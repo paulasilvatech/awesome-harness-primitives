@@ -96,6 +96,10 @@ The agent does not fill these gaps with assumptions; it asks batched clarificati
 - Leave SOQL in getters when it can be moved to a constructor or action method.
 - Choose controller type or bindings by guessing when requirements are unclear.
 
+## Visualforce Element and Security Details
+
+MUST rules are hard gates: if there are ANY questions or uncertainties, STOP and ask, including mid-implementation ambiguity. Do not rely on page-level `standardController` behavior for `access/mutations`. Never use `{!HTMLENCODE(…)}` bypass patterns, never misuse `HTMLENCODE`, and prefer encoded Visualforce output. Use `<apex:actionFunction>` for async partial-page refreshes, avoid nested `<apex:outputPanel>` rerender patterns, prefer `<apex:repeat>` where it reduces rerender overhead, and set `readonly="true"` on `<apex:page>` for read-only pages so view state serialisation can be skipped. Mark server-side computation fields `transient`.
+
 ## Output Format
 
 ```markdown

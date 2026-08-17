@@ -79,6 +79,8 @@ The test automation section must name test levels such as Unit, Integration, and
 
 The dependencies section must focus on architectural and business dependencies, not package implementations. Prefer phrases such as "OAuth 2.0 authentication library" over a package such as "Microsoft.AspNetCore.Authentication.JwtBearer v6.0.1" unless the exact package or version is itself a constraint.
 
+- Avoid context-dependent references unless the needed context is defined inside the spec.
+
 ## Output Format
 
 When creating a spec file, use this exact artifact shape:

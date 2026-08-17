@@ -166,6 +166,10 @@ for attempt in range(3):
         time.sleep(2 **attempt)
 ```
 
+## Preserved Vocabulary
+Use these exact inherited terms when they apply to the domain; they preserve command names, risk labels, paths, and runtime vocabulary from earlier versions.
+- `CREATE`
+
 ## Output Format
 
 Return a security review report in this shape:

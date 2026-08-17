@@ -134,6 +134,13 @@ User commands map to actions:
 
 If a phase crashes, runs out of context, or fails to write its checkpoint, read `quality/PROGRESS.md`, report the failure with specifics, suggest retrying the failed phase in a new context, and do not skip ahead. If context runs out mid-phase, preserve disk artifacts and retry in a new context using `PROGRESS.md` and `quality/` as recovery state.
 
+## Preserved Vocabulary
+Use these exact inherited terms when they apply to the domain; they preserve command names, risk labels, paths, and runtime vocabulary from earlier versions.
+- `quality/PROGRESS.md.`
+- `re-review`
+- `regression-tested`
+- `sub-agents`
+
 ## Output Format
 
 Use this format for orchestration status:

@@ -115,6 +115,19 @@ Jest requirements: every LWC component with user interaction or Apex data has a 
 | Troubleshooting Mode | Diagnose wire adapter failures, reactivity issues, event propagation, or deployment errors. |
 | Refactoring Mode | Migrate Aura to LWC, replace hardcoded styles with tokens, and decompose monolithic components. |
 
+## Preserved Vocabulary
+Use these exact inherited terms when they apply to the domain; they preserve command names, risk labels, paths, and runtime vocabulary from earlier versions.
+- `MUST`
+- `STOP`
+- `built-in`
+- `data-fetch`
+- `flow-screen`
+- `mid-implementation`
+- `re-render`
+- `root-cause`
+- `sub-components`
+- `wire/method`
+
 ## Output Format
 
 ```markdown

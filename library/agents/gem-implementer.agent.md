@@ -62,6 +62,10 @@ It does not know whether a failed strategy is transient, fixable, needs_replan, 
 - Use explicit contracts for dependencies and contract tests before business logic when contracts drive behavior.
 - Meet all `acceptance_criteria`; use the existing tech stack.
 
+## Preserved Implementation Vocabulary
+
+Preserve legacy labels and constraints as task vocabulary: `IMPLEMENTER`, `Batch/join`, `dependency-free`, `Create/update`, `IMPORTANT`, `MANDATORY`, `MUST`, `knowledge_sources`, `output_format`, `failed/needs_revision`, `req-resp/event.`, `colors/spacing.`, `tool/terminal`, `head/tail`, `arg-only`, `repeatable/bulk`, `non-zero`, `pre-existing`, `em-dashes`, `bullet/item.`, and `action/command.`. Treat them as behavior constraints, not tool names.
+
 ## Output Format
 
 Return JSON only. Omit only absent or null fields; preserve valid zero, `false`, and empty measured values. Prose fields must use dense bullets, no paragraphs, and max 120 characters per item.

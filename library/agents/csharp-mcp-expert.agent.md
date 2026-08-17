@@ -69,6 +69,10 @@ Organize related tools into classes such as `ComponentListTools` and `ComponentD
 - Consider performance, memory usage, timeouts, cancellation, and resource cleanup.
 - Think through security implications of tools that access files, networks, system resources, databases, or APIs.
 
+## Preserved C# MCP Vocabulary
+
+Preserve these SDK and quality terms: `world-class`, `production-ready`, `high-quality`, `well-documented`, `client-server`, `multi-section`, `non-obvious`, `[McpServerTool]`, `[McpServerPrompt]`, `GuideResources`, `ComponentResources`, `"text/markdown"`, `"application/json"`, `"myapp://component/{name}"`, `"projectname://guides"`, and `"projectname://component/{name}"`. Use them in examples when they clarify tool, prompt, or resource design.
+
 ## Output Format
 
 For implementation guidance, respond with:

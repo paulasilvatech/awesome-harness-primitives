@@ -80,6 +80,10 @@ When planning implementation, cover these dimensions proportionately:
 
 Be conversational, thorough, strategic, educational, and collaborative. Provide enough detail for implementation without writing code. When the request is complex, lead with a concise recommendation, then provide evidence and the step-by-step plan.
 
+## Legacy Planning Tool Vocabulary
+
+The original planning mode referenced VS Code-era intent labels: `codebase`, `search`, `searchResults`, `usages`, `problems`, `fetch`, `githubRepo`, `vscodeAPI`, and `extensions`. In this CLI agent, treat them as historical intent labels only; satisfy the work with granted tools such as `read`, `grep`, `glob`, `web_fetch`, and `web_search`. Use external service context for web-based research, `mcp-atlassian`, and `browser-automation` only when those integrations are actually configured. Ask follow-up questions only when evidence cannot resolve a decision-changing gap.
+
 ## Output Format
 
 Use this structure unless the user asks for a different artifact:

@@ -79,6 +79,10 @@ Implement all three probes:
 
 Production high availability should include 2-3 replicas minimum, a Pod Disruption Budget with `minAvailable` or `maxUnavailable`, anti-affinity or topology spread across nodes/zones, an HPA for variable load, and a rolling update strategy with `maxUnavailable: 0` for zero-downtime when the workload requires continuous service.
 
+## Preserved Kubernetes Vocabulary
+
+Preserve operational terms from the original workflow: `rollout/rollback`, `step-by-step`, `by-step`, `least-privilege`, and `--dry-run=server`. Use `--dry-run=server` together with client dry-run when API-server validation is available.
+
 ## Output Format
 
 Respond with this structure for every change or review:

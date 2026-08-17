@@ -68,6 +68,10 @@ For `basic` or `full`, compute `page_snapshot_hash` from semantic DOM structure:
 - Prefer maintained official or in-stack libraries over custom implementations.
 - Track out-of-scope findings in `learn`; do not fix them.
 
+## Preserved Execution Vocabulary
+
+Preserve legacy labels and constraints as task vocabulary: `BROWSER`, `TESTER`, `E2E/flow`, `Batch/join`, `dependency-free`, `IMPORTANT`, `MANDATORY`, `MUST`, `UNTRUSTED`, `knowledge_sources`, `output_format`, `task_definition.acceptance_criteria`, `enable/disable`, `none/basic/full`, `per-page`, `tool/terminal`, `head/tail`, `arg-only`, `repeatable/bulk`, `non-zero`, `em-dashes`, `bullet/item.`, `action/command.`, and `root/tmp.`. Treat them as behavior constraints, not tool names.
+
 ## Output Format
 
 Return JSON only. Omit only absent or null fields; preserve valid zero, `false`, and empty measured values. Prose fields must use dense bullets, no paragraphs, and max 120 characters per item.

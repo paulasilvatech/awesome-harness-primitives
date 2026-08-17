@@ -119,22 +119,22 @@ Created: `docs/code-review/[date]-[component]-pyspark-code-verdict.md`
 Report file template:
 
 ```markdown
-# PySpark Performance Review: [Component]
-# review date:[date]
+PySpark Performance Review: [Component]
+review date: [date]
 
-# Quick verdict
+Quick verdict
 | Severity | Score reason | Primary bottleneck hypothesis |
 | --- | --- | --- |
 
-# code smells detected
+code smells detected
 | Severity | Reference | Code smell |
 | --- | --- | --- |
 
-# recommendations
+recommendations
 | Severity | Priority | Recommendation |
 | --- | ---: | --- |
 
-# Distributed correctness / parallelism checks
+Distributed correctness / parallelism checks
 | Severity | Pattern | Distributed impact |
 | --- | --- | --- |
 ```

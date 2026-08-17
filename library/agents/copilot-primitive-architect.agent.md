@@ -22,7 +22,7 @@ Read-only policy: do not create, edit, move, or delete files. Return classificat
 - `library/agents/<name>.agent.md` for custom agents.
 - `library/instructions/<name>.instructions.md` for reusable custom instructions.
 - `library/skills/<name>/SKILL.md` for Agent Skills.
-- `library/prompts/<name>.prompt.md` for VS Code prompts.
+- `library/prompts/<name>` prompt source for VS Code prompts.
 
 Names must be kebab-case with no path separators, no `..`, no leading or trailing hyphen, and no double hyphen. `library/` is canonical source; `.github/` copies and plugin copies are synchronized mirrors, never manual edit targets. Prompts are VS Code-only workflow entries and are not GitHub Copilot CLI primitives.
 
@@ -94,6 +94,17 @@ Recommend `read`, `grep`, and `glob` for consultative agents; add `edit` only fo
 - Treat VS Code prompts as GitHub Copilot CLI primitives.
 - Recommend no-op tool tokens or unrecognized frontmatter fields as effective.
 - Present an unvalidated draft as production-ready.
+
+## Preserved Vocabulary
+Use these exact inherited terms when they apply to the domain; they preserve command names, risk labels, paths, and runtime vocabulary from earlier versions.
+- `allow-list`
+- `environment-specific`
+- `non-empty`
+- `responsibility-boundary`
+- `skill-specific`
+- `user-selected`
+- `validate_primitives.py`
+- `library/prompts/<name>.prompt.md`
 
 ## Output Format
 

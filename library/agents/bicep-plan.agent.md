@@ -73,6 +73,10 @@ For every resource, document:
 
 Use deterministic phase names and task identifiers. Do not include deployment pipeline design, CI/CD process, or next-step prose beyond the implementation plan.
 
+## Legacy Planning Tool Labels
+
+The original VS Code-oriented instructions named `#microsoft-docs`, `#get_bicep_best_practices`, `#bestpractices`, `#azure_get_azure_verified_module`, `#azure_design_architecture`, `#editFiles`, and `#todos`. In this CLI agent, treat `microsoft-docs`, `get_bicep_best_practices`, `azure_get_azure_verified_module`, and `azure_design_architecture` as required evidence categories or external capabilities when available, not as guaranteed CLI tool names. The preserved parser token ` using the ` is legacy wording from the original plan template. The output file remains `INFRA.{goal}.md`; the original phrase `[URL to Microsoft Docs] using the tool context` means the plan must cite documentation evidence.
+
 ## Output Format
 
 Write the plan to `.bicep-planning-files/INFRA.{goal}.md` using this Markdown skeleton:

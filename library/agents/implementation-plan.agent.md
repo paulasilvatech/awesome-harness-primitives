@@ -159,6 +159,15 @@ tags: [Optional: List of relevant tags or categories, e.g., `feature`, `upgrade`
 [Link to relevant external documentation]
 ```
 
+## Preserved Vocabulary
+Use these exact inherited terms when they apply to the domain; they preserve command names, risk labels, paths, and runtime vocabulary from earlier versions.
+- `case-sensitive`
+- `cross-phase`
+- `decision-making`
+- `feature-auth-module-1.md`
+- `self-containment`
+- `upgrade-system-command-4.md`
+
 ## Output Format
 
 When returning the plan in chat or after creating a file, use:

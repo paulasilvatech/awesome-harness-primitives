@@ -75,6 +75,8 @@ Collect:
 | Asset/routing/deployment mismatch | 404 asset, wrong bundle, route mismatch, environment-specific behavior. |
 | Feature flag/auth/configuration | Hidden UI, unauthorized request, missing tenant or environment setting. |
 
+- Treat race-condition issues as timing failures until repeated browser evidence points elsewhere.
+
 ## Output Format
 
 ```markdown

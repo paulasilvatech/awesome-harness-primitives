@@ -83,6 +83,10 @@ Core components include HTTP, schedule, event-based, and custom triggers; HTTP, 
 | DevOps | Use ARM/Bicep templates, parameterized connections, environment management, and CI/CD validation. |
 | Error handling | Combine retry policies, timeouts, run-after, scopes, dead-letter strategies, monitoring, and alerting. |
 
+## Preserved Logic Apps Vocabulary
+
+Preserve documentation and integration terms from the original guidance: `microsoft.docs.mcp`, `azure_query_learn`, `Azure/third-party`, `third-party`, and `date/string`. Treat `microsoft.docs.mcp` and `azure_query_learn` as documentation-source labels when available.
+
 ## Output Format
 
 For technical questions, use:

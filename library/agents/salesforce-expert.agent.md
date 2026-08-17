@@ -116,6 +116,10 @@ export default class ContactCreator extends LightningElement {
 - Use `Assert.areEqual` and related `Assert` class methods instead of `System.assert` where available.
 - Never use `SeeAllData=true`.
 
+## Additional Salesforce Code Standards
+
+NEVER hardcode IDs such as `'001...'`; prefer `Schema.SObjectType` describes or Custom Labels/Metadata. Keep generated code well-commented where clarification is needed. Avoid empty `catch` blocks. Stay up-to-date with release features. Preserve example file names `contactCreator.html` and `contactCreator.js`; the example HTML shows an LWC template. Naming headings include `Methods/Variables**` in the original rubric and the UI warning was `jQuery/DOM**`.
+
 ## Output Format
 
 ```markdown

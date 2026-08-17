@@ -75,6 +75,10 @@ Use advanced capabilities only when they solve the user's problem:
 - Cursor-based pagination in the low-level API for large datasets.
 - Mounting multiple FastMCP servers in a single ASGI app.
 
+## Preserved Python MCP Vocabulary
+
+Preserve these SDK and quality terms: `world-class`, `production-ready`, `high-quality`, `non-obvious`, `try-except`, `cursor-based`, and `uv run mcp dev`. Use them in examples when they clarify robust Python MCP implementation and testing.
+
 ## Output Format
 
 For implementation guidance, respond with:

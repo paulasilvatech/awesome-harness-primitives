@@ -93,6 +93,12 @@ For every recommended fix, include:
 
 Do not rely solely on Lighthouse text; confirm with runtime evidence. Do not optimize for synthetic metrics when the real user flow is healthy. Do not recommend dependencies for small problems solvable in existing code.
 
+## Preserved Vocabulary
+Use these exact inherited terms when they apply to the domain; they preserve command names, risk labels, paths, and runtime vocabulary from earlier versions.
+- `console/network`
+- `highest-value`
+- `user-facing`
+
 ## Output Format
 
 ```markdown

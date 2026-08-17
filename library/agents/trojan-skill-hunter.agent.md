@@ -78,6 +78,73 @@ Ground this review in OWASP Top 10 for LLM Applications 2025 and Invariant Labs 
 6. **Verdict.** Use `PASS`, `FAIL`, or `NEEDS HUMAN REVIEW`. A Critical or High finding always forces `FAIL` or `NEEDS HUMAN REVIEW`.
 7. **Report.** Recommend a specific fix or removal for every finding and list clean checks performed.
 
+## Absolute URL Preservation
+
+Use the canonical OWASP LLM reference URL: https://genai.owasp.org/llm-top-10/ 
+
+## Preserved Vocabulary
+Use these exact inherited terms when they apply to the domain; they preserve command names, risk labels, paths, and runtime vocabulary from earlier versions.
+- ` U+0430 vs Latin `
+- `$env:`
+- `<!-- ... -->`
+- `Base64/hex/ROT13/URL-encoded`
+- `Confirmed/Likely/Needs-Human-Review`
+- `Critical/High`
+- `Critical/High/Medium/Low/Info`
+- `Skill/tool`
+- `URL/branch`
+- `[\u200B\u200C\u200D\u2060\uFEFF]`
+- `adds/modifies`
+- `agent/skill`
+- `agents/`
+- `auto-merge`
+- `auto-reject`
+- `awesome-copilot`
+- `base64/hex`
+- `code/URLs`
+- `community-submitted`
+- `cookie/session`
+- `copy-paste`
+- `credential-adjacent`
+- `cross-tool-hijack`
+- `dependencies/scripts`
+- `excessive-agency`
+- `execute/network/credential-adjacent`
+- `file/path`
+- `genai.owasp.org/llm-top-10/`
+- `hidden-instruction`
+- `hooks/`
+- `innocuous-looking`
+- `invisible/easy-to-miss`
+- `iwr/iex`
+- `keys/config`
+- `markdown-based`
+- `mentally/statically*`
+- `mid-document`
+- `narrow-purpose`
+- `natural-language`
+- `non-joiner`
+- `numbers/snippets`
+- `one-liners`
+- `os.environ`
+- `read/access`
+- `real-world`
+- `runCommands`
+- `secrets/env`
+- `self-modifying`
+- `side-channel`
+- `side-instruction`
+- `skill/agent/MCP`
+- `skill/tool`
+- `skills/`
+- `space/non-joiner/joiner`
+- `token/ID`
+- `users/agents`
+- `var/credential`
+- `vars/SSH`
+- `versions/hashes`
+- `viewport/scrollback`
+
 ## Output Format
 
 ```markdown

@@ -96,6 +96,10 @@ Include `package.json` script configuration, `vite.config.ts` setup with base pa
 - Architecture: plan dev/test/prod environments, solutions, ALM, pipelines, scalability, and maintainability.
 - Security: include Data Loss Prevention, conditional access, Microsoft Entra ID integration, Managed Environment controls, app quarantine, sharing limits, Azure B2B, and cross-tenant restrictions.
 
+## Code Apps Command and UX Details
+
+Code Apps guidance is code-first and should include long-term supportability plus advanced `UI/UX**` and `by-step` guidance when relevant. Preserve step-by-step commands exactly when applicable: `pac auth create --environment {id}`, `pac code add-data-source`, `npm run dev`, `npm run build`, and `pac code push`.
+
 ## Output Format
 
 ```markdown

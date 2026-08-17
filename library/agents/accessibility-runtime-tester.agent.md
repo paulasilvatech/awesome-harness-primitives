@@ -93,7 +93,7 @@ The agent does not fill these gaps with assumptions; it reports untested areas a
 1. <fix direction>
 
 **Re-test checklist**
-- [ ] <same keyboard path and expected result>
+- <same keyboard path and expected result>
 ```
 
 ## Definition of Done

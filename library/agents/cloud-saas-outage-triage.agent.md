@@ -76,6 +76,10 @@ For confirmed or probable upstream incidents, consider retry with bounded backof
 
 For local causes, propose code or configuration fixes only after locating evidence for the local failure. For inconclusive cases, prefer reversible diagnostics with a clear stop condition and a decision-relevant provider recheck interval.
 
+## Preserved Incident Vocabulary
+
+Use `dependency-health` to describe the timestamped provider snapshot and `checked-at` for table columns or evidence notes that record when a provider status was checked.
+
 ## Output Format
 
 Lead with a compact incident brief:
