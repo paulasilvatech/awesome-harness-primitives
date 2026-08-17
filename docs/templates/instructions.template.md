@@ -1,61 +1,87 @@
-<!-- AUTHORING — delete this block after copying.
-Target path: library/instructions/<name>.instructions.md   Filename must match ^[A-Za-z0-9._-]+\.instructions\.md$
-Spec: docs/COPILOT-HARNESS-SPEC.md §2
-
-Frontmatter — ONLY these four keys are recognized; anything else is ignored:
-  applyTo       Comma-separated globs in a SINGLE string. "**" matches every file.
-                Omitting it means the file is never auto-applied (validator: IN004 WARNING).
-                Correct:   applyTo: "**/*.ts,**/*.tsx,src/**"
-                Wrong:     applyTo: ["**/*.ts"]        (array)
-  description   Optional but recommended; shown on hover.
-  name          Optional display name; defaults to the filename.
-  excludeAgent  Optional: "code-review" | "cloud-agent".
-
-Body: non-empty, focused, roughly two pages. Instructions must be GENERAL conventions, not a task
-procedure — a procedure belongs in a skill. Keep code blocks short and illustrative; move long
-walkthroughs into a skill and reference it by name.
--->
 ---
-description: "<What conventions this file carries.> Use when <creating or reviewing the matching files>."
-applyTo: "<glob>,<glob>"
+description: "{{DESCRIPTION_OF_CONVENTIONS}} Use when {{WHEN_THESE_INSTRUCTIONS_APPLY}}."
+applyTo: "{{COMMA_SEPARATED_GLOBS}}"
 ---
 
-# <Topic> Conventions
+# {{TOPIC}} Conventions
 
-<One paragraph: which files activate this file, which toolchain and versions it assumes, and what the
-reader is expected to already have in place. State the default choice when several options exist.>
+## Scope and Stack Context
 
-## Conventions
+These instructions apply to `{{SCOPE_DESCRIPTION}}` matched by the `applyTo` globs. They assume `{{STACK_TOOLS_AND_VERSION_CONTEXT}}` and use `{{DEFAULT_APPROACH}}` when several valid options exist.
+
+They define passive conventions and boundaries for changes in this scope. They do not define a step-by-step workflow; detailed setup, migration, generation, or review procedures belong in a skill.
+
+> **Authoring note — remove before saving:** Replace every `{{UPPER_SNAKE_CASE}}` placeholder, set `applyTo` to one quoted comma-separated glob string (for example, `"**/*.ext,src/**"`), and remove all optional sections or rows that do not apply. Use direct imperatives; reserve MUST and NEVER for constraints whose violation risks correctness, security, data loss, or compatibility.
+
+## Authoritative Sources and Precedence
+
+Follow these sources in order:
+
+1. `{{PRIMARY_AUTHORITY_NAME}}` for `{{PRIMARY_AUTHORITY_SCOPE}}`.
+2. `{{SECONDARY_AUTHORITY_NAME}}` for `{{SECONDARY_AUTHORITY_SCOPE}}`.
+3. `{{FALLBACK_SOURCE_NAME}}` only when it is consistent with the higher-priority sources.
+
+When sources conflict, the higher-priority source wins. Do not duplicate or weaken rules owned by another source.
+
+## Responsibility Split (Optional)
+
+This file owns `{{OWNED_RESPONSIBILITIES}}`. `{{OTHER_PRIMITIVE_NAME}}` ({{OTHER_PRIMITIVE_TYPE}}) owns `{{DEFERRED_RESPONSIBILITIES}}`; follow that primitive for those concerns instead of restating its rules here.
+
+## Core Conventions
 
 | Rule | Rationale |
 | --- | --- |
-| <The rule, stated as an imperative.> | <Why it exists — the failure it prevents.> |
-| <The rule.> | <Rationale.> |
+| {{RULE_1_AS_DIRECT_IMPERATIVE}} | {{RULE_1_FAILURE_OR_COST_PREVENTED}} |
+| {{RULE_2_AS_DIRECT_IMPERATIVE}} | {{RULE_2_FAILURE_OR_COST_PREVENTED}} |
+| {{RULE_3_AS_DIRECT_IMPERATIVE}} | {{RULE_3_FAILURE_OR_COST_PREVENTED}} |
 
-## <Specific Area>
+## {{CONVENTION_AREA}}
 
-<Repeat this section per area. Keep each explanation to a few sentences plus a minimal example.>
+{{SHORT_CONTEXT_FOR_THIS_AREA}}
 
-```<language>
-<The smallest snippet that makes the convention unambiguous.>
+- {{AREA_RULE_1}} — {{AREA_RULE_1_RATIONALE}}
+- {{AREA_RULE_2}} — {{AREA_RULE_2_RATIONALE}}
+- {{AREA_RULE_3}} — {{AREA_RULE_3_RATIONALE}}
+
+## Good / Bad Examples
+
+The examples below illustrate `{{RULE_DEMONSTRATED_BY_EXAMPLES}}`.
+
+**Good**
+
+```{{LANGUAGE}}
+{{SMALL_GOOD_EXAMPLE}}
 ```
+
+Why: {{WHY_THE_GOOD_EXAMPLE_FOLLOWS_THE_CONVENTION}}
+
+**Bad**
+
+```{{LANGUAGE}}
+{{SMALL_BAD_EXAMPLE}}
+```
+
+Why: {{WHY_THE_BAD_EXAMPLE_BREAKS_THE_CONVENTION}}
 
 ## Do / Do Not
 
 | Do | Do not |
 | --- | --- |
-| <Correct practice.> | <The exact mistake it replaces.> |
-| <Correct practice.> | <The exact mistake it replaces.> |
+| {{PREFERRED_PRACTICE_1}} | {{MISTAKE_1}} |
+| {{PREFERRED_PRACTICE_2}} | {{MISTAKE_2}} |
+| {{PREFERRED_PRACTICE_3}} | {{MISTAKE_3}} |
 
-## Checklist Before Opening a PR
+## Verification Checklist
 
-- [ ] <Condition a reviewer can check by reading the diff.>
-- [ ] <Command that must pass locally, matching the CI gate.>
-- [ ] <Security or hygiene condition, such as no secret outside the vault.>
+- [ ] The change stays within `{{SCOPE_DESCRIPTION}}` and respects the responsibility split.
+- [ ] The implementation follows the authoritative sources and the conventions above.
+- [ ] `{{CHANGE_SPECIFIC_CONDITION}}` is satisfied.
+- [ ] Relevant formatting, linting, testing, or validation commands pass: `{{VALIDATION_COMMANDS}}`.
+- [ ] `{{SECURITY_RELIABILITY_OR_HYGIENE_CONDITION}}` is verified.
+- [ ] The change contains no unrelated edits or leftover placeholders.
 
-## Related Primitives
+## Related Primitives (Optional)
 
-| Name | Type | Use it for |
-| --- | --- | --- |
-| `<skill-name>` | skill | <the deeper review or generation task these conventions defer to> |
-| `<agent-name>` | agent | <the agent that owns changes in this area> |
+Remove this section when no related primitive is needed. Refer to each primitive by name and type in text, never by a relative path.
+
+- `{{RELATED_PRIMITIVE_NAME}}` ({{RELATED_PRIMITIVE_TYPE}}): use it for {{RELATED_PRIMITIVE_PURPOSE}}.

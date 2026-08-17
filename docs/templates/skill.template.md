@@ -1,83 +1,179 @@
-<!-- AUTHORING — delete this block after copying.
-Target path: library/skills/<skill-name>/SKILL.md   The directory name IS the skill name.
-Spec: docs/COPILOT-HARNESS-SPEC.md §3
-
-Frontmatter
-  name         REQUIRED. 1-64 chars, kebab-case ^(?:[a-z0-9]|[a-z0-9][a-z0-9-]*[a-z0-9])$, no "--",
-               and it MUST equal the parent directory name.
-  description  REQUIRED. 1-1024 chars. Must state BOTH what the skill does AND when to use it —
-               this string is the only thing loaded at session start, so it is what triggers activation.
-               Write "… Use this skill when <trigger>." (validator: SK005 WARNING if WHEN is missing).
-  allowed-tools / user-invocable / disable-model-invocation / argument-hint / license / metadata / tags
-               Optional. Put author, version, category inside metadata: they are not top-level keys.
-
-Body: non-empty, keep under ~500 lines. The whole body enters context on activation, so every line
-must help execute the task — no meta-commentary about the repository or the workshop it came from.
-Bundled resources live in scripts/, references/, assets/ inside this skill directory and are the ONLY
-relative paths allowed. Use $ARGUMENTS in the body when the skill is user-invocable.
--->
 ---
-name: "<skill-name>"
-description: "<What this skill produces or changes.> Use this skill when <trigger phrasing 1>, <trigger phrasing 2>, or <trigger phrasing 3>."
-allowed-tools: ["view", "grep", "glob", "edit"]
+name: "{{SKILL_NAME}}"
+description: >-
+  {{WHAT_THE_SKILL_DOES}}. Use this skill when {{POSITIVE_TRIGGER_CONDITIONS}}.
+---
+
+# {{SKILL_TITLE}}
+
+> **Authoring note:** Replace every `{{UPPER_SNAKE_CASE}}` placeholder and
+> delete all authoring guidance and optional sections that do not apply.
+> Keep the final `SKILL.md` preferably under 200 lines and always under 500.
+
+The `name` must be 1 to 64 characters, use kebab-case, and exactly match the
+parent skill directory. The `description` must be 1 to 1024 characters and
+state both **WHAT** the skill does and **WHEN** it should activate. Describe
+only positive trigger conditions there; put exclusions in `## Limits`.
+
+{{ONE_PARAGRAPH_SUMMARY_OF_INPUT_TRANSFORMATION_AND_OUTPUT}}
+
+## Optional frontmatter
+
+Keep the frontmatter minimal unless the skill needs an optional capability.
+Add only the relevant lines inside the opening frontmatter block:
+
+```yaml
 user-invocable: true
-argument-hint: "<argument>"
----
+argument-hint: "{{ARGUMENT_HINT}}"
+allowed-tools: ["{{MINIMUM_REQUIRED_TOOL}}"]
+```
 
-# <Skill Title>
-
-<One paragraph: the transformation this skill performs, its input, and its output. Name the worked
-example technology, and state whether the same procedure generalizes to others.>
+- Add `user-invocable` only when direct invocation is useful.
+- Add `argument-hint` only when user-supplied arguments change execution.
+  When present, keep `## Inputs` and consume `$ARGUMENTS` there.
+- Omit `allowed-tools` by default. If used, list only tools the skill actually
+  requires. Do not add editing tools to consultative or review skills unless
+  the skill is explicitly expected to change files.
+- Other supported fields such as `disable-model-invocation`, `license`,
+  `metadata`, and `tags` are optional. Add them only for a concrete need.
 
 ## When to invoke
 
-- "<A request phrased the way a user would actually type it.>"
-- "<A second phrasing that should also match.>"
-- "<A phrasing that looks similar but should NOT match — say which skill handles it instead.>"
+- "{{POSITIVE_USER_REQUEST_ONE}}"
+- "{{POSITIVE_USER_REQUEST_TWO}}"
+- "{{POSITIVE_USER_REQUEST_THREE}}"
 
-## Workflow
+## Inputs
 
-### 1. <First step>
+Delete this section unless `argument-hint` is enabled.
 
-- <Concrete action.>
-- <Decision rule for the ambiguous case.>
+Use `$ARGUMENTS` as {{HOW_ARGUMENTS_CONTROL_THE_TASK}}. Validate it by
+{{ARGUMENT_VALIDATION_RULE}}. If it is empty, {{ARGUMENT_FALLBACK_BEHAVIOR}}.
 
-### 2. <Second step>
+## Prerequisites and context
 
-<Explain the judgment involved, then show it as a contrast table when the distinction is subtle.>
+Delete this section when there are no prerequisites or required context.
 
-| Do this | Not this |
-| --- | --- |
-| <Good example.> | <The near-miss it replaces.> |
+- {{REQUIRED_TOOL_SERVICE_OR_CONFIGURATION}}
+- {{REQUIRED_INPUT_OR_REPOSITORY_CONTEXT}}
+- {{SOURCE_OF_TRUTH_AND_PRECEDENCE_RULE}}
 
-### 3. <Third step>
+## Procedure
 
-<The artifact produced and exactly where it is written.>
+Use this format when order matters. Delete `## Criteria` and add or remove as
+many steps as the real procedure requires.
 
-## Rules
+1. {{FIRST_REQUIRED_ACTION}}
+2. {{NEXT_REQUIRED_ACTION_OR_DECISION}}
+3. Continue with {{ADDITIONAL_ACTIONS_IN_EXECUTION_ORDER}}.
+4. {{VALIDATE_AND_DELIVER_THE_RESULT}}
 
-- <Invariant the skill must never break, such as preserving behavior or encoding.>
-- <Content constraint, such as English only, no emojis, no sensitive data in examples.>
-- <Verification the skill performs before declaring success.>
+## Criteria
 
-## Output Template
+Use this format for reviews, debugging, or evaluation where judgment matters
+more than sequence. Delete `## Procedure` unless both formats are necessary.
 
-<Delete this section when the skill does not emit a fixed artifact.>
+### {{CRITERION_GROUP_ONE}}
+
+- [ ] {{VERIFIABLE_CRITERION}}
+- [ ] {{VERIFIABLE_CRITERION_WITH_REQUIRED_EVIDENCE}}
+
+### {{CRITERION_GROUP_TWO}}
+
+- [ ] {{VERIFIABLE_CRITERION}}
+- [ ] {{DECISION_RULE_FOR_AN_AMBIGUOUS_CASE}}
+
+## Output template
+
+Return exactly this structure:
 
 ```markdown
-<The exact structure of the generated file, with placeholders.>
+## {{RESULT_TITLE}}
+
+**Status:** {{ALLOWED_STATUS_VALUE}}
+**Summary:** {{ONE_SENTENCE_SUMMARY}}
+
+### Details
+{{ORDERED_FINDINGS_ACTIONS_OR_ARTIFACT}}
+
+### Validation
+- {{CHECK_PERFORMED}}: {{PASS_FAIL_RESULT_AND_EVIDENCE}}
 ```
 
-## Quality Gate
+## Examples
 
-- [ ] <The produced artifact exists and is well-formed.>
-- [ ] <Behavior or output is unchanged where it had to be preserved.>
-- [ ] <Every command shown in the output was actually run and works.>
-- [ ] <Content constraints hold: English, no emojis, no sensitive data.>
+Delete this section when examples would not clarify a subtle distinction.
 
-## Related Primitives
+### Good
 
-| Name | Type | Use it for |
+**Input:** `{{GOOD_INPUT}}`
+
+**Expected behavior:** {{GOOD_BEHAVIOR_AND_WHY_IT_IS_CORRECT}}
+
+### Bad
+
+**Input:** `{{BAD_INPUT}}`
+
+**Incorrect behavior:** {{BAD_BEHAVIOR_AND_HOW_TO_CORRECT_IT}}
+
+## Limits
+
+Delete this section only when the skill has no meaningful boundary.
+
+- Do not use this skill for {{OUT_OF_SCOPE_REQUEST}}.
+- Use `{{RELATED_PRIMITIVE_NAME}}` (`{{RELATED_PRIMITIVE_TYPE}}`) instead when
+  {{HANDOFF_CONDITION}}.
+- {{NON_GOAL_OR_SAFETY_BOUNDARY}}
+
+## Gotchas
+
+Delete this section when there are no non-obvious failure modes.
+
+- **{{KEY_CONSTRAINT}}**: {{WHY_THE_CONSTRAINT_EXISTS}}
+- {{COMMON_MISTAKE_AND_PREVENTIVE_ACTION}}
+
+## Troubleshooting
+
+Delete this section when there are no known reactive fixes.
+
+| Symptom | Likely cause | Resolution |
 | --- | --- | --- |
-| `<skill-name>` | skill | <the adjacent skill and the boundary between them> |
-| `<instructions-name>` | instructions | <the conventions this skill must respect while editing> |
+| {{SYMPTOM}} | {{LIKELY_CAUSE}} | {{ACTIONABLE_RESOLUTION}} |
+
+## Progressive disclosure and bundled resources
+
+At discovery time, only `name` and `description` are loaded. The full body
+loads after activation, and bundled resources should be read or executed only
+when needed. Move long explanations, large examples, catalogs, and complex
+workflows out of `SKILL.md`.
+
+- `references/{{REFERENCE_FILE}}`: detailed knowledge or decision rules.
+- `scripts/{{SCRIPT_FILE}}`: deterministic, repeatable automation.
+- `assets/{{ASSET_FILE}}`: static material consumed without modification.
+- `templates/{{TEMPLATE_FILE}}`: starter content the agent modifies.
+
+Delete unused entries. Every referenced resource must exist inside the skill
+directory, and the core instructions must say when to use it.
+
+## Related primitives
+
+Refer to other primitives by name and type, without relative links.
+
+| Name | Type | Use it when |
+| --- | --- | --- |
+| `{{PRIMITIVE_NAME}}` | `{{PRIMITIVE_TYPE}}` | {{PRIMITIVE_BOUNDARY_OR_HANDOFF}} |
+
+## Quality gate
+
+- [ ] `name` is valid kebab-case and matches the parent directory.
+- [ ] `description` states WHAT and WHEN using positive trigger language.
+- [ ] The chosen procedure or criteria match the task instead of forcing an
+      arbitrary workflow.
+- [ ] The output follows `## Output template` exactly.
+- [ ] Every reported check was actually performed and includes evidence.
+- [ ] If `argument-hint` is present, `$ARGUMENTS` is consumed and validated.
+- [ ] `allowed-tools`, if present, contains only the minimum required tools.
+- [ ] Every bundled resource referenced above exists and is used on demand.
+- [ ] All unused optional sections, authoring guidance, and
+      `{{UPPER_SNAKE_CASE}}` placeholders are removed.
+- [ ] `wc -l SKILL.md` reports fewer than 500 lines, preferably fewer than 200.

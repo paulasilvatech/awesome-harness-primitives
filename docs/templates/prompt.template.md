@@ -1,100 +1,160 @@
-<!-- AUTHORING — delete this block after copying.
-Target path: .github/prompts/<name>.prompt.md   Invoked in chat as /<name>.
+<!-- AUTHORING NOTES — remove this entire block before using the prompt.
 
-SCOPE WARNING — this type is NOT part of the Copilot CLI harness.
-docs/COPILOT-HARNESS-SPEC.md recognizes five primitives: agents, instructions, skills, plugins, hooks.
-Prompt files are a VS Code feature. The VS Code documentation states: "Agents running on the Agent Host
-don't use prompt files. To use an existing prompt with the Copilot agent, convert it to an agent skill."
-  - Authoring for VS Code only  -> use this template.
-  - Authoring for the CLI, or for both -> use docs/templates/skill.template.md instead. A user-invocable
-    skill is also reachable as /<skill-name>, so nothing is lost.
-  - Never reference a .prompt.md file from an agent, instructions file, or skill.
+Scope and placement
+- Prompt files are a VS Code feature. They are not a primitive discovered or executed by GitHub Copilot CLI.
+- In this repository, author the canonical source at `library/prompts/{{PROMPT_NAME}}.prompt.md`.
+  Repository synchronization publishes it to `.github/prompts/` for VS Code discovery; do not author the
+  synchronized copy directly.
+- For a workflow that must run in GitHub Copilot CLI, or in both CLI and VS Code, create an agent skill instead.
 
-Frontmatter — the six keys VS Code recognizes, all optional:
-  description    Short description of the prompt.
-  name           Slash-command name; defaults to the filename.
-  argument-hint  Hint text shown in the chat input.
-  agent          "ask" | "agent" | "plan" | the name of a custom agent.
-  model          Defaults to the model selected in the picker.
-  tools          VS Code tool names, tool sets, or <server>/* for MCP.
+Placeholders and runtime variables
+- Replace every visible `{{UPPER_SNAKE_CASE}}` authoring placeholder.
+- Keep VS Code runtime variables such as `${input:topic}` and `${selection}`. They are resolved when the prompt
+  runs and are not authoring placeholders.
+- Delete optional fields, inputs, branches, sections, and examples that the finished prompt does not need.
 
-TOOL VOCABULARY WARNING — VS Code tool names are NOT the CLI tokens. "search" is a real VS Code tool but
-a silent no-op in the CLI. Never copy a tools: list between a prompt file and an agent file.
+Frontmatter
+- Keep `name`, `description`, and `argument-hint` concise and aligned with the prompt body.
+- `agent` is optional. Omit it to use the current agent. Add `agent: 'ask'`, `agent: 'agent'`, `agent: 'plan'`,
+  or a custom-agent name only when the workflow requires that behavior. Do not force a custom agent.
+- `tools` is optional. Omit it when inherited tools are sufficient. If used, copy exact IDs from the VS Code
+  Configure Tools picker. For example, `search/codebase` and `vscode/askQuestions` are VS Code tool IDs.
+  Tool IDs are environment-dependent, and VS Code tool names must not be copied into CLI agent frontmatter.
+- Uncomment the optional frontmatter examples below only after adapting them to the target VS Code environment.
+
+Structure
+- The sections before Prompt Body define the contract: trigger, inputs, scope, output, and acceptance criteria.
+- Prompt Body contains the reusable operational instructions. Do not restate the contract there without an
+  execution reason.
+- Make the destination explicit: a chat response, approved workspace edits, or an exact file path. Never assume
+  that every prompt writes a file.
+- Refer to another component by name and type, such as "the `{{RELATED_NAME}}` skill". Do not use relative links
+  between primitives.
 -->
 ---
-name: "<prompt-name>"
-description: "<What this prompt does in one sentence.>"
-argument-hint: "<argument>=<value>"
-agent: "<custom-agent-name>"
+name: '{{PROMPT_NAME}}'
+description: '{{ACTIONABLE_ONE_SENTENCE_DESCRIPTION}}'
+argument-hint: '{{ARGUMENT_HINT}}'
+# agent: 'ask'
+# tools: ['search/codebase', 'vscode/askQuestions']
 ---
 
-# /<prompt-name>
+# /{{PROMPT_NAME}}
 
 ## Objective
 
-<Two or three sentences: the outcome this run produces and where it sits in the larger sequence.>
+{{OBJECTIVE}}
+
+Deliver the result to `${input:destination:response, edit, or file path}`. Do not create or modify a file unless
+the selected destination, prompt purpose, and available VS Code tools explicitly allow it.
 
 ## When to Invoke
 
-<The moment in the workflow this prompt belongs to, and what must have happened before it.>
+{{INVOCATION_TRIGGER_AND_WORKFLOW_POSITION}}
 
 ## Preconditions
 
-- <State the workspace must already be in.>
-- <Artifact from a previous step that this run consumes.>
+- {{REQUIRED_WORKSPACE_OR_TASK_STATE}}
+- {{REQUIRED_CONTEXT_OR_ARTIFACT}}
+- {{REQUIRED_PERMISSION_OR_SAFETY_CONDITION}}
 
-## Inputs the User Must Provide
+If a required precondition is not met, identify it and stop before making changes.
 
-- <Input and its default value.>
-- <Confirmation the run depends on.>
+## Inputs
+
+| Input | Runtime source | Required | Handling |
+| --- | --- | --- | --- |
+| Topic or task | `${input:topic}` | Yes | Use as the primary scope; ask for it and stop if it remains undefined. |
+| Selected context | `${selection}` | No | Treat an empty selection as absent; do not infer content that was not provided or inspected. |
+| Destination | `${input:destination:response, edit, or file path}` | Yes | Accept `response`, `edit`, or an exact file path; clarify ambiguous destinations before writing. |
+| {{ADDITIONAL_INPUT_NAME}} | {{ADDITIONAL_INPUT_SOURCE}} | {{YES_OR_NO}} | {{ADDITIONAL_INPUT_HANDLING}} |
 
 ## What I Will Do
 
-- <Observable action, phrased as a commitment.>
-- <Observable action.>
+- {{OBSERVABLE_COMMITMENT_ONE}}
+- {{OBSERVABLE_COMMITMENT_TWO}}
+- Validate the result against the Definition of Done and report the evidence.
+- Deliver only to the selected destination.
 
 ## What I Will NOT Do
 
-- <Action deferred to a later step, naming the step.>
-- <Answer the run must not fabricate; it marks the item unknown instead.>
+- {{OUT_OF_SCOPE_ACTION}}
+- Invent missing facts, evidence, file contents, tool results, or validation outcomes.
+- Modify files outside the explicitly approved edit scope or destination.
+- Claim that content was written, edited, or verified when the required tool was unavailable or not run.
 
 ## Output Format
 
-<Where the artifact is written and its exact skeleton.>
+Use exactly one destination mode:
+
+- **Response:** return `{{RESPONSE_FORMAT}}` in Chat and do not modify the workspace.
+- **Edit:** apply only `{{APPROVED_EDIT_SCOPE}}`, then summarize changed paths and validation results.
+- **File path:** create or update only the exact requested path when writing is part of the prompt's purpose and
+  editing tools are available. Otherwise, return the proposed content in Chat and state that no file was written.
+
+Use this result skeleton, adapting only the content under each heading:
 
 ```markdown
-# <Artifact Title>
-## <Section>
-## <Section>
+## Result
+{{RESULT_CONTENT}}
+
+## Evidence
+{{EVIDENCE_OR_TRACEABILITY}}
+
+## Validation
+{{VALIDATION_RESULT}}
 ```
 
 ## Definition of Done
 
-- [ ] <The artifact exists at the stated path.>
-- [ ] <A second person can verify the result independently.>
-- [ ] <Every unknown is marked as unknown rather than guessed.>
+- [ ] {{PRIMARY_VERIFIABLE_SUCCESS_CRITERION}}
+- [ ] {{SECONDARY_VERIFIABLE_SUCCESS_CRITERION}}
+- [ ] The result uses the requested destination and no unapproved file was changed.
+- [ ] Claims are supported by provided or inspected evidence; unknowns are labeled explicitly.
+- [ ] Required checks were run, or each check that could not run is named with the reason.
 
 ## Prompt Body
 
-<The instruction text sent to the model. Keep the steps ordered and explicit.>
+Complete `{{TASK_TYPE}}` for the following runtime context:
 
-**Step 1 — <name>.** <What to do and what to output.>
+- **Topic:** `${input:topic}`
+- **Destination:** `${input:destination:response, edit, or file path}`
+- **Selected context:**
 
-**Step 2 — <name>.** <What to do, including the table or format to emit.>
+  ```text
+  ${selection}
+  ```
 
-**Step 3 — <name>.** <The write step and the target path.>
+Follow these steps in order:
 
-<Close with the hard constraint for this run, such as: do not open any file to read its contents.>
+1. **Validate the request.** Confirm that the topic, destination, and required preconditions are unambiguous.
+   If information is missing, use `vscode/askQuestions` only when that tool is configured and available;
+   otherwise ask for the missing information in Chat and stop before changing anything.
+2. **Gather only the necessary evidence.** Use the selected context and any permitted VS Code tools. Distinguish
+   inspected facts from assumptions, and do not expand beyond `{{SCOPE_BOUNDARY}}`.
+3. **Perform the task.** {{CORE_OPERATIONAL_INSTRUCTIONS}}
+4. **Verify the result.** Check `{{TASK_SPECIFIC_VALIDATION}}` and evaluate every Definition of Done item. Do not
+   report a check as passed unless its evidence is available.
+5. **Deliver conditionally.**
+   - For `response`, return the requested format in Chat without workspace edits.
+   - For `edit`, modify only the approved scope, then report changed paths and validation.
+   - For an exact file path, write only when file output is intended and an editing tool is available. Otherwise,
+     return the content in Chat, identify the intended path, and state that it was not written.
+
+{{FINAL_HARD_CONSTRAINT}}
 
 ## Invocation Example
 
-```text
-/<prompt-name> <argument>=<value>
-```
+1. Select the relevant context in the editor so `${selection}` is populated.
+2. Run **Chat: Run Prompt** and choose `/{{PROMPT_NAME}}`.
+3. Enter `Review the selected implementation and return prioritized, evidence-based findings` for `topic`.
+4. Enter `response` for `destination`.
+5. Verify that the result appears in Chat and that no workspace file changed.
 
 ## Related Primitives
 
-| Name | Type | Use it for |
+Delete this section when the prompt stands alone.
+
+| Name | Type | Relationship |
 | --- | --- | --- |
-| `<agent-name>` | agent | <the agent this prompt runs under> |
-| `<skill-name>` | skill | <the CLI-compatible equivalent or the procedure this prompt defers to> |
+| `{{RELATED_PRIMITIVE_NAME}}` | `{{RELATED_PRIMITIVE_TYPE}}` | {{RELATED_PRIMITIVE_PURPOSE}} |
