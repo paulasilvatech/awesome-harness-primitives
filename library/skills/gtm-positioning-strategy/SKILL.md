@@ -1,440 +1,199 @@
 ---
-name: "gtm-positioning-strategy"
+name: gtm-positioning-strategy
 description: >-
-  Find and own a defensible market position. Use when messaging sounds like competitors, conversion is
-  weak despite awareness, repositioning a product, or testing positioning claims. Includes
-  Crawl-Walk-Run rollout methodology and the word change that improved enterprise deal progression.
-license: "MIT"
+  Diagnose and improve go-to-market positioning by auditing competitor messaging, finding defensible differentiation, testing claims, and planning Crawl-Walk-Run rollout. Use when messaging sounds like competitors, conversion is weak despite awareness, sales cannot explain differentiation, buyers see the product as interchangeable, or a team wants to test positioning before rebrand.
+license: MIT
 metadata:
   author: "Smit Patel (https://linkedin.com/in/smitkpatel)"
   source: "https://github.com/beingsmit/technical-product-gtm"
 ---
-# Positioning Strategy
 
-Find and own a defensible market position. Turn generic messaging into clear differentiation — or at least test whether your differentiation actually resonates before committing to it.
+# GTM positioning strategy
 
-## When to Use
+Turn generic product messaging into a defensible market position. Audit competitive language, identify structural advantage or under-served segments, test word choice and claims with real buyers, and return a rollout plan that reduces rebrand risk.
 
-**Triggers: **
-- "Our messaging sounds exactly like competitors"
-- "Brand awareness is strong but conversion is weak"
-- "Sales team can't explain why we're different"
-- "Buyers see us as interchangeable"
-- "Should we reposition before we rebrand?"
-- "How do we test positioning claims?"
+## When to invoke
 
-**Context: **
-- Competitive markets with similar offerings
-- Messaging that isn't converting
-- New product launches
-- Repositioning existing products
-- Sales team reports buyer confusion
+- "Our messaging sounds exactly like competitors."
+- "Brand awareness is strong but conversion is weak."
+- "Sales cannot explain why we are different."
+- "Buyers see us as interchangeable."
+- "How do we test positioning claims before a rebrand?"
 
----
+## Positioning diagnosis
 
-## Core Frameworks
+| Symptom | Diagnosis | Action |
+| --- | --- | --- |
+| Competitors all claim "fastest", "most reliable", or "easiest to use" | Table-stakes language, not differentiation | Collect 5-7 homepage headlines and mark shared claims as commoditized. |
+| Differentiation requires complex technical explanation | Positioning is too feature-led | Translate the feature into a buyer outcome, segment, or workflow claim. |
+| Strong awareness but weak pipeline/conversion | Market knows the company but not why to choose it | Test a sharper category, segment/use case, or pain-specific claim. |
+| Sales calls derail into comparison questions | Buyers see the product as interchangeable | Equip sales/product with a clear contrast narrative and proof. |
+| Existing customers reject the new description | Repositioning overreaches the product | Rework until customers still recognize what the product does. |
 
-### 1. One Word Can Change Everything (The "Autonomous" Problem)
+A positioning problem is not fixed by saying "better." Find what the product can own now, what competitors cannot copy quickly, and what the best customers already value.
 
-**The Pattern: **
+## Word choice and buyer psychology
 
-Early enterprise conversations for an autonomous AI product. Positioned as "autonomous AI agent."
+The autonomous AI example shows why one word matters. "Autonomous AI agent" made developers think "cool, but scary" and managers worry about team replacement. Reframing the same capability as "AI teammate" made developers hear "this helps me" and managers hear "this makes my team more productive," improving enterprise deal progression.
 
-Developers: "Cool, but scary."
-Managers: "Will this replace our team?"
-Deal progression: Slow. Lots of "we'll think about it."
+| Avoid when selling to enterprises | Why it scares buyers | Prefer | Why it converts |
+| --- | --- | --- | --- |
+| Autonomous | Implies no control and human replacement | Teammate | Implies collaboration and help. |
+| Replaces | Threatens job security | Augments | Makes humans better. |
+| Fully automated | Removes human judgment | You stay in control | Reassures human oversight. |
+| AI-first | Sounds vague or buzzword-driven | Handles repetitive work | Names the specific work removed. |
 
-**The Change: **
+Positioning is what you do not say as much as what you say. A technically true claim such as "replaces developers" can kill enterprise deals if it triggers risk, loss of control, or headcount anxiety.
 
-One word: "autonomous" → "AI teammate"
+## Crawl-Walk-Run rollout
 
-Same product. Same capabilities. Different framing.
+| Phase | Duration | Purpose | Actions | Measurement | Go/No-Go |
+| --- | --- | --- | --- | --- | --- |
+| Crawl | 1-2 weeks | Validate without product/org commitment | A/B test homepage headlines, run two outbound email sequences, ask customers whether the new description still fits | Website CTR, outbound reply rate, qualitative recognition | Move on if at least one variant beats incumbent by 20%+ and customers do not say "wait, that is not what you do." |
+| Walk | 2-3 weeks | Align before public rebrand | Rewrite homepage, enterprise pages, CTAs, pitch deck, call scripts, email templates, documentation, and use-case-specific examples | Sales usability feedback, engagement by segment, no major confusion | Move on if sales says messaging is easier and metrics improve. |
+| Run | 2-3 weeks and ongoing | Scale the validated position | Launch landing pages, run outbound campaigns by angle, update all customer-facing materials, train customer success, announce if appropriate | Pipeline volume, win rate, CAC efficiency, retention | Continue if conversion improves without churn or recognition loss. |
 
-**Result: **
+Do not run phases in parallel; mid-rollout messaging inconsistency makes results unreadable. Product work should follow validated positioning, not block it forever.
 
-Developers: "This helps me."
-Managers: "This makes my team more productive."
-Deal progression: Measurably faster.
+## Testing hierarchy
 
-**Why This Matters: **
+| Test | Sample | Measures | Signal strength | Use when |
+| --- | --- | --- | --- | --- |
+| Outbound Email A/B | 100 prospects per variant | Reply rate and meetings booked | High | Need real buyer intent before committing. |
+| Sales call scripts | Half of AEs use A, half use B | Demo-to-trial conversion | High | Sales team can run controlled scripts. |
+| Website homepage A/B | Current vs new headline and sub-headline | CTR on key CTAs | Moderate | Need fast market interest data. |
+| Existing customer prompt | "If we described ourselves as [new positioning], would you still recognize us?" | Recognition and confusion | Qualitative | Avoid customer churn and category whiplash. |
 
-Positioning isn't what you do. It's what you **don't say **.
+Do not choose a winner by internal consensus. Your team is not the buyer.
 
-We could've said "replaces developers" (technically true for some tasks). Would've killed every enterprise deal.
+## Positioning architecture
 
-**The Framework: Word Choice Shapes Buyer Psychology **
+| Layer | Question | Output |
+| --- | --- | --- |
+| Market context | What problem is the market experiencing, why now, and what happens if it remains unsolved? | A short narrative about urgency and consequences. |
+| Positioning statement | Who do we serve, what problem do we solve, how are we different, and why should buyers believe us? | One or two sentences. |
+| Narrative | Why is the world changing, why do existing solutions fail, why is our approach better, and what future do we enable? | Sales and marketing story. |
 
-**Words that scare enterprises: **
-- Autonomous (implies: no control, replacing humans)
-- Replaces (threatens: job security)
-- Fully automated (removes: human judgment)
-- AI-first (means: unclear, buzzword)
+Headline formats that keep the claim testable:
 
-**Words that convert: **
-- Teammate (implies: collaboration, helping)
-- Augments (helps: makes humans better)
-- You stay in control (reassures: human oversight)
-- Handles repetitive work (specific: saves time)
+| Format | Example shape | Watch out for |
+| --- | --- | --- |
+| `The [adjective] [category] that [differentiator]` | `The customizable platform for [workflow]` | Do not cram in multiple benefits. |
+| `[Product] for [specific use case]` | `Infrastructure for autonomous teams` | Ensure the segment is real and reachable. |
+| `[Product] that [core benefit]` | `The enterprise-grade alternative to [incumbent]` | Avoid defensive competitor-name positioning unless the comparison is strategic. |
 
-**How to Test Word Choice: **
+Use the sub-headline to clarify who, why, and how the product differs from status quo: "Deploy anywhere. Scale instantly. Your infrastructure, your rules." or "Enterprise-grade. No lock-in. Works with your existing stack."
 
-Don't guess. Test.
+Prefer specific, real-time operational proof over vague superlatives. Avoid generic best-in-class language unless independent evidence makes the claim believable.
 
-**Test 1: Outbound Email A/B **
-- Send 100 prospects Version A ("autonomous agent")
-- Send 100 prospects Version B ("AI teammate")
-- Measure: Reply rate, meeting booked rate
-- Signal strength: High (real buyer intent)
+## Defensibility assessment
 
-**Test 2: Website Homepage A/B **
-- Version A: Current positioning
-- Version B: New word choice
-- Measure: Click-through rate on key CTAs
-- Duration: 1-2 weeks minimum
-- Signal strength: Moderate (interest without commitment)
+| Positioning basis | Strength | Decision rule |
+| --- | --- | --- |
+| Structural advantage | Strongest | Use when competitors cannot copy the claim with a sprint: unique data ownership, on-prem deployment, deployment flexibility, pricing model, or network effects. |
+| Market position | Strong if first | Use when the company can credibly own a category before copycats react. |
+| Product feature | Weak | Avoid as the primary claim when competitors can match it quickly. |
 
-**Test 3: Sales Call Scripts **
-- Half of AEs use positioning A
-- Half use positioning B
-- Measure: Demo-to-trial conversion
-- Signal strength: High (real sales cycle)
+Ask four questions for every claim:
 
-**Common Mistake: **
+- Can a competitor copy this with one product sprint? If yes, it is not defensible.
+- Do we have a structural advantage? If no, treat it as temporary.
+- Is it credible with the current product? If no, do not claim it yet.
+- Can we own it before competitors react? If no, narrow the segment.
 
-Changing positioning based on internal consensus, not customer feedback. Your team isn't the buyer.
+## Decision trees
 
----
-
-### 2. Test Before You Commit (Crawl-Walk-Run Positioning Rollout)
-
-**The Pattern: **
-
-Positioning changes create risk. Brand confusion. Sales misalignment. Customer churn (if existing customers don't recognize you).
-
-**De-risk through phased rollout: **
-
-**Crawl Phase (1-2 weeks): Validation **
-
-Test messaging without committing product/org resources.
-
-**Actions: **
-- A/B test website headlines (new vs incumbent)
-- Run two outbound email sequences (different positioning angles) to cold prospects
-- Ask existing customers: "If we described ourselves as [new positioning], would you still recognize us?"
-
-**Measurement: **
-- Track CTR on web variants
-- Track reply rates on outbound sequences
-- Document qualitative feedback
-
-**Go/No-Go: **
-- At least one positioning variant outperforms incumbent by 20%+ on reply rate
-- Existing customers don't say "wait, that's not what you do"
-- Proceed if clear winner; if tied, run longer or test new angles
-
-**Walk Phase (2-3 weeks): Alignment **
-
-If testing validates, align product and sales to new positioning (but don't rebrand publicly yet).
-
-**Actions: **
-- Rewrite website copy (homepage, enterprise pages, CTAs)
-- Create sales enablement: updated pitch deck, call scripts, email templates
-- Update documentation to match new narrative
-- Build use-case-specific examples
-
-**Measurement: **
-- Sales team feedback on messaging usability
-- Website analytics on engagement (not conversion yet)
-- Segment analysis (who's responding?)
-
-**Go/No-Go: **
-- Sales team says new messaging is easier to use
-- CTR metrics improve vs incumbent
-- No major customer confusion
-- Proceed to Run
-
-**Run Phase (2-3 weeks and ongoing): Scale **
-
-Full commitment. This is the rebrand.
-
-**Actions: **
-- Launch dedicated landing pages per use case
-- Outbound campaigns per positioning angle
-- Update all customer-facing materials
-- Train customer success team on new narrative
-- Announce repositioning (if appropriate)
-
-**Measurement: **
-- Pipeline volume by positioning angle
-- Win rate by positioning angle
-- CAC efficiency by channel
-- Customer retention (did we lose anyone?)
-
-**Common Mistakes: **
-- Skipping Crawl (jumping to full rebrand without validation)
-- Running phases in parallel (creates confusion if messaging changes mid-rollout)
-- Waiting for perfect product before repositioning (product should follow positioning, not precede it)
-- Not measuring at each phase (can't determine if test "won")
-
----
-
-### 3. Positioning Clarity Diagnosis
-
-**The Pattern: **
-
-If your messaging closely resembles competitors' messaging, you have a positioning problem, not a product problem.
-
-**Positioning Failure Manifests As: **
-- All competitors describe nearly identical value props
-- Differentiation requires explaining complex technical details
-- Buyers see offerings as interchangeable
-- Marketing metrics (CTR, engagement) weak vs industry benchmarks
-- Sales conversations get derailed by comparison questions
-
-**How to Execute: **
-
-**Step 1: Competitor Messaging Audit **
-- Collect homepage headlines from 5-7 direct competitors
-- Identify shared claims (these are commoditized)
-- Map where competitors claim unique value
-
-**Example: **
-
-If everyone says "fastest," "most reliable," "easiest to use" — these are table stakes, not differentiation.
-
-**Step 2: Assess Your Actual Strengths **
-- What can you do that competitors can't, without massive R&D?
-- What do your best customers choose you for? (Ask them)
-- What structural advantages do you have? (Deployment model, data ownership, pricing, network effects, etc.)
-
-**Step 3: Find Under-Served Position **
-- Where do existing solutions fail users?
-- What problem is everyone ignoring?
-- What buyer segment is under-served?
-
-**Step 4: Stake a Clear Claim **
-
-Must be:
-- Something you can own now (not future roadmap)
-- Something competitors can't easily copy (structural advantage)
-- Resonant with your best customer segments
-
-**Common Mistakes: **
-- Claiming you're "better" at what everyone does (unbelievable)
-- Positioning on features competitors already have
-- Multiple positions simultaneously (choose one)
-- Waiting for perfect product before positioning shift
-
----
-
-### 4. Market Positioning Architecture (Three Layers)
-
-**Layer 1: Market Context **
-- What problem is the market experiencing?
-- Why is it experiencing this problem now?
-- What happens if problem goes unsolved?
-
-**Example: **
-"Infrastructure teams manage increasingly complex deployments across hybrid environments. Organizations adopt microservices and distributed systems. This creates operational complexity that traditional monitoring tools can't handle."
-
-**Layer 2: Positioning Statement (1-2 sentences) **
-- **Who we serve **: What customer segment?
-- **What problem we solve **: The specific pain
-- **How we're different **: Why we matter vs alternatives
-- **Proof **: Why should they believe us?
-
-**Example: **
-"We help platform teams ship faster through [core capability] that connects [workflow A], [workflow B], and [business outcome] in real-time."
-
-**Layer 3: Narrative **
-
-Expand positioning into story:
-- Why the world is changing
-- Why existing solutions don't work
-- Why our approach is better
-- What the future looks like with us
-
-**How to Execute: **
-
-Write all three layers before testing. Test Layer 2 (positioning statement) first with Crawl-Walk-Run methodology. If that validates, build out Layer 3.
-
----
-
-### 5. Headline and Sub-headline Testing
-
-**Principle: ** Clear positioning requires testable structure: headline (what are you?) + sub-headline (for whom? why?).
-
-**Main Headline Formats: **
-- "The [adjective] [category] that [differentiator]"
-- "[Product] for [specific use case]"
-- "[Product] that [core benefit]"
-
-**Examples: **
-- "The customizable platform for [workflow]"
-- "Infrastructure for autonomous teams"
-- "The enterprise-grade alternative to [incumbent]"
-
-**Red Flags: **
-- Using competitor name (defensive, not confident)
-- Too technical (buyer won't understand)
-- Claiming multiple benefits (choose one)
-- Vague ("the future of X" — unbelievable)
-
-**Sub-headline Purpose: **
-
-Clarifies who, why, how it's different from status quo.
-
-**Examples: **
-- "Deploy anywhere. Scale instantly. Your infrastructure, your rules."
-- "For teams drowning in repetitive work. Automation that handles the 80%, humans handle the 20%."
-- "Enterprise-grade. No lock-in. Works with your existing stack."
-
-**How to Test: **
-
-A/B test headline + sub-headline combinations:
-- Variant A: Current messaging
-- Variant B: New positioning angle
-- Variant C: Different differentiation claim
-
-Measure CTR, reply rates, conversion.
-
-Pick winner based on data, not opinion.
-
----
-
-### 6. Positioning Defensibility Assessment
-
-**Principle: ** A positioning is only valuable if competitors can't easily copy it.
-
-**Defensibility Hierarchy: **
-
-**1. Structural Advantage (Strongest) **
-- Hard to copy: unique data ownership, deployment flexibility, pricing model, network effects
-- Example: "Built for regulated industries with on-prem deployment" (can't copy without rebuilding architecture)
-
-**2. Market Position (Strong if First) **
-- Defensible if you own it first and scale
-- Example: "First AI platform for [specific workflow]" (copycats look derivative)
-
-**3. Product Feature (Weak) **
-- Easy to copy: UX, specific capability
-- Example: "Faster API calls" (competitor ships speed improvement in 6 weeks)
-
-**How to Assess: **
-
-For each positioning claim, ask:
-
-1. Can competitor copy this with single product sprint? (Yes = not defensible)
-2. Do we have structural advantage? (No = temporary positioning)
-3. Is this credible given current product? (No = don't claim it yet)
-4. Can we own this position before competitors react? (No = too slow)
-
-**Common Mistake: **
-
-Positioning on features competitors can easily match. This creates positioning treadmill — you're always defending, never owning.
-
----
-
-## Decision Trees
-
-### Should We Reposition?
-
-```
+```text
+Should we reposition?
 Is brand awareness strong but conversion weak?
-├─ Yes → Positioning problem, test new angles
-└─ No → Continue...
-    │
-    Does our messaging sound like competitors?
-    ├─ Yes → Positioning problem
-    └─ No → Not a positioning issue
+├─ Yes → Positioning problem; test new angles.
+└─ No → Does our messaging sound like competitors?
+   ├─ Yes → Positioning problem.
+   └─ No → Not primarily positioning.
 ```
 
-### Which Positioning Angle Should We Test?
-
-```
-Do we have structural advantage competitors can't copy?
-├─ Yes → Position on structural advantage
-└─ No → Continue...
-    │
-    Are we first in a category?
-    ├─ Yes → Position on category ownership
-    └─ No → Find under-served segment/use case
+```text
+Which angle should we test?
+Do we have structural advantage competitors cannot copy?
+├─ Yes → Position on structural advantage.
+└─ No → Are we first in a category?
+   ├─ Yes → Position on category ownership.
+   └─ No → Find an under-served segment/use case.
 ```
 
-### Should We Move from Crawl to Walk Phase?
-
-```
+```text
+Move from Crawl to Walk?
 Did new positioning outperform incumbent by 20%+?
-├─ Yes → Move to Walk (alignment phase)
-└─ No → Continue...
-    │
-    Did we run test long enough (2+ weeks)?
-    ├─ No → Run longer
-    └─ Yes → Try different positioning angle or stay with incumbent
+├─ Yes → Move to Walk.
+└─ No → Did the test run at least two weeks?
+   ├─ No → Run longer.
+   └─ Yes → Try another angle or keep incumbent.
 ```
 
----
+## Common mistakes
 
-## Common Mistakes
+| Mistake | Why it fails | Correction |
+| --- | --- | --- |
+| Claiming to be better at what everyone does | Unbelievable in crowded markets | Choose a different angle. |
+| Positioning on easily-copied features | Creates a treadmill | Anchor on structural advantage or under-served workflows. |
+| Waiting for perfect product before positioning | Delays learning | Test claims and let product follow validated messaging. |
+| Testing too many angles simultaneously | Cannot attribute results | Test one clear claim at a time. |
+| Skipping Crawl | Full rebrand risk is too high | Validate before public commitment. |
+| One positioning for every persona | Different buyers care about different outcomes | Tailor proof and examples by persona. |
+| Generic "best-in-class", `in-class`, or "innovative" language | Does not differentiate | Use concrete outcomes and proof. |
 
-**1. Claiming to be "better" at what everyone does **
-   - Unbelievable. Find different angle.
+## Related primitives
 
-**2. Positioning on easily-copied features **
-   - Competitors will match. Need structural advantage.
+| Name | Type | Use it when |
+| --- | --- | --- |
+| `ai-gtm` | skill | The task is AI-specific naming such as copilot, agent, companion, or teammate. |
+| `technical-product-pricing` | skill | Price is the positioning signal or packaging strategy. |
+| `0-to-1-launch` | skill | A new product launch needs launch sequencing beyond positioning. |
 
-**3. Waiting for perfect product before positioning shift **
-   - Product work should follow positioning, not precede
+## Output template
 
-**4. Testing too many positioning angles simultaneously **
-   - Can't determine what's working. Test one at a time.
+```markdown
+## Positioning strategy
 
-**5. Skipping validation phase **
-   - Jumping to full rebrand without testing = risk
+**Status:** recommended | needs more evidence | blocked
+**Current position:** <one sentence>
+**Recommended position:** <one sentence>
+**Primary risk:** <risk>
 
-**6. One positioning for all buyer personas **
-   - Different personas care about different things
+### Diagnosis
+| Symptom | Evidence | Implication |
+| --- | --- | --- |
+| <symptom> | <competitor/customer/sales evidence> | <positioning issue> |
 
-**7. Generic positioning that doesn't differentiate **
-   - "Best-in-class," "innovative" = meaningless
+### Claim to test
+**Headline:** <headline>
+**Sub-headline:** <sub-headline>
+**Differentiation basis:** structural advantage | market position | feature | under-served segment
+**Why it is defensible:** <reason>
 
----
+### Crawl-Walk-Run plan
+| Phase | Test or action | Metric | Go/No-Go |
+| --- | --- | --- | --- |
+| Crawl | <test> | <metric> | <threshold> |
+| Walk | <alignment action> | <metric> | <threshold> |
+| Run | <scale action> | <metric> | <threshold> |
 
-## Quick Reference
+### Messaging guardrails
+- Say: <words or claims>
+- Do not say: <words or claims>
+```
 
-**Crawl-Walk-Run Testing: **
-- Crawl (1-2 weeks): A/B test messaging, measure reply rates
-- Walk (2-3 weeks): Align sales/product to winning angle
-- Run (ongoing): Full repositioning, measure pipeline/conversion
+## Quality gate
 
-**Word choice that converts: **
-- Teammate, augments, you stay in control
-- Autonomous, replaces, fully automated
+- [ ] Competitor messaging or buyer confusion was used as evidence, not internal preference alone.
+- [ ] The recommendation names one primary position rather than multiple simultaneous positions.
+- [ ] The position is credible with the current product and mapped to structural advantage, market position, feature, or under-served segment.
+- [ ] Scary or vague words are replaced with buyer-safe language when enterprise trust matters.
+- [ ] The Crawl phase includes a measurable test and a Go/No-Go threshold, preferably 20%+ improvement over incumbent.
+- [ ] Existing customer recognition risk is checked before Walk or Run.
+- [ ] The output includes a concrete headline, sub-headline, rollout plan, and messaging guardrails.
 
-**Positioning audit steps: **
-1. Collect competitor messaging
-2. Identify your actual strengths (ask customers)
-3. Find under-served position
-4. Stake clear, defensible claim
+## References
 
-**Defensibility hierarchy: **
-1. Structural advantage (unique data, deployment flexibility, pricing model)
-2. Market position (category ownership)
-3. Product feature (weakest, easily copied)
-
-**Testing hierarchy (signal strength): **
-1. Outbound reply rates (highest)
-2. Sales call conversion (high)
-3. Website CTR (moderate)
-
----
-
-## Related Skills
-
-- **ai-gtm **: AI-specific positioning (copilot vs agent vs teammate)
-- **technical-product-pricing **: Price as a positioning signal
-- **0-to-1-launch **: Positioning for new product launches
-
----
-
-*Based on positioning work at AI agent and developer platforms, including navigating the framing spectrum from "autonomous" to "AI companion" and how category framing changes enterprise buyer perception. Also includes Crawl-Walk-Run rollout methodology from repositioning products without breaking existing customer recognition. Not theory — patterns from testing positioning before committing to rebrands.*
+- [Source repository](https://github.com/beingsmit/technical-product-gtm)
+- [Author profile](https://linkedin.com/in/smitkpatel)

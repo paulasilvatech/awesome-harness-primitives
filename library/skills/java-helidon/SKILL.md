@@ -1,78 +1,64 @@
 ---
-name: "java-helidon"
+name: java-helidon
 description: >-
-  Get best practices for developing applications with Helidon 4 (SE and MP). Use when working with
-  Helidon SE or Helidon MP, HttpService routing, Helidon DB Client, MicroProfile Config, Helidon
-  Security, or Helidon testing in Java 21+ projects.
+  Apply Helidon 4 SE and MP best practices for Java 21 applications, including routing, DB Client, Jakarta and MicroProfile APIs, configuration, security, observability, and tests. Use when working with Helidon SE, Helidon MP, HttpService, HttpRules, MicroProfile Config, Helidon DB Client, Helidon Security, or Helidon testing.
 ---
-# Helidon Best Practices
 
-Your goal is to help me write high-quality Helidon applications by following established best practices.
+# Java Helidon
 
-## Helidon 3 → 4 API changes
+Guide Helidon 4 code generation and review so SE and MP applications compile, keep business logic out of transport layers, use Java 21 idioms, bind data safely, and avoid common Helidon 3 API mistakes.
 
-Helidon 4 renamed or resignatured APIs that appear widely in their Helidon 3 form.
-The left column does not compile on Helidon 4. Check generated code against this table
-before returning it.
+## When to invoke
 
-| Do not use (Helidon 3)                                     | Use (Helidon 4)                                                    |
-| ---------------------------------------------------------- | ------------------------------------------------------------------ |
-| `io.helidon.common.http.Http.Status`                       | `io.helidon.http.Status`                                           |
-| `io.helidon.webserver.Service`                             | `io.helidon.webserver.http.HttpService`                            |
-| `Routing.Rules`, `update(Routing.Rules)`                   | `HttpRules`, `routing(HttpRules)`                                  |
-| `request.path().param("id")`                               | `request.path().pathParameters().get("id")`                        |
-| `String s = column.as(String.class)`                       | `column.getString()` or `column.get(String.class)`                 |
-| `dbClient.execute(exec -> ...)` returning `Single`/`Multi` | `dbClient.execute()` returning `Optional<DbRow>` / `Stream<DbRow>` |
-| `javax.*`                                                  | `jakarta.*`                                                        |
-| `helidon-microprofile-tests-junit5`                        | `helidon-microprofile-testing-junit5`                              |
+- "Write a Helidon 4 SE service."
+- "Review this Helidon MP resource."
+- "Fix Helidon DB Client code that does not compile."
+- "Add Helidon tests without hardcoding a port."
+- "Migrate Helidon 3 APIs to Helidon 4."
 
-`Value.as(Class)` in Helidon 4 returns `OptionalValue<T>`, not `T`. This is the single
-most common Helidon 4 compile error in generated code.
+## Helidon 3 to 4 API changes
 
-## Project Setup & Structure
+Check generated code against this table before returning it. The left column commonly appears in older examples and does not compile or is wrong for Helidon 4.
 
-- **Programming Model:** Determine whether the project uses Helidon SE or Helidon MP before generating code. Do not mix the two programming models unless explicitly required.
-- **Java Version:** Use Java 21 or later for Helidon 4 applications.
-- **Build Tool:** Use Maven (`pom.xml`) or Gradle (`build.gradle`) for dependency management.
-- **Dependency Management:** Use the Helidon BOM or platform to keep Helidon module versions aligned.
-- **Package Structure:** Organize code by feature or domain, such as `com.example.app.order` and `com.example.app.customer`, rather than only by technical layer.
+| Do not use | Use in Helidon 4 |
+| --- | --- |
+| `io.helidon.common.http.Http.Status` | `io.helidon.http.Status` |
+| `io.helidon.webserver.Service` | `io.helidon.webserver.http.HttpService` |
+| `Routing.Rules`, `update(Routing.Rules)` | `HttpRules`, `routing(HttpRules)` |
+| `request.path().param("id")` | `request.path().pathParameters().get("id")` |
+| `String s = column.as(String.class)` | `column.getString()` or `column.get(String.class)` |
+| `dbClient.execute(exec -> ...)` returning `Single`/`Multi` | `dbClient.execute()` returning `Optional<DbRow>` or `Stream<DbRow>` |
+| `javax.*` | `jakarta.*` |
+| `helidon-microprofile-tests-junit5` | `helidon-microprofile-testing-junit5` |
 
-## Helidon SE
+`Value.as(Class)` returns `OptionalValue<T>`, not `T`; `DbColumn.as(String.class)` returns `OptionalValue<String>`, not `String`. This is the most common generated-code compile error in high-quality Helidon 4 work.
 
-- **Explicit Composition:** Construct services and dependencies explicitly in the application bootstrap layer.
-- **Constructor Injection:** Pass required dependencies through constructors and declare dependency fields as `private final`.
-- **HTTP Services:** Group related routes in focused `HttpService` implementations.
-- **Business Logic:** Keep business logic outside route handlers.
-- **Virtual Threads:** Prefer straightforward blocking code with Helidon 4 virtual-thread-based request handling. Do not introduce reactive complexity without a clear reason. Helidon 4 is not reactive; do not generate `Single`, `Multi`, or `CompletionStage` chains.
+Migration tokens to verify explicitly: `DbColumn.as(String.class)`, `OptionalValue<String>`, `String`.
 
-## Helidon MP
+## Project setup and programming model
 
-- **Jakarta and MicroProfile:** Prefer standard Jakarta EE and Eclipse MicroProfile APIs when available.
-- **Dependency Injection:** Use CDI with constructor injection for required dependencies.
-- **Bean Scopes:** Use CDI scopes such as `@ApplicationScoped` and `@RequestScoped` intentionally.
-- **Normal-Scoped Beans:** Add a non-private no-argument constructor to normal-scoped beans that use constructor injection, so the CDI client proxy can be created portably.
-- **Business Logic:** Keep Jakarta REST resource classes thin and delegate business operations to service classes.
-- **Portability:** Prefer portable Jakarta and MicroProfile APIs over Helidon-specific APIs when portability is important.
+| Concern | Rule |
+| --- | --- |
+| Programming model | Determine whether the repository uses Helidon SE or Helidon MP before generating code; do not mix them unless explicitly required. |
+| Java version | Use Java 21 or later for Helidon 4. |
+| Build | Use the existing `pom.xml` or `build.gradle`; align Helidon versions with the Helidon BOM or platform. |
+| Packages | Organize by feature or domain, such as `com.example.app.order` and `com.example.app.customer`, not only technical layers. |
+| Configuration files | Store non-secret configuration in `application.yaml` or `application.properties`; use environment-dependent and deployment-specific overrides for runtime values. |
+| Secrets | Never hardcode credentials, API keys, tokens, private certificates, `DB_USERNAME`, or `DB_PASSWORD`. |
 
-## Configuration
+Use the project's secret-management system for production credentials.
 
-- **Externalized Configuration:** Store non-secret configuration in `application.yaml` or `application.properties`.
-- **Helidon SE Configuration:** Use Helidon Config and pass configuration values or typed configuration objects to components.
-- **Helidon MP Configuration:** Use MicroProfile Config for injected application settings.
-- **Environment Overrides:** Use environment variables or deployment-specific configuration sources for environment-dependent values.
-- **Secrets Management:** Never hardcode credentials, API keys, tokens, or private certificates.
+## Helidon SE patterns
 
-## Web Layer
+| Layer | Rule |
+| --- | --- |
+| Bootstrap | Compose dependencies explicitly in the application startup layer. |
+| Services | Use constructor injection with `private final` fields. |
+| Routing | Group related routes in focused `HttpService` classes and register them with `routing.register(...)`. |
+| Request handling | Keep handlers small; validate parameters and delegate business logic. |
+| Concurrency | Prefer straightforward blocking code on Helidon 4 virtual-thread-based request handling. Do not generate `Single`, `Multi`, or `CompletionStage` chains without a project-specific reason. |
 
-- **DTOs:** Use dedicated request and response models. Do not expose persistence entities directly through APIs.
-- **Validation:** Validate path parameters, query parameters, headers, and request bodies before invoking business logic.
-- **Status Codes:** Return appropriate HTTP status codes for successful, invalid, unauthorized, forbidden, missing, and failed requests. On `PUT` and `DELETE`, return 404 when the target does not exist rather than succeeding unconditionally.
-- **Error Handling:** Use centralized error handling in Helidon SE and Jakarta REST `ExceptionMapper` implementations in Helidon MP.
-- **Sensitive Information:** Do not expose stack traces, database details, filesystem paths, or internal exception messages to clients.
-
-### Helidon SE Example
-
-Use an `HttpService` to register routes programmatically. Keep request handlers small and delegate business logic to a service.
+SE route shape:
 
 ```java
 import io.helidon.http.Status;
@@ -82,7 +68,6 @@ import io.helidon.webserver.http.ServerRequest;
 import io.helidon.webserver.http.ServerResponse;
 
 public final class CustomerHttpService implements HttpService {
-
     private final CustomerService customerService;
 
     public CustomerHttpService(CustomerService customerService) {
@@ -96,30 +81,26 @@ public final class CustomerHttpService implements HttpService {
 
     private void findById(ServerRequest request, ServerResponse response) {
         var id = request.path().pathParameters().get("id");
-
         customerService.findById(id)
-                .ifPresentOrElse(
-                        response::send,
-                        () -> response.status(Status.NOT_FOUND_404).send()
-                );
+                .ifPresentOrElse(response::send, () -> response.status(Status.NOT_FOUND_404).send());
     }
 }
 ```
 
-Register the HTTP service when constructing the server:
+Register with `WebServer.builder().routing(routing -> routing.register("/customers", customerHttpService)).build().start();`.
 
-```java
-import io.helidon.webserver.WebServer;
+## Helidon MP patterns
 
-WebServer server = WebServer.builder()
-        .routing(routing -> routing.register("/customers", customerHttpService))
-        .build()
-        .start();
-```
+| Layer | Rule |
+| --- | --- |
+| Standards | Prefer Jakarta EE and Eclipse MicroProfile APIs when available. |
+| Injection | Use CDI constructor injection for required dependencies. |
+| Scopes | Choose `@ApplicationScoped` and `@RequestScoped` intentionally. |
+| Normal-scoped beans | Add a `non-private` `no-argument` constructor to normal-scoped beans that also use constructor injection so CDI proxies can be created. |
+| REST resources | Keep REST resources thin and delegate business operations to service classes. |
+| Portability | Use portable Jakarta and MicroProfile APIs when portability matters. |
 
-### Helidon MP Example
-
-Use Jakarta REST annotations for endpoints and CDI for dependency injection.
+MP resource shape:
 
 ```java
 import jakarta.enterprise.context.RequestScoped;
@@ -135,17 +116,12 @@ import jakarta.ws.rs.core.Response;
 @RequestScoped
 @Produces(MediaType.APPLICATION_JSON)
 public class CustomerResource {
-
     private final CustomerService customerService;
 
-    protected CustomerResource() {
-        this.customerService = null;
-    }
+    protected CustomerResource() { this.customerService = null; }
 
     @Inject
-    public CustomerResource(CustomerService customerService) {
-        this.customerService = customerService;
-    }
+    public CustomerResource(CustomerService customerService) { this.customerService = customerService; }
 
     @GET
     @Path("/{id}")
@@ -157,155 +133,55 @@ public class CustomerResource {
 }
 ```
 
-## Service Layer
+## Web and service layer rules
 
-- **Transactions:** Define transaction boundaries around complete business operations.
-- **Entity Mapping:** Map persistence entities to API models at the service boundary so that service method signatures expose only API models. A service returning `Optional<CustomerEntity>` where the caller expects `Optional<Customer>` is a common generated-code compile error.
-- **Concurrency:** Avoid mutable shared state in application-scoped components unless access is properly coordinated.
+| Area | Rule |
+| --- | --- |
+| DTOs | Use request and response models; never expose persistence entities directly through APIs. |
+| Validation | Validate path parameters, query parameters, headers, and bodies before business logic. |
+| Status codes | Return appropriate HTTP status codes; on `PUT` and `DELETE`, return 404 when the target does not exist. |
+| Errors | Use centralized error handling in SE and Jakarta REST `ExceptionMapper` in MP. Do not expose stack traces, database details, filesystem paths, or internal exception messages. |
+| Transactions | Put transaction boundaries around complete business operations. |
+| Mapping | Map persistence entities to API models at the service boundary; avoid `Optional<CustomerEntity>` leaking where callers expect `Optional<Customer>`. |
+| State | Avoid mutable shared state in application-scoped components unless access is coordinated. |
 
-### Helidon SE Example
+A service can throw `IllegalArgumentException` for blank IDs or invalid `CreateCustomerRequest` data, map `CustomerEntity` to `Customer.fromEntity`, and use `@Transactional` on methods that change persistent state.
 
-Helidon SE services are normally plain Java classes with explicitly supplied dependencies.
+## Data layer rules
 
-```java
-public final class CustomerService {
+| Concern | Rule |
+| --- | --- |
+| Access technology | Use Helidon DB Client, Jakarta Persistence, or the persistence mechanism already established by the project. |
+| SQL safety | Always bind parameters or use prepared statements; never concatenate untrusted input into SQL. |
+| Column reads | Use `column("name").getString()`, `column("name").get(String.class)`, `getInt()`, `getLong()`, or other typed accessors. |
+| Nullability | Use `asOptional()` or optional-aware accessors for nullable columns; direct `getString()` throws for null. |
+| Whole-row mapping | `DbRow.as(Customer.class)` returns the mapped instance directly but requires a `DbMapper` registered through a `DbMapperProvider` service-loader entry; use this whole-row path only when repeated row shapes justify it. |
+| Migrations | Use a migration tool for schema changes; do not rely on destructive automatic schema updates. |
+| Entity separation | Keep `CustomerEntity` and public API records separate. |
 
-    private final CustomerRepository customerRepository;
-
-    public CustomerService(CustomerRepository customerRepository) {
-        this.customerRepository = customerRepository;
-    }
-
-    public Optional<Customer> findById(String id) {
-        if (id == null || id.isBlank()) {
-            throw new IllegalArgumentException("Customer ID is required");
-        }
-
-        return customerRepository.findById(id);
-    }
-
-    public Customer create(CreateCustomerRequest request) {
-        if (request.name() == null || request.name().isBlank()) {
-            throw new IllegalArgumentException("Customer name is required");
-        }
-
-        var customer = new Customer(request.id(), request.name().trim());
-
-        customerRepository.save(customer);
-        return customer;
-    }
-}
-```
-
-Construct the dependency graph explicitly:
-
-```java
-var repository = new DbCustomerRepository(dbClient);
-var service = new CustomerService(repository);
-var httpService = new CustomerHttpService(service);
-```
-
-### Helidon MP Example
-
-Use CDI scopes and constructor injection. Apply transactions at the service layer when a business operation changes persistent state. Map the persistence entity to the API model here, so the service never leaks `CustomerEntity` to callers.
-
-```java
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
-import jakarta.transaction.Transactional;
-
-@ApplicationScoped
-public class CustomerService {
-
-    private final JpaCustomerRepository customerRepository;
-
-    protected CustomerService() {
-        this.customerRepository = null;
-    }
-
-    @Inject
-    public CustomerService(JpaCustomerRepository customerRepository) {
-        this.customerRepository = customerRepository;
-    }
-
-    public Optional<Customer> findById(String id) {
-        if (id == null || id.isBlank()) {
-            throw new IllegalArgumentException("Customer ID is required");
-        }
-
-        return customerRepository.findById(id)
-                .map(Customer::fromEntity);
-    }
-
-    @Transactional
-    public Customer create(CreateCustomerRequest request) {
-        if (request.name() == null || request.name().isBlank()) {
-            throw new IllegalArgumentException("Customer name is required");
-        }
-
-        var entity = new CustomerEntity(request.id(), request.name().trim());
-
-        customerRepository.save(entity);
-        return Customer.fromEntity(entity);
-    }
-}
-```
-
-## Data Layer
-
-- **Database Access:** Use Helidon DB Client, Jakarta Persistence, or another persistence mechanism already established by the project.
-- **Parameterized Queries:** Always use parameter binding or prepared statements. Never concatenate untrusted input into SQL.
-- **Column Accessors:** Read a typed column value with `column("name").getString()` (or `getInt()`, `getLong()`, and so on) or with `column("name").get(String.class)`. `DbColumn.as(String.class)` returns an `OptionalValue<String>` in Helidon 4, not a `String`.
-- **Nullable Columns:** Read nullable columns through `asOptional()` or another optional-aware accessor. Direct `getString()` and similar accessors throw when the column value is null.
-- **Row Mapping:** For whole-row mapping, `DbRow.as(Customer.class)` returns the mapped instance directly, but requires a `DbMapper` registered through a `DbMapperProvider` service-loader entry. Prefer explicit column reads for a small number of simple repositories, and introduce a `DbMapper` when the same row shape is mapped in several places.
-- **Migrations:** Use a database migration tool for schema changes rather than automatic destructive schema updates.
-- **Entity Separation:** Do not expose database entities directly as API contracts.
-
-### Helidon SE Example
-
-Use Helidon DB Client with parameterized statements. Map database rows into application models inside the repository.
+Helidon DB Client repository shape:
 
 ```java
 import io.helidon.dbclient.DbClient;
 
 public final class DbCustomerRepository implements CustomerRepository {
-
-    private static final String FIND_BY_ID =
-            "SELECT id, name FROM customers WHERE id = :id";
-
-    private static final String INSERT =
-            "INSERT INTO customers (id, name) VALUES (:id, :name)";
-
+    private static final String FIND_BY_ID = "SELECT id, name FROM customers WHERE id = :id";
+    private static final String INSERT = "INSERT INTO customers (id, name) VALUES (:id, :name)";
     private final DbClient dbClient;
 
-    public DbCustomerRepository(DbClient dbClient) {
-        this.dbClient = dbClient;
-    }
-
-    @Override
     public Optional<Customer> findById(String id) {
         return dbClient.execute()
                 .createGet(FIND_BY_ID)
                 .addParam("id", id)
                 .execute()
-                .map(row -> new Customer(
-                        row.column("id").getString(),
-                        row.column("name").getString()
-                ));
-    }
-
-    @Override
-    public void save(Customer customer) {
-        dbClient.execute()
-                .createInsert(INSERT)
-                .addParam("id", customer.id())
-                .addParam("name", customer.name())
-                .execute();
+                .map(row -> new Customer(row.column("id").getString(), row.column("name").getString()));
     }
 }
 ```
 
-Named statements can also be stored in configuration instead of embedding SQL in Java:
+For Helidon MP persistence, keep `JpaCustomerRepository` CDI-managed, inject `EntityManager` with `@PersistenceContext`, and return entities only inside the data layer.
+
+Named statements may live in config:
 
 ```yaml
 db:
@@ -321,117 +197,65 @@ db:
       WHERE id = :id
 ```
 
-Reference the named statement by name instead of passing SQL text:
+Reference named SQL with `createNamedGet("find-customer-by-id")` and bound parameters.
 
-```java
-return dbClient.execute()
-        .createNamedGet("find-customer-by-id")
-        .addParam("id", id)
-        .execute()
-        .map(row -> new Customer(
-                row.column("id").getString(),
-                row.column("name").getString()
-        ));
+## Observability, logging, testing, and security
+
+| Area | Rule |
+| --- | --- |
+| Health | Use Helidon Health in SE or MicroProfile Health in MP for liveness and readiness. |
+| Metrics | Use Helidon Metrics or MicroProfile Metrics; avoid user IDs, request IDs, email addresses, and raw URLs as metric tags. |
+| Tracing | Propagate tracing context across inbound and outbound service calls. |
+| Logging | Use the project's logging API; never log passwords, access tokens, authorization headers, cookies, sensitive bodies, secrets, or personal data. |
+| Unit tests | Use JUnit 5 for services. |
+| SE tests | Use `helidon-webserver-testing-junit5` with `@ServerTest` for full server tests or `@RoutingTest` for routing-only tests; inject `Http1Client` and never hardcode a port. |
+| MP tests | Use `helidon-microprofile-testing-junit5` with `@HelidonTest`; confirm coordinates because the artifact was renamed across 4.x releases. |
+| Integration tests | Consider Testcontainers for real databases, brokers, or infrastructure. |
+| Failure paths | Test validation failures, missing resources, external-service failures, and authorization failures. |
+| Authentication | Use Helidon Security or supported Jakarta and MicroProfile security APIs. |
+| Authorization | Deny protected operations by default and enforce permissions at a clear boundary. |
+| JWT/OIDC | Validate token signatures, issuers, audiences, and expirations. |
+| TLS | Use TLS in production and verify outbound certificates. |
+| CORS | Configure allowed origins explicitly; do not combine wildcard origins with credentials. |
+| Outbound requests | Validate destinations to reduce server-side request forgery risk. |
+
+## Gotchas
+
+- **`Value.as(Class)` is not a direct value**: unwrap `OptionalValue<T>` or use typed accessors.
+- **Helidon 4 is not the old reactive API**: avoid `Single`, `Multi`, and `CompletionStage` patterns copied from Helidon 3.
+- **CDI proxy construction matters**: normal-scoped MP beans with constructor injection need a non-private no-argument constructor.
+- **Testing ports must be dynamic**: `@ServerTest`, `@RoutingTest`, and `@HelidonTest` manage server lifecycle; do not hardcode ports.
+
+## Output template
+
+```markdown
+## Helidon result
+
+**Status:** complete | needs changes | blocked
+**Programming model:** SE | MP
+**Files reviewed or generated:** <paths>
+
+### Findings or changes
+| Area | Evidence | Action |
+| --- | --- | --- |
+| API migration | `<old API>` | `<Helidon 4 replacement>` |
+| Web layer | `<route/resource evidence>` | `<fix>` |
+| Data layer | `<query or mapper evidence>` | `<fix>` |
+| Tests | `<test evidence>` | `<fix>` |
+
+### Validation
+- Compile check: pass | fail | not run
+- Tests: pass | fail | not run
 ```
 
-### Helidon MP Example
+## Quality gate
 
-Use Jakarta Persistence in a CDI-managed repository. Keep transaction boundaries in the service layer. The repository works in entities; the service maps them to API models.
-
-```java
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
-
-@ApplicationScoped
-public class JpaCustomerRepository {
-
-    @PersistenceContext
-    private EntityManager entityManager;
-
-    public Optional<CustomerEntity> findById(String id) {
-        return Optional.ofNullable(entityManager.find(CustomerEntity.class, id));
-    }
-
-    public void save(CustomerEntity customer) {
-        entityManager.persist(customer);
-    }
-}
-```
-
-Define the persistence entity separately from the public API model:
-
-```java
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-
-@Entity
-@Table(name = "customers")
-public class CustomerEntity {
-
-    @Id
-    private String id;
-
-    @Column(nullable = false)
-    private String name;
-
-    protected CustomerEntity() {
-    }
-
-    public CustomerEntity(String id, String name) {
-        this.id = id;
-        this.name = name;
-    }
-
-    public String id() {
-        return id;
-    }
-
-    public String name() {
-        return name;
-    }
-}
-```
-
-The API model stays free of persistence annotations and owns the mapping:
-
-```java
-public record Customer(String id, String name) {
-
-    public static Customer fromEntity(CustomerEntity entity) {
-        return new Customer(entity.id(), entity.name());
-    }
-}
-```
-
-## Observability
-
-- **Health:** Use Helidon Health in SE or MicroProfile Health in MP for liveness and readiness checks.
-- **Metrics:** Use Helidon Metrics or MicroProfile Metrics for operational and business measurements.
-- **Tracing:** Propagate tracing context across inbound and outbound service calls.
-- **Cardinality:** Avoid user IDs, request IDs, email addresses, and raw URLs as metric tags.
-
-## Logging
-
-- **Logging API:** Use the logging API and implementation configured by the project.
-- **Sensitive Information:** Never log passwords, access tokens, authorization headers, cookies, or complete sensitive request bodies. Do not place secrets or personal information in metrics or trace attributes either.
-
-## Testing
-
-- **Unit Tests:** Write unit tests for business services using JUnit 5.
-- **Helidon SE Tests:** Use `helidon-webserver-testing-junit5` with `@ServerTest` for full server tests and `@RoutingTest` for routing-only tests. These start the server on a dynamically selected port and inject a `Http1Client` bound to it. Never hardcode a port.
-- **Helidon MP Tests:** Use `helidon-microprofile-testing-junit5` with `@HelidonTest`, which starts the CDI container and server for the test class. Confirm the artifact coordinates against the Helidon version in use, since this module was renamed across 4.x releases.
-- **Testcontainers:** Consider Testcontainers for integration tests using real databases, message brokers, or other infrastructure.
-- **Failure Paths:** Test validation failures, missing resources, external-service failures, and authorization failures.
-
-## Security
-
-- **Helidon Security:** Use Helidon Security or supported Jakarta and MicroProfile security APIs for authentication and authorization.
-- **Authorization:** Enforce permissions at a clear application boundary and deny protected operations by default.
-- **JWT and OIDC:** Validate token signatures, issuers, audiences, and expiration times.
-- **TLS:** Use TLS for production traffic and verify certificates for outbound connections.
-- **CORS:** Configure allowed origins explicitly. Do not combine wildcard origins with credentials.
-- **Secrets:** Store secrets in protected environment configuration or a dedicated secret-management system.
-- **Outbound Requests:** Validate outbound destinations to reduce server-side request forgery risks.
+- [ ] The output identifies Helidon SE or Helidon MP and does not mix models accidentally.
+- [ ] No Helidon 3 APIs from the migration table remain in generated code.
+- [ ] Java 21, aligned Helidon dependencies, and existing `pom.xml` or `build.gradle` conventions are respected.
+- [ ] Route/resource classes validate inputs, return correct HTTP statuses, and delegate business logic.
+- [ ] SQL uses bound parameters and safe typed accessors; nullable columns use optional-aware reads.
+- [ ] Entities are separated from API DTOs or records.
+- [ ] Configuration and secrets are externalized through `application.yaml`, `application.properties`, environment, or secret management.
+- [ ] Tests use the correct Helidon testing artifact and dynamic server ports.
+- [ ] Security, logging, metrics, CORS, OIDC, and TLS guidance is applied where relevant.

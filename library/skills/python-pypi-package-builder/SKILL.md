@@ -1,31 +1,24 @@
 ---
 name: "python-pypi-package-builder"
 description: >-
-  End-to-end skill for building, testing, linting, versioning, and publishing a production-grade
-  Python library to PyPI. Covers all four build backends (setuptools+setuptools_scm, hatchling, flit,
-  poetry), PEP 440 versioning, semantic versioning, dynamic git-tag versioning, OOP/SOLID design, type
-  hints (PEP 484/526/544/561), Trusted Publishing (OIDC), and the full PyPA packaging flow. Use for:
-  creating Python packages, pip-installable SDKs, CLI tools, framework plugins, pyproject.toml setup,
-  py.typed, setuptools_scm, semver, mypy, pre-commit, GitHub Actions CI/CD, or PyPI publishing. Use
-  this skill when | [2. Package Type Decision](#2-package-type-decision) | Identify what you are
-  building |; | [3. Folder Structure Decision](#3-folder-structure-decision) | src/ vs flat vs
-  monorepo |; | [4. Build Backend Decision](#4-build-backend-decision) | setuptools / hatchling / flit
-  / poetry |.
----
-# Python PyPI Package Builder Skill
-
-A complete, battle-tested guide for building, testing, linting, versioning, typing, and
-publishing a production-grade Python library to PyPI — from first commit to community-ready
-release.
-
-> **AI Agent Instruction:** Read this entire file before writing a single line of code or
-> creating any file. Every decision — layout, backend, versioning strategy, patterns, CI —
-> has a decision rule here. Follow the decision trees in order. This skill applies to any
-> Python package type (utility, SDK, CLI, plugin, data library). Do not skip sections.
-
+  Build, test, type-check, version, package, and publish production Python libraries to PyPI. Use this skill when creating a pip-installable SDK, CLI, plugin, or utility; choosing `src/` vs flat layout; selecting setuptools, hatchling, flit, or poetry; configuring pyproject.toml, py.typed, Ruff, mypy, pre-commit, GitHub Actions, TestPyPI, Trusted Publishing, setuptools_scm, PEP 440, SemVer, or release governance.
 ---
 
-## Quick Navigation
+# Python PyPI package builder
+
+Take a battle-tested, community-ready, end-to-end (`to-end`) Python library, SDK, CLI, plugin, or utility request, transform it into a modern PyPA package with structure, backend, versioning, typing, quality, CI, and publishing decisions, and output the files and release steps needed for a production-grade PyPI release.
+
+Follow the decision trees in order before writing code. This skill applies to utility libraries, SDKs, CLI tools, framework plugins, and data libraries.
+
+## When to invoke
+
+- "Create a Python package I can publish to PyPI."
+- "Build a pip-installable SDK with pyproject.toml."
+- "Choose setuptools_scm, hatchling, flit, or poetry for this library."
+- "Set up py.typed, Ruff, mypy, pre-commit, and GitHub Actions."
+- "Publish this package with Trusted Publishing or TestPyPI."
+
+## Decision map
 
 | Section in this file | What it covers |
 |---|---|
@@ -54,7 +47,7 @@ to generate the entire directory layout, stub files, and `pyproject.toml` in one
 
 ---
 
-## 1. Skill Trigger
+## Trigger details
 
 Load this skill whenever the user wants to:
 
@@ -75,7 +68,7 @@ Load this skill whenever the user wants to:
 
 ---
 
-## 2. Package Type Decision
+## Package type decision
 
 Identify what the user is building **before** writing any code. Each type has distinct patterns.
 
@@ -104,7 +97,7 @@ For implementation patterns of each type, see `references/library-patterns.md`.
 
 ---
 
-## 3. Folder Structure Decision
+## Folder structure decision
 
 ### Decision Tree
 
@@ -134,7 +127,7 @@ Does the package have 5+ internal modules OR multiple contributors OR complex su
 
 ---
 
-## 4. Build Backend Decision
+## Build backend decision
 
 ### Decision Tree
 
@@ -170,7 +163,7 @@ For all four complete `pyproject.toml` templates, see `references/pyproject-toml
 
 ---
 
-## 5. PyPA Packaging Flow
+## PyPA packaging flow
 
 This is the canonical end-to-end flow from source code to user install.
 **Every step must be understood before publishing.**
@@ -218,7 +211,7 @@ For complete CI workflow and publishing setup, see `references/ci-publishing.md`
 
 ---
 
-## 6. Project Structure Templates
+## Project structure templates
 
 ### A. src/ Layout (Recommended default for new projects)
 
@@ -324,7 +317,7 @@ implicit namespace packages (no `__init__.py` in the namespace root).
 
 ---
 
-## 7. Versioning Strategy
+## Versioning strategy
 
 ### PEP 440 — The Standard
 
@@ -413,7 +406,7 @@ For complete pyproject.toml templates for all four backends, see `references/pyp
 
 ---
 
-## Where to Go Next
+## Progressive disclosure and bundled resources
 
 After understanding decisions and structure:
 
@@ -451,3 +444,54 @@ After understanding decisions and structure:
 9. **Simplify tooling with Ruff** → `references/tooling-ruff.md`
    Ruff-only setup replacing black/isort/flake8, mypy config, pre-commit hooks,
    asyncio_mode=auto (remove @pytest.mark.asyncio), migration guide.
+## Output template
+
+```markdown
+### Python package build result
+
+**Status:** scaffolded | updated | published | blocked
+**Package:** `<pypi-name>` / import name `<import_name>`
+**Type:** utility library | API client / SDK | CLI tool | framework plugin | data processing library | mixed
+**Layout:** `src/` | flat | namespace / monorepo
+**Backend:** `setuptools` + `setuptools_scm` | `hatchling` | `flit` | `poetry`
+**Versioning:** PEP 440 / SemVer / static / dynamic git-tag
+
+**Files created or changed**
+- `pyproject.toml`: <backend, metadata, dependencies, tool config>
+- `<package>/py.typed`: <present and empty>
+- `tests/`: <unit/integration/e2e coverage added>
+- `.github/workflows/ci.yml`: <quality gates>
+- `.github/workflows/publish.yml`: <Trusted Publishing or manual fallback>
+- `README.md`, `CHANGELOG.md`, `CONTRIBUTING.md`, `SECURITY.md`: <status>
+
+**Commands**
+- `python -m build`: pass | fail
+- `twine check dist/*`: pass | fail
+- `pytest`: pass | fail
+- `ruff check .`: pass | fail
+- `mypy`: pass | fail
+
+**Release path**
+- TestPyPI: `twine upload --repository testpypi dist/*` then `pip install --index-url https://test.pypi.org/simple/ your-package`
+- PyPI: Trusted Publishing workflow or `twine upload dist/*`
+```
+
+## Quality gate
+
+- [ ] Package type, layout, backend, and versioning choices were made using the decision tables in this skill.
+- [ ] PyPI name is lowercase with hyphens, import name uses underscores, and availability was checked at (https://pypi.org/search/).
+- [ ] `pyproject.toml` uses PEP 517/518 and PEP 621 metadata, with PEP 639 SPDX `license` syntax.
+- [ ] Typed packages include an empty `py.typed` marker for PEP 561 and suitable PEP 484/526/544 hints.
+- [ ] Libraries avoid exact dependency pins unless there is a documented compatibility reason.
+- [ ] Dynamic `setuptools_scm` projects set `local_scheme = "no-local-version"` and CI checkout uses `fetch-depth: 0`.
+- [ ] Build artifacts in `dist/` pass `python -m build` and `twine check dist/*`.
+- [ ] Tests, Ruff, mypy, and pre-commit configuration match the selected package complexity.
+- [ ] Publishing uses Trusted Publishing / OIDC where possible; API tokens are fallback only and never committed.
+- [ ] Release governance covers `CHANGELOG.md`, valid `vX.Y.Z` tags, branch protection, and https://pypi.org/project/your-package/ verification.
+- [ ] Bundled references and `scripts/scaffold.py` are used on demand rather than copied blindly.
+
+## References
+
+- [PyPI package search](https://pypi.org/search/)
+- [TestPyPI simple index](https://test.pypi.org/simple/)
+- [Example PyPI project verification URL](https://pypi.org/project/your-package/)

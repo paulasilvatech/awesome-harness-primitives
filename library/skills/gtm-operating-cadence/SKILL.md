@@ -1,351 +1,42 @@
 ---
 name: "gtm-operating-cadence"
 description: >-
-  Design meeting rhythms, metric reporting, quarterly planning, and decision-making velocity for
-  scaling companies. Use when decisions are slow, planning is broken, the company is growing but
-  alignment is worse, or leadership meetings consume all time without producing decisions.
+  Design operating cadence for scaling companies: meeting architecture, weekly metrics, quarterly planning, decision rights, async communication, CEO updates, and role clarity. Use when meetings do not produce decisions, alignment worsens during growth, decisions take too long, or leadership is stuck in meetings all day.
 license: "MIT"
 metadata:
   author: "Smit Patel (https://linkedin.com/in/smitkpatel)"
   source: "https://github.com/beingsmit/technical-product-gtm"
 ---
-# Operating Cadence
 
-The meeting structure that worked at 30 people collapses at 100. What worked at 100 collapses at 300. The failure mode is always the same: too many people in too many meetings making too few decisions.
+# Operating cadence
 
-## When to Use
+Operating cadence converts growth-stage coordination into meeting rhythms, metric reporting, quarterly planning, decision authority, and async documentation that make decisions faster instead of adding more meetings.
 
-**Triggers:**
-- "Our meetings don't produce decisions"
-- "We're growing but alignment is getting worse"
+## When to invoke
+
+- "Our meetings don't produce decisions."
+- "We're growing but alignment is getting worse."
 - "How often should we meet?"
-- "Nobody knows what's happening across functions"
-- "Decisions take forever"
-- "Leadership is in meetings all day"
+- "Nobody knows what's happening across functions."
+- "Decisions take forever and leadership is in meetings all day."
 
-**Context:**
-- Companies scaling from 20 to 300+ people
-- Post-PMF through growth stage
-- Distributed / remote teams
-- Any stage where "we need to talk about this" has become the default
+## Meeting architecture
 
----
+Separate meetings by function, frequency, and decision authority. Every meeting must produce decisions or be cancelled. Status updates are async.
 
-## Core Frameworks
+| Level | Cadence | Participants | Purpose | Success criteria | Anti-pattern |
+| --- | --- | --- | --- | --- | --- |
+| Level 1: Daily Standup | Daily, 15 min | Teams only, 5-10 people max | Yesterday finished, today starting, blockers | Finishes in 15 minutes and surfaces 1-2 blockers | Whole-company standups, status reporting, strategic discussion |
+| Level 2: Weekly Functional Reviews | Weekly, 60 min | Function leadership | Metrics, feedback, blockers, one deep-dive, next-week priorities | One or two problems resolved or delegated | Trying to solve every problem in the meeting |
+| Level 3: Weekly All-Hands | Weekly, 60 min | Whole company | CEO update, metric dashboard, one strategic deep dive, Q&A | Same dashboard every week and real answers | Defensive tone or inconsistent metrics |
+| Level 4: Bi-Weekly Leadership Alignment | Bi-weekly, 90 min | Leadership | North star progress, functional updates, major decisions, next 2 weeks | Cross-functional blockers resolved | Functions report independently with no decisions |
+| Level 5: Quarterly Strategic Planning | Quarterly, half-day to full-day | Leadership and functions | Retro, next-quarter priorities, breakouts, synthesis | Clear commitments and conflict resolution | Too much fun activity, no decisions |
 
-### 1. The Five-Level Meeting Architecture
-
-**The Pattern:**
-
-Different meetings serve different purposes. Conflating them creates either inefficiency (too much time) or confusion (unclear decisions). Separate meetings by function, frequency, and decision authority.
-
-**Level 1: Daily Standup (15 min, teams only)**
-
-- What we finished yesterday, what we're starting today, what's blocking us
-- 5-10 people max. Whole-company standups are theater
-- Anti-pattern: Status reporting (use Slack, not meetings)
-- Anti-pattern: Strategic discussion (wrong time, wrong place)
-- Success criteria: Finishes in 15 minutes, surfaces 1-2 blockers
-
-**Level 2: Weekly Functional Reviews (60 min, function leadership)**
-
-Each function gets its own weekly rhythm:
-- Product team Friday 4pm: metrics, user feedback, roadmap blockers
-- GTM team Tuesday 4pm: pipeline, customer updates, deal health
-- Engineering Wednesday 4pm: velocity, bug backlog, deployment
-
-Format: Metric recap (10 min) → Wins/blockers (15 min) → One deep-dive (30 min) → Next week priorities (5 min)
-
-Anti-pattern: Trying to solve every problem in the meeting. Pick 1-2, delegate the rest to follow-ups.
-
-**Level 3: Weekly All-Hands (60 min, whole company)**
-
-The single most important alignment mechanism at a scaling company.
-
-- CEO update (15 min): north star progress, week focus, what's changed
-- Metric dashboard (10 min): same format every week (consistency enables pattern recognition)
-- Deep dive (20 min): one strategic topic needing team input — not a presentation, a discussion
-- Q&A (15 min): real questions, real answers
-
-Anti-pattern: Defensive tone. All-hands should be straightforward, not spin.
-Anti-pattern: Inconsistent metrics. If you change the dashboard, the team can't track progress.
-
-**Level 4: Bi-Weekly Leadership Alignment (90 min)**
-
-- North star progress (5 min)
-- Functional updates (30 min, 5-7 min each)
-- Major decisions needing resolution (30-40 min): resource conflicts, strategic pivots, customer/product decisions
-- Next 2 weeks planning (15 min)
-
-This is where cross-functional blockers get resolved. If functions operate independently, this meeting isn't working.
-
-**Level 5: Quarterly Strategic Planning (half-day to full-day)**
-
-- Previous quarter retrospective (90 min): What worked, what didn't, what we'd do differently
-- Next quarter planning (120 min): What are we optimizing for? What's the roadmap?
-- Function breakouts (90 min): Each function plans their quarter
-- Synthesis (60 min): Functions share commitments, resolve conflicts
-
-Anti-pattern: Too much "fun activity," not enough substance.
-Anti-pattern: No clear decisions coming out.
-
-**Scaling Adjustments:**
-
-- **<30 people**: Levels 2-3 only. Skip daily standups (you see everything). Skip bi-weekly leadership (you ARE leadership).
-- **30-100 people**: Add all 5 levels. Monthly review catches what you no longer see daily.
-- **100-300 people**: Add skip-level reviews. You're 2+ layers from execution.
-- **300+ people**: Add function-specific sub-cadences. CEO should be in *fewer* meetings than at 50 — not more.
-
-**The Rule That Makes This Work:**
-
-Every meeting must produce decisions or be cancelled. Status updates are async. If you're in a meeting and nobody is making a decision, leave.
-
----
-
-### 2. Weekly Metric Reporting (The Dashboard That Catches Problems Early)
-
-**The Pattern:**
-
-Monthly reporting catches problems 30 days late. By then, a bad month is baked. Weekly reporting catches problems in week 2, when you can still save the month.
-
-**The Format (Same Structure Every Week):**
-
-```
-WEEK OF [DATE]
-
-North Star: [Metric]
-This Week: [Value] | Last Week: [Value] | Change: [+/-] [↑↓]
-Context: [One sentence — why this trend matters]
-
-Functional Metrics:
-  Product:  7-Day Retention: 34% | Last: 33% | +1% ↑
-            Feature Adoption: 18% | Last: 16% | +2% ↑
-            Context: Onboarding improvements showing impact
-
-  GTM:      Pipeline: $8.2M | Last: $7.8M | +$400K ↑
-            New POCs: 3 | Last: 2
-            Context: Partner pipeline adding deals
-
-  Health:   Team Morale: 7.2/10 (down from 7.5)
-            Context: Org restructure causing uncertainty
-```
-
-**The Discipline Rules:**
-
-1. **Same metrics every week.** Consistency enables pattern recognition. OK to add metrics, never drop them.
-2. **One context sentence per metric.** Not just the number — why does this matter? Vs plan? Vs last period?
-3. **Trend direction for every metric.** Up/down/flat arrow. If it moved significantly: temporary or structural?
-4. **Traffic light colors.** GREEN (on track), YELLOW (watch), RED (action needed). Every RED item must have: owner, specific action, deadline.
-
-**The Escalation Rule:**
-
-If a metric is RED two weeks in a row with the same action plan, escalate — the action plan isn't working.
-
-**How Many Metrics:**
-
-Pick 8-12 total. If a metric doesn't change your behavior when it moves, remove it. Dashboards with 40 metrics are decoration, not decision tools.
-
-**Common Mistake:**
-
-Vanity metrics that look good but don't predict business outcomes. Total downloads without adoption context. CEO headlines without supporting metrics.
-
----
-
-### 3. Quarterly Planning (The Process That Prevents Strategic Drift)
-
-**The Pattern:**
-
-Without quarterly planning, companies drift. Each function optimizes locally. Sales chases deals outside ICP. Product builds features for one customer. Marketing runs campaigns that don't connect to pipeline.
-
-**The 3-Week Planning Cycle:**
-
-**Week 1: Retrospective + Data Gathering**
-- Previous quarter results vs plan (leadership prepares)
-- Each function writes 1-page retrospective: what worked, what didn't, what we'd do differently
-- Finance prepares: revenue actuals, spend actuals, forecast
-- Market data: competitive moves, customer feedback themes, win/loss analysis
-
-**Week 2: Priority Setting (Leadership Half-Day)**
-- Review retrospectives (30 min — pre-read, don't present)
-- Agree on 3-5 company-level priorities
-- For each: owner, success metric, resource requirements
-- Identify what you're *not* doing (as important as what you are)
-- Resolve cross-functional dependencies
-- Use the north star as tiebreaker: "Does this help us hit the goal? Prioritize. Nice-to-have? Defer."
-
-**Week 3: OKR Cascade + Resource Allocation**
-- Each function translates company priorities into team OKRs
-- Leadership reviews for alignment
-- Resource allocation finalized (headcount, budget, tools)
-- Final plan shared company-wide
-
-**The Quarterly Commitment Format:**
-
-```
-Q2 2026 Roadmap
-North Star: [What we're optimizing for]
-
-Pillar 1: Product (25% team effort)
-  Initiative: [Name]
-    Problem: [What we're solving]
-    Success: [Specific metric]
-    Owner: [Name]
-    Timeline: [When]
-
-Pillar 2: GTM (50% team effort)
-  Initiative: [Name]
-    ...
-
-Pillar 3: People (10% effort)
-  Initiative: [Name]
-    ...
-
-Pillar 4: Tech Debt (15% effort)
-  Initiative: [Name]
-    ...
-```
-
-**The "Not Doing" List:**
-
-For every priority you add, identify one thing you're stopping. If you can't name what you're *not* doing, you have too many priorities.
-
-**Common Mistake:**
-
-Quarterly planning that produces a 30-page doc nobody reads. The output should be: 3-5 priorities on one page, each with owner and metric. That's it.
-
----
-
-### 4. Decision Velocity and Authority
-
-**The Pattern:**
-
-At 20 people, the CEO makes every decision in real-time. Fast. At 100 people, decisions require alignment. Slow. At 300, decisions require alignment, approval, and documentation. Glacial.
-
-**The fix isn't more meetings. It's clear decision rights.**
-
-**Decision Authority Matrix:**
-
-| Decision | Who Decides | Timeline | Escalation |
-|----------|------------|----------|------------|
-| Company strategy | CEO | 1 week | Board if strategic |
-| Feature priority | Product lead | 1 week | CEO if >3 eng weeks |
-| Customer support issue | CSM | Immediately | CS lead if escalated |
-| Marketing campaign | Marketing lead | 2 weeks | CMO if >$10K budget |
-| Hiring | Function leader | 2 weeks | CEO if role not approved |
-| New partnership | CEO | 2 weeks | Board if strategic |
-| Vendor selection | Function leader | 1 week | CEO if >$50K/year |
-
-**The Problem:**
-
-Scaling companies start treating reversible, low-stakes decisions like irreversible, high-stakes ones. Everything needs approval. Everything needs a meeting. Everything needs consensus.
-
-**The Fix:**
-
-**Type 1 (Irreversible, high-stakes):** Pricing model, market entry, major partnership → CEO/leadership decides with debate in one meeting. Timeline: 1-2 weeks max.
-
-**Type 2 (Reversible, low-stakes):** Campaign creative, feature prioritization, single hire → Function owner decides, informs, iterates. Timeline: same day or next day.
-
-**Make decisions with 70% information, not 100%.** Speed is a competitive advantage at every stage.
-
-**Common Mistake:**
-
-Consensus culture masquerading as collaboration. "Let's get everyone aligned" often means "nobody wants to decide." Name the decider. Let them decide. Move on.
-
----
-
-### 5. Async-First Communication
-
-**The Pattern:**
-
-Synchronous meetings don't scale. Default to async, escalate to sync.
-
-**Async First (No Meeting Needed):**
-- Decision documents (even major ones — write up proposal, solicit comments, 48-72 hours for feedback, decide if consensus or no material objections)
-- Progress updates (use weekly reporting, not meetings)
-- Process changes and SOPs
-- Decisions already made (inform, don't discuss)
-
-**Sync When:**
-- Real-time brainstorming needed
-- Major disagreement to work through
-- Complex topic needing whiteboard
-- Team building / relationship
-
-**Documentation Discipline:**
-
-Every decision documented: What was decided? Why? Who decided? When does it take effect? Who needs to know?
-
-Store in searchable format (wiki, shared drive). New hires onboard faster. Past decisions don't get relitigated.
-
-**Common Mistake:**
-
-"Quick sync" meetings that grow to consume 10 hours per week. Over-communicating in Slack (ephemeral, noisy) and under-communicating in persistent formats (docs, emails). The important stuff should be searchable 6 months later.
-
----
-
-### 6. The CEO Weekly Update
-
-**The Pattern:**
-
-The single highest-leverage communication tool at a scaling company. 5-10 minutes to write. Everyone reads it. It sets context, celebrates wins, names priorities, and creates shared understanding.
-
-**Format (Sent Sunday Night or Monday Morning):**
-
-**1. Week Focus (1 paragraph):**
-What's the priority this week? What should the team be focused on?
-
-**2. North Star Progress (1-2 bullets):**
-Where are we on the key metric? Trend up/down/flat? Why does this matter?
-
-**3. Wins This Week (3-5 bullets):**
-What shipped? Customer/partner wins? Big picture implication?
-
-**4. Blockers Getting Resolved (1-2 bullets):**
-What are we unblocking this week? Who needs to know?
-
-**5. Ask (1 bullet, optional):**
-What help does the team need? Referrals, feedback, customer introductions?
-
-**The Rule:**
-
-Same day every week. Consistency signals operational discipline. If you skip a week, the team notices — and starts wondering what you're not telling them.
-
-**Common Mistake:**
-
-Too long (team doesn't read), too detailed (save that for function meetings), only good news (team loses trust), inconsistent (team stops reading).
-
----
-
-### 7. Role Clarity > Titles
-
-**The Pattern:**
-
-The most powerful tool for speed isn't hierarchy — it's explicit role clarity. When someone knows exactly what they own and can't delegate it away, decisions happen faster.
-
-**How to Execute:**
-
-- Every initiative gets exactly one owner (with supporting teammates)
-- Metrics are tied to that owner
-- Success is measured by moving KPIs, not completing tasks
-- Eliminate initiatives without clear ownership within 48 hours
-
-**The Test:**
-
-Can you name the single person who owns this outcome? Not "the team" — a person. If you can't, the initiative will drift.
-
-**Common Mistake:**
-
-Assigning projects to multiple people ("everyone owns it" = nobody owns it). Measuring activity instead of impact. Burn rate going up without clear ROI tracking per initiative.
-
----
-
-## Decision Trees
-
-### Which Meeting Levels Do We Need?
+Suggested functional review format: metric recap 10 min → wins/blockers 15 min → one deep-dive 30 min → next week priorities 5 min.
 
 ```
 Company size <30?
-├─ Yes → Levels 2-3 only (weekly functional + all-hands)
+├─ Yes → Levels 2-3 only: weekly functional + all-hands
 └─ No → Continue...
     │
     30-100 people?
@@ -353,70 +44,216 @@ Company size <30?
     └─ No → All 5 + skip-level reviews + function sub-cadences
 ```
 
-### Is This Meeting Worth Keeping?
+| Company stage | Cadence adjustment |
+| --- | --- |
+| <30 people | Skip daily standups if everyone sees the work. Skip bi-weekly leadership because the company is the leadership layer. |
+| 30-100 people | Add all five levels; monthly review catches what leaders no longer see daily. |
+| 100-300 people | Add skip-level reviews because leadership is 2+ layers from execution. |
+| 300+ people | Add function-specific sub-cadences. The CEO should be in fewer meetings than at 50, not more. |
+
+## Weekly metric reporting
+
+Monthly reporting catches problems 30 days late. Weekly reporting catches problems in week 2, when the month can still be saved.
+
+```markdown
+WEEK OF <DATE>
+
+North Star: <Metric>
+This Week: <Value> | Last Week: <Value> | Change: <+/- trend>
+Context: <one sentence explaining why this trend matters>
+
+Functional Metrics:
+  Product:  7-Day Retention: <value> | Last: <value> | <change>
+            Feature Adoption: <value> | Last: <value> | <change>
+            Context: <why it moved>
+
+  GTM:      Pipeline: <value> | Last: <value> | <change>
+            New POCs: <value> | Last: <value>
+            Context: <why it moved>
+
+  Health:   Team Morale: <score>/10
+            Context: <why it moved>
+```
+
+| Rule | Standard |
+| --- | --- |
+| Same metrics every week | Consistency enables pattern recognition. Add metrics when necessary; do not churn them quarterly. |
+| One context sentence per metric | Explain why it matters versus plan or versus last period. |
+| Trend direction for every metric | Mark up, down, or flat and decide whether significant movement is temporary or structural. |
+| Traffic lights | GREEN means on track, YELLOW means watch, RED means action needed. |
+| RED owner/action/deadline | Every RED item needs owner, specific action, and deadline. If RED two weeks in a row with the same action plan, escalate because the action plan is not working. |
+| Metric count | Keep 8-12 total. If a metric does not change behavior when it moves, remove it. Dashboards with 40 metrics are decoration. |
+
+Avoid vanity metrics that look good but do not predict outcomes: total downloads without adoption context, CEO headlines without supporting metrics, or pipeline without deal-health detail.
+
+## Quarterly planning
+
+Without quarterly planning, each function optimizes locally: Sales chases deals outside ICP, Product builds for one customer, and Marketing runs campaigns that do not connect to pipeline.
+
+| Week | Work | Output |
+| --- | --- | --- |
+| Week 1: Retrospective + Data Gathering | Leadership prepares previous quarter results vs plan. Each function writes a 1-page retrospective: what worked, what did not, what we would do differently. Finance prepares revenue actuals, spend actuals, and forecast. Collect market data, competitive moves, customer feedback themes, and win/loss analysis. | Shared pre-read and facts. |
+| Week 2: Priority Setting | Leadership half-day: review retrospectives as pre-read, agree on 3-5 company-level priorities, assign owner, success metric, and resource requirements, identify what you are not doing, resolve dependencies. | One-page priority set. |
+| Week 3: OKR Cascade + Resource Allocation | Functions translate priorities into team OKRs. Leadership reviews alignment. Headcount, budget, and tools are finalized. Plan is shared company-wide. | Final plan and function commitments. |
+
+Use the north star as the tiebreaker: "Does this help us hit the goal?" Prioritize what does and defer nice-to-have work. For every priority added, name one thing you are stopping. If you cannot name what you are not doing, you have too many priorities.
+
+```markdown
+Q2 2026 Roadmap
+North Star: <what we are optimizing for>
+
+Pillar 1: Product (<percent> team effort)
+  Initiative: <name>
+    Problem: <what we are solving>
+    Success: <specific metric>
+    Owner: <name>
+    Timeline: <when>
+
+Pillar 2: GTM (<percent> team effort)
+  Initiative: <name>
+    Problem: <what we are solving>
+    Success: <specific metric>
+    Owner: <name>
+    Timeline: <when>
+
+Pillar 3: People (<percent> effort)
+  Initiative: <name>
+    Problem: <what we are solving>
+    Success: <specific metric>
+    Owner: <name>
+    Timeline: <when>
+
+Pillar 4: Tech Debt (<percent> effort)
+  Initiative: <name>
+    Problem: <what we are solving>
+    Success: <specific metric>
+    Owner: <name>
+    Timeline: <when>
+```
+
+## Decision velocity and authority
+
+The fix for slow decisions is not more meetings; it is clear decision rights. Scaling companies often treat reversible, low-stakes choices like irreversible, high-stakes choices.
+
+| Decision | Who decides | Timeline | Escalation |
+| --- | --- | --- | --- |
+| Company strategy | CEO | 1 week | Board if strategic |
+| Feature priority | Product lead | 1 week | CEO if >3 engineering weeks |
+| Customer support issue | CSM | Immediately | CS lead if escalated |
+| Marketing campaign | Marketing lead | 2 weeks | CMO if >$10K budget |
+| Hiring | Function leader | 2 weeks | CEO if role not approved |
+| New partnership | CEO | 2 weeks | Board if strategic |
+| Vendor selection | Function leader | 1 week | CEO if >$50K/year |
+
+| Decision type | Examples | Decision mode | Timeline |
+| --- | --- | --- | --- |
+| Type 1: irreversible, high-stakes | Pricing model, market entry, major partnership | CEO or leadership decides after debate in one meeting | 1-2 weeks max |
+| Type 2: reversible, low-stakes | Campaign creative, feature prioritization, single hire | Function owner decides, informs, iterates | Same day or next day |
+
+Make decisions with 70% information, not 100%. Consensus culture often masquerades as collaboration: "Let's get everyone aligned" can mean nobody wants to decide. Name the decider, let them decide, and move on.
 
 ```
-Does it produce decisions?
+Does the meeting produce decisions?
 ├─ No → Can it be async?
-│   ├─ Yes → Make it async, cancel the meeting
+│   ├─ Yes → Make it async and cancel the meeting
 │   └─ No → Redesign with decision agenda
 └─ Yes → Are the right people in the room?
-    ├─ No → Fix attendee list (fewer > more)
+    ├─ No → Fix attendee list; fewer is better
     └─ Yes → Keep it
 ```
 
----
+## Async-first communication and CEO updates
 
-## Common Mistakes
+Default to async and escalate to sync only when real-time collaboration is necessary.
 
-**1. Adding meetings as you grow**
-Replace them. At 200 people, the CEO should be in fewer meetings than at 50.
+| Use async for | Use sync for |
+| --- | --- |
+| Decision documents, major proposals with 48-72 hours for comments, progress updates, process changes, SOPs, and decisions already made | Real-time brainstorming, major disagreement, complex whiteboard topics, team building, and relationship work |
 
-**2. Status update meetings**
-If it can be an email, it should be an email. Meetings are for decisions.
+Document every decision: what was decided, why, who decided, when it takes effect, and who needs to know. Store decisions in a searchable wiki, shared drive, docs, or emails instead of Slack alone. Slack is ephemeral, noisy, and hard to search 6 months later.
 
-**3. Changing metrics every quarter**
-Consistency enables trend identification. Same dashboard, every time.
+The CEO weekly update is the highest-leverage communication tool at scale. Send it Sunday night or Monday morning, every week, in the same format:
 
-**4. Consensus culture**
-Name the decider. Let them decide. Inform everyone else.
+1. Week focus: one paragraph on the priority.
+2. North Star Progress: 1-2 bullets on metric trend and why it matters.
+3. Wins This Week: 3-5 bullets on what shipped, customer/partner wins, and big-picture implication.
+4. Blockers Getting Resolved: 1-2 bullets on what is being unblocked and who needs to know.
+5. Ask: optional single bullet for referrals, feedback, or customer introductions.
 
-**5. All information in Slack**
-Ephemeral, noisy, unsearchable. Important decisions go in docs.
+Avoid updates that are too long, too detailed, only good news, or inconsistent. If the update skips a week, the team notices.
 
-**6. Quarterly planning that produces 30-page docs**
-3-5 priorities on one page. That's the output.
+## Role clarity and ownership
 
----
+Role clarity beats titles. Every initiative needs exactly one owner, supporting teammates, a metric, and impact-based success criteria. Eliminate initiatives without clear ownership within 48 hours.
 
-## Quick Reference
+| Test | Pass | Fail |
+| --- | --- | --- |
+| Single owner | One named person owns the outcome. | "The team" owns it, so nobody owns it. |
+| KPI linkage | Success is measured by moving KPIs. | Success is completing tasks. |
+| ROI clarity | Burn rate and resources connect to outcome. | Spend increases without visible return. |
 
-**Meeting architecture:**
-Daily standup (15 min) → Weekly functional (60 min) → Weekly all-hands (60 min) → Bi-weekly leadership (90 min) → Quarterly planning (half-day)
+## Terminology and preserved cadence signals
 
-**Weekly metric dashboard:**
-8-12 metrics, same format every week, traffic light colors, one context sentence per metric, owner + action + deadline for every RED
+Use these exact operating terms when they fit the situation: five-level architecture, decision-making velocity, cross-functional blockers, skip-levels, follow-ups, Wins/blockers, CEO/leadership decisions, customer/product decisions, Customer/partner wins, customer-voice, wins/customer-voice, Up/down/flat trends, 7.2/10 morale scores, nice-to-have and to-have tradeoffs, and under-communicating in persistent docs.
 
-**Quarterly planning cycle:**
-Week 1: Retro + data → Week 2: Priority setting (3-5 max) → Week 3: OKR cascade + resources
+## Related primitives
 
-**Decision authority:**
-Type 1 (irreversible): CEO/leadership, 1-2 weeks → Type 2 (reversible): Function owner, same day
+| Name | Type | Use it when |
+| --- | --- | --- |
+| `enterprise-account-planning` | skill | The operating issue is deal cadence, stakeholder management, MEDDICC, or account planning. |
+| `0-to-1-launch` | skill | The task is launch-specific execution cadence. |
+| `board-and-investor-communication` | skill | The task is board meeting structure or investor updates. |
 
-**CEO weekly update:**
-Week focus → North star progress → Wins → Blockers → Ask
+## Output template
 
-**Information flow:**
-Daily: Slack wins/customer-voice → Weekly: CEO email + function updates → Monthly: All-hands + skip-levels → Quarterly: Planning share + demos
+```markdown
+## Operating cadence design - <company/team>
 
----
+**Status:** designed | needs decision | blocked
+**Scale:** <people count / stage>
+**Primary failure mode:** <slow decisions / bad alignment / metric drift / meeting overload>
 
-## Related Skills
+### Cadence architecture
+| Level | Keep / add / remove | Participants | Decision owner | Notes |
+| --- | --- | --- | --- | --- |
+| Daily Standup | <choice> | <participants> | <owner> | <notes> |
+| Weekly Functional Review | <choice> | <participants> | <owner> | <notes> |
+| Weekly All-Hands | <choice> | <participants> | <owner> | <notes> |
+| Bi-Weekly Leadership Alignment | <choice> | <participants> | <owner> | <notes> |
+| Quarterly Strategic Planning | <choice> | <participants> | <owner> | <notes> |
 
-- **enterprise-account-planning**: Stakeholder management and deal cadence patterns
-- **0-to-1-launch**: Launch-specific execution cadence
-- **board-and-investor-communication**: Board meeting structure and investor updates
+### Weekly dashboard
+| Metric | This week | Last week | Trend | Color | Owner | Action/deadline |
+| --- | --- | --- | --- | --- | --- | --- |
+| <metric> | <value> | <value> | <up/down/flat> | GREEN / YELLOW / RED | <name> | <action> |
 
----
+### Decision rights
+| Decision | Decider | Type 1/Type 2 | Timeline | Escalation |
+| --- | --- | --- | --- | --- |
+| <decision> | <person/role> | <type> | <timeline> | <path> |
 
-*Based on operating cadence design across companies scaling from 20 to 1,000+ employees, including the five-level meeting architecture that survived 3x headcount growth, the weekly reporting format that caught pipeline problems 3 weeks earlier than monthly reviews, and the CEO weekly update format refined across multiple companies. Not theory — patterns from building operating systems through hypergrowth and teaching them to the next team.*
+### Quarterly priorities
+- North star: <metric>
+- Priorities: <3-5 priorities with owners and success metrics>
+- Not doing: <explicit stopped/deferred work>
+
+### Communication plan
+- CEO weekly update: <day/time and sections>
+- Async decision documentation: <where decisions live>
+- Sync-only topics: <allowed reasons>
+```
+
+## Quality gate
+
+- [ ] Each meeting has a decision purpose, owner, participants, and cancellation or async alternative when it is only status.
+- [ ] Weekly dashboard has 8-12 behavior-changing metrics, trend direction, context, traffic-light status, and owner/action/deadline for every RED item.
+- [ ] RED metrics repeated for two weeks are escalated.
+- [ ] Quarterly plan has 3-5 priorities, owners, success metrics, resource allocation, and a "not doing" list.
+- [ ] Decision rights name one decider and classify Type 1 versus Type 2 decisions.
+- [ ] CEO weekly update and async decision documentation are specified in searchable, persistent formats.
+- [ ] Output follows the `## Output template` exactly.
+
+## References
+
+- [technical-product-gtm source](https://github.com/beingsmit/technical-product-gtm)
+- [Smit Patel](https://linkedin.com/in/smitkpatel)

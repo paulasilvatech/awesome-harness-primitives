@@ -1,338 +1,200 @@
 ---
 name: "excalidraw-diagram-generator"
 description: >-
-  Generate Excalidraw diagrams from natural language descriptions. Use when asked to "create a
-  diagram", "make a flowchart", "visualize a process", "draw a system architecture", "create a mind
-  map", or "generate an Excalidraw file". Supports flowcharts, relationship diagrams, mind maps, and
-  system architecture diagrams. Outputs .excalidraw JSON files that can be opened directly in
-  Excalidraw.
+  Generate valid .excalidraw JSON diagrams from natural language descriptions, including flowcharts, relationship diagrams, mind maps, architecture diagrams, DFDs, swimlanes, class diagrams, sequence diagrams, and ER diagrams. Use when asked to create a diagram, make a flowchart, visualize a process, draw a system architecture, create a mind map, show relationships, or generate an Excalidraw file.
 ---
-# Excalidraw Diagram Generator
 
-A skill for generating Excalidraw-format diagrams from natural language descriptions. This skill helps create visual representations of processes, systems, relationships, and ideas without manual drawing.
+# Excalidraw diagram generator
 
-## When to Use This Skill
+Turn a natural-language diagram request into a valid Excalidraw JSON file by choosing the right diagram type, extracting nodes and relationships, laying out elements, and saving a `.excalidraw` artifact the user can open directly.
 
-Use this skill when users request:
+## When to invoke
 
-- "Create a diagram showing..."
-- "Make a flowchart for..."
-- "Visualize the process of..."
-- "Draw the system architecture of..."
-- "Generate a mind map about..."
-- "Create an Excalidraw file for..."
-- "Show the relationship between..."
-- "Diagram the workflow of..."
+- "Create a diagram showing this workflow."
+- "Make a flowchart for the registration process."
+- "Draw the system architecture as an Excalidraw file."
+- "Generate a mind map about these concepts."
+- "Show the relationship between these entities."
 
-**Supported diagram types:**
-- **Flowcharts**: Sequential processes, workflows, decision trees
-- **Relationship Diagrams**: Entity relationships, system components, dependencies
-- **Mind Maps**: Concept hierarchies, brainstorming results, topic organization
-- **Architecture Diagrams**: System design, module interactions, data flow
-- **Data Flow Diagrams (DFD)**: Data flow visualization, data transformation processes
-- **Business Flow (Swimlane)**: Cross-functional workflows, actor-based process flows
-- **Class Diagrams**: Object-oriented design, class structures and relationships
-- **Sequence Diagrams**: Object interactions over time, message flows
-- **ER Diagrams**: Database entity relationships, data models
+## Prerequisites and context
 
-## Prerequisites
+- Require a clear description of what should be visualized, including key entities, steps, concepts, relationships, and flow.
+- If the request has too many elements, propose multiple diagrams before generating a crowded file.
+- Save output as `<descriptive-name>.excalidraw`; users can open it at https://excalidraw.com by drag-and-drop, File → Open, or the Excalidraw VS Code extension.
 
-- Clear description of what should be visualized
-- Identification of key entities, steps, or concepts
-- Understanding of relationships or flow between elements
+## Diagram selection
 
-## Step-by-Step Workflow
+| User intent | Diagram type | Extract |
+| --- | --- | --- |
+| Workflow, process, steps, procedure, decision tree | Flowchart | Start, end, sequential steps, decision points. |
+| Relationship, connections, dependencies, structure | Relationship Diagram | Entities/nodes and labeled relationships from → to. |
+| Mind map, concepts, ideas, breakdown | Mind Map | Central topic, 3-6 main branches, optional sub-topics. |
+| Architecture, system, components, modules | Architecture Diagram | Components, interfaces, boundaries, data/control flow. |
+| Data flow, data processing, data transformation | Data Flow Diagram (DFD) | External entities, processes, data stores, and data flows; do not represent process order. |
+| Business process, swimlane, actors, responsibilities | Business Flow (Swimlane) | Actor columns, process lanes, activities, cross-lane handoffs. |
+| Class, inheritance, OOP, object model | Class Diagram | Classes, attributes, methods, visibility, relationships, multiplicity. |
+| Sequence, interaction, messages, timeline | Sequence Diagram | Objects/actors, lifelines, messages, return values, activation boxes; time flows top to bottom. |
+| Database, entity, relationship, data model | ER Diagram | Entities, attributes, primary keys, foreign keys, cardinality, junction entities. |
 
-### Step 1: Understand the Request
+## Excalidraw JSON rules
 
-Analyze the user's description to determine:
-1. **Diagram type** (flowchart, relationship, mind map, architecture)
-2. **Key elements** (entities, steps, concepts)
-3. **Relationships** (flow, connections, hierarchy)
-4. **Complexity** (number of elements)
-
-### Step 2: Choose the Appropriate Diagram Type
-
-| User Intent | Diagram Type | Example Keywords |
-|-------------|--------------|------------------|
-| Process flow, steps, procedures | **Flowchart** | "workflow", "process", "steps", "procedure" |
-| Connections, dependencies, associations | **Relationship Diagram** | "relationship", "connections", "dependencies", "structure" |
-| Concept hierarchy, brainstorming | **Mind Map** | "mind map", "concepts", "ideas", "breakdown" |
-| System design, components | **Architecture Diagram** | "architecture", "system", "components", "modules" |
-| Data flow, transformation processes | **Data Flow Diagram (DFD)** | "data flow", "data processing", "data transformation" |
-| Cross-functional processes, actor responsibilities | **Business Flow (Swimlane)** | "business process", "swimlane", "actors", "responsibilities" |
-| Object-oriented design, class structures | **Class Diagram** | "class", "inheritance", "OOP", "object model" |
-| Interaction sequences, message flows | **Sequence Diagram** | "sequence", "interaction", "messages", "timeline" |
-| Database design, entity relationships | **ER Diagram** | "database", "entity", "relationship", "data model" |
-
-### Step 3: Extract Structured Information
-
-**For Flowcharts:**
-- List of sequential steps
-- Decision points (if any)
-- Start and end points
-
-**For Relationship Diagrams:**
-- Entities/nodes (name + optional description)
-- Relationships between entities (from → to, with label)
-
-**For Mind Maps:**
-- Central topic
-- Main branches (3-6 recommended)
-- Sub-topics for each branch (optional)
-
-**For Data Flow Diagrams (DFD):**
-- Data sources and destinations (external entities)
-- Processes (data transformations)
-- Data stores (databases, files)
-- Data flows (arrows showing data movement from left-to-right or from top-left to bottom-right)
-- **Important**: Do not represent process order, only data flow
-
-**For Business Flow (Swimlane):**
-- Actors/roles (departments, systems, people) - displayed as header columns
-- Process lanes (vertical lanes under each actor)
-- Process boxes (activities within each lane)
-- Flow arrows (connecting process boxes, including cross-lane handoffs)
-
-**For Class Diagrams:**
-- Classes with names
-- Attributes with visibility (+, -, #)
-- Methods with visibility and parameters
-- Relationships: inheritance (solid line + white triangle), implementation (dashed line + white triangle), association (solid line), dependency (dashed line), aggregation (solid line + white diamond), composition (solid line + filled diamond)
-- Multiplicity notations (1, 0..1, 1..*, *)
-
-**For Sequence Diagrams:**
-- Objects/actors (arranged horizontally at top)
-- Lifelines (vertical lines from each object)
-- Messages (horizontal arrows between lifelines)
-- Synchronous messages (solid arrow), asynchronous messages (dashed arrow)
-- Return values (dashed arrows)
-- Activation boxes (rectangles on lifelines during execution)
-- Time flows from top to bottom
-
-**For ER Diagrams:**
-- Entities (rectangles with entity names)
-- Attributes (listed inside entities)
-- Primary keys (underlined or marked with PK)
-- Foreign keys (marked with FK)
-- Relationships (lines connecting entities)
-- Cardinality: 1:1 (one-to-one), 1:N (one-to-many), N:M (many-to-many)
-- Junction/associative entities for many-to-many relationships (dashed rectangles)
-
-### Step 4: Generate the Excalidraw JSON
-
-Create the `.excalidraw` file with appropriate elements:
-
-**Available element types:**
-- `rectangle`: Boxes for entities, steps, concepts
-- `ellipse`: Alternative shapes for emphasis
-- `diamond`: Decision points
-- `arrow`: Directional connections
-- `text`: Labels and annotations
-
-**Key properties to set:**
-- **Position**: `x`, `y` coordinates
-- **Size**: `width`, `height`
-- **Style**: `strokeColor`, `backgroundColor`, `fillStyle`
-- **Font**: `fontFamily: 5` (Excalifont - **required for all text elements**)
-- **Text**: Embedded text for labels
-- **Connections**: `points` array for arrows
-
-**Important**: All text elements must use `fontFamily: 5` (Excalifont) for consistent visual appearance.
-
-### Step 5: Format the Output
-
-Structure the complete Excalidraw file:
+Generate complete JSON with `type: "excalidraw"`, `version: 2`, `source: "https://excalidraw.com"`, an `elements` array, `appState.viewBackgroundColor: "#ffffff"`, `appState.gridSize: 20`, and `files: {}`.
 
 ```json
 {
   "type": "excalidraw",
   "version": 2,
   "source": "https://excalidraw.com",
-  "elements": [
-    // Array of diagram elements
-  ],
-  "appState": {
-    "viewBackgroundColor": "#ffffff",
-    "gridSize": 20
-  },
+  "elements": [],
+  "appState": { "viewBackgroundColor": "#ffffff", "gridSize": 20 },
   "files": {}
 }
 ```
 
-### Step 6: Save and Provide Instructions
+| Element type | Use it for | Required properties |
+| --- | --- | --- |
+| `rectangle` | Entities, steps, concepts, swimlane activities, classes | `id`, `x`, `y`, `width`, `height`, `strokeColor`, `backgroundColor`, `fillStyle`. |
+| `ellipse` | Alternative emphasis or boundary shapes | Same core position, size, and style properties. |
+| `diamond` | Decision points | Enough width for text and outgoing labels. |
+| `arrow` | Directional connections | `points` array and logical start/end placement. |
+| `text` | Labels and annotations | `fontFamily: 5` for Excalifont, readable `fontSize`, and embedded `text`. |
 
-1. Save as `<descriptive-name>.excalidraw`
-2. Inform user how to open:
-   - Visit https://excalidraw.com
-   - Click "Open" or drag-and-drop the file
-   - Or use Excalidraw VS Code extension
+All text elements must use `fontFamily: 5` (Excalifont). Use timestamp plus random suffix IDs such as `Date.now().toString(36) + Math.random().toString(36).substr(2)`.
 
-## Best Practices
+## Layout rules
 
-### Element Count Guidelines
+| Rule | Value |
+| --- | --- |
+| Horizontal gap | `200-300px` between elements. |
+| Vertical gap | `100-150px` between rows. |
+| Text size | `16-24px`; never below `16px` for normal labels. |
+| Primary color | Light blue `#a5d8ff`. |
+| Secondary color | Light green `#b2f2bb`. |
+| Central/important color | Yellow `#ffd43b`. |
+| Alert/warning color | Light red `#ffc9c9`. |
+| Roughness | Default `1`. |
+| Recommended maximum | Fewer than `20` elements for clarity. |
 
-| Diagram Type | Recommended Count | Maximum |
-|--------------|-------------------|---------|
-| Flowchart steps | 3-10 | 15 |
-| Relationship entities | 3-8 | 12 |
-| Mind map branches | 4-6 | 8 |
-| Mind map sub-topics per branch | 2-4 | 6 |
+Use straight arrows for simple flows and curved arrows only for complex relationships. For relationship diagrams, use grid layout:
 
-### Layout Tips
-
-1. **Start positions**: Center important elements, use consistent spacing
-2. **Spacing**:
-   - Horizontal gap: 200-300px between elements
-   - Vertical gap: 100-150px between rows
-3. **Colors**: Use consistent color scheme
-   - Primary elements: Light blue (`#a5d8ff`)
-   - Secondary elements: Light green (`#b2f2bb`)
-   - Important/Central: Yellow (`#ffd43b`)
-   - Alerts/Warnings: Light red (`#ffc9c9`)
-4. **Text sizing**: 16-24px for readability
-5. **Font**: Always use `fontFamily: 5` (Excalifont) for all text elements
-6. **Arrow style**: Use straight arrows for simple flows, curved for complex relationships
-
-### Complexity Management
-
-**If user request has too many elements:**
-- Suggest breaking into multiple diagrams
-- Focus on main elements first
-- Offer to create detailed sub-diagrams
-
-**Example response:**
-```
-"Your request includes 15 components. For clarity, I recommend:
-1. High-level architecture diagram (6 main components)
-2. Detailed diagram for each subsystem
-
-Would you like me to start with the high-level view?"
-```
-
-## Example Prompts and Responses
-
-### Example 1: Simple Flowchart
-
-**User:** "Create a flowchart for user registration"
-
-**Agent generates:**
-1. Extract steps: "Enter email" → "Verify email" → "Set password" → "Complete"
-2. Create flowchart with 4 rectangles + 3 arrows
-3. Save as `user-registration-flow.excalidraw`
-
-### Example 2: Relationship Diagram
-
-**User:** "Diagram the relationship between User, Post, and Comment entities"
-
-**Agent generates:**
-1. Entities: User, Post, Comment
-2. Relationships: User → Post ("creates"), User → Comment ("writes"), Post → Comment ("contains")
-3. Save as `user-content-relationships.excalidraw`
-
-### Example 3: Mind Map
-
-**User:** "Mind map about machine learning concepts"
-
-**Agent generates:**
-1. Center: "Machine Learning"
-2. Branches: Supervised Learning, Unsupervised Learning, Reinforcement Learning, Deep Learning
-3. Sub-topics under each branch
-4. Save as `machine-learning-mindmap.excalidraw`
-
-## Troubleshooting
-
-| Issue | Solution |
-|-------|----------|
-| Elements overlap | Increase spacing between coordinates |
-| Text doesn't fit in boxes | Increase box width or reduce font size |
-| Too many elements | Break into multiple diagrams |
-| Unclear layout | Use grid layout (rows/columns) or radial layout (mind maps) |
-| Colors inconsistent | Define color palette upfront based on element types |
-
-## Advanced Techniques
-
-### Grid Layout (for Relationship Diagrams)
 ```javascript
 const columns = Math.ceil(Math.sqrt(entityCount));
 const x = startX + (index % columns) * horizontalGap;
 const y = startY + Math.floor(index / columns) * verticalGap;
 ```
 
-### Radial Layout (for Mind Maps)
+For mind maps, use radial layout:
+
 ```javascript
 const angle = (2 * Math.PI * index) / branchCount;
 const x = centerX + radius * Math.cos(angle);
 const y = centerY + radius * Math.sin(angle);
 ```
 
-### Auto-generated IDs
-Use timestamp + random string for unique IDs:
-```javascript
-const id = Date.now().toString(36) + Math.random().toString(36).substr(2);
-```
+## Diagram-specific notation
 
-## Output Format
+| Type | Required conventions |
+| --- | --- |
+| Flowcharts | Rectangles for steps, diamonds for decisions, arrows for sequence, explicit start and end. |
+| Data Flow Diagrams (DFD) | Data sources and destinations, processes, data stores, arrows showing data movement left-to-right or top-left to bottom-right; no process-order semantics. |
+| Business Flow (Swimlane) | Actors/roles as header columns, vertical lanes, process boxes inside lanes, arrows for cross-lane handoffs. |
+| Class Diagrams | Visibility `+`, `-`, `#`; inheritance uses solid line plus white triangle; implementation dashed line plus white triangle; association solid line; dependency dashed line; aggregation solid line plus white diamond; composition solid line plus filled diamond; multiplicity `1`, `0..1`, `1..*`, `*`. |
+| Sequence Diagrams | Actors horizontally at top, vertical lifelines, synchronous solid arrows, asynchronous dashed arrows, return values dashed arrows, activation boxes. |
+| ER Diagrams | Entities as rectangles, attributes inside, primary keys marked `PK`, foreign keys marked `FK`, relationships with `1:1`, `1:N`, `N:M`, and junction/associative entities for many-to-many relationships. |
 
-Always provide:
-1. Complete `.excalidraw` JSON file
-2. Summary of what was created
-3. Element count
-4. Instructions for opening/editing
+## Complexity management
 
-**Example summary:**
-```
-Created: user-workflow.excalidraw
-Type: Flowchart
-Elements: 7 rectangles, 6 arrows, 1 title text
-Total: 14 elements
+| Problem | Response |
+| --- | --- |
+| More than 15 flowchart steps | Split into high-level and detailed flowcharts. |
+| More than 12 relationship entities | Create a high-level relationship diagram first, then subsystem diagrams. |
+| More than 8 mind-map branches or 6 sub-topics per branch | Trim to primary concepts and offer follow-up diagrams. |
+| User includes 15 components | Recommend a high-level architecture diagram with 6 main components plus detailed subsystem diagrams. |
+| Request needs icons | Read `references/icon-libraries.md` and use the icon-library workflow. |
 
-To view:
+## Procedure
+
+1. Understand the request: determine diagram type, key elements, relationships, and complexity.
+2. Choose the appropriate diagram type from the selection table.
+3. Extract structured information: steps, decisions, entities, branches, actors, classes, lifelines, data stores, or cardinalities.
+4. Use bundled templates when they match the requested type; otherwise build JSON from scratch using the schema rules.
+5. Generate the `.excalidraw` file with unique IDs, non-overlapping coordinates, consistent colors, readable text, and logical arrows.
+6. Validate JSON syntax and element count, then provide a concise summary and opening instructions.
+
+## Progressive disclosure and bundled resources
+
+Read bundled resources only when needed:
+
+- `references/excalidraw-schema.md`: complete Excalidraw JSON schema.
+- `references/element-types.md`: detailed element type specifications.
+- `references/icon-libraries.md`: Excalidraw icon libraries and optional icon loading.
+- `templates/flowchart-template.excalidraw`: basic flowchart starter.
+- `templates/relationship-template.excalidraw`: relationship diagram starter.
+- `templates/mindmap-template.excalidraw`: mind map starter.
+- `templates/data-flow-diagram-template.excalidraw`: DFD starter.
+- `templates/business-flow-swimlane-template.excalidraw`: swimlane starter.
+- `templates/class-diagram-template.excalidraw`: class diagram starter.
+- `templates/sequence-diagram-template.excalidraw`: sequence diagram starter.
+- `templates/er-diagram-template.excalidraw`: ER diagram starter.
+- `scripts/split-excalidraw-library.py`: split `.excalidrawlib` files.
+- `scripts/add-icon-to-diagram.py`: add an icon to a diagram.
+- `scripts/add-arrow.py`: add arrows programmatically.
+- `scripts/README.md`: documentation for library tools.
+- `scripts/.gitignore`: prevents local Python artifacts from being committed.
+
+## Limits
+
+- Complex curves are simplified to straight or basic curved lines.
+- Embedded images are not generated automatically; use imports or icon-library resources when needed.
+- No automatic collision detection exists, so apply spacing and validation manually.
+- Mermaid or PlantUML import and auto-layout optimization are future enhancements, not current required output.
+
+## Troubleshooting
+
+| Issue | Solution |
+| --- | --- |
+| Elements overlap | Increase coordinate spacing or switch to grid/radial layout. |
+| Text doesn't fit in boxes | Increase box width or reduce font size while staying readable. |
+| Too many elements | Break into multiple diagrams. |
+| Unclear layout | Use rows/columns for relationships or radial layout for mind maps. |
+| Colors inconsistent | Define the palette upfront by element type. |
+
+## Naming and compatibility notes
+
+Preserve common example filenames and legacy template references when mapping older requests: user-registration-flow, `user-registration-flow.excalidraw`, user-content-relationships, `user-content-relationships.excalidraw`, machine-learning-mindmap, `machine-learning-mindmap.excalidraw`, user-workflow, templates/flowchart-template.json, templates/relationship-template.json, and `templates/mindmap-template.json`. Current bundled templates use `.excalidraw`; do not create new `.json` templates unless the user asks.
+
+Style names must remain understandable to agents translating older examples: Important/Central, Alerts/Warnings, actor-based process flows, Junction/associative entities, one-to-one, one-to-many, sub-diagrams, auto-generation, opening/editing, straight/basic curved lines, Mermaid/PlantUML future import, and core element keys `width`, `height`, `strokeColor`, `backgroundColor`, and `fillStyle`.
+
+## Output template
+
+```markdown
+## Excalidraw diagram result - <diagram name>
+
+**Status:** created | needs clarification | blocked
+**File:** `<descriptive-name>.excalidraw`
+**Type:** Flowchart | Relationship Diagram | Mind Map | Architecture Diagram | Data Flow Diagram (DFD) | Business Flow (Swimlane) | Class Diagram | Sequence Diagram | ER Diagram
+**Elements:** `<count>` total (`<rectangles>` rectangles, `<arrows>` arrows, `<text>` text)
+
+### Created structure
+- <main nodes or sections>
+- <relationships or flow>
+
+### To view
 1. Visit https://excalidraw.com
-2. Drag and drop user-workflow.excalidraw
-3. Or use File → Open in Excalidraw VS Code extension
+2. Drag and drop `<descriptive-name>.excalidraw`
+3. Or use File → Open in the Excalidraw VS Code extension
 ```
 
-## Validation Checklist
+## Quality gate
 
-Before delivering the diagram:
-- [ ] All elements have unique IDs
-- [ ] Coordinates prevent overlapping
-- [ ] Text is readable (font size 16+)
-- [ ] **All text elements use `fontFamily: 5` (Excalifont)**
-- [ ] Arrows connect logically
-- [ ] Colors follow consistent scheme
-- [ ] File is valid JSON
-- [ ] Element count is reasonable (<20 for clarity)
-
-## Bundled Resources
-
-- [Excalidraw icon libraries](references/icon-libraries.md) — Only when the diagram needs optional icons, open this icon-library guidance and loading workflow.
+- [ ] The chosen diagram type matches the user's intent and extracted structure.
+- [ ] The file is valid JSON with `type`, `version`, `source`, `elements`, `appState`, and `files`.
+- [ ] All elements have unique IDs and coordinates prevent overlap.
+- [ ] All text elements use `fontFamily: 5` and readable `fontSize`.
+- [ ] Arrows connect logically and labels match relationships or flow.
+- [ ] Colors follow a consistent scheme and element count is reasonable.
+- [ ] The output includes the `.excalidraw` file, summary, element count, and opening instructions.
 
 ## References
 
-See bundled references for:
-- `references/excalidraw-schema.md` - Complete Excalidraw JSON schema
-- `references/element-types.md` - Detailed element type specifications
-- `templates/flowchart-template.json` - Basic flowchart starter
-- `templates/relationship-template.json` - Relationship diagram starter
-- `templates/mindmap-template.json` - Mind map starter
-- `scripts/split-excalidraw-library.py` - Tool to split `.excalidrawlib` files
-- `scripts/README.md` - Documentation for library tools
-- `scripts/.gitignore` - Prevents local Python artifacts from being committed
-
-## Limitations
-
-- Complex curves are simplified to straight/basic curved lines
-- Hand-drawn roughness is set to default (1)
-- No embedded images support in auto-generation
-- Maximum recommended elements: 20 per diagram
-- No automatic collision detection (use spacing guidelines)
-
-## Future Enhancements
-
-Potential improvements:
-- Auto-layout optimization algorithms
-- Import from Mermaid/PlantUML syntax
-- Template library expansion
-- Interactive editing after generation
+- [Excalidraw](https://excalidraw.com)

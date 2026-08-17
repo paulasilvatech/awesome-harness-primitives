@@ -1,139 +1,84 @@
 ---
-name: "ad-campaign-analyzer"
+name: ad-campaign-analyzer
 description: >-
-  Use this skill when the user shares ad campaign performance data and asks what to cut, scale, or
-  test. Trigger for prompts like "analyze my ad campaigns", "where am I wasting ad spend", "reallocate
-  my ad budget", "which ads are actually working", or "ROAS analysis". Do not trigger for campaign
-  planning or creative generation without performance data.
-license: "MIT"
+  Analyze ad campaign performance data to diagnose waste, identify winners, validate A/B tests, compare channels, and recommend cuts, scaling, tests, and budget reallocation. Use when the user asks to analyze ad campaigns, find wasted spend, optimize Google Ads, Meta Ads, LinkedIn Ads, ROAS, CPA, CAC, or multi-channel ad budgets.
+license: MIT
 metadata:
-  author: "GooseWorks"
-  compatibility: "Cross-platform. Pure reasoning skill over user-provided campaign exports (CSV, paste, or screenshot from Google, Meta, or LinkedIn) — no external tools, network calls, or API keys."
-  source: "https://github.com/gooseworks-ai/goose-skills"
+  author: GooseWorks
+  compatibility: Cross-platform. Pure reasoning skill over user-provided campaign exports (CSV, paste, or screenshot from Google, Meta, or LinkedIn) — no external tools, network calls, or API keys.
+  source: https://github.com/gooseworks-ai/goose-skills
   version: "'1.0'"
 ---
-# Ad Campaign Analyzer
 
-Take raw campaign performance data and turn it into clear decisions. This skill doesn't just summarize metrics — it diagnoses problems, identifies winners, checks statistical significance, and tells you exactly what to cut, scale, and test next. Then it goes further: it compares channels on equal terms, finds where you're over-spending vs under-spending relative to results, and produces a concrete budget reallocation plan.
+# Ad campaign analyzer
 
-**Core principle:** Most startup founders check their ad dashboard, see a ROAS number, and either panic or celebrate. This skill gives you the nuanced analysis a paid media specialist would: what's actually significant, what's noise, and where your next dollar should go. It also solves the allocation problem — most startups either spread budget too thin across channels (no channel gets enough to learn) or dump everything into one channel (missing cheaper opportunities elsewhere).
+Turn raw ad performance exports into a decision report that normalizes metrics, diagnoses waste, identifies winners, checks statistical significance, compares channels on equal terms, and recommends exactly what to pause, scale, test, or reallocate.
 
-## When to Use
+## When to invoke
 
-- "Analyze my Google Ads performance"
-- "Which ads should I kill?"
-- "Is this campaign working?"
+- "Analyze my ad campaign performance."
 - "Where am I wasting ad spend?"
-- "Optimize my Meta Ads"
-- "How should I split my ad budget?"
-- "Should I spend more on Google or Meta?"
-- "Reallocate my ad spend across channels"
-- "Where am I getting the best return?"
-- "I have $X/month for ads — how should I distribute it?"
+- "Which ads should I pause or scale?"
+- "Reallocate my ad budget across channels."
+- "Which channel has the best ROAS or CAC?"
 
-## Phase 0: Intake
+## Prerequisites and context
 
-1. **Campaign data** — One of:
-   - CSV export from Google Ads / Meta Ads Manager / LinkedIn Campaign Manager
-   - Pasted performance table
-   - Screenshots of dashboard (we'll extract the data)
-2. **Platform(s)** — Google / Meta / LinkedIn / All
-3. **Time period** — What date range does this cover?
-4. **Monthly budget** — Total ad spend in this period
-5. **Primary goal** — What conversion are you optimizing for? (Demos / Trials / Purchases / Leads)
-6. **Target metrics** — Do you have target CPA or ROAS? (If not, we'll benchmark)
-7. **Any known changes?** — Did you change creative, budget, or targeting during this period?
-8. **Channels currently running** — Google Ads, Meta Ads, LinkedIn Ads, Twitter/X Ads, TikTok Ads, other
-9. **Funnel data** (if available):
-   - Lead → MQL rate
-   - MQL → SQL rate
-   - SQL → Close rate
-   - Average deal size
-10. **Channels you're considering but haven't tried** — Want to test new channels?
-11. **Constraints** — Minimum spend on any channel? Platform you must stay on?
+This is a pure reasoning skill; no external tools, network calls, API keys, or platform access are required. The user must provide campaign data as CSV export, pasted table, or screenshot from Google Ads, Meta Ads Manager, LinkedIn Campaign Manager, Twitter/X Ads, TikTok Ads, or another ad platform.
 
-## Phase 1: Data Ingestion & Normalization
+## Intake and normalization
 
-### Accepted Data Formats
+Collect or infer:
 
-| Source | Key Columns Expected |
-|--------|---------------------|
-| **Google Ads** | Campaign, Ad Group, Keyword, Impressions, Clicks, CTR, CPC, Conversions, Conv Rate, Cost, Conv Value |
-| **Meta Ads** | Campaign, Ad Set, Ad, Impressions, Reach, Clicks, CTR, CPC, Conversions, Cost Per Result, Amount Spent, ROAS |
-| **LinkedIn Ads** | Campaign, Impressions, Clicks, CTR, CPC, Conversions, Cost, Leads |
+| Input | Why it matters |
+| --- | --- |
+| Campaign data | Spend, impressions, clicks, conversions, and value are the analysis base. |
+| Platform(s) | Google, Meta, LinkedIn, and other channels use different native column names. |
+| Time period | Prevents comparing unlike date ranges. |
+| Monthly budget | Enables over-spending vs under-spending and budget shift analysis. |
+| Primary goal | Demos, Trials, Purchases, Leads, or another conversion define success. |
+| Target metrics | Target CPA or ROAS determines pause/scale thresholds; benchmark if absent. |
+| Known changes | Creative, budget, bid strategy, or targeting changes affect interpretation. |
+| Channels running or considered | Supports current allocation and new-channel recommendations. |
+| Funnel data | Lead → MQL rate, MQL → SQL rate, SQL → Close rate, Average deal size. |
+| Constraints | Minimum spend, must-use platforms, and channel exclusions. |
 
-Normalize all data into a standard analysis format:
+Normalize platform exports into a shared table:
 
-| Dimension | Impressions | Clicks | CTR | CPC | Conversions | Conv Rate | CPA | Spend | Revenue/Value |
-|-----------|------------|--------|-----|-----|-------------|----------|-----|-------|--------------|
+| Source | Key columns expected |
+| --- | --- |
+| Google Ads | Campaign, Ad Group, Keyword, Impressions, Clicks, CTR, CPC, Conversions, Conv Rate, Cost, Conv Value. |
+| Meta Ads | Campaign, Ad Set, Ad, Impressions, Reach, Clicks, CTR, CPC, Conversions, Cost Per Result, Amount Spent, ROAS. |
+| LinkedIn Ads | Campaign, Impressions, Clicks, CTR, CPC, Conversions, Cost, Leads. |
 
-### Multi-Channel Normalization
+Standard dimensions: Dimension, Impressions, Clicks, CTR, CPC, Conversions, Conv Rate, CPA, Spend, Revenue/Value. For multi-channel data, produce a channel rollup with Channel, Monthly Spend, Impressions, Clicks, CTR, CPC, Conversions, Conv Rate, CPA, ROAS, and CAC. CAC is full customer acquisition cost when funnel data is available.
 
-When data spans multiple channels, also produce a channel-level rollup:
-
-| Channel | Monthly Spend | Impressions | Clicks | CTR | CPC | Conversions | Conv Rate | CPA | ROAS | CAC* |
-|---------|-------------|------------|--------|-----|-----|-------------|----------|-----|------|------|
-| Google Search | $[X] | [N] | [N] | [X%] | $[X] | [N] | [X%] | $[X] | [X] | $[X] |
-| Google Display | ... | | | | | | | | | |
-| Meta (FB/IG) | ... | | | | | | | | | |
-| LinkedIn | ... | | | | | | | | | |
-| [Other] | ... | | | | | | | | | |
-| **Total** | $[X] | | | | | [N] | | $[X] avg | [X] avg | $[X] avg |
-
-*CAC = Full customer acquisition cost if funnel data provided (CPA × close-rate adjustment)
-
-### Funnel-Adjusted CAC (If Funnel Data Available)
-
-```
+```text
 Channel CAC = CPA ÷ (MQL rate × SQL rate × Close rate)
 ```
 
-This reveals which channels produce leads that actually close, not just convert.
+## Diagnostic rules
 
-## Phase 2: Performance Diagnostics
+| Area | Signal | Action |
+| --- | --- | --- |
+| Zero-conversion keywords/ads | Spend > threshold with 0 conversions | Pause, add negatives, or isolate for more data. |
+| High CPA outliers | CPA > 3x target | Pause, restructure, or fix landing page/offer mismatch. |
+| Low CTR ads | CTR < 50% of campaign average | Replace creative or tighten targeting. |
+| Broad match bleed | Search terms show irrelevant clicks | Add negative keywords. |
+| Audience overlap | Same users hit by multiple campaigns | Exclude overlapping audiences. |
+| Dayparting waste | Conversions cluster at certain hours while spend runs 24/7 | Set ad schedule. |
+| Top-performing keywords | Lowest CPA and highest conversion rate | Increase bid and add variants. |
+| Winning ads | Highest CTR + conversion-rate combination | Scale spend and clone into relevant ad groups. |
+| Best audiences | Lowest CPA segment | Increase budget allocation. |
+| Best times | Peak conversion hours/days | Concentrate budget. |
 
-### 2A: Campaign-Level Health Check
+Campaign-level health checks compare CTR, CPC, Conv Rate, CPA, ROAS, and Impression Share against target or benchmark. Treat Impression Share `>60%` as a healthy starting point when growth is constrained by availability rather than waste.
 
-For each campaign:
+## Statistical significance and funnel analysis
 
-| Metric | Value | Benchmark | Status |
-|--------|-------|-----------|--------|
-| CTR | [X%] | [Industry avg] | [Good/Okay/Poor] |
-| CPC | $[X] | [Category avg] | [Good/Okay/Poor] |
-| Conv Rate | [X%] | [Benchmark] | [Good/Okay/Poor] |
-| CPA | $[X] | [Target or benchmark] | [Good/Okay/Poor] |
-| ROAS | [X] | [Target or benchmark] | [Good/Okay/Poor] |
-| Impression Share | [X%] | [>60% ideal] | [Good/Okay/Poor] |
+Use significance checks for A/B tests on ad variants, audiences, and landing pages:
 
-### 2B: Budget Waste Detection
-
-Identify spend that produced no or negative return:
-
-| Waste Type | Signal | Action |
-|-----------|--------|--------|
-| **Zero-conversion keywords/ads** | Spend > $[X] with 0 conversions | Pause or add negatives |
-| **High CPA outliers** | CPA > 3x target | Pause or restructure |
-| **Low CTR ads** | CTR < 50% of campaign average | Replace creative |
-| **Broad match bleed** | Search terms report showing irrelevant clicks | Add negative keywords |
-| **Audience overlap** | Same users hit by multiple campaigns | Exclude audiences |
-| **Dayparting waste** | Conversions cluster at certain hours; spend is 24/7 | Set ad schedule |
-
-### 2C: Winner Identification
-
-Find what's actually working:
-
-| Winner Type | Signal | Action |
-|------------|--------|--------|
-| **Top-performing keywords** | Lowest CPA, highest conv rate | Increase bid, add variants |
-| **Winning ads** | Highest CTR + conv rate combo | Scale spend, clone for other groups |
-| **Best audiences** | Lowest CPA segment | Increase budget allocation |
-| **Best times** | Peak conversion hours/days | Concentrate budget |
-
-### 2D: Statistical Significance Check
-
-For any A/B test (ad variants, audiences, landing pages):
-
-```
+```text
 Test: [Variant A] vs [Variant B]
 Metric: [Conv Rate / CTR / CPA]
 Variant A: [X%] (n=[sample_size])
@@ -143,13 +88,11 @@ Verdict: [Statistically significant / Not enough data / Too close to call]
 Recommended action: [Pick winner / Continue test / Increase budget to reach significance]
 ```
 
-Minimum sample: 100 clicks per variant for CTR tests, 30 conversions per variant for CPA tests.
+Minimum samples: 100 clicks per variant for CTR tests and 30 conversions per variant for CPA tests. Below that, call the result inconclusive unless the business risk requires an immediate stop.
 
-## Phase 3: Funnel Analysis
+Represent the funnel explicitly:
 
-### Click → Conversion Path
-
-```
+```text
 Impressions: [N] (100%)
      ↓ CTR: [X%]
 Clicks: [N] ([X%] of impressions)
@@ -159,76 +102,26 @@ Conversions: [N] ([X%] of clicks)
 Revenue: $[N]
 ```
 
-### Funnel Drop-Off Diagnosis
+Diagnose drop-offs at Impression → Click, Click → Conversion, and Conversion → Revenue. Map each to rate, benchmark, likely cause, and fix.
 
-| Drop-Off Point | Rate | Benchmark | Likely Cause | Fix |
-|----------------|------|-----------|-------------|-----|
-| Impression → Click | [CTR%] | [Benchmark] | [Ad relevance / targeting] | [Copy/targeting change] |
-| Click → Conversion | [Conv%] | [Benchmark] | [Landing page / offer / audience mismatch] | [LP optimization] |
-| Conversion → Revenue | [Close%] | [Benchmark] | [Lead quality / sales process] | [Qualification criteria] |
+## Budget reallocation
 
-## Phase 4: Budget Reallocation
+For multi-channel data, rank each channel by CPA, Funnel-Adj CAC, Share of Spend, Share of Conversions, and Efficiency Index.
 
-When data spans multiple channels, perform cross-channel budget optimization.
+```text
+Efficiency Index = Conversion share ÷ Spend share
+```
 
-### 4A: Channel Efficiency Ranking
+Interpretation: `> 1.0` means under-invested, `= 1.0` means proportional, and `< 1.0` means over-invested. Then estimate marginal return from saturation signals such as Google Search impression share, Meta frequency, or LinkedIn volume ceilings.
 
-| Rank | Channel | CPA | Funnel-Adj CAC | Share of Spend | Share of Conversions | Efficiency Index |
-|------|---------|-----|---------------|----------------|---------------------|-----------------|
-| 1 | [Channel] | $[X] | $[X] | [X%] | [X%] | [Conv share ÷ Spend share] |
+Check funnel stage coverage: Awareness (Meta Display, YouTube), Consideration (Google Search, Meta retargeting), Decision (Google Brand, Google Search), and Retargeting (Meta, Google Display). Build budget shifts with current spend, recommended spend, change, and reasoning. Include conservative `+/- 20%`, aggressive `+/- 40%`, and budget-increase scenarios when data supports them.
 
-**Efficiency Index:**
-- **> 1.0** = Under-invested (getting more than its share of conversions)
-- **= 1.0** = Proportional (fair share)
-- **< 1.0** = Over-invested (getting less than its share)
 
-### 4B: Marginal Return Analysis
+## Channel vocabulary and verdict labels
 
-For each channel, estimate if additional spend would yield proportional returns:
+Preserve native channel terminology in the analysis: `FB/IG`, `Google / Meta / LinkedIn`, `channel-level`, `cross-channel`, `Revenue/Value`, `close-rate`, `X/month`, `Keywords/Audiences`, `budget/bids`, and `keywords/ads**`. Use `Good/Okay/Poor` as compact health labels when a dashboard-style output is clearer than prose, and use `Copy/targeting` as the combined fix when weak CTR can be caused by either message or audience mismatch.
 
-| Channel | Current CPA | Impression Share / Saturation Signal | Marginal Return Estimate |
-|---------|-------------|-------------------------------------|------------------------|
-| Google Search | $[X] | [X%] impression share — room to grow | Likely positive |
-| Meta | $[X] | Frequency [X] — audience may be saturated | Diminishing |
-| LinkedIn | $[X] | Low volume — limited targeting pool | Ceiling soon |
-
-### 4C: Funnel Stage Coverage
-
-| Funnel Stage | Channels Covering It | Current Spend | Gap? |
-|-------------|---------------------|--------------|------|
-| **Awareness** (top) | [Meta Display, YouTube] | $[X] | [Yes/No] |
-| **Consideration** (mid) | [Google Search, Meta retargeting] | $[X] | [Yes/No] |
-| **Decision** (bottom) | [Google Brand, Google Search] | $[X] | [Yes/No] |
-| **Retargeting** | [Meta, Google Display] | $[X] | [Yes/No] |
-
-### 4D: Budget Shift Recommendations
-
-| Channel | Current Spend | Recommended Spend | Change | Reasoning |
-|---------|-------------|------------------|--------|-----------|
-| Google Search | $[X] | $[Y] | +$[Z] | [Lowest CPA, room to scale] |
-| Meta | $[X] | $[Y] | -$[Z] | [Audience saturation, frequency too high] |
-| LinkedIn | $[X] | $[Y] | $0 | [Maintain — niche but valuable] |
-| [New channel] | $0 | $[Y] | +$[Y] | [Test budget — competitors succeeding here] |
-| **Total** | $[X] | $[X] | $0 | Budget-neutral reallocation |
-
-### 4E: Scenario Modeling
-
-**Scenario 1: Conservative shift (+/- 20%)**
-- Expected conversions: [N] (currently [N]) = [X%] improvement
-- Expected blended CPA: $[X] (currently $[X])
-- Risk: Low
-
-**Scenario 2: Aggressive shift (+/- 40%)**
-- Expected conversions: [N] = [X%] improvement
-- Expected blended CPA: $[X]
-- Risk: Medium — less data on scaled channels
-
-**Scenario 3: Budget increase to $[Y]/mo**
-- Recommended allocation: [table]
-- Expected conversions: [N]
-- New channels to test: [list]
-
-## Phase 5: Output Format
+## Output template
 
 ```markdown
 # Ad Campaign Analysis — [Product/Client] — [DATE]
@@ -238,25 +131,16 @@ Total spend: $[X]
 Platform(s): [Google / Meta / LinkedIn]
 Primary goal: [Conversions / Revenue / Leads]
 
----
-
 ## Executive Summary
-
-[3-5 sentences: Overall performance verdict, biggest win, biggest problem, top recommendation including any reallocation moves]
-
----
+[3-5 sentences: verdict, biggest win, biggest problem, and top recommendation]
 
 ## Performance Dashboard
-
 | Campaign | Spend | Impressions | Clicks | CTR | CPC | Conversions | CPA | ROAS | Verdict |
-|----------|-------|------------|--------|-----|-----|-------------|-----|------|---------|
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | [Name] | $[X] | [N] | [N] | [X%] | $[X] | [N] | $[X] | [X] | [Scale/Optimize/Pause] |
 
----
-
 ## Budget Waste Report
-
-**Total estimated waste: $[X] ([X%] of total spend)**
+**Total estimated waste:** $[X] ([X%] of total spend)
 
 ### Wasted on zero-conversion items: $[X]
 [List of keywords/ads/audiences with spend but no conversions]
@@ -267,36 +151,20 @@ Primary goal: [Conversions / Revenue / Leads]
 ### Recommended saves: $[X]/month
 [Specific items to pause]
 
----
-
 ## Winners to Scale
-
-### Top Keywords/Audiences
 | Item | CPA | Conv Rate | Current Spend | Recommended Spend |
-|------|-----|----------|--------------|-------------------|
-
-### Top Ads
-| Ad | CTR | Conv Rate | Why It Works |
-|----|-----|----------|-------------|
-
----
+| --- | --- | --- | --- | --- |
 
 ## A/B Test Results
-
 ### [Test Name]
 - Variant A: [Metric] (n=[N])
 - Variant B: [Metric] (n=[N])
 - Confidence: [X%]
 - **Verdict:** [Winner / Continue / Inconclusive]
 
----
-
 ## Budget Reallocation
-
-### Current vs Recommended Allocation
-
 | Channel | Current | Recommended | Change | Why |
-|---------|---------|------------|--------|-----|
+| --- | --- | --- | --- | --- |
 | [Channel] | $[X] | $[Y] | [+/-$Z] | [1-line reason] |
 
 **Projected impact:**
@@ -307,58 +175,41 @@ Primary goal: [Conversions / Revenue / Leads]
 [Coverage map with gaps identified]
 
 ### New Channel Recommendations
-
 #### [Channel Name]
 - **Why test:** [Reasoning]
 - **Recommended test budget:** $[X]/mo for [X weeks]
 - **Success criteria:** CPA < $[X]
 - **Competitors using it:** [Yes/No — who]
 
----
-
 ## Action Plan
-
 ### Immediate (This Week)
-- [ ] **Pause:** [Specific items — keywords, ads, audiences]
-- [ ] **Scale:** [Specific items — increase budget/bids]
-- [ ] **Add negatives:** [Specific keywords from search terms]
-- [ ] **Reallocate:** [Specific dollar shifts between channels]
+- [ ] **Pause:** [Specific keywords, ads, audiences]
+- [ ] **Scale:** [Specific items and bid/budget changes]
+- [ ] **Add negatives:** [Specific keywords]
+- [ ] **Reallocate:** [Specific dollar shifts]
 
 ### This Month
-- [ ] **Test:** [New ad angles / audiences / landing pages]
-- [ ] **Restructure:** [Ad groups that need splitting or merging]
+- [ ] **Test:** [New ad angles, audiences, landing pages]
+- [ ] **Restructure:** [Ad groups to split or merge]
 - [ ] **Optimize:** [Bid strategy changes]
-- [ ] **Monitor reallocation:** Track CPA shifts on scaled channels, watch for diminishing returns
+- [ ] **Monitor reallocation:** Track CPA shifts and diminishing returns
 
 ### Next Month
-- [ ] **Expand:** [New campaigns / channels to test]
-- [ ] **Re-evaluate:** [Run this analysis again with new data, adjust allocations based on actual results]
+- [ ] **Expand:** [New campaigns or channels]
+- [ ] **Re-evaluate:** Run this analysis again with new data
 ```
 
-Save to `campaign-analysis-[YYYY-MM-DD].md` in the current working directory (or user-specified path).
+Save to `campaign-analysis-[YYYY-MM-DD].md` in the current working directory or the user-specified path.
 
-## Cost
+## Quality gate
 
-| Component | Cost |
-|-----------|------|
-| Data analysis | Free (LLM reasoning) |
-| Statistical calculations | Free |
-| **Total** | **Free** |
+- [ ] Data was normalized into comparable CTR, CPC, conversion rate, CPA, ROAS, and CAC fields.
+- [ ] Spend waste, winners, and inconclusive areas were separated.
+- [ ] A/B tests used sample-size rules: 100 clicks per variant for CTR or 30 conversions per variant for CPA.
+- [ ] Multi-channel recommendations used Efficiency Index and funnel-adjusted CAC when funnel data exists.
+- [ ] Every pause, scale, test, or reallocation recommendation includes numeric evidence.
+- [ ] The output includes an immediate, monthly, and next-month action plan.
 
-## Tools Required
+## References
 
-- No external tools needed — pure reasoning skill
-- User provides campaign data as CSV, paste, or screenshot
-
-## Trigger Phrases
-
-- "Analyze my ad campaign performance"
-- "Which ads should I pause?"
-- "Where am I wasting ad budget?"
-- "Is my Google Ads campaign working?"
-- "Optimize my Meta Ads spend"
-- "How should I allocate my ad budget?"
-- "Should I spend more on Google or Meta?"
-- "Reallocate my ad spend"
-- "Where am I getting the best ROAS?"
-- "Optimize my multi-channel ad budget"
+- [GooseWorks source skill](https://github.com/gooseworks-ai/goose-skills)

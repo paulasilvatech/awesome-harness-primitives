@@ -5,100 +5,80 @@ description: >-
   customized for the project. Use this skill when the user asks for asp.net .net framework
   containerization prompt.
 ---
-# ASP.NET .NET Framework Containerization Prompt
 
+# ASP.NET .NET Framework containerization
+
+Take an ASP.NET .NET Framework `.csproj` plus containerization settings, transform the project into a Windows IIS container build, and output Dockerfile, `.dockerignore`, `LogMonitorConfig.json`, project-file, configuration-builder, progress, and build-verification changes.
+## When to invoke
+- "Containerize this ASP.NET .NET Framework app."
+- "Create a Windows Dockerfile for my ASP.NET Framework project."
+- "Add IIS Windows container support to this .csproj."
+- "Make this Web.config read app settings from environment variables."
+- "Build a Docker image for this legacy ASP.NET application."
+## Containerization goal
 Containerize the ASP.NET (.NET Framework) project specified in the containerization settings below, focusing **exclusively** on changes required for the application to run in a Windows Docker container. Containerization should consider all settings specified here.
-
 **REMEMBER:** This is a .NET Framework application, not .NET Core. The containerization process will be different from that of a .NET Core application.
-
 ## Containerization Settings
-
 This section of the prompt contains the specific settings and configurations required for containerizing the ASP.NET (.NET Framework) application. Prior to running this prompt, ensure that the settings are filled out with the necessary information. Note that in many cases, only the first few settings are required. Later settings can be left as defaults if they do not apply to the project being containerized.
-
 Any settings that are not specified will be set to default values. The default values are provided in `[square brackets]`.
-
 ### Basic Project Information
 1. Project to containerize:
    - `[ProjectName (provide path to .csproj file)]`
-
 2. Windows Server SKU to use:
    - `[Windows Server Core (Default) or Windows Server Full]`
-
 3. Windows Server version to use:
    - `[2022, 2019, or 2016 (Default 2022)]`
-
 4. Custom base image for the build stage of the Docker image ("None" to use standard Microsoft base image):
    - `[Specify base image to use for build stage (Default None)]`
-
 5. Custom base image for the run stage of the Docker image ("None" to use standard Microsoft base image):
    - `[Specify base image to use for run stage (Default None)]`
-
 ### Container Configuration
 1. Ports that must be exposed in the container image:
    - Primary HTTP port: `[e.g., 80]`
    - Additional ports: `[List any additional ports, or "None"]`
-
 2. User account the container should run as:
    - `[User account, or default to "ContainerUser"]`
-
 3. IIS settings that must be configured in the container image:
    - `[List any specific IIS settings, or "None"]`
-
 ### Build configuration
 1. Custom build steps that must be performed before building the container image:
    - `[List any specific build steps, or "None"]`
-
 2. Custom build steps that must be performed after building the container image:
    - `[List any specific build steps, or "None"]`
-
 ### Dependencies
 1. .NET assemblies that should be registered in the GAC in the container image:
    - `[Assembly name and version, or "None"]`
-
 2. MSIs that must be copied to the container image and installed:
    - `[MSI names and versions, or "None"]`
-
 3. COM components that must be registered in the container image:
    - `[COM component names, or "None"]`
-
 ### System Configuration
 1. Registry keys and values that must be added to the container image:
    - `[Registry paths and values, or "None"]`
-
 2. Environment variables that must be set in the container image:
    - `[Variable names and values, or "Use defaults"]`
-
 3. Windows Server roles and features that must be installed in the container image:
    - `[Role/feature names, or "None"]`
-
 ### File System
 1. Files/directories that need to be copied to the container image:
    - `[Paths relative to project root, or "None"]`
    - Target location in container: `[Container paths, or "Not applicable"]`
-
 2. Files/directories to exclude from containerization:
    - `[Paths to exclude, or "None"]`
-
 ### .dockerignore Configuration
 1. Patterns to include in the `.dockerignore` file (.dockerignore will already have common defaults; these are additional patterns):
    - Additional patterns: `[List any additional patterns, or "None"]`
-
 ### Health Check Configuration
 1. Health check endpoint:
    - `[Health check URL path, or "None"]`
-
 2. Health check interval and timeout:
    - `[Interval and timeout values, or "Use defaults"]`
-
 ### Additional Instructions
 1. Other instructions that must be followed to containerize the project:
    - `[Specific requirements, or "None"]`
-
 2. Known issues to address:
    - `[Describe any known issues, or "None"]`
-
 ## Scope
-
 - App configuration modification to ensure config builders are used to read app settings and connection strings from the environment variables
 - Dockerfile creation and configuration for an ASP.NET application
 - Specifying multiple stages in the Dockerfile to build/publish the application and copy the output to the final image
@@ -106,9 +86,7 @@ Any settings that are not specified will be set to default values. The default v
 - Proper handling of dependencies (GAC assemblies, MSIs, COM components)
 - No infrastructure setup (assumed to be handled separately)
 - No code changes beyond those required for containerization
-
-## Execution Process
-
+## Procedure
 1. Review the containerization settings above to understand the containerization requirements
 2. Create a `progress.md` file to track changes with check marks
 3. Determine the .NET Framework version from the project's .csproj file by checking the `TargetFrameworkVersion` element
@@ -194,19 +172,15 @@ Any settings that are not specified will be set to default values. The default v
 11. Add the dockerfile to the project by adding the following item to the project file: `<None Include="Dockerfile" />`
 12. Mark tasks as completed: [ ] → [✓]
 13. Continue until all tasks are complete and Docker build succeeds
-
-## Build and Runtime Verification
-
-confirm that Docker build succeeds once the Dockerfile is completed. Use the following command to build the Docker image:
+## Build and runtime verification
+Confirm that Docker build succeeds once the Dockerfile is completed. Use the following command to build the Docker image:
 
 ```bash
 docker build -t aspnet-app:latest .
 ```
 
 If the build fails, review the error messages and make necessary adjustments to the Dockerfile or project configuration. Report success/failure.
-
-## Progress Tracking
-
+## Progress tracking
 Maintain a `progress.md` file with the following structure:
 ```markdown
 # Containerization Progress
@@ -215,12 +189,10 @@ Maintain a `progress.md` file with the following structure:
 - [ ] .NET Framework version detection (version: ___)
 - [ ] Windows Server SKU selection (SKU: ___)
 - [ ] Windows Server version selection (Version: ___)
-
 ## Configuration Changes
 - [ ] Web.config modifications for configuration builders
 - [ ] NuGet package source configuration (if applicable)
 - [ ] Copy LogMonitorConfig.json and adjust if required by settings
-
 ## Containerization
 - [ ] Dockerfile creation
 - [ ] .dockerignore file creation
@@ -231,20 +203,15 @@ Maintain a `progress.md` file with the following structure:
 - [ ] Dependency handling (GAC, MSI, COM, registry, additional files, etc.)
 - [ ] Health check configuration (if applicable)
 - [ ] Special requirements implementation
-
 ## Verification
 - [ ] Review containerization settings and make sure that all requirements are met
 - [ ] Docker build success
 ```
 
 Do not pause for confirmation between steps. Continue methodically until the application has been containerized and Docker build succeeds.
-
 **YOU ARE NOT DONE UNTIL ALL CHECKBOXES ARE MARKED!** This includes building the Docker image successfully and addressing any issues that arise during the build process.
-
-## Reference Materials
-
+## Dockerfile and LogMonitor reference material
 ### Example Dockerfile
-
 An example Dockerfile for an ASP.NET (.NET Framework) application using a Windows Server Core base image.
 
 ```dockerfile
@@ -274,27 +241,20 @@ An example Dockerfile for an ASP.NET (.NET Framework) application using a Window
 # Uses the .NET Framework SDK image for building the application
 FROM mcr.microsoft.com/dotnet/framework/sdk:4.8-windowsservercore-ltsc2022 AS build
 ARG BUILD_CONFIGURATION=Release
-
 # Set the default shell to PowerShell
 SHELL ["powershell", "-command"]
-
 WORKDIR /app
-
 # Copy the solution and project files
 COPY YourSolution.sln .
 COPY YourProject/*.csproj ./YourProject/
 COPY YourOtherProject/*.csproj ./YourOtherProject/
-
 # Copy packages.config files
 COPY YourProject/packages.config ./YourProject/
 COPY YourOtherProject/packages.config ./YourOtherProject/
-
 # Restore NuGet packages
 RUN nuget restore YourSolution.sln
-
 # Copy source code
 COPY . .
-
 # Perform custom pre-build steps here, if needed
 
 # Build and publish the application to C:\publish
@@ -302,7 +262,6 @@ RUN msbuild /p:Configuration=$BUILD_CONFIGURATION `
             /p:WebPublishMethod=FileSystem `
             /p:PublishUrl=C:\publish `
             /p:DeployDefaultTarget=WebPublish
-
 # Perform custom post-build steps here, if needed
 
 # ============================================================
@@ -326,15 +285,11 @@ RUN msbuild /p:Configuration=$BUILD_CONFIGURATION `
 # - 3.5-windowsservercore-ltsc2019 (Windows Server 2016)
 # Uses the .NET Framework ASP.NET image for running the application
 FROM mcr.microsoft.com/dotnet/framework/aspnet:4.8-windowsservercore-ltsc2022
-
 # Set the default shell to PowerShell
 SHELL ["powershell", "-command"]
-
 WORKDIR /inetpub/wwwroot
-
 # Copy from build stage
 COPY --from=build /publish .
-
 # Add any additional environment variables needed for your application (uncomment and modify as needed)
 # ENV KEY=VALUE
 
@@ -377,36 +332,26 @@ EXPOSE 80
 # Copy LogMonitor from the microsoft/windows-container-tools repository
 WORKDIR /LogMonitor
 RUN curl -fSLo LogMonitor.exe https://github.com/microsoft/windows-container-tools/releases/download/v2.1.1/LogMonitor.exe
-
 # Copy LogMonitorConfig.json from local files
 COPY LogMonitorConfig.json .
-
 # Set non-administrator user
 USER ContainerUser
-
 # Override the container's default entry point to take advantage of the LogMonitor
 ENTRYPOINT [ "C:\\LogMonitor\\LogMonitor.exe", "C:\\ServiceMonitor.exe", "w3svc" ]
 ```
 
-## Adapting this Example
-
+## Adapting the Dockerfile example
 **Note:** Customize this template based on the specific requirements in the containerization settings.
-
 When adapting this example Dockerfile:
-
 1. Replace `YourSolution.sln`, `YourProject.csproj`, etc. with your actual file names
 2. Adjust the Windows Server and .NET Framework versions as needed
 3. Modify the dependency installation steps based on your requirements and remove any unnecessary ones
 4. Add or remove stages as needed for your specific workflow
-
-## Notes on Stage Naming
-
+## Stage naming
 - The `AS stage-name` syntax gives each stage a name
 - Use `--from=stage-name` to copy files from a previous stage
 - You can have multiple intermediate stages that aren't used in the final image
-
 ### LogMonitorConfig.json
-
 The LogMonitorConfig.json file should be created in the root of the project directory. It is used to configure the LogMonitor tool, which monitors logs in the container. The contents of this file should look exactly like this to ensure proper logging functionality:
 ```json
 {
@@ -454,3 +399,37 @@ The LogMonitorConfig.json file should be created in the root of the project dire
   }
 }
 ```
+## Output template
+
+```markdown
+### ASP.NET .NET Framework containerization result
+**Status:** complete | build failed | blocked
+**Project:** `<path-to-.csproj>`
+**Framework:** `<TargetFrameworkVersion>`
+**Base images:** `mcr.microsoft.com/dotnet/framework/sdk:<tag>` → `mcr.microsoft.com/dotnet/framework/aspnet:<tag>`
+**Files changed**
+- `Dockerfile`: <build stage, runtime stage, LogMonitor, IIS, ports, dependencies>
+- `.dockerignore`: <required defaults plus custom patterns>
+- `LogMonitorConfig.json`: <copied exactly or documented setting override>
+- `<project>.csproj`: `<None Include="Dockerfile" />`
+- `web.config`: <configBuilders/appSettings/connectionStrings changes>
+- `progress.md`: <all checklist items marked>
+**Validation**
+- `docker build -t aspnet-app:latest .`: pass | fail | not run, with evidence
+```
+
+## Quality gate
+- [ ] The target project path points to the intended `.csproj`, and `TargetFrameworkVersion` was read from that file.
+- [ ] The Dockerfile uses Windows .NET Framework SDK and ASP.NET runtime images unless custom base images were explicitly provided.
+- [ ] Windows Server Core is used unless Windows Server Full was specifically requested.
+- [ ] `web.config` uses `Microsoft.Configuration.ConfigurationBuilders.EnvironmentConfigBuilder` for `appSettings` and `connectionStrings`, or the blocker is reported.
+- [ ] `Microsoft.Configuration.ConfigurationBuilders.Environment` was verified as present; it was not installed automatically when absent.
+- [ ] `LogMonitorConfig.json` matches the required JSON unless settings explicitly override it, and LogMonitor.exe uses the approved URL.
+- [ ] `.dockerignore` includes every required default pattern and any requested additions.
+- [ ] GAC assemblies, MSIs, COM components, registry keys, environment variables, roles/features, IIS settings, additional files, exposed ports, and health checks from the settings are either implemented or explicitly marked not applicable.
+- [ ] `<None Include="Dockerfile" />` was added to the project file.
+- [ ] `progress.md` exists and all applicable checkboxes are marked complete.
+- [ ] `docker build -t aspnet-app:latest .` was run, or the report explains why Docker build could not run in the current environment.
+## References
+- [.NET Framework Docker ASP.NET image tags](https://github.com/microsoft/dotnet-framework-docker/blob/main/README.aspnet.md#full-tag-listing)
+- [Windows container LogMonitor.exe](https://github.com/microsoft/windows-container-tools/releases/download/v2.1.1/LogMonitor.exe)

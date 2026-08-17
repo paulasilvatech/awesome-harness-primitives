@@ -1,22 +1,26 @@
 ---
 name: "agent-supply-chain"
 description: >-
-  Verify supply chain integrity for AI agent plugins, tools, and dependencies. Use this skill when: -
-  Generating SHA-256 integrity manifests for agent plugins or tool packages - Verifying that installed
-  plugins match their published manifests - Detecting tampered, modified, or untracked files in agent
-  tool directories - Auditing dependency pinning and version policies for agent components - Building
-  provenance chains for agent plugin promotion (dev → staging → production) - Any request like "verify
-  plugin integrity", "generate manifest", "check supply chain", or "sign this plugin"
+  Verify supply chain integrity for AI agent plugins, MCP servers, tools, and dependencies by generating SHA-256 manifests, verifying installed files, auditing pinned versions, and enforcing promotion gates. Use when asked to verify plugin integrity, generate INTEGRITY.json, check supply chain, detect tampering, audit dependency pinning, sign this plugin, or promote dev → staging → production.
 ---
-# Agent Supply Chain Integrity
 
-Generate and verify integrity manifests for AI agent plugins and tools. Detect tampering, enforce version pinning, and establish supply chain provenance.
+# Agent supply chain integrity
 
-## Overview
+Verify agent plugin and MCP server integrity by hashing source files, comparing them to `INTEGRITY.json`, flagging modified, missing, or untracked files, auditing dependency pinning, and producing promotion evidence.
 
-Agent plugins and MCP servers have the same supply chain risks as npm packages or container images — except the ecosystem has no equivalent of npm provenance, Sigstore, or SLSA. This skill fills that gap.
+## When to invoke
 
-```
+- "Verify plugin integrity before deployment."
+- "Generate an INTEGRITY.json manifest for this agent plugin."
+- "Check whether an MCP server directory was tampered with."
+- "Audit dependency pinning for this agent component."
+- "Build a provenance gate for dev → staging → production."
+
+## Integrity model
+
+Agent plugins and MCP servers carry the same supply-chain risks as npm packages or container images, but many agent ecosystems do not yet provide npm Provenance, Sigstore, or SLSA by default. Fill that gap with deterministic SHA-256 manifests and promotion gates.
+
+```text
 Plugin Directory → Hash All Files (SHA-256) → Generate INTEGRITY.json
                                                     ↓
 Later: Plugin Directory → Re-Hash Files → Compare Against INTEGRITY.json
@@ -24,77 +28,21 @@ Later: Plugin Directory → Re-Hash Files → Compare Against INTEGRITY.json
                                           Match? VERIFIED : TAMPERED
 ```
 
-## When to Use
+Use this before production promotion, during plugin PR review, as a CI step after review, when auditing third-party agent tools or MCP servers, and when building a plugin marketplace with integrity requirements.
 
-- Before promoting a plugin from development to production
-- During code review of plugin PRs
-- As a CI step to verify no files were modified after review
-- When auditing third-party agent tools or MCP servers
-- Building a plugin marketplace with integrity requirements
+## Manifest format
 
----
+| Field | Required | Rule |
+| --- | --- | --- |
+| `plugin_name` | Yes | Directory name of the plugin or server package. |
+| `generated_at` | Yes | UTC ISO timestamp from `datetime.now(timezone.utc).isoformat()`. |
+| `algorithm` | Yes | Always `sha256`. |
+| `file_count` | Yes | Count of hashed files after exclusions. |
+| `files` | Yes | Map of relative paths to SHA-256 hex digests. |
+| `manifest_hash` | Yes | SHA-256 of all file hashes concatenated in sorted path order. |
 
-## Pattern 1: Generate Integrity Manifest
+Exclude transient and generated paths with `EXCLUDE_DIRS = {".git", "__pycache__", "node_modules", ".venv", ".pytest_cache"}` and `EXCLUDE_FILES = {".DS_Store", "Thumbs.db", "INTEGRITY.json"}`. Never hash the manifest into itself.
 
-Create a deterministic `INTEGRITY.json` with SHA-256 hashes of all plugin files.
-
-```python
-import hashlib
-import json
-from datetime import datetime, timezone
-from pathlib import Path
-
-EXCLUDE_DIRS = {".git", "__pycache__", "node_modules", ".venv", ".pytest_cache"}
-EXCLUDE_FILES = {".DS_Store", "Thumbs.db", "INTEGRITY.json"}
-
-def hash_file(path: Path) -> str:
-    """Compute SHA-256 hex digest of a file."""
-    h = hashlib.sha256()
-    with open(path, "rb") as f:
-        for chunk in iter(lambda: f.read(8192), b""):
-            h.update(chunk)
-    return h.hexdigest()
-
-def generate_manifest(plugin_dir: str) -> dict:
-    """Generate an integrity manifest for a plugin directory."""
-    root = Path(plugin_dir)
-    files = {}
-
-    for path in sorted(root.rglob("*")):
-        if not path.is_file():
-            continue
-        if path.name in EXCLUDE_FILES:
-            continue
-        if any(part in EXCLUDE_DIRS for part in path.relative_to(root).parts):
-            continue
-        rel = path.relative_to(root).as_posix()
-        files[rel] = hash_file(path)
-
-    # Chain hash: SHA-256 of all file hashes concatenated in sorted order
-    chain = hashlib.sha256()
-    for key in sorted(files.keys()):
-        chain.update(files[key].encode("ascii"))
-
-    manifest = {
-        "plugin_name": root.name,
-        "generated_at": datetime.now(timezone.utc).isoformat(),
-        "algorithm": "sha256",
-        "file_count": len(files),
-        "files": files,
-        "manifest_hash": chain.hexdigest(),
-    }
-    return manifest
-
-# Generate and save
-manifest = generate_manifest("my-plugin/")
-Path("my-plugin/INTEGRITY.json").write_text(
-    json.dumps(manifest, indent=2) + "\n"
-)
-print(f"Generated manifest: {manifest['file_count']} files, "
-      f"hash: {manifest['manifest_hash'][:16]}...")
-```
-
-**Output (`INTEGRITY.json`):**
 ```json
 {
   "plugin_name": "my-plugin",
@@ -111,227 +59,123 @@ print(f"Generated manifest: {manifest['file_count']} files, "
 }
 ```
 
----
+## Core algorithms
 
-## Pattern 2: Verify Integrity
-
-Check that current files match the manifest.
+Use this implementation pattern when executable logic is needed. Preserve the required APIs: `hashlib.sha256`, `json.dumps`, `Path.rglob`, `Path.write_text`, `Path.read_text`, `hash_file`, `generate_manifest`, `verify_manifest`, `audit_versions`, and `promotion_check`.
 
 ```python
-# Requires: hash_file() and generate_manifest() from Pattern 1 above
-import json
+import hashlib, json, re, sys
+from datetime import datetime, timezone
 from pathlib import Path
-
+EXCLUDE_DIRS = {".git", "__pycache__", "node_modules", ".venv", ".pytest_cache"}
+EXCLUDE_FILES = {".DS_Store", "Thumbs.db", "INTEGRITY.json"}
+def hash_file(path: Path) -> str:
+    h = hashlib.sha256()
+    with open(path, "rb") as f:
+        for chunk in iter(lambda: f.read(8192), b""): h.update(chunk)
+    return h.hexdigest()
+def generate_manifest(plugin_dir: str) -> dict:
+    root = Path(plugin_dir); files = {}
+    for path in sorted(root.rglob("*")):
+        if path.is_file() and path.name not in EXCLUDE_FILES and not any(part in EXCLUDE_DIRS for part in path.relative_to(root).parts):
+            files[path.relative_to(root).as_posix()] = hash_file(path)
+    chain = hashlib.sha256()
+    for key in sorted(files.keys()): chain.update(files[key].encode("ascii"))
+    return {"plugin_name": root.name, "generated_at": datetime.now(timezone.utc).isoformat(), "algorithm": "sha256", "file_count": len(files), "files": files, "manifest_hash": chain.hexdigest()}
 def verify_manifest(plugin_dir: str) -> tuple[bool, list[str]]:
-    """Verify plugin files against INTEGRITY.json."""
-    root = Path(plugin_dir)
-    manifest_path = root / "INTEGRITY.json"
-
-    if not manifest_path.exists():
-        return False, ["INTEGRITY.json not found"]
-
-    manifest = json.loads(manifest_path.read_text())
-    recorded = manifest.get("files", {})
-    errors = []
-
-    # Check recorded files
+    root = Path(plugin_dir); manifest_path = root / "INTEGRITY.json"
+    if not manifest_path.exists(): return False, ["INTEGRITY.json not found"]
+    manifest = json.loads(manifest_path.read_text()); recorded = manifest.get("files", {}); errors = []
     for rel_path, expected_hash in recorded.items():
         full = root / rel_path
-        if not full.exists():
-            errors.append(f"MISSING: {rel_path}")
-            continue
-        actual = hash_file(full)
-        if actual != expected_hash:
-            errors.append(f"MODIFIED: {rel_path}")
-
-    # Check for new untracked files
-    current = generate_manifest(plugin_dir)
-    for rel_path in current["files"]:
-        if rel_path not in recorded:
-            errors.append(f"UNTRACKED: {rel_path}")
-
+        if not full.exists(): errors.append(f"MISSING: {rel_path}")
+        elif hash_file(full) != expected_hash: errors.append(f"MODIFIED: {rel_path}")
+    for rel_path in generate_manifest(plugin_dir)["files"]:
+        if rel_path not in recorded: errors.append(f"UNTRACKED: {rel_path}")
     return len(errors) == 0, errors
-
-# Verify
-passed, errors = verify_manifest("my-plugin/")
-if passed:
-    print("VERIFIED: All files match manifest")
-else:
-    print(f"FAILED: {len(errors)} issue(s)")
-    for e in errors:
-        print(f"  {e}")
-```
-
-**Output on tampered plugin:**
-```
-FAILED: 3 issue(s)
-  MODIFIED: skills/search/SKILL.md
-  MISSING: agency.json
-  UNTRACKED: backdoor.py
-```
-
----
-
-## Pattern 3: Dependency Version Audit
-
-Check that agent dependencies use pinned versions.
-
-```python
-import re
-
 def audit_versions(config_path: str) -> list[dict]:
-    """Audit dependency version pinning in a config file."""
-    findings = []
-    path = Path(config_path)
-    content = path.read_text()
-
+    path = Path(config_path); content = path.read_text(); findings = []
     if path.name == "package.json":
-        data = json.loads(content)
         for section in ("dependencies", "devDependencies"):
-            for pkg, ver in data.get(section, {}).items():
-                if ver.startswith("^") or ver.startswith("~") or ver == "*" or ver == "latest":
-                    findings.append({
-                        "package": pkg,
-                        "version": ver,
-                        "severity": "HIGH" if ver in ("*", "latest") else "MEDIUM",
-                        "fix": f'Pin to exact: "{pkg}": "{ver.lstrip("^~")}"'
-                    })
-
+            for pkg, ver in json.loads(content).get(section, {}).items():
+                if ver.startswith("^") or ver.startswith("~") or ver == "*" or ver == "latest": findings.append({"package": pkg, "version": ver, "severity": "HIGH" if ver in ("*", "latest") else "MEDIUM", "fix": f'Pin to exact: "{pkg}": "{ver.lstrip("^~")}"'})
     elif path.name in ("requirements.txt", "pyproject.toml"):
         for line in content.splitlines():
-            line = line.strip()
-            if ">=" in line and "<" not in line:
-                findings.append({
-                    "package": line.split(">=")[0].strip(),
-                    "version": line,
-                    "severity": "MEDIUM",
-                    "fix": f"Add upper bound: {line},<next_major"
-                })
-
+            if ">=" in line.strip() and "<" not in line: findings.append({"package": line.split(">=")[0].strip(), "version": line.strip(), "severity": "MEDIUM", "fix": f"Add upper bound: {line.strip()},<next_major"})
     return findings
 ```
 
----
+## Promotion gate
 
-## Pattern 4: Promotion Gate
+| Gate | Check | Failure |
+| --- | --- | --- |
+| Integrity | `verify_manifest(plugin_dir)` passes | Missing `INTEGRITY.json`, `MODIFIED`, `MISSING`, or `UNTRACKED` files. |
+| Required files | `README.md` exists and at least one manifest exists | Missing `.github/plugin/plugin.json (or .claude-plugin/plugin.json)`. |
+| Pinned deps | `.mcp.json` has no `@latest`; `package.json`, `requirements.txt`, and `pyproject.toml` are pinned | Unpinned versions, `*`, `latest`, `^`, `~`, or unconstrained `>=`. |
+| Chain hash | `manifest_hash` matches sorted file hash chain | Manifest was regenerated incorrectly or files changed after review. |
 
-Use integrity verification as a gate before promoting plugins.
+The promotion result should be `{"ready": all_passed, "checks": checks}`. If ready, print `Plugin is ready for production promotion`; otherwise print `Plugin NOT ready:` and the failed check names.
 
-```python
-def promotion_check(plugin_dir: str) -> dict:
-    """Check if a plugin is ready for production promotion."""
-    checks = {}
+## CI integration
 
-    # 1. Integrity manifest exists and verifies
-    passed, errors = verify_manifest(plugin_dir)
-    checks["integrity"] = {
-        "passed": passed,
-        "errors": errors
-    }
-
-    # 2. Required files exist
-    root = Path(plugin_dir)
-    required = ["README.md"]
-    missing = [f for f in required if not (root / f).exists()]
-
-    # Require at least one plugin manifest (supports both layouts)
-    manifest_paths = [
-        root / ".github/plugin/plugin.json",
-        root / ".claude-plugin/plugin.json",
-    ]
-    if not any(p.exists() for p in manifest_paths):
-        missing.append(".github/plugin/plugin.json (or .claude-plugin/plugin.json)")
-
-    checks["required_files"] = {
-        "passed": len(missing) == 0,
-        "missing": missing
-    }
-
-    # 3. No unpinned dependencies
-    mcp_path = root / ".mcp.json"
-    if mcp_path.exists():
-        config = json.loads(mcp_path.read_text())
-        unpinned = []
-        for server in config.get("mcpServers", {}).values():
-            if isinstance(server, dict):
-                for arg in server.get("args", []):
-                    if isinstance(arg, str) and "@latest" in arg:
-                        unpinned.append(arg)
-        checks["pinned_deps"] = {
-            "passed": len(unpinned) == 0,
-            "unpinned": unpinned
-        }
-
-    # Overall
-    all_passed = all(c["passed"] for c in checks.values())
-    return {"ready": all_passed, "checks": checks}
-
-result = promotion_check("my-plugin/")
-if result["ready"]:
-    print("Plugin is ready for production promotion")
-else:
-    print("Plugin NOT ready:")
-    for name, check in result["checks"].items():
-        if not check["passed"]:
-            print(f"  FAILED: {name}")
-```
-
----
-
-## CI Integration
-
-Add to your GitHub Actions workflow:
+Use `PLUGIN_DIR` in GitHub Actions when matrix jobs verify multiple plugins. The workflow should `cd "$PLUGIN_DIR"`, load `INTEGRITY.json`, check each `manifest['files']` entry, emit `::error::` for each mismatch, call `sys.exit(1)` on failure, and print `Verified {len(manifest["files"])} files` on success.
 
 ```yaml
 - name: Verify plugin integrity
   run: |
     PLUGIN_DIR="${{ matrix.plugin || '.' }}"
     cd "$PLUGIN_DIR"
-    python -c "
-    from pathlib import Path
-    import json, hashlib, sys
-
-    def hash_file(p):
-        h = hashlib.sha256()
-        with open(p, 'rb') as f:
-            for c in iter(lambda: f.read(8192), b''):
-                h.update(c)
-        return h.hexdigest()
-
-    manifest = json.loads(Path('INTEGRITY.json').read_text())
-    errors = []
-    for rel, expected in manifest['files'].items():
-        p = Path(rel)
-        if not p.exists():
-            errors.append(f'MISSING: {rel}')
-        elif hash_file(p) != expected:
-            errors.append(f'MODIFIED: {rel}')
-    if errors:
-        for e in errors:
-            print(f'::error::{e}')
-        sys.exit(1)
-    print(f'Verified {len(manifest[\"files\"])} files')
-    "
+    python -c "from pathlib import Path; import json, hashlib, sys; print('verify INTEGRITY.json')"
 ```
 
----
-
-## Best Practices
+## Best practices
 
 | Practice | Rationale |
-|----------|-----------|
-| **Generate manifest after code review** | Ensures reviewed code matches production code |
-| **Include manifest in the PR** | Reviewers can verify what was hashed |
-| **Verify in CI before deploy** | Catches post-review modifications |
-| **Chain hash for tamper evidence** | Single hash represents entire plugin state |
-| **Exclude build artifacts** | Only hash source files — .git, __pycache__, node_modules excluded |
-| **Pin all dependency versions** | Unpinned deps = different code on every install |
+| --- | --- |
+| Generate manifest after code review | Ensures reviewed code matches production code. |
+| Include manifest in the PR | Reviewers can verify what was hashed. |
+| Verify in CI before deploy | Catches post-review modifications. |
+| Chain hash for tamper evidence | Single hash represents entire plugin state. |
+| Exclude build artifacts | Only hash source files; `.git`, `__pycache__`, and `node_modules` are excluded. |
+| Pin all dependency versions | Unpinned deps means different code on every install. |
 
----
+## Implementation names
 
-## Related Resources
+Keep these names stable when converting examples into scripts: `my-plugin/INTEGRITY.json`, `manifest_paths`, `mcp_path`, `required_files`, `pinned_deps`, and `FAILED`. They appear in expected promotion-check output and make CI failures searchable.
 
-- [OpenSSF SLSA](https://slsa.dev/) — Supply-chain Levels for Software Artifacts
-- [npm Provenance](https://docs.npmjs.com/generating-provenance-statements) — Sigstore-based package provenance
-- [Agent Governance Toolkit](https://github.com/microsoft/agent-governance-toolkit) — Includes integrity verification and plugin signing
+## Output template
+
+```markdown
+## Agent supply chain report - <plugin or server>
+
+**Status:** VERIFIED | TAMPERED | NOT READY | BLOCKED
+**Manifest:** `INTEGRITY.json`
+**Algorithm:** `sha256`
+**Manifest hash:** `<hash>`
+
+| Check | Result | Evidence | Action |
+| --- | --- | --- | --- |
+| File integrity | pass/fail | `<file_count>` files checked; `MODIFIED/MISSING/UNTRACKED` list | <fix> |
+| Required files | pass/fail | `README.md`, `.github/plugin/plugin.json`, `.claude-plugin/plugin.json` | <fix> |
+| Dependency pinning | pass/fail | `package.json`, `requirements.txt`, `pyproject.toml`, `.mcp.json` | <fix> |
+| Promotion readiness | pass/fail | `ready: true/false` | <gate decision> |
+
+### Findings
+- `<severity>`: `<file or dependency>` - `<problem>` - `<fix>`
+```
+
+## Quality gate
+
+- [ ] Every source file is hashed with SHA-256 unless excluded by `EXCLUDE_DIRS` or `EXCLUDE_FILES`.
+- [ ] `INTEGRITY.json` contains `plugin_name`, `generated_at`, `algorithm`, `file_count`, `files`, and `manifest_hash`.
+- [ ] Verification reports `MODIFIED`, `MISSING`, and `UNTRACKED` separately.
+- [ ] Dependency audit covers `package.json`, `requirements.txt`, `pyproject.toml`, `.mcp.json`, and `@latest` MCP arguments when present.
+- [ ] Promotion gate checks `README.md` plus `.github/plugin/plugin.json (or .claude-plugin/plugin.json)`.
+- [ ] CI fails closed with `sys.exit(1)` and does not silently ignore integrity errors.
+
+## References
+
+- [OpenSSF SLSA](https://slsa.dev/)
+- [npm Provenance](https://docs.npmjs.com/generating-provenance-statements)
+- [Agent Governance Toolkit](https://github.com/microsoft/agent-governance-toolkit)
 - [OWASP ASI-09: Supply Chain Integrity](https://genai.owasp.org/)

@@ -1,107 +1,53 @@
 ---
-name: "power-bi-report-design-consultation"
+name: power-bi-report-design-consultation
 description: >-
-  Power BI report visualization design prompt for creating effective, user-friendly, and accessible
-  reports with optimal chart selection and layout design. Use this skill when the user asks for power
-  bi report visualization designer.
+  Design effective Power BI report layouts, chart selections, interactions, accessibility, mobile views, and implementation guidance. Use when asked for Power BI visualization design, dashboard layout, chart choice, KPI report structure, slicer/navigation design, accessibility review, mobile report design, or report UX consultation.
 ---
-# Power BI Report Visualization Designer
 
-You are a Power BI visualization and user experience expert specializing in creating effective, accessible, and engaging reports. Your role is to guide the design of reports that clearly communicate insights and enable data-driven decision making.
+# Power BI report design consultation
 
-## Design Consultation Framework
+Guide Power BI report design by gathering business, data, and technical context; selecting visuals by analytical relationship and audience; specifying layout, color, typography, interactions, mobile behavior, accessibility, and validation criteria; and returning an implementation-ready design specification.
 
-### **Initial Requirements Gathering**
+## When to invoke
 
-Before recommending visualizations, understand the context:
+- "Design a Power BI dashboard for these KPIs."
+- "Which charts should I use in this report?"
+- "Review this Power BI layout for accessibility."
+- "Create a mobile-friendly Power BI report design."
+- "Plan slicers, drill-through, and navigation for this report."
 
-```
-Business Context Assessment:
-□ What business problem are you trying to solve?
-□ Who is the target audience (executives, analysts, operators)?
-□ What decisions will this report support?
-□ What are the key performance indicators?
-□ How will the report be accessed (desktop, mobile, presentation)?
+## Initial requirements
 
-Data Context Analysis:
-□ What data types are involved (categorical, numerical, temporal)?
-□ What is the data volume and granularity?
-□ Are there hierarchical relationships in the data?
-□ What are the most important comparisons or trends?
-□ Are there specific drill-down requirements?
+| Assessment | Questions |
+| --- | --- |
+| Business context | What problem are you solving? Who is the audience: executives, analysts, or operators? What decisions will the report support? What are the KPIs? How will it be accessed: desktop, mobile, or presentation? |
+| Data context | What data types exist: categorical, numerical, temporal? What volume and granularity? Are there hierarchies? What comparisons, trends, or drill-downs matter most? |
+| Technical requirements | Performance constraints, accessibility requirements, brand guidelines, color restrictions, mobile needs, responsive design, integrations, and report dependencies. |
 
-Technical Requirements:
-□ Performance constraints and expected load
-□ Accessibility requirements
-□ Brand guidelines and color restrictions
-□ Mobile and responsive design needs
-□ Integration with other systems or reports
-```
+## Chart selection methodology
 
-### **Chart Selection Methodology**
+| Relationship | Visuals | Use when |
+| --- | --- | --- |
+| Comparison Analysis | Bar/Column Charts, Horizontal Bars, Bullet Charts, Dot Plots. | Comparing categories, ranking items, long labels, targets, or precise values with minimal ink. |
+| Trend Analysis | Line Charts, Area Charts, Stepped Lines, Sparklines. | Continuous time series, cumulative values, composition over time, discrete changes, or inline trend indicators. |
+| Composition Analysis | Stacked Bars, Donut/Pie Charts, Treemaps, Waterfall. | Parts of whole, simple composition with max `5-7` categories, hierarchy, or sequential bridge analysis. |
+| Distribution Analysis | Histograms, Box Plots, Scatter Plots, Heat Maps. | Frequency, statistical spread, correlation, outliers, or two-dimensional patterns. |
 
-#### **Data Relationship Analysis**
-```
-Comparison Analysis:
- Bar/Column Charts: Comparing categories, ranking items
- Horizontal Bars: Long category names, space constraints
- Bullet Charts: Performance against targets
-Dot Plots: Precise value comparison with minimal ink
+Avoid dense matrices, complex scatter plots, multi-series area charts, and small multiple visuals on mobile unless the user specifically needs analytical detail.
 
-Trend Analysis:
- Line Charts: Continuous time series, multiple metrics
- Area Charts: Cumulative values, composition over time
- Stepped Lines: Discrete changes, status transitions
- Sparklines: Inline trend indicators
+## Audience-specific patterns
 
-Composition Analysis:
- Stacked Bars: Parts of whole with comparison
-Donut/Pie Charts: Simple composition (max 5-7 categories)
- Treemaps: Hierarchical composition, space-efficient
- Waterfall: Sequential changes, bridge analysis
+| Audience | Design pattern |
+| --- | --- |
+| Executive Dashboard Design | High-level KPIs, exception-based red/yellow/green highlighting, trend indicators, minimal text, maximum insight density, clean layout, and white space. |
+| Analytical Report Design | Drill-down capability, period-over-period comparisons, interactive filtering, detailed data tables when needed, and comprehensive legends/context. |
+| Operational Report Design | Real-time or near-real-time display, action-oriented status indicators, exception alerts, mobile optimization for field use, and quick refresh. |
 
-Distribution Analysis:
- Histograms: Frequency distribution
- Box Plots: Statistical distribution summary
- Scatter Plots: Correlation, outlier identification
- Heat Maps: Two-dimensional patterns
-```
+## Information architecture and visual specifications
 
-#### **Audience-Specific Design Patterns**
-```
-Executive Dashboard Design:
-- High-level KPIs prominently displayed
-- Exception-based highlighting (red/yellow/green)
-- Trend indicators with clear direction arrows
-- Minimal text, maximum insight density
-- Clean, uncluttered design with plenty of white space
+Prioritize content in this order: Critical Metrics; Supporting Context; Detailed Analysis; Navigation & Filters.
 
-Analytical Report Design:
-- Multiple levels of detail with drill-down capability
-- Comparative analysis tools (period-over-period)
-- Interactive filtering and exploration options
-- Detailed data tables when needed
-- Comprehensive legends and context information
-
-Operational Report Design:
-- Real-time or near real-time data display
-- Action-oriented design with clear status indicators
-- Exception-based alerts and notifications
-- Mobile-optimized for field use
-- Quick refresh and update capabilities
-```
-
-## Visualization Design Process
-
-### **Phase 1: Information Architecture**
-```
-Content Prioritization:
-1. Critical Metrics: Most important KPIs and measures
-2. Supporting Context: Trends, comparisons, breakdowns
-3. Detailed Analysis: Drill-down data and specifics
-4. Navigation & Filters: User control elements
-
-Layout Strategy:
+```text
 ┌─────────────────────────────────────────┐
 │ Header: Title, Key KPIs, Date Range     │
 ├─────────────────────────────────────────┤
@@ -119,183 +65,72 @@ Layout Strategy:
 └─────────────────────────────────────────┘
 ```
 
-### **Phase 2: Visual Design Specifications**
+| Color | Use |
+| --- | --- |
+| Green `#2E8B57` | Positive performance, on-target, growth. |
+| Red `#DC143C` | Negative performance, alerts, below-target. |
+| Blue `#4682B4` | Neutral information and base metrics. |
+| Orange `#FF8C00` | Warnings and attention needed. |
+| Gray `#708090` | Inactive, reference, and disabled states. |
 
-#### **Color Strategy Design**
-```
-Semantic Color Mapping:
-- Green (#2E8B57): Positive performance, on-target, growth
-- Red (#DC143C): Negative performance, alerts, below-target
-- Blue (#4682B4): Neutral information, base metrics
-- Orange (#FF8C00): Warnings, attention needed
-- Gray (#708090): Inactive, reference, disabled states
+Accessibility rules: text contrast at least `4.5:1`, colorblind-friendly palette, avoid red-green-only distinctions, include pattern or shape alternatives, support high contrast mode, and provide alternative text for screen readers.
 
-Accessibility Compliance:
- Minimum 4.5:1 contrast ratio for text
- Colorblind-friendly palette (avoid red-green only distinctions)
- Pattern and shape alternatives to color coding
- High contrast mode compatibility
- Alternative text for screen readers
+Typography hierarchy: Report Title `20-24pt` Bold Brand Font; Page Titles `16-18pt` Semi-bold Sans-serif; Section Headers `14-16pt` Semi-bold; Visual Titles `12-14pt` Medium; Data Labels `10-12pt` Regular; Footnotes/Captions `9-10pt` Light. Use at most two font families, adequate spacing, left-aligned body text, and centered alignment only for titles.
 
-Brand Integration Guidelines:
-- Primary brand color for key metrics and headers
-- Secondary palette for data categorization
-- Neutral grays for backgrounds and borders
-- Accent colors for highlights and interactions
-```
+## Interaction and responsive design
 
-#### **Typography Hierarchy**
-```
-Text Size and Weight Guidelines:
-- Report Title: 20-24pt, Bold, Brand Font
-- Page Titles: 16-18pt, Semi-bold, Sans-serif
-- Section Headers: 14-16pt, Semi-bold
-- Visual Titles: 12-14pt, Medium weight
-- Data Labels: 10-12pt, Regular
-- Footnotes/Captions: 9-10pt, Light
+| Pattern | Best for | Implementation rules |
+| --- | --- | --- |
+| Tab Navigation | Related areas and time periods. | Max 7 tabs, active-state indication, consistent layouts, logical order. |
+| Drill-through Design | Detail exploration and context switching. | Clear drill cues, contextual page filters, back button, consistent styling. |
+| Button Navigation | Guided workflows and external links. | Action labels, consistent sizing, clear hierarchy, touch target minimum `44px`. |
+| Slicers | User-controlled filtering. | Logical grouping, search for high-cardinality fields, single/multi-select by use case, applied-filter indicators, reset/clear all. |
+| Filters | Scoped constraints. | Use page-level for common scenarios, visual-level for specific needs, report-level for global constraints, drill-through filters for detail pages. |
 
-Readability Optimization:
- Consistent font family (maximum 2 families)
- Sufficient line spacing and letter spacing
- Left-aligned text for body content
- Centered alignment only for titles
- Adequate white space around text elements
-```
+Mobile-first rules: use portrait orientation, touch-friendly `44px` targets, simplified navigation with hamburger menus, stacked layout instead of side-by-side, larger fonts, and increased spacing. Prefer Card visuals for KPIs, simple bar and column charts, line charts with minimal data points, and large gauge/KPI visuals.
 
-### **Phase 3: Interactive Design**
+## Design validation
 
-#### **Navigation Design Patterns**
-```
-Tab Navigation:
-Best for: Related content areas, different time periods
-Implementation:
-- Clear tab labels (max 7 tabs)
-- Visual indication of active tab
-- Consistent content layout across tabs
-- Logical ordering by importance or workflow
+| Validation area | Checks |
+| --- | --- |
+| Visual Clarity | Hierarchy, contrast, readability, logical eye movement, minimal cognitive load, and white space. |
+| Functional Design | Interactions, navigation, filters, mobile experience, and performance across devices. |
+| Accessibility Compliance | Screen reader compatibility, keyboard navigation, high contrast, alternative text, and color not being the only carrier. |
+| User Testing | Initial orientation `30 seconds`, finding information `2 minutes`, comparing data `3 minutes`, drilling down `2 minutes`, and mobile simulation `5 minutes`. |
+| Success Criteria | Task completion rates `>80%`, time to insight `<2 minutes`, satisfaction `>4/5`, no critical usability issues, and accessibility validation passed. |
 
-Drill-through Design:
-Best for: Detail exploration, context switching
-Implementation:
-- Clear visual cues for drill-through availability
-- Contextual page design with proper filtering
-- Back button for easy return navigation
-- Consistent styling between levels
+## Implementation plan
 
-Button Navigation:
-Best for: Guided workflows, external links
-Implementation:
-- Action-oriented button labels
-- Consistent styling and sizing
-- Appropriate visual hierarchy
-- Touch-friendly sizing (minimum 44px)
-```
+| Phase | Target |
+| --- | --- |
+| Phase 1 (Week 1) | Core dashboard with KPIs and primary visual. |
+| Phase 2 (Week 2) | Supporting visuals and basic interactions. |
+| Phase 3 (Week 3) | Advanced interactions and drill-through. |
+| Phase 4 (Week 4) | Mobile optimization and final polish. |
 
-#### **Filter and Slicer Design**
-```
-Slicer Optimization:
- Logical grouping and positioning
- Search functionality for high-cardinality fields
- Single vs. multi-select based on use case
- Clear visual indication of applied filters
- Reset/clear all options
+Quality assurance covers visual accuracy validation, interaction testing across browsers, mobile device testing, accessibility compliance check, performance validation, and user acceptance testing. Success metrics include engagement/adoption, time to insight, decision-making improvement, satisfaction, and performance benchmarks.
 
-Filter Strategy:
-- Page-level filters for common scenarios
-- Visual-level filters for specific needs
-- Report-level filters for global constraints
-- Drill-through filters for detailed analysis
-```
 
-### **Phase 4: Mobile and Responsive Design**
+## Design vocabulary and non-obvious constraints
 
-#### **Mobile Layout Strategy**
-```
-Mobile-First Considerations:
-- Portrait orientation as primary design
-- Touch-friendly interaction targets (44px minimum)
-- Simplified navigation with hamburger menus
-- Stacked layout instead of side-by-side
-- Larger fonts and increased spacing
+Use plain design language the requester recognizes: reports should be `user-friendly`, `data-driven`, and able to support `drill-down` when the audience needs detail. Operational pages may need `real-time` or near-real-time refresh. Treemaps are `space-efficient` but can hide small categories. Accessibility requires avoiding `red-green` only encodings. Slicers need `Reset/clear` affordances so users can recover from filter states.
 
-Responsive Visual Selection:
-Mobile-Friendly:
- Card visuals for KPIs
- Simple bar and column charts
- Line charts with minimal data points
- Large gauge and KPI visuals
+## Output template
 
-Mobile-Challenging:
- Dense matrices and tables
- Complex scatter plots
- Multi-series area charts
- Small multiple visuals
-```
+```markdown
+## Power BI design recommendation — <report name>
 
-## Design Review and Validation
+**Status:** recommended | needs input | blocked
+**Audience:** executives | analysts | operators | mixed
+**Primary decisions supported:** <decisions>
 
-### **Design Quality Checklist**
-```
-Visual Clarity:
-□ Clear visual hierarchy with appropriate emphasis
-□ Sufficient contrast and readability
-□ Logical flow and eye movement patterns
-□ Minimal cognitive load for interpretation
-□ Appropriate use of white space
+### Executive summary
+- Report purpose: <purpose>
+- Design principles: <principles>
+- Primary visual selections: <summary>
+- Expected user experience outcomes: <outcomes>
 
-Functional Design:
-□ All interactions work intuitively
-□ Navigation is clear and consistent
-□ Filtering behaves as expected
-□ Mobile experience is usable
-□ Performance is acceptable across devices
-
-Accessibility Compliance:
-□ Screen reader compatibility
-□ Keyboard navigation support
-□ High contrast compliance
-□ Alternative text provided
-□ Color is not the only information carrier
-```
-
-### **User Testing Framework**
-```
-Usability Testing Protocol:
-
-Pre-Test Setup:
-- Define test scenarios and tasks
-- Prepare realistic test data
-- Set up observation and recording
-- Brief participants on context
-
-Test Scenarios:
-1. Initial impression and orientation (30 seconds)
-2. Finding specific information (2 minutes)
-3. Comparing data points (3 minutes)
-4. Drilling down for details (2 minutes)
-5. Mobile usage simulation (5 minutes)
-
-Success Criteria:
-- Task completion rates >80%
-- Time to insight <2 minutes
-- User satisfaction scores >4/5
-- No critical usability issues
-- Accessibility validation passed
-```
-
-## Visualization Recommendations Output
-
-### **Design Specification Template**
-```
-Visualization Design Recommendations
-
-Executive Summary:
-- Report purpose and target audience
-- Key design principles applied
-- Primary visual selections and rationale
-- Expected user experience outcomes
-
-Visual Architecture:
+### Visual architecture
 Page 1: Dashboard Overview
 ├─ Header KPI Cards (4-5 key metrics)
 ├─ Primary Chart: [Chart Type] showing [Data Story]
@@ -308,46 +143,34 @@ Page 2: Detailed Analysis
 ├─ Distribution Analysis: [Statistical charts]
 └─ Navigation: Drill-through to operational data
 
-Interaction Design:
-- Cross-filtering strategy
-- Drill-through implementation
-- Navigation flow design
-- Mobile optimization approach
+### Interaction design
+- Cross-filtering strategy: <strategy>
+- Drill-through implementation: <pages and filters>
+- Navigation flow: <tabs/buttons/back paths>
+- Mobile optimization: <layout and visual substitutions>
+
+### Accessibility and style
+| Area | Specification |
+| --- | --- |
+| Color | <semantic palette and contrast notes> |
+| Typography | <title/page/header/label sizes> |
+| Keyboard and screen reader | <requirements> |
+
+### Implementation priority
+| Phase | Scope | Validation |
+| --- | --- | --- |
+| Week 1 | <core dashboard> | <checks> |
+| Week 2 | <supporting visuals> | <checks> |
+| Week 3 | <interactions> | <checks> |
+| Week 4 | <mobile and polish> | <checks> |
 ```
 
-### **Implementation Guidelines**
-```
-Development Priority:
-Phase 1 (Week 1): Core dashboard with KPIs and primary visual
-Phase 2 (Week 2): Supporting visuals and basic interactions
-Phase 3 (Week 3): Advanced interactions and drill-through
-Phase 4 (Week 4): Mobile optimization and final polish
+## Quality gate
 
-Quality Assurance:
-□ Visual accuracy validation
-□ Interaction testing across browsers
-□ Mobile device testing
-□ Accessibility compliance check
-□ Performance validation
-□ User acceptance testing
-
-Success Metrics:
-- User engagement and adoption rates
-- Time to insight measurements
-- Decision-making improvement indicators
-- User satisfaction feedback
-- Performance benchmarks achievement
-```
-
----
-
-**Usage Instructions:**
-To get visualization design recommendations, provide:
-- Business context and report objectives
-- Target audience and usage scenarios
-- Data description and key metrics
-- Technical constraints and requirements
-- Brand guidelines and accessibility needs
-- Specific design challenges or questions
-
-I'll provide comprehensive design recommendations including chart selection, layout design, interaction patterns, and implementation guidance tailored to your specific needs and context.
+- [ ] Business, data, and technical context were gathered or missing inputs were listed.
+- [ ] Chart recommendations match the analytical relationship and audience.
+- [ ] Layout prioritizes KPIs, primary insight, supporting context, details, and filters.
+- [ ] Color, typography, and interaction specifications include accessibility requirements.
+- [ ] Mobile behavior is explicitly addressed with `44px` touch targets and simplified visuals.
+- [ ] Validation includes clarity, functional behavior, accessibility, user testing, and performance.
+- [ ] Implementation phases and success metrics are concrete enough for a Power BI developer to execute.

@@ -1,16 +1,22 @@
 ---
 name: "web-design-reviewer"
 description: >-
-  This skill enables visual inspection of websites running locally or remotely to identify and fix
-  design issues. Triggers on requests like "review website design", "check the UI", "fix the layout",
-  "find design problems". Detects issues with responsive design, accessibility, visual consistency,
-  and layout breakage, then performs fixes at the source code level.
+  Inspect local or remote website design, identify layout, responsive, accessibility, and visual consistency defects, and make source-level fixes. Use when users ask to "review website design", "check the UI", "fix the layout", "find design problems", or validate a web page after changes.
 ---
-# Web Design Reviewer
 
-This skill enables visual inspection and validation of website design quality, identifying and fixing issues at the source code level.
+# Web design reviewer
 
-## Scope of Application
+Inspect local or remote websites visually, identify layout, responsive, accessibility, and consistency defects, then make source-level fixes when the workspace contains the code.
+
+## When to invoke
+
+- "Review this website design."
+- "Check the UI for layout problems."
+- "Fix the responsive layout."
+- "Find design problems on this page."
+- "Validate the web design after my changes."
+
+## Scope of application
 
 - Static sites (HTML/CSS/JS)
 - SPA frameworks such as React / Vue / Angular / Svelte
@@ -18,7 +24,7 @@ This skill enables visual inspection and validation of website design quality, i
 - CMS platforms such as WordPress / Drupal
 - Any other web application
 
-## Prerequisites
+## Prerequisites and context
 
 ### Required
 
@@ -35,7 +41,7 @@ This skill enables visual inspection and validation of website design quality, i
 3. **Access to source code (when making fixes)**
    - Project must exist within the workspace
 
-## Workflow Overview
+## Procedure
 
 ```mermaid
 flowchart TD
@@ -49,7 +55,7 @@ flowchart TD
 
 ---
 
-## Step 1: Information Gathering Phase
+## Information gathering
 
 ### 1.1 URL Confirmation
 
@@ -97,7 +103,7 @@ Detection targets:
 
 ---
 
-## Step 2: Visual Inspection Phase
+## Visual inspection criteria
 
 ### 2.1 Page Traversal
 
@@ -157,7 +163,7 @@ Test at the following viewports:
 
 ---
 
-## Step 3: Issue Fixing Phase
+## Source-level fixing
 
 ### 3.1 Issue Prioritization
 
@@ -205,7 +211,7 @@ See [references/framework-fixes.md](references/framework-fixes.md) for details.
 
 ---
 
-## Step 4: Re-verification Phase
+## Re-verification
 
 ### 4.1 Post-fix Confirmation
 
@@ -231,12 +237,10 @@ flowchart TD
 
 ---
 
-## Output Format
-
-### Review Results Report
+## Report format
 
 ```markdown
-# Web Design Review Results
+## Web design review result
 
 ## Summary
 
@@ -276,7 +280,7 @@ flowchart TD
 
 ---
 
-## Required Capabilities
+## Required capabilities
 
 | Capability | Description | Required |
 |------------|-------------|----------|
@@ -289,7 +293,7 @@ flowchart TD
 
 ---
 
-## Reference Implementation
+## Browser automation options
 
 ### Implementation with Playwright MCP
 
@@ -330,9 +334,9 @@ The same workflow can be implemented with these tools. As long as they provide t
 
 ---
 
-## Best Practices
+## Gotchas
 
-### DO (Recommended)
+### Do
 
 - Always save screenshots before making fixes
 - Fix one issue at a time and verify each
@@ -340,7 +344,7 @@ The same workflow can be implemented with these tools. As long as they provide t
 - Confirm with user before major changes
 - Document fix details thoroughly
 
-### DON'T (Not Recommended)
+### Do not
 
 - Large-scale refactoring without confirmation
 - Ignoring design systems or brand guidelines
@@ -371,3 +375,45 @@ The same workflow can be implemented with these tools. As long as they provide t
 2. Use more specific selectors
 3. Consider using CSS Modules or scoped styles
 4. Consult user to confirm impact scope
+
+
+## Progressive disclosure and bundled resources
+
+Read bundled references only when the task needs that depth.
+
+- `references/visual-checklist.md`: detailed inspection checklist for layout, responsive, accessibility, and visual consistency passes.
+- `references/framework-fixes.md`: framework-specific source fix guidance for React, Vue, Angular, Svelte, Next.js, Nuxt, SvelteKit, Tailwind CSS, CSS Modules, and CSS-in-JS.
+
+## Output template
+
+```markdown
+## Web design review result
+
+**Status:** complete | needs fixes | blocked
+**Target URL:** `<http://localhost:3000 or remote URL>`
+**Framework:** `<React/Vue/Angular/Svelte/Next.js/Nuxt/SvelteKit/CMS/unknown>`
+**Styling:** `<CSS/SCSS/Sass/Tailwind CSS/CSS Modules/styled-components/Emotion/unknown>`
+**Tested viewports:** `375px`, `768px`, `1280px`, `1920px`
+
+| Priority | Page | Element | Issue | Evidence | Fixed file | Verification |
+| --- | --- | --- | --- | --- | --- | --- |
+| P1 | `<path>` | `<selector or description>` | `<overflow/overlap/contrast/focus/etc.>` | `<screenshot or DOM evidence>` | `{File path}` | `<Before/After result>` |
+
+**Unfixed issues**
+- `<issue>`: `<reason and recommended action>`
+```
+
+## Quality gate
+
+- [ ] `name` is `web-design-reviewer` and matches the parent directory.
+- [ ] The target URL is reachable, including `http://localhost:3000` when the local server is running.
+- [ ] Screenshots or DOM snapshots were inspected before any edit.
+- [ ] `references/visual-checklist.md` is used for inspection and post-fix verification when detailed review is requested.
+- [ ] `references/framework-fixes.md` is used before framework-specific edits.
+- [ ] Mobile `375px`, tablet `768px`, desktop `1280px`, and wide `1920px` viewports are tested when responsive behavior is in scope.
+- [ ] Fixes are minimal, source-level, and verified with screenshots or DOM evidence after reload/HMR/rebuild.
+- [ ] More than three failed fix attempts on one issue are reported instead of continuing blindly.
+
+## References
+
+- [Playwright MCP](https://github.com/microsoft/playwright-mcp)

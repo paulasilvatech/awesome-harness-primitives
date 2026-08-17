@@ -7,26 +7,22 @@ description: >-
   hediet.vscode-drawio VS Code extension, and the full agent workflow from request to a ready-to-open
   file.
 ---
-# Draw.io Diagram Generator
 
-This skill enables you to generate, edit, and validate draw.io (`.drawio`) diagram files with
-correct mxGraph XML structure. All generated files open immediately in the
-[Draw.io VS Code extension](https://marketplace.visualstudio.com/items?itemName=hediet.vscode-drawio)
-(`hediet.vscode-drawio`) without any manual fixes required. You can also open the files in the draw.io web app or desktop app if you prefer.
+# Draw.io diagram generator
 
----
+Generate, edit, and validate draw.io (`.drawio`, `.drawio.svg`, `.drawio.png`) files by turning a user request or existing diagram into well-formed mxGraph XML that opens in `hediet.vscode-drawio`, the draw.io web app, or the desktop app.
 
-## 1. When to Use This Skill
+## When to invoke
 
-**Trigger phrases (load this skill when you see these)**
+- "Create a diagram."
+- "Draw a flowchart or generate an architecture diagram."
+- "Design a sequence diagram, UML class diagram, or ER diagram."
+- "Add or update a .drawio file."
+- "Document the architecture, data model, or service interactions."
 
-- "create a diagram", "draw a flowchart", "generate an architecture diagram"
-- "design a sequence diagram", "make a UML class diagram", "build an ER diagram"
-- "add a .drawio file", "update the diagram", "visualise the flow"
-- "document the architecture", "show the data model", "diagram the service interactions"
-- Any request to produce or modify a `.drawio`, `.drawio.svg`, or `.drawio.png` file
+## Diagram types
 
-**Supported diagram types**
+Supported diagram types:
 
 | Diagram Type | Template Available | Description |
 |---|---|---|
@@ -39,9 +35,7 @@ correct mxGraph XML structure. All generated files open immediately in the
 | BPMN Workflow | (use shape library) | Business process events, tasks, gateways |
 | Mind Map | (manual) | Central topic with radiating branches |
 
----
-
-## 2. Prerequisites
+## Prerequisites and context
 
 - If running with VS Code integration enabled, Install the drawio extension: **draw.io VS Code extension** — `hediet.vscode-drawio` (extension id). Install with:
   ```
@@ -50,13 +44,11 @@ correct mxGraph XML structure. All generated files open immediately in the
 - **Supported file extensions**: `.drawio`, `.drawio.svg`, `.drawio.png`
 - **Python 3.8+** (optional) — for the validation and shape-insertion scripts in `scripts/`
 
----
+## Procedure
 
-## 3. Step-by-Step Agent Workflow
+Follow these steps in order for every diagram generation task; wrong order creates invalid XML, unreadable layout, or broken edges.
 
-Follow these steps in order for every diagram generation task.
-
-### Step 1 — Understand the Request
+### Step 1 — Understand the request
 
 Ask or infer:
 1. **Diagram type** — What kind of diagram? (flowchart, architecture, UML, ER, sequence, network...)
@@ -67,7 +59,7 @@ Ask or infer:
 
 If the request is ambiguous, infer the most sensible diagram type from context (e.g. "show the tables" → ER diagram, "show how the API call flows" → sequence diagram).
 
-### Step 2 — Select a Template or Start Fresh
+### Step 2 — Select a template or start fresh
 
 - **Use a template** when the diagram type matches one in `assets/templates/`. Copy the template structure and replace placeholder values.
 - **Start fresh** for novel layouts. Begin with the minimal valid skeleton:
@@ -92,7 +84,7 @@ If the request is ambiguous, infer the most sensible diagram type from context (
 
 > **Rule**: ids `0` and `1` are ALWAYS required and must be the first two cells. Never reuse them.
 
-### Step 3 — Plan the Layout
+### Step 3 — Plan the layout
 
 Before generating XML, sketch the logical placement:
 - Organise into **rows** or **tiers** (use swimlanes for layers)
@@ -129,7 +121,7 @@ Before generating XML, sketch the logical placement:
 - Use `html=1` in style when the label contains HTML (`<b>`, `<i>`, `<br>`)
 - Escape XML special characters in labels: `&` => `&amp;`, `<` => `&lt;`, `>` => `&gt;`
 
-### Step 5 — Apply Correct Styles
+### Step 5 — Apply correct styles
 
 Use the standard semantic color palette for consistency:
 
@@ -178,7 +170,7 @@ edgeStyle=entityRelationEdgeStyle;html=1;endArrow=ERmany;startArrow=ERone;
 
 > See `references/style-reference.md` for the complete style key catalog and `references/shape-libraries.md` for all shape library names.
 
-### Step 6 — Save and Validate
+### Step 6 — Save and validate
 
 1. **Write the file** to the requested path with `.drawio` extension
 2. **Run the validator** (optional but recommended):
@@ -189,9 +181,7 @@ edgeStyle=entityRelationEdgeStyle;html=1;endArrow=ERmany;startArrow=ERone;
    > "Open `<filename>` in VS Code — it will render automatically with the draw.io extension. You can use draw.io's web app or desktop app as well if you prefer."
 4. **Provide a brief description** of what is in the diagram so the user knows what to expect.
 
----
-
-## 4. Diagram-Type Recipes
+## Diagram-type recipes
 
 ### Flowchart
 
@@ -334,9 +324,7 @@ Arrow styles by relationship type:
 | Dependency | `edgeStyle=orthogonalEdgeStyle;dashed=1;html=1;endArrow=open;endFill=0;` |
 | Association | `edgeStyle=orthogonalEdgeStyle;html=1;endArrow=open;endFill=0;` |
 
----
-
-## 5. Multi-Page Diagrams
+## Multi-page diagrams
 
 Add multiple `<diagram>` elements for complex systems:
 
@@ -353,9 +341,7 @@ Add multiple `<diagram>` elements for complex systems:
 
 Each page has its own independent cell id namespace. The same id value can appear in different pages without conflict.
 
----
-
-## 6. Editing Existing Diagrams
+## Editing existing diagrams
 
 When modifying an existing `.drawio` file:
 
@@ -370,9 +356,7 @@ Use `scripts/add-shape.py` to safely add a single shape without editing raw XML:
 python .github/skills/draw-io-diagram-generator/scripts/add-shape.py docs/arch.drawio "New Service" 700 380
 ```
 
----
-
-## 7. Best Practices
+## Best practices
 
 **Layout**
 - Align shapes to the 10px grid (all coordinates divisible by 10)
@@ -394,9 +378,7 @@ python .github/skills/draw-io-diagram-generator/scripts/add-shape.py docs/arch.d
 - Use kebab-case: `order-service-flow.drawio`, `database-schema.drawio`
 - Place diagrams alongside the code they document: `docs/` or `architecture/`
 
----
-
-## 8. Troubleshooting
+## Troubleshooting
 
 | Problem | Likely Cause | Fix |
 |---|---|---|
@@ -408,11 +390,51 @@ python .github/skills/draw-io-diagram-generator/scripts/add-shape.py docs/arch.d
 | Label shows escaped HTML | html=0 on a cell with HTML label | Add `html=1;` to the cell style |
 | Container children overlap container edge | Container height too small | Increase container height in mxGeometry |
 
----
+## Progressive disclosure and bundled resources
 
-## 9. Validation Checklist
+At discovery time, only `name` and `description` load. Read bundled references or execute scripts only when they are needed for the requested diagram. All companion files are in `.github/skills/draw-io-diagram-generator/`:
 
-Before delivering any generated `.drawio` file, verify:
+
+| File | Contents |
+|---|---|
+| `references/drawio-xml-schema.md` | Complete mxfile / mxGraphModel / mxCell attribute reference, coordinate system, reserved cells, validation rules |
+| `references/style-reference.md` | All style keys with allowed values, vertex and edge style keys, shape catalog, semantic color palette |
+| `references/shape-libraries.md` | All shape library categories (General, Flowchart, UML, ER, Network, BPMN, Mockup, K8s) with style strings |
+| `assets/templates/flowchart.drawio` | Ready-to-use flowchart template |
+| `assets/templates/architecture.drawio` | 4-tier system architecture template |
+| `assets/templates/sequence.drawio` | 3-actor sequence diagram template |
+| `assets/templates/er-diagram.drawio` | 3-table ER diagram with crow's foot relationships |
+| `assets/templates/uml-class.drawio` | Interface + 2 classes + enum with relationship arrows |
+| `scripts/validate-drawio.py` | Python script to validate XML structure of any .drawio file |
+| `scripts/add-shape.py` | Python CLI to add a new shape to an existing diagram |
+| `scripts/README.md` | How to use the scripts with examples |
+
+## Output template
+
+```markdown
+## draw.io diagram result — <filename.drawio>
+
+**Status:** created | updated | blocked
+**Diagram type:** <flowchart | architecture | sequence | ER | UML | network | BPMN | mind map | other>
+**File:** `<path-to-file.drawio>`
+
+**Summary:** <one sentence describing what the diagram shows>
+**Open:** Open `<filename>` in VS Code with `hediet.vscode-drawio`, or in the draw.io web app or desktop app.
+**Edit:** Click a shape to select it, double-click to edit the label, and drag to reposition.
+
+**Validation**
+- `python .github/skills/draw-io-diagram-generator/scripts/validate-drawio.py <file.drawio>`: pass | fail | not run (<reason>)
+```
+
+Delivery rules from the previous format:
+
+- Provide the `.drawio` file written to the requested path.
+- Include a one-sentence summary of what the diagram shows.
+- Explain how to open it: "Open `<filename>` in VS Code — the draw.io extension will render it automatically. Or you can open it in the draw.io web app or desktop app if you prefer."
+- Explain how to edit it when customization is likely: "Click any shape to select it. Double-click to edit the label. Drag to reposition."
+- Report validation status and whether the validator script was run and passed.
+
+## Quality gate
 
 - [ ] File starts with `<mxfile>` root element
 - [ ] Every `<diagram>` has a non-empty `id` attribute
@@ -431,36 +453,6 @@ Run the automated validator:
 python .github/skills/draw-io-diagram-generator/scripts/validate-drawio.py <file.drawio>
 ```
 
----
+## References
 
-## 10. Output Format
-
-When delivering a diagram, always provide:
-
-1. **The `.drawio` file** written to the requested path
-2. **A one-sentence summary** of what the diagram shows
-3. **How to open it**:
-   > "Open `<filename>` in VS Code — the draw.io extension will render it automatically. Or you can open it in the draw.io web app or desktop app if you prefer."
-4. **How to edit it** (if the user is likely to customise):
-   > "Click any shape to select it. Double-click to edit the label. Drag to reposition."
-5. **Validation status** — whether the validator script was run and passed
-
----
-
-## 11. References
-
-All companion files are in `.github/skills/draw-io-diagram-generator/`:
-
-| File | Contents |
-|---|---|
-| `references/drawio-xml-schema.md` | Complete mxfile / mxGraphModel / mxCell attribute reference, coordinate system, reserved cells, validation rules |
-| `references/style-reference.md` | All style keys with allowed values, vertex and edge style keys, shape catalog, semantic color palette |
-| `references/shape-libraries.md` | All shape library categories (General, Flowchart, UML, ER, Network, BPMN, Mockup, K8s) with style strings |
-| `assets/templates/flowchart.drawio` | Ready-to-use flowchart template |
-| `assets/templates/architecture.drawio` | 4-tier system architecture template |
-| `assets/templates/sequence.drawio` | 3-actor sequence diagram template |
-| `assets/templates/er-diagram.drawio` | 3-table ER diagram with crow's foot relationships |
-| `assets/templates/uml-class.drawio` | Interface + 2 classes + enum with relationship arrows |
-| `scripts/validate-drawio.py` | Python script to validate XML structure of any .drawio file |
-| `scripts/add-shape.py` | Python CLI to add a new shape to an existing diagram |
-| `scripts/README.md` | How to use the scripts with examples |
+- [Draw.io VS Code extension](https://marketplace.visualstudio.com/items?itemName=hediet.vscode-drawio)

@@ -1,218 +1,115 @@
 ---
-name: "breakdown-test"
+name: breakdown-test
 description: >-
-  Test Planning and Quality Assurance prompt that generates comprehensive test strategies, task
-  breakdowns, and quality validation plans for GitHub projects. Use this skill when the user asks for
-  test planning & quality assurance prompt.
+  Create comprehensive test planning, QA strategy, GitHub issue breakdowns, and quality validation plans from feature artifacts. Use when asked to produce a test strategy, break down test work, plan QA for an epic or feature, apply ISTQB techniques, map ISO 25010 quality characteristics, or create test issues for GitHub project management.
 ---
-# Test Planning & Quality Assurance Prompt
 
-## Goal
+# Test planning and quality assurance
 
-Act as a senior Quality Assurance Engineer and Test Architect with expertise in ISTQB frameworks, ISO 25010 quality standards, and modern testing practices. Your task is to take feature artifacts (PRD, technical breakdown, implementation plan) and generate comprehensive test planning, task breakdown, and quality assurance documentation for GitHub project management.
+Turn feature artifacts into a test strategy, test-issue checklist, and QA plan aligned with ISTQB test design, ISO 25010 quality attributes, risk-based testing, GitHub issue standards, and measurable quality gates.
 
-## Quality Standards Framework
+## When to invoke
 
-### ISTQB Framework Application
+- "Create a test strategy for this feature."
+- "Break down QA tasks for this epic."
+- "Generate GitHub test issues from the implementation plan."
+- "Apply ISTQB and ISO 25010 to this project plan."
+- "Define quality gates and coverage targets."
 
-- **Test Process Activities**: Planning, monitoring, analysis, design, implementation, execution, completion
-- **Test Design Techniques**: Black-box, white-box, and experience-based testing approaches
-- **Test Types**: Functional, non-functional, structural, and change-related testing
-- **Risk-Based Testing**: Risk assessment and mitigation strategies
+## Prerequisites and context
 
-### ISO 25010 Quality Model
+Use the available feature artifacts as source material. Expected project paths are:
 
-- **Quality Characteristics**: Functional suitability, performance efficiency, compatibility, usability, reliability, security, maintainability, portability
-- **Quality Validation**: Measurement and assessment approaches for each characteristic
-- **Quality Gates**: Entry and exit criteria for quality checkpoints
+| Artifact | Path |
+| --- | --- |
+| Feature PRD | `/docs/ways-of-work/plan/{epic-name}/{feature-name}.md` |
+| Technical breakdown | `/docs/ways-of-work/plan/{epic-name}/{feature-name}/technical-breakdown.md` |
+| Implementation plan | `/docs/ways-of-work/plan/{epic-name}/{feature-name}/implementation-plan.md` |
+| GitHub project plan | `/docs/ways-of-work/plan/{epic-name}/{feature-name}/project-plan.md` |
 
-## Input Requirements
+Create or update these outputs:
 
-Before using this prompt, ensure you have:
+| Output | Path |
+| --- | --- |
+| Test strategy | `/docs/ways-of-work/plan/{epic-name}/{feature-name}/test-strategy.md` |
+| Test issues checklist | `/docs/ways-of-work/plan/{epic-name}/{feature-name}/test-issues-checklist.md` |
+| Quality assurance plan | `/docs/ways-of-work/plan/{epic-name}/{feature-name}/qa-plan.md` |
 
-### Core Feature Documents
+## Procedure
 
-1. **Feature PRD**: `/docs/ways-of-work/plan/{epic-name}/{feature-name}.md`
-2. **Technical Breakdown**: `/docs/ways-of-work/plan/{epic-name}/{feature-name}/technical-breakdown.md`
-3. **Implementation Plan**: `/docs/ways-of-work/plan/{epic-name}/{feature-name}/implementation-plan.md`
-4. **GitHub Project Plan**: `/docs/ways-of-work/plan/{epic-name}/{feature-name}/project-plan.md`
+1. Read the PRD, technical breakdown, implementation plan, and project plan.
+2. Extract scope, acceptance criteria, architecture, data flows, risks, dependencies, and release constraints.
+3. Select ISTQB techniques and test types based on the feature risk profile.
+4. Map ISO 25010 characteristics to measurable checks and priorities.
+5. Create test issues by level, type, dependency, estimate, label, and acceptance criteria.
+6. Define QA entry criteria, exit criteria, metrics, escalation, and quality gates.
+7. Write the three output files and verify they cross-reference the same feature, risks, dependencies, and targets.
 
-## Output Format
+## ISTQB and ISO 25010 framework
 
-Create comprehensive test planning documentation:
+| Area | Apply |
+| --- | --- |
+| Test process activities | Planning, monitoring, analysis, design, implementation, execution, completion. |
+| Test design techniques | Equivalence Partitioning, Boundary Value Analysis, Decision Table Testing, State Transition Testing, and Experience-Based Testing. |
+| Test types | Functional, Non-Functional, Structural, and Change-Related testing. |
+| Risk-Based Testing | Rank scenarios by probability, impact, detectability, and mitigation. |
+| ISO 25010 | Functional suitability, performance efficiency, compatibility, usability, reliability, security, maintainability, portability. |
 
-1. **Test Strategy**: `/docs/ways-of-work/plan/{epic-name}/{feature-name}/test-strategy.md`
-2. **Test Issues Checklist**: `/docs/ways-of-work/plan/{epic-name}/{feature-name}/test-issues-checklist.md`
-3. **Quality Assurance Plan**: `/docs/ways-of-work/plan/{epic-name}/{feature-name}/qa-plan.md`
+## Test strategy content
 
-### Test Strategy Structure
+| Section | Required content |
+| --- | --- |
+| Test Strategy Overview | Testing Scope, Quality Objectives, Risk Assessment, Test Approach. |
+| ISTQB Framework Implementation | Technique selection, test-type coverage matrix, and rationale. |
+| ISO 25010 Quality Characteristics Assessment | Priority matrix with measurement approach for each characteristic. |
+| Test Environment and Data Strategy | Hardware, software, network, privacy, maintenance, tools, automation platform, and CI/CD Integration. |
 
-#### 1. Test Strategy Overview
+For each ISO 25010 characteristic, name the validation focus: Functional Suitability covers completeness, correctness, appropriateness; Performance Efficiency covers time behavior, resource utilization, capacity; Compatibility covers co-existence and interoperability; Usability covers UI, accessibility, and UX; Reliability covers fault tolerance, recoverability, availability; Security covers confidentiality, integrity, authentication, authorization; Maintainability covers modularity, reusability, testability; Portability covers adaptability, installability, replaceability.
 
-- **Testing Scope**: Features and components to be tested
-- **Quality Objectives**: Measurable quality goals and success criteria
-- **Risk Assessment**: Identified risks and mitigation strategies
-- **Test Approach**: Overall testing methodology and framework application
+## Test issue breakdown rules
 
-#### 2. ISTQB Framework Implementation
+| Issue type | Include |
+| --- | --- |
+| Test Strategy Issue | Overall testing approach and quality validation plan. |
+| Unit Test Issues | Component-level testing for each implementation task, estimated `0.5-1` story point per component. |
+| Integration Test Issues | Interface and interaction tests, estimated `1-2` story points per interface. |
+| End-to-End Test Issues | Complete user workflows using Playwright, estimated `2-3` story points per workflow. |
+| Performance Test Issues | Non-functional requirement validation, estimated `3-5` story points per performance requirement. |
+| Security Test Issues | Security requirement and vulnerability testing, estimated `2-4` story points per security requirement. |
+| Accessibility Test Issues | WCAG compliance and inclusive design validation. |
+| Regression Test Issues | Risk-based regression and confirmation testing. |
 
-##### Test Design Techniques Selection
+Document Implementation Dependencies, Environment Dependencies, Tool Dependencies, Cross-Team Dependencies, Sequential Dependencies, Parallel Development, Critical Path Identification, Resource Allocation, Skill-Based Assignment, Capacity Planning, Knowledge Transfer, and Cross-Training Opportunities.
 
-Create a comprehensive analysis of which ISTQB test design techniques to apply:
+## Quality targets and labels
 
-- **Equivalence Partitioning**: Input domain partitioning strategy
-- **Boundary Value Analysis**: Edge case identification and testing
-- **Decision Table Testing**: Complex business rule validation
-- **State Transition Testing**: System state behavior validation
-- **Experience-Based Testing**: Exploratory and error guessing approaches
+| Metric | Target |
+| --- | --- |
+| Code Coverage | `>80%` line coverage and `>90%` branch coverage for critical paths. |
+| Functional Coverage | `100%` acceptance criteria validation. |
+| Risk Coverage | `100%` high-risk scenario validation. |
+| Quality Characteristics Coverage | Validation approach for every applicable ISO 25010 characteristic. |
+| Defect Detection Rate | `>95%` of defects found before production. |
+| Test Execution Efficiency | `>90%` test automation coverage. |
+| Quality Gate Compliance | `100%` gates passed before release. |
+| Test Planning Time | `<2 hours` for comprehensive strategy. |
+| Test Implementation Speed | `<1 day` per story point. |
+| Quality Feedback Time | `<2 hours` from test completion. |
+| Documentation Completeness | `100%` of test issues have complete template information. |
 
-##### Test Types Coverage Matrix
+Use labels consistently: `unit-test`, `integration-test`, `e2e-test`, `performance-test`, `security-test`, `quality-gate`, `iso25010`, `istqb-technique`, `risk-based`, `test-critical`, `test-high`, `test-medium`, `test-low`, `frontend-test`, `backend-test`, `api-test`, `database-test`, `test-strategy`, `istqb`, `quality-gates`, `playwright`, `quality-validation`, `quality-assurance`.
 
-Define comprehensive test type coverage:
+## GitHub issue templates
 
-- **Functional Testing**: Feature behavior validation
-- **Non-Functional Testing**: Performance, usability, security validation
-- **Structural Testing**: Code coverage and architecture validation
-- **Change-Related Testing**: Regression and confirmation testing
-
-#### 3. ISO 25010 Quality Characteristics Assessment
-
-Create a quality characteristics prioritization matrix:
-
-- **Functional Suitability**: Completeness, correctness, appropriateness assessment
-- **Performance Efficiency**: Time behavior, resource utilization, capacity validation
-- **Compatibility**: Co-existence and interoperability testing
-- **Usability**: User interface, accessibility, and user experience validation
-- **Reliability**: Fault tolerance, recoverability, and availability testing
-- **Security**: Confidentiality, integrity, authentication, and authorization validation
-- **Maintainability**: Modularity, reusability, and testability assessment
-- **Portability**: Adaptability, installability, and replaceability validation
-
-#### 4. Test Environment and Data Strategy
-
-- **Test Environment Requirements**: Hardware, software, and network configurations
-- **Test Data Management**: Data preparation, privacy, and maintenance strategies
-- **Tool Selection**: Testing tools, frameworks, and automation platforms
-- **CI/CD Integration**: Continuous testing pipeline integration
-
-### Test Issues Checklist
-
-#### Test Level Issues Creation
-
-- [ ] **Test Strategy Issue**: Overall testing approach and quality validation plan
-- [ ] **Unit Test Issues**: Component-level testing for each implementation task
-- [ ] **Integration Test Issues**: Interface and interaction testing between components
-- [ ] **End-to-End Test Issues**: Complete user workflow validation using Playwright
-- [ ] **Performance Test Issues**: Non-functional requirement validation
-- [ ] **Security Test Issues**: Security requirement and vulnerability testing
-- [ ] **Accessibility Test Issues**: WCAG compliance and inclusive design validation
-- [ ] **Regression Test Issues**: Change impact and existing functionality preservation
-
-#### Test Types Identification and Prioritization
-
-- [ ] **Functional Testing Priority**: Critical user paths and core business logic
-- [ ] **Non-Functional Testing Priority**: Performance, security, and usability requirements
-- [ ] **Structural Testing Priority**: Code coverage targets and architecture validation
-- [ ] **Change-Related Testing Priority**: Risk-based regression testing scope
-
-#### Test Dependencies Documentation
-
-- [ ] **Implementation Dependencies**: Tests blocked by specific development tasks
-- [ ] **Environment Dependencies**: Test environment and data requirements
-- [ ] **Tool Dependencies**: Testing framework and automation tool setup
-- [ ] **Cross-Team Dependencies**: Dependencies on external systems or teams
-
-#### Test Coverage Targets and Metrics
-
-- [ ] **Code Coverage Targets**: >80% line coverage, >90% branch coverage for critical paths
-- [ ] **Functional Coverage Targets**: 100% acceptance criteria validation
-- [ ] **Risk Coverage Targets**: 100% high-risk scenario validation
-- [ ] **Quality Characteristics Coverage**: Validation approach for each ISO 25010 characteristic
-
-### Task Level Breakdown
-
-#### Implementation Task Creation and Estimation
-
-- [ ] **Test Implementation Tasks**: Detailed test case development and automation tasks
-- [ ] **Test Environment Setup Tasks**: Infrastructure and configuration tasks
-- [ ] **Test Data Preparation Tasks**: Data generation and management tasks
-- [ ] **Test Automation Framework Tasks**: Tool setup and framework development
-
-#### Task Estimation Guidelines
-
-- [ ] **Unit Test Tasks**: 0.5-1 story point per component
-- [ ] **Integration Test Tasks**: 1-2 story points per interface
-- [ ] **E2E Test Tasks**: 2-3 story points per user workflow
-- [ ] **Performance Test Tasks**: 3-5 story points per performance requirement
-- [ ] **Security Test Tasks**: 2-4 story points per security requirement
-
-#### Task Dependencies and Sequencing
-
-- [ ] **Sequential Dependencies**: Tests that must be implemented in specific order
-- [ ] **Parallel Development**: Tests that can be developed simultaneously
-- [ ] **Critical Path Identification**: Testing tasks on the critical path to delivery
-- [ ] **Resource Allocation**: Task assignment based on team skills and capacity
-
-#### Task Assignment Strategy
-
-- [ ] **Skill-Based Assignment**: Matching tasks to team member expertise
-- [ ] **Capacity Planning**: Balancing workload across team members
-- [ ] **Knowledge Transfer**: Pairing junior and senior team members
-- [ ] **Cross-Training Opportunities**: Skill development through task assignment
-
-### Quality Assurance Plan
-
-#### Quality Gates and Checkpoints
-
-Create comprehensive quality validation checkpoints:
-
-- **Entry Criteria**: Requirements for beginning each testing phase
-- **Exit Criteria**: Quality standards required for phase completion
-- **Quality Metrics**: Measurable indicators of quality achievement
-- **Escalation Procedures**: Process for addressing quality failures
-
-#### GitHub Issue Quality Standards
-
-- [ ] **Template Compliance**: All test issues follow standardized templates
-- [ ] **Required Field Completion**: Mandatory fields populated with accurate information
-- [ ] **Label Consistency**: Standardized labeling across all test work items
-- [ ] **Priority Assignment**: Risk-based priority assignment using defined criteria
-- [ ] **Value Assessment**: Business value and quality impact assessment
-
-#### Labeling and Prioritization Standards
-
-- [ ] **Test Type Labels**: `unit-test`, `integration-test`, `e2e-test`, `performance-test`, `security-test`
-- [ ] **Quality Labels**: `quality-gate`, `iso25010`, `istqb-technique`, `risk-based`
-- [ ] **Priority Labels**: `test-critical`, `test-high`, `test-medium`, `test-low`
-- [ ] **Component Labels**: `frontend-test`, `backend-test`, `api-test`, `database-test`
-
-#### Dependency Validation and Management
-
-- [ ] **Circular Dependency Detection**: Validation to prevent blocking relationships
-- [ ] **Critical Path Analysis**: Identification of testing dependencies on delivery timeline
-- [ ] **Risk Assessment**: Impact analysis of dependency delays on quality validation
-- [ ] **Mitigation Strategies**: Alternative approaches for blocked testing activities
-
-#### Estimation Accuracy and Review
-
-- [ ] **Historical Data Analysis**: Using past project data for estimation accuracy
-- [ ] **Technical Lead Review**: Expert validation of test complexity estimates
-- [ ] **Risk Buffer Allocation**: Additional time allocation for high-uncertainty tasks
-- [ ] **Estimate Refinement**: Iterative improvement of estimation accuracy
-
-## GitHub Issue Templates for Testing
-
-### Test Strategy Issue Template
+### Test strategy issue
 
 ```markdown
 # Test Strategy: {Feature Name}
 
 ## Test Strategy Overview
-
 {Summary of testing approach based on ISTQB and ISO 25010}
 
 ## ISTQB Framework Application
-
 **Test Design Techniques Used:**
 - [ ] Equivalence Partitioning
 - [ ] Boundary Value Analysis
@@ -227,8 +124,6 @@ Create comprehensive quality validation checkpoints:
 - [ ] Change-Related Testing (Regression)
 
 ## ISO 25010 Quality Characteristics
-
-**Priority Assessment:**
 - [ ] Functional Suitability: {Critical/High/Medium/Low}
 - [ ] Performance Efficiency: {Critical/High/Medium/Low}
 - [ ] Compatibility: {Critical/High/Medium/Low}
@@ -250,7 +145,7 @@ Create comprehensive quality validation checkpoints:
 {Strategic planning effort: 2-3 story points}
 ```
 
-### Playwright Test Implementation Issue Template
+### Playwright test implementation issue
 
 ```markdown
 # Playwright Tests: {Story/Component Name}
@@ -263,13 +158,10 @@ Create comprehensive quality validation checkpoints:
 **Test Type**: {Functional/Non-Functional/Structural/Change-Related}
 
 ## Test Cases to Implement
-**Functional Tests:**
 - [ ] Happy path scenarios
 - [ ] Error handling validation
 - [ ] Boundary value testing
 - [ ] Input validation testing
-
-**Non-Functional Tests:**
 - [ ] Performance testing (response time < {threshold})
 - [ ] Accessibility testing (WCAG compliance)
 - [ ] Cross-browser compatibility
@@ -296,7 +188,7 @@ Create comprehensive quality validation checkpoints:
 {Test implementation effort: 2-5 story points}
 ```
 
-### Quality Assurance Issue Template
+### Quality assurance issue
 
 ```markdown
 # Quality Assurance: {Feature Name}
@@ -305,7 +197,6 @@ Create comprehensive quality validation checkpoints:
 {Overall quality validation for feature/epic}
 
 ## ISO 25010 Quality Assessment
-**Quality Characteristics Validation:**
 - [ ] Functional Suitability: Completeness, correctness, appropriateness
 - [ ] Performance Efficiency: Time behavior, resource utilization, capacity
 - [ ] Usability: Interface aesthetics, accessibility, learnability, operability
@@ -341,27 +232,47 @@ Create comprehensive quality validation checkpoints:
 {Quality validation effort: 3-5 story points}
 ```
 
-## Success Metrics
 
-### Test Coverage Metrics
+## Test technique terminology
 
-- **Code Coverage**: >80% line coverage, >90% branch coverage for critical paths
-- **Functional Coverage**: 100% acceptance criteria validation
-- **Risk Coverage**: 100% high-risk scenario testing
-- **Quality Characteristics Coverage**: Validation for all applicable ISO 25010 characteristics
+Use `white-box`, `experience-based`, `non-functional`, and `change-related` language when naming test techniques and test types because those terms map directly to ISTQB terminology. Add a `high-uncertainty` buffer to estimates when risk, unclear requirements, external dependencies, or unfamiliar tooling make the test work hard to size.
 
-### Quality Validation Metrics
+## Output template
 
-- **Defect Detection Rate**: >95% of defects found before production
-- **Test Execution Efficiency**: >90% test automation coverage
-- **Quality Gate Compliance**: 100% quality gates passed before release
-- **Risk Mitigation**: 100% identified risks addressed with mitigation strategies
+```markdown
+## Test planning result — {epic-name}/{feature-name}
 
-### Process Efficiency Metrics
+**Status:** complete | needs input | blocked
+**Artifacts reviewed:** PRD, technical breakdown, implementation plan, project plan
 
-- **Test Planning Time**: <2 hours to create comprehensive test strategy
-- **Test Implementation Speed**: <1 day per story point of test development
-- **Quality Feedback Time**: <2 hours from test completion to quality assessment
-- **Documentation Completeness**: 100% test issues have complete template information
+### Files created or updated
+- `/docs/ways-of-work/plan/{epic-name}/{feature-name}/test-strategy.md`
+- `/docs/ways-of-work/plan/{epic-name}/{feature-name}/test-issues-checklist.md`
+- `/docs/ways-of-work/plan/{epic-name}/{feature-name}/qa-plan.md`
 
-This comprehensive test planning approach ensures thorough quality validation aligned with industry standards while maintaining efficient project management and clear accountability for all testing activities.
+### Coverage plan
+| Level | Techniques | Quality characteristics | Target | Issues |
+| --- | --- | --- | --- | --- |
+| Unit | <techniques> | <ISO 25010 areas> | <target> | <issue titles> |
+
+### Quality gates
+- Entry criteria: <summary>
+- Exit criteria: <summary>
+- Escalation: <summary>
+
+### Validation
+- Source artifacts aligned: pass | fail
+- Dependencies checked for circular blockers: pass | fail
+- Labels and estimates assigned: pass | fail
+```
+
+## Quality gate
+
+- [ ] All four expected input artifacts were used or missing artifacts were reported.
+- [ ] The three output files were created or updated at the required paths.
+- [ ] ISTQB techniques and test types are mapped to feature risks and acceptance criteria.
+- [ ] Every applicable ISO 25010 characteristic has a validation approach.
+- [ ] Coverage targets include code, functional, risk, and quality-characteristic coverage.
+- [ ] GitHub test issues include dependencies, labels, estimates, and acceptance criteria.
+- [ ] QA gates include entry criteria, exit criteria, metrics, and escalation procedures.
+- [ ] Circular dependencies and critical path risks were checked.

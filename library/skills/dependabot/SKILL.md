@@ -10,26 +10,26 @@ description: >-
   (`advanced-security@copilot-plugins`). Use this skill when an agent needs to scan dependencies for
   known vulnerabilities before committing.
 ---
-# Dependabot Configuration & Management
 
-## Overview
+# Dependabot configuration and management
 
+Read repository dependency manifests, transform them into one `.github/dependabot.yml` strategy with grouping, scheduling, security, and monorepo rules, and output a reviewable configuration plus PR-management guidance.
+## When to invoke
+- "Create a dependabot.yml for this repository."
+- "Optimize Dependabot groups for our monorepo."
+- "Configure Dependabot security updates and auto-triage."
+- "Reduce Dependabot PR noise."
+- "Scan dependencies added by this branch before committing."
+## Dependabot model
 Dependabot is GitHub's built-in dependency management tool with three core capabilities:
-
 1. **Dependabot Alerts** — Notify when dependencies have known vulnerabilities (CVEs)
 2. **Dependabot Security Updates** — Auto-create PRs to fix vulnerable dependencies
 3. **Dependabot Version Updates** — Auto-create PRs to keep dependencies current
-
 All configuration lives in a **single file**: `.github/dependabot.yml` on the default branch. GitHub does **not** support multiple `dependabot.yml` files per repository.
-
-## Configuration Workflow
-
+## Procedure
 Follow this process when creating or optimizing a `dependabot.yml`:
-
 ### Step 1: Detect All Ecosystems
-
 Scan the repository for dependency manifests. Look for:
-
 | Ecosystem | YAML Value | Manifest Files |
 |---|---|---|
 | npm/pnpm/yarn | `npm` | `package.json`, `package-lock.json`, `pnpm-lock.yaml`, `yarn.lock` |
@@ -56,13 +56,10 @@ Scan the repository for dependency manifests. Look for:
 | Dev Containers | `devcontainers` | `devcontainer.json` |
 | Git Submodules | `gitsubmodule` | `.gitmodules` |
 | Pre-commit | `pre-commit` | `.pre-commit-config.yaml` |
-
 Notes:
 - pnpm and yarn both use the `npm` ecosystem value.
 - Prefer `uv` ecosystem value when `uv.lock` is present; otherwise use `pip`.
-
 ### Step 2: Map Directory Locations
-
 For each ecosystem, identify where manifests live. Use `directories` (plural) with glob patterns for monorepos:
 
 ```yaml
@@ -75,9 +72,7 @@ directories:
 ```
 
 Important: `directory` (singular) does NOT support globs. Use `directories` (plural) for wildcards.
-
 ### Step 3: Configure Each Ecosystem Entry
-
 Every entry needs at minimum:
 
 ```yaml
@@ -88,13 +83,9 @@ Every entry needs at minimum:
 ```
 
 ### Step 4: Optimize with Grouping, Labels, and Scheduling
-
 See sections below for each optimization technique.
-
 ## Monorepo Strategies
-
 ### Glob Patterns for Workspace Coverage
-
 For monorepos with many packages, use glob patterns to avoid listing each directory:
 
 ```yaml
@@ -109,7 +100,6 @@ For monorepos with many packages, use glob patterns to avoid listing each direct
 ```
 
 ### Cross-Directory Grouping
-
 Use `group-by: dependency-name` to create a single PR when the same dependency updates across multiple directories:
 
 ```yaml
@@ -119,20 +109,14 @@ groups:
 ```
 
 This creates one PR per dependency across all specified directories, reducing CI costs and review burden.
-
 Limitations:
 - All directories must use the same package ecosystem
 - Applies to version updates only
 - Incompatible version constraints create separate PRs
-
 ### Standalone Packages Outside Workspaces
-
 If a directory has its own lockfile and is NOT part of the workspace (e.g., scripts in `.github/`), create a separate ecosystem entry for it.
-
 ## Dependency Grouping
-
 Reduce PR noise by grouping related dependencies into single PRs.
-
 ### By Dependency Type
 
 ```yaml
@@ -170,26 +154,21 @@ Key behaviors:
 - Dependencies matching multiple groups go to the **first** match
 - `applies-to` defaults to `version-updates` when absent
 - Ungrouped dependencies get individual PRs
-
 ## Multi-Ecosystem Groups
-
 Combine updates across different package ecosystems into a single PR:
 
 ```yaml
 version: 2
-
 multi-ecosystem-groups:
   infrastructure:
     schedule:
       interval: "weekly"
     labels: ["infrastructure", "dependencies"]
-
 updates:
   - package-ecosystem: "docker"
     directory: "/"
     patterns: ["nginx", "redis"]
     multi-ecosystem-group: "infrastructure"
-
   - package-ecosystem: "terraform"
     directory: "/"
     patterns: ["aws*"]
@@ -197,9 +176,7 @@ updates:
 ```
 
 The `patterns` key is required when using `multi-ecosystem-group`.
-
 ## PR Customization
-
 ### Labels
 
 ```yaml
@@ -209,7 +186,6 @@ labels:
 ```
 
 Set `labels: []` to disable all labels including defaults. SemVer labels (`major`, `minor`, `patch`) are always applied if present in the repo.
-
 ### Commit Messages
 
 ```yaml
@@ -240,11 +216,8 @@ target-branch: "develop"  # PRs target this instead of default branch
 ```
 
 Note: When `target-branch` is set, security updates still target the default branch; all ecosystem config only applies to version updates.
-
 ## Schedule Optimization
-
 ### Intervals
-
 Supported: `daily`, `weekly`, `monthly`, `quarterly`, `semiannually`, `yearly`, `cron`
 
 ```yaml
@@ -264,7 +237,6 @@ schedule:
 ```
 
 ### Cooldown Periods
-
 Delay updates for newly released versions to avoid early-adopter issues:
 
 ```yaml
@@ -278,13 +250,9 @@ cooldown:
 ```
 
 Cooldown applies to version updates only, not security updates.
-
 ## Security Updates Configuration
-
 ### Enable via Repository Settings
-
 Settings → Advanced Security → Enable Dependabot alerts, security updates, and grouped security updates.
-
 ### Group Security Updates in YAML
 
 ```yaml
@@ -302,16 +270,11 @@ open-pull-requests-limit: 0  # disables version update PRs
 ```
 
 ### Auto-Triage Rules
-
 GitHub presets auto-dismiss low-impact alerts for development dependencies. Custom rules can filter by severity, package name, CWE, and more. Configure in repository Settings → Advanced Security.
-
 ## PR Comment Commands
-
 Interact with Dependabot PRs using `@dependabot` comments.
-
 > **Note:** As of January 2026, merge/close/reopen commands have been deprecated.
 > Use GitHub's native UI, CLI (`gh pr merge`), or auto-merge instead.
-
 | Command | Effect |
 |---|---|
 | `@dependabot rebase` | Rebase the PR |
@@ -320,17 +283,13 @@ Interact with Dependabot PRs using `@dependabot` comments.
 | `@dependabot ignore this major version` | Ignore this major version |
 | `@dependabot ignore this minor version` | Ignore this minor version |
 | `@dependabot ignore this patch version` | Ignore this patch version |
-
 For grouped PRs, additional commands:
 - `@dependabot ignore DEPENDENCY_NAME` — ignore specific dependency in group
 - `@dependabot unignore DEPENDENCY_NAME` — clear ignores, reopen with updates
 - `@dependabot unignore *` — clear all ignores for all dependencies in group
 - `@dependabot show DEPENDENCY_NAME ignore conditions` — display current ignores
-
 For the complete command reference, see `references/pr-commands.md`.
-
 ## Ignore and Allow Rules
-
 ### Ignore Specific Dependencies
 
 ```yaml
@@ -351,7 +310,6 @@ allow:
 ```
 
 Rule: If a dependency matches both `allow` and `ignore`, it is **ignored**.
-
 ### Exclude Paths
 
 ```yaml
@@ -361,11 +319,8 @@ exclude-paths:
 ```
 
 ## Advanced Options
-
 ### Versioning Strategy
-
 Controls how Dependabot edits version constraints:
-
 | Value | Behavior |
 |---|---|
 | `auto` | Default — increase for apps, widen for libraries |
@@ -373,7 +328,6 @@ Controls how Dependabot edits version constraints:
 | `increase-if-necessary` | Only change if current range excludes new version |
 | `lockfile-only` | Only update lockfiles, ignore manifests |
 | `widen` | Widen range to include both old and new versions |
-
 ### Rebase Strategy
 
 ```yaml
@@ -381,7 +335,6 @@ rebase-strategy: "disabled"  # stop auto-rebasing
 ```
 
 Allow rebase over extra commits by including `[dependabot skip]` in commit messages.
-
 ### Open PR Limit
 
 ```yaml
@@ -389,7 +342,6 @@ open-pull-requests-limit: 10  # default is 5 for version, 10 for security
 ```
 
 Set to `0` to disable version updates entirely.
-
 ### Private Registries
 
 ```yaml
@@ -398,7 +350,6 @@ registries:
     type: npm-registry
     url: https://npm.example.com
     token: ${{secrets.NPM_TOKEN}}
-
 updates:
   - package-ecosystem: "npm"
     directory: "/"
@@ -407,25 +358,17 @@ updates:
 ```
 
 ## FAQ
-
 **Can I have multiple `dependabot.yml` files?**
 No. GitHub supports exactly one file at `.github/dependabot.yml`. Use multiple `updates` entries within that file for different ecosystems and directories.
-
 **Does Dependabot support pnpm?**
 Yes. Use `package-ecosystem: "npm"` — Dependabot detects `pnpm-lock.yaml` automatically.
-
 **How do I reduce PR noise in a monorepo?**
 Use `groups` to batch updates, `directories` with globs for coverage, and `group-by: dependency-name` for cross-directory grouping. Consider `monthly` or `quarterly` intervals for low-priority ecosystems.
-
 **How do I handle dependencies outside the workspace?**
 Create a separate ecosystem entry with its own `directory` pointing to that location.
-
 ## Pre-Commit Dependency Scanning via AI Coding Agents
-
 For scanning code changes for vulnerable dependencies inside an AI coding agent before committing, the GitHub MCP Server's `dependabot` toolset can check your dependency additions against the GitHub Advisory Database and return structured results with affected packages, severity, and recommended fixed versions. For more thorough post-commit checks, it can also run the Dependabot CLI locally to diff dependency graphs before and after your changes.
-
 Install the **Advanced Security plugin** which provides dedicated dependency scanning tools and the `/dependency-scanning` skill.
-
 **GitHub Copilot CLI (shell):**
 ```bash
 # Enable the dependabot toolset for the GitHub MCP Server
@@ -440,16 +383,53 @@ copilot --add-github-mcp-toolset dependabot
 **Visual Studio Code:**
 - Add `"X-MCP-Toolsets": "dependabot"` to your GitHub MCP Server headers, or pick **Dependabot** from the toolset selector in Copilot Chat
 - Install the `advanced-security` plugin, then use `/dependency-scanning` in Copilot Chat
-
 **Example prompt:**
 > Scan the dependencies I added on this branch for known vulnerabilities and tell me which versions to upgrade to before I commit.
-
-See: [Advanced Security Plugin — Dependency Scanning Skill](advanced-security plugin dependency-scanning skill)
-
+Use the Advanced Security plugin dependency-scanning skill for the deeper agent-based scan workflow.
 > Announced in [Dependency scanning with GitHub MCP Server is in public preview](https://github.blog/changelog/2026-05-05-dependency-scanning-with-github-mcp-server-is-in-public-preview/) (May 2026)
-
-## Resources
-
+## Progressive disclosure and bundled resources
 - `references/dependabot-yml-reference.md` — Complete YAML options reference
 - `references/pr-commands.md` — Full PR comment commands reference
 - `references/example-configs.md` — Real-world configuration examples
+## Output template
+
+````markdown
+### Dependabot result
+**Status:** configured | reviewed | blocked
+**Repository:** `<owner/repo or path>`
+**Detected ecosystems**
+| Ecosystem | Manifest evidence | Directory setting | Strategy |
+| --- | --- | --- | --- |
+| `<package-ecosystem>` | `<manifest path>` | `directory` or `directories` | `<schedule/groups/security>` |
+**Configuration**
+```yaml
+version: 2
+updates:
+  - package-ecosystem: "<ecosystem>"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+```
+
+**Security and PR operations**
+- Alerts/security updates: <enabled in settings | needs repository setting | not applicable>
+- Grouping/noise reduction: <groups, multi-ecosystem-groups, cooldown, open-pull-requests-limit>
+- Commands or agent scan: <@dependabot command or dependency-scanning action>
+**Validation**
+- `.github/dependabot.yml`: <created | updated | reviewed>
+- Single-file rule: pass | fail
+````
+
+## Quality gate
+- [ ] The repository has exactly one `.github/dependabot.yml` on the default branch.
+- [ ] Every detected manifest maps to the correct `package-ecosystem` and `directory` or `directories` entry.
+- [ ] `directories` is used for glob patterns; `directory` is used only for a single literal path.
+- [ ] `uv` is preferred when `uv.lock` exists; pnpm and yarn use the `npm` ecosystem.
+- [ ] Groups, multi-ecosystem-groups, labels, commit-message, cooldown, target-branch, allow, ignore, exclude-paths, and private registries are used only when they match the repository goal.
+- [ ] Security update behavior is separated from version update behavior, especially when `target-branch` or `open-pull-requests-limit: 0` is used.
+- [ ] PR comment commands exclude deprecated merge, close, and reopen commands.
+- [ ] Private registry examples use `${{secrets.NPM_TOKEN}}` or equivalent secrets, never inline credentials.
+- [ ] Bundled references are cited only for deeper detail and every cited file exists.
+## References
+- [Dependency scanning with GitHub MCP Server is in public preview](https://github.blog/changelog/2026-05-05-dependency-scanning-with-github-mcp-server-is-in-public-preview/)
+- [Example private registry endpoint](https://npm.example.com)

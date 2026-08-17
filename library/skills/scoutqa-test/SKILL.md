@@ -7,31 +7,25 @@ description: >-
   accessibility audits, e-commerce flows, and user flow validation using ScoutQA CLI. Use this skill
   proactively after implementing web application features to verify they work correctly.
 ---
-# ScoutQA Testing Skill
 
-Perform AI-powered exploratory testing on web applications using the `scoutqa` CLI.
+# ScoutQA testing
+
+Run AI-powered exploratory QA against local or remote web applications with the `scoutqa` CLI, then report execution IDs, issue IDs, severities, and verification evidence.
+
 
 **Think of ScoutQA as an intelligent testing partner** that can autonomously explore, discover issues, and verify features. Delegate testing to multiple parallel ScoutQA executions to maximize coverage while saving time.
 
-## When to Use This Skill
+## When to invoke
 
-Use this skill in two scenarios:
+- "Test this website with ScoutQA."
+- "Run exploratory testing on this page."
+- "Check for accessibility issues."
+- "Verify the login flow works."
+- "Find bugs on this page after the feature change."
 
-1. **User requests testing** - When the user explicitly asks to test a website or verify functionality
-2. **Proactive verification** - After implementing web features, automatically run tests to verify the implementation works correctly
+## Procedure
 
-**Example proactive usage:**
-
-- After implementing a login form → Test the authentication flow
-- After adding form validation → Verify validation rules and error handling
-- After building a checkout flow → Test the end-to-end purchase process
-- After fixing a bug → Verify the fix works and didn't break other features
-
-**Best practice**: When you finish implementing a web feature, proactively start a ScoutQA test in the background to verify it works while you continue with other tasks.
-
-## Running Tests
-
-### Testing Workflow
+### Testing workflow
 
 Copy this checklist and track your progress:
 
@@ -106,7 +100,7 @@ scoutqa --url "http://localhost:3000" --prompt "Test the registration form"
 **Finding issue IDs from an execution?** → Use `scoutqa list-issues --execution-id <id>`
 **Agent needs more context?** → Use `scoutqa send-message` (see "Following Up on Stuck Executions")
 
-## Writing Effective Prompts
+## Prompt design
 
 Focus on **what to explore and verify**, not prescriptive steps. ScoutQA autonomously determines how to test.
 
@@ -262,7 +256,7 @@ Test the newly implemented registration form. Verify:
 
 This catches issues immediately while the implementation is fresh in context.
 
-## Listing Issues
+## Listing issues
 
 Use `scoutqa list-issues` to browse issues found in a previous execution. This is useful for finding issue IDs to use with `issue-verify`.
 
@@ -292,7 +286,7 @@ Showing 3 issues:
    Severity: medium | Category: accessibility | Status: resolved
 ```
 
-## Presenting Results
+## Reporting execution and issues
 
 ### Immediate Presentation (After Starting Test)
 
@@ -357,7 +351,7 @@ Focus on the checkout flow next, skip the wishlist feature
 "
 ```
 
-## Checking Test Results
+## Checking test results
 
 ScoutQA tests run remotely on ScoutQA's infrastructure. After starting a test with a short timeout to capture the execution ID:
 
@@ -377,3 +371,38 @@ ScoutQA tests run remotely on ScoutQA's infrastructure. After starting a test wi
 | Test hangs or needs input      | Use `scoutqa send-message --execution-id`                   |
 | Check test results             | Visit browser URL or `scoutqa get-execution --execution-id` |
 | Need issue ID for verification | Run `scoutqa list-issues --execution-id <id>`               |
+
+## Output template
+
+```markdown
+## ScoutQA test result
+
+**Status:** started | complete | blocked
+**Target URL:** `<URL>`
+**Execution ID:** `<019b831d-xxx or ex_abc123>`
+**Live report:** `https://app.scoutqa.ai/t/019b831d-xxx` or the actual ScoutQA URL
+
+| Severity | Category | Issue | Impact | Location | Evidence |
+| --- | --- | --- | --- | --- | --- |
+| High | accessibility | `<title>` | `<user impact>` | `<page or selector>` | `<screenshot, ScoutQA URL, or CLI output>` |
+
+**Commands run**
+- `scoutqa --url "<URL>" --prompt "<test goals>"`
+- `scoutqa list-issues --execution-id <id>` when issue IDs were needed
+- `scoutqa issue-verify --issue-id <id>` when verifying a known issue
+- `scoutqa get-execution --execution-id <id>` when fetching final results
+
+**Follow-up**
+- `<fix, verify, send-message, or no action>`
+```
+
+## Quality gate
+
+- [ ] `name` is `scoutqa-test` and matches the parent directory.
+- [ ] Each run includes `--url` and `--prompt` with a goal-oriented prompt, not step-by-step micromanagement.
+- [ ] The response includes the Execution ID and browser URL such as `https://app.scoutqa.ai/t/019b831d-xxx`.
+- [ ] Local URLs such as `http://localhost:3000`, `http://localhost:3000/register`, `localhost`, and `127.0.0.1` are allowed when the app is running.
+- [ ] Issue workflows use `scoutqa list-issues --execution-id <id>`, `scoutqa issue-verify --issue-id <id>`, or `scoutqa send-message --execution-id` as appropriate.
+- [ ] Results list severity, category, impact, location, and evidence for every reported issue, including end-to-end flows when tested.
+- [ ] Installation or auth blockers are reported with `npm i -g @scoutqa/cli@latest` or `scoutqa auth login`.
+```
