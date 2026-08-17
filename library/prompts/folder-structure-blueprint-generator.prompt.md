@@ -2,9 +2,112 @@
 name: 'folder-structure-blueprint-generator'
 description: 'Analyze a project and generate a technology-agnostic folder structure blueprint with naming and placement conventions.'
 ---
-# Project Folder Structure Blueprint Generator
 
-## Configuration Variables
+# /folder-structure-blueprint-generator
+
+## Objective
+
+Analyze a project and generate `Project_Folders_Structure_Blueprint.md` as a technology-agnostic folder structure blueprint that documents organization principles, directory purposes, file placement, naming conventions, navigation workflows, build outputs, and extension patterns.
+
+## When to Invoke
+
+Use this prompt when a team needs a durable guide for where code, tests, configuration, assets, generated folders, services, and new features belong in an existing repository.
+
+## Preconditions
+
+- The project workspace is available for folder and configuration inspection.
+- The team can provide or accept defaults for project type, microservices, frontend, monorepo, visualization style, depth, file counts, generated folders, file patterns, and templates.
+- The prompt may inspect directory and file names, configuration files, and project metadata needed to infer structure.
+- The output destination is agreed, normally `Project_Folders_Structure_Blueprint.md`.
+
+If a required precondition is not met, identify it and stop before making changes.
+
+## Inputs the Team Must Provide
+
+- `PROJECT_TYPE` — `Auto-detect`, `.NET`, `Java`, `React`, `Angular`, `Python`, `Node.js`, `Flutter`, or `Other`.
+- `INCLUDES_MICROSERVICES`, `INCLUDES_FRONTEND`, and `IS_MONOREPO` — `Auto-detect`, `true`, or `false`.
+- `VISUALIZATION_STYLE` — `ASCII`, `Markdown List`, or `Table`.
+- `DEPTH_LEVEL` — folder depth from `1-5`.
+- `INCLUDE_FILE_COUNTS`, `INCLUDE_GENERATED_FOLDERS`, `INCLUDE_FILE_PATTERNS`, and `INCLUDE_TEMPLATES` — `true` or `false`.
+- Ask the user for anything that is missing. If a setting is not provided, use the documented default behavior from the prompt body.
+
+## What I Will Do
+
+- Detect technology signatures such as `.sln`, `.csproj`, `.fsproj`, `.vbproj`, `pom.xml`, `build.gradle`, `settings.gradle`, `package.json`, `angular.json`, `next.config.js`, `requirements.txt`, `setup.py`, `pyproject.toml`, `pubspec.yaml`, and `android/ios` folders.
+- Identify monorepo, microservices, and frontend structure indicators when configured for auto-detection.
+- Document folder visualization, directory purposes, file placement patterns, naming conventions, navigation guidance, build/output organization, technology-specific structure, extension patterns, optional templates, and enforcement practices.
+- Base claims on observed files, paths, and project conventions rather than theoretical structure.
+
+## What I Will NOT Do
+
+- Invent project structure, naming conventions, or dependency rules that are not visible in the workspace.
+- Include generated folders such as `bin/`, `obj/`, or `node_modules/` unless `INCLUDE_GENERATED_FOLDERS=true`.
+- Rewrite or reorganize the project unless the user separately asks for implementation changes.
+- Treat one detected technology as exclusive when the repository shows multiple stacks.
+
+## Output Format
+
+Return or apply the result using this concrete structure:
+
+````markdown
+# Project_Folders_Structure_Blueprint.md
+
+## Structural Overview
+
+## Directory Visualization
+
+## Key Directory Analysis
+
+## File Placement Patterns
+
+## Naming and Organization Conventions
+
+## Navigation and Development Workflow
+
+## Build and Output Organization
+
+## Technology-Specific Organization
+
+## Extension and Evolution
+
+## Structure Templates
+
+## Structure Enforcement
+
+## Maintenance Notes
+- Generated on: `[date]`
+- Update when folder conventions, build outputs, or architecture boundaries change.
+````
+
+## Definition of Done
+
+- [ ] `Project_Folders_Structure_Blueprint.md` or the requested response contains the agreed sections and destination.
+- [ ] Technology, monorepo, microservices, and frontend detection findings cite observed files or paths.
+- [ ] The selected visualization style and `DEPTH_LEVEL` are applied.
+- [ ] Generated folders are included or excluded according to `INCLUDE_GENERATED_FOLDERS`.
+- [ ] File counts, file patterns, and templates are included only when the corresponding settings require them.
+- [ ] Naming, placement, navigation, build, extension, and enforcement guidance is specific to the inspected project.
+
+## Prompt Body
+
+Follow these steps in order. Preserve existing project conventions and do not invent evidence.
+
+**Step 1 — Resolve structure settings.**
+Resolve configuration values and inspect only the project evidence needed to infer folder structure.
+
+**Step 2 — Inventory folder requirements.**
+Inventory the technical requirements below and preserve each applicable detection rule, output section, and optional branch.
+
+**Step 3 — Generate the folder blueprint.**
+Generate the blueprint using observed directory structure, configuration files, naming patterns, file placement conventions, build outputs, and extension rules.
+
+**Step 4 — Validate the folder blueprint.**
+Validate the blueprint against the selected settings and report any unknowns or assumptions explicitly.
+
+**Technical inventory from the source prompt.**
+Preserve and apply these settings, rules, commands, paths, file patterns, examples, checklists, and output shapes when they are relevant to the invocation:
+
+**Configuration Variables.**
 
 ${PROJECT_TYPE="Auto-detect|.NET|Java|React|Angular|Python|Node.js|Flutter|Other"} 
 <!-- Select primary technology -->
@@ -36,11 +139,11 @@ ${INCLUDE_FILE_PATTERNS=true|false}
 ${INCLUDE_TEMPLATES=true|false} 
 <!-- Include file/folder templates for new features -->
 
-## Generated Prompt
+**Generated Prompt.**
 
 "Analyze the project's folder structure and create a comprehensive 'Project_Folders_Structure_Blueprint.md' document that serves as a definitive guide for maintaining consistent code organization. Use the following approach:
 
-### Initial Auto-detection Phase
+**Initial Auto-detection Phase.**
 
 ${PROJECT_TYPE == "Auto-detect" ? 
 "Begin by scanning the folder structure for key files that identify the project type:
@@ -77,7 +180,7 @@ ${INCLUDES_FRONTEND == "Auto-detect" ?
 - Style sheet organization (CSS, SCSS, styled-components)
 - Static asset organization (images, fonts, icons)" : ""}
 
-### 1. Structural Overview
+**1. Structural Overview.**
 
 Provide a high-level overview of the ${PROJECT_TYPE == "Auto-detect" ? "detected project type(s)" : PROJECT_TYPE} project's organization principles and folder structure:
 
@@ -94,7 +197,7 @@ ${INCLUDES_MICROSERVICES == "Auto-detect" ?
 "If microservices are detected, describe how they are structured and organized." : 
 INCLUDES_MICROSERVICES ? "Describe how the microservices are structured and organized." : ""}
 
-### 2. Directory Visualization
+**2. Directory Visualization.**
 
 ${VISUALIZATION_STYLE == "ASCII" ? 
 "Create an ASCII tree representation of the folder hierarchy to depth level ${DEPTH_LEVEL}." : ""}
@@ -109,7 +212,7 @@ ${INCLUDE_GENERATED_FOLDERS ?
 "Include all folders including generated ones." : 
 "Exclude auto-generated folders like bin/, obj/, node_modules/, etc."}
 
-### 3. Key Directory Analysis
+**3. Key Directory Analysis.**
 
 Document each significant directory's purpose, contents, and patterns:
 
@@ -181,7 +284,7 @@ ${(PROJECT_TYPE == "React" || PROJECT_TYPE == "Angular" || PROJECT_TYPE == "Auto
   - Theme organization
   - Style module patterns" : ""}
 
-### 4. File Placement Patterns
+**4. File Placement Patterns.**
 
 ${INCLUDE_FILE_PATTERNS ? 
 "Document the patterns that determine where different types of files should be placed:
@@ -215,7 +318,7 @@ ${INCLUDE_FILE_PATTERNS ?
   - README file distribution" : 
 "Document where key file types are located in the project."}
 
-### 5. Naming and Organization Conventions
+**5. Naming and Organization Conventions.**
 Document the naming and organizational conventions observed across the project:
 
 - **File Naming Patterns**:
@@ -238,7 +341,7 @@ Document the naming and organizational conventions observed across the project:
   - Feature encapsulation approaches
   - Cross-cutting concern organization
 
-### 6. Navigation and Development Workflow
+**6. Navigation and Development Workflow.**
 Provide guidance for navigating and working with the codebase structure:
 
 - **Entry Points**:
@@ -263,7 +366,7 @@ ${INCLUDE_FILE_COUNTS ?
   - Code distribution metrics
   - Complexity concentration areas" : ""}
 
-### 7. Build and Output Organization
+**7. Build and Output Organization.**
 Document the build process and output organization:
 
 - **Build Configuration**:
@@ -281,7 +384,7 @@ Document the build process and output organization:
   - Environment configuration strategies
   - Build variant organization
 
-### 8. Technology-Specific Organization
+**8. Technology-Specific Organization.**
 
 ${(PROJECT_TYPE == ".NET" || PROJECT_TYPE == "Auto-detect") ? 
 "#### .NET-Specific Structure Patterns (if detected)
@@ -343,7 +446,7 @@ ${(PROJECT_TYPE == "Node.js" || PROJECT_TYPE == "Auto-detect") ?
   - Environment variable management
   - Secret management approaches" : ""}
 
-### 9. Extension and Evolution
+**9. Extension and Evolution.**
 Document how the project structure is designed to be extended:
 
 - **Extension Points**:
@@ -386,7 +489,7 @@ Provide templates for creating new components that follow project conventions:
   - Test file organization templates
   - Test resource organization" : ""}
 
-### ${INCLUDE_TEMPLATES ? "11" : "10"}. Structure Enforcement
+**${INCLUDE_TEMPLATES ? "11" : "10"}. Structure Enforcement.**
 
 Document how the project structure is maintained and enforced:
 
@@ -402,3 +505,9 @@ Document how the project structure is maintained and enforced:
 
 Include a section at the end about maintaining this blueprint and when it was last updated.
 "
+
+## Invocation Example
+
+```
+/folder-structure-blueprint-generator
+```

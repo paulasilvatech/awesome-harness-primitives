@@ -3,35 +3,55 @@ name: 'create-architectural-decision-record'
 description: 'Create an AI-optimized Architectural Decision Record for a documented technical decision.'
 agent: 'agent'
 tools: ['changes', 'codebase', 'editFiles', 'extensions', 'fetch', 'githubRepo', 'openSimpleBrowser', 'problems', 'runTasks', 'search', 'searchResults', 'terminalLastCommand', 'terminalSelection', 'testFailure', 'usages', 'vscodeAPI']
+argument-hint: 'DecisionTitle=<title>'
 ---
-# Create Architectural Decision Record
 
-Create an ADR document for `${input:DecisionTitle}` using structured formatting optimized for AI consumption and human readability.
+# /create-architectural-decision-record
 
-## Inputs
+## Objective
 
-- **Context**: `${input:Context}`
-- **Decision**: `${input:Decision}`
-- **Alternatives**: `${input:Alternatives}`
-- **Stakeholders**: `${input:Stakeholders}`
+Create an AI-optimized Architectural Decision Record for a documented technical decision, including context, chosen decision, consequences, rejected alternatives, implementation notes, references, front matter, and coded bullets for machine parsing and human review.
 
-## Input Validation
-If any of the required inputs are not provided or cannot be determined from the conversation history, ask the user to provide the missing information before proceeding with ADR generation.
+## When to Invoke
 
-## Requirements
+Use this prompt after the team has made or proposed a technical decision that should be recorded before implementation, review, or future trade-off analysis.
 
-- Use precise, unambiguous language
-- Follow standardized ADR format with front matter
-- Include both positive and negative consequences
-- Document alternatives with rejection rationale
-- Structure for machine parsing and human reference
-- Use coded bullet points (3-4 letter codes + 3-digit numbers) for multi-item sections
+## Preconditions
 
-The ADR must be saved in the `/docs/adr/` directory using the naming convention: `adr-NNNN-[title-slug].md`, where NNNN is the next sequential 4-digit number (e.g., `adr-0001-database-selection.md`).
+- `${input:DecisionTitle}` is provided.
+- Context, decision, alternatives, and stakeholders are provided or available from the conversation.
+- The `/docs/adr/` directory may be created or updated.
+- The next sequential 4-digit ADR number can be determined from existing `adr-NNNN-[title-slug].md` files.
 
-## Required Documentation Structure
+## Inputs the Team Must Provide
 
-The documentation file must follow the template below, ensuring that all sections are filled out appropriately. The front matter for the markdown should be structured correctly as per the example following:
+- `DecisionTitle` — the title of the decision.
+- `Context` — `${input:Context}` with problem statement, constraints, business requirements, and environmental factors.
+- `Decision` — `${input:Decision}` with the chosen solution and rationale.
+- `Alternatives` — `${input:Alternatives}` with options considered and rejection rationale.
+- `Stakeholders` — `${input:Stakeholders}` with names or roles.
+- Ask the user for missing required inputs before generating the ADR.
+
+## What I Will Do
+
+- Create an ADR in `/docs/adr/` using `adr-NNNN-[title-slug].md` where `NNNN` is the next sequential 4-digit number.
+- Use precise, unambiguous language and standardized ADR format with front matter.
+- Include positive and negative consequences.
+- Document alternatives with rejection rationale.
+- Use coded bullets with 3–4 letter codes plus 3-digit numbers, such as `POS-001`, `NEG-001`, `ALT-001`, `IMP-001`, and `REF-001`.
+- Structure the document for machine parsing and human reference.
+
+## What I Will NOT Do
+
+- Generate an ADR when context, decision, alternatives, or stakeholders are missing and cannot be determined.
+- Record a decision that the team has not made or clearly proposed.
+- Skip negative consequences or rejected alternatives.
+- Use a non-sequential ADR number or a filename outside `/docs/adr/`.
+- Leave placeholder text in the final ADR.
+
+## Output Format
+
+Create the ADR using this template:
 
 ```md
 ---
@@ -95,4 +115,38 @@ superseded_by: ""
 - **REF-001**: [Related ADRs]
 - **REF-002**: [External documentation]
 - **REF-003**: [Standards or frameworks referenced]
+```
+
+## Definition of Done
+
+- [ ] Required inputs were provided or explicitly confirmed from context.
+- [ ] The ADR is saved in `/docs/adr/` as `adr-NNNN-[title-slug].md` with the next sequential 4-digit number.
+- [ ] Front matter includes title, status, date, authors, tags, supersedes, and superseded_by.
+- [ ] Status, Context, Decision, Consequences, Alternatives Considered, Implementation Notes, and References are complete.
+- [ ] Positive and negative consequences are both documented.
+- [ ] Alternatives include descriptions and rejection reasons.
+- [ ] Multi-item sections use coded bullets with 3–4 letter codes plus 3-digit numbers.
+
+## Prompt Body
+
+Follow these steps in order.
+
+**Step 1 — Validate required inputs.** Confirm `DecisionTitle`, `Context`, `Decision`, `Alternatives`, and `Stakeholders`. If any required input is missing and cannot be determined from conversation history, ask the user to provide it before generating the ADR.
+
+**Step 2 — Determine the ADR number and path.** Inspect `/docs/adr/` for existing `adr-NNNN-[title-slug].md` files. Choose the next sequential 4-digit number. Slugify the title and create `/docs/adr/adr-NNNN-[title-slug].md`.
+
+**Step 3 — Write front matter.** Set `title` to `ADR-NNNN: [Decision Title]`, `status` to `Proposed` unless the user provides another valid status, `date` to `YYYY-MM-DD`, `authors` to stakeholder names or roles, `tags` to `["architecture", "decision"]`, and empty `supersedes` and `superseded_by` unless known.
+
+**Step 4 — Document context and decision.** Write the problem statement, technical constraints, business requirements, environmental factors, chosen solution, and clear rationale.
+
+**Step 5 — Document consequences and alternatives.** Include positive consequences with `POS-001` numbering and negative consequences with `NEG-001` numbering. For each alternative, include coded description and rejection reason entries such as `ALT-001` and `ALT-002`.
+
+**Step 6 — Add implementation notes and references.** Include key implementation considerations, migration or rollout strategy, monitoring and success criteria, related ADRs, external documentation, standards, or frameworks with `IMP-001` and `REF-001` style bullets.
+
+**Step 7 — Validate the ADR.** Check precise language, machine-parseable structure, no placeholders, correct numbering, correct filename, and complete rationale.
+
+## Invocation Example
+
+```
+/create-architectural-decision-record DecisionTitle="Adopt PostgreSQL for transactional storage"
 ```

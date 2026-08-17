@@ -4,21 +4,127 @@ description: 'Containerize an ASP.NET Core project with project-specific Docker 
 agent: 'agent'
 tools: ['codebase', 'editFiles', 'terminalCommand']
 ---
-# ASP.NET Core Docker Containerization Prompt
 
-## Containerization Request
+# /containerize-aspnetcore
+
+## Objective
+
+Containerize an ASP.NET Core project for Linux containers by creating project-specific Docker artifacts, `.dockerignore`, progress tracking, health checks, dependency handling, and build verification with minimal application changes.
+
+## When to Invoke
+
+Use this prompt when an existing ASP.NET Core application must run in a Linux Docker container and the team needs a multi-stage Dockerfile, runtime configuration, dependency handling, and Docker build validation tailored to the project.
+
+## Preconditions
+
+- The target ASP.NET Core project is available in the workspace and the path to the `.csproj` file is known or can be provided.
+- Linux containerization is the intended deployment model; this is not an ASP.NET .NET Framework Windows container request.
+- The team can provide required .NET version, Linux distribution, ports, dependencies, environment variables, health-check settings, copied files, and exclusions, or accept documented defaults.
+- Docker build support is available when build verification is requested.
+
+If a required precondition is not met, identify it and stop before making changes.
+
+## Inputs the Team Must Provide
+
+- Project to containerize — path to the `.csproj` file.
+- .NET version — `8.0` or `9.0`, defaulting to `8.0` unless detected or provided.
+- Linux distribution — `debian`, `alpine`, `ubuntu`, `chiseled`, or `Azure Linux (mariner)`.
+- Custom build and run base images, or `None` to use standard Microsoft images.
+- Ports, container user, `ASPNETCORE_URLS`, custom build steps, NuGet package sources, system packages, native libraries, .NET tools, environment variables, copied files, excluded files, volume mounts, `.dockerignore` additions, health-check settings, additional instructions, and known issues.
+- Ask the user for anything that is missing. Stop before editing when a missing value would change the generated Dockerfile or dependency handling.
+
+## What I Will Do
+
+- Inspect the `.csproj` `TargetFramework` and choose compatible SDK and ASP.NET runtime images.
+- Create a multi-stage Linux Dockerfile that restores, builds, publishes to `/app/publish`, and runs from a minimal runtime image.
+- Create `.dockerignore` with required exclusions plus project-specific additions.
+- Configure ports, `ASPNETCORE_URLS`, non-root user behavior, packages, tools, native libraries, copied files, volumes, environment variables, and health checks from the provided settings.
+- Run or report `docker build -t aspnetcore-app:latest .` and iterate on containerization issues when command execution is available.
+
+## What I Will NOT Do
+
+- Produce Windows-container or ASP.NET .NET Framework instructions.
+- Set up infrastructure, registries, orchestration, or cloud resources.
+- Change application code beyond configuration required for Linux container execution.
+- Use `latest` image tags when a specific supported Microsoft tag can be selected.
+- Install unnecessary packages or keep build dependencies in the final image.
+
+## Output Format
+
+Return or apply the result using this concrete structure:
+
+````markdown
+## ASP.NET Core Containerization Result
+
+### Target
+- Project: `[path-to.csproj]`
+- Target framework: `[TargetFramework]`
+- SDK image: `[mcr.microsoft.com/dotnet/sdk tag]`
+- Runtime image: `[mcr.microsoft.com/dotnet/aspnet tag]`
+
+### Files Created or Updated
+- `Dockerfile`
+- `.dockerignore`
+- `progress.md`
+- `[configuration files changed, if any]`
+
+### Progress
+- [ ] .NET version detection
+- [ ] Linux distribution selection
+- [ ] Dockerfile creation
+- [ ] `.dockerignore` creation
+- [ ] Dependency and health-check handling
+- [ ] Docker build success
+
+### Validation
+- Command: `docker build -t aspnetcore-app:latest .`
+- Result: `[passed|failed|not run with reason]`
+
+### Notes
+- `[package, native library, URL, volume, or health-check notes]`
+````
+
+## Definition of Done
+
+- [ ] The project root contains a customized Linux-container `Dockerfile`, `.dockerignore`, and `progress.md`.
+- [ ] The Dockerfile uses appropriate `mcr.microsoft.com/dotnet/sdk` and `mcr.microsoft.com/dotnet/aspnet` images unless custom images were provided.
+- [ ] Required ports, `ASPNETCORE_URLS`, user, packages, native libraries, .NET tools, copied files, volumes, environment variables, and health checks are represented.
+- [ ] The final image excludes build dependencies and uses the requested non-root user behavior.
+- [ ] `docker build -t aspnetcore-app:latest .` succeeds, or the failure and next corrective action are reported.
+- [ ] All `progress.md` checkboxes are marked complete only when their evidence exists.
+
+## Prompt Body
+
+Follow these steps in order. Preserve existing project conventions and do not invent evidence.
+
+**Step 1 — Confirm the Linux container target.**
+Confirm the request is for ASP.NET Core on Linux containers and identify the project root, `.csproj`, target framework, and requested settings.
+
+**Step 2 — Inventory the technical requirements below and map each applicable item into the generated artifacts.**
+Inventory the technical requirements below and map each applicable item into the generated artifacts.
+
+**Step 3 — Apply the ASP.NET Core containerization workflow.**
+Apply the containerization workflow: inspect `TargetFramework`, choose SDK/runtime image tags, create the multi-stage Dockerfile, create `.dockerignore`, configure dependencies and health checks, and maintain `progress.md`.
+
+**Step 4 — Verify the Docker build.**
+Verify the result with `docker build -t aspnetcore-app:latest .` when possible. If the build fails, adjust the Dockerfile or project configuration until it succeeds or report the exact blocker.
+
+**Technical inventory from the source prompt.**
+Preserve and apply these settings, rules, commands, paths, file patterns, examples, checklists, and output shapes when they are relevant to the invocation:
+
+**Containerization Request.**
 
 Containerize the ASP.NET Core (.NET) project specified in the settings below, focusing **exclusively** on changes required for the application to run in a Linux Docker container. Containerization should consider all settings specified here.
 
 Abide by best practices for containerizing .NET Core applications, ensuring that the container is optimized for performance, security, and maintainability.
 
-## Containerization Settings
+**Containerization Settings.**
 
 This section of the prompt contains the specific settings and configurations required for containerizing the ASP.NET Core application. Prior to running this prompt, ensure that the settings are filled out with the necessary information. Note that in many cases, only the first few settings are required. Later settings can be left as defaults if they do not apply to the project being containerized.
 
 Any settings that are not specified will be set to default values. The default values are provided in `[square brackets]`.
 
-### Basic Project Information
+**Basic Project Information.**
 1. Project to containerize: 
    - `[ProjectName (provide path to .csproj file)]`
 
@@ -34,7 +140,7 @@ Any settings that are not specified will be set to default values. The default v
 5. Custom base image for the run stage of the Docker image ("None" to use standard Microsoft base image):
    - `[Specify base image to use for run stage (Default None)]`   
 
-### Container Configuration
+**Container Configuration.**
 1. Ports that must be exposed in the container image:
    - Primary HTTP port: `[e.g., 8080]`
    - Additional ports: `[List any additional ports, or "None"]`
@@ -45,7 +151,7 @@ Any settings that are not specified will be set to default values. The default v
 3. Application URL configuration:
    - `[Specify ASPNETCORE_URLS, or default to "http://+:8080"]`
 
-### Build configuration
+**Build configuration.**
 1. Custom build steps that must be performed before building the container image:
    - `[List any specific build steps, or "None"]`
 
@@ -55,7 +161,7 @@ Any settings that are not specified will be set to default values. The default v
 3. NuGet package sources that must be configured:
    - `[List any private NuGet feeds with authentication details, or "None"]`
 
-### Dependencies
+**Dependencies.**
 1. System packages that must be installed in the container image:
    - `[Package names for the chosen Linux distribution, or "None"]`
 
@@ -65,11 +171,11 @@ Any settings that are not specified will be set to default values. The default v
 3. Additional .NET tools that must be installed:
    - `[Tool names and versions, or "None"]`
 
-### System Configuration
+**System Configuration.**
 1. Environment variables that must be set in the container image:
    - `[Variable names and values, or "Use defaults"]`
 
-### File System
+**File System.**
 1. Files/directories that need to be copied to the container image:
    - `[Paths relative to project root, or "None"]`
    - Target location in container: `[Container paths, or "Not applicable"]`
@@ -80,25 +186,25 @@ Any settings that are not specified will be set to default values. The default v
 3. Volume mount points that should be configured:
    - `[Volume paths for persistent data, or "None"]`
 
-### .dockerignore Configuration
+**.dockerignore Configuration.**
 1. Patterns to include in the `.dockerignore` file (.dockerignore will already have common defaults; these are additional patterns):
    - Additional patterns: `[List any additional patterns, or "None"]`
 
-### Health Check Configuration
+**Health Check Configuration.**
 1. Health check endpoint:
    - `[Health check URL path, or "None"]`
 
 2. Health check interval and timeout:
    - `[Interval and timeout values, or "Use defaults"]`
 
-### Additional Instructions
+**Additional Instructions.**
 1. Other instructions that must be followed to containerize the project:
    - `[Specific requirements, or "None"]`
 
 2. Known issues to address:
    - `[Describe any known issues, or "None"]`
 
-## Scope
+**Scope.**
 
 - App configuration modification to ensure application settings and connection strings can be read from environment variables
 - Dockerfile creation and configuration for an ASP.NET Core application
@@ -108,7 +214,7 @@ Any settings that are not specified will be set to default values. The default v
 - No infrastructure setup (assumed to be handled separately)
 - No code changes beyond those required for containerization
 
-## Execution Process
+**Execution Process.**
 
 1. Review the containerization settings above to understand the containerization requirements
 2. Create a `progress.md` file to track changes with check marks
@@ -166,7 +272,7 @@ Any settings that are not specified will be set to default values. The default v
 8. Mark tasks as completed: [ ] → [✓]
 9. Continue until all tasks are complete and Docker build succeeds
 
-## Build and Runtime Verification
+**Build and Runtime Verification.**
 
 Confirm that Docker build succeeds once the Dockerfile is completed. Use the following command to build the Docker image:
 
@@ -176,7 +282,7 @@ docker build -t aspnetcore-app:latest .
 
 If the build fails, review the error messages and make necessary adjustments to the Dockerfile or project configuration. Report success/failure.
 
-## Progress Tracking
+**Progress Tracking.**
 
 Maintain a `progress.md` file with the following structure:
 ```markdown
@@ -211,7 +317,7 @@ Do not pause for confirmation between steps. Continue methodically until the app
 
 **YOU ARE NOT DONE UNTIL ALL CHECKBOXES ARE MARKED!** This includes building the Docker image successfully and addressing any issues that arise during the build process.
 
-## Example Dockerfile
+**Example Dockerfile.**
 
 An example Dockerfile for an ASP.NET Core (.NET) application using a Linux base image.
 
@@ -333,7 +439,7 @@ USER $APP_UID
 ENTRYPOINT ["dotnet", "YourProject.dll"]
 ```
 
-## Adapting this Example
+**Adapting this Example.**
 
 **Note:** Customize this template based on the specific requirements in containerization settings.
 
@@ -346,9 +452,9 @@ When adapting this example Dockerfile:
 5. Add or remove stages as needed for your specific workflow
 6. Update the health check endpoint to match your application's health check route
 
-## Linux Distribution Variations
+**Linux Distribution Variations.**
 
-### Alpine Linux
+**Alpine Linux.**
 For smaller image sizes, you can use Alpine Linux:
 
 ```dockerfile
@@ -360,7 +466,7 @@ FROM mcr.microsoft.com/dotnet/aspnet:8.0-alpine AS final
 RUN apk update && apk add --no-cache curl ca-certificates
 ```
 
-### Ubuntu Chiseled
+**Ubuntu Chiseled.**
 For minimal attack surface, consider using chiseled images:
 
 ```dockerfile
@@ -368,7 +474,7 @@ FROM mcr.microsoft.com/dotnet/aspnet:8.0-jammy-chiseled AS final
 # Note: Chiseled images have minimal packages, so you may need to use a different base for additional dependencies
 ```
 
-### Azure Linux (Mariner)
+**Azure Linux (Mariner).**
 For Azure-optimized containers:
 
 ```dockerfile
@@ -377,17 +483,23 @@ FROM mcr.microsoft.com/dotnet/aspnet:8.0-azurelinux3.0 AS final
 RUN tdnf update -y && tdnf install -y curl ca-certificates && tdnf clean all
 ```
 
-## Notes on Stage Naming
+**Notes on Stage Naming.**
 
 - The `AS stage-name` syntax gives each stage a name
 - Use `--from=stage-name` to copy files from a previous stage
 - You can have multiple intermediate stages that aren't used in the final image
 - The `final` stage is the one that becomes the final container image
 
-## Security Best Practices
+**Security Best Practices.**
 
 - Always run as a non-root user in production
 - Use specific image tags instead of `latest`
 - Minimize the number of installed packages
 - Keep base images updated
 - Use multi-stage builds to exclude build dependencies from the final image
+
+## Invocation Example
+
+```
+/containerize-aspnetcore
+```

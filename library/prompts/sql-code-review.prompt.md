@@ -3,271 +3,70 @@ name: 'sql-code-review'
 description: 'Review SQL code across database engines for security, maintainability, quality, and best-practice issues.'
 agent: 'agent'
 tools: ['changes', 'codebase', 'editFiles', 'problems']
+argument-hint: 'target=<selection-or-project> engine=<postgresql|mysql|sqlserver|oracle|other>'
 ---
 
-# SQL Code Review
+# /sql-code-review
 
-Perform a thorough SQL code review of ${selection} (or entire project if no selection) focusing on security, performance, maintainability, and database best practices.
+## Objective
 
-## Security Analysis
+Perform a thorough SQL code review of `${selection}` or the requested project scope, focusing on security, performance, maintainability, schema quality, and database-specific best practices across PostgreSQL, MySQL, SQL Server, Oracle, and other SQL engines.
 
-### SQL Injection Prevention
-```sql
--- CRITICAL: SQL Injection vulnerability
-query = "SELECT * FROM users WHERE id = " + userInput;
-query = f"DELETE FROM orders WHERE user_id = {user_id}";
+## When to Invoke
 
--- SECURE: Parameterized queries
--- PostgreSQL/MySQL
-PREPARE stmt FROM 'SELECT * FROM users WHERE id = ?';
-EXECUTE stmt USING @user_id;
+Use this prompt when reviewing SQL queries, migrations, stored procedures, repository SQL, schema definitions, or database access patterns before merging or release.
 
--- SQL Server
-EXEC sp_executesql N'SELECT * FROM users WHERE id = @id', N'@id INT', @id = @user_id;
-```
+## Preconditions
 
-### Access Control & Permissions
-- **Principle of Least Privilege**: Grant minimum required permissions
-- **Role-Based Access**: Use database roles instead of direct user permissions
-- **Schema Security**: Proper schema ownership and access controls
-- **Function/Procedure Security**: Review DEFINER vs INVOKER rights
+- The SQL code, selected text, migration, stored procedure, repository method, or project scope is available.
+- The target database engine is known, or findings can be labeled database-agnostic until the engine is provided.
+- The review scope permits inspecting related schema, indexes, and data-access code.
+- Security and performance findings can cite a location such as table, view, procedure, file, or line number when available.
 
-### Data Protection
-- **Sensitive Data Exposure**: Avoid SELECT * on tables with sensitive columns
-- **Audit Logging**: Ensure sensitive operations are logged
-- **Data Masking**: Use views or functions to mask sensitive data
-- **Encryption**: Verify encrypted storage for sensitive data
+## Inputs the Team Must Provide
 
-## Performance Optimization
+- `target` — `${selection}`, a file, a migration, a procedure, or a project area to review.
+- `engine` — PostgreSQL, MySQL, SQL Server, Oracle, or another engine.
+- Schema context — tables, columns, constraints, indexes, procedures, functions, and permissions.
+- Risk context — sensitive data, write paths, user input sources, performance concerns, and deployment environment.
+- Ask the user for anything that is missing, especially the database engine, schema context, or review scope.
 
-### Query Structure Analysis
-```sql
--- BAD: Inefficient query patterns
-SELECT DISTINCT u.* 
-FROM users u, orders o, products p
-WHERE u.id = o.user_id 
-AND o.product_id = p.id
-AND YEAR(o.order_date) = 2024;
+## What I Will Do
 
--- GOOD: Optimized structure
-SELECT u.id, u.name, u.email
-FROM users u
-INNER JOIN orders o ON u.id = o.user_id
-WHERE o.order_date >= '2024-01-01' 
-AND o.order_date < '2025-01-01';
-```
+- Review for SQL injection, dynamic SQL string concatenation, unsafe deletes, and missing parameterization.
+- Check access control, least privilege, role-based access, schema ownership, and `DEFINER` versus `INVOKER` rights.
+- Look for sensitive data exposure, audit logging gaps, data masking needs, and encryption expectations.
+- Analyze query structure, indexes, joins, aggregates, window functions, and anti-patterns such as N+1 access.
+- Review formatting, naming conventions, reserved words, case sensitivity, comments, and maintainability.
+- Check schema design for normalization, data types, `PRIMARY KEY`, `FOREIGN KEY`, `CHECK`, `NOT NULL`, and default values.
+- Call out PostgreSQL, MySQL, SQL Server, and Oracle best practices only when relevant to the engine.
+- Produce prioritized issues with before/after SQL and top actions.
 
-### Index Strategy Review
-- **Missing Indexes**: Identify columns that need indexing
-- **Over-Indexing**: Find unused or redundant indexes
-- **Composite Indexes**: Multi-column indexes for complex queries
-- **Index Maintenance**: Check for fragmented or outdated indexes
+## What I Will NOT Do
 
-### Join Optimization
-- **Join Types**: Verify appropriate join types (INNER vs LEFT vs EXISTS)
-- **Join Order**: Optimize for smaller result sets first
-- **Cartesian Products**: Identify and fix missing join conditions
-- **Subquery vs JOIN**: Choose the most efficient approach
+- Execute destructive SQL or modify production data.
+- Claim a vulnerability, performance impact, or expected improvement without evidence or a labeled assumption.
+- Apply platform-specific advice as universal SQL.
+- Recommend indexes without considering existing indexes, write overhead, maintenance, and query pattern fit.
+- Rewrite SQL in a way that changes result semantics without explicitly flagging the behavior change.
+- Mask join mistakes with `DISTINCT` without explaining the underlying issue.
+- Ignore sensitive data exposure caused by `SELECT *`.
 
-### Aggregate and Window Functions
-```sql
--- BAD: Inefficient aggregation
-SELECT user_id, 
-       (SELECT COUNT(*) FROM orders o2 WHERE o2.user_id = o1.user_id) as order_count
-FROM orders o1
-GROUP BY user_id;
+## Output Format
 
--- GOOD: Efficient aggregation
-SELECT user_id, COUNT(*) as order_count
-FROM orders
-GROUP BY user_id;
-```
+Return the review in this format:
 
-## Code Quality & Maintainability
+````markdown
+## SQL Code Review
 
-### SQL Style & Formatting
-```sql
--- BAD: Poor formatting and style
-select u.id,u.name,o.total from users u left join orders o on u.id=o.user_id where u.status='active' and o.order_date>='2024-01-01';
+### Summary Assessment
+- **Security Score**: 7/10 — SQL injection protection, access controls
+- **Performance Score**: 6/10 — Query efficiency, index usage
+- **Maintainability Score**: 8/10 — Code quality, documentation
+- **Schema Quality Score**: 7/10 — Design patterns, normalization
 
--- GOOD: Clean, readable formatting
-SELECT u.id,
-       u.name,
-       o.total
-FROM users u
-LEFT JOIN orders o ON u.id = o.user_id
-WHERE u.status = 'active'
-  AND o.order_date >= '2024-01-01';
-```
+### Findings
 
-### Naming Conventions
-- **Consistent Naming**: Tables, columns, constraints follow consistent patterns
-- **Descriptive Names**: Clear, meaningful names for database objects
-- **Reserved Words**: Avoid using database reserved words as identifiers
-- **Case Sensitivity**: Consistent case usage across schema
-
-### Schema Design Review
-- **Normalization**: Appropriate normalization level (avoid over/under-normalization)
-- **Data Types**: Optimal data type choices for storage and performance
-- **Constraints**: Proper use of PRIMARY KEY, FOREIGN KEY, CHECK, NOT NULL
-- **Default Values**: Appropriate default values for columns
-
-## Database-Specific Best Practices
-
-### PostgreSQL
-```sql
--- Use JSONB for JSON data
-CREATE TABLE events (
-    id SERIAL PRIMARY KEY,
-    data JSONB NOT NULL,
-    created_at TIMESTAMPTZ DEFAULT NOW()
-);
-
--- GIN index for JSONB queries
-CREATE INDEX idx_events_data ON events USING gin(data);
-
--- Array types for multi-value columns
-CREATE TABLE tags (
-    post_id INT,
-    tag_names TEXT[]
-);
-```
-
-### MySQL
-```sql
--- Use appropriate storage engines
-CREATE TABLE sessions (
-    id VARCHAR(128) PRIMARY KEY,
-    data TEXT,
-    expires TIMESTAMP
-) ENGINE=InnoDB;
-
--- Optimize for InnoDB
-ALTER TABLE large_table 
-ADD INDEX idx_covering (status, created_at, id);
-```
-
-### SQL Server
-```sql
--- Use appropriate data types
-CREATE TABLE products (
-    id BIGINT IDENTITY(1,1) PRIMARY KEY,
-    name NVARCHAR(255) NOT NULL,
-    price DECIMAL(10,2) NOT NULL,
-    created_at DATETIME2 DEFAULT GETUTCDATE()
-);
-
--- Columnstore indexes for analytics
-CREATE COLUMNSTORE INDEX idx_sales_cs ON sales;
-```
-
-### Oracle
-```sql
--- Use sequences for auto-increment
-CREATE SEQUENCE user_id_seq START WITH 1 INCREMENT BY 1;
-
-CREATE TABLE users (
-    id NUMBER DEFAULT user_id_seq.NEXTVAL PRIMARY KEY,
-    name VARCHAR2(255) NOT NULL
-);
-```
-
-## Testing & Validation
-
-### Data Integrity Checks
-```sql
--- Verify referential integrity
-SELECT o.user_id 
-FROM orders o 
-LEFT JOIN users u ON o.user_id = u.id 
-WHERE u.id IS NULL;
-
--- Check for data consistency
-SELECT COUNT(*) as inconsistent_records
-FROM products 
-WHERE price < 0 OR stock_quantity < 0;
-```
-
-### Performance Testing
-- **Execution Plans**: Review query execution plans
-- **Load Testing**: Test queries with realistic data volumes
-- **Stress Testing**: Verify performance under concurrent load
-- **Regression Testing**: Ensure optimizations don't break functionality
-
-## Common Anti-Patterns
-
-### N+1 Query Problem
-```sql
--- BAD: N+1 queries in application code
-for user in users:
-    orders = query("SELECT * FROM orders WHERE user_id = ?", user.id)
-
--- GOOD: Single optimized query
-SELECT u.*, o.*
-FROM users u
-LEFT JOIN orders o ON u.id = o.user_id;
-```
-
-### Overuse of DISTINCT
-```sql
--- BAD: DISTINCT masking join issues
-SELECT DISTINCT u.name 
-FROM users u, orders o 
-WHERE u.id = o.user_id;
-
--- GOOD: Proper join without DISTINCT
-SELECT u.name
-FROM users u
-INNER JOIN orders o ON u.id = o.user_id
-GROUP BY u.name;
-```
-
-### Function Misuse in WHERE Clauses
-```sql
--- BAD: Functions prevent index usage
-SELECT * FROM orders 
-WHERE YEAR(order_date) = 2024;
-
--- GOOD: Range conditions use indexes
-SELECT * FROM orders 
-WHERE order_date >= '2024-01-01' 
-  AND order_date < '2025-01-01';
-```
-
-## SQL Review Checklist
-
-### Security
-- [ ] All user inputs are parameterized
-- [ ] No dynamic SQL construction with string concatenation
-- [ ] Appropriate access controls and permissions
-- [ ] Sensitive data is properly protected
-- [ ] SQL injection attack vectors are eliminated
-
-### Performance
-- [ ] Indexes exist for frequently queried columns
-- [ ] No unnecessary SELECT * statements
-- [ ] JOINs are optimized and use appropriate types
-- [ ] WHERE clauses are selective and use indexes
-- [ ] Subqueries are optimized or converted to JOINs
-
-### Code Quality
-- [ ] Consistent naming conventions
-- [ ] Proper formatting and indentation
-- [ ] Meaningful comments for complex logic
-- [ ] Appropriate data types are used
-- [ ] Error handling is implemented
-
-### Schema Design
-- [ ] Tables are properly normalized
-- [ ] Constraints enforce data integrity
-- [ ] Indexes support query patterns
-- [ ] Foreign key relationships are defined
-- [ ] Default values are appropriate
-
-## Review Output Format
-
-### Issue Template
-```
 ## [PRIORITY] [CATEGORY]: [Brief Description]
 
 **Location**: [Table/View/Procedure name and line number if applicable]
@@ -287,17 +86,77 @@ WHERE order_date >= '2024-01-01'
 ```
 
 **Expected Improvement**: [Performance gain, security benefit]
-```
-
-### Summary Assessment
-- **Security Score**: [1-10] - SQL injection protection, access controls
-- **Performance Score**: [1-10] - Query efficiency, index usage
-- **Maintainability Score**: [1-10] - Code quality, documentation
-- **Schema Quality Score**: [1-10] - Design patterns, normalization
 
 ### Top 3 Priority Actions
-1. **[Critical Security Fix]**: Address SQL injection vulnerabilities
-2. **[Performance Optimization]**: Add missing indexes or optimize queries
-3. **[Code Quality]**: Improve naming conventions and documentation
+1. **[Critical Security Fix]**: Address SQL injection vulnerabilities.
+2. **[Performance Optimization]**: Add missing indexes or optimize queries.
+3. **[Code Quality]**: Improve naming conventions and documentation.
 
-Focus on providing actionable, database-agnostic recommendations while highlighting platform-specific optimizations and best practices.
+### Review Checklist
+- Security: pass/fail with evidence
+- Performance: pass/fail with evidence
+- Code Quality: pass/fail with evidence
+- Schema Design: pass/fail with evidence
+````
+
+## Definition of Done
+
+- [ ] All user input paths are reviewed for parameterization.
+- [ ] No dynamic SQL construction with string concatenation is left unflagged.
+- [ ] Access controls, permissions, and sensitive data handling are evaluated.
+- [ ] Query performance issues cite a concrete pattern, plan evidence, or labeled assumption.
+- [ ] Index recommendations include purpose and trade-offs.
+- [ ] Database-specific recommendations are labeled by engine.
+- [ ] Findings include priority, category, location, recommendation, and expected improvement.
+- [ ] The review includes security, performance, code quality, and schema design checklist results.
+
+## Prompt Body
+
+Follow these steps in order.
+
+**Step 1 — Establish scope and engine.**
+Review `${selection}` when present, or inspect the requested project scope. Identify the database engine and label unknowns. Focus on actionable, database-agnostic recommendations while highlighting platform-specific optimizations and best practices.
+
+**Step 2 — Review SQL injection prevention.**
+Flag any query built from user input with string concatenation, including patterns like `query = "SELECT * FROM users WHERE id = " + userInput;` and `query = f"DELETE FROM orders WHERE user_id = {user_id}";`. Recommend parameterized queries such as PostgreSQL/MySQL `PREPARE stmt FROM 'SELECT * FROM users WHERE id = ?'; EXECUTE stmt USING @user_id;` or SQL Server `EXEC sp_executesql N'SELECT * FROM users WHERE id = @id', N'@id INT', @id = @user_id;`.
+
+**Step 3 — Review access control and data protection.**
+Apply the principle of least privilege. Prefer database roles over direct user permissions. Check schema security, proper schema ownership, access controls, function/procedure security, and `DEFINER` versus `INVOKER` rights. Avoid `SELECT *` on tables with sensitive columns. Verify audit logging, data masking through views or functions, and encrypted storage for sensitive data.
+
+**Step 4 — Analyze query structure.**
+Flag inefficient patterns such as `SELECT DISTINCT u.* FROM users u, orders o, products p WHERE u.id = o.user_id AND o.product_id = p.id AND YEAR(o.order_date) = 2024;`. Prefer explicit columns, explicit joins, and date ranges such as `SELECT u.id, u.name, u.email FROM users u INNER JOIN orders o ON u.id = o.user_id WHERE o.order_date >= '2024-01-01' AND o.order_date < '2025-01-01';`.
+
+**Step 5 — Review index strategy.**
+Identify missing indexes for frequently queried columns, unused or redundant indexes, composite indexes for complex queries, and index maintenance concerns such as fragmented or outdated indexes. Consider over-indexing and write overhead before recommending an index.
+
+**Step 6 — Review joins, aggregates, and window functions.**
+Verify appropriate join types (`INNER` vs `LEFT` vs `EXISTS`), join order, smaller result sets first, missing join conditions, and Cartesian products. Compare subquery versus `JOIN` approaches. Replace inefficient correlated aggregate patterns such as `SELECT user_id, (SELECT COUNT(*) FROM orders o2 WHERE o2.user_id = o1.user_id) as order_count FROM orders o1 GROUP BY user_id;` with `SELECT user_id, COUNT(*) as order_count FROM orders GROUP BY user_id;` when semantics match.
+
+**Step 7 — Review style and maintainability.**
+Flag poor formatting like `select u.id,u.name,o.total from users u left join orders o on u.id=o.user_id where u.status='active' and o.order_date>='2024-01-01';`. Prefer readable formatting with uppercase keywords, one selected column per line for complex queries, clear indentation, and meaningful comments for complex logic.
+
+**Step 8 — Review naming and schema design.**
+Check consistent naming for tables, columns, constraints, and database objects. Prefer descriptive names. Avoid reserved words as identifiers. Maintain consistent case usage across schema. Check normalization level, avoid over/under-normalization, choose optimal data types, and enforce integrity through `PRIMARY KEY`, `FOREIGN KEY`, `CHECK`, `NOT NULL`, and appropriate default values.
+
+**Step 9 — Apply database-specific best practices.**
+For PostgreSQL, prefer `JSONB` for JSON data when appropriate, `TIMESTAMPTZ DEFAULT NOW()` for timestamp defaults, GIN indexes such as `CREATE INDEX idx_events_data ON events USING gin(data);`, and array types like `TEXT[]` for true multi-value columns. For MySQL, use appropriate storage engines such as `ENGINE=InnoDB` and covering indexes such as `ALTER TABLE large_table ADD INDEX idx_covering (status, created_at, id);`. For SQL Server, use data types such as `BIGINT IDENTITY(1,1)`, `NVARCHAR(255)`, `DECIMAL(10,2)`, `DATETIME2 DEFAULT GETUTCDATE()`, and columnstore indexes such as `CREATE COLUMNSTORE INDEX idx_sales_cs ON sales;` for analytics. For Oracle, use sequences such as `CREATE SEQUENCE user_id_seq START WITH 1 INCREMENT BY 1;` and `user_id_seq.NEXTVAL` defaults when appropriate.
+
+Use PostgreSQL array examples such as `post_id INT` with `tag_names TEXT[]` when reviewing multi-value tags. For Oracle, describe sequences as the auto-increment equivalent when comparing identity strategies across engines.
+
+**Step 10 — Validate data integrity and performance assumptions.**
+Suggest data integrity checks such as `SELECT o.user_id FROM orders o LEFT JOIN users u ON o.user_id = u.id WHERE u.id IS NULL;` and `SELECT COUNT(*) as inconsistent_records FROM products WHERE price < 0 OR stock_quantity < 0;`. Review execution plans, load testing with realistic data volumes, stress testing under concurrent load, and regression testing to ensure optimizations do not break functionality.
+
+**Step 11 — Flag common anti-patterns.**
+Identify N+1 query problems such as application loops that run `SELECT * FROM orders WHERE user_id = ?` per user; recommend a single query like `SELECT u.*, o.* FROM users u LEFT JOIN orders o ON u.id = o.user_id;` when appropriate. Flag overuse of `DISTINCT` masking join issues, for example `SELECT DISTINCT u.name FROM users u, orders o WHERE u.id = o.user_id;`, and prefer proper joins with explicit grouping when needed. Flag functions in `WHERE` clauses such as `WHERE YEAR(order_date) = 2024` and prefer range conditions.
+
+**Step 12 — Complete the SQL review checklist.**
+Security: all user inputs are parameterized; no dynamic SQL construction with string concatenation; appropriate access controls and permissions; sensitive data is properly protected; SQL injection attack vectors are eliminated. Performance: indexes exist for frequently queried columns; no unnecessary `SELECT *`; joins are optimized and use appropriate types; `WHERE` clauses are selective and use indexes; subqueries are optimized or converted to joins. Code quality: consistent naming conventions; proper formatting and indentation; meaningful comments for complex logic; appropriate data types; error handling is implemented. Schema design: tables are properly normalized; constraints enforce data integrity; indexes support query patterns; foreign key relationships are defined; default values are appropriate.
+
+**Step 13 — Prioritize and report.**
+Classify issues by priority and category. Include before/after SQL where possible, expected improvement, security risk, performance impact, and top three priority actions.
+
+## Invocation Example
+
+```
+/sql-code-review target=${selection} engine=postgresql
+```

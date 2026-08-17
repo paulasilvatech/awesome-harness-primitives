@@ -2,9 +2,125 @@
 name: 'architecture-blueprint-generator'
 description: 'Generate a comprehensive architecture blueprint from a codebase analysis.'
 ---
-# Comprehensive Project Architecture Blueprint Generator
 
-## Configuration Variables
+# /architecture-blueprint-generator
+
+## Objective
+
+Analyze a codebase and generate `Project_Architecture_Blueprint.md` as a comprehensive architecture reference covering detected stacks, architectural patterns, components, dependencies, data architecture, cross-cutting concerns, service communication, testing, deployment, extension, governance, and new-development guidance.
+
+## When to Invoke
+
+Use this prompt when maintainers need a definitive architecture blueprint for an existing project so future changes preserve architectural consistency and reflect actual implementation patterns.
+
+## Preconditions
+
+- The project workspace is available for codebase, configuration, dependency, and deployment inspection.
+- The team can provide or accept defaults for project type, architecture pattern, diagram type, detail level, code examples, implementation patterns, decision records, and extensibility focus.
+- The prompt may inspect project files, dependency manifests, imports, configuration, tests, and deployment artifacts needed to infer architecture.
+- The output destination is agreed, normally `Project_Architecture_Blueprint.md`.
+
+If a required precondition is not met, identify it and stop before making changes.
+
+## Inputs the Team Must Provide
+
+- `PROJECT_TYPE` — `Auto-detect`, `.NET`, `Java`, `React`, `Angular`, `Python`, `Node.js`, `Flutter`, or `Other`.
+- `ARCHITECTURE_PATTERN` — `Auto-detect`, `Clean Architecture`, `Microservices`, `Layered`, `MVVM`, `MVC`, `Hexagonal`, `Event-Driven`, `Serverless`, `Monolithic`, or `Other`.
+- `DIAGRAM_TYPE` — `C4`, `UML`, `Flow`, `Component`, or `None`.
+- `DETAIL_LEVEL` — `High-level`, `Detailed`, `Comprehensive`, or `Implementation-Ready`.
+- `INCLUDES_CODE_EXAMPLES`, `INCLUDES_IMPLEMENTATION_PATTERNS`, `INCLUDES_DECISION_RECORDS`, and `FOCUS_ON_EXTENSIBILITY` — `true` or `false`.
+- Ask the user for anything that is missing. If a setting is not provided, use the documented default behavior from the prompt body.
+
+## What I Will Do
+
+- Detect technology stacks and frameworks from project files, configuration, dependencies, imports, framework conventions, and build/deployment artifacts.
+- Infer architectural patterns from folder organization, namespaces, dependency flow, abstraction boundaries, and communication mechanisms.
+- Document actual components, layers, data architecture, cross-cutting concerns, service communication, testing, deployment, extension, optional examples, optional ADR-style decisions, governance, and new-development workflow.
+- Create diagrams or textual component relationships according to `DIAGRAM_TYPE`.
+- Distinguish observed implementation from inferred rationale and label assumptions.
+
+## What I Will NOT Do
+
+- Invent architectural intent, decision rationale, diagrams, or code examples that are not supported by inspected evidence.
+- Rewrite architecture, reorganize files, or implement new patterns unless the user separately asks for changes.
+- Present theoretical best practices as if they are implemented in the codebase.
+- Include code examples when `INCLUDES_CODE_EXAMPLES=false` or decision records when `INCLUDES_DECISION_RECORDS=false`.
+
+## Output Format
+
+Return or apply the result using this concrete structure:
+
+````markdown
+# Project_Architecture_Blueprint.md
+
+## Architecture Detection and Analysis
+
+## Architectural Overview
+
+## Architecture Visualization
+
+## Core Architectural Components
+
+## Architectural Layers and Dependencies
+
+## Data Architecture
+
+## Cross-Cutting Concerns Implementation
+
+## Service Communication Patterns
+
+## Technology-Specific Architectural Patterns
+
+## Implementation Patterns
+
+## Testing Architecture
+
+## Deployment Architecture
+
+## Extension and Evolution Patterns
+
+## Architectural Pattern Examples
+
+## Architectural Decision Records
+
+## Architecture Governance
+
+## Blueprint for New Development
+
+## Maintenance Notes
+- Generated on: `[date]`
+- Update when architecture, dependencies, deployment topology, or governance rules change.
+````
+
+## Definition of Done
+
+- [ ] `Project_Architecture_Blueprint.md` or the requested response contains the agreed sections and destination.
+- [ ] Detected stacks, frameworks, and architecture patterns cite observed files, dependencies, imports, or configuration.
+- [ ] Diagrams or textual relationships match `DIAGRAM_TYPE` and reflect actual implementation.
+- [ ] Components, layers, data, cross-cutting concerns, service communication, testing, deployment, extension, governance, and new-development guidance are covered at the requested detail level.
+- [ ] Optional implementation patterns, code examples, and decision records appear only when their settings require them.
+- [ ] Assumptions and unknowns are labeled explicitly.
+
+## Prompt Body
+
+Follow these steps in order. Preserve existing project conventions and do not invent evidence.
+
+**Step 1 — Resolve architecture settings.**
+Resolve configuration values and inspect only the codebase evidence needed to infer architecture.
+
+**Step 2 — Inventory architecture requirements.**
+Inventory the technical requirements below and preserve each applicable detection rule, output section, and optional branch.
+
+**Step 3 — Generate the architecture blueprint.**
+Generate the architecture blueprint from observed project structure, dependency flow, component boundaries, data access, cross-cutting concerns, tests, deployment artifacts, extension points, and governance signals.
+
+**Step 4 — Validate the architecture blueprint.**
+Validate the blueprint against the selected settings and report any unknowns or assumptions explicitly.
+
+**Technical inventory from the source prompt.**
+Preserve and apply these settings, rules, commands, paths, file patterns, examples, checklists, and output shapes when they are relevant to the invocation:
+
+**Configuration Variables.**
 ${PROJECT_TYPE="Auto-detect|.NET|Java|React|Angular|Python|Node.js|Flutter|Other"} <!-- Primary technology -->
 ${ARCHITECTURE_PATTERN="Auto-detect|Clean Architecture|Microservices|Layered|MVVM|MVC|Hexagonal|Event-Driven|Serverless|Monolithic|Other"} <!-- Primary architectural pattern -->
 ${DIAGRAM_TYPE="C4|UML|Flow|Component|None"} <!-- Architecture diagram type -->
@@ -14,11 +130,11 @@ ${INCLUDES_IMPLEMENTATION_PATTERNS=true|false} <!-- Include detailed implementat
 ${INCLUDES_DECISION_RECORDS=true|false} <!-- Include architectural decision records -->
 ${FOCUS_ON_EXTENSIBILITY=true|false} <!-- Emphasize extension points and patterns -->
 
-## Generated Prompt
+**Generated Prompt.**
 
 "Create a comprehensive 'Project_Architecture_Blueprint.md' document that thoroughly analyzes the architectural patterns in the codebase to serve as a definitive reference for maintaining architectural consistency. Use the following approach:
 
-### 1. Architecture Detection and Analysis
+**1. Architecture Detection and Analysis.**
 - ${PROJECT_TYPE == "Auto-detect" ? "Analyze the project structure to identify all technology stacks and frameworks in use by examining:
   - Project and configuration files
   - Package dependencies and import statements
@@ -31,13 +147,13 @@ ${FOCUS_ON_EXTENSIBILITY=true|false} <!-- Emphasize extension points and pattern
   - Interface segregation and abstraction patterns
   - Communication mechanisms between components" : "Document how the ${ARCHITECTURE_PATTERN} architecture is implemented"}
 
-### 2. Architectural Overview
+**2. Architectural Overview.**
 - Provide a clear, concise explanation of the overall architectural approach
 - Document the guiding principles evident in the architectural choices
 - Identify architectural boundaries and how they're enforced
 - Note any hybrid architectural patterns or adaptations of standard patterns
 
-### 3. Architecture Visualization
+**3. Architecture Visualization.**
 ${DIAGRAM_TYPE != "None" ? `Create ${DIAGRAM_TYPE} diagrams at multiple levels of abstraction:
 - High-level architectural overview showing major subsystems
 - Component interaction diagrams showing relationships and dependencies
@@ -47,7 +163,7 @@ ${DIAGRAM_TYPE != "None" ? `Create ${DIAGRAM_TYPE} diagrams at multiple levels o
 - Dependency directions and component interactions
 - Data flow and process sequences"}
 
-### 4. Core Architectural Components
+**4. Core Architectural Components.**
 For each architectural component discovered in the codebase:
 
 - **Purpose and Responsibility**:
@@ -71,14 +187,14 @@ For each architectural component discovered in the codebase:
   - Variation points and plugin mechanisms
   - Configuration and customization approaches
 
-### 5. Architectural Layers and Dependencies
+**5. Architectural Layers and Dependencies.**
 - Map the layer structure as implemented in the codebase
 - Document the dependency rules between layers
 - Identify abstraction mechanisms that enable layer separation
 - Note any circular dependencies or layer violations
 - Document dependency injection patterns used to maintain separation
 
-### 6. Data Architecture
+**6. Data Architecture.**
 - Document domain model structure and organization
 - Map entity relationships and aggregation patterns
 - Identify data access patterns (repositories, data mappers, etc.)
@@ -86,7 +202,7 @@ For each architectural component discovered in the codebase:
 - Note caching strategies and implementations
 - Document data validation patterns
 
-### 7. Cross-Cutting Concerns Implementation
+**7. Cross-Cutting Concerns Implementation.**
 Document implementation patterns for cross-cutting concerns:
 
 - **Authentication & Authorization**:
@@ -119,7 +235,7 @@ Document implementation patterns for cross-cutting concerns:
   - Secret management approach
   - Feature flag implementation
 
-### 8. Service Communication Patterns
+**8. Service Communication Patterns.**
 - Document service boundary definitions
 - Identify communication protocols and formats
 - Map synchronous vs. asynchronous communication patterns
@@ -127,7 +243,7 @@ Document implementation patterns for cross-cutting concerns:
 - Identify service discovery mechanisms
 - Note resilience patterns in service communication
 
-### 9. Technology-Specific Architectural Patterns
+**9. Technology-Specific Architectural Patterns.**
 ${PROJECT_TYPE == "Auto-detect" ? "For each detected technology stack, document specific architectural patterns:" : `Document ${PROJECT_TYPE}-specific architectural patterns:`}
 
 ${(PROJECT_TYPE == ".NET" || PROJECT_TYPE == "Auto-detect") ? 
@@ -174,7 +290,7 @@ ${(PROJECT_TYPE == "Python" || PROJECT_TYPE == "Auto-detect") ?
 - Framework integration patterns
 - Asynchronous programming approach" : ""}
 
-### 10. Implementation Patterns
+**10. Implementation Patterns.**
 ${INCLUDES_IMPLEMENTATION_PATTERNS ? 
 "Document concrete implementation patterns for key architectural components:
 
@@ -208,14 +324,14 @@ ${INCLUDES_IMPLEMENTATION_PATTERNS ?
   - Domain event implementation
   - Business rule enforcement" : "Mention that detailed implementation patterns vary across the codebase."}
 
-### 11. Testing Architecture
+**11. Testing Architecture.**
 - Document testing strategies aligned with the architecture
 - Identify test boundary patterns (unit, integration, system)
 - Map test doubles and mocking approaches
 - Document test data strategies
 - Note testing tools and frameworks integration
 
-### 12. Deployment Architecture
+**12. Deployment Architecture.**
 - Document deployment topology derived from configuration
 - Identify environment-specific architectural adaptations
 - Map runtime dependency resolution patterns
@@ -223,7 +339,7 @@ ${INCLUDES_IMPLEMENTATION_PATTERNS ?
 - Identify containerization and orchestration approaches
 - Note cloud service integration patterns
 
-### 13. Extension and Evolution Patterns
+**13. Extension and Evolution Patterns.**
 ${FOCUS_ON_EXTENSIBILITY ? 
 "Provide detailed guidance for extending the architecture:
 
@@ -291,13 +407,13 @@ For each decision, note:
 - Resulting consequences (positive and negative)
 - Future flexibility or limitations introduced" : ""}
 
-### ${INCLUDES_DECISION_RECORDS ? "16" : INCLUDES_CODE_EXAMPLES ? "15" : "14"}. Architecture Governance
+**${INCLUDES_DECISION_RECORDS ? "16" : INCLUDES_CODE_EXAMPLES ? "15" : "14"}. Architecture Governance.**
 - Document how architectural consistency is maintained
 - Identify automated checks for architectural compliance
 - Note architectural review processes evident in the codebase
 - Document architectural documentation practices
 
-### ${INCLUDES_DECISION_RECORDS ? "17" : INCLUDES_CODE_EXAMPLES ? "16" : "15"}. Blueprint for New Development
+**${INCLUDES_DECISION_RECORDS ? "17" : INCLUDES_CODE_EXAMPLES ? "16" : "15"}. Blueprint for New Development.**
 Create a clear architectural guide for implementing new features:
 
 - **Development Workflow**:
@@ -319,3 +435,9 @@ Create a clear architectural guide for implementing new features:
   - Testing blind spots
 
 Include information about when this blueprint was generated and recommendations for keeping it updated as the architecture evolves."
+
+## Invocation Example
+
+```
+/architecture-blueprint-generator
+```
