@@ -36,14 +36,14 @@ Analyze current repository context and suggest relevant Agent Skills from the [G
 
 ## Context Analysis Criteria
 
-🔍 **Repository Patterns**:
+**Repository Patterns**:
 - Programming languages used (.cs, .js, .py, .ts, etc.)
 - Framework indicators (ASP.NET, React, Azure, Next.js, etc.)
 - Project types (web apps, APIs, libraries, tools, infrastructure)
 - Development workflow requirements (testing, CI/CD, deployment)
 - Infrastructure and cloud providers (Azure, AWS, GCP)
 
-🗨️ **Chat History Context**:
+**Chat History Context**:
 - Recent discussions and pain points
 - Feature requests or implementation needs
 - Code review patterns
@@ -56,9 +56,9 @@ Display analysis results in structured table comparing awesome-copilot skills wi
 
 | Awesome-Copilot Skill | Description | Bundled Assets | Already Installed | Similar Local Skill | Suggestion Rationale |
 |-----------------------|-------------|----------------|-------------------|---------------------|---------------------|
-| [gh-attach](https://github.com/github/awesome-copilot/tree/main/skills/gh-attach) | GitHub CLI skill for managing repositories and workflows | None | ❌ No | None | Would enhance GitHub workflow automation capabilities |
-| [aspire](https://github.com/github/awesome-copilot/tree/main/skills/aspire) | Aspire skill for distributed application development | 9 reference files | ✅ Yes | aspire | Already covered by existing Aspire skill |
-| [terraform-azurerm-set-diff-analyzer](https://github.com/github/awesome-copilot/tree/main/skills/terraform-azurerm-set-diff-analyzer) | Analyze Terraform AzureRM provider changes | Reference files | ⚠️ Outdated | terraform-azurerm-set-diff-analyzer | Instructions updated with new validation patterns - Update recommended |
+| [gh-attach](https://github.com/github/awesome-copilot/tree/main/skills/gh-attach) | GitHub CLI skill for managing repositories and workflows | None | Do Not | None | Would enhance GitHub workflow automation capabilities |
+| [aspire](https://github.com/github/awesome-copilot/tree/main/skills/aspire) | Aspire skill for distributed application development | 9 reference files | Do | aspire | Already covered by existing Aspire skill |
+| [terraform-azurerm-set-diff-analyzer](https://github.com/github/awesome-copilot/tree/main/skills/terraform-azurerm-set-diff-analyzer) | Analyze Terraform AzureRM provider changes | Reference files |  Outdated | terraform-azurerm-set-diff-analyzer | Instructions updated with new validation patterns - Update recommended |
 
 ## Local Skills Discovery Process
 
@@ -117,14 +117,14 @@ description: 'Brief description of what this skill provides and when to use it'
 
 ## Icons Reference
 
-- ✅ Already installed and up-to-date
-- ⚠️ Installed but outdated (update available)
-- ❌ Not installed in repo
+- Already installed and up-to-date
+- Installed but outdated (update available)
+- Not installed in repo
 
 ## Update Handling
 
 When outdated skills are identified:
-1. Include them in the output table with ⚠️ status
+1. Include them in the output table with  status
 2. Document specific differences in the "Suggestion Rationale" column
 3. Provide recommendation to update with key changes noted
 4. When user requests update, replace entire local skill folder with remote version

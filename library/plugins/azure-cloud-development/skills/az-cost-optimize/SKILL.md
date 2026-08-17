@@ -11,7 +11,7 @@ This workflow analyzes Infrastructure-as-Code (IaC) files and Azure resources to
 
 ## Prerequisites
 - Azure MCP server configured and authenticated
-- GitHub MCP server configured and authenticated  
+- GitHub MCP server configured and authenticated
 - Target GitHub repository identified
 - Azure resources deployed (IaC files optional but helpful)
 - Prefer Azure MCP tools (`azmcp-*`) over direct Azure CLI when available
@@ -38,7 +38,7 @@ This workflow analyzes Infrastructure-as-Code (IaC) files and Azure resources to
      - Use `az resource list --subscription <id> --resource-group <name>`
    - For each resource type, use MCP tools first if possible, then CLI fallback:
      - `azmcp-cosmos-account-list --subscription <id>` - Cosmos DB accounts
-     - `azmcp-storage-account-list --subscription <id>` - Storage accounts  
+     - `azmcp-storage-account-list --subscription <id>` - Storage accounts
      - `azmcp-monitor-workspace-list --subscription <id>` - Log Analytics workspaces
      - `azmcp-keyvault-key-list` - Key Vaults
      - `az webapp list` - Web Apps (fallback - no MCP tool available)
@@ -79,13 +79,13 @@ This workflow analyzes Infrastructure-as-Code (IaC) files and Azure resources to
    AppServiceAppLogs
    | where TimeGenerated > ago(7d)
    | summarize avg(CpuTime) by Resource, bin(TimeGenerated, 1h)
-   
-   // Cosmos DB RU consumption  
+
+   // Cosmos DB RU consumption
    AzureDiagnostics
    | where ResourceProvider == "MICROSOFT.DOCUMENTDB"
    | where TimeGenerated > ago(7d)
    | summarize avg(RequestCharge) by Resource
-   
+
    // Storage account access patterns
    StorageBlobLogs
    | where TimeGenerated > ago(7d)
@@ -98,7 +98,7 @@ This workflow analyzes Infrastructure-as-Code (IaC) files and Azure resources to
    - Storage access frequency
    - Function execution rates
 
-4. **VALIDATE CURRENT COSTS**: 
+4. **VALIDATE CURRENT COSTS**:
    - Using the SKU/tier configurations discovered in Step 2
    - Look up current Azure pricing at https://azure.microsoft.com/en-us/pricing/ or use `az billing` commands
    - Document: Resource → Current SKU → Estimated monthly cost
@@ -109,36 +109,36 @@ This workflow analyzes Infrastructure-as-Code (IaC) files and Azure resources to
 **Tools**: Local analysis using collected data
 **Process**:
 1. **Apply Optimization Patterns** based on resource types found:
-   
+
    **Compute Optimizations**:
    - App Service Plans: Right-size based on CPU/memory usage
    - Function Apps: Premium → Consumption plan for low usage
    - Virtual Machines: Scale down oversized instances
-   
+
    **Database Optimizations**:
-   - Cosmos DB: 
+   - Cosmos DB:
      - Provisioned → Serverless for variable workloads
      - Right-size RU/s based on actual usage
    - SQL Database: Right-size service tiers based on DTU usage
-   
+
    **Storage Optimizations**:
    - Implement lifecycle policies (Hot → Cool → Archive)
    - Consolidate redundant storage accounts
    - Right-size storage tiers based on access patterns
-   
+
    **Infrastructure Optimizations**:
    - Remove unused/redundant resources
    - Implement auto-scaling where beneficial
    - Schedule non-production environments
 
-2. **Calculate Evidence-Based Savings**: 
+2. **Calculate Evidence-Based Savings**:
    - Current validated cost → Target cost = Savings
    - Document pricing source for both current and target configurations
 
 3. **Calculate Priority Score** for each recommendation:
    ```
    Priority Score = (Value Score × Monthly Savings) / (Risk Score × Implementation Days)
-   
+
    High Priority: Score > 20
    Medium Priority: Score 5-20
    Low Priority: Score < 5
@@ -155,26 +155,26 @@ This workflow analyzes Infrastructure-as-Code (IaC) files and Azure resources to
 **Process**:
 1. **Display Optimization Summary**:
    ```
-   🎯 Azure Cost Optimization Summary
-   
-   📊 Analysis Results:
+   Azure Cost Optimization Summary
+
+   Analysis Results:
    • Total Resources Analyzed: X
-   • Current Monthly Cost: $X 
-   • Potential Monthly Savings: $Y 
+   • Current Monthly Cost: $X
+   • Potential Monthly Savings: $Y
    • Optimization Opportunities: Z
    • High Priority Items: N
-   
-   🏆 Recommendations:
+
+   Recommendations:
    1. [Resource]: [Current SKU] → [Target SKU] = $X/month savings - [Risk Level] | [Implementation Effort]
    2. [Resource]: [Current Config] → [Target Config] = $Y/month savings - [Risk Level] | [Implementation Effort]
    3. [Resource]: [Current Config] → [Target Config] = $Z/month savings - [Risk Level] | [Implementation Effort]
    ... and so on
-   
-   💡 This will create:
+
+   This will create:
    • Y individual GitHub issues (one per optimization)
    • 1 EPIC issue to coordinate implementation
-   
-   ❓ Proceed with creating GitHub issues? (y/n)
+
+   Proceed with creating GitHub issues? (y/n)
    ```
 
 2. **Wait for User Confirmation**: Only proceed if user confirms
@@ -186,47 +186,47 @@ This workflow analyzes Infrastructure-as-Code (IaC) files and Azure resources to
 1. **Create Individual Issues** using this template:
 
    **Title Format**: `[COST-OPT] [Resource Type] - [Brief Description] - $X/month savings`
-   
+
    **Body Template**:
    ```markdown
-   ## 💰 Cost Optimization: [Brief Title]
-   
+   ## Cost Optimization: [Brief Title]
+
    **Monthly Savings**: $X | **Risk Level**: [Low/Medium/High] | **Implementation Effort**: X days
-   
-   ### 📋 Description
+
+   ### Description
    [Clear explanation of the optimization and why it's needed]
-   
-   ### 🔧 Implementation
-   
+
+   ### Implementation
+
    **IaC Files Detected**: [Yes/No - based on file_search results]
-   
+
    ```bash
    # If IaC files found: Show IaC modifications + deployment
    # File: infrastructure/bicep/modules/app-service.bicep
    # Change: sku.name: 'S3' → 'B2'
    az deployment group create --resource-group [rg] --template-file infrastructure/bicep/main.bicep
-   
+
    # If no IaC files: Direct Azure CLI commands + warning
-   # ⚠️ No IaC files found. If they exist elsewhere, modify those instead.
+   # No IaC files found. If they exist elsewhere, modify those instead.
    az appservice plan update --name [plan] --sku B2
    ```
-   
-   ### 📊 Evidence
+
+   ### Evidence
    - Current Configuration: [details]
    - Usage Pattern: [evidence from monitoring data]
    - Cost Impact: $X/month → $Y/month
    - Best Practice Alignment: [reference to Azure best practices if applicable]
-   
-   ### ✅ Validation Steps
+
+   ### Validation Steps
    - [ ] Test in non-production environment
    - [ ] Verify no performance degradation
    - [ ] Confirm cost reduction in Azure Cost Management
    - [ ] Update monitoring and alerts if needed
-   
-   ### ⚠️ Risks & Considerations
+
+   ### Risks & Considerations
    - [Risk 1 and mitigation]
    - [Risk 2 and mitigation]
-   
+
    **Priority Score**: X | **Value**: X/10 | **Risk**: X/10
    ```
 
@@ -238,53 +238,53 @@ This workflow analyzes Infrastructure-as-Code (IaC) files and Azure resources to
 1. **Create EPIC Issue**:
 
    **Title**: `[EPIC] Azure Cost Optimization Initiative - $X/month potential savings`
-   
+
    **Body Template**:
    ```markdown
-   # 🎯 Azure Cost Optimization EPIC
-   
+   # Azure Cost Optimization EPIC
+
    **Total Potential Savings**: $X/month | **Implementation Timeline**: X weeks
-   
-   ## 📊 Executive Summary
+
+   ## Executive Summary
    - **Resources Analyzed**: X
-   - **Optimization Opportunities**: Y  
+   - **Optimization Opportunities**: Y
    - **Total Monthly Savings Potential**: $X
    - **High Priority Items**: N
-   
-   ## 🏗️ Current Architecture Overview
-   
+
+   ## Current Architecture Overview
+
    ```mermaid
    graph TB
        subgraph "Resource Group: [name]"
            [Generated architecture diagram showing current resources and costs]
        end
    ```
-   
-   ## 📋 Implementation Tracking
-   
-   ### 🚀 High Priority (Implement First)
+
+   ## Implementation Tracking
+
+   ### High Priority (Implement First)
    - [ ] #[issue-number]: [Title] - $X/month savings
    - [ ] #[issue-number]: [Title] - $X/month savings
-   
-   ### ⚡ Medium Priority 
+
+   ### Medium Priority
    - [ ] #[issue-number]: [Title] - $X/month savings
    - [ ] #[issue-number]: [Title] - $X/month savings
-   
-   ### 🔄 Low Priority (Nice to Have)
+
+   ### Low Priority (Nice to Have)
    - [ ] #[issue-number]: [Title] - $X/month savings
-   
-   ## 📈 Progress Tracking
+
+   ## Progress Tracking
    - **Completed**: 0 of Y optimizations
    - **Savings Realized**: $0 of $X/month
    - **Implementation Status**: Not Started
-   
-   ## 🎯 Success Criteria
+
+   ## Success Criteria
    - [ ] All high-priority optimizations implemented
    - [ ] >80% of estimated savings realized
    - [ ] No performance degradation observed
    - [ ] Cost monitoring dashboard updated
-   
-   ## 📝 Notes
+
+   ## Notes
    - Review and update this EPIC as issues are completed
    - Monitor actual vs. estimated savings
    - Consider scheduling regular cost optimization reviews
@@ -298,10 +298,10 @@ This workflow analyzes Infrastructure-as-Code (IaC) files and Azure resources to
 - **Insufficient Usage Data**: Note limitations and provide configuration-based recommendations only
 
 ## Success Criteria
-- ✅ All cost estimates verified against actual resource configurations and Azure pricing
-- ✅ Individual issues created for each optimization (trackable and assignable)
-- ✅ EPIC issue provides comprehensive coordination and tracking
-- ✅ All recommendations include specific, executable Azure CLI commands
-- ✅ Priority scoring enables ROI-focused implementation
-- ✅ Architecture diagram accurately represents current state
-- ✅ User confirmation prevents unwanted issue creation
+- All cost estimates verified against actual resource configurations and Azure pricing
+- Individual issues created for each optimization (trackable and assignable)
+- EPIC issue provides comprehensive coordination and tracking
+- All recommendations include specific, executable Azure CLI commands
+- Priority scoring enables ROI-focused implementation
+- Architecture diagram accurately represents current state
+- User confirmation prevents unwanted issue creation

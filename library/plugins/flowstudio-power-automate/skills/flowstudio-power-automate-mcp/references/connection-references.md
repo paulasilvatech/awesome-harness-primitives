@@ -74,7 +74,7 @@ conn_refs = flow["properties"]["connectionReferences"]
 # → "shared-sharepointonl-eeeeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee"
 ```
 
-> ⚠️ Connection references are **user-scoped**. If a connection is owned
+> Connection references are **user-scoped**. If a connection is owned
 > by another account, `update_live_flow` will return 403
 > `ConnectionAuthorizationFailed`. You must use a connection belonging to
 > the account whose token is in the `x-api-key` header.

@@ -17,7 +17,7 @@ Create individual files in `${input:FolderPath|docs/spikes}` directory. Name eac
 ---
 title: "${input:SpikeTitle}"
 category: "${input:Category|Technical}"
-status: "🔴 Not Started"
+status: " Not Started"
 priority: "${input:Priority|High}"
 timebox: "${input:Timebox|1 week}"
 created: [YYYY-MM-DD]
@@ -117,9 +117,9 @@ tags: ["technical-spike", "${input:Category|technical}", "research"]
 
 | Date   | Status         | Notes                      |
 | ------ | -------------- | -------------------------- |
-| [Date] | 🔴 Not Started | Spike created and scoped   |
-| [Date] | 🟡 In Progress | Research commenced         |
-| [Date] | 🟢 Complete    | [Resolution summary]       |
+| [Date] | Not Started | Spike created and scoped |
+| [Date] | In Progress | Research commenced |
+| [Date] | Complete | [Resolution summary] |
 
 ---
 
@@ -168,19 +168,19 @@ _Last updated: [Date] by [Name]_
 
 Use descriptive, kebab-case names that indicate the category and specific unknown:
 
-**API/Integration Examples:**
+**API/Integration Examples: **
 
 - `api-copilot-chat-integration-spike.md`
 - `api-azure-speech-realtime-spike.md`
 - `api-vscode-extension-capabilities-spike.md`
 
-**Performance Examples:**
+**Performance Examples: **
 
 - `performance-audio-processing-latency-spike.md`
 - `performance-extension-host-limitations-spike.md`
 - `performance-webrtc-reliability-spike.md`
 
-**Architecture Examples:**
+**Architecture Examples: **
 
 - `architecture-voice-pipeline-design-spike.md`
 - `architecture-state-management-spike.md`
@@ -188,45 +188,45 @@ Use descriptive, kebab-case names that indicate the category and specific unknow
 
 ## Best Practices for AI Agents
 
-1. **One Question Per Spike:** Each document focuses on a single technical decision or research question
+1. **One Question Per Spike: ** Each document focuses on a single technical decision or research question
 
-2. **Time-Boxed Research:** Define specific time limits and deliverables for each spike
+2. **Time-Boxed Research: ** Define specific time limits and deliverables for each spike
 
-3. **Evidence-Based Decisions:** Require concrete evidence (tests, prototypes, documentation) before marking as complete
+3. **Evidence-Based Decisions: ** Require concrete evidence (tests, prototypes, documentation) before marking as complete
 
-4. **Clear Recommendations:** Document specific recommendations and rationale for implementation
+4. **Clear Recommendations: ** Document specific recommendations and rationale for implementation
 
-5. **Dependency Tracking:** Identify how spikes relate to each other and impact project decisions
+5. **Dependency Tracking: ** Identify how spikes relate to each other and impact project decisions
 
-6. **Outcome-Focused:** Every spike must result in an actionable decision or recommendation
+6. **Outcome-Focused: ** Every spike must result in an actionable decision or recommendation
 
 ## Research Strategy
 
 ### Phase 1: Information Gathering
 
-1. **Search existing documentation** using search/fetch tools
-2. **Analyze codebase** for existing patterns and constraints
-3. **Research external resources** (APIs, libraries, examples)
+1. **Search existing documentation ** using search/fetch tools
+2. **Analyze codebase ** for existing patterns and constraints
+3. **Research external resources ** (APIs, libraries, examples)
 
 ### Phase 2: Validation & Testing
 
-1. **Create focused prototypes** to test specific hypotheses
-2. **Run targeted experiments** to validate assumptions
-3. **Document test results** with supporting evidence
+1. **Create focused prototypes ** to test specific hypotheses
+2. **Run targeted experiments ** to validate assumptions
+3. **Document test results ** with supporting evidence
 
 ### Phase 3: Decision & Documentation
 
-1. **Synthesize findings** into clear recommendations
-2. **Document implementation guidance** for development team
-3. **Create follow-up tasks** for implementation
+1. **Synthesize findings ** into clear recommendations
+2. **Document implementation guidance ** for development team
+3. **Create follow-up tasks ** for implementation
 
 ## Tools Usage
 
-- **search/searchResults:** Research existing solutions and documentation
-- **fetch/githubRepo:** Analyze external APIs, libraries, and examples
-- **codebase:** Understand existing system constraints and patterns
-- **runTasks:** Execute prototypes and validation tests
-- **editFiles:** Update research progress and findings
-- **vscodeAPI:** Test VS Code extension capabilities and limitations
+- **search/searchResults: ** Research existing solutions and documentation
+- **fetch/githubRepo: ** Analyze external APIs, libraries, and examples
+- **codebase: ** Understand existing system constraints and patterns
+- **runTasks: ** Execute prototypes and validation tests
+- **editFiles: ** Update research progress and findings
+- **vscodeAPI: ** Test VS Code extension capabilities and limitations
 
 Focus on time-boxed research that resolves critical technical decisions and unblocks development progress.

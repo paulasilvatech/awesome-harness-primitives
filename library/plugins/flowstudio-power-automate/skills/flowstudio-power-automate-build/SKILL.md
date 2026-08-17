@@ -14,7 +14,7 @@ description: >-
 Step-by-step guide for constructing and deploying Power Automate cloud flows
 programmatically through the FlowStudio MCP server.
 
-**Prerequisite**: A FlowStudio MCP server must be reachable with a valid JWT.
+**Prerequisite **: A FlowStudio MCP server must be reachable with a valid JWT.
 See the `flowstudio-power-automate-mcp` skill for connection setup.
 Subscribe at https://mcp.flowstudio.app
 
@@ -31,7 +31,7 @@ Workflow:
 
 ## Source of Truth
 
-> **Always call `list_skills` / `tool_search` first** to confirm available tool
+> **Always call `list_skills` / `tool_search` first ** to confirm available tool
 > names and parameter schemas. Tool names and parameters may change between
 > server versions.
 > This skill covers response shapes, behavioral notes, and build patterns —
@@ -127,7 +127,7 @@ Every connector action needs a `connectionName` that points to a key in the
 flow's `connectionReferences` map. That key links to an authenticated connection
 in the environment.
 
-> **MANDATORY**: You MUST call `list_live_connections` first — do NOT ask the
+> **MANDATORY **: You MUST call `list_live_connections` first — do NOT ask the
 > user for connection names or GUIDs. The API returns the exact values you need.
 > Only prompt the user if the API confirms that required connections are missing.
 
@@ -305,7 +305,7 @@ if result.get("error") is not None:
 else:
     # Capture the new flow ID for subsequent steps
     FLOW_ID = result["created"]
-    print(f"✅ Flow created: {FLOW_ID}")
+    print(f" Flow created: {FLOW_ID}")
 ```
 
 ### Update an existing flow
@@ -331,10 +331,10 @@ else:
     print("Update succeeded:", result)
 ```
 
-> ⚠️ `update_live_flow` always returns an `error` key.
+> `update_live_flow` always returns an `error` key.
 > `null` (Python `None`) means success — do not treat the presence of the key as failure.
 >
-> ⚠️ Flow description lives at `definition["description"]`. The current server
+> Flow description lives at `definition["description"]`. The current server
 > appends `#flowstudio-mcp` for usage tracking. Do not pass a top-level
 > `description` argument unless `tool_search` shows one in the active schema.
 
@@ -342,7 +342,7 @@ else:
 
 | Error message (contains) | Cause | Fix |
 |---|---|---|
-| `missing from connectionReferences` | An action's `host.connectionName` references a key that doesn't exist in the `connectionReferences` map | Ensure `host.connectionName` uses the **key** from `connectionReferences` (e.g. `shared_teams`), not the raw GUID |
+| `missing from connectionReferences` | An action's `host.connectionName` references a key that doesn't exist in the `connectionReferences` map | Ensure `host.connectionName` uses the **key ** from `connectionReferences` (e.g. `shared_teams`), not the raw GUID |
 | `ConnectionAuthorizationFailed` / 403 | The connection GUID belongs to another user or is not authorized | Re-run Step 2a and use a connection owned by the current `x-api-key` user |
 | `InvalidTemplate` / `InvalidDefinition` | Syntax error in the definition JSON | Check `runAfter` chains, expression syntax, and action type spelling |
 | `ConnectionNotConfigured` | A connector action exists but the connection GUID is invalid or expired | Re-check `list_live_connections` for a fresh GUID |
@@ -368,7 +368,7 @@ print("Actions:", list(acts.keys()))
 
 ## 6. Test the Flow
 
-> **MANDATORY**: Before triggering any test run, **ask the user for confirmation**.
+> **MANDATORY **: Before triggering any test run, ** ask the user for confirmation **.
 > Running a flow has real side effects — it may send emails, post Teams messages,
 > write to SharePoint, start approvals, or call external APIs. Explain what the
 > flow will do and wait for explicit approval before calling `trigger_live_flow`
@@ -376,7 +376,7 @@ print("Actions:", list(acts.keys()))
 
 ### Updated flows (have prior runs) — ANY trigger type
 
-> **Use `resubmit_live_flow_run` first.** It works for EVERY trigger type —
+> **Use `resubmit_live_flow_run` first. ** It works for EVERY trigger type —
 > Recurrence, SharePoint, connector webhooks, Button, and HTTP. It replays
 > the original trigger payload. Do NOT ask the user to manually trigger the
 > flow or wait for the next scheduled run.
@@ -392,7 +392,7 @@ if runs:
 
 ### HTTP-triggered flows — custom test payload
 
-Only use `trigger_live_flow` when you need to send a **different** payload
+Only use `trigger_live_flow` when you need to send a **different ** payload
 than the original run. For verifying a fix, `resubmit_live_flow_run` is
 better because it uses the exact data that caused the failure.
 
@@ -410,10 +410,10 @@ print(f"Status: {result['responseStatus']}")
 
 ### Brand-new non-HTTP flows (Recurrence, connector triggers, etc.)
 
-A brand-new Recurrence or connector-triggered flow has **no prior runs** to
+A brand-new Recurrence or connector-triggered flow has **no prior runs ** to
 resubmit and no HTTP endpoint to call. This is the ONLY scenario where you
 need the temporary HTTP trigger approach below. **Deploy with a temporary
-HTTP trigger first, test the actions, then swap to the production trigger.**
+HTTP trigger first, test the actions, then swap to the production trigger. **
 
 Compact recipe:
 
@@ -464,7 +464,7 @@ payload.
 | `union(old_data, new_data)` | Old values override new (first-wins) | Use `union(new_data, old_data)` |
 | `split()` on potentially-null string | `InvalidTemplate` crash | Wrap with `coalesce(field, '')` |
 | Checking `result["error"]` exists | Always present; true error is `!= null` | Use `result.get("error") is not None` |
-| Flow deployed but state is "Stopped" | Flow won't run on schedule | Call `set_live_flow_state` with `state: "Started"` — do **not** use `update_live_flow` for state changes |
+| Flow deployed but state is "Stopped" | Flow won't run on schedule | Call `set_live_flow_state` with `state: "Started"` — do **not ** use `update_live_flow` for state changes |
 | Teams "Chat with Flow bot" recipient as object | 400 `GraphUserDetailNotFound` | Use plain string with trailing semicolon (see below) |
 | Copilot/Skills flow not in a solution | Copilot Studio may not discover it as an agent tool | After deploy, call `add_live_flow_to_solution` with the target `solutionId` |
 | Button/Skills trigger used for MCP testing | MCP cannot directly fire the production trigger | Test the same actions through a temporary HTTP twin, then swap the trigger back |
@@ -479,10 +479,10 @@ The `body/recipient` parameter format depends on the `location` value:
 
 | Location | `body/recipient` format | Example |
 |---|---|---|
-| **Chat with Flow bot** | Plain email string with **trailing semicolon** | `"user@contoso.com;"` |
-| **Channel** | Object with `groupId` and `channelId` | `{"groupId": "...", "channelId": "..."}` |
+| **Chat with Flow bot ** | Plain email string with ** trailing semicolon ** | `"user@contoso.com;"` |
+| **Channel ** | Object with `groupId` and `channelId` | `{"groupId": "...", "channelId": "..."}` |
 
-> **Common mistake**: passing `{"to": "user@contoso.com"}` for "Chat with Flow bot"
+> **Common mistake **: passing `{"to": "user@contoso.com"}` for "Chat with Flow bot"
 > returns a 400 `GraphUserDetailNotFound` error. The API expects a plain string.
 
 ---

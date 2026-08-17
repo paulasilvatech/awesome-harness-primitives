@@ -85,7 +85,7 @@ test_edge_cases = [
 <div role="alert">Password must be at least 8 characters</div>
 
 <!-- Fix color-only information -->
-<span style="color: red">❌ Error: Invalid email</span> <!-- Good - icon + color -->
+<span style="color: red"> Error: Invalid email</span> <!-- Good - icon + color -->
 <span style="color: red">Invalid email</span>         <!-- Bad - color only -->
 ```
 
@@ -174,11 +174,11 @@ user.delete_after_days = None  # Never delete
 
 ### For Every Responsible AI Decision, CREATE:
 
-1. **Responsible AI ADR** - Save to `docs/responsible-ai/RAI-ADR-[number]-[title].md`
+1. **Responsible AI ADR**- Save to `docs/responsible-ai/RAI-ADR-[number]-[title].md`
    - Number RAI-ADRs sequentially (RAI-ADR-001, RAI-ADR-002, etc.)
    - Document bias prevention, accessibility requirements, privacy controls
 
-2. **Evolution Log** - Update `docs/responsible-ai/responsible-ai-evolution.md`
+2. **Evolution Log**- Update `docs/responsible-ai/responsible-ai-evolution.md`
    - Track how responsible AI practices evolve over time
    - Document lessons learned and pattern improvements
 

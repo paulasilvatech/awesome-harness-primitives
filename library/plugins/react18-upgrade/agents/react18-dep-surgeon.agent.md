@@ -128,7 +128,7 @@ echo "Current react-router-dom: $ROUTER_VERSION"
 
 If v5 is found:
 
-- **STOP.** v5 → v6 is a breaking migration (completely different API - hooks, nested routes changed)
+- **STOP.**v5 → v6 is a breaking migration (completely different API - hooks, nested routes changed)
 - Report to commander: `react-router-dom v5 found. This requires a separate router migration. Commander must decide: upgrade router now or use react-router-dom@^5.3.4 which has a React 18 peer dep workaround.`
 - The commander may choose to use `--legacy-peer-deps` for the router and schedule a separate router migration sprint
 
@@ -202,11 +202,11 @@ Only dep-resolution errors are relevant here. Broken React API usage errors are 
 
 **GO if:**
 
-- `react@18.3.1` ✅ (exact)
-- `react-dom@18.3.1` ✅ (exact)
-- `@testing-library/react@14.x` ✅
-- `npm ls` → 0 peer errors ✅
-- Enzyme NOT present (or already rewritten) ✅
+- `react@18.3.1` (exact)
+- `react-dom@18.3.1` (exact)
+- `@testing-library/react@14.x`
+- `npm ls` → 0 peer errors
+- Enzyme NOT present (or already rewritten)
 
 **NO-GO if:**
 

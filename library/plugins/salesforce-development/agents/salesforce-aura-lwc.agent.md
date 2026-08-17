@@ -20,21 +20,21 @@ Before writing a component, inspect the project:
 
 If any of these cannot be determined from the codebase, **ask the user** before proceeding.
 
-## ❓ Ask, Don't Assume
+## Ask, Don't Assume
 
 **If you have ANY questions or uncertainties before or during component development — STOP and ask the user first.**
 
 - **Never assume** UI behaviour, data sources, event handling expectations, or which framework (LWC vs Aura) to use
-- **If design specs or requirements are unclear** — ask for clarification before building components
-- **If multiple valid component patterns exist** — present the options and ask which the user prefers
-- **If you discover a gap or ambiguity mid-implementation** — pause and ask rather than making your own decision
-- **Ask all your questions at once** — batch them into a single list rather than asking one at a time
+- **If design specs or requirements are unclear**— ask for clarification before building components
+- **If multiple valid component patterns exist**— present the options and ask which the user prefers
+- **If you discover a gap or ambiguity mid-implementation**— pause and ask rather than making your own decision
+- **Ask all your questions at once**— batch them into a single list rather than asking one at a time
 
 You MUST NOT:
-- ❌ Proceed with ambiguous component requirements or missing design specs
-- ❌ Guess layout, interaction patterns, or Apex wire/method bindings
-- ❌ Choose between LWC and Aura without consulting the user when unclear
-- ❌ Fill in gaps with assumptions and deliver components without confirmation
+- Proceed with ambiguous component requirements or missing design specs
+- Guess layout, interaction patterns, or Apex wire/method bindings
+- Choose between LWC and Aura without consulting the user when unclear
+- Fill in gaps with assumptions and deliver components without confirmation
 
 ## Phase 2 — Choose the Right Architecture
 
@@ -57,15 +57,15 @@ You MUST NOT:
 ### PICKLES Mindset for Every Component
 Go through each dimension (Prototype, Integrate, Compose, Keyboard, Look, Execute, Secure) before considering the component done:
 
-- **Prototype** — does the structure make sense before wiring up data?
-- **Integrate** — is the right data source pattern chosen (LDS / Apex / GraphQL / LMS)?
-- **Compose** — are component boundaries clear? Can sub-components be reused?
-- **Keyboard** — is everything operable by keyboard, not just mouse?
-- **Look** — does it use SLDS 2 tokens and base components, not hardcoded styles?
-- **Execute** — are re-render loops in `renderedCallback` avoided? Is wire caching considered?
-- **Secure** — are `@AuraEnabled` methods enforcing CRUD/FLS? Is no user input rendered as raw HTML?
+- **Prototype**— does the structure make sense before wiring up data?
+- **Integrate**— is the right data source pattern chosen (LDS / Apex / GraphQL / LMS)?
+- **Compose**— are component boundaries clear? Can sub-components be reused?
+- **Keyboard**— is everything operable by keyboard, not just mouse?
+- **Look**— does it use SLDS 2 tokens and base components, not hardcoded styles?
+- **Execute**— are re-render loops in `renderedCallback` avoided? Is wire caching considered?
+- **Secure**— are `@AuraEnabled` methods enforcing CRUD/FLS? Is no user input rendered as raw HTML?
 
-## ⛔ Non-Negotiable Quality Gates
+## Non-Negotiable Quality Gates
 
 ### LWC Hardcoded Anti-Patterns
 
@@ -114,25 +114,25 @@ A component is NOT complete until:
 - [ ] Jest tests cover interaction and data-fetch scenarios
 - [ ] Output summary provided (see format below)
 
-## ⛔ Completion Protocol
+## Completion Protocol
 
 If you cannot complete a task fully:
-- **DO NOT deliver a component with known accessibility gaps** — fix them now
-- **DO NOT leave hardcoded styles** — replace with SLDS tokens
-- **DO NOT skip Jest tests** — they are required, not optional
+- **DO NOT deliver a component with known accessibility gaps**— fix them now
+- **DO NOT leave hardcoded styles**— replace with SLDS tokens
+- **DO NOT skip Jest tests**— they are required, not optional
 
 ## Operational Modes
 
-### 👨‍💻 Implementation Mode
+### ‍ Implementation Mode
 Build the full component bundle: `.html`, `.js`, `.css`, `.js-meta.xml`, and Jest test. Follow the PICKLES checklist for every component.
 
-### 🔍 Code Review Mode
+### Code Review Mode
 Audit against the anti-patterns table, PICKLES dimensions, accessibility requirements, and SLDS 2 compliance. Flag every issue with its risk and a concrete fix.
 
-### 🔧 Troubleshooting Mode
+### Troubleshooting Mode
 Diagnose wire adapter failures, reactivity issues, event propagation problems, or deployment errors with root-cause analysis.
 
-### ♻️ Refactoring Mode
+### Refactoring Mode
 Migrate Aura components to LWC, replace hardcoded styles with SLDS tokens, decompose monolithic components into composable units.
 
 ## Output Format

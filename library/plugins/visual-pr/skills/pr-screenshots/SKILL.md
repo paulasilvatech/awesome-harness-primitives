@@ -61,12 +61,12 @@ For PRs with several visual changes, use separate before/after pairs with headin
 
 ## Image Sizing
 
-- **Take screenshots at native 1x resolution** — don't resize with PIL (creates artifacts)
-- **Control display size in HTML** when images are too large:
+- **Take screenshots at native 1x resolution ** — don't resize with PIL (creates artifacts)
+- **Control display size in HTML ** when images are too large:
   ```html
   <img src="url" width="600" alt="description">
   ```
-- **Before/after pairs must use the same viewport width and crop** — otherwise the comparison is meaningless
+- **Before/after pairs must use the same viewport width and crop ** — otherwise the comparison is meaningless
 
 ## Uploading Images
 
@@ -100,7 +100,7 @@ Reference in the PR description:
 ![description](https://{org}.visualstudio.com/{projectId}/_apis/git/repositories/{repoId}/pullRequests/{prId}/attachments/screenshot.png)
 ```
 
-**Azure DevOps gotchas:**
+**Azure DevOps gotchas: **
 
 - **Use `{org}.visualstudio.com` NOT `dev.azure.com/{org}`** — AzDO's markdown renderer uses `.visualstudio.com`. The `dev.azure.com` format loads noticeably slower
 - Use `POST` not `PUT` (PUT returns 405)
@@ -112,17 +112,17 @@ Reference in the PR description:
 
 ### GitHub
 
-> **⚠️ Work in progress.** GitHub's drag-and-drop image upload uses internal endpoints that require browser cookies. There's no clean public API for uploading images to PR descriptions yet.
+> **Work in progress. ** GitHub's drag-and-drop image upload uses internal endpoints that require browser cookies. There's no clean public API for uploading images to PR descriptions yet.
 
-**Current workaround:** Commit images to a `pr-assets` orphan branch and reference via blob URLs (`github.com/{owner}/{repo}/blob/pr-assets/{file}?raw=true`). It works but is clunky — contributions for a better approach are welcome.
+**Current workaround: ** Commit images to a `pr-assets` orphan branch and reference via blob URLs (`github.com/{owner}/{repo}/blob/pr-assets/{file}?raw=true`). It works but is clunky — contributions for a better approach are welcome.
 
 ## Guidelines
 
-1. **Capture before state BEFORE making changes** — it's easy to forget, and reconstructing the original state later is slow and error-prone
-2. **Keep descriptions brief** — a sentence or two per image pointing out what changed is enough
-3. **Prefer visible images over collapsed sections** — screenshots behind `<details>` tags are easy to skip
-4. **Annotate when the change is subtle** — use the `image-annotations` skill to add callouts when the difference isn't immediately obvious
-5. **Match viewport and crop** between before/after pairs so the comparison is meaningful
+1. **Capture before state BEFORE making changes ** — it's easy to forget, and reconstructing the original state later is slow and error-prone
+2. **Keep descriptions brief ** — a sentence or two per image pointing out what changed is enough
+3. **Prefer visible images over collapsed sections ** — screenshots behind `<details>` tags are easy to skip
+4. **Annotate when the change is subtle ** — use the `image-annotations` skill to add callouts when the difference isn't immediately obvious
+5. **Match viewport and crop ** between before/after pairs so the comparison is meaningful
 
 ## Limitations
 

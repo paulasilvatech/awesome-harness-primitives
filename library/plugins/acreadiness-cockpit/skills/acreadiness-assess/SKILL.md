@@ -37,7 +37,7 @@ This skill is the *Measure* step in AgentRC's **Measure → Generate → Maintai
    - Tags every pillar with an **AI relevance** badge (High / Medium / Low).
    - Surfaces **Extras** separately (they never affect the score).
    - Shows the **Active Policy** including any disabled/overridden criteria and thresholds.
-   - Produces a **Prioritised Remediation Plan** (🔴 Fix First / 🟡 Fix Next / 🔵 Plan).
+   - Produces a **Prioritised Remediation Plan** ( Fix First /  Fix Next /  Plan).
    - Embeds the raw AgentRC JSON for reuse.
 
 5. **Tell the user where the report lives** (`reports/index.html`) and how to open it. Summarise in chat: maturity level, overall score, top three lowest pillars, and the single highest-leverage next action (almost always: run the `acreadiness-generate-instructions` skill).

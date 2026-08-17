@@ -24,13 +24,13 @@ genuinely supportive for neurodivergent people. Two ground rules:
 | **Overwhelm** — a long list paralyzes | reduce visible load; one thing at a time | **Focus mode** dims all but one; carryover keeps the list short |
 | **Dopamine / reward** — interest- & urgency-driven; needs immediate payoff | instant, visible reward + novelty | progress ring, confetti, momentum feed; **starting counts** (flip to in-progress — the partner can log it in the feed); rotating encouragements |
 | **Perfectionism / shame spiral** — miss one → abandon the whole system | no punishment; partial credit; easy defer | **"not today" carryover** (no overdue-shaming); "in progress" counts; carried items leave the ring math |
-| **Intrusive thoughts** — a stray thought pulls you off task | frictionless capture, deal with it later | **🧠 brain-dump box** ("park it, keep going") |
+| **Intrusive thoughts** — a stray thought pulls you off task | frictionless capture, deal with it later | ** brain-dump box** ("park it, keep going") |
 | **Task-switching / transitions** | explicit "what's next" handoff | agent behavior: name ONE next action, offer Focus mode |
 | **Body-doubling** — focus improves with a present partner | be the other-in-the-room | the whole premise: you drive the board *by talking to your AI partner* |
 | **Sensory / motion sensitivity** | calm base, optional stimulation | **reduced-motion toggle** (kills confetti/transitions); honors `prefers-reduced-motion` by default |
 | **Self-regulation / interoception** — reacting before noticing your state | *locate yourself* without judgment first | **above/below-the-line check-in** (from Conscious Leadership); below-the-line quietly softens the partner's suggestions |
-| **Motivation / self-talk** — a bare to-do list is joyless | a kind, chosen intention | **daily mantra** — self-set or 🔄-suggested, keyed to the check-in (grounding when below, momentum when above) |
-| **Prioritization overwhelm** — everything feels equally urgent | separate *important* from *urgent* | **Eisenhower quadrants** (Do first / Schedule / Delegate / Later) + **sort by priority** + a 🧭 plain-language legend |
+| **Motivation / self-talk** — a bare to-do list is joyless | a kind, chosen intention | **daily mantra** — self-set or -suggested, keyed to the check-in (grounding when below, momentum when above) |
+| **Prioritization overwhelm** — everything feels equally urgent | separate *important* from *urgent* | **Eisenhower quadrants** (Do first / Schedule / Delegate / Later) + **sort by priority** + a  plain-language legend |
 | **Agency / ownership** — rigid systems get abandoned | let people shape their own tool | **drag-to-reorder** (or ▲/▼ / keyboard), **editable labels**, **add tasks** live (remove the ones you add) |
 | **Closure / reflection** — days blur together without a marker | end with a gentle, concrete recap | **end-of-day save** — download or copy a Markdown recap; paste it to the partner to journal and plan tomorrow |
 

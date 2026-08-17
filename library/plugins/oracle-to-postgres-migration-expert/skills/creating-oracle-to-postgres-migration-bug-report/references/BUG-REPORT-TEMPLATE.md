@@ -13,7 +13,7 @@ BUG_REPORT_<DescriptiveSlug>.md
 ```markdown
 # Bug Report: <Title>
 
-**Status:** ✅ RESOLVED | ⛔ UNRESOLVED | ⏳ IN PROGRESS
+**Status:**  RESOLVED |  UNRESOLVED | ⏳ IN PROGRESS
 **Component:** <High-level component/endpoint and key method(s)>
 **Test:** <Related automated test names>
 **Severity:** Low | Medium | High | Critical
@@ -65,8 +65,8 @@ are already applied or still needed.>
 
 | Status | Meaning |
 |--------|---------|
-| ✅ RESOLVED | Defect has been fixed and verified |
-| ⛔ UNRESOLVED | Defect has not been addressed yet |
+| RESOLVED | Defect has been fixed and verified |
+| UNRESOLVED | Defect has not been addressed yet |
 | ⏳ IN PROGRESS | Defect is being investigated or fix is underway |
 
 ## Style Rules

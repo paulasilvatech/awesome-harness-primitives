@@ -285,7 +285,7 @@ for action_name in [root_action, "Compose_WeekEnd", "HTTP_Get_Data"]:
     print(f"Outputs: {json.dumps(out.get('outputs', ''), indent=2)[:300]}")
 ```
 
-> ⚠️ Output payloads from array-processing actions can be very large.
+>Output payloads from array-processing actions can be very large.
 > Always slice (e.g. `[:500]`) before printing.
 
 > **Tip**: Omit `actionName` to list top-level actions when you're not sure
@@ -375,7 +375,7 @@ result = mcp("update_live_flow",
 print(result.get("error"))  # None = success
 ```
 
-> ⚠️ `update_live_flow` always returns an `error` key.
+>`update_live_flow` always returns an `error` key.
 > A value of `null` (Python `None`) means success.
 
 ---

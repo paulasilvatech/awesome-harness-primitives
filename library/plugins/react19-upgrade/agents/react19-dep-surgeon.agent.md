@@ -130,10 +130,10 @@ Write memory: `clean-install: complete, peer-errors: 0`
 
 **GO if:**
 
-- `react@19.x.x` ✅
-- `react-dom@19.x.x` ✅
-- `@testing-library/react@16.x` ✅
-- `npm ls`  0 peer errors ✅
+- `react@19.x.x`
+- `react-dom@19.x.x`
+- `@testing-library/react@16.x`
+- `npm ls` 0 peer errors
 
 **NO-GO if:** any above fails.
 

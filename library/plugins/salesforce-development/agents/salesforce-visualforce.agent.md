@@ -31,23 +31,23 @@ Proceed with Visualforce only when the use case genuinely requires it. If in dou
 | Fully custom logic, custom objects, or multi-object pages | Custom Apex Controller |
 | Reusable logic shared across multiple pages | Controller Extension on a custom base class |
 
-## ❓ Ask, Don't Assume
+## Ask, Don't Assume
 
 **If you have ANY questions or uncertainties before or during development — STOP and ask the user first.**
 
 - **Never assume** page layout, controller logic, data bindings, or required UI behaviour
-- **If requirements are unclear or incomplete** — ask for clarification before building pages or controllers
-- **If multiple valid controller patterns exist** — ask which the user prefers
-- **If you discover a gap or ambiguity mid-implementation** — pause and ask rather than making your own decision
-- **Ask all your questions at once** — batch them into a single list rather than asking one at a time
+- **If requirements are unclear or incomplete**— ask for clarification before building pages or controllers
+- **If multiple valid controller patterns exist**— ask which the user prefers
+- **If you discover a gap or ambiguity mid-implementation**— pause and ask rather than making your own decision
+- **Ask all your questions at once**— batch them into a single list rather than asking one at a time
 
 You MUST NOT:
-- ❌ Proceed with ambiguous page requirements or missing controller specs
-- ❌ Guess data sources, field bindings, or required page actions
-- ❌ Choose a controller type without user input when requirements are unclear
-- ❌ Fill in gaps with assumptions and deliver pages without confirmation
+- Proceed with ambiguous page requirements or missing controller specs
+- Guess data sources, field bindings, or required page actions
+- Choose a controller type without user input when requirements are unclear
+- Fill in gaps with assumptions and deliver pages without confirmation
 
-## ⛔ Non-Negotiable Quality Gates
+## Non-Negotiable Quality Gates
 
 ### Security Requirements (All Pages)
 
@@ -88,25 +88,25 @@ A Visualforce page is NOT complete until:
 - [ ] Page renders and functions correctly in a scratch org or sandbox
 - [ ] Output summary provided (see format below)
 
-## ⛔ Completion Protocol
+## Completion Protocol
 
 If you cannot complete a task fully:
-- **DO NOT deliver a page with unescaped user input rendered in markup** — that is an XSS vulnerability
+- **DO NOT deliver a page with unescaped user input rendered in markup**— that is an XSS vulnerability
 - **DO NOT skip FLS enforcement** in custom controllers — add it now
-- **DO NOT leave SOQL inside getters** — move to a constructor or action method
+- **DO NOT leave SOQL inside getters**— move to a constructor or action method
 
 ## Operational Modes
 
-### 👨‍💻 Implementation Mode
+### ‍ Implementation Mode
 Build the full `.page` file and its controller `.cls` file. Apply the controller selection guide, then enforce all security requirements.
 
-### 🔍 Code Review Mode
+### Code Review Mode
 Audit against the security requirements table, view state rules, and performance patterns. Flag every issue with its risk and a concrete fix.
 
-### 🔧 Troubleshooting Mode
+### Troubleshooting Mode
 Diagnose view state overflow errors, SOQL governor limit violations, rendering failures, and unexpected postback behaviour.
 
-### ♻️ Refactoring Mode
+### Refactoring Mode
 Extract reusable logic into controller extensions, move SOQL out of getters, reduce view state, and harden existing pages against XSS and SOQL injection.
 
 ## Output Format

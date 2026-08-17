@@ -27,9 +27,9 @@ Create a complete MCP server implementation that:
    - Ensure all endpoints return full URIs
 
 3. **MCP Components to Include:**
-   - **Tools**: Functions for the language model to call (✅ Supported in Copilot Studio)
-   - **Resources**: File-like data outputs from tools (✅ Supported in Copilot Studio - must be tool outputs to be accessible)
-   - **Prompts**: Predefined templates for specific tasks (❌ Not yet supported in Copilot Studio)
+  - **Tools**: Functions for the language model to call ( Supported in Copilot Studio)
+  - **Resources**: File-like data outputs from tools ( Supported in Copilot Studio - must be tool outputs to be accessible)
+  - **Prompts**: Predefined templates for specific tasks ( Not yet supported in Copilot Studio)
 
 4. **Implementation Structure:**
    ```
@@ -44,7 +44,7 @@ Create a complete MCP server implementation that:
 ## Context Variables
 
 - **Server Purpose**: [Describe what the MCP server should accomplish]
-- **Tools Needed**: [List of specific tools to implement]  
+- **Tools Needed**: [List of specific tools to implement]
 - **Resources**: [Types of resources to provide]
 - **Authentication**: [Auth method: none, api-key, oauth2]
 - **Host Environment**: [Azure Function, Express.js, FastAPI, etc.]
@@ -107,7 +107,7 @@ Ensure generated code:
 
 ```yaml
 Server Purpose: Customer data management and analysis
-Tools Needed: 
+Tools Needed:
   - searchCustomers
   - getCustomerDetails
   - analyzeCustomerTrends

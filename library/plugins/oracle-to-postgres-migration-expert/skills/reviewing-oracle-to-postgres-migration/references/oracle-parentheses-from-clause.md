@@ -101,9 +101,9 @@ When fixing this issue, verify:
    - Confirm it's **not** a subquery (no SELECT keyword inside)
 
 2. **Distinguish valid parentheses**:
-   - ✅ `FROM (SELECT ...)` - Valid subquery
-   - ✅ `FROM (table_name` followed by a join - Check if JOIN keyword follows
-   - ❌ `FROM (TABLE_NAME)` - Invalid, remove parentheses
+  - `FROM (SELECT ...)` - Valid subquery
+  - `FROM (table_name` followed by a join - Check if JOIN keyword follows
+  - `FROM (TABLE_NAME)` - Invalid, remove parentheses
 
 3. **Apply the fix**:
    - Remove the parentheses around the table name
@@ -118,12 +118,12 @@ When fixing this issue, verify:
 
 Search for `FROM (` in:
 
-- ✅ Stored procedures and functions (DDL scripts)
-- ✅ Application data access layers (DAL classes)
-- ✅ Dynamic SQL builders
-- ✅ Reporting queries
-- ✅ Views and materialized views
-- ✅ Complex queries with multiple joins
+- Stored procedures and functions (DDL scripts)
+- Application data access layers (DAL classes)
+- Dynamic SQL builders
+- Reporting queries
+- Views and materialized views
+- Complex queries with multiple joins
 
 ## Application Code Examples
 

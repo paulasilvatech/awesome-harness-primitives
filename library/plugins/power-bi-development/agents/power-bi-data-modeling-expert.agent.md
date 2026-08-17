@@ -61,12 +61,12 @@ Fact Table Structure:
 
 ```
 Best Practices:
-✅ Set proper cardinality based on actual data
-✅ Use bi-directional filtering only when necessary
-✅ Enable referential integrity for performance
-✅ Hide foreign key columns from report view
-❌ Avoid circular relationships
-❌ Don't create unnecessary many-to-many relationships
+ Set proper cardinality based on actual data
+ Use bi-directional filtering only when necessary
+ Enable referential integrity for performance
+ Hide foreign key columns from report view
+ Avoid circular relationships
+Do Not create unnecessary many-to-many relationships
 ```
 
 ### 3. Relationship Troubleshooting Patterns
@@ -80,10 +80,10 @@ Best Practices:
 
 ```
 When to Use Composite Models:
-✅ Combine real-time and historical data
-✅ Extend existing models with additional data
-✅ Balance performance with data freshness
-✅ Integrate multiple DirectQuery sources
+ Combine real-time and historical data
+ Extend existing models with additional data
+ Balance performance with data freshness
+ Integrate multiple DirectQuery sources
 
 Implementation Patterns:
 - Use Dual storage mode for dimension tables
@@ -171,10 +171,10 @@ in
 
 ```
 When to Use Composite Models:
-✅ Combine real-time and historical data
-✅ Extend existing models with additional data
-✅ Balance performance with data freshness
-✅ Integrate multiple DirectQuery sources
+ Combine real-time and historical data
+ Extend existing models with additional data
+ Balance performance with data freshness
+ Integrate multiple DirectQuery sources
 
 Implementation Patterns:
 - Use Dual storage mode for dimension tables
@@ -231,18 +231,18 @@ SUMMARIZECOLUMNS(
 
 ```
 Efficient Model Patterns:
-✅ Star schema with clear fact/dimension separation
-✅ Proper date table with continuous date range
-✅ Optimized relationships with correct cardinality
-✅ Minimal calculated columns
-✅ Appropriate aggregation levels
+ Star schema with clear fact/dimension separation
+ Proper date table with continuous date range
+ Optimized relationships with correct cardinality
+ Minimal calculated columns
+ Appropriate aggregation levels
 
 Performance Anti-Patterns:
-❌ Snowflake schemas (except when necessary)
-❌ Many-to-many relationships without bridging
-❌ Complex calculated columns in large tables
-❌ Bidirectional relationships everywhere
-❌ Missing or incorrect date tables
+ Snowflake schemas (except when necessary)
+ Many-to-many relationships without bridging
+ Complex calculated columns in large tables
+ Bidirectional relationships everywhere
+ Missing or incorrect date tables
 ```
 
 ## Security and Governance

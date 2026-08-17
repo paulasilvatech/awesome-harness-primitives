@@ -49,18 +49,18 @@ never hand-concatenate raw user-provided text. Schema:
 
 ```js
 {
-  name: "Alex",              // optional — shows "Let's go, Alex 🔥"; omit for "Let's go 🔥"
+  name: "Alex",              // optional — shows "Let's go, Alex "; omit for "Let's go "
   dateKey: "2026-07-27",     // optional — localStorage key; defaults to today (YYYY-MM-DD)
   mantra: "Small, real, done.", // optional — today's intention (editable on the board)
   checkin: "above",          // optional — arrival check-in: "below" | "mid" | "above"
   tasks: [
     // counter task (numeric goal → progress bar + set/＋ buttons):
-    { id:"pages", emoji:"📖", title:"Read 30 pages",
+    { id:"pages", emoji:"", title:"Read 30 pages",
       goal:30, start:0, inc:5, unit:"pages", tag:"mind", tagc:"new", quad:"ins" },
     // status task (to-do → in progress → done + progress notes):
-    { id:"doc", emoji:"⚙️", title:"Finish the design doc", sub:"the anchor",
+    { id:"doc", emoji:"", title:"Finish the design doc", sub:"the anchor",
       due:"2026-07-27T17:00", tag:"deadline", tagc:"deadline", quad:"iu" },
-    { id:"move", emoji:"🌿", title:"Move a little — whatever fits your body", tag:"body" }
+    { id:"move", emoji:"", title:"Move a little — whatever fits your body", tag:"body" }
   ]
 }
 ```
@@ -80,10 +80,10 @@ never hand-concatenate raw user-provided text. Schema:
   (neither → *Later*). Renders as a colored accent; the person can change it on the board.
 - `mantra` / `checkin` (both optional, top-level) seed today's intention and the above/below-the-line
   arrival check-in. Set these from the conversation, or leave them for the person to set/tap.
-- **Built-in, no config needed:** the "how are you arriving?" check-in + daily mantra (with 🔄
-  suggestions), ➕ **add-a-task** live, **drag-to-reorder** (⠿ handle) + **sort by priority**, a
-  🧭 priority guide, **editable labels** per tile, a gentle **overload nudge**, an **end-of-day
-  save** (download/copy a recap), Focus mode, "not today" carryover, the 🧠 brain-dump box, the
+- **Built-in, no config needed:** the "how are you arriving?" check-in + daily mantra (with
+  suggestions),  **add-a-task** live, **drag-to-reorder** (⠿ handle) + **sort by priority**, a
+   priority guide, **editable labels** per tile, a gentle **overload nudge**, an **end-of-day
+  save** (download/copy a recap), Focus mode, "not today" carryover, the  brain-dump box, the
   reduced-motion toggle, and the live clock. Just set good tasks; the rest comes for free.
 
 **3. Serve + open it.** localStorage needs an `http://` origin, so serve the folder rather than

@@ -93,7 +93,7 @@ Create detailed journey maps that show **what users think, feel, and do** at eac
 ### Stage 1: Awareness
 **What user is doing**: Receiving onboarding email with login info
 **What user is thinking**: "Where do I start? Is there a checklist?"
-**What user is feeling**: 😰 Overwhelmed, uncertain
+**What user is feeling**: Overwhelmed, uncertain
 **Pain points**:
 - No clear starting point
 - Too many tools listed at once
@@ -102,7 +102,7 @@ Create detailed journey maps that show **what users think, feel, and do** at eac
 ### Stage 2: Exploration
 **What user is doing**: Clicking through different tools
 **What user is thinking**: "Do I need access to all of these? Which are critical?"
-**What user is feeling**: 😕 Confused about priorities
+**What user is feeling**: Confused about priorities
 **Pain points**:
 - No indication of which tools are essential vs optional
 - Can't find help when stuck
@@ -111,7 +111,7 @@ Create detailed journey maps that show **what users think, feel, and do** at eac
 ### Stage 3: Action
 **What user is doing**: Setting up accounts, configuring tools
 **What user is thinking**: "Am I doing this right? Did I miss anything?"
-**What user is feeling**: 😌 Progress, but checking frequently
+**What user is feeling**: Progress, but checking frequently
 **Pain points**:
 - No confirmation of completion
 - Unclear if setup is correct
@@ -120,7 +120,7 @@ Create detailed journey maps that show **what users think, feel, and do** at eac
 ### Stage 4: Outcome
 **What user is doing**: Working in tools, referring back to docs
 **What user is thinking**: "I think I'm all set, but I'll check the list again"
-**What user is feeling**: 😊 Confident, productive
+**What user is feeling**: Confident, productive
 **Success metrics**:
 - All critical tools accessed within 24 hours
 - No blocked work due to missing access

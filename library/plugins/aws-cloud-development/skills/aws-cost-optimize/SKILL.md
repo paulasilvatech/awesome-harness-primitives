@@ -116,22 +116,22 @@ This workflow analyzes Infrastructure-as-Code (IaC) files and AWS resources to g
 **Action**: Present summary and get approval before creating GitHub issues
 
 ```
-🎯 AWS Cost Optimization Summary
+ AWS Cost Optimization Summary
 
-📊 Analysis Results:
+ Analysis Results:
 • Total Resources Analyzed: X
 • Current Monthly Cost: $X
 • Potential Monthly Savings: $Y
 • Optimization Opportunities: Z
 • High Priority Items: N
 
-🏆 Recommendations:
+ Recommendations:
 1. [Resource]: [Current] → [Target] = $X/month savings - [Risk] | [Effort]
 ...
 
-💡 This will create Y individual GitHub issues + 1 EPIC issue.
+ This will create Y individual GitHub issues + 1 EPIC issue.
 
-❓ Proceed with creating GitHub issues? (y/n)
+ Proceed with creating GitHub issues? (y/n)
 ```
 
 Wait for user confirmation before proceeding.
@@ -143,14 +143,14 @@ Wait for user confirmation before proceeding.
 
 **Body**:
 ````markdown
-## 💰 Cost Optimization: [Brief Title]
+##  Cost Optimization: [Brief Title]
 
 **Monthly Savings**: $X | **Risk Level**: [Low/Medium/High] | **Effort**: X days
 
-### 📋 Description
+###  Description
 [Clear explanation of the optimization and why it's needed]
 
-### 🔧 Implementation
+###  Implementation
 
 **IaC Files Detected**: [Yes/No]
 
@@ -158,17 +158,17 @@ Wait for user confirmation before proceeding.
 # IaC modification (preferred) or AWS CLI fallback
 ```
 
-### 📊 Evidence
+###  Evidence
 - Current Configuration: [details]
 - Usage Pattern: [evidence from CloudWatch]
 - Cost Impact: $X/month → $Y/month
 
-### ✅ Validation Steps
+###  Validation Steps
 - [ ] Test in non-production environment
 - [ ] Verify no performance degradation via CloudWatch
 - [ ] Confirm cost reduction in AWS Cost Explorer
 
-### ⚠️ Risks & Considerations
+###  Risks & Considerations
 - [Risk and mitigation]
 
 **Priority Score**: X | **Value**: X/10 | **Risk**: X/10
@@ -189,8 +189,8 @@ Wait for user confirmation before proceeding.
 - **Cost Explorer Not Enabled**: Guide user to enable in AWS Console
 
 ## Success Criteria
-- ✅ All cost estimates verified against actual configurations and AWS pricing
-- ✅ Individual GitHub issues created for each optimization
-- ✅ EPIC issue provides comprehensive coordination and tracking
-- ✅ All recommendations include specific AWS CLI or IaC commands
-- ✅ User confirmation obtained before creating issues
+- All cost estimates verified against actual configurations and AWS pricing
+- Individual GitHub issues created for each optimization
+- EPIC issue provides comprehensive coordination and tracking
+- All recommendations include specific AWS CLI or IaC commands
+- User confirmation obtained before creating issues

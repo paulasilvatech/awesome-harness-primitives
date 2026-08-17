@@ -25,7 +25,7 @@ CREATE TABLE events (
 CREATE INDEX idx_events_data_gin ON events USING gin(data);
 
 -- JSONB containment and path queries
-SELECT * FROM events 
+SELECT * FROM events
 WHERE data @> '{"type": "login"}'
   AND data #>> '{user,role}' = 'admin';
 
@@ -54,7 +54,7 @@ SELECT array_agg(DISTINCT category) FROM posts, unnest(categories) as category;
 ### Window Functions & Analytics
 ```sql
 -- Advanced window functions
-SELECT 
+SELECT
     product_id,
     sale_date,
     amount,
@@ -80,19 +80,19 @@ CREATE TABLE documents (
 );
 
 -- Update search vector
-UPDATE documents 
+UPDATE documents
 SET search_vector = to_tsvector('english', title || ' ' || content);
 
 -- GIN index for search performance
 CREATE INDEX idx_documents_search ON documents USING gin(search_vector);
 
 -- Search queries
-SELECT * FROM documents 
+SELECT * FROM documents
 WHERE search_vector @@ plainto_tsquery('english', 'postgresql database');
 
 -- Ranking results
 SELECT *, ts_rank(search_vector, plainto_tsquery('postgresql')) as rank
-FROM documents 
+FROM documents
 WHERE search_vector @@ plainto_tsquery('postgresql')
 ORDER BY rank DESC;
 ```
@@ -102,7 +102,7 @@ ORDER BY rank DESC;
 ### Query Optimization
 ```sql
 -- EXPLAIN ANALYZE for performance analysis
-EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT) 
+EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
 SELECT u.name, COUNT(o.id) as order_count
 FROM users u
 LEFT JOIN orders o ON u.id = o.user_id
@@ -112,8 +112,8 @@ GROUP BY u.id, u.name;
 -- Identify slow queries from pg_stat_statements
 SELECT query, calls, total_time, mean_time, rows,
        100.0 * shared_blks_hit / nullif(shared_blks_hit + shared_blks_read, 0) AS hit_percent
-FROM pg_stat_statements 
-ORDER BY total_time DESC 
+FROM pg_stat_statements
+ORDER BY total_time DESC
 LIMIT 10;
 ```
 
@@ -135,17 +135,17 @@ CREATE INDEX idx_orders_covering ON orders(user_id, status) INCLUDE (total, crea
 ### Connection & Memory Management
 ```sql
 -- Check connection usage
-SELECT count(*) as connections, state 
-FROM pg_stat_activity 
+SELECT count(*) as connections, state
+FROM pg_stat_activity
 GROUP BY state;
 
 -- Monitor memory usage
-SELECT name, setting, unit 
-FROM pg_settings 
+SELECT name, setting, unit
+FROM pg_settings
 WHERE name IN ('shared_buffers', 'work_mem', 'maintenance_work_mem');
 ```
 
-## �️ PostgreSQL Advanced Data Types
+## � PostgreSQL Advanced Data Types
 
 ### Custom Types & Domains
 ```sql
@@ -160,7 +160,7 @@ CREATE TYPE address_type AS (
 CREATE TYPE order_status AS ENUM ('pending', 'processing', 'shipped', 'delivered', 'cancelled');
 
 -- Use domains for data validation
-CREATE DOMAIN email_address AS TEXT 
+CREATE DOMAIN email_address AS TEXT
 CHECK (VALUE ~* '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$');
 
 -- Table using custom types
@@ -183,12 +183,12 @@ CREATE TABLE reservations (
 );
 
 -- Range queries
-SELECT * FROM reservations 
+SELECT * FROM reservations
 WHERE reservation_period && tstzrange('2024-07-20', '2024-07-25');
 
 -- Exclude overlapping ranges
-ALTER TABLE reservations 
-ADD CONSTRAINT no_overlap 
+ALTER TABLE reservations
+ADD CONSTRAINT no_overlap
 EXCLUDE USING gist (room_id WITH =, reservation_period WITH &&);
 ```
 
@@ -204,14 +204,14 @@ CREATE TABLE locations (
 );
 
 -- Geometric queries
-SELECT name FROM locations 
+SELECT name FROM locations
 WHERE coordinates <-> point(40.7128, -74.0060) < 10; -- Within 10 units
 
 -- GiST index for geometric data
 CREATE INDEX idx_locations_coords ON locations USING gist(coordinates);
 ```
 
-## 📊 PostgreSQL Extensions & Tools
+## PostgreSQL Extensions & Tools
 
 ### Useful Extensions
 ```sql
@@ -236,12 +236,12 @@ SELECT pg_size_pretty(pg_database_size(current_database())) as db_size;
 -- Table and index sizes
 SELECT schemaname, tablename,
        pg_size_pretty(pg_total_relation_size(schemaname||'.'||tablename)) as size
-FROM pg_tables 
+FROM pg_tables
 ORDER BY pg_total_relation_size(schemaname||'.'||tablename) DESC;
 
 -- Index usage statistics
 SELECT schemaname, tablename, indexname, idx_scan, idx_tup_read, idx_tup_fetch
-FROM pg_stat_user_indexes 
+FROM pg_stat_user_indexes
 WHERE idx_scan = 0;  -- Unused indexes
 ```
 
@@ -253,19 +253,19 @@ WHERE idx_scan = 0;  -- Unused indexes
 - **Partition large tables** using PostgreSQL 10+ declarative partitioning
 - **Use pg_stat_statements** for query performance monitoring
 
-## 📊 Monitoring and Maintenance
+## Monitoring and Maintenance
 
 ### Query Performance Monitoring
 ```sql
 -- Identify slow queries
 SELECT query, calls, total_time, mean_time, rows
-FROM pg_stat_statements 
-ORDER BY total_time DESC 
+FROM pg_stat_statements
+ORDER BY total_time DESC
 LIMIT 10;
 
 -- Check index usage
 SELECT schemaname, tablename, indexname, idx_scan, idx_tup_read, idx_tup_fetch
-FROM pg_stat_user_indexes 
+FROM pg_stat_user_indexes
 WHERE idx_scan = 0;
 ```
 
@@ -275,50 +275,50 @@ WHERE idx_scan = 0;
 - **Statistics Updates**: Keep query planner statistics current
 - **Log Analysis**: Regular review of PostgreSQL logs
 
-## 🛠️ Common Query Patterns
+## Common Query Patterns
 
 ### Pagination
 ```sql
--- ❌ BAD: OFFSET for large datasets
+--  BAD: OFFSET for large datasets
 SELECT * FROM products ORDER BY id OFFSET 10000 LIMIT 20;
 
--- ✅ GOOD: Cursor-based pagination
-SELECT * FROM products 
-WHERE id > $last_id 
-ORDER BY id 
+--  GOOD: Cursor-based pagination
+SELECT * FROM products
+WHERE id > $last_id
+ORDER BY id
 LIMIT 20;
 ```
 
 ### Aggregation
 ```sql
--- ❌ BAD: Inefficient grouping
-SELECT user_id, COUNT(*) 
-FROM orders 
-WHERE order_date >= '2024-01-01' 
+--  BAD: Inefficient grouping
+SELECT user_id, COUNT(*)
+FROM orders
+WHERE order_date >= '2024-01-01'
 GROUP BY user_id;
 
--- ✅ GOOD: Optimized with partial index
-CREATE INDEX idx_orders_recent ON orders(user_id) 
+--  GOOD: Optimized with partial index
+CREATE INDEX idx_orders_recent ON orders(user_id)
 WHERE order_date >= '2024-01-01';
 
-SELECT user_id, COUNT(*) 
-FROM orders 
-WHERE order_date >= '2024-01-01' 
+SELECT user_id, COUNT(*)
+FROM orders
+WHERE order_date >= '2024-01-01'
 GROUP BY user_id;
 ```
 
 ### JSON Queries
 ```sql
--- ❌ BAD: Inefficient JSON querying
+--  BAD: Inefficient JSON querying
 SELECT * FROM users WHERE data::text LIKE '%admin%';
 
--- ✅ GOOD: JSONB operators and GIN index
+--  GOOD: JSONB operators and GIN index
 CREATE INDEX idx_users_data_gin ON users USING gin(data);
 
 SELECT * FROM users WHERE data @> '{"role": "admin"}';
 ```
 
-## 📋 Optimization Checklist
+## Optimization Checklist
 
 ### Query Analysis
 - [ ] Run EXPLAIN ANALYZE for expensive queries
@@ -348,7 +348,7 @@ SELECT * FROM users WHERE data @> '{"role": "admin"}';
 - [ ] Track database growth and maintenance needs
 - [ ] Set up alerting for performance degradation
 
-## 🎯 Optimization Output Format
+## Optimization Output Format
 
 ### Query Analysis Results
 ```
@@ -373,12 +373,12 @@ CREATE INDEX idx_table_column ON table(column);
 **Performance Impact**: Expected 80% improvement in execution time
 ```
 
-## 🚀 Advanced PostgreSQL Features
+## Advanced PostgreSQL Features
 
 ### Window Functions
 ```sql
 -- Running totals and rankings
-SELECT 
+SELECT
     product_id,
     order_date,
     amount,
@@ -392,11 +392,11 @@ FROM sales;
 -- Recursive queries for hierarchical data
 WITH RECURSIVE category_tree AS (
     SELECT id, name, parent_id, 1 as level
-    FROM categories 
+    FROM categories
     WHERE parent_id IS NULL
-    
+
     UNION ALL
-    
+
     SELECT c.id, c.name, c.parent_id, ct.level + 1
     FROM categories c
     JOIN category_tree ct ON c.parent_id = ct.id

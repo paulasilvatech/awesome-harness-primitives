@@ -377,7 +377,7 @@ aws secretsmanager list-secrets \
   --query 'SecretList[?RotationEnabled==`true`].[Name,LastRotatedDate]' --output table
 ```
 
-> ⚠️ **Note**: Secret **values** are never retrieved (`get-secret-value` is excluded). Only metadata is shown.
+> **Note**: Secret **values** are never retrieved (`get-secret-value` is excluded). Only metadata is shown.
 
 #### SSM Parameter Store
 ```bash
@@ -391,7 +391,7 @@ aws ssm describe-parameters \
   --query 'Parameters[].[Name,Type,LastModifiedDate]' --output table
 ```
 
-> ⚠️ **Note**: Parameter **values** are never retrieved (`get-parameter` is excluded). Only metadata is shown.
+> **Note**: Parameter **values** are never retrieved (`get-parameter` is excluded). Only metadata is shown.
 
 #### KMS & Certificates
 ```bash

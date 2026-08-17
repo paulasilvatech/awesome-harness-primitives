@@ -144,23 +144,23 @@ aws rds reboot-db-instance --db-instance-identifier <name>
 
 Present findings:
 ```
-🏥 AWS Resource Health Assessment
+ AWS Resource Health Assessment
 
-📊 Resource Overview:
+ Resource Overview:
 • Resource: [Name] ([Type])
 • Status: [Healthy/Warning/Critical]
 • Region: [Region] | Account: [Account ID]
 
-🚨 Issues Identified:
+ Issues Identified:
 • Critical: X | High: Y | Medium: Z | Low: N
 
-🔍 Top Issues:
+ Top Issues:
 1. [Issue]: [Description] — Impact: [High/Medium/Low]
 2. [Issue]: [Description] — Impact: [High/Medium/Low]
 
-🛠️ Remediation: X immediate, Y short-term, Z long-term actions
+ Remediation: X immediate, Y short-term, Z long-term actions
 
-❓ Proceed with detailed remediation plan? (y/n)
+ Proceed with detailed remediation plan? (y/n)
 ```
 
 Then generate a full markdown report covering: health metrics, issues with root cause analysis, phased remediation steps with AWS CLI commands, CloudWatch alarm recommendations, and validation checklist.
@@ -173,9 +173,9 @@ Then generate a full markdown report covering: health metrics, issues with root 
 - **Query Timeouts**: Use shorter time windows
 
 ## Success Criteria
-- ✅ Resource health accurately assessed across all key metrics
-- ✅ All significant issues identified and classified by severity
-- ✅ Root cause analysis completed for major problems
-- ✅ Actionable remediation plan with AWS CLI commands
-- ✅ CloudWatch monitoring recommendations included
-- ✅ Implementation steps include validation and rollback procedures
+- Resource health accurately assessed across all key metrics
+- All significant issues identified and classified by severity
+- Root cause analysis completed for major problems
+- Actionable remediation plan with AWS CLI commands
+- CloudWatch monitoring recommendations included
+- Implementation steps include validation and rollback procedures

@@ -166,7 +166,7 @@ echo "=== FINAL TEST RUN ==="
 npm test -- --watchAll=false --passWithNoTests --forceExit 2>&1 | grep -E "Tests:|Test Suites:|FAIL|PASS" | tail -10
 ```
 
-**COMPLETE ✅ only if:**
+**COMPLETE only if:**
 
 - Build exits with code 0
 - Tests show 0 failing
@@ -177,11 +177,11 @@ npm test -- --watchAll=false --passWithNoTests --forceExit 2>&1 | grep -E "Tests
 
 ## Rules of Engagement
 
-- **Never skip a gate.** A subagent saying "done" is not enough. Verify with commands.
-- **Never invent completion.** If the build or tests fail, you keep going.
-- **Always pass context.** When invoking a subagent, include all relevant prior results.
-- **Use memory.** If the session dies, the next session resumes from the correct phase.
-- **One subagent at a time.** Sequential pipeline. No parallel invocation.
+- **Never skip a gate.**A subagent saying "done" is not enough. Verify with commands.
+- **Never invent completion.**If the build or tests fail, you keep going.
+- **Always pass context.**When invoking a subagent, include all relevant prior results.
+- **Use memory.**If the session dies, the next session resumes from the correct phase.
+- **One subagent at a time.**Sequential pipeline. No parallel invocation.
 
 ---
 

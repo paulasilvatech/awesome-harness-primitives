@@ -12,11 +12,11 @@ Generate comprehensive Power Platform custom connector implementations with Mode
 ## MCP Capabilities in Copilot Studio
 
 **Currently Supported:**
-- ✅ **Tools**: Functions that the LLM can call (with user approval)
-- ✅ **Resources**: File-like data that agents can read (must be tool outputs)
+- **Tools**: Functions that the LLM can call (with user approval)
+- **Resources**: File-like data that agents can read (must be tool outputs)
 
 **Not Yet Supported:**
-- ❌ **Prompts**: Pre-written templates (prepare for future support)
+- **Prompts**: Pre-written templates (prepare for future support)
 
 ## Connector Generation
 
@@ -37,11 +37,11 @@ Create complete Power Platform connector with:
 ## Schema Validation & Troubleshooting
 
 **Validate schemas for Copilot Studio compliance:**
-- ✅ No reference types (`$ref`) in tool inputs/outputs
-- ✅ Single type values only (not `["string", "number"]`)
-- ✅ Primitive types: string, number, integer, boolean, array, object
-- ✅ Resources as tool outputs, not separate entities
-- ✅ Full URIs for all endpoints
+- No reference types (`$ref`) in tool inputs/outputs
+- Single type values only (not `["string", "number"]`)
+- Primitive types: string, number, integer, boolean, array, object
+- Resources as tool outputs, not separate entities
+- Full URIs for all endpoints
 
 **Common issues and fixes:**
 - Tools filtered → Remove reference types, use primitives
