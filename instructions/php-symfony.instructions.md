@@ -1,6 +1,6 @@
 ---
-description: "Symfony development standards aligned with official Symfony Best Practices"
-applyTo: "**/*.php, **/*.yaml, **/*.yml, **/*.xml, **/*.twig"
+applyTo: '**/*.php, **/*.yaml, **/*.yml, **/*.xml, **/*.twig'
+description: 'Symfony development standards aligned with official Symfony Best Practices'
 ---
 
 # Symfony Development Instructions

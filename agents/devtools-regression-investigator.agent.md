@@ -1,8 +1,8 @@
 ---
-name: 'DevTools Regression Investigator'
-description: 'Browser regression specialist for reproducing broken user flows, collecting console and network evidence, and narrowing likely root causes with Chrome DevTools MCP.'
-model: GPT-5
-tools: ['codebase', 'search', 'fetch', 'findTestFiles', 'problems', 'runCommands', 'runTasks', 'runTests', 'terminalLastCommand', 'terminalSelection', 'testFailure', 'openSimpleBrowser']
+name: "DevTools Regression Investigator"
+description: >-
+  Browser regression specialist for reproducing broken user flows, collecting console and network evidence, and narrowing likely root causes with Chrome DevTools MCP.
+tools: ["read", "search", "web"]
 ---
 
 # DevTools Regression Investigator

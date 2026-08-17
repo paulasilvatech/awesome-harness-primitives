@@ -1,8 +1,9 @@
 ---
-name: update-avm-modules-in-bicep
-description: 'Update Azure Verified Modules (AVM) to latest versions in Bicep files.'
+name: "update-avm-modules-in-bicep"
+description: >-
+  Update Azure Verified Modules (AVM) to latest versions in Bicep files. Use this skill when the user
+  asks for update azure verified modules in bicep files.
 ---
-
 # Update Azure Verified Modules in Bicep Files
 
 Update Bicep file `${file}` to use latest Azure Verified Module (AVM) versions. Limit progress updates to non-breaking changes. Don't output information other than the final output table and summary.

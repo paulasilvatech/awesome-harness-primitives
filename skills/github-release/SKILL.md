@@ -1,11 +1,13 @@
 ---
-name: github-release
-description: >
-  Guides IA through releasing a new version of a GitHub library end-to-end.
-  Handles SemVer versioning and Keep a Changelog formatting automatically.
-compatibility: "requires: gh CLI and git"
+name: "github-release"
+description: >-
+  Guides IA through releasing a new version of a GitHub library end-to-end. Use this skill when the
+  user wants to cut a new release, publish a new version,; bump a version, create a release branch,
+  generate a changelog, or open a release PR; on a GitHub repository. Trigger even if the user says
+  something casual like "let's.
+metadata:
+  compatibility: "requires: gh CLI and git"
 ---
-
 # GitHub Release Skill
 
 This skill automates the full release workflow for a single-package GitHub repository,

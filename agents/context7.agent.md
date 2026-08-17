@@ -1,18 +1,20 @@
 ---
-name: Context7-Expert
-description: 'Expert in latest library versions, best practices, and correct syntax using up-to-date documentation'
-argument-hint: 'Ask about specific libraries/frameworks (e.g., "Next.js routing", "React hooks", "Tailwind CSS")'
-tools: ['read', 'search', 'web', 'context7/*', 'agent/runSubagent']
+name: "Context7-Expert"
+description: "Expert in latest library versions, best practices, and correct syntax using up-to-date documentation"
+tools: ["read", "search", "web", "agent", "context7/*"]
 mcp-servers:
   context7:
-    type: http
+    type: "http"
     url: "https://mcp.context7.com/mcp"
-    headers: {"CONTEXT7_API_KEY": "${{ secrets.COPILOT_MCP_CONTEXT7 }}"}
-    tools: ["get-library-docs", "resolve-library-id"]
+    headers:
+      CONTEXT7_API_KEY: "${{ secrets.COPILOT_MCP_CONTEXT7 }}"
+    tools:
+      ["get-library-docs", "resolve-library-id"]
+argument-hint: "Ask about specific libraries/frameworks (e.g., \"Next.js routing\", \"React hooks\", \"Tailwind CSS\")"
 handoffs:
-  - label: Implement with Context7
-    agent: agent
-    prompt: Implement the solution using the Context7 best practices and documentation outlined above.
+  - label: "Implement with Context7"
+    agent: "agent"
+    prompt: "Implement the solution using the Context7 best practices and documentation outlined above."
     send: false
 ---
 

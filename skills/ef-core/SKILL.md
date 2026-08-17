@@ -1,8 +1,7 @@
 ---
-name: ef-core
-description: 'Get best practices for Entity Framework Core'
+name: "ef-core"
+description: "Get best practices for Entity Framework Core. Use this skill when the user asks for entity framework core best practices."
 ---
-
 # Entity Framework Core Best Practices
 
 Your goal is to help me follow best practices when working with Entity Framework Core.

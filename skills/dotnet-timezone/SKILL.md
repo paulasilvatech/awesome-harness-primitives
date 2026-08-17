@@ -1,8 +1,11 @@
 ---
-name: dotnet-timezone
-description: '.NET timezone handling guidance for C# applications. Use when working with TimeZoneInfo, DateTimeOffset, NodaTime, UTC conversion, daylight saving time, scheduling across timezones, cross-platform Windows/IANA timezone IDs, or when a .NET user needs the timezone for a city, address, region, or country and copy-paste-ready C# code.'
+name: "dotnet-timezone"
+description: >-
+  .NET timezone handling guidance for C# applications. Use when working with TimeZoneInfo,
+  DateTimeOffset, NodaTime, UTC conversion, daylight saving time, scheduling across timezones,
+  cross-platform Windows/IANA timezone IDs, or when a .NET user needs the timezone for a city,
+  address, region, or country and copy-paste-ready C# code.
 ---
-
 # .NET Timezone
 
 Resolve timezone questions for .NET and C# code with production-safe guidance and copy-paste-ready snippets.

@@ -14,15 +14,5 @@
     "storage",
     "windows"
   ],
-  "license": "MIT",
-  "extensions": {
-    "com.github.copilot": {
-      "logo": "assets/preview.png"
-    },
-    "com.github.awesome-copilot": {
-      "extensions": [
-        "./extensions/windows-app-storage-inspector-cleanup"
-      ]
-    }
-  }
+  "license": "MIT"
 }

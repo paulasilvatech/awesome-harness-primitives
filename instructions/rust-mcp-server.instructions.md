@@ -1,6 +1,6 @@
 ---
-description: 'Best practices for building Model Context Protocol servers in Rust using the official rmcp SDK with async/await patterns'
 applyTo: '**/*.rs'
+description: 'Best practices for building Model Context Protocol servers in Rust using the official rmcp SDK with async/await patterns'
 ---
 
 # Rust MCP Server Development Best Practices

@@ -1,8 +1,9 @@
 ---
-description: 'Expert embedded C guidance for safety-critical systems — covers MISRA C:2012/2025 rule compliance, CERT C secure coding, static analysis tooling (Coverity, QAC, PC-lint), and defensive programming patterns that frontier models do not handle reliably by default.'
-name: 'expert-embedded-c-engineer'
-model: 'claude-sonnet-4'
-tools: ['edit/editFiles', 'search/codebase', 'search/usages', 'execute/runInTerminal', 'read/terminalLastCommand', 'read/terminalSelection', 'read/problems', 'web/fetch']
+name: "expert-embedded-c-engineer"
+description: >-
+  Expert embedded C guidance for safety-critical systems — covers MISRA C:2012/2025 rule compliance, CERT C secure coding, static analysis tooling (Coverity, QAC, PC-lint), and defensive programming patterns that frontier models do not handle reliably by default.
+tools: ["read", "search", "web"]
+model: "claude-sonnet-4"
 ---
 
 # Expert Embedded C Software Engineer Mode Instructions

@@ -1,7 +1,7 @@
 ---
-applyTo: "**.go, go.mod"
-description: "This file provides guidance on building Go applications using GitHub Copilot SDK."
-name: "GitHub Copilot SDK Go Instructions"
+applyTo: '**.go, go.mod'
+description: 'This file provides guidance on building Go applications using GitHub Copilot SDK.'
+name: 'GitHub Copilot SDK Go Instructions'
 ---
 
 ## Core Principles

@@ -1,8 +1,10 @@
 ---
-name: create-implementation-plan
-description: 'Create a new implementation plan file for new features, refactoring existing code or upgrading packages, design, architecture or infrastructure.'
+name: "create-implementation-plan"
+description: >-
+  Create a new implementation plan file for new features, refactoring existing code or upgrading
+  packages, design, architecture or infrastructure. Use this skill when the user asks for primary
+  directive.
 ---
-
 # Create Implementation Plan
 
 ## Primary Directive

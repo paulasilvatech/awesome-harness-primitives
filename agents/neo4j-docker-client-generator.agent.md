@@ -1,29 +1,8 @@
 ---
-name: neo4j-docker-client-generator
-description: AI agent that generates simple, high-quality Python Neo4j client libraries from GitHub issues with proper best practices
-tools: ['read', 'edit', 'search', 'shell', 'neo4j-local/neo4j-local-get_neo4j_schema', 'neo4j-local/neo4j-local-read_neo4j_cypher', 'neo4j-local/neo4j-local-write_neo4j_cypher']
-mcp-servers:
-  neo4j-local:
-    type: 'local'
-    command: 'docker'
-    args: [
-      'run',
-      '-i',
-      '--rm',
-      '-e', 'NEO4J_URI',
-      '-e', 'NEO4J_USERNAME',
-      '-e', 'NEO4J_PASSWORD',
-      '-e', 'NEO4J_DATABASE',
-      '-e', 'NEO4J_NAMESPACE=neo4j-local',
-      '-e', 'NEO4J_TRANSPORT=stdio',
-      'mcp/neo4j-cypher:latest'
-    ]
-    env:
-      NEO4J_URI: '${COPILOT_MCP_NEO4J_URI}'
-      NEO4J_USERNAME: '${COPILOT_MCP_NEO4J_USERNAME}'
-      NEO4J_PASSWORD: '${COPILOT_MCP_NEO4J_PASSWORD}'
-      NEO4J_DATABASE: '${COPILOT_MCP_NEO4J_DATABASE}'
-    tools: ["*"]
+name: "neo4j-docker-client-generator"
+description: "AI agent that generates simple, high-quality Python Neo4j client libraries from GitHub issues with proper best practices"
+tools: ["read", "search", "edit", "execute", "neo4j-local/neo4j-local-get_neo4j_schema", "neo4j-local/neo4j-local-read_neo4j_cypher", "neo4j-local/neo4j-local-write_neo4j_cypher"]
+mcp-servers: "{'neo4j-local': {'type': 'local', 'command': 'docker', 'args': ['run', '-i', '--rm', '-e', 'NEO4J_URI', '-e', 'NEO4J_USERNAME', '-e', 'NEO4J_PASSWORD', '-e', 'NEO4J_DATABASE', '-e', 'NEO4J_NAMESPACE=neo4j-local', '-e', 'NEO4J_TRANSPORT=stdio', 'mcp/neo4j-cypher:latest'], 'env': {'NEO4J_URI': '${COPILOT_MCP_NEO4J_URI}', 'NEO4J_USERNAME': '${COPILOT_MCP_NEO4J_USERNAME}', 'NEO4J_PASSWORD': '${COPILOT_MCP_NEO4J_PASSWORD}', 'NEO4J_DATABASE': '${COPILOT_MCP_NEO4J_DATABASE}'}, 'tools': ['*']}}"
 ---
 
 # Neo4j Python Client Generator

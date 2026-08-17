@@ -18,7 +18,7 @@
   "extensions": {
     "com.github.awesome-copilot": {
       "agents": [
-        "./agents/context-architect.md"
+        "./agents/context-architect.agent.md"
       ],
       "skills": [
         "./skills/context-map/",
@@ -26,5 +26,13 @@
         "./skills/what-context-needed/"
       ]
     }
-  }
+  },
+  "agents": [
+    "./agents/context-architect.agent.md"
+  ],
+  "skills": [
+    "./skills/context-map/",
+    "./skills/refactor-plan/",
+    "./skills/what-context-needed/"
+  ]
 }

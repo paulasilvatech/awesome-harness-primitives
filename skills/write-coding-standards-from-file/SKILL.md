@@ -1,8 +1,10 @@
 ---
-name: write-coding-standards-from-file
-description: 'Write a coding standards document for a project using the coding styles from the file(s) and/or folder(s) passed as arguments in the prompt.'
+name: "write-coding-standards-from-file"
+description: >-
+  Write a coding standards document for a project using the coding styles from the file(s) and/or
+  folder(s) passed as arguments in the prompt. Use this skill when the user asks for rules and
+  configuration.
 ---
-
 # Write Coding Standards From File
 
 Use the existing syntax of the file(s) to establish the standards and style guides for the project. If more than one file or a folder is passed, loop through each file or files in the folder, appending the file's data to temporary memory or a file, then when complete use temporary data as a single instance; as if it were the file name to base the standards and style guideline on.

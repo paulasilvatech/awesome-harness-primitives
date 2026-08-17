@@ -1,11 +1,17 @@
 ---
-name: 'audit-integrity'
-description: 'Shared audit integrity framework for all AppSec agents — enforces output quality, intellectual honesty, and continuous improvement through anti-rationalization guards, self-critique loops, retry protocols, non-negotiable behaviors, self-reflection quality gates (1-10 scoring, ≥8 threshold), and a self-learning system with lesson/memory governance for security analysis agents.'
-compatibility: 'Cross-platform. Works with any language or framework analyzed by AppSec agents.'
+name: "audit-integrity"
+description: >-
+  Shared audit integrity framework for all AppSec agents — enforces output quality, intellectual
+  honesty, and continuous improvement through anti-rationalization guards, self-critique loops, retry
+  protocols, non-negotiable behaviors, self-reflection quality gates (1-10 scoring, ≥8 threshold), and
+  a self-learning system with lesson/memory governance for security analysis agents. Use this skill
+  when every security analysis, code review, threat model, or quality scan agent run; applied
+  automatically as a post-analysis quality gate; applicable to any agent performing SAST, SCA, threat
+  modeling, or code quality analysis.
 metadata:
-  version: '1.0'
+  compatibility: "Cross-platform. Works with any language or framework analyzed by AppSec agents."
+  version: "1.0"
 ---
-
 # Audit Integrity Skill
 
 Enforces output quality, intellectual honesty, and continuous improvement across all AppSec agents.

@@ -1,8 +1,10 @@
 ---
-name: aws-cost-optimize
-description: 'Analyze AWS resources used in the app (IaC files and/or resources in a target account/region) and optimize costs - creating GitHub issues for identified optimizations.'
+name: "aws-cost-optimize"
+description: >-
+  Analyze AWS resources used in the app (IaC files and/or resources in a target account/region) and
+  optimize costs - creating GitHub issues for identified optimizations. Use this skill when the user
+  asks for prerequisites.
 ---
-
 # AWS Cost Optimize
 
 This workflow analyzes Infrastructure-as-Code (IaC) files and AWS resources to generate cost optimization recommendations. It creates individual GitHub issues for each optimization opportunity plus one EPIC issue to coordinate implementation, enabling efficient tracking and execution of cost savings initiatives.

@@ -1,58 +1,34 @@
 ---
 name: 'Session Logger'
-description: 'Logs all Copilot coding agent session activity for audit and analysis'
-tags: ['logging', 'audit', 'analytics']
+description: 'Logs basic Copilot session lifecycle events and prompt submissions.'
+tags: ['logging', 'sessionStart', 'sessionEnd', 'userPromptSubmitted']
 ---
 
-# Session Logger Hook
+# Session Logger
 
-Comprehensive logging for GitHub Copilot coding agent sessions, tracking session starts, ends, and user prompts for audit trails and usage analytics.
+Logs session start/end and prompt-submitted event metadata. It does not write prompt content or tool payloads to logs.
 
-## Overview
+## Events
 
-This hook provides detailed logging of Copilot coding agent activity:
-- Session start/end times with working directory context
-- User prompt submission events
-- Configurable log levels
+- `sessionStart`
+- `sessionEnd`
+- `userPromptSubmitted`
 
-## Features
+## Install
 
-- **Session Tracking**: Log session start and end events
-- **Prompt Logging**: Record when user prompts are submitted
-- **Structured Logging**: JSON format for easy parsing
-- **Privacy Aware**: Configurable to disable logging entirely
+- Repository: copy or use the matching manifest at `.github/hooks/session-logger.json`. Copilot CLI discovers repo hooks from `.github/hooks/*.json`; a bare `hooks/session-logger/hooks.json` is only a package example and is not auto-discovered.
+- User: copy `hooks/session-logger/hooks.json` to `~/.copilot/hooks/session-logger.json` and keep this repository path layout or adjust script paths.
+- Scripts referenced by the manifest must be executable (`chmod +x`).
 
-## Installation
+## Exit-code and output contract
 
-1. Copy this hook folder to your repository's `.github/hooks/` directory:
-   ```bash
-   cp -r hooks/session-logger .github/hooks/
-   ```
+Copilot hook stdin is JSON. `exit 0` allows the action; `exit 2` blocks and surfaces stderr to the model; any other non-zero exit is a non-blocking hook error. If stdout JSON is emitted, only the Copilot response keys documented in `docs/COPILOT-HARNESS-SPEC.md` are meaningful.
 
-2. Create the logs directory:
-   ```bash
-   mkdir -p logs/copilot
-   ```
+## Environment
 
-3. Ensure scripts are executable:
-   ```bash
-   chmod +x .github/hooks/session-logger/*.sh
-   ```
+- `LOG_LEVEL` for prompt event log level (default in manifest: `INFO`)
+- `SKIP_LOGGING=true` disables it
 
-4. Commit the hook configuration to your repository's default branch
+## Safety posture
 
-## Log Format
-
-Session events are written to `logs/copilot/session.log` and prompt events to `logs/copilot/prompts.log` in JSON format:
-
-```json
-{"timestamp":"2024-01-15T10:30:00Z","event":"sessionStart","cwd":"/workspace/project"}
-{"timestamp":"2024-01-15T10:35:00Z","event":"sessionEnd"}
-```
-
-## Privacy & Security
-
-- Add `logs/` to `.gitignore` to avoid committing session data
-- Use `LOG_LEVEL=ERROR` to only log errors
-- Set `SKIP_LOGGING=true` environment variable to disable
-- Logs are stored locally only
+Repo-level hook is enabled. It writes minimal local logs under `logs/copilot` and exits 0; it never blocks.

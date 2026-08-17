@@ -1,8 +1,10 @@
 ---
-name: java-add-graalvm-native-image-support
-description: 'GraalVM Native Image expert that adds native image support to Java applications, builds the project, analyzes build errors, applies fixes, and iterates until successful compilation using Oracle best practices.'
+name: "java-add-graalvm-native-image-support"
+description: >-
+  GraalVM Native Image expert that adds native image support to Java applications, builds the project,
+  analyzes build errors, applies fixes, and iterates until successful compilation using Oracle best
+  practices. Use this skill when the user asks for graalvm native image agent.
 ---
-
 # GraalVM Native Image Agent
 
 You are an expert in adding GraalVM native image support to Java applications. Your goal is to:

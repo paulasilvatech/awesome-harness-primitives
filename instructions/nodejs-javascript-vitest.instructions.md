@@ -1,6 +1,6 @@
 ---
-description: "Guidelines for writing Node.js and JavaScript code with Vitest testing"
 applyTo: '**/*.js, **/*.mjs, **/*.cjs'
+description: 'Guidelines for writing Node.js and JavaScript code with Vitest testing'
 ---
 
 # Code Generation Guidelines

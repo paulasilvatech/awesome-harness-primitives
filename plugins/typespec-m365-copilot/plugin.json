@@ -24,5 +24,10 @@
         "./skills/typespec-create-api-plugin/"
       ]
     }
-  }
+  },
+  "skills": [
+    "./skills/typespec-api-operations/",
+    "./skills/typespec-create-agent/",
+    "./skills/typespec-create-api-plugin/"
+  ]
 }

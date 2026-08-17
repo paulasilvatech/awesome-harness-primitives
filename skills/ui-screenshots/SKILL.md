@@ -1,8 +1,10 @@
 ---
-name: ui-screenshots
-description: 'Capture screenshots of web apps during development using Playwright and PIL. Supports full-page captures, interactive states, and an iterate-on-crop workflow that avoids slow re-screenshots.'
+name: "ui-screenshots"
+description: >-
+  Capture screenshots of web apps during development using Playwright and PIL. Use this skill when you
+  need to; capture the current state of a running web app; document a UI before and after a code
+  change.
 ---
-
 # UI Screenshots
 
 Capture screenshots of web apps and graphical UIs during development to document visual changes.

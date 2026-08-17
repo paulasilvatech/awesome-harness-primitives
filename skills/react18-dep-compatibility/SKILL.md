@@ -1,8 +1,10 @@
 ---
-name: react18-dep-compatibility
-description: 'React 18.3.1 and React 19 dependency compatibility matrix.'
+name: "react18-dep-compatibility"
+description: >-
+  React 18.3.1 and React 19 dependency compatibility matrix. Use this skill when review this matrix
+  before running `npm install` during a React upgrade and before accepting an npm dependency conflict
+  resolution, especi; core Upgrade Targets.
 ---
-
 # React Dependency Compatibility Matrix
 
 Minimum versions required for React 18.3.1 and React 19 compatibility.

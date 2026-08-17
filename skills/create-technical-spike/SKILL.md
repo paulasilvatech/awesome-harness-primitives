@@ -1,8 +1,10 @@
 ---
-name: create-technical-spike
-description: 'Create time-boxed technical spike documents for researching and resolving critical development decisions before implementation.'
+name: "create-technical-spike"
+description: >-
+  Create time-boxed technical spike documents for researching and resolving critical development
+  decisions before implementation. Use this skill when the user asks for create technical spike
+  document.
 ---
-
 # Create Technical Spike Document
 
 Create time-boxed technical spike documents for researching critical questions that must be answered before development can proceed. Each spike focuses on a specific technical decision with clear deliverables and timelines.

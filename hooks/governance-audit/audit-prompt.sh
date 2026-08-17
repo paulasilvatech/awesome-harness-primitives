@@ -22,10 +22,11 @@ LEVEL="${GOVERNANCE_LEVEL:-standard}"
 BLOCK="${BLOCK_ON_THREAT:-false}"
 LOG_FILE="logs/copilot/governance/audit.log"
 
-# Extract prompt text from Copilot input (JSON with userMessage field)
+# Extract prompt text from Copilot input. userPromptSubmitted provides `prompt`;
+# `userMessage` is accepted only for compatibility with older examples.
 PROMPT=""
 if command -v jq &>/dev/null; then
-  PROMPT=$(echo "$INPUT" | jq -r '.userMessage // .prompt // empty' 2>/dev/null || echo "")
+  PROMPT=$(printf '%s' "$INPUT" | jq -r '.prompt // .userMessage // empty' 2>/dev/null || echo "")
 fi
 if [[ -z "$PROMPT" ]]; then
   PROMPT="$INPUT"
@@ -83,8 +84,11 @@ if [[ ${#THREATS_FOUND[@]} -gt 0 ]]; then
   MAX_SEVERITY="0.0"
   for threat in "${THREATS_FOUND[@]}"; do
     IFS=$'\t' read -r category severity description evidence_encoded <<< "$threat"
-    local evidence
+    evidence=""
     evidence=$(printf '%s' "$evidence_encoded" | base64 -d 2>/dev/null || echo "[redacted]")
+    if [[ "$category" == "credential_exposure" ]]; then
+      evidence="[REDACTED]"
+    fi
 
     if [[ "$FIRST" != "true" ]]; then
       THREATS_JSON+=","
@@ -99,7 +103,7 @@ if [[ ${#THREATS_FOUND[@]} -gt 0 ]]; then
       '{"category":$cat,"severity":($sev|tonumber),"description":$desc,"evidence":$ev}')
 
     # Track max severity
-    if (( $(echo "$severity > $MAX_SEVERITY" | bc -l 2>/dev/null || echo 0) )); then
+    if awk "BEGIN { exit !($severity > $MAX_SEVERITY) }" 2>/dev/null; then
       MAX_SEVERITY="$severity"
     fi
   done
@@ -114,16 +118,18 @@ if [[ ${#THREATS_FOUND[@]} -gt 0 ]]; then
     '{"timestamp":$timestamp,"event":"threat_detected","governance_level":$level,"threat_count":$count,"max_severity":($max_severity|tonumber),"threats":$threats}' \
     >> "$LOG_FILE"
 
-  echo "⚠️ Governance: ${#THREATS_FOUND[@]} threat signal(s) detected (max severity: $MAX_SEVERITY)"
-  for threat in "${THREATS_FOUND[@]}"; do
-    IFS=$'\t' read -r category severity description _evidence_encoded <<< "$threat"
-    echo "  🔴 [$category] $description (severity: $severity)"
-  done
+  {
+    echo "⚠️ Governance: ${#THREATS_FOUND[@]} threat signal(s) detected (max severity: $MAX_SEVERITY)"
+    for threat in "${THREATS_FOUND[@]}"; do
+      IFS=$'\t' read -r category severity description _evidence_encoded <<< "$threat"
+      echo "  🔴 [$category] $description (severity: $severity)"
+    done
+  } >&2
 
   # In strict/locked mode or when BLOCK_ON_THREAT is true, exit non-zero to block
   if [[ "$BLOCK" == "true" ]] || [[ "$LEVEL" == "strict" ]] || [[ "$LEVEL" == "locked" ]]; then
-    echo "🚫 Prompt blocked by governance policy (level: $LEVEL)"
-    exit 1
+    echo "🚫 Prompt blocked by governance policy (level: $LEVEL)" >&2
+    exit 2
   fi
 else
   jq -Rn \

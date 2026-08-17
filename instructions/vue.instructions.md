@@ -1,6 +1,6 @@
 ---
-description: 'Comprehensive Vue 3 development standards and best practices: Composition API, `<script setup>`, the full reactivity system, compiler macros (defineModel/defineSlots/defineOptions), built-in components (Teleport/Suspense/Transition/KeepAlive), provide/inject, composables, Pinia, Vue Router, TypeScript, testing, performance, SSR, and security.'
 applyTo: '**/*.vue, **/*.ts, **/*.js, **/*.css, **/*.scss'
+description: 'Comprehensive Vue 3 development standards and best practices: Composition API, `<script setup>`, the full reactivity system, compiler macros (defineModel/defineSlots/defineOptions), built-in components (Teleport/Suspense/Transition/KeepAlive), provide/inject, composables, Pinia, Vue Router, TypeScript, testing, performance, SSR, and security.'
 ---
 
 # Vue 3 Development Instructions

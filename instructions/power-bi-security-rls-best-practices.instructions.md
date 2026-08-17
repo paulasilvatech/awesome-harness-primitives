@@ -1,6 +1,6 @@
 ---
-description: 'Comprehensive Power BI Row-Level Security (RLS) and advanced security patterns implementation guide with dynamic security, best practices, and governance strategies.'
 applyTo: '**/*.{pbix,dax,md,txt,json,csharp,powershell}'
+description: 'Comprehensive Power BI Row-Level Security (RLS) and advanced security patterns implementation guide with dynamic security, best practices, and governance strategies.'
 ---
 
 # Power BI Security and Row-Level Security Best Practices

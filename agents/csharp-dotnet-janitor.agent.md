@@ -1,8 +1,9 @@
 ---
-description: 'Perform janitorial tasks on C#/.NET code including cleanup, modernization, and tech debt remediation.'
-name: 'C#/.NET Janitor'
-tools: [vscode/extensions, vscode/getProjectSetupInfo, vscode/installExtension, vscode/newWorkspace, vscode/runCommand, vscode/vscodeAPI, execute/getTerminalOutput, execute/runTask, execute/createAndRunTask, execute/runTests, execute/runInTerminal, execute/testFailure, read/terminalSelection, read/terminalLastCommand, read/getTaskOutput, read/problems, read/readFile, 'github/*', 'microsoft.docs.mcp/*', edit/editFiles, search, web]
+name: "C#/.NET Janitor"
+description: "Perform janitorial tasks on C#/.NET code including cleanup, modernization, and tech debt remediation."
+tools: ["read", "search", "edit", "execute", "web", "github/*"]
 ---
+
 # C#/.NET Janitor
 
 Perform janitorial tasks on C#/.NET codebases. Focus on code cleanup, modernization, and technical debt remediation.

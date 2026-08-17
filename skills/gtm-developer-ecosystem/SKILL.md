@@ -1,12 +1,14 @@
 ---
-name: gtm-developer-ecosystem
-description: Build and scale developer-led adoption through ecosystem programs. Use when deciding open vs curated ecosystems, building developer programs, scaling platform adoption, or designing student program pipelines.
-license: MIT
+name: "gtm-developer-ecosystem"
+description: >-
+  Build and scale developer-led adoption through ecosystem programs. Use when deciding open vs curated
+  ecosystems, building developer programs, scaling platform adoption, or designing student program
+  pipelines.
+license: "MIT"
 metadata:
-  author: Smit Patel (https://linkedin.com/in/smitkpatel)
-  source: https://github.com/beingsmit/technical-product-gtm
+  author: "Smit Patel (https://linkedin.com/in/smitkpatel)"
+  source: "https://github.com/beingsmit/technical-product-gtm"
 ---
-
 # Developer Ecosystem
 
 Build and scale developer-led adoption through ecosystem programs, community, and partnerships. Focus on what actually drives adoption, not vanity metrics.

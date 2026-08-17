@@ -1,8 +1,7 @@
 ---
-description: "Testing mode for Playwright tests"
 name: "Playwright Tester Mode"
-tools: ["changes", "codebase", "edit/editFiles", "fetch", "findTestFiles", "problems", "runCommands", "runTasks", "runTests", "search", "searchResults", "terminalLastCommand", "terminalSelection", "testFailure", "playwright"]
-model: Claude Sonnet 4
+description: "Testing mode for Playwright tests"
+tools: ["read", "search", "edit", "execute", "web"]
 ---
 
 ## Core Responsibilities

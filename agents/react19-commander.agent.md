@@ -1,25 +1,9 @@
 ---
-name: react19-commander
-description: 'Master orchestrator for React 19 migration. Invokes specialist subagents in sequence - auditor, dep-surgeon, migrator, test-guardian - and gates advancement between steps. Uses memory to track migration state across the pipeline. Zero tolerance for incomplete migrations.'
-tools: [
-  'agent',
-  'vscode/memory',
-  'edit/editFiles',
-  'execute/getTerminalOutput',
-  'execute/runInTerminal',
-  'read/terminalLastCommand',
-  'read/terminalSelection',
-  'search',
-  'search/usages',
-  'read/problems'
-]
-agents: [
-  'react19-auditor',
-  'react19-dep-surgeon',
-  'react19-migrator',
-  'react19-test-guardian'
-]
-argument-hint: Just activate to start the React 19 migration.
+name: "react19-commander"
+description: >-
+  Master orchestrator for React 19 migration. Invokes specialist subagents in sequence - auditor, dep-surgeon, migrator, test-guardian - and gates advancement between steps. Uses memory to track migration state across the pipeline. Zero tolerance for incomplete migrations.
+tools: ["read", "search", "edit", "execute", "agent"]
+argument-hint: "Just activate to start the React 19 migration."
 ---
 
 # React 19 Commander  Migration Orchestrator
@@ -222,3 +206,7 @@ npm test -- --watchAll=false --passWithNoTests --forceExit 2>&1 | grep -E "Tests
 - [ ] StrictMode call count assertions updated
 - [ ] All tests passing (0 failures)
 - [ ] Build succeeds
+
+## Delegation Targets
+
+This orchestrator was originally configured with these intended subagents: react19-auditor, react19-dep-surgeon, react19-migrator, react19-test-guardian. Preserve that delegation plan when invoking subagents in the Copilot CLI.

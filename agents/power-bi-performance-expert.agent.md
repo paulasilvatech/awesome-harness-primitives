@@ -1,8 +1,9 @@
 ---
-description: "Expert Power BI performance optimization guidance for troubleshooting, monitoring, and improving the performance of Power BI models, reports, and queries."
 name: "Power BI Performance Expert Mode"
+description: >-
+  Expert Power BI performance optimization guidance for troubleshooting, monitoring, and improving the performance of Power BI models, reports, and queries.
+tools: ["read", "search", "web"]
 model: "gpt-4.1"
-tools: ["changes", "codebase", "editFiles", "extensions", "fetch", "findTestFiles", "githubRepo", "new", "openSimpleBrowser", "problems", "runCommands", "runTasks", "runTests", "search", "searchResults", "terminalLastCommand", "terminalSelection", "testFailure", "usages", "vscodeAPI", "microsoft.docs.mcp"]
 ---
 
 # Power BI Performance Expert Mode

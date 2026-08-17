@@ -1,8 +1,11 @@
 ---
-name: mcp-release-qa
-description: 'Verify an MCP server before release by exercising a real protocol session, comparing runtime capabilities with source and documentation, testing failure paths, and recording reproducible evidence. Use when shipping or reviewing an MCP server, tool, resource, prompt, catalog, or install path.'
+name: "mcp-release-qa"
+description: >-
+  Verify an MCP server before release by exercising a real protocol session, comparing runtime
+  capabilities with source and documentation, testing failure paths, and recording reproducible
+  evidence. Use when shipping or reviewing an MCP server, tool, resource, prompt, catalog, or install
+  path.
 ---
-
 # MCP Release QA
 
 Test the server that users will run. A schema review or a passing unit test is

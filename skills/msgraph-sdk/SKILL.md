@@ -1,8 +1,11 @@
 ---
-name: msgraph-sdk
-description: 'Integrate Microsoft Graph SDK into any project — .NET, TypeScript/JavaScript, or Python. Covers auth patterns (client credentials, OBO, managed identity), SDK setup, calling Graph APIs, batching, delta queries, change notifications, throttling, and permission scopes. Use when accessing Microsoft 365 data (users, mail, calendar, Teams, files, SharePoint) from any application type.'
+name: "msgraph-sdk"
+description: >-
+  Integrate Microsoft Graph SDK into any project — .NET, TypeScript/JavaScript, or Python. Covers auth
+  patterns (client credentials, OBO, managed identity), SDK setup, calling Graph APIs, batching, delta
+  queries, change notifications, throttling, and permission scopes. Use when accessing Microsoft 365
+  data (users, mail, calendar, Teams, files, SharePoint) from any application type.
 ---
-
 # Microsoft Graph SDK
 
 Use this skill when integrating Microsoft Graph into an application to access Microsoft 365 data and services.

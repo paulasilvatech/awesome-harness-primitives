@@ -1,6 +1,6 @@
 ---
-description: 'Memory Bank pattern: persistent project documentation under a memory-bank/ folder so the AI can resume context across sessions.'
 applyTo: 'memory-bank/**'
+description: 'Memory Bank pattern: persistent project documentation under a memory-bank/ folder so the AI can resume context across sessions.'
 ---
 
 > **Opt-in pattern.** This instruction creates and maintains a `memory-bank/` folder in the workspace root. Enable it only when you want persistent project documentation across AI sessions; otherwise the auxiliary files will accumulate in repos that don't need them.

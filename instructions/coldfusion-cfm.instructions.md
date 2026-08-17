@@ -1,6 +1,6 @@
 ---
+applyTo: '**/*.cfm'
 description: 'ColdFusion cfm files and application patterns'
-applyTo: "**/*.cfm"
 ---
 
 # ColdFusion Coding Standards

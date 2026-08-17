@@ -1,7 +1,8 @@
 ---
-name: react19-dep-surgeon
-description: 'Dependency upgrade specialist. Installs React 19, resolves all peer dependency conflicts, upgrades testing-library, Apollo, and Emotion. Uses memory to log each upgrade step. Returns GO/NO-GO to the commander. Invoked as a subagent by react19-commander.'
-tools: ['vscode/memory', 'edit/editFiles', 'execute/getTerminalOutput', 'execute/runInTerminal', 'read/terminalLastCommand', 'read/terminalSelection', 'search', 'web/fetch']
+name: "react19-dep-surgeon"
+description: >-
+  Dependency upgrade specialist. Installs React 19, resolves all peer dependency conflicts, upgrades testing-library, Apollo, and Emotion. Uses memory to log each upgrade step. Returns GO/NO-GO to the commander. Invoked as a subagent by react19-commander.
+tools: ["read", "search", "edit", "execute", "web"]
 user-invocable: false
 ---
 

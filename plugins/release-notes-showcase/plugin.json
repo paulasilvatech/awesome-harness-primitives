@@ -14,15 +14,5 @@
     "launch-summary",
     "product-updates",
     "release-notes"
-  ],
-  "extensions": {
-    "com.github.copilot": {
-      "logo": "assets/preview.png"
-    },
-    "com.github.awesome-copilot": {
-      "extensions": [
-        "./extensions/release-notes-showcase"
-      ]
-    }
-  }
+  ]
 }

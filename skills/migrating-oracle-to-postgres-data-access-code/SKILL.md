@@ -1,8 +1,12 @@
 ---
-name: migrating-oracle-to-postgres-data-access-code
-description: 'Migrates .NET/C# data access code from Oracle to PostgreSQL (Npgsql). Replaces Oracle NuGet packages, rewrites OracleConnection/OracleCommand/OracleDataReader usage, fixes DbType mappings, updates stored procedure invocation patterns, and adapts connection string configuration. Use when migrating the application code layer of a .NET project during an Oracle-to-PostgreSQL database migration.'
+name: "migrating-oracle-to-postgres-data-access-code"
+description: >-
+  Migrates .NET/C# data access code from Oracle to PostgreSQL (Npgsql). Replaces Oracle NuGet
+  packages, rewrites OracleConnection/OracleCommand/OracleDataReader usage, fixes DbType mappings,
+  updates stored procedure invocation patterns, and adapts connection string configuration. Use when
+  migrating the application code layer of a .NET project during an Oracle-to-PostgreSQL database
+  migration.
 ---
-
 # Migrating .NET Data Access Code from Oracle to PostgreSQL
 
 Migrate the C# data access layer of a single `.Postgres`-copy project from Oracle (Oracle.ManagedDataAccess) to PostgreSQL (Npgsql). Work item by item through `Reports/{ProjectName}/MigrationChecklist.md`.

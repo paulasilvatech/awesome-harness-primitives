@@ -15,15 +15,5 @@
     "screenshots",
     "ui-testing",
     "web-navigation"
-  ],
-  "extensions": {
-    "com.github.copilot": {
-      "logo": "assets/preview.png"
-    },
-    "com.github.awesome-copilot": {
-      "extensions": [
-        "./extensions/chromium-control-canvas"
-      ]
-    }
-  }
+  ]
 }

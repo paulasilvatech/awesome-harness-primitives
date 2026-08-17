@@ -1,8 +1,11 @@
 ---
-name: bench-read
-description: 'Read artifacts from the shared bench — the workspace where desks leave findings, verdicts, and work products for each other and the operator.'
+name: "bench-read"
+description: >-
+  Read artifacts from the shared bench — the workspace where desks leave findings, verdicts, and work
+  products for each other and the operator. Use this skill when starting a session and need to see
+  what other desks have produced; reviewing work before routing it to another desk; the operator asks
+  "what's on the bench?" or "show me what desk X found".
 ---
-
 # Bench Read
 
 Read artifacts from the shared workspace (the bench) where desks

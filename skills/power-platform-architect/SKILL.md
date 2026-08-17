@@ -1,11 +1,13 @@
 ---
-name: power-platform-architect
-description: Use this skill when the user needs to transform business requirements, use case descriptions, or meeting transcripts into a technical Power Platform solution architecture, including component selection and Mermaid.js diagrams.
-license: MIT
+name: "power-platform-architect"
+description: >-
+  Use this skill when the user needs to transform business requirements, use case descriptions, or
+  meeting transcripts into a technical Power Platform solution architecture, including component
+  selection and Mermaid.js diagrams.
+license: "MIT"
 metadata:
-  author: Tim Hanewich
+  author: "Tim Hanewich"
 ---
-
 # Power Platform Architect Skill
 
 ## Context

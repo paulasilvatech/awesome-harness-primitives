@@ -1,8 +1,9 @@
 ---
-name: finalize-agent-prompt
-description: 'Finalize prompt file using the role of an AI agent to polish the prompt for the end user.'
+name: "finalize-agent-prompt"
+description: >-
+  Finalize prompt file using the role of an AI agent to polish the prompt for the end user. Use this
+  skill when the user asks for current role.
 ---
-
 # Finalize Agent Prompt
 
 ## Current Role

@@ -1,6 +1,6 @@
 ---
-applyTo: ["*"]
-description: "Comprehensive best practices for adopting new Java 17 features since the release of Java 11."
+applyTo: '**/*.java,**/*.gradle,**/*.gradle.kts,**/pom.xml'
+description: 'Comprehensive best practices for adopting new Java 17 features since the release of Java 11.'
 ---
 
 # Java 11 to Java 17 Upgrade Guide

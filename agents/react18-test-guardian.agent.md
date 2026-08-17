@@ -1,7 +1,8 @@
 ---
-name: react18-test-guardian
-description: 'Test suite fixer and verifier for React 16/17 → 18.3.1 migration. Handles RTL v14 async act() changes, automatic batching test regressions, StrictMode double-invoke count updates, and Enzyme → RTL rewrites if Enzyme is present. Loops until zero test failures. Invoked as subagent by react18-commander.'
-tools: ['vscode/memory', 'edit/editFiles', 'execute/getTerminalOutput', 'execute/runInTerminal', 'read/terminalLastCommand', 'read/terminalSelection', 'search', 'search/usages', 'read/problems']
+name: "react18-test-guardian"
+description: >-
+  Test suite fixer and verifier for React 16/17 → 18.3.1 migration. Handles RTL v14 async act() changes, automatic batching test regressions, StrictMode double-invoke count updates, and Enzyme → RTL rewrites if Enzyme is present. Loops until zero test failures. Invoked as subagent by react18-commander.
+tools: ["read", "search", "edit", "execute"]
 user-invocable: false
 ---
 

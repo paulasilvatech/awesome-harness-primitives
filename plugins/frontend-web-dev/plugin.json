@@ -22,13 +22,21 @@
   "extensions": {
     "com.github.awesome-copilot": {
       "agents": [
-        "./agents/electron-angular-native.md",
-        "./agents/expert-react-frontend-engineer.md"
+        "./agents/electron-angular-native.agent.md",
+        "./agents/expert-react-frontend-engineer.agent.md"
       ],
       "skills": [
         "./skills/playwright-explore-website/",
         "./skills/playwright-generate-test/"
       ]
     }
-  }
+  },
+  "agents": [
+    "./agents/electron-angular-native.agent.md",
+    "./agents/expert-react-frontend-engineer.agent.md"
+  ],
+  "skills": [
+    "./skills/playwright-explore-website/",
+    "./skills/playwright-generate-test/"
+  ]
 }

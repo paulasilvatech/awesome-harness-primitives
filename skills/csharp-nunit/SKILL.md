@@ -1,8 +1,7 @@
 ---
-name: csharp-nunit
-description: 'Get best practices for NUnit unit testing, including data-driven tests'
+name: "csharp-nunit"
+description: "Get best practices for NUnit unit testing, including data-driven tests. Use this skill when the user asks for nunit best practices."
 ---
-
 # NUnit Best Practices
 
 Your goal is to help me write effective unit tests with NUnit, covering both standard and data-driven testing approaches.

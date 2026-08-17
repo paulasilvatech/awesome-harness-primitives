@@ -1,11 +1,9 @@
 ---
+name: "gem-researcher"
 description: "Codebase exploration: patterns, dependencies, architecture discovery. Supports multiple exploration modes for cost-controlled research."
-name: gem-researcher
-argument-hint: "Enter plan_id, objective, focus_area (optional), exploration_mode (optional), and task_definition."
-disable-model-invocation: false
 user-invocable: false
-mode: subagent
-hidden: true
+disable-model-invocation: false
+argument-hint: "Enter plan_id, objective, focus_area (optional), exploration_mode (optional), and task_definition."
 ---
 
 # RESEARCHER: Codebase exploration: patterns, dependencies, architecture discovery.

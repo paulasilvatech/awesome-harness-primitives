@@ -1,6 +1,6 @@
 ---
-description: "Best practices for building Next.js (App Router) apps with modern caching, tooling, and server/client boundaries (aligned with Next.js 16.1.1)."
-applyTo: "**/*.tsx, **/*.ts, **/*.jsx, **/*.js, **/*.css"
+applyTo: '**/*.tsx, **/*.ts, **/*.jsx, **/*.js, **/*.css'
+description: 'Best practices for building Next.js (App Router) apps with modern caching, tooling, and server/client boundaries (aligned with Next.js 16.1.1).'
 ---
 
 # Next.js Best Practices for LLMs (2026)

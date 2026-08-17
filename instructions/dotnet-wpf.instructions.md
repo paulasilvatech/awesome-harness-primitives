@@ -1,6 +1,6 @@
 ---
-description: '.NET WPF component and application patterns'
 applyTo: '**/*.xaml, **/*.cs'
+description: '.NET WPF component and application patterns'
 ---
 
 ## Summary

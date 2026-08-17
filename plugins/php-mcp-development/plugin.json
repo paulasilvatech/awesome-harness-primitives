@@ -20,11 +20,17 @@
   "extensions": {
     "com.github.awesome-copilot": {
       "agents": [
-        "./agents/php-mcp-expert.md"
+        "./agents/php-mcp-expert.agent.md"
       ],
       "skills": [
         "./skills/php-mcp-server-generator/"
       ]
     }
-  }
+  },
+  "agents": [
+    "./agents/php-mcp-expert.agent.md"
+  ],
+  "skills": [
+    "./skills/php-mcp-server-generator/"
+  ]
 }

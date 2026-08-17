@@ -1,8 +1,9 @@
 ---
-name: breakdown-epic-arch
-description: 'Prompt for creating the high-level technical architecture for an Epic, based on a Product Requirements Document.'
+name: "breakdown-epic-arch"
+description: >-
+  Prompt for creating the high-level technical architecture for an Epic, based on a Product
+  Requirements Document. Use this skill when the user asks for epic architecture specification prompt.
 ---
-
 # Epic Architecture Specification Prompt
 
 ## Goal

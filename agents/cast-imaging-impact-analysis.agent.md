@@ -1,13 +1,14 @@
 ---
-name: 'CAST Imaging Impact Analysis Agent'
-description: 'Specialized agent for comprehensive change impact assessment and risk analysis in software systems using CAST Imaging'
+name: "CAST Imaging Impact Analysis Agent"
+description: "Specialized agent for comprehensive change impact assessment and risk analysis in software systems using CAST Imaging"
 mcp-servers:
   imaging-impact-analysis:
-    type: 'http'
-    url: 'https://castimaging.io/imaging/mcp/'
+    type: "http"
+    url: "https://castimaging.io/imaging/mcp/"
     headers:
-      'x-api-key': '${input:imaging-key}'
-    args: []
+      x-api-key: "${input:imaging-key}"
+    args:
+      []
 ---
 
 # CAST Imaging Impact Analysis Agent

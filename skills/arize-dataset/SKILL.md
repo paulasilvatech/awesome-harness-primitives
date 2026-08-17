@@ -1,12 +1,15 @@
 ---
-name: arize-dataset
-description: Creates, manages, and queries Arize datasets and examples. Covers dataset CRUD, appending examples, exporting data, and file-based dataset creation using the ax CLI. Use when the user needs test data, evaluation examples, or mentions create dataset, list datasets, export dataset, append examples, dataset version, golden dataset, or test set.
+name: "arize-dataset"
+description: >-
+  Creates, manages, and queries Arize datasets and examples. Covers dataset CRUD, appending examples,
+  exporting data, and file-based dataset creation using the ax CLI. Use when the user needs test data,
+  evaluation examples, or mentions create dataset, list datasets, export dataset, append examples,
+  dataset version, golden dataset, or test set.
 metadata:
-  author: arize
+  author: "arize"
+  compatibility: "Requires the ax CLI and a configured Arize profile."
   version: "1.0"
-compatibility: Requires the ax CLI and a configured Arize profile.
 ---
-
 # Arize Dataset Skill
 
 > **`SPACE`** — All `--space` flags and the `ARIZE_SPACE` env var accept a space **name** (e.g., `my-workspace`) or a base64 space **ID** (e.g., `U3BhY2U6...`). Find yours with `ax spaces list`.

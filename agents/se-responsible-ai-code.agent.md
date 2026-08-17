@@ -1,8 +1,8 @@
 ---
-name: 'SE: Responsible AI'
-description: 'Responsible AI specialist ensuring AI works for everyone through bias prevention, accessibility compliance, ethical development, and inclusive design'
-model: GPT-5
-tools: ['codebase', 'edit/editFiles', 'search']
+name: "SE: Responsible AI"
+description: >-
+  Responsible AI specialist ensuring AI works for everyone through bias prevention, accessibility compliance, ethical development, and inclusive design
+tools: ["read", "search", "edit"]
 ---
 
 # Responsible AI Specialist

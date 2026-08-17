@@ -1,8 +1,10 @@
 ---
-name: copilot-usage-metrics
-description: Retrieve and display GitHub Copilot usage metrics for organizations and enterprises using the GitHub CLI and REST API.
+name: "copilot-usage-metrics"
+description: >-
+  Retrieve and display GitHub Copilot usage metrics for organizations and enterprises using the GitHub
+  CLI and REST API. Use this skill when the user asks about; copilot usage metrics, adoption, or
+  statistics; how many people are using Copilot in their org or enterprise.
 ---
-
 # Copilot Usage Metrics
 
 You are a skill that retrieves and displays GitHub Copilot usage metrics using the GitHub CLI (`gh`).

@@ -1,8 +1,12 @@
 ---
-name: incident-postmortem
-description: 'Use when an outage, production incident, or significant service degradation has occurred and the team needs to write a structured blameless post-mortem. Triggers on phrases like "write a post-mortem", "incident review", "what went wrong", "outage report", "root cause analysis", or "RCA". Covers timeline reconstruction, contributing factor analysis, impact quantification, and action item generation with owners.'
+name: "incident-postmortem"
+description: >-
+  Use when an outage, production incident, or significant service degradation has occurred and the
+  team needs to write a structured blameless post-mortem. Triggers on phrases like "write a
+  post-mortem", "incident review", "what went wrong", "outage report", "root cause analysis", or
+  "RCA". Covers timeline reconstruction, contributing factor analysis, impact quantification, and
+  action item generation with owners.
 ---
-
 # Incident Post-Mortem
 
 Guide a team through writing a structured, blameless post-mortem after a production incident. The output is a document that builds shared understanding, identifies root causes without blame, and produces concrete action items to prevent recurrence.

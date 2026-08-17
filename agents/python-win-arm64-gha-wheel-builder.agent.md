@@ -1,6 +1,6 @@
 ---
-name: GitHub Actions Windows ARM64 wheel builder
-description: Adds native Windows ARM64 wheel builds and tests to a Python package's existing GitHub Actions workflows using the 'windows-11-arm' runner.
+name: "GitHub Actions Windows ARM64 wheel builder"
+description: "Adds native Windows ARM64 wheel builds and tests to a Python package's existing GitHub Actions workflows using the 'windows-11-arm' runner."
 ---
 
 # GitHub Actions Windows ARM64 wheel builder

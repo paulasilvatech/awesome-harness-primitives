@@ -1,6 +1,6 @@
 ---
-description: 'Production-grade guidance for AWS AppSync Event API handlers using APPSYNC_JS runtime restrictions, utilities, modules, and datasource patterns'
 applyTo: '**/*.{graphql,gql,vtl,ts,js,mjs,cjs,json,yml,yaml}'
+description: 'Production-grade guidance for AWS AppSync Event API handlers using APPSYNC_JS runtime restrictions, utilities, modules, and datasource patterns'
 ---
 
 # AWS AppSync Event API Instructions

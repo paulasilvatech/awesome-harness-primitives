@@ -1,17 +1,15 @@
 ---
-name: code-tour
-description: >
-  Use this skill to create CodeTour .tour files — persona-targeted, step-by-step walkthroughs
-  that link to real files and line numbers. Trigger for: "create a tour", "make a code tour",
-  "generate a tour", "onboarding tour", "tour for this PR", "tour for this bug", "RCA tour",
-  "architecture tour", "explain how X works", "vibe check", "PR review tour",
-  "contributor guide", "help someone ramp up", or any request for a structured walkthrough
-  through code. Supports 20 developer personas (new joiner, bug fixer, architect, PR reviewer,
-  vibecoder, security reviewer, and more), all CodeTour step types (file/line, selection,
-  pattern, uri, commands, view), and tour-level fields (ref, isPrimary, nextTour).
-  Works with any repository in any language.
+name: "code-tour"
+description: >-
+  Use this skill to create CodeTour .tour files — persona-targeted, step-by-step walkthroughs that
+  link to real files and line numbers. Trigger for: "create a tour", "make a code tour", "generate a
+  tour", "onboarding tour", "tour for this PR", "tour for this bug", "RCA tour", "architecture tour",
+  "explain how X works", "vibe check", "PR review tour", "contributor guide", "help someone ramp up",
+  or any request for a structured walkthrough through code. Supports 20 developer personas (new
+  joiner, bug fixer, architect, PR reviewer, vibecoder, security reviewer, and more), all CodeTour
+  step types (file/line, selection, pattern, uri, commands, view), and tour-level fields (ref,
+  isPrimary, nextTour). Works with any repository in any language.
 ---
-
 # Code Tour Skill
 
 You are creating a **CodeTour** — a persona-targeted, step-by-step walkthrough of a codebase

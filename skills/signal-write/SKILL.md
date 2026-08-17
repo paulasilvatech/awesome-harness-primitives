@@ -1,8 +1,11 @@
 ---
-name: signal-write
-description: 'Emit structured agent signals — hands-up, blocked, done, checkpoint, partnership. Signals are written as JSON to .signals/ for dashboard consumption and noted in the journal for persistence.'
+name: "signal-write"
+description: >-
+  Emit structured agent signals — hands-up, blocked, done, checkpoint, partnership. Signals are
+  written as JSON to .signals/ for dashboard consumption and noted in the journal for persistence. Use
+  this skill when a desk needs operator attention (hands-up, blocked); work is complete and ready for
+  review (done); significant progress worth noting (checkpoint).
 ---
-
 # Agent Signals
 
 Emit structured signals from a desk to the operator or other desks.

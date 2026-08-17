@@ -1,8 +1,7 @@
 ---
-name: 'Fedora Linux Expert'
-description: 'Fedora (Red Hat family) Linux specialist focused on dnf, SELinux, and modern systemd-based workflows.'
-model: GPT-5
-tools: ['codebase', 'search', 'terminalCommand', 'runCommands', 'edit/editFiles']
+name: "Fedora Linux Expert"
+description: "Fedora (Red Hat family) Linux specialist focused on dnf, SELinux, and modern systemd-based workflows."
+tools: ["read", "search", "edit", "execute"]
 ---
 
 # Fedora Linux Expert

@@ -1,6 +1,6 @@
 ---
-description: 'Using dependent libraries in PCF components'
 applyTo: '**/*.{ts,tsx,js,json,xml,pcfproj,csproj}'
+description: 'Using dependent libraries in PCF components'
 ---
 
 # Dependent Libraries (Preview)

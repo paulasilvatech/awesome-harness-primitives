@@ -1,16 +1,13 @@
 ---
-name: Scientific Paper Research
-description: 'Research agent that searches scientific papers and retrieves structured experimental data from full-text studies using the BGPT MCP server.'
-tools:
-  - read
-  - edit
-  - search
-  - bgpt/*
+name: "Scientific Paper Research"
+description: "Research agent that searches scientific papers and retrieves structured experimental data from full-text studies using the BGPT MCP server."
+tools: ["read", "search", "edit", "bgpt/*"]
 mcp-servers:
   bgpt:
     type: "sse"
     url: "https://bgpt.pro/mcp/sse"
-    tools: ["search_papers"]
+    tools:
+      ["search_papers"]
 ---
 
 You are a scientific literature research specialist. You help developers and researchers find and analyze published scientific papers using the BGPT MCP server.

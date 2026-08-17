@@ -1,24 +1,21 @@
 ---
-name: brag-sheet
-description: >
-  Turn vague "what did I do?" into evidence-backed impact statements for performance
-  reviews, self-reviews, promotion packets, and weekly updates. Uniquely mines Copilot
-  CLI session logs to reconstruct forgotten work, plus git commits and GitHub PRs.
-  Enforces a 3-part impact contract (action → result → evidence). Works standalone
-  with zero dependencies. Trigger for: "brag", "log work", "what did I do",
-  "backfill my work history", "performance review", "self-review", "self assessment",
-  "write impact statement", "review prep", "promo packet", "promotion case",
-  "weekly update", "status report", "accomplishments", "what did I ship",
-  "I forgot to log my work", "summarize my work", "track my wins",
-  "what should I highlight", "end of half", "career growth", "work journal",
-  or any request to document, summarize, or organize work accomplishments.
-license: MIT
-compatibility: 'Cross-platform (Windows, macOS, Linux). Works with any GitHub Copilot CLI session. Optional: git, gh CLI.'
+name: "brag-sheet"
+description: >-
+  Turn vague "what did I do?" into evidence-backed impact statements for performance reviews,
+  self-reviews, promotion packets, and weekly updates. Uniquely mines Copilot CLI session logs to
+  reconstruct forgotten work, plus git commits and GitHub PRs. Enforces a 3-part impact contract
+  (action → result → evidence). Works standalone with zero dependencies. Trigger for: "brag", "log
+  work", "what did I do", "backfill my work history", "performance review", "self-review", "self
+  assessment", "write impact statement", "review prep", "promo packet", "promotion case", "weekly
+  update", "status report", "accomplishments", "what did I ship", "I forgot to log my work",
+  "summarize my work", "track my wins", "what should I highlight", "end of half", "career growth",
+  "work journal", or any request to document, summarize, or organize work accomplishments.
+license: "MIT"
 metadata:
+  compatibility: "Cross-platform (Windows, macOS, Linux). Works with any GitHub Copilot CLI session. Optional: git, gh CLI."
   version: "1.1"
-argument-hint: 'Optional: time range ("last 2 weeks", "this half"), category ("infrastructure"), "backfill", or "review prep"'
+argument-hint: "Optional: time range (\"last 2 weeks\", \"this half\"), category (\"infrastructure\"), \"backfill\", or \"review prep\""
 ---
-
 # Brag Sheet — Work Impact Writer
 
 Turn engineering work into evidence-backed impact statements for performance reviews, self-reviews, promotion packets, and weekly updates. Uniquely mines Copilot CLI session logs, git history, and PRs to reconstruct forgotten work.

@@ -1,6 +1,6 @@
 ---
-description: 'Complete PCF API reference with all interfaces and their availability in model-driven and canvas apps'
 applyTo: '**/*.{ts,tsx,js}'
+description: 'Complete PCF API reference with all interfaces and their availability in model-driven and canvas apps'
 ---
 
 # Power Apps Component Framework API Reference

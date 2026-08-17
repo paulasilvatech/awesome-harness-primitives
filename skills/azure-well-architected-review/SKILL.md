@@ -1,8 +1,10 @@
 ---
-name: azure-well-architected-review
-description: 'Perform an Azure Well-Architected Framework review of the current workload IaC and architecture, generating findings and GitHub issues for improvements.'
+name: "azure-well-architected-review"
+description: >-
+  Perform an Azure Well-Architected Framework review of the current workload IaC and architecture,
+  generating findings and GitHub issues for improvements. Use this skill when the user asks for azure
+  well-architected review.
 ---
-
 # Azure Well-Architected Review
 
 This workflow performs a structured Azure Well-Architected Framework (WAF) review against your workload's IaC files and deployed infrastructure. It identifies risks across all 5 WAF pillars and creates GitHub issues to track remediation.

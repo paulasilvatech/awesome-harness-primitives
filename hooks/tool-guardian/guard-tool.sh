@@ -20,7 +20,7 @@ if [[ "${SKIP_TOOL_GUARD:-}" == "true" ]]; then
 fi
 
 # ---------------------------------------------------------------------------
-# Read tool invocation from stdin (JSON with toolName + toolInput)
+# Read tool invocation from stdin (JSON with toolInput/tool_input and optional toolCalls)
 # ---------------------------------------------------------------------------
 INPUT=$(cat)
 
@@ -38,16 +38,16 @@ TOOL_NAME=""
 TOOL_INPUT=""
 
 if command -v jq &>/dev/null; then
-  TOOL_NAME=$(printf '%s' "$INPUT" | jq -r '.toolName // empty' 2>/dev/null || echo "")
-  TOOL_INPUT=$(printf '%s' "$INPUT" | jq -r '.toolInput // empty' 2>/dev/null || echo "")
+  TOOL_NAME=$(printf '%s' "$INPUT" | jq -r '.toolName // .tool_name // .name // .toolCalls[0].name // empty' 2>/dev/null || echo "")
+  TOOL_INPUT=$(printf '%s' "$INPUT" | jq -c '.toolInput // .tool_input // .toolCalls[0].args // .toolCalls[0].input // {}' 2>/dev/null || echo "")
 fi
 
 # Fallback: extract with grep/sed if jq unavailable or fields empty
 if [[ -z "$TOOL_NAME" ]]; then
-  TOOL_NAME=$(printf '%s' "$INPUT" | grep -oE '"toolName"\s*:\s*"[^"]*"' | head -1 | sed 's/.*"toolName"\s*:\s*"//;s/"//')
+  TOOL_NAME=$(printf '%s' "$INPUT" | grep -oE '"(toolName|tool_name|name)"\s*:\s*"[^"]*"' | head -1 | sed 's/.*:[[:space:]]*"//;s/"//' || true)
 fi
 if [[ -z "$TOOL_INPUT" ]]; then
-  TOOL_INPUT=$(printf '%s' "$INPUT" | grep -oE '"toolInput"\s*:\s*"[^"]*"' | head -1 | sed 's/.*"toolInput"\s*:\s*"//;s/"//')
+  TOOL_INPUT=$(printf '%s' "$INPUT" | grep -oE '"(toolInput|tool_input|command|script|args)"\s*:\s*"[^"]*"' | head -1 | sed 's/.*:[[:space:]]*"//;s/"//' || true)
 fi
 
 # Combine for pattern matching
@@ -153,11 +153,13 @@ done
 # Output and logging
 # ---------------------------------------------------------------------------
 if [[ $THREAT_COUNT -gt 0 ]]; then
-  echo ""
-  echo "🛡️  Tool Guardian: $THREAT_COUNT threat(s) detected in '$TOOL_NAME' invocation"
-  echo ""
-  printf "  %-24s %-10s %-40s %s\n" "CATEGORY" "SEVERITY" "MATCH" "SUGGESTION"
-  printf "  %-24s %-10s %-40s %s\n" "--------" "--------" "-----" "----------"
+  {
+    echo ""
+    echo "🛡️  Tool Guardian: $THREAT_COUNT threat(s) detected in '$TOOL_NAME' invocation"
+    echo ""
+    printf "  %-24s %-10s %-40s %s\n" "CATEGORY" "SEVERITY" "MATCH" "SUGGESTION"
+    printf "  %-24s %-10s %-40s %s\n" "--------" "--------" "-----" "----------"
+  } >&2
 
   # Build JSON findings array
   FINDINGS_JSON="["
@@ -170,7 +172,7 @@ if [[ $THREAT_COUNT -gt 0 ]]; then
     if [[ ${#match} -gt 38 ]]; then
       display_match="${match:0:35}..."
     fi
-    printf "  %-24s %-10s %-40s %s\n" "$category" "$severity" "$display_match" "$suggestion"
+    printf "  %-24s %-10s %-40s %s\n" "$category" "$severity" "$display_match" "$suggestion" >&2
 
     if [[ "$FIRST" != "true" ]]; then
       FINDINGS_JSON+=","
@@ -180,18 +182,18 @@ if [[ $THREAT_COUNT -gt 0 ]]; then
   done
   FINDINGS_JSON+="]"
 
-  echo ""
+  echo "" >&2
 
   # Write structured log entry
   printf '{"timestamp":"%s","event":"threats_detected","mode":"%s","tool":"%s","threat_count":%d,"threats":%s}\n' \
     "$TIMESTAMP" "$MODE" "$(json_escape "$TOOL_NAME")" "$THREAT_COUNT" "$FINDINGS_JSON" >> "$LOG_FILE"
 
   if [[ "$MODE" == "block" ]]; then
-    echo "🚫 Operation blocked: resolve the threats above or adjust TOOL_GUARD_ALLOWLIST."
-    echo "   Set GUARD_MODE=warn to log without blocking."
-    exit 1
+    echo "🚫 Operation blocked: resolve the threats above or adjust TOOL_GUARD_ALLOWLIST." >&2
+    echo "   Set GUARD_MODE=warn to log without blocking." >&2
+    exit 2
   else
-    echo "⚠️  Threats logged in warn mode. Set GUARD_MODE=block to prevent dangerous operations."
+    echo "⚠️  Threats logged in warn mode. Set GUARD_MODE=block to prevent dangerous operations." >&2
   fi
 else
   # Log clean result

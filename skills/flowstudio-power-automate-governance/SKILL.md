@@ -1,18 +1,16 @@
 ---
-name: flowstudio-power-automate-governance
+name: "flowstudio-power-automate-governance"
 description: >-
-  Govern Power Automate flows and Power Apps at scale using the FlowStudio MCP
-  cached store. Classify flows by business impact, detect orphaned resources,
-  audit connector usage, enforce compliance standards, manage notification rules,
-  and compute governance scores — all without Dataverse or the CoE Starter Kit.
-  Load this skill when asked to: tag or classify flows, set business impact,
-  assign ownership, detect orphans, audit connectors, check compliance, compute
-  archive scores, manage notification rules, run a governance review, generate
-  a compliance report, offboard a maker, or any task that involves writing
-  governance metadata to flows. Requires a FlowStudio for Teams or MCP Pro+
-  subscription — see https://mcp.flowstudio.app
+  Govern Power Automate flows and Power Apps at scale using the FlowStudio MCP cached store. Classify
+  flows by business impact, detect orphaned resources, audit connector usage, enforce compliance
+  standards, manage notification rules, and compute governance scores — all without Dataverse or the
+  CoE Starter Kit. Load this skill when asked to: tag or classify flows, set business impact, assign
+  ownership, detect orphans, audit connectors, check compliance, compute archive scores, manage
+  notification rules, run a governance review, generate a compliance report, offboard a maker, or any
+  task that involves writing governance metadata to flows. Requires a FlowStudio for Teams or MCP Pro+
+  subscription — see https://mcp.flowstudio.app. Use this skill when > Writing a plain string like
+  `"reviewed"` will overwrite this. To mark a; > flow as security-reviewed, use `tags` instead.
 ---
-
 # Power Automate Governance with FlowStudio MCP
 
 Classify, tag, and govern Power Automate flows at scale through the FlowStudio

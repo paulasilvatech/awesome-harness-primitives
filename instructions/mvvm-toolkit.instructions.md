@@ -1,6 +1,6 @@
 ---
-description: 'CommunityToolkit.Mvvm (MVVM Toolkit) coding conventions for ViewModels, commands, messaging, validation, and DI across WPF, WinUI 3, .NET MAUI, Uno Platform, and Avalonia.'
 applyTo: '**/*.cs, **/*.xaml, **/*.csproj'
+description: 'CommunityToolkit.Mvvm (MVVM Toolkit) coding conventions for ViewModels, commands, messaging, validation, and DI across WPF, WinUI 3, .NET MAUI, Uno Platform, and Avalonia.'
 ---
 
 # CommunityToolkit.Mvvm (MVVM Toolkit)

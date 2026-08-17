@@ -1,6 +1,6 @@
 ---
+applyTo: '**/*.{py,js,jsx,ts,tsx,mjs,cjs,json,toml}'
 description: 'Verify PyPI and npm package and symbol names against the attester.dev existence oracle before installing or importing, so hallucinated dependencies never reach code'
-applyTo: '**'
 ---
 
 # Verify packages before installing or importing

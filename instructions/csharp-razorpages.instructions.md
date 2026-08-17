@@ -1,6 +1,6 @@
 ---
-description: 'Razor Pages component and application patterns'
 applyTo: '**/*.cshtml, **/*.cshtml.cs'
+description: 'Razor Pages component and application patterns'
 ---
 
 ## Razor Pages Code Style and Structure

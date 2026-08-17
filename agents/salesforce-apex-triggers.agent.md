@@ -1,8 +1,7 @@
 ---
-name: 'Salesforce Apex & Triggers Development'
-description: 'Implement Salesforce business logic using Apex classes and triggers with production-quality code following Salesforce best practices.'
-model: claude-3.5-sonnet
-tools: ['codebase', 'edit/editFiles', 'terminalCommand', 'search', 'githubRepo']
+name: "Salesforce Apex & Triggers Development"
+description: "Implement Salesforce business logic using Apex classes and triggers with production-quality code following Salesforce best practices."
+tools: ["read", "search", "edit", "execute"]
 ---
 
 # Salesforce Apex & Triggers Development Agent
@@ -170,4 +169,3 @@ Tests: <PNB coverage, factories used, async handling>
 Risks / Notes: <governor limits, dependencies, deployment sequencing>
 Next step: <deploy to scratch org, run specific tests, or hand off to Flow>
 ```
-

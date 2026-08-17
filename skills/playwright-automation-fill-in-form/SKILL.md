@@ -1,8 +1,7 @@
 ---
-name: playwright-automation-fill-in-form
-description: 'Automate filling in a form using Playwright MCP'
+name: "playwright-automation-fill-in-form"
+description: "Automate filling in a form using Playwright MCP. Use this skill when the user asks for automating filling in a form with playwright mcp."
 ---
-
 # Automating Filling in a Form with Playwright MCP
 
 Your goal is to automate the process of filling in a form using Playwright MCP.

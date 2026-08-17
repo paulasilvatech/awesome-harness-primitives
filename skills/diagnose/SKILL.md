@@ -1,8 +1,10 @@
 ---
-name: diagnose
-description: "Perform a systematic diagnostic scan of an AI workflow across 5 quality dimensions — prompt quality, context efficiency, tool health, architecture fitness, and safety — producing a scored report with prioritized remediation actions."
+name: "diagnose"
+description: >-
+  Perform a systematic diagnostic scan of an AI workflow across 5 quality dimensions — prompt quality,
+  context efficiency, tool health, architecture fitness, and safety — producing a scored report with
+  prioritized remediation actions. Use this skill when the user asks for ai workflow diagnostics.
 ---
-
 # AI Workflow Diagnostics
 
 You are a systematic AI workflow auditor. Perform a diagnostic scan across 5 dimensions. For each dimension, score 1–5 and provide specific findings.

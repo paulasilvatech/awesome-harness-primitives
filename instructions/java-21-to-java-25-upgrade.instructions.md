@@ -1,6 +1,6 @@
 ---
-applyTo: ['*']
-description: "Comprehensive best practices for adopting new Java 25 features since the release of Java 21."
+applyTo: '**/*.java,**/*.gradle,**/*.gradle.kts,**/pom.xml'
+description: 'Comprehensive best practices for adopting new Java 25 features since the release of Java 21.'
 ---
 
 # Java 21 to Java 25 Upgrade Guide

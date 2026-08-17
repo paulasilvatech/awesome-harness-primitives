@@ -1,8 +1,14 @@
 ---
-name: mvvm-toolkit
-description: 'CommunityToolkit.Mvvm (the MVVM Toolkit) core: source generators ([ObservableProperty], [RelayCommand], [NotifyPropertyChangedFor], [NotifyCanExecuteChangedFor], [NotifyDataErrorInfo]), base classes (ObservableObject / ObservableValidator / ObservableRecipient), commands (RelayCommand / AsyncRelayCommand), and validation. Companion skills: mvvm-toolkit-messenger for pub/sub, mvvm-toolkit-di for Microsoft.Extensions.DependencyInjection wiring. Works across WPF, WinUI 3, MAUI, Uno, and Avalonia.'
+name: "mvvm-toolkit"
+description: >-
+  CommunityToolkit.Mvvm (the MVVM Toolkit) core: source generators ([ObservableProperty],
+  [RelayCommand], [NotifyPropertyChangedFor], [NotifyCanExecuteChangedFor], [NotifyDataErrorInfo]),
+  base classes (ObservableObject / ObservableValidator / ObservableRecipient), commands (RelayCommand
+  / AsyncRelayCommand), and validation. Companion skills: mvvm-toolkit-messenger for pub/sub,
+  mvvm-toolkit-di for Microsoft.Extensions.DependencyInjection wiring. Works across WPF, WinUI 3,
+  MAUI, Uno, and Avalonia. Use this skill when commands, or validation in apps that use
+  `CommunityToolkit.Mvvm` 8.x.
 ---
-
 # CommunityToolkit.Mvvm (core)
 
 Use this skill when authoring or reviewing ViewModels, properties,

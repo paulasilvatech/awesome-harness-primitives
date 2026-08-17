@@ -1,6 +1,6 @@
 ---
-description: "Use when creating, editing, or reviewing draw.io diagrams and mxGraph XML in .drawio, .drawio.svg, or .drawio.png files."
-applyTo: "**/*.drawio,**/*.drawio.svg,**/*.drawio.png"
+applyTo: '**/*.drawio,**/*.drawio.svg,**/*.drawio.png'
+description: 'Use when creating, editing, or reviewing draw.io diagrams and mxGraph XML in .drawio, .drawio.svg, or .drawio.png files.'
 ---
 
 # draw.io Diagram Standards

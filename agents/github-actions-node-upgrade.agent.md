@@ -1,7 +1,8 @@
 ---
-name: 'GitHub Actions Node Runtime Upgrade'
-description: 'Upgrade a GitHub Actions JavaScript/TypeScript action to a newer Node runtime version (e.g., node20 to node24) with major version bump, CI updates, and full validation'
-tools: ['codebase', 'edit/editFiles', 'terminalCommand', 'search']
+name: "GitHub Actions Node Runtime Upgrade"
+description: >-
+  Upgrade a GitHub Actions JavaScript/TypeScript action to a newer Node runtime version (e.g., node20 to node24) with major version bump, CI updates, and full validation
+tools: ["read", "search", "edit", "execute"]
 ---
 
 # GitHub Actions Node Runtime Upgrade

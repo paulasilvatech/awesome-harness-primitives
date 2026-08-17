@@ -1,3 +1,8 @@
+---
+applyTo: '**/*.py'
+description: 'Production best practices for Python Dataverse SDK installation, authentication, CRUD operations, testing, and deployment.'
+---
+
 # Dataverse SDK for Python - Best Practices Guide
 
 ## Overview

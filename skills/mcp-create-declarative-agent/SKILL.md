@@ -1,8 +1,10 @@
 ---
-name: mcp-create-declarative-agent
-description: 'Skill converted from mcp-create-declarative-agent.prompt.md'
+name: "mcp-create-declarative-agent"
+description: >-
+  Create a Microsoft 365 Copilot declarative agent backed by an MCP server with authentication,
+  selected tools, and configuration. Use this skill when the user asks to build or configure a
+  declarative agent that integrates MCP tools into Microsoft 365 Copilot.
 ---
-
 ````prompt
 ---
 mode: 'agent'

@@ -1,8 +1,9 @@
 ---
-name: create-github-issues-for-unmet-specification-requirements
-description: 'Create GitHub Issues for unimplemented requirements from specification files using feature_request.yml template.'
+name: "create-github-issues-for-unmet-specification-requirements"
+description: >-
+  Create GitHub Issues for unimplemented requirements from specification files using
+  feature_request.yml template. Use this skill when the user asks for process.
 ---
-
 # Create GitHub Issues for Unmet Specification Requirements
 
 Create GitHub Issues for unimplemented requirements in the specification at `${file}`.

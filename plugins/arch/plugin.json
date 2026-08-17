@@ -21,5 +21,8 @@
         "./skills/doc-and-modernize/"
       ]
     }
-  }
+  },
+  "skills": [
+    "./skills/doc-and-modernize/"
+  ]
 }

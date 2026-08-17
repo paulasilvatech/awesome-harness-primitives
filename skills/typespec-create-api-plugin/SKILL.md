@@ -1,8 +1,9 @@
 ---
-name: typespec-create-api-plugin
-description: 'Generate a TypeSpec API plugin with REST operations, authentication, and Adaptive Cards for Microsoft 365 Copilot'
+name: "typespec-create-api-plugin"
+description: >-
+  Generate a TypeSpec API plugin with REST operations, authentication, and Adaptive Cards for
+  Microsoft 365 Copilot. Use this skill when the user asks for create typespec api plugin.
 ---
-
 # Create TypeSpec API Plugin
 
 Create a complete TypeSpec API plugin for Microsoft 365 Copilot that integrates with external REST APIs.

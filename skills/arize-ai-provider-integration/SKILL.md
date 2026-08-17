@@ -1,12 +1,16 @@
 ---
-name: arize-ai-provider-integration
-description: Creates, reads, updates, and deletes Arize AI integrations that store LLM provider credentials used by evaluators and other Arize features. Supports any LLM provider (e.g. OpenAI, Anthropic, Azure OpenAI, AWS Bedrock, Vertex AI, Gemini, NVIDIA NIM). Use when the user mentions AI integration, LLM provider credentials, create integration, list integrations, update credentials, delete integration, or connecting an LLM provider to Arize.
+name: "arize-ai-provider-integration"
+description: >-
+  Creates, reads, updates, and deletes Arize AI integrations that store LLM provider credentials used
+  by evaluators and other Arize features. Supports any LLM provider (e.g. OpenAI, Anthropic, Azure
+  OpenAI, AWS Bedrock, Vertex AI, Gemini, NVIDIA NIM). Use when the user mentions AI integration, LLM
+  provider credentials, create integration, list integrations, update credentials, delete integration,
+  or connecting an LLM provider to Arize.
 metadata:
-  author: arize
+  author: "arize"
+  compatibility: "Requires the ax CLI and a configured Arize profile."
   version: "1.0"
-compatibility: Requires the ax CLI and a configured Arize profile.
 ---
-
 # Arize AI Integration Skill
 
 > **`SPACE`** — Most `--space` flags and the `ARIZE_SPACE` env var accept a space **name** (e.g., `my-workspace`) or a base64 space **ID** (e.g., `U3BhY2U6...`). Find yours with `ax spaces list`.

@@ -1,8 +1,10 @@
 ---
-name: update-llms
-description: 'Update the llms.txt file in the root folder to reflect changes in documentation or specifications following the llms.txt specification at https://llmstxt.org/'
+name: "update-llms"
+description: >-
+  Update the llms.txt file in the root folder to reflect changes in documentation or specifications
+  following the llms.txt specification at https://llmstxt.org/. Use this skill when the user asks for
+  update llms.txt file.
 ---
-
 # Update LLMs.txt File
 
 Update the existing `llms.txt` file in the root of the repository to reflect changes in documentation, specifications, or repository structure. This file provides high-level guidance to large language models (LLMs) on where to find relevant content for understanding the repository's purpose and specifications.

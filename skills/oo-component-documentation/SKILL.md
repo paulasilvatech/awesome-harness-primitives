@@ -1,8 +1,10 @@
 ---
-name: oo-component-documentation
-description: 'Create or update standardized object-oriented component documentation using a shared template plus mode-specific guidance for new and existing docs.'
+name: "oo-component-documentation"
+description: >-
+  Create or update standardized object-oriented component documentation using a shared template plus
+  mode-specific guidance for new and existing docs. Use this skill when the user asks for determine
+  the mode first.
 ---
-
 # OO Component Documentation
 
 Create new documentation for an object-oriented component or update an existing component documentation file by analyzing the current implementation.

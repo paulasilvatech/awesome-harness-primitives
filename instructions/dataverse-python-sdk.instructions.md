@@ -1,6 +1,8 @@
 ---
-applyTo: '**'
+applyTo: '**/*.py'
+description: 'Quickstart instructions for installing, authenticating, and using the Python Dataverse SDK.'
 ---
+
 # Dataverse SDK for Python — Official Quickstart
 
 This instruction summarizes Microsoft Learn guidance for the Dataverse SDK for Python (preview) and provides copyable snippets.

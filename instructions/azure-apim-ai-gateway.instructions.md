@@ -1,6 +1,6 @@
 ---
+applyTo: '**/*.xml, **/policies/**, **/*.bicep'
 description: 'Configure Azure API Management as an AI (GenAI) gateway in front of Microsoft Foundry and other LLM APIs: token-limit and token-metric policies, managed-identity auth, backend load balancing with circuit breakers, semantic caching, and content safety — plus the policy mistakes Copilot makes by default.'
-applyTo: "**/*.xml, **/policies/**, **/*.bicep"
 ---
 
 # Azure API Management as an AI Gateway Instructions

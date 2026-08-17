@@ -19,11 +19,11 @@
   "extensions": {
     "com.github.awesome-copilot": {
       "agents": [
-        "./agents/react19-auditor.md",
-        "./agents/react19-commander.md",
-        "./agents/react19-dep-surgeon.md",
-        "./agents/react19-migrator.md",
-        "./agents/react19-test-guardian.md"
+        "./agents/react19-auditor.agent.md",
+        "./agents/react19-commander.agent.md",
+        "./agents/react19-dep-surgeon.agent.md",
+        "./agents/react19-migrator.agent.md",
+        "./agents/react19-test-guardian.agent.md"
       ],
       "skills": [
         "./skills/react19-concurrent-patterns/",
@@ -31,5 +31,17 @@
         "./skills/react19-test-patterns/"
       ]
     }
-  }
+  },
+  "agents": [
+    "./agents/react19-auditor.agent.md",
+    "./agents/react19-commander.agent.md",
+    "./agents/react19-dep-surgeon.agent.md",
+    "./agents/react19-migrator.agent.md",
+    "./agents/react19-test-guardian.agent.md"
+  ],
+  "skills": [
+    "./skills/react19-concurrent-patterns/",
+    "./skills/react19-source-patterns/",
+    "./skills/react19-test-patterns/"
+  ]
 }

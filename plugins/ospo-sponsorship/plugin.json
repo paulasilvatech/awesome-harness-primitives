@@ -14,5 +14,8 @@
         "./skills/sponsor-finder/"
       ]
     }
-  }
+  },
+  "skills": [
+    "./skills/sponsor-finder/"
+  ]
 }

@@ -1,8 +1,9 @@
 ---
-name: pr-screenshots
-description: 'Embed before/after screenshots and annotated images in pull request descriptions. Covers PR description patterns, image upload for Azure DevOps and GitHub, and sizing best practices.'
+name: "pr-screenshots"
+description: >-
+  Embed before/after screenshots and annotated images in pull request descriptions. Use this skill
+  when a PR changes something visible; layout, styling, CSS; charts, dashboards, data visualizations.
 ---
-
 # PR Screenshots
 
 Embed before/after screenshots in pull request descriptions so reviewers can see the visual change without checking out the branch.

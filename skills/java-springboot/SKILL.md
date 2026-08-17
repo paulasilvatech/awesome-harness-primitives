@@ -1,8 +1,7 @@
 ---
-name: java-springboot
-description: 'Get best practices for developing applications with Spring Boot.'
+name: "java-springboot"
+description: "Get best practices for developing applications with Spring Boot. Use this skill when the user asks for spring boot best practices."
 ---
-
 # Spring Boot Best Practices
 
 Your goal is to help me write high-quality Spring Boot applications by following established best practices.

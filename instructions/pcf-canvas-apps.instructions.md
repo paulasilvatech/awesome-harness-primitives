@@ -1,6 +1,6 @@
 ---
-description: 'Code components for canvas apps implementation, security, and configuration'
 applyTo: '**/*.{ts,tsx,js,json,xml,pcfproj,csproj}'
+description: 'Code components for canvas apps implementation, security, and configuration'
 ---
 
 # Code Components for Canvas Apps

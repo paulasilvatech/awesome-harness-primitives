@@ -1,3 +1,8 @@
+---
+applyTo: '**/*.py'
+description: 'Preview guidance for building agentic Python workflows that use Dataverse as an enterprise data source.'
+---
+
 # Dataverse SDK for Python - Agentic Workflows Guide
 
 ## ⚠️ PREVIEW FEATURE NOTICE

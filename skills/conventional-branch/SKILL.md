@@ -1,8 +1,10 @@
 ---
-name: conventional-branch
-description: 'Create Git branches following the Conventional Branch specification (feature/, bugfix/, hotfix/, release/, chore/). Use when creating a new branch, naming a branch, or checking whether a branch name complies with the spec.'
+name: "conventional-branch"
+description: >-
+  Create Git branches following the Conventional Branch specification (feature/, bugfix/, hotfix/,
+  release/, chore/). Use when creating a new branch, naming a branch, or checking whether a branch
+  name complies with the spec.
 ---
-
 # Conventional Branch
 
 Create Git branches that follow the [Conventional Branch](https://conventional-branch.github.io) specification — a simple, consistent convention for naming Git branches.

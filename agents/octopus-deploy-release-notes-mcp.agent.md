@@ -1,42 +1,17 @@
 ---
-name: octopus-release-notes-with-mcp
-description: Generate release notes for a release in Octopus Deploy. The tools for this MCP server provide access to the Octopus Deploy APIs.
+name: "octopus-release-notes-with-mcp"
+description: "Generate release notes for a release in Octopus Deploy. The tools for this MCP server provide access to the Octopus Deploy APIs."
 mcp-servers:
   octopus:
-    type: 'local'
-    command: 'npx'
+    type: "local"
+    command: "npx"
     args:
-    - '-y'
-    - '@octopusdeploy/mcp-server'
+      ["-y", "@octopusdeploy/mcp-server"]
     env:
-      OCTOPUS_API_KEY: ${{ secrets.OCTOPUS_API_KEY }}
-      OCTOPUS_SERVER_URL: ${{ secrets.OCTOPUS_SERVER_URL }}
+      OCTOPUS_API_KEY: "${{ secrets.OCTOPUS_API_KEY }}"
+      OCTOPUS_SERVER_URL: "${{ secrets.OCTOPUS_SERVER_URL }}"
     tools:
-    - 'get_account'
-    - 'get_branches'
-    - 'get_certificate'
-    - 'get_current_user'
-    - 'get_deployment_process'
-    - 'get_deployment_target'
-    - 'get_kubernetes_live_status'
-    - 'get_missing_tenant_variables'
-    - 'get_release_by_id'
-    - 'get_task_by_id'
-    - 'get_task_details'
-    - 'get_task_raw'
-    - 'get_tenant_by_id'
-    - 'get_tenant_variables'
-    - 'get_variables'
-    - 'list_accounts'
-    - 'list_certificates'
-    - 'list_deployments'
-    - 'list_deployment_targets'
-    - 'list_environments'
-    - 'list_projects'
-    - 'list_releases'
-    - 'list_releases_for_project'
-    - 'list_spaces'
-    - 'list_tenants'
+      ["get_account", "get_branches", "get_certificate", "get_current_user", "get_deployment_process", "get_deployment_target", "get_kubernetes_live_status", "get_missing_tenant_variables", "get_release_by_id", "get_task_by_id", "get_task_details", "get_task_raw", "get_tenant_by_id", "get_tenant_variables", "get_variables", "list_accounts", "list_certificates", "list_deployments", "list_deployment_targets", "list_environments", "list_projects", "list_releases", "list_releases_for_project", "list_spaces", "list_tenants"]
 ---
 
 # Release Notes for Octopus Deploy

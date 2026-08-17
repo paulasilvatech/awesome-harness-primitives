@@ -16,11 +16,17 @@
   "extensions": {
     "com.github.awesome-copilot": {
       "agents": [
-        "./agents/clojure-interactive-programming.md"
+        "./agents/clojure-interactive-programming.agent.md"
       ],
       "skills": [
         "./skills/remember-interactive-programming/"
       ]
     }
-  }
+  },
+  "agents": [
+    "./agents/clojure-interactive-programming.agent.md"
+  ],
+  "skills": [
+    "./skills/remember-interactive-programming/"
+  ]
 }

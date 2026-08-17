@@ -1,8 +1,17 @@
 ---
-name: python-pypi-package-builder
-description: 'End-to-end skill for building, testing, linting, versioning, and publishing a production-grade Python library to PyPI. Covers all four build backends (setuptools+setuptools_scm, hatchling, flit, poetry), PEP 440 versioning, semantic versioning, dynamic git-tag versioning, OOP/SOLID design, type hints (PEP 484/526/544/561), Trusted Publishing (OIDC), and the full PyPA packaging flow. Use for: creating Python packages, pip-installable SDKs, CLI tools, framework plugins, pyproject.toml setup, py.typed, setuptools_scm, semver, mypy, pre-commit, GitHub Actions CI/CD, or PyPI publishing.'
+name: "python-pypi-package-builder"
+description: >-
+  End-to-end skill for building, testing, linting, versioning, and publishing a production-grade
+  Python library to PyPI. Covers all four build backends (setuptools+setuptools_scm, hatchling, flit,
+  poetry), PEP 440 versioning, semantic versioning, dynamic git-tag versioning, OOP/SOLID design, type
+  hints (PEP 484/526/544/561), Trusted Publishing (OIDC), and the full PyPA packaging flow. Use for:
+  creating Python packages, pip-installable SDKs, CLI tools, framework plugins, pyproject.toml setup,
+  py.typed, setuptools_scm, semver, mypy, pre-commit, GitHub Actions CI/CD, or PyPI publishing. Use
+  this skill when | [2. Package Type Decision](#2-package-type-decision) | Identify what you are
+  building |; | [3. Folder Structure Decision](#3-folder-structure-decision) | src/ vs flat vs
+  monorepo |; | [4. Build Backend Decision](#4-build-backend-decision) | setuptools / hatchling / flit
+  / poetry |.
 ---
-
 # Python PyPI Package Builder Skill
 
 A complete, battle-tested guide for building, testing, linting, versioning, typing, and

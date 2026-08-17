@@ -1,8 +1,9 @@
 ---
-name: kotlin-springboot
-description: 'Get best practices for developing applications with Spring Boot and Kotlin.'
+name: "kotlin-springboot"
+description: >-
+  Get best practices for developing applications with Spring Boot and Kotlin. Use this skill when the
+  user asks for spring boot with kotlin best practices.
 ---
-
 # Spring Boot with Kotlin Best Practices
 
 Your goal is to help me write high-quality, idiomatic Spring Boot applications using Kotlin.

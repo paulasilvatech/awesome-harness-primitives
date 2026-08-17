@@ -1,7 +1,6 @@
 ---
-description: "Expert assistance for building Model Context Protocol servers in Swift using modern concurrency features and the official MCP Swift SDK."
 name: "Swift MCP Expert"
-model: GPT-4.1
+description: "Expert assistance for building Model Context Protocol servers in Swift using modern concurrency features and the official MCP Swift SDK."
 ---
 
 # Swift MCP Expert

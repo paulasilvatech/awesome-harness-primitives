@@ -21,13 +21,13 @@
   "extensions": {
     "com.github.awesome-copilot": {
       "agents": [
-        "./agents/azure-logic-apps-expert.md",
-        "./agents/azure-principal-architect.md",
-        "./agents/azure-saas-architect.md",
-        "./agents/azure-verified-modules-bicep.md",
-        "./agents/azure-verified-modules-terraform.md",
-        "./agents/terraform-azure-implement.md",
-        "./agents/terraform-azure-planning.md"
+        "./agents/azure-logic-apps-expert.agent.md",
+        "./agents/azure-principal-architect.agent.md",
+        "./agents/azure-saas-architect.agent.md",
+        "./agents/azure-verified-modules-bicep.agent.md",
+        "./agents/azure-verified-modules-terraform.agent.md",
+        "./agents/terraform-azure-implement.agent.md",
+        "./agents/terraform-azure-planning.agent.md"
       ],
       "skills": [
         "./skills/az-cost-optimize/",
@@ -36,5 +36,20 @@
         "./skills/import-infrastructure-as-code/"
       ]
     }
-  }
+  },
+  "agents": [
+    "./agents/azure-logic-apps-expert.agent.md",
+    "./agents/azure-principal-architect.agent.md",
+    "./agents/azure-saas-architect.agent.md",
+    "./agents/azure-verified-modules-bicep.agent.md",
+    "./agents/azure-verified-modules-terraform.agent.md",
+    "./agents/terraform-azure-implement.agent.md",
+    "./agents/terraform-azure-planning.agent.md"
+  ],
+  "skills": [
+    "./skills/az-cost-optimize/",
+    "./skills/azure-pricing/",
+    "./skills/azure-resource-health-diagnose/",
+    "./skills/import-infrastructure-as-code/"
+  ]
 }

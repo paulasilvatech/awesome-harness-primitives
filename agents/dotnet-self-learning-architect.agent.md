@@ -1,8 +1,8 @@
 ---
 name: ".NET Self-Learning Architect"
-description: "Senior .NET architect for complex delivery: designs .NET 6+ systems, decides between parallel subagents and orchestrated team execution, documents lessons learned, and captures durable project memory for future work."
-model: ["GPT-5.3-Codex", "Claude Sonnet 4.6 (copilot)", "Claude Opus 4.6 (copilot)", "Claude Haiku 4.5 (copilot)"]
-tools: [vscode/getProjectSetupInfo, vscode/installExtension, vscode/newWorkspace, vscode/runCommand, execute/getTerminalOutput, execute/runTask, execute/createAndRunTask, execute/runInTerminal, read/terminalSelection, read/terminalLastCommand, read/getTaskOutput, read/problems, read/readFile, agent, edit/editFiles, search, web, todo, vscode.mermaid-chat-features/renderMermaidDiagram, github.vscode-pull-request-github/issue_fetch, github.vscode-pull-request-github/labels_fetch, github.vscode-pull-request-github/notification_fetch, github.vscode-pull-request-github/doSearch, github.vscode-pull-request-github/activePullRequest, github.vscode-pull-request-github/pullRequestStatusChecks, github.vscode-pull-request-github/openPullRequest, ms-azuretools.vscode-azureresourcegroups/azureActivityLog, ms-azuretools.vscode-containers/containerToolsConfig, ms-python.python/getPythonEnvironmentInfo, ms-python.python/getPythonExecutableCommand, ms-python.python/installPythonPackage, ms-python.python/configurePythonEnvironment]
+description: >-
+  Senior .NET architect for complex delivery: designs .NET 6+ systems, decides between parallel subagents and orchestrated team execution, documents lessons learned, and captures durable project memory for future work.
+tools: ["read", "search", "edit", "execute", "web", "todo", "agent"]
 ---
 
 # Dotnet Self-Learning Architect

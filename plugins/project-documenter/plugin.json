@@ -22,12 +22,19 @@
   "extensions": {
     "com.github.awesome-copilot": {
       "agents": [
-        "./agents/project-documenter.md"
+        "./agents/project-documenter.agent.md"
       ],
       "skills": [
         "./skills/drawio/",
         "./skills/md-to-docx/"
       ]
     }
-  }
+  },
+  "agents": [
+    "./agents/project-documenter.agent.md"
+  ],
+  "skills": [
+    "./skills/drawio/",
+    "./skills/md-to-docx/"
+  ]
 }

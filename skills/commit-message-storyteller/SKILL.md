@@ -1,8 +1,12 @@
 ---
-name: commit-message-storyteller
-description: 'Analyzes git diffs or staged changes and generates narrative commit messages that explain WHY a change was made, not just what changed — following Conventional Commits format. Use when asked to "write a commit message", "generate a commit", "describe my changes", "what should I commit this as", "commit this", "summarize my diff", or "help me commit". Works with git diff output, staged files, or plain descriptions of changes.'
+name: "commit-message-storyteller"
+description: >-
+  Analyzes git diffs or staged changes and generates narrative commit messages that explain WHY a
+  change was made, not just what changed — following Conventional Commits format. Use when asked to
+  "write a commit message", "generate a commit", "describe my changes", "what should I commit this
+  as", "commit this", "summarize my diff", or "help me commit". Works with git diff output, staged
+  files, or plain descriptions of changes.
 ---
-
 # Commit Message Storyteller
 
 Transforms raw git diffs and change descriptions into clear, story-driven commit messages that follow the [Conventional Commits](https://www.conventionalcommits.org/) specification. Instead of "update file.js", you get messages that communicate intent, context, and impact.

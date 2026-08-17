@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """attester-import-check hook for GitHub Copilot coding agent (preToolUse).
 
-Reads the tool invocation as JSON on stdin ({"toolName", "toolInput"}),
+Reads the tool invocation as JSON on stdin (using the Copilot hook
+`toolInput`/`tool_input` fields, plus `toolCalls` when present),
 extracts package imports from the code being introduced, and checks each
 name against the attester.dev existence oracle (free keyless tier, 25
-calls/day per client IP). Exits 1 to block on a confident "does not exist".
+calls/day per client IP). Exits 2 to block on a confident "does not exist".
 Quota exhaustion, offline, and payload problems fail open (exit 0): a guard
 that blocks the wrong operation is worse than one that misses one.
 
@@ -174,6 +175,10 @@ def main() -> int:
     except (ValueError, OSError):
         return 0
     tool_input = payload.get("toolInput") or payload.get("tool_input") or {}
+    if not tool_input and isinstance(payload.get("toolCalls"), list) and payload["toolCalls"]:
+        first_call = payload["toolCalls"][0]
+        if isinstance(first_call, dict):
+            tool_input = first_call.get("args") or first_call.get("input") or {}
 
     filename = ""
     code_chunks: list[str] = []
@@ -232,7 +237,7 @@ def main() -> int:
         msg += " Remove or fix the import, or add the name to .attester-allowlist if this is a false positive."
         print(msg, file=sys.stderr)
     if findings and not warn_only:
-        return 1
+        return 2
     return 0
 
 

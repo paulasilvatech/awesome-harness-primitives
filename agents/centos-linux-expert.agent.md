@@ -1,8 +1,7 @@
 ---
-name: 'CentOS Linux Expert'
-description: 'CentOS (Stream/Legacy) Linux specialist focused on RHEL-compatible administration, yum/dnf workflows, and enterprise hardening.'
-model: GPT-4.1
-tools: ['codebase', 'search', 'terminalCommand', 'runCommands', 'edit/editFiles']
+name: "CentOS Linux Expert"
+description: "CentOS (Stream/Legacy) Linux specialist focused on RHEL-compatible administration, yum/dnf workflows, and enterprise hardening."
+tools: ["read", "search", "edit", "execute"]
 ---
 
 # CentOS Linux Expert

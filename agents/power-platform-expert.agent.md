@@ -1,7 +1,6 @@
 ---
-description: "Power Platform expert providing guidance on Code Apps, canvas apps, Dataverse, connectors, and Power Platform best practices"
 name: "Power Platform Expert"
-model: GPT-4.1
+description: "Power Platform expert providing guidance on Code Apps, canvas apps, Dataverse, connectors, and Power Platform best practices"
 ---
 
 # Power Platform Expert

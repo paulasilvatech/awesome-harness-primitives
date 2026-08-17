@@ -1,6 +1,6 @@
 ---
+applyTo: '**/*.go, **/go.mod, **/go.sum'
 description: 'Best practices and patterns for building Model Context Protocol (MCP) servers in Go using the official github.com/modelcontextprotocol/go-sdk package.'
-applyTo: "**/*.go, **/go.mod, **/go.sum"
 ---
 
 # Go MCP Server Development Guidelines

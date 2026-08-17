@@ -23,5 +23,8 @@
         "./skills/noob-mode/"
       ]
     }
-  }
+  },
+  "skills": [
+    "./skills/noob-mode/"
+  ]
 }

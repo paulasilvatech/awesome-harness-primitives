@@ -1,5 +1,5 @@
 ---
-applyTo: '**'
+applyTo: '**/*.{html,htm,css,scss,sass,js,jsx,ts,tsx,vue,svelte,astro}'
 description: 'Comprehensive web performance standards based on Core Web Vitals (LCP, INP, CLS), with 50+ anti-patterns, detection regex, framework-specific fixes for modern web frameworks, and modern API guidance.'
 ---
 

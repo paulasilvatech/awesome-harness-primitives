@@ -1,8 +1,9 @@
 ---
-name: git-flow-branch-creator
-description: 'Intelligent Git Flow branch creator that analyzes git status/diff and creates appropriate branches following the nvie Git Flow branching model.'
+name: "git-flow-branch-creator"
+description: >-
+  Intelligent Git Flow branch creator that analyzes git status/diff and creates appropriate branches
+  following the nvie Git Flow branching model. Use this skill when the user asks for workflow.
 ---
-
 ### Instructions
 
 ```xml

@@ -1,8 +1,11 @@
 ---
-name: tm7-threat-model
-description: 'Creates valid Microsoft Threat Modeling Tool (.tm7) files compatible with the Microsoft Threat Modeling Tool v7.3+. Use this skill whenever asked to create, generate, or modify a .tm7 threat model file, or when performing STRIDE threat modeling that should output a .tm7 file that opens cleanly in the Microsoft Threat Modeling Tool.'
+name: "tm7-threat-model"
+description: >-
+  Creates valid Microsoft Threat Modeling Tool (.tm7) files compatible with the Microsoft Threat
+  Modeling Tool v7.3+. Use this skill whenever asked to create, generate, or modify a .tm7 threat
+  model file, or when performing STRIDE threat modeling that should output a .tm7 file that opens
+  cleanly in the Microsoft Threat Modeling Tool.
 ---
-
 # Microsoft Threat Modeling Tool (.tm7) Generator
 
 You generate **valid `.tm7` files** for the Microsoft Threat Modeling Tool (v7.3+). A `.tm7`

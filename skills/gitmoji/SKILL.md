@@ -1,9 +1,14 @@
 ---
-name: gitmoji
-description: 'Generates commit messages following the gitmoji convention (https://gitmoji.dev) — picks the right emoji for the intent of the change and writes a well-formed message. Use when asked to "write a gitmoji commit", "add an emoji to my commit message", "which gitmoji should I use", "gitmoji this change", or when a project uses gitmoji-style commit messages. Works from a git diff, staged changes, or a plain description of the change. Generates the message only — does not run git commands.'
-license: MIT
+name: "gitmoji"
+description: >-
+  Generates commit messages following the gitmoji convention (https://gitmoji.dev) — picks the right
+  emoji for the intent of the change and writes a well-formed message. Use when asked to "write a
+  gitmoji commit", "add an emoji to my commit message", "which gitmoji should I use", "gitmoji this
+  change", or when a project uses gitmoji-style commit messages. Works from a git diff, staged
+  changes, or a plain description of the change. Generates the message only — does not run git
+  commands.
+license: "MIT"
 ---
-
 # Gitmoji
 
 Generates commit messages that follow the [gitmoji](https://gitmoji.dev/) convention: every commit starts with an emoji that identifies the intent of the change at a glance. Given a diff, a list of staged files, or a plain description of a change, this skill picks the single most appropriate gitmoji and writes a concise, well-formed commit message around it.

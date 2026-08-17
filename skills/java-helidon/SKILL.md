@@ -1,8 +1,10 @@
 ---
-name: java-helidon
-description: 'Get best practices for developing applications with Helidon 4 (SE and MP). Use when working with Helidon SE or Helidon MP, HttpService routing, Helidon DB Client, MicroProfile Config, Helidon Security, or Helidon testing in Java 21+ projects.'
+name: "java-helidon"
+description: >-
+  Get best practices for developing applications with Helidon 4 (SE and MP). Use when working with
+  Helidon SE or Helidon MP, HttpService routing, Helidon DB Client, MicroProfile Config, Helidon
+  Security, or Helidon testing in Java 21+ projects.
 ---
-
 # Helidon Best Practices
 
 Your goal is to help me write high-quality Helidon applications by following established best practices.

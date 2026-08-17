@@ -23,5 +23,11 @@
         "./skills/dataverse-python-usecase-builder/"
       ]
     }
-  }
+  },
+  "skills": [
+    "./skills/dataverse-python-advanced-patterns/",
+    "./skills/dataverse-python-production-code/",
+    "./skills/dataverse-python-quickstart/",
+    "./skills/dataverse-python-usecase-builder/"
+  ]
 }

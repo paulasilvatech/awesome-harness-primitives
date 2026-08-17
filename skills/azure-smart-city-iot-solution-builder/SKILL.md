@@ -1,8 +1,11 @@
 ---
-name: azure-smart-city-iot-solution-builder
-description: 'Design and plan end-to-end Azure IoT and Smart City solutions: requirements, architecture, security, operations, cost, and a phased delivery plan with concrete implementation artifacts.'
+name: "azure-smart-city-iot-solution-builder"
+description: >-
+  Design and plan end-to-end Azure IoT and Smart City solutions: requirements, architecture, security,
+  operations, cost, and a phased delivery plan with concrete implementation artifacts. Use this skill
+  when the user asks for things like; "I want to build an IoT solution on Azure"; "Smart City
+  architecture for traffic, lighting, or waste".
 ---
-
 # Azure Smart City IoT Solution Builder
 
 Use this skill to rebuild and standardize a complete workflow for Azure IoT and Smart City solutions.

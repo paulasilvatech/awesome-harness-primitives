@@ -15,15 +15,5 @@
     "session-breaks",
     "threejs"
   ],
-  "extensions": {
-    "com.github.copilot": {
-      "logo": "assets/preview.png"
-    },
-    "com.github.awesome-copilot": {
-      "extensions": [
-        "./extensions/flight-map-canvas"
-      ]
-    }
-  },
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json"
 }

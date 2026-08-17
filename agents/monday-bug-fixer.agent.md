@@ -1,13 +1,16 @@
 ---
-name: Monday Bug Context Fixer
-description: Elite bug-fixing agent that enriches task context from Monday.com platform data. Gathers related items, docs, comments, epics, and requirements to deliver production-quality fixes with comprehensive PRs.
-tools: ['*']
+name: "Monday Bug Context Fixer"
+description: >-
+  Elite bug-fixing agent that enriches task context from Monday.com platform data. Gathers related items, docs, comments, epics, and requirements to deliver production-quality fixes with comprehensive PRs.
+tools: ["read", "search", "edit", "execute", "web", "todo", "agent"]
 mcp-servers:
   monday-api-mcp:
-    type: http
+    type: "http"
     url: "https://mcp.monday.com/mcp"
-    headers: {"Authorization": "Bearer $MONDAY_TOKEN"}
-    tools: ['*']
+    headers:
+      Authorization: "Bearer $MONDAY_TOKEN"
+    tools:
+      ["*"]
 ---
 
 # Monday Bug Context Fixer
@@ -436,4 +439,3 @@ You're not just fixing code—you're solving business problems with engineering 
 **Be thorough. Be thoughtful. Be excellent.**
 
 Your value: turning scattered bug reports into confidence-inspiring fixes that merge fast because they're obviously correct.
-

@@ -21,11 +21,17 @@
   "extensions": {
     "com.github.awesome-copilot": {
       "agents": [
-        "./agents/java-mcp-expert.md"
+        "./agents/java-mcp-expert.agent.md"
       ],
       "skills": [
         "./skills/java-mcp-server-generator/"
       ]
     }
-  }
+  },
+  "agents": [
+    "./agents/java-mcp-expert.agent.md"
+  ],
+  "skills": [
+    "./skills/java-mcp-server-generator/"
+  ]
 }

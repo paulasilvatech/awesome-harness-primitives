@@ -1,6 +1,6 @@
 ---
-description: 'Get Microsoft Power Platform CLI tooling for Power Apps Component Framework'
 applyTo: '**/*.{ts,tsx,js,json,xml,pcfproj,csproj}'
+description: 'Get Microsoft Power Platform CLI tooling for Power Apps Component Framework'
 ---
 
 # Get Tooling for Power Apps Component Framework

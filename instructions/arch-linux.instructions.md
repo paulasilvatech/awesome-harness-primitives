@@ -1,6 +1,6 @@
 ---
-description: 'Guidance for Arch Linux administration, pacman workflows, and rolling-release best practices.'
 applyTo: '**'
+description: 'Guidance for Arch Linux administration, pacman workflows, and rolling-release best practices.'
 ---
 
 # Arch Linux Administration Guidelines

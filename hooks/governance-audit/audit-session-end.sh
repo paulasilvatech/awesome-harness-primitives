@@ -21,7 +21,7 @@ THREATS=0
 SESSION_START=""
 if [[ -f "$LOG_FILE" ]]; then
   # Find the last session_start event to scope stats to current session
-  SESSION_START=$(grep '"session_start"' "$LOG_FILE" 2>/dev/null | tail -1 | jq -r '.timestamp' 2>/dev/null || echo "")
+  SESSION_START=$(grep '"session_start"' "$LOG_FILE" 2>/dev/null | tail -1 | python3 -c 'import json,sys; line=sys.stdin.read().strip(); print(json.loads(line).get("timestamp","") if line else "")' 2>/dev/null || echo "")
   if [[ -n "$SESSION_START" ]]; then
     # Count events after session start
     TOTAL=$(awk -v start="$SESSION_START" -F'"timestamp":"' '{split($2,a,"\""); if(a[1]>=start) count++} END{print count+0}' "$LOG_FILE" 2>/dev/null || echo 0)
@@ -32,12 +32,8 @@ if [[ -f "$LOG_FILE" ]]; then
   fi
 fi
 
-jq -Rn \
-  --arg timestamp "$TIMESTAMP" \
-  --argjson total "$TOTAL" \
-  --argjson threats "$THREATS" \
-  '{"timestamp":$timestamp,"event":"session_end","total_events":$total,"threats_detected":$threats}' \
-  >> "$LOG_FILE"
+python3 -c 'import json,sys; print(json.dumps({"timestamp":sys.argv[1],"event":"session_end","total_events":int(sys.argv[2]),"threats_detected":int(sys.argv[3])}))' \
+  "$TIMESTAMP" "$TOTAL" "$THREATS" >> "$LOG_FILE"
 
 if [[ "$THREATS" -gt 0 ]]; then
   echo "⚠️ Session ended: $THREATS threat(s) detected in $TOTAL events"

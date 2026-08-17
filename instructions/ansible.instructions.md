@@ -1,6 +1,6 @@
 ---
-description: 'Ansible conventions and best practices'
 applyTo: '**/*.yaml, **/*.yml'
+description: 'Ansible conventions and best practices'
 ---
 
 # Ansible Conventions and Best Practices

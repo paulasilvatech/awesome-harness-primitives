@@ -16,5 +16,10 @@
         "./skills/structured-autonomy-plan/"
       ]
     }
-  }
+  },
+  "skills": [
+    "./skills/structured-autonomy-generate/",
+    "./skills/structured-autonomy-implement/",
+    "./skills/structured-autonomy-plan/"
+  ]
 }

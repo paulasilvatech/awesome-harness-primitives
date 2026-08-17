@@ -1,8 +1,12 @@
 ---
-name: code-exemplars-blueprint-generator
-description: 'Technology-agnostic prompt generator that creates customizable AI prompts for scanning codebases and identifying high-quality code exemplars. Supports multiple programming languages (.NET, Java, JavaScript, TypeScript, React, Angular, Python) with configurable analysis depth, categorization methods, and documentation formats to establish coding standards and maintain consistency across development teams.'
+name: "code-exemplars-blueprint-generator"
+description: >-
+  Technology-agnostic prompt generator that creates customizable AI prompts for scanning codebases and
+  identifying high-quality code exemplars. Supports multiple programming languages (.NET, Java,
+  JavaScript, TypeScript, React, Angular, Python) with configurable analysis depth, categorization
+  methods, and documentation formats to establish coding standards and maintain consistency across
+  development teams. Use this skill when the user asks for configuration variables.
 ---
-
 # Code Exemplars Blueprint Generator
 
 ## Configuration Variables

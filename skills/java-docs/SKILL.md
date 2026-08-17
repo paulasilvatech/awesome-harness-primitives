@@ -1,8 +1,9 @@
 ---
-name: java-docs
-description: 'Ensure that Java types are documented with Javadoc comments and follow best practices for documentation.'
+name: "java-docs"
+description: >-
+  Ensure that Java types are documented with Javadoc comments and follow best practices for
+  documentation. Use this skill when the user asks for java documentation (javadoc) best practices.
 ---
-
 # Java Documentation (Javadoc) Best Practices
 
 - Public and protected members should be documented with Javadoc comments.

@@ -1,9 +1,11 @@
 ---
-name: prd
-description: 'Generate high-quality Product Requirements Documents (PRDs) for software systems and AI-powered features. Includes executive summaries, user stories, technical specifications, and risk analysis.'
-license: MIT
+name: "prd"
+description: >-
+  Generate high-quality Product Requirements Documents (PRDs) for software systems and AI-powered
+  features. Use this skill when starting a new product or feature development cycle; translating a
+  vague idea into a concrete technical specification; defining requirements for AI-powered features.
+license: "MIT"
 ---
-
 # Product Requirements Document (PRD)
 
 ## Overview

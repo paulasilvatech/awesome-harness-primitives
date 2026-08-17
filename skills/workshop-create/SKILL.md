@@ -1,8 +1,12 @@
 ---
-name: workshop-create
-description: 'Create a new workshop or use an existing directory as one. Handles two paths: (A) use an existing local directory the operator points at, or (B) create a new private GitHub repo in the signed-in account. Never creates a repo inside another repo.'
+name: "workshop-create"
+description: >-
+  Create a new workshop or use an existing directory as one. Handles two paths: (A) use an existing
+  local directory the operator points at, or (B) create a new private GitHub repo in the signed-in
+  account. Never creates a repo inside another repo. Use this skill when the operator says "create a
+  workshop" or "start a new workshop"; the operator wants to organize work under a shared root; the
+  operator has an existing directory they want to use as a workshop.
 ---
-
 # Create a Workshop
 
 Set up a new workshop — the root directory where desks live.

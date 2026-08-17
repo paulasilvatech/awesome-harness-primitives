@@ -1,8 +1,9 @@
 ---
-name: appinsights-instrumentation
-description: 'Instrument a webapp to send useful telemetry data to Azure App Insights'
+name: "appinsights-instrumentation"
+description: >-
+  Instrument a webapp to send useful telemetry data to Azure App Insights. Use this skill when the
+  user wants to enable telemetry for their webapp.
 ---
-
 # AppInsights instrumentation
 
 This skill enables sending telemetry data of a webapp to Azure App Insights for better observability of the app's health.

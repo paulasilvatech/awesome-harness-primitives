@@ -1,8 +1,13 @@
 ---
-name: email-drafter
-description: 'Draft and review professional emails that match your personal writing style. Analyzes your sent emails for tone, greeting, structure, and sign-off patterns via WorkIQ, then generates context-aware drafts for any recipient. USE FOR: draft email, write email, compose email, reply email, follow-up email, analyze email tone, email style.'
+name: "email-drafter"
+description: >-
+  Draft and review professional emails that match your personal writing style. Analyzes your sent
+  emails for tone, greeting, structure, and sign-off patterns via WorkIQ, then generates context-aware
+  drafts for any recipient. USE FOR: draft email, write email, compose email, reply email, follow-up
+  email, analyze email tone, email style. Use this skill when "Draft an email to [person] about
+  [topic]"; "Write a follow-up email to [customer] regarding [project]"; "Reply to [person]'s email
+  about [subject]".
 ---
-
 # Email Drafter
 
 Draft professional emails that match your established writing style and tone. Uses WorkIQ to analyze your sent emails and prior correspondence with recipients, then produces context-aware drafts you can review and refine.

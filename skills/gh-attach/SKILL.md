@@ -1,8 +1,11 @@
 ---
-name: gh-attach
-description: 'Uploads a local file (screenshot, image, PDF, zip, video) to GitHub user-attachments, downloads GitHub user-attachments, and embeds local files in a PR, issue, or comment. Use when asked to "attach a screenshot to the PR", "add an image to the issue", "embed before/after screenshots", "attach this file", or "download this GitHub attachment". Powered by `gh-attach`.'
+name: "gh-attach"
+description: >-
+  Uploads a local file (screenshot, image, PDF, zip, video) to GitHub user-attachments, downloads
+  GitHub user-attachments, and embeds local files in a PR, issue, or comment. Use when asked to
+  "attach a screenshot to the PR", "add an image to the issue", "embed before/after screenshots",
+  "attach this file", or "download this GitHub attachment". Powered by `gh-attach`.
 ---
-
 # gh-attach
 
 `gh attach` uploads a file to GitHub's internal user-attachments endpoint (no public API exists) and prints the URL, which GitHub auto-renders (image/video/file) wherever it's pasted. The URL inherits the repo's visibility, so private-repo uploads stay private.

@@ -1,8 +1,11 @@
 ---
-name: optimize-simplicite-logs
-description: capability to parse Simplicité logs from a raw `.txt` file, filter fields to reduce noise, and output the result as structured JSON.
+name: "optimize-simplicite-logs"
+description: >-
+  capability to parse Simplicité logs from a raw `.txt` file, filter fields to reduce noise, and
+  output the result as structured JSON. Use this skill when you need to; analyze user-provided
+  Simplicité log files in `.txt` format; avoid ingesting massive raw log files into your context
+  window.
 ---
-
 # Optimize Simplicite Logs
 
 This skill provides the capability to parse Simplicité logs from a raw `.txt` file, filter fields to reduce noise, and output the result as structured JSON. This is critical for optimizing AI context size (saving ~56% of tokens) and providing structured, predictable data for troubleshooting.

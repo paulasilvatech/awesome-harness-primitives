@@ -1,6 +1,6 @@
 ---
-description: 'R language and document formats (R, Rmd, Quarto): coding standards and Copilot guidance for idiomatic, safe, and consistent code generation.'
 applyTo: '**/*.R, **/*.r, **/*.Rmd, **/*.rmd, **/*.qmd'
+description: 'R language and document formats (R, Rmd, Quarto): coding standards and Copilot guidance for idiomatic, safe, and consistent code generation.'
 ---
 
 # R Programming Language Instructions

@@ -1,6 +1,6 @@
 ---
+applyTo: '**/*.py'
 description: 'Build agents with the Microsoft Foundry SDK (azure-ai-projects v2) in Python: versioned agents, the Responses/Conversations model, tools, and the SDK mistakes Copilot makes by default.'
-applyTo: "**/*.py"
 ---
 
 # Microsoft Foundry Agents (Python) Instructions

@@ -18,11 +18,17 @@
   "extensions": {
     "com.github.awesome-copilot": {
       "agents": [
-        "./agents/openapi-to-application.md"
+        "./agents/openapi-to-application.agent.md"
       ],
       "skills": [
         "./skills/openapi-to-application-code/"
       ]
     }
-  }
+  },
+  "agents": [
+    "./agents/openapi-to-application.agent.md"
+  ],
+  "skills": [
+    "./skills/openapi-to-application-code/"
+  ]
 }

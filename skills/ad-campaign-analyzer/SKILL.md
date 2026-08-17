@@ -1,14 +1,17 @@
 ---
-name: ad-campaign-analyzer
-description: 'Use this skill when the user shares ad campaign performance data and asks what to cut, scale, or test. Trigger for prompts like "analyze my ad campaigns", "where am I wasting ad spend", "reallocate my ad budget", "which ads are actually working", or "ROAS analysis". Do not trigger for campaign planning or creative generation without performance data.'
-license: MIT
-compatibility: 'Cross-platform. Pure reasoning skill over user-provided campaign exports (CSV, paste, or screenshot from Google, Meta, or LinkedIn) — no external tools, network calls, or API keys.'
+name: "ad-campaign-analyzer"
+description: >-
+  Use this skill when the user shares ad campaign performance data and asks what to cut, scale, or
+  test. Trigger for prompts like "analyze my ad campaigns", "where am I wasting ad spend", "reallocate
+  my ad budget", "which ads are actually working", or "ROAS analysis". Do not trigger for campaign
+  planning or creative generation without performance data.
+license: "MIT"
 metadata:
-  version: "1.0"
-  author: GooseWorks
-  source: https://github.com/gooseworks-ai/goose-skills
+  author: "GooseWorks"
+  compatibility: "Cross-platform. Pure reasoning skill over user-provided campaign exports (CSV, paste, or screenshot from Google, Meta, or LinkedIn) — no external tools, network calls, or API keys."
+  source: "https://github.com/gooseworks-ai/goose-skills"
+  version: "'1.0'"
 ---
-
 # Ad Campaign Analyzer
 
 Take raw campaign performance data and turn it into clear decisions. This skill doesn't just summarize metrics — it diagnoses problems, identifies winners, checks statistical significance, and tells you exactly what to cut, scale, and test next. Then it goes further: it compares channels on equal terms, finds where you're over-spending vs under-spending relative to results, and produces a concrete budget reallocation plan.

@@ -14,15 +14,5 @@
     "github-actions",
     "recent-runs",
     "workflow-dispatch"
-  ],
-  "extensions": {
-    "com.github.copilot": {
-      "logo": "assets/preview.png"
-    },
-    "com.github.awesome-copilot": {
-      "extensions": [
-        "./extensions/repo-actions-hub"
-      ]
-    }
-  }
+  ]
 }

@@ -1,7 +1,7 @@
 ---
-applyTo: "**.py, pyproject.toml, setup.py"
-description: "This file provides guidance on building Python applications using GitHub Copilot SDK."
-name: "GitHub Copilot SDK Python Instructions"
+applyTo: '**.py, pyproject.toml, setup.py'
+description: 'This file provides guidance on building Python applications using GitHub Copilot SDK.'
+name: 'GitHub Copilot SDK Python Instructions'
 ---
 
 ## Core Principles

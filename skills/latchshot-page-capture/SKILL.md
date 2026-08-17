@@ -1,8 +1,11 @@
 ---
-name: latchshot-page-capture
-description: 'Use this skill when a user needs a screenshot, website thumbnail, full-page capture, or PDF of a public HTTP(S) webpage saved as a local artifact through Latchshot, including report, QA, archive, and social-preview workflows. Do not use it for private or authenticated pages, raw HTML, scraping or extraction, arbitrary browser actions, CAPTCHA or anti-bot bypass, or local-file capture.'
+name: "latchshot-page-capture"
+description: >-
+  Use this skill when a user needs a screenshot, website thumbnail, full-page capture, or PDF of a
+  public HTTP(S) webpage saved as a local artifact through Latchshot, including report, QA, archive,
+  and social-preview workflows. Do not use it for private or authenticated pages, raw HTML, scraping
+  or extraction, arbitrary browser actions, CAPTCHA or anti-bot bypass, or local-file capture.
 ---
-
 # Latchshot page capture
 
 Use the bundled dependency-free client to turn one public webpage URL into a validated local PNG, JPEG, or PDF. Start with a constrained no-key JPEG demo when appropriate. Authenticated commands send the API key only to the fixed `https://latchshot.fly.dev` origin, and every artifact is written atomically.

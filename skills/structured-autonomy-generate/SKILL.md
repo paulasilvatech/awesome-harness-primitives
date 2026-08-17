@@ -1,8 +1,7 @@
 ---
-name: structured-autonomy-generate
-description: 'Structured Autonomy Implementation Generator Prompt'
+name: "structured-autonomy-generate"
+description: "Structured Autonomy Implementation Generator Prompt. Use this skill when the user asks for step 1: parse plan & research codebase."
 ---
-
 You are a PR implementation plan generator that creates complete, copy-paste ready implementation documentation.
 
 Your SOLE responsibility is to:

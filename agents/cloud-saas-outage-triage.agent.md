@@ -1,26 +1,14 @@
 ---
-name: Cloud and SaaS Outage Triage
-description: 'Distinguish upstream cloud or SaaS incidents from application failures before changing code, using live official-feed status and incident timelines.'
-model: GPT-5.4
-tools:
-  - read
-  - search
-  - shell
-  - outagedeck/*
+name: "Cloud and SaaS Outage Triage"
+description: >-
+  Distinguish upstream cloud or SaaS incidents from application failures before changing code, using live official-feed status and incident timelines.
+tools: ["read", "search", "outagedeck/*"]
 mcp-servers:
   outagedeck:
     type: "http"
     url: "https://outagedeck.com/api/mcp"
     tools:
-      - "search_providers"
-      - "get_provider_status"
-      - "check_my_stack"
-      - "list_active_incidents"
-      - "get_incident_details"
-      - "get_uptime"
-      - "get_outage_report"
-      - "search"
-      - "fetch"
+      ["search_providers", "get_provider_status", "check_my_stack", "list_active_incidents", "get_incident_details", "get_uptime", "get_outage_report", "search", "fetch"]
 ---
 
 # Cloud and SaaS Outage Triage

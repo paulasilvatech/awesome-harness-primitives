@@ -1,15 +1,12 @@
 ---
-name: agentic-eval
-description: |
-  Patterns and techniques for evaluating and improving AI agent outputs. Use this skill when:
-  - Implementing self-critique and reflection loops
-  - Building evaluator-optimizer pipelines for quality-critical generation
-  - Creating test-driven code refinement workflows
-  - Designing rubric-based or LLM-as-judge evaluation systems
-  - Adding iterative improvement to agent outputs (code, reports, analysis)
-  - Measuring and improving agent response quality
+name: "agentic-eval"
+description: >-
+  Patterns and techniques for evaluating and improving AI agent outputs. Use this skill when: -
+  Implementing self-critique and reflection loops - Building evaluator-optimizer pipelines for
+  quality-critical generation - Creating test-driven code refinement workflows - Designing
+  rubric-based or LLM-as-judge evaluation systems - Adding iterative improvement to agent outputs
+  (code, reports, analysis) - Measuring and improving agent response quality
 ---
-
 # Agentic Evaluation Patterns
 
 Patterns for self-improvement through iterative evaluation and refinement.

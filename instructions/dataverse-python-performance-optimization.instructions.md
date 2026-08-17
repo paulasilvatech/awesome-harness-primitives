@@ -1,5 +1,6 @@
 ---
-applyTo: '**'
+applyTo: '**/*.py'
+description: 'Performance optimization guidance for Python Dataverse SDK queries, batching, pagination, and large data operations.'
 ---
 
 # Dataverse SDK for Python — Performance & Optimization Guide

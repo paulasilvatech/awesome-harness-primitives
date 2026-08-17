@@ -14,15 +14,5 @@
     "signal-grouping",
     "theme-analysis",
     "trend-discovery"
-  ],
-  "extensions": {
-    "com.github.copilot": {
-      "logo": "assets/preview.png"
-    },
-    "com.github.awesome-copilot": {
-      "extensions": [
-        "./extensions/feedback-themes"
-      ]
-    }
-  }
+  ]
 }

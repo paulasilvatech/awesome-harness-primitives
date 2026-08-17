@@ -1,13 +1,18 @@
 ---
-name: phoenix-cli
-description: Debug LLM applications using the Phoenix CLI. Fetch traces, analyze errors, structure trace review with open coding and axial coding, inspect datasets, review experiments, query annotation configs, and use the GraphQL API. Use whenever the user is analyzing traces or spans, investigating LLM/agent failures, deciding what to do after instrumenting an app, building failure taxonomies, choosing what evals to write, or asking "what's going wrong", "what kinds of mistakes", or "where do I focus" — even without naming a technique.
-license: Apache-2.0
-compatibility: Requires Node.js (for npx) or global install of @arizeai/phoenix-cli. Optionally requires jq for JSON processing.
+name: "phoenix-cli"
+description: >-
+  Debug LLM applications using the Phoenix CLI. Fetch traces, analyze errors, structure trace review
+  with open coding and axial coding, inspect datasets, review experiments, query annotation configs,
+  and use the GraphQL API. Use whenever the user is analyzing traces or spans, investigating LLM/agent
+  failures, deciding what to do after instrumenting an app, building failure taxonomies, choosing what
+  evals to write, or asking "what's going wrong", "what kinds of mistakes", or "where do I focus" —
+  even without naming a technique.
+license: "Apache-2.0"
 metadata:
-  author: arize-ai
+  author: "arize-ai"
+  compatibility: "Requires Node.js (for npx) or global install of @arizeai/phoenix-cli. Optionally requires jq for JSON processing."
   version: "3.3.0"
 ---
-
 # Phoenix CLI
 
 ## Invocation

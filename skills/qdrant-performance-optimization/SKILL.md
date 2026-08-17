@@ -1,13 +1,11 @@
 ---
-name: qdrant-performance-optimization
-description: "Different techniques to optimize the performance of Qdrant, including indexing strategies, query optimization, and hardware considerations. Use when you want to improve the speed and efficiency of your Qdrant deployment."
-allowed-tools:
-  - Read
-  - Grep
-  - Glob
+name: "qdrant-performance-optimization"
+description: >-
+  Different techniques to optimize the performance of Qdrant, including indexing strategies, query
+  optimization, and hardware considerations. Use when you want to improve the speed and efficiency of
+  your Qdrant deployment.
+allowed-tools: [Read, Grep, Glob]
 ---
-
-
 # Qdrant Performance Optimization
 
 There are different aspects of Qdrant performance, this document serves as a navigation hub for different aspects of performance optimization in Qdrant.

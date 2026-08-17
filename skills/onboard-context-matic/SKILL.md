@@ -1,8 +1,17 @@
 ---
-name: onboard-context-matic
-description: 'Interactive onboarding tour for the context-matic MCP server. Walks the user through what the server does, shows all available APIs, lets them pick one to explore, explains it in their project language, demonstrates model_search and endpoint_search live, and ends with a menu of things the user can ask the agent to do. USE FOR: first-time setup; "what can this MCP do?"; "show me the available APIs"; "onboard me"; "how do I use the context-matic server"; "give me a tour". DO NOT USE FOR: actually integrating an API end-to-end (use integrate-context-matic instead).'
+name: "onboard-context-matic"
+description: >-
+  Interactive onboarding tour for the context-matic MCP server. Walks the user through what the server
+  does, shows all available APIs, lets them pick one to explore, explains it in their project
+  language, demonstrates model_search and endpoint_search live, and ends with a menu of things the
+  user can ask the agent to do. USE FOR: first-time setup; "what can this MCP do?"; "show me the
+  available APIs"; "onboard me"; "how do I use the context-matic server"; "give me a tour". DO NOT USE
+  FOR: actually integrating an API end-to-end (use integrate-context-matic instead). Use this skill
+  when > |---|---|---|---|; > | `fetch_api` | Returns an exact match for an API `key`/identifier and
+  language, or lists all APIs for a given language. The `key` is t; > | `ask` | Answers integration
+  questions with version-accurate guidance and code samples | "How do I authenticate?", "Show me the
+  quicks.
 ---
-
 # Onboarding: ContextMatic MCP
 
 This skill delivers a guided, interactive tour of the `context-matic` MCP server. Follow every

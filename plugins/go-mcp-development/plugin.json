@@ -19,11 +19,17 @@
   "extensions": {
     "com.github.awesome-copilot": {
       "agents": [
-        "./agents/go-mcp-expert.md"
+        "./agents/go-mcp-expert.agent.md"
       ],
       "skills": [
         "./skills/go-mcp-server-generator/"
       ]
     }
-  }
+  },
+  "agents": [
+    "./agents/go-mcp-expert.agent.md"
+  ],
+  "skills": [
+    "./skills/go-mcp-server-generator/"
+  ]
 }

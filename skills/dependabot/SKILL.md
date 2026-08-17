@@ -1,16 +1,15 @@
 ---
-name: dependabot
+name: "dependabot"
 description: >-
-  Comprehensive guide for configuring and managing GitHub Dependabot. Use this skill when
-  users ask about creating or optimizing dependabot.yml files, managing Dependabot pull requests,
-  configuring dependency update strategies, setting up grouped updates, monorepo patterns,
-  multi-ecosystem groups, security update configuration, auto-triage rules, or any GitHub
-  Advanced Security (GHAS) supply chain security topic related to Dependabot. For pre-commit
-  dependency vulnerability scanning in AI coding agents via the GitHub MCP Server, this skill
-  references the Advanced Security plugin (`advanced-security@copilot-plugins`). Use this skill
-  when an agent needs to scan dependencies for known vulnerabilities before committing.
+  Comprehensive guide for configuring and managing GitHub Dependabot. Use this skill when users ask
+  about creating or optimizing dependabot.yml files, managing Dependabot pull requests, configuring
+  dependency update strategies, setting up grouped updates, monorepo patterns, multi-ecosystem groups,
+  security update configuration, auto-triage rules, or any GitHub Advanced Security (GHAS) supply
+  chain security topic related to Dependabot. For pre-commit dependency vulnerability scanning in AI
+  coding agents via the GitHub MCP Server, this skill references the Advanced Security plugin
+  (`advanced-security@copilot-plugins`). Use this skill when an agent needs to scan dependencies for
+  known vulnerabilities before committing.
 ---
-
 # Dependabot Configuration & Management
 
 ## Overview

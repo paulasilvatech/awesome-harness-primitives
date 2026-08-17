@@ -1,8 +1,12 @@
 ---
-name: server-side-conversion-tracking
-description: Set up server-side conversion tracking so purchases are reported accurately to Facebook, TikTok, Google and Bing despite iOS restrictions, ad blockers and cookie loss. Use when conversions are under-reported, when platform-reported purchases do not match real orders, when asked about Conversions API / Events API / offline conversions / CAPI, click id passthrough (fbclid, ttclid, gclid, msclkid), or when ad optimization has degraded after tracking changes.
+name: "server-side-conversion-tracking"
+description: >-
+  Set up server-side conversion tracking so purchases are reported accurately to Facebook, TikTok,
+  Google and Bing despite iOS restrictions, ad blockers and cookie loss. Use when conversions are
+  under-reported, when platform-reported purchases do not match real orders, when asked about
+  Conversions API / Events API / offline conversions / CAPI, click id passthrough (fbclid, ttclid,
+  gclid, msclkid), or when ad optimization has degraded after tracking changes.
 ---
-
 # Server-Side Conversion Tracking
 
 Browser pixels lose a large and unpredictable share of conversions to iOS tracking prevention, ad blockers, cookie lifetime limits and cross-domain hops. Server-side reporting fixes the *reporting*, which is what the ad platform's bidding model learns from. This skill covers the model, the setup order and how to verify it.

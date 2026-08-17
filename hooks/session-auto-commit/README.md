@@ -1,90 +1,31 @@
 ---
-name: 'Session Auto-Commit'
-description: 'Automatically commits and pushes changes when a Copilot coding agent session ends'
-tags: ['automation', 'git', 'productivity']
+name: 'Session Auto Commit'
+description: 'Automatically commits and pushes repository changes at session end when explicitly enabled.'
+tags: ['git', 'sessionEnd']
 ---
 
-# Session Auto-Commit Hook
+# Session Auto Commit
 
-Automatically commits and pushes changes when a GitHub Copilot coding agent session ends, ensuring your work is always saved and backed up.
+Stages, commits, and attempts to push outstanding changes when a session ends.
 
-## Overview
+## Events
 
-This hook runs at the end of each Copilot coding agent session and automatically:
-- Detects if there are uncommitted changes
-- Stages all changes
-- Creates a timestamped commit
-- Pushes to the remote repository
+- `sessionEnd`
 
-## Features
+## Install
 
-- **Automatic Backup**: Never lose work from a Copilot session
-- **Timestamped Commits**: Each auto-commit includes the session end time
-- **Safe Execution**: Only commits when there are actual changes
-- **Error Handling**: Gracefully handles push failures
+- Repository: copy or use the matching manifest at `.github/hooks/session-auto-commit.json`. Copilot CLI discovers repo hooks from `.github/hooks/*.json`; a bare `hooks/session-auto-commit/hooks.json` is only a package example and is not auto-discovered.
+- User: copy `hooks/session-auto-commit/hooks.json` to `~/.copilot/hooks/session-auto-commit.json` and keep this repository path layout or adjust script paths.
+- Scripts referenced by the manifest must be executable (`chmod +x`).
 
-## Installation
+## Exit-code and output contract
 
-1. Copy this hook folder to your repository's `.github/hooks/` directory:
-   ```bash
-   cp -r hooks/session-auto-commit .github/hooks/
-   ```
+Copilot hook stdin is JSON. `exit 0` allows the action; `exit 2` blocks and surfaces stderr to the model; any other non-zero exit is a non-blocking hook error. If stdout JSON is emitted, only the Copilot response keys documented in `docs/COPILOT-HARNESS-SPEC.md` are meaningful.
 
-2. Ensure the script is executable:
-   ```bash
-   chmod +x .github/hooks/session-auto-commit/auto-commit.sh
-   ```
+## Environment
 
-3. Commit the hook configuration to your repository's default branch
+- `SKIP_AUTO_COMMIT=true` disables it
 
-## Configuration
+## Safety posture
 
-The hook is configured in `hooks.json` to run on the `sessionEnd` event:
-
-```json
-{
-  "version": 1,
-  "hooks": {
-    "sessionEnd": [
-      {
-        "type": "command",
-        "bash": ".github/hooks/session-auto-commit/auto-commit.sh",
-        "timeoutSec": 30
-      }
-    ]
-  }
-}
-```
-
-## How It Works
-
-1. When a Copilot coding agent session ends, the hook executes
-2. Checks if inside a Git repository
-3. Detects uncommitted changes using `git status`
-4. Stages all changes with `git add -A`
-5. Creates a commit with format: `auto-commit: YYYY-MM-DD HH:MM:SS`
-6. Attempts to push to remote
-7. Reports success or failure
-
-## Customization
-
-You can customize the hook by modifying `auto-commit.sh`:
-
-- **Commit Message Format**: Change the timestamp format or message prefix
-- **Selective Staging**: Use specific git add patterns instead of `-A`
-- **Branch Selection**: Push to specific branches only
-- **Notifications**: Add desktop notifications or Slack messages
-
-## Disabling
-
-To temporarily disable auto-commits:
-
-1. Remove or comment out the `sessionEnd` hook in `hooks.json`
-2. Or set an environment variable: `export SKIP_AUTO_COMMIT=true`
-
-## Notes
-
-- The hook uses `--no-verify` to avoid triggering pre-commit hooks
-- Failed pushes won't block session termination
-- Requires appropriate git credentials configured
-- Works with both Copilot coding agent and GitHub Copilot CLI
+This hook mutates repository history and may push to a remote. The repo-level `.github/hooks/session-auto-commit.json` ships with `disableAllHooks: true`; enable it only in repositories where automatic commits and pushes are desired. It exits 0 on skips/failures so it does not block the session.

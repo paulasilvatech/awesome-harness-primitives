@@ -26,5 +26,8 @@
         "./skills/generate-image/"
       ]
     }
-  }
+  },
+  "skills": [
+    "./skills/generate-image/"
+  ]
 }

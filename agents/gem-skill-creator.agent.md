@@ -1,11 +1,9 @@
 ---
+name: "gem-skill-creator"
 description: "Pattern-to-skill extraction: creates agent skills files from high-confidence learnings."
-name: gem-skill-creator
-argument-hint: "Enter task_id, plan_id, plan_path, patterns, source_task_id."
-disable-model-invocation: false
 user-invocable: false
-mode: subagent
-hidden: true
+disable-model-invocation: false
+argument-hint: "Enter task_id, plan_id, plan_path, patterns, source_task_id."
 ---
 
 # SKILL CREATOR: Pattern-to-skill extraction from high-confidence learnings.

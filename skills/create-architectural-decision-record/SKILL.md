@@ -1,8 +1,9 @@
 ---
-name: create-architectural-decision-record
-description: 'Create an Architectural Decision Record (ADR) document for AI-optimized decision documentation.'
+name: "create-architectural-decision-record"
+description: >-
+  Create an Architectural Decision Record (ADR) document for AI-optimized decision documentation. Use
+  this skill when the user asks for inputs.
 ---
-
 # Create Architectural Decision Record
 
 Create an ADR document for `${input:DecisionTitle}` using structured formatting optimized for AI consumption and human readability.

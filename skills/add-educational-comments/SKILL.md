@@ -1,8 +1,9 @@
 ---
-name: add-educational-comments
-description: 'Add educational comments to the file specified, or prompt asking for file to comment if one is not provided.'
+name: "add-educational-comments"
+description: >-
+  Add educational comments to the file specified, or prompt asking for file to comment if one is not
+  provided. Use this skill when the user asks for role.
 ---
-
 # Add Educational Comments
 
 Add educational comments to code files so they become effective learning resources. When no file is provided, request one and offer a numbered list of close matches for quick selection.

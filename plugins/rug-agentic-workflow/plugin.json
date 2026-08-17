@@ -18,10 +18,15 @@
   "extensions": {
     "com.github.awesome-copilot": {
       "agents": [
-        "./agents/qa-subagent.md",
-        "./agents/rug-orchestrator.md",
-        "./agents/swe-subagent.md"
+        "./agents/qa-subagent.agent.md",
+        "./agents/rug-orchestrator.agent.md",
+        "./agents/swe-subagent.agent.md"
       ]
     }
-  }
+  },
+  "agents": [
+    "./agents/qa-subagent.agent.md",
+    "./agents/rug-orchestrator.agent.md",
+    "./agents/swe-subagent.agent.md"
+  ]
 }

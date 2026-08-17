@@ -1,11 +1,9 @@
 ---
+name: "gem-debugger"
 description: "Root-cause analysis, stack trace diagnosis, regression bisection, error reproduction."
-name: gem-debugger
-argument-hint: "Enter task_id, plan_id, plan_path, and error_context (error message, stack trace, failing test) to diagnose."
-disable-model-invocation: false
 user-invocable: false
-mode: subagent
-hidden: true
+disable-model-invocation: false
+argument-hint: "Enter task_id, plan_id, plan_path, and error_context (error message, stack trace, failing test) to diagnose."
 ---
 
 # DEBUGGER: Root-cause analysis, stack trace diagnosis, regression bisection, error reproduction.

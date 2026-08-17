@@ -1,8 +1,12 @@
 ---
-name: daily-prep
-description: 'Prepare for tomorrow''s meetings and tasks. Pulls calendar from Outlook via WorkIQ, cross-references open tasks and workspace context, classifies meetings, detects conflicts and day-fit issues, finds learning and deep-work slots, and generates a structured HTML prep file with productivity recommendations.'
+name: "daily-prep"
+description: >-
+  Prepare for tomorrow's meetings and tasks. Pulls calendar from Outlook via WorkIQ, cross-references
+  open tasks and workspace context, classifies meetings, detects conflicts and day-fit issues, finds
+  learning and deep-work slots, and generates a structured HTML prep file with productivity
+  recommendations. Use this skill when end of day: "prepare me for tomorrow"; any time: "prep me for
+  Friday" or "what does March 25 look like?"; weekly planning: run for multiple days.
 ---
-
 # Daily Prep
 
 Generate a structured prep file for the next working day with meeting details, prep bullets, linked tasks, and productivity recommendations.

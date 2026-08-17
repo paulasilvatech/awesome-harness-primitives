@@ -1,6 +1,6 @@
 ---
+applyTo: '**/*.py'
 description: 'Playwright Python AI test generation instructions based on official documentation.'
-applyTo: '**'
 ---
 
 # Playwright Python Test Generation Instructions

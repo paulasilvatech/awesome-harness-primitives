@@ -1,8 +1,10 @@
 ---
-name: gen-specs-as-issues
-description: 'This workflow guides you through a systematic approach to identify missing features, prioritize them, and create detailed specifications for implementation.'
+name: "gen-specs-as-issues"
+description: >-
+  This workflow guides you through a systematic approach to identify missing features, prioritize
+  them, and create detailed specifications for implementation. Use this skill when the user asks for
+  product manager assistant: feature identification and specification.
 ---
-
 # Product Manager Assistant: Feature Identification and Specification
 
 This workflow guides you through a systematic approach to identify missing features, prioritize them, and create detailed specifications for implementation.

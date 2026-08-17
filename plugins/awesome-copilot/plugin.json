@@ -18,7 +18,7 @@
   "extensions": {
     "com.github.awesome-copilot": {
       "agents": [
-        "./agents/meta-agentic-project-scaffold.md"
+        "./agents/meta-agentic-project-scaffold.agent.md"
       ],
       "mcpServers": "./.mcp.json",
       "skills": [
@@ -27,5 +27,13 @@
         "./skills/suggest-awesome-github-copilot-skills/"
       ]
     }
-  }
+  },
+  "agents": [
+    "./agents/meta-agentic-project-scaffold.agent.md"
+  ],
+  "skills": [
+    "./skills/suggest-awesome-github-copilot-agents/",
+    "./skills/suggest-awesome-github-copilot-instructions/",
+    "./skills/suggest-awesome-github-copilot-skills/"
+  ]
 }

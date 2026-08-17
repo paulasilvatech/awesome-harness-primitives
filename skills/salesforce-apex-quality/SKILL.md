@@ -1,8 +1,12 @@
 ---
-name: salesforce-apex-quality
-description: 'Apex code quality guardrails for Salesforce development. Enforces bulk-safety rules (no SOQL/DML in loops), sharing model requirements, CRUD/FLS security, SOQL injection prevention, PNB test coverage (Positive / Negative / Bulk), and modern Apex idioms. Use this skill when reviewing or generating Apex classes, trigger handlers, batch jobs, or test classes to catch governor limit risks, security gaps, and quality issues before deployment.'
+name: "salesforce-apex-quality"
+description: >-
+  Apex code quality guardrails for Salesforce development. Enforces bulk-safety rules (no SOQL/DML in
+  loops), sharing model requirements, CRUD/FLS security, SOQL injection prevention, PNB test coverage
+  (Positive / Negative / Bulk), and modern Apex idioms. Use this skill when reviewing or generating
+  Apex classes, trigger handlers, batch jobs, or test classes to catch governor limit risks, security
+  gaps, and quality issues before deployment.
 ---
-
 # Salesforce Apex Quality Guardrails
 
 Apply these checks to every Apex class, trigger, and test file you write or review.

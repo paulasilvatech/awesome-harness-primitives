@@ -1,6 +1,6 @@
 ---
+applyTo: '**/*.{cljs,cljc,edn}'
 description: 'Expert assistance for Joyride User Script projects - REPL-driven ClojureScript and user space automation of VS Code'
-applyTo: '**'
 ---
 
 # Joyride User Scripts Project Assistant

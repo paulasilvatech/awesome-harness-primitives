@@ -19,7 +19,7 @@
   "extensions": {
     "com.github.awesome-copilot": {
       "agents": [
-        "./agents/mcp-m365-agent-expert.md"
+        "./agents/mcp-m365-agent-expert.agent.md"
       ],
       "skills": [
         "./skills/mcp-create-adaptive-cards/",
@@ -27,5 +27,13 @@
         "./skills/mcp-deploy-manage-agents/"
       ]
     }
-  }
+  },
+  "agents": [
+    "./agents/mcp-m365-agent-expert.agent.md"
+  ],
+  "skills": [
+    "./skills/mcp-create-adaptive-cards/",
+    "./skills/mcp-create-declarative-agent/",
+    "./skills/mcp-deploy-manage-agents/"
+  ]
 }

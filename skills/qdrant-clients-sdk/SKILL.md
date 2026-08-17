@@ -1,13 +1,10 @@
 ---
-name: qdrant-clients-sdk
-description: "Qdrant provides client SDKs for various programming languages, allowing easy integration with Qdrant deployments."
-allowed-tools:
-  - Read
-  - Grep
-  - Glob
-  - Bash
+name: "qdrant-clients-sdk"
+description: >-
+  Qdrant provides client SDKs for various programming languages, allowing easy integration with Qdrant
+  deployments. Use this skill when the user asks for api reference.
+allowed-tools: [Read, Grep, Glob, Bash]
 ---
-
 # Qdrant Clients SDK
 
 Qdrant has the following officially supported client SDKs:
@@ -44,7 +41,7 @@ Response example:
 
 ## Snippet 1
 
-*qdrant-client* (vlatest) — https://search.qdrant.tech/md/documentation/manage-data/points/
+*qdrant-client* (vlatest) — https://qdrant.tech/documentation/manage-data/points/
 
 Uploads multiple vector-embedded points to a Qdrant collection using the Python qdrant_client (PointStruct) with id, payload (e.g., color), and a 3D-like vector for similarity search. It supports parallel uploads (parallel=4) and a retry policy (max_retries=3) for robust indexing. The operation is idempotent: re-uploading with the same id overwrites existing points; if ids aren’t provided, Qdrant auto-generates UUIDs.
 

@@ -1,3 +1,8 @@
+---
+applyTo: '**/*.py'
+description: 'Advanced Python Dataverse SDK patterns for option sets, complex filtering, SQL queries, metadata operations, and production use.'
+---
+
 # Dataverse SDK for Python - Advanced Features Guide
 
 ## Overview

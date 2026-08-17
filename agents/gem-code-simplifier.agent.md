@@ -1,11 +1,9 @@
 ---
+name: "gem-code-simplifier"
 description: "Refactoring specialist: removes dead code, reduces complexity, consolidates duplicates."
-name: gem-code-simplifier
-argument-hint: "Enter task_id, scope (single_file|multiple_files|project_wide), targets (file paths/patterns), and focus (dead_code|complexity|duplication|naming|all)."
-disable-model-invocation: false
 user-invocable: false
-mode: subagent
-hidden: true
+disable-model-invocation: false
+argument-hint: "Enter task_id, scope (single_file|multiple_files|project_wide), targets (file paths/patterns), and focus (dead_code|complexity|duplication|naming|all)."
 ---
 
 # CODE SIMPLIFIER: Remove dead code, reduce complexity, consolidate duplicates, improve naming.

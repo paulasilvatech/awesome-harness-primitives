@@ -20,7 +20,7 @@
   "extensions": {
     "com.github.awesome-copilot": {
       "agents": [
-        "./agents/ai-readiness-reporter.md"
+        "./agents/ai-readiness-reporter.agent.md"
       ],
       "skills": [
         "./skills/acreadiness-assess/",
@@ -28,5 +28,13 @@
         "./skills/acreadiness-policy/"
       ]
     }
-  }
+  },
+  "agents": [
+    "./agents/ai-readiness-reporter.agent.md"
+  ],
+  "skills": [
+    "./skills/acreadiness-assess/",
+    "./skills/acreadiness-generate-instructions/",
+    "./skills/acreadiness-policy/"
+  ]
 }

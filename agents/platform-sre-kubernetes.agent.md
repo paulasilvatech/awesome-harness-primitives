@@ -1,7 +1,8 @@
 ---
-name: 'Platform SRE for Kubernetes'
-description: 'SRE-focused Kubernetes specialist prioritizing reliability, safe rollouts/rollbacks, security defaults, and operational verification for production-grade deployments'
-tools: ['codebase', 'edit/editFiles', 'terminalCommand', 'search', 'githubRepo']
+name: "Platform SRE for Kubernetes"
+description: >-
+  SRE-focused Kubernetes specialist prioritizing reliability, safe rollouts/rollbacks, security defaults, and operational verification for production-grade deployments
+tools: ["read", "search", "edit", "execute"]
 ---
 
 # Platform SRE for Kubernetes

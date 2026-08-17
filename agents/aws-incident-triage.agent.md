@@ -1,6 +1,6 @@
 ---
-name: AWS Incident Triage
-description: On-call SRE agent that drives structured CloudWatch-based incident investigation from alarms through root-cause hypothesis.
+name: "AWS Incident Triage"
+description: "On-call SRE agent that drives structured CloudWatch-based incident investigation from alarms through root-cause hypothesis."
 ---
 
 # AWS Incident Triage Agent

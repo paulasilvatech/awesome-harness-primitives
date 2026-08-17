@@ -1,10 +1,13 @@
 ---
-name: react-container-presentation-component
-description: "Create a React component using the Container/Presentation pattern in src/components by asking for the component name and type (ui or features), then scaffold files that follow this repository's TypeScript, Storybook, and SCSS conventions. Use when the user explicitly asks for a Container/Presentation-based component or runs /react-container-presentation-component."
+name: "react-container-presentation-component"
+description: >-
+  Create a React component using the Container/Presentation pattern in src/components by asking for
+  the component name and type (ui or features), then scaffold files that follow this repository's
+  TypeScript, Storybook, and SCSS conventions. Use when the user explicitly asks for a
+  Container/Presentation-based component or runs /react-container-presentation-component.
 argument-hint: "componentName type(ui|features)"
 user-invocable: true
 ---
-
 # Container/Presentation Component
 
 Use this skill to create a React component under `src/components` that follows the Container/Presentation pattern.

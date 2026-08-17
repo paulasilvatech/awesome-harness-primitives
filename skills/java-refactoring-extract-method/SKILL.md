@@ -1,8 +1,7 @@
 ---
-name: java-refactoring-extract-method
-description: 'Refactoring using Extract Methods in Java Language'
+name: "java-refactoring-extract-method"
+description: "Refactoring using Extract Methods in Java Language. Use this skill when the user asks for refactoring java methods with extract method."
 ---
-
 # Refactoring Java Methods with Extract Method
 
 ## Role

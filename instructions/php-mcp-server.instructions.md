@@ -1,6 +1,6 @@
 ---
-description: 'Best practices for building Model Context Protocol servers in PHP using the official PHP SDK with attribute-based discovery and multiple transport options'
 applyTo: '**/*.php'
+description: 'Best practices for building Model Context Protocol servers in PHP using the official PHP SDK with attribute-based discovery and multiple transport options'
 ---
 
 # PHP MCP Server Development Best Practices

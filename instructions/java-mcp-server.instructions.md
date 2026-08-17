@@ -1,6 +1,6 @@
 ---
+applyTo: '**/*.java, **/pom.xml, **/build.gradle, **/build.gradle.kts'
 description: 'Best practices and patterns for building Model Context Protocol (MCP) servers in Java using the official MCP Java SDK with reactive streams and Spring integration.'
-applyTo: "**/*.java, **/pom.xml, **/build.gradle, **/build.gradle.kts"
 ---
 
 # Java MCP Server Development Guidelines

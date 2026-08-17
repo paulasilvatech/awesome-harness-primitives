@@ -1,6 +1,6 @@
 ---
-description: 'Require Azure IoT Edge documentation review before proposing edge IoT architectures or Azure implementation guidance.'
 applyTo: '**/*.bicep,**/*.tf,**/*iot*.md,**/*smart-city*.md,**/*edge*.md'
+description: 'Require Azure IoT Edge documentation review before proposing edge IoT architectures or Azure implementation guidance.'
 ---
 
 ## Azure IoT Edge Architecture Instruction

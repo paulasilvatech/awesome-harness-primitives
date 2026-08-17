@@ -19,11 +19,17 @@
   "extensions": {
     "com.github.awesome-copilot": {
       "agents": [
-        "./agents/doublecheck.md"
+        "./agents/doublecheck.agent.md"
       ],
       "skills": [
         "./skills/doublecheck/"
       ]
     }
-  }
+  },
+  "agents": [
+    "./agents/doublecheck.agent.md"
+  ],
+  "skills": [
+    "./skills/doublecheck/"
+  ]
 }

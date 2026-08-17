@@ -18,11 +18,17 @@
   "extensions": {
     "com.github.awesome-copilot": {
       "agents": [
-        "./agents/typescript-mcp-expert.md"
+        "./agents/typescript-mcp-expert.agent.md"
       ],
       "skills": [
         "./skills/typescript-mcp-server-generator/"
       ]
     }
-  }
+  },
+  "agents": [
+    "./agents/typescript-mcp-expert.agent.md"
+  ],
+  "skills": [
+    "./skills/typescript-mcp-server-generator/"
+  ]
 }

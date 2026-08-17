@@ -1,5 +1,6 @@
 ---
-applyTo: '**'
+applyTo: '**/*.py'
+description: 'Authentication and security patterns for Python Dataverse SDK apps using Azure Identity and secure credential handling.'
 ---
 
 # Dataverse SDK for Python — Authentication & Security Patterns

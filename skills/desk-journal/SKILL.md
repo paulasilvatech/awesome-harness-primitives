@@ -1,8 +1,12 @@
 ---
-name: desk-journal
-description: 'Write, append, or read desk journal entries. The journal is persistent memory — what survives session boundaries. A good entry has: what was done, current state, next step.'
+name: "desk-journal"
+description: >-
+  Write, append, or read desk journal entries. The journal is persistent memory — what survives
+  session boundaries. A good entry has: what was done, current state, next step. Use this skill when
+  **End of session:** Write what was done, current state, next step; **Start of session:** Read the
+  journal to pick up where you left off; **Mid-session checkpoint:** Note significant progress or
+  decisions.
 ---
-
 # Desk Journal
 
 Manage a desk's journal — the persistent memory that survives

@@ -1,7 +1,7 @@
 ---
+name: "aws-serverless-architect"
 description: "Provide expert AWS Serverless Architect guidance focusing on event-driven architectures, Lambda, API Gateway, and serverless best practices."
-name: aws-serverless-architect
-tools: [execute/getTerminalOutput, execute/runTask, execute/createAndRunTask, execute/runInTerminal, execute/runTests, execute/testFailure, read/problems, read/readFile, read/terminalSelection, read/terminalLastCommand, read/getTaskOutput, edit/editFiles, search, web/fetch, web/githubRepo]
+tools: ["read", "search", "edit", "execute", "web"]
 ---
 
 # AWS Serverless Architect mode instructions

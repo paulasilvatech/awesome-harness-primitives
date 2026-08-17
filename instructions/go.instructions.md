@@ -1,6 +1,6 @@
 ---
-description: 'Instructions for writing Go code following idiomatic Go practices and community standards'
 applyTo: '**/*.go,**/go.mod,**/go.sum'
+description: 'Instructions for writing Go code following idiomatic Go practices and community standards'
 ---
 
 # Go Development Instructions

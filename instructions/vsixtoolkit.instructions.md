@@ -1,6 +1,6 @@
 ---
-description: 'Guidelines for Visual Studio extension (VSIX) development using Community.VisualStudio.Toolkit'
 applyTo: '**/*.cs, **/*.vsct, **/*.xaml, **/source.extension.vsixmanifest'
+description: 'Guidelines for Visual Studio extension (VSIX) development using Community.VisualStudio.Toolkit'
 ---
 
 # Visual Studio Extension Development with Community.VisualStudio.Toolkit

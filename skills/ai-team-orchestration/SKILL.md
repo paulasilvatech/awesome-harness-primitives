@@ -1,8 +1,10 @@
 ---
-name: ai-team-orchestration
-description: 'Bootstrap and run a lightweight multi-agent development team. Use when starting or adopting a project, planning work, coordinating implementation and optional QA, brainstorming with distinct perspectives, or preserving context across sessions.'
+name: "ai-team-orchestration"
+description: >-
+  Bootstrap and run a lightweight multi-agent development team. Use when starting or adopting a
+  project, planning work, coordinating implementation and optional QA, brainstorming with distinct
+  perspectives, or preserving context across sessions.
 ---
-
 # AI Team Orchestration
 
 Use three stable agents:

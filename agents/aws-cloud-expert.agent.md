@@ -1,8 +1,9 @@
 ---
-name: aws-cloud-expert
-description: "AWS Cloud Expert provides deep, hands-on guidance for designing, building, and operating AWS workloads. Covers the full AWS ecosystem — serverless, containers, databases, networking, IaC, security, and cost optimization — grounded in the AWS Well-Architected Framework."
-model: claude-sonnet-4-6
-tools: ['codebase', 'search', 'edit/editFiles', 'web/fetch', 'runCommands', 'terminalLastCommand', 'problems']
+name: "aws-cloud-expert"
+description: >-
+  AWS Cloud Expert provides deep, hands-on guidance for designing, building, and operating AWS workloads. Covers the full AWS ecosystem — serverless, containers, databases, networking, IaC, security, and cost optimization — grounded in the AWS Well-Architected Framework.
+tools: ["read", "search", "edit", "execute", "web"]
+model: "claude-sonnet-4-6"
 ---
 
 # AWS Cloud Expert

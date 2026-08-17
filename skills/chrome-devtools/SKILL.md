@@ -1,9 +1,13 @@
 ---
-name: chrome-devtools
-description: 'Expert-level browser automation, debugging, and performance analysis using Chrome DevTools MCP. Use for interacting with web pages, capturing screenshots, analyzing network traffic, and profiling performance.'
-license: MIT
+name: "chrome-devtools"
+description: >-
+  Expert-level browser automation, debugging, and performance analysis using Chrome DevTools MCP. Use
+  this skill when **Browser Automation**: Navigating pages, clicking elements, filling forms, and
+  handling dialogs; **Visual Inspection**: Taking screenshots or text snapshots of web pages;
+  **Debugging**: Inspecting console messages, evaluating JavaScript in the page context, and analyzing
+  network requests.
+license: "MIT"
 ---
-
 # Chrome DevTools Agent
 
 ## Overview

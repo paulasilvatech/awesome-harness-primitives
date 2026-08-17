@@ -1,8 +1,10 @@
 ---
-name: codebase-memory-mcp
-description: 'Use when a configured codebase-memory-mcp server can assist with graph-backed code discovery, architecture orientation, symbol lookup, callers and callees, dependency or data-flow tracing, impact analysis, unfamiliar modules, or an explicit Codebase Memory request.'
+name: "codebase-memory-mcp"
+description: >-
+  Use when a configured codebase-memory-mcp server can assist with graph-backed code discovery,
+  architecture orientation, symbol lookup, callers and callees, dependency or data-flow tracing,
+  impact analysis, unfamiliar modules, or an explicit Codebase Memory request.
 ---
-
 # Codebase Memory MCP
 
 Use the configured Codebase Memory graph as a discovery accelerator, not as the sole source of truth. Confirm graph-derived conclusions with source snippets or local files before editing code or making strong claims.

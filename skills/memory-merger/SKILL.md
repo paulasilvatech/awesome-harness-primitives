@@ -1,8 +1,10 @@
 ---
-name: memory-merger
-description: 'Merges mature lessons from a domain memory file into its instruction file. Syntax: `/memory-merger >domain [scope]` where scope is `global` (default), `user`, `workspace`, or `ws`.'
+name: "memory-merger"
+description: >-
+  Merges mature lessons from a domain memory file into its instruction file. Syntax: `/memory-merger
+  >domain [scope]` where scope is `global` (default), `user`, `workspace`, or `ws`. Use this skill
+  when the user asks for scopes.
 ---
-
 # Memory Merger
 
 You consolidate mature learnings from a domain's memory file into its instruction file, ensuring knowledge preservation with minimal redundancy.

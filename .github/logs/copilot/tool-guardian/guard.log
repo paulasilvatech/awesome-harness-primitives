@@ -1,0 +1,4 @@
+{"timestamp":"2026-08-17T16:51:26Z","event":"threats_detected","mode":"block","tool":"bash","threat_count":1,"threats":[{"category":"destructive_file_ops","severity":"critical","match":"rm -rf /","suggestion":"Use targeted 'rm' on specific paths instead of root"}]}
+{"timestamp":"2026-08-17T16:51:26Z","event":"guard_passed","mode":"block","tool":"bash"}
+{"timestamp":"2026-08-17T16:51:26Z","event":"guard_passed","mode":"block","tool":""}
+{"timestamp":"2026-08-17T16:51:27Z","event":"guard_passed","mode":"block","tool":""}

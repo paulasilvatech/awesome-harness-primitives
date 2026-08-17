@@ -1,8 +1,11 @@
 ---
-name: tldr-prompt
-description: 'Create tldr summaries for GitHub Copilot files (prompts, agents, instructions, collections), MCP servers, or documentation from URLs and queries.'
+name: "tldr-prompt"
+description: >-
+  Create tldr summaries for GitHub Copilot files (prompts, agents, instructions, collections), MCP
+  servers, or documentation from URLs and queries. Use this skill when by frequency; for 2-3
+  files/URLs: You MUST include 3-5 examples per file; for 4-5 files/URLs: You MUST include 2-3
+  essential examples per file.
 ---
-
 # TLDR Prompt
 
 ## Overview

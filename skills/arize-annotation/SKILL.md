@@ -1,12 +1,15 @@
 ---
-name: arize-annotation
-description: Creates and manages annotation configs (categorical, continuous, freeform label schemas) and annotation queues (human review workflows) on Arize. Applies human annotations to project spans via the Python SDK. Use when the user mentions annotation config, annotation queue, label schema, human feedback, bulk annotate spans, update_annotations, labeling queue, annotate record, or human review.
+name: "arize-annotation"
+description: >-
+  Creates and manages annotation configs (categorical, continuous, freeform label schemas) and
+  annotation queues (human review workflows) on Arize. Applies human annotations to project spans via
+  the Python SDK. Use when the user mentions annotation config, annotation queue, label schema, human
+  feedback, bulk annotate spans, update_annotations, labeling queue, annotate record, or human review.
 metadata:
-  author: arize
+  author: "arize"
+  compatibility: "Requires the ax CLI and a configured Arize profile."
   version: "1.0"
-compatibility: Requires the ax CLI and a configured Arize profile.
 ---
-
 # Arize Annotation Skill
 
 > **`SPACE`** — All `--space` flags and the `ARIZE_SPACE` env var accept a space **name** (e.g., `my-workspace`) or a base64 space **ID** (e.g., `U3BhY2U6...`). Find yours with `ax spaces list`.

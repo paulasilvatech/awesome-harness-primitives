@@ -1,17 +1,15 @@
 ---
-name: azure-architecture-autopilot
-description: >
-  Design Azure infrastructure using natural language, or analyze existing Azure resources
-  to auto-generate architecture diagrams, refine them through conversation, and deploy with Bicep.
-
-  When to use this skill:
-  - "Create X on Azure", "Set up a RAG architecture" (new design)
-  - "Analyze my current Azure infrastructure", "Draw a diagram for rg-xxx" (existing analysis)
-  - "Foundry is slow", "I want to reduce costs", "Strengthen security" (natural language modification)
-  - Azure resource deployment, Bicep template generation, IaC code generation
-  - Microsoft Foundry, AI Search, OpenAI, Fabric, ADLS Gen2, Databricks, and all Azure services
+name: "azure-architecture-autopilot"
+description: >-
+  Design Azure infrastructure using natural language, or analyze existing Azure resources to
+  auto-generate architecture diagrams, refine them through conversation, and deploy with Bicep. When
+  to use this skill: - "Create X on Azure", "Set up a RAG architecture" (new design) - "Analyze my
+  current Azure infrastructure", "Draw a diagram for rg-xxx" (existing analysis) - "Foundry is slow",
+  "I want to reduce costs", "Strengthen security" (natural language modification) - Azure resource
+  deployment, Bicep template generation, IaC code generation - Microsoft Foundry, AI Search, OpenAI,
+  Fabric, ADLS Gen2, Databricks, and all Azure services. Use this skill when ```; phase 1
+  (references/phase1-advisor.md) — Interactive architecture design + diagram; ↓.
 ---
-
 # Azure Architecture Builder
 
 A pipeline that designs Azure infrastructure using natural language, or analyzes existing resources to visualize architecture and proceed through modification and deployment.

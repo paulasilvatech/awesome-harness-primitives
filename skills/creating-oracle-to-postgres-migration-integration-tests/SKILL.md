@@ -1,8 +1,13 @@
 ---
-name: creating-oracle-to-postgres-migration-integration-tests
-description: 'Creates integration test cases targeting Oracle for .NET data access artifacts. Tests capture Oracle expected behavior as the authoritative baseline; they are written once and later ported to PostgreSQL by migrating the test project in Phase 6. Use only during Phase 3, before any PostgreSQL migration work has begun. Do not invoke during Phase 6 or against a project that has already been migrated.'
+name: "creating-oracle-to-postgres-migration-integration-tests"
+description: >-
+  Creates integration test cases targeting Oracle for .NET data access artifacts. Tests capture Oracle
+  expected behavior as the authoritative baseline; they are written once and later ported to
+  PostgreSQL by migrating the test project in Phase 6. Use only during Phase 3, before any PostgreSQL
+  migration work has begun. Do not invoke during Phase 6 or against a project that has already been
+  migrated. Use this skill when the user asks for creating integration tests for oracle-to-postgresql
+  migration.
 ---
-
 # Creating Integration Tests for Oracle-to-PostgreSQL Migration
 
 Generates integration test cases for data access artifacts in a single target project. Tests target Oracle and capture its behavior as the authoritative baseline. They are written to be logically portable — so they can survive Phase 6 migration without rewriting — but they do not run against PostgreSQL at this stage.

@@ -1,9 +1,12 @@
 ---
-name: azure-developer-cli
-description: 'Design, create, review, migrate, or troubleshoot Azure Developer CLI (azd) projects using current Microsoft guidance. Use for azd, azure.yaml, AZD templates, Bicep or Terraform under infra, AZD environments and secrets, hooks, deployment workflows, and azd-managed CI/CD.'
-license: MIT
+name: "azure-developer-cli"
+description: >-
+  Design, create, review, migrate, or troubleshoot Azure Developer CLI (azd) projects using current
+  Microsoft guidance. Use for azd, azure.yaml, AZD templates, Bicep or Terraform under infra, AZD
+  environments and secrets, hooks, deployment workflows, and azd-managed CI/CD. Use this skill when
+  the user asks for azure developer cli best practices.
+license: "MIT"
 ---
-
 # Azure Developer CLI best practices
 
 Use this skill to produce maintainable, secure, environment-aware `azd` projects. Prefer repository conventions when they are already coherent, and make the smallest complete change that improves the project.

@@ -1,6 +1,6 @@
 ---
-description: 'Comprehensive Power BI DAX best practices and patterns based on Microsoft guidance for creating efficient, maintainable, and performant DAX formulas.'
 applyTo: '**/*.{pbix,dax,md,txt}'
+description: 'Comprehensive Power BI DAX best practices and patterns based on Microsoft guidance for creating efficient, maintainable, and performant DAX formulas.'
 ---
 
 # Power BI DAX Best Practices

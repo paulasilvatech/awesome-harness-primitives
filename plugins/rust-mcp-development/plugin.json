@@ -22,11 +22,17 @@
   "extensions": {
     "com.github.awesome-copilot": {
       "agents": [
-        "./agents/rust-mcp-expert.md"
+        "./agents/rust-mcp-expert.agent.md"
       ],
       "skills": [
         "./skills/rust-mcp-server-generator/"
       ]
     }
-  }
+  },
+  "agents": [
+    "./agents/rust-mcp-expert.agent.md"
+  ],
+  "skills": [
+    "./skills/rust-mcp-server-generator/"
+  ]
 }

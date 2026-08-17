@@ -1,8 +1,13 @@
 ---
-name: x-twitter-scraper
-description: 'Build GitHub Copilot workflows with Xquik X API SDKs, REST endpoints, hosted Apify Actor runs, MCP tools, TweetClaw OpenClaw plugin installs, signed webhooks, tweet search, user lookup, follower exports, media actions, and agent automation.'
+name: "x-twitter-scraper"
+description: >-
+  Build GitHub Copilot workflows with Xquik X API SDKs, REST endpoints, hosted Apify Actor runs, MCP
+  tools, TweetClaw OpenClaw plugin installs, signed webhooks, tweet search, user lookup, follower
+  exports, media actions, and agent automation. Use this skill when search tweets, fetch tweet
+  details, read timelines, and download media; look up users, check relationships, and export
+  followers or following; start extraction jobs for replies, reposts, quotes, likes, lists,
+  communities, articles, and search results.
 ---
-
 # X Twitter Scraper
 
 Use this skill when a user wants to integrate Xquik into an app, script, data pipeline, or AI agent workflow for X API and Twitter scraper tasks.

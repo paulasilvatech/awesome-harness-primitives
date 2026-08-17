@@ -1,8 +1,7 @@
 ---
-name: mcp-deploy-manage-agents
-description: 'Skill converted from mcp-deploy-manage-agents.prompt.md'
+name: "mcp-deploy-manage-agents"
+description: "Skill converted from mcp-deploy-manage-agents.prompt.md. Use this skill when highlight benefits and capabilities; offer support channels."
 ---
-
 ````prompt
 ---
 mode: 'agent'

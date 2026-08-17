@@ -17,7 +17,7 @@
   "extensions": {
     "com.github.awesome-copilot": {
       "agents": [
-        "./agents/expert-dotnet-software-engineer.md"
+        "./agents/expert-dotnet-software-engineer.agent.md"
       ],
       "skills": [
         "./skills/aspnet-minimal-api-openapi/",
@@ -30,5 +30,18 @@
         "./skills/dotnet-upgrade/"
       ]
     }
-  }
+  },
+  "agents": [
+    "./agents/expert-dotnet-software-engineer.agent.md"
+  ],
+  "skills": [
+    "./skills/aspnet-minimal-api-openapi/",
+    "./skills/csharp-async/",
+    "./skills/csharp-mstest/",
+    "./skills/csharp-nunit/",
+    "./skills/csharp-tunit/",
+    "./skills/csharp-xunit/",
+    "./skills/dotnet-best-practices/",
+    "./skills/dotnet-upgrade/"
+  ]
 }

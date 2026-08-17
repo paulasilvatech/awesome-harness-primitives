@@ -1,7 +1,7 @@
 ---
-description: 'Debug your application to find and fix a bug'
-name: 'Debug Mode Instructions'
-tools: ['edit/editFiles', 'search/codebase', 'search/usages', 'execute/getTerminalOutput', 'execute/runInTerminal', 'read/terminalLastCommand', 'read/terminalSelection', 'read/problems', 'execute/testFailure', 'web/fetch', 'execute/runTests']
+name: "Debug Mode Instructions"
+description: "Debug your application to find and fix a bug"
+tools: ["read", "search", "edit", "execute", "web"]
 ---
 
 # Debug Mode Instructions

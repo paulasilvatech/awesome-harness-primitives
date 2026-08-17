@@ -21,8 +21,8 @@
   "extensions": {
     "com.github.awesome-copilot": {
       "agents": [
-        "./agents/ms-sql-dba.md",
-        "./agents/postgresql-dba.md"
+        "./agents/ms-sql-dba.agent.md",
+        "./agents/postgresql-dba.agent.md"
       ],
       "skills": [
         "./skills/postgresql-code-review/",
@@ -31,5 +31,15 @@
         "./skills/sql-optimization/"
       ]
     }
-  }
+  },
+  "agents": [
+    "./agents/ms-sql-dba.agent.md",
+    "./agents/postgresql-dba.agent.md"
+  ],
+  "skills": [
+    "./skills/postgresql-code-review/",
+    "./skills/postgresql-optimization/",
+    "./skills/sql-code-review/",
+    "./skills/sql-optimization/"
+  ]
 }

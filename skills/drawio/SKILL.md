@@ -1,8 +1,9 @@
 ---
-name: drawio
-description: Generate draw.io diagrams as .drawio files and export to PNG/SVG/PDF with embedded XML
+name: "drawio"
+description: >-
+  Generate draw.io diagrams as .drawio files and export to PNG/SVG/PDF with embedded XML. Use this
+  skill when the user asks for draw.io diagram skill.
 ---
-
 # Draw.io Diagram Skill
 
 Generate draw.io diagrams as native `.drawio` files and export them to PNG images that can be embedded in Word documents.

@@ -1,12 +1,14 @@
 ---
-name: gtm-partnership-architecture
-description: Build and scale partner ecosystems that drive revenue and platform adoption. Use when building partner programs from scratch, tiering partnerships, managing co-marketing, making build-vs-partner decisions, or structuring crawl-walk-run partner deployment.
-license: MIT
+name: "gtm-partnership-architecture"
+description: >-
+  Build and scale partner ecosystems that drive revenue and platform adoption. Use when building
+  partner programs from scratch, tiering partnerships, managing co-marketing, making build-vs-partner
+  decisions, or structuring crawl-walk-run partner deployment.
+license: "MIT"
 metadata:
-  author: Smit Patel (https://linkedin.com/in/smitkpatel)
-  source: https://github.com/beingsmit/technical-product-gtm
+  author: "Smit Patel (https://linkedin.com/in/smitkpatel)"
+  source: "https://github.com/beingsmit/technical-product-gtm"
 ---
-
 # Partnership Architecture
 
 Build and scale partner ecosystems that drive revenue and platform adoption. These aren't theory — they're patterns from building partner programs that drove 8-figure ARR and observing partnerships with real economic commitment.

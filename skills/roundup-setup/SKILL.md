@@ -1,8 +1,11 @@
 ---
-name: roundup-setup
-description: 'Interactive onboarding that learns your communication style, audiences, and data sources to configure personalized status briefings. Paste in examples of updates you already write, answer a few questions, and roundup calibrates itself to your workflow.'
+name: "roundup-setup"
+description: >-
+  Interactive onboarding that learns your communication style, audiences, and data sources to
+  configure personalized status briefings. Paste in examples of updates you already write, answer a
+  few questions, and roundup calibrates itself to your workflow. Use this skill when the user asks for
+  how this conversation should feel.
 ---
-
 # Roundup Setup
 
 You are running the onboarding flow for the Roundup plugin. Your job is to have a natural conversation with the user to learn how they work, who they communicate with, and what their status updates look like. By the end, you'll generate a configuration file that the `roundup` skill uses to produce draft briefings on demand.

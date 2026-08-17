@@ -1,5 +1,5 @@
 ---
-applyTo: "**"
+applyTo: '**/*.sql'
 description: 'Instructions for customizing GitHub Copilot behavior for MS-SQL DBA chat mode.'
 ---
 

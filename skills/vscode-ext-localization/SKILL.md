@@ -1,8 +1,12 @@
 ---
-name: vscode-ext-localization
-description: 'Guidelines for proper localization of VS Code extensions, following VS Code extension development guidelines, libraries and good practices'
+name: "vscode-ext-localization"
+description: >-
+  Guidelines for proper localization of VS Code extensions, following VS Code extension development
+  guidelines, libraries and good practices. Use this skill when you need to; localize new or existing
+  contributed configurations (settings), commands, menus, views or walkthroughs; localize new or
+  existing messages or other string resources contained in extension source code that are displayed to
+  the end user.
 ---
-
 # VS Code extension localization
 
 This skill helps you localize every aspect of VS Code extensions

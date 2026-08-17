@@ -1,12 +1,15 @@
 ---
-name: arize-experiment
-description: Creates, runs, and analyzes Arize experiments for evaluating and comparing model performance. Covers experiment CRUD, exporting runs, comparing results, and evaluation workflows using the ax CLI. Use when the user mentions create experiment, run experiment, compare models, model performance, evaluate AI, experiment results, benchmark, A/B test models, or measure accuracy.
+name: "arize-experiment"
+description: >-
+  Creates, runs, and analyzes Arize experiments for evaluating and comparing model performance. Covers
+  experiment CRUD, exporting runs, comparing results, and evaluation workflows using the ax CLI. Use
+  when the user mentions create experiment, run experiment, compare models, model performance,
+  evaluate AI, experiment results, benchmark, A/B test models, or measure accuracy.
 metadata:
-  author: arize
+  author: "arize"
+  compatibility: "Requires the ax CLI and a configured Arize profile."
   version: "1.0"
-compatibility: Requires the ax CLI and a configured Arize profile.
 ---
-
 # Arize Experiment Skill
 
 > **`SPACE`** — All `--space` flags and the `ARIZE_SPACE` env var accept a space **name** (e.g., `my-workspace`) or a base64 space **ID** (e.g., `U3BhY2U6...`). Find yours with `ax spaces list`.

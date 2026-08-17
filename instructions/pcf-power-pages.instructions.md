@@ -1,6 +1,6 @@
 ---
-description: 'Using code components in Power Pages sites'
 applyTo: '**/*.{ts,tsx,js,json,xml,pcfproj,csproj}'
+description: 'Using code components in Power Pages sites'
 ---
 
 # Use Code Components in Power Pages

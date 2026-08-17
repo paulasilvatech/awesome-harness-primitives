@@ -1,8 +1,13 @@
 ---
-name: react18-enzyme-to-rtl
-description: 'Provides exact Enzyme → React Testing Library migration patterns for React 18 upgrades. Use this skill whenever Enzyme tests need to be rewritten - shallow, mount, wrapper.find(), wrapper.simulate(), wrapper.prop(), wrapper.state(), wrapper.instance(), Enzyme configure/Adapter calls, or any test file that imports from enzyme. This skill covers the full API mapping and the philosophy shift from implementation testing to behavior testing. Always read this skill before rewriting Enzyme tests - do not translate Enzyme APIs 1:1, that produces brittle RTL tests.'
+name: "react18-enzyme-to-rtl"
+description: >-
+  Provides exact Enzyme → React Testing Library migration patterns for React 18 upgrades. Use this
+  skill whenever Enzyme tests need to be rewritten - shallow, mount, wrapper.find(),
+  wrapper.simulate(), wrapper.prop(), wrapper.state(), wrapper.instance(), Enzyme configure/Adapter
+  calls, or any test file that imports from enzyme. This skill covers the full API mapping and the
+  philosophy shift from implementation testing to behavior testing. Always read this skill before
+  rewriting Enzyme tests - do not translate Enzyme APIs 1:1, that produces brittle RTL tests.
 ---
-
 # React 18 Enzyme → RTL Migration
 
 Enzyme has no React 18 adapter and no React 18 support path. All Enzyme tests must be rewritten using React Testing Library.

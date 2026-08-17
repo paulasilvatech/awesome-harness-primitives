@@ -1,6 +1,6 @@
 ---
-description: "Standardizes JUnit 5 (Jupiter) assertions with best practices for performance, readability, and modern features (5.8+). Covers Supplier messages, assertAll, assertThrowsExactly, and performance-critical timeouts."
-applyTo: "**/*Test.java, **/*IT.java, **/*Steps.java, **/*StepDefs.java"
+applyTo: '**/*Test.java, **/*IT.java, **/*Steps.java, **/*StepDefs.java'
+description: 'Standardizes JUnit 5 (Jupiter) assertions with best practices for performance, readability, and modern features (5.8+). Covers Supplier messages, assertAll, assertThrowsExactly, and performance-critical timeouts.'
 ---
 
 # JUnit 5 Assertions Best Practices

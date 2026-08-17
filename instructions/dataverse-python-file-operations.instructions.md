@@ -1,3 +1,8 @@
+---
+applyTo: '**/*.py'
+description: 'Python Dataverse SDK guidance for file uploads, chunking, validation, and practical file-operation examples.'
+---
+
 # Dataverse SDK for Python - File Operations & Practical Examples
 
 ## Overview

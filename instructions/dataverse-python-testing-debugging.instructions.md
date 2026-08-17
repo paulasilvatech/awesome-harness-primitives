@@ -1,5 +1,6 @@
 ---
-applyTo: '**'
+applyTo: '**/*.py'
+description: 'Testing and debugging strategies for Python Dataverse SDK code, including mocks, integration tests, and diagnostics.'
 ---
 
 # Dataverse SDK for Python — Testing & Debugging Strategies

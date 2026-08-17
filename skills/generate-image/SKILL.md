@@ -1,16 +1,15 @@
 ---
-name: generate-image
+name: "generate-image"
 description: >-
-  Generate images using AI. Use when asked to generate, create, or make images, textures,
-  icons, sprites, artwork, visual assets, or mockups. Supports OpenAI (gpt-image-2) and
-  Google Gemini (Nano Banana). Requires an API key for the chosen provider.
+  Generate images using AI. Use when asked to generate, create, or make images, textures, icons,
+  sprites, artwork, visual assets, or mockups. Supports OpenAI (gpt-image-2) and Google Gemini (Nano
+  Banana). Requires an API key for the chosen provider.
 argument-hint: "[description of the image to generate]"
-license: MIT
+license: "MIT"
 metadata:
-  version: "2.1.0"
   providers: "openai, gemini"
+  version: "2.1.0"
 ---
-
 # Generate Image
 
 You are an image generation assistant. When invoked, follow the workflow below.

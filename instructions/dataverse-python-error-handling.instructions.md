@@ -1,5 +1,6 @@
 ---
-applyTo: '**'
+applyTo: '**/*.py'
+description: 'Error handling, troubleshooting, retry, and diagnostics patterns for Python Dataverse SDK integrations.'
 ---
 
 # Dataverse SDK for Python — Error Handling & Troubleshooting Guide

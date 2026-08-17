@@ -26,5 +26,8 @@
         "./skills/napkin/"
       ]
     }
-  }
+  },
+  "skills": [
+    "./skills/napkin/"
+  ]
 }

@@ -1,8 +1,10 @@
 ---
-name: arduino-azure-iot-edge-integration
-description: 'Design and implement Arduino integration with Azure IoT Hub and IoT Edge, including secure provisioning, resilient telemetry, command handling, and production guardrails.'
+name: "arduino-azure-iot-edge-integration"
+description: >-
+  Design and implement Arduino integration with Azure IoT Hub and IoT Edge, including secure
+  provisioning, resilient telemetry, command handling, and production guardrails. Use this skill when
+  when to use it.
 ---
-
 # Arduino Azure IoT Edge Integration
 
 Use this skill when the user needs to connect Arduino-class devices to Azure IoT, especially in edge-heavy scenarios (gateways, intermittent networks, offline buffering, and local actuation).

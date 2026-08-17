@@ -1,8 +1,9 @@
 ---
-name: dotnet-design-pattern-review
-description: 'Review the C#/.NET code for design pattern implementation and suggest improvements.'
+name: "dotnet-design-pattern-review"
+description: >-
+  Review the C#/.NET code for design pattern implementation and suggest improvements. Use this skill
+  when the user asks for .net/c# design pattern review.
 ---
-
 # .NET/C# Design Pattern Review
 
 Review the C#/.NET code in ${selection} for design pattern implementation and suggest improvements for the solution/project. Do not make any changes to the code, just provide a review.

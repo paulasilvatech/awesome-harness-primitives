@@ -1,12 +1,16 @@
 ---
-name: arize-trace
-description: Downloads, exports, and inspects existing Arize traces and spans to understand what an LLM app is doing or debug runtime issues. Covers exporting traces by ID, spans by ID, sessions by ID, and root-cause investigation using the ax CLI. Use when the user wants to look at existing trace data, see what their LLM app is doing, export traces, download spans, investigate errors, or analyze behavior regressions.
+name: "arize-trace"
+description: >-
+  Downloads, exports, and inspects existing Arize traces and spans to understand what an LLM app is
+  doing or debug runtime issues. Covers exporting traces by ID, spans by ID, sessions by ID, and
+  root-cause investigation using the ax CLI. Use when the user wants to look at existing trace data,
+  see what their LLM app is doing, export traces, download spans, investigate errors, or analyze
+  behavior regressions.
 metadata:
-  author: arize
+  author: "arize"
+  compatibility: "Requires the ax CLI and a configured Arize profile."
   version: "1.0"
-compatibility: Requires the ax CLI and a configured Arize profile.
 ---
-
 # Arize Trace Skill
 
 > **`SPACE`** — All `--space` flags and the `ARIZE_SPACE` env var accept a space **name** (e.g., `my-workspace`) or a base64 space **ID** (e.g., `U3BhY2U6...`). Find yours with `ax spaces list`.

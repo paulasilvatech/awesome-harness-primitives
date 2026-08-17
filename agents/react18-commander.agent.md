@@ -1,9 +1,9 @@
 ---
-name: react18-commander
-description: 'Master orchestrator for React 16/17 → 18.3.1 migration. Designed for class-component-heavy codebases. Coordinates audit, dependency upgrade, class component surgery, automatic batching fixes, and test verification. Uses memory to gate each phase and resume interrupted sessions. 18.3.1 is the target - it surface-exposes every deprecation that React 19 will remove, so the output is a codebase ready for the React 19 orchestra next.'
-tools: ['agent', 'vscode/memory', 'edit/editFiles', 'execute/getTerminalOutput', 'execute/runInTerminal', 'read/terminalLastCommand', 'read/terminalSelection', 'search', 'search/usages', 'read/problems']
-agents: ['react18-auditor', 'react18-dep-surgeon', 'react18-class-surgeon', 'react18-batching-fixer', 'react18-test-guardian']
-argument-hint: Just activate to start the React 18 migration.
+name: "react18-commander"
+description: >-
+  Master orchestrator for React 16/17 → 18.3.1 migration. Designed for class-component-heavy codebases. Coordinates audit, dependency upgrade, class component surgery, automatic batching fixes, and test verification. Uses memory to gate each phase and resume interrupted sessions. 18.3.1 is the target - it surface-exposes every deprecation that React 19 will remove, so the output is a codebase ready for the React 19 orchestra next.
+tools: ["read", "search", "edit", "execute", "agent"]
+argument-hint: "Just activate to start the React 18 migration."
 ---
 
 # React 18 Commander - Migration Orchestrator (React 16/17 → 18.3.1)
@@ -228,3 +228,7 @@ React 18.3.1's explicit warnings are your friend - they surface all of this. The
 - [ ] All tests passing (0 failures)
 - [ ] Build succeeds
 - [ ] Zero React 18.3.1 deprecation warnings
+
+## Delegation Targets
+
+This orchestrator was originally configured with these intended subagents: react18-auditor, react18-dep-surgeon, react18-class-surgeon, react18-batching-fixer, react18-test-guardian. Preserve that delegation plan when invoking subagents in the Copilot CLI.

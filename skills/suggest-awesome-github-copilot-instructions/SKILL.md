@@ -1,8 +1,11 @@
 ---
-name: suggest-awesome-github-copilot-instructions
-description: 'Suggest relevant GitHub Copilot instruction files from the awesome-copilot repository based on current repository context and chat history, avoiding duplicates with existing instructions in this repository, and identifying outdated instructions that need updates.'
+name: "suggest-awesome-github-copilot-instructions"
+description: >-
+  Suggest relevant GitHub Copilot instruction files from the awesome-copilot repository based on
+  current repository context and chat history, avoiding duplicates with existing instructions in this
+  repository, and identifying outdated instructions that need updates. Use this skill when the user
+  asks for process.
 ---
-
 # Suggest Awesome GitHub Copilot Instructions
 
 Analyze current repository context and suggest relevant copilot-instruction files from the [GitHub awesome-copilot repository](https://github.com/github/awesome-copilot/blob/main/docs/README.instructions.md) that are not already available in this repository.

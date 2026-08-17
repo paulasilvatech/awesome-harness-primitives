@@ -1,6 +1,6 @@
 ---
-description: 'Instructions for writing Dart and Flutter code following the official recommendations.'
 applyTo: '**/*.dart'
+description: 'Instructions for writing Dart and Flutter code following the official recommendations.'
 ---
 
 # Dart and Flutter

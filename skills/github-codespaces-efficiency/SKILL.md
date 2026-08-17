@@ -1,8 +1,10 @@
 ---
-name: github-codespaces-efficiency
-description: 'Audit and improve GitHub Codespaces efficiency. Use this skill when a user wants faster Codespaces startup, lower Codespaces spend, slim devcontainers, right-size machines, tune idle timeout, or scope prebuilds to branches with sustained usage.'
+name: "github-codespaces-efficiency"
+description: >-
+  Audit and improve GitHub Codespaces efficiency. Use this skill when a user wants faster Codespaces
+  startup, lower Codespaces spend, slim devcontainers, right-size machines, tune idle timeout, or
+  scope prebuilds to branches with sustained usage.
 ---
-
 # GitHub Codespaces Efficiency
 
 Use this skill as a lean entrypoint for GitHub Codespaces efficiency work. Inspect the repo, identify waste, and load only needed references.

@@ -1,8 +1,14 @@
 ---
-name: performance-review-writer
-description: 'Draft performance reviews, self-assessments, peer reviews, and upward feedback in your own voice. Analyzes your contributions, emails, and meeting history via WorkIQ, then produces honest, impact-focused drafts using the STAR format. USE FOR: write my performance review, draft self-assessment, peer review, 360 feedback, annual review, mid-year review, upward feedback, write review for colleague, performance appraisal.'
+name: "performance-review-writer"
+description: >-
+  Draft performance reviews, self-assessments, peer reviews, and upward feedback in your own voice.
+  Analyzes your contributions, emails, and meeting history via WorkIQ, then produces honest,
+  impact-focused drafts using the STAR format. USE FOR: write my performance review, draft
+  self-assessment, peer review, 360 feedback, annual review, mid-year review, upward feedback, write
+  review for colleague, performance appraisal. Use this skill when "Write my self-assessment for this
+  review cycle"; "Draft a peer review for [colleague]"; "Help me write upward feedback for my
+  manager".
 ---
-
 # Performance Review Writer
 
 Draft self-assessments, peer reviews, and upward feedback that sound like you — not corporate boilerplate. Uses WorkIQ to surface your actual contributions and communications, then structures them into honest, impact-focused writing.

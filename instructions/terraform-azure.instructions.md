@@ -1,6 +1,6 @@
 ---
-description: 'Create or modify solutions built using Terraform on Azure.'
 applyTo: '**/*.terraform, **/*.tf, **/*.tfvars, **/*.tflint.hcl, **/*.tfstate, **/*.tf.json, **/*.tfvars.json'
+description: 'Create or modify solutions built using Terraform on Azure.'
 ---
 
 # Azure Terraform Best Practices

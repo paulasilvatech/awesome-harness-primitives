@@ -1,6 +1,6 @@
 ---
-description: 'Guidance for CentOS administration, RHEL-compatible tooling, and SELinux-aware operations.'
 applyTo: '**'
+description: 'Guidance for CentOS administration, RHEL-compatible tooling, and SELinux-aware operations.'
 ---
 
 # CentOS Administration Guidelines

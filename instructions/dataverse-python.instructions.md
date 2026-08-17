@@ -1,6 +1,8 @@
 ---
-applyTo: '**'
+applyTo: '**/*.py'
+description: 'Getting-started guidance for installing, authenticating, and performing basic Python Dataverse SDK operations.'
 ---
+
 # Dataverse SDK for Python — Getting Started
 
 - Install the Dataverse Python SDK and prerequisites.

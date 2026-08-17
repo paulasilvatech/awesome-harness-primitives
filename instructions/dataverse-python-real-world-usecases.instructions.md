@@ -1,5 +1,6 @@
 ---
-applyTo: '**'
+applyTo: '**/*.py'
+description: 'Real-world Python Dataverse SDK templates for migration, synchronization, reporting, and automation scenarios.'
 ---
 
 # Dataverse SDK for Python — Real-World Use Cases & Templates

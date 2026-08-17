@@ -1,13 +1,20 @@
 ---
-name: autoresearch
-description: 'Autonomous iterative experimentation loop for any programming task. Guides the user through defining goals, measurable metrics, and scope constraints, then runs an autonomous loop of code changes, testing, measuring, and keeping/discarding results. Inspired by Karpathy''s autoresearch. USE FOR: autonomous improvement, iterative optimization, experiment loop, auto research, performance tuning, automated experimentation, hill climbing, try things automatically, optimize code, run experiments, autonomous coding loop. DO NOT USE FOR: one-shot tasks, simple bug fixes, code review, or tasks without a measurable metric.'
-license: MIT
-compatibility: Requires git. The project must be a git repository. Requires terminal access to run commands.
+name: "autoresearch"
+description: >-
+  Autonomous iterative experimentation loop for any programming task. Guides the user through defining
+  goals, measurable metrics, and scope constraints, then runs an autonomous loop of code changes,
+  testing, measuring, and keeping/discarding results. Inspired by Karpathy's autoresearch. USE FOR:
+  autonomous improvement, iterative optimization, experiment loop, auto research, performance tuning,
+  automated experimentation, hill climbing, try things automatically, optimize code, run experiments,
+  autonomous coding loop. DO NOT USE FOR: one-shot tasks, simple bug fixes, code review, or tasks
+  without a measurable metric. Use this skill when 3 d4e5f6g 0.000000 crash double model width (OOM);
+  ```.
+license: "MIT"
 metadata:
-  author: luiscantero
-  inspired-by: https://github.com/karpathy/autoresearch
+  author: "luiscantero"
+  compatibility: "Requires git. The project must be a git repository. Requires terminal access to run commands."
+  inspired-by: "https://github.com/karpathy/autoresearch"
 ---
-
 # Autoresearch: Autonomous Iterative Experimentation
 
 An autonomous experimentation loop for any programming task. You define the goal and how to measure it; the agent iterates autonomously -- modifying code, running experiments, measuring results, and keeping or discarding changes -- until interrupted.

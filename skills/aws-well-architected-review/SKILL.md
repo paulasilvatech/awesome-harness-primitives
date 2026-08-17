@@ -1,8 +1,10 @@
 ---
-name: aws-well-architected-review
-description: 'Perform an AWS Well-Architected Framework review of the current workload IaC and architecture, generating findings and GitHub issues for improvements.'
+name: "aws-well-architected-review"
+description: >-
+  Perform an AWS Well-Architected Framework review of the current workload IaC and architecture,
+  generating findings and GitHub issues for improvements. Use this skill when the user asks for aws
+  well-architected review.
 ---
-
 # AWS Well-Architected Review
 
 This workflow performs a structured AWS Well-Architected Framework (WAF) review against your workload's IaC files and deployed infrastructure. It identifies risks across all 6 WAF pillars and creates GitHub issues to track remediation.

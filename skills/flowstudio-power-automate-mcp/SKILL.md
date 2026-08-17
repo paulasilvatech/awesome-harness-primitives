@@ -1,16 +1,16 @@
 ---
-name: flowstudio-power-automate-mcp
+name: "flowstudio-power-automate-mcp"
 description: >-
-  Foundation skill for Power Automate via FlowStudio MCP — auth setup, the
-  reusable MCP helper (Python + Node.js), tool discovery via `list_skills` /
-  `tool_search`, and oversized-response handling. Load this skill first when
-  connecting an agent to Power Automate. For specialized workflows, load
-  `flowstudio-power-automate-build`, `flowstudio-power-automate-debug`, `flowstudio-power-automate-monitoring`
-  (Pro+), or `flowstudio-power-automate-governance` (Pro+) — each contains the workflow
-  narrative, this skill provides the plumbing they all rely on. Requires a
-  FlowStudio MCP subscription or compatible server — see https://mcp.flowstudio.app
+  Foundation skill for Power Automate via FlowStudio MCP — auth setup, the reusable MCP helper (Python
+  + Node.js), tool discovery via `list_skills` / `tool_search`, and oversized-response handling. Load
+  this skill first when connecting an agent to Power Automate. For specialized workflows, load
+  `flowstudio-power-automate-build`, `flowstudio-power-automate-debug`,
+  `flowstudio-power-automate-monitoring` (Pro+), or `flowstudio-power-automate-governance` (Pro+) —
+  each contains the workflow narrative, this skill provides the plumbing they all rely on. Requires a
+  FlowStudio MCP subscription or compatible server — see https://mcp.flowstudio.app. Use this skill
+  when | `discover` | Enumerating environments, flows, and connections |; | `governance` | Pro+
+  cached-store tagging, maker audit, and metadata updates |.
 ---
-
 # Power Automate via FlowStudio MCP — Foundation
 
 This skill is the **plumbing layer**. It gives an AI agent a reliable way to

@@ -1,6 +1,6 @@
 ---
-description: 'Complete manifest schema reference for PCF components with all available XML elements'
 applyTo: '**/*.xml'
+description: 'Complete manifest schema reference for PCF components with all available XML elements'
 ---
 
 # Manifest Schema Reference

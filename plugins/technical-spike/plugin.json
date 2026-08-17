@@ -17,11 +17,17 @@
   "extensions": {
     "com.github.awesome-copilot": {
       "agents": [
-        "./agents/research-technical-spike.md"
+        "./agents/research-technical-spike.agent.md"
       ],
       "skills": [
         "./skills/create-technical-spike/"
       ]
     }
-  }
+  },
+  "agents": [
+    "./agents/research-technical-spike.agent.md"
+  ],
+  "skills": [
+    "./skills/create-technical-spike/"
+  ]
 }

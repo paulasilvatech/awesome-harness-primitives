@@ -1,8 +1,7 @@
 ---
-name: what-context-needed
-description: 'Ask Copilot what files it needs to see before answering a question'
+name: "what-context-needed"
+description: "Ask Copilot what files it needs to see before answering a question. Use this skill when the user asks for what context do you need?."
 ---
-
 # What Context Do You Need?
 
 Before answering my question, tell me what files you need to see.

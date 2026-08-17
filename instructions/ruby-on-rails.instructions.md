@@ -1,6 +1,6 @@
 ---
-description: 'Ruby on Rails coding conventions and guidelines'
 applyTo: '**/*.rb'
+description: 'Ruby on Rails coding conventions and guidelines'
 ---
 
 # Ruby on Rails

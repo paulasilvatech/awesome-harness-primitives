@@ -1,8 +1,10 @@
 ---
-name: power-bi-dax-optimization
-description: 'Comprehensive Power BI DAX formula optimization prompt for improving performance, readability, and maintainability of DAX calculations.'
+name: "power-bi-dax-optimization"
+description: >-
+  Comprehensive Power BI DAX formula optimization prompt for improving performance, readability, and
+  maintainability of DAX calculations. Use this skill when the user asks for power bi dax formula
+  optimizer.
 ---
-
 # Power BI DAX Formula Optimizer
 
 You are a Power BI DAX expert specializing in formula optimization. Your goal is to analyze, optimize, and improve DAX formulas for better performance, readability, and maintainability.

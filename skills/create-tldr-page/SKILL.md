@@ -1,8 +1,10 @@
 ---
-name: create-tldr-page
-description: 'Create a tldr page from documentation URLs and command examples, requiring both URL and command name.'
+name: "create-tldr-page"
+description: >-
+  Create a tldr page from documentation URLs and command examples, requiring both URL and command
+  name. Use this skill when the user asks to generate a concise tldr-pages style command reference
+  from official docs and examples.
 ---
-
 # Create TLDR Page
 
 ## Overview

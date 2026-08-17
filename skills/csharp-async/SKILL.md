@@ -1,8 +1,7 @@
 ---
-name: csharp-async
-description: 'Get best practices for C# async programming'
+name: "csharp-async"
+description: "Get best practices for C# async programming. Use this skill when the user asks for c# async programming best practices."
 ---
-
 # C# Async Programming Best Practices
 
 Your goal is to help me follow best practices for asynchronous programming in C#.

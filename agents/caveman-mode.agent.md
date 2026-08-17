@@ -1,6 +1,7 @@
 ---
-description: 'Terse, low-token responses. Minimal words, no fluff. Full capabilities preserved. Use when: optimize token usage, low-token mode, concise output, caveman mode, reduce verbosity, token-efficient, brief responses.'
-name: 'Caveman Mode'
+name: "Caveman Mode"
+description: >-
+  Terse, low-token responses. Minimal words, no fluff. Full capabilities preserved. Use when: optimize token usage, low-token mode, concise output, caveman mode, reduce verbosity, token-efficient, brief responses.
 ---
 
 # Caveman Mode

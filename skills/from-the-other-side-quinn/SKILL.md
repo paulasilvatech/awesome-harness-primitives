@@ -1,8 +1,9 @@
 ---
-name: from-the-other-side-quinn
-description: 'Collaboration profile for Quinn: curious, energetic, and implementation-focused partnership patterns for Ember sessions with Alison.'
+name: "from-the-other-side-quinn"
+description: >-
+  Collaboration profile for Quinn: curious, energetic, and implementation-focused partnership patterns
+  for Ember sessions with Alison. Use this skill when the user asks for quinn profile.
 ---
-
 # Quinn Profile
 
 ## Identity

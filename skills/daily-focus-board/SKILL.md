@@ -1,8 +1,17 @@
 ---
-name: daily-focus-board
-description: 'Spin up a personal, motivating daily focus board that renders in a browser canvas and that the user drives by talking to their AI partner. Tasks track status (to-do → in progress → done) with timestamped progress notes and roll up into a "today''s momentum" feed; numeric-goal tasks (pages, pomodoros, reps) render as progress-bar counters. Executive-function / neurodivergent-friendly by design: Focus mode, kind "not today" carryover (no overdue-shaming), a brain-dump box, reduced-motion, and gentle deadline countdowns. Add, reorder, and relabel tasks live, assign Eisenhower priority (Do first / Schedule / Delegate / Later), open with an above/below-the-line check-in and a daily mantra, and save an end-of-day recap. Use when someone wants to plan their day, stay focused, kick off a work session, or track progress. Progress persists in the browser (localStorage).'
+name: "daily-focus-board"
+description: >-
+  Spin up a personal, motivating daily focus board that renders in a browser canvas and that the user
+  drives by talking to their AI partner. Tasks track status (to-do → in progress → done) with
+  timestamped progress notes and roll up into a "today's momentum" feed; numeric-goal tasks (pages,
+  pomodoros, reps) render as progress-bar counters. Executive-function / neurodivergent-friendly by
+  design: Focus mode, kind "not today" carryover (no overdue-shaming), a brain-dump box,
+  reduced-motion, and gentle deadline countdowns. Add, reorder, and relabel tasks live, assign
+  Eisenhower priority (Do first / Schedule / Delegate / Later), open with an above/below-the-line
+  check-in and a daily mantra, and save an end-of-day recap. Use when someone wants to plan their day,
+  stay focused, kick off a work session, or track progress. Progress persists in the browser
+  (localStorage).
 ---
-
 # Daily Focus Board
 
 A warm, visual "let's go" board for a person's day — rendered from a self-contained HTML

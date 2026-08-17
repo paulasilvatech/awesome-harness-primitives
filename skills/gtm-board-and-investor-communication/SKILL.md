@@ -1,12 +1,15 @@
 ---
-name: gtm-board-and-investor-communication
-description: Board meeting preparation, investor updates, and executive communication. Use when preparing board decks, writing investor updates, handling bad news with the board, structuring QBRs, or building board-level metric discipline. Includes the "Three Things" narrative model, the 4-tier metric hierarchy, and the pre-brief pattern that prevents board surprises.
-license: MIT
+name: "gtm-board-and-investor-communication"
+description: >-
+  Board meeting preparation, investor updates, and executive communication. Use when preparing board
+  decks, writing investor updates, handling bad news with the board, structuring QBRs, or building
+  board-level metric discipline. Includes the "Three Things" narrative model, the 4-tier metric
+  hierarchy, and the pre-brief pattern that prevents board surprises.
+license: "MIT"
 metadata:
-  author: Smit Patel (https://linkedin.com/in/smitkpatel)
-  source: https://github.com/beingsmit/technical-product-gtm
+  author: "Smit Patel (https://linkedin.com/in/smitkpatel)"
+  source: "https://github.com/beingsmit/technical-product-gtm"
 ---
-
 # Board and Investor Communication
 
 Structure board meetings, investor updates, and executive communication that builds trust and drives decisions — not slide decks that nobody reads.

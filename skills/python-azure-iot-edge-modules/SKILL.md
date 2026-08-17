@@ -1,8 +1,11 @@
 ---
-name: python-azure-iot-edge-modules
-description: 'Build and operate Python Azure IoT Edge modules with robust messaging, deployment manifests, observability, and production readiness checks.'
+name: "python-azure-iot-edge-modules"
+description: >-
+  Build and operate Python Azure IoT Edge modules with robust messaging, deployment manifests,
+  observability, and production readiness checks. Use this skill when the user asks to create Python
+  IoT Edge modules, deploy edge modules with manifests, process telemetry at the edge, or validate IoT
+  Edge production readiness.
 ---
-
 # Python Azure IoT Edge Modules
 
 Use this skill to design, implement, and validate Python-based IoT Edge modules for telemetry processing, local inference, protocol translation, and edge-to-cloud integration.

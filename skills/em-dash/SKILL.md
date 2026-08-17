@@ -1,8 +1,11 @@
 ---
-name: em-dash
-description: 'Expert on the history, origin, and correct use of the em dash. Use when writing or reviewing code, comments, or data files to avoid em and en dashes, defaulting to never using them and replacing any found with a hyphen (-). Includes strong knowledge of punctuation marks and the proper usage of punctuation characters when writing comments.'
+name: "em-dash"
+description: >-
+  Expert on the history, origin, and correct use of the em dash. Use when writing or reviewing code,
+  comments, or data files to avoid em and en dashes, defaulting to never using them and replacing any
+  found with a hyphen (-). Includes strong knowledge of punctuation marks and the proper usage of
+  punctuation characters when writing comments.
 ---
-
 # em dash
 
 The **em dash** (U+2014, `\u2014`; not the hyphen-minus `-`) is the longest

@@ -1,6 +1,6 @@
 ---
-description: 'How to use and run PCF sample components from the PowerApps-Samples repository'
 applyTo: '**/*.{ts,tsx,js,json,xml,pcfproj,csproj}'
+description: 'How to use and run PCF sample components from the PowerApps-Samples repository'
 ---
 
 # How to Use the Sample Components

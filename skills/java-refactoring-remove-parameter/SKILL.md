@@ -1,8 +1,7 @@
 ---
-name: java-refactoring-remove-parameter
-description: 'Refactoring using Remove Parameter in Java Language'
+name: "java-refactoring-remove-parameter"
+description: "Refactoring using Remove Parameter in Java Language. Use this skill when the user asks for refactoring java methods with remove parameter."
 ---
-
 # Refactoring Java Methods with Remove Parameter
 
 ## Role

@@ -1,6 +1,6 @@
 ---
-description: 'Markdown formatting for GitHub-flavored markdown (GFM) files'
 applyTo: '**/*.md'
+description: 'Markdown formatting for GitHub-flavored markdown (GFM) files'
 ---
 
 # GitHub Flavored Markdown (GFM)

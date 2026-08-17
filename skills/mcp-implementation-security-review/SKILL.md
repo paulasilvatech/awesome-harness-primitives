@@ -1,15 +1,17 @@
 ---
-name: mcp-implementation-security-review
-description: |
-  Review the implementation source code of MCP (Model Context Protocol) servers, clients, and tool handlers against a security baseline — authentication, sessions, rate limiting, input-schema validation, official-SDK usage, RCE vectors, and the OWASP MCP Top 10 — producing a report with file/line evidence. Use this skill when:
-  - Reviewing an MCP server implementation for security before release
-  - Checking a server against the baseline controls (MCP-01 to MCP-05) and the OWASP MCP Top 10
-  - Auditing tools for RCE vectors (command/code injection, unsafe deserialization, path traversal, SSTI, dependency hijacking, SSRF)
-  - Verifying auth, session, rate-limiting, and input-validation controls on a network-exposed server
-  - Reviewing MCP client code that handles untrusted server responses and session IDs
-  - Requests like "review this MCP server for security" or "is my MCP server implementation secure?"
+name: "mcp-implementation-security-review"
+description: >-
+  Review the implementation source code of MCP (Model Context Protocol) servers, clients, and tool
+  handlers against a security baseline — authentication, sessions, rate limiting, input-schema
+  validation, official-SDK usage, RCE vectors, and the OWASP MCP Top 10 — producing a report with
+  file/line evidence. Use this skill when: - Reviewing an MCP server implementation for security
+  before release - Checking a server against the baseline controls (MCP-01 to MCP-05) and the OWASP
+  MCP Top 10 - Auditing tools for RCE vectors (command/code injection, unsafe deserialization, path
+  traversal, SSTI, dependency hijacking, SSRF) - Verifying auth, session, rate-limiting, and
+  input-validation controls on a network-exposed server - Reviewing MCP client code that handles
+  untrusted server responses and session IDs - Requests like "review this MCP server for security" or
+  "is my MCP server implementation secure?"
 ---
-
 # MCP Implementation Security Review
 
 ## Process

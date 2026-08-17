@@ -14,15 +14,5 @@
     "repository-analysis",
     "submission-workflow",
     "tiny-tool-town"
-  ],
-  "extensions": {
-    "com.github.copilot": {
-      "logo": "assets/preview.png"
-    },
-    "com.github.awesome-copilot": {
-      "extensions": [
-        "./extensions/tiny-tool-town-submitter"
-      ]
-    }
-  }
+  ]
 }

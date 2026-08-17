@@ -1,8 +1,10 @@
 ---
-name: containerize-aspnet-framework
-description: 'Containerize an ASP.NET .NET Framework project by creating Dockerfile and .dockerfile files customized for the project.'
+name: "containerize-aspnet-framework"
+description: >-
+  Containerize an ASP.NET .NET Framework project by creating Dockerfile and .dockerfile files
+  customized for the project. Use this skill when the user asks for asp.net .net framework
+  containerization prompt.
 ---
-
 # ASP.NET .NET Framework Containerization Prompt
 
 Containerize the ASP.NET (.NET Framework) project specified in the containerization settings below, focusing **exclusively** on changes required for the application to run in a Windows Docker container. Containerization should consider all settings specified here.

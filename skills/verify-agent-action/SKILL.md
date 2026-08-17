@@ -1,8 +1,13 @@
 ---
-name: verify-agent-action
-description: 'Review a proposed AI-agent action or human-approval packet before execution. Use when an agent wants to run a consequential tool, command, deployment, message, purchase, credential operation, or data mutation; when checking whether approval still matches the exact action; or when auditing action evidence for forged results, parameter swaps, replay, correlated reviewers, missing evidence, expiry, or stale monitoring. Produce an evidence-based review only—never execute or authorize the action.'
+name: "verify-agent-action"
+description: >-
+  Review a proposed AI-agent action or human-approval packet before execution. Use when an agent wants
+  to run a consequential tool, command, deployment, message, purchase, credential operation, or data
+  mutation; when checking whether approval still matches the exact action; or when auditing action
+  evidence for forged results, parameter swaps, replay, correlated reviewers, missing evidence,
+  expiry, or stale monitoring. Produce an evidence-based review only—never execute or authorize the
+  action.
 ---
-
 # Verify Agent Action
 
 Treat a plausible approval screen as a claim, not proof. Verify the complete

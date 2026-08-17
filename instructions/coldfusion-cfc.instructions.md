@@ -1,6 +1,6 @@
 ---
+applyTo: '**/*.cfc'
 description: 'ColdFusion Coding Standards for CFC component and application patterns'
-applyTo: "**/*.cfc"
 ---
 
 # ColdFusion Coding Standards for CFC Files

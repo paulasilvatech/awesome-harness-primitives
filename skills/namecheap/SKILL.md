@@ -1,8 +1,12 @@
 ---
-name: namecheap
-description: 'Manage DNS records for domains registered with Namecheap via their API. List domains, view/add/update/remove DNS host entries (A, AAAA, CNAME, MX, TXT, etc.), and guide users through API setup including public IP detection and credential configuration. Use when the user mentions Namecheap, DNS records, domain management, or wants to add/change/remove A records, CNAME records, MX records, or TXT records for their domains.'
+name: "namecheap"
+description: >-
+  Manage DNS records for domains registered with Namecheap via their API. List domains,
+  view/add/update/remove DNS host entries (A, AAAA, CNAME, MX, TXT, etc.), and guide users through API
+  setup including public IP detection and credential configuration. Use when the user mentions
+  Namecheap, DNS records, domain management, or wants to add/change/remove A records, CNAME records,
+  MX records, or TXT records for their domains.
 ---
-
 # Namecheap DNS Management
 
 **UTILITY SKILL** — manages DNS records via the Namecheap API.

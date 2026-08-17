@@ -1,7 +1,7 @@
 ---
-description: 'Perform janitorial tasks on C#/.NET code including cleanup, modernization, and tech debt remediation.'
-name: '.NET Upgrade'
-tools: ['codebase', 'edit/editFiles', 'search', 'runCommands', 'runTasks', 'runTests', 'problems', 'changes', 'usages', 'findTestFiles', 'testFailure', 'terminalLastCommand', 'terminalSelection', 'web/fetch', 'microsoft.docs.mcp']
+name: ".NET Upgrade"
+description: "Perform janitorial tasks on C#/.NET code including cleanup, modernization, and tech debt remediation."
+tools: ["read", "search", "edit", "execute", "web"]
 ---
 
 # .NET Upgrade Collection

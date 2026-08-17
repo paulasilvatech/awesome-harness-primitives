@@ -1,6 +1,6 @@
 ---
-description: 'Svelte 5 and SvelteKit 2 development standards and best practices for component-based user interfaces and full-stack applications'
 applyTo: '**/*.svelte, **/*.ts, **/*.js, **/*.css, **/*.scss, **/*.json'
+description: 'Svelte 5 and SvelteKit 2 development standards and best practices for component-based user interfaces and full-stack applications'
 ---
 
 # Svelte 5 and SvelteKit Development Instructions

@@ -1,9 +1,12 @@
 ---
-name: unit-test-vue-pinia
-category: testing
-description: 'Write and review unit tests for Vue 3 + TypeScript + Vitest + Pinia codebases. Use when creating or updating tests for components, composables, and stores; mocking Pinia with createTestingPinia; applying Vue Test Utils patterns; and enforcing black-box assertions over implementation details.'
+name: "unit-test-vue-pinia"
+description: >-
+  Write and review unit tests for Vue 3 + TypeScript + Vitest + Pinia codebases. Use when creating or
+  updating tests for components, composables, and stores; mocking Pinia with createTestingPinia;
+  applying Vue Test Utils patterns; and enforcing black-box assertions over implementation details.
+metadata:
+  category: "testing"
 ---
-
 # unit-test-vue-pinia
 
 Use this skill to create or review unit tests for Vue components, composables, and Pinia stores. Keep tests small, deterministic, and behavior-first.

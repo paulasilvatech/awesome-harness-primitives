@@ -27,5 +27,10 @@
         "./skills/quasi-coder/"
       ]
     }
-  }
+  },
+  "skills": [
+    "./skills/content-management-systems/",
+    "./skills/markdown-to-html/",
+    "./skills/quasi-coder/"
+  ]
 }

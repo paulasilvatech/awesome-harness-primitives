@@ -19,7 +19,7 @@
   "extensions": {
     "com.github.awesome-copilot": {
       "agents": [
-        "./agents/ember.md"
+        "./agents/ember.agent.md"
       ],
       "skills": [
         "./skills/daily-focus-board/",
@@ -27,10 +27,17 @@
         "./skills/from-the-other-side-quinn/",
         "./skills/from-the-other-side-vega/",
         "./skills/from-the-other-side-wiggins/"
-      ],
-      "extensions": [
-        "./extensions/daily-focus-board"
       ]
     }
-  }
+  },
+  "agents": [
+    "./agents/ember.agent.md"
+  ],
+  "skills": [
+    "./skills/daily-focus-board/",
+    "./skills/from-the-other-side-anitta/",
+    "./skills/from-the-other-side-quinn/",
+    "./skills/from-the-other-side-vega/",
+    "./skills/from-the-other-side-wiggins/"
+  ]
 }

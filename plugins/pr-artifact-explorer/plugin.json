@@ -15,15 +15,5 @@
     "pull-requests",
     "test-results"
   ],
-  "extensions": {
-    "com.github.copilot": {
-      "logo": "assets/preview.png"
-    },
-    "com.github.awesome-copilot": {
-      "extensions": [
-        "./extensions/pr-artifact-explorer"
-      ]
-    }
-  },
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json"
 }

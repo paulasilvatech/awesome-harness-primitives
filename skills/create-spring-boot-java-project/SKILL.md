@@ -1,8 +1,7 @@
 ---
-name: create-spring-boot-java-project
-description: 'Create Spring Boot Java Project Skeleton'
+name: "create-spring-boot-java-project"
+description: "Create Spring Boot Java Project Skeleton. Use this skill when the user asks for create spring boot java project prompt."
 ---
-
 # Create Spring Boot Java project prompt
 
 - Please make sure you have the following software installed on your system:

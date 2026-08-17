@@ -1,14 +1,15 @@
 ---
-name: phoenix-tracing
-description: OpenInference semantic conventions and instrumentation for Phoenix AI observability. Use when implementing LLM tracing, creating custom spans, or deploying to production.
-license: Apache-2.0
-compatibility: Requires Phoenix server. Python skills need arize-phoenix-otel; TypeScript skills need @arizeai/phoenix-otel.
+name: "phoenix-tracing"
+description: >-
+  OpenInference semantic conventions and instrumentation for Phoenix AI observability. Use when
+  implementing LLM tracing, creating custom spans, or deploying to production.
+license: "Apache-2.0"
 metadata:
-  author: oss@arize.com
-  version: "1.0.0"
+  author: "oss@arize.com"
+  compatibility: "Requires Phoenix server. Python skills need arize-phoenix-otel; TypeScript skills need @arizeai/phoenix-otel."
   languages: "Python, TypeScript"
+  version: "1.0.0"
 ---
-
 # Phoenix Tracing
 
 Comprehensive guide for instrumenting LLM applications with OpenInference tracing in Phoenix. Contains reference files covering setup, instrumentation, span types, and production deployment.

@@ -18,12 +18,19 @@
   "extensions": {
     "com.github.awesome-copilot": {
       "agents": [
-        "./agents/power-platform-mcp-integration-expert.md"
+        "./agents/power-platform-mcp-integration-expert.agent.md"
       ],
       "skills": [
         "./skills/mcp-copilot-studio-server-generator/",
         "./skills/power-platform-mcp-connector-suite/"
       ]
     }
-  }
+  },
+  "agents": [
+    "./agents/power-platform-mcp-integration-expert.agent.md"
+  ],
+  "skills": [
+    "./skills/mcp-copilot-studio-server-generator/",
+    "./skills/power-platform-mcp-connector-suite/"
+  ]
 }

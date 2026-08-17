@@ -1,8 +1,9 @@
 ---
-name: bug-reproduction-brief
-description: 'Turn a vague, intermittent, or environment-specific bug report into a minimal evidence-backed reproduction before proposing a fix.'
+name: "bug-reproduction-brief"
+description: >-
+  Turn a vague, intermittent, or environment-specific bug report into a minimal evidence-backed
+  reproduction before proposing a fix. Use this skill when 1. Record the observed failure.
 ---
-
 # Bug Reproduction Brief
 
 Use this skill when a bug report is incomplete, intermittent, environment-specific, or mixed with an assumed cause. The goal is to prove the smallest observable failure before diagnosis or repair begins.

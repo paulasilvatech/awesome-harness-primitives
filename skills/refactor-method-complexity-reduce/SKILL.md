@@ -1,8 +1,10 @@
 ---
-name: refactor-method-complexity-reduce
-description: 'Refactor given method `${input:methodName}` to reduce its cognitive complexity to `${input:complexityThreshold}` or below, by extracting helper methods.'
+name: "refactor-method-complexity-reduce"
+description: >-
+  Refactor given method `${input:methodName}` to reduce its cognitive complexity to
+  `${input:complexityThreshold}` or below, by extracting helper methods. Use this skill when the user
+  asks for refactor method to reduce cognitive complexity.
 ---
-
 # Refactor Method to Reduce Cognitive Complexity
 
 ## Objective

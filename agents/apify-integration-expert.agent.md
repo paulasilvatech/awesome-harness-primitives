@@ -1,20 +1,16 @@
 ---
-name: apify-integration-expert
-description: "Expert agent for integrating Apify Actors into codebases. Handles Actor selection, workflow design, implementation across JavaScript/TypeScript and Python, testing, and production-ready deployment."
+name: "apify-integration-expert"
+description: >-
+  Expert agent for integrating Apify Actors into codebases. Handles Actor selection, workflow design, implementation across JavaScript/TypeScript and Python, testing, and production-ready deployment.
 mcp-servers:
   apify:
-    type: 'http'
-    url: 'https://mcp.apify.com'
+    type: "http"
+    url: "https://mcp.apify.com"
     headers:
-      Authorization: 'Bearer $APIFY_TOKEN'
-      Content-Type: 'application/json'
+      Authorization: "Bearer $APIFY_TOKEN"
+      Content-Type: "application/json"
     tools:
-    - 'fetch-actor-details'
-    - 'search-actors'
-    - 'call-actor'
-    - 'search-apify-docs'
-    - 'fetch-apify-docs'
-    - 'get-actor-output'
+      ["fetch-actor-details", "search-actors", "call-actor", "search-apify-docs", "fetch-apify-docs", "get-actor-output"]
 ---
 
 # Apify Actor Expert Agent

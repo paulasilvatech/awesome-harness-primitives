@@ -1,6 +1,6 @@
 ---
-description: 'Terraform Conventions and Guidelines'
 applyTo: '**/*.tf'
+description: 'Terraform Conventions and Guidelines'
 ---
 
 # Terraform Conventions

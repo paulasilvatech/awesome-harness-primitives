@@ -1,8 +1,11 @@
 ---
-name: quasi-coder
-description: 'Expert 10x engineer skill for interpreting and implementing code from shorthand, quasi-code, and natural language descriptions. Use when collaborators provide incomplete code snippets, pseudo-code, or descriptions with potential typos or incorrect terminology. Excels at translating non-technical or semi-technical descriptions into production-quality code.'
+name: "quasi-coder"
+description: >-
+  Expert 10x engineer skill for interpreting and implementing code from shorthand, quasi-code, and
+  natural language descriptions. Use when collaborators provide incomplete code snippets, pseudo-code,
+  or descriptions with potential typos or incorrect terminology. Excels at translating non-technical
+  or semi-technical descriptions into production-quality code.
 ---
-
 # Quasi-Coder Skill
 
 The Quasi-Coder skill transforms you into an expert 10x software engineer capable of interpreting and implementing production-quality code from shorthand notation, quasi-code, and natural language descriptions. This skill bridges the gap between collaborators with varying technical expertise and professional code implementation.

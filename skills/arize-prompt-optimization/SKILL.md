@@ -1,12 +1,16 @@
 ---
-name: arize-prompt-optimization
-description: Optimizes, improves, and debugs LLM prompts using production trace data, evaluations, and annotations. Extracts prompts from spans, gathers performance signal, and runs a data-driven optimization loop using the ax CLI. Use when the user mentions optimize prompt, improve prompt, make AI respond better, improve output quality, prompt engineering, prompt tuning, or system prompt improvement.
+name: "arize-prompt-optimization"
+description: >-
+  Optimizes, improves, and debugs LLM prompts using production trace data, evaluations, and
+  annotations. Extracts prompts from spans, gathers performance signal, and runs a data-driven
+  optimization loop using the ax CLI. Use when the user mentions optimize prompt, improve prompt, make
+  AI respond better, improve output quality, prompt engineering, prompt tuning, or system prompt
+  improvement.
 metadata:
-  author: arize
+  author: "arize"
+  compatibility: "Requires the ax CLI and a configured Arize profile."
   version: "1.0"
-compatibility: Requires the ax CLI and a configured Arize profile.
 ---
-
 # Arize Prompt Optimization Skill
 
 > **`SPACE`** — All `--space` flags and the `ARIZE_SPACE` env var accept a space **name** (e.g., `my-workspace`) or a base64 space **ID** (e.g., `U3BhY2U6...`). Find yours with `ax spaces list`.

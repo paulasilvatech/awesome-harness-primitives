@@ -1,8 +1,9 @@
 ---
-name: breakdown-feature-prd
-description: 'Prompt for creating Product Requirements Documents (PRDs) for new features, based on an Epic.'
+name: "breakdown-feature-prd"
+description: >-
+  Prompt for creating Product Requirements Documents (PRDs) for new features, based on an Epic. Use
+  this skill when the user asks for feature prd prompt.
 ---
-
 # Feature PRD Prompt
 
 ## Goal

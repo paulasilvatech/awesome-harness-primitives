@@ -1,6 +1,6 @@
 ---
-description: "Shorthand code will be in the file provided from the prompt or raw data in the prompt, and will be used to update the code file when the prompt has the text `UPDATE CODE FROM SHORTHAND`."
-applyTo: "**/${input:file}"
+applyTo: '**/${input:file}'
+description: 'Shorthand code will be in the file provided from the prompt or raw data in the prompt, and will be used to update the code file when the prompt has the text `UPDATE CODE FROM SHORTHAND`.'
 ---
 
 # Update Code from Shorthand

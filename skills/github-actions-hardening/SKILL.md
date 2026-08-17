@@ -1,8 +1,17 @@
 ---
-name: github-actions-hardening
-description: Security hardening reviewer for GitHub Actions workflow files (.github/workflows/*.yml). Reasons about the Actions threat model that pattern matchers and general code linters miss — untrusted-input script injection, privileged triggers running fork code, mutable action references, and over-scoped tokens. Use this skill when asked to review, audit, harden, or secure a GitHub Actions workflow, when writing a new workflow, or for any request like "is this workflow safe?", "review my CI for security issues", "why is pull_request_target dangerous here?", "pin my actions", or "lock down GITHUB_TOKEN permissions". Covers script injection via ${{ }} interpolation, pull_request_target / workflow_run privilege escalation, SHA-pinning of third-party actions, least-privilege permissions, GITHUB_ENV/GITHUB_OUTPUT injection, secret exposure, OIDC over long-lived credentials, and self-hosted runner exposure on public repositories.
+name: "github-actions-hardening"
+description: >-
+  Security hardening reviewer for GitHub Actions workflow files (.github/workflows/*.yml). Reasons
+  about the Actions threat model that pattern matchers and general code linters miss — untrusted-input
+  script injection, privileged triggers running fork code, mutable action references, and over-scoped
+  tokens. Use this skill when asked to review, audit, harden, or secure a GitHub Actions workflow,
+  when writing a new workflow, or for any request like "is this workflow safe?", "review my CI for
+  security issues", "why is pull_request_target dangerous here?", "pin my actions", or "lock down
+  GITHUB_TOKEN permissions". Covers script injection via ${{ }} interpolation, pull_request_target /
+  workflow_run privilege escalation, SHA-pinning of third-party actions, least-privilege permissions,
+  GITHUB_ENV/GITHUB_OUTPUT injection, secret exposure, OIDC over long-lived credentials, and
+  self-hosted runner exposure on public repositories.
 ---
-
 # GitHub Actions Hardening
 
 A focused security reviewer for GitHub Actions workflows. It reasons about the *Actions-specific*

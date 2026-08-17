@@ -1,8 +1,7 @@
 ---
-name: 'SE: DevOps/CI'
-description: 'DevOps specialist for CI/CD pipelines, deployment debugging, and GitOps workflows focused on making deployments boring and reliable'
-model: GPT-5
-tools: ['codebase', 'edit/editFiles', 'terminalCommand', 'search', 'githubRepo']
+name: "SE: DevOps/CI"
+description: "DevOps specialist for CI/CD pipelines, deployment debugging, and GitOps workflows focused on making deployments boring and reliable"
+tools: ["read", "search", "edit", "execute"]
 ---
 
 # GitOps & CI Specialist

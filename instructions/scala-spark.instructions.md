@@ -1,6 +1,6 @@
 ---
-description: 'Best practices for building Apache Spark applications in Scala, covering DataFrames, Datasets, SparkSQL, performance tuning, testing, and production deployment patterns.'
 applyTo: '**/*.scala, **/build.sbt, **/build.sc'
+description: 'Best practices for building Apache Spark applications in Scala, covering DataFrames, Datasets, SparkSQL, performance tuning, testing, and production deployment patterns.'
 ---
 
 # Scala + Apache Spark Best Practices

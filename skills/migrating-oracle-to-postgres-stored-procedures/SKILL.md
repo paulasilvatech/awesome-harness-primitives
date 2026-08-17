@@ -1,8 +1,12 @@
 ---
-name: migrating-oracle-to-postgres-stored-procedures
-description: 'Migrates Oracle PL/SQL stored procedures to PostgreSQL PL/pgSQL. Translates Oracle-specific syntax, preserves method signatures and type-anchored parameters, leverages orafce where appropriate, and applies explicit collation mapping (`COLLATE "C"` only when appropriate, locale collations when required). Use when converting Oracle stored procedures or functions to PostgreSQL equivalents during a database migration.'
+name: "migrating-oracle-to-postgres-stored-procedures"
+description: >-
+  Migrates Oracle PL/SQL stored procedures to PostgreSQL PL/pgSQL. Translates Oracle-specific syntax,
+  preserves method signatures and type-anchored parameters, leverages orafce where appropriate, and
+  applies explicit collation mapping (`COLLATE "C"` only when appropriate, locale collations when
+  required). Use when converting Oracle stored procedures or functions to PostgreSQL equivalents
+  during a database migration.
 ---
-
 # Migrating Stored Procedures from Oracle to PostgreSQL
 
 Translate Oracle PL/SQL stored procedures and functions to PostgreSQL PL/pgSQL equivalents.

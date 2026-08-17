@@ -1,17 +1,18 @@
 ---
-name: eval-driven-dev
-description: >
-  Improve AI application with evaluation-driven development. Define eval criteria, instrument the application, build golden datasets, observe and evaluate application runs, analyze results, and produce a concrete action plan for improvements.
-  ALWAYS USE THIS SKILL when the user asks to set up QA, add tests, add evals,
-  evaluate, benchmark, fix wrong behaviors, improve quality, or do quality assurance for any Python project that calls an LLM model.
-license: MIT
-compatibility: Python 3.10+
+name: "eval-driven-dev"
+description: >-
+  Improve AI application with evaluation-driven development. Define eval criteria, instrument the
+  application, build golden datasets, observe and evaluate application runs, analyze results, and
+  produce a concrete action plan for improvements. ALWAYS USE THIS SKILL when the user asks to set up
+  QA, add tests, add evals, evaluate, benchmark, fix wrong behaviors, improve quality, or do quality
+  assurance for any Python project that calls an LLM model.
+license: "MIT"
 metadata:
-  version: 0.8.4
+  compatibility: "Python 3.10+"
+  pixie-qa-source: "https://github.com/yiouli/pixie-qa/"
   pixie-qa-version: ">=0.8.4,<0.9.0"
-  pixie-qa-source: https://github.com/yiouli/pixie-qa/
+  version: "0.8.4"
 ---
-
 # Eval-Driven Development for Python LLM Applications
 
 You're building an **automated evaluation pipeline** that tests a Python-based AI application end-to-end — running it the same way a real user would, with real inputs — then scoring the outputs using evaluators and producing pass/fail results via `pixie test`.

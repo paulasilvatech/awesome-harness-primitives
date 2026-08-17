@@ -1,8 +1,9 @@
 ---
-name: convert-plaintext-to-md
-description: 'Convert a text-based document to markdown following instructions from prompt, or if a documented option is passed, follow the instructions for that option.'
+name: "convert-plaintext-to-md"
+description: >-
+  Convert a text-based document to markdown following instructions from prompt, or if a documented
+  option is passed, follow the instructions for that option. Use this skill when *User**.
 ---
-
 # Convert Plaintext Documentation to Markdown
 
 ## Current Role

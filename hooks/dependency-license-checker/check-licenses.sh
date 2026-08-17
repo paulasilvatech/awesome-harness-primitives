@@ -13,6 +13,10 @@
 
 set -euo pipefail
 
+# Consume the Copilot hook payload. License detection is based on the repository
+# diff, not on payload fields.
+INPUT=$(cat || true)
+
 # ---------------------------------------------------------------------------
 # Early exit if disabled
 # ---------------------------------------------------------------------------
@@ -343,7 +347,7 @@ if [[ $FINDING_COUNT -gt 0 ]]; then
   if [[ "$MODE" == "block" ]]; then
     echo "🚫 Session blocked: resolve license violations above before committing."
     echo "   Set LICENSE_MODE=warn to log without blocking, or add packages to LICENSE_ALLOWLIST."
-    exit 1
+    exit 2
   else
     echo "💡 Review the violations above. Set LICENSE_MODE=block to prevent commits with license issues."
   fi

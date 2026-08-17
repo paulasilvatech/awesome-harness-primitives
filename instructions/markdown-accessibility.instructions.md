@@ -1,6 +1,6 @@
 ---
-description: 'Markdown accessibility guidelines based on GitHub''s 5 best practices for inclusive documentation'
 applyTo: '**/*.md'
+description: 'Markdown accessibility guidelines based on GitHub''s 5 best practices for inclusive documentation'
 ---
 
 # Markdown Accessibility Review Guidelines

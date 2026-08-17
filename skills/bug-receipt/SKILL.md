@@ -1,8 +1,11 @@
 ---
-name: bug-receipt
-description: 'Close bugs and incidents with an auditable BUG RECEIPT and VERIFIED, PARTIAL, or BLOCKED status. Use for defect repair, regression proof, production incidents, and issue closeout.'
+name: "bug-receipt"
+description: >-
+  Close bugs and incidents with an auditable BUG RECEIPT and VERIFIED, PARTIAL, or BLOCKED status. Use
+  for defect repair, regression proof, production incidents, and issue closeout. Use this skill when |
+  Cross-system blocker | One sanitized failing request/response with timestamp or request ID, edge and
+  application logs, and identity-pro.
 ---
-
 # Bug Receipt
 
 ## Mandatory closeout output

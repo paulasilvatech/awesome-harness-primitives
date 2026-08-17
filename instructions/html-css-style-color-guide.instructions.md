@@ -1,6 +1,6 @@
 ---
-description: 'Color usage guidelines and styling rules for HTML elements to ensure accessible, professional designs.'
 applyTo: '**/*.html, **/*.css, **/*.js'
+description: 'Color usage guidelines and styling rules for HTML elements to ensure accessible, professional designs.'
 ---
 
 # HTML CSS Style Color Guide

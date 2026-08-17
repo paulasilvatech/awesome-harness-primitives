@@ -1,8 +1,9 @@
 ---
-name: dotnet-upgrade
-description: 'Ready-to-use prompts for comprehensive .NET framework upgrade analysis and execution'
+name: "dotnet-upgrade"
+description: >-
+  Ready-to-use prompts for comprehensive .NET framework upgrade analysis and execution. Use this skill
+  when the user asks for project discovery & assessment.
 ---
-
 # Project Discovery & Assessment
   - name: "Project Classification Analysis"
     prompt: "Identify all projects in the solution and classify them by type (`.NET Framework`, `.NET Core`, `.NET Standard`). Analyze each `.csproj` for its current `TargetFramework` and SDK usage."

@@ -1,6 +1,6 @@
 ---
-description: 'Guidelines and best practices for developing Lightning Web Components (LWC) on Salesforce Platform.'
 applyTo: 'force-app/main/default/lwc/**'
+description: 'Guidelines and best practices for developing Lightning Web Components (LWC) on Salesforce Platform.'
 ---
 
 # LWC Development

@@ -16,12 +16,8 @@ TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 CWD=$(pwd)
 LEVEL="${GOVERNANCE_LEVEL:-standard}"
 
-jq -Rn \
-  --arg timestamp "$TIMESTAMP" \
-  --arg cwd "$CWD" \
-  --arg level "$LEVEL" \
-  '{"timestamp":$timestamp,"event":"session_start","governance_level":$level,"cwd":$cwd}' \
-  >> logs/copilot/governance/audit.log
+python3 -c 'import json,sys; print(json.dumps({"timestamp":sys.argv[1],"event":"session_start","governance_level":sys.argv[2],"cwd":sys.argv[3]}))' \
+  "$TIMESTAMP" "$LEVEL" "$CWD" >> logs/copilot/governance/audit.log
 
 echo "🛡️ Governance audit active (level: $LEVEL)"
 exit 0

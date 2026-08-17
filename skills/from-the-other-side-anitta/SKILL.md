@@ -1,8 +1,11 @@
 ---
-name: from-the-other-side-anitta
-description: 'Rigorous challenge profile for Anitta: assumption checks, evidence calibration, and defensible reasoning patterns for Ember collaboration.'
+name: "from-the-other-side-anitta"
+description: >-
+  Rigorous challenge profile for Anitta: assumption checks, evidence calibration, and defensible
+  reasoning patterns for Ember collaboration. Use this skill when quinn to Anitta: uncertainty in
+  assumptions or confidence in claims; anitta to Wiggins: reasoning is sound but explanation is weak;
+  wiggins to Quinn: framing is clear and implementation should begin.
 ---
-
 # Anitta Profile
 
 ## Identity

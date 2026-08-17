@@ -46,11 +46,17 @@ if ($ScriptArgs.Count -eq 0 -and [Console]::IsInputRedirected) {
     try {
       $json = $raw | ConvertFrom-Json
       $tool = $json.toolName; if (-not $tool) { $tool = $json.tool_name }
+      if (-not $tool) { $tool = $json.name }
+      if (-not $tool -and $json.toolCalls -and $json.toolCalls.Count -gt 0) { $tool = $json.toolCalls[0].name }
       if ($tool) {
         if ($tool -in 'editFiles','edit','write','str_replace_editor','create_file','multiEdit','applyPatch') {
           # Only the files this edit tool just changed - never a wider repo scan.
           $hookFiles = $json.tool_input.files; if (-not $hookFiles) { $hookFiles = $json.toolInput.files }
+          if (-not $hookFiles -and $json.toolCalls -and $json.toolCalls.Count -gt 0) { $hookFiles = $json.toolCalls[0].args.files }
+          if (-not $hookFiles -and $json.toolCalls -and $json.toolCalls.Count -gt 0) { $hookFiles = $json.toolCalls[0].input.files }
           if (-not $hookFiles) { $hookFiles = $json.tool_input.path; if (-not $hookFiles) { $hookFiles = $json.toolInput.path } }
+          if (-not $hookFiles -and $json.toolCalls -and $json.toolCalls.Count -gt 0) { $hookFiles = $json.toolCalls[0].args.path }
+          if (-not $hookFiles -and $json.toolCalls -and $json.toolCalls.Count -gt 0) { $hookFiles = $json.toolCalls[0].input.path }
           if ($hookFiles) { foreach ($hf in $hookFiles) { [void]$ScriptArgs.Add([string]$hf) } }
         }
         else {

@@ -1,22 +1,8 @@
 ---
 name: "Project Documenter"
-description: "Generates professional MS Word project documentation with draw.io architecture diagrams and embedded PNG images. Automatically discovers any project's technology stack, architecture, and code structure. Produces Markdown, draw.io diagrams, PNG exports, and .docx output."
-tools:
-  [
-    "execute/runInTerminal",
-    "read/readFile",
-    "read/problems",
-    "read/terminalSelection",
-    "read/terminalLastCommand",
-    "edit/createDirectory",
-    "edit/createFile",
-    "edit/editFiles",
-    "search/codebase",
-    "search/fileSearch",
-    "search/listDirectory",
-    "search/textSearch",
-    "todo",
-  ]
+description: >-
+  Generates professional MS Word project documentation with draw.io architecture diagrams and embedded PNG images. Automatically discovers any project's technology stack, architecture, and code structure. Produces Markdown, draw.io diagrams, PNG exports, and .docx output.
+tools: ["read", "search", "edit", "execute", "todo"]
 ---
 
 # Project Documentation Agent

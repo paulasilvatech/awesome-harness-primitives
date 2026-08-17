@@ -1,8 +1,11 @@
 ---
-name: microsoft-docs
-description: 'Query official Microsoft documentation to find concepts, tutorials, and code examples across Azure, .NET, Agent Framework, Aspire, VS Code, GitHub, and more. Uses Microsoft Learn MCP as the default, with Context7 and Aspire MCP for content that lives outside learn.microsoft.com.'
+name: "microsoft-docs"
+description: >-
+  Query official Microsoft documentation to find concepts, tutorials, and code examples across Azure,
+  .NET, Agent Framework, Aspire, VS Code, GitHub, and more. Uses Microsoft Learn MCP as the default,
+  with Context7 and Aspire MCP for content that lives outside learn.microsoft.com. Use this skill when
+  the following categories live **outside** learn.microsoft.com. Use the specified tool instead.
 ---
-
 # Microsoft Docs
 
 Research skill for the Microsoft technology ecosystem. Covers learn.microsoft.com and documentation that lives outside it (VS Code, GitHub, Aspire, Agent Framework repos).

@@ -1,6 +1,6 @@
 ---
-description: 'Instructions for building Model Context Protocol (MCP) servers using the TypeScript SDK'
 applyTo: '**/*.ts, **/*.js, **/package.json'
+description: 'Instructions for building Model Context Protocol (MCP) servers using the TypeScript SDK'
 ---
 
 # TypeScript MCP Server Development

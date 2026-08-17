@@ -24,5 +24,8 @@
         "./skills/ai-prompt-engineering-safety-review/"
       ]
     }
-  }
+  },
+  "skills": [
+    "./skills/ai-prompt-engineering-safety-review/"
+  ]
 }

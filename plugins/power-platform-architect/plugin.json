@@ -23,5 +23,8 @@
         "./skills/power-platform-architect/"
       ]
     }
-  }
+  },
+  "skills": [
+    "./skills/power-platform-architect/"
+  ]
 }

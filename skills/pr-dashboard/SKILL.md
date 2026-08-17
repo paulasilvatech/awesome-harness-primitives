@@ -1,8 +1,10 @@
 ---
-name: pr-dashboard
-description: 'Open a GitHub PR dashboard in the browser. Use when the user asks to see their pull requests, open the PR dashboard, show PRs for a date range, or check PR status. Trigger phrases include "show my PRs", "open PR dashboard", "pull request dashboard".'
+name: "pr-dashboard"
+description: >-
+  Open a GitHub PR dashboard in the browser. Use when the user asks to see their pull requests, open
+  the PR dashboard, show PRs for a date range, or check PR status. Trigger phrases include "show my
+  PRs", "open PR dashboard", "pull request dashboard".
 ---
-
 # PR Dashboard
 
 Generates and opens a GitHub PR dashboard in the browser for a given date range and role filter.

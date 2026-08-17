@@ -1,6 +1,6 @@
 ---
-description: 'Limitations and restrictions of Power Apps Component Framework'
 applyTo: '**/*.{ts,tsx,js,json,xml,pcfproj,csproj}'
+description: 'Limitations and restrictions of Power Apps Component Framework'
 ---
 
 # Limitations

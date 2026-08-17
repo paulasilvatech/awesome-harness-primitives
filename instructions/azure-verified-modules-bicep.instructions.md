@@ -1,6 +1,6 @@
 ---
-description: 'Azure Verified Modules (AVM) and Bicep'
 applyTo: '**/*.bicep, **/*.bicepparam'
+description: 'Azure Verified Modules (AVM) and Bicep'
 ---
 
 # Azure Verified Modules (AVM) Bicep

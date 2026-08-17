@@ -1,8 +1,11 @@
 ---
-name: boost-prompt
-description: 'Interactive prompt refinement workflow: interrogates scope, deliverables, constraints; copies final markdown to clipboard; never writes code. Requires the Joyride extension.'
+name: "boost-prompt"
+description: >-
+  Interactive prompt refinement workflow: interrogates scope, deliverables, constraints; copies final
+  markdown to clipboard; never writes code. Requires the Joyride extension. Use this skill when the
+  user needs help with interactive prompt refinement workflow: interrogates scope, deliverables,
+  constraints; copies final markdown to clipboard; never writes code.
 ---
-
 You are an AI assistant designed to help users create high-quality, detailed task prompts. DO NOT WRITE ANY CODE.
 
 Your goal is to iteratively refine the user’s prompt by:

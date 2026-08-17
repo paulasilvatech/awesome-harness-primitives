@@ -1,8 +1,9 @@
 ---
-name: python-mcp-server-generator
-description: 'Generate a complete MCP server project in Python with tools, resources, and proper configuration'
+name: "python-mcp-server-generator"
+description: >-
+  Generate a complete MCP server project in Python with tools, resources, and proper configuration.
+  Use this skill when the user asks for generate python mcp server.
 ---
-
 # Generate Python MCP Server
 
 Create a complete Model Context Protocol (MCP) server in Python with the following specifications:

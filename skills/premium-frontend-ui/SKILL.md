@@ -1,11 +1,13 @@
 ---
-name: premium-frontend-ui
-description: 'A comprehensive guide for GitHub Copilot to craft immersive, high-performance web experiences with advanced motion, typography, and architectural craftsmanship.'
+name: "premium-frontend-ui"
+description: >-
+  Guide Copilot to craft immersive, high-performance web experiences with advanced motion, typography,
+  and architectural polish. Use this skill when the user asks for premium frontend UI, sophisticated
+  animations, scroll-driven interactions, layout polish, or high-end visual design implementation.
 metadata:
-  author: 'Utkarsh Patrikar'
-  author_url: 'https://github.com/utkarsh232005'
+  author: "Utkarsh Patrikar"
+  author_url: "https://github.com/utkarsh232005"
 ---
-
 # Immersive Frontend UI Craftsmanship
 
 As an AI engineering assistant, your role when building premium frontend experiences goes beyond outputting functional HTML and CSS. You must architect **immersive digital environments**. This skill provides the blueprint for generating highly intentional, award-level web applications that prioritize aesthetic quality, deep interactivity, and flawless performance.

@@ -1,8 +1,7 @@
 ---
-name: playwright-explore-website
-description: 'Website exploration for testing using Playwright MCP'
+name: "playwright-explore-website"
+description: "Website exploration for testing using Playwright MCP. Use this skill when the user asks for website exploration for testing."
 ---
-
 # Website Exploration for Testing
 
 Your goal is to explore the website and identify key functionalities.

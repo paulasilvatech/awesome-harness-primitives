@@ -1,8 +1,9 @@
 ---
-description: 'Generate technical debt remediation plans for code, tests, and documentation.'
-name: 'Technical Debt Remediation Plan'
-tools: ['changes', 'codebase', 'edit/editFiles', 'extensions', 'web/fetch', 'findTestFiles', 'githubRepo', 'new', 'openSimpleBrowser', 'problems', 'runCommands', 'runTasks', 'runTests', 'search', 'searchResults', 'terminalLastCommand', 'terminalSelection', 'testFailure', 'usages', 'vscodeAPI', 'github']
+name: "Technical Debt Remediation Plan"
+description: "Generate technical debt remediation plans for code, tests, and documentation."
+tools: ["read", "search", "web"]
 ---
+
 # Technical Debt Remediation Plan
 
 Generate comprehensive technical debt remediation plans. Analysis only - no code modifications. Keep recommendations concise and actionable. Do not provide verbose explanations or unnecessary details.

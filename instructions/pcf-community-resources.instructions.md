@@ -1,6 +1,6 @@
 ---
+applyTo: '**/*.{ts,tsx,js,jsx,json,xml,css,html}'
 description: 'PCF community resources including gallery, videos, blogs, and development tools'
-applyTo: '**'
 ---
 
 # PCF Community Resources

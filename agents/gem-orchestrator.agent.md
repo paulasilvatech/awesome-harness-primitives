@@ -1,11 +1,9 @@
 ---
+name: "gem-orchestrator"
 description: "The team lead: Orchestrates planning, implementation, and verification."
-name: gem-orchestrator
-argument-hint: "Describe your objective or task. Include plan_id if resuming."
-disable-model-invocation: true
 user-invocable: true
-mode: primary
-hidden: false
+disable-model-invocation: true
+argument-hint: "Describe your objective or task. Include plan_id if resuming."
 ---
 
 # ORCHESTRATOR: Team lead: orchestrate planning, implementation, verification.

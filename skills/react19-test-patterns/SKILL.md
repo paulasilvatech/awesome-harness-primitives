@@ -1,8 +1,10 @@
 ---
-name: react19-test-patterns
-description: 'Provides before/after patterns for migrating test files to React 19 compatibility, including act() imports, Simulate removal, and StrictMode call count changes.'
+name: "react19-test-patterns"
+description: >-
+  Provides before/after patterns for migrating test files to React 19 compatibility, including act()
+  imports, Simulate removal, and StrictMode call count changes. Use this skill when the user asks for
+  react 19 test migration patterns.
 ---
-
 # React 19 Test Migration Patterns
 
 Reference for all test file migrations required by React 19.

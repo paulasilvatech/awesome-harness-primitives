@@ -1,8 +1,11 @@
 ---
-name: snowflake-semanticview
-description: Create, alter, and validate Snowflake semantic views using Snowflake CLI (snow). Use when asked to build or troubleshoot semantic views/semantic layer definitions with CREATE/ALTER SEMANTIC VIEW, to validate semantic-view DDL against Snowflake via CLI, or to guide Snowflake CLI installation and connection setup.
+name: "snowflake-semanticview"
+description: >-
+  Create, alter, and validate Snowflake semantic views using Snowflake CLI (snow). Use when asked to
+  build or troubleshoot semantic views/semantic layer definitions with CREATE/ALTER SEMANTIC VIEW, to
+  validate semantic-view DDL against Snowflake via CLI, or to guide Snowflake CLI installation and
+  connection setup.
 ---
-
 # Snowflake Semantic Views
 
 ## One-Time Setup

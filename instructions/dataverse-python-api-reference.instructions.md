@@ -1,6 +1,8 @@
 ---
-applyTo: '**'
+applyTo: '**/*.py'
+description: 'Detailed reference for Python Dataverse SDK client methods, table operations, queries, and SDK models.'
 ---
+
 # Dataverse SDK for Python — API Reference Guide
 
 ## DataverseClient Class

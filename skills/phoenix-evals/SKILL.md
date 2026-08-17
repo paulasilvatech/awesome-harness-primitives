@@ -1,14 +1,13 @@
 ---
-name: phoenix-evals
-description: Build and run evaluators for AI/LLM applications using Phoenix.
-license: Apache-2.0
-compatibility: Requires Phoenix server. Python skills need phoenix and openai packages; TypeScript skills need @arizeai/phoenix-client.
+name: "phoenix-evals"
+description: "Build and run evaluators for AI/LLM applications using Phoenix. Use this skill when the user asks for quick reference."
+license: "Apache-2.0"
 metadata:
-  author: oss@arize.com
-  version: "1.0.0"
+  author: "oss@arize.com"
+  compatibility: "Requires Phoenix server. Python skills need phoenix and openai packages; TypeScript skills need @arizeai/phoenix-client."
   languages: "Python, TypeScript"
+  version: "1.0.0"
 ---
-
 # Phoenix Evals
 
 Build evaluators for AI/LLM applications. Code first, LLM for nuance, validate against humans.

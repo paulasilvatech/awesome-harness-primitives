@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "hooks": {
+    "postToolUse": [
+      {
+        "type": "command",
+        "bash": "hooks/fix-broken-links/link-fix.sh",
+        "powershell": "hooks/fix-broken-links/link-fix.ps1",
+        "cwd": ".",
+        "timeoutSec": 120
+      }
+    ]
+  },
+  "disableAllHooks": true
+}

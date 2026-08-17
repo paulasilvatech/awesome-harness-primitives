@@ -5,6 +5,9 @@
 
 set -euo pipefail
 
+# Consume the Copilot hook payload; this hook acts on repository state.
+INPUT=$(cat || true)
+
 # Check if SKIP_AUTO_COMMIT is set
 if [[ "${SKIP_AUTO_COMMIT:-}" == "true" ]]; then
   echo "⏭️  Auto-commit skipped (SKIP_AUTO_COMMIT=true)"

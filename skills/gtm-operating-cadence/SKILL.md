@@ -1,12 +1,14 @@
 ---
-name: gtm-operating-cadence
-description: Design meeting rhythms, metric reporting, quarterly planning, and decision-making velocity for scaling companies. Use when decisions are slow, planning is broken, the company is growing but alignment is worse, or leadership meetings consume all time without producing decisions.
-license: MIT
+name: "gtm-operating-cadence"
+description: >-
+  Design meeting rhythms, metric reporting, quarterly planning, and decision-making velocity for
+  scaling companies. Use when decisions are slow, planning is broken, the company is growing but
+  alignment is worse, or leadership meetings consume all time without producing decisions.
+license: "MIT"
 metadata:
-  author: Smit Patel (https://linkedin.com/in/smitkpatel)
-  source: https://github.com/beingsmit/technical-product-gtm
+  author: "Smit Patel (https://linkedin.com/in/smitkpatel)"
+  source: "https://github.com/beingsmit/technical-product-gtm"
 ---
-
 # Operating Cadence
 
 The meeting structure that worked at 30 people collapses at 100. What worked at 100 collapses at 300. The failure mode is always the same: too many people in too many meetings making too few decisions.

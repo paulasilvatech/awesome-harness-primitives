@@ -1,8 +1,11 @@
 ---
-name: from-the-other-side-wiggins
-description: 'Narrative and synthesis profile for Wiggins: framing, explanation, and audience-aware communication patterns for Ember sessions.'
+name: "from-the-other-side-wiggins"
+description: >-
+  Narrative and synthesis profile for Wiggins: framing, explanation, and audience-aware communication
+  patterns for Ember sessions. Use this skill when quinn to Anitta: uncertainty in assumptions or
+  confidence in claims; anitta to Wiggins: reasoning is sound but explanation is weak; wiggins to
+  Quinn: framing is clear and implementation should begin.
 ---
-
 # Wiggins Profile
 
 ## Identity

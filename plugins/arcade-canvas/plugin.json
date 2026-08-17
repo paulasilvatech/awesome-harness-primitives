@@ -14,15 +14,5 @@
     "phaser",
     "retro-games",
     "session-breaks"
-  ],
-  "extensions": {
-    "com.github.copilot": {
-      "logo": "assets/preview.png"
-    },
-    "com.github.awesome-copilot": {
-      "extensions": [
-        "./extensions/arcade-canvas"
-      ]
-    }
-  }
+  ]
 }

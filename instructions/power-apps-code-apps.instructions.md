@@ -1,6 +1,6 @@
 ---
-description: 'Power Apps Code Apps development standards and best practices for TypeScript, React, and Power Platform integration'
 applyTo: '**/*.{ts,tsx,js,jsx}, **/vite.config.*, **/package.json, **/tsconfig.json, **/power.config.json'
+description: 'Power Apps Code Apps development standards and best practices for TypeScript, React, and Power Platform integration'
 ---
 
 # Power Apps Code Apps Development Instructions

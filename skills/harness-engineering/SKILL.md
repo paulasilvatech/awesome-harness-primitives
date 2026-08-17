@@ -1,8 +1,10 @@
 ---
-name: harness-engineering
-description: 'Adopt repository-level harness engineering for coding agents. Use when a user wants to prevent repeated AI coding-agent mistakes by turning failures into durable instructions, drift checks, regression tests, failure memory, and adoption reports tailored to the target repository.'
+name: "harness-engineering"
+description: >-
+  Adopt repository-level harness engineering for coding agents. Use when a user wants to prevent
+  repeated AI coding-agent mistakes by turning failures into durable instructions, drift checks,
+  regression tests, failure memory, and adoption reports tailored to the target repository.
 ---
-
 # Harness Engineering
 
 Harness engineering turns repeated coding-agent mistakes into durable

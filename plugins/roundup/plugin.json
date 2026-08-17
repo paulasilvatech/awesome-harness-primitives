@@ -25,5 +25,9 @@
         "./skills/roundup/"
       ]
     }
-  }
+  },
+  "skills": [
+    "./skills/roundup-setup/",
+    "./skills/roundup/"
+  ]
 }

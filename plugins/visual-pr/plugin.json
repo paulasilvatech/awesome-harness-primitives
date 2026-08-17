@@ -27,5 +27,11 @@
         "./skills/ui-screenshots/"
       ]
     }
-  }
+  },
+  "skills": [
+    "./skills/image-annotations/",
+    "./skills/pr-screenshots/",
+    "./skills/screen-recording/",
+    "./skills/ui-screenshots/"
+  ]
 }

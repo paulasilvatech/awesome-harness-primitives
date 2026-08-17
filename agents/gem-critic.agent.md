@@ -1,11 +1,9 @@
 ---
+name: "gem-critic"
 description: "Challenges assumptions, finds edge cases, spots over-engineering and logic gaps."
-name: gem-critic
-argument-hint: "Enter plan_id, plan_path, and target to critique."
-disable-model-invocation: false
 user-invocable: false
-mode: subagent
-hidden: true
+disable-model-invocation: false
+argument-hint: "Enter plan_id, plan_path, and target to critique."
 ---
 
 # CRITIC: Challenge assumptions, find edge cases, spot over-engineering, logic gaps.

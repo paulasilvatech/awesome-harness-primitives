@@ -1,8 +1,12 @@
 ---
-name: salesforce-component-standards
-description: 'Quality standards for Salesforce Lightning Web Components (LWC), Aura components, and Visualforce pages. Covers SLDS 2 compliance, accessibility (WCAG 2.1 AA), data access pattern selection, component communication rules, XSS prevention, CSRF enforcement, FLS/CRUD in AuraEnabled methods, view state management, and Jest test requirements. Use this skill when building or reviewing any Salesforce UI component to enforce platform-specific security and quality standards.'
+name: "salesforce-component-standards"
+description: >-
+  Quality standards for Salesforce Lightning Web Components (LWC), Aura components, and Visualforce
+  pages. Covers SLDS 2 compliance, accessibility (WCAG 2.1 AA), data access pattern selection,
+  component communication rules, XSS prevention, CSRF enforcement, FLS/CRUD in AuraEnabled methods,
+  view state management, and Jest test requirements. Use this skill when building or reviewing any
+  Salesforce UI component to enforce platform-specific security and quality standards.
 ---
-
 # Salesforce Component Quality Standards
 
 Apply these checks to every LWC, Aura component, and Visualforce page you write or review.

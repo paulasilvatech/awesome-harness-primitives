@@ -1,6 +1,6 @@
 ---
-description: 'Comprehensive Power BI report design and visualization best practices based on Microsoft guidance for creating effective, accessible, and performant reports and dashboards.'
 applyTo: '**/*.{pbix,md,json,txt}'
+description: 'Comprehensive Power BI report design and visualization best practices based on Microsoft guidance for creating effective, accessible, and performant reports and dashboards.'
 ---
 
 # Power BI Report Design and Visualization Best Practices

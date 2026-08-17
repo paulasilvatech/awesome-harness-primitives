@@ -26,5 +26,9 @@
         "./skills/onboard-context-matic/"
       ]
     }
-  }
+  },
+  "skills": [
+    "./skills/integrate-context-matic/",
+    "./skills/onboard-context-matic/"
+  ]
 }

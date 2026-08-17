@@ -1,8 +1,10 @@
 ---
-name: update-specification
-description: 'Update an existing specification file for the solution, optimized for Generative AI consumption based on new requirements or updates to any existing code.'
+name: "update-specification"
+description: >-
+  Update an existing specification file for the solution, optimized for Generative AI consumption
+  based on new requirements or updates to any existing code. Use this skill when the user asks for
+  best practices for ai-ready specifications.
 ---
-
 # Update Specification
 
 Your goal is to update the existing specification file `${file}` based on new requirements or updates to any existing code.

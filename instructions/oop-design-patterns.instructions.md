@@ -1,8 +1,7 @@
 ---
-description: 'Best practices for applying Object-Oriented Programming (OOP) design patterns, including Gang of Four (GoF) patterns and SOLID principles, to ensure clean, maintainable, and scalable code.'
 applyTo: '**/*.py, **/*.java, **/*.ts, **/*.js, **/*.cs'
+description: 'Best practices for applying Object-Oriented Programming (OOP) design patterns, including Gang of Four (GoF) patterns and SOLID principles, to ensure clean, maintainable, and scalable code.'
 ---
-
 
 # Design Patterns for Object-Oriented Programming for Clean Code
 

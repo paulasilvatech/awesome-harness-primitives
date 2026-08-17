@@ -1,8 +1,9 @@
 ---
-name: vscode-ext-commands
-description: 'Guidelines for contributing commands in VS Code extensions. Indicates naming convention, visibility, localization and other relevant attributes, following VS Code extension development guidelines, libraries and good practices'
+name: "vscode-ext-commands"
+description: >-
+  Guidelines for contributing commands in VS Code extensions. Use this skill when you need to; add or
+  update commands to your VS Code extension.
 ---
-
 # VS Code extension command contribution
 
 This skill helps you to contribute commands in VS Code extensions

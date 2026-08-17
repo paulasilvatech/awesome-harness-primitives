@@ -26,5 +26,8 @@
         "./skills/geofeed-tuner/"
       ]
     }
-  }
+  },
+  "skills": [
+    "./skills/geofeed-tuner/"
+  ]
 }

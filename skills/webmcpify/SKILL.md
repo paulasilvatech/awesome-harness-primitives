@@ -1,12 +1,15 @@
 ---
-name: webmcpify
-description: 'Make a web app agent-ready — propose a WebMCP tool manifest, integrate, verify in a real browser, heal; unrelated code stays untouched. Use for "webmcpify", "add WebMCP", or "expose app actions to AI agents".'
+name: "webmcpify"
+description: >-
+  Make a web app agent-ready — propose a WebMCP tool manifest, integrate, verify in a real browser,
+  heal; unrelated code stays untouched. Use for "webmcpify", "add WebMCP", or "expose app actions to
+  AI agents". Use this skill when "batchCommit": null, // sha under commit-per-batch — lands in the
+  manifest one commit LATER; "notes": ""; }.
 argument-hint: "[inventory|integrate|verify|status|full] [scope notes]"
-license: MIT
+license: "MIT"
 metadata:
-  source: https://github.com/TueJon/webmcpify
+  source: "https://github.com/TueJon/webmcpify"
 ---
-
 # webmcpify — make any web app agent-ready, verifiably
 
 You are running the webmcpify pipeline. It takes an existing web application and

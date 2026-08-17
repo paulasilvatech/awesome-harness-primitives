@@ -17,12 +17,19 @@
   "extensions": {
     "com.github.awesome-copilot": {
       "agents": [
-        "./agents/azure-principal-architect.md"
+        "./agents/azure-principal-architect.agent.md"
       ],
       "skills": [
         "./skills/azure-resource-health-diagnose/",
         "./skills/multi-stage-dockerfile/"
       ]
     }
-  }
+  },
+  "agents": [
+    "./agents/azure-principal-architect.agent.md"
+  ],
+  "skills": [
+    "./skills/azure-resource-health-diagnose/",
+    "./skills/multi-stage-dockerfile/"
+  ]
 }

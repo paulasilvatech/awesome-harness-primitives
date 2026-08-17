@@ -1,34 +1,15 @@
 ---
-name: elasticsearch-agent
-description: Our expert AI assistant for debugging code (O11y), optimizing vector search (RAG), and remediating security threats using live Elastic data.
-tools:
-  # Standard tools for file reading, editing, and execution
-  - read
-  - edit
-  - shell
-  # Wildcard to enable all custom tools from your Elastic MCP server
-  - elastic-mcp/*
+name: "elasticsearch-agent"
+description: "Our expert AI assistant for debugging code (O11y), optimizing vector search (RAG), and remediating security threats using live Elastic data."
+tools: ["read", "search", "edit", "execute", "elastic-mcp/*"]
 mcp-servers:
-  # Defines the connection to your Elastic Agent Builder MCP Server
-  # This is based on the spec and Elastic blog examples
   elastic-mcp:
-    type: 'remote'
-    # 'npx mcp-remote' is used to connect to a remote MCP server
-    command: 'npx'
-    args: [
-        'mcp-remote',
-        # ---
-        # !! ACTION REQUIRED !!
-        # Replace this URL with your actual Kibana URL
-        # ---
-        'https://{KIBANA_URL}/api/agent_builder/mcp',
-        '--header',
-        'Authorization:${AUTH_HEADER}'
-      ]
-    # This section maps a GitHub secret to the AUTH_HEADER environment variable
-    # The 'ApiKey' prefix is required by Elastic
+    type: "remote"
+    command: "npx"
+    args:
+      ["mcp-remote", "https://{KIBANA_URL}/api/agent_builder/mcp", "--header", "Authorization:${AUTH_HEADER}"]
     env:
-      AUTH_HEADER: ApiKey ${{ secrets.ELASTIC_API_KEY }}
+      AUTH_HEADER: "ApiKey ${{ secrets.ELASTIC_API_KEY }}"
 ---
 
 # System

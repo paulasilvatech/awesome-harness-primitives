@@ -1,6 +1,8 @@
 ---
-applyTo: '**'
+applyTo: '**/*.py'
+description: 'Complete module reference for the Python Dataverse SDK package hierarchy, configuration, models, and helpers.'
 ---
+
 # Dataverse SDK for Python — Complete Module Reference
 
 ## Package Hierarchy

@@ -1,6 +1,6 @@
 ---
-description: 'C# アプリケーション構築指針 by @tsubakimoto'
 applyTo: '**/*.cs'
+description: 'C# アプリケーション構築指針 by @tsubakimoto'
 ---
 
 # C# アプリケーション開発

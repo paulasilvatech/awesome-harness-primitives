@@ -1,7 +1,8 @@
 ---
-name: react19-test-guardian
-description: 'Test suite fixer and verification specialist. Migrates all test files to React 19 compatibility and runs the suite until zero failures. Uses memory to track per-file fix progress and failure history. Does not stop until npm test reports 0 failures. Invoked as a subagent by react19-commander.'
-tools: ['vscode/memory', 'edit/editFiles', 'execute/getTerminalOutput', 'execute/runInTerminal', 'read/terminalLastCommand', 'read/terminalSelection', 'search', 'search/usages', 'read/problems']
+name: "react19-test-guardian"
+description: >-
+  Test suite fixer and verification specialist. Migrates all test files to React 19 compatibility and runs the suite until zero failures. Uses memory to track per-file fix progress and failure history. Does not stop until npm test reports 0 failures. Invoked as a subagent by react19-commander.
+tools: ["read", "search", "edit", "execute"]
 user-invocable: false
 ---
 

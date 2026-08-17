@@ -1,10 +1,13 @@
 ---
-name: technical-job-search
-description: 'Use this skill when a software engineer asks for help with job search tasks: parsing or analyzing a job description, tailoring a CV/resume, writing a cover letter, evaluating a job offer, or drafting a post-interview follow-up email. Do not activate for general career advice unrelated to an active job search action.'
-license: MIT
-argument-hint: 'Optional: the specific task — e.g. "analyze this JD", "tailor my CV", "write cover letter", "evaluate this offer"'
+name: "technical-job-search"
+description: >-
+  Use this skill when a software engineer asks for help with job search tasks: parsing or analyzing a
+  job description, tailoring a CV/resume, writing a cover letter, evaluating a job offer, or drafting
+  a post-interview follow-up email. Do not activate for general career advice unrelated to an active
+  job search action.
+license: "MIT"
+argument-hint: "Optional: the specific task — e.g. \"analyze this JD\", \"tailor my CV\", \"write cover letter\", \"evaluate this offer\""
 ---
-
 # Technical Job Search
 
 Helps software engineers with discrete job search tasks: job description analysis, CV tailoring, cover letter writing, offer evaluation, and follow-up emails.

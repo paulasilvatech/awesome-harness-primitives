@@ -1,8 +1,9 @@
 ---
-name: create-github-issues-feature-from-implementation-plan
-description: 'Create GitHub Issues from implementation plan phases using feature_request.yml or chore_request.yml templates.'
+name: "create-github-issues-feature-from-implementation-plan"
+description: >-
+  Create GitHub Issues from implementation plan phases using feature_request.yml or chore_request.yml
+  templates. Use this skill when the user asks for create github issue from implementation plan.
 ---
-
 # Create GitHub Issue from Implementation Plan
 
 Create GitHub Issues for the implementation plan at `${file}`.

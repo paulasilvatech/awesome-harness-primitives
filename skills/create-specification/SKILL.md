@@ -1,8 +1,9 @@
 ---
-name: create-specification
-description: 'Create a new specification file for the solution, optimized for Generative AI consumption.'
+name: "create-specification"
+description: >-
+  Create a new specification file for the solution, optimized for Generative AI consumption. Use this
+  skill when the user asks for best practices for ai-ready specifications.
 ---
-
 # Create Specification
 
 Your goal is to create a new specification file for `${input:SpecPurpose}`.

@@ -1,8 +1,7 @@
 ---
-name: mkdocs-translations
-description: 'Generate a language translation for a mkdocs documentation stack.'
+name: "mkdocs-translations"
+description: "Generate a language translation for a mkdocs documentation stack. Use this skill when the user asks for mkdocs ai translator."
 ---
-
 # MkDocs AI Translator
 
 ## Role

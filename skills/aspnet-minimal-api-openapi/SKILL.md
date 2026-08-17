@@ -1,8 +1,9 @@
 ---
-name: aspnet-minimal-api-openapi
-description: 'Create ASP.NET Minimal API endpoints with proper OpenAPI documentation'
+name: "aspnet-minimal-api-openapi"
+description: >-
+  Create ASP.NET Minimal API endpoints with proper OpenAPI documentation. Use this skill when the user
+  asks for asp.net minimal api with openapi.
 ---
-
 # ASP.NET Minimal API with OpenAPI
 
 Your goal is to help me create well-structured ASP.NET Minimal API endpoints with correct types and comprehensive OpenAPI/Swagger documentation.

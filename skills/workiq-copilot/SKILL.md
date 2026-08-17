@@ -1,8 +1,10 @@
 ---
-name: workiq-copilot
-description: 'Guides the Copilot CLI on how to use the WorkIQ CLI/MCP server to query Microsoft 365 Copilot data (emails, meetings, docs, Teams, people) for live context, summaries, and recommendations.'
+name: "workiq-copilot"
+description: >-
+  Guides the Copilot CLI on how to use the WorkIQ CLI/MCP server to query Microsoft 365 Copilot data
+  (emails, meetings, docs, Teams, people) for live context, summaries, and recommendations. Use this
+  skill when supported Data & Sample Prompts.
 ---
-
 # WorkIQ Copilot Skill
 
 ## Overview

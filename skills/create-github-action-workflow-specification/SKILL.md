@@ -1,8 +1,10 @@
 ---
-name: create-github-action-workflow-specification
-description: 'Create a formal specification for an existing GitHub Actions CI/CD workflow, optimized for AI consumption and workflow maintenance.'
+name: "create-github-action-workflow-specification"
+description: >-
+  Create a formal specification for an existing GitHub Actions CI/CD workflow, optimized for AI
+  consumption and workflow maintenance. Use this skill when *Target Environments**: [Environment
+  scope].
 ---
-
 # Create GitHub Actions Workflow Specification
 
 Create a comprehensive specification for the GitHub Actions workflow: `${input:WorkflowFile}`.

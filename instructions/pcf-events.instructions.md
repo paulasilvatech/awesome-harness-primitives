@@ -1,6 +1,6 @@
 ---
-description: 'Define and handle custom events in PCF components'
 applyTo: '**/*.{ts,tsx,js,json,xml,pcfproj,csproj}'
+description: 'Define and handle custom events in PCF components'
 ---
 
 # Define Events (Preview)

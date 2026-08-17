@@ -1,7 +1,8 @@
 ---
-name: Gitmoji Setup
-description: 'Sets up gitmoji (https://gitmoji.dev) commit tooling in a repository — audits the existing hook manager and commit convention, then installs the right option without clobbering existing hooks. Defaults to a non-interactive prepare-commit-msg hook that prefills a suggested emoji from the branch name and staged files; can alternatively install the gitmoji-cli interactive picker or commitlint enforcement.'
-tools: ['codebase', 'search', 'editFiles', 'runCommands']
+name: "Gitmoji Setup"
+description: >-
+  Sets up gitmoji (https://gitmoji.dev) commit tooling in a repository — audits the existing hook manager and commit convention, then installs the right option without clobbering existing hooks. Defaults to a non-interactive prepare-commit-msg hook that prefills a suggested emoji from the branch name and staged files; can alternatively install the gitmoji-cli interactive picker or commitlint enforcement.
+tools: ["read", "search", "edit", "execute"]
 ---
 
 # Gitmoji Setup Agent

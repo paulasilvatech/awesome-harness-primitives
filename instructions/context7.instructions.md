@@ -1,6 +1,6 @@
 ---
-description: 'Use Context7 for authoritative external docs and API references when local context is insufficient'
 applyTo: '**'
+description: 'Use Context7 for authoritative external docs and API references when local context is insufficient'
 ---
 
 # Context7-aware development

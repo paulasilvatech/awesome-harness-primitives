@@ -21,7 +21,7 @@
   "extensions": {
     "com.github.awesome-copilot": {
       "agents": [
-        "./agents/oracle-to-postgres-migration-expert.md"
+        "./agents/oracle-to-postgres-migration-expert.agent.md"
       ],
       "skills": [
         "./skills/creating-oracle-to-postgres-master-migration-plan/",
@@ -34,5 +34,18 @@
         "./skills/scaffolding-oracle-to-postgres-migration-test-project/"
       ]
     }
-  }
+  },
+  "agents": [
+    "./agents/oracle-to-postgres-migration-expert.agent.md"
+  ],
+  "skills": [
+    "./skills/creating-oracle-to-postgres-master-migration-plan/",
+    "./skills/creating-oracle-to-postgres-migration-bug-report/",
+    "./skills/creating-oracle-to-postgres-migration-integration-tests/",
+    "./skills/migrating-oracle-to-postgres-data-access-code/",
+    "./skills/migrating-oracle-to-postgres-stored-procedures/",
+    "./skills/planning-oracle-to-postgres-migration-integration-testing/",
+    "./skills/reviewing-oracle-to-postgres-migration/",
+    "./skills/scaffolding-oracle-to-postgres-migration-test-project/"
+  ]
 }

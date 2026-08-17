@@ -1,32 +1,17 @@
 ---
-name: DiffblueCover
-description: Expert agent for creating unit tests for java applications using Diffblue Cover.
-tools: [ 'DiffblueCover/*' ]
+name: "DiffblueCover"
+description: "Expert agent for creating unit tests for java applications using Diffblue Cover."
+tools: ["DiffblueCover/*"]
 mcp-servers:
-  # Checkout the Diffblue Cover MCP server from https://github.com/diffblue/cover-mcp/, and follow
-  # the instructions in the README to set it up locally.
   DiffblueCover:
-    type: 'local'
-    command: 'uv'
-    args: [
-      'run',
-      '--with',
-      'fastmcp',
-      'fastmcp',
-      'run',
-      '/placeholder/path/to/cover-mcp/main.py',
-    ]
+    type: "local"
+    command: "uv"
+    args:
+      ["run", "--with", "fastmcp", "fastmcp", "run", "/placeholder/path/to/cover-mcp/main.py"]
     env:
-      # You will need a valid license for Diffblue Cover to use this tool, you can get a trial
-      # license from https://www.diffblue.com/try-cover/.
-      # Follow the instructions provided with your license to install it on your system.
-      #
-      # DIFFBLUE_COVER_CLI should be set to the full path of the Diffblue Cover CLI executable ('dcover').
-      #
-      # Replace the placeholder below with the actual path on your system.
-      # For example: /opt/diffblue/cover/bin/dcover or C:\Program Files\Diffblue\Cover\bin\dcover.exe
       DIFFBLUE_COVER_CLI: "/placeholder/path/to/dcover"
-    tools: [ "*" ]
+    tools:
+      ["*"]
 ---
 
 # Java Unit Test Agent

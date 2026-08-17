@@ -1,6 +1,6 @@
 ---
-description: 'Astro 7 development standards and best practices for content-driven websites'
 applyTo: '**/*.astro, **/*.ts, **/*.js, **/*.md, **/*.mdx'
+description: 'Astro 7 development standards and best practices for content-driven websites'
 ---
 
 # Astro Development Instructions

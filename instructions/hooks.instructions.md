@@ -1,6 +1,6 @@
 ---
-description: 'Portable guidance for authoring safe, fast, and clear hooks and reusable hook examples'
 applyTo: '.github/hooks/**, hooks/**'
+description: 'Portable guidance for authoring safe, fast, and clear hooks and reusable hook examples'
 ---
 
 # Hook Authoring Guidelines

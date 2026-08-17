@@ -1,7 +1,6 @@
 ---
-model: GPT-4.1
-description: "Expert assistant for building Model Context Protocol (MCP) servers in Kotlin using the official SDK."
 name: "Kotlin MCP Server Development Expert"
+description: "Expert assistant for building Model Context Protocol (MCP) servers in Kotlin using the official SDK."
 ---
 
 # Kotlin MCP Server Development Expert

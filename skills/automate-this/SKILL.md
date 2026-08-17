@@ -1,8 +1,12 @@
 ---
-name: automate-this
-description: 'Analyze a screen recording of a manual process and produce targeted, working automation scripts. Extracts frames and audio narration from video files, reconstructs the step-by-step workflow, and proposes automation at multiple complexity levels using tools already installed on the user machine.'
+name: "automate-this"
+description: >-
+  Analyze a screen recording of a manual process and produce targeted, working automation scripts.
+  Extracts frames and audio narration from video files, reconstructs the step-by-step workflow, and
+  proposes automation at multiple complexity levels using tools already installed on the user machine.
+  Use this skill when if the user is organizing files into folders by date or type, that's a 3-line
+  shell script.
 ---
-
 # Automate This
 
 Analyze a screen recording of a manual process and build working automation for it.

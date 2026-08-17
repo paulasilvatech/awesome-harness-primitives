@@ -25,5 +25,8 @@
         "./skills/copilot-sdk/"
       ]
     }
-  }
+  },
+  "skills": [
+    "./skills/copilot-sdk/"
+  ]
 }

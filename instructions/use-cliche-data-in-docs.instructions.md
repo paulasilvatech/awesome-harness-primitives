@@ -1,6 +1,6 @@
 ---
-description: 'Ensure documentation and examples use only generic, cliche placeholder data — never real or sensitive data sourced from local scripts, configuration, task files, or prompt context.'
 applyTo: '**/*.{md,js,mjs,cjs,ts,tsx,jsx,py,json}'
+description: 'Ensure documentation and examples use only generic, cliche placeholder data — never real or sensitive data sourced from local scripts, configuration, task files, or prompt context.'
 ---
 
 # Use Cliche Data in Documentation

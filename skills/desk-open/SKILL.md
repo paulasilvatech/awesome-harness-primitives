@@ -1,8 +1,11 @@
 ---
-name: desk-open
-description: 'Create and open a new desk in the workshop. Sets up the folder structure, initial journal, and desk identity so the next session that sits down finds the trail.'
+name: "desk-open"
+description: >-
+  Create and open a new desk in the workshop. Sets up the folder structure, initial journal, and desk
+  identity so the next session that sits down finds the trail. Use this skill when the operator wants
+  to start a new workstream; work arrives that doesn't belong to any existing desk; a topic needs its
+  own frame (its own history, its own priors).
 ---
-
 # Open a Desk
 
 Create a new desk in the workshop with the standard structure.

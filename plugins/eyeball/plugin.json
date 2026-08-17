@@ -23,5 +23,8 @@
         "./skills/eyeball/"
       ]
     }
-  }
+  },
+  "skills": [
+    "./skills/eyeball/"
+  ]
 }

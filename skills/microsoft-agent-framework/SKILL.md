@@ -1,8 +1,11 @@
 ---
-name: microsoft-agent-framework
-description: 'Create, update, refactor, explain, or review Microsoft Agent Framework solutions using shared guidance plus language-specific references for .NET and Python.'
+name: "microsoft-agent-framework"
+description: >-
+  Create, update, refactor, explain, or review Microsoft Agent Framework solutions using shared
+  guidance plus language-specific references for .NET and Python. Use this skill when microsoft Agent
+  Framework is the unified successor to Semantic Kernel and AutoGen, combining their strengths with
+  new capabilities. Becau.
 ---
-
 # Microsoft Agent Framework
 
 Use this skill when working with applications, agents, workflows, or migrations built on Microsoft Agent Framework.

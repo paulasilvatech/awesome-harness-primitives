@@ -1,8 +1,9 @@
 ---
-name: openapi-to-application-code
-description: 'Generate a complete, production-ready application from an OpenAPI specification'
+name: "openapi-to-application-code"
+description: >-
+  Generate a complete, production-ready application from an OpenAPI specification. Use this skill when
+  the user asks for generate application from openapi spec.
 ---
-
 # Generate Application from OpenAPI Spec
 
 Your goal is to generate a complete, working application from an OpenAPI specification using the active framework's conventions and best practices.

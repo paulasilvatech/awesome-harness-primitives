@@ -1,14 +1,17 @@
 ---
-name: competitor-ad-intelligence
-description: 'Use this skill when the user asks to analyze, tear down, or reverse-engineer a competitor''s paid ads. Trigger for prompts like "what ads is [competitor] running", "tear down their ad strategy", "competitor ad analysis", "find ad angles we haven''t tried", or "reverse-engineer their paid funnel". Do not trigger for organic/SEO competitor research or website positioning analysis.'
-license: MIT
-compatibility: 'Cross-platform. Uses web search and public ad libraries (Meta Ad Library, Google Ads Transparency Center) only — no API keys or credentials required.'
+name: "competitor-ad-intelligence"
+description: >-
+  Use this skill when the user asks to analyze, tear down, or reverse-engineer a competitor's paid
+  ads. Trigger for prompts like "what ads is [competitor] running", "tear down their ad strategy",
+  "competitor ad analysis", "find ad angles we haven't tried", or "reverse-engineer their paid
+  funnel". Do not trigger for organic/SEO competitor research or website positioning analysis.
+license: "MIT"
 metadata:
-  version: "1.0"
-  author: GooseWorks
-  source: https://github.com/gooseworks-ai/goose-skills
+  author: "GooseWorks"
+  compatibility: "Cross-platform. Uses web search and public ad libraries (Meta Ad Library, Google Ads Transparency Center) only — no API keys or credentials required."
+  source: "https://github.com/gooseworks-ai/goose-skills"
+  version: "'1.0'"
 ---
-
 # Competitor Ad Intelligence
 
 Scrape competitor ads from Meta and Google, analyze creative patterns, reverse-engineer landing page funnels, and produce a full strategic teardown — hooks, formats, positioning bets, vulnerabilities, and counter-plays.

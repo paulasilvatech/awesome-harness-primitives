@@ -1,13 +1,14 @@
 ---
-name: mini-context-graph
-description: |
-  A persistent, compounding knowledge base combining Karpathy's LLM Wiki pattern
-  with a structured knowledge graph. Ingest documents once — the LLM writes wiki
-  pages, extracts entities/relations into the graph, and stores raw content for
-  evidence retrieval. Knowledge accumulates and cross-references; it is never
-  re-derived from scratch.
+name: "mini-context-graph"
+description: >-
+  A persistent, compounding knowledge base combining Karpathy's LLM Wiki pattern with a structured
+  knowledge graph. Ingest documents once — the LLM writes wiki pages, extracts entities/relations into
+  the graph, and stores raw content for evidence retrieval. Knowledge accumulates and
+  cross-references; it is never re-derived from scratch. Use this skill when
+  |--------|---------|-------------|; | `skill.ingest_with_content(doc_id, title, source, raw_content,
+  entities, relations)` | Full RAG ingest: raw docs + graph + provenance |; | `skill.add_node(name,
+  node_type)` | Add single entity (no provenance) | Quick additions without a source doc |.
 ---
-
 # Mini Context Graph Skill
 
 ## The Core Idea

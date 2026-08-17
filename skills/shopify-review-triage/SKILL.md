@@ -1,14 +1,22 @@
 ---
-name: shopify-review-triage
-description: 'Use this skill when someone wants public Shopify App Store reviews, low-star reviews, or merchant feedback triaged, prioritized, clustered, or turned into a product or support brief. Trigger for prompts like "triage these app store reviews", "what should we fix first from this feedback", "cluster our 1-star reviews", or "write a weekly low-star review brief", for a single Shopify app or a portfolio plus watched competitors. Produces a P0-P3 brief covering incident risk, repeated friction, pricing confusion, feature requests, and an explicit needs-human-read bucket, where every item keeps its public source link and stays labeled first pass or human-checked. Do not trigger for support tickets, order data, or any other private merchant data, and never use it to reply to or contact a reviewer.'
-license: MIT
-compatibility: 'Cross-platform. Pure reasoning skill over review rows the user pastes - no network access, scripts, API keys, or system packages. Portable to any client that supports the Agent Skills SKILL.md format.'
+name: "shopify-review-triage"
+description: >-
+  Use this skill when someone wants public Shopify App Store reviews, low-star reviews, or merchant
+  feedback triaged, prioritized, clustered, or turned into a product or support brief. Trigger for
+  prompts like "triage these app store reviews", "what should we fix first from this feedback",
+  "cluster our 1-star reviews", or "write a weekly low-star review brief", for a single Shopify app or
+  a portfolio plus watched competitors. Produces a P0-P3 brief covering incident risk, repeated
+  friction, pricing confusion, feature requests, and an explicit needs-human-read bucket, where every
+  item keeps its public source link and stays labeled first pass or human-checked. Do not trigger for
+  support tickets, order data, or any other private merchant data, and never use it to reply to or
+  contact a reviewer.
+license: "MIT"
 metadata:
-  version: '1.0'
-  author: 'Shopify App Review Brief - independent, not affiliated with or endorsed by Shopify Inc.'
-  source: https://alfredtech2026.github.io/shopify-app-review-brief/guides/shopify-app-review-triage.html
+  author: "Shopify App Review Brief - independent, not affiliated with or endorsed by Shopify Inc."
+  compatibility: "Cross-platform. Pure reasoning skill over review rows the user pastes - no network access, scripts, API keys, or system packages. Portable to any client that supports the Agent Skills SKILL.md format."
+  source: "https://alfredtech2026.github.io/shopify-app-review-brief/guides/shopify-app-review-triage.html"
+  version: "'1.0'"
 ---
-
 # Shopify review triage - public low-star reviews to a P0-P3 brief
 
 ## What this does

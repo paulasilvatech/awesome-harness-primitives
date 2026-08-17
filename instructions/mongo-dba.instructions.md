@@ -1,5 +1,5 @@
 ---
-applyTo: "**"
+applyTo: '**/*.{js,ts,json}'
 description: 'Instructions for customizing GitHub Copilot behavior for MONGODB DBA chat mode.'
 ---
 

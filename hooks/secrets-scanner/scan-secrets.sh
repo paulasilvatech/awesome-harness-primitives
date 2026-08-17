@@ -13,6 +13,10 @@
 
 set -euo pipefail
 
+# Consume the Copilot hook payload. This hook scopes its scan from repository
+# state, but reading stdin prevents redirected payloads from surprising children.
+INPUT=$(cat || true)
+
 # ---------------------------------------------------------------------------
 # Secret detection patterns (edit this list to add or remove patterns)
 #
@@ -215,7 +219,7 @@ echo "🔍 Scanning ${#FILES[@]} modified file(s) for secrets..."
 for filepath in "${FILES[@]}"; do
   if [[ "$SCOPE" == "staged" ]]; then
     # Scan the staged (index) version to match what will actually be committed
-    _tmpfile=$(mktemp)
+    _tmpfile="$LOG_DIR/staged-${RANDOM}-${RANDOM}.scan"
     git show :"$filepath" > "$_tmpfile" 2>/dev/null || true
     scan_file "$filepath" "$_tmpfile"
     rm -f "$_tmpfile"
@@ -259,7 +263,7 @@ if [[ $FINDING_COUNT -gt 0 ]]; then
   if [[ "$MODE" == "block" ]]; then
     echo "🚫 Session blocked: resolve the findings above before committing."
     echo "   Set SCAN_MODE=warn to log without blocking, or add patterns to SECRETS_ALLOWLIST."
-    exit 1
+    exit 2
   else
     echo "💡 Review the findings above. Set SCAN_MODE=block to prevent commits with secrets."
   fi

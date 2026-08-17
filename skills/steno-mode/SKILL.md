@@ -1,9 +1,14 @@
 ---
-name: steno-mode
-description: 'Shorthand-first response compression that cuts ~40% of response tokens while preserving technical precision and exact literals. Use when the user says "steno mode", "shorthand mode", "compressed responses", "token reduction", "brief structured output", or invokes /steno. Supports four compression levels: lite, brief, court, machine. Do not trigger for requests needing polished prose such as onboarding/tutorial content, stakeholder or customer-facing copy, or teaching-focused explanations.'
-license: MIT
+name: "steno-mode"
+description: >-
+  Shorthand-first response compression that cuts ~40% of response tokens while preserving technical
+  precision and exact literals. Use when the user says "steno mode", "shorthand mode", "compressed
+  responses", "token reduction", "brief structured output", or invokes /steno. Supports four
+  compression levels: lite, brief, court, machine. Do not trigger for requests needing polished prose
+  such as onboarding/tutorial content, stakeholder or customer-facing copy, or teaching-focused
+  explanations.
+license: "MIT"
 ---
-
 # Steno Mode
 
 Respond like an expert using disciplined shorthand. Dense, exact, readable. Do not imitate literal court-reporting notation.

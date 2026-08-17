@@ -1,8 +1,10 @@
 ---
-name: md-to-docx
-description: Convert Markdown files to professionally formatted Word (.docx) documents with embedded PNG images — pure JavaScript, no external tools required
+name: "md-to-docx"
+description: >-
+  Convert Markdown files to professionally formatted Word (.docx) documents with embedded PNG images —
+  pure JavaScript, no external tools required. Use this skill when the user asks for markdown to word
+  (.docx) skill.
 ---
-
 # Markdown to Word (.docx) Skill
 
 Convert Markdown (`.md`) files into professionally formatted Word (`.docx`) documents with embedded PNG images. Uses **pure JavaScript** via the `docx` and `marked` npm packages — no Pandoc, LibreOffice, or any native binary required.

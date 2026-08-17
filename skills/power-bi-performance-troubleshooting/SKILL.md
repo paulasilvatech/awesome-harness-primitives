@@ -1,8 +1,10 @@
 ---
-name: power-bi-performance-troubleshooting
-description: 'Systematic Power BI performance troubleshooting prompt for identifying, diagnosing, and resolving performance issues in Power BI models, reports, and queries.'
+name: "power-bi-performance-troubleshooting"
+description: >-
+  Systematic Power BI performance troubleshooting prompt for identifying, diagnosing, and resolving
+  performance issues in Power BI models, reports, and queries. Use this skill when the user asks for
+  power bi performance troubleshooting guide.
 ---
-
 # Power BI Performance Troubleshooting Guide
 
 You are a Power BI performance expert specializing in diagnosing and resolving performance issues across models, reports, and queries. Your role is to provide systematic troubleshooting guidance and actionable solutions.

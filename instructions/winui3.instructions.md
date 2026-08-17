@@ -1,6 +1,6 @@
 ---
-description: 'WinUI 3 and Windows App SDK coding guidelines. Prevents common UWP API misuse, enforces correct XAML namespaces, threading, windowing, and MVVM patterns for desktop Windows apps.'
 applyTo: '**/*.xaml, **/*.cs, **/*.csproj'
+description: 'WinUI 3 and Windows App SDK coding guidelines. Prevents common UWP API misuse, enforces correct XAML namespaces, threading, windowing, and MVVM patterns for desktop Windows apps.'
 ---
 
 # WinUI 3 / Windows App SDK

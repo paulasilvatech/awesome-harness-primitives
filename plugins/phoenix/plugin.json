@@ -26,5 +26,10 @@
         "./skills/phoenix-tracing/"
       ]
     }
-  }
+  },
+  "skills": [
+    "./skills/phoenix-cli/",
+    "./skills/phoenix-evals/",
+    "./skills/phoenix-tracing/"
+  ]
 }

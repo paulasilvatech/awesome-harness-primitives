@@ -1,11 +1,9 @@
 ---
+name: "gem-mobile-tester"
 description: "Mobile E2E testing: Detox, Maestro, iOS/Android simulators."
-name: gem-mobile-tester
-argument-hint: "Enter task_id, plan_id, plan_path, and mobile test definition to run E2E tests on iOS/Android."
-disable-model-invocation: false
 user-invocable: false
-mode: subagent
-hidden: true
+disable-model-invocation: false
+argument-hint: "Enter task_id, plan_id, plan_path, and mobile test definition to run E2E tests on iOS/Android."
 ---
 
 # MOBILE TESTER: Mobile E2E: Detox, Maestro, iOS/Android simulators.

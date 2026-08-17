@@ -1,8 +1,10 @@
 ---
-name: refactor-plan
-description: 'Create a concrete plan before starting a multi-file refactor. Use when the user asks to plan, sequence, scope, or safely execute a refactor across multiple files; always investigate first, output the plan, and wait for confirmation before making code changes.'
+name: "refactor-plan"
+description: >-
+  Create a concrete plan before starting a multi-file refactor. Use when the user asks to plan,
+  sequence, scope, or safely execute a refactor across multiple files; always investigate first,
+  output the plan, and wait for confirmation before making code changes.
 ---
-
 # Refactor Plan
 
 Create a detailed plan before making any code changes.

@@ -1,8 +1,7 @@
 ---
-name: dotnet-best-practices
-description: 'Ensure .NET/C# code meets best practices for the solution/project.'
+name: "dotnet-best-practices"
+description: "Ensure .NET/C# code meets best practices for the solution/project. Use this skill when the user asks for .net/c# best practices."
 ---
-
 # .NET/C# Best Practices
 
 Your task is to ensure .NET/C# code in ${selection} meets the best practices specific to this solution/project. This includes:

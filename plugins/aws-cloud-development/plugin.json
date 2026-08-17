@@ -22,10 +22,10 @@
   "extensions": {
     "com.github.awesome-copilot": {
       "agents": [
-        "./agents/aws-principal-architect.md",
-        "./agents/aws-serverless-architect.md",
-        "./agents/terraform-aws-implement.md",
-        "./agents/terraform-aws-planning.md"
+        "./agents/aws-principal-architect.agent.md",
+        "./agents/aws-serverless-architect.agent.md",
+        "./agents/terraform-aws-implement.agent.md",
+        "./agents/terraform-aws-planning.agent.md"
       ],
       "skills": [
         "./skills/aws-cost-optimize/",
@@ -34,5 +34,17 @@
         "./skills/aws-well-architected-review/"
       ]
     }
-  }
+  },
+  "agents": [
+    "./agents/aws-principal-architect.agent.md",
+    "./agents/aws-serverless-architect.agent.md",
+    "./agents/terraform-aws-implement.agent.md",
+    "./agents/terraform-aws-planning.agent.md"
+  ],
+  "skills": [
+    "./skills/aws-cost-optimize/",
+    "./skills/aws-resource-health-diagnose/",
+    "./skills/aws-resource-query/",
+    "./skills/aws-well-architected-review/"
+  ]
 }

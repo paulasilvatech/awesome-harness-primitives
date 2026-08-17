@@ -1,6 +1,6 @@
 ---
-description: 'Clojure-specific coding patterns, inline def usage, code block templates, and namespace handling for Clojure development.'
 applyTo: '**/*.{clj,cljs,cljc,bb,edn.mdx?}'
+description: 'Clojure-specific coding patterns, inline def usage, code block templates, and namespace handling for Clojure development.'
 ---
 
 # Clojure Development Instructions

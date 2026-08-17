@@ -1,8 +1,7 @@
 ---
-name: 'Salesforce Visualforce Development'
-description: 'Implement Visualforce pages and controllers following Salesforce MVC architecture and best practices.'
-model: claude-3.5-sonnet
-tools: ['codebase', 'edit/editFiles', 'terminalCommand', 'search', 'githubRepo']
+name: "Salesforce Visualforce Development"
+description: "Implement Visualforce pages and controllers following Salesforce MVC architecture and best practices."
+tools: ["read", "search", "edit", "execute"]
 ---
 
 # Salesforce Visualforce Development Agent

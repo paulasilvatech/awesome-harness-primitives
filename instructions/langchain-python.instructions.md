@@ -1,6 +1,6 @@
 ---
+applyTo: '**/*.py'
 description: 'Instructions for using LangChain with Python'
-applyTo: "**/*.py"
 ---
 
 # LangChain Python Instructions

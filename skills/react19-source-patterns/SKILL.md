@@ -1,8 +1,9 @@
 ---
-name: react19-source-patterns
-description: 'Reference for React 19 source-file migration patterns, including API changes, ref handling, and context updates.'
+name: "react19-source-patterns"
+description: >-
+  Reference for React 19 source-file migration patterns, including API changes, ref handling, and
+  context updates. Use this skill when the user asks for react 19 source migration patterns.
 ---
-
 # React 19 Source Migration Patterns
 
 Reference for every source-file migration required for React 19.

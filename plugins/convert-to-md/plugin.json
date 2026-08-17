@@ -25,5 +25,10 @@
         "./skills/convert-word-to-md/"
       ]
     }
-  }
+  },
+  "skills": [
+    "./skills/convert-excel-to-md/",
+    "./skills/convert-pdf-to-md/",
+    "./skills/convert-word-to-md/"
+  ]
 }

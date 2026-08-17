@@ -1,6 +1,6 @@
 ---
-description: 'Terraform conventions and guidelines for SAP Business Technology Platform (SAP BTP).'
 applyTo: '**/*.tf, **/*.tfvars, **/*.tflint.hcl, **/*.tf.json, **/*.tfvars.json'
+description: 'Terraform conventions and guidelines for SAP Business Technology Platform (SAP BTP).'
 ---
 
 # Terraform on SAP BTP – Best Practices & Conventions

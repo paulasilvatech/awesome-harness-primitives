@@ -1,8 +1,12 @@
 ---
-name: github-actions-efficiency
-description: 'Audit GitHub Actions workflow efficiency and recommend fixes to reduce CI minutes and costs.'
+name: "github-actions-efficiency"
+description: >-
+  Audit GitHub Actions workflow efficiency and recommend fixes to reduce CI minutes and costs. Use
+  this skill when the user wants to reduce GitHub Actions runtime, CI cost, or wasted workflow runs;
+  the repo has existing workflows in `.github/workflows/` or explicit GitHub Actions configuration
+  questions; the user asks for caching, concurrency, path filters, matrix reduction, job optimization,
+  or workflow-specific fixes.
 ---
-
 # GitHub Actions Efficiency
 
 Use this skill as a lean entrypoint for GitHub Actions efficiency work. Inspect the repo, identify the waste source, and load only the reference material needed for the current task.

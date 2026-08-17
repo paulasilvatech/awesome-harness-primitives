@@ -1,8 +1,10 @@
 ---
-name: screen-recording
-description: 'Create annotated animated GIF demos and screen recordings for pull requests and documentation. Covers frame capture, timing, imageio-based GIF creation, and per-frame annotation workflows.'
+name: "screen-recording"
+description: >-
+  Create annotated animated GIF demos and screen recordings for pull requests and documentation. Use
+  this skill when you need to; record a multi-step UI interaction as an animated GIF; create a demo
+  showing before/after behavior.
 ---
-
 # Screen Recording
 
 Create animated GIF demos that show a feature or workflow in action — with annotations, variable timing, and proper pacing. Useful for PR descriptions, documentation, and release notes.

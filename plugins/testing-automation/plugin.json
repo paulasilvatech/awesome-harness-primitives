@@ -21,10 +21,10 @@
   "extensions": {
     "com.github.awesome-copilot": {
       "agents": [
-        "./agents/playwright-tester.md",
-        "./agents/tdd-green.md",
-        "./agents/tdd-red.md",
-        "./agents/tdd-refactor.md"
+        "./agents/playwright-tester.agent.md",
+        "./agents/tdd-green.agent.md",
+        "./agents/tdd-red.agent.md",
+        "./agents/tdd-refactor.agent.md"
       ],
       "skills": [
         "./skills/ai-prompt-engineering-safety-review/",
@@ -34,5 +34,18 @@
         "./skills/playwright-generate-test/"
       ]
     }
-  }
+  },
+  "agents": [
+    "./agents/playwright-tester.agent.md",
+    "./agents/tdd-green.agent.md",
+    "./agents/tdd-red.agent.md",
+    "./agents/tdd-refactor.agent.md"
+  ],
+  "skills": [
+    "./skills/ai-prompt-engineering-safety-review/",
+    "./skills/csharp-nunit/",
+    "./skills/java-junit/",
+    "./skills/playwright-explore-website/",
+    "./skills/playwright-generate-test/"
+  ]
 }

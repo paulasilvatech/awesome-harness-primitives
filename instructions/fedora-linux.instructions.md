@@ -1,6 +1,6 @@
 ---
-description: 'Guidance for Fedora (Red Hat family) systems, dnf workflows, SELinux, and modern systemd practices.'
 applyTo: '**'
+description: 'Guidance for Fedora (Red Hat family) systems, dnf workflows, SELinux, and modern systemd practices.'
 ---
 
 # Fedora Administration Guidelines

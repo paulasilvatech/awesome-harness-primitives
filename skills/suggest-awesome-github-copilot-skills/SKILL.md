@@ -1,8 +1,10 @@
 ---
-name: suggest-awesome-github-copilot-skills
-description: 'Suggest relevant GitHub Copilot skills from the awesome-copilot repository based on current repository context and chat history, avoiding duplicates with existing skills in this repository, and identifying outdated skills that need updates.'
+name: "suggest-awesome-github-copilot-skills"
+description: >-
+  Suggest relevant GitHub Copilot skills from the awesome-copilot repository based on current
+  repository context and chat history, avoiding duplicates with existing skills in this repository,
+  and identifying outdated skills that need updates. Use this skill when --; ```.
 ---
-
 # Suggest Awesome GitHub Copilot Skills
 
 Analyze current repository context and suggest relevant Agent Skills from the [GitHub awesome-copilot repository](https://github.com/github/awesome-copilot/blob/main/docs/README.skills.md) that are not already available in this repository. Agent Skills are self-contained folders located in the [skills](https://github.com/github/awesome-copilot/tree/main/skills) folder of the awesome-copilot repository, each containing a `SKILL.md` file with instructions and optional bundled assets.

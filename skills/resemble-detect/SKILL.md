@@ -1,10 +1,14 @@
 ---
-name: resemble-detect
-description: Deepfake detection and media safety — detect AI-generated audio, images, video, and text, trace synthesis sources, apply watermarks, verify speaker identity, and analyze media intelligence using Resemble AI
-license: Apache-2.0
-compatibility: 'Requires a Resemble AI API key (https://app.resemble.ai) set as RESEMBLE_API_KEY. All media must be accessible via public HTTPS URLs — local file paths are not supported except for text detection.'
+name: "resemble-detect"
+description: >-
+  Deepfake detection and media safety — detect AI-generated audio, images, video, and text, trace
+  synthesis sources, apply watermarks, verify speaker identity, and analyze media intelligence using
+  Resemble AI. Use this skill when the user's request involves any of these; checking if audio, video,
+  image, or text is AI-generated or manipulated; detecting deepfakes in any media format.
+license: "Apache-2.0"
+metadata:
+  compatibility: "Requires a Resemble AI API key (https://app.resemble.ai) set as RESEMBLE_API_KEY. All media must be accessible via public HTTPS URLs — local file paths are not supported except for text detection."
 ---
-
 # Resemble Detect — Deepfake Detection & Media Safety
 
 Analyze audio, image, video, and text for synthetic manipulation, AI-generated content, watermarks, speaker identity, and media intelligence using the Resemble AI platform.

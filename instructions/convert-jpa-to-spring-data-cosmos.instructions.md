@@ -1,6 +1,6 @@
 ---
-description: 'Step-by-step guide for converting Spring Boot JPA applications to use Azure Cosmos DB with Spring Data Cosmos'
 applyTo: '**/*.java,**/pom.xml,**/build.gradle,**/application*.properties'
+description: 'Step-by-step guide for converting Spring Boot JPA applications to use Azure Cosmos DB with Spring Data Cosmos'
 ---
 
 # Convert Spring JPA project to Spring Data Cosmos

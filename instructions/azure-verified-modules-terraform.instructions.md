@@ -1,6 +1,6 @@
 ---
-description: ' Azure Verified Modules (AVM) and Terraform'
 applyTo: '**/*.terraform, **/*.tf, **/*.tfvars, **/*.tfstate, **/*.tflint.hcl, **/*.tf.json, **/*.tfvars.json'
+description: ' Azure Verified Modules (AVM) and Terraform'
 ---
 
 # Azure Verified Modules (AVM) Terraform

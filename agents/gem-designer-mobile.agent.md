@@ -1,11 +1,9 @@
 ---
+name: "gem-designer-mobile"
 description: "Mobile UI/UX specialist: HIG, Material Design, safe areas, touch targets."
-name: gem-designer-mobile
-argument-hint: "Enter task_id, plan_id (optional), plan_path (optional), mode (create|validate), scope (component|screen|navigation|design_system), context (framework, library), and constraints (platform, responsive, accessible, dark_mode)."
-disable-model-invocation: false
 user-invocable: false
-mode: subagent
-hidden: true
+disable-model-invocation: false
+argument-hint: "Enter task_id, plan_id (optional), plan_path (optional), mode (create|validate), scope (component|screen|navigation|design_system), context (framework, library), and constraints (platform, responsive, accessible, dark_mode)."
 ---
 
 # DESIGNER-MOBILE: Mobile UI/UX: HIG, Material 3, safe areas, touch targets.

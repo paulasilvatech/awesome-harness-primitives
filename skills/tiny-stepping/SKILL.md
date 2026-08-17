@@ -1,8 +1,10 @@
 ---
-name: tiny-stepping
-description: Incremental development workflow that makes the smallest meaningful change per step and pauses for feedback, so the direction gets validated early before continuing. Use for careful, iterative implementation with continuous validation.
+name: "tiny-stepping"
+description: >-
+  Incremental development workflow that makes the smallest meaningful change per step and pauses for
+  feedback, so the direction gets validated early before continuing. Use for careful, iterative
+  implementation with continuous validation. Use this skill when the user asks for workflow.
 ---
-
 # Tiny Stepping
 
 Drive implementation in the smallest possible meaningful increments, pausing for feedback after each step so the work stays reviewable and easy to course-correct.

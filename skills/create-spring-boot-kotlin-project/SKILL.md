@@ -1,8 +1,7 @@
 ---
-name: create-spring-boot-kotlin-project
-description: 'Create Spring Boot Kotlin Project Skeleton'
+name: "create-spring-boot-kotlin-project"
+description: "Create Spring Boot Kotlin Project Skeleton. Use this skill when the user asks for create spring boot kotlin project prompt."
 ---
-
 # Create Spring Boot Kotlin project prompt
 
 - Please make sure you have the following software installed on your system:

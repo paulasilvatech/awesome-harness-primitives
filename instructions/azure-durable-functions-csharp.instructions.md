@@ -1,6 +1,6 @@
 ---
-description: 'Guidelines and best practices for building Azure Durable Functions in C# using the isolated worker model'
 applyTo: '**/*.cs, **/host.json, **/local.settings.json, **/*.csproj'
+description: 'Guidelines and best practices for building Azure Durable Functions in C# using the isolated worker model'
 ---
 
 # Azure Durable Functions C# Development

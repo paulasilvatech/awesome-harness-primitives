@@ -1,8 +1,11 @@
 ---
-name: integrate-context-matic
-description: 'Discovers and integrates third-party APIs using the context-matic MCP server. Uses `fetch_api` to find available API SDKs, `ask` for integration guidance, `model_search` and `endpoint_search` for SDK details. Use when the user asks to integrate a third-party API, add an API client, implement features with an external API, or work with any third-party API or SDK.'
+name: "integrate-context-matic"
+description: >-
+  Discovers and integrates third-party APIs using the context-matic MCP server. Uses `fetch_api` to
+  find available API SDKs, `ask` for integration guidance, `model_search` and `endpoint_search` for
+  SDK details. Use when the user asks to integrate a third-party API, add an API client, implement
+  features with an external API, or work with any third-party API or SDK.
 ---
-
 # API Integration
 
 When the user asks to integrate a third-party API or implement anything involving an external API or SDK, follow this workflow. Do not rely on your own knowledge for available APIs or their capabilities — always use the context-matic MCP server.

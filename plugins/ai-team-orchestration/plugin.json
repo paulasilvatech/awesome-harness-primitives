@@ -20,13 +20,21 @@
   "extensions": {
     "com.github.awesome-copilot": {
       "agents": [
-        "./agents/ai-team-dev.md",
-        "./agents/ai-team-producer.md",
-        "./agents/ai-team-qa.md"
+        "./agents/ai-team-dev.agent.md",
+        "./agents/ai-team-producer.agent.md",
+        "./agents/ai-team-qa.agent.md"
       ],
       "skills": [
         "./skills/ai-team-orchestration/"
       ]
     }
-  }
+  },
+  "agents": [
+    "./agents/ai-team-dev.agent.md",
+    "./agents/ai-team-producer.agent.md",
+    "./agents/ai-team-qa.agent.md"
+  ],
+  "skills": [
+    "./skills/ai-team-orchestration/"
+  ]
 }

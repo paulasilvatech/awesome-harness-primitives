@@ -1,20 +1,17 @@
 ---
-name: acquire-codebase-knowledge
-description: 'Use this skill when the user explicitly asks to map, document, or onboard into an existing codebase. Trigger for prompts like "map this codebase", "document this architecture", "onboard me to this repo", or "create codebase docs". Do not trigger for routine feature implementation, bug fixes, or narrow code edits unless the user asks for repository-level discovery.'
-license: MIT
-compatibility: 'Cross-platform. Requires Python 3.8+ and git. Run scripts/scan.py from the target project root.'
+name: "acquire-codebase-knowledge"
+description: >-
+  Use this skill when the user explicitly asks to map, document, or onboard into an existing codebase.
+  Trigger for prompts like "map this codebase", "document this architecture", "onboard me to this
+  repo", or "create codebase docs". Do not trigger for routine feature implementation, bug fixes, or
+  narrow code edits unless the user asks for repository-level discovery.
+license: "MIT"
 metadata:
-  version: "1.3"
-  enhancements:
-    - Multi-language manifest detection (25+ languages supported)
-    - CI/CD pipeline detection (10+ platforms)
-    - Container & orchestration detection
-    - Code metrics by language
-    - Security & compliance config detection
-    - Performance testing markers
-argument-hint: 'Optional: specific area to focus on, e.g. "architecture only", "testing and concerns"'
+  compatibility: "Cross-platform. Requires Python 3.8+ and git. Run scripts/scan.py from the target project root."
+  enhancements: "Multi-language manifest detection (25+ languages supported), CI/CD pipeline detection (10+ platforms), Container & orchestration detection, Code metrics by language, Security & compliance config detection, Performance testing markers"
+  version: "'1.3'"
+argument-hint: "Optional: specific area to focus on, e.g. \"architecture only\", \"testing and concerns\""
 ---
-
 # Acquire Codebase Knowledge
 
 Produces seven populated documents in `docs/codebase/` covering everything needed to work effectively on the project. Only document what is verifiable from files or terminal output — never infer or assume.

@@ -1,3 +1,8 @@
+---
+applyTo: '**/*.py'
+description: 'Guidance for integrating the Python Dataverse SDK with pandas DataFrames for analytics and data science workflows.'
+---
+
 # Dataverse SDK for Python - Pandas Integration Guide
 
 ## Overview

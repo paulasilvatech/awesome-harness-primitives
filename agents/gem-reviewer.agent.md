@@ -1,11 +1,9 @@
 ---
+name: "gem-reviewer"
 description: "Security auditing, code review, OWASP scanning, PRD compliance verification."
-name: gem-reviewer
-argument-hint: "Enter task_id, plan_id, plan_path, review_scope (plan|wave), and review criteria for compliance and security audit."
-disable-model-invocation: false
 user-invocable: false
-mode: subagent
-hidden: true
+disable-model-invocation: false
+argument-hint: "Enter task_id, plan_id, plan_path, review_scope (plan|wave), and review criteria for compliance and security audit."
 ---
 
 # REVIEWER: Security auditing, code review, OWASP scanning, PRD compliance.

@@ -41,13 +41,13 @@ if [ "$#" -eq 0 ] && [ ! -t 0 ]; then
   _HOOK=1                      # invoked as a hook: stdin carries the tool payload
   _INPUT=$(cat)
   if command -v jq >/dev/null 2>&1; then
-    _TOOL=$(printf '%s' "$_INPUT" | jq -r '.toolName // .tool_name // empty' 2>/dev/null)
+    _TOOL=$(printf '%s' "$_INPUT" | jq -r '.toolName // .tool_name // .name // .toolCalls[0].name // empty' 2>/dev/null)
     case "$_TOOL" in
       editFiles|edit|write|str_replace_editor|create_file|multiEdit|applyPatch)
         # Only the files this edit tool just changed - never a wider repo scan.
         mapfile -t _FILES < <(
           printf '%s' "$_INPUT" \
-            | jq -r '.tool_input.files[]? // .toolInput.files[]? // .tool_input.path // .toolInput.path // empty' 2>/dev/null
+            | jq -r '(.tool_input.files[]?, .toolInput.files[]?, .toolCalls[0].args.files[]?, .toolCalls[0].input.files[]?, .tool_input.path, .toolInput.path, .toolCalls[0].args.path, .toolCalls[0].input.path) // empty' 2>/dev/null
         )
         [ "${#_FILES[@]}" -gt 0 ] && set -- "${_FILES[@]}"
         ;;
@@ -119,6 +119,17 @@ glob_escape() {
     esac
   done
   printf '%s' "$out"
+}
+
+lower() {
+  printf '%s' "$1" | tr '[:upper:]' '[:lower:]'
+}
+
+list_has_line() {
+  case "$1" in
+    *$'\n'"$2"$'\n'*) return 0 ;;
+    *) return 1 ;;
+  esac
 }
 
 # Print every http(s) URL in a file, trailing punctuation trimmed, de-duplicated.
@@ -194,16 +205,16 @@ agent_alts() {
 # line is what `r` uses; the remainder become the numbered alternatives.
 suggest_alts() {
   local url="$1" max="${2:-6}" cand key
-  local -A seen=()
+  local seen_lines=$'\n'
   local out=()
 
-  cand="$(find_variation "$url")" && [ -n "$cand" ] && { out+=("$cand"); seen["${cand,,}"]=1; }
+  cand="$(find_variation "$url")" && [ -n "$cand" ] && { out+=("$cand"); seen_lines+="$(lower "$cand")"$'\n'; }
 
   while IFS= read -r cand; do
     [ "${#out[@]}" -ge "$max" ] && break
     [ -z "$cand" ] && continue
-    key="${cand,,}"; [ -n "${seen[$key]:-}" ] && continue
-    out+=("$cand"); seen[$key]=1
+    key="$(lower "$cand")"; list_has_line "$seen_lines" "$key" && continue
+    out+=("$cand"); seen_lines+="$key"$'\n'
   done < <(agent_alts "$url" "$max")
 
   [ "${#out[@]}" -eq 0 ] && return 0
@@ -268,15 +279,15 @@ collect_input() {
     -o -type f -print 2>/dev/null
 }
 
-declare -A SEEN
+SEEN_FILES=$'\n'
 FILES=()
 while IFS= read -r f; do
   [ -z "$f" ] && continue
   [ -f "$f" ] || continue
   case "$f" in */node_modules/*|*/.git/*|*/dist/*|*/build/*) continue ;; esac
   printf '%s\n' "$f" | grep -qiE "$WEB_RE" || continue
-  [ -n "${SEEN[$f]:-}" ] && continue
-  SEEN[$f]=1
+  list_has_line "$SEEN_FILES" "$f" && continue
+  SEEN_FILES+="$f"$'\n'
   FILES+=("$f")
 done < <(collect_input "$@")
 
@@ -328,7 +339,15 @@ fi
 
 printf '\n%s\n  fix-broken-links report\n%s\n' "============================================================" "============================================================"
 
-declare -A CHANGED
+CHANGED=()
+mark_changed() {
+  local f="$1"
+  local existing
+  for existing in "${CHANGED[@]}"; do
+    [ "$existing" = "$f" ] && return
+  done
+  CHANGED+=("$f")
+}
 n="${#B_URL[@]}"
 for ((i=0; i<n; i++)); do
   file="${B_FILE[$i]}"; url="${B_URL[$i]}"; status="${B_STATUS[$i]}"
@@ -361,24 +380,24 @@ for ((i=0; i<n; i++)); do
     ch="$(ask '  > ')"
     case "$ch" in
       s|"") break ;;
-      d) remove_link "$file" "$url"; CHANGED[$file]=1; printf '    removed\n'; break ;;
+      d) remove_link "$file" "$url"; mark_changed "$file"; printf '    removed\n'; break ;;
       r) if [ "${#alts[@]}" -gt 0 ]; then
-           replace_url "$file" "$url" "${alts[0]}"; CHANGED[$file]=1; printf '    replaced -> %s\n' "${alts[0]}"; break
+           replace_url "$file" "$url" "${alts[0]}"; mark_changed "$file"; printf '    replaced -> %s\n' "${alts[0]}"; break
          fi
          printf '    no suggestion available\n' ;;
       [1-9]) if [ "$ch" -lt "${#alts[@]}" ]; then
-               replace_url "$file" "$url" "${alts[$ch]}"; CHANGED[$file]=1; printf '    replaced -> %s\n' "${alts[$ch]}"; break
+               replace_url "$file" "$url" "${alts[$ch]}"; mark_changed "$file"; printf '    replaced -> %s\n' "${alts[$ch]}"; break
              else printf '    invalid choice\n'; fi ;;
       c) u="$(ask '  URL: ')"
-         if [ -n "$u" ]; then replace_url "$file" "$url" "$u"; CHANGED[$file]=1; printf '    replaced\n'; break; fi ;;
+         if [ -n "$u" ]; then replace_url "$file" "$url" "$u"; mark_changed "$file"; printf '    replaced\n'; break; fi ;;
       *) printf '    invalid choice\n' ;;
     esac
   done
 done
 
-if [ "${CHANGED[*]+x}" = x ] && [ "${#CHANGED[@]}" -gt 0 ]; then
+if [ "${#CHANGED[@]}" -gt 0 ]; then
   printf '\n  %d file(s) updated:\n' "${#CHANGED[@]}"
-  for f in "${!CHANGED[@]}"; do printf '    %s\n' "$f"; done
+  for f in "${CHANGED[@]}"; do printf '    %s\n' "$f"; done
   printf '\n'
 fi
 exit 0

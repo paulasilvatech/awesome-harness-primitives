@@ -19,7 +19,7 @@
   "extensions": {
     "com.github.awesome-copilot": {
       "agents": [
-        "./agents/workshop-ta.md"
+        "./agents/workshop-ta.agent.md"
       ],
       "skills": [
         "./skills/bench-read/",
@@ -27,10 +27,17 @@
         "./skills/desk-open/",
         "./skills/signal-write/",
         "./skills/workshop-create/"
-      ],
-      "extensions": [
-        "./extensions/signals-dashboard"
       ]
     }
-  }
+  },
+  "agents": [
+    "./agents/workshop-ta.agent.md"
+  ],
+  "skills": [
+    "./skills/bench-read/",
+    "./skills/desk-journal/",
+    "./skills/desk-open/",
+    "./skills/signal-write/",
+    "./skills/workshop-create/"
+  ]
 }

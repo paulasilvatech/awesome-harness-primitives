@@ -1,8 +1,10 @@
 ---
-name: aws-resource-health-diagnose
-description: 'Analyze AWS resource health, diagnose issues from CloudWatch logs and metrics, and create a remediation plan for identified problems.'
+name: "aws-resource-health-diagnose"
+description: >-
+  Analyze AWS resource health, diagnose issues from CloudWatch logs and metrics, and create a
+  remediation plan for identified problems. Use this skill when the user asks for aws resource health
+  & issue diagnosis.
 ---
-
 # AWS Resource Health & Issue Diagnosis
 
 This workflow analyzes a specific AWS resource to assess its health status, diagnose potential issues using CloudWatch logs and metrics, and develop a comprehensive remediation plan for any problems discovered.

@@ -24,5 +24,8 @@
         "./skills/automate-this/"
       ]
     }
-  }
+  },
+  "skills": [
+    "./skills/automate-this/"
+  ]
 }

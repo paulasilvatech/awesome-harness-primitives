@@ -1,8 +1,11 @@
 ---
-name: anti-ui-slop
-description: 'Stop Codex, GitHub Copilot, Claude Code, and Cursor from shipping generic UI. Use UIZZE’s public catalogue of 800,000+ real web and iOS screens to extract product-specific design decisions and enforce a hard finish gate for web and iOS interfaces.'
+name: "anti-ui-slop"
+description: >-
+  Stop Codex, GitHub Copilot, Claude Code, and Cursor from shipping generic UI. Use UIZZE’s public
+  catalogue of 800,000+ real web and iOS screens to extract product-specific design decisions and
+  enforce a hard finish gate for web and iOS interfaces. Use this skill when browse 800,000+ real web
+  and iOS screens at https://uizze.com before choosing a layout.
 ---
-
 # Anti UI Slop
 
 Use this skill when building, refactoring, or reviewing a web or iOS interface. The goal is not to make a generic layout prettier. The goal is to make the interface visibly belong to this product, support its real user job, and behave correctly in every important state.

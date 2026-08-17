@@ -1,8 +1,9 @@
 ---
-name: csharp-mstest
-description: 'Get best practices for MSTest 3.x/4.x unit testing, including modern assertion APIs and data-driven tests'
+name: "csharp-mstest"
+description: >-
+  Get best practices for MSTest 3.x/4.x unit testing, including modern assertion APIs and data-driven
+  tests. Use this skill when the user asks for mstest best practices (mstest 3.x/4.x).
 ---
-
 # MSTest Best Practices (MSTest 3.x/4.x)
 
 Your goal is to help me write effective unit tests with modern MSTest, using current APIs and best practices.

@@ -14,15 +14,5 @@
     "interactive-diagrams",
     "node-drilldown",
     "relationship-visualization"
-  ],
-  "extensions": {
-    "com.github.copilot": {
-      "logo": "assets/preview.png"
-    },
-    "com.github.awesome-copilot": {
-      "extensions": [
-        "./extensions/diagram-viewer"
-      ]
-    }
-  }
+  ]
 }

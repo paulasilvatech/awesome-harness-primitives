@@ -1,8 +1,7 @@
 ---
-name: java-junit
-description: 'Get best practices for JUnit 5 unit testing, including data-driven tests'
+name: "java-junit"
+description: "Get best practices for JUnit 5 unit testing, including data-driven tests. Use this skill when the user asks for junit 5+ best practices."
 ---
-
 # JUnit 5+ Best Practices
 
 Your goal is to help me write effective unit tests with JUnit 5, covering both standard and data-driven testing approaches.
