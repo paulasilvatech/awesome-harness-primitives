@@ -219,7 +219,7 @@ Architecture Review
 - Deployment: <recommendation and trade-off>
 
 **ADR draft**
-# ADR-<number>: <title>
+\# ADR-<number>: <title>
 Status: Proposed
 Decision drivers: <drivers>
 Options considered: <options>

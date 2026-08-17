@@ -103,7 +103,7 @@ Execute rapid classification to determine planning depth as necessary based on p
 goal: [Title of what to achieve]
 ---
 
-# Introduction
+\# Introduction
 
 [1–3 sentences summarizing the plan and its purpose]
 
@@ -145,10 +145,10 @@ goal: [Title of what to achieve]
 ```yaml
 name: <resourceName>
 kind: AVM | Raw
-# If kind == AVM:
+\# If kind == AVM:
 avmModule: registry.terraform.io/Azure/avm-res-<service>-<resource>/<provider>
 version: <version>
-# If kind == Raw:
+\# If kind == Raw:
 resource: azurerm_<resource_type>
 provider: azurerm
 version: <provider_version>
@@ -178,7 +178,7 @@ docs: {URL to Microsoft Docs}
 avm: {module repo URL or commit} # if applicable
 ```
 
-# Implementation Plan
+\# Implementation Plan
 
 {Brief summary of overall approach and key dependencies}
 
@@ -207,7 +207,7 @@ Write the plan to `.terraform-planning-files/INFRA.{goal}.md` in this shape:
 goal: <title>
 ---
 
-# Introduction
+\# Introduction
 <1-3 sentence purpose>
 
 ## WAF Alignment
@@ -228,7 +228,7 @@ references:
   avm: <AVM URL when applicable>
 ```
 
-# Implementation Plan
+\# Implementation Plan
 ## Phase 1 - <Phase Name>
 | Task | Description | Action |
 | --- | --- | --- |

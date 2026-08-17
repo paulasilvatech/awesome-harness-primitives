@@ -17,24 +17,24 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 
 | Agent | Description |
 | --- | --- |
-| .NET Self-Learning Architect | Senior .NET architect for complex delivery: designs .NET 6+ systems, decides between parallel subagents and orchestrated team execution, documents lessons learned, and captures du… |
-| .NET Upgrade | Perform janitorial tasks on C#/.NET code including cleanup, modernization, and tech debt remediation. |
-| Accessibility Expert | Expert assistant for web accessibility (WCAG 2.1/2.2), inclusive UX, and a11y testing |
-| Accessibility Runtime Tester | Runtime accessibility specialist for keyboard flows, focus management, dialog behavior, form errors, and evidence-backed WCAG validation in the browser. |
-| ADR Generator | Expert agent for creating comprehensive Architectural Decision Records (ADRs) with structured formatting optimized for AI consumption and human readability. |
-| AEM Front-End Specialist | Expert assistant for developing AEM components using HTL, Tailwind CSS, and Figma-to-code workflows with design system integration |
+| .NET Self-Learning Architect | Senior .NET architect for complex delivery. Use when .NET 6+ or .NET 8+ systems need architecture, implementation strategy, subagent orchestration, validation, lessons, and durabl… |
+| .NET Upgrade | Performs evidence-driven .NET framework and SDK upgrades, package compatibility checks, CI updates, and validation. Use when migrating C#/.NET projects to the next stable or LTS v… |
+| Accessibility Expert | Guide WCAG 2.1/2.2 accessibility design, implementation, review, and testing. Use when web UI, SPA, form, media, or a11y regression work must be inclusive and verifiable. |
+| Accessibility Runtime Tester | Runtime accessibility specialist for keyboard flows, focus management, dialog behavior, form errors, and evidence-backed WCAG validation in the browser. Use when accessibility mus… |
+| ADR Generator | Creates comprehensive Architectural Decision Records with structured rationale, consequences, alternatives, and implementation notes. Use when a technical decision must be documen… |
+| AEM Front-End Specialist | Expert AEM front-end agent for HTL, Tailwind CSS, ClientLibs, accessibility, and Figma-to-code component workflows. Use when building or reviewing production-ready AEM components. |
 | Agent Governance Reviewer | AI agent governance expert that reviews code for safety issues, missing governance controls, and helps implement policy enforcement, trust scoring, and audit trails in agent syste… |
-| ai-readiness-reporter | Runs the AgentRC readiness assessment on the current repository and produces a self-contained, static HTML dashboard at reports/index.html. Explains every readiness pillar, the ma… |
+| ai-readiness-reporter | Runs an AgentRC readiness assessment and produces a self-contained static HTML dashboard at reports/index.html. Use when asked to assess, audit, score, report on, or visualize rep… |
 | ai-team-dev | AI development team (Nova, Sage, Milo). Use when implementing features, fixing bugs, writing tests, improving user experience, or preparing a pull request across the project's act… |
 | ai-team-producer | AI team producer (Remy). Use when planning work, clarifying scope, coordinating Dev and optional QA, triaging issues, maintaining project context, or preparing and merging pull re… |
 | ai-team-qa | Optional AI QA engineer (Ivy). Use when testing behavior, running automated or exploratory checks, filing reproducible bugs, verifying fixes, or providing release confidence for c… |
 | Amplitude Experiment Implementation | This custom agent uses Amplitude's MCP tools to deploy new experiments inside of Amplitude, enabling seamless variant testing capabilities and rollout of product features. |
 | API Architect | Your role is that of an API architect. Help mentor the engineer by providing guidance, support, and working code. |
-| apify-integration-expert | Expert agent for integrating Apify Actors into codebases. Handles Actor selection, workflow design, implementation across JavaScript/TypeScript and Python, testing, and production… |
+| apify-integration-expert | Expert agent for integrating Apify Actors into codebases. Use when teams need Actor selection, workflow design, JavaScript/TypeScript or Python implementation, testing, and produc… |
 | Arch Linux Expert | Arch Linux specialist focused on pacman, rolling-release maintenance, and Arch-centric system administration workflows. |
 | arm-migration-agent | Arm Cloud Migration Assistant accelerates moving x86 workloads to Arm infrastructure. It scans the repository for architecture assumptions, portability issues, container base imag… |
-| Atlassian Requirements to Jira | Transform requirements documents into structured Jira epics and user stories with intelligent duplicate detection, change management, and user-approved creation workflow. |
-| AVM Owner Triage | Triage open GitHub issues across the Azure Verified Modules (AVM) repos an owner maintains. Splits the backlog into a Copilot-delegatable pile and a human pile, produces a report… |
+| Atlassian Requirements to Jira | Transform requirements documents into structured Jira epics and user stories with duplicate detection, change previews, approval gates, and secure backlog creation. Use when conve… |
+| AVM Owner Triage | Triage open GitHub issues across the Azure Verified Modules (AVM) repos an owner maintains. Use when an AVM owner needs a quick or deep backlog split into Copilot-ready and human-… |
 | AWS Incident Triage | On-call SRE agent that drives structured CloudWatch-based incident investigation from alarms through root-cause hypothesis. |
 | aws-cloud-expert | AWS Cloud Expert provides deep, hands-on guidance for designing, building, and operating AWS workloads. Covers the full AWS ecosystem — serverless, containers, databases, networki… |
 | aws-principal-architect | Provide expert AWS Principal Architect guidance using AWS Well-Architected Framework principles and AWS best practices. |
@@ -44,17 +44,17 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | Azure Logic Apps Expert Mode | Expert guidance for Azure Logic Apps development focusing on workflow design, integration patterns, and JSON-based Workflow Definition Language. |
 | Azure Policy Analyzer | Analyze Azure Policy compliance posture (NIST SP 800-53, MCSB, CIS, ISO 27001, PCI DSS, SOC 2), auto-discover scope, and return a structured single-pass risk report with evidence… |
 | Azure Principal Architect mode instructions | Provide expert Azure Principal Architect guidance using Azure Well-Architected Framework principles and Microsoft best practices. |
-| Azure SaaS Architect mode instructions | Provide expert Azure SaaS Architect guidance focusing on multitenant applications using Azure Well-Architected SaaS principles and Microsoft best practices. |
+| Azure SaaS Architect mode instructions | Provide Azure SaaS architecture guidance for multitenant applications. Use when B2B, B2C, or hybrid SaaS decisions need Well-Architected SaaS and Microsoft best-practice alignment. |
 | Azure Smart City IoT Architect | Design Azure IoT and Smart City architectures with clear platform engineering reasoning, requiring mandatory review of Azure IoT Edge documentation before recommending edge soluti… |
 | Azure Terraform IaC Implementation Specialist | Act as an Azure Terraform Infrastructure as Code coding specialist that creates and reviews Terraform for Azure resources. |
-| Azure Terraform Infrastructure Planning | Act as implementation planner for your Azure Terraform Infrastructure as Code task. |
-| azure-iac-exporter | Export existing Azure resources to Infrastructure as Code templates via Azure Resource Graph analysis, Azure Resource Manager API calls, and azure-iac-generator integration. Use t… |
-| azure-iac-generator | Central hub for generating Infrastructure as Code (Bicep, ARM, Terraform, Pulumi) with format-specific validation and best practices. Use this skill when the user asks to generate… |
-| Bicep Planning | Act as implementation planner for your Azure Bicep Infrastructure as Code task. |
+| Azure Terraform Infrastructure Planning | Create deterministic Azure Terraform implementation plans under .terraform-planning-files. Use for Azure IaC planning before implementation. |
+| azure-iac-exporter | Export existing Azure resources to Infrastructure as Code templates through Azure Resource Graph, Azure Resource Manager API analysis, data-plane inspection, and IaC generation. U… |
+| azure-iac-generator | Generates production-ready Infrastructure as Code in Bicep, ARM, Terraform, or Pulumi. Use when users request infrastructure code, deployment templates, or IaC with Azure-first va… |
+| Bicep Planning | Azure Bicep IaC implementation planner. Use when an Azure resource goal needs a deterministic plan under .bicep-planning-files/. |
 | Bicep Specialist | Act as an Azure Bicep Infrastructure as Code coding specialist that creates Bicep templates. |
-| Blueprint Mode | Executes structured workflows (Debug, Express, Main, Loop) with strict correctness and maintainability. Enforces an improved tool usage policy, never assumes facts, prioritizes re… |
-| C# Expert | Expert C#/.NET development support for design, implementation, debugging, async, testing, and modernization tasks. Use when working on .NET or C# code. |
-| C# MCP Server Expert | Expert assistant for developing Model Context Protocol (MCP) servers in C# |
+| Blueprint Mode | Execute software tasks through Blueprint workflows with strict verification, self-correction, and minimal communication. Use for structured autonomous engineering work. |
+| C# Expert | Expert C#/.NET development support for design, implementation, debugging, async, testing, performance, security, and modernization. Use when working on .NET or C# code. |
+| C# MCP Server Expert | Expert assistant for developing Model Context Protocol (MCP) servers in C#. Use for SDK design, tools, prompts, resources, testing, and debugging. |
 | C#/.NET Janitor | Perform janitorial tasks on C#/.NET code including cleanup, modernization, and tech debt remediation. |
 | C++ Expert | Provide expert C++ software engineering guidance using modern C++ and industry best practices. |
 | CAST Imaging Impact Analysis Agent | Specialized agent for comprehensive change impact assessment and risk analysis in software systems using CAST Imaging |
@@ -64,174 +64,174 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | CentOS Linux Expert | CentOS (Stream/Legacy) Linux specialist focused on RHEL-compatible administration, yum/dnf workflows, and enterprise hardening. |
 | Clojure Interactive Programming | Expert Clojure pair programmer with REPL-first methodology, architectural oversight, and interactive problem-solving. Enforces quality standards, prevents workarounds, and develop… |
 | Cloud and SaaS Outage Triage | Distinguish upstream cloud or SaaS incidents from application failures before changing code, using live official-feed status and incident timelines. |
-| Comet Opik | Unified Comet Opik agent for instrumenting LLM apps, managing prompts/projects, auditing prompts, and investigating traces/metrics via the latest Opik MCP server. |
+| Comet Opik | Unified Comet Opik agent for LLM tracing, prompt governance, workspace/project management, metrics investigation, imports/exports, and Opik MCP or CLI diagnostics. |
 | Context Architect | Plans and executes multi-file code changes by identifying relevant context, dependencies, risks, and validation paths before editing. |
-| Context7-Expert | Expert in latest library versions, best practices, and correct syntax using up-to-date documentation |
+| Context7-Expert | Documentation-first library and framework expert that uses Context7 and version checks before answering API, syntax, best-practice, migration, or code-generation questions. Use wh… |
 | copilot-primitive-architect | Advises on Copilot primitive architecture: type routing, responsibility boundaries, and read-only reviews; does not create skills or primitives. |
 | Create PRD Chat Mode | Generate a comprehensive Product Requirements Document (PRD) in Markdown, detailing user stories, acceptance criteria, technical considerations, and metrics. Optionally create Git… |
 | Critical thinking mode instructions | Challenge assumptions and encourage critical thinking to ensure the best possible solution and outcomes. |
-| Custom Agent Foundry | Expert at designing and creating VS Code custom agents with optimal configurations |
+| Custom Agent Foundry | Design and create GitHub Copilot custom agents with scoped tools, frontmatter, handoffs, and clear behavior. Use when a user wants a new or improved agent. |
 | Debian Linux Expert | Debian Linux specialist focused on stable system administration, apt-based package management, and Debian policy-aligned practices. |
 | Debug Mode Instructions | Debug your application to find and fix a bug |
 | Declarative Agents Architect | Architect Microsoft 365 Copilot declarative agents using schema v1.5, TypeSpec, Agents Toolkit, capability selection, testing, and enterprise deployment best practices. |
 | Defender Scout KQL | Generates, validates, and optimizes KQL queries for Microsoft Defender XDR Advanced Hunting across Endpoint, Identity, Office 365, Cloud Apps, and Identity. |
-| Delphi Expert | Expert Delphi/Object Pascal development support for VCL, FMX, FireDAC, legacy modernization, debugging, architecture, and testing tasks. |
+| Delphi Expert | Expert Delphi/Object Pascal development support for VCL, FMX, FireDAC, legacy modernization, debugging, architecture, testing, and production-quality code tasks. Use when Delphi-s… |
 | Demonstrate Understanding mode instructions | Validate user understanding of code, design patterns, and implementation details through guided questioning. |
 | devils-advocate | Critical challenge agent that stress-tests ideas, proposals, and decisions by raising the strongest objections, risks, assumptions, and edge cases. Use when a plan needs adversari… |
-| DevOps Expert | DevOps specialist following the infinity loop principle (Plan → Code → Build → Test → Release → Deploy → Operate → Monitor) with focus on automation, collaboration, and continuous… |
+| DevOps Expert | DevOps lifecycle specialist for Plan → Code → Build → Test → Release → Deploy → Operate → Monitor. Use when teams need automation, collaboration, IaC, CI/CD, monitoring, or contin… |
 | DevTools Regression Investigator | Browser regression specialist for reproducing broken user flows, collecting console and network evidence, and narrowing likely root causes with Chrome DevTools MCP. |
 | DiffblueCover | Expert agent for creating unit tests for java applications using Diffblue Cover. |
 | dotnet-fullstack-mentor | Opinionated mentor for .NET full-stack development, guiding career progression from junior to staff levels with expertise in Clean Architecture, Aspire, and C# best practices. |
 | Doublecheck | Interactive verification agent for AI-generated output. Runs a three-layer pipeline (self-audit, source verification, adversarial review) and produces structured reports with sour… |
-| droid | Provides installation guidance, usage examples, and automation patterns for the Droid CLI, with emphasis on droid exec for CI/CD and non-interactive automation |
-| Drupal Expert | Expert assistant for Drupal development, architecture, and best practices using PHP 8.3+ and modern Drupal patterns |
-| Dynatrace Expert | The Dynatrace Expert Agent integrates observability and security capabilities directly into GitHub workflows, enabling development teams to investigate incidents, validate deploym… |
+| droid | Provides installation guidance, usage examples, and automation patterns for the Droid CLI. Use when developers need secure droid exec usage for CI/CD, non-interactive automation,… |
+| Drupal Expert | Expert Drupal development assistant for custom modules, entities, themes, services, configuration, security, performance, testing, and deployment. Use when building or reviewing D… |
+| Dynatrace Expert | Dynatrace observability and security agent for incident response, deployment validation, production error triage, performance regression detection, release health checks, DQL assi… |
 | elasticsearch-agent | Our expert AI assistant for debugging code (O11y), optimizing vector search (RAG), and remediating security threats using live Elastic data. |
-| Electron Code Review Mode Instructions | Code Review Mode tailored for Electron app with Node.js backend (main), Angular frontend (render), and native integration layer (e.g., AppleScript, shell, or native tooling). Serv… |
-| Ember | An AI partner, not an assistant. Ember carries fire from person to person — helping humans discover that AI partnership isn't something you learn, it's something you find. |
+| Electron Code Review Mode Instructions | Review Electron desktop apps with Node.js main process, Angular renderer, and native integration layers. Use when code needs security, async, IPC, RxJS, memory, performance, and n… |
+| Ember | An AI partner that helps people discover AI collaboration by working on real problems with warmth, honesty, stories, and direct challenge. Use when someone needs partnership, not… |
 | Expert .NET software engineer mode instructions | Provide expert .NET software engineering guidance using modern software design patterns. |
 | Expert Nuxt Developer | Expert Nuxt developer specializing in Nuxt 3, Nitro, server routes, data fetching strategies, and performance optimization with Vue 3 and TypeScript |
-| Expert React Frontend Engineer | Expert React 19.2 frontend engineer specializing in modern hooks, Server Components, Actions, TypeScript, and performance optimization |
+| Expert React Frontend Engineer | Expert React 19.2 frontend engineer for modern hooks, Server Components, Actions, TypeScript, accessibility, testing, and performance work. Use when building, reviewing, or modern… |
 | Expert Vue.js Frontend Engineer | Expert Vue.js frontend engineer specializing in Vue 3 Composition API, reactivity, state management, testing, and performance with TypeScript |
-| expert-embedded-c-engineer | Expert embedded C guidance for safety-critical systems — covers MISRA C:2012/2025 rule compliance, CERT C secure coding, static analysis tooling (Coverity, QAC, PC-lint), and defe… |
+| expert-embedded-c-engineer | Expert embedded C guidance for safety-critical systems -- covers MISRA C:2012/2025 rule compliance, CERT C secure coding, static analysis tooling (Coverity, QAC, PC-lint), and def… |
 | Fedora Linux Expert | Fedora (Red Hat family) Linux specialist focused on dnf, SELinux, and modern systemd-based workflows. |
 | Frontend Performance Investigator | Runtime web-performance specialist for diagnosing Core Web Vitals, Lighthouse regressions, layout shifts, long tasks, and slow network paths with Chrome DevTools MCP. |
-| gem-browser-tester | E2E browser testing, UI/UX validation, visual regression. |
-| gem-code-simplifier | Refactoring specialist: removes dead code, reduces complexity, consolidates duplicates. |
-| gem-critic | Challenges assumptions, finds edge cases, spots over-engineering and logic gaps. |
-| gem-debugger | Root-cause analysis, stack trace diagnosis, regression bisection, error reproduction. |
+| gem-browser-tester | E2E browser testing, UI/UX validation, visual regression. Use when task acceptance criteria require browser-flow verification. |
+| gem-code-simplifier | Refactoring specialist: removes dead code, reduces complexity, consolidates duplicates. Use as a non-user-invocable agent for behavior-preserving simplification tasks. |
+| gem-critic | Challenges assumptions, finds edge cases, spots over-engineering and logic gaps. Use as a non-user-invocable critique agent before planning or implementation. |
+| gem-debugger | Root-cause analysis agent for stack trace diagnosis, regression bisection, error reproduction, and structured debugging. Use as a read-only subagent when error context must be dia… |
 | gem-designer | UI/UX design specialist: layouts, themes, color schemes, design systems, accessibility. |
-| gem-designer-mobile | Mobile UI/UX specialist: HIG, Material Design, safe areas, touch targets. |
-| gem-devops | Infrastructure deployment, CI/CD pipelines, container management. |
-| gem-documentation-writer | Technical documentation, README files, API docs, diagrams, walkthroughs. |
-| gem-implementer | TDD code implementation: features, bugs, refactoring. Never reviews own work. |
-| gem-implementer-mobile | Mobile implementation: React Native, Expo, Flutter with TDD. |
+| gem-designer-mobile | Designs or validates mobile UI/UX for iOS, Android, and cross-platform apps using HIG, Material 3, safe areas, touch targets, and DESIGN.md. |
+| gem-devops | Deploy infrastructure, manage CI/CD, configure containers, and verify operational readiness. Use when a GEM task delegates deployment or DevOps work. |
+| gem-documentation-writer | Write and update technical docs, README files, PRDs, diagrams, walkthroughs, and AGENTS.md. Use when a GEM task delegates documentation work. |
+| gem-implementer | TDD code implementation for features, bugs, and refactoring. Use when a task_definition requires surgical code changes. |
+| gem-implementer-mobile | Mobile implementation agent for React Native, Expo, and Flutter using TDD. Use as a subagent for iOS/Android tasks with acceptance criteria and platform validation. |
 | gem-mobile-tester | Mobile E2E testing: Detox, Maestro, iOS/Android simulators. |
-| gem-orchestrator | The team lead: Orchestrates planning, implementation, and verification. |
-| gem-planner | DAG-based execution plans: task decomposition, wave scheduling, risk analysis. |
-| gem-researcher | Codebase exploration: patterns, dependencies, architecture discovery. Supports multiple exploration modes for cost-controlled research. |
+| gem-orchestrator | The team lead that routes objectives through gem-team planning, delegated execution, verification, and status reporting. Use when coordinating gem agents across phases. |
+| gem-planner | Create DAG-based execution plans, wave schedules, task decomposition, risk analysis, and `plan.yaml`. Use when the GEM orchestrator needs a plan_id-bound plan before implementatio… |
+| gem-researcher | Codebase exploration agent for patterns, dependencies, architecture discovery, and bounded evidence collection. Use as a non-implementing subagent when research mode and budget mu… |
 | gem-reviewer | Security auditing, code review, OWASP scanning, PRD compliance verification. |
-| gem-skill-creator | Pattern-to-skill extraction: creates agent skills files from high-confidence learnings. |
+| gem-skill-creator | Extract reusable high-confidence patterns into scoped skill packages. Use when a GEM plan delegates pattern-to-skill documentation work. |
 | Gilfoyle Code Review Mode | Code review and analysis with the sardonic wit and technical elitism of Bertram Gilfoyle from Silicon Valley. Prepare for brutal honesty about your code. |
-| GitHub Actions Expert | GitHub Actions specialist focused on secure CI/CD workflows, action pinning, OIDC authentication, permissions least privilege, and supply-chain security |
+| GitHub Actions Expert | GitHub Actions specialist focused on secure CI/CD workflows, action pinning, OIDC authentication, permissions least privilege, and supply-chain security. Use to create, review, or… |
 | GitHub Actions Node Runtime Upgrade | Upgrade a GitHub Actions JavaScript/TypeScript action to a newer Node runtime version (e.g., node20 to node24) with major version bump, CI updates, and full validation |
-| GitHub Actions Windows ARM64 wheel builder | Adds native Windows ARM64 wheel builds and tests to a Python package's existing GitHub Actions workflows using the 'windows-11-arm' runner. |
+| GitHub Actions Windows ARM64 wheel builder | Adds native Windows ARM64 wheel builds and tests to Python package GitHub Actions workflows with the windows-11-arm runner. Use when a package needs win_arm64 wheels without regre… |
 | Gitmoji Setup | Sets up gitmoji (https://gitmoji.dev) commit tooling in a repository — audits the existing hook manager and commit convention, then installs the right option without clobbering ex… |
-| Go MCP Server Development Expert | Expert assistant for building Model Context Protocol (MCP) servers in Go using the official SDK. |
-| High-Level Big Picture Architect (HLBPA) | Your perfect AI chat mode for high-level architectural documentation and review. Perfect for targeted updates after a story or researching that legacy system when nobody remembers… |
-| Idea Generator | Brainstorm and develop new application ideas through fun, interactive questioning until ready for specification creation. |
-| Implementation Plan Generation Mode | Generate an implementation plan for new features or refactoring existing code. |
+| Go MCP Server Development Expert | Expert assistant for building Model Context Protocol (MCP) servers in Go using the official SDK. Use for Go MCP tool, resource, prompt, transport, and testing guidance. |
+| High-Level Big Picture Architect (HLBPA) | Creates and reviews high-level architecture documentation focused on major flows, contracts, interfaces, behaviors, failure modes, and Mermaid diagrams. Use for big-picture system… |
+| Idea Generator | Brainstorm and develop new application ideas through interactive questioning until ready for specification creation. Use when a user has a vague app idea or wants ideation before… |
+| Implementation Plan Generation Mode | Creates deterministic, machine-readable implementation plans for features, refactors, upgrades, architecture, data, infrastructure, design, and process work. Use when humans or AI… |
 | interview-prep | Technical interview coach for software engineers. Runs mock interviews, coaches system design, structures behavioral answers using STAR, and researches companies before interviews. |
-| Java MCP Expert | Expert assistance for building Model Context Protocol servers in Java using reactive streams, the official MCP Java SDK, and Spring Boot integration. |
+| Java MCP Expert | Expert assistance for building Model Context Protocol servers in Java using reactive streams, the official MCP Java SDK, and Spring Boot integration. Use when designing, implement… |
 | JFrog Security Agent | The dedicated Application Security agent for automated security remediation. Verifies package and version compliance, and suggests vulnerability fixes using JFrog security intelli… |
-| Kotlin MCP Server Development Expert | Expert assistant for building Model Context Protocol (MCP) servers in Kotlin using the official SDK. |
+| Kotlin MCP Server Development Expert | Expert Kotlin MCP server assistant for official SDK design, tools, resources, prompts, transports, schemas, coroutines, Gradle, and tests. Use when building MCP servers in Kotlin. |
 | KubeStellar Console | Kubernetes operations expert for KubeStellar Console — helps you set up the console, configure kc-agent (MCP server), connect clusters, deploy workloads, and query live Kubernetes… |
 | Kusto Assistant | Expert KQL assistant for live Azure Data Explorer analysis via Azure MCP server |
-| Laravel Expert Agent | Expert Laravel development assistant specializing in modern Laravel 12+ applications with Eloquent, Artisan, testing, and best practices |
+| Laravel Expert Agent | Expert Laravel development assistant specializing in modern Laravel 12+ applications with Eloquent, Artisan, testing, and best practices. Use when building, reviewing, or fixing L… |
 | launchdarkly-flag-cleanup | A specialized GitHub Copilot agent that uses the LaunchDarkly MCP server to safely automate feature flag cleanup workflows. This agent determines removal readiness, identifies the… |
 | Lingo.dev Localization (i18n) Agent | Expert at implementing internationalization (i18n) in web applications using a systematic, checklist-driven approach. |
 | LinkedIn Post Writer | Draft and format compelling LinkedIn posts with Unicode bold/italic styling, visual separators, and engagement-optimized structure. Transforms raw content, technical material, ima… |
-| Markdown Accessibility Assistant | Improves the accessibility of markdown files using five GitHub best practices |
-| MAUI Expert | Support development of .NET MAUI cross-platform apps with controls, XAML, handlers, and performance best practices. |
+| Markdown Accessibility Assistant | Improves existing Markdown accessibility using GitHub best practices. Use when documentation needs descriptive links, alt text review, heading fixes, plain-language suggestions, o… |
+| MAUI Expert | Support .NET MAUI cross-platform apps with controls, XAML, handlers, performance, and navigation guidance. Use when building or reviewing MAUI UI and app patterns. |
 | MCP M365 Agent Expert | Expert assistant for building MCP-based declarative agents for Microsoft 365 Copilot with Model Context Protocol integration |
 | Mentor mode | Help mentor the engineer by providing guidance and support. |
 | Meta Agentic Project Scaffold | Finds and installs relevant awesome-copilot prompts, instructions, and chat modes to scaffold agentic project workflows. Use when creating reusable Copilot workflow assets for an… |
-| Microsoft Learn Contributor | Microsoft Learn Contributor chatmode for editing and writing Microsoft Learn documentation following Microsoft Writing Style Guide and authoring best practices. |
+| Microsoft Learn Contributor | Microsoft Learn documentation contributor and reviewer. Use when writing, editing, or reviewing Learn articles for Microsoft Writing Style Guide, accessibility, Markdown, metadata… |
 | Microsoft Study and Learn | Activate your personal Microsoft/Azure tutor - learn through guided discovery, not just answers. |
 | modernization | Human-in-the-loop modernization agent for exhaustive project analysis, feature documentation, architecture recommendations, and migration planning. Use when a repository needs com… |
-| Monday Bug Context Fixer | Elite bug-fixing agent that enriches task context from Monday.com platform data. Gathers related items, docs, comments, epics, and requirements to deliver production-quality fixes… |
+| Monday Bug Context Fixer | Elite bug-fixing agent that enriches task context from Monday.com platform data. Use when a Monday bug item ID needs full context discovery, root-cause analysis, production-qualit… |
 | mongodb-performance-advisor | Analyze MongoDB database performance, offer query and index optimization insights and provide actionable recommendations to improve overall usage of the database. |
 | MS-SQL Database Administrator | Work with Microsoft SQL Server databases using the MS SQL extension. |
-| neo4j-docker-client-generator | AI agent that generates simple, high-quality Python Neo4j client libraries from GitHub issues with proper best practices |
+| neo4j-docker-client-generator | Generates simple Python Neo4j client libraries from GitHub issues using schema introspection, Pydantic models, repositories, pytest, and testcontainers. Use for clean starter clie… |
 | Neon Migration Specialist | Safe Postgres migrations with zero-downtime using Neon's branching workflow. Test schema changes in isolated database branches, validate thoroughly, then apply to production—all a… |
 | Neon Performance Analyzer | Identify and fix slow Postgres queries automatically using Neon's branching workflow. Analyzes execution plans, tests optimizations in isolated database branches, and provides cle… |
-| New Relic Incident Response Agent | Identify and fix production issues by correlating New Relic observability data with code changes. Analyze alerts, transaction traces, error analytics, and deployments to find root… |
-| Next.js Expert | Expert Next.js 16 developer specializing in App Router, Server Components, Cache Components, Turbopack, and modern React patterns with TypeScript |
+| New Relic Incident Response Agent | Correlate New Relic alerts, traces, errors, deployments, and code changes during production incidents. Use when engineers need root cause analysis and safe remediation guidance. |
+| Next.js Expert | Expert Next.js 16 developer specializing in App Router, Server Components, Cache Components, Turbopack, React Compiler, React 19.2, TypeScript, routing, caching, performance, and… |
 | octopus-release-notes-with-mcp | Generate release notes for a release in Octopus Deploy. The tools for this MCP server provide access to the Octopus Deploy APIs. |
-| one-shot-feature-issue-planner | Cloud Agent to Turn a single new-feature request into a complete, issue-ready implementation plan without follow-up questions. |
+| one-shot-feature-issue-planner | Cloud Agent to Turn a single new-feature request into a complete, issue-ready implementation plan without follow-up questions. Use when a feature idea must become a GitHub issue d… |
 | OpenAPI to Application Generator | Expert assistant for generating working applications from OpenAPI specifications |
 | Oracle-to-PostgreSQL Migration Expert | Agent for Oracle-to-PostgreSQL application migrations. Educates users on migration concepts, pitfalls, and best practices; makes code edits and runs commands directly. |
 | PagerDuty Incident Responder | Responds to PagerDuty incidents by analyzing incident context, identifying recent code changes, and suggesting fixes via GitHub PRs. |
-| PHP MCP Expert | Expert assistant for PHP MCP server development using the official PHP SDK with attribute-based discovery |
-| Pimcore Expert | Expert Pimcore development assistant specializing in CMS, DAM, PIM, and E-Commerce solutions with Symfony integration |
-| Plan Mode - Strategic Planning & Architecture | Strategic planning and architecture assistant focused on thoughtful analysis before implementation. Helps developers understand codebases, clarify requirements, and develop compre… |
+| PHP MCP Expert | Expert PHP MCP server developer using the official PHP SDK, attributes, discovery, transports, testing, deployment, and performance patterns. Use when building or debugging PHP MC… |
+| Pimcore Expert | Build and review Pimcore CMS, DAM, PIM, and E-Commerce solutions with Symfony conventions. Use when Pimcore data models, documents, assets, APIs, workflows, or performance need ex… |
+| Plan Mode - Strategic Planning & Architecture | Strategic planning and architecture assistant focused on thoughtful analysis before implementation. Use when developers need codebase understanding, requirement clarification, ris… |
 | Planning mode instructions | Generate an implementation plan for new features or refactoring existing code. |
 | Platform SRE for Kubernetes | SRE-focused Kubernetes specialist prioritizing reliability, safe rollouts/rollbacks, security defaults, and operational verification for production-grade deployments |
 | Playwright Tester Mode | Explores web apps and generates or improves Playwright tests from observed user flows. Use when creating, debugging, or strengthening Playwright coverage. |
 | PostgreSQL Database Administrator | Work with PostgreSQL databases using the PostgreSQL extension. |
-| Power BI Data Modeling Expert Mode | Expert Power BI data modeling guidance using star schema principles, relationship design, and Microsoft best practices for optimal model performance and usability. |
-| Power BI DAX Expert Mode | Expert Power BI DAX guidance using Microsoft best practices for performance, readability, and maintainability of DAX formulas and calculations. |
-| Power BI Performance Expert Mode | Expert Power BI performance optimization guidance for troubleshooting, monitoring, and improving the performance of Power BI models, reports, and queries. |
-| Power BI Visualization Expert Mode | Expert Power BI report design and visualization guidance using Microsoft best practices for creating effective, performant, and user-friendly reports and dashboards. |
-| Power Platform Expert | Power Platform expert providing guidance on Code Apps, canvas apps, Dataverse, connectors, and Power Platform best practices |
-| Power Platform MCP Integration Expert | Expert in Power Platform custom connector development with MCP integration for Copilot Studio - comprehensive knowledge of schemas, protocols, and integration patterns |
+| Power BI Data Modeling Expert Mode | Expert Power BI data modeling agent for star schema design, relationship strategy, storage-mode decisions, RLS, and model performance. Use when a Power BI semantic model needs Mic… |
+| Power BI DAX Expert Mode | Expert Power BI DAX guidance using Microsoft best practices for performance, readability, and maintainability of DAX formulas and calculations. Use when designing, optimizing, deb… |
+| Power BI Performance Expert Mode | Expert Power BI performance optimization guidance for troubleshooting, monitoring, and improving Power BI models, reports, DAX, DirectQuery, capacity, refresh, and query performan… |
+| Power BI Visualization Expert Mode | Expert Power BI report design and visualization guidance using Microsoft best practices. Use when report visuals, layout, accessibility, interactions, mobile design, or user exper… |
+| Power Platform Expert | Power Platform expert for Code Apps, canvas apps, Dataverse, connectors, ALM, security, and enterprise best practices. Use for implementation guidance and architecture decisions. |
+| Power Platform MCP Integration Expert | Design Power Platform custom connectors with MCP integration for Copilot Studio. Use for connector schemas, OAuth, JSON-RPC, and deployment guidance. |
 | Principal software engineer | Provide principal-level software engineering guidance with focus on engineering excellence, technical leadership, and pragmatic implementation. |
 | Project Architecture Planner | Holistic software architecture planner that evaluates tech stacks, designs scalability roadmaps, performs cloud-agnostic cost analysis, reviews existing codebases, and delivers in… |
-| Project Documenter | Generates professional MS Word project documentation with draw.io architecture diagrams and embedded PNG images. Automatically discovers any project's technology stack, architectu… |
-| Prompt Builder | Expert prompt engineering and validation system for creating high-quality prompts - Brought to you by microsoft/edge-ai |
+| Project Documenter | Generates professional MS Word project documentation with draw.io architecture diagrams and embedded PNG images. Use when any software project needs discovered architecture, stack… |
+| Prompt Builder | Expert prompt engineering agent for creating, improving, researching, and validating prompts with Prompt Tester feedback. Use when prompts need structured engineering, source anal… |
 | Prompt Engineer | A specialized chat mode for analyzing and improving prompts. Every user input is treated as a prompt to be improved. It first provides a detailed analysis of the original prompt w… |
-| PySpark Expert Agent | Diagnose PySpark performance bottlenecks, distributed execution pitfalls, and suggest Spark-native rewrites and safer distributed patterns (incl. mapInPandas guidance). |
-| Python MCP Server Expert | Expert assistant for developing Model Context Protocol (MCP) servers in Python |
+| PySpark Expert Agent | Diagnose PySpark performance bottlenecks, distributed execution pitfalls, and suggest Spark-native rewrites and safer distributed patterns (incl. mapInPandas guidance). Use when P… |
+| Python MCP Server Expert | Expert assistant for developing Model Context Protocol (MCP) servers in Python. Use for FastMCP, tools, resources, prompts, transports, and testing. |
 | Python Notebook Sample Builder | Builds verified Python notebooks that demonstrate Azure and AI features. Use when creating hands-on VS Code notebook samples. |
 | QA | Meticulous QA subagent for test planning, bug hunting, edge-case analysis, and implementation verification. |
-| quality-playbook | Run a complete quality engineering audit on any codebase. Orchestrates six phases — explore, generate, review, audit, reconcile, verify — each in its own context window for maximu… |
+| quality-playbook | Orchestrates the Quality Playbook skill across exploration, generation, review, audit, reconciliation, verification, and iterations. Use when a codebase needs deep quality enginee… |
 | react18-auditor | Deep-scan specialist for React 16/17 class-component codebases targeting React 18.3.1. Finds unsafe lifecycle methods, legacy context, batching vulnerabilities, event delegation a… |
-| react18-batching-fixer | Automatic batching regression specialist. React 18 batches ALL setState calls including those in Promises, setTimeout, and native event handlers - React 16/17 did NOT. Class compo… |
-| react18-class-surgeon | Class component migration specialist for React 16/17 → 18.3.1. Migrates all three unsafe lifecycle methods with correct semantic replacements (not just UNSAFE_ prefix). Migrates l… |
-| react18-commander | Master orchestrator for React 16/17 → 18.3.1 migration. Designed for class-component-heavy codebases. Coordinates audit, dependency upgrade, class component surgery, automatic bat… |
-| react18-dep-surgeon | Dependency upgrade specialist for React 16/17 → 18.3.1. Pins to 18.3.1 exactly (not 18.x latest). Upgrades RTL to v14, Apollo 3.8+, Emotion 11.10+, react-router v6. Detects and bl… |
+| react18-batching-fixer | React 18 automatic batching regression specialist for class-component codebases. Use when async setState chains, Promises, setTimeout handlers, or native event handlers may rely o… |
+| react18-class-surgeon | Class component migration specialist for React 16/17 → 18.3.1. Use when deprecated class lifecycles, legacy context, string refs, findDOMNode, or ReactDOM.render must be migrated… |
+| react18-commander | Orchestrates React 16/17 to React 18.3.1 migration for class-component-heavy codebases. Use to coordinate audit, dependency upgrades, class surgery, batching fixes, and test verif… |
+| react18-dep-surgeon | Dependency upgrade specialist for React 16/17 to exact React 18.3.1. Use inside React migration pipelines to pin React, upgrade compatible libraries, detect Enzyme blockers, and r… |
 | react18-test-guardian | Test suite fixer and verifier for React 16/17 → 18.3.1 migration. Handles RTL v14 async act() changes, automatic batching test regressions, StrictMode double-invoke count updates,… |
-| react19-auditor | Deep-scan specialist that identifies every React 19 breaking change and deprecated pattern across the entire codebase. Produces a prioritized migration report at .github/react19-a… |
-| react19-commander | Master orchestrator for React 19 migration. Invokes specialist subagents in sequence - auditor, dep-surgeon, migrator, test-guardian - and gates advancement between steps. Uses me… |
-| react19-dep-surgeon | Dependency upgrade specialist. Installs React 19, resolves all peer dependency conflicts, upgrades testing-library, Apollo, and Emotion. Uses memory to log each upgrade step. Retu… |
-| react19-migrator | Source code migration engine. Rewrites every deprecated React pattern to React 19 APIs - forwardRef, defaultProps, ReactDOM.render, legacy context, string refs, useRef(). Uses mem… |
-| react19-test-guardian | Test suite fixer and verification specialist. Migrates all test files to React 19 compatibility and runs the suite until zero failures. Uses memory to track per-file fix progress… |
+| react19-auditor | Audits a React codebase for React 19 breaking changes and deprecated patterns. Use as a read-mostly scanner that writes .github/react19-audit.md for the React 19 commander. |
+| react19-commander | Orchestrates complete React 19 migrations through audit, dependency, source, and test specialists with strict gates and memory state. Use to coordinate a zero-incomplete React 18… |
+| react19-dep-surgeon | Dependency upgrade specialist that installs React 19, resolves peer dependency conflicts, upgrades Testing Library, Apollo, and Emotion, and returns GO/NO-GO. Use as a subagent of… |
+| react19-migrator | Migrates React source files to React 19 APIs from an audit report. Use to rewrite deprecated source patterns while leaving test files untouched. |
+| react19-test-guardian | Test suite fixer and verification specialist. Use when react19-commander needs a hidden subagent to migrate all tests to React 19 compatibility and keep fixing until npm test repo… |
 | reepl-linkedin | AI-powered LinkedIn content creation, scheduling, and analytics agent. Create posts, carousels, and manage your LinkedIn presence with GitHub Copilot. |
 | Refine Requirement or Issue | Refine the requirement or issue with Acceptance Criteria, Technical Considerations, Edge Cases, and NFRs |
-| Repo Architect Agent | Bootstraps and validates agentic project structures for GitHub Copilot (VS Code) and OpenCode CLI workflows. Run after `opencode /init` or VS Code Copilot initialization to scaffo… |
-| Ruby MCP Expert | Expert assistance for building Model Context Protocol servers in Ruby using the official MCP Ruby SDK gem with Rails integration. |
+| Repo Architect Agent | Bootstraps and validates agentic project structures for GitHub Copilot (VS Code) and OpenCode CLI workflows. Use after `opencode /init`, VS Code Copilot initialization, or migrati… |
+| Ruby MCP Expert | Expert Ruby MCP server agent. Use when building, testing, or reviewing Model Context Protocol servers in Ruby with the official MCP Ruby SDK and Rails integration. |
 | RUG | Pure orchestration agent that decomposes requests, delegates all work to subagents, validates outcomes, and repeats until complete. |
-| Rust MCP Expert | Expert assistant for Rust MCP server development using the rmcp SDK with tokio async runtime |
-| Salesforce Apex & Triggers Development | Implement Salesforce business logic using Apex classes and triggers with production-quality code following Salesforce best practices. |
-| Salesforce Expert Agent | Provide expert Salesforce Platform guidance, including Apex Enterprise Patterns, LWC, integration, and Aura-to-LWC migration. |
-| Salesforce Flow Development | Implement business automation using Salesforce Flow following declarative automation best practices. |
-| Salesforce UI Development (Aura & LWC) | Implement Salesforce UI components using Lightning Web Components and Aura components following Lightning framework best practices. |
-| Salesforce Visualforce Development | Implement Visualforce pages and controllers following Salesforce MVC architecture and best practices. |
-| sast-sca-security-analyzer | Use when: performing SAST (Static Application Security Testing), SCA (Software Composition Analysis), scanning source code or binaries for security flaws, auditing third-party dep… |
+| Rust MCP Expert | Expert assistant for production Rust MCP server development with rmcp, tokio, typed tools, transports, testing, and deployment. Use when building or debugging Rust MCP servers. |
+| Salesforce Apex & Triggers Development | Implement and review bulk-safe Salesforce Apex classes and triggers with PNB tests and security gates. Use for Apex business logic work. |
+| Salesforce Expert Agent | Provide expert Salesforce Platform guidance, including Apex Enterprise Patterns, LWC, integration, and Aura-to-LWC migration. Use for secure, scalable Salesforce solutions. |
+| Salesforce Flow Development | Implement and review Salesforce Flow automation. Use when declarative automation must be designed, bulk-safe, fault-tolerant, and deployment-ready. |
+| Salesforce UI Development (Aura & LWC) | Builds, reviews, troubleshoots, and refactors Salesforce Aura and Lightning Web Components with SLDS, accessibility, Apex, LDS, GraphQL, LMS, and Jest best practices. |
+| Salesforce Visualforce Development | Implement and review Visualforce pages and Apex controllers. Use when Visualforce is required and pages must be secure, performant, accessible, and MVC-aligned. |
+| sast-sca-security-analyzer | Performs SAST and SCA security analysis. Use when scanning source code, binaries, dependency manifests, license risk, policy compliance, CWE-mapped flaws, CVE exposure, or CI/CD g… |
 | Scientific Paper Research | Research agent that searches scientific papers and retrieves structured experimental data from full-text studies using the BGPT MCP server. |
-| SE: Architect | System architecture review specialist with Well-Architected frameworks, design validation, and scalability analysis for AI and distributed systems |
-| SE: DevOps/CI | DevOps specialist for CI/CD pipelines, deployment debugging, and GitOps workflows focused on making deployments boring and reliable |
+| SE: Architect | Review system architecture with Well-Architected, security, reliability, scalability, cost, and AI concerns. Use before major design commitments. |
+| SE: DevOps/CI | DevOps specialist for CI/CD pipelines, deployment debugging, and GitOps workflows. Use when deployments, build failures, branch protections, health checks, monitoring, or rollback… |
 | SE: Product Manager | Product management guidance for creating GitHub issues, aligning business value with user needs, and making data-driven product decisions |
 | SE: Responsible AI | Responsible AI specialist ensuring AI works for everyone through bias prevention, accessibility compliance, ethical development, and inclusive design |
-| SE: Security | Security-focused code review specialist with OWASP Top 10, Zero Trust, LLM security, and enterprise security standards |
-| SE: Tech Writer | Technical writing specialist for creating developer documentation, technical blogs, tutorials, and educational content |
-| SE: UX Designer | Jobs-to-be-Done analysis, user journey mapping, and UX research artifacts for Figma and design workflows |
-| Search & AI Optimization Expert | Expert guidance for modern search optimization: SEO, Answer Engine Optimization (AEO), and Generative Engine Optimization (GEO) with AI-ready content strategies |
-| Senior Cloud Architect | Expert in modern architecture design patterns, NFR requirements, and creating comprehensive architectural diagrams and documentation |
-| Sensei - Junior Mentor | Socratic mentor for junior developers. Guides through questions, never gives direct answers. Helps beginners understand code, debug issues, and build autonomy using the PEAR Loop… |
-| Shopify Expert | Expert Shopify development assistant specializing in theme development, Liquid templating, app development, and Shopify APIs |
-| Software Engineer Agent | Expert-level software engineering agent. Deliver production-ready, maintainable code. Execute systematically and specification-driven. Document comprehensively. Operate autonomous… |
-| Specification | Generate or update specification documents for new or existing functionality. |
-| stackhawk-security-onboarding | Automatically set up StackHawk security testing for your repository with generated configuration and GitHub Actions workflow |
+| SE: Security | Reviews code for OWASP Top 10, OWASP LLM risks, Zero Trust, reliability, and enterprise security readiness. Use for security-focused code review. |
+| SE: Tech Writer | Technical writing specialist for creating developer documentation, technical blogs, tutorials, and educational content. Use when complex technical material must become clear, accu… |
+| SE: UX Designer | Create Jobs-to-be-Done analysis, user journeys, user flows, and Figma-ready UX research artifacts. Use before UI design when user goals, context, and accessibility requirements ne… |
+| Search & AI Optimization Expert | Advises on SEO, Answer Engine Optimization, and Generative Engine Optimization. Use for technical search audits, AI-ready content strategy, schema, migrations, and Core Web Vitals. |
+| Senior Cloud Architect | Creates comprehensive architecture documentation and Mermaid diagrams for cloud-native systems, NFRs, deployment, data flow, and phased designs. Use for architecture planning, not… |
+| Sensei - Junior Mentor | Guide junior developers with Socratic questions, PEAR learning loops, progressive clues, and recap. Use for teaching-oriented coding help. |
+| Shopify Expert | Expert Shopify development assistant for themes, Liquid, Online Store 2.0, apps, APIs, checkout extensions, metafields, performance, and CLI workflows. Use when building or review… |
+| Software Engineer Agent | Deliver production-ready software changes through autonomous specification-driven engineering. Use for implementation tasks needing design, validation, and documentation. |
+| Specification | Generate or update AI-ready specification documents for new or existing functionality. Use when requirements, constraints, interfaces, and acceptance criteria need a durable spec. |
+| stackhawk-security-onboarding | Sets up StackHawk API security testing when a repository exposes a web app or API attack surface. |
 | SWE | Senior software engineer subagent for implementation tasks: feature development, debugging, refactoring, and testing. |
-| Swift MCP Expert | Expert assistance for building Model Context Protocol servers in Swift using modern concurrency features and the official MCP Swift SDK. |
-| Task Planner Instructions | Task planner for creating actionable implementation plans - Brought to you by microsoft/edge-ai |
-| Task Researcher Instructions | Task research specialist for comprehensive project analysis - Brought to you by microsoft/edge-ai |
+| Swift MCP Expert | Expert assistance for building Model Context Protocol servers in Swift. Use when implementing Swift MCP tools, resources, prompts, transports, concurrency, testing, or production… |
+| Task Planner Instructions | Task planner for creating actionable implementation plans. Use when a request needs research-verified checklist, details, and implementation prompt files before coding - Brought t… |
+| Task Researcher Instructions | Research project context, external references, alternatives, and implementation guidance into `.copilot-tracking/research/`. Use when planning needs verified evidence before imple… |
 | TaxCore Technical Writer | A domain-expert technical writer for the TaxCore electronic fiscal invoicing ecosystem. Use this agent to create, improve, or review documentation for TaxCore applications — inclu… |
 | TDD Green Phase - Make Tests Pass Quickly | Implement minimal code to satisfy GitHub issue requirements and make failing tests pass without over-engineering. |
 | TDD Red Phase - Write Failing Tests First | Guide test-first development by writing failing tests that describe desired behaviour from GitHub issue context before implementation exists. |
 | TDD Refactor Phase - Improve Quality & Security | Improve code quality, apply security best practices, and enhance design whilst maintaining green tests and GitHub issue compliance. |
 | Technical Debt Remediation Plan | Generate technical debt remediation plans for code, tests, and documentation. |
 | Technical spike research mode | Systematically research and validate technical spike documents through exhaustive investigation and controlled experimentation. |
-| technical-content-evaluator | Elite technical content editor and curriculum architect for evaluating technical training materials, documentation, and educational content. Reviews for technical accuracy, pedago… |
+| technical-content-evaluator | Elite technical content editor and curriculum architect for evaluating technical training materials, documentation, and educational content. Use when technical content needs evide… |
 | terminal-helper | Fast terminal syntax and command helper for PowerShell and Bash |
-| Terraform Agent | Terraform infrastructure specialist with automated HCP Terraform workflows. Leverages Terraform MCP server for registry integration, workspace management, and run orchestration. G… |
-| Terraform IaC Reviewer | Terraform-focused agent that reviews and creates safer IaC changes with emphasis on state safety, least privilege, module patterns, drift detection, and plan/apply discipline |
-| terraform-aws-implement | Act as an AWS Terraform Infrastructure as Code coding specialist that creates and reviews Terraform for AWS resources. |
+| Terraform Agent | Terraform infrastructure specialist with automated HCP Terraform workflows. Use when generating, reviewing, testing, or operating Terraform code with registry intelligence, worksp… |
+| Terraform IaC Reviewer | Terraform-focused agent that reviews and creates safer IaC changes with emphasis on state safety, least privilege, module patterns, drift detection, and plan/apply discipline. Use… |
+| terraform-aws-implement | AWS Terraform Infrastructure as Code coding specialist that creates and reviews Terraform for AWS resources. Use for bounded AWS Terraform implementation with security, reliabilit… |
 | terraform-aws-planning | Act as implementation planner for your AWS Terraform Infrastructure as Code task. |
 | Terratest Module Testing | Generate and refactor Go Terratest suites for Terraform modules, including CI-safe patterns, staged tests, and negative-path validation. |
-| Thinking Beast Mode | A transcendent coding agent with quantum cognitive architecture, adversarial intelligence, and unrestricted creative freedom. |
-| Trojan Skill Hunter | Audits agent, skill, instruction, hook, and MCP-config contributions for hidden prompt injection, tool poisoning, unicode steganography, and excessive-agency red flags before they… |
+| Thinking Beast Mode | Autonomous problem-solving agent for complex coding tasks requiring deep investigation, current research, iterative implementation, and rigorous validation. Use when the user need… |
+| Trojan Skill Hunter | Audits agent, skill, instruction, hook, MCP, and plugin contributions for hidden prompt injection, unicode steganography, tool poisoning, supply-chain drift, and excessive agency… |
 | TypeScript MCP Server Expert | Expert assistant for developing Model Context Protocol (MCP) servers in TypeScript |
 | Ultimate Transparent Thinking Beast Mode | Autonomous coding agent for transparent, exhaustive problem solving. Use when a task needs persistent planning, implementation, validation, and risk surfacing. |
 | Universal Janitor | Perform janitorial tasks on any codebase including cleanup, simplification, and tech debt remediation. |
@@ -240,7 +240,7 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | VSCode Tour Expert | Expert agent for creating and maintaining VSCode CodeTour files with comprehensive schema support and best practices |
 | WG Code Alchemist | Refactors code using Clean Code and SOLID principles. Use when transforming code smells into maintainable implementations. |
 | WG Code Sentinel | Reviews code and configuration for security vulnerabilities. Use when assessing application security risks and mitigations. |
-| WinForms Expert | Support development of .NET (OOP) WinForms Designer compatible Apps. |
+| WinForms Expert | Support development of .NET (OOP) WinForms Designer compatible Apps. Use when building or fixing WinForms UI, designer code, data binding, async UI, or layout behavior. |
 | Workshop TA | Room coordinator for a multi-agent workshop. Sees all desks, routes work, tracks state, manages journals, and emits coordination signals. Not a desk — the person who sees the whol… |
 
 ## Instructions
