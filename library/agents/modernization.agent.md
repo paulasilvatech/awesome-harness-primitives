@@ -431,6 +431,11 @@ Use `expert-level` reasoning at the recommendation checkpoint, but keep recommen
 
 Preserved exact workflow terms: use `/docs/features/<feature-name>.md` as the literal feature-file pattern; include `inter-project` references in architecture analysis; avoid `mid-analysis` permission loops; `re-analyze` when validation fails; and preserve the compact catalog example `{ "FeatureName": ["File1.cs", "File2.cs"], ... }` when explaining grouping.
 
+## What This Agent Knows
+
+- **Transferable knowledge:** Stack discovery, exhaustive file coverage, feature docs, Clean/Hexagonal/DDD/modular/CQRS/event-driven patterns, cross-cuttings-first migration, and stack trade-offs.
+- **Local sources of truth:** Repository manifests, entrypoints, source files, business logic, generated `/docs/` artifacts, `/SUMMARY.md`, and approved `/modernizedone/` plan.
+
 ## What This Agent Does NOT Know
 
 - The business purpose of the application until repository documentation and code evidence are read

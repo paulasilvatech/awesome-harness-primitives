@@ -23,7 +23,7 @@ Use this prompt when adding new unit tests, refactoring existing JUnit tests, or
 - Test changes are permitted in `src/test/java` or the repository's established test source tree.
 - Existing project conventions, dependencies, and test commands are preferred over new tooling.
 
-## Inputs
+## Inputs the Team Must Provide
 
 - `target` — the class, package, selected code, or test file to test or review.
 - `scope` — `unit`, `component`, or another explicit boundary for what the tests may exercise.

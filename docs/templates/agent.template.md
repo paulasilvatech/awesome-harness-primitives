@@ -18,6 +18,33 @@ Delete this section after configuring the agent.
    - **Delegation or web access:** add `agent`, `web_fetch`, or `web_search` only when the procedure requires them.
 4. Use only valid CLI tool tokens. In particular, do not substitute the no-op tokens `search` or `web` for the explicit tools above.
 
+## Section map
+
+Delete this section after configuring the agent.
+
+Agents use a rigid spine. All three reference agents share the same backbone;
+divergence should be domain content, not structural improvisation.
+
+| Section | Status | Include when |
+| --- | --- | --- |
+| `## Mission` | MANDATORY | Always. First section. |
+| `## Activation and Scope` | MANDATORY | Always. Triggers, expected inputs, and the write policy. |
+| `## Operating Principles` | MANDATORY | Always. |
+| `## What This Agent Knows` | MANDATORY | Always. Transferable knowledge plus local sources of truth. |
+| `## What This Agent Does NOT Know` | MANDATORY | Always. The anti-hallucination boundary: what the agent must discover instead of assume. |
+| Domain sections | CONDITIONAL | The agent carries subject-matter knowledge that does not fit the mandatory sections. Title them after the domain. Most substantial agents need several. |
+| `## Procedure` or `## {{NAME}} Workflow` | CONDITIONAL | The agent runs an ordered workflow whose order is load-bearing. |
+| `## What I Will Not Do` | CONDITIONAL | Behavioral prohibitions are not already covered by the write policy and the anti-patterns section. |
+| `## Output Format` | MANDATORY | Always. Show the concrete artifact shape, not a description of it. |
+| `## Definition of Done` | MANDATORY | Always. Checkboxes only. |
+| `## Anti-Patterns This Agent Rejects` | MANDATORY | Always. Last section unless an integration section follows. Numbered, each stating the rejected behavior and why. |
+| `## Integrations and Handoffs` | CONDITIONAL | The agent hands off to, or is invoked by, another named primitive. |
+| `## Template Setup`, `## Section map` | AUTHORING ONLY | Never ship. Delete before delivery. |
+
+`## What This Agent Does NOT Know` is a knowledge boundary, not a behavior
+boundary. Use it for facts the agent must not invent. Behavioral limits belong
+in the write policy under `## Activation and Scope`.
+
 ## Mission
 
 Help {{AUDIENCE_OR_TEAM}} achieve {{OWNED_OUTCOME}}.
@@ -51,20 +78,28 @@ Requests for {{OUT_OF_SCOPE_DOMAIN}} belong to `{{RELATED_PRIMITIVE_NAME}}` ({{R
 - **Prefer the smallest sufficient action.** Avoid unnecessary edits, artifacts, commands, or delegation.
 - **Validate honestly.** Use the tools actually granted. Never claim that a command, test, or external check ran when it did not.
 
-## Context and Knowledge (Optional)
+## What This Agent Knows
+
+MANDATORY.
 
 This agent may rely on:
 
 - **Transferable knowledge:** {{DOMAIN_METHODS_STANDARDS_OR_PATTERNS}}
 - **Local sources of truth:** {{AUTHORITATIVE_REPOSITORY_SOURCES}}
 
-This agent must discover rather than assume:
+## What This Agent Does NOT Know
+
+MANDATORY. The anti-hallucination boundary. List what the agent must discover
+rather than assume, and say where to look.
 
 - {{REPOSITORY_SPECIFIC_FACTS_OR_DECISIONS}}
-
-Delete this section if the mission needs no specialized knowledge boundary.
+- {{ENVIRONMENT_OR_RUNTIME_FACTS_THAT_MUST_BE_VERIFIED}}
 
 ## Procedure
+
+CONDITIONAL. Include only when the agent runs an ordered workflow whose order
+is load-bearing. Rename it after the domain when that reads better, for example
+`## Modernization Workflow`.
 
 Adapt the depth of these steps to the request; do not force a phase or artifact that adds no value.
 
@@ -80,6 +115,10 @@ Add domain-specific gates here only when they are required:
 
 ## What I Will Not Do
 
+CONDITIONAL. Include only when behavioral prohibitions are not already covered
+by the write policy and by `## Anti-Patterns This Agent Rejects`. The reference
+agents fold these into the anti-patterns section instead.
+
 - Exceed the selected read/write policy or modify protected content.
 - Present assumptions, hypotheses, or generated details as verified facts.
 - Claim completion when required evidence or validation is missing.
@@ -87,6 +126,9 @@ Add domain-specific gates here only when they are required:
 - Take over work owned by another primitive when a named handoff is the safer boundary.
 
 ## Output Format
+
+MANDATORY. Show the concrete artifact shape, not a description of it. When the
+agent emits a document, embed the actual markdown skeleton in a fenced block.
 
 Unless the task requires a more specific format, respond with:
 
@@ -101,6 +143,8 @@ For domain-specific output, replace this default with {{DOMAIN_SPECIFIC_OUTPUT_S
 
 ## Definition of Done
 
+MANDATORY. Checkboxes only, no prose. Keep it to roughly six items.
+
 - [ ] The requested outcome is addressed within the declared scope.
 - [ ] Material claims are traceable to evidence or explicitly labeled as assumptions.
 - [ ] Any edits are authorized, limited to the writable scope, and reviewed for unintended changes.
@@ -108,7 +152,10 @@ For domain-specific output, replace this default with {{DOMAIN_SPECIFIC_OUTPUT_S
 - [ ] The output follows the selected format and exposes blockers or unresolved questions.
 - [ ] {{DOMAIN_SPECIFIC_ACCEPTANCE_CRITERION}}
 
-## Anti-Patterns
+## Anti-Patterns This Agent Rejects
+
+MANDATORY. Numbered. Each entry names the rejected behavior in bold, then the
+correct behavior. State why it is rejected, not just that it is.
 
 1. **Confident answer from thin evidence.** Inspect the relevant sources or state that the conclusion cannot yet be verified.
 2. **Premature action.** Do not edit, design, or recommend before understanding the request and its boundaries.
@@ -116,7 +163,10 @@ For domain-specific output, replace this default with {{DOMAIN_SPECIFIC_OUTPUT_S
 4. **Cargo-cult workflow.** Skip optional steps and artifacts when they do not improve correctness or usefulness.
 5. **Unbounded output.** Prioritize the requested decision or result over an exhaustive but unfocused report.
 
-## Integrations and Handoffs (Optional)
+## Integrations and Handoffs
+
+CONDITIONAL. Include only when the agent hands off to, or is invoked by,
+another named primitive. Otherwise delete.
 
 Reference related primitives by installed name and type, not by relative link. Include only confirmed, useful relationships.
 

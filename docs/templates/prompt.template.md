@@ -29,6 +29,31 @@ Delete this section after configuring the prompt.
    workspace edits, or write an exact path, but it must not assume that every invocation writes files.
 7. Refer to another primitive by installed name and type, not by a relative link.
 
+## Section map
+
+Delete this section after configuring the prompt.
+
+Prompts are the most rigid primitive type. All four reference prompts share the
+same ten sections in the same order. Do not reorder, rename, or drop them.
+
+| Section | Status | Include when |
+| --- | --- | --- |
+| `## Objective` | MANDATORY | Always. First section. |
+| `## When to Invoke` | MANDATORY | Always. |
+| `## Preconditions` | MANDATORY | Always. What must already be true, and stop if it is not. |
+| `## Inputs the Team Must Provide` | MANDATORY | Always. Use this exact title. |
+| `## What I Will Do` | MANDATORY | Always. |
+| `## What I Will NOT Do` | MANDATORY | Always. The behavioral boundary. |
+| `## Output Format` | MANDATORY | Always. Embed the literal artifact skeleton in a fenced block. |
+| `## Definition of Done` | MANDATORY | Always. Checkboxes only. |
+| `## Prompt Body` | MANDATORY | Always. Numbered steps the model executes, `Step 1` through `Step N`. |
+| `## Invocation Example` | MANDATORY | Always. Last section unless `## Related Primitives` follows. |
+| `## Related Primitives` | CONDITIONAL | Another primitive owns an adjacent responsibility worth naming. |
+| `## Template Setup`, `## Section map` | AUTHORING ONLY | Never ship. Delete before delivery. |
+
+Domain-specific headings belong inside the fenced block under
+`## Output Format`, never as extra top-level sections between the ten above.
+
 ## Objective
 
 {{OBJECTIVE}}
@@ -48,7 +73,7 @@ the selected destination, prompt purpose, and available VS Code tools explicitly
 
 If a required precondition is not met, identify it and stop before making changes.
 
-## Inputs
+## Inputs the Team Must Provide
 
 | Input | Runtime source | Required | Handling |
 | --- | --- | --- | --- |
@@ -141,7 +166,7 @@ Follow these steps in order:
 
 ## Related Primitives
 
-Delete this section when the prompt stands alone.
+CONDITIONAL. Include only when another primitive owns an adjacent responsibility worth naming. Otherwise delete.
 
 | Name | Type | Relationship |
 | --- | --- | --- |

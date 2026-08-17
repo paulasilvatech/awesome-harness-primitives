@@ -7,8 +7,40 @@ description: >-
 # {{SKILL_TITLE}}
 
 > **Authoring note:** Replace every `{{UPPER_SNAKE_CASE}}` placeholder and
-> delete all authoring guidance and optional sections that do not apply.
-> Keep the final `SKILL.md` preferably under 200 lines and always under 500.
+> delete all authoring guidance and every CONDITIONAL section whose trigger is
+> not met. Keep the final `SKILL.md` preferably under 200 lines and always
+> under 500.
+
+## Section map
+
+Skills use the loosest structure of all primitive types. Only four elements are
+mandatory; everything else is earned by real content. Adding a CONDITIONAL
+section with placeholder filler is worse than omitting it.
+
+| Section | Status | Include when |
+| --- | --- | --- |
+| `## When to invoke` | MANDATORY | Always. First section after the summary. |
+| Domain sections | MANDATORY | Always. One or more, freely titled after the actual subject matter. This is where the skill's real knowledge lives and where most of its length belongs. |
+| `## Output template` | MANDATORY | Always. Second-to-last section. |
+| `## Quality gate` | MANDATORY | Always. Last section, unless `## References` follows it. |
+| `## Optional frontmatter` | AUTHORING ONLY | Never ships. Delete before delivery. |
+| `## Inputs` | CONDITIONAL | `argument-hint` is set in the frontmatter. |
+| `## Prerequisites and context` | CONDITIONAL | The skill needs a tool, service, credential, or file that may be absent. |
+| `## Procedure` | CONDITIONAL | Execution order is load-bearing and a wrong order produces a wrong result. |
+| `## Criteria` | CONDITIONAL | The skill reviews or evaluates, and judgment matters more than sequence. |
+| `## Examples` | CONDITIONAL | A subtle good/bad distinction is not obvious from the rules alone. |
+| `## Limits` | CONDITIONAL | The skill has an out-of-scope boundary or hands off to another primitive. |
+| `## Gotchas` | CONDITIONAL | There are non-obvious failure modes a competent agent would still hit. |
+| `## Troubleshooting` | CONDITIONAL | There are known symptoms with known reactive fixes. |
+| `## Progressive disclosure and bundled resources` | CONDITIONAL | The skill directory contains `references/`, `scripts/`, `assets/`, or `templates/`. |
+| `## Related primitives` | CONDITIONAL | Another primitive owns an adjacent responsibility worth naming. |
+| `## References` | CONDITIONAL | The skill cites absolute external URLs such as specs, RFCs, books, or vendor docs. Place it after `## Quality gate`. |
+
+`## Procedure` and `## Criteria` are alternatives. Use both only when the skill
+genuinely runs an ordered workflow and then applies judgment to the result.
+
+Section titles for MANDATORY sections use sentence case exactly as written
+above. Domain section titles are free.
 
 The `name` must be 1 to 64 characters, use kebab-case, and exactly match the
 parent skill directory. The `description` must be 1 to 1024 characters and
@@ -18,6 +50,8 @@ only positive trigger conditions there; put exclusions in `## Limits`.
 {{ONE_PARAGRAPH_SUMMARY_OF_INPUT_TRANSFORMATION_AND_OUTPUT}}
 
 ## Optional frontmatter
+
+AUTHORING ONLY. Delete this whole section from the delivered skill.
 
 Keep the frontmatter minimal unless the skill needs an optional capability.
 Add only the relevant lines inside the opening frontmatter block:
@@ -39,20 +73,33 @@ allowed-tools: ["{{MINIMUM_REQUIRED_TOOL}}"]
 
 ## When to invoke
 
+MANDATORY. Quote the phrases a real user would type, not paraphrases.
+
 - "{{POSITIVE_USER_REQUEST_ONE}}"
 - "{{POSITIVE_USER_REQUEST_TWO}}"
 - "{{POSITIVE_USER_REQUEST_THREE}}"
 
+## {{DOMAIN_SECTION_TITLE}}
+
+MANDATORY, repeatable. Add one section per real subject area, titled after the
+domain rather than after this template. This is where the skill's substance
+lives: rules, tables, commands, patterns, anti-patterns, thresholds, and
+worked detail. A skill whose only content is the mandatory scaffolding has no
+reason to exist.
+
+{{DOMAIN_KNOWLEDGE_AS_PROSE_TABLES_OR_CODE}}
+
 ## Inputs
 
-Delete this section unless `argument-hint` is enabled.
+CONDITIONAL. Include only when `argument-hint` is set. Otherwise delete.
 
 Use `$ARGUMENTS` as {{HOW_ARGUMENTS_CONTROL_THE_TASK}}. Validate it by
 {{ARGUMENT_VALIDATION_RULE}}. If it is empty, {{ARGUMENT_FALLBACK_BEHAVIOR}}.
 
 ## Prerequisites and context
 
-Delete this section when there are no prerequisites or required context.
+CONDITIONAL. Include only when the skill depends on a tool, service,
+credential, or file that may be absent. Otherwise delete.
 
 - {{REQUIRED_TOOL_SERVICE_OR_CONFIGURATION}}
 - {{REQUIRED_INPUT_OR_REPOSITORY_CONTEXT}}
@@ -60,8 +107,8 @@ Delete this section when there are no prerequisites or required context.
 
 ## Procedure
 
-Use this format when order matters. Delete `## Criteria` and add or remove as
-many steps as the real procedure requires.
+CONDITIONAL. Include only when execution order is load-bearing and a wrong
+order produces a wrong result. Delete `## Criteria` when you use this.
 
 1. {{FIRST_REQUIRED_ACTION}}
 2. {{NEXT_REQUIRED_ACTION_OR_DECISION}}
@@ -70,8 +117,9 @@ many steps as the real procedure requires.
 
 ## Criteria
 
-Use this format for reviews, debugging, or evaluation where judgment matters
-more than sequence. Delete `## Procedure` unless both formats are necessary.
+CONDITIONAL. Include only for reviews, debugging, or evaluation where judgment
+matters more than sequence. Delete `## Procedure` unless the skill genuinely
+runs an ordered workflow and then applies judgment to its result.
 
 ### {{CRITERION_GROUP_ONE}}
 
@@ -85,7 +133,7 @@ more than sequence. Delete `## Procedure` unless both formats are necessary.
 
 ## Output template
 
-Return exactly this structure:
+MANDATORY. Return exactly this structure:
 
 ```markdown
 ## {{RESULT_TITLE}}
@@ -102,7 +150,8 @@ Return exactly this structure:
 
 ## Examples
 
-Delete this section when examples would not clarify a subtle distinction.
+CONDITIONAL. Include only when a subtle good/bad distinction is not obvious
+from the rules alone. Otherwise delete.
 
 ### Good
 
@@ -118,7 +167,8 @@ Delete this section when examples would not clarify a subtle distinction.
 
 ## Limits
 
-Delete this section only when the skill has no meaningful boundary.
+CONDITIONAL. Include only when the skill has an out-of-scope boundary or hands
+off to another primitive. Otherwise delete.
 
 - Do not use this skill for {{OUT_OF_SCOPE_REQUEST}}.
 - Use `{{RELATED_PRIMITIVE_NAME}}` (`{{RELATED_PRIMITIVE_TYPE}}`) instead when
@@ -127,20 +177,25 @@ Delete this section only when the skill has no meaningful boundary.
 
 ## Gotchas
 
-Delete this section when there are no non-obvious failure modes.
+CONDITIONAL. Include only when there are non-obvious failure modes a competent
+agent would still hit. Otherwise delete.
 
 - **{{KEY_CONSTRAINT}}**: {{WHY_THE_CONSTRAINT_EXISTS}}
 - {{COMMON_MISTAKE_AND_PREVENTIVE_ACTION}}
 
 ## Troubleshooting
 
-Delete this section when there are no known reactive fixes.
+CONDITIONAL. Include only when there are known symptoms with known reactive
+fixes. Otherwise delete.
 
 | Symptom | Likely cause | Resolution |
 | --- | --- | --- |
 | {{SYMPTOM}} | {{LIKELY_CAUSE}} | {{ACTIONABLE_RESOLUTION}} |
 
 ## Progressive disclosure and bundled resources
+
+CONDITIONAL. Include only when the skill directory contains `references/`,
+`scripts/`, `assets/`, or `templates/`. Otherwise delete.
 
 At discovery time, only `name` and `description` are loaded. The full body
 loads after activation, and bundled resources should be read or executed only
@@ -157,6 +212,9 @@ directory, and the core instructions must say when to use it.
 
 ## Related primitives
 
+CONDITIONAL. Include only when another primitive owns an adjacent
+responsibility worth naming. Otherwise delete.
+
 Refer to other primitives by name and type, without relative links.
 
 | Name | Type | Use it when |
@@ -164,6 +222,8 @@ Refer to other primitives by name and type, without relative links.
 | `{{PRIMITIVE_NAME}}` | `{{PRIMITIVE_TYPE}}` | {{PRIMITIVE_BOUNDARY_OR_HANDOFF}} |
 
 ## Quality gate
+
+MANDATORY. Last section, unless `## References` follows it.
 
 - [ ] `name` is valid kebab-case and matches the parent directory.
 - [ ] `description` states WHAT and WHEN using positive trigger language.
@@ -174,6 +234,17 @@ Refer to other primitives by name and type, without relative links.
 - [ ] If `argument-hint` is present, `$ARGUMENTS` is consumed and validated.
 - [ ] `allowed-tools`, if present, contains only the minimum required tools.
 - [ ] Every bundled resource referenced above exists and is used on demand.
-- [ ] All unused optional sections, authoring guidance, and
+- [ ] Every MANDATORY section is present, in order, with sentence-case titles.
+- [ ] At least one domain section carries real subject-matter knowledge.
+- [ ] Every CONDITIONAL section present has a met trigger; none is filler.
+- [ ] All unused CONDITIONAL sections, authoring guidance, and
       `{{UPPER_SNAKE_CASE}}` placeholders are removed.
 - [ ] `wc -l SKILL.md` reports fewer than 500 lines, preferably fewer than 200.
+
+## References
+
+CONDITIONAL. Include only when the skill cites absolute external URLs such as
+specs, RFCs, books, or vendor docs. Relative links between primitives are never
+allowed; absolute external URLs are legitimate technical content.
+
+- [{{EXTERNAL_SOURCE_TITLE}}]({{ABSOLUTE_URL}})

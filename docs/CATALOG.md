@@ -77,7 +77,7 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | Defender Scout KQL | Generates, validates, and optimizes KQL queries for Microsoft Defender XDR Advanced Hunting across Endpoint, Identity, Office 365, Cloud Apps, and Identity. |
 | Delphi Expert | Expert Delphi/Object Pascal development support for VCL, FMX, FireDAC, legacy modernization, debugging, architecture, and testing tasks. |
 | Demonstrate Understanding mode instructions | Validate user understanding of code, design patterns, and implementation details through guided questioning. |
-| Devils Advocate | I play the devil's advocate to challenge and stress-test your ideas by finding flaws, risks, and edge cases |
+| devils-advocate | Critical challenge agent that stress-tests ideas, proposals, and decisions by raising the strongest objections, risks, assumptions, and edge cases. Use when a plan needs adversari… |
 | DevOps Expert | DevOps specialist following the infinity loop principle (Plan → Code → Build → Test → Release → Deploy → Operate → Monitor) with focus on automation, collaboration, and continuous… |
 | DevTools Regression Investigator | Browser regression specialist for reproducing broken user flows, collecting console and network evidence, and narrowing likely root causes with Chrome DevTools MCP. |
 | DiffblueCover | Expert agent for creating unit tests for java applications using Diffblue Cover. |
@@ -138,7 +138,7 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | Meta Agentic Project Scaffold | Finds and installs relevant awesome-copilot prompts, instructions, and chat modes to scaffold agentic project workflows. Use when creating reusable Copilot workflow assets for an… |
 | Microsoft Learn Contributor | Microsoft Learn Contributor chatmode for editing and writing Microsoft Learn documentation following Microsoft Writing Style Guide and authoring best practices. |
 | Microsoft Study and Learn | Activate your personal Microsoft/Azure tutor - learn through guided discovery, not just answers. |
-| Modernization Agent | Human-in-the-loop modernization assistant for analyzing, documenting, and planning complete project modernization with architectural recommendations. |
+| modernization | Human-in-the-loop modernization agent for exhaustive project analysis, feature documentation, architecture recommendations, and migration planning. Use when a repository needs com… |
 | Monday Bug Context Fixer | Elite bug-fixing agent that enriches task context from Monday.com platform data. Gathers related items, docs, comments, epics, and requirements to deliver production-quality fixes… |
 | mongodb-performance-advisor | Analyze MongoDB database performance, offer query and index optimization insights and provide actionable recommendations to improve overall usage of the database. |
 | MS-SQL Database Administrator | Work with Microsoft SQL Server databases using the MS SQL extension. |
@@ -271,7 +271,7 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | azure-verified-modules-bicep | **/*.bicep, **/*.bicepparam | Azure Verified Modules (AVM) and Bicep |
 | azure-verified-modules-terraform | **/*.terraform, **/*.tf, **/*.tfvars, **/*.tfstate, **/*.tflint.hcl, **/*.tf.json, **/*.tfvars.json | Azure Verified Modules (AVM) and Terraform |
 | bicep-code-best-practices | **/*.bicep | Conventions for Azure Bicep infrastructure code covering naming, parameters, resource structure, security, modules, and outputs. |
-| blazor | **/*.razor,**/*.razor.cs,**/*.razor.css | Conventions for Blazor components and applications covering structure, naming, state, validation, performance, and API integration. |
+| Blazor Conventions | **/*.razor,**/*.razor.cs,**/*.razor.css | Enforces Blazor component conventions for Razor structure, naming, state, validation, performance, caching, API integration, testing, security, and API documentation. |
 | caveman-mode | ** | Terse, low-token responses. Minimal words, no fluff. Full capabilities preserved. Use when: optimize token usage, low-token mode, concise output, caveman mode, reduce verbosity, t… |
 | centos-linux | ** | Guidance for CentOS administration, RHEL-compatible tooling, and SELinux-aware operations. |
 | clojure | **/*.{clj,cljs,cljc,bb,edn.mdx?} | Clojure-specific coding patterns, inline def usage, code block templates, and namespace handling for Clojure development. |
@@ -364,7 +364,7 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | nextjs-tailwind | **/*.tsx, **/*.ts, **/*.jsx, **/*.js, **/*.css | Next.js + Tailwind development standards and instructions |
 | No Heredoc File Operations | ** | Prevents terminal heredoc file corruption in VS Code Copilot by enforcing use of file editing tools instead of shell redirections |
 | nodejs-javascript-vitest | **/*.js, **/*.mjs, **/*.cjs | Guidelines for writing Node.js and JavaScript code with Vitest testing |
-| object-calisthenics | **/*.{cs,ts,java} | Enforces Object Calisthenics principles for business domain code to ensure clean, maintainable, and robust code |
+| Object Calisthenics Conventions | **/*.{cs,ts,java} | Enforces the original 9 Object Calisthenics rules for business domain code, with pragmatic exemptions for DTOs, API contracts, configuration, infrastructure, and tests. |
 | oop-design-patterns | **/*.py, **/*.java, **/*.ts, **/*.js, **/*.cs | Best practices for applying Object-Oriented Programming (OOP) design patterns, including Gang of Four (GoF) patterns and SOLID principles, to ensure clean, maintainable, and scala… |
 | oqtane | **/*.razor,**/*.razor.cs,**/*.razor.css | Conventions for Oqtane and Blazor modules covering component structure, naming, module-specific patterns, validation, performance, and state. |
 | pcf-alm | **/*.{ts,tsx,js,json,xml,pcfproj,csproj,sln} | Application lifecycle management (ALM) for PCF code components |
@@ -536,7 +536,7 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | content-management-systems | Workflow for building and modifying content management systems across WordPress, Shopify, Wix, Squarespace, Drupal, WooCommerce, Joomla, HubSpot CMS Hub, Webflow, Adobe Experience… |
 | context-map | Generate a map of all files relevant to a task before making changes. Use this skill when the user asks for task. |
 | conventional-branch | Create Git branches following the Conventional Branch specification (feature/, bugfix/, hotfix/, release/, chore/). Use when creating a new branch, naming a branch, or checking wh… |
-| conventional-commit | Prompt and workflow for generating conventional commit messages using a structured XML format. Guides users to create standardized, descriptive commit messages in line with the Co… |
+| conventional-commit | Generate and execute Conventional Commit messages from staged or unstaged Git changes. Use this skill when the user asks to create a commit, write a conventional commit message, c… |
 | convert-excel-to-md | Converts Excel (.xlsx) workbooks into Markdown so their contents can be accurately analyzed, summarized, searched, or extracted from. Use this skill whenever the user shares, refe… |
 | convert-pdf-to-md | Converts PDF (.pdf) documents into Markdown so their contents can be accurately analyzed, summarized, searched, or extracted from. Use this skill whenever the user shares, referen… |
 | convert-plaintext-to-md | Convert a text-based document to markdown following instructions from prompt, or if a documented option is passed, follow the instructions for that option. Use this skill when *Us… |
@@ -753,7 +753,7 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | project-workflow-analysis-blueprint-generator | Comprehensive technology-agnostic prompt generator for documenting end-to-end application workflows. Automatically detects project architecture patterns, technology stacks, and da… |
 | prompt-optimizer | Turn any rough prompt, half-formed idea, or task description into a finished, ready-to-send prompt optimized for any LLM model inside a chat interface — NOT the API. Use this skil… |
 | publish-to-pages | Publish presentations and web content to GitHub Pages. Converts PPTX, PDF, HTML, or Google Slides to a live GitHub Pages URL. Handles repo creation, file conversion, Pages enablem… |
-| pytest-coverage | Run pytest tests with coverage, discover lines missing coverage, and increase coverage to 100%. Use this skill when the user needs help with run pytest tests with coverage, discov… |
+| pytest-coverage | Run pytest with coverage, read annotated coverage output, identify uncovered lines, and add tests until Python code reaches 100% line coverage. Use this skill when the user asks t… |
 | python-azure-iot-edge-modules | Build and operate Python Azure IoT Edge modules with robust messaging, deployment manifests, observability, and production readiness checks. Use this skill when the user asks to c… |
 | python-mcp-server-generator | Generate a complete MCP server project in Python with tools, resources, and proper configuration. Use this skill when the user asks for generate python mcp server. |
 | python-pypi-package-builder | End-to-end skill for building, testing, linting, versioning, and publishing a production-grade Python library to PyPI. Covers all four build backends (setuptools+setuptools_scm, h… |

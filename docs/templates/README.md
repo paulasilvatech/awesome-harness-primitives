@@ -44,10 +44,13 @@ The formats do not share one mandatory body outline. Use the contract that match
   `handoffs` are ignored by CLI.
 - **Activation:** make `description` state what the agent does and when it should be selected.
   `Activation and Scope` then defines expected inputs, owned decisions, writable paths, and handoffs.
-- **Procedure:** use `Mission`, `Operating Principles`, and `Procedure` to define the persona's judgment
-  and proportionate way of working.
-- **Limits:** choose exactly one read-only or editing policy. Keep `What I Will Not Do` and
-  `Anti-Patterns` specific to the agent's authority.
+- **Procedure:** use `Mission`, `Operating Principles`, and an optional workflow section to define the
+  persona's judgment and proportionate way of working.
+- **Knowledge boundary:** `What This Agent Knows` lists transferable knowledge and local sources of
+  truth. `What This Agent Does NOT Know` is the anti-hallucination boundary and lists what the agent
+  must discover instead of assume.
+- **Limits:** choose exactly one read-only or editing policy. Keep `Anti-Patterns This Agent Rejects`
+  specific to the agent's authority.
 - **Output:** define a stable response structure in `Output Format`, or replace it with a more suitable
   domain-neutral schema.
 - **Quality gate:** use `Definition of Done`; also keep the body non-empty and at most 30,000 characters.
@@ -59,9 +62,9 @@ The formats do not share one mandatory body outline. Use the contract that match
   explain itself and auto-apply. Without `applyTo`, the file is available only through manual attachment.
 - **Activation:** `applyTo` is one quoted, comma-separated glob string. Keep the scope paragraph aligned
   with those globs.
-- **Conventions:** instructions are passive rules, not a task workflow. Define authoritative sources,
-  precedence, direct conventions, rationales, and focused examples. Put ordered setup, migration, or
-  review procedures in a skill.
+- **Conventions:** instructions are passive rules, not a task workflow. Domain sections carry the bulk of
+  the file and are titled after the real subject areas. `Conventions` then holds cross-cutting rules in a
+  `Rule | Rationale` table. Put ordered setup, migration, or review procedures in a skill.
 - **Limits:** use the responsibility split and `Do / Do Not` table to prevent overlap with other
   primitives.
 - **Output:** instructions do not define a standalone result; they constrain work performed on matching
@@ -77,6 +80,10 @@ The formats do not share one mandatory body outline. Use the contract that match
   `allowed-tools`, `license`, `metadata`, and `tags` are optional.
 - **Activation:** discovery loads only `name` and `description`, so use positive trigger language there.
   `When to invoke` may reinforce those triggers. Put exclusions in `Limits`.
+- **Structure:** skills use the loosest structure of the four types. Only `When to invoke`, at least one
+  freely titled domain section, `Output template`, and `Quality gate` are mandatory. Every other section
+  is conditional and must be earned by real content; a conditional section filled with placeholders is
+  worse than an omitted one.
 - **Inputs:** include `Inputs` only when `argument-hint` is present, and consume and validate
   `$ARGUMENTS`.
 - **Procedure or review criteria:** use `Procedure` when order matters and `Criteria` when judgment
@@ -96,6 +103,11 @@ The formats do not share one mandatory body outline. Use the contract that match
   `name`, `description`, and `argument-hint` as its baseline. Keep the first two clear and concise, and
   remove `argument-hint` when it adds no useful UI hint. `agent` and `tools` are optional and remain
   commented out until the workflow requires them.
+- **Structure:** prompts are the most rigid type. All ten sections are mandatory and appear in the
+  template order: `Objective`, `When to Invoke`, `Preconditions`, `Inputs the Team Must Provide`,
+  `What I Will Do`, `What I Will NOT Do`, `Output Format`, `Definition of Done`, `Prompt Body`,
+  `Invocation Example`. Domain headings belong inside the `Output Format` fenced block, never as extra
+  top-level sections.
 - **Activation:** `When to Invoke` states the workflow position and preconditions for this explicit,
   user-selected action.
 - **Procedure:** `Prompt Body` consumes VS Code runtime context, validates the request, gathers permitted

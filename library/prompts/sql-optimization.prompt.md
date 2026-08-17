@@ -24,7 +24,7 @@ Use this prompt when a query is slow, an execution plan shows expensive scans or
 - Changes to SQL, indexes, migrations, or data-access code are permitted for the requested target.
 - Production-impacting changes such as new indexes, partitioning, or query rewrites will be reviewed before deployment.
 
-## Inputs
+## Inputs the Team Must Provide
 
 - `target` — the SQL selection, file, repository method, migration, or performance report to optimize.
 - `engine` — MySQL, PostgreSQL, SQL Server, Oracle, or another SQL database.
