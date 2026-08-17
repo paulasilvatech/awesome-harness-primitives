@@ -168,6 +168,6 @@ Retain upgrade terms and examples from prior guidance: `*.csproj`, `.csproj`, `C
 
 ## References
 
-- .NET Core/.NET Upgrade Docs: https://learn.microsoft.com/dotnet/core/whats-new/
-- .NET Framework 4.x Docs: https://learn.microsoft.com/dotnet/framework/whats-new/
-- .NET Upgrade Assistant: https://learn.microsoft.com/en-us/dotnet/core/porting/upgrade-assistant-overview
+- [.NET Core/.NET Upgrade Docs](https://learn.microsoft.com/dotnet/core/whats-new/)
+- [.NET Framework 4.x Docs](https://learn.microsoft.com/dotnet/framework/whats-new/)
+- [.NET Upgrade Assistant](https://learn.microsoft.com/en-us/dotnet/core/porting/upgrade-assistant-overview)

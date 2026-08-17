@@ -214,7 +214,7 @@ description: 'Brief description of purpose'
 applyTo: '**/*.ext'
 ---
 
-# Technology Name Development
+## Technology Name Development
 
 Brief introduction and context.
 

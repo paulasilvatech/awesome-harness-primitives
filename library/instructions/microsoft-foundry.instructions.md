@@ -85,7 +85,7 @@ Requires: the AKS pod has the workload-identity annotation and projected OIDC to
 
 **Do NOT generate this (v1 / azure-ai-agents style — no longer valid):**
 ```python
-# WRONG — these methods do not exist in azure-ai-projects v2
+## WRONG — these methods do not exist in azure-ai-projects v2
 agent = client.agents.create_agent(name="x", model="gpt-4o", instructions="...")
 thread = client.threads.create()
 client.messages.create(thread_id=thread.id, role="user", content="Hi")
@@ -198,13 +198,13 @@ definition = PromptAgentDefinition(
     instructions="You are a helpful assistant.",
     tools=[CodeInterpreterTool()],
 )
-# ... create_version(...), configure the endpoint, then:
+## ... create_version(...), configure the endpoint, then:
 response = openai_client.responses.create(
     conversation=conversation.id,
     input="Generate a 10x10 multiplication table.",
     tool_choice="required",
 )
-# Inspect the executed code:
+## Inspect the executed code:
 code = next((o.code for o in response.output if o.type == "code_interpreter_call"), "")
 print(response.output_text)
 ```
@@ -232,12 +232,12 @@ tool = FunctionTool(
     strict=True,
 )
 
-# definition = PromptAgentDefinition(model=..., instructions=..., tools=[tool])
-# ... create version, configure endpoint, get openai_client ...
+## definition = PromptAgentDefinition(model=..., instructions=..., tools=[tool])
+## ... create version, configure endpoint, get openai_client ...
 
 response = openai_client.responses.create(input="What is my horoscope? I am an Aquarius.")
 
-# Continue processing until no more function calls
+## Continue processing until no more function calls
 while any(item.type == "function_call" for item in response.output):
     input_list: ResponseInputParam = []
     for item in response.output:

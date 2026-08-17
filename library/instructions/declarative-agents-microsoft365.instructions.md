@@ -177,4 +177,4 @@ Retain `production-ready` as the quality bar and `MyAgent` only as an illustrati
 
 ## References
 
-- Microsoft 365 declarative agent schema v1.5: https://developer.microsoft.com/json-schemas/copilot/declarative-agent/v1.5/schema.json
+- [Microsoft 365 declarative agent schema v1.5](https://developer.microsoft.com/json-schemas/copilot/declarative-agent/v1.5/schema.json)

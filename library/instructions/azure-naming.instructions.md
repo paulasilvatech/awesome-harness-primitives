@@ -50,7 +50,7 @@ Always follow these rules when creating, suggesting, or reviewing Azure resource
 
 ## Official Abbreviations and Naming Rules
 
-### Management and Governance
+##Management and Governance
 
 | Resource | Abbr | Scope | Length | Valid Characters | Example |
 |----------|------|-------|--------|-----------------|---------|
@@ -60,7 +60,7 @@ Always follow these rules when creating, suggesting, or reviewing Azure resource
 | Application Insights | `appi` | resource group | 1-260 | Can't use: `%&\?/` | `appi-navigator-prod-001` |
 | Automation account | `aa` | resource group + region | 6-50 | Alphanumerics and hyphens, start with letter | `aa-navigator-prod-001` |
 
-### Networking
+##Networking
 
 | Resource | Abbr | Scope | Length | Valid Characters | Example |
 |----------|------|-------|--------|-----------------|---------|
@@ -85,7 +85,7 @@ Always follow these rules when creating, suggesting, or reviewing Azure resource
 | CDN profile | `cdnp` | resource group | 1-260 | Alphanumerics and hyphens | `cdnp-navigator-prod-001` |
 | Front Door profile | `afd` | resource group | 5-64 | Alphanumerics and hyphens | `afd-navigator-prod` |
 
-### Compute and Web
+##Compute and Web
 
 | Resource | Abbr | Scope | Length | Valid Characters | Example |
 |----------|------|-------|--------|-----------------|---------|
@@ -98,7 +98,7 @@ Always follow these rules when creating, suggesting, or reviewing Azure resource
 | Static web app | `stapp` | resource group | — | — | `stapp-navigator-prod-001` |
 | App Service environment | `ase` | resource group | — | — | `ase-navigator-prod-001` |
 
-### Containers
+##Containers
 
 | Resource | Abbr | Scope | Length | Valid Characters | Example |
 |----------|------|-------|--------|-----------------|---------|
@@ -110,7 +110,7 @@ Always follow these rules when creating, suggesting, or reviewing Azure resource
 | Container instance | `ci` | resource group | 1-63 | Lowercase letters, numbers, hyphens. Can't start/end with hyphen. | `ci-navigator-prod-001` |
 | Container registry | `cr` | global | 5-50 | **Alphanumerics only — no hyphens** | `crnavigatorprod001` |
 
-### Databases
+##Databases
 
 | Resource | Abbr | Scope | Length | Valid Characters | Example |
 |----------|------|-------|--------|-----------------|---------|
@@ -136,7 +136,7 @@ Always follow these rules when creating, suggesting, or reviewing Azure resource
 | Key vault | `kv` | global | 3-24 | Alphanumerics and hyphens. Start with letter, end with letter or number. No consecutive hyphens. | `kv-navigator-prod-001` |
 | Managed identity | `id` | resource group | 3-128 | Alphanumerics, hyphens, underscores. Start with letter or number. | `id-navigator-prod-001` |
 
-### Integration
+##Integration
 
 | Resource | Abbr | Scope | Length | Valid Characters | Example |
 |----------|------|-------|--------|-----------------|---------|
@@ -148,7 +148,7 @@ Always follow these rules when creating, suggesting, or reviewing Azure resource
 | Event hub | `evh` | Event Hubs namespace | 1-256 | Alphanumerics, periods, hyphens, underscores | `evh-navigator` |
 | Logic app | `logic` | resource group | 1-43 | Alphanumerics, hyphens, underscores, periods | `logic-navigator-prod-001` |
 
-### AI and Machine Learning
+##AI and Machine Learning
 
 | Resource | Abbr | Scope | Length | Valid Characters | Example |
 |----------|------|-------|--------|-----------------|---------|
@@ -196,18 +196,18 @@ These resources require concatenated lowercase alphanumerics (no separators):
 ## CAF Examples
 
 ```
-# Management
+Management
 rg-navigator-prod
 rg-webapp-database-dev
 
-# Networking
+Networking
 vnet-shared-eastus2-001
 snet-shared-eastus2-001
 nsg-weballow-001
 pip-dc1-shared-eastus2-001
 lbe-navigator-prod-001
 
-# Compute
+Compute
 vm-sql-test-001
 vm-sharepoint-dev-001
 vmss-navigator-prod-001
@@ -215,33 +215,33 @@ asp-navigator-prod-001
 app-navigator-prod-001
 func-navigator-prod-001
 
-# Containers
+Containers
 aks-navigator-prod-001
 ca-navigator-prod-001
 cae-navigator-prod-001
 crnavigatorprod001        # no hyphens!
 
-# Databases
+Databases
 sql-navigator-prod-001
 sqldb-navigator-prod
 cosmos-navigator-prod
 psql-navigator-prod-001
 
-# Storage / Security
+Storage / Security
 stnavigatorprod001        # no hyphens!
 kv-navigator-prod-001
 id-navigator-prod-001
 
-# Integration
+Integration
 apim-navigator-prod
 sbns-navigator-prod
 evhns-navigator-prod
 
-# Monitoring
+Monitoring
 log-navigator-prod-001
 appi-navigator-prod-001
 
-# AI
+AI
 oai-navigator-prod
 srch-navigator-prod
 ```

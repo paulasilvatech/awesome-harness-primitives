@@ -99,7 +99,7 @@ Creates a user account.
 **Throws:**
 - `ValidationError`: When `email` is invalid.
 
-Update `.env.example` and `docs/configuration.md` when `USER_INVITE_TTL_SECONDS` is introduced.
+Update `.env.example` and `docs/configuration.md` when `invite_ttl_seconds` is introduced.
 ```
 
 Why: The docs name parameters, defaults, return type, errors, and the related configuration surface affected by the code change.

@@ -96,16 +96,16 @@ More information: [Package a code component](https://learn.microsoft.com/en-us/p
 When developing code components, it's recommended that you use a source code control provider such as Azure DevOps or GitHub. When committing changes using git source control, the `.gitignore` file provided by the `pac pcf init` template will ensure that some files are not added to the source control because they're either restored by `npm` or are generated as part of the build process:
 
 ```
-# dependencies
+## dependencies
 /node_modules
 
-# generated directory
+## generated directory
 **/generated
 
-# output directory
+## output directory
 /out
 
-# msbuild output directories
+## msbuild output directories
 /bin
 /obj
 ```
@@ -206,10 +206,10 @@ When deploying an update to a code component, the version in the `ControlManifes
 **Commands to update version:**
 
 ```bash
-# Advance the PATCH version by one
+## Advance the PATCH version by one
 pac pcf version --strategy manifest
 
-# Specify an exact PATCH value (e.g., in automated build pipeline)
+## Specify an exact PATCH value (e.g., in automated build pipeline)
 pac pcf version --patchversion <PATCH VERSION>
 ```
 

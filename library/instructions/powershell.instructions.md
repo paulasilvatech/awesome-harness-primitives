@@ -76,6 +76,8 @@ Keep the following API and stream names recognizable when refactoring existing e
 | `Quiet.IsPresent` | Use `$Quiet.IsPresent` when showing switch presence checks. |
 | `ActiveDirectory`, `Microsoft.ActiveDirectory.Management.ADException`, `ActiveDirectoryError`, `Remove-ADUser`, `UserAccount`, `UserExists`, `UserNotFound`, `ObjectNotFound`, `System.Exception`, and `UnexpectedError` | Preserve these names in Active Directory removal examples so exception-specific handling, stable error IDs, and target categories remain clear. |
 | `<# ... #>` | Use this marker to demonstrate comment-based help blocks inside public functions. |
+| `ForEach-Object` | Use the full pipeline iteration cmdlet name in scripts instead of `%`. |
+| `Get-ChildItem` | Use the full child-item discovery cmdlet name in scripts instead of `gci`, `ls`, or `dir`. |
 
 ## Good / Bad Examples
 

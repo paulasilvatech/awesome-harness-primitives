@@ -82,6 +82,10 @@ A Power BI release is complete only after validation, rollback readiness, and he
 | Health checks | Keep `Test-DeploymentHealth` with `$ExpectedReports` and `$ExpectedDatasets`; use `Get-PowerBIReport`, `Get-PowerBIDataset`, `RefreshState`, and statuses `Healthy`, `Unhealthy`, `Degraded`, and `Failed`. |
 | Notifications | Keep `Send-DeploymentNotification`, `$TeamsWebhookUrl`, `$DeploymentResult`, `$Environment`, status colors `28A745`, `FFC107`, `DC3545`, `@type = MessageCard`, `@context = https://schema.org/extensions`, `themeColor`, `sections`, `activityTitle`, `activitySubtitle`, `facts`, `ReportsCount`, `application/json`, and `Invoke-RestMethod -ContentType 'application/json'`. |
 
+## Operational API and Identifier Vocabulary
+
+Preserve these Power BI DevOps identifiers because scripts, examples, and pipeline contracts commonly depend on them: `powerbi-service-principal`, `FactSales`, `DimProduct`, `GitFlow`, `CleanTargetFolder`, `TargetFolder`, `SchemaFile`, `DataFile`, `DefaultVersion`, `KeyVault`, `KeyVaultName`, `BackupName`, `FilePath`, `ReportId`, `RowCount`, `DaysOld`, `LastRefresh`, `ComplexCalc`, `ConvertFrom`, `MyInvocation`, `MyCommand`, `MyInvocation.MyCommand.Definition`, `DeploymentResult.Status`, `DeploymentResult.Duration`, and `DeploymentResult.ReportsCount`.
+
 ## Good / Bad Examples
 
 The examples below illustrate automated deployment with explicit artifact, workspace, and binding inputs instead of untracked Desktop publishing.

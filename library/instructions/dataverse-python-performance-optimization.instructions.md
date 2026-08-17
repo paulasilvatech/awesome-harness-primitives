@@ -73,6 +73,17 @@ Bulk operations do not provide transactional guarantees. After bulk create or up
 
 Monitor operation duration. A decorator such as `monitored_operation(operation_name)` may use `time.time()`, `logging.getLogger("dataverse")`, `logger.info(f"{operation_name}: {duration:.2f}s")`, and `logger.error(f"{operation_name} failed after {duration:.2f}s: {e}")` before re-raising. Test performance with production-like data because throughput changes with table complexity, plugins, lookup counts, and network latency.
 
+## Preserved Performance API Vocabulary
+
+The following identifiers are domain vocabulary from the Python Dataverse SDK guidance and should remain recognizable in examples, tables, or prose.
+
+| Category | Identifiers |
+| --- | --- |
+| SDK packages | `PowerPlatform`, `PowerPlatform.Dataverse`, `PowerPlatform.Dataverse.core.errors`, `Microsoft.Dynamics.CRM` |
+| Query and batching labels | `SLOW`, `FAST`, `FASTER`, `BEST`, `GOOD`, `ACCEPTABLE`, `OPTIMIZED`, `SOMETIMES`, `SUPPORTED`, `WORKAROUND`, `WHERE/TOP/ORDER`, `Large/complex`, `create/update`, `on-demand` |
+| Helper names | `call_with_backoff`, `get_client`, `process_batch`, `bulk_create_optimized`, `load_to_dataframe_chunked`, `process_large_table`, `create_accounts` |
+| Processing variables | `all_accounts`, `process_page`, `process_record`, `save_result`, `process_chunk`, `df_chunk`, `wait_time`, `large_file`, `singleton_client` |
+
 ## Good / Bad Examples
 
 The examples below illustrate bounded, server-side, page-oriented reads.

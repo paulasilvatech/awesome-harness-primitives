@@ -144,7 +144,15 @@ Why: The intrinsic names omit `~/`, the Store install is in the wrong context, a
 
 ## Dev Box Tooling Vocabulary
 
-Retain these Dev Box terms because documentation, tools, and troubleshooting output use them directly: `devbox_customization_winget_task_generator`, `Task Generator`, `Customization {task_name} Task Generator`, `task_name`, `Customization YAML Generation Planner`, `Customization YAML Validator`, `FIRST`, `SECOND`, `STEP`, `PREREQUISITE`, `MANDATORY`, `IMPORTANT`, `NOTE`, `CRITICAL`, `SECURITY`, `INFORMATION`, `TROUBLESHOOTING`, `MUST`, `ALWAYS`, `TEMP`, `JSON`, `Azure CLI`, `.msixbundle`, `--source msstore`, `winget install`, `winget search`, `single-quotes`, `hard-coded`, `runtime-only`, `inner-loop`, `ad-hoc`, `up-to-date`, `and/or`, `recommendations-on-validating-key-vault-setup`, `keeping-track-of-the-available-customization-tasks-for-use-during-prompting`, ` folder) called `, ` label in the dev box tools. For example, `, `), Git Clone (`, and `), and PowerShell (`.
+Retain these Dev Box terms because documentation, tools, and troubleshooting output use them directly.
+
+- ` folder) called `
+- ` label in the dev box tools. For example, `
+- `), Git Clone (`
+- `), and PowerShell (`
+- `devbox_customization_winget_task_generator`, `Task Generator`, `Customization {task_name} Task Generator`, `task_name`, `Customization YAML Generation Planner`, and `Customization YAML Validator`.
+- `FIRST`, `SECOND`, `STEP`, `PREREQUISITE`, `MANDATORY`, `IMPORTANT`, `NOTE`, `CRITICAL`, `SECURITY`, `INFORMATION`, `TROUBLESHOOTING`, `MUST`, `ALWAYS`, `TEMP`, and `JSON`.
+- `Azure CLI`, `.msixbundle`, `--source msstore`, `winget install`, `winget search`, `single-quotes`, `hard-coded`, `runtime-only`, `inner-loop`, `ad-hoc`, `up-to-date`, `and/or`, `recommendations-on-validating-key-vault-setup`, and keeping-track-of-the-available-customization-tasks-for-use-during-prompting.
 
 ## Conventions
 
@@ -182,15 +190,15 @@ Retain these Dev Box terms because documentation, tools, and troubleshooting out
 
 ## References
 
-- Team Customizations docs: https://learn.microsoft.com/azure/dev-box/concept-what-are-team-customizations?tabs=team-customizations
-- Write an image definition file for Dev Box Team Customizations: https://learn.microsoft.com/azure/dev-box/how-to-write-image-definition-file
-- Create an image definition file with Copilot: https://learn.microsoft.com/azure/dev-box/how-to-use-copilot-generate-image-definition-file
-- Use Azure Key Vault secrets in customization files: https://learn.microsoft.com/azure/dev-box/how-to-use-secrets-customization-files
-- Use Team Customizations: https://learn.microsoft.com/azure/dev-box/quickstart-team-customizations
-- Example YAML customization file: https://aka.ms/devcenter/preview/imaging/examples
-- System tasks and user tasks: https://learn.microsoft.com/azure/dev-box/how-to-configure-team-customizations#system-tasks-and-user-tasks
-- Create a customization task: https://learn.microsoft.com/azure/dev-box/how-to-configure-customization-tasks#what-are-tasks
-- Transfer data using AzCopy: https://learn.microsoft.com/azure/storage/common/storage-use-azcopy-v10?tabs=dnf#transfer-data
-- Download a file from Azure Storage: https://learn.microsoft.com/azure/dev-box/how-to-customizations-connect-resource-repository#example-download-a-file-from-azure-storage
-- WinGet install package: https://aka.ms/getwinget
-- WinGet CLI releases: https://github.com/microsoft/winget-cli/releases
+- [Team Customizations docs](https://learn.microsoft.com/azure/dev-box/concept-what-are-team-customizations?tabs=team-customizations)
+- [Write an image definition file for Dev Box Team Customizations](https://learn.microsoft.com/azure/dev-box/how-to-write-image-definition-file)
+- [Create an image definition file with Copilot](https://learn.microsoft.com/azure/dev-box/how-to-use-copilot-generate-image-definition-file)
+- [Use Azure Key Vault secrets in customization files](https://learn.microsoft.com/azure/dev-box/how-to-use-secrets-customization-files)
+- [Use Team Customizations](https://learn.microsoft.com/azure/dev-box/quickstart-team-customizations)
+- [Example YAML customization file](https://aka.ms/devcenter/preview/imaging/examples)
+- [System tasks and user tasks](https://learn.microsoft.com/azure/dev-box/how-to-configure-team-customizations#system-tasks-and-user-tasks)
+- [Create a customization task](https://learn.microsoft.com/azure/dev-box/how-to-configure-customization-tasks#what-are-tasks)
+- [Transfer data using AzCopy](https://learn.microsoft.com/azure/storage/common/storage-use-azcopy-v10?tabs=dnf#transfer-data)
+- [Download a file from Azure Storage](https://learn.microsoft.com/azure/dev-box/how-to-customizations-connect-resource-repository#example-download-a-file-from-azure-storage)
+- [WinGet install package](https://aka.ms/getwinget)
+- [WinGet CLI releases](https://github.com/microsoft/winget-cli/releases)
