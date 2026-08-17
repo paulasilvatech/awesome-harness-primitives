@@ -133,6 +133,10 @@ Constrain recommendations to available tools unless installing one tool clearly 
 
 Every script must include a dry run, avoid hardcoded secrets, account for missing files or changed formats, and say how to undo changes.
 
+## Automation terminology
+
+Use exact operational terms when they match the user's workflow: `$WORK_DIR`, `--dry-run`, `HTTP`, `TMPDIR`, `XXXXXX`, `automate-this-`, `command-line`, `double-click`, `end-to-end`, `file-based`, `mid-process`, `move/copy/rename`, `multi-app`, `multi-step`, `per-run`, `security`, `triggered-on-change`, and `visual-only`.
+
 ## Output template
 
 ```markdown

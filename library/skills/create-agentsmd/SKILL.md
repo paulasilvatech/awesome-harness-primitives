@@ -145,6 +145,10 @@ Create a complete root `AGENTS.md` that gives coding agents accurate setup, work
 - **Do not over-document human context**: agents need commands, conventions, and boundaries more than product narrative.
 - **Do not invent workflows**: if CI is the only source of truth, derive commands from `.github/workflows` and label anything unverified.
 
+## AGENTS.md terminology
+
+Preserve project guidance terms that agents search for: `Import/export`, `Watch/hot-reload`, `[command]`, `[lint command]`, `[package manager] install`, `[test command]`, `building/testing`, `hot-reload`, `human-focused`, `packages/projects`, `pnpm dlx turbo run where <project_name>`, `pnpm install --filter <project_name>`, `pnpm lint`, `pnpm lint --filter <project_name>`, `pnpm test`, `project-specific`, `react-ts`, and `top-level`.
+
 ## Output template
 
 ```markdown

@@ -1,248 +1,140 @@
 ---
-name: "technology-stack-blueprint-generator"
+name: technology-stack-blueprint-generator
 description: >-
-  Comprehensive technology stack blueprint generator that analyzes codebases to create detailed
-  architectural documentation. Automatically detects technology stacks, programming languages, and
-  implementation patterns across multiple platforms (.NET, Java, JavaScript, React, Python). Generates
-  configurable blueprints with version information, licensing details, usage patterns, coding
-  conventions, and visual diagrams. Provides implementation-ready templates and maintains
-  architectural consistency for guided development. Use this skill when the user asks for
-  comprehensive technology stack blueprint generator.
+  Generate a technology stack blueprint by analyzing codebase languages, frameworks, dependencies, versions, licenses, conventions, usage patterns, tooling, infrastructure, and diagrams. Use this skill when the user asks for a stack blueprint, architecture technology inventory, implementation-ready tech map, dependency and convention documentation, or guided development baseline.
 ---
-# Comprehensive Technology Stack Blueprint Generator
 
-## Configuration Variables
-${PROJECT_TYPE="Auto-detect|.NET|Java|JavaScript|React.js|React Native|Angular|Python|Other"} <!-- Primary technology -->
-${DEPTH_LEVEL="Basic|Standard|Comprehensive|Implementation-Ready"} <!-- Analysis depth -->
-${INCLUDE_VERSIONS=true|false} <!-- Include version information -->
-${INCLUDE_LICENSES=true|false} <!-- Include license information -->
-${INCLUDE_DIAGRAMS=true|false} <!-- Generate architecture diagrams -->
-${INCLUDE_USAGE_PATTERNS=true|false} <!-- Include code usage patterns -->
-${INCLUDE_CONVENTIONS=true|false} <!-- Document coding conventions -->
-${OUTPUT_FORMAT="Markdown|JSON|YAML|HTML"} <!-- Select output format -->
-${CATEGORIZATION="Technology Type|Layer|Purpose"} <!-- Organization method -->
+# Technology stack blueprint generator
 
-## Generated Prompt
+Analyze a repository and produce a configurable technology blueprint that documents the stack, versions, licenses, usage patterns, conventions, integration points, and implementation rules needed for consistent future code generation.
 
-"Analyze the codebase and generate a ${DEPTH_LEVEL} technology stack blueprint that thoroughly documents technologies and implementation patterns to facilitate consistent code generation. Use the following approach:
+## When to invoke
 
-### 1. Technology Identification Phase
-- ${PROJECT_TYPE == "Auto-detect" ? "Scan the codebase for project files, configuration files, and dependencies to determine all technology stacks in use" : "Focus on ${PROJECT_TYPE} technologies"}
-- Identify all programming languages by examining file extensions and content
-- Analyze configuration files (package.json, .csproj, pom.xml, etc.) to extract dependencies
-- Examine build scripts and pipeline definitions for tooling information
-- ${INCLUDE_VERSIONS ? "Extract precise version information from package files and configuration" : "Skip version details"}
-- ${INCLUDE_LICENSES ? "Document license information for all dependencies" : ""}
+- "Generate a technology stack blueprint for this repo."
+- "Document our frameworks, dependencies, and coding conventions."
+- "Create an implementation-ready architecture technology map."
+- "Analyze this .NET, Java, JavaScript, React, or Python stack."
+- "Produce a stack diagram and dependency flow for guided development."
 
-### 2. Core Technologies Analysis
+## Inputs
 
-${PROJECT_TYPE == ".NET" || PROJECT_TYPE == "Auto-detect" ? "#### .NET Stack Analysis (if detected)
-- Target frameworks and language versions (detect from project files)
-- All NuGet package references with versions and purpose comments
-- Project structure and organization patterns
-- Configuration approach (appsettings.json, IOptions, etc.)
-- Authentication mechanisms (Identity, JWT, etc.)
-- API design patterns (REST, GraphQL, minimal APIs, etc.)
-- Data access approaches (EF Core, Dapper, etc.)
-- Dependency injection patterns
-- Middleware pipeline components" : ""}
+Use `$ARGUMENTS` to capture configuration overrides. Defaults are `PROJECT_TYPE="Auto-detect"`, `DEPTH_LEVEL="Standard"`, `INCLUDE_VERSIONS=true`, `INCLUDE_LICENSES=false`, `INCLUDE_DIAGRAMS=true`, `INCLUDE_USAGE_PATTERNS=true`, `INCLUDE_CONVENTIONS=true`, `OUTPUT_FORMAT="Markdown"`, and `CATEGORIZATION="Technology Type"`.
 
-${PROJECT_TYPE == "Java" || PROJECT_TYPE == "Auto-detect" ? "#### Java Stack Analysis (if detected)
-- JDK version and core frameworks
-- All Maven/Gradle dependencies with versions and purpose
-- Package structure organization
-- Spring Boot usage and configurations
-- Annotation patterns
-- Dependency injection approach
-- Data access technologies (JPA, JDBC, etc.)
-- API design (Spring MVC, JAX-RS, etc.)" : ""}
+## Configuration model
 
-${PROJECT_TYPE == "JavaScript" || PROJECT_TYPE == "Auto-detect" ? "#### JavaScript Stack Analysis (if detected)
-- ECMAScript version and transpiler settings
-- All npm dependencies categorized by purpose
-- Module system (ESM, CommonJS)
-- Build tooling (webpack, Vite, etc.) with configuration
-- TypeScript usage and configuration
-- Testing frameworks and patterns" : ""}
+| Variable | Allowed values | Effect |
+| --- | --- | --- |
+| `PROJECT_TYPE` | `Auto-detect`, `.NET`, `Java`, `JavaScript`, `React.js`, `React Native`, `Angular`, `Python`, `Other` | Selects the primary analysis lens. |
+| `DEPTH_LEVEL` | `Basic`, `Standard`, `Comprehensive`, `Implementation-Ready` | Controls whether the result is inventory-only, convention-rich, or ready for new feature scaffolding. |
+| `INCLUDE_VERSIONS` | `true`, `false` | Extracts precise version information from package and configuration files. |
+| `INCLUDE_LICENSES` | `true`, `false` | Adds dependency license information when available from manifests or lockfiles. |
+| `INCLUDE_DIAGRAMS` | `true`, `false` | Generates stack, dependency flow, component relationship, and data flow diagrams. |
+| `INCLUDE_USAGE_PATTERNS` | `true`, `false` | Extracts representative code examples and usage patterns. |
+| `INCLUDE_CONVENTIONS` | `true`, `false` | Documents naming, organization, error handling, logging, configuration, validation, and testing conventions. |
+| `OUTPUT_FORMAT` | `Markdown`, `JSON`, `YAML`, `HTML` | Selects the output artifact format. |
+| `CATEGORIZATION` | `Technology Type`, `Layer`, `Purpose` | Controls grouping in the blueprint. |
 
-${PROJECT_TYPE == "React.js" || PROJECT_TYPE == "Auto-detect" ? "#### React Analysis (if detected)
-- React version and key patterns (hooks vs class components)
-- State management approach (Context, Redux, Zustand, etc.)
-- Component library usage (Material-UI, Chakra, etc.)
-- Routing implementation
-- Form handling strategies
-- API integration patterns
-- Testing approach for components" : ""}
+## Procedure
 
-${PROJECT_TYPE == "Python" || PROJECT_TYPE == "Auto-detect" ? "#### Python Analysis (if detected)
-- Python version and key language features used
-- Package dependencies and virtual environment setup
-- Web framework details (Django, Flask, FastAPI)
-- ORM usage patterns
-- Project structure organization
-- API design patterns" : ""}
+1. Identify technologies by scanning project files, configuration files, file extensions, dependency manifests, build scripts, and pipeline definitions.
+2. Extract versions when `INCLUDE_VERSIONS=true` and licenses when `INCLUDE_LICENSES=true`.
+3. Analyze each detected stack using the stack-specific criteria below.
+4. Document implementation patterns and conventions when `INCLUDE_CONVENTIONS=true`.
+5. Extract representative code examples when `INCLUDE_USAGE_PATTERNS=true`.
+6. Create a technology stack map for `Comprehensive` and `Implementation-Ready` depth.
+7. Add implementation blueprints, file/class templates, code snippets, integration points, testing requirements, and documentation requirements for `Implementation-Ready` depth.
+8. Add diagrams when `INCLUDE_DIAGRAMS=true`.
+9. Save the output as `Technology_Stack_Blueprint.md`, `Technology_Stack_Blueprint.json`, `Technology_Stack_Blueprint.yaml`, or `Technology_Stack_Blueprint.html` based on `OUTPUT_FORMAT`.
 
-### 3. Implementation Patterns & Conventions
-${INCLUDE_CONVENTIONS ? 
-"Document coding conventions and patterns for each technology area:
+## Stack analysis checklist
 
-#### Naming Conventions
-- Class/type naming patterns
-- Method/function naming patterns
-- Variable naming conventions
-- File naming and organization conventions
-- Interface/abstract class patterns
+| Stack | Inspect |
+| --- | --- |
+| .NET | Target frameworks, language versions, NuGet packages, project structure, `appsettings.json`, `IOptions`, Identity, JWT, REST, GraphQL, minimal APIs, EF Core, Dapper, dependency injection, middleware pipeline, Scoped/Singleton/Transient registrations, controllers, filters, route attributes, ORM configuration, relationship definitions. |
+| Java | JDK version, Maven/Gradle dependencies, package structure, Spring Boot configuration, annotations, dependency injection, JPA, JDBC, Spring MVC, JAX-RS. |
+| JavaScript | ECMAScript version, transpiler settings, npm dependencies, ESM, CommonJS, webpack, Vite, TypeScript, test framework patterns. |
+| React.js | React version, hooks versus class components, Context, Redux, Zustand, Material-UI, Chakra, routing, forms, API integration, component testing, props interfaces, `useState`, `useEffect`, custom hooks, selectors, CSS modules, styled-components, themes, responsive design. |
+| Python | Python version, package dependencies, virtual environment setup, Django, Flask, FastAPI, ORM usage, project structure, API patterns. |
 
-#### Code Organization
-- File structure and organization
-- Folder hierarchy patterns
-- Component/module boundaries
-- Code separation and responsibility patterns
+## Implementation patterns
 
-#### Common Patterns
-- Error handling approaches
-- Logging patterns
-- Configuration access
-- Authentication/authorization implementation
-- Validation strategies
-- Testing patterns" : ""}
+When `INCLUDE_CONVENTIONS=true`, document these categories:
 
-### 4. Usage Examples
-${INCLUDE_USAGE_PATTERNS ? 
-"Extract representative code examples showing standard implementation patterns:
+| Category | Required observations |
+| --- | --- |
+| Naming conventions | Class/type, method/function, variable, file naming, interface/abstract class patterns. |
+| Code organization | Folder hierarchy, component boundaries, module boundaries, separation of responsibility. |
+| Common patterns | Error handling, logging, configuration access, authentication, authorization, validation, and testing. |
+| API examples | Controller/endpoint implementation, request DTO, response formatting, validation, error handling. |
+| Data access examples | Repository pattern, entity/model definitions, query patterns, transaction handling. |
+| Service layer examples | Business logic organization, cross-cutting concerns, dependency injection usage. |
+| UI component examples | Component structure, state management, event handling, API integration. |
 
-#### API Implementation Examples
-- Standard controller/endpoint implementation
-- Request DTO pattern
-- Response formatting
-- Validation approach
-- Error handling
+## Technology stack map
 
-#### Data Access Examples
-- Repository pattern implementation
-- Entity/model definitions
-- Query patterns
-- Transaction handling
+For `Comprehensive` and `Implementation-Ready`, include:
 
-#### Service Layer Examples
-- Service class implementation
-- Business logic organization
-- Cross-cutting concerns integration
-- Dependency injection usage
+| Area | Include |
+| --- | --- |
+| Core Framework Usage | Primary frameworks, project-specific configuration, customizations, extension points. |
+| Integration Points | How technology components integrate, authentication flow, frontend/backend data flow, third-party service integrations. |
+| Development Tooling | IDE settings, code analysis tools, linters, formatters, build pipeline, deployment pipeline, testing frameworks. |
+| Infrastructure | Deployment environment, containers, cloud services, monitoring, logging. |
+| Technology Decision Context | Apparent reasons for choices, legacy or deprecated technologies, constraints, boundaries, upgrade paths, compatibility considerations. |
 
-#### UI Component Examples (if applicable)
-- Component structure
-- State management pattern
-- Event handling
-- API integration pattern" : ""}
+## Blueprint for new code
 
-### 5. Technology Stack Map
-${DEPTH_LEVEL == "Comprehensive" || DEPTH_LEVEL == "Implementation-Ready" ? 
-"Create a comprehensive technology map including:
+For `DEPTH_LEVEL="Implementation-Ready"`, include file/class templates, ready-to-use code snippets, end-to-end implementation checklists, integration points, testing requirements, and documentation requirements. Keep examples extracted from the repository's real patterns, not generic framework samples.
 
-#### Core Framework Usage
-- Primary frameworks and their specific usage in the project
-- Framework-specific configurations and customizations
-- Extension points and customizations
+## Blueprint terminology
 
-#### Integration Points
-- How different technology components integrate
-- Authentication flow between components
-- Data flow between frontend and backend
-- Third-party service integration patterns
+Keep implementation-ready blueprint labels exact when they appear in source evidence: `Authentication/authorization`, `Component/module`, `Entity/model`, `File/Class`, `Interface/abstract`, `Method/function`, `controller/endpoint`, `to-use`, and `version-dependent`.
 
-#### Development Tooling
-- IDE settings and conventions
-- Code analysis tools
-- Linters and formatters with configuration
-- Build and deployment pipeline
-- Testing frameworks and approaches
+## Output template
 
-#### Infrastructure
-- Deployment environment details
-- Container technologies
-- Cloud services utilized
-- Monitoring and logging infrastructure" : ""}
+```markdown
+## Technology stack blueprint
 
-### 6. Technology-Specific Implementation Details
+**Status:** complete | partial | blocked
+**Project type:** `PROJECT_TYPE=<value>`
+**Depth:** `DEPTH_LEVEL=<value>`
+**Output:** `Technology_Stack_Blueprint.<extension>`
 
-${PROJECT_TYPE == ".NET" || PROJECT_TYPE == "Auto-detect" ? 
-"#### .NET Implementation Details (if detected)
-- **Dependency Injection Pattern**:
-  - Service registration approach (Scoped/Singleton/Transient patterns)
-  - Configuration binding patterns
-  
-- **Controller Patterns**:
-  - Base controller usage
-  - Action result types and patterns
-  - Route attribute conventions
-  - Filter usage (authorization, validation, etc.)
-  
-- **Data Access Patterns**:
-  - ORM configuration and usage
-  - Entity configuration approach
-  - Relationship definitions
-  - Query patterns and optimization approaches
-  
-- **API Design Patterns** (if used):
-  - Endpoint organization
-  - Parameter binding approaches
-  - Response type handling
-  
-- **Language Features Used**:
-  - Detect specific language features from code
-  - Identify common patterns and idioms
-  - Note any specific version-dependent features" : ""}
+### Technology inventory
+| Layer or category | Technology | Version | License | Purpose | Evidence |
+| --- | --- | --- | --- | --- | --- |
+| `<layer>` | `<technology>` | `<version or unknown>` | `<license or not checked>` | `<purpose>` | `<file>` |
 
-${PROJECT_TYPE == "React.js" || PROJECT_TYPE == "Auto-detect" ? 
-"#### React Implementation Details (if detected)
-- **Component Structure**:
-  - Function vs class components
-  - Props interface definitions
-  - Component composition patterns
-  
-- **Hook Usage Patterns**:
-  - Custom hook implementation style
-  - useState patterns
-  - useEffect cleanup approaches
-  - Context usage patterns
-  
-- **State Management**:
-  - Local vs global state decisions
-  - State management library patterns
-  - Store configuration
-  - Selector patterns
-  
-- **Styling Approach**:
-  - CSS methodology (CSS modules, styled-components, etc.)
-  - Theme implementation
-  - Responsive design patterns" : ""}
+### Implementation patterns
+| Pattern | Current convention | Evidence | Rule for new code |
+| --- | --- | --- | --- |
+| `<pattern>` | `<observed convention>` | `<file>` | `<instruction>` |
 
-### 7. Blueprint for New Code Implementation
-${DEPTH_LEVEL == "Implementation-Ready" ? 
-"Based on the analysis, provide a detailed blueprint for implementing new features:
+### Integration map
+```mermaid
+flowchart TD
+  A[Client] --> B[API]
+  B --> C[Data store]
+```
 
-- **File/Class Templates**: Standard structure for common component types
-- **Code Snippets**: Ready-to-use code patterns for common operations
-- **Implementation Checklist**: Standard steps for implementing features end-to-end
-- **Integration Points**: How to connect new code with existing systems
-- **Testing Requirements**: Standard test patterns for different component types
-- **Documentation Requirements**: Standard doc patterns for new features" : ""}
+### New-code blueprint
+- File/class templates: `<summary>`
+- Testing requirements: `<commands and patterns>`
+- Documentation requirements: `<rules>`
 
-${INCLUDE_DIAGRAMS ? 
-"### 8. Technology Relationship Diagrams
-- **Stack Diagram**: Visual representation of the complete technology stack
-- **Dependency Flow**: How different technologies interact
-- **Component Relationships**: How major components depend on each other
-- **Data Flow**: How data flows through the technology stack" : ""}
+### Validation
+- Versions included: `INCLUDE_VERSIONS=<true|false>`
+- Licenses included: `INCLUDE_LICENSES=<true|false>`
+- Diagrams included: `INCLUDE_DIAGRAMS=<true|false>`
+- Usage patterns included: `INCLUDE_USAGE_PATTERNS=<true|false>`
+- Conventions included: `INCLUDE_CONVENTIONS=<true|false>`
+```
 
-### ${INCLUDE_DIAGRAMS ? "9" : "8"}. Technology Decision Context
-- Document apparent reasons for technology choices
-- Note any legacy or deprecated technologies marked for replacement
-- Identify technology constraints and boundaries
-- Document technology upgrade paths and compatibility considerations
+## Quality gate
 
-Format the output as ${OUTPUT_FORMAT} and categorize technologies by ${CATEGORIZATION}.
-
-Save the output as 'Technology_Stack_Blueprint.${OUTPUT_FORMAT == "Markdown" ? "md" : OUTPUT_FORMAT.toLowerCase()}'
-"
+- [ ] `PROJECT_TYPE`, `DEPTH_LEVEL`, `OUTPUT_FORMAT`, and `CATEGORIZATION` are stated.
+- [ ] Every technology is backed by a file, dependency manifest, configuration file, or source example.
+- [ ] Versions and licenses are included or explicitly skipped according to `INCLUDE_VERSIONS` and `INCLUDE_LICENSES`.
+- [ ] Usage patterns and conventions are repository-specific when `INCLUDE_USAGE_PATTERNS` and `INCLUDE_CONVENTIONS` are true.
+- [ ] Diagrams are included only when `INCLUDE_DIAGRAMS=true` and match the documented stack.
+- [ ] The artifact is saved with the correct `Technology_Stack_Blueprint` extension for `OUTPUT_FORMAT`.

@@ -22,7 +22,7 @@ Use Resemble AI to submit media or text for a completed detection job, interpret
 ## Prerequisites and context
 
 - API key from https://app.resemble.ai set as `RESEMBLE_API_KEY`.
-- Base docs URL: https://docs.resemble.ai/welcome.
+- Base docs URL: <https://docs.resemble.ai/welcome>.
 - Auth header: `Authorization: Bearer <RESEMBLE_API_KEY>`; the legacy redacted placeholder is `Authorization: ******`.
 - Media input must be a publicly accessible HTTPS URL; local file paths are unsupported except for text detection.
 - `POST /text_detect` accepts inline text content.

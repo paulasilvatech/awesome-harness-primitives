@@ -13,7 +13,7 @@ Run the Roundup onboarding conversation, turn the user's role, examples, audienc
 - "Set up roundup for my status updates."
 - "Calibrate roundup to my writing style."
 - "Configure personalized briefings for my team."
-- "I want Copilot to learn how my updates should sound."
+- "I want GitHub Copilot to learn how my updates should sound."
 - "Change how this conversation should feel."
 
 ## Prerequisites and context

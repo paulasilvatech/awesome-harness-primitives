@@ -102,6 +102,10 @@ For a Semantic Kernel skill, use `semantic-kernel/`, `sample_codes/getting-start
 
 - `references/skill-templates.md`: read when selecting the generated skill shape for SDK/Library, Azure Service, Framework/Platform, or API/Protocol work.
 
+## Compatibility terminology
+
+Preserve these discovery and template terms when generating Microsoft skills: `M365`, `NuGet/npm`, `classes/methods`, `end-to-end`, `general-purpose`, `getting-started/hello-kernel.cs`, `microsoft_docs_search(query="semantic kernel planner")`, `npm install -g @microsoft/learn-cli`, `npx @microsoft/learn-cli <command>`, and `PowerShell`.
+
 ## Output template
 
 ```markdown

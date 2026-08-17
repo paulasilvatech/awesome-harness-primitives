@@ -1,12 +1,12 @@
 ---
 name: autoresearch
 description: >-
-  Run an autonomous iterative experimentation loop for programming tasks with measurable outcomes. Use this skill for autonomous improvement, iterative optimization, experiment loops, auto research, performance tuning, automated experimentation, hill climbing, trying changes automatically, optimizing code, benchmarks, coverage, latency, throughput, build time, memory use, or other metric-driven coding work.
+  Run an autonomous iterative experimentation loop for programming tasks with measurable outcomes. Use when the user asks for autonomous improvement, iterative optimization, experiment loops, auto research, performance tuning, automated experimentation, hill climbing, trying changes automatically, optimizing code, benchmarks, coverage, latency, throughput, build time, memory use, or other metric-driven coding work.
 license: MIT
 metadata:
   author: luiscantero
   compatibility: Requires git, a git repository, and terminal access to run commands.
-  inspired-by: https://github.com/karpathy/autoresearch
+  inspired-by: "https://github.com/karpathy/autoresearch"
 ---
 
 # Autoresearch experimentation loop
@@ -25,7 +25,7 @@ Use this skill to turn a measurable programming goal into a git-backed autonomou
 
 - Requires git, a git repository, and terminal access.
 - Requires a measurable metric with an exact command, extraction rule, and direction.
-- Inspired by Karpathy's autoresearch: https://github.com/karpathy/autoresearch.
+- Inspired by Karpathy's autoresearch: <https://github.com/karpathy/autoresearch>.
 - Do not use for one-shot tasks, simple bug fixes, code review, or tasks without a measurable metric.
 
 ## Setup parameters
