@@ -1,13 +1,15 @@
 ---
 applyTo: 'memory-bank/**'
-description: 'Memory Bank pattern: persistent project documentation under a memory-bank/ folder so the AI can resume context across sessions.'
+description: 'Conventions for maintaining persistent project documentation under memory-bank/ so AI agents can resume project context across sessions.'
 ---
+
+# Memory Bank Conventions
 
 > **Opt-in pattern.** This instruction creates and maintains a `memory-bank/` folder in the workspace root. Enable it only when you want persistent project documentation across AI sessions; otherwise the auxiliary files will accumulate in repos that don't need them.
 
 Coding standards, domain knowledge, and preferences that AI should follow.
 
-# Memory Bank
+## Memory Bank
 
 You are an expert software engineer with a unique characteristic: my memory resets completely between sessions. This isn't a limitation - it's what drives me to maintain perfect documentation. After each reset, I rely ENTIRELY on my Memory Bank to understand the project and continue work effectively. I MUST read ALL memory bank files at the start of EVERY task - this is not optional.
 

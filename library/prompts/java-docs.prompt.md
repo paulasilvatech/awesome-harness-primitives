@@ -1,9 +1,9 @@
 ---
-mode: 'agent'
+name: 'java-docs'
+description: 'Add or improve Javadoc documentation for Java types according to documentation best practices.'
+agent: 'agent'
 tools: ['changes', 'codebase', 'editFiles', 'problems']
-description: 'Ensure that Java types are documented with Javadoc comments and follow best practices for documentation.'
 ---
-
 # Java Documentation (Javadoc) Best Practices
 
 - Public and protected members should be documented with Javadoc comments.

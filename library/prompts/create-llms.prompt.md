@@ -1,6 +1,7 @@
 ---
-mode: 'agent'
-description: 'Create an llms.txt file from scratch based on repository structure following the llms.txt specification at https://llmstxt.org/'
+name: 'create-llms'
+description: 'Create an llms.txt file from the repository structure that follows the llms.txt specification.'
+agent: 'agent'
 tools: ['changes', 'codebase', 'editFiles', 'extensions', 'fetch', 'githubRepo', 'openSimpleBrowser', 'problems', 'runTasks', 'search', 'searchResults', 'terminalLastCommand', 'terminalSelection', 'testFailure', 'usages', 'vscodeAPI']
 ---
 # Create LLMs.txt File from Repository Structure

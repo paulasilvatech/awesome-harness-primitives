@@ -1,8 +1,9 @@
 ---
-mode: agent
-description: 'Generate a language translation for a mkdocs documentation stack.'
+name: 'mkdocs-translations'
+description: 'Generate a complete locale-specific translation workflow for an MkDocs documentation stack.'
+agent: 'agent'
+model: 'Claude Sonnet 4'
 tools: ['codebase', 'usages', 'problems', 'changes', 'terminalSelection', 'terminalLastCommand', 'searchResults', 'extensions', 'editFiles', 'search', 'runCommands', 'runTasks']
-model: Claude Sonnet 4
 ---
 
 # MkDocs AI Translator

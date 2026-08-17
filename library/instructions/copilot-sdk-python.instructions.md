@@ -1,10 +1,10 @@
 ---
-applyTo: '**.py, pyproject.toml, setup.py'
-description: 'This file provides guidance on building Python applications using GitHub Copilot SDK.'
+applyTo: '**/*.py,**/pyproject.toml,**/setup.py'
+description: 'Conventions for building Python applications with the GitHub Copilot SDK, including async client setup, sessions, permissions, and error handling.'
 name: 'GitHub Copilot SDK Python Instructions'
 ---
 
-## Core Principles
+# GitHub Copilot SDK Python Conventions
 
 - The SDK is in technical preview and may have breaking changes
 - Requires Python 3.9 or later

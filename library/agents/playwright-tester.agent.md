@@ -1,8 +1,10 @@
 ---
 name: "Playwright Tester Mode"
-description: "Testing mode for Playwright tests"
+description: "Explores web apps and generates or improves Playwright tests from observed user flows. Use when creating, debugging, or strengthening Playwright coverage."
 tools: ["read", "grep", "glob", "edit", "execute", "web_fetch", "web_search"]
 ---
+
+# Playwright Tester Agent
 
 ## Core Responsibilities
 

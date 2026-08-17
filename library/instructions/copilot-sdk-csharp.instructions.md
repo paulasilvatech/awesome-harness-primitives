@@ -1,10 +1,10 @@
 ---
-applyTo: '**.cs, **.csproj'
-description: 'This file provides guidance on building C# applications using GitHub Copilot SDK.'
+applyTo: '**/*.cs,**/*.csproj'
+description: 'Conventions for building C# applications with the GitHub Copilot SDK, including client setup, sessions, permissions, and error handling.'
 name: 'GitHub Copilot SDK C# Instructions'
 ---
 
-## Core Principles
+# GitHub Copilot SDK C# Conventions
 
 - The SDK is in technical preview and may have breaking changes
 - Requires .NET 10.0 or later
@@ -567,4 +567,3 @@ var session = await client.CreateSessionAsync(new SessionConfig
     ]
 });
 ```
-

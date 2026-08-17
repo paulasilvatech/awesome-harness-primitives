@@ -1,6 +1,8 @@
 ---
-description: 'Transform this Python script into a polished, beginner-friendly project by refactoring the code, adding clear instructional comments, and generating a complete markdown tutorial.'
+name: 'comment-code-generate-a-tutorial'
+description: 'Refactor a Python script into a beginner-friendly project with instructional comments and a tutorial.'
 ---
+# Generate a Commented Code Tutorial
 
 Transform this Python script into a polished, beginner-friendly project by refactoring the code, adding clear instructional comments, and generating a complete markdown tutorial.
 

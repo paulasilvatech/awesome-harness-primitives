@@ -1,9 +1,10 @@
 ---
 applyTo: '**/*.tf'
-description: 'Guidelines for generating modern Terraform code for Azure'
+description: 'Conventions for modern Terraform code targeting Azure, including provider usage, modules, variables, outputs, state, and idempotency.'
 ---
 
-## 1. Use Latest Terraform and Providers
+# Modern Terraform for Azure Conventions
+
 Always target the latest stable Terraform version and Azure providers. In code, specify the required Terraform and provider versions to enforce this. Keep provider versions updated to get new features and fixes.
 
 ## 2. Organize Code Cleanly

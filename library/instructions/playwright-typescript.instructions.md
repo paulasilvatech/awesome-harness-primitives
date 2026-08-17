@@ -1,9 +1,9 @@
 ---
-applyTo: '**/*.{ts,tsx}'
-description: 'Playwright test generation instructions'
+applyTo: '**/*.spec.ts,**/*.test.ts,**/*.spec.tsx,**/*.test.tsx,**/playwright.config.ts,tests/**/*.ts,tests/**/*.tsx'
+description: 'Conventions for Playwright tests in TypeScript covering test structure, selectors, assertions, fixtures, execution, and quality checks.'
 ---
 
-## Test Writing Guidelines
+# Playwright TypeScript Conventions
 
 ### Code Quality Standards
 - **Locators**: Prioritize user-facing, role-based locators (`getByRole`, `getByLabel`, `getByText`, etc.) for resilience and accessibility. Use `test.step()` to group interactions and improve test readability and reporting.

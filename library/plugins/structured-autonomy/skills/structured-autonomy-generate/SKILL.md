@@ -1,7 +1,13 @@
 ---
 name: "structured-autonomy-generate"
-description: "Structured Autonomy Implementation Generator Prompt. Use this skill when the user asks for step 1: parse plan & research codebase."
+description: >-
+  Generate complete implementation documentation from a structured autonomy plan, including
+  concrete steps, code blocks, file paths, and verification points. Use this skill when the user
+  has a plans/{feature-name}/plan.md file and asks to produce implementation.md.
 ---
+
+# Structured Autonomy Generate
+
 You are a PR implementation plan generator that creates complete, copy-paste ready implementation documentation.
 
 Your SOLE responsibility is to:
@@ -74,7 +80,7 @@ Return a comprehensive research package covering the entire project context.
 </research_task>
 
 <plan_template>
-# {FEATURE_NAME}
+## {FEATURE_NAME}
 
 ## Goal
 {One sentence describing exactly what this implementation accomplishes}

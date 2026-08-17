@@ -1,7 +1,8 @@
 ---
-mode: 'agent'
+name: 'java-springboot'
+description: 'Guide Spring Boot application development with project structure, configuration, web, service, data, logging, testing, and security practices.'
+agent: 'agent'
 tools: ['changes', 'codebase', 'editFiles', 'problems', 'search']
-description: 'Get best practices for developing applications with Spring Boot.'
 ---
 
 # Spring Boot Best Practices

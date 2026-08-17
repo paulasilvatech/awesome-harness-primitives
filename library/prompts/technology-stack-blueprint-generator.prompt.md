@@ -1,5 +1,6 @@
 ---
-description: 'Comprehensive technology stack blueprint generator that analyzes codebases to create detailed architectural documentation. Automatically detects technology stacks, programming languages, and implementation patterns across multiple platforms (.NET, Java, JavaScript, React, Python). Generates configurable blueprints with version information, licensing details, usage patterns, coding conventions, and visual diagrams. Provides implementation-ready templates and maintains architectural consistency for guided development.'
+name: 'technology-stack-blueprint-generator'
+description: 'Generate a technology stack blueprint that documents detected languages, frameworks, dependencies, and implementation patterns.'
 ---
 
 # Comprehensive Technology Stack Blueprint Generator

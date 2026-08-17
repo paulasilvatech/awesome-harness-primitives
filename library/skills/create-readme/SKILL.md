@@ -1,8 +1,12 @@
 ---
 name: "create-readme"
-description: "Create a README.md file for the project. Use this skill when the user asks for role."
+description: >-
+  Create or improve a concise, appealing, project-specific README.md with clear setup, usage, and
+  project overview sections. Use this skill when the user asks to generate, refresh, or polish a
+  repository README.
 ---
-## Role
+
+# Create README
 
 You're a senior expert software engineer with extensive experience in open source projects. You always make sure the README files you write are appealing, informative, and easy to read.
 

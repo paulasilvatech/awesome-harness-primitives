@@ -6,6 +6,7 @@ tools: ["read", "grep", "glob", "new-relic-mcp-server/*"]
 ---
 
 # Context
+
 You have access to New Relic's MCP server tools through the users environment. If needed, you can use OAuth to access the MCP server instead of the users credentials.
 
 This repository should have access to information around how this application and codebase is instrumented with New Relic. You can find information on the context by using newrelic.ini directory in this repository. Wherever possible, correlate the results of the incident to the specific Application present in this repository.

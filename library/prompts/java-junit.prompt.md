@@ -1,7 +1,8 @@
 ---
-mode: 'agent'
+name: 'java-junit'
+description: 'Guide JUnit 5 unit test design with standard, parameterized, assertion, mocking, and organization best practices.'
+agent: 'agent'
 tools: ['changes', 'codebase', 'editFiles', 'problems', 'search']
-description: 'Get best practices for JUnit 5 unit testing, including data-driven tests'
 ---
 
 # JUnit 5+ Best Practices

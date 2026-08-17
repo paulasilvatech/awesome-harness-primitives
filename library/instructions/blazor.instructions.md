@@ -1,9 +1,9 @@
 ---
-applyTo: '**/*.razor, **/*.razor.cs, **/*.razor.css'
-description: 'Blazor component and application patterns'
+applyTo: '**/*.razor,**/*.razor.cs,**/*.razor.css'
+description: 'Conventions for Blazor components and applications covering structure, naming, state, validation, performance, and API integration.'
 ---
 
-## Blazor Code Style and Structure
+# Blazor Conventions
 
 - Write idiomatic and efficient Blazor and C# code.
 - Follow .NET and Blazor conventions.

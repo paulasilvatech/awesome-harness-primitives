@@ -1,10 +1,10 @@
 ---
-applyTo: '**.go, go.mod'
-description: 'This file provides guidance on building Go applications using GitHub Copilot SDK.'
+applyTo: '**/*.go,**/go.mod'
+description: 'Conventions for building Go applications with the GitHub Copilot SDK, including client setup, sessions, permissions, and error handling.'
 name: 'GitHub Copilot SDK Go Instructions'
 ---
 
-## Core Principles
+# GitHub Copilot SDK Go Conventions
 
 - The SDK is in technical preview and may have breaking changes
 - Requires Go 1.21 or later

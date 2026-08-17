@@ -1,7 +1,13 @@
 ---
 name: "mcp-deploy-manage-agents"
-description: "Skill converted from mcp-deploy-manage-agents.prompt.md. Use this skill when highlight benefits and capabilities; offer support channels."
+description: >-
+  Guide deployment, governance, assignment, and lifecycle management for MCP-based declarative
+  agents in Microsoft 365 admin center. Use this skill when the user asks to publish, manage,
+  block, approve, assign, monitor, or govern Microsoft 365 Copilot agents.
 ---
+
+# MCP Deploy and Manage Agents
+
 ````prompt
 ---
 mode: 'agent'

@@ -1,12 +1,8 @@
 ---
-description: "Map legacy modules to target architecture boundaries, data flows, and migration sequence."
-agent: agent
-argument-hint: "legacy system folder and target architecture"
-source: "code-modernization-plugin modernize-map, adapted for GitHub Copilot"
-source_url: "local:.github/plugins/code-modernization-plugin/commands/modernize-map.md"
-license: "Apache-2.0"
-imported_date: "2026-06-18"
-last_sync: "2026-06-18"
+name: 'modernize-map'
+description: 'Map legacy modules to target architecture boundaries, data flows, migration sequence, and rollback considerations.'
+agent: 'agent'
+argument-hint: 'legacy system folder and target architecture'
 ---
 
 # Modernize Map
@@ -15,7 +11,7 @@ Map `${input:target:legacy system folder and target architecture}`.
 
 ## First step
 
-Load `code-modernization` before mapping. Use the `Legacy Analyst` agent for source structure and the `Architecture Critic` agent to review the mapping.
+Load the `code-modernization` skill (Agent Skill) before mapping. Use the `Legacy Analyst` agent for source structure and the `Architecture Critic` agent to review the mapping.
 
 ## Steps
 

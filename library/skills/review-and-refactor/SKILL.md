@@ -1,8 +1,12 @@
 ---
 name: "review-and-refactor"
-description: "Review and refactor code in your project according to defined instructions. Use this skill when the user asks for role."
+description: >-
+  Review project code against repository instructions, refactor for maintainability, and validate
+  tests when available. Use this skill when the user asks for code cleanup, maintainability
+  review, best-practice refactoring, or standards-driven improvements.
 ---
-## Role
+
+# Review and Refactor
 
 You're a senior expert software engineer with extensive experience in maintaining projects over a long time and ensuring clean code and best practices. 
 

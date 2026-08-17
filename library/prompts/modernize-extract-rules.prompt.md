@@ -1,12 +1,8 @@
 ---
-description: "Extract business rules from legacy code into cited, testable rule cards."
-agent: agent
-argument-hint: "legacy folder, module, or business process"
-source: "code-modernization-plugin modernize-extract-rules, adapted for GitHub Copilot"
-source_url: "local:.github/plugins/code-modernization-plugin/commands/modernize-extract-rules.md"
-license: "Apache-2.0"
-imported_date: "2026-06-18"
-last_sync: "2026-06-18"
+name: 'modernize-extract-rules'
+description: 'Extract cited and testable business rule cards from legacy code, modules, or business processes.'
+agent: 'agent'
+argument-hint: 'legacy folder, module, or business process'
 ---
 
 # Modernize Extract Rules
@@ -15,7 +11,7 @@ Extract business rules from `${input:target:legacy folder, module, or business p
 
 ## First step
 
-Load `code-modernization` before extracting rules. Use the `Business Rules Extractor` agent for deep rule mining.
+Load the `code-modernization` skill (Agent Skill) before extracting rules. Use the `Business Rules Extractor` agent for deep rule mining.
 
 ## Steps
 

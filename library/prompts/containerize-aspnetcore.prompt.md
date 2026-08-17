@@ -1,9 +1,9 @@
 ---
-mode: 'agent'
+name: 'containerize-aspnetcore'
+description: 'Containerize an ASP.NET Core project with project-specific Docker artifacts.'
+agent: 'agent'
 tools: ['codebase', 'editFiles', 'terminalCommand']
-description: 'Containerize an ASP.NET Core project by creating Dockerfile and .dockerfile files customized for the project.'
 ---
-
 # ASP.NET Core Docker Containerization Prompt
 
 ## Containerization Request

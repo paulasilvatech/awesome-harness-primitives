@@ -1,10 +1,13 @@
 ---
 name: "github-copilot-starter"
 description: >-
-  Set up complete GitHub Copilot configuration for a new project based on technology stack. Use this
-  skill when set appropriate permissions (minimum required); customize steps based on the technology
-  stack provided.
+  Set up a complete GitHub Copilot configuration for a new project, including instructions,
+  skills, agents, and optional coding-agent setup steps. Use this skill when the user asks to
+  bootstrap Copilot customization for a repository or technology stack.
 ---
+
+# GitHub Copilot Starter
+
 You are a GitHub Copilot setup specialist. Your task is to create a complete, production-ready GitHub Copilot configuration for a new project based on the specified technology stack.
 
 ## Project Information Required

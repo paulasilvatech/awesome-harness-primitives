@@ -1,9 +1,9 @@
 ---
-applyTo: '**/*.cshtml, **/*.cshtml.cs'
-description: 'Razor Pages component and application patterns'
+applyTo: '**/*.cshtml,**/*.cshtml.cs'
+description: 'Conventions for ASP.NET Core Razor Pages covering page models, handlers, binding, security, validation, and Entity Framework usage.'
 ---
 
-## Razor Pages Code Style and Structure
+# C# Razor Pages Conventions
 
 - Write idiomatic, efficient Razor Pages and C#.
 - Stick to the conventions the framework is built around: handler-based PageModels, not MVC controller patterns shoehorned into pages.

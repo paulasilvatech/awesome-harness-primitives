@@ -40,9 +40,9 @@ When operating in chat mode with these instructions loaded:
 
 These instructions provide Azure-specific guidance for solutions created Terraform, including how to incorporate and use Azure Verified Modules.
 
-For general Terraform conventions, see [terraform.instructions.md](terraform.instructions.md).
+For general Terraform conventions, follow the `terraform` instructions.
 
-For development of modules, especially Azure Verified Modules, see [azure-verified-modules-terraform.instructions.md](azure-verified-modules-terraform.instructions.md).
+For development of modules, especially Azure Verified Modules, follow the `azure-verified-modules-terraform` instructions.
 
 ## 2. Anti-Patterns to Avoid
 
@@ -89,7 +89,7 @@ Use `snake_casing` for variables and module names.
 
 ## 4. Use Azure Verified Modules (AVM)
 
-Any significant resource should use an AVM if available. AVMs are designed to be aligned to the Well Architected Framework, are supported and maintained by Microsoft helping reduce the amount of code to be maintained. Information about how to discover these is available in [Azure Verified Modules for Terraform](azure-verified-modules-terraform.instructions.md).
+Any significant resource should use an AVM if available. AVMs are designed to be aligned to the Well Architected Framework, are supported and maintained by Microsoft helping reduce the amount of code to be maintained. Information about how to discover these is available in the `azure-verified-modules-terraform` instructions.
 
 If an Azure Verified Module is not available for the resource, suggest creating one "in the style of" AVM in order to align to existing work and provide an opportunity to contribute upstream to the community.
 

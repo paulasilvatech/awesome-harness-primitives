@@ -1,9 +1,9 @@
 ---
-mode: 'agent'
+name: 'ef-core'
+description: 'Apply Entity Framework Core best practices to data access code and project configuration.'
+agent: 'agent'
 tools: ['changes', 'codebase', 'editFiles', 'problems', 'runCommands']
-description: 'Get best practices for Entity Framework Core'
 ---
-
 # Entity Framework Core Best Practices
 
 Your goal is to help me follow best practices when working with Entity Framework Core.

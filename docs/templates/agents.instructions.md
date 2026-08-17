@@ -984,8 +984,8 @@ Each level can override settings from previous levels.
 - [Your First Custom Agent Tutorial](https://docs.github.com/en/copilot/tutorials/customization-library/custom-agents/your-first-custom-agent)
 
 ### Related Files
-- [Prompt Files Guidelines](./prompt.instructions.md) - For creating prompt files
-- [Instructions Guidelines](./instructions.instructions.md) - For creating instruction files
+- Follow the `prompt` instructions for creating VS Code prompt files
+- Follow the `instructions` instructions for creating instruction files
 
 ## Version Compatibility Notes
 

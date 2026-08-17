@@ -1,9 +1,9 @@
 ---
 applyTo: '**'
-description: 'Prevent Copilot from wreaking havoc across your codebase, keeping it under control.'
+description: 'General repository-wide conventions for keeping Copilot changes controlled, minimal, standard, surgical, and aligned with project context.'
 ---
 
-## Core Directives & Hierarchy
+# Taming Copilot Conventions
 
 This section outlines the absolute order of operations. These rules have the highest priority and must not be violated.
 

@@ -5,7 +5,7 @@ description: 'PowerShell Pester testing best practices based on Pester v6 conven
 
 # PowerShell Pester v6 Testing Guidelines
 
-This guide provides PowerShell-specific instructions for creating automated tests with the PowerShell Pester v6 module. Pester v6 runs on Windows PowerShell 5.1 and PowerShell 7.4+. Follow the general PowerShell scripting guidance in [powershell.instructions.md](./powershell.instructions.md).
+This guide provides PowerShell-specific instructions for creating automated tests with the PowerShell Pester v6 module. Pester v6 runs on Windows PowerShell 5.1 and PowerShell 7.4+. Follow the general PowerShell scripting guidance in the `powershell` instructions.
 
 Pester v6 is largely compatible with v5, but it makes several previously deprecated behaviours fail fast. Keep each test file self-contained and run the suite with the same PowerShell and Pester versions used by CI.
 

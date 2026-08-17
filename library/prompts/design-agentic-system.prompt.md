@@ -1,9 +1,9 @@
 ---
-description: "Design a production agentic system on GitHub platform and Azure AI Foundry end to end: resolve model routing, prompt and semantic caching, short and long term memory, context curation, tools and MCP, identity and guardrails, evaluation, observability, and cost, then produce the architecture document and diagrams. Routes to the AI-Native Engineer agent and its companion skills."
-agent: agent
-argument-hint: "the system to design, for example an agentic RAG service on Foundry with a Redis semantic cache"
+name: 'design-agentic-system'
+description: 'Design a production agentic system on GitHub and Azure AI Foundry with architecture documentation and diagrams.'
+agent: 'agent'
+argument-hint: 'the system to design, for example an agentic RAG service on Foundry with a Redis semantic cache'
 ---
-
 # Design Agentic System
 
 Design `${input:system:the agentic system to design, for example an agentic RAG service on Foundry}` as a production architecture on the GitHub platform and Azure AI Foundry.

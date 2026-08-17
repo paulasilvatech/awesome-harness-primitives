@@ -1,9 +1,9 @@
 ---
 applyTo: '**/*.bicep,**/*.tf,**/*iot*.md,**/*smart-city*.md,**/*edge*.md'
-description: 'Require Azure IoT Edge documentation review before proposing edge IoT architectures or Azure implementation guidance.'
+description: 'Conventions for Azure IoT Edge architecture guidance, requiring documentation review before proposing edge IoT designs or implementations.'
 ---
 
-## Azure IoT Edge Architecture Instruction
+# Azure IoT Edge Architecture Conventions
 
 When the task includes Azure IoT, Smart City, edge processing, gateway design, or disconnected edge scenarios, do this before providing architecture recommendations:
 

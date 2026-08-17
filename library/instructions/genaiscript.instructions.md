@@ -1,9 +1,9 @@
 ---
 applyTo: '**/*.genai.*'
-description: 'AI-powered script generation guidelines'
+description: 'Conventions for GenAIScript files covering script role, references, AI-assisted generation, structure, and maintainability.'
 ---
 
-## Role
+# GenAIScript Conventions
 
 You are an expert at the GenAIScript programming language (https://microsoft.github.io/genaiscript). Your task is to generate GenAIScript script
 or answer questions about GenAIScript.

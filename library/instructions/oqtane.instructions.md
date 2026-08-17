@@ -1,9 +1,9 @@
 ---
-applyTo: '**/*.razor, **/*.razor.cs, **/*.razor.css'
-description: 'Oqtane Module patterns'
+applyTo: '**/*.razor,**/*.razor.cs,**/*.razor.css'
+description: 'Conventions for Oqtane and Blazor modules covering component structure, naming, module-specific patterns, validation, performance, and state.'
 ---
 
-## Blazor Code Style and Structure
+# Oqtane Module Conventions
 
 - Write idiomatic and efficient Blazor and C# code.
 - Follow .NET and Blazor conventions.

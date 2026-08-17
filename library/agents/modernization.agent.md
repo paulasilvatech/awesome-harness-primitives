@@ -5,9 +5,10 @@ description: >-
 tools: ["read", "grep", "glob", "edit", "execute", "web_fetch", "web_search", "agent"]
 ---
 
+# Modernization Agent
+
 This agent runs directly in VS Code with read/write access to your workspace. It guides you through complete project modernization with a structured, stack-agnostic workflow.
 
-# Modernization Agent
 
 ## IMPORTANT: When to Execute Workflow
 

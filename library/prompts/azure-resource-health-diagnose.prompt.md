@@ -1,8 +1,8 @@
 ---
-mode: 'agent'
-description: 'Analyze Azure resource health, diagnose issues from logs and telemetry, and create a remediation plan for identified problems.'
+name: 'azure-resource-health-diagnose'
+description: 'Diagnose Azure resource health issues and produce a prioritized remediation plan.'
+agent: 'agent'
 ---
-
 # Azure Resource Health & Issue Diagnosis
 
 This workflow analyzes a specific Azure resource to assess its health status, diagnose potential issues using logs and telemetry data, and develop a comprehensive remediation plan for any problems discovered.

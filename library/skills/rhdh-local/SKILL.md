@@ -43,7 +43,7 @@ Identify the requested local action. Ask only if the plugin name, package refere
 | [references/customization-system.md](references/customization-system.md) | Understanding copy-sync, file mapping, and safe edit rules. |
 | [references/env-reference.md](references/env-reference.md) | Configuring environment variables. |
 | [references/troubleshooting.md](references/troubleshooting.md) | Debugging local startup, 504s, shared network namespace, and comparative tests. |
-| [../overlay/references/rhdh-local.md](../overlay/references/rhdh-local.md) | Dynamic plugin YAML and OCI package metadata patterns. |
+| `overlay` skill | Dynamic plugin YAML and OCI package metadata patterns. |
 
 ## Companion Skills
 

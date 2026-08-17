@@ -1,7 +1,13 @@
 ---
 name: "mcp-create-adaptive-cards"
-description: "Skill converted from mcp-create-adaptive-cards.prompt.md. Use this skill when the user asks for create adaptive cards for mcp plugins."
+description: >-
+  Create Adaptive Card response templates and response_semantics for MCP-based API plugins in
+  Microsoft 365 Copilot. Use this skill when the user asks to present MCP tool or API data with
+  visual Adaptive Cards, card templates, or citation mappings.
 ---
+
+# MCP Create Adaptive Cards
+
 ````prompt
 ---
 mode: 'agent'

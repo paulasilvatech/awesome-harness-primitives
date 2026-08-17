@@ -53,7 +53,7 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | Bicep Planning | Act as implementation planner for your Azure Bicep Infrastructure as Code task. |
 | Bicep Specialist | Act as an Azure Bicep Infrastructure as Code coding specialist that creates Bicep templates. |
 | Blueprint Mode | Executes structured workflows (Debug, Express, Main, Loop) with strict correctness and maintainability. Enforces an improved tool usage policy, never assumes facts, prioritizes re… |
-| C# Expert | An agent designed to assist with software development tasks for .NET projects. |
+| C# Expert | Expert C#/.NET development support for design, implementation, debugging, async, testing, and modernization tasks. Use when working on .NET or C# code. |
 | C# MCP Server Expert | Expert assistant for developing Model Context Protocol (MCP) servers in C# |
 | C#/.NET Janitor | Perform janitorial tasks on C#/.NET code including cleanup, modernization, and tech debt remediation. |
 | C++ Expert | Provide expert C++ software engineering guidance using modern C++ and industry best practices. |
@@ -65,7 +65,7 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | Clojure Interactive Programming | Expert Clojure pair programmer with REPL-first methodology, architectural oversight, and interactive problem-solving. Enforces quality standards, prevents workarounds, and develop… |
 | Cloud and SaaS Outage Triage | Distinguish upstream cloud or SaaS incidents from application failures before changing code, using live official-feed status and incident timelines. |
 | Comet Opik | Unified Comet Opik agent for instrumenting LLM apps, managing prompts/projects, auditing prompts, and investigating traces/metrics via the latest Opik MCP server. |
-| Context Architect | An agent that helps plan and execute multi-file changes by identifying relevant context and dependencies |
+| Context Architect | Plans and executes multi-file code changes by identifying relevant context, dependencies, risks, and validation paths before editing. |
 | Context7-Expert | Expert in latest library versions, best practices, and correct syntax using up-to-date documentation |
 | copilot-primitive-architect | Advises on Copilot primitive architecture: type routing, responsibility boundaries, and read-only reviews; does not create skills or primitives. |
 | Create PRD Chat Mode | Generate a comprehensive Product Requirements Document (PRD) in Markdown, detailing user stories, acceptance criteria, technical considerations, and metrics. Optionally create Git… |
@@ -75,7 +75,7 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | Debug Mode Instructions | Debug your application to find and fix a bug |
 | Declarative Agents Architect | Architect Microsoft 365 Copilot declarative agents using schema v1.5, TypeSpec, Agents Toolkit, capability selection, testing, and enterprise deployment best practices. |
 | Defender Scout KQL | Generates, validates, and optimizes KQL queries for Microsoft Defender XDR Advanced Hunting across Endpoint, Identity, Office 365, Cloud Apps, and Identity. |
-| Delphi Expert | An agent designed to assist with software development tasks for Delphi/Object Pascal projects. |
+| Delphi Expert | Expert Delphi/Object Pascal development support for VCL, FMX, FireDAC, legacy modernization, debugging, architecture, and testing tasks. |
 | Demonstrate Understanding mode instructions | Validate user understanding of code, design patterns, and implementation details through guided questioning. |
 | Devils Advocate | I play the devil's advocate to challenge and stress-test your ideas by finding flaws, risks, and edge cases |
 | DevOps Expert | DevOps specialist following the infinity loop principle (Plan → Code → Build → Test → Release → Deploy → Operate → Monitor) with focus on automation, collaboration, and continuous… |
@@ -135,7 +135,7 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | MAUI Expert | Support development of .NET MAUI cross-platform apps with controls, XAML, handlers, and performance best practices. |
 | MCP M365 Agent Expert | Expert assistant for building MCP-based declarative agents for Microsoft 365 Copilot with Model Context Protocol integration |
 | Mentor mode | Help mentor the engineer by providing guidance and support. |
-| Meta Agentic Project Scaffold | Meta agentic project creation assistant to help users create and manage project workflows effectively. |
+| Meta Agentic Project Scaffold | Finds and installs relevant awesome-copilot prompts, instructions, and chat modes to scaffold agentic project workflows. Use when creating reusable Copilot workflow assets for an… |
 | Microsoft Learn Contributor | Microsoft Learn Contributor chatmode for editing and writing Microsoft Learn documentation following Microsoft Writing Style Guide and authoring best practices. |
 | Microsoft Study and Learn | Activate your personal Microsoft/Azure tutor - learn through guided discovery, not just answers. |
 | Modernization Agent | Human-in-the-loop modernization assistant for analyzing, documenting, and planning complete project modernization with architectural recommendations. |
@@ -157,7 +157,7 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | Plan Mode - Strategic Planning & Architecture | Strategic planning and architecture assistant focused on thoughtful analysis before implementation. Helps developers understand codebases, clarify requirements, and develop compre… |
 | Planning mode instructions | Generate an implementation plan for new features or refactoring existing code. |
 | Platform SRE for Kubernetes | SRE-focused Kubernetes specialist prioritizing reliability, safe rollouts/rollbacks, security defaults, and operational verification for production-grade deployments |
-| Playwright Tester Mode | Testing mode for Playwright tests |
+| Playwright Tester Mode | Explores web apps and generates or improves Playwright tests from observed user flows. Use when creating, debugging, or strengthening Playwright coverage. |
 | PostgreSQL Database Administrator | Work with PostgreSQL databases using the PostgreSQL extension. |
 | Power BI Data Modeling Expert Mode | Expert Power BI data modeling guidance using star schema principles, relationship design, and Microsoft best practices for optimal model performance and usability. |
 | Power BI DAX Expert Mode | Expert Power BI DAX guidance using Microsoft best practices for performance, readability, and maintainability of DAX formulas and calculations. |
@@ -172,7 +172,7 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | Prompt Engineer | A specialized chat mode for analyzing and improving prompts. Every user input is treated as a prompt to be improved. It first provides a detailed analysis of the original prompt w… |
 | PySpark Expert Agent | Diagnose PySpark performance bottlenecks, distributed execution pitfalls, and suggest Spark-native rewrites and safer distributed patterns (incl. mapInPandas guidance). |
 | Python MCP Server Expert | Expert assistant for developing Model Context Protocol (MCP) servers in Python |
-| Python Notebook Sample Builder | Custom agent for building Python Notebooks in VS Code that demonstrate Azure and AI features |
+| Python Notebook Sample Builder | Builds verified Python notebooks that demonstrate Azure and AI features. Use when creating hands-on VS Code notebook samples. |
 | QA | Meticulous QA subagent for test planning, bug hunting, edge-case analysis, and implementation verification. |
 | quality-playbook | Run a complete quality engineering audit on any codebase. Orchestrates six phases — explore, generate, review, audit, reconcile, verify — each in its own context window for maximu… |
 | react18-auditor | Deep-scan specialist for React 16/17 class-component codebases targeting React 18.3.1. Finds unsafe lifecycle methods, legacy context, batching vulnerabilities, event delegation a… |
@@ -233,13 +233,13 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | Thinking Beast Mode | A transcendent coding agent with quantum cognitive architecture, adversarial intelligence, and unrestricted creative freedom. |
 | Trojan Skill Hunter | Audits agent, skill, instruction, hook, and MCP-config contributions for hidden prompt injection, tool poisoning, unicode steganography, and excessive-agency red flags before they… |
 | TypeScript MCP Server Expert | Expert assistant for developing Model Context Protocol (MCP) servers in TypeScript |
-| Ultimate Transparent Thinking Beast Mode | Ultimate Transparent Thinking Beast Mode |
+| Ultimate Transparent Thinking Beast Mode | Autonomous coding agent for transparent, exhaustive problem solving. Use when a task needs persistent planning, implementation, validation, and risk surfacing. |
 | Universal Janitor | Perform janitorial tasks on any codebase including cleanup, simplification, and tech debt remediation. |
 | Universal PR Comment Addresser | Address PR comments |
-| VS Code Insiders Accessibility Tracker | Specialized agent for tracking and analyzing accessibility improvements in VS Code Insiders builds |
+| VS Code Insiders Accessibility Tracker | Tracks and analyzes VS Code Insiders accessibility improvements. Use when investigating released accessibility fixes, issues, and feature history. |
 | VSCode Tour Expert | Expert agent for creating and maintaining VSCode CodeTour files with comprehensive schema support and best practices |
-| WG Code Alchemist | Ask WG Code Alchemist to transform your code with Clean Code principles and SOLID design |
-| WG Code Sentinel | Ask WG Code Sentinel to review your code for security issues. |
+| WG Code Alchemist | Refactors code using Clean Code and SOLID principles. Use when transforming code smells into maintainable implementations. |
+| WG Code Sentinel | Reviews code and configuration for security vulnerabilities. Use when assessing application security risks and mitigations. |
 | WinForms Expert | Support development of .NET (OOP) WinForms Designer compatible Apps. |
 | Workshop TA | Room coordinator for a multi-agent workshop. Sees all desks, routes work, tracks state, manages journals, and emits coordination signals. Not a desk — the person who sees the whol… |
 
@@ -247,7 +247,7 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 
 | Instruction | applyTo | Description |
 | --- | --- | --- |
-| .NET Framework Upgrade Specialist | **/*.{csproj,vbproj,fsproj,sln,props,targets} | Specialized agent for comprehensive .NET framework upgrades with progressive tracking and validation |
+| .NET Framework Upgrade Specialist | **/*.{csproj,vbproj,fsproj,sln,props,targets} | Conventions for .NET project upgrades covering project sequencing, target framework selection, breaking changes, validation, and CI updates. |
 | a11y | **/*.{html,htm,css,scss,sass,js,jsx,ts,tsx,vue,svelte,astro} | Comprehensive web accessibility standards based on WCAG 2.2 AA, with 38+ anti-patterns, legal enforcement context (EAA, ADA Title II), WAI-ARIA patterns, and framework-specific fi… |
 | agent-safety | ** | Guidelines for building safe, governed AI agent systems. Apply when writing code that uses agent frameworks, tool-calling LLMs, or multi-agent orchestration to ensure proper safet… |
 | agent-skills | **/skills/**/SKILL.md | Guidelines for creating high-quality Agent Skills for GitHub Copilot |
@@ -264,18 +264,18 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | azure-devops-pipelines | **/azure-pipelines.yml, **/azure-pipelines*.yml, **/*.pipeline.yml | Best practices for Azure DevOps Pipeline YAML files |
 | azure-durable-functions-csharp | **/*.cs, **/host.json, **/local.settings.json, **/*.csproj | Guidelines and best practices for building Azure Durable Functions in C# using the isolated worker model |
 | azure-functions-csharp | **/*.cs, **/host.json, **/local.settings.json, **/*.csproj | Guidelines and best practices for building Azure Functions in C# using the isolated worker model |
-| azure-functions-typescript | **/*.ts, **/*.js, **/*.json | TypeScript patterns for Azure Functions |
-| azure-iot-edge-architecture | **/*.bicep,**/*.tf,**/*iot*.md,**/*smart-city*.md,**/*edge*.md | Require Azure IoT Edge documentation review before proposing edge IoT architectures or Azure implementation guidance. |
+| azure-functions-typescript | **/*.ts,**/*.js,**/host.json,**/local.settings.json,**/function.json,**/package.json | Conventions for Azure Functions apps in TypeScript and JavaScript, including async Node.js patterns, dependency choices, and function configuration. |
+| azure-iot-edge-architecture | **/*.bicep,**/*.tf,**/*iot*.md,**/*smart-city*.md,**/*edge*.md | Conventions for Azure IoT Edge architecture guidance, requiring documentation review before proposing edge IoT designs or implementations. |
 | azure-logic-apps-power-automate | **/*.json,**/*.logicapp.json,**/workflow.json,**/*-definition.json,**/*.flow.json | Guidelines for developing Azure Logic Apps and Power Automate workflows with best practices for Workflow Definition Language (WDL), integration patterns, and enterprise automation |
 | azure-naming | **/*.bicep,**/*.tf,**/*.tfvars,**/*.bicepparam,**/infra/**,**/infrastructure/** | Azure resource naming conventions based on Microsoft CAF (Cloud Adoption Framework). Use when creating, reviewing, or suggesting names for Azure resources. |
 | azure-verified-modules-bicep | **/*.bicep, **/*.bicepparam | Azure Verified Modules (AVM) and Bicep |
 | azure-verified-modules-terraform | **/*.terraform, **/*.tf, **/*.tfvars, **/*.tfstate, **/*.tflint.hcl, **/*.tf.json, **/*.tfvars.json | Azure Verified Modules (AVM) and Terraform |
-| bicep-code-best-practices | **/*.bicep | Infrastructure as Code with Bicep |
-| blazor | **/*.razor, **/*.razor.cs, **/*.razor.css | Blazor component and application patterns |
+| bicep-code-best-practices | **/*.bicep | Conventions for Azure Bicep infrastructure code covering naming, parameters, resource structure, security, modules, and outputs. |
+| blazor | **/*.razor,**/*.razor.cs,**/*.razor.css | Conventions for Blazor components and applications covering structure, naming, state, validation, performance, and API integration. |
 | caveman-mode | ** | Terse, low-token responses. Minimal words, no fluff. Full capabilities preserved. Use when: optimize token usage, low-token mode, concise output, caveman mode, reduce verbosity, t… |
 | centos-linux | ** | Guidance for CentOS administration, RHEL-compatible tooling, and SELinux-aware operations. |
 | clojure | **/*.{clj,cljs,cljc,bb,edn.mdx?} | Clojure-specific coding patterns, inline def usage, code block templates, and namespace handling for Clojure development. |
-| cmake-vcpkg | **/*.cmake, **/CMakeLists.txt, **/*.cpp, **/*.h, **/*.hpp | C++ project configuration and package management |
+| cmake-vcpkg | **/*.cmake,**/CMakeLists.txt,**/*.cpp,**/*.c,**/*.h,**/*.hpp | Conventions for CMake C++ projects that use vcpkg manifest mode for dependency management and build configuration. |
 | code-review-generic | ** | Generic code review instructions that can be customized for any project using GitHub Copilot |
 | codexer | **/*.py | Advanced Python research assistant with Context 7 MCP integration, focusing on speed, reliability, and 10+ years of software development expertise |
 | coldfusion-cfc | **/*.cfc | ColdFusion Coding Standards for CFC component and application patterns |
@@ -287,12 +287,12 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | convert-jpa-to-spring-data-cosmos | **/*.java,**/pom.xml,**/build.gradle,**/application*.properties | Step-by-step guide for converting Spring Boot JPA applications to use Azure Cosmos DB with Spring Data Cosmos |
 | copilot-primitive-authoring | library/agents/*.agent.md,library/instructions/*.instructions.md,library/skills/**/SKILL.md,library/prompts/*.prompt.md,.github/agents/*.agent.md,.github/instructions/*.instructions.md,.github/skills/**/SKILL.md,.github/prompts/*.prompt.md | Require routing, canonical paths, frontmatter, mirror, and validation conventions when editing Copilot primitives. |
 | copilot-thought-logging | ** | See process Copilot is following where you can edit this to reshape the interaction or save when follow up may be needed |
-| cpp-language-service-tools | **/*.cpp, **/*.h, **/*.hpp, **/*.cc, **/*.cxx, **/*.c | You are an expert at using C++ language service tools (GetSymbolReferences_CppTools, GetSymbolInfo_CppTools, GetSymbolCallHierarchy_CppTools). Instructions for calling C++ Tools f… |
+| cpp-language-service-tools | **/*.cpp,**/*.h,**/*.hpp,**/*.cc,**/*.cxx,**/*.c | Conventions for using C++ language service tools for symbol references, symbol information, and call hierarchy instead of manual code inspection. |
 | csharp | **/*.cs | Guidelines for building C# applications |
 | csharp-ja | **/*.cs | C# アプリケーション構築指針 by @tsubakimoto |
 | csharp-ko | **/*.cs | C# 애플리케이션 개발을 위한 코드 작성 규칙 by @jgkim999 |
 | csharp-mcp-server | **/*.cs, **/*.csproj | Instructions for building Model Context Protocol (MCP) servers using the C# SDK |
-| csharp-razorpages | **/*.cshtml, **/*.cshtml.cs | Razor Pages component and application patterns |
+| csharp-razorpages | **/*.cshtml,**/*.cshtml.cs | Conventions for ASP.NET Core Razor Pages covering page models, handlers, binding, security, validation, and Entity Framework usage. |
 | dart-n-flutter | **/*.dart | Instructions for writing Dart and Flutter code following the official recommendations. |
 | dataverse-python | **/*.py | Getting-started guidance for installing, authenticating, and performing basic Python Dataverse SDK operations. |
 | dataverse-python-advanced-features | **/*.py | Advanced Python Dataverse SDK patterns for option sets, complex filtering, SQL queries, metadata operations, and production use. |
@@ -316,18 +316,18 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | dotnet-framework | **/*.csproj, **/*.cs | Guidance for working with .NET Framework projects. Includes project structure, C# language version, NuGet management, and best practices. |
 | dotnet-maui | **/*.xaml, **/*.cs | .NET MAUI component and application patterns |
 | dotnet-maui-9-to-dotnet-maui-10-upgrade | **/*.csproj, **/*.cs, **/*.xaml | Instructions for upgrading .NET MAUI applications from version 9 to version 10, including breaking changes, deprecated APIs, and migration strategies for ListView to CollectionVie… |
-| dotnet-wpf | **/*.xaml, **/*.cs | .NET WPF component and application patterns |
+| dotnet-wpf | **/*.xaml,**/*.cs | Conventions for .NET WPF applications covering MVVM structure, XAML and C# patterns, UI behavior, performance, and testing. |
 | draw-io | **/*.drawio,**/*.drawio.svg,**/*.drawio.png | Use when creating, editing, or reviewing draw.io diagrams and mxGraph XML in .drawio, .drawio.svg, or .drawio.png files. |
 | exclude-prompt-data | ** | Write only the resulting content into files. Never echo prompt instructions, rationale, or meta-commentary into documentation, comments, or code being produced from a prompt. |
 | fedora-linux | ** | Guidance for Fedora (Red Hat family) systems, dnf workflows, SELinux, and modern systemd practices. |
-| genaiscript | **/*.genai.* | AI-powered script generation guidelines |
-| generate-modern-terraform-code-for-azure | **/*.tf | Guidelines for generating modern Terraform code for Azure |
+| genaiscript | **/*.genai.* | Conventions for GenAIScript files covering script role, references, AI-assisted generation, structure, and maintainability. |
+| generate-modern-terraform-code-for-azure | **/*.tf | Conventions for modern Terraform code targeting Azure, including provider usage, modules, variables, outputs, state, and idempotency. |
 | gilfoyle-code-review | ** | Gilfoyle-style code review instructions that channel the sardonic technical supremacy of Silicon Valley's most arrogant systems architect. |
-| GitHub Copilot SDK C# Instructions | **.cs, **.csproj | This file provides guidance on building C# applications using GitHub Copilot SDK. |
-| GitHub Copilot SDK Go Instructions | **.go, go.mod | This file provides guidance on building Go applications using GitHub Copilot SDK. |
-| GitHub Copilot SDK Java Instructions | **/*.java, **/pom.xml | This file provides guidance on building Java applications using GitHub Copilot SDK for Java. |
-| GitHub Copilot SDK Node.js Instructions | **.ts, **.js, package.json | This file provides guidance on building Node.js/TypeScript applications using GitHub Copilot SDK. |
-| GitHub Copilot SDK Python Instructions | **.py, pyproject.toml, setup.py | This file provides guidance on building Python applications using GitHub Copilot SDK. |
+| GitHub Copilot SDK C# Instructions | **/*.cs,**/*.csproj | Conventions for building C# applications with the GitHub Copilot SDK, including client setup, sessions, permissions, and error handling. |
+| GitHub Copilot SDK Go Instructions | **/*.go,**/go.mod | Conventions for building Go applications with the GitHub Copilot SDK, including client setup, sessions, permissions, and error handling. |
+| GitHub Copilot SDK Java Instructions | **/*.java,**/pom.xml,**/build.gradle,**/build.gradle.kts | Conventions for building Java applications with the GitHub Copilot SDK, including client setup, virtual threads, sessions, permissions, and error handling. |
+| GitHub Copilot SDK Node.js Instructions | **/*.ts,**/*.js,**/package.json | Conventions for building Node.js and TypeScript applications with the GitHub Copilot SDK, including client setup, sessions, permissions, and error handling. |
+| GitHub Copilot SDK Python Instructions | **/*.py,**/pyproject.toml,**/setup.py | Conventions for building Python applications with the GitHub Copilot SDK, including async client setup, sessions, permissions, and error handling. |
 | github-actions-ci-cd-best-practices | .github/workflows/*.yml,.github/workflows/*.yaml | Comprehensive guide for building robust, secure, and efficient CI/CD pipelines using GitHub Actions. Covers workflow structure, jobs, steps, environment variables, secret manageme… |
 | go | **/*.go,**/go.mod,**/go.sum | Instructions for writing Go code following idiomatic Go practices and community standards |
 | go-mcp-server | **/*.go, **/go.mod, **/go.sum | Best practices and patterns for building Model Context Protocol (MCP) servers in Go using the official github.com/modelcontextprotocol/go-sdk package. |
@@ -353,7 +353,7 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | markdown-content-creation | **/*.md | Markdown guidelines and content creation standards for blog posts |
 | markdown-gfm | **/*.md | Markdown formatting for GitHub-flavored markdown (GFM) files |
 | mcp-m365-copilot | **/{*mcp*,*agent*,*plugin*,declarativeAgent.json,ai-plugin.json,mcp.json,manifest.json} | Best practices for building MCP-based declarative agents and API plugins for Microsoft 365 Copilot with Model Context Protocol integration |
-| memory-bank | memory-bank/** | Memory Bank pattern: persistent project documentation under a memory-bank/ folder so the AI can resume context across sessions. |
+| memory-bank | memory-bank/** | Conventions for maintaining persistent project documentation under memory-bank/ so AI agents can resume project context across sessions. |
 | microsoft-foundry | **/*.py | Build agents with the Microsoft Foundry SDK (azure-ai-projects v2) in Python: versioned agents, the Responses/Conversations model, tools, and the SDK mistakes Copilot makes by def… |
 | mongo-dba | **/*.{js,ts,json} | Instructions for customizing GitHub Copilot behavior for MONGODB DBA chat mode. |
 | moodle | **/*.php, **/*.js, **/*.mustache, **/*.xml, **/*.css, **/*.scss | Instructions for GitHub Copilot to generate code in a Moodle project context. |
@@ -366,7 +366,7 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | nodejs-javascript-vitest | **/*.js, **/*.mjs, **/*.cjs | Guidelines for writing Node.js and JavaScript code with Vitest testing |
 | object-calisthenics | **/*.{cs,ts,java} | Enforces Object Calisthenics principles for business domain code to ensure clean, maintainable, and robust code |
 | oop-design-patterns | **/*.py, **/*.java, **/*.ts, **/*.js, **/*.cs | Best practices for applying Object-Oriented Programming (OOP) design patterns, including Gang of Four (GoF) patterns and SOLID principles, to ensure clean, maintainable, and scala… |
-| oqtane | **/*.razor, **/*.razor.cs, **/*.razor.css | Oqtane Module patterns |
+| oqtane | **/*.razor,**/*.razor.cs,**/*.razor.css | Conventions for Oqtane and Blazor modules covering component structure, naming, module-specific patterns, validation, performance, and state. |
 | pcf-alm | **/*.{ts,tsx,js,json,xml,pcfproj,csproj,sln} | Application lifecycle management (ALM) for PCF code components |
 | pcf-api-reference | **/*.{ts,tsx,js} | Complete PCF API reference with all interfaces and their availability in model-driven and canvas apps |
 | pcf-best-practices | **/*.{ts,tsx,js,json,xml,pcfproj,csproj,css,html} | Best practices and guidance for developing PCF code components |
@@ -389,7 +389,7 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | php-symfony | **/*.php, **/*.yaml, **/*.yml, **/*.xml, **/*.twig | Symfony development standards aligned with official Symfony Best Practices |
 | playwright-dotnet | **/*.cs | Playwright .NET test generation instructions |
 | playwright-python | **/*.py | Playwright Python AI test generation instructions based on official documentation. |
-| playwright-typescript | **/*.{ts,tsx} | Playwright test generation instructions |
+| playwright-typescript | **/*.spec.ts,**/*.test.ts,**/*.spec.tsx,**/*.test.tsx,**/playwright.config.ts,tests/**/*.ts,tests/**/*.tsx | Conventions for Playwright tests in TypeScript covering test structure, selectors, assertions, fixtures, execution, and quality checks. |
 | Power Platform Connectors Schema Development Instructions | **/*.{json,md} | Comprehensive development guidelines for Power Platform Custom Connectors using JSON Schema definitions. Covers API definitions (Swagger 2.0), API properties, and settings configu… |
 | power-apps-canvas-yaml | **/*.{yaml,yml,md,pa.yaml} | Comprehensive guide for working with Power Apps Canvas Apps YAML structure based on Microsoft Power Apps YAML schema v3.0. Covers Power Fx formulas, control structures, data types… |
 | power-apps-code-apps | **/*.{ts,tsx,js,jsx}, **/vite.config.*, **/package.json, **/tsconfig.json, **/power.config.json | Power Apps Code Apps development standards and best practices for TypeScript, React, and Power Platform integration |
@@ -405,7 +405,7 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | prompt | **/*.prompt.md | Guidelines for creating high-quality prompt files for GitHub Copilot |
 | python-mcp-server | **/*.py, **/pyproject.toml, **/requirements.txt | Instructions for building Model Context Protocol (MCP) servers using the Python SDK |
 | qa-engineering-best-practices | ** | Comprehensive QA engineering best practices covering test strategy, test pyramid, naming conventions, assertion patterns, bug reporting, and automation guidelines for modern softw… |
-| quarkus | * | Quarkus development standards and instructions |
+| quarkus | **/*.java,**/pom.xml,**/build.gradle,**/build.gradle.kts,**/application.properties,**/application.yaml,**/application.yml | Conventions for Quarkus applications using Java 17 or later, covering project structure, REST resources, data access, configuration, and testing. |
 | quarkus-mcp-server-sse | * | Quarkus and MCP Server with HTTP SSE transport development standards and instructions |
 | r | **/*.R, **/*.r, **/*.Rmd, **/*.rmd, **/*.qmd | R language and document formats (R, Rmd, Quarto): coding standards and Copilot guidance for idiomatic, safe, and consistent code generation. |
 | ruby-mcp-server | **/*.rb, **/Gemfile, **/*.gemspec, **/Rakefile | Best practices and patterns for building Model Context Protocol (MCP) servers in Ruby using the official MCP Ruby SDK gem. |
@@ -424,7 +424,7 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | svelte | **/*.svelte, **/*.ts, **/*.js, **/*.css, **/*.scss, **/*.json | Svelte 5 and SvelteKit 2 development standards and best practices for component-based user interfaces and full-stack applications |
 | swift-mcp-server | **/*.swift, **/Package.swift, **/Package.resolved | Best practices and patterns for building Model Context Protocol (MCP) servers in Swift using the official MCP Swift SDK package. |
 | tailwind-v4-vite | vite.config.ts, vite.config.js, **/*.css, **/*.tsx, **/*.ts, **/*.jsx, **/*.js | Tailwind CSS v4+ installation and configuration for Vite projects using the official @tailwindcss/vite plugin |
-| taming-copilot | ** | Prevent Copilot from wreaking havoc across your codebase, keeping it under control. |
+| taming-copilot | ** | General repository-wide conventions for keeping Copilot changes controlled, minimal, standard, surgical, and aligned with project context. |
 | tanstack-start-shadcn-tailwind | **/*.ts, **/*.tsx, **/*.js, **/*.jsx, **/*.css, **/*.scss, **/*.json | Guidelines for building TanStack Start applications |
 | task-implementation | **/.copilot-tracking/changes/*.md | Instructions for implementing task plans with progressive tracking and change record - Brought to you by microsoft/edge-ai |
 | tasksync | ** | TaskSync V5 - Allows you to give the agent new instructions or feedback after completing a task using terminal while agent is running. |
@@ -499,7 +499,7 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | azure-pricing | Fetches real-time Azure retail pricing using the Azure Retail Prices API (prices.azure.com) and estimates Copilot Studio agent credit consumption. Use when the user asks about the… |
 | azure-resource-health-diagnose | Analyze Azure resource health, diagnose issues from logs and telemetry, and create a remediation plan for identified problems. Use this skill when the user asks for azure resource… |
 | azure-resource-visualizer | Analyze Azure resource groups and generate detailed Mermaid architecture diagrams showing the relationships between individual resources. Use this skill when the user asks for a d… |
-| azure-role-selector | When user is asking for guidance for which role to assign to an identity given desired permissions, this agent helps them understand the role that will meet the requirements with… |
+| azure-role-selector | Select the least-privilege Azure role for an identity, explain matching built-in or custom role options, and provide assignment commands or Bicep snippets. Use this skill when the… |
 | azure-smart-city-iot-solution-builder | Design and plan end-to-end Azure IoT and Smart City solutions: requirements, architecture, security, operations, cost, and a phased delivery plan with concrete implementation arti… |
 | azure-static-web-apps | Helps create, configure, and deploy Azure Static Web Apps using the SWA CLI. Use when deploying static sites to Azure, setting up SWA local development, configuring staticwebapp.c… |
 | azure-well-architected-review | Perform an Azure Well-Architected Framework review of the current workload IaC and architecture, generating findings and GitHub issues for improvements. Use this skill when the us… |
@@ -557,7 +557,7 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | create-github-issues-for-unmet-specification-requirements | Create GitHub Issues for unimplemented requirements from specification files using feature_request.yml template. Use this skill when the user asks for process. |
 | create-implementation-plan | Create a new implementation plan file for new features, refactoring existing code or upgrading packages, design, architecture or infrastructure. Use this skill when the user asks… |
 | create-llms | Create an llms.txt file from scratch based on repository structure following the llms.txt specification at https://llmstxt.org/. Use this skill when the user asks for create llms.… |
-| create-readme | Create a README.md file for the project. Use this skill when the user asks for role. |
+| create-readme | Create or improve a concise, appealing, project-specific README.md with clear setup, usage, and project overview sections. Use this skill when the user asks to generate, refresh,… |
 | create-specification | Create a new specification file for the solution, optimized for Generative AI consumption. Use this skill when the user asks for best practices for ai-ready specifications. |
 | create-spring-boot-java-project | Create Spring Boot Java Project Skeleton. Use this skill when the user asks for create spring boot java project prompt. |
 | create-spring-boot-kotlin-project | Create Spring Boot Kotlin Project Skeleton. Use this skill when the user asks for create spring boot kotlin project prompt. |
@@ -597,7 +597,7 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | doublecheck | Three-layer verification pipeline for AI output. Extracts verifiable claims, finds supporting or contradicting sources via web search, runs adversarial review for hallucination pa… |
 | draw-io-diagram-generator | Use when creating, editing, or generating draw.io diagram files (.drawio, .drawio.svg, .drawio.png). Covers mxGraph XML authoring, shape libraries, style strings, flowcharts, syst… |
 | drawio | Generate draw.io diagrams as .drawio files and export to PNG/SVG/PDF with embedded XML. Use this skill when the user asks for draw.io diagram skill. |
-| editorconfig | Generates a comprehensive and best-practice-oriented .editorconfig file based on project analysis and user preferences. Use this skill when the user asks for 📜 mission. |
+| editorconfig | Generate a comprehensive .editorconfig from project file types and user formatting preferences, with rule-by-rule explanations. Use this skill when the user asks to create, update… |
 | ef-core | Get best practices for Entity Framework Core. Use this skill when the user asks for entity framework core best practices. |
 | efcore-d2-db-diagram | Generate D2 database diagrams from Entity Framework Core models. Use this skill when the user wants to generate a database / ERD diagram from an Entity Framework Core codebase; ty… |
 | em-dash | Expert on the history, origin, and correct use of the em dash. Use when writing or reviewing code, comments, or data files to avoid em and en dashes, defaulting to never using the… |
@@ -634,12 +634,12 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | geofeed-tuner | Use this skill whenever the user mentions IP geolocation feeds, RFC 8805, geofeeds, or wants help creating, tuning, validating, or publishing a self-published IP geolocation feed… |
 | gh-attach | Uploads a local file (screenshot, image, PDF, zip, video) to GitHub user-attachments, downloads GitHub user-attachments, and embeds local files in a PR, issue, or comment. Use whe… |
 | git-commit | Execute git commit with conventional commit message analysis, intelligent staging, and message generation. Use when user asks to commit changes, create a git commit, or mentions "… |
-| git-flow-branch-creator | Intelligent Git Flow branch creator that analyzes git status/diff and creates appropriate branches following the nvie Git Flow branching model. Use this skill when the user asks f… |
+| git-flow-branch-creator | Analyze git status and diffs, choose the appropriate Git Flow branch type, and create a correctly named branch. Use this skill when the user asks to start feature, bugfix, release… |
 | github-actions-efficiency | Audit GitHub Actions workflow efficiency and recommend fixes to reduce CI minutes and costs. Use this skill when the user wants to reduce GitHub Actions runtime, CI cost, or waste… |
 | github-actions-hardening | Security hardening reviewer for GitHub Actions workflow files (.github/workflows/*.yml). Reasons about the Actions threat model that pattern matchers and general code linters miss… |
 | github-actions-runtime-upgrade-conventions | Upgrade GitHub Actions to supported runtimes by selecting safe action versions, preserving workflow behavior, and validating post-upgrade execution. Use this skill when workflow l… |
 | github-codespaces-efficiency | Audit and improve GitHub Codespaces efficiency. Use this skill when a user wants faster Codespaces startup, lower Codespaces spend, slim devcontainers, right-size machines, tune i… |
-| github-copilot-starter | Set up complete GitHub Copilot configuration for a new project based on technology stack. Use this skill when set appropriate permissions (minimum required); customize steps based… |
+| github-copilot-starter | Set up a complete GitHub Copilot configuration for a new project, including instructions, skills, agents, and optional coding-agent setup steps. Use this skill when the user asks… |
 | github-issues | Create, update, and manage GitHub issues using MCP tools. Use this skill when users want to create bug reports, feature requests, or task issues, update existing issues, add label… |
 | github-release | Guides IA through releasing a new version of a GitHub library end-to-end. Use this skill when the user wants to cut a new release, publish a new version,; bump a version, create a… |
 | gitmoji | Generates commit messages following the gitmoji convention (https://gitmoji.dev) — picks the right emoji for the intent of the change and writes a well-formed message. Use when as… |
@@ -686,9 +686,9 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | markstream-install | Install and configure Markstream streaming Markdown renderers for Vue, React, Svelte, Angular, Nuxt, and Vue 2 applications. Use this skill when the user asks to add streaming Mar… |
 | mcp-cli | Interface for MCP (Model Context Protocol) servers via CLI. Use when you need to interact with external tools, APIs, or data sources through MCP servers, list available MCP server… |
 | mcp-copilot-studio-server-generator | Generate a complete MCP server implementation optimized for Copilot Studio integration with proper schema constraints and streamable HTTP support. Use this skill when the user ask… |
-| mcp-create-adaptive-cards | Skill converted from mcp-create-adaptive-cards.prompt.md. Use this skill when the user asks for create adaptive cards for mcp plugins. |
+| mcp-create-adaptive-cards | Create Adaptive Card response templates and response_semantics for MCP-based API plugins in Microsoft 365 Copilot. Use this skill when the user asks to present MCP tool or API dat… |
 | mcp-create-declarative-agent | Create a Microsoft 365 Copilot declarative agent backed by an MCP server with authentication, selected tools, and configuration. Use this skill when the user asks to build or conf… |
-| mcp-deploy-manage-agents | Skill converted from mcp-deploy-manage-agents.prompt.md. Use this skill when highlight benefits and capabilities; offer support channels. |
+| mcp-deploy-manage-agents | Guide deployment, governance, assignment, and lifecycle management for MCP-based declarative agents in Microsoft 365 admin center. Use this skill when the user asks to publish, ma… |
 | mcp-implementation-security-review | Review the implementation source code of MCP (Model Context Protocol) servers, clients, and tool handlers against a security baseline — authentication, sessions, rate limiting, in… |
 | mcp-release-qa | Verify an MCP server before release by exercising a real protocol session, comparing runtime capabilities with source and documentation, testing failure paths, and recording repro… |
 | mcp-security-audit | Audit MCP (Model Context Protocol) server configurations for security issues. Use this skill when: - Reviewing .mcp.json files for security risks - Checking MCP server args for ha… |
@@ -784,9 +784,9 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | refactor-plan | Create a concrete plan before starting a multi-file refactor. Use when the user asks to plan, sequence, scope, or safely execute a refactor across multiple files; always investiga… |
 | remember | Transforms lessons learned into domain-organized memory instructions (global or workspace). Syntax: `/remember [>domain [scope]] lesson clue` where scope is `global` (default), `u… |
 | remember-interactive-programming | A micro-prompt that reminds the agent that it is an interactive programmer. Works great in Clojure when Copilot has access to the REPL (probably via Backseat Driver). Will work wi… |
-| repo-story-time | Generate a comprehensive repository summary and narrative story from commit history. Use this skill when the user asks for role. |
+| repo-story-time | Generate repository archaeology deliverables: a technical repository summary and a narrative story from commit history. Use this skill when the user asks to analyze a repo, summar… |
 | resemble-detect | Deepfake detection and media safety — detect AI-generated audio, images, video, and text, trace synthesis sources, apply watermarks, verify speaker identity, and analyze media int… |
-| review-and-refactor | Review and refactor code in your project according to defined instructions. Use this skill when the user asks for role. |
+| review-and-refactor | Review project code against repository instructions, refactor for maintainability, and validate tests when available. Use this skill when the user asks for code cleanup, maintaina… |
 | reviewing-oracle-to-postgres-migration | Identifies Oracle-to-PostgreSQL migration risks by cross-referencing code against known behavioral differences (empty strings, refcursors, type coercion, sorting/collations, UNION… |
 | rhdh | Use this skill when the user works on Red Hat Developer Hub (RHDH) — the primary entry point that routes to specialized RHDH skills for plugin development, overlay management, loc… |
 | rhdh-jira | Use this skill when the user works with RHDH Jira projects RHIDP, RHDHPLAN, RHDHBUGS, or RHDHSUPP using acli, GraphQL, and REST fallback. Trigger for Jira keys, creating features,… |
@@ -822,9 +822,9 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | sql-server-table-reconciliation | Use when: comparing SQL Server tables across instances, data migration validation, ETL verification, row mismatch detection, schema drift, reconciliation report, production vs sta… |
 | ssma-console | Use when: SSMA console operations — create project, generate assessment report, convert schema, migrate data, Oracle to SQL Server migration, schema conversion, data migration |
 | steno-mode | Shorthand-first response compression that cuts ~40% of response tokens while preserving technical precision and exact literals. Use when the user says "steno mode", "shorthand mod… |
-| structured-autonomy-generate | Structured Autonomy Implementation Generator Prompt. Use this skill when the user asks for step 1: parse plan & research codebase. |
-| structured-autonomy-implement | Structured Autonomy Implementation Prompt. Use this skill when the user needs help with structured Autonomy Implementation Prompt. |
-| structured-autonomy-plan | Structured Autonomy Planning Prompt. Use this skill when the user asks for step 1: research and gather context. |
+| structured-autonomy-generate | Generate complete implementation documentation from a structured autonomy plan, including concrete steps, code blocks, file paths, and verification points. Use this skill when the… |
+| structured-autonomy-implement | Execute a structured autonomy implementation plan step by step without deviating from the documented scope. Use this skill when the user asks to implement an existing plans/{featu… |
+| structured-autonomy-plan | Research a feature request and produce a structured autonomy plan with commit-sized implementation steps, affected files, and tests. Use this skill when the user asks to plan a fe… |
 | suggest-awesome-github-copilot-agents | Suggest relevant GitHub Copilot Custom Agents files from the awesome-copilot repository based on current repository context and chat history, avoiding duplicates with existing cus… |
 | suggest-awesome-github-copilot-instructions | Suggest relevant GitHub Copilot instruction files from the awesome-copilot repository based on current repository context and chat history, avoiding duplicates with existing instr… |
 | suggest-awesome-github-copilot-skills | Suggest relevant GitHub Copilot skills from the awesome-copilot repository based on current repository context and chat history, avoiding duplicates with existing skills in this r… |

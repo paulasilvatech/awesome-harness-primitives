@@ -1,9 +1,9 @@
 ---
-applyTo: '**/*.xaml, **/*.cs'
-description: '.NET WPF component and application patterns'
+applyTo: '**/*.xaml,**/*.cs'
+description: 'Conventions for .NET WPF applications covering MVVM structure, XAML and C# patterns, UI behavior, performance, and testing.'
 ---
 
-## Summary
+# .NET WPF Conventions
 
 These instructions guide GitHub Copilot to assist with building high-quality, maintainable, and performant WPF applications using the MVVM pattern. It includes best practices for XAML, data binding, UI responsiveness, and .NET performance.
 

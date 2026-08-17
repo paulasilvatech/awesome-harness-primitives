@@ -1,6 +1,7 @@
 ---
-mode: 'agent'
-description: 'Ensure .NET/C# code meets best practices for the solution/project.'
+name: 'dotnet-best-practices'
+description: 'Apply .NET and C# best practices to selected solution code and document required improvements.'
+agent: 'agent'
 ---
 # .NET/C# Best Practices
 

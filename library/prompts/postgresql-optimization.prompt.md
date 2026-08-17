@@ -1,15 +1,17 @@
 ---
-mode: 'agent'
+name: 'postgresql-optimization'
+description: 'Optimize PostgreSQL implementations using database-specific features, indexing, monitoring, and query tuning guidance.'
+agent: 'agent'
 tools: ['changes', 'codebase', 'editFiles', 'problems']
-description: 'PostgreSQL-specific development assistant focusing on unique PostgreSQL features, advanced data types, and PostgreSQL-exclusive capabilities. Covers JSONB operations, array types, custom types, range/geometric types, full-text search, window functions, and PostgreSQL extensions ecosystem.'
-tested_with: 'GitHub Copilot Chat (GPT-4o) - Validated July 20, 2025'
 ---
 
 # PostgreSQL Development Assistant
 
 Expert PostgreSQL guidance for ${selection} (or entire project if no selection). Focus on PostgreSQL-specific features, optimization patterns, and advanced capabilities.
 
-## � PostgreSQL-Specific Features
+Use `postgresql-optimization` (type: skill) as the primary workflow reference. Apply the additional examples, checklists, and output format in this prompt when they add task-specific detail not provided by the skill.
+
+## PostgreSQL-Specific Features
 
 ### JSONB Operations
 ```sql
@@ -96,7 +98,7 @@ WHERE search_vector @@ plainto_tsquery('postgresql')
 ORDER BY rank DESC;
 ```
 
-## � PostgreSQL Performance Tuning
+## PostgreSQL Performance Tuning
 
 ### Query Optimization
 ```sql
@@ -144,7 +146,7 @@ FROM pg_settings
 WHERE name IN ('shared_buffers', 'work_mem', 'maintenance_work_mem');
 ```
 
-## �️ PostgreSQL Advanced Data Types
+## PostgreSQL Advanced Data Types
 
 ### Custom Types & Domains
 ```sql

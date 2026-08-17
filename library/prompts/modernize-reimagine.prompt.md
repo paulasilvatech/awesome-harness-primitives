@@ -1,12 +1,8 @@
 ---
-description: "Design the target architecture for a modernization while preserving required behavior and naming intentional changes."
-agent: agent
-argument-hint: "legacy system, rules artifact, map artifact, or target stack"
-source: "code-modernization-plugin modernize-reimagine, adapted for GitHub Copilot"
-source_url: "local:.github/plugins/code-modernization-plugin/commands/modernize-reimagine.md"
-license: "Apache-2.0"
-imported_date: "2026-06-18"
-last_sync: "2026-06-18"
+name: 'modernize-reimagine'
+description: 'Design a target modernization architecture that preserves required behavior and names intentional changes.'
+agent: 'agent'
+argument-hint: 'legacy system, rules artifact, map artifact, or target stack'
 ---
 
 # Modernize Reimagine
@@ -15,7 +11,7 @@ Design the target architecture for `${input:target:legacy system, rules artifact
 
 ## First step
 
-Load `code-modernization` before designing. Use the `Architecture Critic` agent to challenge the design before finalizing it.
+Load the `code-modernization` skill (Agent Skill) before designing. Use the `Architecture Critic` agent to challenge the design before finalizing it.
 
 ## Steps
 

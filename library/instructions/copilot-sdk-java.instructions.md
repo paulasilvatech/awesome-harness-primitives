@@ -1,10 +1,10 @@
 ---
-applyTo: '**/*.java, **/pom.xml'
-description: 'This file provides guidance on building Java applications using GitHub Copilot SDK for Java.'
+applyTo: '**/*.java,**/pom.xml,**/build.gradle,**/build.gradle.kts'
+description: 'Conventions for building Java applications with the GitHub Copilot SDK, including client setup, virtual threads, sessions, permissions, and error handling.'
 name: 'GitHub Copilot SDK Java Instructions'
 ---
 
-## Core Principles
+# GitHub Copilot SDK Java Conventions
 
 - The SDK is in public preview and may have breaking changes
 - Requires Java 17 or later for baseline SDK usage. Some examples use newer JDK features and therefore require JDK 21 or later (for example, virtual threads via `Executors.newVirtualThreadPerTaskExecutor()` and `switch` pattern matching). **Java 25 or later highly recommended**.

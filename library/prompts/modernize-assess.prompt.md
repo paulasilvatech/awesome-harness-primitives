@@ -1,12 +1,8 @@
 ---
-description: "Assess a legacy system or modernization portfolio with inventory, complexity, dependencies, risks, and modernization recommendation."
-agent: agent
-argument-hint: "system folder, or --portfolio parent folder"
-source: "code-modernization-plugin modernize-assess, adapted for GitHub Copilot"
-source_url: "local:.github/plugins/code-modernization-plugin/commands/modernize-assess.md"
-license: "Apache-2.0"
-imported_date: "2026-06-18"
-last_sync: "2026-06-18"
+name: 'modernize-assess'
+description: 'Assess a legacy system or modernization portfolio with inventory, complexity, dependencies, risks, and modernization recommendations.'
+agent: 'agent'
+argument-hint: 'system folder, or --portfolio parent folder'
 ---
 
 # Modernize Assess
@@ -15,7 +11,7 @@ Assess `${input:target:system folder, or --portfolio parent folder}`.
 
 ## First step
 
-Load `code-modernization` before scanning or writing artifacts. Use the `Legacy Analyst`, `Security Auditor`, and `Modernization Test Engineer` agents where useful.
+Load the `code-modernization` skill (Agent Skill) before scanning or writing artifacts. Use the `Legacy Analyst`, `Security Auditor`, and `Modernization Test Engineer` agents where useful.
 
 ## Steps
 

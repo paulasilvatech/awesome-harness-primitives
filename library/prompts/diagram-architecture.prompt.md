@@ -1,9 +1,9 @@
 ---
-description: "Produce a complete architecture diagram with the official Azure, Microsoft, and GitHub (Octicons) icon sets, output as an editable draw.io (.drawio) file plus exported SVG. Uses the bundled draw.io MCP server or hand-authored mxGraph XML, with boundary grouping, orthogonal connectors, and the icon terms of use respected."
-agent: agent
-argument-hint: "what to diagram, for example an agentic platform on Foundry with Redis, APIM, and API Center"
+name: 'diagram-architecture'
+description: 'Produce an editable draw.io architecture diagram and exported SVG using official Azure, Microsoft, and GitHub icons.'
+agent: 'agent'
+argument-hint: 'what to diagram, for example an agentic platform on Foundry with Redis, APIM, and API Center'
 ---
-
 # Diagram Architecture
 
 Create an architecture diagram for `${input:target:what to diagram, for example an agentic platform on Foundry}` using official vendor icons.

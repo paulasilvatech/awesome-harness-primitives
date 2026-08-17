@@ -5,6 +5,9 @@ description: >-
   selected tools, and configuration. Use this skill when the user asks to build or configure a
   declarative agent that integrates MCP tools into Microsoft 365 Copilot.
 ---
+
+# MCP Create Declarative Agent
+
 ````prompt
 ---
 mode: 'agent'

@@ -1,10 +1,10 @@
 ---
-applyTo: '**.ts, **.js, package.json'
-description: 'This file provides guidance on building Node.js/TypeScript applications using GitHub Copilot SDK.'
+applyTo: '**/*.ts,**/*.js,**/package.json'
+description: 'Conventions for building Node.js and TypeScript applications with the GitHub Copilot SDK, including client setup, sessions, permissions, and error handling.'
 name: 'GitHub Copilot SDK Node.js Instructions'
 ---
 
-## Core Principles
+# GitHub Copilot SDK Node.js Conventions
 
 - The SDK is in technical preview and may have breaking changes
 - Requires Node.js 18.0 or later

@@ -1,8 +1,8 @@
 ---
-mode: 'agent'
+name: 'postgresql-code-review'
+description: 'Review PostgreSQL code for database-specific correctness, security, maintainability, and performance risks.'
+agent: 'agent'
 tools: ['changes', 'codebase', 'editFiles', 'problems']
-description: 'PostgreSQL-specific code review assistant focusing on PostgreSQL best practices, anti-patterns, and unique quality standards. Covers JSONB operations, array usage, custom types, schema design, function optimization, and PostgreSQL-exclusive security features like Row Level Security (RLS).'
-tested_with: 'GitHub Copilot Chat (GPT-4o) - Validated July 20, 2025'
 ---
 
 # PostgreSQL Code Review Assistant

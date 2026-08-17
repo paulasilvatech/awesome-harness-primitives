@@ -1,16 +1,17 @@
 ---
-description: "Scaffold a new GitHub Copilot agent skill folder that follows the repository's authoring conventions."
-agent: agent
-argument-hint: "skill name and what it should do"
+name: 'new-skill'
+description: 'Scaffold a new GitHub Copilot Agent Skill using the skill-creator skill workflow.'
+agent: 'agent'
+argument-hint: 'skill name and what it should do'
 ---
 
 # New Skill
 
-Scaffold a new skill under `.github/skills/` following [../instructions/skills-authoring.instructions.md](../instructions/skills-authoring.instructions.md). If the `skill-creator` skill is available, load it for the authoring workflow and description optimization.
+Scaffold a new skill under `library/skills/` by using `skill-creator` (type: skill) for the authoring workflow, validation expectations, and description optimization.
 
-## First step, always
+## First Step
 
-If the `skill-creator` skill is available, load it before drafting or editing the skill. If it is not available, follow [../instructions/skills-authoring.instructions.md](../instructions/skills-authoring.instructions.md) directly.
+Route the request to `skill-creator` (type: skill) before drafting or editing the skill. If that skill is unavailable in VS Code, stop and report that the required authoring primitive is missing.
 
 ## Inputs
 
@@ -22,7 +23,7 @@ Ask for any that are missing:
 
 ## Steps
 
-1. Create `.github/skills/<name>/SKILL.md` with frontmatter on line 1:
+1. Create `library/skills/<name>/SKILL.md` with frontmatter on line 1:
 
    ```markdown
    ---

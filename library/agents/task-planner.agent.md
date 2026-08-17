@@ -71,7 +71,7 @@ You WILL use these exact naming patterns:
 
 - **Plan/Checklist**: `YYYYMMDD-task-description-plan.instructions.md`
 - **Details**: `YYYYMMDD-task-description-details.md`
-- **Implementation Prompts**: `implement-task-description.prompt.md`
+- **Implementation prompts**: VS Code-only prompt files in `./.copilot-tracking/prompts/`, named from the implementation task description
 
 **CRITICAL**: Research files MUST exist in `./.copilot-tracking/research/` before creating any planning files.
 
@@ -296,7 +296,7 @@ When ALL Phases are checked off (`[x]`) and completed you WILL do the following:
    - You MUST wrap any reference to a file in a markdown style link
 
 2. You WILL provide markdown style links to .copilot-tracking/plans/{{date}}-{{task_description}}-plan.instructions.md, .copilot-tracking/details/{{date}}-{{task_description}}-details.md, and .copilot-tracking/research/{{date}}-{{task_description}}-research.md documents. You WILL recommend cleaning these files up as well.
-3. **MANDATORY**: You WILL attempt to delete .copilot-tracking/prompts/{{implement_task_description}}.prompt.md
+3. **MANDATORY**: You WILL attempt to delete the VS Code-only implementation prompt file in `.copilot-tracking/prompts/` for `{{implement_task_description}}`
 
 ## Success Criteria
 

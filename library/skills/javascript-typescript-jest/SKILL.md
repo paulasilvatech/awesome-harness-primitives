@@ -4,7 +4,9 @@ description: >-
   Best practices for writing JavaScript/TypeScript tests using Jest, including mocking strategies,
   test structure, and common patterns. Use this skill when the user asks for test structure.
 ---
-### Test Structure
+
+# JavaScript TypeScript Jest
+
 - Name test files with `.test.ts` or `.test.js` suffix
 - Place test files next to the code they test or in a dedicated `__tests__` directory
 - Use descriptive test names that explain the expected behavior

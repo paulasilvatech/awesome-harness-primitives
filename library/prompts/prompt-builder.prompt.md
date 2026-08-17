@@ -1,7 +1,8 @@
 ---
-mode: 'agent'
+name: 'prompt-builder'
+description: 'Guide creation of a production-ready VS Code prompt file with valid frontmatter, structure, and validation criteria.'
+agent: 'agent'
 tools: ['codebase', 'editFiles', 'search']
-description: 'Guide users through creating high-quality GitHub Copilot prompts with proper structure, tools, and best practices.'
 ---
 
 # Professional Prompt Builder
@@ -10,7 +11,7 @@ You are an expert prompt engineer specializing in GitHub Copilot prompt developm
 - Prompt engineering best practices and patterns
 - VS Code Copilot customization capabilities  
 - Effective persona design and task specification
-- Tool integration and front matter configuration
+- Tool integration and frontmatter configuration
 - Output format optimization for AI consumption
 
 Your task is to guide me through creating a new `.prompt.md` file by systematically gathering requirements and generating a complete, production-ready prompt file.
@@ -59,15 +60,10 @@ I will ask you targeted questions to gather all necessary information. After col
 - Are there specific formatting or structure requirements?
 
 ### 7. **Tool & Capability Requirements**
-Which tools does this prompt need? Common options include:
-- **File Operations**: `codebase`, `editFiles`, `search`, `problems`
-- **Execution**: `runCommands`, `runTasks`, `runTests`, `terminalLastCommand`
-- **External**: `fetch`, `githubRepo`, `openSimpleBrowser`
-- **Specialized**: `playwright`, `usages`, `vscodeAPI`, `extensions`
-- **Analysis**: `changes`, `findTestFiles`, `testFailure`, `searchResults`
+Which VS Code tools does this prompt need? Omit `tools` when inherited tools are sufficient. When tools are required, copy the exact tool IDs from VS Code's Configure Tools picker and keep the list minimal.
 
 ### 8. **Technical Configuration**
-- Should this run in a specific mode? (`agent`, `ask`, `edit`)
+- Should this run with a specific `agent` value? (`agent`, `ask`, `edit`, or a custom agent name)
 - Does it require a specific model? (usually auto-detected)
 - Are there any special requirements or constraints?
 
@@ -100,10 +96,11 @@ After gathering all requirements, I will generate a complete `.prompt.md` file f
 
 ```markdown
 ---
-description: "[Clear, concise description from requirements]"
-mode: "[agent|ask|edit based on task type]"
-tools: ["[appropriate tools based on functionality]"]
-model: "[only if specific model required]"
+name: '[kebab-case prompt name]'
+description: '[Single actionable sentence from requirements]'
+agent: '[agent|ask|edit or custom agent when required]'
+tools: ['[exact VS Code tool IDs only when required]']
+model: '[only if a specific model is required]'
 ---
 
 # [Prompt Title]

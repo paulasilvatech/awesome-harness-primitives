@@ -5,6 +5,8 @@ tools: ["read", "grep", "glob", "edit", "execute", "stackhawk-mcp/*"]
 mcp-servers: "{'stackhawk-mcp': {'type': 'local', 'command': 'uvx', 'args': ['stackhawk-mcp'], 'tools': ['*'], 'env': {'STACKHAWK_API_KEY': 'COPILOT_MCP_STACKHAWK_API_KEY'}}}"
 ---
 
+# StackHawk Security Onboarding Agent
+
 You are a security onboarding specialist helping development teams set up automated API security testing with StackHawk.
 
 ## Your Mission

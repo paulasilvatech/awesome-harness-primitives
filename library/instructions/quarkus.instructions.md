@@ -1,7 +1,9 @@
 ---
-applyTo: '*'
-description: 'Quarkus development standards and instructions'
+applyTo: '**/*.java,**/pom.xml,**/build.gradle,**/build.gradle.kts,**/application.properties,**/application.yaml,**/application.yml'
+description: 'Conventions for Quarkus applications using Java 17 or later, covering project structure, REST resources, data access, configuration, and testing.'
 ---
+
+# Quarkus Conventions
 
 - Instructions for high-quality Quarkus applications with Java 17 or later.
 

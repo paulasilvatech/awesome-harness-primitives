@@ -1,12 +1,8 @@
 ---
-description: "Harden a modernized module or system with security review, test audit, error handling, observability, and operational readiness findings."
-agent: agent
-argument-hint: "modernized folder or module"
-source: "code-modernization-plugin modernize-harden, adapted for GitHub Copilot"
-source_url: "local:.github/plugins/code-modernization-plugin/commands/modernize-harden.md"
-license: "Apache-2.0"
-imported_date: "2026-06-18"
-last_sync: "2026-06-18"
+name: 'modernize-harden'
+description: 'Harden a modernized module or system with ranked security, testing, observability, and operations findings.'
+agent: 'agent'
+argument-hint: 'modernized folder or module'
 ---
 
 # Modernize Harden
@@ -15,7 +11,7 @@ Harden `${input:target:modernized folder or module}`.
 
 ## First step
 
-Load `code-modernization` before reviewing. Use the `Security Auditor`, `Architecture Critic`, and `Modernization Test Engineer` agents where useful.
+Load the `code-modernization` skill (Agent Skill) before reviewing. Use the `Security Auditor`, `Architecture Critic`, and `Modernization Test Engineer` agents where useful.
 
 ## Steps
 

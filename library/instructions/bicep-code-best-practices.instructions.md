@@ -1,9 +1,9 @@
 ---
 applyTo: '**/*.bicep'
-description: 'Infrastructure as Code with Bicep'
+description: 'Conventions for Azure Bicep infrastructure code covering naming, parameters, resource structure, security, modules, and outputs.'
 ---
 
-## Naming Conventions
+# Bicep Code Best Practices
 
 -   When writing Bicep code, use lowerCamelCase for all names (variables, parameters, resources)
 -   Use resource type descriptive symbolic names (e.g., 'storageAccount' not 'storageAccountName')

@@ -1,6 +1,7 @@
 ---
-mode: 'agent'
-description: 'Create a formal specification for an existing GitHub Actions CI/CD workflow, optimized for AI consumption and workflow maintenance.'
+name: 'create-github-action-workflow-specification'
+description: 'Create an AI-ready specification for an existing GitHub Actions workflow.'
+agent: 'agent'
 tools: ['changes', 'codebase', 'editFiles', 'extensions', 'fetch', 'findTestFiles', 'githubRepo', 'new', 'openSimpleBrowser', 'problems', 'runCommands', 'runInTerminal2', 'runNotebooks', 'runTasks', 'runTests', 'search', 'searchResults', 'terminalLastCommand', 'terminalSelection', 'testFailure', 'usages', 'vscodeAPI', 'microsoft.docs.mcp', 'github', 'Microsoft Docs']
 ---
 # Create GitHub Actions Workflow Specification

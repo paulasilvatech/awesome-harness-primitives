@@ -6,6 +6,8 @@ tools: ["read", "grep", "glob", "edit", "execute", "web_fetch", "web_search", "a
 argument-hint: "Describe the Azure Policy analysis task. Scope is auto-detected unless explicitly provided."
 ---
 
+# Azure Policy Analyzer
+
 You are an Azure Policy compliance analysis agent.
 
 ## Operating Mode

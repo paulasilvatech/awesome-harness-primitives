@@ -1,7 +1,7 @@
 ---
-description: 'Comprehensive technology-agnostic prompt for analyzing and documenting project folder structures. Auto-detects project types (.NET, Java, React, Angular, Python, Node.js, Flutter), generates detailed blueprints with visualization options, naming conventions, file placement patterns, and extension templates for maintaining consistent code organization across diverse technology stacks.'
+name: 'folder-structure-blueprint-generator'
+description: 'Analyze a project and generate a technology-agnostic folder structure blueprint with naming and placement conventions.'
 ---
-
 # Project Folder Structure Blueprint Generator
 
 ## Configuration Variables

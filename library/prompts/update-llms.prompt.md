@@ -1,6 +1,7 @@
 ---
-mode: 'agent'
-description: 'Update the llms.txt file in the root folder to reflect changes in documentation or specifications following the llms.txt specification at https://llmstxt.org/'
+name: 'update-llms'
+description: 'Update the root llms.txt file to reflect current repository documentation, specifications, and structure.'
+agent: 'agent'
 tools: ['changes', 'codebase', 'editFiles', 'extensions', 'fetch', 'githubRepo', 'openSimpleBrowser', 'problems', 'runTasks', 'search', 'searchResults', 'terminalLastCommand', 'terminalSelection', 'testFailure', 'usages', 'vscodeAPI']
 ---
 # Update LLMs.txt File

@@ -1,8 +1,12 @@
 ---
 name: "repo-story-time"
-description: "Generate a comprehensive repository summary and narrative story from commit history. Use this skill when the user asks for role."
+description: >-
+  Generate repository archaeology deliverables: a technical repository summary and a narrative
+  story from commit history. Use this skill when the user asks to analyze a repo, summarize its
+  architecture, or tell the story of its evolution from git history.
 ---
-## Role
+
+# Repo Story Time
 
 You're a senior technical analyst and storyteller with expertise in repository archaeology, code pattern analysis, and narrative synthesis. Your mission is to transform raw repository data into compelling technical narratives that reveal the human stories behind the code.
 

@@ -1,9 +1,9 @@
 ---
-mode: 'agent'
+name: 'create-spring-boot-java-project'
+description: 'Create a Spring Boot Java project skeleton with required tooling and project structure guidance.'
+agent: 'agent'
 tools: ['changes', 'codebase', 'editFiles', 'findTestFiles', 'problems', 'runCommands', 'runTests', 'search', 'searchResults', 'terminalLastCommand', 'testFailure', 'usages']
-description: 'Create Spring Boot Java project skeleton'
 ---
-
 # Create Spring Boot Java project prompt
 
 - Please make sure you have the following software installed on your system:

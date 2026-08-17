@@ -1,8 +1,11 @@
 ---
-mode: 'agent'
+name: 'multi-stage-dockerfile'
+description: 'Create optimized multi-stage Dockerfiles that reduce image size, improve security, and preserve reproducible builds.'
+agent: 'agent'
 tools: ['codebase']
-description: 'Create optimized multi-stage Dockerfiles for any language or framework'
 ---
+
+# Multi-Stage Dockerfile Builder
 
 Your goal is to help me create efficient multi-stage Dockerfiles that follow best practices, resulting in smaller, more secure container images.
 

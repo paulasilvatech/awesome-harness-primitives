@@ -46,7 +46,7 @@ PROJECT ROOT
 └── [LAYER 3: CAPABILITIES - Skills & Tools]
     "The Hands & Execution"
     ├── .github/skills/*.md              ← Complex workflows
-    ├── .github/prompts/*.prompt.md      ← Quick reusable snippets
+    ├── .github/prompts/                ← VS Code-only quick reusable prompt snippets
     └── .github/instructions/*.instructions.md  ← Language/file-specific rules
 ```
 
@@ -105,7 +105,7 @@ Validate existing agentic project structure (focus on structure, not deep file i
 
 2. **Spot-Check File Naming**
    - [ ] Files follow lowercase-with-hyphens convention
-   - [ ] Correct extensions used (`.agent.md`, `.prompt.md`, `.instructions.md`)
+   - [ ] Correct extensions used for agents, VS Code-only prompts, and instructions
 
 3. **Check Symlinks** (if hybrid setup)
    - [ ] Symlinks are valid and point to existing files
@@ -124,7 +124,7 @@ Validate existing agentic project structure (focus on structure, not deep file i
 
    Skills Layer:
      ✅ .github/skills/git-workflow.md
-     ❌ .github/prompts/test-gen.prompt.md - missing 'description'
+     ❌ .github/prompts/test-gen (VS Code-only prompt) - missing 'description'
    ```
 
 ### `/migrate` - Migration from Existing Setup
@@ -276,7 +276,7 @@ applyTo: '{FILE_PATTERNS}'
 {Patterns to avoid}
 ```
 
-### Prompt Template (.prompt.md)
+### VS Code Prompt Template (VS Code-only)
 
 ```markdown
 ---
@@ -345,7 +345,7 @@ These are the official requirements from awesome-copilot. The agent does NOT dee
 | File Type | Required Fields | Recommended |
 |-----------|-----------------|-------------|
 | `.agent.md` | `description` | `model`, `tools`, `name` |
-| `.prompt.md` | `agent`, `description` | `model`, `tools`, `name` |
+| VS Code prompt file | `agent`, `description` | `model`, `tools`, `name` |
 | `.instructions.md` | `description`, `applyTo` | - |
 | `SKILL.md` | `name`, `description` | - |
 
@@ -418,7 +418,7 @@ Created:
   ├── instructions/
   │   └── typescript.instructions.md (new)
   └── prompts/
-      └── test-gen.prompt.md (new)
+      └── test generation prompt (VS Code-only, new)
 
   AGENTS.md → symlink to .github/copilot-instructions.md
 

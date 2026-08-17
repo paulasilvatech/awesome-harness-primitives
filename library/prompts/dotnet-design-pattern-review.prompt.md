@@ -1,6 +1,7 @@
 ---
-mode: 'agent'
-description: 'Review the C#/.NET code for design pattern implementation and suggest improvements.'
+name: 'dotnet-design-pattern-review'
+description: 'Review selected C# and .NET code for design pattern usage and recommend improvements.'
+agent: 'agent'
 ---
 # .NET/C# Design Pattern Review
 

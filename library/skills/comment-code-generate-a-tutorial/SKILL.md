@@ -7,6 +7,9 @@ description: >-
   project by refactoring the code, adding clear instructional comments, and generating a complete
   markdown tutorial.
 ---
+
+# Comment Code Generate a Tutorial
+
 Transform this Python script into a polished, beginner-friendly project by refactoring the code, adding clear instructional comments, and generating a complete markdown tutorial.
 
 1. **Refactor the code**  

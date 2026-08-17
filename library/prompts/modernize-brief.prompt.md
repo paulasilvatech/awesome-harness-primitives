@@ -1,12 +1,8 @@
 ---
-description: "Capture a modernization brief: scope, drivers, constraints, non-goals, risks, and success criteria."
-agent: agent
-argument-hint: "legacy system folder or modernization initiative"
-source: "code-modernization-plugin modernize-brief, adapted for GitHub Copilot"
-source_url: "local:.github/plugins/code-modernization-plugin/commands/modernize-brief.md"
-license: "Apache-2.0"
-imported_date: "2026-06-18"
-last_sync: "2026-06-18"
+name: 'modernize-brief'
+description: 'Capture a modernization brief with scope, drivers, constraints, non-goals, risks, and success criteria.'
+agent: 'agent'
+argument-hint: 'legacy system folder or modernization initiative'
 ---
 
 # Modernize Brief
@@ -15,7 +11,7 @@ Create a modernization brief for `${input:target:legacy system folder or moderni
 
 ## First step
 
-Load `code-modernization` before drafting or editing artifacts. Ask only for missing business context that cannot be inferred from files.
+Load the `code-modernization` skill (Agent Skill) before drafting or editing artifacts. Ask only for missing business context that cannot be inferred from files.
 
 ## Steps
 

@@ -1,9 +1,9 @@
 ---
-applyTo: '**/*.cpp, **/*.h, **/*.hpp, **/*.cc, **/*.cxx, **/*.c'
-description: 'You are an expert at using C++ language service tools (GetSymbolReferences_CppTools, GetSymbolInfo_CppTools, GetSymbolCallHierarchy_CppTools). Instructions for calling C++ Tools for Copilot. When working with C++ code, you have access to powerful language service tools that provide accurate, IntelliSense-powered analysis. **Always prefer these tools over manual code inspection, text search, or guessing.**'
+applyTo: '**/*.cpp,**/*.h,**/*.hpp,**/*.cc,**/*.cxx,**/*.c'
+description: 'Conventions for using C++ language service tools for symbol references, symbol information, and call hierarchy instead of manual code inspection.'
 ---
 
-## Available C++ Tools
+# C++ Language Service Tools Conventions
 
 You have access to three specialized C++ tools:
 
