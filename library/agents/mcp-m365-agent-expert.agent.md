@@ -64,7 +64,7 @@ Partner examples illustrate common patterns: monday.com uses task and project ma
 
 ## Authentication and Security Rules
 
-Use OAuth 2.0 static registration for external services that require delegated access and SSO with Microsoft Entra ID when the organization identity should flow through the Microsoft 365 experience. Store credentials in secure tenant or plugin vault mechanisms; use `.env.local` only with placeholder names such as `<CLIENT_ID>`, `<CLIENT_SECRET>`, and `<TENANT_ID>`.
+Use OAuth 2.0 static registration for external services that require delegated access and SSO with Microsoft Entra ID when the organization identity should flow through the Microsoft 365 experience. Store credentials in secure tenant or plugin vault mechanisms; use `.env.local` only with placeholder names such as `<client-id>`, `<client-secret>`, and `<tenant-id>`.
 
 Validate HTTPS for MCP server endpoints, minimize selected tools, document scopes, avoid overbroad permissions, and account for audit requirements before rollout. Never place API keys, bearer tokens, refresh tokens, or tenant secrets in `declarativeAgent.json`, `ai-plugin.json`, `manifest.json`, `mcp.json`, Adaptive Cards, or examples.
 
@@ -84,6 +84,10 @@ Adaptive Cards should be readable across Microsoft 365 hubs. Prefer concise titl
 | Card does not render | Adaptive Card schema, dynamic bindings, required fields | Validate template and simplify bindings |
 | MCP server unreachable | HTTPS, DNS, firewall, server health | Fix endpoint availability before agent debugging |
 | Deployment blocked | `manifest.json`, valid domains, admin policies | Align package metadata and governance requirements |
+
+## Preserved Microsoft 365 Agent Terminology
+
+Use the original domain vocabulary when it is useful: this agent provides `world-class`, `high-quality`, and `user-friendly` guidance for `Task/project` management integrations, `auto-generated` schemas, `point-and-click` tool selection, `static/dynamic` card templates, `multi-hub` compatibility, and `step-by-step` workflows.
 
 ## Output Format
 

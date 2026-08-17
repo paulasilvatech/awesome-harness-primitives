@@ -1,13 +1,13 @@
 ---
-applyTo: '**/*.agent.md'
-description: 'Guidelines for creating custom agent files for GitHub Copilot'
+applyTo: "**/*.agent.md"
+description: "Enforces conventions for GitHub Copilot custom agent files, including frontmatter, tools, handoffs, orchestration, MCP configuration, naming, and validation."
 ---
 
-# Custom Agent File Guidelines
+# Custom Agent Conventions — Authoring and Runtime Compatibility
 
-Instructions for creating effective and maintainable custom agent files that provide specialized expertise for specific development tasks in GitHub Copilot.
+These instructions apply to `*.agent.md` custom agent files matched by the `applyTo` glob and are authoritative for agent frontmatter, tool allow-lists, handoffs, orchestration prompts, MCP server configuration, file organization, naming, runtime compatibility, and validation expectations. Official GitHub Copilot and VS Code custom-agent documentation wins when platform behavior changes; repository authoring instructions and validators win for local packaging rules, and these conventions preserve passive rules rather than step-by-step workflow procedures.
 
-## Project Context
+## Agent Scope and File Contract
 
 - Target audience: Developers creating custom agents for GitHub Copilot
 - File format: Markdown with YAML frontmatter
@@ -853,7 +853,7 @@ Lower-level configurations override higher-level ones with the same name.
 
 Each level can override settings from previous levels.
 
-## Agent Creation Checklist
+## Quality Gates for Agent Files
 
 ### Frontmatter
 - [ ] `description` field present and descriptive (50-150 chars)
@@ -983,9 +983,9 @@ Each level can override settings from previous levels.
 - [Customization Library Examples](https://docs.github.com/en/copilot/tutorials/customization-library/custom-agents)
 - [Your First Custom Agent Tutorial](https://docs.github.com/en/copilot/tutorials/customization-library/custom-agents/your-first-custom-agent)
 
-### Related Files
-- Follow the `prompt` instructions for creating VS Code prompt files
-- Follow the `instructions` instructions for creating instruction files
+### Related Primitive Types
+- Use prompt primitives for VS Code-only reusable chat workflows.
+- Use `instructions` primitives for passive repository or language conventions.
 
 ## Version Compatibility Notes
 
@@ -1004,3 +1004,82 @@ Each level can override settings from previous levels.
 - Some properties may behave differently
 
 When creating agents for multiple environments, focus on common properties and test in all target environments. Use `target` property to create environment-specific agents when necessary.
+
+## Good / Bad Examples
+
+The examples below illustrate minimal, compatible agent frontmatter with a focused tool set and a clear runtime target.
+
+**Good:**
+
+```yaml
+---
+description: 'Reviews code quality and maintainability without editing files'
+name: 'Code Reviewer'
+tools: ['read', 'grep', 'glob']
+---
+```
+
+Why: The agent has a concise quoted description, a display name, and only the read/search tools required for review work.
+
+**Bad:**
+
+```yaml
+---
+description: Reviews anything
+tools: ['search', 'terminal', 'all']
+model: 'GPT Latest'
+---
+```
+
+Why: The description is vague and unquoted, the tool tokens are no-op or unsupported in the CLI, and the model value is display-name-only instead of a recognized lowercase model ID.
+
+## Conventions
+
+| Rule | Rationale |
+|---|---|
+| Put each custom agent in `.github/agents/` for repository scope or the organization/enterprise `agents/` location for broader scope | Runtime discovery depends on location and scope |
+| Use lowercase hyphenated filenames ending in `.agent.md` and only `.`, `-`, `_`, `a-z`, `A-Z`, and `0-9` characters | Predictable identifiers prevent picker, handoff, and invocation ambiguity |
+| Keep frontmatter valid YAML with a quoted `description`; add `name`, `tools`, `target`, `model`, `user-invocable`, `disable-model-invocation`, `metadata`, `mcp-servers`, `argument-hint`, or `handoffs` only when their platform supports them | Unsupported or malformed metadata is ignored or causes fallback behavior |
+| Prefer omitting `model`; when a model is required, use a current lowercase model ID recognized by the target surface | Unknown display names can warn and fall back to an unintended model |
+| Treat `tools:` as an allow-list and use valid CLI tokens such as `read`, `view`, `create`, `edit`, `execute`, `bash`, `agent`, `task`, `grep`, `glob`, `web_fetch`, `web_search`, and `session_store_sql` | Unrecognized tokens are silently dropped and remove capability at runtime |
+| Grant only the tools the agent needs; give `execute` and MCP access only when the agent purpose requires them | Least privilege reduces accidental destructive actions and improves agent focus |
+| Use handoffs only for logical VS Code 1.106+ transitions with clear labels, existing target agents, concise prompts, and deliberate `send` behavior | Handoffs are UI guidance, not a substitute for clear agent boundaries |
+| Keep orchestration prompt-based, pass concrete paths and identifiers, and keep sub-agent pipelines small | Large multi-step sub-agent processing adds latency and context overhead |
+| Configure MCP servers only where the target supports them, keep secrets in the copilot environment, and reference `COPILOT_MCP_ENV_VAR_VALUE` forms correctly | MCP configuration is platform-specific and secret handling must not leak credentials |
+| Keep the prompt body specific, bounded, structured, and under 30,000 characters | Clear behavior and scope make agent responses reliable and maintainable |
+
+## Do / Do Not
+
+| Do | Do not |
+|---|---|
+| Write a 50-150 character description that names the agent's purpose and expertise | Use vague descriptions such as "helps with code" or leave `description` missing |
+| Use `tools: ['read', 'grep', 'glob']` for read-only reviewers | Give reviewers `edit` or `execute` without a documented need |
+| Use `tools: []` when the agent should have only the always-on floor (`skill` and `sql`) | Assume an empty list means all tools are enabled |
+| Use `github/*` or `server-name/tool` syntax for MCP tools | Forget the MCP server namespace or invent tool names |
+| Use action-oriented handoff labels such as "Start Implementation" or "Review for Security" | Add generic handoffs such as "Next" or hand off to non-existent agents |
+| Pass `${projectName}`, `${basePath}`, `${logFile}`, and similar values only after substituting concrete values | Expect the runtime to resolve placeholders automatically |
+| Document dynamic parameters, constraints, expected outputs, and return summaries | Hide required inputs inside vague prose |
+| Test agents in each intended surface, including VS Code, GitHub.com, JetBrains, Eclipse, or Xcode where relevant | Assume platform-specific properties behave identically everywhere |
+
+## Checklist Before Opening a PR
+
+- [ ] The file keeps YAML frontmatter valid and includes a quoted `description`.
+- [ ] `name`, `model`, `target`, visibility, metadata, handoff, and MCP fields are present only when justified for the target surface.
+- [ ] The filename is lowercase with hyphens, uses only allowed characters, and ends in `.agent.md`.
+- [ ] The file is placed in `.github/agents/` or the correct organization/enterprise `agents/` location.
+- [ ] Tool tokens are valid for the target runtime, minimal for the agent purpose, and include parent permissions needed by sub-agents.
+- [ ] Handoffs point to existing agents, use clear labels, and have concise context-aware prompts.
+- [ ] MCP configuration uses supported `type`, `command`, `args`, `tools`, and `env` fields, with secrets referenced through approved `COPILOT_MCP_ENV_VAR_VALUE` patterns.
+- [ ] Dynamic parameters and placeholders such as `AGENT_NAME`, `AGENT_SPEC_PATH`, `BASE_PATH`, `WORK_UNIT_NAME`, `STEP_ID`, `PARAMETER_NAME`, `VAR_NAME`, `ENV_VAR_NAME`, and `API_KEY` are documented or replaced as intended.
+- [ ] The prompt body defines identity, responsibilities, methodology, constraints, and output expectations without exceeding 30,000 characters.
+- [ ] Representative tasks were tested and documentation references are current.
+
+## References
+
+- Creating Custom Agents: https://docs.github.com/en/copilot/how-tos/use-copilot-agents/coding-agent/create-custom-agents
+- Custom Agents Configuration: https://docs.github.com/en/copilot/reference/custom-agents-configuration
+- Custom Agents in VS Code: https://code.visualstudio.com/docs/copilot/customization/custom-agents
+- MCP Integration: https://docs.github.com/en/copilot/how-tos/use-copilot-agents/coding-agent/extend-coding-agent-with-mcp
+- Awesome Copilot Agents Collection: https://github.com/github/awesome-copilot/tree/main/agents
+- Customization Library Examples: https://docs.github.com/en/copilot/tutorials/customization-library/custom-agents
+- Your First Custom Agent Tutorial: https://docs.github.com/en/copilot/tutorials/customization-library/custom-agents/your-first-custom-agent

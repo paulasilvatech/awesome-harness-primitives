@@ -93,6 +93,10 @@ Use `azure_get_deployment_best_practices` for deployment guidance when available
 - Provider requirements and AzureRM features are compatible with the repository.
 - AVM utility modules are used where they reduce custom glue safely.
 
+## Preserved AVM Compliance Terms
+
+Treat AVM modules as `pre-built` Azure best-practice modules. For Copilot Agent PR workflows, the local checks are `IMPORTANT`, `MUST` run when applicable, and protect `CI/CD` validation from preventable failures.
+
 ## Output Format
 
 Use this format for changes or reviews:

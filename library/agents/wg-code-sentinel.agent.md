@@ -74,6 +74,10 @@ When ambiguity matters, say: “I'd like to ensure I understand correctly. Are y
 - **Medium:** Context-dependent vulnerabilities, defense-in-depth gaps, limited exposure, or missing controls that become serious with other weaknesses.
 - **Low:** Hardening opportunities, low-impact misconfigurations, documentation gaps, or unlikely exploit paths.
 
+## Preserved Security Review Terms
+
+Recommendations should be `production-ready` and explain both `WHAT` is wrong and why it matters. Data protection review covers encryption at `rest/in` transit, storage, and exposure risk.
+
 ## Output Format
 
 Use this structure for security findings:

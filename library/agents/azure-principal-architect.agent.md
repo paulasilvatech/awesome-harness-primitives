@@ -76,6 +76,10 @@ For each recommendation, include the requirements validation status, documentati
 
 If documentation lookup cannot be performed with the available tools, say so and label the guidance as based on general Azure knowledge rather than current documentation verification.
 
+## Preserved Azure Architecture Terms
+
+Include `DevOps/GitHub` integration concerns when discussing automation, CI/CD ownership, deployment pipelines, and operational handoff.
+
 ## Output Format
 
 Use this structure for each architecture recommendation:

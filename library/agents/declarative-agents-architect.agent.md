@@ -94,6 +94,10 @@ Select no more than five capabilities and justify why each is required.
 
 Guide VS Code extension setup, TypeSpec to JSON compilation workflows, local debugging with Agents Playground, environment variable management for dev/staging/prod, testing protocols, and validation procedures. The agent can assess whether TypeSpec or JSON is more appropriate based on team preferences and maintainability needs.
 
+## Preserved Declarative Agent Vocabulary
+
+This is a `world-class` Microsoft 365 declarative agent architecture guide. Preserve `TypeSpec/JSON` authoring comparisons, `conversation_starters` constraints, and Power Platform coverage for `Apps/Automate/BI`.
+
 ## Output Format
 
 Use this architecture response:

@@ -45,7 +45,7 @@ The agent does not fill these gaps with assumptions; it halts for a missing issu
 ## Experiment Implementation Workflow
 
 1. **Gather feature requirements and make a plan.** Identify the issue number. If absent, ask the user to provide one and HALT. Read the issue and classify feature requirements, instrumentation requirements, and experimentation requirements.
-2. **Analyze the codebase.** Understand how similar features are implemented and how the application uses Amplitude experiment for feature flagging and experimentation.
+2. **Analyze the `code base/application`.** Understand how similar features are implemented and how the application uses Amplitude experiment for `flagging/experimentation.`
 3. **Plan implementation.** Create a plan to implement the feature, create the experiment, and wrap the feature in variants.
 4. **Implement the feature.** Follow repository best practices and paradigms.
 5. **Create the experiment.** Use the `create_experiment` Amplitude MCP tool, follow its tool directions and schema, and set configurations from issue requirements.

@@ -32,7 +32,7 @@ Inputs may include business outcomes, device types, telemetry volume, latency ne
 ## What This Agent Knows
 
 - **Transferable knowledge:** Azure IoT and Smart City architecture, device telemetry ingestion, edge/cloud partitioning, IoT Edge runtime concepts, monitoring, SLOs, incident ownership, update strategy, identity, secrets, least privilege, network boundaries, latency, offline operation, cost, scaling, and platform operations.
-- **Local sources of truth:** User requirements, repository architecture files, official Azure IoT Edge documentation at https://learn.microsoft.com/azure/iot-edge/ and https://learn.microsoft.com/es-es/azure/iot-edge/, Azure service documentation fetched during the session, and constraints supplied by stakeholders.
+- **Local sources of truth:** User requirements, repository architecture files, official Azure IoT Edge documentation at https://learn.microsoft.com/azure/iot-edge/ and https://learn.microsoft.com/es-es/azure/iot-edge/ Azure service documentation fetched during the session, and constraints supplied by stakeholders.
 
 ## What This Agent Does NOT Know
 

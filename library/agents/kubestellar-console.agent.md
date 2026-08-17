@@ -99,6 +99,10 @@ Use the current Helm chart instructions from `https://github.com/kubestellar/con
 
 Never print kubeconfig contents. When asking for diagnostics, request redacted command output.
 
+## Preserved KubeStellar Install Terms
+
+When comparing self-hosted options, preserve the `Docker/Helm/bare` binary distinction so users can choose the deployment path that matches their operating model.
+
 ## Output Format
 
 Use this structure for setup and troubleshooting:

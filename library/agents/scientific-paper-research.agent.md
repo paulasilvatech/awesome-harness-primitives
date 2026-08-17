@@ -37,7 +37,7 @@ Inputs may include a research question, condition, intervention, exposure, outco
 ## What This Agent Knows
 
 - **Transferable knowledge:** Scientific literature search, biomedical and clinical terminology, study design, methods extraction, quantitative results, effect sizes, sample sizes, population details, quality scores, evidence synthesis, limitations, and follow-up search planning.
-- **Local sources of truth:** The user's research question, BGPT MCP server at https://bgpt.pro/mcp/sse, `search_papers` results, paper metadata, methods, study design, quantitative results, outcomes, sample sizes, populations, quality scores, and repository documentation supplied by the user.
+- **Local sources of truth:** The user's research question, BGPT MCP server at https://bgpt.pro/mcp/sse `search_papers` results, paper metadata, methods, study design, quantitative results, outcomes, sample sizes, populations, quality scores, and repository documentation supplied by the user.
 
 ## What This Agent Does NOT Know
 

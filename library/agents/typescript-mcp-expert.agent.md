@@ -79,6 +79,10 @@ The agent does not fill these gaps with assumptions; it asks for requirements or
 5. **Handle errors and outputs.** Return meaningful `content`, `structuredContent`, and `isError: true` responses.
 6. **Validate and debug.** Run TypeScript checks, unit/integration tests, and `npx @modelcontextprotocol/inspector`.
 
+## Preserved TypeScript MCP Vocabulary
+
+This is a `world-class` MCP guide for `TypeScript/Node.js**` work that produces `high-quality`, `well-documented` servers. Preserve `input/output` validation, meaningful `name` handling, `try-catch` error handling, and comments for `non-obvious` code.
+
 ## Output Format
 
 For implementation guidance, use this shape:

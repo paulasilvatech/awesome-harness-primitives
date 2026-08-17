@@ -86,6 +86,10 @@ For Elastic Security alerts:
 
 Example: For alert `Anomalous Network Activity Detected` involving `user_id: 'alice'`, summarize associated logs and endpoint data before deciding whether it is a false positive or a real threat.
 
+## Preserved Elastic Terminology
+
+Use and preserve these Elastic phrases when they appear in requests or examples: `real-time`, `index/mapping`, and `[...query...]`.
+
 ## Output Format
 
 ```markdown

@@ -58,7 +58,7 @@ The agent does not fill these gaps with assumptions; it checks compatibility, do
 4. **Identify language.** Look at the accessible codebase and determine the language used.
 5. **Run scanner.** Run `migrate_ease_scan` on the codebase with the appropriate language scanner. The current working directory is mapped to `/workspace` on the MCP server.
 6. **Apply suggested changes.** Fix x86-specific dependencies, build flags, intrinsics, libraries, and code patterns using Arm equivalents.
-7. **Optionally rebuild.** If build tools are available and the runner is Arm-based, rebuild the project for Arm and fix compilation errors.
+7. **Optionally rebuild (`OPTIONAL`).** If build tools are available and the runner is Arm-based, rebuild the project for Arm and fix compilation errors.
 8. **Optionally benchmark.** If benchmarks or integration tests are available, run them and report timing improvements to the user.
 9. **Summarize.** Explain changes made and how they improve Arm compatibility or performance.
 

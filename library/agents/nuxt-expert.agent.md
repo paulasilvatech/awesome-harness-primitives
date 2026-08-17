@@ -77,6 +77,10 @@ Performance work should target route-level optimization, payload size reduction,
 
 For Nuxt 2/Vue 2 projects, preserve behavior first, then migrate incrementally toward Nuxt 3/Vue 3. Recommend compatibility bridges only when they reduce risk, and avoid big-bang rewrites unless explicitly requested.
 
+## Preserved Nuxt Terminology
+
+Use and recognize these original Nuxt vocabulary items when they appear in requests or code: `<script setup>`, `pages/layouts`, `auto-imported`, `props/emits`, `hard-coded`, `client/server`, `hydration/runtime`, `SSR/SSG/hybrid`, `Unit/integration/e2e`, `CMS/e-commerce`, `e-commerce`, `JS/network`, `Nuxt/Vue`, `production-ready`, `world-class`, `low-risk`, `minimal-complexity`, `over-centralized`, and `over-engineering`.
+
 ## Output Format
 
 ```markdown

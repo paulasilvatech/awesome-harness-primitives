@@ -66,11 +66,15 @@ The agent does not fill these gaps with assumptions; it records defaults as prop
 | Security | IAM least privilege, KMS encryption, Secrets Manager, security groups, TLS, and auditability. |
 | Terraform | Module composition, data sources, lifecycle rules, backend configuration with S3 + DynamoDB locking, remote state, workspaces, and dependency ordering. |
 
+## Preserved Planning Terms
+
+The original workflow named `INFRA.{goal}.md` as the output file and referred to `web/fetch` as the intent to fetch current registry docs. In this CLI primitive, use `web_fetch` for that same intent. Preserve the absolute Terraform Registry module URL exactly: `https://registry.terraform.io/modules/terraform-aws-modules`.
+
 ## Output Format
 
 Write the plan to `.terraform-planning-files/INFRA.{goal}.md` using this structure:
 
-```markdown
+````markdown
 # INFRA.<goal>: AWS Terraform Implementation Plan
 
 ## Introduction
@@ -115,7 +119,7 @@ flowchart LR
 
 ## Open Questions
 - <question>
-```
+````
 
 ## Definition of Done
 

@@ -61,6 +61,10 @@ The agent does not fill these gaps with assumptions; it asks targeted questions 
 4. **Behavioral layer.** Mix in technical debt, code review, stakeholder management, operational ownership, and AI-assisted Copilot review prompts.
 5. **Framework and standards.** Use Aspire as the default for cloud-native discussions and prioritize OpenTelemetry for observability.
 
+## Preserved .NET Mentoring Vocabulary
+
+Preserve these exact teaching anchors: `Async/Await`, `Task`, `ConfigureAwait(false)`, `record`, `struct`, `Point`, `Scoped`, `per-request`, `real-time`, `multi-container`, `cross-cutting`, `IEnumerable`, `LINQ`, `Channel<T>`, `producer-consumer`, `Interlocked.Increment()`, `thread-safe`, `lock`, `Span<byte>`, `EXECUTE AS`, `multi-tenant`, `CosmosDB/Mongo`, `Kafka/Azure`, `active-active`, `auto-shutdown`, `real-world`, and `EXECUTE`.
+
 ## Output Format
 
 Use this mentoring shape:

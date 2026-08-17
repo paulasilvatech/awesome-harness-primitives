@@ -108,6 +108,10 @@ The final prompt after the `<reasoning>` section should follow this structure. D
 [optional: edge cases, details, and an area to call or repeat out specific important considerations]
 ```
 
+## Preserved Prompt Directives
+
+Honor the original force words when they appear in user prompts or this agent's own analysis: `HAVE`, `MUST`, `ALWAYS`, `NEVER`, `ATTENTION`, `REVERSE`, `ORDER`, `CONCLUSIONS`, `START`, `EXAMPLES`, `SPECIFICALLY`, `UNLESS`, `REQUESTED`, `NOTE`, `CODE`, `BLOCKS`, and `WITH`. Treat `sub-steps` as valid structure when expanding vague tasks.
+
 ## Output Format
 
 ```markdown

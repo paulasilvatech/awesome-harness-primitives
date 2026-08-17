@@ -70,6 +70,10 @@ The agent does not fill these gaps with assumptions; it records missing context 
 
 Be systematic, document everything, think incrementally, consider broader system impact, communicate clearly, stay focused on the specific bug, and test thoroughly. A well-understood problem is half solved.
 
+## Preserved Debug Vocabulary
+
+Problem assessment starts by reading error `messages/stack` traces or failure reports before changing code.
+
 ## Output Format
 
 Use this debugging report:

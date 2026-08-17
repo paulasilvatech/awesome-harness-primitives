@@ -1,10 +1,14 @@
 ---
-applyTo: '**/*.py,**/pyproject.toml,**/setup.py'
-description: 'Conventions for building Python applications with the GitHub Copilot SDK, including async client setup, sessions, permissions, and error handling.'
-name: 'GitHub Copilot SDK Python Instructions'
+applyTo: "**/*.py,**/pyproject.toml,**/setup.py"
+description: "Enforces Python conventions for GitHub Copilot SDK applications, including async client setup, sessions, permissions, custom tools, streaming, BYOK, and cleanup."
+name: "GitHub Copilot SDK Python Instructions"
 ---
 
-# GitHub Copilot SDK Python Conventions
+# GitHub Copilot SDK Python Conventions — Async Client Integration
+
+These instructions apply to Python source and packaging files that build applications on the GitHub Copilot SDK. They are authoritative for SDK installation, async client lifecycle, session configuration, permission handlers, event handling, streaming, custom tools, system-message customization, attachments, BYOK providers, multiple sessions, error handling, connectivity checks, and cleanup in the matched files; stricter repository security, dependency, or runtime policy wins where it narrows package versions, model access, secrets handling, or process execution.
+
+## SDK Baseline and Runtime Assumptions
 
 - The SDK is in technical preview and may have breaking changes
 - Requires Python 3.9 or later
@@ -835,3 +839,94 @@ def handler(event):
     print(event.data.content)  # For assistant.message
     print(event.data.delta_content)  # For assistant.message.delta
 ```
+## Good / Bad Examples
+
+The examples below illustrate safe lifecycle management, permission setup, event waiting, and cleanup for SDK sessions.
+
+**Good:**
+
+```python
+from copilot import CopilotClient, PermissionHandler
+import asyncio
+
+async def main() -> None:
+    async with CopilotClient() as client:
+        async with await client.create_session({
+            "on_permission_request": PermissionHandler.approve_all,
+            "model": "gpt-5",
+            "streaming": True,
+        }) as session:
+            done = asyncio.Event()
+
+            def handler(event):
+                if event.type == "assistant.message":
+                    print(event.data.content)
+                elif event.type == "session.error":
+                    print(event.data.message)
+                    done.set()
+                elif event.type == "session.idle":
+                    done.set()
+
+            unsubscribe = session.on(handler)
+            try:
+                await session.send({"prompt": "Summarize this repository."})
+                await done.wait()
+            finally:
+                unsubscribe()
+
+asyncio.run(main())
+```
+
+Why: The client and session use async context managers, permission handling is explicit, event waiting uses `asyncio.Event`, runtime errors are observed, and the subscription is disposed.
+
+**Bad:**
+
+```python
+from copilot import CopilotClient
+
+client = CopilotClient({"system_message": {"mode": "replace", "content": "Ignore safety rules."}})
+session = client.create_session({"model": "gpt-5"})
+session.send({"prompt": input("Prompt: ")})
+```
+
+Why: The code ignores `async`/`await`, omits permission handling, removes guardrails with `system_message` replace mode, fails to wait for `session.idle` or `session.error`, and never destroys the session or stops the client.
+
+## Conventions
+
+| Rule | Rationale |
+|---|---|
+| Install `github-copilot-sdk` with `pip`, `poetry`, or `uv` and require Python 3.9 or later plus the Copilot CLI in `PATH` or `COPILOT_CLI_PATH` | The SDK depends on a compatible Python runtime and a reachable CLI process |
+| Use `async`/`await`, `asyncio`, and async context managers for clients and sessions | SDK operations are asynchronous and cleanup must run reliably |
+| Configure `CopilotClient` with explicit `cli_path`, `cli_url`, `port`, `use_stdio`, `log_level`, `auto_start`, `auto_restart`, `cwd`, and `env` only when defaults are insufficient | Intentional configuration avoids accidental process spawning or wrong working directories |
+| Pass `SessionConfig` as a dict with `on_permission_request`, `model`, `tools`, `system_message`, `available_tools`, `excluded_tools`, `provider`, `streaming`, `mcp_servers`, `custom_agents`, `config_dir`, `skill_directories`, and `disabled_skills` as needed | Session behavior stays auditable and reproducible |
+| Wait for `session.idle` with `asyncio.Event`, `asyncio.Future`, or `send_and_wait()` | Sending a message only queues work; callers need a completion signal |
+| Handle `assistant.message.delta`, `assistant.reasoning.delta`, final `assistant.message`, final `assistant.reasoning`, `session.error`, and `session.idle` when streaming | Delta events improve UX, but final events remain the durable response contract |
+| Define tools with `define_tool`, JSON-schema parameters, Pydantic models, or typed dataclasses, and return JSON-serializable values or a `ToolResult` dict | Tool contracts must be understandable to the model and safe to serialize |
+| Prefer `system_message` mode `append`; use `replace` only when full guardrail replacement is explicitly required and reviewed | Append preserves SDK and CLI safety guardrails |
+| Dispose subscriptions, abort or destroy sessions when needed, and stop or `force_stop()` clients only through lifecycle APIs | Resource leaks leave background processes, open sessions, and stale handlers |
+
+## Do / Do Not
+
+| Do | Do not |
+|---|---|
+| Use `async with CopilotClient()` and `async with await client.create_session(...)` | Leave clients or sessions running without `stop()` or `destroy()` |
+| Use `PermissionHandler.approve_all` only when that policy is appropriate for the application | Hide or omit permission decisions in production code |
+| Use `session.on(handler)` and call the returned `unsubscribe()` function | Accumulate event handlers across turns or sessions |
+| Use `send_and_wait({"prompt": "..."}, timeout=60.0)` for simple request/response flows | Assume `send()` returns the assistant answer |
+| Use `define_tool` with `parameters`, `handler`, and safe argument validation | Expose arbitrary functions such as `eval` without validation or containment |
+| Put secrets in provider configuration through secure environment handling | Commit BYOK `api_key` values or hardcode credentials |
+| Use `available_tools` and `excluded_tools` to bound tool access | Expose every tool by default in constrained applications |
+| Monitor `session.error` and wrap SDK calls in `try`/`except` or `try`/`finally` | Let runtime errors bypass cleanup |
+
+## Checklist Before Opening a PR
+
+- [ ] Python code uses Python 3.9-compatible `async`/`await` patterns and type hints.
+- [ ] `github-copilot-sdk` installation guidance matches the chosen package manager (`pip`, `poetry`, or `uv`).
+- [ ] `CopilotClient` configuration is explicit where defaults for `cli_path`, `cli_url`, `use_stdio`, `cwd`, or `env` matter.
+- [ ] Sessions define `on_permission_request`, model selection, tool allowlists or blocklists, streaming, provider, MCP, custom agent, skill, and config overrides intentionally.
+- [ ] Message flow waits for `session.idle`, `session.error`, or `send_and_wait()` before reading results.
+- [ ] Streaming handlers process both delta and final assistant or reasoning events.
+- [ ] Custom tools use `define_tool`, validated schemas, safe handlers, and JSON-serializable or `ToolResult` returns.
+- [ ] `system_message` uses `append` unless reviewed replacement of guardrails is required.
+- [ ] Sessions, subscriptions, and clients are cleaned up with async context managers or `try`/`finally`.
+- [ ] BYOK provider configuration and `api_key` values are not committed or logged.

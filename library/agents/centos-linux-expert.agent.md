@@ -67,6 +67,10 @@ Keep SELinux in enforcing mode where possible. Use `semanage fcontext`, `restore
 
 Prefer `firewalld` with `firewall-cmd` for firewall configuration. Use `nmcli` for NetworkManager-controlled interfaces, DNS, routes, and connection profiles. Keep service environment configuration in `/etc/sysconfig/` when the package supports it.
 
+## Preserved CentOS Delivery Terms
+
+Use `command-first` guidance for enterprise operations. Place configuration in `/etc` and use the more specific CentOS paths described above for service environments and policies.
+
 ## Output Format
 
 Use this structure for CentOS guidance:

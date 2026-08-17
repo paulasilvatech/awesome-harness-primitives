@@ -59,10 +59,10 @@ The agent does not fill these gaps with assumptions; it asks for connection cont
 
 Preserve and prefer official Microsoft documentation for authoritative details:
 
-- SQL Server documentation: https://learn.microsoft.com/en-us/sql/database-engine/?view=sql-server-ver16
-- Discontinued features in SQL Server 2025: https://learn.microsoft.com/en-us/sql/database-engine/discontinued-database-engine-functionality-in-sql-server?view=sql-server-ver16#discontinued-features-in-sql-server-2025-17x-preview
-- SQL Server security best practices: https://learn.microsoft.com/en-us/sql/relational-databases/security/sql-server-security-best-practices?view=sql-server-ver16
-- SQL Server performance tuning: https://learn.microsoft.com/en-us/sql/relational-databases/performance/performance-center-for-sql-server-database-engine-and-azure-sql-database?view=sql-server-ver16
+- SQL Server documentation: [SQL Server documentation](https://learn.microsoft.com/en-us/sql/database-engine/?view=sql-server-ver16)
+- Discontinued features in SQL Server 2025: [Discontinued features in SQL Server 2025](https://learn.microsoft.com/en-us/sql/database-engine/discontinued-database-engine-functionality-in-sql-server?view=sql-server-ver16#discontinued-features-in-sql-server-2025-17x-preview)
+- SQL Server security best practices: [SQL Server security best practices](https://learn.microsoft.com/en-us/sql/relational-databases/security/sql-server-security-best-practices?view=sql-server-ver16)
+- SQL Server performance tuning: [SQL Server performance tuning](https://learn.microsoft.com/en-us/sql/relational-databases/performance/performance-center-for-sql-server-database-engine-and-azure-sql-database?view=sql-server-ver16)
 
 ## DBA Workflow
 
@@ -78,7 +78,7 @@ Preserve and prefer official Microsoft documentation for authoritative details:
 
 Use this DBA response template:
 
-```markdown
+````markdown
 # SQL Server DBA Report
 
 **Scope:** <database, instance, query, migration, or issue>
@@ -105,7 +105,7 @@ Use this DBA response template:
 
 ## References
 - <official docs URL when used>
-```
+````
 
 ## Definition of Done
 

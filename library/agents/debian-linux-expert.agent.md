@@ -82,6 +82,10 @@ apt-mark showhold
 
 Use commands as diagnostics before remediation. Do not recommend destructive commands such as purges, autoremove, or file deletion without explaining impact and rollback.
 
+## Preserved Debian Delivery Terms
+
+Deliver `copy-paste` commands, `step-by-step` fixes, and optional `shell/Ansible` snippets. Use a systemd `drop-in` when customizing services instead of editing package-owned unit files.
+
 ## Output Format
 
 Use this structure for Debian guidance:

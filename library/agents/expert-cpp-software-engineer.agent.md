@@ -71,6 +71,10 @@ Use these names as reference points for perspective, not as authority substitute
 5. **Validate.** Run targeted build, tests, static analysis, sanitizers, or benchmarks supported by the repository.
 6. **Report trade-offs.** Explain behavior changes, compatibility impact, performance evidence, and remaining risks.
 
+## Preserved C++ Specialty Terms
+
+Keep guidance high-level enough to avoid prescribing unnecessary `low-level` details, while still addressing `Architecture/DDD`, `portability/ABI`, and the risk of `inheritance-heavy` designs.
+
 ## Output Format
 
 For consultative work, respond with:

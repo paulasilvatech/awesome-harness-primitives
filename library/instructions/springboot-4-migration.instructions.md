@@ -1,13 +1,15 @@
 ---
-applyTo: '**/*.java, **/*.kt, **/build.gradle.kts, **/build.gradle, **/settings.gradle.kts, **/gradle/libs.versions.toml, **/*.properties, **/*.yml, **/*.yaml'
-description: 'Comprehensive guide for migrating Spring Boot applications from 3.x to 4.0, focusing on Gradle Kotlin DSL and version catalogs'
+applyTo: "**/*.java,**/*.kt,**/build.gradle.kts,**/build.gradle,**/settings.gradle.kts,**/gradle/libs.versions.toml,**/*.properties,**/*.yml,**/*.yaml"
+description: "Enforces Spring Boot 3.x to 4.0 migration conventions for Java, Kotlin, Gradle, version catalogs, configuration, tests, and production readiness."
 ---
 
-# Spring Boot 3.x to 4.0 Migration Guide
+# Spring Boot 4 Migration Conventions — Gradle and Kotlin
 
-## Project Context
+These instructions apply to Spring Boot application code, Gradle build files, version catalogs, and configuration matched by the `applyTo` globs during a Spring Boot 3.x to 4.0 migration. They are authoritative for dependency selection, renamed modules, build baselines, configuration-property moves, serialization changes, framework API replacements, testing changes, and production-readiness defaults in those files; official Spring Boot, Spring Framework, Jackson, Kotlin, Gradle, and dependency documentation wins where a vendor source is stricter or newer than these conventions.
 
-This guide provides comprehensive GitHub Copilot instructions for upgrading Spring Boot projects from version 3.x to 4.0, with emphasis on Gradle Kotlin DSL, version catalogs (`libs.versions.toml`), and Kotlin-specific considerations.
+## Migration Scope and Architectural Baseline
+
+Apply these conventions when moving Spring Boot applications from version 3.x to 4.0, especially projects using Gradle Kotlin DSL, version catalogs (`libs.versions.toml`), and Kotlin-specific build or nullability behavior.
 
 **Key architectural changes in Spring Boot 4.0:**
 - Modular dependency structure with focused, smaller modules
@@ -37,9 +39,9 @@ This guide provides comprehensive GitHub Copilot instructions for upgrading Spri
 ./gradlew dependencies --configuration runtimeClasspath
 ```
 
-## Pre-Migration Steps
+## Migration Readiness
 
-### 1. Upgrade to Latest Spring Boot 3.5.x
+### Spring Boot 3.5.x Baseline
 
 Before migrating to 4.0, upgrade to the latest 3.5.x release:
 
@@ -49,7 +51,7 @@ Before migrating to 4.0, upgrade to the latest 3.5.x release:
 springBoot = "3.5.6" # Latest 3.x before migrating to 4.0
 ```
 
-### 2. Clean Up Deprecations
+### Deprecation Cleanup
 
 Remove all deprecated API usage from Spring Boot 3.x. These will be compilation errors in 4.0:
 
@@ -58,7 +60,7 @@ Remove all deprecated API usage from Spring Boot 3.x. These will be compilation 
 ./gradlew clean build --warning-mode all
 ```
 
-### 3. Review Dependency Changes
+### Dependency Review
 
 Compare your dependencies against:
 - [Spring Boot 3.5.x Dependency Versions](https://docs.spring.io/spring-boot/3.5/appendix/dependency-versions/coordinates.html)
@@ -72,9 +74,9 @@ Spring Boot 4.0 introduces **smaller, focused modules** replacing large monolith
 
 **Important for Library Authors:** Due to the modularization effort and package reorganization, **supporting both Spring Boot 3 and Spring Boot 4 within the same artifact is strongly discouraged**. Library authors should publish separate artifacts for each major version to avoid runtime conflicts and ensure clean dependency management.
 
-### Migration Strategy: Choose One Approach
+### Starter Selection Rules
 
-#### Option 1: Technology-Specific Starters (Recommended for Production)
+#### Technology-Specific Starters (Recommended for Production)
 
 Most technologies covered by Spring Boot now have **dedicated test starter companions**. This provides fine-grained control.
 
@@ -110,7 +112,7 @@ dependencies {
 }
 ```
 
-#### Option 2: Classic Starters (Quick Migration, Deprecated)
+#### Classic Starters (Quick Migration, Deprecated)
 
 For rapid migration, use **classic starters** that bundle all auto-configuration (like Spring Boot 3.x):
 
@@ -131,7 +133,7 @@ dependencies {
 
 **Warning**: Classic starters are **deprecated** and will be removed in future releases. Plan migration to technology-specific starters.
 
-#### Option 3: Direct Module Dependencies (Advanced)
+#### Direct Module Dependencies (Advanced)
 
 For explicit control over transitive dependencies:
 
@@ -1418,87 +1420,6 @@ tasks.withType<JavaExec> {
 }
 ```
 
-## Migration Checklist
-
-### Pre-Migration
-
-- [ ] Upgrade to latest Spring Boot 3.5.x
-- [ ] Review and fix all deprecation warnings
-- [ ] Document current dependency versions
-- [ ] Run full test suite and verify green build
-- [ ] Review [Spring Boot 3.5.x → 4.0 dependency changes](https://docs.spring.io/spring-boot/4.0/appendix/dependency-versions/coordinates.html)
-
-### Core Migration
-
-- [ ] Update `libs.versions.toml` with Spring Boot 4.0.0
-- [ ] Update Kotlin version to 2.2.0+
-- [ ] Rename starters: `spring-boot-starter-web` → `spring-boot-starter-webmvc`, etc.
-- [ ] Add technology-specific test starters (or use classic starters temporarily)
-- [ ] Remove Undertow dependency if present (switch to Tomcat/Jetty)
-- [ ] Remove `spring-session-hazelcast` / `spring-session-mongodb` or add explicit versions
-
-### Jackson 3 Migration
-
-- [ ] Update imports: `com.fasterxml.jackson` → `tools.jackson`
-- [ ] Update exception: `jackson-annotations` still uses `com.fasterxml.jackson.core`
-- [ ] Rename: `@JsonComponent` → `@JacksonComponent`
-- [ ] Rename: `Jackson2ObjectMapperBuilderCustomizer` → `JsonMapperBuilderCustomizer`
-- [ ] Update properties: `spring.jackson.read.*` → `spring.jackson.json.read.*`
-- [ ] Consider temporary `spring-boot-jackson2` module if needed
-
-### Property Updates
-
-- [ ] MongoDB: `spring.data.mongodb.*` → `spring.mongodb.*` (for non-Spring Data properties)
-- [ ] Session: `spring.session.redis.*` → `spring.session.data.redis.*`
-- [ ] Persistence: `spring.dao.exceptiontranslation` → `spring.persistence.exceptiontranslation`
-- [ ] Kafka retry: `backoff.random` → `backoff.jitter`
-
-### Code Updates
-
-- [ ] Update package: `BootstrapRegistry` → `org.springframework.boot.bootstrap.BootstrapRegistry`
-- [ ] Update package: `EnvironmentPostProcessor` → `org.springframework.boot.EnvironmentPostProcessor`
-- [ ] Update package: `EntityScan` → `org.springframework.boot.persistence.autoconfigure.EntityScan`
-- [ ] Update: `RestClient` → `Rest5Client` (Elasticsearch)
-- [ ] Update: `StreamBuilderFactoryBeanCustomizer` → `StreamsBuilderFactoryBeanConfigurer` (Kafka)
-- [ ] Split: `RabbitRetryTemplateCustomizer` → `RabbitTemplateRetrySettingsCustomizer` / `RabbitListenerRetrySettingsCustomizer`
-- [ ] Replace: `HttpMessageConverters` → `ClientHttpMessageConvertersCustomizer` / `ServerHttpMessageConvertersCustomizer`
-- [ ] Update: `PropertyMapper` usage with `.always()` if null handling needed
-
-### Testing Updates
-
-- [ ] Add `@ExtendWith(MockitoExtension::class)` to tests using `@Mock` / `@Captor`
-- [ ] Add `@AutoConfigureMockMvc` to tests using `MockMvc`
-- [ ] Add `@AutoConfigureWebTestClient` to tests using `WebTestClient`
-- [ ] Migrate `TestRestTemplate` → `RestTestClient` (or add `@AutoConfigureTestRestTemplate`)
-- [ ] Update: `@PropertyMapping` imports → `org.springframework.boot.test.context`
-
-### Build Configuration
-
-- [ ] Update Gradle to 8.5+
-- [ ] Update Gradle CycloneDX plugin to 3.0.0+
-- [ ] Review optional dependency inclusion in uber jars
-- [ ] Remove `loaderImplementation = CLASSIC` if present
-- [ ] Remove `launchScript()` configuration if present
-
-### Verification
-
-- [ ] Run `./gradlew clean build`
-- [ ] Run full test suite
-- [ ] Verify integration tests with TestContainers
-- [ ] Check for new Kotlin null-safety warnings
-- [ ] Test Spring Boot Actuator endpoints
-- [ ] Verify health probes (`/actuator/health/liveness`, `/actuator/health/readiness`)
-- [ ] Performance test with new defaults
-
-### Post-Migration
-
-- [ ] Review Spring Boot 4.0 release notes for additional features
-- [ ] Consider adopting new Spring Framework 7.0 features
-- [ ] Plan migration away from classic starters (if used)
-- [ ] Plan migration away from `spring-boot-jackson2` module (if used)
-- [ ] Update CI/CD pipelines for Java 17+ requirement
-- [ ] Update deployment manifests (Servlet 6.1 containers)
-
 ## Common Pitfalls
 
 1. **Classic starters**: Remember these are deprecated - plan migration to technology-specific starters
@@ -1519,12 +1440,121 @@ tasks.withType<JavaExec> {
 - **Jackson 3**: Improved JSON processing performance
 - **Virtual threads**: Consider enabling with Java 21+ (`spring.threads.virtual.enabled=true`)
 
-## Resources
+## Good / Bad Examples
+
+The examples below illustrate the preferred Spring Boot 4 starter strategy and the deprecated shortcut that should remain temporary.
+
+**Good:**
+
+```kotlin
+dependencies {
+    implementation(libs.spring.boot.starter.webmvc)
+    testImplementation(libs.spring.boot.starter.webmvc.test)
+}
+```
+
+Why: Technology-specific starters keep the runtime and test classpaths aligned with Spring Boot 4.0 modularization and avoid the deprecated classic aggregate.
+
+**Bad:**
+
+```kotlin
+dependencies {
+    implementation(libs.spring.boot.starter.classic)
+    testImplementation(libs.spring.boot.starter.test.classic)
+}
+```
+
+Why: Classic starters are acceptable only as a short-lived migration bridge because they are deprecated and planned for removal.
+
+## Conventions
+
+| Rule | Rationale |
+| --- | --- |
+| Establish a clean Spring Boot 3.5.x baseline before changing to Spring Boot 4.0.0 | Deprecations and dependency drift are easier to isolate before the major-version upgrade. |
+| Keep Java at 17+ and prefer Java 21 or 25 only when the project toolchain, deployment runtime, and preview-feature settings support it | Spring Boot 4.0 requires Java 17+, while newer LTS choices affect compiler, test, and runtime flags. |
+| Use Kotlin 2.2.0+, Gradle 8.5+, and Gradle CycloneDX Plugin 3.0.0+ for Kotlin DSL and version-catalog builds | Older build tools are outside the Spring Boot 4.0 compatibility envelope. |
+| Prefer technology-specific starters and matching test starters over classic starters | Modular dependencies reduce classpath size and avoid deprecated aggregate starters. |
+| Remove Undertow and non-Servlet 6.1 containers from servlet applications | Spring Boot 4.0 uses the Jakarta EE 11 and Servlet 6.1 baseline, which Undertow does not support. |
+| Migrate Jackson code to `tools.jackson.*` and Spring Boot 4 Jackson component names unless a temporary `spring-boot-jackson2` bridge is required | Jackson 3 changes package and group IDs, while the compatibility bridge is deprecated. |
+| Configure MongoDB UUID and BigDecimal representations explicitly | Spring Boot 4.0 no longer supplies defaults, and persistence can fail at runtime without them. |
+| Add explicit test auto-configuration annotations for MockMVC, WebTestClient, TestRestTemplate, or RestTestClient | `@SpringBootTest` no longer creates those test clients automatically. |
+| Treat JSpecify nullability as source-compatible but behavior-significant | Kotlin, NullAway, SpotBugs, and `RestClient.body()` callers may surface new nullable paths. |
+| Run `./gradlew clean build` and the full test suite after dependency, property, and package migrations | The migration touches build, runtime, configuration, serialization, web, messaging, actuator, and testing behavior. |
+
+## Do / Do Not
+
+| Do | Do not |
+| --- | --- |
+| Upgrade through the latest Spring Boot 3.5.x release and fix `--warning-mode all` findings | Jump directly from an unclean 3.x baseline to 4.0.0. |
+| Rename Spring Boot starters and add dedicated test starter companions where available | Keep Spring Boot 3.x starter names such as `spring-boot-starter-web` when Spring Boot 4.0 renamed them. |
+| Use Tomcat or Jetty for Servlet 6.1 web applications | Keep `spring-boot-starter-undertow` or deploy to non-Servlet 6.1 containers. |
+| Move Jackson 3 imports, annotations, and properties to the new namespaces | Assume `com.fasterxml.jackson.*` imports still cover all Jackson 3 runtime code. |
+| Use `org.jspecify.annotations.Nullable` for actuator endpoint nullability | Use `javax.annotations.NonNull` or `org.springframework.lang.Nullable` on actuator endpoint parameters. |
+| Register `UrlHandlerFilter` when trailing slash compatibility is required | Re-enable `PathMatchConfigurer#setUseTrailingSlashMatch(true)`, which is removed. |
+| Split client and server HTTP converter customization | Keep using deprecated `HttpMessageConverters` for both directions. |
+| Prefer `RestTestClient` for new REST integration tests | Rely on `TestRestTemplate` without its Spring Boot 4.0 dependency, import, and auto-configuration. |
+| Keep classic starters and `spring-boot-jackson2` only as temporary bridges with an exit plan | Treat deprecated compatibility modules as the final architecture. |
+| Verify actuator probes, observability modules, optional dependency packaging, and native-image requirements where the application uses them | Assume Spring Boot 3.x production defaults still apply unchanged. |
+
+## Checklist Before Opening a PR
+
+- [ ] Upgrade to latest Spring Boot 3.5.x
+- [ ] Review and fix all deprecation warnings
+- [ ] Document current dependency versions
+- [ ] Run full test suite and verify green build
+- [ ] Review [Spring Boot 3.5.x → 4.0 dependency changes](https://docs.spring.io/spring-boot/4.0/appendix/dependency-versions/coordinates.html)
+- [ ] Update `libs.versions.toml` with Spring Boot 4.0.0
+- [ ] Update Kotlin version to 2.2.0+
+- [ ] Rename starters: `spring-boot-starter-web` → `spring-boot-starter-webmvc`, etc.
+- [ ] Add technology-specific test starters (or use classic starters temporarily)
+- [ ] Remove Undertow dependency if present (switch to Tomcat/Jetty)
+- [ ] Remove `spring-session-hazelcast` / `spring-session-mongodb` or add explicit versions
+- [ ] Update imports: `com.fasterxml.jackson` → `tools.jackson`
+- [ ] Update exception: `jackson-annotations` still uses `com.fasterxml.jackson.core`
+- [ ] Rename: `@JsonComponent` → `@JacksonComponent`
+- [ ] Rename: `Jackson2ObjectMapperBuilderCustomizer` → `JsonMapperBuilderCustomizer`
+- [ ] Update properties: `spring.jackson.read.*` → `spring.jackson.json.read.*`
+- [ ] Consider temporary `spring-boot-jackson2` module if needed
+- [ ] MongoDB: `spring.data.mongodb.*` → `spring.mongodb.*` (for non-Spring Data properties)
+- [ ] Session: `spring.session.redis.*` → `spring.session.data.redis.*`
+- [ ] Persistence: `spring.dao.exceptiontranslation` → `spring.persistence.exceptiontranslation`
+- [ ] Kafka retry: `backoff.random` → `backoff.jitter`
+- [ ] Update package: `BootstrapRegistry` → `org.springframework.boot.bootstrap.BootstrapRegistry`
+- [ ] Update package: `EnvironmentPostProcessor` → `org.springframework.boot.EnvironmentPostProcessor`
+- [ ] Update package: `EntityScan` → `org.springframework.boot.persistence.autoconfigure.EntityScan`
+- [ ] Update: `RestClient` → `Rest5Client` (Elasticsearch)
+- [ ] Update: `StreamBuilderFactoryBeanCustomizer` → `StreamsBuilderFactoryBeanConfigurer` (Kafka)
+- [ ] Split: `RabbitRetryTemplateCustomizer` → `RabbitTemplateRetrySettingsCustomizer` / `RabbitListenerRetrySettingsCustomizer`
+- [ ] Replace: `HttpMessageConverters` → `ClientHttpMessageConvertersCustomizer` / `ServerHttpMessageConvertersCustomizer`
+- [ ] Update: `PropertyMapper` usage with `.always()` if null handling needed
+- [ ] Add `@ExtendWith(MockitoExtension::class)` to tests using `@Mock` / `@Captor`
+- [ ] Add `@AutoConfigureMockMvc` to tests using `MockMvc`
+- [ ] Add `@AutoConfigureWebTestClient` to tests using `WebTestClient`
+- [ ] Migrate `TestRestTemplate` → `RestTestClient` (or add `@AutoConfigureTestRestTemplate`)
+- [ ] Update: `@PropertyMapping` imports → `org.springframework.boot.test.context`
+- [ ] Update Gradle to 8.5+
+- [ ] Update Gradle CycloneDX plugin to 3.0.0+
+- [ ] Review optional dependency inclusion in uber jars
+- [ ] Remove `loaderImplementation = CLASSIC` if present
+- [ ] Remove `launchScript()` configuration if present
+- [ ] Run `./gradlew clean build`
+- [ ] Run full test suite
+- [ ] Verify integration tests with TestContainers
+- [ ] Check for new Kotlin null-safety warnings
+- [ ] Test Spring Boot Actuator endpoints
+- [ ] Verify health probes (`/actuator/health/liveness`, `/actuator/health/readiness`)
+- [ ] Performance test with new defaults
+- [ ] Review Spring Boot 4.0 release notes for additional features
+- [ ] Consider adopting new Spring Framework 7.0 features
+- [ ] Plan migration away from classic starters (if used)
+- [ ] Plan migration away from `spring-boot-jackson2` module (if used)
+- [ ] Update CI/CD pipelines for Java 17+ requirement
+- [ ] Update deployment manifests (Servlet 6.1 containers)
+
+## References
 
 - [Spring Boot 4.0 Migration Guide](https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-4.0-Migration-Guide)
 - [Spring Boot 4.0 Release Notes](https://github.com/spring-projects/spring-boot/releases)
 - [Spring Framework 7.0 Documentation](https://docs.spring.io/spring-framework/reference/)
 - [Jackson 3 Migration Guide](https://github.com/FasterXML/jackson/blob/main/jackson3/MIGRATING_TO_JACKSON_3.md)
 - [Kotlin 2.2 Release Notes](https://kotlinlang.org/docs/whatsnew22.html)
-
----

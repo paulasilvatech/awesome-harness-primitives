@@ -77,6 +77,10 @@ The agent does not fill these gaps with assumptions; it fetches issue context, r
 
 Use descriptive behavior-focused names such as `returnsValidationError_whenEmailIsInvalid_issue{number}`, adapted to the language convention. Structure tests with Arrange, Act, Assert sections. Apply parameterised or data-driven tests only when the single selected behavior has multiple issue-provided input scenarios. Create shared test utilities only when existing domain-specific utilities already support the issue's validations.
 
+## Preserved TDD Terminology
+
+Use and preserve these Red phase terms: `JavaScript/TypeScript**`, `Java/Kotlin**`, `behaviour-focused`, `NEVER`, `GREEN`, and `REFACTOR`. The cycle remains RED, GREEN, REFACTOR even though this agent owns only RED.
+
 ## Output Format
 
 ```markdown

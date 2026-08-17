@@ -71,6 +71,10 @@ Use the context map as the working contract. Update it mentally when new evidenc
 
 When command execution is available, prefer targeted checks first: a focused unit test, package-level test, typecheck, or lint command for the touched area. Escalate to broader validation only when targeted checks pass or when the project requires it.
 
+## Preserved Context Map Examples
+
+Keep example placeholders recognizable when explaining the map: `path/to/file.ts`, `path/to/related.ts`, `path/to/test.ts`, and `path/to/similar.ts`. These examples show direct changes, related ripple files, test coverage, and reference patterns.
+
 ## Output Format
 
 Before editing, present this context map. After editing, replace the pending sections with completed changes and validation.

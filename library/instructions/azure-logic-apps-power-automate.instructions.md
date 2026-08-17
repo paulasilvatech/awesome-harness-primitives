@@ -1,45 +1,61 @@
 ---
-applyTo: '**/*.json,**/*.logicapp.json,**/workflow.json,**/*-definition.json,**/*.flow.json'
-description: 'Guidelines for developing Azure Logic Apps and Power Automate workflows with best practices for Workflow Definition Language (WDL), integration patterns, and enterprise automation'
+applyTo: "**/*.json,**/*.logicapp.json,**/workflow.json,**/*-definition.json,**/*.flow.json"
+description: "Enforces Azure Logic Apps and Power Automate workflow conventions for WDL structure, triggers, actions, reliability, security, integration patterns, DevOps, monitoring, and cost governance."
 ---
 
-# Azure Logic Apps and Power Automate Instructions
+# Azure Logic Apps and Power Automate Conventions — Workflow Automation
 
-## Overview
-
-These instructions will guide you in writing high-quality Azure Logic Apps and Microsoft Power Automate workflow definitions using the JSON-based Workflow Definition Language (WDL). Azure Logic Apps is a cloud-based integration platform as a service (iPaaS) that provides 1,400+ connectors to simplify integration across services and protocols. Follow these guidelines to create robust, efficient, and maintainable cloud workflow automation solutions.
+These instructions apply to Azure Logic Apps and Microsoft Power Automate workflow JSON definitions that use the JSON-based Workflow Definition Language (WDL). They are authoritative for workflow structure, connector use, expressions, integration patterns, reliability, security, monitoring, deployment, migration, and cost discipline in matched workflow files; platform policy, tenant licensing, and organization-specific Azure governance win where they define stricter requirements.
 
 ## Workflow Definition Language Structure
 
-When working with Logic Apps or Power Automate flow JSON files, ensure your workflow follows this standard structure:
+Use the canonical WDL envelope for Logic Apps and flow definitions. Keep the top-level `definition` and deployment `parameters` separate so environment values do not leak into workflow logic.
 
 ```json
 {
   "definition": {
     "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
-    "actions": { },
+    "actions": {},
     "contentVersion": "1.0.0.0",
-    "outputs": { },
-    "parameters": { },
-    "staticResults": { },
-    "triggers": { }
+    "outputs": {},
+    "parameters": {},
+    "staticResults": {},
+    "triggers": {}
   },
-  "parameters": { }
+  "parameters": {}
 }
 ```
 
-## Best Practices for Azure Logic Apps and Power Automate Development
+- Keep `actions`, `triggers`, `parameters`, `outputs`, `staticResults`, and `contentVersion` explicit in workflow definitions.
+- Use clear action names such as `Get_Customer_Data`, `Parse_Customer_Response`, `Switch_Request_Type`, `Initialize_Response_Variable`, and `Return_Success_Response` because run history and alerts surface these names directly.
+- Avoid hardcoded properties in trigger and action definitions; parameterize environment-specific values such as `apiEndpoint`, `serviceBusQueueName`, `slaThresholdSeconds`, `criticalAlertChannelId`, `warningAlertChannelId`, `subscriptionId`, `resourceGroupName`, `location`, `Environment`, `logicAppName`, and `version`.
+- Keep workflows to roughly 50 actions or less for designer performance; split complex business logic into multiple smaller workflows when necessary.
+- Use descriptive comments only where JSON comments are accepted by the surrounding artifact or tooling; otherwise encode context in names, metadata, run tracking, and documentation.
 
-### 1. Triggers
+## Platform Selection and Workflow Types
 
-- **Use appropriate trigger types** based on your scenario:
-  - **Request trigger**: For synchronous API-like workflows
-  - **Recurrence trigger**: For scheduled operations
-  - **Event-based triggers**: For reactive patterns (Service Bus, Event Grid, etc.)
-- **Configure proper trigger settings**:
-  - Set reasonable timeout periods
-  - Use pagination settings for high-volume data sources
-  - Implement proper authentication
+Choose Azure Logic Apps or Power Automate intentionally even though both share the underlying workflow engine and language.
+
+| Platform or type | Use when | Avoid when |
+| --- | --- | --- |
+| Power Automate | Business users need a user-friendly interface, Microsoft 365 and Dynamics 365 integration, Power Platform environments, desktop flow UI automation, or RPA capabilities. | Enterprise operations, advanced Azure integration, and deep monitoring are primary requirements. |
+| Azure Logic Apps | Developers need enterprise-grade integration, Azure service integration, operational monitoring, API-style workflows, B2B/EDI, or source-controlled deployment. | Licensing, ownership, or citizen-developer requirements make a Power Platform Solution the right ALM boundary. |
+| Consumption Logic Apps | Workloads are variable, unpredictable, serverless, and fit a pay-per-execution pricing model. | Predictable performance, local development support, VNet integration, or fixed plan economics are required. |
+| Standard Logic Apps | Fixed App Service Plan pricing, predictable performance, local development support, shared workflows, deployment slots, and VNet integration are needed. | Pay-per-execution economics are better for the workload. |
+| Integration Service Environment (ISE) | Dedicated deployment, isolated runtime, direct VNet access, higher throughput, or longer execution durations are required. | The scenario can use newer Standard networking and private endpoint patterns. |
+
+Power Automate license decisions belong in the design record: `Power Automate per user plan`, `Power Automate per flow plan`, `Power Automate Process plan`, or `Power Automate included with Office 365`. Account for premium connectors, API call limits, per-user assignment, per-flow ownership, and Office 365 limitations before moving a flow into production.
+
+## Triggers and API Entry Points
+
+Select trigger types by integration style and protect every inbound boundary.
+
+- Use a Request trigger for synchronous API-like workflows and return explicit `Response` actions with appropriate `statusCode`, headers, and body shape.
+- Use a Recurrence trigger for scheduled operations; set recurrence intervals that avoid over-polling.
+- Use event-based triggers for reactive patterns such as Service Bus and Event Grid.
+- Use webhook-based triggers instead of polling triggers when the source supports callbacks.
+- Configure timeout periods, pagination settings for high-volume data sources, authentication, IP restrictions, and OpenAPI schemas for HTTP triggers.
+- For Workflow as API patterns, design request triggers with `method`, `required`, `enum`, field descriptions, and response contracts.
 
 ```json
 "triggers": {
@@ -48,240 +64,121 @@ When working with Logic Apps or Power Automate flow JSON files, ensure your work
     "kind": "Http",
     "inputs": {
       "schema": {
+        "$schema": "http://json-schema.org/draft-04/schema#",
         "type": "object",
         "properties": {
-          "requestParameter": {
-            "type": "string"
-          }
-        }
-      }
-    }
-  }
-}
-```
-
-### 2. Actions
-
-- **Name actions descriptively** to indicate their purpose
-- **Organize complex workflows** using scopes for logical grouping
-- **Use proper action types** for different operations:
-  - HTTP actions for API calls
-  - Connector actions for built-in integrations
-  - Data operation actions for transformations
-
-```json
-"actions": {
-  "Get_Customer_Data": {
-    "type": "Http",
-    "inputs": {
-      "method": "GET",
-      "uri": "https://api.example.com/customers/@{triggerBody()?['customerId']}",
-      "headers": {
-        "Content-Type": "application/json"
-      }
-    },
-    "runAfter": {}
-  }
-}
-```
-
-### 3. Error Handling and Reliability
-
-- **Implement robust error handling**:
-  - Use "runAfter" configurations to handle failures
-  - Configure retry policies for transient errors
-  - Use scopes with "runAfter" conditions for error branches
-- **Implement fallback mechanisms** for critical operations
-- **Add timeouts** for external service calls
-- **Use runAfter conditions** for complex error handling scenarios
-
-```json
-"actions": {
-  "HTTP_Action": {
-    "type": "Http",
-    "inputs": { },
-    "retryPolicy": {
-      "type": "fixed",
-      "count": 3,
-      "interval": "PT20S",
-      "minimumInterval": "PT5S",
-      "maximumInterval": "PT1H"
-    }
-  },
-  "Handle_Success": {
-    "type": "Scope",
-    "actions": { },
-    "runAfter": {
-      "HTTP_Action": ["Succeeded"]
-    }
-  },
-  "Handle_Failure": {
-    "type": "Scope",
-    "actions": {
-      "Log_Error": {
-        "type": "ApiConnection",
-        "inputs": {
-          "host": {
-            "connection": {
-              "name": "@parameters('$connections')['loganalytics']['connectionId']"
-            }
-          },
-          "method": "post",
-          "body": {
-            "LogType": "WorkflowError",
-            "ErrorDetails": "@{actions('HTTP_Action').outputs.body}",
-            "StatusCode": "@{actions('HTTP_Action').outputs.statusCode}"
-          }
-        }
-      },
-      "Send_Notification": {
-        "type": "ApiConnection",
-        "inputs": {
-          "host": {
-            "connection": {
-              "name": "@parameters('$connections')['office365']['connectionId']"
-            }
-          },
-          "method": "post",
-          "path": "/v2/Mail",
-          "body": {
-            "To": "support@contoso.com",
-            "Subject": "Workflow Error - HTTP Call Failed",
-            "Body": "<p>The HTTP call failed with status code: @{actions('HTTP_Action').outputs.statusCode}</p>"
-          }
+          "customerId": { "type": "string", "description": "The unique identifier for the customer" },
+          "requestType": { "type": "string", "enum": ["Profile", "OrderSummary"], "description": "The type of request to process" },
+          "requestParameter": { "type": "string" },
+          "apiVersion": { "type": "string" }
         },
-        "runAfter": {
-          "Log_Error": ["Succeeded"]
-        }
+        "required": ["customerId", "requestType"]
+      },
+      "method": "POST"
+    }
+  },
+  "When_a_message_is_received_in_a_queue": {
+    "type": "ApiConnectionWebhook",
+    "inputs": {
+      "host": { "connection": { "name": "@parameters('$connections')['servicebus']['connectionId']" } },
+      "body": { "isSessionsEnabled": true },
+      "path": "/subscriptionListener",
+      "queries": {
+        "queueName": "@parameters('serviceBusQueueName')",
+        "subscriptionType": "Main"
       }
-    },
-    "runAfter": {
-      "HTTP_Action": ["Failed", "TimedOut"]
     }
   }
 }
 ```
 
-### 4. Expressions and Functions
+When importing a Logic App through API Management, apply consistent URL structures, path versioning such as `/api/v1/resource`, request validation, rate limiting, and correlation headers before forwarding to the backend.
 
-- **Use built-in expression functions** to transform data
-- **Keep expressions concise and readable**
-- **Document complex expressions** with comments
+## Actions, Connectors, and Control Flow
 
-Common expression patterns:
-- String manipulation: `concat()`, `replace()`, `substring()`
-- Collection operations: `filter()`, `map()`, `select()`
-- Conditional logic: `if()`, `and()`, `or()`, `equals()`
-- Date/time manipulation: `formatDateTime()`, `addDays()`
-- JSON handling: `json()`, `array()`, `createArray()`
+Use the smallest reliable action set and choose the right action type for the operation.
 
-```json
-"Set_Variable": {
-  "type": "SetVariable",
-  "inputs": {
-    "name": "formattedData",
-    "value": "@{map(body('Parse_JSON'), item => {
-      return {
-        id: item.id,
-        name: toUpper(item.name),
-        date: formatDateTime(item.timestamp, 'yyyy-MM-dd')
-      }
-    })}"
-  }
-}
-```
-
-#### Using Expressions in Power Automate Conditions
-
-Power Automate supports advanced expressions in conditions to check multiple values. When working with complex logical conditions, use the following pattern:
-
-- For comparing a single value: Use the basic condition designer interface
-- For multiple conditions: Use advanced expressions in advanced mode
-
-Common logical expression functions for conditions in Power Automate:
-
-| Expression | Description | Example |
-|------------|-------------|---------|
-| `and` | Returns true if both arguments are true | `@and(equals(item()?['Status'], 'completed'), equals(item()?['Assigned'], 'John'))` |
-| `or` | Returns true if either argument is true | `@or(equals(item()?['Status'], 'completed'), equals(item()?['Status'], 'unnecessary'))` |
-| `equals` | Checks if values are equal | `@equals(item()?['Status'], 'blocked')` |
-| `greater` | Checks if first value is greater than second | `@greater(item()?['Due'], item()?['Paid'])` |
-| `less` | Checks if first value is less than second | `@less(item()?['dueDate'], addDays(utcNow(),1))` |
-| `empty` | Checks if object, array or string is empty | `@empty(item()?['Status'])` |
-| `not` | Returns opposite of a boolean value | `@not(contains(item()?['Status'], 'Failed'))` |
-
-Example: Check if a status is "completed" OR "unnecessary":
-```
-@or(equals(item()?['Status'], 'completed'), equals(item()?['Status'], 'unnecessary'))
-```
-
-Example: Check if status is "blocked" AND assigned to specific person:
-```
-@and(equals(item()?['Status'], 'blocked'), equals(item()?['Assigned'], 'John Wonder'))
-```
-
-Example: Check if a payment is overdue AND incomplete:
-```
-@and(greater(item()?['Due'], item()?['Paid']), less(item()?['dueDate'], utcNow()))
-```
-
-**Note:** In Power Automate, when accessing dynamic values from previous steps in expressions, use the syntax `item()?['PropertyName']` to safely access properties in a collection.
-
-### 5. Parameters and Variables
-
-- **Parameterize your workflows** for reusability across environments
-- **Use variables for temporary values** within a workflow
-- **Define clear parameter schemas** with default values and descriptions
-
-```json
-"parameters": {
-  "apiEndpoint": {
-    "type": "string",
-    "defaultValue": "https://api.dev.example.com",
-    "metadata": {
-      "description": "The base URL for the API endpoint"
-    }
-  }
-},
-"variables": {
-  "requestId": "@{guid()}",
-  "processedItems": []
-}
-```
-
-### 6. Control Flow
-
-- **Use conditions** for branching logic
-- **Implement parallel branches** for independent operations
-- **Use foreach loops** with reasonable batch sizes for collections
-- **Apply until loops** with proper exit conditions
+- Use HTTP actions for direct REST calls, SOAP bridges, and protocol bridging when a connector does not provide a better contract.
+- Use connector actions such as `ApiConnection` and `ApiConnectionWebhook` for built-in integrations with Key Vault, Service Bus, Office 365, Application Insights, Log Analytics, SQL, Teams, and Dataverse when the managed connector gives authentication, throttling, and schema benefits.
+- Use data operation actions such as `Compose`, `ParseJson`, `InitializeVariable`, `SetVariable`, `AppendToArrayVariable`, `If`, `Switch`, `Scope`, `Foreach`, and `Response` to keep transformation and control flow explicit.
+- Organize complex workflows with `Scope` actions such as `Try_Process_Order`, `Handle_Process_Error`, `Handle_Success`, `Handle_Failure`, `Handle_Connection_Errors`, and `Handle_Business_Logic_Errors`.
+- Use conditions for branching logic, parallel branches for independent work, and `until` loops only with clear exit conditions and timeouts.
+- Configure `runtimeConfiguration.concurrency.repetitions` for parallelizable `Foreach` loops; start with a conservative value such as `10` and adjust after observing connector limits.
+- Use `runAfter` to make success, failure, timeout, and compensation paths explicit.
 
 ```json
 "Process_Items": {
   "type": "Foreach",
   "foreach": "@body('Get_Items')",
   "actions": {
-    "Process_Single_Item": {
-      "type": "Scope",
-      "actions": { }
-    }
+    "Process_Single_Item": { "type": "Scope", "actions": {} }
   },
-  "runAfter": {
-    "Get_Items": ["Succeeded"]
-  },
+  "runAfter": { "Get_Items": ["Succeeded"] },
   "runtimeConfiguration": {
-    "concurrency": {
-      "repetitions": 10
+    "concurrency": { "repetitions": 10 }
+  }
+}
+```
+
+## Expressions, Parameters, Variables, and Message Handling
+
+Keep expressions readable and defensive. Use built-in expression functions instead of custom actions when the transformation is simple.
+
+| Concern | Convention |
+| --- | --- |
+| String manipulation | Use `concat()`, `replace()`, `substring()`, and `toUpper()` for small string transforms. |
+| Collection operations | Use `filter()`, `map()`, `select()`, `length()`, `sum()`, `max()`, `join()`, and `createArray()` when the expression remains readable. |
+| Conditional logic | Use `if()`, `and()`, `or()`, `not()`, `equals()`, `greater()`, `less()`, and `contains()` for simple decisions; move complex branching into `If` or `Switch` actions. |
+| Date/time | Use `formatDateTime()`, `addDays()`, `utcNow()`, `ticks()`, `div()`, `sub()`, and `mul()` for deterministic temporal calculations. |
+| JSON handling | Use `json()`, `array()`, and `ParseJson` with schema validation before accessing structured payloads. |
+| Safe access | Use `item()?['PropertyName']`, `triggerBody()?['customerId']`, `body('Parse_Message')?['data']?['items']`, `outputs('Calculate_Processing_Time')`, and `coalesce()` where missing data is possible. |
+
+Power Automate conditions should use the designer for a single comparison and advanced expressions for multiple conditions:
+
+```text
+@or(equals(item()?['Status'], 'completed'), equals(item()?['Status'], 'unnecessary'))
+@and(equals(item()?['Status'], 'blocked'), equals(item()?['Assigned'], 'John Wonder'))
+@and(greater(item()?['Due'], item()?['Paid']), less(item()?['dueDate'], utcNow()))
+@equals(item()?['Status'], 'blocked')
+@greater(item()?['Due'], item()?['Paid'])
+@less(item()?['dueDate'], addDays(utcNow(),1))
+@empty(item()?['Status'])
+@not(contains(item()?['Status'], 'Failed'))
+```
+
+Use the function names `equals`, `greater`, `less`, and `empty` consistently in Power Automate condition expressions so reviewers can map designer conditions to WDL expressions.
+Preserve common condition snippets when refactoring: `@equals(item()?['Status'], 'blocked')`, `@greater(item()?['Due'], item()?['Paid'])`, `@less(item()?['dueDate'], addDays(utcNow(),1))`, `@empty(item()?['Status'])`, and `@not(contains(item()?['Status'], 'Failed'))`.
+
+Parameterize workflows for reuse and keep temporary state local to the run:
+
+```json
+"parameters": {
+  "apiEndpoint": {
+    "type": "string",
+    "defaultValue": "https://api.dev.example.com",
+    "metadata": { "description": "The base URL for the API endpoint" }
+  },
+  "$connections": { "defaultValue": {}, "type": "Object" },
+  "serviceBusQueueName": { "type": "string", "defaultValue": "orders" },
+  "slaThresholdSeconds": { "type": "int" }
+},
+"actions": {
+  "Initialize_Variables": {
+    "type": "InitializeVariable",
+    "inputs": {
+      "variables": [
+        { "name": "requestId", "type": "string", "value": "@{guid()}" },
+        { "name": "processedItems", "type": "array", "value": [] },
+        { "name": "validItems", "type": "array", "value": [] },
+        { "name": "invalidItems", "type": "array", "value": [] },
+        { "name": "responsePayload", "type": "object", "value": {} }
+      ]
     }
   }
 }
 ```
 
-### 7. Content and Message Handling
-
-- **Validate message schemas** to ensure data integrity
-- **Implement proper content type handling**
-- **Use Parse JSON actions** to work with structured data
+Validate message schemas, set `Content-Type` deliberately, and use `Parse JSON` actions before downstream transformations.
 
 ```json
 "Parse_Response": {
@@ -291,42 +188,114 @@ Example: Check if a payment is overdue AND incomplete:
     "schema": {
       "type": "object",
       "properties": {
-        "id": {
-          "type": "string"
-        },
-        "data": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": { }
-          }
-        }
+        "id": { "type": "string" },
+        "data": { "type": "array", "items": { "type": "object", "properties": {} } }
       }
     }
   }
 }
 ```
 
-### 8. Security Best Practices
+## Reliability, Error Handling, and Exception Strategy
 
-- **Use managed identities** when possible
-- **Store secrets in Key Vault**
-- **Implement least privilege access** for connections
-- **Secure API endpoints** with authentication
-- **Implement IP restrictions** for HTTP triggers
-- **Apply data encryption** for sensitive data in parameters and messages
-- **Use Azure RBAC** to control access to Logic Apps resources
-- **Conduct regular security reviews** of workflows and connections
+Design every workflow with explicit success, failure, timeout, fallback, and notification behavior.
+
+- Configure retry policies for transient errors; use `fixed` retries for predictable short failures and `exponential` retries for unstable downstream services.
+- Add timeouts for external service calls so runs do not hang indefinitely.
+- Use `runAfter` with `Succeeded`, `Failed`, and `TimedOut` conditions for error branches.
+- Add fallback mechanisms for critical operations, including `Invoke_Fallback_Endpoint` when a primary dependency fails.
+- Use schema validation, defensive expressions with `coalesce()` and safe navigation (`?`), and pre-condition checks before critical operations.
+- Use structured `try/catch`-style scopes: `Try_Primary_Action`, `Main_Operation`, `Handle_Connection_Errors`, `Handle_Business_Logic_Errors`, and `Switch_On_Error_Type`.
+- Capture `ErrorCategory`, `StatusCode`, `ErrorMessage`, `ErrorDetails`, `Timestamp`, `EventId`, `OrderId`, `CustomerId`, and correlation IDs in logs.
+- Categorize error types such as `ResourceNotFound`, `ValidationError`, and `PermissionDenied`; use specific recovery actions such as `Create_Resource`, `Resubmit_With_Defaults`, `Elevate_Permissions`, or `Send_To_Support_Queue` only when they are safe and intentional.
+
+```json
+"HTTP_Action": {
+  "type": "Http",
+  "inputs": { "method": "GET", "uri": "https://api.example.com/resource" },
+  "retryPolicy": {
+    "type": "fixed",
+    "count": 3,
+    "interval": "PT20S",
+    "minimumInterval": "PT5S",
+    "maximumInterval": "PT1H"
+  }
+},
+"Get_Customer_Details": {
+  "type": "Http",
+  "inputs": { "method": "GET", "uri": "https://api.example.com/customers/@{body('Parse_Message')?['data']?['customerId']}" },
+  "retryPolicy": {
+    "type": "exponential",
+    "count": 5,
+    "interval": "PT10S",
+    "minimumInterval": "PT5S",
+    "maximumInterval": "PT1H"
+  }
+},
+"Handle_Failure": {
+  "type": "Scope",
+  "actions": {
+    "Log_Error": {
+      "type": "ApiConnection",
+      "inputs": {
+        "host": { "connection": { "name": "@parameters('$connections')['loganalytics']['connectionId']" } },
+        "method": "post",
+        "body": {
+          "LogType": "WorkflowError",
+          "ErrorDetails": "@{actions('HTTP_Action').outputs.body}",
+          "StatusCode": "@{actions('HTTP_Action').outputs.statusCode}"
+        }
+      }
+    },
+    "Send_Notification": {
+      "type": "ApiConnection",
+      "inputs": {
+        "host": { "connection": { "name": "@parameters('$connections')['office365']['connectionId']" } },
+        "method": "post",
+        "path": "/v2/Mail",
+        "body": {
+          "To": "support@contoso.com",
+          "Subject": "Workflow Error - HTTP Call Failed",
+          "Body": "<p>The HTTP call failed with status code: @{actions('HTTP_Action').outputs.statusCode}</p>"
+        }
+      },
+      "runAfter": { "Log_Error": ["Succeeded"] }
+    }
+  },
+  "runAfter": { "HTTP_Action": ["Failed", "TimedOut"] }
+}
+```
+
+For Service Bus processing, explicitly complete, abandon, or dead-letter messages by using `Complete_Message`, `Abandon_Message`, or `Dead_Letter_Message` with `lockToken`, `sessionId`, `queueName`, `deadLetterReason`, and `deadLetterDescription`. Use actions such as `Validate_Stock`, `Check_Product_Stock`, `Verify_Availability`, `Add_To_Valid_Items`, `Add_To_Invalid_Items`, `Check_Order_Validity`, `Process_Valid_Order`, `Send_Order_Confirmation`, and `Send_Invalid_Stock_Notification` to make business outcomes visible in run history.
+When parsing Service Bus connector payloads, read message content from `ContentData` before applying a `ParseJson` schema so the workflow validates the actual brokered message body.
+
+Use retry intervals such as `PT15S` or `PT30S` when the downstream connector needs a different cadence from the default `PT20S`; use `PT1S` only for explicit duration conversion logic, not as an aggressive retry interval.
+
+```json
+"Complete_Message": { "type": "ApiConnection", "inputs": { "path": "/messages/complete" } },
+"Abandon_Message": { "type": "ApiConnection", "inputs": { "path": "/messages/abandon" } },
+"Dead_Letter_Message": { "type": "ApiConnection", "inputs": { "path": "/messages/deadletter" } }
+```
+
+## Security, Identity, and Sensitive Data
+
+Treat workflow definitions as production integration code that can expose data, credentials, and privileged actions.
+
+- Use managed identities, especially `ManagedServiceIdentity`, for Azure service access when possible.
+- In ARM templates, set the Logic App identity `type` to `SystemAssigned` when the workflow needs its own managed identity.
+- Store secrets and credentials in Azure Key Vault; fetch `apiKey` and `database-connection-string` through the `keyvault` connector instead of embedding values.
+- Apply least privilege to connections and Azure RBAC assignments; implement custom roles where built-in roles are too broad.
+- Secure API endpoints with authentication and authorization; protect API Management frontends with `validate-jwt`, `openid-config`, and `required-claims`.
+- Apply IP restrictions to HTTP triggers and content/action endpoints with `allowedCallerIpAddresses`, `addressRange`, `13.91.0.0/16`, and `40.112.0.0/13` only when those ranges are the intended callers.
+- Apply encryption for sensitive parameters, messages, data at rest, and data in transit.
+- Mask sensitive data in logs and monitoring; never emit raw connection strings, tokens, secrets, or full payloads containing sensitive data.
+- Implement regular access reviews, Just-In-Time access for administrative operations, audit trails for access and configuration changes, private endpoints, and Virtual Network integration for Logic Apps Standard.
 
 ```json
 "Get_Secret": {
   "type": "ApiConnection",
   "inputs": {
-    "host": {
-      "connection": {
-        "name": "@parameters('$connections')['keyvault']['connectionId']"
-      }
-    },
+    "host": { "connection": { "name": "@parameters('$connections')['keyvault']['connectionId']" } },
     "method": "get",
     "path": "/secrets/@{encodeURIComponent('apiKey')}/value"
   }
@@ -338,187 +307,184 @@ Example: Check if a payment is overdue AND incomplete:
     "uri": "https://api.example.com/protected",
     "headers": {
       "Content-Type": "application/json",
-      "Authorization": "Bearer @{body('Get_Secret')?['value']}"
+      "Authorization": "******'Get_Secret')?['value']}"
     },
-    "body": {
-      "data": "@variables('processedData')"
-    }
+    "body": { "data": "@variables('processedData')" }
   },
-  "authentication": {
-    "type": "ManagedServiceIdentity"
-  },
-  "runAfter": {
-    "Get_Secret": ["Succeeded"]
-  }
+  "authentication": { "type": "ManagedServiceIdentity" },
+  "runAfter": { "Get_Secret": ["Succeeded"] }
 }
 ```
 
-## Performance Optimization
-
-- **Minimize unnecessary actions**
-- **Use batch operations** when available
-- **Optimize expressions** to reduce complexity
-- **Configure appropriate timeout values**
-- **Implement pagination** for large data sets
-- **Implement concurrency control** for parallelizable operations
+SQL connector calls that must execute a parameterized query should keep the dataset path and SQL shape explicit:
 
 ```json
-"Process_Items": {
-  "type": "Foreach",
-  "foreach": "@body('Get_Items')",
-  "actions": {
-    "Process_Single_Item": {
-      "type": "Scope",
-      "actions": { }
-    }
-  },
-  "runAfter": {
-    "Get_Items": ["Succeeded"]
-  },
-  "runtimeConfiguration": {
-    "concurrency": {
-      "repetitions": 10
+"Execute_Database_Query": {
+  "type": "ApiConnection",
+  "inputs": {
+    "host": { "connection": { "name": "@parameters('$connections')['sql']['connectionId']" } },
+    "method": "post",
+    "path": "/datasets/default/query",
+    "body": {
+      "query": "SELECT * FROM Customers WHERE CustomerId = @CustomerId",
+      "parameters": { "CustomerId": "@triggerBody()?['customerId']" },
+      "connectionString": "@body('Get_Database_Credentials')?['value']"
     }
   }
 }
 ```
 
-### Workflow Design Best Practices
+```xml
+<policies>
+  <inbound>
+    <validate-jwt header-name="Authorization" failed-validation-httpcode="401" failed-validation-error-message="Unauthorized">
+      <openid-config url="https://login.microsoftonline.com/{tenant-id}/.well-known/openid-configuration" />
+      <required-claims>
+        <claim name="aud" match="any"><value>api://mylogicapp</value></claim>
+      </required-claims>
+    </validate-jwt>
+    <rate-limit calls="5" renewal-period="60" />
+    <set-header name="Correlation-Id" exists-action="override"><value>@(context.RequestId)</value></set-header>
+    <log-to-eventhub logger-id="api-logger">@{ return new JObject(new JProperty("correlationId", context.RequestId), new JProperty("api", context.Api.Name), new JProperty("operation", context.Operation.Name), new JProperty("user", context.User.Email), new JProperty("ip", context.Request.IpAddress)).ToString(); }</log-to-eventhub>
+  </inbound>
+  <backend><forward-request /></backend>
+  <outbound><set-header name="X-Powered-By" exists-action="delete" /></outbound>
+  <on-error><base /></on-error>
+</policies>
+```
 
-- **Limit workflows to 50 actions or less** for optimal designer performance
-- **Split complex business logic** into multiple smaller workflows when necessary
-- **Use deployment slots** for mission-critical logic apps that require zero downtime deployments
-- **Avoid hardcoded properties** in trigger and action definitions
-- **Add descriptive comments** to provide context about trigger and action definitions
-- **Use built-in operations** when available instead of shared connectors for better performance
-- **Use an Integration Account** for B2B scenarios and EDI message processing
-- **Reuse workflow templates** for standard patterns across your organization
-- **Avoid deep nesting** of scopes and actions to maintain readability
+## Integration and Enterprise Patterns
 
-### Monitoring and Observability
+Select integration patterns by business semantics, not by connector convenience.
 
-- **Configure diagnostic settings** to capture workflow runs and metrics
-- **Add tracking IDs** to correlate related workflow runs
-- **Implement comprehensive logging** with appropriate detail levels
-- **Set up alerts** for workflow failures and performance degradation
-- **Use Application Insights** for end-to-end tracing and monitoring
+| Pattern | Convention |
+| --- | --- |
+| Mediator Pattern | Use Logic Apps or Power Automate as an orchestration layer between systems when central routing adds clarity. |
+| Content-Based Routing | Route messages based on content to different destinations with `If` or `Switch`. |
+| Message Transformation | Transform between JSON, XML, EDI, and other formats with explicit schemas and maps. |
+| Scatter-Gather | Distribute independent work in parallel and aggregate results after all branches finish. |
+| Protocol Bridging | Connect systems with different protocols such as REST, SOAP, FTP, and B2B transports. |
+| Claim Check | Store large payloads externally in blob storage or databases and move references through the workflow. |
+| Saga Pattern | Manage distributed transactions with compensating actions for failures. |
+| Choreography Pattern | Coordinate multiple services without creating an unnecessary central orchestrator. |
+| Asynchronous Processing Pattern | Name long-running HTTP steps clearly, for example `LongRunningAction`, and use callbacks, durable status, and retries for operations such as `https://api.example.com/longrunning`. |
+| Webhook Pattern | Name callback subscription steps clearly, for example `WebhookAction`, and use `ApiConnectionWebhook` with subscription paths such as `/subscribe/topics/@{encodeURIComponent('mytopic')}/subscriptions/@{encodeURIComponent('mysubscription')}` for callback-based processing. |
+| B2B Message Exchange | Exchange EDI documents between trading partners with AS2, X12, and EDIFACT. |
+| Integration Account | Store B2B artifacts such as agreements, schemas, and maps. |
+| Rules Engine | Use the Azure Logic Apps Rules Engine for complex business rules. |
+| Message Validation | Validate messages against schemas for compliance and data integrity. |
+| Transaction Processing | Use compensating transactions and rollback semantics for business transaction failure paths. |
 
-## Platform Types and Considerations
+For API integration workflows, validate inputs, retrieve secrets, call external systems, parse responses, branch by request type, log success, and return a deterministic result. Preserve clear action names and telemetry fields such as `Validate_Input`, `Get_API_Key`, `Get_Customer_Data`, `Parse_Customer_Response`, `Prepare_Profile_Response`, `Calculate_Order_Statistics`, `Prepare_Order_Response`, `Set_Default_Response`, `Log_Successful_Request`, `Return_Validation_Error`, `Return_Success_Response`, `ApiRequestSuccess`, `RequestType`, and `ProcessingTime`.
 
-### Azure Logic Apps vs Power Automate
+```json
+{
+  "type": "Http",
+  "inputs": {
+    "method": "GET",
+    "uri": "https://api.example.com/customers/@{triggerBody()?['customerId']}",
+    "headers": {
+      "Content-Type": "application/json",
+      "Authorization": "******'Get_API_Key')?['value']}"
+    }
+  }
+}
+```
 
-While Azure Logic Apps and Power Automate share the same underlying workflow engine and language, they have different target audiences and capabilities:
+For order-processing examples, keep event fields and business fields explicit: `eventId`, `eventType`, `eventTime`, `dataVersion`, `data`, `orderId`, `orderDate`, `customerId`, `customerName`, `email`, `status`, `createdDate`, `orders`, `items`, `productId`, `quantity`, `unitPrice`, `availableStock`, `requestedQuantity`, `reason`, `Insufficient stock`, `InsufficientStock`, `processedTime`, `LockToken`, `SessionId`, `Importance`, `IsHtml`, and `Normal`.
 
-- **Power Automate**: 
-  - User-friendly interface for business users
-  - Part of the Power Platform ecosystem
-  - Integration with Microsoft 365 and Dynamics 365
-  - Desktop flow capabilities for UI automation
+## Monitoring, Observability, and Operations
 
-- **Azure Logic Apps**:
-  - Enterprise-grade integration platform
-  - Developer-focused with advanced capabilities
-  - Deeper Azure service integration
-  - More extensive monitoring and operations capabilities
+Make workflows observable from the first production run.
 
-### Logic App Types
+- Configure diagnostic settings to capture workflow runs and metrics.
+- Add tracking IDs and correlation IDs to correlate related workflow runs across systems.
+- Implement comprehensive logging with appropriate detail levels and masked sensitive data.
+- Set alerts for workflow failures, performance degradation, SLA breaches, dead-letter growth, and business KPI failures.
+- Use Application Insights and Log Analytics for end-to-end tracing and operational analysis.
+- Create dedicated health check workflows, heartbeat patterns, periodic check-ins, and dead letter handling workflows for operational monitoring.
+- Track business metrics such as order processing times, approval rates, transaction IDs, and SLA compliance.
+- Route alerts by business impact through email, SMS, or Teams and group related alerts to prevent alert fatigue.
+- Use stable `LogType` values such as `ConnectionError` and `OrderProcessingError` for failure categories so dashboards and alerts can filter errors without parsing free-form messages.
 
-#### Consumption Logic Apps
-- Pay-per-execution pricing model
-- Serverless architecture
-- Suitable for variable or unpredictable workloads
-
-#### Standard Logic Apps
-- Fixed pricing based on App Service Plan
-- Predictable performance
-- Local development support
-- Integration with VNets
-
-#### Integration Service Environment (ISE)
-- Dedicated deployment environment
-- Higher throughput and longer execution durations
-- Direct access to VNet resources
-- Isolated runtime environment
-
-### Power Automate License Types
-- **Power Automate per user plan**: For individual users
-- **Power Automate per flow plan**: For specific workflows
-- **Power Automate Process plan**: For RPA capabilities
-- **Power Automate included with Office 365**: Limited capabilities for Office 365 users
-
-## Common Integration Patterns
-
-### Architectural Patterns
-- **Mediator Pattern**: Use Logic Apps/Power Automate as an orchestration layer between systems
-- **Content-Based Routing**: Route messages based on content to different destinations
-- **Message Transformation**: Transform messages between formats (JSON, XML, EDI, etc.)
-- **Scatter-Gather**: Distribute work in parallel and aggregate results
-- **Protocol Bridging**: Connect systems with different protocols (REST, SOAP, FTP, etc.)
-- **Claim Check**: Store large payloads externally in blob storage or databases
-- **Saga Pattern**: Manage distributed transactions with compensating actions for failures
-- **Choreography Pattern**: Coordinate multiple services without a central orchestrator
-
-### Action Patterns
-- **Asynchronous Processing Pattern**: For long-running operations
-  ```json
-  "LongRunningAction": {
-    "type": "Http",
-    "inputs": {
-      "method": "POST",
-      "uri": "https://api.example.com/longrunning",
-      "body": { "data": "@triggerBody()" }
+```json
+"Monitor_Transaction_SLA": {
+  "type": "Scope",
+  "actions": {
+    "Calculate_Processing_Time": {
+      "type": "Compose",
+      "inputs": "@{div(sub(ticks(utcNow()), ticks(triggerBody()?['startTime'])), 10000000)}"
     },
-    "retryPolicy": {
-      "type": "fixed",
-      "count": 3,
-      "interval": "PT30S"
-    }
-  }
-  ```
-
-- **Webhook Pattern**: For callback-based processing
-  ```json
-  "WebhookAction": {
-    "type": "ApiConnectionWebhook",
-    "inputs": {
-      "host": {
-        "connection": {
-          "name": "@parameters('$connections')['servicebus']['connectionId']"
+    "Check_SLA_Breach": {
+      "type": "If",
+      "expression": "@greater(outputs('Calculate_Processing_Time'), parameters('slaThresholdSeconds'))",
+      "actions": {
+        "Log_SLA_Breach": {
+          "type": "ApiConnection",
+          "inputs": {
+            "host": { "connection": { "name": "@parameters('$connections')['loganalytics']['connectionId']" } },
+            "method": "post",
+            "body": {
+              "LogType": "SLABreach",
+              "TransactionId": "@{triggerBody()?['transactionId']}",
+              "ProcessingTimeSeconds": "@{outputs('Calculate_Processing_Time')}",
+              "SLAThresholdSeconds": "@{parameters('slaThresholdSeconds')}",
+              "BreachSeverity": "@if(greater(outputs('Calculate_Processing_Time'), mul(parameters('slaThresholdSeconds'), 2)), 'Critical', 'Warning')"
+            }
+          }
+        },
+        "Send_SLA_Alert": {
+          "type": "ApiConnection",
+          "inputs": {
+            "host": { "connection": { "name": "@parameters('$connections')['teams']['connectionId']" } },
+            "method": "post",
+            "body": {
+              "notificationTitle": "SLA Breach Alert",
+              "message": "Transaction @{triggerBody()?['transactionId']} exceeded SLA by @{sub(outputs('Calculate_Processing_Time'), parameters('slaThresholdSeconds'))} seconds",
+              "channelId": "@{if(greater(outputs('Calculate_Processing_Time'), mul(parameters('slaThresholdSeconds'), 2)), parameters('criticalAlertChannelId'), parameters('warningAlertChannelId'))}"
+            }
+          }
         }
-      },
-      "body": {
-        "content": "@triggerBody()"
-      },
-      "path": "/subscribe/topics/@{encodeURIComponent('mytopic')}/subscriptions/@{encodeURIComponent('mysubscription')}"
+      }
     }
   }
-  ```
+}
+```
 
-### Enterprise Integration Patterns
-- **B2B Message Exchange**: Exchange EDI documents between trading partners (AS2, X12, EDIFACT)
-- **Integration Account**: Use for storing and managing B2B artifacts (agreements, schemas, maps)
-- **Rules Engine**: Implement complex business rules using the Azure Logic Apps Rules Engine
-- **Message Validation**: Validate messages against schemas for compliance and data integrity
-- **Transaction Processing**: Process business transactions with compensating transactions for rollback
+Cost metrics should record `WorkflowCostMetrics`, `WorkflowName`, `ExecutionId`, `ActionCount`, `TriggerType`, `DataProcessedBytes`, `ExecutionDurationSeconds`, `Timestamp`, `workflow().name`, `workflow().run.id`, `workflow().run.actions`, `workflow().triggers[0].kind`, `workflow().run.transferred`, and `workflow().run.duration` when the telemetry source provides those values.
 
-## DevOps and CI/CD for Logic Apps
+## Performance and Cost Governance
 
-### Source Control and Versioning
+Optimize for fewer reliable actions, bounded payloads, controlled concurrency, and predictable licensing.
 
-- **Store Logic App definitions in source control** (Git, Azure DevOps, GitHub)
-- **Use ARM templates** for deployment to multiple environments
-- **Implement branching strategies** appropriate for your release cadence
-- **Version your Logic Apps** using tags or version properties
+| Area | Convention |
+| --- | --- |
+| Trigger optimization | Use batching in triggers to process multiple items in a single run, use webhook-based triggers where possible, and avoid over-polling recurrence schedules. |
+| Action optimization | Reduce action count by combining related operations, using built-in functions instead of custom actions, and batching when connector APIs support it. |
+| Data transfer | Minimize payload sizes in HTTP requests and responses; use local file operations or external blob storage for large payloads; apply data compression where supported. |
+| Consumption Logic Apps | Watch execution count, trigger frequency, connector calls, action count, and data transfer. |
+| Standard Logic Apps | Right-size App Service Plans, implement auto-scaling, consider reserved instances for predictable workloads, and consolidate compatible workflows in shared App Service Plans. |
+| Shared resources | Use shared connections and integration resources without creating hidden coupling or violating least privilege. |
+| Power Automate | Choose license types based on workflow complexity, premium connector use, user assignment, API call reduction, caching, batch processing, and trigger frequency. |
+| Designer health | Limit workflows to 50 actions or less, avoid deep nesting of scopes and actions, and split workflow templates when complexity grows. |
 
-### Automated Deployment
+Use deployment slots for mission-critical Logic Apps that require zero-downtime deployments, and keep post-deployment validation tests in the release pipeline.
 
-- **Use Azure DevOps pipelines** or GitHub Actions for automated deployments
-- **Implement parameterization** for environment-specific values
-- **Use deployment slots** for zero-downtime deployments
-- **Include post-deployment validation** tests in your CI/CD pipeline
+## DevOps, Source Control, and ALM
+
+Treat Logic Apps and Power Automate assets as versioned deployment artifacts.
+
+- Store Logic App definitions in source control such as Git, Azure DevOps, or GitHub.
+- Use ARM templates, Bicep, or supported deployment artifacts for multiple environments; the original examples use ARM templates.
+- Use Azure DevOps pipelines or GitHub Actions for automated deployment.
+- Implement branching strategies appropriate for release cadence.
+- Version Logic Apps using tags, version properties, URI path versioning, parameter versioning, or side-by-side versioning.
+- Include post-deployment validation tests in CI/CD.
+- Use Power Platform Solutions for Power Automate ALM where flows belong to the Power Platform ecosystem.
+- Reuse workflow templates for standard patterns across the organization.
+- Label Azure DevOps examples as `YAML` when documentation distinguishes them from JSON workflow definitions.
 
 ```yaml
-# Example Azure DevOps YAML pipeline for Logic App deployment
 trigger:
   branches:
     include:
@@ -543,24 +509,39 @@ steps:
     deploymentMode: 'Incremental'
 ```
 
-## Cross-Platform Considerations
-
-When working with both Azure Logic Apps and Power Automate:
-
-- **Export/Import Compatibility**: Flows can be exported from Power Automate and imported into Logic Apps, but some modifications may be required
-- **Connector Differences**: Some connectors are available in one platform but not the other
-- **Environment Isolation**: Power Automate environments provide isolation and may have different policies
-- **ALM Practices**: Consider using Azure DevOps for Logic Apps and Solutions for Power Automate
-
-### Migration Strategies
-
-- **Assessment**: Evaluate complexity and suitability for migration
-- **Connector Mapping**: Map connectors between platforms and identify gaps
-- **Testing Strategy**: Implement parallel testing before cutover
-- **Documentation**: Document all configuration changes for reference
+For ARM versioning, maintain `workflowDefinitionMap`, `v1Definition`, `v2Definition`, `v3Definition`, `fullLogicAppName`, and `allowedValues` such as `v1`, `v2`, and `v3`. Use `Microsoft.Logic/workflows`, `apiVersion` `2019-05-01`, `resourceGroup().location`, and `parameters('logicAppName')` consistently in ARM templates. For deployment schemas, preserve `https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#`.
 
 ```json
-// Example Power Platform solution structure for Power Automate flows
+"Check_Request_Version": {
+  "type": "Switch",
+  "expression": "@triggerBody()?['apiVersion']",
+  "cases": {
+    "1.0": { "actions": { "Process_V1_Format": { "type": "Scope", "actions": {} } } },
+    "2.0": { "actions": { "Process_V2_Format": { "type": "Scope", "actions": {} } } }
+  },
+  "default": {
+    "actions": {
+      "Return_Version_Error": {
+        "type": "Response",
+        "kind": "Http",
+        "inputs": { "statusCode": 400, "body": { "error": "Unsupported API version", "supportedVersions": ["1.0", "2.0"] } }
+      }
+    }
+  }
+}
+```
+
+## Cross-Platform Compatibility and Migration
+
+Plan platform movement before relying on connector or licensing behavior that exists only in one product.
+
+- Export/Import compatibility is not guaranteed: flows can be exported from Power Automate and imported into Logic Apps, but modifications may be required.
+- Some connectors exist in one platform but not the other; perform connector mapping and identify gaps before migration.
+- Power Automate environments provide isolation and may have different policies.
+- Use Azure DevOps for Logic Apps ALM and Solutions for Power Automate ALM unless the organization defines a different standard.
+- Migration assessments should evaluate complexity, suitability, connector mapping, testing strategy, parallel testing before cutover, and documentation of configuration changes.
+
+```json
 {
   "SolutionName": "MyEnterpriseFlows",
   "Version": "1.0.0",
@@ -584,9 +565,7 @@ When working with both Azure Logic Apps and Power Automate:
               }
             }
           },
-          "actions": {
-            // Actions would be defined here
-          }
+          "actions": {}
         }
       }
     }
@@ -594,292 +573,67 @@ When working with both Azure Logic Apps and Power Automate:
 }
 ```
 
-## Practical Logic App Examples
+## Good / Bad Examples
 
-### HTTP Request Handler with API Integration
+The examples below illustrate a resilient API-style Logic App convention: validate input, use Key Vault, call the API with explicit content type, parse the response, branch on request type, log, and return a typed response. The bad example hardcodes secrets, skips validation, omits `runAfter`, and gives operators no failure path.
 
-This example demonstrates a Logic App that accepts an HTTP request, validates the input data, calls an external API, transforms the response, and returns a formatted result.
+**Good:**
 
 ```json
 {
-  "definition": {
-    "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
-    "actions": {
-      "Validate_Input": {
-        "type": "If",
-        "expression": {
-          "and": [
-            {
-              "not": {
-                "equals": [
-                  "@triggerBody()?['customerId']",
-                  null
-                ]
-              }
-            },
-            {
-              "not": {
-                "equals": [
-                  "@triggerBody()?['requestType']",
-                  null
-                ]
-              }
-            }
-          ]
-        },
-        "actions": {
-          "Get_Customer_Data": {
-            "type": "Http",
-            "inputs": {
-              "method": "GET",
-              "uri": "https://api.example.com/customers/@{triggerBody()?['customerId']}",
-              "headers": {
-                "Content-Type": "application/json",
-                "Authorization": "Bearer @{body('Get_API_Key')?['value']}"
-              }
-            },
-            "runAfter": {
-              "Get_API_Key": [
-                "Succeeded"
-              ]
-            }
-          },
-          "Get_API_Key": {
-            "type": "ApiConnection",
-            "inputs": {
-              "host": {
-                "connection": {
-                  "name": "@parameters('$connections')['keyvault']['connectionId']"
-                }
-              },
-              "method": "get",
-              "path": "/secrets/@{encodeURIComponent('apiKey')}/value"
-            }
-          },
-          "Parse_Customer_Response": {
-            "type": "ParseJson",
-            "inputs": {
-              "content": "@body('Get_Customer_Data')",
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "id": { "type": "string" },
-                  "name": { "type": "string" },
-                  "email": { "type": "string" },
-                  "status": { "type": "string" },
-                  "createdDate": { "type": "string" },
-                  "orders": {
-                    "type": "array",
-                    "items": {
-                      "type": "object",
-                      "properties": {
-                        "orderId": { "type": "string" },
-                        "orderDate": { "type": "string" },
-                        "amount": { "type": "number" }
-                      }
-                    }
-                  }
-                }
-              }
-            },
-            "runAfter": {
-              "Get_Customer_Data": [
-                "Succeeded"
-              ]
-            }
-          },
-          "Switch_Request_Type": {
-            "type": "Switch",
-            "expression": "@triggerBody()?['requestType']",
-            "cases": {
-              "Profile": {
-                "actions": {
-                  "Prepare_Profile_Response": {
-                    "type": "SetVariable",
-                    "inputs": {
-                      "name": "responsePayload",
-                      "value": {
-                        "customerId": "@body('Parse_Customer_Response')?['id']",
-                        "customerName": "@body('Parse_Customer_Response')?['name']",
-                        "email": "@body('Parse_Customer_Response')?['email']",
-                        "status": "@body('Parse_Customer_Response')?['status']",
-                        "memberSince": "@formatDateTime(body('Parse_Customer_Response')?['createdDate'], 'yyyy-MM-dd')"
-                      }
-                    }
-                  }
-                }
-              },
-              "OrderSummary": {
-                "actions": {
-                  "Calculate_Order_Statistics": {
-                    "type": "Compose",
-                    "inputs": {
-                      "totalOrders": "@length(body('Parse_Customer_Response')?['orders'])",
-                      "totalSpent": "@sum(body('Parse_Customer_Response')?['orders'], item => item.amount)",
-                      "averageOrderValue": "@if(greater(length(body('Parse_Customer_Response')?['orders']), 0), div(sum(body('Parse_Customer_Response')?['orders'], item => item.amount), length(body('Parse_Customer_Response')?['orders'])), 0)",
-                      "lastOrderDate": "@if(greater(length(body('Parse_Customer_Response')?['orders']), 0), max(body('Parse_Customer_Response')?['orders'], item => item.orderDate), '')"
-                    }
-                  },
-                  "Prepare_Order_Response": {
-                    "type": "SetVariable",
-                    "inputs": {
-                      "name": "responsePayload",
-                      "value": {
-                        "customerId": "@body('Parse_Customer_Response')?['id']",
-                        "customerName": "@body('Parse_Customer_Response')?['name']",
-                        "orderStats": "@outputs('Calculate_Order_Statistics')"
-                      }
-                    },
-                    "runAfter": {
-                      "Calculate_Order_Statistics": [
-                        "Succeeded"
-                      ]
-                    }
-                  }
-                }
-              }
-            },
-            "default": {
-              "actions": {
-                "Set_Default_Response": {
-                  "type": "SetVariable",
-                  "inputs": {
-                    "name": "responsePayload",
-                    "value": {
-                      "error": "Invalid request type specified",
-                      "validTypes": [
-                        "Profile",
-                        "OrderSummary"
-                      ]
-                    }
-                  }
-                }
-              }
-            },
-            "runAfter": {
-              "Parse_Customer_Response": [
-                "Succeeded"
-              ]
-            }
-          },
-          "Log_Successful_Request": {
-            "type": "ApiConnection",
-            "inputs": {
-              "host": {
-                "connection": {
-                  "name": "@parameters('$connections')['applicationinsights']['connectionId']"
-                }
-              },
-              "method": "post",
-              "body": {
-                "LogType": "ApiRequestSuccess",
-                "CustomerId": "@triggerBody()?['customerId']",
-                "RequestType": "@triggerBody()?['requestType']",
-                "ProcessingTime": "@workflow()['run']['duration']"
-              }
-            },
-            "runAfter": {
-              "Switch_Request_Type": [
-                "Succeeded"
-              ]
-            }
-          },
-          "Return_Success_Response": {
-            "type": "Response",
-            "kind": "Http",
-            "inputs": {
-              "statusCode": 200,
-              "body": "@variables('responsePayload')",
-              "headers": {
-                "Content-Type": "application/json"
-              }
-            },
-            "runAfter": {
-              "Log_Successful_Request": [
-                "Succeeded"
-              ]
-            }
+  "actions": {
+    "Validate_Input": {
+      "type": "If",
+      "expression": {
+        "and": [
+          { "not": { "equals": ["@triggerBody()?['customerId']", null] } },
+          { "not": { "equals": ["@triggerBody()?['requestType']", null] } }
+        ]
+      },
+      "actions": {
+        "Get_API_Key": {
+          "type": "ApiConnection",
+          "inputs": {
+            "host": { "connection": { "name": "@parameters('$connections')['keyvault']['connectionId']" } },
+            "method": "get",
+            "path": "/secrets/@{encodeURIComponent('apiKey')}/value"
           }
         },
-        "else": {
-          "actions": {
-            "Return_Validation_Error": {
-              "type": "Response",
-              "kind": "Http",
-              "inputs": {
-                "statusCode": 400,
-                "body": {
-                  "error": "Invalid request",
-                  "message": "Request must include customerId and requestType",
-                  "timestamp": "@utcNow()"
-                }
+        "Get_Customer_Data": {
+          "type": "Http",
+          "inputs": {
+            "method": "GET",
+            "uri": "https://api.example.com/customers/@{triggerBody()?['customerId']}",
+            "headers": { "Content-Type": "application/json", "Authorization": "******'Get_API_Key')?['value']}" }
+          },
+          "runAfter": { "Get_API_Key": ["Succeeded"] }
+        },
+        "Parse_Customer_Response": {
+          "type": "ParseJson",
+          "inputs": {
+            "content": "@body('Get_Customer_Data')",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": { "type": "string" },
+                "name": { "type": "string" },
+                "email": { "type": "string" },
+                "status": { "type": "string" },
+                "createdDate": { "type": "string" },
+                "orders": { "type": "array", "items": { "type": "object", "properties": { "orderId": { "type": "string" }, "orderDate": { "type": "string" }, "amount": { "type": "number" } } } }
               }
             }
-          }
-        },
-        "runAfter": {
-          "Initialize_Response_Variable": [
-            "Succeeded"
-          ]
+          },
+          "runAfter": { "Get_Customer_Data": ["Succeeded"] }
         }
       },
-      "Initialize_Response_Variable": {
-        "type": "InitializeVariable",
-        "inputs": {
-          "variables": [
-            {
-              "name": "responsePayload",
-              "type": "object",
-              "value": {}
-            }
-          ]
-        }
-      }
-    },
-    "contentVersion": "1.0.0.0",
-    "outputs": {},
-    "parameters": {
-      "$connections": {
-        "defaultValue": {},
-        "type": "Object"
-      }
-    },
-    "triggers": {
-      "manual": {
-        "type": "Request",
-        "kind": "Http",
-        "inputs": {
-          "schema": {
-            "type": "object",
-            "properties": {
-              "customerId": {
-                "type": "string"
-              },
-              "requestType": {
-                "type": "string",
-                "enum": [
-                  "Profile",
-                  "OrderSummary"
-                ]
-              }
-            }
+      "else": {
+        "actions": {
+          "Return_Validation_Error": {
+            "type": "Response",
+            "kind": "Http",
+            "inputs": { "statusCode": 400, "body": { "error": "Invalid request", "message": "Request must include customerId and requestType", "timestamp": "@utcNow()" } }
           }
-        }
-      }
-    }
-  },
-  "parameters": {
-    "$connections": {
-      "value": {
-        "keyvault": {
-          "connectionId": "/subscriptions/{subscription-id}/resourceGroups/{resource-group}/providers/Microsoft.Web/connections/keyvault",
-          "connectionName": "keyvault",
-          "id": "/subscriptions/{subscription-id}/providers/Microsoft.Web/locations/{location}/managedApis/keyvault"
-        },
-        "applicationinsights": {
-          "connectionId": "/subscriptions/{subscription-id}/resourceGroups/{resource-group}/providers/Microsoft.Web/connections/applicationinsights",
-          "connectionName": "applicationinsights",
-          "id": "/subscriptions/{subscription-id}/providers/Microsoft.Web/locations/{location}/managedApis/applicationinsights"
         }
       }
     }
@@ -887,439 +641,37 @@ This example demonstrates a Logic App that accepts an HTTP request, validates th
 }
 ```
 
-### Event-Driven Process with Error Handling
+Why: The workflow validates input, resolves secrets at runtime, uses explicit dependencies, parses structured data, and returns a clear error response.
 
-This example demonstrates a Logic App that processes events from Azure Service Bus, handles the message processing with robust error handling, and implements the retry pattern for resilience.
+**Bad:**
 
 ```json
 {
-  "definition": {
-    "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
-    "actions": {
-      "Parse_Message": {
-        "type": "ParseJson",
-        "inputs": {
-          "content": "@triggerBody()?['ContentData']",
-          "schema": {
-            "type": "object",
-            "properties": {
-              "eventId": { "type": "string" },
-              "eventType": { "type": "string" },
-              "eventTime": { "type": "string" },
-              "dataVersion": { "type": "string" },
-              "data": {
-                "type": "object",
-                "properties": {
-                  "orderId": { "type": "string" },
-                  "customerId": { "type": "string" },
-                  "items": {
-                    "type": "array",
-                    "items": {
-                      "type": "object",
-                      "properties": {
-                        "productId": { "type": "string" },
-                        "quantity": { "type": "integer" },
-                        "unitPrice": { "type": "number" }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "runAfter": {}
-      },
-      "Try_Process_Order": {
-        "type": "Scope",
-        "actions": {
-          "Get_Customer_Details": {
-            "type": "Http",
-            "inputs": {
-              "method": "GET",
-              "uri": "https://api.example.com/customers/@{body('Parse_Message')?['data']?['customerId']}",
-              "headers": {
-                "Content-Type": "application/json",
-                "Authorization": "Bearer @{body('Get_API_Key')?['value']}"
-              }
-            },
-            "runAfter": {
-              "Get_API_Key": [
-                "Succeeded"
-              ]
-            },
-            "retryPolicy": {
-              "type": "exponential",
-              "count": 5,
-              "interval": "PT10S",
-              "minimumInterval": "PT5S",
-              "maximumInterval": "PT1H"
-            }
-          },
-          "Get_API_Key": {
-            "type": "ApiConnection",
-            "inputs": {
-              "host": {
-                "connection": {
-                  "name": "@parameters('$connections')['keyvault']['connectionId']"
-                }
-              },
-              "method": "get",
-              "path": "/secrets/@{encodeURIComponent('apiKey')}/value"
-            }
-          },
-          "Validate_Stock": {
-            "type": "Foreach",
-            "foreach": "@body('Parse_Message')?['data']?['items']",
-            "actions": {
-              "Check_Product_Stock": {
-                "type": "Http",
-                "inputs": {
-                  "method": "GET",
-                  "uri": "https://api.example.com/inventory/@{items('Validate_Stock')?['productId']}",
-                  "headers": {
-                    "Content-Type": "application/json",
-                    "Authorization": "Bearer @{body('Get_API_Key')?['value']}"
-                  }
-                },
-                "retryPolicy": {
-                  "type": "fixed",
-                  "count": 3,
-                  "interval": "PT15S"
-                }
-              },
-              "Verify_Availability": {
-                "type": "If",
-                "expression": {
-                  "and": [
-                    {
-                      "greater": [
-                        "@body('Check_Product_Stock')?['availableStock']",
-                        "@items('Validate_Stock')?['quantity']"
-                      ]
-                    }
-                  ]
-                },
-                "actions": {
-                  "Add_To_Valid_Items": {
-                    "type": "AppendToArrayVariable",
-                    "inputs": {
-                      "name": "validItems",
-                      "value": {
-                        "productId": "@items('Validate_Stock')?['productId']",
-                        "quantity": "@items('Validate_Stock')?['quantity']",
-                        "unitPrice": "@items('Validate_Stock')?['unitPrice']",
-                        "availableStock": "@body('Check_Product_Stock')?['availableStock']"
-                      }
-                    }
-                  }
-                },
-                "else": {
-                  "actions": {
-                    "Add_To_Invalid_Items": {
-                      "type": "AppendToArrayVariable",
-                      "inputs": {
-                        "name": "invalidItems",
-                        "value": {
-                          "productId": "@items('Validate_Stock')?['productId']",
-                          "requestedQuantity": "@items('Validate_Stock')?['quantity']",
-                          "availableStock": "@body('Check_Product_Stock')?['availableStock']",
-                          "reason": "Insufficient stock"
-                        }
-                      }
-                    }
-                  }
-                },
-                "runAfter": {
-                  "Check_Product_Stock": [
-                    "Succeeded"
-                  ]
-                }
-              }
-            },
-            "runAfter": {
-              "Get_Customer_Details": [
-                "Succeeded"
-              ]
-            }
-          },
-          "Check_Order_Validity": {
-            "type": "If",
-            "expression": {
-              "and": [
-                {
-                  "equals": [
-                    "@length(variables('invalidItems'))",
-                    0
-                  ]
-                },
-                {
-                  "greater": [
-                    "@length(variables('validItems'))",
-                    0
-                  ]
-                }
-              ]
-            },
-            "actions": {
-              "Process_Valid_Order": {
-                "type": "Http",
-                "inputs": {
-                  "method": "POST",
-                  "uri": "https://api.example.com/orders",
-                  "headers": {
-                    "Content-Type": "application/json",
-                    "Authorization": "Bearer @{body('Get_API_Key')?['value']}"
-                  },
-                  "body": {
-                    "orderId": "@body('Parse_Message')?['data']?['orderId']",
-                    "customerId": "@body('Parse_Message')?['data']?['customerId']",
-                    "customerName": "@body('Get_Customer_Details')?['name']",
-                    "items": "@variables('validItems')",
-                    "processedTime": "@utcNow()",
-                    "eventId": "@body('Parse_Message')?['eventId']"
-                  }
-                }
-              },
-              "Send_Order_Confirmation": {
-                "type": "ApiConnection",
-                "inputs": {
-                  "host": {
-                    "connection": {
-                      "name": "@parameters('$connections')['office365']['connectionId']"
-                    }
-                  },
-                  "method": "post",
-                  "path": "/v2/Mail",
-                  "body": {
-                    "To": "@body('Get_Customer_Details')?['email']",
-                    "Subject": "Order Confirmation: @{body('Parse_Message')?['data']?['orderId']}",
-                    "Body": "<p>Dear @{body('Get_Customer_Details')?['name']},</p><p>Your order has been successfully processed.</p><p>Order ID: @{body('Parse_Message')?['data']?['orderId']}</p><p>Thank you for your business!</p>",
-                    "Importance": "Normal",
-                    "IsHtml": true
-                  }
-                },
-                "runAfter": {
-                  "Process_Valid_Order": [
-                    "Succeeded"
-                  ]
-                }
-              },
-              "Complete_Message": {
-                "type": "ApiConnection",
-                "inputs": {
-                  "host": {
-                    "connection": {
-                      "name": "@parameters('$connections')['servicebus']['connectionId']"
-                    }
-                  },
-                  "method": "post",
-                  "path": "/messages/complete",
-                  "body": {
-                    "lockToken": "@triggerBody()?['LockToken']",
-                    "sessionId": "@triggerBody()?['SessionId']",
-                    "queueName": "@parameters('serviceBusQueueName')"
-                  }
-                },
-                "runAfter": {
-                  "Send_Order_Confirmation": [
-                    "Succeeded"
-                  ]
-                }
-              }
-            },
-            "else": {
-              "actions": {
-                "Send_Invalid_Stock_Notification": {
-                  "type": "ApiConnection",
-                  "inputs": {
-                    "host": {
-                      "connection": {
-                        "name": "@parameters('$connections')['office365']['connectionId']"
-                      }
-                    },
-                    "method": "post",
-                    "path": "/v2/Mail",
-                    "body": {
-                      "To": "@body('Get_Customer_Details')?['email']",
-                      "Subject": "Order Cannot Be Processed: @{body('Parse_Message')?['data']?['orderId']}",
-                      "Body": "<p>Dear @{body('Get_Customer_Details')?['name']},</p><p>We regret to inform you that your order cannot be processed due to insufficient stock for the following items:</p><p>@{join(variables('invalidItems'), '</p><p>')}</p><p>Please adjust your order and try again.</p>",
-                      "Importance": "High",
-                      "IsHtml": true
-                    }
-                  }
-                },
-                "Dead_Letter_Message": {
-                  "type": "ApiConnection",
-                  "inputs": {
-                    "host": {
-                      "connection": {
-                        "name": "@parameters('$connections')['servicebus']['connectionId']"
-                      }
-                    },
-                    "method": "post",
-                    "path": "/messages/deadletter",
-                    "body": {
-                      "lockToken": "@triggerBody()?['LockToken']",
-                      "sessionId": "@triggerBody()?['SessionId']",
-                      "queueName": "@parameters('serviceBusQueueName')",
-                      "deadLetterReason": "InsufficientStock",
-                      "deadLetterDescription": "Order contained items with insufficient stock"
-                    }
-                  },
-                  "runAfter": {
-                    "Send_Invalid_Stock_Notification": [
-                      "Succeeded"
-                    ]
-                  }
-                }
-              }
-            },
-            "runAfter": {
-              "Validate_Stock": [
-                "Succeeded"
-              ]
-            }
-          }
-        },
-        "runAfter": {
-          "Initialize_Variables": [
-            "Succeeded"
-          ]
-        }
-      },
-      "Initialize_Variables": {
-        "type": "InitializeVariable",
-        "inputs": {
-          "variables": [
-            {
-              "name": "validItems",
-              "type": "array",
-              "value": []
-            },
-            {
-              "name": "invalidItems",
-              "type": "array",
-              "value": []
-            }
-          ]
-        },
-        "runAfter": {
-          "Parse_Message": [
-            "Succeeded"
-          ]
-        }
-      },
-      "Handle_Process_Error": {
-        "type": "Scope",
-        "actions": {
-          "Log_Error_Details": {
-            "type": "ApiConnection",
-            "inputs": {
-              "host": {
-                "connection": {
-                  "name": "@parameters('$connections')['applicationinsights']['connectionId']"
-                }
-              },
-              "method": "post",
-              "body": {
-                "LogType": "OrderProcessingError",
-                "EventId": "@body('Parse_Message')?['eventId']",
-                "OrderId": "@body('Parse_Message')?['data']?['orderId']",
-                "CustomerId": "@body('Parse_Message')?['data']?['customerId']",
-                "ErrorDetails": "@result('Try_Process_Order')",
-                "Timestamp": "@utcNow()"
-              }
-            }
-          },
-          "Abandon_Message": {
-            "type": "ApiConnection",
-            "inputs": {
-              "host": {
-                "connection": {
-                  "name": "@parameters('$connections')['servicebus']['connectionId']"
-                }
-              },
-              "method": "post",
-              "path": "/messages/abandon",
-              "body": {
-                "lockToken": "@triggerBody()?['LockToken']",
-                "sessionId": "@triggerBody()?['SessionId']",
-                "queueName": "@parameters('serviceBusQueueName')"
-              }
-            },
-            "runAfter": {
-              "Log_Error_Details": [
-                "Succeeded"
-              ]
-            }
-          },
-          "Send_Alert_To_Operations": {
-            "type": "ApiConnection",
-            "inputs": {
-              "host": {
-                "connection": {
-                  "name": "@parameters('$connections')['office365']['connectionId']"
-                }
-              },
-              "method": "post",
-              "path": "/v2/Mail",
-              "body": {
-                "To": "operations@example.com",
-                "Subject": "Order Processing Error: @{body('Parse_Message')?['data']?['orderId']}",
-                "Body": "<p>An error occurred while processing an order:</p><p>Order ID: @{body('Parse_Message')?['data']?['orderId']}</p><p>Customer ID: @{body('Parse_Message')?['data']?['customerId']}</p><p>Error: @{result('Try_Process_Order')}</p>",
-                "Importance": "High",
-                "IsHtml": true
-              }
-            },
-            "runAfter": {
-              "Abandon_Message": [
-                "Succeeded"
-              ]
-            }
-          }
-        },
-        "runAfter": {
-          "Try_Process_Order": [
-            "Failed",
-            "TimedOut"
-          ]
-        }
+  "actions": {
+    "CallApi": {
+      "type": "Http",
+      "inputs": {
+        "method": "GET",
+        "uri": "https://api.example.com/orders",
+        "headers": { "Authorization": "hardcoded-secret" }
       }
     },
-    "contentVersion": "1.0.0.0",
-    "outputs": {},
-    "parameters": {
-      "$connections": {
-        "defaultValue": {},
-        "type": "Object"
-      },
-      "serviceBusQueueName": {
-        "type": "string",
-        "defaultValue": "orders"
-      }
-    },
-    "triggers": {
-      "When_a_message_is_received_in_a_queue": {
-        "type": "ApiConnectionWebhook",
-        "inputs": {
-          "host": {
-            "connection": {
-              "name": "@parameters('$connections')['servicebus']['connectionId']"
-            }
-          },
-          "body": {
-            "isSessionsEnabled": true
-          },
-          "path": "/subscriptionListener",
-          "queries": {
-            "queueName": "@parameters('serviceBusQueueName')",
-            "subscriptionType": "Main"
-          }
-        }
-      }
+    "Return": {
+      "type": "Response",
+      "inputs": { "statusCode": 200, "body": "@body('CallApi')" }
     }
-  },
+  }
+}
+```
+
+Why: The workflow hardcodes a credential, has no validation, no schema, no retry policy, no failure branch, and no observable action names for support.
+
+## Deployment and Connection Literals
+
+Preserve provider paths and placeholder names exactly when converting examples into deployable ARM or connection-parameter artifacts.
+
+```json
+{
   "parameters": {
     "$connections": {
       "value": {
@@ -1349,595 +701,79 @@ This example demonstrates a Logic App that processes events from Azure Service B
 }
 ```
 
-## Advanced Exception Handling and Monitoring
+Use this file for high-quality, cloud-based Apps/Power workflow definitions; keep multi-layered exception handling in named scopes instead of hiding it in a single opaque action. Treat HTTP requests/responses and connector requests/responses as separate contracts so API response shape does not drift from connector payload shape.
 
-### Comprehensive Exception Handling Strategy
+## Conventions
 
-Implement a multi-layered exception handling approach for robust workflows:
+| Rule | Rationale |
+|---|---|
+| Keep the WDL envelope explicit with `definition`, `$schema`, `actions`, `triggers`, `parameters`, `outputs`, `staticResults`, and `contentVersion` | Tools, designers, and deployment pipelines depend on predictable workflow shape |
+| Choose Logic Apps, Power Automate, Consumption, Standard, or ISE based on ownership, operations, networking, performance, and licensing needs | Platform mismatch creates avoidable cost, missing connectors, and operational gaps |
+| Use Request, Recurrence, event-based, and webhook triggers according to integration semantics | Trigger choice controls latency, cost, reliability, and API behavior |
+| Name actions descriptively and group complex paths with scopes | Run history, diagnostics, and support alerts become understandable |
+| Parameterize environment values and use variables only for run-local temporary state | Definitions stay portable across environments without hiding mutable state |
+| Keep expressions concise, safe, and schema-backed | Complex inline expressions are hard to debug and unsafe payload access fails at runtime |
+| Use `runAfter`, retry policies, timeouts, fallback paths, and dead-letter handling | Transient and terminal failures are handled deliberately instead of becoming stuck runs |
+| Use managed identities, Key Vault, least privilege, RBAC, IP restrictions, private networking, and masked logs | Workflow definitions often connect privileged systems and can leak sensitive data |
+| Configure diagnostics, tracking IDs, Application Insights, Log Analytics, business metrics, and alerts | Operators need correlated evidence for failures, SLA breaches, and process health |
+| Limit action count, avoid deep nesting, batch where possible, and control concurrency | Performance, designer usability, connector throttling, and execution cost stay bounded |
+| Store definitions in source control and deploy through CI/CD with environment parameter files | Production changes remain reviewable, repeatable, and auditable |
+| Version APIs and workflows with URI path, parameters, or side-by-side deployments | Consumers can migrate safely without breaking existing integrations |
+| Use Integration Account, EDI, AS2, X12, EDIFACT, and Rules Engine features for B2B scenarios | Enterprise integration artifacts require platform support beyond ad hoc JSON transforms |
 
-1. **Preventative Measures**:
-   - Use schema validation for all incoming messages
-   - Implement defensive expression evaluations using `coalesce()` and `?` operators
-   - Add pre-condition checks before critical operations
+## Do / Do Not
 
-2. **Runtime Error Handling**:
-   - Use structured error handling scopes with nested try/catch patterns
-   - Implement circuit breaker patterns for external dependencies
-   - Capture and handle specific error types differently
+| Do | Do not |
+|---|---|
+| Use the WDL schema `https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#` | Ship workflow JSON without an explicit schema and `contentVersion` |
+| Use managed identity and Key Vault for secrets | Hardcode tokens, passwords, connection strings, or API keys in workflow definitions |
+| Use `ParseJson` with schemas before accessing nested payloads | Navigate arbitrary payloads without validation or safe access |
+| Use `runAfter` branches for `Succeeded`, `Failed`, and `TimedOut` outcomes | Assume the happy path is the only path that will run |
+| Use batching, webhooks, and measured concurrency | Over-poll sources or run unbounded parallel loops |
+| Use API Management policies for public API frontends | Expose unauthenticated HTTP triggers directly when governance requires an API gateway |
+| Store Logic Apps in Git and deploy with ARM, Azure DevOps, or GitHub Actions | Make manual-only portal changes that cannot be reviewed or reproduced |
+| Use Solutions for Power Automate ALM | Treat business flows as unowned personal automations |
+| Track workflow runs, business metrics, and cost metrics | Operate production workflows without diagnostics or alerts |
+| Split workflows that exceed the readability budget | Build deeply nested 50+ action workflows that the designer and reviewers cannot reason about |
 
-```json
-"Process_With_Comprehensive_Error_Handling": {
-  "type": "Scope",
-  "actions": {
-    "Try_Primary_Action": {
-      "type": "Scope",
-      "actions": {
-        "Main_Operation": {
-          "type": "Http",
-          "inputs": { "method": "GET", "uri": "https://api.example.com/resource" }
-        }
-      }
-    },
-    "Handle_Connection_Errors": {
-      "type": "Scope",
-      "actions": {
-        "Log_Connection_Error": {
-          "type": "ApiConnection",
-          "inputs": {
-            "host": {
-              "connection": {
-                "name": "@parameters('$connections')['loganalytics']['connectionId']"
-              }
-            },
-            "method": "post",
-            "body": {
-              "LogType": "ConnectionError",
-              "ErrorCategory": "Network",
-              "StatusCode": "@{result('Try_Primary_Action')?['outputs']?['Main_Operation']?['statusCode']}",
-              "ErrorMessage": "@{result('Try_Primary_Action')?['error']?['message']}"
-            }
-          }
-        },
-        "Invoke_Fallback_Endpoint": {
-          "type": "Http",
-          "inputs": { "method": "GET", "uri": "https://fallback-api.example.com/resource" }
-        }
-      },
-      "runAfter": {
-        "Try_Primary_Action": ["Failed"]
-      }
-    },
-    "Handle_Business_Logic_Errors": {
-      "type": "Scope",
-      "actions": {
-        "Parse_Error_Response": {
-          "type": "ParseJson",
-          "inputs": {
-            "content": "@outputs('Try_Primary_Action')?['Main_Operation']?['body']",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "errorCode": { "type": "string" },
-                "errorMessage": { "type": "string" }
-              }
-            }
-          }
-        },
-        "Switch_On_Error_Type": {
-          "type": "Switch",
-          "expression": "@body('Parse_Error_Response')?['errorCode']",
-          "cases": {
-            "ResourceNotFound": {
-              "actions": { "Create_Resource": { "type": "Http", "inputs": {} } }
-            },
-            "ValidationError": {
-              "actions": { "Resubmit_With_Defaults": { "type": "Http", "inputs": {} } }
-            },
-            "PermissionDenied": {
-              "actions": { "Elevate_Permissions": { "type": "Http", "inputs": {} } }
-            }
-          },
-          "default": {
-            "actions": { "Send_To_Support_Queue": { "type": "ApiConnection", "inputs": {} } }
-          }
-        }
-      },
-      "runAfter": {
-        "Try_Primary_Action": ["Succeeded"]
-      }
-    }
-  }
-}
-```
+## Checklist Before Opening a PR
 
-3. **Centralized Error Logging**:
-   - Create a dedicated Logic App for error handling that other workflows can call
-   - Log errors with correlation IDs for traceability across systems
-   - Categorize errors by type and severity for better analysis
+- [ ] The workflow JSON keeps the WDL `definition`, `$schema`, `actions`, `triggers`, `parameters`, `outputs`, `staticResults`, and `contentVersion` structure.
+- [ ] Trigger choice, authentication, pagination, timeout, IP restrictions, and request schema match the integration scenario.
+- [ ] Actions have descriptive names, explicit `runAfter` dependencies, and scopes for complex success and failure branches.
+- [ ] Environment values, connection IDs, endpoint URLs, queue names, channel IDs, and version values are parameterized.
+- [ ] Expressions use safe access, schema validation, and built-in functions without becoming unreadable.
+- [ ] External calls have timeout, retry, fallback, and error logging behavior appropriate to the downstream service.
+- [ ] Secrets come from Key Vault or managed connections, and logs do not expose sensitive payloads or credentials.
+- [ ] Managed identity, least privilege, Azure RBAC, API authentication, CORS or IP restrictions, and private networking are configured where required.
+- [ ] Diagnostics, tracking IDs, Application Insights or Log Analytics, alerts, and business metrics cover failure and performance scenarios.
+- [ ] Action count, nesting, batching, concurrency, and trigger frequency stay within performance and cost expectations.
+- [ ] Source control, CI/CD deployment, environment parameter files, and post-deployment validation are updated with the workflow.
+- [ ] Cross-platform connector differences, Power Automate licensing, and migration constraints are documented when a workflow moves between products.
+- [ ] API Management policies, versioning, and response contracts are updated when the workflow is exposed as an API.
+- [ ] No unrelated edits, leftover placeholders, hardcoded secrets, or unreviewed manual portal changes are included.
 
-### Advanced Monitoring Architecture
+## References
 
-Implement a comprehensive monitoring strategy that covers:
-
-1. **Operational Monitoring**:
-   - **Health Probes**: Create dedicated health check workflows
-   - **Heartbeat Patterns**: Implement periodic check-ins to verify system health
-   - **Dead Letter Handling**: Process and analyze failed messages
-
-2. **Business Process Monitoring**:
-   - **Business Metrics**: Track key business KPIs (order processing times, approval rates)
-   - **SLA Monitoring**: Measure performance against service level agreements
-   - **Correlated Tracing**: Implement end-to-end transaction tracking
-
-3. **Alerting Strategy**:
-   - **Multi-channel Alerts**: Configure alerts to appropriate channels (email, SMS, Teams)
-   - **Severity-based Routing**: Route alerts based on business impact
-   - **Alert Correlation**: Group related alerts to prevent alert fatigue
-
-```json
-"Monitor_Transaction_SLA": {
-  "type": "Scope",
-  "actions": {
-    "Calculate_Processing_Time": {
-      "type": "Compose",
-      "inputs": "@{div(sub(ticks(utcNow()), ticks(triggerBody()?['startTime'])), 10000000)}"
-    },
-    "Check_SLA_Breach": {
-      "type": "If",
-      "expression": "@greater(outputs('Calculate_Processing_Time'), parameters('slaThresholdSeconds'))",
-      "actions": {
-        "Log_SLA_Breach": {
-          "type": "ApiConnection",
-          "inputs": {
-            "host": {
-              "connection": {
-                "name": "@parameters('$connections')['loganalytics']['connectionId']"
-              }
-            },
-            "method": "post",
-            "body": {
-              "LogType": "SLABreach",
-              "TransactionId": "@{triggerBody()?['transactionId']}",
-              "ProcessingTimeSeconds": "@{outputs('Calculate_Processing_Time')}",
-              "SLAThresholdSeconds": "@{parameters('slaThresholdSeconds')}",
-              "BreachSeverity": "@if(greater(outputs('Calculate_Processing_Time'), mul(parameters('slaThresholdSeconds'), 2)), 'Critical', 'Warning')"
-            }
-          }
-        },
-        "Send_SLA_Alert": {
-          "type": "ApiConnection",
-          "inputs": {
-            "host": {
-              "connection": {
-                "name": "@parameters('$connections')['teams']['connectionId']"
-              }
-            },
-            "method": "post",
-            "body": {
-              "notificationTitle": "SLA Breach Alert",
-              "message": "Transaction @{triggerBody()?['transactionId']} exceeded SLA by @{sub(outputs('Calculate_Processing_Time'), parameters('slaThresholdSeconds'))} seconds",
-              "channelId": "@{if(greater(outputs('Calculate_Processing_Time'), mul(parameters('slaThresholdSeconds'), 2)), parameters('criticalAlertChannelId'), parameters('warningAlertChannelId'))}"
-            }
-          }
-        }
-      }
-    }
-  }
-}
-```
-
-## API Management Integration
-
-Integrate Logic Apps with Azure API Management for enhanced security, governance, and management:
-
-### API Management Frontend
-
-- **Expose Logic Apps via API Management**:
-  - Create API definitions for Logic App HTTP triggers
-  - Apply consistent URL structures and versioning
-  - Implement API policies for security and transformation
-
-### Policy Templates for Logic Apps
-
-```xml
-<!-- Logic App API Policy Example -->
-<policies>
-  <inbound>
-    <!-- Authentication -->
-    <validate-jwt header-name="Authorization" failed-validation-httpcode="401" failed-validation-error-message="Unauthorized">
-      <openid-config url="https://login.microsoftonline.com/{tenant-id}/.well-known/openid-configuration" />
-      <required-claims>
-        <claim name="aud" match="any">
-          <value>api://mylogicapp</value>
-        </claim>
-      </required-claims>
-    </validate-jwt>
-    
-    <!-- Rate limiting -->
-    <rate-limit calls="5" renewal-period="60" />
-    
-    <!-- Request transformation -->
-    <set-header name="Correlation-Id" exists-action="override">
-      <value>@(context.RequestId)</value>
-    </set-header>
-    
-    <!-- Logging -->
-    <log-to-eventhub logger-id="api-logger">
-      @{
-        return new JObject(
-          new JProperty("correlationId", context.RequestId),
-          new JProperty("api", context.Api.Name),
-          new JProperty("operation", context.Operation.Name),
-          new JProperty("user", context.User.Email),
-          new JProperty("ip", context.Request.IpAddress)
-        ).ToString();
-      }
-    </log-to-eventhub>
-  </inbound>
-  <backend>
-    <forward-request />
-  </backend>
-  <outbound>
-    <!-- Response transformation -->
-    <set-header name="X-Powered-By" exists-action="delete" />
-  </outbound>
-  <on-error>
-    <base />
-  </on-error>
-</policies>
-```
-
-### Workflow as API Pattern
-
-- **Implement Workflow as API pattern**:
-  - Design Logic Apps specifically as API backends
-  - Use request triggers with OpenAPI schemas
-  - Apply consistent response patterns
-  - Implement proper status codes and error handling
-
-```json
-"triggers": {
-  "manual": {
-    "type": "Request",
-    "kind": "Http",
-    "inputs": {
-      "schema": {
-        "$schema": "http://json-schema.org/draft-04/schema#",
-        "type": "object",
-        "properties": {
-          "customerId": {
-            "type": "string",
-            "description": "The unique identifier for the customer"
-          },
-          "requestType": {
-            "type": "string",
-            "enum": ["Profile", "OrderSummary"],
-            "description": "The type of request to process"
-          }
-        },
-        "required": ["customerId", "requestType"]
-      },
-      "method": "POST"
-    }
-  }
-}
-```
-
-## Versioning Strategies
-
-Implement robust versioning approaches for Logic Apps and Power Automate flows:
-
-### Versioning Patterns
-
-1. **URI Path Versioning**:
-   - Include version in HTTP trigger path (/api/v1/resource)
-   - Maintain separate Logic Apps for each major version
-
-2. **Parameter Versioning**:
-   - Add version parameter to workflow definitions
-   - Use conditional logic based on version parameter
-
-3. **Side-by-Side Versioning**:
-   - Deploy new versions alongside existing ones
-   - Implement traffic routing between versions
-
-### Version Migration Strategy
-
-```json
-"actions": {
-  "Check_Request_Version": {
-    "type": "Switch",
-    "expression": "@triggerBody()?['apiVersion']",
-    "cases": {
-      "1.0": {
-        "actions": {
-          "Process_V1_Format": {
-            "type": "Scope",
-            "actions": { }
-          }
-        }
-      },
-      "2.0": {
-        "actions": {
-          "Process_V2_Format": {
-            "type": "Scope",
-            "actions": { }
-          }
-        }
-      }
-    },
-    "default": {
-      "actions": {
-        "Return_Version_Error": {
-          "type": "Response",
-          "kind": "Http",
-          "inputs": {
-            "statusCode": 400,
-            "body": {
-              "error": "Unsupported API version",
-              "supportedVersions": ["1.0", "2.0"]
-            }
-          }
-        }
-      }
-    }
-  }
-}
-```
-
-### ARM Template Deployment for Different Versions
-
-```json
-{
-  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
-  "contentVersion": "1.0.0.0",
-  "parameters": {
-    "logicAppName": {
-      "type": "string",
-      "metadata": {
-        "description": "Base name of the Logic App"
-      }
-    },
-    "version": {
-      "type": "string",
-      "metadata": {
-        "description": "Version of the Logic App to deploy"
-      },
-      "allowedValues": ["v1", "v2", "v3"]
-    }
-  },
-  "variables": {
-    "fullLogicAppName": "[concat(parameters('logicAppName'), '-', parameters('version'))]",
-    "workflowDefinitionMap": {
-      "v1": "[variables('v1Definition')]",
-      "v2": "[variables('v2Definition')]",
-      "v3": "[variables('v3Definition')]"
-    },
-    "v1Definition": {},
-    "v2Definition": {},
-    "v3Definition": {}
-  },
-  "resources": [
-    {
-      "type": "Microsoft.Logic/workflows",
-      "apiVersion": "2019-05-01",
-      "name": "[variables('fullLogicAppName')]",
-      "location": "[resourceGroup().location]",
-      "properties": {
-        "definition": "[variables('workflowDefinitionMap')[parameters('version')]]"
-      }
-    }
-  ]
-}
-```
-
-## Cost Optimization Techniques
-
-Implement strategies to optimize the cost of Logic Apps and Power Automate solutions:
-
-### Logic Apps Consumption Optimization
-
-1. **Trigger Optimization**:
-   - Use batching in triggers to process multiple items in a single run
-   - Implement proper recurrence intervals (avoid over-polling)
-   - Use webhook-based triggers instead of polling triggers
-
-2. **Action Optimization**:
-   - Reduce action count by combining related operations
-   - Use built-in functions instead of custom actions
-   - Implement proper concurrency settings for foreach loops
-
-3. **Data Transfer Optimization**:
-   - Minimize payload sizes in HTTP requests/responses
-   - Use local file operations instead of repeated API calls
-   - Implement data compression for large payloads
-
-### Logic Apps Standard (Workflow) Cost Optimization
-
-1. **App Service Plan Selection**:
-   - Right-size App Service Plans for workload requirements
-   - Implement auto-scaling based on load patterns
-   - Consider reserved instances for predictable workloads
-
-2. **Resource Sharing**:
-   - Consolidate workflows in shared App Service Plans
-   - Implement shared connections and integration resources
-   - Use integration accounts efficiently
-
-### Power Automate Licensing Optimization
-
-1. **License Type Selection**:
-   - Choose appropriate license types based on workflow complexity
-   - Implement proper user assignment for per-user plans
-   - Consider premium connectors usage requirements
-
-2. **API Call Reduction**:
-   - Cache frequently accessed data
-   - Implement batch processing for multiple records
-   - Reduce trigger frequency for scheduled flows
-
-### Cost Monitoring and Governance
-
-```json
-"Monitor_Execution_Costs": {
-  "type": "ApiConnection",
-  "inputs": {
-    "host": {
-      "connection": {
-        "name": "@parameters('$connections')['loganalytics']['connectionId']"
-      }
-    },
-    "method": "post",
-    "body": {
-      "LogType": "WorkflowCostMetrics",
-      "WorkflowName": "@{workflow().name}",
-      "ExecutionId": "@{workflow().run.id}",
-      "ActionCount": "@{length(workflow().run.actions)}",
-      "TriggerType": "@{workflow().triggers[0].kind}",
-      "DataProcessedBytes": "@{workflow().run.transferred}",
-      "ExecutionDurationSeconds": "@{div(workflow().run.duration, 'PT1S')}",
-      "Timestamp": "@{utcNow()}"
-    }
-  },
-  "runAfter": {
-    "Main_Workflow_Actions": ["Succeeded", "Failed", "TimedOut"]
-  }
-}
-```
-
-## Enhanced Security Practices
-
-Implement comprehensive security measures for Logic Apps and Power Automate workflows:
-
-### Sensitive Data Handling
-
-1. **Data Classification and Protection**:
-   - Identify and classify sensitive data in workflows
-   - Implement masking for sensitive data in logs and monitoring
-   - Apply encryption for data at rest and in transit
-
-2. **Secure Parameter Handling**:
-   - Use Azure Key Vault for all secrets and credentials
-   - Implement dynamic parameter resolution at runtime
-   - Apply parameter encryption for sensitive values
-
-```json
-"actions": {
-  "Get_Database_Credentials": {
-    "type": "ApiConnection",
-    "inputs": {
-      "host": {
-        "connection": {
-          "name": "@parameters('$connections')['keyvault']['connectionId']"
-        }
-      },
-      "method": "get",
-      "path": "/secrets/@{encodeURIComponent('database-connection-string')}/value"
-    }
-  },
-  "Execute_Database_Query": {
-    "type": "ApiConnection",
-    "inputs": {
-      "host": {
-        "connection": {
-          "name": "@parameters('$connections')['sql']['connectionId']"
-        }
-      },
-      "method": "post",
-      "path": "/datasets/default/query",
-      "body": {
-        "query": "SELECT * FROM Customers WHERE CustomerId = @CustomerId",
-        "parameters": {
-          "CustomerId": "@triggerBody()?['customerId']"
-        },
-        "connectionString": "@body('Get_Database_Credentials')?['value']"
-      }
-    },
-    "runAfter": {
-      "Get_Database_Credentials": ["Succeeded"]
-    }
-  }
-}
-```
-
-### Advanced Identity and Access Controls
-
-1. **Fine-grained Access Control**:
-   - Implement custom roles for Logic Apps management
-   - Apply principle of least privilege for connections
-   - Use managed identities for all Azure service access
-
-2. **Access Reviews and Governance**:
-   - Implement regular access reviews for Logic Apps resources
-   - Apply Just-In-Time access for administrative operations
-   - Audit all access and configuration changes
-
-3. **Network Security**:
-   - Implement network isolation using private endpoints
-   - Apply IP restrictions for trigger endpoints
-   - Use Virtual Network integration for Logic Apps Standard
-
-```json
-{
-  "resources": [
-    {
-      "type": "Microsoft.Logic/workflows",
-      "apiVersion": "2019-05-01",
-      "name": "[parameters('logicAppName')]",
-      "location": "[parameters('location')]",
-      "identity": {
-        "type": "SystemAssigned"
-      },
-      "properties": {
-        "accessControl": {
-          "triggers": {
-            "allowedCallerIpAddresses": [
-              {
-                "addressRange": "13.91.0.0/16"
-              },
-              {
-                "addressRange": "40.112.0.0/13"
-              }
-            ]
-          },
-          "contents": {
-            "allowedCallerIpAddresses": [
-              {
-                "addressRange": "13.91.0.0/16"
-              },
-              {
-                "addressRange": "40.112.0.0/13"
-              }
-            ]
-          },
-          "actions": {
-            "allowedCallerIpAddresses": [
-              {
-                "addressRange": "13.91.0.0/16"
-              },
-              {
-                "addressRange": "40.112.0.0/13"
-              }
-            ]
-          }
-        },
-        "definition": {}
-      }
-    }
-  ]
-}
-```
-
-## Additional Resources
-
-- [Azure Logic Apps Documentation](https://learn.microsoft.com/en-us/azure/logic-apps/)
-- [Power Automate Documentation](https://learn.microsoft.com/en-us/power-automate/)
-- [Workflow Definition Language Schema](https://learn.microsoft.com/en-us/azure/logic-apps/workflow-definition-language-schema)
-- [Power Automate vs Logic Apps Comparison](https://learn.microsoft.com/en-us/azure/azure-functions/functions-compare-logic-apps-ms-flow-webjobs)
-- [Enterprise Integration Patterns](https://learn.microsoft.com/en-us/azure/logic-apps/logic-apps-enterprise-integration-overview)
-- [Logic Apps B2B Documentation](https://learn.microsoft.com/en-us/azure/logic-apps/logic-apps-enterprise-integration-b2b)
-- [Azure Logic Apps Limits and Configuration](https://learn.microsoft.com/en-us/azure/logic-apps/logic-apps-limits-and-config)
-- Logic Apps performance optimization: use concurrency, batching, connector limits, and monitoring guidance from the Azure Logic Apps documentation.
-- [Logic Apps Security Overview](https://learn.microsoft.com/en-us/azure/logic-apps/logic-apps-securing-a-logic-app)
-- [API Management and Logic Apps Integration](https://learn.microsoft.com/en-us/azure/api-management/import-logic-app-as-api)
-- [Logic Apps Standard Networking](https://learn.microsoft.com/en-us/azure/logic-apps/single-tenant-overview-compare)
+- Azure Logic Apps Documentation: https://learn.microsoft.com/en-us/azure/logic-apps/
+- Power Automate Documentation: https://learn.microsoft.com/en-us/power-automate/
+- Workflow Definition Language Schema: https://learn.microsoft.com/en-us/azure/logic-apps/workflow-definition-language-schema
+- Power Automate vs Logic Apps Comparison: https://learn.microsoft.com/en-us/azure/azure-functions/functions-compare-logic-apps-ms-flow-webjobs
+- Enterprise Integration Patterns: https://learn.microsoft.com/en-us/azure/logic-apps/logic-apps-enterprise-integration-overview
+- Logic Apps B2B Documentation: https://learn.microsoft.com/en-us/azure/logic-apps/logic-apps-enterprise-integration-b2b
+- Azure Logic Apps Limits and Configuration: https://learn.microsoft.com/en-us/azure/logic-apps/logic-apps-limits-and-config
+- Logic Apps Security Overview: https://learn.microsoft.com/en-us/azure/logic-apps/logic-apps-securing-a-logic-app
+- API Management and Logic Apps Integration: https://learn.microsoft.com/en-us/azure/api-management/import-logic-app-as-api
+- Logic Apps Standard Networking: https://learn.microsoft.com/en-us/azure/logic-apps/single-tenant-overview-compare
+- JSON Schema draft-04 used in request-trigger examples: http://json-schema.org/draft-04/schema#
+- Example development endpoint preserved from workflow samples: https://api.dev.example.com
+- Example customer endpoint using trigger data: https://api.example.com/customers/@{triggerBody()?['customerId']}
+- Example customer endpoint using parsed body data: https://api.example.com/customers/@{body('Parse_Message')?['data']?['customerId']}
+- Example inventory endpoint: https://api.example.com/inventory/@{items('Validate_Stock')?['productId']}
+- Example long-running endpoint: https://api.example.com/longrunning
+- Example orders endpoint: https://api.example.com/orders
+- Example protected endpoint: https://api.example.com/protected
+- Example resource endpoint: https://api.example.com/resource
+- Example fallback endpoint: https://fallback-api.example.com/resource
+- Microsoft Entra OpenID configuration template: https://login.microsoftonline.com/{tenant-id}/.well-known/openid-configuration
+- ARM deployment template schema: https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#

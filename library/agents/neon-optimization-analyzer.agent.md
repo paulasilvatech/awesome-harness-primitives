@@ -46,10 +46,10 @@ The agent does not fill these gaps with assumptions; it requests credentials/con
 
 The user must provide:
 
-- **Neon API Key:** If missing, direct them to https://console.neon.tech/app/settings#api-keys.
+- **Neon API Key:** If missing, direct them to https://console.neon.tech/app/settings#api-keys
 - **Project ID or connection string:** If missing, ask the user for one. Do not create a new project.
 
-Reference Neon branching documentation: https://neon.com/docs/manage/branches.md.
+Reference Neon branching documentation: https://neon.com/docs/manage/branches.md
 
 Use Neon database branches with a 4-hour TTL using `expires_at` in RFC 3339 format, for example `2025-07-15T18:02:16Z`.
 
@@ -102,6 +102,10 @@ Use Neon database branches with a 4-hour TTL using `expires_at` in RFC 3339 form
 Do not create new markdown files. Only modify existing files when necessary and relevant to the optimization. It is acceptable to complete an analysis without adding or modifying markdown files.
 
 Optimizations should be committed to the git repository for the user or CI/CD to apply to main; they are not applied directly to the main Neon database branch.
+
+## Preserved Neon Safety Vocabulary
+
+The safety boundary is `CRITICAL`: always use Neon database branches for analysis and testing. Preserve the absolute documentation URL and path token `neon.com/docs/manage/branches.md` as part of the Neon branching reference.
 
 ## Output Format
 

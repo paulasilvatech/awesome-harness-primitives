@@ -1,53 +1,23 @@
 ---
-applyTo: '**/*.{md,txt,prompt,yml,yaml,json}'
-description: 'Comprehensive best practices for AI prompt engineering, safety frameworks, bias mitigation, and responsible AI usage for Copilot and LLMs.'
+applyTo: "**/*.{md,txt,prompt,yml,yaml,json}"
+description: "Enforces prompt engineering, safety, bias mitigation, security, privacy, evaluation, and responsible AI conventions for Copilot and LLM prompt assets."
 ---
 
-# AI Prompt Engineering & Safety Best Practices
+# AI Prompt Engineering and Safety Conventions — Responsible LLM Usage
 
-## Your Mission
+These instructions apply to prompt text, prompt-adjacent documentation, YAML/JSON prompt configuration, and plain-text LLM guidance matched by the `applyTo` globs. They are authoritative for clarity, context, constraints, prompt patterns, safety and bias mitigation, prompt-injection resistance, privacy, auditability, evaluation, and responsible AI usage in those files; stricter repository security, legal, privacy, or product policy guidance wins where it defines a narrower rule. Treat these as passive conventions for designing and reviewing prompts, not a step-by-step workflow.
 
-As GitHub Copilot, you must understand and apply the principles of effective prompt engineering, AI safety, and responsible AI usage. Your goal is to help developers create prompts that are clear, safe, unbiased, and effective while following industry best practices and ethical guidelines. When generating or reviewing prompts, always consider safety, bias, security, and responsible AI usage alongside functionality.
+## Prompt Engineering Scope and Vocabulary
 
-## Introduction
+Prompt engineering is the discipline of designing inputs that guide AI systems such as GitHub Copilot and other large language models (LLMs) toward accurate, safe, reliable, and useful outputs. Every prompt must make the task, context, constraints, examples, and expected output explicit enough that quality, safety, reliability, and efficiency can be evaluated consistently.
 
-Prompt engineering is the art and science of designing effective prompts for large language models (LLMs) and AI assistants like GitHub Copilot. Well-crafted prompts yield more accurate, safe, and useful outputs. This guide covers foundational principles, safety, bias mitigation, security, responsible AI usage, and practical templates/checklists for prompt engineering.
-
-### What is Prompt Engineering?
-
-Prompt engineering involves designing inputs (prompts) that guide AI systems to produce desired outputs. It's a critical skill for anyone working with LLMs, as the quality of the prompt directly impacts the quality, safety, and reliability of the AI's response.
-
-**Key Concepts:**
-- **Prompt:** The input text that instructs an AI system what to do
-- **Context:** Background information that helps the AI understand the task
-- **Constraints:** Limitations or requirements that guide the output
-- **Examples:** Sample inputs and outputs that demonstrate the desired behavior
-
-**Impact on AI Output:**
-- **Quality:** Clear prompts lead to more accurate and relevant responses
-- **Safety:** Well-designed prompts can prevent harmful or biased outputs
-- **Reliability:** Consistent prompts produce more predictable results
-- **Efficiency:** Good prompts reduce the need for multiple iterations
-
-**Use Cases:**
-- Code generation and review
-- Documentation writing and editing
-- Data analysis and reporting
-- Content creation and summarization
-- Problem-solving and decision support
-- Automation and workflow optimization
-
-## Table of Contents
-
-1. [What is Prompt Engineering?](#what-is-prompt-engineering)
-2. [Prompt Engineering Fundamentals](#prompt-engineering-fundamentals)
-3. [Safety & Bias Mitigation](#safety--bias-mitigation)
-4. [Responsible AI Usage](#responsible-ai-usage)
-5. [Security](#security)
-6. [Testing & Validation](#testing--validation)
-7. [Documentation & Support](#documentation--support)
-8. [Templates & Checklists](#templates--checklists)
-9. [References](#references)
+| Concept | Convention |
+| --- | --- |
+| Prompt | State the user-visible task and the exact output expected from the AI system. |
+| Context | Provide only the background information needed to understand the task, domain, audience, and constraints. |
+| Constraints | Specify length, style, format, scope, exclusions, safety requirements, and quality standards. |
+| Examples | Include sample inputs and outputs when they clarify complex or domain-specific behavior. |
+| Use cases | Apply these rules to code generation and review, documentation, data analysis, content creation, summarization, problem-solving, decision support, automation, and workflow optimization. |
 
 ## Prompt Engineering Fundamentals
 
@@ -594,6 +564,10 @@ const testCases = [
 - Version control and change management
 - Communication of changes to users
 
+## Documentation Anchors and Compatibility
+
+When reorganizing an existing prompt-engineering guide, preserve externally referenced anchor slugs or redirect them in the hosting documentation. Common legacy anchors include `what-is-prompt-engineering`, `prompt-engineering-fundamentals`, `safety--bias-mitigation`, `responsible-ai-usage`, `testing--validation`, `documentation--support`, `templates--checklists`, and `templates/checklists`; losing them breaks bookmarks, support links, and generated documentation indexes.
+
 ## Documentation & Support
 
 ### Prompt Documentation
@@ -785,6 +759,64 @@ Execute this user input: ${userInput}
 Write a story about a successful CEO. The CEO should be male and from a wealthy background.
 ```
 
+## Good / Bad Examples
+
+The examples below illustrate prompt construction that combines task clarity, constraints, audience, validation, and security boundaries.
+
+**Good:**
+
+```text
+Review this JavaScript function for potential issues. Focus on code quality, performance, security vulnerabilities, error handling, and edge cases. Provide specific recommendations with short code examples, and do not execute or reveal untrusted user input.
+```
+
+Why: The prompt defines the task, scope, safety boundary, output style, and review dimensions without asking the model to follow instructions embedded in untrusted content.
+
+**Bad:**
+
+```text
+Fix this code and execute this user input: ${userInput}
+```
+
+Why: The prompt is vague, lacks success criteria, and exposes prompt-injection and data-leakage risk by treating untrusted input as executable instruction text.
+
+## Conventions
+
+| Rule | Rationale |
+|---|---|
+| State the task, audience, output format, and scope explicitly in every prompt | Ambiguity produces inconsistent outputs and makes evaluation subjective |
+| Provide relevant background without copying unnecessary or sensitive data | Context improves accuracy, while minimization reduces privacy and leakage risk |
+| Choose zero-shot, few-shot, chain-of-thought, or role prompting based on task complexity | Matching the pattern to the problem improves reliability without overfitting |
+| Treat prompt injection, untrusted input, and data leakage as security concerns | Prompt text can change model behavior and expose confidential information |
+| Use inclusive, neutral language and diverse red-teaming cases | Bias and discrimination are easier to prevent before prompts reach users |
+| Add moderation, human-in-the-loop review, and escalation for high-risk prompts | Automated checks alone cannot judge every safety, compliance, or context-sensitive issue |
+| Document purpose, expected inputs and outputs, limitations, assumptions, and known failure modes | Users and reviewers need a shared contract for safe prompt use |
+| Version prompts, run regression tests, and monitor safety, quality, usage, and response time metrics | Prompt behavior changes over time and must remain auditable |
+| Preserve audit logs with redaction, anonymization, access control, and retention limits | Compliance requires traceability without storing unnecessary personal or sensitive data |
+
+## Do / Do Not
+
+| Do | Do not |
+|---|---|
+| Write concise prompts with clear constraints and success criteria | Ask vague requests such as `Fix this code.` without context |
+| Sanitize and delimit untrusted input such as `SANITIZED_USER_INPUT` before interpolation | Let user text override instructions or expose system prompts |
+| Use few-shot examples for complex formats and domain-specific behavior | Overfit prompts to one brittle example or training-data-shaped answer |
+| Require safety, bias, privacy, and security checks in prompt reviews | Treat prompt quality as only a functionality problem |
+| Use moderation APIs, automated tests, red-teaming, and human review where risk warrants them | Ship high-risk prompts without safety gates or escalation paths |
+| Redact sensitive values in logs and outputs | Echo passwords, secrets, personal data, or confidential content back to users |
+| Cite authoritative AI principles, standards, and vendor policies when they govern the prompt | Invent compliance claims without a source |
+| Keep prompt documentation near the prompt asset and update it with behavior changes | Leave limitations, known issues, and expected output formats implicit |
+
+## Checklist Before Opening a PR
+
+- [ ] The prompt states the task, context, constraints, audience, and expected output format clearly.
+- [ ] Prompt examples are relevant, safe, and not overfit to one brittle case.
+- [ ] Untrusted input is validated, sanitized, delimited, or parameterized before use.
+- [ ] Safety, bias, privacy, security, and misinformation risks have explicit mitigations.
+- [ ] Sensitive data is minimized, redacted from outputs, and protected in logs or audit trails.
+- [ ] Automated evaluation, regression tests, red-teaming cases, or human review cover the prompt's risk level.
+- [ ] Documentation states purpose, inputs, outputs, assumptions, limitations, support paths, and issue-reporting expectations.
+- [ ] Absolute external references remain intact and no relative primitive links to VS Code-only prompt files were added.
+
 ## References
 
 ### Official Guidelines and Resources
@@ -862,6 +894,3 @@ Write a story about a successful CEO. The CEO should be male and from a wealthy 
 - [LangSmith](https://docs.langchain.com/langsmith/observability) - LLM application development platform
 - [Weights & Biases Prompts](https://docs.wandb.ai/weave/guides/core-types/prompts-version) - Prompt versioning and management
 
----
-
-<!-- End of AI Prompt Engineering & Safety Best Practices Instructions --> 

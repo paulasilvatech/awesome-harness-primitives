@@ -82,6 +82,10 @@ Example event-driven pattern for S3 uploads: S3 → S3 Event Notification → SQ
 4. **Validate or troubleshoot.** Use repository checks, AWS logs, X-Ray traces, CloudTrail events, and deployment output to identify issues.
 5. **Prevent recurrence.** Add alarms, guardrails, tests, policies, runbooks, or staged rollout guidance.
 
+## Preserved AWS Vocabulary
+
+Preserve `CI/CD**` coverage, `SAM/CloudFormation` output options, `dev/staging/prod` environment assumptions, `health-check` endpoints, `steady-state` compute cost guidance, and the observation that low-volume SQS + Lambda + DynamoDB on-demand can be `near-zero` cost.
+
 ## Output Format
 
 For architecture and design questions:

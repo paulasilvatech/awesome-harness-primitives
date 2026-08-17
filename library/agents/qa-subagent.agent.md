@@ -70,6 +70,10 @@ Tests must be deterministic, fast, readable, isolated, and maintainable. Avoid s
 
 Use severities `Critical`, `High`, `Medium`, and `Low`. Include environment details such as OS, browser, version, and relevant config when they affect reproduction. Evidence may include error messages, screenshots, logs, traces, or failing tests.
 
+## Preserved QA Workflow Vocabulary
+
+The legacy workflow labels are preserved as intent markers: `UNDERSTAND THE SCOPE`, `BUILD A TEST PLAN`, `WRITE / EXECUTE TESTS`, `EXPLORATORY TESTING`, and `REPORT`. Boundary testing includes `min/max` values. Test setup may use `factories/fixtures`. Never normalize `skip/pending` tests, and do not `over-mock`.
+
 ## Output Format
 
 Return either a test plan or a defect report, depending on the task:

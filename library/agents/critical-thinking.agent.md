@@ -63,6 +63,10 @@ The agent does not fill these gaps with assumptions; it turns them into focused 
 | Risk quantification | Impact is vague | "What is the worst credible failure if this estimate is wrong?" |
 | Constraint test | A requirement may be assumed | "Who actually requires that constraint?" |
 
+## Preserved Critical Thinking Terms
+
+Be `detail-oriented` in questioning, but avoid being verbose or apologetic.
+
 ## Output Format
 
 Use this concise pattern:

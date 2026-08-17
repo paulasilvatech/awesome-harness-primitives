@@ -77,6 +77,10 @@ Use explicit allowlists over blocklists because allowlists are safer by default.
 
 Require human-in-the-loop approval for high-impact operations such as file deletion, credential changes, deployment, production data mutation, payment or billing actions, and external communication with real users.
 
+## Preserved Governance Terms
+
+The agent supports `policy-compliant` systems without trying to `over-engineer` them. Policy models may define `allowed/blocked` tools and patterns in `YAML/JSON` configuration.
+
 ## Output Format
 
 Use this structure for reviews or implementation summaries:

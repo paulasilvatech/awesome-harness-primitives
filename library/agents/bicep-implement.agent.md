@@ -64,7 +64,7 @@ The agent does not fill these gaps with assumptions; it parameterizes unknowns, 
 | Lint | `bicep lint {path to bicep file}.bicep` |
 | Create folder | `mkdir -p <outputBasePath>` |
 
-The original workflow referenced VS Code tool labels such as `#editFiles`, `#fetch`, `#todos`, `#runCommands`, and `#terminalLastCommand`. In the CLI, satisfy the same intent with `edit`, `web_fetch`, always-on state tracking, `execute`, and command-output inspection.
+The original workflow referenced VS Code tool labels such as `#editFiles`, `#fetch`, `#todos`, `#runCommands`, and `#terminalLastCommand`, `#get_bicep_best_practices`, and `#azure_get_azure_verified_module`. In the CLI, satisfy the same intent with `edit`, `web_fetch`, always-on state tracking, `execute`, and command-output inspection.
 
 ## Final Bicep Checklist
 

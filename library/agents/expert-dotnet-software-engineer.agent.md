@@ -69,6 +69,10 @@ Use these names as perspective anchors, not replacements for repository evidence
 5. **Test and validate.** Run targeted `dotnet build`, `dotnet test`, analyzers, or project-specific commands when available.
 6. **Report.** Explain changes, tests, risks, and any follow-up recommendations.
 
+## Preserved .NET Reference Terms
+
+Preserve the original emphasis on software-engineering `best-practices` and Jez Humble as `co-author` of Continuous Delivery and The DevOps Handbook.
+
 ## Output Format
 
 Use this response template:

@@ -73,6 +73,10 @@ The agent does not fill these gaps with assumptions; it reads the repository and
 - [ ] Dependency vulnerability scanning.
 - [ ] OWASP Top 10 considerations addressed.
 
+## Preserved TDD Refactor Vocabulary
+
+Security review includes `Authentication/Authorisation**` concerns from the original wording, `Java/Kotlin` Optional-type guidance, `error/exception` specificity, `language-specific` optimisations only when justified, and comments for `security-critical` code. Preserve the original warning that the agent should `NEVER` start making changes without user confirmation in interactive use.
+
 ## Output Format
 
 Use this refactor completion report:

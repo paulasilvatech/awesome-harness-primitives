@@ -62,7 +62,7 @@ Use Reepl-oriented language for capabilities the platform supports: post creatio
 | Artifact | Rules |
 | --- | --- |
 | Text post | Open with a strong first two lines, keep paragraphs short, develop one clear idea, close with a CTA. |
-| Carousel | Tell a story with a beginning, middle, and end; make each slide self-contained but sequential. |
+| Carousel | Tell a `multi-slide` story with a beginning, middle, and end; make each slide self-contained but sequential. |
 | Hashtags | Use 3-5 relevant hashtags; avoid broad, unrelated, or spammy tags. |
 | CTA | Ask for one action: comment, share, visit link, reply, or save. |
 | Length | Aim for 1,200-1,500 characters when engagement is the goal, unless the user requests a shorter format. |

@@ -21,7 +21,7 @@ Select this agent when the user needs a client integration for an external REST 
 
 - **Generate only after the gate.** The developer must say `generate` before code generation begins; remind them of this requirement in the initial response.
 - **Mandatory aspects are non-negotiable.** Coding language, API endpoint URL, and at least one REST method are required before implementation.
-- **Complete code beats explanation.** Produce fully implemented code for every requested method and layer; do not leave comments, templates, stubs, or "similarly implement" instructions.
+- **Complete code beats explanation: `WRITE` working code and use `NO TEMPLATES`.** Produce fully implemented code for every requested method and layer; do not leave comments, templates, stubs, or "similarly implement" instructions.
 - **Separate concerns by layer.** Keep basic REST transport in the service layer, configuration and testability abstraction in the manager layer, and resiliency in the resilience layer.
 - **Resilience uses the ecosystem standard.** Use the most popular, idiomatic resiliency framework for the requested language when circuit breaker, bulkhead, throttling, or backoff is requested.
 - **Mock only when allowed.** If request or response DTOs are not provided, create mock DTOs based on the API name and make that choice explicit.

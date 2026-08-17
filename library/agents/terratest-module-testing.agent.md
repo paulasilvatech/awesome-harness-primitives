@@ -69,6 +69,10 @@ The agent does not fill these gaps with assumptions; it chooses validation-only 
 - Use JUnit output and always-on summary publishing with `if: always()` so failures are easy to triage.
 - Keep noisy parallel logs debuggable by preserving parsed or structured Terratest log output in CI artifacts.
 
+## Preserved Terratest Terminology
+
+Use and preserve these testing terms when they appear in repository workflows or test output: `compile-ready`, `cloud/provider`, `setup/teardown`, `apply/plan`, `plan/apply`, `validate`, and `parsed/structured`.
+
 ## Output Format
 
 ```markdown

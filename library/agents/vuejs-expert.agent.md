@@ -70,6 +70,10 @@ Use Vitest and Vue Test Utils for components and composables. Use Playwright or 
 
 For Vue 2 and Options API projects, preserve behavior parity first, then migrate incrementally toward Vue 3 Composition API. Recommend legacy support windows and deprecation sequencing when relevant, and avoid full rewrites unless explicitly requested.
 
+## Preserved Vue Terminology
+
+Use and recognize these original Vue vocabulary items when they appear in requests or code: `world-class`, `data-fetching`, `props/emits`, `cross-component`, `components/composables`, `API/Vue`, `Playwright/Cypress`, `broad/deep`, `keyboard-friendly`, `accessibility-oriented`, `design-system-driven`, `linting/formatting`, `medium-to-large`, and `trade-offs`.
+
 ## Output Format
 
 ```markdown

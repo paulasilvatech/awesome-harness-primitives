@@ -1,9 +1,11 @@
 ---
-applyTo: '**'
-description: 'Comprehensive secure coding standards based on OWASP Top 10 2025, with 55+ anti-patterns, detection regex, framework-specific fixes for modern web and backend frameworks, and AI/LLM security guidance.'
+applyTo: "**"
+description: "Enforces OWASP-aligned secure coding conventions for web, backend, frontend, API, dependency, logging, and AI/LLM changes."
 ---
 
-# Security Standards
+# Security and OWASP Conventions — Web and Backend Secure Coding
+
+This file applies to application code, API handlers, frontend components, backend services, configuration, dependency manifests, and AI/LLM integration points where security behavior is introduced or changed. It is authoritative for OWASP-aligned vulnerability prevention, anti-pattern detection, anti-patterns, severity handling, secure defaults, framework-specific fixes, and review gates in the matched files; language-specific, framework-specific, or compliance primitives win only where they impose stricter controls for the same risk.
 
 Comprehensive security rules for web application development. Every anti-pattern includes a severity classification, detection method, OWASP 2025 reference, and corrective code examples.
 
@@ -1005,7 +1007,7 @@ Set-Cookie: session=value; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=36
 
 ---
 
-## Security Checklist
+## Security Review Areas
 
 ### Authentication and Sessions
 - [ ] Passwords hashed with Argon2id or bcrypt (cost >= 12)
@@ -1055,3 +1057,45 @@ Set-Cookie: session=value; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=36
 - [ ] No sensitive data in logs (passwords, tokens, PII)
 - [ ] Structured logging with correlation IDs
 - [ ] Alerts configured for anomalous patterns
+
+## Conventions
+
+| Rule | Rationale |
+|---|---|
+| Treat every `CRITICAL` anti-pattern as a merge blocker | The listed patterns are exploitable vulnerabilities or direct paths to data exposure, account takeover, injection, or integrity failure |
+| Fix `IMPORTANT` issues in the same sprint unless a documented risk decision assigns a compensating control | Significant security debt becomes exploitable when combined with routine application changes |
+| Track `SUGGESTION` items as defense-in-depth work instead of deleting them from review | Security posture improves through layered controls even when no single item is immediately exploitable |
+| Validate and encode untrusted input at every trust boundary | Injection, XSS, SSRF, path traversal, template injection, and XXE all start with unsafe data crossing a boundary |
+| Enforce authentication, authorization, ownership checks, and re-authentication on the server | Client-side checks are UX only and do not protect resources |
+| Keep secrets out of source, client bundles, logs, errors, and CI output | Secret exposure turns ordinary bugs into credential compromise |
+| Prefer secure framework defaults such as Helmet, httpOnly cookies, structured logging, and parameterized query APIs | Built-in controls reduce custom security code and prevent well-known mistakes |
+| Bound runtime work with rate limits, request-size limits, output limits, timeouts, and dependency integrity checks | Resource exhaustion, brute force, and supply-chain failures are security vulnerabilities, not only reliability defects |
+| Treat LLM input and output as untrusted data | Prompt injection and unsafe model output can trigger the same classes of injection, integrity, and data disclosure bugs as user input |
+| Keep security logging useful but non-sensitive | Incident response requires auth, access-denied, rate-limit, validation, and password-change events without leaking passwords, tokens, or PII |
+
+## Do / Do Not
+
+| Do | Do not |
+|---|---|
+| Use parameterized queries, typed validation, and safe parser settings | Concatenate SQL, CQL, NoSQL operators, shell commands, templates, paths, XML entities, or HTML with user input |
+| Store JWTs and sessions in `httpOnly`, `Secure`, `SameSite` cookies with expiration and rotation | Store access tokens in `localStorage` or issue JWTs without `exp` and enforced algorithms |
+| Require auth middleware, RBAC, ownership checks, and re-auth for sensitive operations | Trust route naming, frontend guards, user-supplied roles, or object IDs as authorization |
+| Use Argon2id or bcrypt with appropriate cost for passwords | Store plaintext passwords or fast hashes such as MD5, SHA-1, or SHA-256 |
+| Configure CSP, HSTS, `X-Content-Type-Options`, frame protections, Referrer-Policy, Permissions-Policy, and restricted CORS | Ship missing headers, wildcard CORS with credentials, or CSP with avoidable `unsafe-inline` and `unsafe-eval` |
+| Review lockfiles, audit output, new dependency names, postinstall scripts, SRI, SBOM, and provenance | Add production dependencies with wildcard, `latest`, unreviewed scripts, or stale lockfiles |
+| Sanitize raw HTML with DOMPurify and prefer text interpolation | Use `dangerouslySetInnerHTML`, `[innerHTML]`, `v-html`, or Angular bypass APIs with unsanitized content |
+| Use structured logs with redaction and correlation IDs | Print stack traces, SQL, secrets, tokens, passwords, or unsanitized user strings to responses or logs |
+| Validate LLM output against Zod or JSON Schema before use | Execute or render LLM output as SQL, shell, HTML, code, or trusted structured data |
+
+## Checklist Before Opening a PR
+
+- [ ] No `CRITICAL` anti-pattern from this file remains in changed code.
+- [ ] `IMPORTANT` findings are fixed or have an explicit documented risk decision and compensating control.
+- [ ] User input, request parameters, files, URLs, webhook payloads, XML, templates, and LLM content are validated before use.
+- [ ] Database, shell, filesystem, HTML, redirect, GraphQL, and API operations use safe framework APIs with limits and allowlists where applicable.
+- [ ] Authentication, authorization, ownership checks, rate limiting, CSRF protection, and session regeneration are present for affected flows.
+- [ ] Secrets are read from server-side environment or secret stores, never committed, logged, exposed to `NEXT_PUBLIC_`, or returned in errors.
+- [ ] Security headers, cookie flags, CORS, body size limits, and error handling match the conventions above.
+- [ ] Dependency manifests and lockfiles are synchronized, audited, and reviewed for typosquatting, postinstall scripts, wildcard versions, and provenance risks.
+- [ ] Security events are logged with redaction and correlation IDs, and sensitive data is excluded from logs.
+- [ ] Framework-specific React/Next.js, Angular, Express, Go, API, and AI/LLM rules in this file have been applied where those technologies are present.

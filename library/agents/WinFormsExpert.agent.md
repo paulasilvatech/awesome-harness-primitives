@@ -133,12 +133,14 @@ private void InitializeComponent()
 
     _picDogPhoto.Name = "_picDogPhoto";
     _picDogPhoto.SizeMode = PictureBoxSizeMode.Zoom;
+    _picDogPhoto.TabStop = false;
     _lblDogographerCredit.Name = "_lblDogographerCredit";
     _lblDogographerCredit.Text = "Photo by: Professional Dogographer";
     _btnAdopt.Name = "_btnAdopt";
     _btnAdopt.Text = "Adopt!";
     _btnAdopt.Click += BtnAdopt_Click;
 
+    AutoScaleDimensions = new SizeF(13F, 32F);
     AutoScaleMode = AutoScaleMode.Font;
     ClientSize = new Size(420, 450);
     Controls.Add(_picDogPhoto);
@@ -273,6 +275,9 @@ Common patterns:
 | GroupBox/Panel in TLP | `AutoSize = true`, `AutoSizeMode = GrowOnly`, usually `Dock = Fill`, parent row AutoSize, nested TLP or FLP inside. |
 | OK/Cancel bottom-right | FlowLayoutPanel with `FlowDirection = RightToLeft`, bottom row, optional percent filler row. |
 | Wizard/browser buttons | FlowLayoutPanel with `FlowDirection = TopDown`, rightmost AutoSize column, `Anchor = Top | Right`. |
+| `MainForm` shell | `MenuStrip`, optional `ToolStrip`, content area, and `StatusStrip`. |
+| Tabbed interface | One UserControl per `TabPage` keeps designer code manageable. |
+| `RadioButtons` cluster | Single-column, auto-size-cells TLP inside AutoGrow/AutoSize GroupBox. |
 
 For modal dialogs, set `AcceptButton`, primary `DialogResult = OK`, secondary `CancelButton`, `DialogResult = Cancel`, and rely on `DialogResult` rather than extra close code. Perform validation on the form, not at field focus-change scope; do not block focus changes with `CancelEventArgs.Cancel = true`. Use `DataContext` on .NET 8+ forms to pass and return modal data objects.
 
@@ -471,12 +476,7 @@ public class CustomControl : Control
 
 ## Preserved WinForms Reference Tokens
 
-Keep these exact designer and binding terms available when producing examples: `Anchor = Left`, `object? sender`, `EventHandler?`, `Friend WithEvents controlName as ControlType`, `Binding`, `Parse`, `Format`, `Command`, and `MinimumSize`. They are common review anchors for designer-safe code, nullable event signatures, VB backing fields, conversion hooks, command binding, and modal sizing.
-
-
-Keep the original slash-separated review terms explicit: `asks/requests` for new project triggers, `build/compile` for diagnostic closure, `coalescing/conditional` for forbidden null operators, `margins/padding` for layout spacing, `page/virtualize` for large DataGridView data, `theming/coloring` for DarkMode owner-draw work, `wizards/browsers` for top-right stacked modal buttons, and `and/or` for the `var` exception when a type is obvious and/or awkwardly long.
-
-Preserve the original `single-line`, `multi-line`, `cell-sizing`, `navigation-heavy`, and `re-throwing` distinctions: layout cells determine control size, navigation-heavy dialogs use top-right stacked buttons, and async exception handling must preserve stack traces when rethrowing.
+Preserve exact WinForms review anchors: `Anchor = Left`, `object? sender`, `EventHandler?`, `Friend WithEvents controlName as ControlType`, `Binding`, `Parse`, `Format`, `Command`, `MinimumSize`, `asks/requests`, `build/compile`, `coalescing/conditional`, `margins/padding`, `page/virtualize`, `theming/coloring`, `wizards/browsers`, `and/or`, `single-line`, `multi-line`, `cell-sizing`, `navigation-heavy`, and `re-throwing`.
 
 ## Output Format
 

@@ -73,6 +73,10 @@ Do not modify the test during Green phase when the test encodes the issue requir
 
 Prefer a targeted command first, such as a single test file, test case, package, or project. After the target passes, run the next-smallest relevant suite to catch regressions.
 
+## Preserved TDD Green Terms
+
+When teaching minimal implementation, keep the Green phase vocabulary explicit: begin with `hard-coded` returns when appropriate, move to `if/else` only when tests require it, and extract `methods/functions**` only after duplication appears. In interactive contexts, `NEVER` start making changes without user confirmation; in autonomous contexts, document the minimal assumption and proceed.
+
 ## Output Format
 
 Use this format for implementation summaries:

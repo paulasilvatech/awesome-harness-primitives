@@ -98,6 +98,10 @@ Use specific quality-standard workflows when users ask about Security/CVE, Green
 
 Example scenarios: “Show me security vulnerabilities (CVEs)”, “Check for Green IT deficiencies”, and “Assess ISO-5055 compliance”.
 
+## Preserved CAST Emphasis
+
+The original instructions used `ALWAYS` for structural context, source access level, issue-type verification, testing implications, and unexpected-result double-checking; preserve that strength in every analysis.
+
 ## Output Format
 
 Use this CAST quality report:

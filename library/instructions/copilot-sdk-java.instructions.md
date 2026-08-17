@@ -1,10 +1,14 @@
 ---
-applyTo: '**/*.java,**/pom.xml,**/build.gradle,**/build.gradle.kts'
-description: 'Conventions for building Java applications with the GitHub Copilot SDK, including client setup, virtual threads, sessions, permissions, and error handling.'
-name: 'GitHub Copilot SDK Java Instructions'
+applyTo: "**/*.java,**/pom.xml,**/build.gradle,**/build.gradle.kts"
+description: "Enforces Java conventions for applications using the GitHub Copilot SDK, including client setup, virtual threads, sessions, permissions, events, tools, BYOK, MCP servers, and cleanup."
+name: "GitHub Copilot SDK Java Instructions"
 ---
 
-# GitHub Copilot SDK Java Conventions
+# GitHub Copilot SDK Java Conventions — Client Integration
+
+This file applies to Java source, Maven, and Gradle files that configure or use the GitHub Copilot SDK. It is authoritative for SDK client construction, Java version expectations, asynchronous execution, session configuration, permissions, event handling, tools, BYOK providers, MCP servers, lifecycle management, and cleanup in matched files; project build, security, and deployment instructions win when they define stricter repository-wide requirements.
+
+## Runtime and SDK Baseline
 
 - The SDK is in public preview and may have breaking changes
 - Requires Java 17 or later for baseline SDK usage. Some examples use newer JDK features and therefore require JDK 21 or later (for example, virtual threads via `Executors.newVirtualThreadPerTaskExecutor()` and `switch` pattern matching). **Java 25 or later highly recommended**.
@@ -13,7 +17,7 @@ name: 'GitHub Copilot SDK Java Instructions'
 - Implements `AutoCloseable` for resource cleanup (try-with-resources)
 - Getters on configuration classes return `Optional<T>` (or `OptionalInt`/`OptionalDouble`) to distinguish "not set" from explicit values; setters accept raw types and return `this` for chaining. Use the `clear` methods to unset values if needed.
 
-## Installation
+## Dependency Installation
 
 ### Maven
 
@@ -31,7 +35,7 @@ name: 'GitHub Copilot SDK Java Instructions'
 implementation "com.github:copilot-sdk-java:${copilotSdkJavaVersion}"
 ```
 
-## Client Initialization
+## Client Initialization and Configuration
 
 ### Basic Client Setup
 
@@ -706,20 +710,20 @@ try {
 }
 ```
 
-## Best Practices
+## Operating Practices
 
-1. **Always use try-with-resources** for `CopilotClient` and `CopilotSession`
-2. **Always provide a permission handler** - it is required for `createSession` and `resumeSession`
-3. **Use `CompletableFuture`** properly - call `.get()` to block, or chain with `.thenApply()`/`.thenCompose()`
-4. **Use `sendAndWait()`** for simple request-response patterns instead of manual event handling
-5. **Handle `SessionErrorEvent`** for robust error handling
-6. **Use pattern matching** (switch with sealed types) for event handling
-7. **Enable streaming** for better UX in interactive scenarios
-8. **Close event subscriptions** (`Closeable`) when no longer needed
-9. **Use `SystemMessageMode.APPEND`** to preserve safety guardrails
-10. **Provide descriptive tool names and descriptions** for better model understanding
-11. **Handle both delta and final events** when streaming is enabled
-12. **Use `getArgumentsAs()`** for type-safe tool argument deserialization
+- **Always use try-with-resources** for `CopilotClient` and `CopilotSession`.
+- **Always provide a permission handler** because it is required for `createSession` and `resumeSession`.
+- **Use `CompletableFuture`** properly: call `.get()` to block, or chain with `.thenApply()` and `.thenCompose()`.
+- **Use `sendAndWait()`** for simple request-response patterns instead of manual event handling.
+- **Handle `SessionErrorEvent`** for robust error handling.
+- **Use pattern matching** with switch and sealed types for event handling when the JDK supports it.
+- **Enable streaming** for better UX in interactive scenarios.
+- **Close event subscriptions** (`Closeable`) when no longer needed.
+- **Use `SystemMessageMode.APPEND`** to preserve safety guardrails.
+- **Provide descriptive tool names and descriptions** for better model understanding.
+- **Handle both delta and final events** when streaming is enabled.
+- **Use `getArgumentsAs()`** for type-safe tool argument deserialization.
 
 ## Common Patterns
 
@@ -888,3 +892,43 @@ var session = client.createSession(new SessionConfig()
     .setOnPermissionRequest(PermissionHandler.APPROVE_ALL)
 ).get();
 ```
+
+## Conventions
+
+| Rule | Rationale |
+|---|---|
+| Treat the SDK as public preview and isolate direct usage behind small integration classes | Breaking changes are easier to absorb when SDK calls are localized |
+| Require Java 17 or later, and use JDK 25 or later for production virtual-thread execution | Baseline APIs compile on Java 17 while virtual-thread scalability depends on newer JDK fixes |
+| Start `CopilotClient` explicitly when `autoStart` is disabled and close clients, sessions, and subscriptions | CLI server processes, sessions, and event handlers otherwise leak resources |
+| Supply `onPermissionRequest` for every `createSession` and `resumeSession` call | Session creation requires an explicit permission policy and unsafe defaults are avoided |
+| Prefer `SystemMessageMode.APPEND` unless replacing all guardrails is a deliberate product requirement | Append mode preserves Copilot safety and platform instructions |
+| Use `CompletableFuture` consistently and choose `sendAndWait()` only for simple request-response flows | Async control flow remains predictable and long-running conversations can use events |
+| Handle `SessionErrorEvent` and configure `EventErrorPolicy` deliberately | Runtime failures and handler exceptions become observable instead of silently corrupting state |
+| Define custom tools with JSON Schema, descriptive names, and `getArgumentsAs()` for typed inputs | The model understands tool intent and Java code avoids fragile map casting |
+| Use `createSkipPermission()` only for safe read-only tools | Permission bypass remains limited to operations that cannot mutate or expose sensitive data |
+| Configure BYOK providers, MCP servers, model capabilities, hooks, and telemetry through `SessionConfig` and option objects | SDK configuration stays typed, reviewable, and compatible with future options |
+
+## Do / Do Not
+
+| Do | Do not |
+|---|---|
+| Use `try (var client = new CopilotClient())` and close `CopilotSession` instances | Leave clients, sessions, lifecycle subscriptions, or event subscriptions open |
+| Set `PermissionHandler.APPROVE_ALL` only in trusted development or tests and provide custom permission logic for risky actions | Approve `dangerous-action` or other mutating tool requests without policy checks |
+| Use `Default` async patterns with `.thenApply()`, `.thenCompose()`, or bounded `.get()` calls | Block virtual threads or event dispatch indefinitely without timeout or cancellation |
+| Keep `SystemMessageMode.APPEND` for normal customization | Use `SystemMessageMode.REPLACE` casually and remove platform guardrails |
+| Convert tool arguments with `getArgumentsAs()` and return JSON-serializable values | Parse untyped maps everywhere or return non-serializable objects |
+| Register typed event handlers and close their `Closeable` subscriptions | Let handler exceptions stop dispatch unintentionally or leave subscriptions dangling |
+| Configure OpenAI, Azure OpenAI, MCP, hooks, and capabilities with the SDK option classes | Hardcode provider secrets, server URLs, or model limits in scattered application code |
+
+## Checklist Before Opening a PR
+
+- [ ] Java source compiles with the project's baseline JDK; virtual-thread code is limited to JDK 21+ examples or JDK 25+ production usage.
+- [ ] Maven or Gradle declares `com.github:copilot-sdk-java` with a managed version such as `${copilot-sdk-java.version}` or `${copilotSdkJavaVersion}`.
+- [ ] `CopilotClient`, `CopilotSession`, lifecycle subscriptions, and event subscriptions are closed by try-with-resources, `close()`, `stop()`, or `forceStop()` as appropriate.
+- [ ] Every session creation or resume path sets `onPermissionRequest`, and permission bypass appears only on safe read-only tools.
+- [ ] Session configuration covers model, reasoning effort, tools, MCP servers, hooks, skills, provider, streaming, working directory, and event handlers where the application relies on them.
+- [ ] Streaming handlers process delta and final events, and non-streaming flows use `sendAndWait()` only where a blocking response is acceptable.
+- [ ] Tool definitions include JSON Schema, descriptive names, typed argument handling, and JSON-serializable return values.
+- [ ] BYOK, `GITHUB_TOKEN`, CLI paths, TCP tokens, and provider credentials come from secure configuration rather than hardcoded literals.
+- [ ] Error handling covers `ExecutionException`, `SessionErrorEvent`, and event handler policy.
+- [ ] Connectivity and auth checks such as `ping()`, `getStatus()`, `getAuthStatus()`, and `listModels()` are used where startup diagnostics require them.

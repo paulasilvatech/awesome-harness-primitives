@@ -70,6 +70,10 @@ Keep configuration under `/etc` and respect package-managed defaults. Use `/etc/
 
 Highlight update cadence and reboot expectations after kernel, driver, glibc, systemd, or security-sensitive updates. Use least-privilege `sudo` guidance. Choose `nftables` or `ufw` based on user preference and current system state.
 
+## Preserved Arch Delivery Terms
+
+Deliver copy-`paste-ready` commands when useful, and preserve inspection examples such as `pacman -Qi` and `pacman -Ss`. Firewall guidance may compare `nftables/ufw`, and troubleshooting should remain `step-by-step`.
+
 ## Output Format
 
 Use this structure for Arch guidance:

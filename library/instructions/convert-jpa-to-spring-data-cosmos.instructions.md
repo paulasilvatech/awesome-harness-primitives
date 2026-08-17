@@ -1,27 +1,28 @@
 ---
-applyTo: '**/*.java,**/pom.xml,**/build.gradle,**/application*.properties'
-description: 'Step-by-step guide for converting Spring Boot JPA applications to use Azure Cosmos DB with Spring Data Cosmos'
+applyTo: "**/*.java,**/pom.xml,**/build.gradle,**/application*.properties"
+description: "Enforces conventions for converting Spring Boot JPA applications to Azure Cosmos DB with Spring Data Cosmos, including dependencies, configuration, entity mapping, repositories, services, tests, templates, and runtime validation."
 ---
 
-# Convert Spring JPA project to Spring Data Cosmos
+# Spring Data Cosmos Conversion Conventions — JPA Migration
 
-This generalized guide applies to any JPA to Spring Data Cosmos DB conversion project.
+This file applies to Spring Boot Java, Maven, Gradle, and `application*.properties` files being converted from JPA persistence to Azure Cosmos DB with Spring Data Cosmos. It is authoritative for dependency replacement, Cosmos profile configuration, Azure Identity authentication, entity and repository shape, relationship storage, service-layer template compatibility, Spring Security serialization, test conversion, seeding, runtime validation, and common post-migration fixes; broader project architecture, security, and deployment primitives win when they impose stricter repository-wide rules.
 
-## High-level plan
+## Conversion Scope and Invariants
 
-1. Swap build dependencies (remove JPA, add Cosmos + Identity).
-2. Add `cosmos` profile and properties.
-3. Add Cosmos config with proper Azure identity authentication.
-4. Transform entities (ids → `String`, add `@Container` and `@PartitionKey`, remove JPA mappings, adjust relationships).
-5. Convert repositories (`JpaRepository` → `CosmosRepository`).
-6. **Create service layer** for relationship management and template compatibility.
-7. **CRITICAL**: Update ALL test files to work with String IDs and Cosmos repositories.
-8. Seed data via `CommandLineRunner`.
-9. **CRITICAL**: Test runtime functionality and fix template compatibility issues.
+- Swap build dependencies by removing JPA and database-specific dependencies, then adding Cosmos and Identity dependencies.
+- Add the `cosmos` profile and properties before relying on Cosmos repositories.
+- Configure Cosmos with Azure identity authentication rather than key-based authentication.
+- Transform entities by changing ids to `String`, adding `@Container` and `@PartitionKey`, removing JPA mappings, and adjusting relationships.
+- Convert repositories from `JpaRepository` to `CosmosRepository`.
+- **Create service layer** conventions for relationship management and template compatibility.
+- **CRITICAL**: Update ALL test files to work with String IDs and Cosmos repositories.
+- Seed data via `CommandLineRunner` with meaningful String IDs.
+- **CRITICAL**: Test runtime functionality and fix template compatibility issues after compilation succeeds.
+- Do not treat these conventions as a Step-by-step SECTION; apply them passively to every matched change.
 
-## Step-by-step
+## Conversion Domains
 
-### Step 1 — Build dependencies
+### Build Dependencies
 
 - **Maven** (`pom.xml`):
   - Remove dependency `spring-boot-starter-data-jpa`
@@ -31,7 +32,7 @@ This generalized guide applies to any JPA to Spring Data Cosmos DB conversion pr
 - **Gradle**: Apply same dependency changes for Gradle syntax
 - Remove testcontainers and JPA-specific test dependencies
 
-### Step 2 — Properties and Configuration
+### Properties and Configuration
 
 - Create `src/main/resources/application-cosmos.properties`:
   ```properties
@@ -45,7 +46,7 @@ This generalized guide applies to any JPA to Spring Data Cosmos DB conversion pr
   spring.profiles.active=cosmos
   ```
 
-### Step 3 — Configuration class with Azure Identity
+### Configuration Class with Azure Identity
 
 - Create `src/main/java/<rootpkg>/config/CosmosConfiguration.java`:
   ```java
@@ -78,7 +79,7 @@ This generalized guide applies to any JPA to Spring Data Cosmos DB conversion pr
   ```
 - **IMPORTANT**: Use `DefaultAzureCredentialBuilder().build()` instead of key-based authentication for production security
 
-### Step 4 — Entity transformation
+### Entity Transformation
 
 - Target all classes with JPA annotations (`@Entity`, `@MappedSuperclass`, `@Embeddable`)
 - **Base entity changes**:
@@ -177,7 +178,7 @@ This generalized guide applies to any JPA to Spring Data Cosmos DB conversion pr
   - Update `addVisit(Integer petId, Visit visit)` to `addVisit(String petId, Visit visit)`
   - Ensure all ID comparison logic uses `.equals()` instead of `==`
 
-### Step 5 — Repository conversion
+### Repository Conversion
 
 - Change all repository interfaces:
   - From: `extends JpaRepository<Entity, Integer>`
@@ -189,7 +190,7 @@ This generalized guide applies to any JPA to Spring Data Cosmos DB conversion pr
   - **Replace custom method names**: `findPetTypes()` → `findAllOrderByName()`
   - **Update ALL references** to changed method names in controllers and formatters
 
-### Step 6 — **Create service layer** for relationship management and template compatibility
+### Service Layer for Relationship Management and Template Compatibility
 
 - **CRITICAL**: Create service classes to bridge Cosmos document storage with existing template expectations
 - **Purpose**: Handle relationship population and maintain template compatibility
@@ -239,7 +240,7 @@ This generalized guide applies to any JPA to Spring Data Cosmos DB conversion pr
 
   ```
 
-### Step 6.5 — **Spring Security Integration** (CRITICAL for Authentication)
+### Spring Security Integration for Authentication
 
 - **UserDetailsService Integration Pattern**:
   ```java
@@ -326,7 +327,7 @@ private void populateRelationships(Entity entity) {
 
   ```
 
-### Step 7 — Data seeding
+### Data Seeding
 
 - Create `@Component` implementing `CommandLineRunner`:
   ```java
@@ -353,7 +354,7 @@ private void populateRelationships(Entity entity) {
     3. Wrap BigDecimal operations in try-catch and handle gracefully
   - **The application will start successfully even if seeding fails** - check logs for seeding errors
 
-### Step 8 — Test file conversion (CRITICAL SECTION)
+### Test File Conversion
 
 **This step is often overlooked but essential for successful conversion**
 
@@ -424,7 +425,7 @@ private void populateRelationships(Entity entity) {
   - `assertThat(entity.getId()).isEqualTo(1)` → `assertThat(entity.getId()).isEqualTo("test-id-1")`
   - JSON path assertions: `jsonPath("$.id").value(1)` → `jsonPath("$.id").value("test-id-1")`
 
-### Step 8 — Test file conversion (CRITICAL SECTION)
+### Test File Conversion
 
 **This step is often overlooked but essential for successful conversion**
 
@@ -494,7 +495,7 @@ private void populateRelationships(Entity entity) {
   - `assertThat(entity.getId()).isEqualTo(1)` → `assertThat(entity.getId()).isEqualTo("test-id-1")`
   - JSON path assertions: `jsonPath("$.id").value(1)` → `jsonPath("$.id").value("test-id-1")`
 
-### Step 9 — **Runtime Testing and Template Compatibility**
+### Runtime Testing and Template Compatibility
 
 #### **CRITICAL**: Test the running application after compilation success
 
@@ -521,14 +522,14 @@ private void populateRelationships(Entity entity) {
 - **Verify service methods populate relationships** before returning entities
 - **Test all CRUD operations** through the web interface
 
-### Step 9.5 — **Template Runtime Validation** (CRITICAL)
+### Template Runtime Validation
 
 #### **Systematic Template Testing Process**
 
 After successful compilation and application startup:
 
-1. **Navigate to EVERY page** in the application systematically
-2. **Test each template that displays entity data**:
+- **Navigate to EVERY page** in the application systematically
+- **Test each template that displays entity data**:
    - List pages (e.g., `/vets`, `/owners`)
    - Detail pages (e.g., `/owners/{id}`, `/vets/{id}`)
    - Forms and edit pages
@@ -553,37 +554,37 @@ When encountering template errors:
 - `Property or field 'pets' cannot be found` → Add `@JsonIgnore private List<Pet> pets` to Owner entity
 - Empty relationship data displayed → Service not populating transient properties
 
-### Step 10 — **Systematic Error Resolution Process**
+### Systematic Error Resolution Process
 
 #### When compilation fails:
 
-1. **Run `mvn compile` first** - fix main source issues before tests
-2. **Run `mvn test-compile`** - systematically fix each test compilation error
-3. **Focus on most frequent error patterns**:
+- **Run `mvn compile` first** - fix main source issues before tests
+- **Run `mvn test-compile`** - systematically fix each test compilation error
+- **Focus on most frequent error patterns**:
    - `int cannot be converted to String` → Change test constants and entity setters
    - `method X cannot be applied to given types` → Remove pagination parameters
    - `cannot find symbol: method Y()` → Update to new repository method names
    - Method signature conflicts → Rename conflicting methods
 
-### Step 10 — **Systematic Error Resolution Process**
+### Systematic Error Resolution Process
 
 #### When compilation fails:
 
-1. **Run `mvn compile` first** - fix main source issues before tests
-2. **Run `mvn test-compile`** - systematically fix each test compilation error
-3. **Focus on most frequent error patterns**:
+- **Run `mvn compile` first** - fix main source issues before tests
+- **Run `mvn test-compile`** - systematically fix each test compilation error
+- **Focus on most frequent error patterns**:
    - `int cannot be converted to String` → Change test constants and entity setters
    - `method X cannot be applied to given types` → Remove pagination parameters
    - `cannot find symbol: method Y()` → Update to new repository method names
    - Method signature conflicts → Rename conflicting methods
 #### When runtime fails:
 
-1. **Check application logs** for specific error messages
-2. **Look for template/SpEL errors**:
+- **Check application logs** for specific error messages
+- **Look for template/SpEL errors**:
    - `Property or field 'xxx' cannot be found` → Add transient property to entity
    - Missing relationship data → Service layer not populating relationships
-3. **Verify service layer usage** in controllers
-4. **Test navigation through all application pages**
+- **Verify service layer usage** in controllers
+- **Test navigation through all application pages**
 
 #### Common error patterns and solutions:
 
@@ -616,7 +617,7 @@ When encountering template errors:
   - Solution: Ensure all controller methods use service layer for entity retrieval
   - Prevention: Never return repository results directly to templates
 
-### Step 11 — Validation checklist
+### Conversion Validation Checklist
 
 After conversion, verify:
 
@@ -641,7 +642,7 @@ After conversion, verify:
 - [ ] **No method signature conflicts** in entity classes
 - [ ] **All renamed methods updated** in callers (controllers, tests, formatters)
 
-### Common pitfalls to avoid
+### Common Pitfalls to Avoid
 
 1. **Not checking compilation frequently** - Run `mvn test-compile` after each major change
 2. **Method signature conflicts** - Method overloading issues when converting ID types
@@ -667,39 +668,39 @@ After conversion, verify:
 22. **Health check database references** - Remove database dependencies from Spring Boot health checks after JPA removal
 23. **Collection type mismatches** - Update service methods to handle String vs object collections consistently
 
-### Debugging compilation issues systematically
+### Debugging Compilation Issues Systematically
 
 If compilation fails after conversion:
 
-1. **Start with main compilation**: `mvn compile` - fix entity and controller issues first
-2. **Then test compilation**: `mvn test-compile` - fix each error systematically
-3. **Check for remaining `jakarta.persistence` imports** throughout codebase
-4. **Verify all test constants use String IDs** - search for `int.*TEST.*ID`
-5. **Ensure repository method signatures match** new Cosmos interface
-6. **Check for mixed Integer/String ID usage** in entity relationships and tests
-7. **Validate all mocking uses correct method names** (`findAllOrderByName()` not `findPetTypes()`)
-8. **Look for method signature conflicts** - resolve by renaming conflicting methods
-9. **Verify assertion methods work with String IDs** (`isNotEmpty()` not `isNotZero()`)
+- **Start with main compilation**: `mvn compile` - fix entity and controller issues first
+- **Then test compilation**: `mvn test-compile` - fix each error systematically
+- **Check for remaining `jakarta.persistence` imports** throughout codebase
+- **Verify all test constants use String IDs** - search for `int.*TEST.*ID`
+- **Ensure repository method signatures match** new Cosmos interface
+- **Check for mixed Integer/String ID usage** in entity relationships and tests
+- **Validate all mocking uses correct method names** (`findAllOrderByName()` not `findPetTypes()`)
+- **Look for method signature conflicts** - resolve by renaming conflicting methods
+- **Verify assertion methods work with String IDs** (`isNotEmpty()` not `isNotZero()`)
 
-### Debugging runtime issues systematically
+### Debugging Runtime Issues Systematically
 
 If runtime fails after successful compilation:
 
-1. **Check application startup logs** for initialization errors
-2. **Navigate through all pages** to identify template/controller issues
-3. **Look for SpEL template errors** in logs:
+- **Check application startup logs** for initialization errors
+- **Navigate through all pages** to identify template/controller issues
+- **Look for SpEL template errors** in logs:
    - `Property or field 'xxx' cannot be found` → Missing transient property
    - `EL1008E` → Service layer not populating relationships
-4. **Verify service layer is being used** instead of direct repository access
-5. **Check that transient properties are populated** in service methods
-6. **Test all CRUD operations** through the web interface
-7. **Verify data seeding worked correctly** and relationships are maintained
-8. **Authentication-specific debugging**:
+- **Verify service layer is being used** instead of direct repository access
+- **Check that transient properties are populated** in service methods
+- **Test all CRUD operations** through the web interface
+- **Verify data seeding worked correctly** and relationships are maintained
+- **Authentication-specific debugging**:
    - `Cannot pass null or empty values to constructor` → Check for `@JsonIgnore` on required fields
    - `BadCredentialsException` → Verify User entity serialization and password field accessibility
    - Check logs for "DomainUserDetailsService" debugging output to trace authentication flow
 
-### **Pro Tips for Success**
+### Pro Tips for Success
 
 - **Compile early and often** - Don't let errors accumulate
 - **Use global search and replace** - Find all occurrences of patterns to update
@@ -710,7 +711,7 @@ If runtime fails after successful compilation:
 - **Always test runtime** - Compilation success doesn't guarantee functional templates
 - **Service layer is critical** - Bridge between document storage and template expectations
 
-### **Authentication Troubleshooting Guide** (CRITICAL)
+### Authentication Troubleshooting Guide
 
 #### **Common Authentication Serialization Errors**:
 
@@ -762,7 +763,7 @@ If runtime fails after successful compilation:
 - [ ] User activation status checked appropriately
 - [ ] Test login with known credentials (admin/admin)
 
-### **Common Runtime Issues and Solutions**
+### Common Runtime Issues and Solutions
 
 #### **Issue 1: Repository Reactive Type Casting Errors**
 
@@ -907,7 +908,7 @@ public Set<RelatedEntity> getRelatedEntities() {
 - [ ] **Authentication works**: Can sign in without serialization errors
 - [ ] **CRUD operations functional**: All entity operations work through UI
 
-## **Quick Reference: Common Post-Migration Fixes**
+## Quick Reference: Common Post-Migration Fixes
 
 ### **Top Runtime Issues to Check**
 
@@ -947,3 +948,103 @@ public Set<RelatedEntity> getRelatedEntities() {
 - **Add transient properties** with `@JsonIgnore` for UI access to related data
 - **Use service layer** to populate transient relationships before rendering
 - **Never return repository results directly** to templates without relationship population
+
+## Good / Bad Examples
+
+The examples below illustrate the required Cosmos relationship pattern: persist IDs, expose transient objects for templates, and populate them through services before rendering.
+
+**Good:**
+
+```java
+@Container(containerName = "vets")
+public class Vet {
+  @Id
+  private String id;
+
+  @PartitionKey
+  private String partitionKey = "vet";
+
+  private List<String> specialtyIds = new ArrayList<>();
+
+  @JsonIgnore
+  private List<Specialty> specialties = new ArrayList<>();
+}
+
+@Service
+public class VetService {
+  public Optional<Vet> findById(String id) {
+    return vetRepository.findById(id).map(vet -> {
+      populateRelationships(vet);
+      return vet;
+    });
+  }
+}
+```
+
+Why: The document stores Cosmos-friendly String IDs, keeps template compatibility through transient properties, and uses a service to populate relationships before controller rendering.
+
+**Bad:**
+
+```java
+@Entity
+public class Vet {
+  @OneToMany
+  @JsonIgnore
+  private List<Specialty> specialties;
+}
+
+@Controller
+class VetController {
+  String show(Model model) {
+    model.addAttribute("vets", vetRepository.findAll());
+    return "vets/list";
+  }
+}
+```
+
+Why: The entity keeps JPA mappings, blocks Cosmos persistence with `@JsonIgnore` on persisted data, and returns repository results directly to templates without relationship population.
+
+## Conventions
+
+| Rule | Rationale |
+|---|---|
+| Replace `spring-boot-starter-data-jpa`, H2, MySQL, PostgreSQL, Testcontainers, and JPA-specific tests with `com.azure:azure-spring-data-cosmos:5.17.0` or the latest compatible version plus `com.azure:azure-identity:1.15.4` | The application must compile and run against Cosmos repositories and `DefaultAzureCredential` instead of relational infrastructure |
+| Configure `application-cosmos.properties` with `COSMOS_URI`, `COSMOS_DATABASE`, `azure.cosmos.populate-query-metrics=false`, and `azure.cosmos.enable-multiple-write-locations=false` | The `cosmos` profile needs deterministic defaults and explicit Cosmos client behavior |
+| Use `DefaultAzureCredentialBuilder().build()` in `CosmosClientBuilder` and avoid key-based authentication | Managed identity and developer credentials avoid committing or distributing account keys |
+| Convert JPA entities to `@Container` documents with `String` IDs, `@PartitionKey`, no `jakarta.persistence` imports, and no `@JsonIgnore` on persisted fields | Cosmos serialization and Spring Data mapping fail when relational annotations or hidden persisted fields remain |
+| Store relationships as String ID collections and expose transient `@JsonIgnore` object lists only for templates | Document storage stays normalized enough for Cosmos while Thymeleaf/JSP property access remains compatible |
+| Convert repositories from `JpaRepository<Entity, Integer>` to `CosmosRepository<Entity, String>` and update pagination, custom query names, and Cosmos SQL | Repository signatures must match Spring Data Cosmos and all callers must compile |
+| Route controllers and formatters through service classes that populate relationships | Templates must not receive unpopulated repository documents after relationships become ID references |
+| Store Spring Security authorities as `Set<String>` and convert to `GrantedAuthority` in `UserDetailsService` | Cosmos serializes simple authority names reliably while Spring Security receives the expected runtime objects |
+| Run `mvn compile`, `mvn test-compile`, `mvn spring-boot:run`, and full template navigation after conversion | Compilation success does not prove runtime template, authentication, seeding, or CRUD compatibility |
+| Resolve Java 17+ `BigDecimal`, health check `db`, `BlockingIterable`, String ID, and SpEL `EL1008E` issues using the documented patterns | These are common post-migration failures that otherwise surface only at runtime |
+
+## Do / Do Not
+
+| Do | Do not |
+|---|---|
+| Use `CosmosRepository<Entity, String>` and meaningful IDs such as `owner-1`, `pet-1`, and `pettype-1` | Mix `Integer` and `String` IDs or keep `JpaRepository<Entity, Integer>` |
+| Remove `@Entity`, `@Table`, `@Column`, `@JoinColumn`, `@OneToMany`, `@ManyToOne`, `@ManyToMany`, and `jakarta.persistence` imports | Leave relational mappings in Cosmos document classes |
+| Use `@JsonProperty` for persisted JSON names and reserve `@JsonIgnore` for transient template-only properties | Put `@JsonIgnore` on password, authorities, or any field that must be stored in Cosmos DB |
+| Rename conflicting methods such as `getPet(String name)` to `getPetByName(String name)` and update all callers | Create overloads that collapse into identical `String` signatures after ID conversion |
+| Remove `Pageable` parameters from Cosmos query methods and update mocks, controllers, and formatters | Keep JPA pagination signatures that Cosmos repositories no longer implement |
+| Convert `findAll()` results with `StreamSupport.stream().collect(Collectors.toList())` when a `List` is required | Cast `BlockingIterable` or `Iterable` directly to `java.util.List` |
+| Replace `@DataJpaTest`, `@AutoConfigureTestDatabase`, `@Transactional`, and `org.springframework.orm` usage in tests | Leave relational test slices and exceptions after removing JPA |
+| Navigate every list, detail, form, edit, and CRUD page while watching logs for SpEL and authentication errors | Stop after `mvn compile` or `mvn test-compile` succeeds |
+| Remove `db` from readiness health checks after database dependencies are removed | Keep actuator checks that reference deleted relational components |
+| Use services to populate ALL transient properties used by templates | Return repository entities directly to templates or populate only some relationships |
+
+## Checklist Before Opening a PR
+
+- [ ] Build files remove JPA/database-specific dependencies and add Spring Data Cosmos plus Azure Identity.
+- [ ] `application.properties` activates the `cosmos` profile and `application-cosmos.properties` defines `COSMOS_URI`, `COSMOS_DATABASE`, and Cosmos options.
+- [ ] Cosmos configuration uses `DefaultAzureCredential`, `@EnableCosmosRepositories`, `AbstractCosmosConfiguration`, and `CosmosConfig`.
+- [ ] Entities use `@Container`, `@Id`, `@PartitionKey`, `String` IDs, `.equals()` comparisons, and no remaining `jakarta.persistence` imports.
+- [ ] Persisted fields needed by Cosmos, including User password and authorities, are not hidden with `@JsonIgnore`.
+- [ ] Relationship storage uses ID fields, template access uses transient properties, and count/helper methods read the correct collection.
+- [ ] Repositories extend `CosmosRepository<Entity, String>` and every renamed or depaginated method is updated in controllers, formatters, services, and tests.
+- [ ] Services populate relationships before templates receive entities, and controllers do not bypass those services.
+- [ ] Test files, mocks, utilities, assertions, JSON paths, path variables, and constants use String IDs and Cosmos-compatible annotations.
+- [ ] Data seeding is idempotent, uses meaningful String IDs, and logs any Java 17+ `BigDecimal` reflection issue clearly.
+- [ ] `mvn compile`, `mvn test-compile`, `mvn spring-boot:run`, authentication, CRUD operations, and every template page pass without SpEL errors.
+- [ ] Runtime checks cover `BlockingIterable` casting, health readiness configuration, relationship population, authentication serialization, and collection type mismatches.

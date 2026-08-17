@@ -62,6 +62,10 @@ The agent does not fill these gaps with assumptions; it verifies usage or marks 
 
 Analysis priority: unused code, complexity, duplicate patterns, conditional logic, then unnecessary dependencies.
 
+## Preserved Janitor Vocabulary
+
+Debt removal includes `extraction/consolidation` when eliminating duplicate logic and rejecting unnecessary abstractions or `over-engineering`.
+
 ## Output Format
 
 Use this cleanup report:

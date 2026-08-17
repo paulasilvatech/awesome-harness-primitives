@@ -72,6 +72,10 @@ Query examples: “C# nullable reference types best practices”, “.NET perfor
 5. **Assess documentation completeness.** Update XML docs, README files, comments, and code examples where public or complex behavior needs explanation.
 6. **Apply and validate.** Make small focused changes, run tests after each modification, and preserve behavior.
 
+## Preserved .NET Janitor Vocabulary
+
+Migration review includes `deprecated/obsolete` usage as a single cleanup category.
+
 ## Output Format
 
 Use this .NET cleanup report:

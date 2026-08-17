@@ -1,11 +1,13 @@
 ---
-applyTo: '**/*.cls, **/*.trigger'
-description: 'Guidelines and best practices for Apex development on the Salesforce Platform'
+applyTo: "**/*.cls,**/*.trigger"
+description: "Enforces Apex conventions for Salesforce Platform classes and triggers, including bulkification, governor limits, security, testing, asynchronous processing, integrations, and deployment verification."
 ---
 
-# Apex Development
+# Apex Conventions — Salesforce Platform Classes and Triggers
 
-## General Instructions
+This file applies to Apex classes and triggers matched by `**/*.cls` and `**/*.trigger`. It is authoritative for Salesforce Platform Apex style, bulk-safe design, governor-limit discipline, security enforcement, trigger architecture, asynchronous processing, tests, documentation, and deployment verification in those files; stricter organization, security, testing, or CI primitives win where they define narrower project-wide rules, and Salesforce platform limits and compiler behavior win over all local conventions.
+
+## Platform Design Principles
 
 - Always use the latest Apex features and best practices for the Salesforce Platform.
 - Write clear and concise comments for each class and method, explaining the business logic and any complex operations.
@@ -15,7 +17,7 @@ description: 'Guidelines and best practices for Apex development on the Salesfor
 - Implement proper separation of concerns using service layers, domain classes, and selector classes.
 - Document external dependencies, integration points, and their purposes in comments.
 
-## Naming Conventions
+## Naming and Organization
 
 - **Classes**: Use `PascalCase` for class names. Name classes descriptively to reflect their purpose.
   - Controllers: suffix with `Controller` (e.g., `AccountController`)
@@ -39,9 +41,9 @@ description: 'Guidelines and best practices for Apex development on the Salesfor
 
 - **Triggers**: Name triggers as `ObjectName` + trigger event (e.g., `AccountTrigger`, `ContactTrigger`)
 
-## Best Practices
+## Governor-Safe Apex Design
 
-### Bulkification
+## Bulkification and Collection Processing
 
 - **Always write bulkified code** - Design all code to handle collections of records, not individual records.
 - Avoid SOQL queries and DML statements inside loops.
@@ -67,7 +69,7 @@ public static void updateAccountRating(Account account) {
 }
 ```
 
-### Maps for O(1) Lookup
+## Maps and Constant-Time Lookup
 
 - **Use Maps for efficient lookups** - Convert lists to maps for O(1) constant-time lookups instead of O(n) list iterations.
 - Use `Map<Id, SObject>` constructor to quickly convert query results to a map.
@@ -108,7 +110,7 @@ for (Contact con : contacts) {
 }
 ```
 
-### Governor Limits
+## Governor Limits and Query Scale
 
 - Be aware of Salesforce governor limits: SOQL queries (100), DML statements (150), heap size (6MB), CPU time (10s).
 - **Monitor governor limits proactively** using `System.Limits` class to check consumption before hitting limits.
@@ -130,7 +132,7 @@ public static void processLargeDataSet() {
 List<Account> accounts = [SELECT Id, Name FROM Account WHERE IsActive__c = true LIMIT 200];
 ```
 
-### Security and Data Access
+## Security and Data Access
 
 - **Always check CRUD/FLS permissions** before performing SOQL queries or DML operations.
 - Use `WITH SECURITY_ENFORCED` in SOQL queries to enforce field-level security.
@@ -163,7 +165,7 @@ public with sharing class AccountController {
 }
 ```
 
-### Exception Handling
+## Exception Handling
 
 - Always use try-catch blocks for DML operations and callouts.
 - Create custom exception classes for specific error scenarios.
@@ -189,7 +191,7 @@ public class AccountService {
 }
 ```
 
-### SOQL Best Practices
+## SOQL and Query Selectivity
 
 - Use selective queries with indexed fields (`Id`, `Name`, `OwnerId`, custom indexed fields).
 - Limit query results with `LIMIT` clause when appropriate.
@@ -236,14 +238,12 @@ List<Account> accounts = [
     WHERE Description LIKE '%test%'  // Non-indexed field
 ];
 
-// Check query performance in Developer Console:
-// 1. Enable 'Use Query Plan' in Developer Console
-// 2. Run SOQL query and review 'Query Plan' tab
-// 3. Look for 'Index' usage vs 'TableScan'
-// 4. Ensure selectivity > 10% for optimal performance
+// Check query performance in Developer Console with 'Use Query Plan' enabled.
+// Review the Query Plan tab for 'Index' usage vs 'TableScan'.
+// Ensure selectivity > 10% for optimal performance
 ```
 
-### Trigger Best Practices
+## Trigger Architecture
 
 - Use **one trigger per object** to maintain clarity and avoid conflicts.
 - Implement trigger logic in handler classes, not directly in triggers.
@@ -281,7 +281,7 @@ public class AccountTriggerHandler extends TriggerHandler {
 }
 ```
 
-### Code Quality Best Practices
+## Apex Language Quality
 
 - **Use `isEmpty()`** - Check if collections are empty using built-in methods instead of size comparisons.
 - **Use Custom Labels** - Store user-facing text in Custom Labels for internationalization and maintainability.
@@ -420,7 +420,7 @@ List<Account> accountsCopy = accountList.clone();
 Set<Id> accountIds = new Set<Id>(accountMap.keySet());
 ```
 
-### Recursion Prevention
+## Recursion Prevention
 
 - **Use static variables** to track recursive calls and prevent infinite loops.
 - Implement a **circuit breaker** pattern to stop execution after a threshold.
@@ -461,7 +461,7 @@ public class OpportunityService {
 }
 ```
 
-### Method Visibility and Encapsulation
+## Method Visibility and Encapsulation
 
 - **Use `private` by default** - Only expose methods that need to be public.
 - Use `protected` for methods that subclasses need to access.
@@ -515,7 +515,7 @@ public virtual class BaseService {
 }
 ```
 
-### Design Patterns
+## Design Patterns
 
 - **Service Layer Pattern**: Encapsulate business logic in service classes.
 - **Circuit Breaker Pattern**: Prevent repeated failures by stopping execution after threshold.
@@ -630,9 +630,9 @@ public class AccountSelector {
 }
 ```
 
-### Configuration Management
+## Configuration Management
 
-#### Custom Metadata Types vs Custom Settings
+### Custom Metadata Types vs Custom Settings
 
 - **Prefer Custom Metadata Types (CMT)** for configuration data that can be deployed.
 - Use **Custom Settings** for user-specific or org-specific data that varies by environment.
@@ -662,7 +662,7 @@ Org_Settings__c orgSettings = Org_Settings__c.getOrgDefaults();
 Integer maxRecords = Integer.valueOf(orgSettings.Max_Records_Per_Query__c);
 ```
 
-#### Named Credentials and HTTP Callouts
+### Named Credentials and HTTP Callouts
 
 - **Always use Named Credentials** for external API endpoints and authentication.
 - Avoid hardcoding URLs, tokens, or credentials in code.
@@ -728,7 +728,7 @@ public static String createExternalRecord(Map<String, Object> data) {
 }
 ```
 
-### Common Annotations
+## Common Annotations
 
 - `@AuraEnabled` - Expose methods to Lightning Web Components and Aura Components.
 - `@AuraEnabled(cacheable=true)` - Enable client-side caching for read-only methods.
@@ -802,7 +802,7 @@ public class AccountService {
 }
 ```
 
-### Asynchronous Apex
+## Asynchronous Apex
 
 - Use **@future** methods for simple asynchronous operations and callouts.
 - Use **Queueable Apex** for complex asynchronous operations that require chaining.
@@ -1006,7 +1006,7 @@ public class AccountCleanupScheduler implements Schedulable {
 // System.schedule('Daily Account Cleanup', cronExp, new AccountCleanupScheduler());
 ```
 
-## Testing
+## Apex Testing
 
 - **Always achieve 100% code coverage** for production code (minimum 75% required).
 - Write **meaningful tests** that verify business logic, not just code coverage.
@@ -1216,7 +1216,7 @@ sf code-analyzer run --view detail                        # Show detailed violat
 - Monitor with **Debug Logs** and **Event Monitoring**.
 - Use **ApexGuru** and **Scale Center** for performance insights.
 
-### Platform Cache
+## Platform Cache
 
 - Use **Platform Cache** to store frequently accessed data and reduce SOQL queries.
 - `Cache.OrgPartition` - Shared across all users and sessions in the org.
@@ -1286,9 +1286,115 @@ public class UserPreferenceCache {
 
 ## Build and Verification
 
-- After adding or modifying code, verify the project continues to build successfully.
-- Run all relevant Apex test classes to ensure no regressions.
+- Keep the project deployable after every Apex change.
+- Keep all relevant Apex test classes passing to prevent regressions.
 - Use Salesforce CLI: `sf apex run test --test-level RunLocalTests`
 - Ensure code coverage meets the minimum 75% requirement (aim for 100%).
 - Use Salesforce Code Analyzer to check for code quality issues: `sf code-analyzer run --severity-threshold 2`
 - Review violations and address them before deployment.
+
+## Good / Bad Examples
+
+The examples below illustrate the hardest Apex convention to preserve consistently: one bulk-safe, secure service method should combine collection input, selector-style SOQL, CRUD/FLS checks, `WITH SECURITY_ENFORCED`, `Security.stripInaccessible()`, no SOQL or DML in loops, meaningful exceptions, and named constants.
+
+**Good:**
+
+```apex
+public with sharing class AccountRatingService {
+    private static final Decimal HOT_REVENUE_THRESHOLD = 1000000;
+
+    public class AccountRatingServiceException extends Exception {}
+
+    public static void updateAccountRatings(Set<Id> accountIds) {
+        if (accountIds == null || accountIds.isEmpty()) {
+            return;
+        }
+        if (!Schema.sObjectType.Account.isAccessible() || !Schema.sObjectType.Account.isUpdateable()) {
+            throw new AccountRatingServiceException('User does not have permission to update accounts');
+        }
+
+        List<Account> accounts = [
+            SELECT Id, AnnualRevenue, Rating
+            FROM Account
+            WHERE Id IN :accountIds
+            WITH SECURITY_ENFORCED
+        ];
+        SObjectAccessDecision decision = Security.stripInaccessible(AccessType.UPDATABLE, accounts);
+        List<Account> writableAccounts = (List<Account>) decision.getRecords();
+
+        for (Account account : writableAccounts) {
+            account.Rating = account.AnnualRevenue > HOT_REVENUE_THRESHOLD ? 'Hot' : 'Warm';
+        }
+        update writableAccounts;
+    }
+}
+```
+
+Why: The method accepts a collection, exits safely on empty input, checks object and field access, uses one selective query, performs one DML statement outside the loop, and keeps the threshold in a constant.
+
+**Bad:**
+
+```apex
+public without sharing class AccountRatingService {
+    public static void updateAccountRatings(List<Id> accountIds) {
+        for (Id accountId : accountIds) {
+            Account account = Database.query('SELECT Id, AnnualRevenue, Rating FROM Account WHERE Id = \'' + accountId + '\'');
+            if (account.AnnualRevenue > 1000000) {
+                account.Rating = 'Hot';
+            }
+            update account;
+        }
+    }
+}
+```
+
+Why: The method disables sharing without explanation, builds dynamic SOQL unnecessarily, performs SOQL and DML inside a loop, omits CRUD/FLS enforcement, and hides a business threshold as a magic number.
+
+## Conventions
+
+| Rule | Rationale |
+|---|---|
+| Write Apex for collections of records by default, especially trigger, service, batch, queueable, and invocable entry points | Salesforce transactions commonly process up to 200 records, and single-record assumptions cause governor-limit failures |
+| Keep SOQL queries and DML statements outside loops | The platform enforces 100 SOQL queries and 150 DML statements per synchronous transaction |
+| Use `List<>`, `Set<>`, and `Map<>` to group records, de-duplicate IDs, and perform O(1) lookups | Collection-first code avoids nested-loop O(n²) behavior and scales to trigger batch sizes |
+| Enforce CRUD/FLS and sharing with `with sharing`, `inherited sharing`, `WITH SECURITY_ENFORCED`, and `Security.stripInaccessible()` where appropriate | Apex can otherwise expose records or fields the running user cannot access |
+| Keep SOQL selective, field-explicit, limited, and checked with Query Plan for large objects | Non-selective queries fail or degrade under real Salesforce data volumes |
+| Put trigger logic in handler classes and keep one trigger per object | Handler classes centralize context routing, recursion prevention, tests, and business logic |
+| Use service, selector, domain, trigger handler, builder, strategy, and circuit breaker patterns only where their responsibilities are clear | Named patterns improve separation of concerns when they reduce coupling rather than add ceremony |
+| Prefer Custom Metadata Types for deployable configuration and Custom Settings for user-specific or org-specific runtime values | Configuration stays portable where it should be packaged and flexible where it varies by org or user |
+| Use Named Credentials and `callout:NamedCredential` for external endpoints and credentials | Integration secrets and URLs stay out of source code and remain deployable across environments |
+| Choose asynchronous Apex deliberately: `@future` for simple work, Queueable for chained work, Batch Apex for more than 50,000 records, Scheduled Apex for recurrence, and Platform Events for decoupled integration | Each asynchronous mechanism has different limits, transaction boundaries, and operational semantics |
+| Test positive, negative, permission, callout, and bulk scenarios with isolated test data | Coverage alone does not prove business behavior, security, or governor-limit safety |
+| Use JavaDoc-style comments for classes, methods, complex business rules, and integration dependencies | Apex often lives close to declarative automation, and comments preserve intent for administrators and developers |
+| Validate with Salesforce CLI tests, deployment dry runs, and Salesforce Code Analyzer before release | Local verification catches coverage, metadata, PMD, ESLint, and security issues before deployment |
+
+## Do / Do Not
+
+| Do | Do not |
+|---|---|
+| Process `List<Account>`, `Set<Id>`, or `Map<Id, SObject>` inputs in services and handlers | Design production logic around one `Account` or one `Id` when the caller can pass records in bulk |
+| Query once with `WHERE Id IN :ids`, then use maps for lookup | Query inside a loop or scan lists repeatedly with nested loops |
+| Check CRUD/FLS before SOQL and DML and sanitize inaccessible fields | Assume `with sharing` is enough to enforce field-level security |
+| Use `with sharing` or `inherited sharing` by default | Use `without sharing` without a documented reason |
+| Keep trigger bodies thin and delegate to `AccountTriggerHandler`-style classes | Put business logic directly inside `AccountTrigger` or `ContactTrigger` |
+| Use `String.escapeSingleQuotes()` only when dynamic SOQL is unavoidable | Concatenate user input directly into `Database.query()` |
+| Store user-facing text in Custom Labels and configuration in constants, CMT, Custom Settings, or Named Credentials | Hardcode labels, IDs, URLs, credentials, magic numbers, or retry thresholds in business logic |
+| Use `String.isBlank()`, `String.valueOf()`, `?.`, `??`, `isEmpty()`, and collection helpers for safe, readable code | Write repeated null checks, `size() == 0`, loop string concatenation, or avoidable if-else chains |
+| Separate `Database.Batchable` and `Schedulable` implementations | Implement both batch and scheduler responsibilities in the same class |
+| Use `@TestSetup`, `Test.startTest()`, `Test.stopTest()`, `System.runAs()`, `Test.setMock()`, and `Assert` methods with messages | Use `@SeeAllData=true`, deprecated `System.assert*()` methods, or tests that only chase coverage |
+| Run `sf apex run test --test-level RunLocalTests` and `sf code-analyzer run --severity-threshold 2` when relevant | Ship Apex changes without test and analyzer feedback |
+
+## Checklist Before Opening a PR
+
+- [ ] Classes, triggers, methods, variables, constants, and test files follow the Apex naming conventions above.
+- [ ] Trigger and service code is bulkified for 200-record transactions and contains no SOQL or DML inside loops.
+- [ ] Queries specify fields, use selective filters, use `LIMIT` or `LIMIT 1` where appropriate, and avoid `SELECT *` assumptions.
+- [ ] CRUD, FLS, sharing, `WITH SECURITY_ENFORCED`, and `Security.stripInaccessible()` are applied for data access and DML paths.
+- [ ] Dynamic SOQL uses bind variables where possible and `String.escapeSingleQuotes()` for unavoidable user input concatenation.
+- [ ] Trigger logic lives in handler classes, one trigger exists per object, and recursion prevention is documented where needed.
+- [ ] External integrations use Named Credentials, explicit timeouts, HTTP status handling, and callout-capable async interfaces where required.
+- [ ] Asynchronous Apex uses the mechanism and batch size that match the data volume, chaining, callout, and scheduling requirements.
+- [ ] Tests create their own data, avoid `@SeeAllData=true`, cover positive, negative, permission, callout, and 200+ record bulk scenarios, and use `Assert` methods with messages.
+- [ ] Comments document business logic, external dependencies, integration points, and applicable `@param`, `@return`, and `@throws` tags without stale or empty tags.
+- [ ] `sf apex run test --test-level RunLocalTests` passes, or the PR states the narrower test command used and why it is sufficient.
+- [ ] `sf code-analyzer run --severity-threshold 2` is clean or every remaining violation is reviewed and justified.

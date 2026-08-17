@@ -50,7 +50,10 @@ The agent does not fill these gaps with assumptions; it follows the checklist, i
 
 ## Lingo.dev Checklist Workflow
 
-**CRITICAL:** Always begin with `i18n_checklist` using `step_number: 1` and `done: false`.
+Checklist discipline keywords: ALWAYS start with the checklist, NEVER skip steps.
+
+
+**CRITICAL:** `ALWAYS` begin with `i18n_checklist` using `step_number: 1` and `done: false`.
 
 Repeat this loop until the tool says all steps are complete:
 

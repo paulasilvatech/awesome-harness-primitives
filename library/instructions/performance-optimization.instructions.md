@@ -1,11 +1,11 @@
 ---
-applyTo: '**/*.{html,htm,css,scss,sass,js,jsx,ts,tsx,vue,svelte,astro}'
-description: 'Comprehensive web performance standards based on Core Web Vitals (LCP, INP, CLS), with 50+ anti-patterns, detection regex, framework-specific fixes for modern web frameworks, and modern API guidance.'
+applyTo: "**/*.{html,htm,css,scss,sass,js,jsx,ts,tsx,vue,svelte,astro}"
+description: "Enforces Core Web Vitals performance conventions for web UI files, including LCP, INP, CLS, loading, rendering, media, bundles, and framework-specific fixes."
 ---
 
-# Performance Standards
+# Performance Optimization Conventions — Core Web Vitals
 
-Comprehensive performance rules for web application development. Every anti-pattern includes a severity classification, detection method, Core Web Vitals metric impacted, and corrective code examples.
+These instructions apply to web UI source files matched by the `applyTo` globs and are authoritative for Core Web Vitals performance conventions, including LCP, INP, CLS, loading, rendering, JavaScript runtime behavior, CSS, media, fonts, bundles, and framework-specific fixes. When framework, accessibility, or security primitives define stricter requirements, follow the stricter rule; keep these conventions passive and use them to judge code shape, resource priority, and measurable performance risk rather than as a step-by-step audit workflow.
 
 **Severity levels:**
 
@@ -927,9 +927,33 @@ Rules: preload 1-2 critical fonts only, use WOFF2, subset to needed characters, 
 
 ---
 
-## Performance Checklist (CWV)
+## Conventions
 
-### LCP (< 2.5s)
+| Rule | Rationale |
+|---|---|
+| Treat each `anti-pattern` ID and CRITICAL anti-patterns as merge blockers when they can push LCP, INP, or CLS into the poor range | Core Web Vitals regressions affect real user experience and search-quality signals |
+| Keep LCP resources discoverable early with server-rendered content, critical CSS, `preload`, `preconnect`, and `fetchpriority="high"` where appropriate | Late discovery wastes the LCP budget on avoidable network and render delay |
+| Keep interaction handlers under 50ms, yield long work, virtualize large lists, and move heavy computation off the main thread | INP reports the worst interaction, so one long task can define the page experience |
+| Reserve layout space for images, ads, embeds, fonts, and deferred content | CLS failures usually come from missing dimensions or late injected content |
+| Prefer modern browser and framework primitives such as Server Components, Suspense, `@defer`, signals, `next/font`, `NgOptimizedImage`, and image components when the project supports them | Platform-aware fixes reduce custom code and align with framework performance models |
+| Feature-check progressive APIs such as `scheduler.yield()` and `document.startViewTransition` before calling them | Unsupported browsers must receive a safe fallback instead of runtime errors |
+| Use direct ESM imports, route splitting, tree-shakeable utilities, and duplicate dependency cleanup | Smaller bundles reduce parse, compile, hydration, and interaction cost |
+
+## Do / Do Not
+
+| Do | Do not |
+|---|---|
+| Inline or extract critical CSS and load the rest without inline event handlers | Depend on render-blocking CSS or CSP-hostile `media="print" onload="this.media='all'"` tricks |
+| Mark only the true LCP image or font as high priority and preload sparingly | Preload non-critical assets or lazy-load above-fold hero media |
+| Batch DOM reads before writes and animate `transform` or `opacity` | Mix layout reads and writes in loops or animate `top`, `left`, `width`, `height`, `margin`, or `padding` |
+| Clean up timers, subscriptions, event listeners, and detached DOM references | Leave `setInterval`, `setTimeout`, `addEventListener`, or subscriptions running after unmount |
+| Use WebP or AVIF, responsive `srcset`/`sizes`, and explicit image dimensions | Ship JPEG/PNG-only assets without dimensions or responsive variants |
+| Fetch main content on the server or through framework-native data paths | Hide the primary page content behind client-only `useEffect` or `ngOnInit` fetching |
+| Split routes and heavy components with dynamic imports | Import every route and large component into the initial bundle |
+
+## Checklist Before Opening a PR
+
+- [ ] LCP target `< 2.5s` is met.
 - [ ] LCP image has `fetchpriority="high"` or `priority` prop
 - [ ] LCP image preloaded if not in HTML source
 - [ ] No `loading="lazy"` on above-fold images
@@ -941,7 +965,7 @@ Rules: preload 1-2 critical fonts only, use WOFF2, subset to needed characters, 
 - [ ] Compression enabled (Brotli preferred)
 - [ ] Fonts preloaded with `font-display: swap` or `optional`
 
-### INP (< 200ms)
+- [ ] INP target `< 200ms` is met.
 - [ ] Event handlers complete in < 50ms
 - [ ] Long tasks broken into smaller chunks
 - [ ] Route-based code splitting implemented
@@ -953,10 +977,17 @@ Rules: preload 1-2 critical fonts only, use WOFF2, subset to needed characters, 
 - [ ] Layout-triggering CSS properties not animated
 - [ ] Effect cleanup implemented (no leaking listeners/timers)
 
-### CLS (< 0.1)
+- [ ] CLS target `< 0.1` is met.
 - [ ] All images have `width` and `height` attributes
 - [ ] Fonts use `font-display: swap` or `optional`
 - [ ] No content injected above existing content dynamically
 - [ ] Ads/embeds have reserved space
 - [ ] No hydration mismatches
 - [ ] `content-visibility: auto` has `contain-intrinsic-size`
+
+
+## References
+
+- Example critical API origin used above: https://api.example.com
+- Example analytics origin used above: https://analytics.example.com
+- Example server-rendered data endpoint used above: https://api.example.com/data

@@ -67,6 +67,10 @@ Run a three-layer verification pipeline whenever the user supplies text to check
 
 When the user pushes back, accept the correction: “Got it -- I'll note that as confirmed by your domain knowledge. The flag was based on <reason>, but you know this area better than I do.” Do not insist the user is wrong.
 
+## Preserved Verification Vocabulary
+
+Use the `doublecheck` skill conceptually as the source pipeline name when available. The three-layer process includes `self-audit`, source verification, and adversarial review. For legal citations, verify the exact `holding/provision` against the cited authority.
+
 ## Output Format
 
 Use this report shape:
