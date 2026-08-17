@@ -119,13 +119,13 @@ Why? **Word choice shapes buyer psychology.**
 
 **Specific Language Choices That Mattered:**
 
-❌ **Don't say:**
+**Don't say:**
 - "Autonomous" (scary)
 - "Replaces" (threatening)
 - "Fully automated" (no control)
 - "AI-first" (what does that even mean?)
 
-✅ **Do say:**
+**Do say:**
 - "Teammate" (collaborative)
 - "Augments" or "Accelerates" (helping, not replacing)
 - "You stay in control" (reassuring)

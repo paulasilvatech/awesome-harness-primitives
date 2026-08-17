@@ -11,7 +11,7 @@ description: >-
   a clean PR; the bot runs it. Trigger phrases: "address copilot comments", "run a copilot review
   loop", "fix this PR", "iterate on copilot feedback". Repo-agnostic, gh CLI + PowerShell. Full
   autopilot needs repo Triage/Write; external PR authors get single-iteration mode plus manual
-  re-trigger (UI 🔄 or substantive-commit push).
+  re-trigger (UI or substantive-commit push).
 ---
 # Copilot PR Autopilot
 
@@ -62,7 +62,7 @@ The full multi-round autopilot (steps 1 → 9 → 1) needs **Triage or Write** p
 | You are… | What works |
 |---|---|
 | **Repo collaborator with Triage / Write** | Full loop: `01` triggers Copilot, `02` waits, `04`–`08` triage / fix / reply, loop back to `01`. Hands-off. |
-| **External PR author (no write permission)** | `01` will throw a clear actionable error. Use `-SingleIteration` mode: address all current findings in one pass, then either click the UI 🔄 next to Copilot, **or** push a substantive commit (the `synchronize` event auto-triggers Copilot on most repos). Then re-run `02` to verify. |
+| **External PR author (no write permission)** | `01` will throw a clear actionable error. Use `-SingleIteration` mode: address all current findings in one pass, then either click the UI next to Copilot, **or** push a substantive commit (the `synchronize` event auto-triggers Copilot on most repos). Then re-run `02` to verify. |
 
 In single-iteration mode the loop's convergence boolean is `Converged: true` iff `OpenThreadsAwaitingReply == 0` (the agent's side is done). The maintainer-side re-trigger then drives any additional rounds.
 

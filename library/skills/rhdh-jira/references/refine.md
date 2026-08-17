@@ -12,9 +12,9 @@ Before generating the report, determine the refinement context. Ask or infer fro
 
 | Context | Goal | Urgency framing |
 |---------|------|------------------|
-| **Pre-release prep** | Features are ready to start work when the release kicks off | "Ready for a clean start" |
-| **Mid-release hygiene** | In-flight features are on track, no blockers | "On track for delivery" |
-| **Feature freeze triage** | All features must be complete or descoped | "Must close or descope before freeze" |
+| **Pre-release prep ** | Features are ready to start work when the release kicks off | "Ready for a clean start" |
+| **Mid-release hygiene ** | In-flight features are on track, no blockers | "On track for delivery" |
+| **Feature freeze triage ** | All features must be complete or descoped | "Must close or descope before freeze" |
 
 The context affects report tone, Slack messages, and which checks matter most. Pre-release prep cares about sizing + child epics + Refinement transition readiness. Freeze triage cares about completion + blockers + descope candidates.
 
@@ -22,8 +22,8 @@ The context affects report tone, Slack messages, and which checks matter most. P
 
 The caller provides one of:
 
-1. **Issue key(s)** - one or more specific issues to refine
-2. **JQL query** - e.g., `"project = RHIDP AND sprint in openSprints() AND status = New"`
+1. **Issue key(s) ** - one or more specific issues to refine
+2. **JQL query ** - e.g., `"project = RHIDP AND sprint in openSprints() AND status = New"`
 3. **`sprint`** - shorthand for "all issues in the current sprint that need refinement"
 4. **`backlog`** - shorthand for "unrefined backlog issues for my team"
 
@@ -35,11 +35,11 @@ Load `references/workflows.md` for the full exit criteria tables per issue type 
 
 Key definitions used by the checks below:
 
-- **Unrefined** = Story Points empty AND not in a sprint AND status is New or Refinement.
-- **Ready for Planning** = Story Points set AND not in a sprint AND status is Backlog or To Do.
-- **Planned** = Story Points set AND in an open/future sprint AND status is To Do, In Progress, or Review AND assignee set.
-- **DoR** (Definition of Ready) = all exit criteria from entry statuses complete before moving to In Progress.
-- **DoD** (Definition of Done) = all exit criteria for all statuses complete before moving to Closed.
+- **Unrefined ** = Story Points empty AND not in a sprint AND status is New or Refinement.
+- **Ready for Planning ** = Story Points set AND not in a sprint AND status is Backlog or To Do.
+- **Planned ** = Story Points set AND in an open/future sprint AND status is To Do, In Progress, or Review AND assignee set.
+- **DoR ** (Definition of Ready) = all exit criteria from entry statuses complete before moving to In Progress.
+- **DoD ** (Definition of Done) = all exit criteria for all statuses complete before moving to Closed.
 
 ## Refinement Checks
 
@@ -114,8 +114,8 @@ curl -s -u "$AUTH" \
 
 Flag if:
 
-- The most recent comment is a **question** (contains `?`) and was not posted by the current assignee - "Unaddressed question from {author}, {N} days ago."
-- The most recent comment mentions **action items** (contains "TODO", "action item", "follow up", "next step") - "Unaddressed action item from {author}."
+- The most recent comment is a **question ** (contains `?`) and was not posted by the current assignee - "Unaddressed question from {author}, {N} days ago."
+- The most recent comment mentions **action items ** (contains "TODO", "action item", "follow up", "next step") - "Unaddressed action item from {author}."
 - The last comment is older than 14 days on an In Progress issue - "Stale - no activity for {N} days."
 
 ### Check 5 - Relevance and Staleness
@@ -199,25 +199,25 @@ Flag any sprint issue missing these as "not sprint-ready."
 
 Checked: {issues_checked} issues | Findings: {issues_with_findings} issues
 
-### ❌ Missing Fields ({count})
+### Missing Fields ({count})
 
 | # | Issue | Type | Status | Missing |
 |---|-------|------|--------|---------|
 | 1 | [RHIDP-1234](url) | Epic | New | Component, Size |
 
-### 🔄 Possible Duplicates ({count})
+### Possible Duplicates ({count})
 
 | # | Issue | Possibly duplicates | Overlap |
 |---|-------|--------------------|---------|
 | 1 | [RHIDP-1234](url) | [RHIDP-1100](url) | 72% |
 
-### 🔗 Hierarchy Gaps ({count})
+### Hierarchy Gaps ({count})
 
 | # | Issue | Type | Gap |
 |---|-------|------|-----|
 | 1 | [RHIDP-1234](url) | Epic | No parent Feature |
 
-### 💬 Unaddressed Comments ({count})
+### Unaddressed Comments ({count})
 
 | # | Issue | Last comment | By | Days ago |
 |---|-------|--------------|----|----------|
@@ -229,7 +229,7 @@ Checked: {issues_checked} issues | Findings: {issues_with_findings} issues
 |---|-------|--------|-------------|------|
 | 1 | [RHIDP-9012](url) | New | 95 days ago | Still relevant? |
 
-### 🏃 Sprint Not Ready ({count})
+### Sprint Not Ready ({count})
 
 | # | Issue | Missing for sprint |
 |---|-------|--------------------|
@@ -251,7 +251,7 @@ Checked: {issues_checked} issues | Findings: {issues_with_findings} issues
 
 After presenting the report:
 
-Use the standard confirmation flow from SKILL.md (`y/N/edit`). **y** applies auto-fixable changes and prompts for non-auto-fixable. **N** is report only.
+Use the standard confirmation flow from SKILL.md (`y/N/edit`). **y ** applies auto-fixable changes and prompts for non-auto-fixable. ** N ** is report only.
 
 ### Auto-fixable actions
 
@@ -266,7 +266,7 @@ These are non-controversial changes applied without individual prompts:
 - Setting Story Points - needs estimation
 - Linking to parent Feature/Epic - needs selection from candidates
 - Marking as duplicate - destructive, needs confirmation
-- Closing stale issues - needs relevance confirmation. When closing, **always** add a comment documenting the rationale (e.g., "Closing as stale - no activity for 90 days, no longer on the roadmap") and set the resolution field (e.g., `Won't Do`, `Duplicate`, `Done`). This preserves the decision trail for future reference.
+- Closing stale issues - needs relevance confirmation. When closing, **always ** add a comment documenting the rationale (e.g., "Closing as stale - no activity for 90 days, no longer on the roadmap") and set the resolution field (e.g., `Won't Do`, `Duplicate`, `Done`). This preserves the decision trail for future reference.
 - Marking as duplicate - same rule: add a comment linking to the original issue and set resolution to `Duplicate`
 
 For writes, follow the API preference order from SKILL.md. Since refinement uses GraphQL reads (AUTH is already set), prefer REST for writes.
@@ -283,8 +283,8 @@ For writes, follow the API preference order from SKILL.md. Since refinement uses
 
 ## Caveats
 
-1. **Duplicate detection is keyword-based.** It catches obvious duplicates but misses semantically similar issues with different wording. When in doubt, flag as "possibly related" not "duplicate."
-2. **Comment analysis is heuristic.** Question detection (looking for `?`) has false positives (rhetorical questions, URLs with query params). Use as a signal, not a verdict.
-3. **Team field requires REST fallback.** GraphQL cannot reliably read team values from issues. When checking the Team field, make a REST call per issue: `GET /rest/api/3/issue/{key}?fields=customfield_10001`.
-4. **Exit criteria may evolve.** The field requirements are maintained in `references/workflows.md`. If the process changes, update that file.
-5. **Triage is automated separately.** The RHDH Triage Maintainer role is handled by an AI CronJob (`jira_triager_agent.py`) that sets Component, Team, and Priority on new issues. This refinement check complements triage - it validates deeper readiness, not initial routing.
+1. **Duplicate detection is keyword-based. ** It catches obvious duplicates but misses semantically similar issues with different wording. When in doubt, flag as "possibly related" not "duplicate."
+2. **Comment analysis is heuristic. ** Question detection (looking for `?`) has false positives (rhetorical questions, URLs with query params). Use as a signal, not a verdict.
+3. **Team field requires REST fallback. ** GraphQL cannot reliably read team values from issues. When checking the Team field, make a REST call per issue: `GET /rest/api/3/issue/{key}?fields=customfield_10001`.
+4. **Exit criteria may evolve. ** The field requirements are maintained in `references/workflows.md`. If the process changes, update that file.
+5. **Triage is automated separately. ** The RHDH Triage Maintainer role is handled by an AI CronJob (`jira_triager_agent.py`) that sets Component, Team, and Priority on new issues. This refinement check complements triage - it validates deeper readiness, not initial routing.

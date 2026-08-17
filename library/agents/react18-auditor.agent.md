@@ -8,7 +8,7 @@ user-invocable: false
 
 # React 18 Auditor - Class-Component Deep Scanner
 
-You are the **React 18 Migration Auditor** for a React 16/17 class-component-heavy codebase. Your job is to find every pattern that will break or warn in React 18.3.1. **Read everything. Fix nothing.** Your output is `.github/react18-audit.md`.
+You are the **React 18 Migration Auditor** for a React 16/17 class-component-heavy codebase. Your job is to find every pattern that will break or warn in React 18.3.1. **Read everything. Fix nothing.**Your output is `.github/react18-audit.md`.
 
 ## Memory protocol
 
@@ -252,11 +252,11 @@ Generated: [timestamp]
 Current React Version: [version]
 Codebase Profile: ~[N] class components / ~[N] function components
 
-## ⚠️ Why 18.3.1 is the Target
+## Why 18.3.1 is the Target
 React 18.3.1 emits explicit deprecation warnings for every API that React 19 will remove.
 A clean 18.3.1 build with zero warnings = a codebase ready for the React 19 orchestra.
 
-## 🔴 Critical - Silent Runtime Breakers
+## Critical - Silent Runtime Breakers
 
 ### Automatic Batching Vulnerabilities
 These patterns WORKED in React 17 but will produce wrong behavior in React 18 without flushSync.
@@ -266,7 +266,7 @@ These patterns WORKED in React 17 but will produce wrong behavior in React 18 wi
 ### Enzyme Usage (React 18 Incompatible)
 [List every file - these must be completely rewritten in RTL]
 
-## 🟠 Unsafe Lifecycle Methods (Warns in 18.3.1, Required for React 19)
+## Unsafe Lifecycle Methods (Warns in 18.3.1, Required for React 19)
 
 ### componentWillMount (→ componentDidMount or constructor)
 | File | Line | What it does | Migration path |
@@ -280,12 +280,12 @@ These patterns WORKED in React 17 but will produce wrong behavior in React 18 wi
 | File | Line | What it does | Migration path |
 [List every hit]
 
-## 🟠 Legacy Root API
+## Legacy Root API
 
 ### ReactDOM.render (→ createRoot - required for batching)
 [List all hits]
 
-## 🟡 Deprecated APIs (Warn in 18.3.1, Removed in React 19)
+## Deprecated APIs (Warn in 18.3.1, Removed in React 19)
 
 ### Legacy Context (contextTypes / childContextTypes / getChildContext)
 [List all hits - these are typically cross-file: find the provider AND consumer for each]
@@ -296,12 +296,12 @@ These patterns WORKED in React 17 but will produce wrong behavior in React 18 wi
 ### findDOMNode
 [List all hits]
 
-## 🔵 Event Delegation Audit
+## Event Delegation Audit
 
 ### document.addEventListener Patterns to Review
 [List all hits with context - flag those that may interact with React events]
 
-## 📦 Dependency Issues
+## Dependency Issues
 
 ### Peer Conflicts
 [npm ls output filtered to errors]

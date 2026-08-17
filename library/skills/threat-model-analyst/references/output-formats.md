@@ -1,6 +1,6 @@
 # Output Formats — Report File Templates
 
-⛔ **SELF-CORRECT DIRECTIVE:** After writing ANY file using templates from this document, immediately run the Self-Check section at the bottom. Your response to the orchestrator MUST include the filled checklist with ✅/❌ for each item. If ANY item is ❌, fix the file before proceeding to the next step.
+ **SELF-CORRECT DIRECTIVE:** After writing ANY file using templates from this document, immediately run the Self-Check section at the bottom. Your response to the orchestrator MUST include the filled checklist with / for each item. If ANY item is , fix the file before proceeding to the next step.
 
 This file defines the structure and content of every output file produced by the Threat Model Analyst. Each section is self-contained with templates, rules, and validation checklists.
 
@@ -195,11 +195,11 @@ Component `## ` headings become link targets from `3-findings.md`.
 
 ### Template
 
-> **⛔ CRITICAL: The `## Summary` table MUST appear at the TOP of the file, immediately after `## Exploitability Tiers` and BEFORE any individual `## Component` sections. It is a navigation aid — readers need it first. The model consistently moves it to the BOTTOM — that is WRONG. Follow this exact order: `# STRIDE + Abuse Cases — Threat Analysis` → `## Exploitability Tiers` → `## Summary` → `---` → `## Component 1` → `## Component 2` → ...**
+>** CRITICAL: The `## Summary` table MUST appear at the TOP of the file, immediately after `## Exploitability Tiers` and BEFORE any individual `## Component` sections. It is a navigation aid — readers need it first. The model consistently moves it to the BOTTOM — that is WRONG. Follow this exact order: `# STRIDE + Abuse Cases — Threat Analysis` → `## Exploitability Tiers` → `## Summary` → `---` → `## Component 1` → `## Component 2` → ...**
 
-> **⛔ RIGID TIER DEFINITIONS — Apply these EXACTLY. Do NOT use subjective judgment.** This is a skill directive — do NOT copy this line into the output. The tier table below is what goes into the report, WITHOUT this directive line.
+>** RIGID TIER DEFINITIONS — Apply these EXACTLY. Do NOT use subjective judgment.** This is a skill directive — do NOT copy this line into the output. The tier table below is what goes into the report, WITHOUT this directive line.
 
-> **⛔ LEAKED DIRECTIVE CHECK:** The output file MUST NOT contain the text "RIGID TIER DEFINITIONS", "Do NOT use subjective judgment", or any line starting with `⛔`. These are skill instructions, not report content. If you see them in your output, remove them before finalizing.
+>** LEAKED DIRECTIVE CHECK:** The output file MUST NOT contain the text "RIGID TIER DEFINITIONS", "Do NOT use subjective judgment", or any line starting with ``. These are skill instructions, not report content. If you see them in your output, remove them before finalizing.
 
 ```markdown
 # STRIDE + Abuse Cases — Threat Analysis
@@ -215,9 +215,9 @@ Threats are classified into three exploitability tiers based on the prerequisite
 | **Tier 3** | Defense-in-Depth | `Host/OS Access`, `Admin Credentials`, `{Component} Compromise`, `Physical Access`, or MULTIPLE prerequisites joined with `+` | Requires significant prior breach, infrastructure access, or multiple combined prerequisites. |
 ```
 
-> **⛔ COPY THE TIERS TABLE VERBATIM.** The 4th column must be `Assignment Rule` (NOT `Example`, `Description`, `Criteria`, or any other name). The cell values must be the exact text above — do NOT replace them with deployment-specific examples. Do NOT add a "Deployment context affecting tier assignment" paragraph after the table — deployment context belongs in the individual component sections, not in the tier definitions.
+>** COPY THE TIERS TABLE VERBATIM.** The 4th column must be `Assignment Rule` (NOT `Example`, `Description`, `Criteria`, or any other name). The cell values must be the exact text above — do NOT replace them with deployment-specific examples. Do NOT add a "Deployment context affecting tier assignment" paragraph after the table — deployment context belongs in the individual component sections, not in the tier definitions.
 
-> **⛔ STRIDE-A CATEGORY LABELS (MANDATORY — the “A” is “Abuse”, NEVER “Authorization”):**
+>** STRIDE-A CATEGORY LABELS (MANDATORY — the “A” is “Abuse”, NEVER “Authorization”):**
 > The 7 STRIDE-A categories used in ALL tables (Summary, per-component Tier tables, threat-inventory.json) are:
 > **S**poofing | **T**ampering | **R**epudiation | **I**nformation Disclosure | **D**enial of Service | **E**levation of Privilege | **A**buse
 > “Abuse” covers: business logic abuse, workflow manipulation, feature misuse, unintended use of legitimate features.
@@ -238,7 +238,7 @@ Threats are classified into three exploitability tiers based on the prerequisite
 
 ### STRIDE-A Analysis
 
-> **⛔ CATEGORY NAMING: The 7 STRIDE-A categories are: Spoofing, Tampering, Repudiation, Information Disclosure, Denial of Service, Elevation of Privilege, Abuse. The "A" category is ALWAYS "Abuse" — NEVER "Authorization". Authorization issues belong under Elevation of Privilege (E). This applies to N/A justification labels, threat table Category columns, and all prose.**
+>** CATEGORY NAMING: The 7 STRIDE-A categories are: Spoofing, Tampering, Repudiation, Information Disclosure, Denial of Service, Elevation of Privilege, Abuse. The "A" category is ALWAYS "Abuse" — NEVER "Authorization". Authorization issues belong under Elevation of Privilege (E). This applies to N/A justification labels, threat table Category columns, and all prose.**
 
 #### Tier 1 — Direct Exposure (No Prerequisites)
 | ID | Category | Threat | Prerequisites | Affected Flow | Mitigation | Status |
@@ -251,11 +251,11 @@ Threats are classified into three exploitability tiers based on the prerequisite
 | ID | Category | Threat | Prerequisites | Affected Flow | Mitigation | Status |
 ```
 
-**⛔ STRIDE Status Column — Valid Values (must match Coverage table):**
+** STRIDE Status Column — Valid Values (must match Coverage table):**
 The `Status` column in each threat row MUST use exactly one of these values:
-- `Open` — Threat is not mitigated; MUST map to a finding (`✅ Covered` in Coverage table). The finding documents the vulnerability and remediation guidance.
-- `Mitigated` — Threat is mitigated by the engineering team's own code, configuration, or design decisions in THIS repository. Maps to `✅ Mitigated (FIND-XX)` in Coverage table. A finding MUST be created that documents WHAT the team did, WHERE in the code, and HOW it mitigates the threat. This gives credit to the engineering team for security work they've already done.
-- `Platform` — Threat is mitigated by an EXTERNAL platform that is NOT part of the analyzed codebase. See strict definition below. Maps to `🔄 Mitigated by Platform` in Coverage table. NO finding is created — the mitigation is outside this team's control.
+- `Open` — Threat is not mitigated; MUST map to a finding (` Covered` in Coverage table). The finding documents the vulnerability and remediation guidance.
+- `Mitigated` — Threat is mitigated by the engineering team's own code, configuration, or design decisions in THIS repository. Maps to ` Mitigated (FIND-XX)` in Coverage table. A finding MUST be created that documents WHAT the team did, WHERE in the code, and HOW it mitigates the threat. This gives credit to the engineering team for security work they've already done.
+- `Platform` — Threat is mitigated by an EXTERNAL platform that is NOT part of the analyzed codebase. See strict definition below. Maps to ` Mitigated by Platform` in Coverage table. NO finding is created — the mitigation is outside this team's control.
 
 **How to distinguish Mitigated vs Platform:**
 | Question | If YES → | If NO → |
@@ -279,7 +279,7 @@ The `Status` column in each threat row MUST use exactly one of these values:
 - Remediation section: describes what's already implemented + any hardening recommendations
 - This ensures the Coverage table shows the team's security work, not just gaps
 
-**⛔ STRICT DEFINITION OF "PLATFORM" (MANDATORY):**
+** STRICT DEFINITION OF "PLATFORM" (MANDATORY):**
 `Platform` status is ONLY valid when ALL of these conditions are true:
 1. The mitigation is provided by a system **completely outside** the analyzed repository's code
 2. The mitigation is **managed by a different team/organization** (e.g., Azure AD is managed by Microsoft Identity team, not by this repo's team)
@@ -292,29 +292,29 @@ The `Status` column in each threat row MUST use exactly one of these values:
 - TPM hardware security (hardware, not software)
 
 **Examples of things that are NOT "Platform" — they are `Mitigated` (team's work):**
-- ✅ "Auth middleware on endpoints" → `Mitigated` — team wrote the auth code. Create finding documenting it.
-- ✅ "TLS on localhost" → `Mitigated` — team implemented TLS. Create finding documenting the implementation.
-- ✅ "File permissions 0600" → `Mitigated` — team set secure defaults. Create finding documenting the choice.
-- ✅ "Localhost binding" → `Mitigated` — team made architectural security decision. Create finding.
-- ✅ "Input validation" → `Mitigated` — team built defense. Create finding documenting what's validated.
-- ✅ "Operation state machine" → `Mitigated` — team's logic prevents abuse. Create finding.
+-  "Auth middleware on endpoints" → `Mitigated` — team wrote the auth code. Create finding documenting it.
+-  "TLS on localhost" → `Mitigated` — team implemented TLS. Create finding documenting the implementation.
+-  "File permissions 0600" → `Mitigated` — team set secure defaults. Create finding documenting the choice.
+-  "Localhost binding" → `Mitigated` — team made architectural security decision. Create finding.
+-  "Input validation" → `Mitigated` — team built defense. Create finding documenting what's validated.
+-  "Operation state machine" → `Mitigated` — team's logic prevents abuse. Create finding.
 
-**⛔ MAXIMUM PLATFORM RATIO:** If more than 20% of threats are classified as "🔄 Mitigated by Platform", re-examine each. Many should be `Mitigated` (team's code) not `Platform` (external). In a typical application, 5-15% are genuinely platform-mitigated, 20-40% are mitigated by the team's own code, and the rest are `Open` (needing remediation).
+** MAXIMUM PLATFORM RATIO:** If more than 20% of threats are classified as " Mitigated by Platform", re-examine each. Many should be `Mitigated` (team's code) not `Platform` (external). In a typical application, 5-15% are genuinely platform-mitigated, 20-40% are mitigated by the team's own code, and the rest are `Open` (needing remediation).
 
-**⛔ NEVER use these values:**
-- ❌ `Partial` — ambiguous. If partially mitigated, it's `Open` (the remaining gap is the finding)
-- ❌ `N/A` — every threat is applicable if it's in the table
-- ❌ `Accepted` — the tool does not accept risks
-- ❌ `Needs Review` — every threat must be either Covered, Mitigated, or Platform
+** NEVER use these values:**
+-  `Partial` — ambiguous. If partially mitigated, it's `Open` (the remaining gap is the finding)
+-  `N/A` — every threat is applicable if it's in the table
+-  `Accepted` — the tool does not accept risks
+-  `Needs Review` — every threat must be either Covered, Mitigated, or Platform
 
 **Consistency rule:** The STRIDE `Status` column and the Findings Coverage table `Status` MUST agree:
 | STRIDE Status | Coverage Table Status | Meaning |
 |---|---|---|
-| `Open` | `✅ Covered (FIND-XX)` | Finding documents a vulnerability needing remediation |
-| `Mitigated` | `✅ Mitigated (FIND-XX)` | Finding documents an existing control the team built — gives credit for security work |
-| `Platform` | `🔄 Mitigated by Platform` | External platform handles it — no finding needed |
+| `Open` | ` Covered (FIND-XX)` | Finding documents a vulnerability needing remediation |
+| `Mitigated` | ` Mitigated (FIND-XX)` | Finding documents an existing control the team built — gives credit for security work |
+| `Platform` | ` Mitigated by Platform` | External platform handles it — no finding needed |
 
-**⛔ "Accepted Risk" and "Needs Review" are FORBIDDEN.** The tool does NOT have authority to accept risks or defer threats. Every threat maps to either a finding (Covered or Mitigated) or a genuine external platform mitigation. There is no middle ground.
+** "Accepted Risk" and "Needs Review" are FORBIDDEN.** The tool does NOT have authority to accept risks or defer threats. Every threat maps to either a finding (Covered or Mitigated) or a genuine external platform mitigation. There is no middle ground.
 
 ### Arithmetic Verification (MANDATORY)
 
@@ -331,7 +331,7 @@ After writing ALL component tables:
 
 **Purpose:** Prioritized security findings with evidence and remediation.
 
-> **⛔ IMPORTANT: Before writing this file, read [skeleton-findings.md](./skeletons/skeleton-findings.md) and copy the skeleton VERBATIM for each finding. Fill in the `[FILL]` placeholders. This prevents template drift.**
+> ** IMPORTANT: Before writing this file, read [skeleton-findings.md](./skeletons/skeleton-findings.md) and copy the skeleton VERBATIM for each finding. Fill in the `[FILL]` placeholders. This prevents template drift.**
 
 ### Structure Requirements
 
@@ -359,7 +359,7 @@ Sort by severity **within** each tier, then by CVSS descending.
 **Finding ID Numbering — MUST be sequential:**
 - Use `FIND-01`, `FIND-02`, `FIND-03`, ... only. `F-01`, `F01`, or `Finding 1` formats are NOT allowed.
 - IDs MUST appear in order in the document: FIND-01 before FIND-02 before FIND-03, etc.
-- ❌ NEVER have FIND-06 appear before FIND-04 in the document. If reordering findings, renumber ALL IDs to maintain sequential order.
+-  NEVER have FIND-06 appear before FIND-04 in the document. If reordering findings, renumber ALL IDs to maintain sequential order.
 - After final sort, scan the document top-to-bottom: the first finding heading must be FIND-01, the next FIND-02, etc. No gaps, no out-of-order.
 
 ### Finding Attributes (ALL MANDATORY)
@@ -414,7 +414,7 @@ Send an unauthenticated GET request to `/api/v1/resources` — should return 401
 
 ### Related Threats Link Format
 
-> **⛔ CRITICAL: Related Threats MUST be hyperlinks, NOT plain text. The model consistently outputs plain text like `T-02, T-17` — this is WRONG. Each threat ID must link to the specific component section in stride analysis.**
+> ** CRITICAL: Related Threats MUST be hyperlinks, NOT plain text. The model consistently outputs plain text like `T-02, T-17` — this is WRONG. Each threat ID must link to the specific component section in stride analysis.**
 
 - Individual links per threat ID: `[T01.S](2-stride-analysis.md#component-name)`
 - **WRONG**: `T-02, T-17, T-23` (plain text, no links)
@@ -435,25 +435,25 @@ Send an unauthenticated GET request to `/api/v1/resources` — should return 401
 
 | Threat ID | Finding ID | Status |
 |-----------|------------|--------|
-| T01.S | FIND-01 | ✅ Covered |
-| T01.T | FIND-05 | ✅ Mitigated (team implemented TLS) |
-| T02.I | — | 🔄 Mitigated by Platform (Azure AD) |
+| T01.S | FIND-01 | Covered |
+| T01.T | FIND-05 | Mitigated (team implemented TLS) |
+| T02.I | — | Mitigated by Platform (Azure AD) |
 ```
 
 Every threat from `2-stride-analysis.md` must appear in this table. Status is one of:
-- `✅ Covered (FIND-XX)` — finding documents a vulnerability that needs remediation
-- `✅ Mitigated (FIND-XX)` — finding documents an existing control the team built (gives credit for security work done)
-- `🔄 Mitigated by Platform` — external system handles it (only for genuinely external platforms)
+- ` Covered (FIND-XX)` — finding documents a vulnerability that needs remediation
+- ` Mitigated (FIND-XX)` — finding documents an existing control the team built (gives credit for security work done)
+- ` Mitigated by Platform` — external system handles it (only for genuinely external platforms)
 
-**⛔ THIS TABLE IS A FEEDBACK LOOP, NOT DOCUMENTATION:**
+** THIS TABLE IS A FEEDBACK LOOP, NOT DOCUMENTATION:**
 The purpose of this table is to force you to check your work. After filling it out:
-1. If ANY threat has a `—` dash in the Finding ID column with status other than `🔄 Mitigated by Platform` → **you missed a finding. Go back and create one.**
+1. If ANY threat has a `—` dash in the Finding ID column with status other than ` Mitigated by Platform` → **you missed a finding. Go back and create one.**
 2. If Platform count > 20% of total threats → **you are overusing Platform as an escape hatch. Re-examine.**
-3. If any threat is listed as `⚠️ Accepted Risk` or `⚠️ Needs Review` → **VIOLATION. Create a finding or verify it's genuinely Platform.**
+3. If any threat is listed as ` Accepted Risk` or ` Needs Review` → **VIOLATION. Create a finding or verify it's genuinely Platform.**
 
-The table should drive you to 100% coverage: every threat maps to either a finding (`✅ Covered`) or a legitimate external platform mitigation (`🔄 Mitigated by Platform`). There is no third option.
+The table should drive you to 100% coverage: every threat maps to either a finding (` Covered`) or a legitimate external platform mitigation (` Mitigated by Platform`). There is no third option.
 
-**⛔ FINDING GENERATION RULE:**
+** FINDING GENERATION RULE:**
 If a threat in `2-stride-analysis.md` has a non-empty `Mitigation` column, it MUST become a finding. The mitigation text provides the remediation — use it. The only exception is threats genuinely mitigated by an EXTERNAL platform (Azure AD, K8s RBAC, TPM hardware) that this code cannot disable.
 
 ---
@@ -462,7 +462,7 @@ If a threat in `2-stride-analysis.md` has a non-empty `Mitigation` column, it MU
 
 **Purpose:** Executive summary, risk rating, action plan, and metadata. The "front page" of the report.
 
-> **⛔ IMPORTANT: Before writing this file, read [skeleton-assessment.md](./skeletons/skeleton-assessment.md) and copy the skeleton VERBATIM. Fill in the `[FILL]` placeholders. This prevents template drift.**
+> ** IMPORTANT: Before writing this file, read [skeleton-assessment.md](./skeletons/skeleton-assessment.md) and copy the skeleton VERBATIM. Fill in the `[FILL]` placeholders. This prevents template drift.**
 
 ### Section Order (MANDATORY — ALL 7 sections REQUIRED, do NOT skip any)
 
@@ -474,7 +474,7 @@ If a threat in `2-stride-analysis.md` has a non-empty `Mitigation` column, it MU
 6. **Report Metadata** (REQUIRED) — Model, timestamps, duration, git info
 7. **Classification Reference** (REQUIRED) — MUST be the last section. Static table copied from skeleton.
 
-⚠️ **Enforcement:** If a section has no data, include it with empty tables or "N/A" notes — NEVER omit the section entirely. The agent in previous iterations skipped sections 1, 4, 5, and 6 entirely. ALL SEVEN must be present.
+ **Enforcement:** If a section has no data, include it with empty tables or "N/A" notes — NEVER omit the section entirely. The agent in previous iterations skipped sections 1, 4, 5, and 6 entirely. ALL SEVEN must be present.
 
 ### Report Files Template
 
@@ -494,11 +494,11 @@ The Report Files table MUST list `0-assessment.md` (this file) as the FIRST row,
 | [3-findings.md](3-findings.md) | Prioritized security findings with remediation |
 ```
 
-⚠️ **`0-assessment.md` MUST be the first row.** The model consistently lists `0.1-architecture.md` first — that is WRONG. This file IS the front page of the report and lists itself first.
+ **`0-assessment.md` MUST be the first row.** The model consistently lists `0.1-architecture.md` first — that is WRONG. This file IS the front page of the report and lists itself first.
 
 ### Risk Rating
 
-The heading must be plain text with NO emojis: `### Risk Rating: Elevated`, NOT `### Risk Rating: 🟠 Elevated`
+The heading must be plain text with NO emojis: `### Risk Rating: Elevated`, NOT `### Risk Rating:  Elevated`
 
 ### Threat Count Context Paragraph
 
@@ -510,27 +510,27 @@ Include at end of Executive Summary:
 
 ### Action Summary Template
 
-> **⛔ FIXED PRIORITY MAPPING — The Priority column values are DETERMINISTIC, not judgment-based:**
+> ** FIXED PRIORITY MAPPING — The Priority column values are DETERMINISTIC, not judgment-based:**
 > | Tier | Priority | Always |
 > |------|----------|--------|
-> | Tier 1 | 🔴 Critical Risk | ALWAYS — regardless of threat/finding count |
-> | Tier 2 | 🟠 Elevated Risk | ALWAYS — regardless of threat/finding count |
-> | Tier 3 | 🟡 Moderate Risk | ALWAYS — regardless of threat/finding count |
+> | Tier 1 |  Critical Risk | ALWAYS — regardless of threat/finding count |
+> | Tier 2 |  Elevated Risk | ALWAYS — regardless of threat/finding count |
+> | Tier 3 |  Moderate Risk | ALWAYS — regardless of threat/finding count |
 >
-> **NEVER change the priority based on how many threats or findings exist in that tier.** Even if Tier 1 has 0 threats and 0 findings, the priority is still 🔴 Critical Risk — because IF a Tier 1 threat existed, it would be critical. The priority reflects the tier's inherent severity, not the count. A report with Tier 1 = "🟢 Low Risk" is WRONG and must be fixed.
+> **NEVER change the priority based on how many threats or findings exist in that tier.** Even if Tier 1 has 0 threats and 0 findings, the priority is still  Critical Risk — because IF a Tier 1 threat existed, it would be critical. The priority reflects the tier's inherent severity, not the count. A report with Tier 1 = " Low Risk" is WRONG and must be fixed.
 
 ```markdown
 ## Action Summary
 
 | Tier | Description | Threats | Findings | Priority |
 |------|-------------|---------|----------|----------|
-| Tier 1 | Directly exploitable | 5 | 3 | 🔴 Critical Risk |
-| Tier 2 | Requires authenticated access | 8 | 4 | 🟠 Elevated Risk |
-| Tier 3 | Requires prior compromise | 12 | 5 | 🟡 Moderate Risk |
+| Tier 1 | Directly exploitable | 5 | 3 | Critical Risk |
+| Tier 2 | Requires authenticated access | 8 | 4 | Elevated Risk |
+| Tier 3 | Requires prior compromise | 12 | 5 | Moderate Risk |
 | **Total** | | **25** | **12** | |
 ```
 
-> **⛔ EXACTLY 4 ROWS: The Action Summary table MUST have exactly 4 data rows: Tier 1, Tier 2, Tier 3, and Total. Do NOT add rows for "Mitigated", "Platform", "Fixed", "Accepted", or any other status. Mitigated threats are distributed across their respective tiers — they are NOT a separate tier. If you find yourself adding a "Mitigated" row, STOP and remove it.**
+> ** EXACTLY 4 ROWS: The Action Summary table MUST have exactly 4 data rows: Tier 1, Tier 2, Tier 3, and Total. Do NOT add rows for "Mitigated", "Platform", "Fixed", "Accepted", or any other status. Mitigated threats are distributed across their respective tiers — they are NOT a separate tier. If you find yourself adding a "Mitigated" row, STOP and remove it.**
 
 ```markdown
 
@@ -541,7 +541,7 @@ Include at end of Executive Summary:
 | FIND-XX | [title] | [reason] |
 ```
 
-⚠️ **Quick Wins is a REQUIRED subsection.** The `### Quick Wins` heading and table MUST appear after the tier summary table inside Action Summary. If no low-effort findings exist, write: `### Quick Wins\n\nNo low-effort findings identified. All findings require Medium or High effort.`
+ **Quick Wins is a REQUIRED subsection.** The `### Quick Wins` heading and table MUST appear after the tier summary table inside Action Summary. If no low-effort findings exist, write: `### Quick Wins\n\nNo low-effort findings identified. All findings require Medium or High effort.`
 
 **Processing Rules for Action Summary:**
 1. Populate the tier table with actual counts from `3-findings.md` (findings per tier) and `2-stride-analysis.md` (threats per tier from T1/T2/T3 columns in summary table)
@@ -551,7 +551,7 @@ Include at end of Executive Summary:
 5. Verify: Findings column sums must equal total findings count in `3-findings.md`
 6. Verify: Threats column sums must equal total threats count in `2-stride-analysis.md` summary table
 
-### ⛔ PROHIBITED Content in Action Summary and All Output Files
+###  PROHIBITED Content in Action Summary and All Output Files
 
 **NEVER generate ANY of the following:**
 - `### Priority Remediation by Phase` or any phase-based remediation roadmap
@@ -565,7 +565,7 @@ Include at end of Executive Summary:
 
 ### Analysis Context & Assumptions Template
 
-⚠️ **This ENTIRE section is REQUIRED.** Previous iterations skipped it entirely. Include ALL sub-sections below, even if tables are empty.
+ **This ENTIRE section is REQUIRED.** Previous iterations skipped it entirely. Include ALL sub-sections below, even if tables are empty.
 
 ````markdown
 ## Analysis Context & Assumptions
@@ -605,7 +605,7 @@ Include at end of Executive Summary:
 
 ### References Consulted Template
 
-> **⛔ CRITICAL: This section MUST have TWO subsections with THREE-column tables including full URLs. Do NOT flatten into a simple 2-column `| Reference | Usage |` table. The model ALWAYS tries to simplify this — do NOT simplify it.**
+> ** CRITICAL: This section MUST have TWO subsections with THREE-column tables including full URLs. Do NOT flatten into a simple 2-column `| Reference | Usage |` table. The model ALWAYS tries to simplify this — do NOT simplify it.**
 
 ```markdown
 ## References Consulted
@@ -635,7 +635,7 @@ Include at end of Executive Summary:
 
 ### Report Metadata Template
 
-> **⛔ CRITICAL: ALL fields below are MANDATORY. Do NOT skip Model, Analysis Started, Analysis Completed, or Duration. The previous run omitted these — that is a critical failure. Run `Get-Date` at start and end to compute Duration.**
+> ** CRITICAL: ALL fields below are MANDATORY. Do NOT skip Model, Analysis Started, Analysis Completed, or Duration. The previous run omitted these — that is a critical failure. Run `Get-Date` at start and end to compute Duration.**
 
 ```markdown
 ## Report Metadata
@@ -686,30 +686,30 @@ Before writing 0-assessment.md:
 
 These are the most observed deviations. Check after writing each file:
 
-1. ❌ Organizing by severity → ✅ Organize by **Exploitability Tier**
-2. ❌ Flat STRIDE tables → ✅ Split into Tier 1/2/3 sub-sections per component
-3. ❌ Missing `Exploitability Tier` and `Remediation Effort` → ✅ MANDATORY on every finding
-4. ❌ STRIDE summary missing T1/T2/T3 columns → ✅ Include T1|T2|T3 columns
-5. ❌ Wrapping `.md` in ` ```markdown ` code fences → ✅ Start with `# Heading` on line 1. The `create_file` tool writes raw content — fences become literal text in the file.
-6. ❌ Wrapping `.mmd` in ` ```plaintext ` or ` ```mermaid ` → ✅ Start with `%%{init:` on line 1. The `.mmd` file is raw Mermaid source.
-7. ❌ Missing Action Summary → ✅ Section MUST be titled exactly `## Action Summary`. MUST include `### Quick Wins` subsection with table of Tier 1 low-effort findings.
-8. ❌ Missing threat count context paragraph → ✅ Include `> **Note on threat counts:**` blockquote in Executive Summary
-9. ❌ Omitting empty tier sections → ✅ Always include all three tiers per component
-10. ❌ Adding separate `### Key Recommendations` or `### Top Recommendations` or `### Priority Remediation Roadmap` → ✅ Action Summary IS the recommendations — no other name.
-11. ❌ Drawing sidecars as separate nodes → ✅ See `diagram-conventions.md` Rule 1
-12. ❌ Missing CVSS 4.0 vector string → ✅ Every finding MUST have both score AND full vector (e.g., `CVSS:4.0/AV:N/AC:L/...`)
-13. ❌ Missing CWE or OWASP on findings → ✅ MANDATORY on every finding
-14. ❌ Using OWASP `:2021` suffix → ✅ ALWAYS use `:2025` (e.g., `A01:2025 – Broken Access Control`). The 2025 edition is current.
-15. ❌ Missing Threat Coverage Verification table → ✅ Required at end of `3-findings.md`
-16. ❌ Architecture component not in STRIDE analysis → ✅ Every component in 0.1-architecture.md must have a STRIDE section
-17. ❌ Missing sequence diagrams for top scenarios → ✅ First 3 scenarios in 0.1-architecture.md MUST have Mermaid sequence diagrams
-18. ❌ Missing Needs Verification section in 0-assessment.md → ✅ Include under Analysis Context & Assumptions
-19. ❌ Missing `## Analysis Context & Assumptions` section entirely → ✅ REQUIRED. Previous iterations skipped this section. Must include Scope, Needs Verification, and Finding Overrides sub-tables.
-20. ❌ Missing `### Quick Wins` subsection → ✅ REQUIRED under Action Summary. List Tier 1 low-effort findings; if none, include heading with note.
-21. ❌ Skipping `## Report Files`, `## References Consulted`, or `## Report Metadata` → ✅ ALL 7 sections in 0-assessment.md are MANDATORY. Never omit any.
-22. ❌ Finding IDs out of order (FIND-06 before FIND-04) → ✅ Finding IDs MUST be sequential top-to-bottom: FIND-01, FIND-02, FIND-03, ... Renumber after sorting.
-23. ❌ CWE without hyperlink → ✅ CWE MUST include hyperlink: `[CWE-306](https://cwe.mitre.org/data/definitions/306.html): Missing Authentication for Critical Function`
-24. ❌ Time estimates or scheduling in output → ✅ NEVER generate `~1 hour`, `Sprint 1-2`, `Phase 1 — Immediate`, `(hours)`, or any timeline/duration in ANY output file. The report says WHAT to fix, not WHEN.
+1.  Organizing by severity →  Organize by **Exploitability Tier**
+2.  Flat STRIDE tables →  Split into Tier 1/2/3 sub-sections per component
+3.  Missing `Exploitability Tier` and `Remediation Effort` →  MANDATORY on every finding
+4.  STRIDE summary missing T1/T2/T3 columns →  Include T1|T2|T3 columns
+5.  Wrapping `.md` in ` ```markdown ` code fences →  Start with `# Heading` on line 1. The `create_file` tool writes raw content — fences become literal text in the file.
+6.  Wrapping `.mmd` in ` ```plaintext ` or ` ```mermaid ` →  Start with `%%{init:` on line 1. The `.mmd` file is raw Mermaid source.
+7.  Missing Action Summary →  Section MUST be titled exactly `## Action Summary`. MUST include `### Quick Wins` subsection with table of Tier 1 low-effort findings.
+8.  Missing threat count context paragraph →  Include `> **Note on threat counts:**` blockquote in Executive Summary
+9.  Omitting empty tier sections →  Always include all three tiers per component
+10.  Adding separate `### Key Recommendations` or `### Top Recommendations` or `### Priority Remediation Roadmap` →  Action Summary IS the recommendations — no other name.
+11.  Drawing sidecars as separate nodes →  See `diagram-conventions.md` Rule 1
+12.  Missing CVSS 4.0 vector string →  Every finding MUST have both score AND full vector (e.g., `CVSS:4.0/AV:N/AC:L/...`)
+13.  Missing CWE or OWASP on findings →  MANDATORY on every finding
+14.  Using OWASP `:2021` suffix →  ALWAYS use `:2025` (e.g., `A01:2025 – Broken Access Control`). The 2025 edition is current.
+15.  Missing Threat Coverage Verification table →  Required at end of `3-findings.md`
+16.  Architecture component not in STRIDE analysis →  Every component in 0.1-architecture.md must have a STRIDE section
+17.  Missing sequence diagrams for top scenarios →  First 3 scenarios in 0.1-architecture.md MUST have Mermaid sequence diagrams
+18.  Missing Needs Verification section in 0-assessment.md →  Include under Analysis Context & Assumptions
+19.  Missing `## Analysis Context & Assumptions` section entirely →  REQUIRED. Previous iterations skipped this section. Must include Scope, Needs Verification, and Finding Overrides sub-tables.
+20.  Missing `### Quick Wins` subsection →  REQUIRED under Action Summary. List Tier 1 low-effort findings; if none, include heading with note.
+21.  Skipping `## Report Files`, `## References Consulted`, or `## Report Metadata` →  ALL 7 sections in 0-assessment.md are MANDATORY. Never omit any.
+22.  Finding IDs out of order (FIND-06 before FIND-04) →  Finding IDs MUST be sequential top-to-bottom: FIND-01, FIND-02, FIND-03, ... Renumber after sorting.
+23.  CWE without hyperlink →  CWE MUST include hyperlink: `[CWE-306](https://cwe.mitre.org/data/definitions/306.html): Missing Authentication for Critical Function`
+24.  Time estimates or scheduling in output →  NEVER generate `~1 hour`, `Sprint 1-2`, `Phase 1 — Immediate`, `(hours)`, or any timeline/duration in ANY output file. The report says WHAT to fix, not WHEN.
 
 ---
 
@@ -844,7 +844,7 @@ This file enables automated comparison between two threat model runs.
 }
 ```
 
-> **⛔ stride_category MUST be a SINGLE LETTER:** `S`, `T`, `R`, `I`, `D`, `E`, or `A`. NEVER use full names like `"Spoofing"` or `"Denial of Service"`. The heatmap computation and comparison matching depend on single-letter codes. If you write `"stride_category": "Denial of Service"` instead of `"stride_category": "D"`, the heatmap will show all zeros for STRIDE columns while tier columns have correct values — this is a critical data integrity bug.
+> ** stride_category MUST be a SINGLE LETTER:** `S`, `T`, `R`, `I`, `D`, `E`, or `A`. NEVER use full names like `"Spoofing"` or `"Denial of Service"`. The heatmap computation and comparison matching depend on single-letter codes. If you write `"stride_category": "Denial of Service"` instead of `"stride_category": "D"`, the heatmap will show all zeros for STRIDE columns while tier columns have correct values — this is a critical data integrity bug.
 
 ### Incremental Analysis Extensions
 
@@ -990,7 +990,7 @@ Use these rules so repeated runs on unchanged code produce comparable inventorie
 9. Populate `aliases`, `boundary_kind`/`kind`, `fingerprint`, and `contains_fingerprint` for deterministic matching
 10. If a component has multiple observed names in the same run, keep one canonical `id` and store all alternates in `aliases`
 
-> **⚠️ CRITICAL — Array completeness:**
+> ** CRITICAL — Array completeness:**
 > The `threats` array MUST contain one entry for every threat listed in `2-stride-analysis.md`.
 > The `findings` array MUST contain one entry for every finding in `3-findings.md`.
 > The `components` array MUST contain one entry for every component in the Element Table.
@@ -1002,7 +1002,7 @@ Use these rules so repeated runs on unchanged code produce comparable inventorie
 
 ## Self-Check — Run After Writing Each File
 
-⛔ **MANDATORY:** After writing each file, verify these checks and report results. Fix any ❌ before proceeding.
+ **MANDATORY:** After writing each file, verify these checks and report results. Fix any  before proceeding.
 
 ### After `2-stride-analysis.md`:
 - [ ] Summary table appears BEFORE individual component sections
@@ -1059,4 +1059,4 @@ All reports MUST use these exact values. Do NOT abbreviate, substitute, or inven
 - [ ] Deployment pattern documented (K8s operator vs standalone)
 - [ ] All metadata values in backticks
 
-**Also verify (applies to ALL files):** No leaked directives (⛔, RIGID, NON-NEGOTIABLE in output), no time estimates, no nested output folders. See `verification-checklist.md` Phase 0 for the full common deviation list.
+**Also verify (applies to ALL files):** No leaked directives (, RIGID, NON-NEGOTIABLE in output), no time estimates, no nested output folders. See `verification-checklist.md` Phase 0 for the full common deviation list.

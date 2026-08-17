@@ -280,9 +280,9 @@ flowchart TD
 
 | Capability | Description | Required |
 |------------|-------------|----------|
-| Web Page Navigation | Access URLs, page transitions | ✅ |
-| Screenshot Capture | Page image capture | ✅ |
-| Image Analysis | Visual issue detection | ✅ |
+| Web Page Navigation | Access URLs, page transitions | Yes |
+| Screenshot Capture | Page image capture | Yes |
+| Image Analysis | Visual issue detection | Yes |
 | DOM Retrieval | Page structure retrieval | Recommended |
 | File Read/Write | Source code reading and editing | Required for fixes |
 | Code Search | Code search within project | Required for fixes |
@@ -334,18 +334,18 @@ The same workflow can be implemented with these tools. As long as they provide t
 
 ### DO (Recommended)
 
-- ✅ Always save screenshots before making fixes
-- ✅ Fix one issue at a time and verify each
-- ✅ Follow the project's existing code style
-- ✅ Confirm with user before major changes
-- ✅ Document fix details thoroughly
+- Always save screenshots before making fixes
+- Fix one issue at a time and verify each
+- Follow the project's existing code style
+- Confirm with user before major changes
+- Document fix details thoroughly
 
 ### DON'T (Not Recommended)
 
-- ❌ Large-scale refactoring without confirmation
-- ❌ Ignoring design systems or brand guidelines
-- ❌ Fixes that ignore performance
-- ❌ Fixing multiple issues at once (difficult to verify)
+- Large-scale refactoring without confirmation
+- Ignoring design systems or brand guidelines
+- Fixes that ignore performance
+- Fixing multiple issues at once (difficult to verify)
 
 ---
 

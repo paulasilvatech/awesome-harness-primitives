@@ -5,11 +5,11 @@ description: 'Preview guidance for building agentic Python workflows that use Da
 
 # Dataverse SDK for Python - Agentic Workflows Guide
 
-## ⚠️ PREVIEW FEATURE NOTICE
+## PREVIEW FEATURE NOTICE
 
-**Status**: This feature is in **Public Preview** as of December 2025  
-**Availability**: General Availability (GA) date TBD  
-**Documentation**: Complete implementation details forthcoming  
+**Status**: This feature is in **Public Preview** as of December 2025
+**Availability**: General Availability (GA) date TBD
+**Documentation**: Complete implementation details forthcoming
 
 This guide covers the conceptual framework and planned capabilities for building agentic workflows with the Dataverse SDK for Python. Specific APIs and implementations may change before general availability.
 
@@ -47,21 +47,21 @@ The SDK is strategically positioned to support:
 # Conceptual pattern - specific APIs pending GA
 class DataQualityAgent:
     """Autonomous agent that monitors and improves data quality."""
-    
+
     def __init__(self, client):
         self.client = client
-    
+
     async def evaluate_data_quality(self, table_name):
         """Evaluate data quality metrics for a table."""
         records = await self.client.get(table_name)
-        
+
         metrics = {
             'total_records': len(records),
             'null_values': sum(1 for r in records if None in r.values()),
             'duplicate_records': await self._find_duplicates(table_name)
         }
         return metrics
-    
+
     async def auto_remediate(self, issues):
         """Automatically fix identified data quality issues."""
         # Agent autonomously decides on remediation actions
@@ -69,11 +69,11 @@ class DataQualityAgent:
 
 class DataEnrichmentAgent:
     """Autonomous agent that enriches data from external sources."""
-    
+
     async def enrich_accounts(self):
         """Enrich account data with market information."""
         accounts = await self.client.get("account")
-        
+
         for account in accounts:
             enrichment = await self._lookup_market_data(account['name'])
             await self.client.update("account", account['id'], enrichment)
@@ -84,22 +84,22 @@ class DataEnrichmentAgent:
 # Conceptual pattern - specific APIs pending GA
 class DataPipeline:
     """Orchestrates multiple agents working together."""
-    
+
     def __init__(self, client):
         self.quality_agent = DataQualityAgent(client)
         self.enrichment_agent = DataEnrichmentAgent(client)
         self.sync_agent = SyncAgent(client)
-    
+
     async def run(self, table_name):
         """Execute multi-agent workflow."""
         # Step 1: Quality check
         print("Running quality checks...")
         issues = await self.quality_agent.evaluate_data_quality(table_name)
-        
+
         # Step 2: Enrich data
         print("Enriching data...")
         await self.enrichment_agent.enrich_accounts()
-        
+
         # Step 3: Sync to external systems
         print("Syncing to external systems...")
         await self.sync_agent.sync_to_external_db(table_name)
@@ -172,7 +172,7 @@ await server.handle_tool_call("query_accounts", {
 # Conceptual pattern - specific APIs pending GA
 class DataValidationAgent:
     """Validates data before downstream agents process it."""
-    
+
     async def validate_and_notify(self, data):
         """Validate data and notify other agents."""
         if await self._is_valid(data):
@@ -183,10 +183,10 @@ class DataValidationAgent:
 
 class DataProcessingAgent:
     """Waits for valid data from validation agent."""
-    
+
     async def __init__(self):
         self.subscribe("data_validated", self.process_data)
-    
+
     async def process_data(self, data):
         """Process already-validated data."""
         # Agent can safely assume data is valid
@@ -207,51 +207,51 @@ import json
 
 class DataQualityAgent:
     """Monitor and report on data quality."""
-    
+
     def __init__(self, org_url, credential):
         self.client = DataverseClient(org_url, credential)
-    
+
     def analyze_completeness(self, table_name, required_fields):
         """Analyze field completeness."""
         records = self.client.get(
             table_name,
             select=required_fields
         )
-        
+
         missing_by_field = {field: 0 for field in required_fields}
         total = 0
-        
+
         for page in records:
             for record in page:
                 total += 1
                 for field in required_fields:
                     if field not in record or record[field] is None:
                         missing_by_field[field] += 1
-        
+
         # Calculate completeness percentage
         completeness = {
-            field: ((total - count) / total * 100) 
+            field: ((total - count) / total * 100)
             for field, count in missing_by_field.items()
         }
-        
+
         return {
             'table': table_name,
             'total_records': total,
             'completeness': completeness,
             'missing_counts': missing_by_field
         }
-    
+
     def detect_duplicates(self, table_name, key_fields):
         """Detect potential duplicate records."""
         records = self.client.get(table_name, select=key_fields)
-        
+
         all_records = []
         for page in records:
             all_records.extend(page)
-        
+
         seen = {}
         duplicates = []
-        
+
         for record in all_records:
             key = tuple(record.get(f) for f in key_fields)
             if key in seen:
@@ -262,25 +262,25 @@ class DataQualityAgent:
                 })
             else:
                 seen[key] = record.get('id')
-        
+
         return {
             'table': table_name,
             'duplicate_count': len(duplicates),
             'duplicates': duplicates
         }
-    
+
     def generate_quality_report(self, table_name):
         """Generate comprehensive quality report."""
         completeness = self.analyze_completeness(
             table_name,
             ['name', 'telephone1', 'emailaddress1']
         )
-        
+
         duplicates = self.detect_duplicates(
             table_name,
             ['name', 'emailaddress1']
         )
-        
+
         return {
             'timestamp': pd.Timestamp.now().isoformat(),
             'table': table_name,
@@ -304,37 +304,37 @@ import pandas as pd
 
 class FormPredictionAgent:
     """Predict and autofill form values."""
-    
+
     def __init__(self, org_url, credential):
         self.client = DataverseClient(org_url, credential)
         self.model = None
-    
+
     def train_on_historical_data(self, table_name, features, target):
         """Train prediction model on historical data."""
         # Collect training data
         records = []
         for page in self.client.get(table_name, select=features + [target]):
             records.extend(page)
-        
+
         df = pd.DataFrame(records)
-        
+
         # Train model
         X = df[features].fillna(0)
         y = df[target]
-        
+
         self.model = RandomForestRegressor()
         self.model.fit(X, y)
-        
+
         return self.model.score(X, y)
-    
+
     def predict_field_values(self, table_name, record_id, features_data):
         """Predict missing field values."""
         if self.model is None:
             raise ValueError("Model not trained. Call train_on_historical_data first.")
-        
+
         # Predict
         prediction = self.model.predict([features_data])[0]
-        
+
         # Return prediction with confidence
         return {
             'record_id': record_id,
@@ -354,11 +354,11 @@ from openai import OpenAI
 
 class DataInsightAgent:
     """Use LLM to generate insights from Dataverse data."""
-    
+
     def __init__(self, org_url, credential, openai_key):
         self.client = DataverseClient(org_url, credential)
         self.llm = OpenAI(api_key=openai_key)
-    
+
     def analyze_with_llm(self, table_name, sample_size=100):
         """Analyze data using LLM."""
         # Get sample data
@@ -369,24 +369,24 @@ class DataInsightAgent:
             count += len(page)
             if count >= sample_size:
                 break
-        
+
         # Create summary for LLM
         summary = f"""
         Table: {table_name}
         Total records sampled: {len(records)}
-        
+
         Sample data:
         {json.dumps(records[:5], indent=2, default=str)}
-        
+
         Provide insights about this data.
         """
-        
+
         # Ask LLM
         response = self.llm.chat.completions.create(
             model="gpt-4",
             messages=[{"role": "user", "content": summary}]
         )
-        
+
         return response.choices[0].message.content
 ```
 
@@ -453,7 +453,7 @@ governance.enforce_all_policies()
 
 While full agentic features are in preview, current SDK capabilities already support agent building:
 
-### ✅ Available Now
+### Available Now
 - **CRUD Operations** - Create, retrieve, update, delete data
 - **Bulk Operations** - Process large datasets efficiently
 - **Query Capabilities** - OData and SQL for flexible data retrieval
@@ -462,7 +462,7 @@ While full agentic features are in preview, current SDK capabilities already sup
 - **Pagination** - Handle large result sets
 - **File Upload** - Manage document attachments
 
-### 🔜 Coming in GA
+### Coming in GA
 - Full MCP integration
 - A2A collaboration primitives
 - Enhanced authentication/impersonation
@@ -481,34 +481,34 @@ import json
 
 class SimpleDataAgent:
     """Your first Dataverse agent."""
-    
+
     def __init__(self, org_url):
         credential = InteractiveBrowserCredential()
         self.client = DataverseClient(org_url, credential)
-    
+
     def check_health(self, table_name):
         """Agent function: Check table health."""
         try:
             tables = self.client.list_tables()
             matching = [t for t in tables if t['LogicalName'] == table_name]
-            
+
             if not matching:
                 return {"status": "error", "message": f"Table {table_name} not found"}
-            
+
             # Get record count
             records = []
             for page in self.client.get(table_name):
                 records.extend(page)
                 if len(records) > 1000:
                     break
-            
+
             return {
                 "status": "healthy",
                 "table": table_name,
                 "record_count": len(records),
                 "timestamp": pd.Timestamp.now().isoformat()
             }
-        
+
         except Exception as e:
             return {"status": "error", "message": str(e)}
 
@@ -540,19 +540,19 @@ print(json.dumps(health, indent=2))
 
 ## 12. FAQ: Agentic Workflows
 
-**Q: Can I use agents today with the current SDK?**  
+**Q: Can I use agents today with the current SDK?**
 A: Yes! Use the current capabilities to build agent-like systems. Full MCP/A2A support coming in GA.
 
-**Q: What's the difference between current SDK and agentic features?**  
+**Q: What's the difference between current SDK and agentic features?**
 A: Current: Synchronous CRUD; Agentic: Async, autonomous decision-making, agent collaboration.
 
-**Q: Will there be breaking changes from preview to GA?**  
+**Q: Will there be breaking changes from preview to GA?**
 A: Possibly. This is a preview feature; expect API refinements before general availability.
 
-**Q: How do I prepare for agentic workflows today?**  
+**Q: How do I prepare for agentic workflows today?**
 A: Build agents using current CRUD operations, design with async patterns in mind, use MCP specs for future compatibility.
 
-**Q: Is there a cost difference for agentic features?**  
+**Q: Is there a cost difference for agentic features?**
 A: Unknown at this time. Check release notes closer to GA.
 
 ---

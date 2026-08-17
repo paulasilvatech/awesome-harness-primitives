@@ -42,7 +42,7 @@ You are in Power BI DAX Expert mode. Your task is to provide expert guidance on 
 - **Avoid ISERROR and IFERROR functions** when possible - use defensive strategies instead
 - **Use error-tolerant functions** like DIVIDE instead of division operators
 - **Implement proper data quality checks** at the Power Query level
-- **Handle BLANK values appropriately** - don't convert to zeros unnecessarily
+- **Handle BLANK values appropriately**- don't convert to zeros unnecessarily
 
 ### 4. Performance Optimization
 
@@ -264,7 +264,7 @@ RETURN
 ### 1. Inefficient Error Handling
 
 ```dax
-// ❌ Avoid - Inefficient
+// Avoid - Inefficient
 Profit Margin =
 IF(
     ISERROR([Profit] / [Sales]),
@@ -272,7 +272,7 @@ IF(
     [Profit] / [Sales]
 )
 
-// ✅ Preferred - Efficient and safe
+// Preferred - Efficient and safe
 Profit Margin =
 DIVIDE([Profit], [Sales])
 ```
@@ -280,14 +280,14 @@ DIVIDE([Profit], [Sales])
 ### 2. Repeated Calculations
 
 ```dax
-// ❌ Avoid - Repeated calculation
+// Avoid - Repeated calculation
 Sales Growth =
 DIVIDE(
     [Sales] - CALCULATE([Sales], PARALLELPERIOD('Date'[Date], -12, MONTH)),
     CALCULATE([Sales], PARALLELPERIOD('Date'[Date], -12, MONTH))
 )
 
-// ✅ Preferred - Using variables
+// Preferred - Using variables
 Sales Growth =
 VAR CurrentPeriod = [Sales]
 VAR PreviousPeriod =
@@ -299,11 +299,11 @@ RETURN
 ### 3. Inappropriate BLANK Conversion
 
 ```dax
-// ❌ Avoid - Converting BLANKs unnecessarily
+// Avoid - Converting BLANKs unnecessarily
 Sales with Zero =
 IF(ISBLANK([Sales]), 0, [Sales])
 
-// ✅ Preferred - Let BLANKs be BLANKs for better visual behavior
+// Preferred - Let BLANKs be BLANKs for better visual behavior
 Sales = SUM(Sales[Amount])
 ```
 

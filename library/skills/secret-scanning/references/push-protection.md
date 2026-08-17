@@ -10,10 +10,10 @@ Push protection scans for secrets during the push process and blocks pushes cont
 
 | Surface | Scanned |
 |---|---|
-| Command line pushes | ✅ |
-| GitHub UI commits | ✅ |
-| File uploads to repo | ✅ |
-| REST API content creation requests | ✅ |
+| Command line pushes | Yes |
+| GitHub UI commits | Yes |
+| File uploads to repo | Yes |
+| REST API content creation requests | Yes |
 
 ### Types of Push Protection
 

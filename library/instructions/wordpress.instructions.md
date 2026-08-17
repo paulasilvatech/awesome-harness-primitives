@@ -176,11 +176,11 @@ require $_tests_dir . '/includes/bootstrap.php';
 - Use clear, imperative commit messages; reference issues/tickets and summarize impact.
 
 ## 12) What Copilot Must Ensure (Checklist)
-- ✅ Unique prefixes/namespaces; no accidental globals.  
-- ✅ Nonce + capability checks for any write action (AJAX/REST/forms).  
-- ✅ Inputs sanitized; outputs escaped.  
-- ✅ User‑visible strings wrapped in i18n with correct text domain.  
-- ✅ Assets enqueued via APIs (no inline script/style).  
-- ✅ Tests added/updated for new behaviors.  
-- ✅ Code passes PHPCS (WPCS) and ESLint where applicable.  
-- ✅ Avoid direct DB concatenation; always prepare queries.
+- Unique prefixes/namespaces; no accidental globals.
+- Nonce + capability checks for any write action (AJAX/REST/forms).
+- Inputs sanitized; outputs escaped.
+- User‑visible strings wrapped in i18n with correct text domain.
+- Assets enqueued via APIs (no inline script/style).
+- Tests added/updated for new behaviors.
+- Code passes PHPCS (WPCS) and ESLint where applicable.
+- Avoid direct DB concatenation; always prepare queries.

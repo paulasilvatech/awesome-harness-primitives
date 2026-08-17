@@ -29,9 +29,9 @@ Use this template structure when generating `preflight-report.md` in the project
 
 | Check | Status | Details |
 |-------|--------|---------|
-| Bicep Syntax | {✅ Pass | ❌ Fail | ⚠️ Warnings | ⏭️ Skipped} | {details} |
-| What-If Analysis | {✅ Pass | ❌ Fail | ⏭️ Skipped} | {details} |
-| Permission Check | {✅ Pass | ⚠️ Limited | ❌ Fail} | {details} |
+| Bicep Syntax | { Pass | Fail |  Warnings | ⏭ Skipped} | {details} |
+| What-If Analysis | { Pass | Fail | ⏭ Skipped} | {details} |
+| Permission Check | { Pass |  Limited | Fail} | {details} |
 
 ---
 
@@ -57,14 +57,14 @@ Use this template structure when generating `preflight-report.md` in the project
 ## Issues
 
 {if-no-issues}
-✅ **No issues found.** The deployment is ready to proceed.
+ **No issues found.** The deployment is ready to proceed.
 {end-if}
 
 {if-issues-exist}
 ### Errors
 
 {for-each-error}
-#### ❌ {error-title}
+#### {error-title}
 
 - **Severity:** Error
 - **Source:** {bicep-build | what-if | permissions}
@@ -78,7 +78,7 @@ Use this template structure when generating `preflight-report.md` in the project
 ### Warnings
 
 {for-each-warning}
-#### ⚠️ {warning-title}
+#### {warning-title}
 
 - **Severity:** Warning
 - **Source:** {source}
@@ -98,11 +98,11 @@ Use this template structure when generating `preflight-report.md` in the project
 
 | Change Type | Count |
 |-------------|-------|
-| 🆕 Create | {count} |
-| 📝 Modify | {count} |
-| 🗑️ Delete | {count} |
+|  Create | {count} |
+|  Modify | {count} |
+|  Delete | {count} |
 | ✓ No Change | {count} |
-| ⚠️ Ignore | {count} |
+|  Ignore | {count} |
 
 ### Resources to Create
 
@@ -138,7 +138,7 @@ Use this template structure when generating `preflight-report.md` in the project
 |---------------|---------------|
 | {type} | {name} |
 
-> ⚠️ **Warning:** Resources listed for deletion will be permanently removed.
+>**Warning:** Resources listed for deletion will be permanently removed.
 {end-if}
 
 {if-no-resources-to-delete}
@@ -206,18 +206,18 @@ Please resolve the issues listed above before deploying. After fixes:
 
 | Status | Meaning | Visual |
 |--------|---------|--------|
-| **Pass** | All checks succeeded, safe to deploy | ✅ |
-| **Pass with Warnings** | Checks succeeded but review warnings | ⚠️ |
-| **Fail** | One or more checks failed | ❌ |
+| **Pass** | All checks succeeded, safe to deploy | Yes |
+| **Pass with Warnings** | Checks succeeded but review warnings |  |
+| **Fail** | One or more checks failed | No |
 
 ### Individual Check Status
 
 | Status | Meaning |
 |--------|---------|
-| ✅ Pass | Check completed successfully |
-| ❌ Fail | Check found errors |
-| ⚠️ Warnings | Check passed with warnings |
-| ⏭️ Skipped | Check was skipped (tool unavailable, etc.) |
+| Pass | Check completed successfully |
+| Fail | Check found errors |
+|  Warnings | Check passed with warnings |
+| ⏭ Skipped | Check was skipped (tool unavailable, etc.) |
 
 ---
 
@@ -227,7 +227,7 @@ Please resolve the issues listed above before deploying. After fixes:
 # Azure Deployment Preflight Report
 
 **Generated:** 2026-01-16T14:32:00Z
-**Status:** ⚠️ Pass with Warnings
+**Status:**  Pass with Warnings
 
 ---
 
@@ -246,9 +246,9 @@ Please resolve the issues listed above before deploying. After fixes:
 
 | Check | Status | Details |
 |-------|--------|---------|
-| Bicep Syntax | ✅ Pass | No errors found |
-| What-If Analysis | ⚠️ Warnings | 1 resource ignored due to nested template limits |
-| Permission Check | ✅ Pass | Full deployment permissions verified |
+| Bicep Syntax | Pass | No errors found |
+| What-If Analysis |  Warnings | 1 resource ignored due to nested template limits |
+| Permission Check | Pass | Full deployment permissions verified |
 
 ---
 
@@ -275,7 +275,7 @@ Please resolve the issues listed above before deploying. After fixes:
 
 ### Warnings
 
-#### ⚠️ Nested Template Limit Reached
+#### Nested Template Limit Reached
 
 - **Severity:** Warning
 - **Source:** what-if
@@ -290,11 +290,11 @@ Please resolve the issues listed above before deploying. After fixes:
 
 | Change Type | Count |
 |-------------|-------|
-| 🆕 Create | 3 |
-| 📝 Modify | 1 |
-| 🗑️ Delete | 0 |
+|  Create | 3 |
+|  Modify | 1 |
+|  Delete | 0 |
 | ✓ No Change | 2 |
-| ⚠️ Ignore | 1 |
+|  Ignore | 1 |
 
 ### Resources to Create
 

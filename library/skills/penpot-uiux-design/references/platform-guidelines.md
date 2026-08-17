@@ -30,9 +30,9 @@
 
 ### Touch Targets
 
-- **Minimum:** 44×44pt (iOS) / 48×48dp (Android)
-- **Recommended:** 48×48px for all platforms
-- **Spacing:** Minimum 8px between targets
+- **Minimum: ** 44×44pt (iOS) / 48×48dp (Android)
+- **Recommended: ** 48×48px for all platforms
+- **Spacing: ** Minimum 8px between targets
 
 ---
 
@@ -40,9 +40,9 @@
 
 ### Design Philosophy
 
-- **Clarity:** Text is legible, icons precise, adornments subtle
-- **Deference:** UI helps people understand content, never competes
-- **Depth:** Distinct visual layers convey hierarchy
+- **Clarity: ** Text is legible, icons precise, adornments subtle
+- **Deference: ** UI helps people understand content, never competes
+- **Depth: ** Distinct visual layers convey hierarchy
 
 ### Navigation Patterns
 
@@ -57,7 +57,7 @@
 
 ```text
 ┌─────────────────────────────────┐
-│  🏠    🔍    ➕    💬    👤    │
+│ │
 │ Home  Search Add  Chat  Profile │ 49pt height
 └─────────────────────────────────┘
 
@@ -110,11 +110,11 @@
 
 ### iOS-Specific Patterns
 
-- **Swipe gestures:** Delete, archive, actions
-- **Pull to refresh:** Standard list refresh
-- **Long press:** Context menus
-- **Haptic feedback:** Confirm actions
-- **Edge swipe:** Back navigation
+- **Swipe gestures: ** Delete, archive, actions
+- **Pull to refresh: ** Standard list refresh
+- **Long press: ** Context menus
+- **Haptic feedback: ** Confirm actions
+- **Edge swipe: ** Back navigation
 
 ---
 
@@ -122,9 +122,9 @@
 
 ### Android Design Philosophy
 
-- **Material as metaphor:** Physical properties, elevation
-- **Bold, graphic, intentional:** Deliberate color, typography, space
-- **Motion provides meaning:** Feedback and continuity
+- **Material as metaphor: ** Physical properties, elevation
+- **Bold, graphic, intentional: ** Deliberate color, typography, space
+- **Motion provides meaning: ** Feedback and continuity
 
 ### Android Navigation Patterns
 
@@ -139,7 +139,7 @@
 
 ```text
 ┌─────────────────────────────────┐
-│  🏠    🔍    📷    💬    👤    │
+│ │
 │ Home  Search Camera Chat Account│ 80dp height
 └─────────────────────────────────┘
 
@@ -154,7 +154,7 @@
 
 ```text
 ┌─────────────────────────────────┐
-│ ≡  App Title                🔍 │ 64dp height
+│ ≡ App Title │ 64dp height
 └─────────────────────────────────┘
 
 ```
@@ -165,10 +165,10 @@
 
 ### Floating Action Button (FAB)
 
-- **Size:** 56dp standard, 40dp mini
-- **Position:** Bottom right, 16dp from edges
-- **Purpose:** Primary action only
-- **Behavior:** Can hide on scroll
+- **Size: ** 56dp standard, 40dp mini
+- **Position: ** Bottom right, 16dp from edges
+- **Purpose: ** Primary action only
+- **Behavior: ** Can hide on scroll
 
 ### Typography (Roboto)
 
@@ -217,10 +217,10 @@
 
 ### Android-Specific Patterns
 
-- **Snackbar:** Brief feedback at bottom
-- **Bottom sheet:** Additional content/actions
-- **Chips:** Filter, input, choice, action
-- **Speed dial FAB:** Multiple related actions
+- **Snackbar: ** Brief feedback at bottom
+- **Bottom sheet: ** Additional content/actions
+- **Chips: ** Filter, input, choice, action
+- **Speed dial FAB: ** Multiple related actions
 
 ---
 
@@ -239,10 +239,10 @@
 
 ### Grid System
 
-- **Columns:** 12-column grid standard
-- **Gutters:** 16-24px between columns
-- **Margins:** 16px (mobile) to 64px (desktop)
-- **Max content width:** 1200-1440px
+- **Columns: ** 12-column grid standard
+- **Gutters: ** 16-24px between columns
+- **Margins: ** 16px (mobile) to 64px (desktop)
+- **Max content width: ** 1200-1440px
 
 ### Responsive Typography
 
@@ -251,12 +251,12 @@ Mobile (base):
   Body: 16px
   H1: 28-32px
   H2: 22-24px
-  
+
 Tablet:
   Body: 16px
   H1: 32-40px
   H2: 24-28px
-  
+
 Desktop:
   Body: 16-18px
   H1: 40-56px

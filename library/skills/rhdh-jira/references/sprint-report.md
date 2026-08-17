@@ -62,7 +62,7 @@ Split into categories:
 | Completion rate | `completed_sp / committed_sp × 100` |
 | Scope creep | Count and SP of mid-sprint additions |
 
-Flag if completion rate < 70%: "⚠ Below 70% completion - review sprint commitments."
+Flag if completion rate < 70%: " Below 70% completion - review sprint commitments."
 Note if > 100%: "Team completed more than committed - pulled in extra work."
 
 ### Step 5 - Per-Member Breakdown
@@ -97,7 +97,7 @@ Find issues with `demo` label. For each:
    - **Team Forum** - team-related demos
    - **Architecture Call** - deep technical topics
 
-Flag missing demo links: "❌ Demo required but no Feature Demo link set on parent Feature."
+Flag missing demo links: " Demo required but no Feature Demo link set on parent Feature."
 
 ### Step 8 - Velocity Trend
 

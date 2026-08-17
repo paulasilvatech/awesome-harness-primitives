@@ -186,7 +186,7 @@ Skills can include additional files that Copilot accesses on-demand:
     └── config.template   # Config template the AI agent fills in
 ```
 
-> **LICENSE.txt**: When creating a skill, download the Apache 2.0 license text from https://www.apache.org/licenses/LICENSE-2.0.txt and save as `LICENSE.txt`. Update the copyright year and owner in the appendix section.
+>**LICENSE.txt**: When creating a skill, download the Apache 2.0 license text from https://www.apache.org/licenses/LICENSE-2.0.txt and save as `LICENSE.txt`. Update the copyright year and owner in the appendix section.
 
 ### Assets vs Templates: Key Distinction
 
@@ -296,12 +296,12 @@ The `## Gotchas` section is consistently the most valuable part of any skill —
 Use numbered steps only for concrete, repeatable procedures (build, deploy, environment setup) where the sequence genuinely matters. For open-ended tasks (debugging, refactoring, code review), provide decision criteria and reference information instead — Copilot needs flexibility to adapt to the user's specific situation.
 
 ```markdown
-# ❌ Too rigid
+# Too rigid
 1. Open the file at src/api/handlers.ts
 2. Find the function named processOrder
 3. Add a try-catch block around lines 45-60
 
-# ✅ Flexible
+# Flexible
 When fixing error handling in API handlers:
 - Ensure all database operations have proper error handling
 - Use the project's ErrorHandler utility (see ./references/error-handling.md)

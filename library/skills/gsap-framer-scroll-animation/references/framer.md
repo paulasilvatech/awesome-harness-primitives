@@ -213,8 +213,8 @@ export function ScrollProgressBar() {
 
 **Copilot Chat Prompt:**
 ```
-Framer Motion: reusable ScrollReveal component that wraps children with 
-fade-in-up entrance animation using whileInView. Props: delay (default 0), 
+Framer Motion: reusable ScrollReveal component that wraps children with
+fade-in-up entrance animation using whileInView. Props: delay (default 0),
 duration (default 0.6), once (default true). viewport margin -80px.
 TypeScript. 'use client'.
 ```
@@ -258,7 +258,7 @@ export function ScrollReveal({
 **Copilot Chat Prompt:**
 ```
 Framer Motion parallax section: background moves y from 0% to 30% (slow),
-foreground text moves y from 50 to -50px (fast). 
+foreground text moves y from 50 to -50px (fast).
 Both use target ref with offset ['start end', 'end start'].
 Fade out at top and bottom using opacity useTransform [0, 0.3, 0.7, 1] → [0,1,1,0].
 ```
@@ -444,7 +444,7 @@ export function Navbar() {
 
 **Copilot Chat Prompt:**
 ```
-Framer Motion: card grid with stagger entrance. Use variants: 
+Framer Motion: card grid with stagger entrance. Use variants:
 container has staggerChildren 0.1, delayChildren 0.2.
 Each card: hidden (opacity 0, y 40, scale 0.96) → visible (opacity 1, y 0, scale 1).
 Trigger with whileInView on the container. Once.
@@ -664,10 +664,10 @@ return <div ref={ref}>...</div>;                          // ← ref attached
 **Using animate prop for scroll-linked values:** Scroll-linked values must use `style`, not `animate`.
 `animate` runs on mount/unmount, not on scroll.
 ```tsx
-// ❌ Wrong
+//  Wrong
 <motion.div animate={{ opacity }} />
 
-// ✅ Correct
+//  Correct
 <motion.div style={{ opacity }} />
 ```
 

@@ -4,7 +4,7 @@ This file contains the detailed instructions for Phase 0. When the user requests
 
 Scan results are visualized as an architecture diagram, and subsequent natural-language modification requests from the user are routed to Phase 1.
 
-> **🚨 Output Storage Path Rule**: All outputs (scan JSON, diagram HTML, Bicep code) must be saved in **a project folder under the current working directory (cwd)**. NEVER save them inside `~/.copilot/session-state/`. The session-state directory is a temporary space and may be deleted when the session ends.
+> **Output Storage Path Rule **: All outputs (scan JSON, diagram HTML, Bicep code) must be saved in ** a project folder under the current working directory (cwd) **. NEVER save them inside `~/.copilot/session-state/`. The session-state directory is a temporary space and may be deleted when the session ends.
 
 ---
 
@@ -25,7 +25,7 @@ az account show 2>&1
 az account list --output json
 ```
 
-Present the subscription list as `ask_user` choices. **Multiple subscriptions can be selected:**
+Present the subscription list as `ask_user` choices. **Multiple subscriptions can be selected: **
 ```
 ask_user({
   question: "Please select the Azure subscription(s) to analyze. (You can add more one at a time for multiple selections)",
@@ -54,25 +54,25 @@ ask_user({
 })
 ```
 
-- **Specific RG** → Select from the RG list or enter manually
-- **Multiple RGs** → Repeat ask_user to add RGs one at a time. Stop when the user says "that's enough."
+- **Specific RG ** → Select from the RG list or enter manually
+- **Multiple RGs ** → Repeat ask_user to add RGs one at a time. Stop when the user says "that's enough."
   Alternatively, the user can enter multiple RGs separated by commas (e.g., `rg-prod, rg-dev, rg-network`)
-- **Entire subscription** → `az group list` → Scan all RGs (warn if there are many resources that it may take time)
+- **Entire subscription ** → `az group list` → Scan all RGs (warn if there are many resources that it may take time)
 
-**Combining multiple subscriptions + multiple RGs is supported:**
+**Combining multiple subscriptions + multiple RGs is supported: **
 - rg-prod from subscription A + rg-network from subscription B → Scan both and display in a single diagram
 
 ---
 
 ## Diagram Hierarchy — Displaying Multiple Subscriptions/RGs
 
-**Single subscription + single RG**: Same as before (VNet boundary only)
-**Multiple RGs (same subscription)**: Dashed boundary per RG
-**Multiple subscriptions**: Two-level boundary of Subscription > RG
+**Single subscription + single RG **: Same as before (VNet boundary only)
+**Multiple RGs (same subscription) **: Dashed boundary per RG
+**Multiple subscriptions **: Two-level boundary of Subscription > RG
 
 Pass hierarchy information in the diagram JSON:
 
-**Add `subscription` and `resourceGroup` fields to the services JSON:**
+**Add `subscription` and `resourceGroup` fields to the services JSON: **
 ```json
 {
   "id": "foundry",
@@ -84,7 +84,7 @@ Pass hierarchy information in the diagram JSON:
 }
 ```
 
-**Pass hierarchy information via the `--hierarchy` parameter:**
+**Pass hierarchy information via the `--hierarchy` parameter: **
 ```
 --hierarchy '[{"subscription":"sub-002","resourceGroups":["rg-prod","rg-dev"]},{"subscription":"sub-001","resourceGroups":["rg-network"]}]'
 ```
@@ -98,16 +98,16 @@ Based on this information, the diagram script will:
 
 ## Step 2: Resource Scan
 
-**🚨 az CLI Output Principles:**
-- az CLI output must **always be saved to a file** and then read with `view`. Direct terminal output may be truncated.
-- Bundle **no more than 3 az commands** per PowerShell call. Bundling too many may cause timeouts.
+**az CLI Output Principles: **
+- az CLI output must **always be saved to a file ** and then read with `view`. Direct terminal output may be truncated.
+- Bundle **no more than 3 az commands ** per PowerShell call. Bundling too many may cause timeouts.
 - Use `--query` JMESPath to extract only the required fields and reduce output size.
 
 ```powershell
-# ✅ Correct approach — Save to file then read
+# Correct approach — Save to file then read
 az resource list -g "<RG>" --query "[].{name:name,type:type,kind:kind,location:location}" -o json | Set-Content -Path "$outDir/resources.json"
 
-# ❌ Wrong approach — Direct terminal output (may be truncated)
+# Wrong approach — Direct terminal output (may be truncated)
 az resource list -g "<RG>" -o json
 ```
 
@@ -121,10 +121,10 @@ New-Item -ItemType Directory -Path $outDir -Force | Out-Null
 az resource list -g "<RG>" --query "[].{name:name,type:type,kind:kind,location:location,id:id}" -o json | Set-Content "$outDir/resources.json"
 ```
 
-**🚨 Immediately after reading resources.json, you MUST display the full resource list table to the user:**
+**Immediately after reading resources.json, you MUST display the full resource list table to the user: **
 
 ```
-📋 rg-<RG> Resource List (N resources)
+ rg-<RG> Resource List (N resources)
 
 ┌─────────────────────────┬──────────────────────────────────────────────┬─────────────────┐
 │ Name                    │ Type                                         │ Location        │
@@ -137,15 +137,15 @@ az resource list -g "<RG>" --query "[].{name:name,type:type,kind:kind,location:l
 ⏳ Retrieving detailed information...
 ```
 
-Display this table **first** before proceeding to detailed queries. Do not make the user wait without knowing what resources exist.
+Display this table **first ** before proceeding to detailed queries. Do not make the user wait without knowing what resources exist.
 
 ### 2-B: Dynamic Detailed Query — Based on resources.json
 
-**Dynamically determine detailed query commands based on the resource types found in resources.json.**
+**Dynamically determine detailed query commands based on the resource types found in resources.json. **
 
 Do not use a hardcoded command list. Only execute commands for types that exist in resources.json, selected from the mapping table below.
 
-**Type → Detailed Query Command Mapping:**
+**Type → Detailed Query Command Mapping: **
 
 | Type in resources.json | Detailed Query Command | Output File |
 |---|---|---|
@@ -176,11 +176,11 @@ Do not use a hardcoded command list. Only execute commands for types that exist 
 | `Microsoft.Network/azureFirewalls` | `az network firewall list -g "<RG>" --query "[].{name:name,sku:sku,threatIntelMode:threatIntelMode,location:location}" -o json` | `firewall.json` |
 | `Microsoft.Network/bastionHosts` | `az network bastion list -g "<RG>" --query "[].{name:name,sku:sku.name,location:location}" -o json` | `bastion.json` |
 
-**Dynamic Query Process:**
+**Dynamic Query Process: **
 
 1. Read `resources.json`
 2. Extract the distinct values of the `type` field
-3. Execute **only the commands for matching types** from the mapping table above (skip types not present)
+3. Execute **only the commands for matching types ** from the mapping table above (skip types not present)
 4. If a type not in the mapping table is found → Use generic query: `az resource show --ids "<ID>" --query "{name:name,sku:sku,kind:kind,location:location,properties:properties}" -o json`
 5. Execute commands in batches of 2-3 (do not run all at once)
 
@@ -207,11 +207,11 @@ From the VNet:
 
 ## Step 3: Inferring Relationships Between Resources
 
-Automatically infer **relationships (connections)** between scanned resources to construct the connections JSON for the diagram.
+Automatically infer **relationships (connections) ** between scanned resources to construct the connections JSON for the diagram.
 
 ### Relationship Inference Rules
 
-**🚨 If there are insufficient connection lines, the diagram becomes meaningless. Infer as many relationships as possible.**
+**If there are insufficient connection lines, the diagram becomes meaningless. Infer as many relationships as possible. **
 
 #### Confirmed Inference (Directly verifiable from resource IDs/properties)
 
@@ -317,7 +317,7 @@ Convert scan results into the input format for the built-in diagram engine.
 }
 ```
 
-**Information to include in details:**
+**Information to include in details: **
 - Endpoint URL
 - SKU/tier details
 - kind (AIServices, OpenAI, etc.)
@@ -363,13 +363,13 @@ Scanned Resources (N total):
 [Summary table by resource type]
 
 What would you like to change here?
-- 🔧 Performance improvement ("it's slow", "increase throughput")
-- 💰 Cost optimization ("reduce costs", "make it cheaper")
-- 🔒 Security hardening ("add PE", "block public access")
-- 🌐 Network changes ("separate VNet", "add Bastion")
-- ➕ Add/remove resources ("add a VM", "delete this")
-- 📊 Monitoring ("set up logs", "add alerts")
-- 🤔 Diagnostics ("is this architecture OK?", "what's wrong?")
+- Performance improvement ("it's slow", "increase throughput")
+- Cost optimization ("reduce costs", "make it cheaper")
+- Security hardening ("add PE", "block public access")
+- Network changes ("separate VNet", "add Bastion")
+- Add/remove resources ("add a VM", "delete this")
+- Monitoring ("set up logs", "add alerts")
+- Diagnostics ("is this architecture OK?", "what's wrong?")
 - Or just take the diagram and stop here
 ```
 
@@ -378,13 +378,13 @@ What would you like to change here?
 ## Step 6: Modification Conversation → Transition to Phase 1
 
 When the user requests modifications, transition to Phase 1 (phase1-advisor.md).
-This is the **Path B entry point**, using the existing scan results as the baseline.
+This is the **Path B entry point **, using the existing scan results as the baseline.
 
 ### Natural Language Modification Request Handling — Clarifying Question Patterns
 
 Ask clarifying questions to make the user's vague requests more specific:
 
-**🔧 Performance**
+**Performance **
 
 | User Request | Clarifying Question Example |
 |---|---|
@@ -392,7 +392,7 @@ Ask clarifying questions to make the user's vague requests more specific:
 | "I want to increase throughput" | "Which service's throughput should we increase? Scale out? Increase DTU/RU?" |
 | "AI Search indexing is slow" | "Should we add partitions? Upgrade the SKU to S2?" |
 
-**💰 Cost**
+**Cost **
 
 | User Request | Clarifying Question Example |
 |---|---|
@@ -400,7 +400,7 @@ Ask clarifying questions to make the user's vague requests more specific:
 | "How much does this cost?" | Look up pricing info from MS Docs and provide estimated cost based on current SKUs |
 | "It's a dev environment, so make it cheap" | "Should we switch to Free/Basic tiers? Which services?" |
 
-**🔒 Security**
+**Security **
 
 | User Request | Clarifying Question Example |
 |---|---|
@@ -408,7 +408,7 @@ Ask clarifying questions to make the user's vague requests more specific:
 | "Block public access" | "Should we apply PE + publicNetworkAccess: Disabled to all services?" |
 | "Manage the keys" | "Should we add Key Vault and connect it with Managed Identity?" |
 
-**🌐 Network**
+**Network **
 
 | User Request | Clarifying Question Example |
 |---|---|
@@ -416,7 +416,7 @@ Ask clarifying questions to make the user's vague requests more specific:
 | "Separate the VNet" | "Which subnets should we separate? Should we also add NSGs?" |
 | "Add Bastion" | "Adding Azure Bastion for VM access. Please specify the subnet CIDR." |
 
-**➕ Add/Remove Resources**
+**Add/Remove Resources **
 
 | User Request | Clarifying Question Example |
 |---|---|
@@ -424,7 +424,7 @@ Ask clarifying questions to make the user's vague requests more specific:
 | "Add Fabric" | "What SKU? What's the admin email?" |
 | "Delete this" | "Are you sure you want to remove [resource name]? Connected PEs will also be removed." |
 
-**📊 Monitoring/Operations**
+**Monitoring/Operations **
 
 | User Request | Clarifying Question Example |
 |---|---|
@@ -432,7 +432,7 @@ Ask clarifying questions to make the user's vague requests more specific:
 | "Set up alerts" | "For which metrics? CPU? Error rate? Response time?" |
 | "Attach Application Insights" | "To which service? App Service? Function App?" |
 
-**🔄 Migration/Changes**
+**Migration/Changes **
 
 | User Request | Clarifying Question Example |
 |---|---|
@@ -440,7 +440,7 @@ Ask clarifying questions to make the user's vague requests more specific:
 | "Switch SQL to Cosmos" | "What Cosmos DB API type? (SQL/MongoDB/Cassandra) I can also provide a data migration guide." |
 | "Switch Foundry to Hub" | "Hub is suitable only when ML training/open-source models are needed. Let me verify the use case." |
 
-**🤔 Diagnostics/Questions**
+**Diagnostics/Questions **
 
 | User Request | Clarifying Question Example |
 |---|---|
@@ -463,7 +463,7 @@ Once modifications are finalized:
 - Run `az resource list` first to determine the resource count, then proceed with detailed queries
 - Query key services first (Foundry, Search, Storage, KeyVault, VNet, PE), then collect only basic information for the rest via `az resource show`
 - Keep the user informed of progress:
-  > **⏳ Scanning resources** — M of N resources completed
+  > **⏳ Scanning resources ** — M of N resources completed
 
 ---
 

@@ -29,9 +29,9 @@ skill-name/
 
 ### Key Principles
 
-- **Frontmatter is critical**: `name` and `description` determine when the skill triggers—be clear and comprehensive
-- **Concise is key**: Only include what agents don't already know; context window is shared
-- **No duplication**: Information lives in SKILL.md OR reference files, not both
+- **Frontmatter is critical **: `name` and `description` determine when the skill triggers—be clear and comprehensive
+- **Concise is key **: Only include what agents don't already know; context window is shared
+- **No duplication **: Information lives in SKILL.md OR reference files, not both
 
 ## Learn MCP Tools
 
@@ -68,20 +68,20 @@ Generated skills should include this same CLI fallback table so agents can use e
 
 Build deep understanding using Learn MCP tools in three phases:
 
-**Phase 1 - Scope Discovery:**
+**Phase 1 - Scope Discovery: **
 ```
 microsoft_docs_search(query="{technology} overview what is")
 microsoft_docs_search(query="{technology} concepts architecture")
 microsoft_docs_search(query="{technology} getting started tutorial")
 ```
 
-**Phase 2 - Core Content:**
+**Phase 2 - Core Content: **
 ```
 microsoft_docs_fetch(url="...")  # Fetch pages from Phase 1
 microsoft_code_sample_search(query="{technology}", language="{lang}")
 ```
 
-**Phase 3 - Depth:**
+**Phase 3 - Depth: **
 ```
 microsoft_docs_search(query="{technology} best practices")
 microsoft_docs_search(query="{technology} troubleshooting errors")
@@ -127,13 +127,13 @@ Use the appropriate template from [skill-templates.md](references/skill-template
 
 ### Step 4: Balance Local vs Dynamic Content
 
-**Store locally when:**
+**Store locally when: **
 - Foundational (needed for any task)
 - Frequently accessed
 - Stable (won't change)
 - Hard to find via search
 
-**Keep dynamic when:**
+**Keep dynamic when: **
 - Exhaustive reference (too large)
 - Version-specific
 - Situational (specific tasks only)
@@ -143,9 +143,9 @@ Use the appropriate template from [skill-templates.md](references/skill-template
 
 | Content Type | Local | Dynamic |
 |--------------|-------|---------|
-| Core concepts (3-5) | ✅ Full | |
-| Hello world code | ✅ Full | |
-| Common patterns (3-5) | ✅ Full | |
+| Core concepts (3-5) | Full | |
+| Hello world code | Full | |
+| Common patterns (3-5) | Full | |
 | Top API methods | Signature + example | Full docs via fetch |
 | Best practices | Top 5 bullets | Search for more |
 | Troubleshooting | | Search queries |

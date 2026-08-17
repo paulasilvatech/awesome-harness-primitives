@@ -29,7 +29,7 @@ These tools include:
 
 - **Customization WinGet Task Generator** - For `~/winget` tasks
 - **Customization Git Clone Task Generator** - For `~/gitclone` tasks
-- **Customization PowerShell Task Generator** - For `~/powershell` tasks  
+- **Customization PowerShell Task Generator** - For `~/powershell` tasks
 - **Customization YAML Generation Planner** - For planning YAML files
 - **Customization YAML Validator** - For validating YAML files
 
@@ -86,12 +86,12 @@ This approach ensures users have the best experience while avoiding unnecessary 
 
 **IMPORTANT**: When working with intrinsic tasks, and using the short task name, ALWAYS use the `~/` prefix. This is a critical requirement that must be consistently applied to ensure the correct task is used and to avoid conflicts with any custom tasks that may have similar names. Examples:
 
-- ✅ **Correct**: `name: ~/winget` (for WinGet installations)
-- ✅ **Correct**: `name: ~/powershell` (for PowerShell scripts)  
-- ✅ **Correct**: `name: ~/gitclone` (for Git cloning)
-- ❌ **Incorrect**: `name: winget` (missing ~/prefix)
-- ❌ **Incorrect**: `name: powershell` (missing ~/prefix)
-- ❌ **Incorrect**: `name: gitclone` (missing ~/prefix)
+- **Correct**: `name: ~/winget` (for WinGet installations)
+- **Correct**: `name: ~/powershell` (for PowerShell scripts)
+- **Correct**: `name: ~/gitclone` (for Git cloning)
+- **Incorrect**: `name: winget` (missing ~/prefix)
+- **Incorrect**: `name: powershell` (missing ~/prefix)
+- **Incorrect**: `name: gitclone` (missing ~/prefix)
 
 When reviewing or generating YAML files, always verify that intrinsic tasks use this prefix.
 
@@ -109,21 +109,21 @@ To avoid confusion or conflicting information, that may potentially happen in so
 
 - When the user has a ```Task Generator``` selected, this should be used as the primary means to generate the YAML for the respective intrinsic tasks rather than attempting to generate the YAML directly using information from this file, dev box CLI, and/or referenced documentation.
 
-  > [!NOTE]
-  > The Task generators are identified by the ```Task Generator``` label in the dev box tools. For example, ```Customization {task_name} Task Generator```.
-  > You can use the information provided in the table below to identify which intrinsic task(s) the selected Task generator is used for. This will help you determine when to use that rather than generating content based on this file, dev box CLI, and/or referenced documentation.
+  >[!NOTE]
+  >The Task generators are identified by the ```Task Generator``` label in the dev box tools. For example, ```Customization {task_name} Task Generator```.
+  >You can use the information provided in the table below to identify which intrinsic task(s) the selected Task generator is used for. This will help you determine when to use that rather than generating content based on this file, dev box CLI, and/or referenced documentation.
   >
-  > | Task Generator Name                      | Intrinsic Task Name(s)                                  |
-  > |------------------------------------------|---------------------------------------------------------|
-  > | Customization WinGet Task Generator      | `__INTRINSIC_WinGet__` &#124; `~/winget`                |
-  > | Customization Git Clone Task Generator   | `__INTRINSIC_GitClone__` &#124; `~/gitclone`            |
-  > | Customization PowerShell Task Generator  | `__INTRINSIC_PowerShell__` &#124; `~/powershell`        |
+  >| Task Generator Name                      | Intrinsic Task Name(s)                                  |
+  >|------------------------------------------|---------------------------------------------------------|
+  >| Customization WinGet Task Generator      | `__INTRINSIC_WinGet__` &#124; `~/winget`                |
+  >| Customization Git Clone Task Generator   | `__INTRINSIC_GitClone__` &#124; `~/gitclone`            |
+  >| Customization PowerShell Task Generator  | `__INTRINSIC_PowerShell__` &#124; `~/powershell`        |
 
 - If the user has selected the ```Customization YAML Generation Planner``` tool, this should be used as a first pass to help the user plan and generate the YAML file based on their requirements and the available customization tasks before considering the content of this file, dev box CLI, and/or referenced documentation.
 
-  > [!IMPORTANT]
-  > Be aware that the ```Customization YAML Generation Planner``` tool will only be aware of the intrinsic tasks available to them. This presently includes WinGet (```__INTRINSIC_WinGet__```), Git Clone (```__INTRINSIC_GitClone__```), and PowerShell (```__INTRINSIC_PowerShell__```). It does not include any custom tasks the user may also have available to them which may be a better fit for the requirements
-  > You should **ALWAYS** evaluate whether there are other tasks available that might be a better fit for the requirements which they might wish to consider instead of an intrinsic task
+  >[!IMPORTANT]
+  >Be aware that the ```Customization YAML Generation Planner``` tool will only be aware of the intrinsic tasks available to them. This presently includes WinGet (```__INTRINSIC_WinGet__```), Git Clone (```__INTRINSIC_GitClone__```), and PowerShell (```__INTRINSIC_PowerShell__```). It does not include any custom tasks the user may also have available to them which may be a better fit for the requirements
+  >You should **ALWAYS** evaluate whether there are other tasks available that might be a better fit for the requirements which they might wish to consider instead of an intrinsic task
 
 - If the user has selected the ```Customization YAML Validator``` tool, this should be used as the primary means to validate the YAML customization file they have created or are working on. This tool will help ensure that the YAML file is correctly formatted and adheres to the requirements for Dev Box Team Customizations
 
@@ -175,8 +175,8 @@ Include tasks in the `userTasks` section for operations that interact with user 
 3. **Group related operations** in the same context to maintain execution order
 4. **If unsure, test context placement**: Start by placing the `winget` commands in the `tasks` section. If they don't work under the `tasks` section, try moving them to the `userTasks` section
 
-> [!NOTE]
-> For `winget` operations specifically, where possible, prefer using the intrinsic `~/winget` task to help avoid context issues.
+>[!NOTE]
+>For `winget` operations specifically, where possible, prefer using the intrinsic `~/winget` task to help avoid context issues.
 
 ## Useful Dev Box CLI operations for Team Customizations
 
@@ -186,8 +186,8 @@ Run this command in Terminal to apply the customizations on the Dev Box to aid i
 
 ```devbox customizations apply-tasks --filePath "{image definition filepath}"```
 
-> [!NOTE]
-> Running via GitHub Copilot Chat rather than via the Visual Studio Code Dev Box extension can be beneficial in that you can then read the console output directly. For example, to confirm the outcome and assist with troubleshooting as needed. However, Visual Studio Code must be running as administrator to run system tasks.
+>[!NOTE]
+>Running via GitHub Copilot Chat rather than via the Visual Studio Code Dev Box extension can be beneficial in that you can then read the console output directly. For example, to confirm the outcome and assist with troubleshooting as needed. However, Visual Studio Code must be running as administrator to run system tasks.
 
 ### devbox customizations list-tasks
 
@@ -195,8 +195,8 @@ Run this command in Terminal to list the customization tasks that are available 
 
 ```devbox customizations list-tasks```
 
-> [!IMPORTANT]
-> [Keeping track of the available customization tasks for use during prompting](#keeping-track-of-the-available-customization-tasks-for-use-during-prompting) and then referring to the contents of the local file can reduce the need to prompt the user to execute this command.
+>[!IMPORTANT]
+>[Keeping track of the available customization tasks for use during prompting](#keeping-track-of-the-available-customization-tasks-for-use-during-prompting) and then referring to the contents of the local file can reduce the need to prompt the user to execute this command.
 
 ### Installing WinGet locally for package discovery
 
@@ -213,8 +213,8 @@ Invoke-WebRequest -Uri https://aka.ms/getwinget -OutFile Microsoft.DesktopAppIns
 Add-AppxPackage Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle
 ```
 
-> [!NOTE]
-> You can offer to run the above PowerShell command if relevant to handling the requested operation.
+>[!NOTE]
+>You can offer to run the above PowerShell command if relevant to handling the requested operation.
 
 Option 2: GitHub Release
 
@@ -232,8 +232,8 @@ winget search "Visual Studio Code"
 
 This will help you find the exact package IDs (like `Microsoft.VisualStudioCode`) needed for your image definition files and understand which winget sources you will need to use.
 
-> [!NOTE]
-> You can offer to run the above PowerShell command if relevant to handling the requested operation. You can suggest including the `--accept-source-agreements` flag if the user expects to accept the source agreements for the packages they are installing to avoid being prompted to do so when running the `winget search` CLI command.
+>[!NOTE]
+>You can offer to run the above PowerShell command if relevant to handling the requested operation. You can suggest including the `--accept-source-agreements` flag if the user expects to accept the source agreements for the packages they are installing to avoid being prompted to do so when running the `winget search` CLI command.
 
 ## Keeping track of the available customization tasks for use during prompting
 
@@ -267,8 +267,8 @@ This will help you find the exact package IDs (like `Microsoft.VisualStudioCode`
 - If the stderr.log suggests there's a syntax error, suggest replacing double-quotes with single-quotes in the inline PowerShell script where possible. This can help resolve issues related to string interpolation or escaping characters that may not be handled correctly with double-quotes in the context of the Dev Box customization tasks
 - If use of double-quotes is necessary, ensure that the script is properly escaped to avoid syntax errors. This may involve using backticks or other escaping mechanisms to ensure that the script runs correctly within the Dev Box environment
 
-> [!NOTE]
-> When using single-quotes, ensure that any variables or expressions that need to be evaluated are not enclosed in single-quotes, as this will prevent them from being interpreted correctly.
+>[!NOTE]
+>When using single-quotes, ensure that any variables or expressions that need to be evaluated are not enclosed in single-quotes, as this will prevent them from being interpreted correctly.
 
 #### General PowerShell guidance
 

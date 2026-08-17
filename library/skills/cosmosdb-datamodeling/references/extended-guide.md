@@ -53,7 +53,7 @@ A JSON representation showing 5-10 representative documents for the container
 ## Access Pattern Mapping
 ### Solved Patterns
 
-🔴 CRITICAL: List both writes and reads solved.
+ CRITICAL: List both writes and reads solved.
 
 ## Access Pattern Mapping
 
@@ -63,7 +63,7 @@ A JSON representation showing 5-10 representative documents for the container
 |---------|-----------|---------------|-------------------|---------------------|
 
 ## Hot Partition Analysis
-- **MainContainer**: Pattern #1 at 500 RPS distributed across ~10K users = 0.05 RPS per partition ✅
+- **MainContainer**: Pattern #1 at 500 RPS distributed across ~10K users = 0.05 RPS per partition
 - **Container-2**: Pattern #4 filtering by status could concentrate on "ACTIVE" status - **Mitigation**: Add random suffix to partition key
 
 ## Trade-offs and Optimizations
@@ -83,23 +83,23 @@ A JSON representation showing 5-10 representative documents for the container
 - **Conflict Resolution**: [policy selection and custom resolution procedures]
 - **Regional Failover**: [automatic vs manual failover strategy]
 
-## Validation Results 🔴
+## Validation Results
 
-- [ ] Reasoned step-by-step through design decisions, applying Important Cosmos DB Context, Core Design Philosophy, and optimizing using Design Patterns ✅
-- [ ] Aggregate boundaries clearly defined based on access pattern analysis ✅
-- [ ] Every access pattern solved or alternative provided ✅
-- [ ] Unnecessary cross-partition queries eliminated using identifying relationships ✅
-- [ ] All containers and indexes documented with full justification ✅
-- [ ] Hot partition analysis completed ✅
-- [ ] Cost estimates provided for high-volume operations ✅
-- [ ] Trade-offs explicitly documented and justified ✅
-- [ ] Global distribution strategy detailed ✅
-- [ ] Cross-referenced against `cosmosdb_requirements.md` for accuracy ✅
+- [ ] Reasoned step-by-step through design decisions, applying Important Cosmos DB Context, Core Design Philosophy, and optimizing using Design Patterns
+- [ ] Aggregate boundaries clearly defined based on access pattern analysis
+- [ ] Every access pattern solved or alternative provided
+- [ ] Unnecessary cross-partition queries eliminated using identifying relationships
+- [ ] All containers and indexes documented with full justification
+- [ ] Hot partition analysis completed
+- [ ] Cost estimates provided for high-volume operations
+- [ ] Trade-offs explicitly documented and justified
+- [ ] Global distribution strategy detailed
+- [ ] Cross-referenced against `cosmosdb_requirements.md` for accuracy
 ```
 
 ## Communication Guidelines
 
-🔴 CRITICAL BEHAVIORS:
+ CRITICAL BEHAVIORS:
 
 - NEVER fabricate RPS numbers - always work with user to estimate
 - NEVER reference other cloud providers' implementations
@@ -126,13 +126,13 @@ A JSON representation showing 5-10 representative documents for the container
 • Show RU calculations and distribution reasoning
 • Be conversational but precise with technical details
 
-🔴 File Creation Rules:
+ File Creation Rules:
 
 • **Update cosmosdb_requirements.md**: After every user message with new info
 • **Create cosmosdb_data_model.md**: Only after user confirms all patterns captured AND validation checklist complete
 • **When creating final model**: Reason step-by-step, don't copy design considerations verbatim - re-evaluate everything
 
-🔴 **COST CALCULATION ACCURACY RULES**:
+ **COST CALCULATION ACCURACY RULES**:
 • **Always calculate RU costs based on realistic document sizes** - not theoretical 1KB examples
 • **Include cross-partition overhead** in all cross-partition query costs (2.5 RU × physical partitions)
 • **Calculate physical partitions** using total data size ÷ 50GB formula
@@ -370,10 +370,10 @@ Decision: Separate Aggregates (different containers)
 ### Natural Keys Over Generic Identifiers
 
 Your keys should describe what they identify:
-• ✅ user_id, order_id, product_sku - Clear, purposeful
-• ❌ PK, SK, GSI1PK - Obscure, requires documentation
-• ✅ OrdersByCustomer, ProductsByCategory - Self-documenting queries
-• ❌ Query1, Query2 - Meaningless names
+•  user_id, order_id, product_sku - Clear, purposeful
+•  PK, SK, GSI1PK - Obscure, requires documentation
+•  OrdersByCustomer, ProductsByCategory - Self-documenting queries
+•  Query1, Query2 - Meaningless names
 
 This clarity becomes critical as your application grows and new developers join.
 
@@ -397,7 +397,7 @@ Choose partition keys that distribute load evenly across many values while align
 
 Index overhead increases RU costs and storage. It occurs when documents have many indexed properties or frequent updates to indexed properties. Each indexed property consumes additional RUs on writes and storage space. Depending on query patterns, this overhead might be acceptable for read-heavy workloads.
 
-🔴 IMPORTANT: If you're OK with the added costs, make sure you confirm the increased RU consumption will not exceed your container's provisioned throughput. You should do back of the envelope math to be safe.
+ IMPORTANT: If you're OK with the added costs, make sure you confirm the increased RU consumption will not exceed your container's provisioned throughput. You should do back of the envelope math to be safe.
 
 #### Workload-Driven Cost Optimization
 
@@ -428,7 +428,7 @@ This section includes common optimizations. None of these optimizations should b
 
 ### Massive Scale Data Binning Pattern
 
-🔴 **CRITICAL PATTERN** for extremely high-volume workloads (>50k writes/sec of >100M records):
+ **CRITICAL PATTERN** for extremely high-volume workloads (>50k writes/sec of >100M records):
 
 When facing massive write volumes, **data binning/chunking** can reduce write operations by 90%+ while maintaining query efficiency.
 
@@ -730,7 +730,7 @@ This pattern ensures uniqueness constraints while maintaining performance within
 
 ### Hierarchical Partition Keys (HPK) for Natural Query Boundaries
 
-🔴 **NEW FEATURE** - Available in dedicated Cosmos DB NoSQL API only:
+ **NEW FEATURE** - Available in dedicated Cosmos DB NoSQL API only:
 
 Hierarchical Partition Keys provide natural query boundaries using multiple fields as partition key levels, eliminating synthetic key complexity while optimizing query performance.
 

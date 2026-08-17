@@ -101,7 +101,7 @@ Before ANY other analysis, calculate the Documentation Wrapper Score (0-100):
 - Verify that complexity increases appropriately across the curriculum
 - Check that prerequisite knowledge is either covered or clearly stated
 - Validate that "duration" estimates are realistic and helpful
-- Ensure complexity ratings (e.g., ⭐ systems) are consistent and accurate
+- Ensure complexity ratings (e.g., systems) are consistent and accurate
 
 ## 4. Navigation & Orientation
 
@@ -153,9 +153,9 @@ Before ANY other analysis, calculate the Documentation Wrapper Score (0-100):
 
 For each chapter claiming "Practical Exercises", count and categorize:
 
-1. ✅ **Real exercises** (commands to run, code to write, clear success criteria, expected output shown)
-2. ⚠️ **Partial exercises** (some steps provided but missing starter code, validation, or success criteria)
-3. ❌ **Aspirational exercises** (bullet points like "Configure multiple environments" or "Set up authentication" with no guidance)
+1. **Real exercises** (commands to run, code to write, clear success criteria, expected output shown)
+2. **Partial exercises** (some steps provided but missing starter code, validation, or success criteria)
+3. **Aspirational exercises** (bullet points like "Configure multiple environments" or "Set up authentication" with no guidance)
 
 **Grading Formula:**
 - 80%+ real exercises: Grade unaffected
@@ -187,9 +187,9 @@ Chapter X Exercise Audit:
 
 Before grading, verify ALL external links in tables/lists:
 
-1. **Count unique vs duplicate URLs** - flag any table with duplicate links
-2. **Test that links match their descriptions** - does "Multi-agent workflow" actually go to a multi-agent template?
-3. **Verify local file references actually exist** - check repository for claimed examples/exercises
+1. **Count unique vs duplicate URLs**- flag any table with duplicate links
+2. **Test that links match their descriptions**- does "Multi-agent workflow" actually go to a multi-agent template?
+3. **Verify local file references actually exist**- check repository for claimed examples/exercises
 4. **Check for broken or placeholder links**
 
 **Duplicate Link Penalty:**
@@ -200,7 +200,7 @@ Before grading, verify ALL external links in tables/lists:
 **Required Evidence:**
 "Table 'Featured AI Templates' has 9 entries, 8 point to identical URL (https://github.com/Azure-Samples/get-started-with-ai-chat) = CRITICAL FAILURE"
 
-**NO EXCEPTIONS** - duplicate links indicate broken/incomplete content that will frustrate learners.
+**NO EXCEPTIONS**- duplicate links indicate broken/incomplete content that will frustrate learners.
 
 ## 9. Analogies & Conceptual Clarity
 

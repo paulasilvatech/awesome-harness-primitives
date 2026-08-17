@@ -4,7 +4,7 @@ This file contains detailed instructions for Phase 4. Read and follow this file 
 
 ---
 
-**🚨🚨🚨 Phase 4 Mandatory Execution Order — Never Skip Any Step 🚨🚨🚨**
+** Phase 4 Mandatory Execution Order — Never Skip Any Step **
 
 The following 5 steps must be executed **strictly in order**. No step may be omitted or skipped.
 Even if the user requests deployment with "deploy it", "go ahead", "do it", etc., always proceed from Step 1 in order.
@@ -45,7 +45,7 @@ az group create --name "<RG_NAME>" --location "<LOCATION>"  # Location confirmed
 ```
 → Proceed to next step after confirming success
 
-### Step 2: Validate → What-if Validation — 🚨 Mandatory
+### Step 2: Validate → What-if Validation —  Mandatory
 
 **Do not skip this step. Always execute it no matter how urgently the user requests deployment.**
 
@@ -90,7 +90,7 @@ az deployment group what-if `
 ```
 → Summarize the What-if results and present them to the user.
 
-**⏱️ What-if Execution Method and Timeout Handling:**
+**⏱ What-if Execution Method and Timeout Handling:**
 
 What-if performs resource validation on the Azure server side, so it may take time depending on the service/region.
 **Always execute with `initial_wait: 300` (5 minutes).** If not completed within 5 minutes, it automatically times out.
@@ -121,7 +121,7 @@ ask_user({
 **If "Skip What-if and deploy directly" is selected:**
 - Generate the preview diagram based on the Phase 1 draft
 - Inform the user of the risks:
-  > **⚠️ Deploying without What-if validation.** Unexpected resource changes may occur. Please verify in the Azure Portal after deployment.
+  > ** Deploying without What-if validation.** Unexpected resource changes may occur. Please verify in the Azure Portal after deployment.
 
 **Never do the following:**
 - Execute without setting `initial_wait`, causing indefinite waiting
@@ -129,7 +129,7 @@ ask_user({
 - Automatically switch to deployment without asking the user on timeout
 - Skip what-if for reasons like "deployment is faster"
 
-### Step 3: Preview Diagram Based on What-if Results — 🚨 Mandatory
+### Step 3: Preview Diagram Based on What-if Results —  Mandatory
 
 **Do not skip this step. Always generate the preview diagram when What-if succeeds.**
 
@@ -188,7 +188,7 @@ az deployment group show `
 
 When deployment fails, some resources may remain in a 'Failed' state. Redeploying in this state causes errors like `AccountIsNotSucceeded`.
 
-**⚠️ Resource deletion is a destructive command. Always explain the situation to the user and obtain approval before executing.**
+** Resource deletion is a destructive command. Always explain the situation to the user and obtain approval before executing.**
 
 ```
 [Resource name] failed during deployment.
@@ -199,7 +199,7 @@ Delete and redeploy? (Yes/No)
 
 Delete failed resources and redeploy once the user approves.
 
-**🔹 Handling Soft-deleted Resources (Prevent Redeployment Blocking):**
+**Handling Soft-deleted Resources (Prevent Redeployment Blocking):**
 
 When a resource group is deleted after a failed deployment, Cognitive Services (Foundry), Key Vault, etc. remain in a **soft-delete state**.
 Redeploying with the same name causes `FlagMustBeSetForRestore`, `Conflict` errors.

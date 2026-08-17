@@ -4,7 +4,7 @@ This file contains the complete orchestration logic for performing an **incremen
 
 **Key difference from single analysis (`orchestrator.md`):** Instead of discovering components from scratch, this workflow inherits the old report's component inventory, IDs, and conventions. It then verifies each item against the current code and discovers new items.
 
-## ⚡ Context Budget — Read Files Selectively
+## Context Budget — Read Files Selectively
 
 **Phase 1 (setup + change detection):** Read this file (`incremental-orchestrator.md`) only. The old `threat-inventory.json` provides the structural skeleton — no need to read other skill files yet.
 **Phase 2 (report generation):** Read `orchestrator.md` (for mandatory rules 1–34), `output-formats.md`, `diagram-conventions.md` — plus the relevant skeleton from `skeletons/` before writing each file. See the incremental-specific rules below.
@@ -42,7 +42,7 @@ Use incremental analysis when ALL of these conditions are met:
 
 ---
 
-**⛔ Sub-Agent Governance applies to ALL phases.** See `orchestrator.md` Sub-Agent Governance section. Sub-agents are READ-ONLY helpers — they NEVER call `create_file` for report files.
+** Sub-Agent Governance applies to ALL phases.** See `orchestrator.md` Sub-Agent Governance section. Sub-agents are READ-ONLY helpers — they NEVER call `create_file` for report files.
 
 ## Phase 0: Setup & Validation
 
@@ -192,9 +192,9 @@ Now generate all report files. **Read the relevant skill files before starting:*
 - `diagram-conventions.md` — diagram colors and styles
 - **Before writing EACH file, read the corresponding skeleton from `skeletons/skeleton-*.md`** — copy VERBATIM and fill `[FILL]` placeholders
 
-**⛔ SUB-AGENT GOVERNANCE (MANDATORY — prevents the dual-folder bug):** The parent agent owns ALL file creation. Sub-agents are READ-ONLY helpers that search code, gather context, and run verification — they NEVER call `create_file` for report files. See the full Sub-Agent Governance rules in `orchestrator.md`. The ONLY exception is `threat-inventory.json` delegation for large repos — and even then, the sub-agent prompt must include the exact output file path and explicit instruction to write ONLY that one file.
+** SUB-AGENT GOVERNANCE (MANDATORY — prevents the dual-folder bug):** The parent agent owns ALL file creation. Sub-agents are READ-ONLY helpers that search code, gather context, and run verification — they NEVER call `create_file` for report files. See the full Sub-Agent Governance rules in `orchestrator.md`. The ONLY exception is `threat-inventory.json` delegation for large repos — and even then, the sub-agent prompt must include the exact output file path and explicit instruction to write ONLY that one file.
 
-**⛔ CRITICAL: The incremental report is a STANDALONE report.** Someone reading it without the old report must understand the complete security posture. Status annotations ([STILL PRESENT], [FIXED], [NEW CODE], etc.) are additions on top of complete content — not replacements for it.
+** CRITICAL: The incremental report is a STANDALONE report.** Someone reading it without the old report must understand the complete security posture. Status annotations ([STILL PRESENT], [FIXED], [NEW CODE], etc.) are additions on top of complete content — not replacements for it.
 
 ### 4a. 0.1-architecture.md
 
@@ -206,7 +206,7 @@ Now generate all report files. **Read the relevant skill files before starting:*
 - **Removed components:** Add with annotation: `[REMOVED]` and brief note
 - Tech stack, deployment model: update if changed, otherwise carry forward
 
-  ⛔ **DEPLOYMENT CLASSIFICATION IS MANDATORY (even in incremental mode):**
+   **DEPLOYMENT CLASSIFICATION IS MANDATORY (even in incremental mode):**
   The `0.1-architecture.md` MUST contain:
   1. `**Deployment Classification:** \`[VALUE]\`` line (e.g., `K8S_SERVICE`, `LOCALHOST_DESKTOP`)
   2. `### Component Exposure Table` with columns: Component, Listens On, Auth Required, Reachability, Min Prerequisite, Derived Tier
@@ -228,7 +228,7 @@ Now generate all report files. **Read the relevant skill files before starting:*
 - **New flows:** New IDs continuing the sequence
 - All standard DFD rules from `diagram-conventions.md` apply (flowchart LR, color palette, etc.)
 
-  ⛔ **POST-DFD GATE:** After creating `1.1-threatmodel.mmd`, count elements and boundaries. If elements > 15 OR boundaries > 4 → create `1.2-threatmodel-summary.mmd` using `skeleton-summary-dfd.md` NOW. Do NOT proceed to Step 4c until the decision is made.
+   **POST-DFD GATE:** After creating `1.1-threatmodel.mmd`, count elements and boundaries. If elements > 15 OR boundaries > 4 → create `1.2-threatmodel-summary.mmd` using `skeleton-summary-dfd.md` NOW. Do NOT proceed to Step 4c until the decision is made.
 
 ### 4c. 1-threatmodel.md
 
@@ -244,7 +244,7 @@ Now generate all report files. **Read the relevant skill files before starting:*
 
 - **Read `skeletons/skeleton-stride-analysis.md` first** — use Summary table and per-component structure
 
-**⛔ CRITICAL REMINDERS FOR INCREMENTAL STRIDE (these rules from `orchestrator.md` apply identically here):**
+** CRITICAL REMINDERS FOR INCREMENTAL STRIDE (these rules from `orchestrator.md` apply identically here):**
 1. **The "A" in STRIDE-A is ALWAYS "Abuse"** (business logic abuse, workflow manipulation, feature misuse). NEVER use "Authorization" as the STRIDE-A category name. This applies to threat ID suffixes (T01.A), N/A justification labels, and all prose. Authorization issues fall under Elevation of Privilege (E), not the A category.
 2. **The `## Summary` table MUST appear at the TOP of the file**, immediately after `## Exploitability Tiers`, BEFORE any individual component sections. Use this EXACT structure at the top:
 
@@ -268,13 +268,13 @@ Now generate all report files. **Read the relevant skill files before starting:*
 ```
 
 3. **STRIDE categories may produce 0, 1, 2, 3+ threats** per component. Do NOT cap at 1 threat per category. Components with rich security surfaces should typically have 2-4 threats per relevant category. If every STRIDE cell in the Summary table is 0 or 1, the analysis is too shallow — go back and identify additional threat vectors. The Summary table columns reflect actual threat counts.
-4. **⛔ PREREQUISITE FLOOR CHECK (per threat):** Before assigning a prerequisite to any threat, look up the component's `Min Prerequisite` and `Derived Tier` in the Component Exposure Table (`0.1-architecture.md`). The threat's prerequisite MUST be ≥ the component's floor. The threat's tier MUST be ≥ the component's derived tier. Use the canonical prerequisite→tier mapping from `analysis-principles.md`. Prerequisites MUST use only canonical values: `None`, `Authenticated User`, `Privileged User`, `Internal Network`, `Local Process Access`, `Host/OS Access`, `Admin Credentials`, `Physical Access`, `{Component} Compromise`. ⛔ `Application Access` and `Host Access` are FORBIDDEN.
+4. ** PREREQUISITE FLOOR CHECK (per threat):** Before assigning a prerequisite to any threat, look up the component's `Min Prerequisite` and `Derived Tier` in the Component Exposure Table (`0.1-architecture.md`). The threat's prerequisite MUST be ≥ the component's floor. The threat's tier MUST be ≥ the component's derived tier. Use the canonical prerequisite→tier mapping from `analysis-principles.md`. Prerequisites MUST use only canonical values: `None`, `Authenticated User`, `Privileged User`, `Internal Network`, `Local Process Access`, `Host/OS Access`, `Admin Credentials`, `Physical Access`, `{Component} Compromise`. `Application Access` and `Host Access` are FORBIDDEN.
 
-**⛔ HEADING ANCHOR RULE (applies to ALL output files):** ALL `##` and `###` headings in every output file must be PLAIN text — NO status tags (`[Existing]`, `[Fixed]`, `[Partial]`, `[New]`, `[Removed]`, or any old-style tags) in heading text. Tags break markdown anchor links and pollute table-of-contents. Place status annotations on the FIRST LINE of the section/finding body instead:
-- ✅ `## KmsPluginProvider` with first line `> **[New]** Component added in this release.`
-- ✅ `### FIND-01: Missing Auth Check` with first line `> **[Existing]**`
-- ❌ `## KmsPluginProvider [New]` (breaks `#kmspluginprovider` anchor)
-- ❌ `### FIND-01: Missing Auth Check [Existing]` (pollutes heading)
+** HEADING ANCHOR RULE (applies to ALL output files):** ALL `##` and `###` headings in every output file must be PLAIN text — NO status tags (`[Existing]`, `[Fixed]`, `[Partial]`, `[New]`, `[Removed]`, or any old-style tags) in heading text. Tags break markdown anchor links and pollute table-of-contents. Place status annotations on the FIRST LINE of the section/finding body instead:
+- `## KmsPluginProvider` with first line `> **[New]** Component added in this release.`
+- `### FIND-01: Missing Auth Check` with first line `> **[Existing]**`
+- `## KmsPluginProvider [New]` (breaks `#kmspluginprovider` anchor)
+- `### FIND-01: Missing Auth Check [Existing]` (pollutes heading)
 
 This rule applies to: `0.1-architecture.md`, `2-stride-analysis.md`, `3-findings.md`, `1-threatmodel.md`.
 
@@ -312,17 +312,17 @@ Add a `Change` column to each threat table row with one of:
   [Removed] = removed_with_component (component deleted)
   JSON change_status keeps the detailed values for programmatic use. -->
 
-⛔ POST-STEP CHECK: After writing the Change column for ALL threats, verify:
+ POST-STEP CHECK: After writing the Change column for ALL threats, verify:
   1. Every threat row has exactly one of: Existing, Fixed, New, Removed
   2. No old-style tags: Still Present, New (Code), New (Modified), Previously Unidentified
   3. Fixed threats cite the specific code change
 
 ### 4e. 3-findings.md
 
-⛔ **BEFORE WRITING ANY FINDING — Re-read `skeletons/skeleton-findings.md` NOW.**
+ **BEFORE WRITING ANY FINDING — Re-read `skeletons/skeleton-findings.md` NOW.**
 The skeleton defines the EXACT structure for each finding block, including the mandatory `**Prerequisite basis:**` line in the `#### Evidence` section. Every finding — whether [Existing], [New], [Fixed], or [Partial] — MUST follow this skeleton structure.
 
-⛔ **DEPLOYMENT CONTEXT GATE (FAIL-CLOSED) — applies to ALL findings (new and carried-forward):**
+ **DEPLOYMENT CONTEXT GATE (FAIL-CLOSED) — applies to ALL findings (new and carried-forward):**
 Read `0.1-architecture.md` Deployment Classification and Component Exposure Table.
 If classification is `LOCALHOST_DESKTOP` or `LOCALHOST_SERVICE`:
 - ZERO findings may have `Exploitation Prerequisites` = `None` → fix to `Local Process Access` or `Host/OS Access`
@@ -332,7 +332,7 @@ For ALL classifications:
 - Each finding's prerequisite MUST be ≥ its component's `Min Prerequisite` from the exposure table
 - Each finding's tier MUST be ≥ its component's `Derived Tier`
 - **EVERY finding's `#### Evidence` section MUST start with a `**Prerequisite basis:**` line** citing the specific code/config that determines the prerequisite (e.g., "ClusterIP service, no Ingress — Internal Only per Exposure Table"). This applies to [Existing] findings too — re-derive from current code.
-- Prerequisites MUST use only canonical values. ⛔ `Application Access` and `Host Access` are FORBIDDEN.
+- Prerequisites MUST use only canonical values. `Application Access` and `Host Access` are FORBIDDEN.
 
 For each old finding, verify against the current code:
 
@@ -351,7 +351,7 @@ For new findings:
 | Existing component, vulnerability introduced by code change | `new_in_modified` | `> **[New]**` — cite the specific change |
 | Existing component, vulnerability was in old code but missed | `previously_unidentified` | `> **[New]**` — verify against baseline worktree |
 
-<!-- ⛔ POST-STEP CHECK: After writing all finding annotations:
+<!-- POST-STEP CHECK: After writing all finding annotations:
   1. Every finding body starts with one of: [Existing], [Fixed], [Partial], [New], [Removed]
   2. Tags are in body text as blockquote (> **[Tag]**), NOT in the ### heading
   3. No old-style tags: [STILL PRESENT], [NEW CODE], [NEW IN MODIFIED], [PREVIOUSLY UNIDENTIFIED], [PARTIALLY MITIGATED], [REMOVED WITH COMPONENT]
@@ -577,7 +577,7 @@ Generate a self-contained HTML file that visualizes the comparison. All data com
 </div>
 
 <!-- Section 6: STRIDE Heatmap with Deltas -->
-<!-- ⛔ MANDATORY: Heatmap MUST have 13 columns including T1/T2/T3 after a divider -->
+<!--  MANDATORY: Heatmap MUST have 13 columns including T1/T2/T3 after a divider -->
 <table class="stride-heatmap">
   <thead>
     <tr>
@@ -644,7 +644,7 @@ After standard verification passes, run the incremental-specific checks from `ex
 
 ---
 
-## ⛔ Rules Specific to Incremental Analysis
+## Rules Specific to Incremental Analysis
 
 These rules supplement (not replace) the 34 mandatory rules from `orchestrator.md`:
 

@@ -286,13 +286,13 @@ const versionNonce = Math.floor(Math.random() * 2147483647);
 
 ## Validation Rules
 
-✅ **Required:**
+ **Required:**
 - All IDs must be unique
 - `type` must match actual element type
 - `version` must be an integer ≥ 1
 - `opacity` must be 0-100
 
-⚠️ **Recommended:**
+ **Recommended:**
 - Keep `roughness` at 1 for consistency
 - Use `strokeWidth` of 2 for clarity
 - Set `isDeleted` to `false`

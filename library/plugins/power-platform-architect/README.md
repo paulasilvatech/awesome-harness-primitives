@@ -67,10 +67,10 @@ For uploaded documents, AI Builder's Document Processing model scans the site pl
 signature fields are not blank and key data areas are populated. This catches the subtle defects Marcus described —
 "referenced but not included" attachments and illegible or unsigned documents.
 
- - If complete: The permit status advances to Under Review and the flow routes it to the assigned plan reviewer 
+ - If complete: The permit status advances to Under Review and the flow routes it to the assigned plan reviewer
 (Jim's team).
- - If incomplete: The status is set to Incomplete, and Power Automate sends an automated email notification to the 
-applicant via the Outlook connector detailing exactly what's missing. The applicant can log back into the Power 
+ - If incomplete: The status is set to Incomplete, and Power Automate sends an automated email notification to the
+applicant via the Outlook connector detailing exactly what's missing. The applicant can log back into the Power
 Pages portal to upload corrections. No staff time is consumed.
 
 3. Plan Review & Approval (Jim's Team → Model-Driven App)
@@ -78,7 +78,7 @@ Pages portal to upload corrections. No staff time is consumed.
 The assigned plan reviewer opens the permit in the Model-Driven App, which surfaces all applicant data, documents,
 and the AI validation results in a single view. The reviewer evaluates the application and either:
 
- - Approves → Power Automate advances the status to Approved – Pending Inspection and notifies the applicant via 
+ - Approves → Power Automate advances the status to Approved – Pending Inspection and notifies the applicant via
 email that their permit is approved and an inspection will be scheduled.
  - Requests Revisions → Status set to Revisions Requested, the applicant is emailed with specific feedback, and they
  resubmit through the portal.
@@ -107,9 +107,9 @@ later.
 
 When Sarah submits inspection results:
 
- - Pass → Power Automate sets status to Permit Issued, generates a confirmation, and notifies the applicant that 
+ - Pass → Power Automate sets status to Permit Issued, generates a confirmation, and notifies the applicant that
 their solar installation is approved.
- - Fail → Status set to Inspection Failed – Corrections Required, with Sarah's notes and photos attached. The 
+ - Fail → Status set to Inspection Failed – Corrections Required, with Sarah's notes and photos attached. The
 applicant is notified of required corrections and can schedule a re-inspection through the portal.
 
 6. Self-Service Status Tracking (Residents & Contractors → Power Pages)
@@ -118,9 +118,9 @@ At any point in this process, residents and contractors can log into the Power P
 current status, what stage it's in, whether payment has been recorded, and what the next step is. This directly
 addresses the top three phone questions Marcus cited:
 
- 1. ✅ "Did you receive my check?" → Payment status visible on portal
- 2. ✅ "What is the status of my permit?" → Live stage tracking
- 3. ✅ "When is the inspector coming?" → Scheduled date displayed
+ 1. "Did you receive my check?" → Payment status visible on portal
+ 2. "What is the status of my permit?" → Live stage tracking
+ 3. "When is the inspector coming?" → Scheduled date displayed
 
 7. Live Analytics & Audit Readiness (Elena & Jim → Power BI)
 

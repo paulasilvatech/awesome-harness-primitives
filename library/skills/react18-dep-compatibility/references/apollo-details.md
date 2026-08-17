@@ -10,11 +10,11 @@ Apollo 3.8 was the first version to adopt `useSyncExternalStore`, which React 18
 
 | Apollo Version | React 18 Support | React 19 Support | Notes |
 |---|---|---|---|
-| < 3.7 | ❌ | ❌ | Concurrent mode data tearing |
-| 3.7.x | ⚠️ | ⚠️ | Works with legacy root only (ReactDOM.render) |
-| **3.8.x** | ✅ | ✅ | First fully compatible version |
-| 3.9+ | ✅ | ✅ | Recommended |
-| 3.11+ | ✅ | ✅ (confirmed) | Explicit React 19 testing added |
+| < 3.7 | No | No | Concurrent mode data tearing |
+| 3.7.x | Yes | Yes | Works with legacy root only (ReactDOM.render) |
+| **3.8.x** | Yes | Yes | First fully compatible version |
+| 3.9+ | Yes | Yes | Recommended |
+| 3.11+ | Yes | (confirmed) | Explicit React 19 testing added |
 
 ## If You're on Apollo 3.7 Using Legacy Root
 

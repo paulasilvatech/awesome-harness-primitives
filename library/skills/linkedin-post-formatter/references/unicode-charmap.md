@@ -49,5 +49,5 @@ Bullseye bullet: ◎
 Down arrow:      ↓
 Right arrow:     →
 Sub-item arrow:  ↳
-Repost icon:     ♻️
+Repost icon:
 ```

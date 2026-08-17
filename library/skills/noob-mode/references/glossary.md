@@ -4,7 +4,7 @@ A plain-English reference for technical terms you'll encounter when using Copilo
 
 ---
 
-## 🗂️ Git & Version Control
+## Git & Version Control
 
 ### Repository (repo)
 **Plain English:** A project folder that remembers every change ever made to its files.
@@ -93,7 +93,7 @@ A plain-English reference for technical terms you'll encounter when using Copilo
 
 ---
 
-## 💻 File System & Shell
+## File System & Shell
 
 ### Terminal (Console)
 **Plain English:** The text-based control panel for your computer. You type commands instead of clicking buttons.
@@ -167,7 +167,7 @@ A plain-English reference for technical terms you'll encounter when using Copilo
 
 ---
 
-## 🔧 Development Concepts
+## Development Concepts
 
 ### API (Application Programming Interface)
 **Plain English:** A way for two programs to talk to each other, following agreed-upon rules.
@@ -246,7 +246,7 @@ A plain-English reference for technical terms you'll encounter when using Copilo
 
 ---
 
-## 🌐 Web & Networking
+## Web & Networking
 
 ### URL (Uniform Resource Locator)
 **Plain English:** A web address. The text you type in a browser's address bar.
@@ -293,7 +293,7 @@ A plain-English reference for technical terms you'll encounter when using Copilo
 
 ---
 
-## 🤖 Copilot CLI Specific
+## Copilot CLI Specific
 
 ### MCP Server (Model Context Protocol)
 **Plain English:** An add-on that gives Copilot CLI extra abilities — like plugins for a web browser.
@@ -347,7 +347,7 @@ A plain-English reference for technical terms you'll encounter when using Copilo
 
 ---
 
-## 📎 Common Commands
+## Common Commands
 
 | What you see | What it means |
 |---|---|

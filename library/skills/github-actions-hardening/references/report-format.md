@@ -9,11 +9,11 @@ GitHub Actions Hardening — <workflow file(s) reviewed>
 
 | Severity   | Count |
 | ---------- | ----- |
-| 🔴 CRITICAL | 1     |
-| 🟠 HIGH     | 2     |
-| 🟡 MEDIUM   | 1     |
-| 🔵 LOW      | 1     |
-| ⚪ INFO     | 0     |
+|  CRITICAL | 1     |
+|  HIGH     | 2     |
+|  MEDIUM   | 1     |
+|  LOW      | 1     |
+|  INFO     | 0     |
 ```
 
 If nothing was found: `No issues found. Checked: triggers, injection sinks, permissions, action
@@ -24,7 +24,7 @@ pinning, secret handling.`
 For each finding use a card:
 
 ```
-### 🔴 CRITICAL — Script injection via PR title on a privileged trigger
+### CRITICAL — Script injection via PR title on a privileged trigger
 
 File: .github/workflows/triage.yml  (line 14)
 Trigger: pull_request_target

@@ -165,7 +165,7 @@ marked -i input.md -o output.html -c config.json
 
 ### Security Warning
 
-⚠️ **Marked does NOT sanitize output HTML.** For untrusted input, use a sanitizer:
+ **Marked does NOT sanitize output HTML.** For untrusted input, use a sanitizer:
 
 ```javascript
 import { marked } from 'marked';
@@ -265,7 +265,7 @@ pandoc input.md -s -o output.docx
 
 ### Security Warning
 
-⚠️ **Pandoc processes input faithfully.** When converting untrusted markdown:
+ **Pandoc processes input faithfully.** When converting untrusted markdown:
 
 - Use `--sandbox` mode to disable external file access
 - Validate input before processing
@@ -387,7 +387,7 @@ For advanced configuration, use the Go library programmatically with parser and 
 
 ### Security Warning
 
-⚠️ **gomarkdown does NOT sanitize output HTML.** For untrusted input, use Bluemonday:
+ **gomarkdown does NOT sanitize output HTML.** For untrusted input, use Bluemonday:
 
 ```go
 import (
@@ -487,7 +487,7 @@ bundle exec jekyll serve --drafts
 
 ### Security Warning
 
-⚠️ **Jekyll security considerations:**
+ **Jekyll security considerations:**
 
 - Avoid using `safe: false` in production
 - Use `exclude` in `_config.yml` to prevent sensitive files from being published
@@ -617,7 +617,7 @@ hugo server --port 8080
 
 ### Security Warning
 
-⚠️ **Hugo security considerations:**
+ **Hugo security considerations:**
 
 - Configure security policy in `hugo.toml` for external commands
 - Use `--enableGitInfo` carefully with public repositories

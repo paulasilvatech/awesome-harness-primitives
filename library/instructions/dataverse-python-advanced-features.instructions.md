@@ -134,7 +134,7 @@ for page in accounts:
 ```python
 # SQL queries are read-only but powerful for analytics
 sql = """
-SELECT 
+SELECT
     a.name as AccountName,
     a.creditlimit,
     COUNT(c.contactid) as ContactCount
@@ -336,7 +336,7 @@ for page in client.get("account", top=batch_size, filter="statecode eq 0"):
                 "id": account['accountid'],
                 "accountmanagerid": "senior-manager-guid"
             })
-    
+
     # Batch update
     for update in batch_updates:
         client.update("account", update['id'], {"accountmanagerid": update['accountmanagerid']})
@@ -358,7 +358,7 @@ def safe_update(table, record_id, data, check_field=None, check_value=None):
             if record.get(check_field) != check_value:
                 print(f"Condition not met: {check_field} != {check_value}")
                 return False
-        
+
         client.update(table, record_id, data)
         return True
     except DataverseError as e:
@@ -404,10 +404,10 @@ print(f"Industry: {industry_formatted or industry}")  # "Technology" or 1
 
 ### Column Selection Strategy
 ```python
-# ❌ Retrieve all columns (slow, uses more bandwidth)
+# Retrieve all columns (slow, uses more bandwidth)
 account = client.get("account", record_id)
 
-# ✅ Retrieve only needed columns (fast, efficient)
+# Retrieve only needed columns (fast, efficient)
 account = client.get(
     "account",
     record_id,
@@ -417,13 +417,13 @@ account = client.get(
 
 ### Filtering on Server
 ```python
-# ❌ Retrieve all, filter locally (inefficient)
+# Retrieve all, filter locally (inefficient)
 all_accounts = []
 for page in client.get("account"):
     all_accounts.extend(page)
 large_accounts = [a for a in all_accounts if a.get("creditlimit", 0) > 100000]
 
-# ✅ Filter on server, retrieve only matches (efficient)
+# Filter on server, retrieve only matches (efficient)
 large_accounts = []
 for page in client.get("account", filter="creditlimit gt 100000"):
     large_accounts.extend(page)
@@ -431,10 +431,10 @@ for page in client.get("account", filter="creditlimit gt 100000"):
 
 ### Paging Large Result Sets
 ```python
-# ❌ Load all results at once (memory intensive)
+# Load all results at once (memory intensive)
 all_accounts = list(client.get("account"))
 
-# ✅ Process in pages (memory efficient)
+# Process in pages (memory efficient)
 processed = 0
 for page in client.get("account", top=1000):
     for account in page:
@@ -445,11 +445,11 @@ for page in client.get("account", top=1000):
 
 ### Batch Operations
 ```python
-# ❌ Individual creates in loop (slow)
+# Individual creates in loop (slow)
 for account_data in accounts:
     client.create("account", account_data)
 
-# ✅ Batch create (fast, optimized)
+# Batch create (fast, optimized)
 created_ids = client.create("account", accounts)
 ```
 
@@ -571,17 +571,17 @@ def delete_table_safe(table_name):
         if not table_info:
             print(f"Table {table_name} not found")
             return False
-        
+
         # Delete
         client.delete_table(table_name)
         print(f"✓ Deleted table: {table_name}")
-        
+
         # Clear cache
         client.flush_cache()
         return True
-        
+
     except MetadataError as e:
-        print(f"❌ Failed to delete table: {e}")
+        print(f" Failed to delete table: {e}")
         return False
 
 delete_table_safe("new_TempTable")
@@ -626,7 +626,7 @@ try:
         }
     )
     print(f"✓ Created table: {table_info['table_schema_name']}")
-    
+
     # 2. Create records
     print("\nCreating tasks...")
     tasks = [
@@ -654,7 +654,7 @@ try:
     ]
     task_ids = client.create("new_ProjectTask", tasks)
     print(f"✓ Created {len(task_ids)} tasks")
-    
+
     # 3. Query and filter
     print("\nQuerying high-priority tasks...")
     high_priority = client.get(
@@ -665,7 +665,7 @@ try:
     for page in high_priority:
         for task in page:
             print(f"  - {task['new_title']}: {task['new_estimatedhours']} hours")
-    
+
     # 4. Update records
     print("\nUpdating task status...")
     client.update("new_ProjectTask", task_ids[1], {
@@ -673,17 +673,17 @@ try:
         "new_EstimatedHours": 85.5
     })
     print("✓ Updated task status")
-    
+
     # 5. Cleanup
     print("\nCleaning up...")
     client.delete_table("new_ProjectTask")
     print("✓ Deleted table")
-    
+
     # Clear cache
     client.flush_cache()
-    
+
 except (MetadataError, DataverseError) as e:
-    print(f"❌ Error: {e}")
+    print(f" Error: {e}")
 ```
 
 ---

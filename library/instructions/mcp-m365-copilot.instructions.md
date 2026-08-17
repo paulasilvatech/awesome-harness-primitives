@@ -123,7 +123,7 @@ Use JSONPath to extract relevant data:
   "data_path": "$.items[*]",
   "properties": {
     "title": "$.name",
-    "subtitle": "$.description", 
+    "subtitle": "$.description",
     "url": "$.html_url"
   }
 }
@@ -161,7 +161,7 @@ Define in ai-plugin.json for consistent formatting:
 ```json
 {
   "type": "TextBlock",
-  "text": "${if(status == 'active', '✅ Active', '❌ Inactive')}"
+  "text": "${if(status == 'active', ' Active', ' Inactive')}"
 }
 ```
 

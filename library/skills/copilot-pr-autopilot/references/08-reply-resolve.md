@@ -94,10 +94,10 @@ have been broken up.
 
 ### Anti-patterns — DO NOT use
 
-- ❌ `"Thanks!"` / `"Good point."` with no substance.
-- ❌ `"Will fix later."` Either fix it now or decline with rationale;
+- `"Thanks!"` / `"Good point."` with no substance.
+- `"Will fix later."` Either fix it now or decline with rationale;
   deferred fixes that aren't tracked anywhere get lost.
-- ❌ Resolve-without-reply. The next reviewer cannot reconstruct why
+- Resolve-without-reply. The next reviewer cannot reconstruct why
   the thread was closed.
-- ❌ `"I disagree."` with no reasoning. State the actual technical
+- `"I disagree."` with no reasoning. State the actual technical
   disagreement.

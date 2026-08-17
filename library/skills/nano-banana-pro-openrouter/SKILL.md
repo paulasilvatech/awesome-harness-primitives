@@ -5,7 +5,7 @@ description: >-
   generation, image edits, and multi-image compositing; supports 1K/2K/4K output. Use this skill when
   the user asks for prompt-only generation.
 metadata:
-  emoji: "🍌"
+  emoji: ""
   primaryEnv: "OPENROUTER_API_KEY"
   requires: "{\"bins\": [\"uv\"], \"env\": [\"OPENROUTER_API_KEY\"]}"
 ---

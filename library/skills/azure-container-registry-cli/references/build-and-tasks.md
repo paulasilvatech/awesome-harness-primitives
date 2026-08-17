@@ -79,7 +79,7 @@ az acr task delete --registry {registry} --name build-app --yes
 
 Useful run variables for `--image`: `{{.Run.ID}}`, `{{.Run.Commit}}`, `{{.Run.Branch}}`, `{{.Run.Date}}`.
 
-⚠️ On **ABAC-enabled registries** (`roleAssignmentMode` = `AbacRepositoryPermissions`), tasks and quick builds/runs have no default access to the source registry. Pass `--source-acr-auth-id [caller]` to `az acr build`/`az acr run`, and `--source-acr-auth-id [system]` (or a user-assigned identity resource ID) to `az acr task create`/`update`, then grant that identity the `Container Registry Repository ...` roles. Ensure the task actually has that identity — add `--assign-identity [system]` at creation, or run `az acr task identity assign` on an existing task, before referencing it.
+On **ABAC-enabled registries** (`roleAssignmentMode` = `AbacRepositoryPermissions`), tasks and quick builds/runs have no default access to the source registry. Pass `--source-acr-auth-id [caller]` to `az acr build`/`az acr run`, and `--source-acr-auth-id [system]` (or a user-assigned identity resource ID) to `az acr task create`/`update`, then grant that identity the `Container Registry Repository ...` roles. Ensure the task actually has that identity — add `--assign-identity [system]` at creation, or run `az acr task identity assign` on an existing task, before referencing it.
 
 ## Triggers
 

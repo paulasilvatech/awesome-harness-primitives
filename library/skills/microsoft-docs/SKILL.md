@@ -4,7 +4,7 @@ description: >-
   Query official Microsoft documentation to find concepts, tutorials, and code examples across Azure,
   .NET, Agent Framework, Aspire, VS Code, GitHub, and more. Uses Microsoft Learn MCP as the default,
   with Context7 and Aspire MCP for content that lives outside learn.microsoft.com. Use this skill when
-  the following categories live **outside** learn.microsoft.com. Use the specified tool instead.
+  the following categories live **outside ** learn.microsoft.com. Use the specified tool instead.
 ---
 # Microsoft Docs
 
@@ -14,7 +14,7 @@ Research skill for the Microsoft technology ecosystem. Covers learn.microsoft.co
 
 ## Default: Microsoft Learn MCP
 
-Use these tools for **everything on learn.microsoft.com** — Azure, .NET, M365, Power Platform, Agent Framework, Semantic Kernel, Windows, and more. This is the primary tool for the vast majority of Microsoft documentation queries.
+Use these tools for **everything on learn.microsoft.com ** — Azure, .NET, M365, Power Platform, Agent Framework, Semantic Kernel, Windows, and more. This is the primary tool for the vast majority of Microsoft documentation queries.
 
 | Tool | Purpose |
 |------|---------|
@@ -49,11 +49,11 @@ Pass `--json` to `search` or `code-search` to get raw JSON output for further pr
 
 ## Exceptions: When to Use Other Tools
 
-The following categories live **outside** learn.microsoft.com. Use the specified tool instead.
+The following categories live **outside ** learn.microsoft.com. Use the specified tool instead.
 
 ### .NET Aspire — Use Aspire MCP Server (preferred) or Context7
 
-Aspire docs live on **aspire.dev**, not Learn. The best tool depends on your Aspire CLI version:
+Aspire docs live on **aspire.dev **, not Learn. The best tool depends on your Aspire CLI version:
 
 **CLI 13.2+** (recommended) — The Aspire MCP server includes built-in docs search tools:
 
@@ -65,7 +65,7 @@ Aspire docs live on **aspire.dev**, not Learn. The best tool depends on your Asp
 
 These ship in Aspire CLI 13.2 ([PR #14028](https://github.com/dotnet/aspire/pull/14028)). To update: `aspire update --self --channel daily`. Ref: https://davidpine.dev/posts/aspire-docs-mcp-tools/
 
-**CLI 13.1** — The MCP server provides integration lookup (`list_integrations`, `get_integration_docs`) but **not** docs search. Fall back to Context7:
+**CLI 13.1 ** — The MCP server provides integration lookup (`list_integrations`, `get_integration_docs`) but ** not ** docs search. Fall back to Context7:
 
 | Library ID | Use for |
 |---|---|
@@ -75,7 +75,7 @@ These ship in Aspire CLI 13.2 ([PR #14028](https://github.com/dotnet/aspire/pull
 
 ### VS Code — Use Context7
 
-VS Code docs live on **code.visualstudio.com**, not Learn.
+VS Code docs live on **code.visualstudio.com **, not Learn.
 
 | Library ID | Use for |
 |---|---|
@@ -84,7 +84,7 @@ VS Code docs live on **code.visualstudio.com**, not Learn.
 
 ### GitHub — Use Context7
 
-GitHub docs live on **docs.github.com** and **cli.github.com**.
+GitHub docs live on **docs.github.com ** and ** cli.github.com **.
 
 | Library ID | Use for |
 |---|---|
@@ -93,14 +93,14 @@ GitHub docs live on **docs.github.com** and **cli.github.com**.
 
 ### Agent Framework — Use Learn MCP + Context7
 
-Agent Framework tutorials are on learn.microsoft.com (use `microsoft_docs_search`), but the **GitHub repo** has API-level detail that is often ahead of published docs — particularly DevUI REST API reference, CLI options, and .NET integration.
+Agent Framework tutorials are on learn.microsoft.com (use `microsoft_docs_search`), but the **GitHub repo ** has API-level detail that is often ahead of published docs — particularly DevUI REST API reference, CLI options, and .NET integration.
 
 | Library ID | Use for |
 |---|---|
 | `/websites/learn_microsoft_en-us_agent-framework` | Tutorials — DevUI guides, tracing, workflow orchestration |
 | `/microsoft/agent-framework` | API detail — DevUI REST endpoints, CLI flags, auth, .NET `AddDevUI`/`MapDevUI` |
 
-**DevUI tip:** Query the Learn website source for how-to guides, then the repo source for API-level specifics (endpoint schemas, proxy config, auth tokens).
+**DevUI tip: ** Query the Learn website source for how-to guides, then the repo source for API-level specifics (endpoint schemas, proxy config, auth tokens).
 
 ---
 
@@ -118,11 +118,11 @@ For any Context7 query, resolve the library ID first (one-time per session):
 Be specific — include version, intent, and language:
 
 ```
-# ❌ Too broad
+# Too broad
 "Azure Functions"
 "agent framework"
 
-# ✅ Specific
+# Specific
 "Azure Functions Python v2 programming model"
 "Cosmos DB partition key design best practices"
 "GitHub Actions workflow_dispatch inputs matrix strategy"
@@ -132,6 +132,6 @@ Be specific — include version, intent, and language:
 ```
 
 Include context:
-- **Version** when relevant (`.NET 8`, `Aspire 13`, `VS Code 1.96`)
-- **Task intent** (`quickstart`, `tutorial`, `overview`, `limits`, `API reference`)
-- **Language** for polyglot docs (`Python`, `TypeScript`, `C#`)
+- **Version ** when relevant (`.NET 8`, `Aspire 13`, `VS Code 1.96`)
+- **Task intent ** (`quickstart`, `tutorial`, `overview`, `limits`, `API reference`)
+- **Language ** for polyglot docs (`Python`, `TypeScript`, `C#`)

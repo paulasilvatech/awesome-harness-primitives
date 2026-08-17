@@ -20,7 +20,7 @@ Fix issues found in compilation results:
 - **ERROR** → Must fix and recompile
 - **WARNING** → Handle according to the criteria below
 
-**🚨 WARNING Handling Criteria — Do Not Force Unnecessary Fixes:**
+** WARNING Handling Criteria — Do Not Force Unnecessary Fixes:**
 
 WARNINGs do not block deployment. Attempting to resolve warnings often introduces deployment errors, so use the following criteria:
 
@@ -107,7 +107,7 @@ State these limitations in the review results so the user understands the import
 ## Bicep Code Review Results
 
 **Compilation Result**: [PASS/WARNING N items]
-**Checklist**: ✅ Passed X items / ⚠️ Warnings X items
+**Checklist**:  Passed X items /  Warnings X items
 **Hardcoding Check**: [PASS / N violations]
 **Auto-fixed**: X items
 
@@ -130,7 +130,7 @@ Users may feel uneasy about the word "deployment", so clearly communicate that w
 
 ```
 ask_user({
-  question: "Code review passed! Ready to proceed to the next step?\n\n⚡ This does NOT deploy immediately:\n  1️⃣ What-if validation — Simulates what will be created (not a deployment, safe)\n  2️⃣ Preview diagram — Review the architecture to be deployed as a diagram\n  3️⃣ Final confirmation — Actual deployment only after you review the diagram and approve\n\nNothing will be deployed without your approval.",
+  question: "Code review passed! Ready to proceed to the next step?\n\n This does NOT deploy immediately:\n  1 What-if validation — Simulates what will be created (not a deployment, safe)\n  2 Preview diagram — Review the architecture to be deployed as a diagram\n  3 Final confirmation — Actual deployment only after you review the diagram and approve\n\nNothing will be deployed without your approval.",
   choices: [
     "Proceed to next step (what-if validation + preview diagram) (Recommended)",
     "Just give me the code, I'll deploy later"

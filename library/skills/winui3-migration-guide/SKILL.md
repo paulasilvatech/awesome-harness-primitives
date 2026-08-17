@@ -38,7 +38,7 @@ All `Windows.UI.Xaml.*` namespaces move to `Microsoft.UI.Xaml.*`:
 ### 1. ContentDialog Without XamlRoot
 
 ```csharp
-// ❌ WRONG — Throws InvalidOperationException in WinUI 3
+// WRONG — Throws InvalidOperationException in WinUI 3
 var dialog = new ContentDialog
 {
     Title = "Error",
@@ -49,7 +49,7 @@ await dialog.ShowAsync();
 ```
 
 ```csharp
-// ✅ CORRECT — Set XamlRoot before showing
+// CORRECT — Set XamlRoot before showing
 var dialog = new ContentDialog
 {
     Title = "Error",
@@ -63,13 +63,13 @@ await dialog.ShowAsync();
 ### 2. MessageDialog Instead of ContentDialog
 
 ```csharp
-// ❌ WRONG — UWP API, not available in WinUI 3 desktop
+// WRONG — UWP API, not available in WinUI 3 desktop
 var dialog = new Windows.UI.Popups.MessageDialog("Are you sure?", "Confirm");
 await dialog.ShowAsync();
 ```
 
 ```csharp
-// ✅ CORRECT — Use ContentDialog
+// CORRECT — Use ContentDialog
 var dialog = new ContentDialog
 {
     Title = "Confirm",
@@ -88,7 +88,7 @@ if (result == ContentDialogResult.Primary)
 ### 3. CoreDispatcher Instead of DispatcherQueue
 
 ```csharp
-// ❌ WRONG — CoreDispatcher does not exist in WinUI 3
+// WRONG — CoreDispatcher does not exist in WinUI 3
 await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
 {
     StatusText.Text = "Done";
@@ -96,7 +96,7 @@ await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
 ```
 
 ```csharp
-// ✅ CORRECT — Use DispatcherQueue
+// CORRECT — Use DispatcherQueue
 DispatcherQueue.TryEnqueue(() =>
 {
     StatusText.Text = "Done";
@@ -116,12 +116,12 @@ DispatcherQueue.TryEnqueue(DispatcherQueuePriority.High, () =>
 ### Window Reference
 
 ```csharp
-// ❌ WRONG — Window.Current does not exist in WinUI 3
+// WRONG — Window.Current does not exist in WinUI 3
 var currentWindow = Window.Current;
 ```
 
 ```csharp
-// ✅ CORRECT — Use a static property in App
+// CORRECT — Use a static property in App
 public partial class App : Application
 {
     public static Window MainWindow { get; private set; }
@@ -161,14 +161,14 @@ public partial class App : Application
 ### File/Folder Pickers
 
 ```csharp
-// ❌ WRONG — UWP style, no window handle
+// WRONG — UWP style, no window handle
 var picker = new FileOpenPicker();
 picker.FileTypeFilter.Add(".txt");
 var file = await picker.PickSingleFileAsync();
 ```
 
 ```csharp
-// ✅ CORRECT — Initialize with window handle
+// CORRECT — Initialize with window handle
 var picker = new FileOpenPicker();
 var hwnd = WinRT.Interop.WindowNative.GetWindowHandle(App.MainWindow);
 WinRT.Interop.InitializeWithWindow.Initialize(picker, hwnd);
@@ -185,14 +185,14 @@ var file = await picker.PickSingleFileAsync();
 | `CoreDispatcher.ProcessEvents()` | No equivalent — restructure async code |
 | `CoreWindow.GetForCurrentThread()` | Not available — use `DispatcherQueue.GetForCurrentThread()` |
 
-**Key difference**: UWP uses ASTA (Application STA) with built-in reentrancy blocking. WinUI 3 uses standard STA without this protection. Watch for reentrancy issues when async code pumps messages.
+**Key difference **: UWP uses ASTA (Application STA) with built-in reentrancy blocking. WinUI 3 uses standard STA without this protection. Watch for reentrancy issues when async code pumps messages.
 
 ---
 
 ## Background Tasks Migration
 
 ```csharp
-// ❌ WRONG — UWP IBackgroundTask
+// WRONG — UWP IBackgroundTask
 public sealed class MyTask : IBackgroundTask
 {
     public void Run(IBackgroundTaskInstance taskInstance) { }
@@ -200,7 +200,7 @@ public sealed class MyTask : IBackgroundTask
 ```
 
 ```csharp
-// ✅ CORRECT — Windows App SDK AppLifecycle
+// CORRECT — Windows App SDK AppLifecycle
 using Microsoft.Windows.AppLifecycle;
 
 // Register for activation
@@ -242,13 +242,13 @@ UWP unit test projects do not work with WinUI 3. You must migrate to the WinUI 3
 
 | UWP | WinUI 3 |
 |-----|---------|
-| Unit Test App (Universal Windows) | **Unit Test App (WinUI in Desktop)** |
+| Unit Test App (Universal Windows) | **Unit Test App (WinUI in Desktop) ** |
 | Standard MSTest project with UWP types | Must use WinUI test app for Xaml runtime |
 | `[TestMethod]` for all tests | `[TestMethod]` for logic, `[UITestMethod]` for XAML/UI tests |
-| Class Library (Universal Windows) | **Class Library (WinUI in Desktop)** |
+| Class Library (Universal Windows) | **Class Library (WinUI in Desktop) ** |
 
 ```csharp
-// ✅ WinUI 3 unit test — use [UITestMethod] for any XAML interaction
+// WinUI 3 unit test — use [UITestMethod] for any XAML interaction
 [UITestMethod]
 public void TestMyControl()
 {
@@ -257,7 +257,7 @@ public void TestMyControl()
 }
 ```
 
-**Key:** The `[UITestMethod]` attribute tells the test runner to execute the test on the XAML UI thread, which is required for instantiating any `Microsoft.UI.Xaml` type.
+**Key: ** The `[UITestMethod]` attribute tells the test runner to execute the test on the XAML UI thread, which is required for instantiating any `Microsoft.UI.Xaml` type.
 
 ---
 
@@ -276,5 +276,5 @@ public void TestMyControl()
 11. [ ] Update interop for Share and Print managers
 12. [ ] Replace `IBackgroundTask` with `AppLifecycle` activation
 13. [ ] Update project file: TFM to `net10.0-windows10.0.22621.0`, add `<UseWinUI>true</UseWinUI>`
-14. [ ] Migrate unit tests to **Unit Test App (WinUI in Desktop)** project; use `[UITestMethod]` for XAML tests
+14. [ ] Migrate unit tests to **Unit Test App (WinUI in Desktop) ** project; use `[UITestMethod]` for XAML tests
 15. [ ] Test both packaged and unpackaged configurations

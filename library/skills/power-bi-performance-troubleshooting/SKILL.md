@@ -178,12 +178,12 @@ Premium Capacity Monitoring:
 ```dax
 -- Replace inefficient patterns:
 
-❌ Poor Performance:
+ Poor Performance:
 Sales Growth = 
 ([Total Sales] - CALCULATE([Total Sales], PREVIOUSMONTH('Date'[Date]))) / 
 CALCULATE([Total Sales], PREVIOUSMONTH('Date'[Date]))
 
-✅ Optimized Version:
+ Optimized Version:
 Sales Growth = 
 VAR CurrentMonth = [Total Sales]
 VAR PreviousMonth = CALCULATE([Total Sales], PREVIOUSMONTH('Date'[Date]))

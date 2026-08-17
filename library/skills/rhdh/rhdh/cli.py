@@ -641,7 +641,7 @@ def cmd_setup_submodule_list(fmt: OutputFormatter, _args: argparse.Namespace) ->
             status_text = "✓ configured"
         elif status == "directory_exists":
             color = YELLOW
-            status_text = "⚠ directory exists"
+            status_text = "directory exists"
         else:
             color = RED if repo["required"] else YELLOW
             status_text = "✗ not configured"

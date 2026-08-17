@@ -72,8 +72,8 @@ Before working with unfamiliar code, **ALWAYS** call `GetSymbolInfo_CppTools` to
 ### File Paths
 
 - **STRONGLY PREFERRED**: Always provide absolute file paths when available
-  - ✅ Good: `C:\Users\Project\src\main.cpp`
-  - ❌ Avoid: `src\main.cpp` (requires resolution, may fail)
+  - Good: `C:\Users\Project\src\main.cpp`
+  - Avoid: `src\main.cpp` (requires resolution, may fail)
 - If you have access to a file path, include it
 - If working with user-specified files, use their exact path
 
@@ -112,9 +112,9 @@ CORRECT workflow:
 5. Update ALL call sites with new signature
 
 INCORRECT workflow:
-❌ Changing the function without finding callers
-❌ Only updating visible call sites
-❌ Using text search to find calls
+Changing the function without finding callers
+Only updating visible call sites
+Using text search to find calls
 ```
 
 ### Understanding Unfamiliar Code
@@ -126,9 +126,9 @@ CORRECT workflow:
 3. Call GetSymbolCallHierarchy_CppTools with callsFrom=false to understand where a function is used
 
 INCORRECT workflow:
-❌ Reading code manually without tool assistance
-❌ Making assumptions about symbol meanings
-❌ Skipping hierarchy analysis
+Reading code manually without tool assistance
+Making assumptions about symbol meanings
+Skipping hierarchy analysis
 ```
 
 ### Analyzing Function Dependencies
@@ -140,8 +140,8 @@ CORRECT workflow:
 3. Use this to understand code flow and dependencies
 
 INCORRECT workflow:
-❌ Manually reading through function body
-❌ Guessing at call patterns
+Manually reading through function body
+Guessing at call patterns
 ```
 
 ---
@@ -192,20 +192,20 @@ This is NOT an error - it means:
 
 **Question: Do I need to find where a symbol is used/called/referenced?**
 
-- ✅ YES → Use `GetSymbolReferences_CppTools`
-- ❌ NO → Continue
+- YES → Use `GetSymbolReferences_CppTools`
+- NO → Continue
 
 **Question: Am I changing a function signature or analyzing function calls?**
 
-- ✅ YES → Use `GetSymbolCallHierarchy_CppTools`
+- YES → Use `GetSymbolCallHierarchy_CppTools`
   - Finding callers? → `callsFrom=false`
   - Finding what it calls? → `callsFrom=true`
-- ❌ NO → Continue
+- NO → Continue
 
 **Question: Do I need to find a definition or understand a type?**
 
-- ✅ YES → Use `GetSymbolInfo_CppTools`
-- ❌ NO → You may not need a C++ tool for this task
+- YES → Use `GetSymbolInfo_CppTools`
+- NO → You may not need a C++ tool for this task
 
 ---
 
@@ -213,26 +213,26 @@ This is NOT an error - it means:
 
 ### DO:
 
-- ✅ Call `GetSymbolReferences_CppTools` for ANY symbol usage search
-- ✅ Call `GetSymbolCallHierarchy_CppTools` before function signature changes
-- ✅ Use `read_file` to find line numbers before specifying them### Rule 1: Prefer GetSymbolReferences_CppTools as the default for locating C/C++ Symbol Usages
-- ✅ Prefer C++ tools as the default. Rely on text-based search tools only as a fallback if C++ tools are unavailable, fail, or appear incomplete.
-- ✅ Provide absolute file paths when available
-- ✅ Follow error message instructions exactly
-- ✅ Trust tool results over manual inspection
-- ✅ Use minimal parameters first, add more if needed
-- ✅ Remember line numbers are 1-based
+- Call `GetSymbolReferences_CppTools` for ANY symbol usage search
+- Call `GetSymbolCallHierarchy_CppTools` before function signature changes
+- Use `read_file` to find line numbers before specifying them### Rule 1: Prefer GetSymbolReferences_CppTools as the default for locating C/C++ Symbol Usages
+- Prefer C++ tools as the default. Rely on text-based search tools only as a fallback if C++ tools are unavailable, fail, or appear incomplete.
+- Provide absolute file paths when available
+- Follow error message instructions exactly
+- Trust tool results over manual inspection
+- Use minimal parameters first, add more if needed
+- Remember line numbers are 1-based
 
 ### DO NOT:
-- ❌ Rely on text-based search tools such as `vscode_listCodeUsages`, `grep_search`, or `read_file` to find symbol usages
-- ❌ Manually inspect code to find references
-- ❌ Guess line numbers
-- ❌ Assume symbol uniqueness without checking
-- ❌ Ignore error messages
-- ❌ Skip tool usage to save time
-- ❌ Use 0-based line numbers
-- ❌ Batch multiple unrelated symbol operations
-- ❌ Make changes without finding all affected locations
+- Rely on text-based search tools such as `vscode_listCodeUsages`, `grep_search`, or `read_file` to find symbol usages
+- Manually inspect code to find references
+- Guess line numbers
+- Assume symbol uniqueness without checking
+- Ignore error messages
+- Skip tool usage to save time
+- Use 0-based line numbers
+- Batch multiple unrelated symbol operations
+- Make changes without finding all affected locations
 
 ---
 
@@ -250,9 +250,9 @@ CORRECT response:
 5. Update ALL call sites with new parameter
 
 INCORRECT response:
-❌ Only updating the definition
-❌ Updating only obvious call sites
-❌ Not using call_hierarchy tool
+Only updating the definition
+Updating only obvious call sites
+Not using call_hierarchy tool
 ```
 
 ### Example 2: User asks to understand a function
@@ -266,9 +266,9 @@ CORRECT response:
 4. Explain based on code + call hierarchy
 
 INCORRECT response:
-❌ Only reading the function body
-❌ Not checking what it calls
-❌ Guessing at behavior
+Only reading the function body
+Not checking what it calls
+Guessing at behavior
 ```
 
 ---

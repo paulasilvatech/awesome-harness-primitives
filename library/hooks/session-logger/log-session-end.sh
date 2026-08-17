@@ -34,5 +34,5 @@ TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 # Log session end
 echo "{\"timestamp\":\"$TIMESTAMP\",\"event\":\"sessionEnd\"}" >> "$LOG_DIR/session.log"
 
-echo "📝 Session end logged"
+echo "Session end logged"
 exit 0

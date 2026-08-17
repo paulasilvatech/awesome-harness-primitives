@@ -275,7 +275,7 @@ def main():
     if output:
         Path(output).parent.mkdir(parents=True, exist_ok=True)
         Path(output).write_text(out_json)
-        print(f"✅ Skeleton written to {output}")
+        print(f" Skeleton written to {output}")
         print(f"   {len(skeleton['steps'])} steps generated from docs")
         print(f"   Fill in all [TODO: ...] entries before sharing")
     else:

@@ -1,9 +1,9 @@
 # Skeleton: 3-findings.md
 
-> **⛔ Copy the template content below VERBATIM (excluding the outer code fence). Replace `[FILL]` placeholders. ALL 10 attribute rows are MANDATORY per finding. Organize by TIER, not by severity.**
-> **⛔ DO NOT abbreviate attribute names. Use EXACT names: `SDL Bugbar Severity` (not `Severity`), `Exploitation Prerequisites` (not `Prerequisites`), `Exploitability Tier` (not `Tier`), `Remediation Effort` (not `Effort`), `CVSS 4.0` (not `CVSS Score`).**
-> **⛔ DO NOT use bold inline headers (`**Description:**`). Use `#### Description` markdown h4 headings.**
-> **⛔ Tier section headings MUST be: `## Tier 1 — Direct Exposure (No Prerequisites)`, NOT `## Tier 1 Findings`.**
+>** Copy the template content below VERBATIM (excluding the outer code fence). Replace `[FILL]` placeholders. ALL 10 attribute rows are MANDATORY per finding. Organize by TIER, not by severity.**
+>** DO NOT abbreviate attribute names. Use EXACT names: `SDL Bugbar Severity` (not `Severity`), `Exploitation Prerequisites` (not `Prerequisites`), `Exploitability Tier` (not `Tier`), `Remediation Effort` (not `Effort`), `CVSS 4.0` (not `CVSS Score`).**
+>** DO NOT use bold inline headers (`**Description:**`). Use `#### Description` markdown h4 headings.**
+>** Tier section headings MUST be: `## Tier 1 — Direct Exposure (No Prerequisites)`, NOT `## Tier 1 Findings`.**
 
 ---
 
@@ -31,7 +31,7 @@
 | Component | [FILL: component name] |
 | Related Threats | [T[FILL: NN].[FILL: X]](2-stride-analysis.md#[FILL: component-anchor]), [T[FILL: NN].[FILL: X]](2-stride-analysis.md#[FILL: component-anchor]) |
 
-<!-- ⛔ POST-FINDING CHECK: Verify this finding IMMEDIATELY:
+<!--  POST-FINDING CHECK: Verify this finding IMMEDIATELY:
   1. ALL 10 attribute rows present (SDL Bugbar Severity through Related Threats)
   2. Row names are EXACT: 'SDL Bugbar Severity' (not 'SDL Bugbar'), 'Exploitation Prerequisites' (not 'Prerequisites'), 'Exploitability Tier' (not 'Risk Tier'), 'Remediation Effort' (not 'Effort')
   3. Related Threats are HYPERLINKS with `](2-stride-analysis.md#` — NOT plain text like 'T01.S, T02.T'
@@ -58,7 +58,7 @@
 
 [FILL: how to verify the fix was applied]
 
-<!-- ⛔ POST-SECTION CHECK: Verify this finding's sub-sections:
+<!--  POST-SECTION CHECK: Verify this finding's sub-sections:
   1. Exactly 4 sub-headings present: `#### Description`, `#### Evidence`, `#### Remediation`, `#### Verification`
   2. Sub-headings use `####` level (NOT bold `**Description:**` inline text)
   3. No extra sub-headings like `#### Impact`, `#### Recommendation`, `#### Mitigation`
@@ -170,14 +170,14 @@ At the END of `3-findings.md`, append the Threat Coverage Verification table:
 | Threat ID | Finding ID | Status |
 |-----------|------------|--------|
 [REPEAT: one row per threat from ALL components in 2-stride-analysis.md]
-| [FILL: T##.X] | [FILL: FIND-## or —] | [FILL: ✅ Covered (FIND-XX) / ✅ Mitigated (FIND-XX) / 🔄 Mitigated by Platform] |
+| [FILL: T##.X] | [FILL: FIND-## or —] | [FILL:  Covered (FIND-XX) /  Mitigated (FIND-XX) /  Mitigated by Platform] |
 [END-REPEAT]
 
-<!-- ⛔ POST-TABLE CHECK: Verify Threat Coverage Verification:
+<!--  POST-TABLE CHECK: Verify Threat Coverage Verification:
   1. Status column uses ONLY these 3 values with emoji prefixes:
-     - `✅ Covered (FIND-XX)` — vulnerability needs remediation
-     - `✅ Mitigated (FIND-XX)` — team built a control (documented in finding)
-     - `🔄 Mitigated by Platform` — external platform handles it
+     - ` Covered (FIND-XX)` — vulnerability needs remediation
+     - ` Mitigated (FIND-XX)` — team built a control (documented in finding)
+     - ` Mitigated by Platform` — external platform handles it
   2. Do NOT use plain text like "Finding", "Mitigated", "Covered" without the emoji
   3. Do NOT use "Needs Review", "Accepted Risk", or "N/A"
   4. Column headers are EXACTLY: `Threat ID | Finding ID | Status` (NOT `Threat | Finding | Status`)

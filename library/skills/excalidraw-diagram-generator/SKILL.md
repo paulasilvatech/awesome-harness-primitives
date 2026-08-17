@@ -25,15 +25,15 @@ Use this skill when users request:
 - "Diagram the workflow of..."
 
 **Supported diagram types:**
-- 📊 **Flowcharts**: Sequential processes, workflows, decision trees
-- 🔗 **Relationship Diagrams**: Entity relationships, system components, dependencies
-- 🧠 **Mind Maps**: Concept hierarchies, brainstorming results, topic organization
-- 🏗️ **Architecture Diagrams**: System design, module interactions, data flow
-- 📈 **Data Flow Diagrams (DFD)**: Data flow visualization, data transformation processes
-- 🏊 **Business Flow (Swimlane)**: Cross-functional workflows, actor-based process flows
-- 📦 **Class Diagrams**: Object-oriented design, class structures and relationships
-- 🔄 **Sequence Diagrams**: Object interactions over time, message flows
-- 🗃️ **ER Diagrams**: Database entity relationships, data models
+- **Flowcharts**: Sequential processes, workflows, decision trees
+- **Relationship Diagrams**: Entity relationships, system components, dependencies
+- **Mind Maps**: Concept hierarchies, brainstorming results, topic organization
+- **Architecture Diagrams**: System design, module interactions, data flow
+- **Data Flow Diagrams (DFD)**: Data flow visualization, data transformation processes
+- **Business Flow (Swimlane)**: Cross-functional workflows, actor-based process flows
+- **Class Diagrams**: Object-oriented design, class structures and relationships
+- **Sequence Diagrams**: Object interactions over time, message flows
+- **ER Diagrams**: Database entity relationships, data models
 
 ## Prerequisites
 
@@ -182,7 +182,7 @@ Structure the complete Excalidraw file:
 ### Layout Tips
 
 1. **Start positions**: Center important elements, use consistent spacing
-2. **Spacing**: 
+2. **Spacing**:
    - Horizontal gap: 200-300px between elements
    - Vertical gap: 100-150px between rows
 3. **Colors**: Use consistent color scheme
@@ -275,10 +275,10 @@ const id = Date.now().toString(36) + Math.random().toString(36).substr(2);
 ## Output Format
 
 Always provide:
-1. ✅ Complete `.excalidraw` JSON file
-2. 📊 Summary of what was created
-3. 📝 Element count
-4. 💡 Instructions for opening/editing
+1. Complete `.excalidraw` JSON file
+2. Summary of what was created
+3. Element count
+4. Instructions for opening/editing
 
 **Example summary:**
 ```

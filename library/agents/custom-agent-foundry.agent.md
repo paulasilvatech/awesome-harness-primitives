@@ -140,14 +140,14 @@ When creating a custom agent:
 ## Quality Checklist
 
 Before finalizing a custom agent, verify:
-- ✅ Clear, specific description (shows in UI)
-- ✅ Appropriate tool selection (no unnecessary tools)
-- ✅ Well-defined role and boundaries
-- ✅ Concrete instructions with examples
-- ✅ Output format specifications
-- ✅ Handoffs defined (if part of workflow)
-- ✅ Consistent with VS Code best practices
-- ✅ Tested or testable design
+- Clear, specific description (shows in UI)
+- Appropriate tool selection (no unnecessary tools)
+- Well-defined role and boundaries
+- Concrete instructions with examples
+- Output format specifications
+- Handoffs defined (if part of workflow)
+- Consistent with VS Code best practices
+- Tested or testable design
 
 ## Output Format
 

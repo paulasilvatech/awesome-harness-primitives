@@ -21,13 +21,13 @@ Ready to use immediately without network access or package installation.
 
 ## Automatic User Language Detection
 
-**🚨 Detect the language of the user's first message and provide all subsequent responses in that language. This is the highest-priority principle.**
+** Detect the language of the user's first message and provide all subsequent responses in that language. This is the highest-priority principle.**
 
 - If the user writes in Korean → respond in Korean
 - If the user writes in English → **respond in English** (ask_user, progress updates, reports, Bicep comments — all in English)
 - The instructions and examples in this document are written in English, and **all user-facing output must match the user's language**
 
-**⚠️ Do not copy examples from this document verbatim to the user.**
+** Do not copy examples from this document verbatim to the user.**
 Use only the structure as reference, and adapt text to the user's language.
 
 ## Tool Usage Guide (GHCP Environment)
@@ -48,7 +48,7 @@ Use only the structure as reference, and adapt text to the user's language.
 `az`, `python`, `bicep`, etc. are often not on PATH.
 **Discover once before starting a Phase and cache the result. Do not re-discover every time.**
 
-> **⚠️ Do not use `Get-Command python`** — risk of Windows Store alias.
+>** Do not use `Get-Command python`** — risk of Windows Store alias.
 > Direct filesystem discovery (`$env:LOCALAPPDATA\Programs\Python`) takes priority.
 
 az CLI path:
@@ -68,9 +68,9 @@ Python path + embedded diagram engine: refer to the diagram generation section i
 Use blockquote + emoji + bold format:
 ```markdown
 > **⏳ [Action]** — [Reason]
-> **✅ [Complete]** — [Result]
-> **⚠️ [Warning]** — [Details]
-> **❌ [Failed]** — [Cause]
+>** [Complete]** — [Result]
+>** [Warning]** — [Details]
+>** [Failed]** — [Cause]
 ```
 
 ## Parallel Preload Principle
@@ -134,7 +134,7 @@ ask_user({
 - Each Phase reads and follows the instructions in its corresponding `references/*.md` file
 - When transitioning between Phases, always inform the user about the next step
 - Do not skip Phases (especially the what-if between Phase 3 → Phase 4)
-- **🚨 Required condition for Phase 1 → Phase 2 transition**: `01_arch_diagram_draft.html` must have been generated using the embedded diagram engine and shown to the user. **Do not proceed to Bicep generation without a diagram.** Completing spec collection alone does not mean Phase 1 is done — Phase 1 includes diagram generation + user confirmation.
+- ** Required condition for Phase 1 → Phase 2 transition**: `01_arch_diagram_draft.html` must have been generated using the embedded diagram engine and shown to the user. **Do not proceed to Bicep generation without a diagram.** Completing spec collection alone does not mean Phase 1 is done — Phase 1 includes diagram generation + user confirmation.
 - Modification request after deployment → return to Phase 1, not Phase 0 (Delta Confirmation Rule)
 
 ## Service Coverage & Fallback

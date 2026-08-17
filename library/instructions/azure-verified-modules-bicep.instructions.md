@@ -83,57 +83,57 @@ If no AVM module exists for a resource type, use native Bicep resource declarati
 
 ### Module Discovery and Usage
 
-- ✅ **Always** check for existing AVM modules before creating raw resources
-- ✅ **Review** module documentation and examples before implementation
-- ✅ **Pin** module versions explicitly
-- ✅ **Use** types from modules when available (import types from module)
-- ✅ **Prefer** AVM modules over raw resource declarations
+- **Always** check for existing AVM modules before creating raw resources
+- **Review** module documentation and examples before implementation
+- **Pin** module versions explicitly
+- **Use** types from modules when available (import types from module)
+- **Prefer** AVM modules over raw resource declarations
 
 ### Code Structure
 
-- ✅ **Declare** parameters at top of file with `@sys.description()` decorators
-- ✅ **Specify** `@minLength()` and `@maxLength()` for naming parameters
-- ✅ **Use** `@allowed()` decorator sparingly to avoid blocking valid deployments
-- ✅ **Set** default values safe for test environments (low-cost SKUs)
-- ✅ **Use** variables for complex expressions instead of embedding in resource properties
-- ✅ **Leverage** `loadJsonContent()` for external configuration files
+- **Declare** parameters at top of file with `@sys.description()` decorators
+- **Specify** `@minLength()` and `@maxLength()` for naming parameters
+- **Use** `@allowed()` decorator sparingly to avoid blocking valid deployments
+- **Set** default values safe for test environments (low-cost SKUs)
+- **Use** variables for complex expressions instead of embedding in resource properties
+- **Leverage** `loadJsonContent()` for external configuration files
 
 ### Resource References
 
-- ✅ **Use** symbolic names for references (e.g., `storageAccount.id`) not `reference()` or `resourceId()`
-- ✅ **Create** dependencies through symbolic names, not explicit `dependsOn`
-- ✅ **Use** `existing` keyword for accessing properties from other resources
-- ✅ **Access** module outputs via dot notation (e.g., `storageAccount.outputs.resourceId`)
+- **Use** symbolic names for references (e.g., `storageAccount.id`) not `reference()` or `resourceId()`
+- **Create** dependencies through symbolic names, not explicit `dependsOn`
+- **Use** `existing` keyword for accessing properties from other resources
+- **Access** module outputs via dot notation (e.g., `storageAccount.outputs.resourceId`)
 
 ### Resource Naming
 
-- ✅ **Use** `uniqueString()` with meaningful prefixes for unique names
-- ✅ **Add** prefixes since some resources don't allow names starting with numbers
-- ✅ **Respect** resource-specific naming constraints (length, characters)
+- **Use** `uniqueString()` with meaningful prefixes for unique names
+- **Add** prefixes since some resources don't allow names starting with numbers
+- **Respect** resource-specific naming constraints (length, characters)
 
 ### Child Resources
 
-- ✅ **Avoid** excessive nesting of child resources
-- ✅ **Use** `parent` property or nesting instead of constructing names manually
+- **Avoid** excessive nesting of child resources
+- **Use** `parent` property or nesting instead of constructing names manually
 
 ### Security
 
-- ❌ **Never** include secrets or keys in outputs
-- ✅ **Use** resource properties directly in outputs (e.g., `storageAccount.outputs.primaryBlobEndpoint`)
-- ✅ **Enable** managed identities where possible
-- ✅ **Disable** public access when network isolation is enabled
+- **Never** include secrets or keys in outputs
+- **Use** resource properties directly in outputs (e.g., `storageAccount.outputs.primaryBlobEndpoint`)
+- **Enable** managed identities where possible
+- **Disable** public access when network isolation is enabled
 
 ### Types
 
-- ✅ **Import** types from modules when available: `import { deploymentType } from './module.bicep'`
-- ✅ **Use** user-defined types for complex parameter structures
-- ✅ **Leverage** type inference for variables
+- **Import** types from modules when available: `import { deploymentType } from './module.bicep'`
+- **Use** user-defined types for complex parameter structures
+- **Leverage** type inference for variables
 
 ### Documentation
 
-- ✅ **Include** helpful `//` comments for complex logic
-- ✅ **Use** `@sys.description()` on all parameters with clear explanations
-- ✅ **Document** non-obvious design decisions
+- **Include** helpful `//` comments for complex logic
+- **Use** `@sys.description()` on all parameters with clear explanations
+- **Document** non-obvious design decisions
 
 ## Validation Requirements
 
@@ -151,9 +151,9 @@ az bicep build --file main.bicep
 
 ### Bicep Parameter Files
 
-- ✅ **Always** update accompanying `*.bicepparam` files when modifying `*.bicep` files
-- ✅ **Validate** parameter files match current parameter definitions
-- ✅ **Test** deployments with parameter files before committing
+- **Always** update accompanying `*.bicepparam` files when modifying `*.bicep` files
+- **Validate** parameter files match current parameter definitions
+- **Test** deployments with parameter files before committing
 
 ## Tool Integration
 

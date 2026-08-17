@@ -43,9 +43,9 @@ records = client.get("account")
 ```
 
 **When to use**:
-- ✅ Interactive development and testing
-- ✅ Desktop applications with UI
-- ❌ Background services or scheduled jobs
+- Interactive development and testing
+- Desktop applications with UI
+- Background services or scheduled jobs
 
 ---
 
@@ -117,10 +117,10 @@ records = client.get("account")
 4. Store credentials in environment variables or secure vault
 
 **Security concerns**:
-- ⚠️ Never hardcode credentials in source code
-- ⚠️ Store secrets in Azure Key Vault or environment variables
-- ⚠️ Rotate credentials regularly
-- ⚠️ Use minimal required permissions
+- Never hardcode credentials in source code
+- Store secrets in Azure Key Vault or environment variables
+- Rotate credentials regularly
+- Use minimal required permissions
 
 ---
 
@@ -144,10 +144,10 @@ records = client.get("account")
 ```
 
 **Benefits**:
-- ✅ No secrets to manage
-- ✅ Automatic token refresh
-- ✅ Highly secure
-- ✅ Built-in to Azure services
+- No secrets to manage
+- Automatic token refresh
+- Highly secure
+- Built-in to Azure services
 
 **Setup**:
 1. Enable managed identity on Azure resource (App Service, VM, etc.)
@@ -272,14 +272,14 @@ client = DataverseClient(
 ### 1. Never Hardcode Credentials
 
 ```python
-# ❌ BAD - Don't do this!
+# BAD - Don't do this!
 credential = ClientSecretCredential(
     tenant_id="your-tenant-id",
     client_id="your-client-id",
     client_secret="your-secret-key"  # EXPOSED!
 )
 
-# ✅ GOOD - Use environment variables
+# GOOD - Use environment variables
 import os
 credential = ClientSecretCredential(
     tenant_id=os.environ["AZURE_TENANT_ID"],
@@ -373,10 +373,10 @@ from PowerPlatform.Dataverse.client import DataverseClient
 def get_client_for_tenant(tenant_id: str) -> DataverseClient:
     """Get DataverseClient for specific tenant."""
     credential = DefaultAzureCredential()
-    
+
     # Dataverse URL contains tenant-specific org
     base_url = f"https://{get_org_for_tenant(tenant_id)}.crm.dynamics.com"
-    
+
     return DataverseClient(
         base_url=base_url,
         credential=credential
@@ -411,7 +411,7 @@ except DataverseError as e:
 from azure.identity import DefaultAzureCredential
 
 try:
-    cred = DefaultAzureCredential(exclude_cli_credential=False, 
+    cred = DefaultAzureCredential(exclude_cli_credential=False,
                                   exclude_powershell_credential=False)
     # Force re-authentication
     import subprocess
@@ -420,7 +420,7 @@ except Exception as e:
     print(f"Authentication failed: {e}")
 ```
 
-### Error: "Invalid Tenant" 
+### Error: "Invalid Tenant"
 
 ```python
 # Verify tenant ID
@@ -463,18 +463,18 @@ client.get("contact")
 ```python
 class DataverseSession:
     """Manages DataverseClient lifecycle."""
-    
+
     def __init__(self, base_url: str):
         from azure.identity import DefaultAzureCredential
-        
+
         self.client = DataverseClient(
             base_url=base_url,
             credential=DefaultAzureCredential()
         )
-    
+
     def __enter__(self):
         return self.client
-    
+
     def __exit__(self, exc_type, exc_val, exc_tb):
         # Cleanup if needed
         pass
@@ -500,12 +500,12 @@ from PowerPlatform.Dataverse.client import DataverseClient
 def get_user_client(user_username: str) -> DataverseClient:
     # User must already be authenticated
     credential = InteractiveBrowserCredential()
-    
+
     client = DataverseClient(
         base_url="https://myorg.crm.dynamics.com",
         credential=credential
     )
-    
+
     # User only sees records they have access to
     return client
 ```

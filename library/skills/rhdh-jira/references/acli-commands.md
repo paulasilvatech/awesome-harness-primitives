@@ -4,7 +4,7 @@ Cheat sheet for `acli jira` commands. For full flag details, run `acli jira <sub
 
 ## Key Syntax Rules
 
-1. **`view` takes a positional arg.** Everything else uses `--key`.
+1. **`view` takes a positional arg. ** Everything else uses `--key`.
 2. **Always pass `--yes`** on mutating commands (`edit`, `transition`, `assign`, `link create`) to skip interactive prompts.
 3. **Use `--json`** when you need fields beyond `key`, `summary`, `status`, `assignee`, `issuetype`, `priority`, `description`. The `--fields` flag rejects `components`, `sprint`, `labels`, `fixVersions`.
 4. **Use `--csv`** for search results you want to pipe or parse.
@@ -14,7 +14,7 @@ Cheat sheet for `acli jira` commands. For full flag details, run `acli jira <sub
 
 ### Search
 
-> ⚠️ **Default page size is 30 results.** Results beyond 30 are silently dropped with no warning. Always pass `--limit 200` or `--paginate` for bulk queries. Use `--count` first to verify the total matches before fetching.
+> **Default page size is 30 results. ** Results beyond 30 are silently dropped with no warning. Always pass `--limit 200` or `--paginate` for bulk queries. Use `--count` first to verify the total matches before fetching.
 
 ```bash
 # JQL search with field selection (always set --limit for bulk)
@@ -197,7 +197,7 @@ acli jira sprint list-workitems --sprint 65456 --board 11374
 acli jira sprint create --name "RHDH COPE 3292" --board 11374
 ```
 
-**Sprint JSON gotcha:** `list-workitems --json` returns `{"issues": [...], "maxResults": N, ...}` - NOT a flat array. Extract the `issues` array before piping to `parse_issues.py`:
+**Sprint JSON gotcha: ** `list-workitems --json` returns `{"issues": [...], "maxResults": N, ...}` - NOT a flat array. Extract the `issues` array before piping to `parse_issues.py`:
 
 ```bash
 acli jira sprint list-workitems --sprint 65456 --board 11374 --json | python -c "
@@ -244,7 +244,7 @@ When writing descriptions, use `--description "plain text"`. When reading, be aw
 
 ## Custom Fields and `--enrich`
 
-**Critical:** Both `search --json` and `view KEY --json` (without `--fields "*all"`) return only basic fields: assignee, issuetype, priority, status, summary. Custom fields (story_points, team, sprint, size) are NOT included.
+**Critical: ** Both `search --json` and `view KEY --json` (without `--fields "*all"`) return only basic fields: assignee, issuetype, priority, status, summary. Custom fields (story_points, team, sprint, size) are NOT included.
 
 To get custom fields, you MUST either:
 

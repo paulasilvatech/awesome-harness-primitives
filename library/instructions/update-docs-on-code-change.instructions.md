@@ -440,23 +440,23 @@ If `apply-best-practices == true`, then apply the following configurable instruc
 
 ### Do's
 
-- ✅ Update documentation in the same commit as code changes
-- ✅ Include before/after examples for changes to be reviewed before applying
-- ✅ Test code examples before committing
-- ✅ Use consistent formatting and terminology
-- ✅ Document limitations and edge cases
-- ✅ Provide migration paths for breaking changes
-- ✅ Keep documentation DRY (link instead of duplicating)
+- Update documentation in the same commit as code changes
+- Include before/after examples for changes to be reviewed before applying
+- Test code examples before committing
+- Use consistent formatting and terminology
+- Document limitations and edge cases
+- Provide migration paths for breaking changes
+- Keep documentation DRY (link instead of duplicating)
 
 ### Don'ts
 
-- ❌ Commit code changes without updating documentation
-- ❌ Leave outdated examples in documentation
-- ❌ Document features that don't exist yet
-- ❌ Use vague or ambiguous language
-- ❌ Forget to update changelog
-- ❌ Ignore broken links or failing examples
-- ❌ Document implementation details users don't need
+- Commit code changes without updating documentation
+- Leave outdated examples in documentation
+- Document features that don't exist yet
+- Use vague or ambiguous language
+- Forget to update changelog
+- Ignore broken links or failing examples
+- Document implementation details users don't need
 
 ## Validation Example Commands `apply-validation-commands`
 

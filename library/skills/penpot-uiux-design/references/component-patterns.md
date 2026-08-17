@@ -152,7 +152,7 @@ Loading    → Processing: spinner replaces or accompanies label
 │           Content Area              │
 │                                     │
 ├─────────────────────────────────────┤
-│  🏠    🔍    ➕    💬    👤        │
+│                          │
 │ Home  Search Add  Chat  Profile     │
 └─────────────────────────────────────┘
 

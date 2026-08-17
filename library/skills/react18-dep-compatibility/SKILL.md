@@ -51,7 +51,7 @@ Read **`references/apollo-details.md`** for concurrent mode issues and MockedPro
 | Package | React 18 Min | React 19 Min | Notes |
 |---|---|---|---|
 | `react-router-dom` | **v6.0.0** | **v6.8.0** | v5 → v6 is a breaking migration - see details below |
-| `react-router-dom` v5 | 5.3.4 (workaround) | ❌ Not supported | See legacy peer deps note |
+| `react-router-dom` v5 | 5.3.4 (workaround) | Not supported | See legacy peer deps note |
 
 **react-router v5 → v6 is a SEPARATE migration sprint.** Read `references/router-migration.md`.
 

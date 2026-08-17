@@ -241,9 +241,9 @@ After all assignments, summarize:
 
 ```markdown
 ## Assignment Results
-- ✅ RHIDP-1234 → Allison Hill
-- ✅ RHIDP-5678 → Noah Rhodes
-- ❌ RHIDP-9012 → Angie Henderson (403: no edit permission)
+-  RHIDP-1234 → Allison Hill
+-  RHIDP-5678 → Noah Rhodes
+-  RHIDP-9012 → Angie Henderson (403: no edit permission)
 ```
 
 ## Error Handling

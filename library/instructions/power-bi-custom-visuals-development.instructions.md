@@ -74,7 +74,7 @@ export class Visual implements IVisual {
 
     public update(options: VisualUpdateOptions) {
         const dataView: DataView = options.dataViews[0];
-        
+
         if (!dataView) {
             return;
         }
@@ -135,7 +135,7 @@ export class Visual implements IVisual {
 
     public update(options: VisualUpdateOptions) {
         const dataView: DataView = options.dataViews[0];
-        
+
         if (dataView) {
             const reactProps = this.parseDataView(dataView);
             this.reactRoot = React.createElement(ReactCircleCard, reactProps);
@@ -167,17 +167,17 @@ export interface ReactCircleCardProps {
 
 export const ReactCircleCard: React.FC<ReactCircleCardProps> = (props) => {
     const { data, categories, size = 200, color = "#3498db" } = props;
-    
+
     const maxValue = Math.max(...data);
     const minValue = Math.min(...data);
-    
+
     return (
         <div className="react-circle-card">
             {data.map((value, index) => {
                 const radius = ((value - minValue) / (maxValue - minValue)) * size / 2;
                 return (
                     <div key={index} className="data-point">
-                        <div 
+                        <div
                             className="circle"
                             style={{
                                 width: radius * 2,
@@ -214,7 +214,7 @@ export class Visual implements IVisual {
         this.svg = d3.select(options.element)
             .append('svg')
             .classed('visual-svg', true);
-        
+
         this.container = this.svg
             .append('g')
             .classed('visual-container', true);
@@ -222,14 +222,14 @@ export class Visual implements IVisual {
 
     public update(options: VisualUpdateOptions) {
         const dataView = options.dataViews[0];
-        
+
         if (!dataView) {
             return;
         }
 
         const width = options.viewport.width;
         const height = options.viewport.height;
-        
+
         this.svg
             .attr('width', width)
             .attr('height', height);
@@ -240,7 +240,7 @@ export class Visual implements IVisual {
 
     private renderChart(dataView: DataView, width: number, height: number): void {
         const data = this.transformData(dataView);
-        
+
         // Create scales
         const xScale = d3.scaleBand()
             .domain(data.map(d => d.category))
@@ -293,11 +293,11 @@ export class AdvancedD3Visual implements IVisual {
     constructor(options: VisualConstructorOptions) {
         this.host = options.host;
         this.selectionManager = this.host.createSelectionManager();
-        
+
         // Create main SVG
         this.svg = d3.select(options.element)
             .append('svg');
-        
+
         // Create tooltip
         this.tooltip = d3.select(options.element)
             .append('div')
@@ -351,10 +351,10 @@ import { formattingSettings } from "powerbi-visuals-utils-formattingmodel";
 export class VisualFormattingSettingsModel extends formattingSettings.CompositeFormattingSettingsModel {
     // Color settings card
     public colorCard: ColorCardSettings = new ColorCardSettings();
-    
-    // Data point settings card  
+
+    // Data point settings card
     public dataPointCard: DataPointCardSettings = new DataPointCardSettings();
-    
+
     // General settings card
     public generalCard: GeneralCardSettings = new GeneralCardSettings();
 
@@ -458,7 +458,7 @@ export class Visual implements IVisual {
             <div class="landing-page-content">
                 <h2>Custom Visual</h2>
                 <p>Add data to get started</p>
-                <div class="landing-page-icon">📊</div>
+                <div class="landing-page-icon"></div>
             </div>
         `;
         return landingPage;
@@ -576,7 +576,7 @@ describe('ReactCircleCard', () => {
 
     test('renders with correct data points', () => {
         render(<ReactCircleCard {...mockProps} />);
-        
+
         expect(screen.getByText('A: 10')).toBeInTheDocument();
         expect(screen.getByText('B: 20')).toBeInTheDocument();
         expect(screen.getByText('C: 30')).toBeInTheDocument();
@@ -584,10 +584,10 @@ describe('ReactCircleCard', () => {
 
     test('applies correct styling', () => {
         render(<ReactCircleCard {...mockProps} />);
-        
+
         const circles = document.querySelectorAll('.circle');
         expect(circles).toHaveLength(3);
-        
+
         circles.forEach(circle => {
             expect(circle).toHaveStyle('backgroundColor: #3498db');
             expect(circle).toHaveStyle('borderRadius: 50%');
@@ -597,7 +597,7 @@ describe('ReactCircleCard', () => {
     test('handles empty data gracefully', () => {
         const emptyProps = { ...mockProps, data: [], categories: [] };
         const { container } = render(<ReactCircleCard {...emptyProps} />);
-        
+
         expect(container.querySelector('.data-point')).toBeNull();
     });
 });
@@ -666,7 +666,7 @@ export class Visual implements IVisual {
         return dataPoints.map(dataPoint => {
             // Get conditional formatting color
             const color = this.colorHelper.getColorForDataPoint(dataPoint.dataViewObject);
-            
+
             return {
                 ...dataPoint,
                 color: color,
@@ -709,7 +709,7 @@ export class Visual implements IVisual {
                         value: dataPoint.category
                     },
                     {
-                        displayName: "Value", 
+                        displayName: "Value",
                         value: dataPoint.value.toString()
                     },
                     {
@@ -736,7 +736,7 @@ export class Visual implements IVisual {
                 "window": {
                     "count": 300
                 }
-            }  
+            }
         },
         "values": {
             "group": {
@@ -750,7 +750,7 @@ export class Visual implements IVisual {
                     "top": {
                         "count": 100
                     }
-                }  
+                }
             }
         }
     }
@@ -770,7 +770,7 @@ export class OptimizedVisual implements IVisual {
 
     private queueRender(renderFunction: () => void): void {
         this.renderQueue.push(renderFunction);
-        
+
         if (!this.animationFrameId) {
             this.animationFrameId = requestAnimationFrame(() => {
                 this.processRenderQueue();
@@ -786,14 +786,14 @@ export class OptimizedVisual implements IVisual {
                 renderFunction();
             }
         }
-        
+
         this.animationFrameId = null;
     }
 
     private performUpdate(options: VisualUpdateOptions): void {
         // Use virtual DOM or efficient diffing strategies
         const currentData = this.transformData(options.dataViews[0]);
-        
+
         if (this.hasDataChanged(currentData)) {
             this.renderVisualization(currentData);
             this.previousData = currentData;

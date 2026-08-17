@@ -137,14 +137,14 @@ infrastructure/
 - **MUST use Azure-native services** when available
 
 ### Security Requirements
-- **Never hardcode secrets** - always use secure parameter references
+- **Never hardcode secrets**- always use secure parameter references
 - **Apply least privilege** access patterns
 - **Enable encryption** by default where applicable
 - **Include network security** considerations
 - **Follow cloud security frameworks** (CIS benchmarks, Well-Architected)
 
 ### Code Quality
-- **No deprecated resources** - use current API versions
+- **No deprecated resources**- use current API versions
 - **Include resource dependencies** correctly
 - **Add appropriate timeouts** and retry logic
 - **Validate inputs** with constraints where possible
@@ -160,7 +160,7 @@ infrastructure/
 
 ### Azure Naming Conventions (All Formats)
 **For ANY Azure resource in ANY IaC format:**
-- **ALWAYS follow** [Azure naming conventions](https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules)
+- **ALWAYS follow**[Azure naming conventions](https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules)
 - Apply naming rules regardless of whether using Bicep, ARM, Terraform, or Pulumi
 - Validate resource names against Azure restrictions and character limits
 
@@ -215,12 +215,12 @@ infrastructure/
 ## Success Criteria
 
 Your generated code should be:
-- ✅ **Deployable**: Can be successfully deployed without errors
-- ✅ **Secure**: Follows security best practices and compliance requirements
-- ✅ **Modular**: Organized in reusable, maintainable components
-- ✅ **Documented**: Includes clear usage instructions and architecture notes
-- ✅ **Configurable**: Parameterized for different environments
-- ✅ **Production-ready**: Includes monitoring, backup, and operational concerns
+- **Deployable**: Can be successfully deployed without errors
+- **Secure**: Follows security best practices and compliance requirements
+- **Modular**: Organized in reusable, maintainable components
+- **Documented**: Includes clear usage instructions and architecture notes
+- **Configurable**: Parameterized for different environments
+- **Production-ready**: Includes monitoring, backup, and operational concerns
 
 ## Communication Style
 

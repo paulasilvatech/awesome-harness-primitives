@@ -33,7 +33,7 @@ Standard RAG re-discovers knowledge from scratch on every query. This skill is d
 
 ---
 
-## ⚡ Quick Start for Agents
+## Quick Start for Agents
 
 A complete runnable version of this workflow is in `scripts/template_agent_workflow.py` — copy and adapt it.
 
@@ -143,22 +143,22 @@ Ask the LLM to review and fix: broken links, orphan pages, stale claims, missing
 
 ## Ingestion Constraints
 
-- ❌ Do NOT hallucinate entities not present in the text
-- ❌ Do NOT add relations without explicit textual evidence
-- ❌ Do NOT add edges with confidence < 0.6
-- ✅ Provide `supporting_text` for every entity and relation — this enables provenance
-- ✅ Write a wiki summary page for every ingested document
-- ✅ Update existing entity pages when new information arrives
-- ✅ Flag contradictions in wiki pages when new data conflicts with old claims
+- Do NOT hallucinate entities not present in the text
+- Do NOT add relations without explicit textual evidence
+- Do NOT add edges with confidence < 0.6
+- Provide `supporting_text` for every entity and relation — this enables provenance
+- Write a wiki summary page for every ingested document
+- Update existing entity pages when new information arrives
+- Flag contradictions in wiki pages when new data conflicts with old claims
 
 ---
 
 ## Retrieval Constraints
 
-- 🔒 Traversal depth MUST NOT exceed 2 (config: MAX_GRAPH_DEPTH)
-- 🔒 Only edges with confidence ≥ 0.6 (config: MIN_CONFIDENCE)
-- 🔒 Maximum 50 nodes returned (config: MAX_NODES)
-- ❌ Do NOT fabricate nodes or edges not in the graph
+- Traversal depth MUST NOT exceed 2 (config: MAX_GRAPH_DEPTH)
+- Only edges with confidence ≥ 0.6 (config: MIN_CONFIDENCE)
+- Maximum 50 nodes returned (config: MAX_NODES)
+- Do NOT fabricate nodes or edges not in the graph
 
 ---
 

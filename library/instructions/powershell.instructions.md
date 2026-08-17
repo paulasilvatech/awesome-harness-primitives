@@ -98,11 +98,11 @@ function Set-ResourceConfiguration {
         [ValidateSet('Dev', 'Test', 'Prod')]
         [string]$Environment = 'Dev',
 
-        # ✔️ CORRECT: Use `[switch]` with no default value
+        # ✔ CORRECT: Use `[switch]` with no default value
         [Parameter()]
         [switch]$Force,
 
-         # ❌ WRONG: Shows incorrect default assignment, however this is correct syntax (requires `[switch]` cast).
+         #  WRONG: Shows incorrect default assignment, however this is correct syntax (requires `[switch]` cast).
         [Parameter()]
         [switch]$Quiet = [switch]$true,
 
@@ -234,7 +234,7 @@ function Remove-CacheFiles {
 
     try {
         $files = Get-ChildItem -Path $Path -Filter "*.cache" -ErrorAction Stop
-        
+
         # Demonstrates WhatIf support
         if ($PSCmdlet.ShouldProcess($Path, 'Remove cache files')) {
             $files | Remove-Item -Force -ErrorAction Stop
@@ -325,7 +325,7 @@ function Remove-UserAccount {
                 # This prompt is bypassed when -Force is specified
                 if ($Force -or $PSCmdlet.ShouldContinue("Are you sure you want to remove '$Username'?", "Confirm Removal")) {
                     Write-Verbose "Removing user account: $Username"
-                    
+
                     # Main operation
                     Remove-ADUser -Identity $Username -ErrorAction Stop
                     Write-Warning "User account '$Username' has been removed"

@@ -13,11 +13,11 @@ You are a developer productivity agent that generates **simple, high-quality Pyt
 
 Generate a **basic, well-structured Python client** that developers can use as a foundation:
 
-1. **Simple and clear** - Easy to understand and extend
-2. **Python best practices** - Modern patterns with type hints and Pydantic
-3. **Modular design** - Clean separation of concerns
-4. **Tested** - Working examples with pytest and testcontainers
-5. **Secure** - Parameterized queries and basic error handling
+1. **Simple and clear**- Easy to understand and extend
+2. **Python best practices**- Modern patterns with type hints and Pydantic
+3. **Modular design**- Clean separation of concerns
+4. **Tested**- Working examples with pytest and testcontainers
+5. **Secure**- Parameterized queries and basic error handling
 
 ## MCP Server Capabilities
 
@@ -141,11 +141,11 @@ Before creating pull request, verify:
 
 **Always follow these security rules:**
 
-1. **Parameterize queries** - Never use string formatting or f-strings for Cypher
-2. **Use MERGE** - Prefer `MERGE` over `CREATE` to avoid duplicates
-3. **Validate inputs** - Use Pydantic models to validate data before queries
-4. **Handle errors** - Catch and wrap Neo4j driver exceptions
-5. **Avoid injection** - Never construct Cypher queries from user input directly
+1. **Parameterize queries**- Never use string formatting or f-strings for Cypher
+2. **Use MERGE**- Prefer `MERGE` over `CREATE` to avoid duplicates
+3. **Validate inputs**- Use Pydantic models to validate data before queries
+4. **Handle errors**- Catch and wrap Neo4j driver exceptions
+5. **Avoid injection**- Never construct Cypher queries from user input directly
 
 ## Python Best Practices
 
@@ -161,29 +161,29 @@ Before creating pull request, verify:
 - Keep classes small and focused
 
 **What to INCLUDE:**
-- ✅ Pydantic models for type safety
-- ✅ Repository pattern for query organization
-- ✅ Type hints everywhere
-- ✅ Basic error handling
-- ✅ Context managers for connections
-- ✅ Parameterized Cypher queries
-- ✅ Working pytest tests with testcontainers
-- ✅ Clear README with examples
+- Pydantic models for type safety
+- Repository pattern for query organization
+- Type hints everywhere
+- Basic error handling
+- Context managers for connections
+- Parameterized Cypher queries
+- Working pytest tests with testcontainers
+- Clear README with examples
 
 **What to AVOID:**
-- ❌ Complex transaction management
-- ❌ Async/await (unless explicitly requested)
-- ❌ ORM-like abstractions
-- ❌ Logging frameworks
-- ❌ Monitoring/observability code
-- ❌ CLI tools
-- ❌ Complex retry/circuit breaker logic
-- ❌ Caching layers
+- Complex transaction management
+- Async/await (unless explicitly requested)
+- ORM-like abstractions
+- Logging frameworks
+- Monitoring/observability code
+- CLI tools
+- Complex retry/circuit breaker logic
+- Caching layers
 
 ## Pull Request Workflow
 
-1. **Create feature branch** - Use format `neo4j-client-issue-<NUMBER>`
-2. **Commit generated code** - Use clear, descriptive commit messages
+1. **Create feature branch**- Use format `neo4j-client-issue-<NUMBER>`
+2. **Commit generated code**- Use clear, descriptive commit messages
 3. **Open pull request** with description including:
    - Summary of what was generated
    - Quick start usage example
@@ -193,13 +193,13 @@ Before creating pull request, verify:
 
 ## Key Reminders
 
-**This is a STARTING POINT, not a final product.** The goal is to:
+**This is a STARTING POINT, not a final product.**The goal is to:
 - Provide clean, working code that demonstrates best practices
 - Make it easy for developers to understand and extend
 - Focus on simplicity and clarity over completeness
 - Generate high-quality fundamentals, not enterprise features
 
-**When in doubt, keep it simple.** It's better to generate less code that's clear and correct than more code that's complex and confusing.
+**When in doubt, keep it simple.**It's better to generate less code that's clear and correct than more code that's complex and confusing.
 
 ## Environment Configuration
 

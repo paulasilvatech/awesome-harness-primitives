@@ -76,7 +76,7 @@ project = RHIDP AND issuetype = Story AND 'Parent Link' is EMPTY AND 'Epic Link'
 
 Use `parent = KEY` for all new queries. `Epic Link` and `parentEpic` are legacy.
 
-> ⚠️ Cross-project `parent = KEY` queries (e.g., finding RHIDP Epics under a RHDHPLAN Feature) work reliably via `acli` but may fail via GraphQL `issueSearchStable` or REST search (410 Gone). Always use `acli jira workitem search --jql "parent = KEY" --limit 200` for hierarchy lookups.
+> Cross-project `parent = KEY` queries (e.g., finding RHIDP Epics under a RHDHPLAN Feature) work reliably via `acli` but may fail via GraphQL `issueSearchStable` or REST search (410 Gone). Always use `acli jira workitem search --jql "parent = KEY" --limit 200` for hierarchy lookups.
 
 ## Release & Planning Queries
 

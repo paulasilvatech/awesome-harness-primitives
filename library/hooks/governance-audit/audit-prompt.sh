@@ -133,16 +133,16 @@ if [[ ${#THREATS_FOUND[@]} -gt 0 ]]; then
     >> "$LOG_FILE"
 
   {
-    echo "⚠️ Governance: ${#THREATS_FOUND[@]} threat signal(s) detected (max severity: $MAX_SEVERITY)"
+    echo "Governance: ${#THREATS_FOUND[@]} threat signal(s) detected (max severity: $MAX_SEVERITY)"
     for threat in "${THREATS_FOUND[@]}"; do
       IFS=$'\t' read -r category severity description _evidence_encoded <<< "$threat"
-      echo "  🔴 [$category] $description (severity: $severity)"
+      echo "  [$category] $description (severity: $severity)"
     done
   } >&2
 
   # In strict/locked mode or when BLOCK_ON_THREAT is true, exit non-zero to block
   if [[ "$BLOCK" == "true" ]] || [[ "$LEVEL" == "strict" ]] || [[ "$LEVEL" == "locked" ]]; then
-    echo "🚫 Prompt blocked by governance policy (level: $LEVEL)" >&2
+    echo "Prompt blocked by governance policy (level: $LEVEL)" >&2
     exit 2
   fi
 else

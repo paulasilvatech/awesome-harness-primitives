@@ -42,22 +42,22 @@ Docstrings belong immediately after the function name and before the argument ve
 **Always align multi-line elements vertically in all data structures: vectors, maps, lists, sets, all code (since Clojure code is data). Misalignment causes the bracket balancer to close brackets incorrectly, creating invalid forms.**
 
 ```clojure
-;; ❌ Wrong - misaligned vector elements
+;;  Wrong - misaligned vector elements
 (select-keys m [:key-a
                 :key-b
                :key-c])  ; Misalignment → incorrect ] placement
 
-;; ✅ Correct - aligned vector elements
+;;  Correct - aligned vector elements
 (select-keys m [:key-a
                 :key-b
                 :key-c])  ; Proper alignment → correct ] placement
 
-;; ❌ Wrong - misaligned map entries
+;;  Wrong - misaligned map entries
 {:name "Alice"
  :age 30
 :city "Oslo"}  ; Misalignment → incorrect } placement
 
-;; ✅ Correct - aligned map entries
+;;  Correct - aligned map entries
 {:name "Alice"
  :age 30
  :city "Oslo"}  ; Proper alignment → correct } placement
@@ -110,11 +110,11 @@ After editing files, reload the edited namespace in the REPL so updated definiti
 Consistent indentation is crucial to help the bracket balancer.
 
 ```clojure
-;; ❌
+;;
 (defn my-function [x]
 (+ x 2))
 
-;; ✅
+;;
 (defn my-function [x]
   (+ x 2))
 ```

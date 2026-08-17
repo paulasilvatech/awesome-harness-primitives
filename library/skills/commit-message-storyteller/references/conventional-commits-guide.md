@@ -129,9 +129,9 @@ BREAKING CHANGE: /api/v1/* routes no longer exist. See migration guide at docs/v
 ## Body Writing Tips
 
 Ask yourself before writing the body:
-- **What was broken / missing before this change?**
-- **Why was this approach chosen over alternatives?**
-- **What will be different for users or developers after this?**
+- **What was broken / missing before this change? **
+- **Why was this approach chosen over alternatives? **
+- **What will be different for users or developers after this? **
 
 Avoid:
 - Restating what the diff already shows ("changed the variable name")
@@ -142,7 +142,7 @@ Avoid:
 
 ## Commit Message Anti-Patterns
 
-| ❌ Bad | ✅ Better |
+| Bad | Better |
 |--------|----------|
 | `fix bug` | `fix(cart): prevent duplicate items on rapid add-to-cart clicks` |
 | `updates` | `feat(profile): allow users to update display name` |

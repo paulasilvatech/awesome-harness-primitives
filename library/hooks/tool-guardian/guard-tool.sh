@@ -168,7 +168,7 @@ done
 if [[ $THREAT_COUNT -gt 0 ]]; then
   {
     echo ""
-    echo "🛡️  Tool Guardian: $THREAT_COUNT threat(s) detected in '$TOOL_NAME' invocation"
+    echo "Tool Guardian: $THREAT_COUNT threat(s) detected in '$TOOL_NAME' invocation"
     echo ""
     printf "  %-24s %-10s %-40s %s\n" "CATEGORY" "SEVERITY" "MATCH" "SUGGESTION"
     printf "  %-24s %-10s %-40s %s\n" "--------" "--------" "-----" "----------"
@@ -202,11 +202,11 @@ if [[ $THREAT_COUNT -gt 0 ]]; then
     "$TIMESTAMP" "$MODE" "$(json_escape "$TOOL_NAME")" "$THREAT_COUNT" "$FINDINGS_JSON" >> "$LOG_FILE"
 
   if [[ "$MODE" == "block" ]]; then
-    echo "🚫 Operation blocked: resolve the threats above or adjust TOOL_GUARD_ALLOWLIST." >&2
+    echo "Operation blocked: resolve the threats above or adjust TOOL_GUARD_ALLOWLIST." >&2
     echo "   Set GUARD_MODE=warn to log without blocking." >&2
     exit 2
   else
-    echo "⚠️  Threats logged in warn mode. Set GUARD_MODE=block to prevent dangerous operations." >&2
+    echo "Threats logged in warn mode. Set GUARD_MODE=block to prevent dangerous operations." >&2
   fi
 else
   # Log clean result

@@ -78,9 +78,9 @@ Validity checks verify whether a detected secret is still active.
 
 | Status | Meaning | Priority |
 |---|---|---|
-| `Active` | Secret is confirmed to be valid and exploitable | 🔴 Immediate |
-| `Inactive` | Secret has been revoked or expired | 🟡 Lower priority |
-| `Unknown` | GitHub cannot determine validity | 🟠 Investigate |
+| `Active` | Secret is confirmed to be valid and exploitable |  Immediate |
+| `Inactive` | Secret has been revoked or expired |  Lower priority |
+| `Unknown` | GitHub cannot determine validity |  Investigate |
 
 ### On-Demand Validation
 

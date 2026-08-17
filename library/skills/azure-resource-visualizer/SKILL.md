@@ -70,23 +70,23 @@ graph TB
             SUBNET2[Subnet: data<br/>10.0.2.0/24]
             NSG[Network Security Group]
         end
-        
+
         subgraph "Compute Layer"
             APP[App Service<br/>Plan: P1v2]
             FUNC[Function App<br/>Runtime: .NET 8]
         end
-        
+
         subgraph "Data Layer"
             SQL[Azure SQL Database<br/>DTU: S1]
             STORAGE[Storage Account<br/>Type: Standard LRS]
         end
-        
+
         subgraph "Security & Identity"
             KV[Key Vault]
             MI[Managed Identity]
         end
     end
-    
+
     %% Define relationships with descriptive labels
     APP -->|"HTTPS requests"| FUNC
     FUNC -->|"SQL connection"| SQL
@@ -143,7 +143,7 @@ Use [template-architecture.md](./assets/template-architecture.md) as a template 
 
 ### Tool Usage Patterns
 
-1. **Azure MCP Search**: 
+1. **Azure MCP Search**:
    - Use `intent="list resource groups"` to discover resource groups
    - Use `intent="list resources in group"` with group name to get all resources
    - Use `intent="get resource details"` for individual resource analysis
@@ -162,23 +162,23 @@ Use [template-architecture.md](./assets/template-architecture.md) as a template 
 ### Constraints & Boundaries
 
 **Always Do:**
-- ✅ List resource groups if not specified
-- ✅ Wait for user selection before proceeding
-- ✅ Analyze ALL resources in the group
-- ✅ Create detailed, accurate diagrams
-- ✅ Include configuration details in node labels
-- ✅ Group resources logically with subgraphs
-- ✅ Label all connections descriptively
-- ✅ Create a complete markdown file with diagram
+- List resource groups if not specified
+- Wait for user selection before proceeding
+- Analyze ALL resources in the group
+- Create detailed, accurate diagrams
+- Include configuration details in node labels
+- Group resources logically with subgraphs
+- Label all connections descriptively
+- Create a complete markdown file with diagram
 
 **Never Do:**
-- ❌ Skip resources because they seem unimportant
-- ❌ Make assumptions about resource relationships without verification
-- ❌ Create incomplete or placeholder diagrams
-- ❌ Omit configuration details that affect architecture
-- ❌ Proceed without confirming resource group selection
-- ❌ Generate invalid Mermaid syntax
-- ❌ Modify or delete Azure resources (read-only analysis)
+- Skip resources because they seem unimportant
+- Make assumptions about resource relationships without verification
+- Create incomplete or placeholder diagrams
+- Omit configuration details that affect architecture
+- Proceed without confirming resource group selection
+- Generate invalid Mermaid syntax
+- Modify or delete Azure resources (read-only analysis)
 
 ### Edge Cases & Error Handling
 
@@ -223,13 +223,13 @@ Use [template-architecture.md](./assets/template-architecture.md) as a template 
 ## Success Criteria
 
 A successful analysis includes:
-- ✅ Valid resource group identified
-- ✅ All resources discovered and analyzed
-- ✅ All significant relationships mapped
-- ✅ Detailed Mermaid diagram with proper grouping
-- ✅ Complete markdown file created
-- ✅ Clear, actionable documentation
-- ✅ Valid Mermaid syntax that renders correctly
-- ✅ Professional, architect-level output
+- Valid resource group identified
+- All resources discovered and analyzed
+- All significant relationships mapped
+- Detailed Mermaid diagram with proper grouping
+- Complete markdown file created
+- Clear, actionable documentation
+- Valid Mermaid syntax that renders correctly
+- Professional, architect-level output
 
 Your goal is to provide clarity and insight into Azure architectures, making complex resource relationships easy to understand through excellent visualization.

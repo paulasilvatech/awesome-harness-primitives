@@ -33,5 +33,5 @@ LEVEL="${GOVERNANCE_LEVEL:-standard}"
 python3 -c 'import json,sys; print(json.dumps({"timestamp":sys.argv[1],"event":"session_start","governance_level":sys.argv[2],"cwd":sys.argv[3]}))' \
   "$TIMESTAMP" "$LEVEL" "$CWD" >> "$LOG_DIR/audit.log"
 
-echo "🛡️ Governance audit active (level: $LEVEL)"
+echo "Governance audit active (level: $LEVEL)"
 exit 0

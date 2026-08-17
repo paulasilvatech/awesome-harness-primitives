@@ -604,7 +604,7 @@ def format_markdown_output(result: AnalysisResult) -> str:
             other_changes.append((res.address, res.other_changes))
 
     # Section: Order-only changes (false positives)
-    lines.append("## 🟢 Order-only Changes (No Impact)")
+    lines.append("## Order-only Changes (No Impact)")
     lines.append("")
     if order_only_changes:
         lines.append(
@@ -620,7 +620,7 @@ def format_markdown_output(result: AnalysisResult) -> str:
     lines.append("")
 
     # Section: Actual Set changes
-    lines.append("## 🟡 Actual Set Attribute Changes")
+    lines.append("## Actual Set Attribute Changes")
     lines.append("")
     if actual_set_changes:
         for address, name, change in actual_set_changes:
@@ -633,7 +633,7 @@ def format_markdown_output(result: AnalysisResult) -> str:
     lines.append("")
 
     # Section: Resource replacements
-    lines.append("## 🔴 Resource Replacement (Caution)")
+    lines.append("## Resource Replacement (Caution)")
     lines.append("")
     if replace_resources:
         lines.append(
@@ -648,7 +648,7 @@ def format_markdown_output(result: AnalysisResult) -> str:
 
     # Section: Warnings
     if result.warnings:
-        lines.append("## ⚠️ Warnings")
+        lines.append("## Warnings")
         lines.append("")
         for warning in result.warnings:
             lines.append(f"- {warning}")
@@ -720,14 +720,14 @@ def format_summary_output(result: AnalysisResult) -> str:
     parts = []
 
     if result.order_only_count > 0:
-        parts.append(f"🟢 {result.order_only_count} order-only")
+        parts.append(f"{result.order_only_count} order-only")
     if result.actual_set_changes_count > 0:
-        parts.append(f"🟡 {result.actual_set_changes_count} set changes")
+        parts.append(f"{result.actual_set_changes_count} set changes")
     if result.replace_count > 0:
-        parts.append(f"🔴 {result.replace_count} replacements")
+        parts.append(f"{result.replace_count} replacements")
 
     if not parts:
-        return "✅ No changes detected"
+        return "No changes detected"
 
     return " | ".join(parts)
 
@@ -912,7 +912,7 @@ def main():
                 )
             )
         elif args.format == "summary":
-            print("✅ No changes detected")
+            print("No changes detected")
         else:
             print("# Terraform Plan Analysis Results\n")
             print("No resource changes detected.")

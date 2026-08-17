@@ -18,13 +18,13 @@ Scan for these patterns before declaring any Apex file acceptable:
 ### SOQL and DML in Loops — Automatic Fail
 
 ```apex
-// ❌ NEVER — causes LimitException at scale
+//  NEVER — causes LimitException at scale
 for (Account a : accounts) {
     List<Contact> contacts = [SELECT Id FROM Contact WHERE AccountId = :a.Id]; // SOQL in loop
     update a; // DML in loop
 }
 
-// ✅ ALWAYS — collect, then query/update once
+//  ALWAYS — collect, then query/update once
 Set<Id> accountIds = new Map<Id, Account>(accounts).keySet();
 Map<Id, List<Contact>> contactsByAccount = new Map<Id, List<Contact>>();
 for (Contact c : [SELECT Id, AccountId FROM Contact WHERE AccountId IN :accountIds]) {
@@ -72,13 +72,13 @@ Rule: any Apex method callable from a UI component, REST endpoint, or `@Invocabl
 ## Step 4 — SOQL Injection Prevention
 
 ```apex
-// ❌ NEVER — concatenates user input into SOQL string
+//  NEVER — concatenates user input into SOQL string
 String soql = 'SELECT Id FROM Account WHERE Name = \'' + userInput + '\'';
 
-// ✅ ALWAYS — bind variable
+//  ALWAYS — bind variable
 String soql = [SELECT Id FROM Account WHERE Name = :userInput];
 
-// ✅ For dynamic SOQL with user-controlled field names — validate against a whitelist
+//  For dynamic SOQL with user-controlled field names — validate against a whitelist
 Set<String> allowedFields = new Set<String>{'Name', 'Industry', 'AnnualRevenue'};
 if (!allowedFields.contains(userInput)) {
     throw new IllegalArgumentException('Field not permitted: ' + userInput);

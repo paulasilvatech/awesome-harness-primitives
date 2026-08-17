@@ -101,9 +101,9 @@ For each finding, classify:
 ### Step 5: User Confirmation
 
 ```
-🏗️ Azure Well-Architected Review Summary
+ Azure Well-Architected Review Summary
 
-📊 Review Results:
+ Review Results:
 • IaC Files Analyzed: X
 • Azure Services Identified: Y
 • Total Findings: Z
@@ -111,13 +111,13 @@ For each finding, classify:
   • Medium Risk: B (should address soon)
   • Low Risk: C (nice to have)
 
-🔴 Top High Risk Findings:
+ Top High Risk Findings:
 1. [Pillar]: [Finding] — [Why it matters]
 2. [Pillar]: [Finding] — [Why it matters]
 
-💡 This will create Z individual GitHub issues + 1 EPIC issue.
+ This will create Z individual GitHub issues + 1 EPIC issue.
 
-❓ Proceed with creating GitHub issues? (y/n)
+ Proceed with creating GitHub issues? (y/n)
 ```
 
 **Gate**: Only proceed to Steps 6–7 if the user gives an explicit affirmative response (e.g. "y", "yes"). On a negative, ambiguous, or missing response, do **not** create any GitHub issues — output the full findings as formatted markdown to the console and stop.
@@ -129,14 +129,14 @@ Label with "well-architected" and the pillar name (e.g., "security", "reliabilit
 
 **Body**:
 ````markdown
-## 🏗️ Well-Architected Finding: [Brief Title]
+## Well-Architected Finding: [Brief Title]
 
 **Pillar**: [Name] | **Risk Level**: [High/Medium/Low] | **Effort**: [Low/Medium/High]
 
-### 📋 Description
+### Description
 [Clear explanation of the finding and why it matters]
 
-### 🔧 Remediation
+### Remediation
 
 **IaC Fix** (preferred):
 ```bicep
@@ -160,11 +160,11 @@ az storage account update --name <name> --resource-group <rg> \
   --min-tls-version TLS1_2 --allow-blob-public-access false --https-only true
 ```
 
-### 📚 Azure Reference
+### Azure Reference
 - [WAF Best Practice Link]
 - [Microsoft Learn Documentation Link]
 
-### ✅ Validation
+### Validation
 - [ ] Change implemented in IaC and deployed
 - [ ] Azure Policy compliance passes (if applicable)
 - [ ] Microsoft Defender for Cloud recommendation resolved (if applicable)
@@ -188,9 +188,9 @@ Label with "well-architected" and "epic".
 - **GitHub Creation Failure**: Output all findings as formatted markdown to console
 
 ## Success Criteria
-- ✅ All 5 WAF pillars reviewed against IaC and live infrastructure
-- ✅ All findings classified by risk level and pillar
-- ✅ Actionable remediation steps with IaC examples for each finding
-- ✅ GitHub issues created for team tracking
-- ✅ Architecture diagram generated for EPIC context
-- ✅ Microsoft Learn documentation references included
+- All 5 WAF pillars reviewed against IaC and live infrastructure
+- All findings classified by risk level and pillar
+- Actionable remediation steps with IaC examples for each finding
+- GitHub issues created for team tracking
+- Architecture diagram generated for EPIC context
+- Microsoft Learn documentation references included

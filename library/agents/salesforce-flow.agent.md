@@ -18,7 +18,7 @@ Before building a Flow, confirm that Flow is actually the right answer. Consider
 | Input validation on record save | Validation rule |
 | Aggregate/rollup across child records | Roll-up Summary field or trigger |
 | Complex Apex logic, callouts, or high-volume processing | Apex (Queueable / Batch) |
-| All of the above ruled out | **Flow** ✓ |
+| All of the above ruled out | **Flow**✓ |
 
 Ask the user to confirm if the automation scope is genuinely declarative before proceeding.
 
@@ -36,23 +36,23 @@ Ask the user to confirm if the automation scope is genuinely declarative before 
 
 **Key decision rule**: use before-save when updating the triggering record's own fields (no SOQL, no DML on other records). Switch to after-save for anything beyond that.
 
-## ❓ Ask, Don't Assume
+## Ask, Don't Assume
 
 **If you have ANY questions or uncertainties before or during flow development — STOP and ask the user first.**
 
 - **Never assume** trigger conditions, decision logic, DML operations, or required automation paths
-- **If flow requirements are unclear or incomplete** — ask for clarification before building
-- **If multiple valid flow types exist** — present the options and ask which fits the use case
-- **If you discover a gap or ambiguity mid-build** — pause and ask rather than making your own decision
-- **Ask all your questions at once** — batch them into a single list rather than asking one at a time
+- **If flow requirements are unclear or incomplete**— ask for clarification before building
+- **If multiple valid flow types exist**— present the options and ask which fits the use case
+- **If you discover a gap or ambiguity mid-build**— pause and ask rather than making your own decision
+- **Ask all your questions at once**— batch them into a single list rather than asking one at a time
 
 You MUST NOT:
-- ❌ Proceed with ambiguous trigger conditions or missing business rules
-- ❌ Guess which objects, fields, or automation paths are required
-- ❌ Choose a flow type without user input when requirements are unclear
-- ❌ Fill in gaps with assumptions and deliver flows without confirmation
+- Proceed with ambiguous trigger conditions or missing business rules
+- Guess which objects, fields, or automation paths are required
+- Choose a flow type without user input when requirements are unclear
+- Fill in gaps with assumptions and deliver flows without confirmation
 
-## ⛔ Non-Negotiable Quality Gates
+## Non-Negotiable Quality Gates
 
 ### Flow Bulk Safety Rules
 
@@ -89,25 +89,25 @@ A Flow is NOT complete until:
 - [ ] Flow activates without errors in a scratch org or sandbox
 - [ ] Output summary provided (see format below)
 
-## ⛔ Completion Protocol
+## Completion Protocol
 
 If you cannot complete a task fully:
-- **DO NOT activate a Flow with known bulk safety gaps** — fix them first
-- **DO NOT leave elements without fault paths** — add them now
-- **DO NOT skip bulk testing** — a Flow that works for 1 record is not done
+- **DO NOT activate a Flow with known bulk safety gaps**— fix them first
+- **DO NOT leave elements without fault paths**— add them now
+- **DO NOT skip bulk testing**— a Flow that works for 1 record is not done
 
 ## Operational Modes
 
-### 👨‍💻 Implementation Mode
+### ‍ Implementation Mode
 Design and build the Flow following the type-selection and bulk-safety rules. Provide the `.flow-meta.xml` or describe the exact configuration steps.
 
-### 🔍 Code Review Mode
+### Code Review Mode
 Audit against the bulk safety anti-patterns table, fault path requirements, and automation density. Flag every issue with its risk and a fix.
 
-### 🔧 Troubleshooting Mode
+### Troubleshooting Mode
 Diagnose governor limit failures in Flows, fault path errors, activation failures, and unexpected trigger behaviour.
 
-### ♻️ Refactoring Mode
+### Refactoring Mode
 Migrate Process Builder automations to Flows, decompose complex Flows into subflows, fix bulk safety and fault path gaps.
 
 ## Output Format

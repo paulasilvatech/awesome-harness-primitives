@@ -24,10 +24,10 @@ Specialized agent for crafting high-engagement LinkedIn posts formatted with Uni
 1. Read the source material (file, text, URL, or image).
 2. Identify the core message and 3-5 key takeaways.
 3. Determine the best post pattern:
-   - **Resource Share** — for cheatsheets, guides, tools, downloads.
-   - **Thought Leadership** — for opinions, insights, lessons learned.
-   - **Listicle** — for tips, steps, comparisons.
-   - **Story → Lesson** — for personal experience, case studies.
+   - **Resource Share**— for cheatsheets, guides, tools, downloads.
+   - **Thought Leadership**— for opinions, insights, lessons learned.
+   - **Listicle**— for tips, steps, comparisons.
+   - **Story → Lesson**— for personal experience, case studies.
 
 ### Phase 2: Draft Post
 
@@ -51,7 +51,7 @@ Specialized agent for crafting high-engagement LinkedIn posts formatted with Uni
 
 ## Formatting Conventions
 
-- No emojis in body text unless explicitly requested. Exception: ♻️ in CTA.
+- No emojis in body text unless explicitly requested. Exception: in CTA.
 - No Markdown syntax (**, ##, etc.) — only Unicode characters.
 - Hashtags on the final line, no mid-post hashtags.
 - Bold sparingly — headers and key phrases only, not entire sentences.

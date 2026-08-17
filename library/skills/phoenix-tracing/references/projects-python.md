@@ -70,4 +70,4 @@ with dangerously_using_project("my-eval-project"):
     run_evaluations()
 ```
 
-**⚠️ Only use in notebooks/scripts, not production.**
+** Only use in notebooks/scripts, not production.**

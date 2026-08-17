@@ -35,7 +35,7 @@ A **desk** isn't a sub-agent — it's a peer with a history. Sub-agents inherit 
 
 ## The Cairn Dashboard
 
-The Workshop's live view is a **canvas extension** (🪨 Cairn) — `signals-dashboard` — that shows the pulse of every desk (score bars, patterns, escalations), auto-refreshing in the GitHub Copilot app.
+The Workshop's live view is a **canvas extension** (Cairn) — `signals-dashboard` — that shows the pulse of every desk (score bars, patterns, escalations), auto-refreshing in the GitHub Copilot app.
 
 Each desk card has two launch choices:
 

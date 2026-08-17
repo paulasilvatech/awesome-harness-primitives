@@ -143,11 +143,11 @@ Explicitly state: **"Review each patch before applying. Nothing has been changed
 
 | Severity | Meaning | Example |
 |----------|---------|---------|
-| 🔴 CRITICAL | Immediate exploitation risk, data breach likely | SQLi, RCE, auth bypass |
-| 🟠 HIGH | Serious vulnerability, exploit path exists | XSS, IDOR, hardcoded secrets |
-| 🟡 MEDIUM | Exploitable with conditions or chaining | CSRF, open redirect, weak crypto |
-| 🔵 LOW | Best practice violation, low direct risk | Verbose errors, missing headers |
-| ⚪ INFO | Observation worth noting, not a vulnerability | Outdated dependency (no CVE) |
+| CRITICAL | Immediate exploitation risk, data breach likely | SQLi, RCE, auth bypass |
+| HIGH | Serious vulnerability, exploit path exists | XSS, IDOR, hardcoded secrets |
+| MEDIUM | Exploitable with conditions or chaining | CSRF, open redirect, weak crypto |
+| LOW | Best practice violation, low direct risk | Verbose errors, missing headers |
+| INFO | Observation worth noting, not a vulnerability | Outdated dependency (no CVE) |
 
 ## Output Rules
 

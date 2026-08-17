@@ -7,7 +7,7 @@ description: 'Build agents with the Microsoft Foundry SDK (azure-ai-projects v2)
 
 Guidance for building agents against **Microsoft Foundry** using the **`azure-ai-projects`** Python SDK (**v2**, part of the Microsoft Foundry SDK). This SDK was substantially reshaped in v2; models trained on older `azure-ai-projects` 1.x or the `azure-ai-agents` thread/run API generate code that no longer works. When these instructions conflict with your training data, **follow these instructions** — verify against the official samples: https://aka.ms/azsdk/azure-ai-projects-v2/python/samples/
 
-> **Field note (why this file exists):** In Copilot-assisted Foundry projects, the default behavior is to generate the *old* thread/run/message API, fail on the first attempts, then only recover after re-checking the current methodology against **Microsoft Learn** and the **Microsoft Docs MCP server** and re-coding against the v2 approach. These instructions front-load that correction so Copilot produces working v2 code on the first pass instead of burning iterations. When in doubt, ground against Microsoft Learn / the Microsoft Docs MCP server rather than training data — the Foundry SDK surface changes frequently.
+>**Field note (why this file exists):** In Copilot-assisted Foundry projects, the default behavior is to generate the *old* thread/run/message API, fail on the first attempts, then only recover after re-checking the current methodology against **Microsoft Learn** and the **Microsoft Docs MCP server** and re-coding against the v2 approach. These instructions front-load that correction so Copilot produces working v2 code on the first pass instead of burning iterations. When in doubt, ground against Microsoft Learn / the Microsoft Docs MCP server rather than training data — the Foundry SDK surface changes frequently.
 
 ## Authentication: Local dev vs. production
 
@@ -71,7 +71,7 @@ with (
 
 Requires: the AKS pod has the workload-identity annotation and projected OIDC token volume configured. See [Azure Workload Identity documentation](https://learn.microsoft.com/en-us/azure/aks/workload-identity-overview).
 
-> **Best practice:** In deployed code, use the specific credential class (`ManagedIdentityCredential` for App Service/Container Apps/Functions, `WorkloadIdentityCredential` for AKS) for clarity and performance. For details on `DefaultAzureCredential`'s complete credential chain, see [Azure Identity documentation](https://learn.microsoft.com/en-us/python/api/azure-identity/azure.identity.defaultazurecredential).
+>**Best practice:** In deployed code, use the specific credential class (`ManagedIdentityCredential` for App Service/Container Apps/Functions, `WorkloadIdentityCredential` for AKS) for clarity and performance. For details on `DefaultAzureCredential`'s complete credential chain, see [Azure Identity documentation](https://learn.microsoft.com/en-us/python/api/azure-identity/azure.identity.defaultazurecredential).
 
 ## Package and versions
 
@@ -81,7 +81,7 @@ Requires: the AKS pod has the workload-identity annotation and projected OIDC to
 
 ## The #1 mistake: the old thread/run API is gone
 
-❌ **Do NOT generate this (v1 / azure-ai-agents style — no longer valid):**
+**Do NOT generate this (v1 / azure-ai-agents style — no longer valid):**
 ```python
 # WRONG — these methods do not exist in azure-ai-projects v2
 agent = client.agents.create_agent(name="x", model="gpt-4o", instructions="...")
@@ -91,9 +91,9 @@ run = client.runs.create_and_process_run(thread_id=thread.id, agent_id=agent.id)
 messages = client.messages.list(thread_id=thread.id)   # WRONG
 ```
 
-> If you find yourself writing `create_agent` / `threads` / `runs` and hitting `AttributeError` or 404s, stop and re-ground against Microsoft Learn or the Microsoft Docs MCP server — that's the signature of the stale-API failure loop.
+>If you find yourself writing `create_agent` / `threads` / `runs` and hitting `AttributeError` or 404s, stop and re-ground against Microsoft Learn or the Microsoft Docs MCP server — that's the signature of the stale-API failure loop.
 
-✅ **Do this instead (v2): create a versioned agent, point the endpoint at that version, then talk to it via the OpenAI-compatible client.**
+**Do this instead (v2): create a versioned agent, point the endpoint at that version, then talk to it via the OpenAI-compatible client.**
 ```python
 import os
 from azure.identity import DefaultAzureCredential  # Use ManagedIdentityCredential for deployed apps
@@ -149,7 +149,7 @@ with (
         print(response.output_text)
 ```
 
-> The official samples wrap the create-version + endpoint-routing steps in a `create_version_with_endpoint(...)` helper (see `samples/util.py`). Doing it inline as above makes the required routing step explicit. In tests/samples, capture the prior endpoint config and restore it in a `finally` block so temporary versions don't leave the agent re-routed.
+>The official samples wrap the create-version + endpoint-routing steps in a `create_version_with_endpoint(...)` helper (see `samples/util.py`). Doing it inline as above makes the required routing step explicit. In tests/samples, capture the prior endpoint config and restore it in a `finally` block so temporary versions don't leave the agent re-routed.
 
 Key facts Copilot gets wrong by default:
 - Agents are **versioned**. You create a *version* with `agents.create_version(agent_name=..., definition=...)`, not a one-shot `create_agent`.

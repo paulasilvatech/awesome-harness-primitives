@@ -54,12 +54,12 @@ For every meeting, check the organizer field and apply these additional markers:
 
 | Condition | Marker | Action |
 |-----------|--------|--------|
-| Starts ≥ 15:30 and < 16:00 (any organizer) | `⚠️ After-hours` | Recommend decline |
-| Starts ≥ 16:00 and **not** self-organized | `⚠️ After-hours` | Recommend decline |
+| Starts ≥ 15:30 and < 16:00 (any organizer) | ` After-hours` | Recommend decline |
+| Starts ≥ 16:00 and **not** self-organized | ` After-hours` | Recommend decline |
 | Starts ≥ 16:00 and self-organized | _(no flag)_ | OK — you chose to schedule it |
-| Before 09:00 and **not** self-organized | `⚠️ Early` | Recommend decline — intrudes on learning window |
+| Before 09:00 and **not** self-organized | ` Early` | Recommend decline — intrudes on learning window |
 | Before 09:00 and self-organized | _(no flag)_ | OK — you chose to schedule it |
-| Overlaps 12:00–13:00 | `🍽️ Lunch conflict` | Note in Calendar Notes |
+| Overlaps 12:00–13:00 | ` Lunch conflict` | Note in Calendar Notes |
 
 "Self-organized" means **you** are the meeting organizer (check the organizer field from WorkIQ).
 
@@ -130,7 +130,7 @@ Analyze the full day and provide:
 
 | Section | What to Include |
 |---------|------------------|
-| **Day Fit Score** | Rate 0–100% how well the day matches the Ideal Day Structure. Criteria: (1) morning focus clear (+20%), (2) ≤2 customer meetings in 09:00–12:00 (+20%), (3) lunch 12:00–13:00 protected (+15%), (4) deep work 13:00–15:30 intact (+20%), (5) nothing after 15:30 or only self-organized after 16:00 (+15%), (6) ≥1h learning slots found (+10%). Show as: 🟢 ≥80%, 🟡 50–79%, 🔴 <50%. |
+| **Day Fit Score** | Rate 0–100% how well the day matches the Ideal Day Structure. Criteria: (1) morning focus clear (+20%), (2) ≤2 customer meetings in 09:00–12:00 (+20%), (3) lunch 12:00–13:00 protected (+15%), (4) deep work 13:00–15:30 intact (+20%), (5) nothing after 15:30 or only self-organized after 16:00 (+15%), (6) ≥1h learning slots found (+10%). Show as:  ≥80%,  50–79%,  <50%. |
 | **Day Shape** | Total meeting hours, focus time available, learning hours, deep work hours, heavy/moderate/light assessment |
 | **Decline Candidates** | Auto-include: (1) all meetings 15:30–16:00, (2) others' meetings ≥16:00, (3) others' meetings <09:00, (4) 3rd+ customer meeting, (5) optional meetings during deep work zone. Show "Reclaim" column with minutes recovered. Self-organized meetings before 09:00 or after 16:00 are **excluded** from auto-decline. |
 | **Conflict Resolution** | Specific recommendation for each overlap |

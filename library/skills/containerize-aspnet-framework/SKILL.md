@@ -18,7 +18,7 @@ This section of the prompt contains the specific settings and configurations req
 Any settings that are not specified will be set to default values. The default values are provided in `[square brackets]`.
 
 ### Basic Project Information
-1. Project to containerize: 
+1. Project to containerize:
    - `[ProjectName (provide path to .csproj file)]`
 
 2. Windows Server SKU to use:
@@ -31,7 +31,7 @@ Any settings that are not specified will be set to default values. The default v
    - `[Specify base image to use for build stage (Default None)]`
 
 5. Custom base image for the run stage of the Docker image ("None" to use standard Microsoft base image):
-   - `[Specify base image to use for run stage (Default None)]`   
+   - `[Specify base image to use for run stage (Default None)]`
 
 ### Container Configuration
 1. Ports that must be exposed in the container image:
@@ -99,13 +99,13 @@ Any settings that are not specified will be set to default values. The default v
 
 ## Scope
 
-- ✅ App configuration modification to ensure config builders are used to read app settings and connection strings from the environment variables
-- ✅ Dockerfile creation and configuration for an ASP.NET application
-- ✅ Specifying multiple stages in the Dockerfile to build/publish the application and copy the output to the final image
-- ✅ Configuration of Windows container platform compatibility (Windows Server Core or Full)
-- ✅ Proper handling of dependencies (GAC assemblies, MSIs, COM components)
-- ❌ No infrastructure setup (assumed to be handled separately)
-- ❌ No code changes beyond those required for containerization
+- App configuration modification to ensure config builders are used to read app settings and connection strings from the environment variables
+- Dockerfile creation and configuration for an ASP.NET application
+- Specifying multiple stages in the Dockerfile to build/publish the application and copy the output to the final image
+- Configuration of Windows container platform compatibility (Windows Server Core or Full)
+- Proper handling of dependencies (GAC assemblies, MSIs, COM components)
+- No infrastructure setup (assumed to be handled separately)
+- No code changes beyond those required for containerization
 
 ## Execution Process
 
@@ -148,7 +148,7 @@ Any settings that are not specified will be set to default values. The default v
        - The build stage MUST use a `mcr.microsoft.com/dotnet/framework/sdk` base image unless a custom base image is specified in the settings file
        - Copy sln, csproj, and packages.config files first
        - Copy NuGet.config if one exists and configure any private feeds
-       - Restore NuGet packages       
+       - Restore NuGet packages
        - Then, copy the rest of the source code and build and publish the application to C:\publish using MSBuild
      - Final stage: Use the selected Windows Server image to run the application
        - The final stage MUST use a `mcr.microsoft.com/dotnet/framework/aspnet` base image unless a custom base image is specified in the settings file
@@ -390,7 +390,7 @@ ENTRYPOINT [ "C:\\LogMonitor\\LogMonitor.exe", "C:\\ServiceMonitor.exe", "w3svc"
 
 ## Adapting this Example
 
-**Note:** Customize this template based on the specific requirements in the containerization settings. 
+**Note:** Customize this template based on the specific requirements in the containerization settings.
 
 When adapting this example Dockerfile:
 

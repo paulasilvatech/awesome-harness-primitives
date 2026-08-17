@@ -311,12 +311,12 @@ Follow these requirements:
 
 When creating a new command, verify:
 
-1. ✅ Inherits from the project’s command base class when one exists or provides meaningful shared behavior
-2. ✅ Constructor passes `name`, `description` to base
-3. ✅ All options have `Description`, `Required`
-4. ✅ Handler wired via `this.SetAction(CommandHandler)`
-5. ✅ Handler signature: `async Task<int> CommandHandler(ParseResult, CancellationToken)`
-6. ✅ Command registered in parent (RootCommand or group command)
-7. ✅ Class is `internal`
-8. ✅ File placed in `Commands/<Group>/` folder
-9. ✅ Namespace matches folder: `MyProject.CLI.Commands.<Group>`
+1. Inherits from the project’s command base class when one exists or provides meaningful shared behavior
+2. Constructor passes `name`, `description` to base
+3. All options have `Description`, `Required`
+4. Handler wired via `this.SetAction(CommandHandler)`
+5. Handler signature: `async Task<int> CommandHandler(ParseResult, CancellationToken)`
+6. Command registered in parent (RootCommand or group command)
+7. Class is `internal`
+8. File placed in `Commands/<Group>/` folder
+9. Namespace matches folder: `MyProject.CLI.Commands.<Group>`

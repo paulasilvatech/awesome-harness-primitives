@@ -139,7 +139,7 @@ Use these characters to create visual structure:
 
 [Grab it / Share it CTA]
 
-♻️ 𝗥𝗲𝗽𝗼𝘀𝘁 if this is useful to your network.
+ 𝗥𝗲𝗽𝗼𝘀𝘁 if this is useful to your network.
 
 #Hashtags
 ```
@@ -152,14 +152,14 @@ Use these characters to create visual structure:
 4. **Bold sparingly**: Bold key phrases and headers, not entire paragraphs.
 5. **Italic for nuance**: Use italic for technical terms, internal thoughts, or subtle emphasis.
 6. **Hashtags at the end**: 5-8 relevant hashtags on the last line. No mid-post hashtags.
-7. **No emojis in body** unless the user explicitly requests them. Exception: one strategic emoji in CTA (♻️ for repost).
+7. **No emojis in body** unless the user explicitly requests them. Exception: one strategic emoji in CTA ( for repost).
 8. **Character limit**: LinkedIn posts can be up to 3000 characters. Aim for 1500-2500 for optimal engagement.
 9. **No URLs in body**: LinkedIn suppresses reach for posts with links. Add links in comments instead. Mention "link in comments" or "grab it below" as CTA.
 
 ## Engagement Optimization
 
 - **Opening hooks that work**: Questions, bold claims, "If you do X...", contrarian takes, surprising stats.
-- **Closing CTAs that work**: "♻️ 𝗥𝗲𝗽𝗼𝘀𝘁 if...", "Save this for later", "Tag someone who needs this", "What's your take? 👇"
+- **Closing CTAs that work**: " 𝗥𝗲𝗽𝗼𝘀𝘁 if...", "Save this for later", "Tag someone who needs this", "What's your take? "
 - **Whitespace is your friend**: Dense text gets scrolled past. Airy, scannable layout wins.
 - **The "see more" hook**: LinkedIn truncates posts after ~210 characters on desktop. Make sure the first 2 lines create enough curiosity to click.
 

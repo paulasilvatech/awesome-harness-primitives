@@ -23,12 +23,12 @@ copilot plugin install react19-upgrade@awesome-copilot
 
 3. **react19-dep-surgeon**  Dependency upgrade specialist that upgrades to react@19, handles @testing-library/react@16+, resolves all peer conflicts, and returns GO/NO-GO confirmation.
 
-4. **react19-migrator**  Source code migration engine that rewrites required React 19 changes and can apply optional modernizations for deprecated patterns:  
-   - `ReactDOM.render` → `createRoot`  
-   - `ReactDOM.hydrate` → `hydrateRoot`  
-   - `unmountComponentAtNode` → `root.unmount()`  
-   - `findDOMNode` → direct refs  
-   - Optional modernization: `forwardRef` → ref as direct prop  
+4. **react19-migrator**  Source code migration engine that rewrites required React 19 changes and can apply optional modernizations for deprecated patterns:
+   - `ReactDOM.render` → `createRoot`
+   - `ReactDOM.hydrate` → `hydrateRoot`
+   - `unmountComponentAtNode` → `root.unmount()`
+   - `findDOMNode` → direct refs
+   - Optional modernization: `forwardRef` → ref as direct prop
    - `defaultProps` → ES6 defaults
    - Legacy Context → `createContext`
    - String refs → `createRef`
@@ -91,13 +91,13 @@ The react19-commander will guide you through:
 
 ## Key Features
 
-- ✅ Comprehensive removal of 8+ deprecated React APIs
-- ✅ Handles complex patterns: legacy context, forwardRef, defaultProps
-- ✅ Memory-based resumable pipeline  survive interruptions
-- ✅ Zero tolerance for incomplete migrations  run to full success
-- ✅ StrictMode-aware test fixes
-- ✅ Testing-library v16+ compatibility verification
-- ✅ Error boundary and async test pattern updates
+- Comprehensive removal of 8+ deprecated React APIs
+- Handles complex patterns: legacy context, forwardRef, defaultProps
+- Memory-based resumable pipeline - survive interruptions
+- Zero tolerance for incomplete migrations - run to full success
+- StrictMode-aware test fixes
+- Testing-library v16+ compatibility verification
+- Error boundary and async test pattern updates
 
 ## Prerequisite
 

@@ -376,7 +376,7 @@ SERVICE_ICONS = {
         "azure_icon_key": "notification_hubs"
     },
     "spring_apps": {
-        "icon_svg": '<circle cx="24" cy="24" r="18" fill="#6DB33F"/><text x="24" y="28" text-anchor="middle" font-size="10" fill="white" font-weight="700">🌱</text>',
+        "icon_svg": '<circle cx="24" cy="24" r="18" fill="#6DB33F"/><text x="24" y="28" text-anchor="middle" font-size="10" fill="white" font-weight="700">S</text>',
         "color": "#6DB33F", "bg": "#EFF8E8", "category": "Compute",
         "azure_icon_key": "azure_spring_apps"
     },
@@ -1208,12 +1208,12 @@ function renderDiagram() {{
     accent.setAttribute('rx', '8'); accent.setAttribute('fill', gb.color);
     root.appendChild(accent);
 
-    // Group label — RG uses 📁, PE uses "Private Endpoints", category uses category name
+    // Group label — RG uses resource group name, PE uses "Private Endpoints", category uses category name
     const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
     label.setAttribute('x', gb.x + 12); label.setAttribute('y', gb.y + 18);
     label.setAttribute('font-size', '12'); label.setAttribute('font-weight', '600');
     label.setAttribute('fill', gb.color); label.setAttribute('font-family', 'Segoe UI, sans-serif');
-    label.textContent = gb.isRG ? `📁 ${{gb.cat}}` : gb.cat;
+    label.textContent = gb.cat;
     root.appendChild(label);
     _groupLabelElements.push(label);
 
@@ -1262,7 +1262,7 @@ function renderDiagram() {{
       sl.setAttribute('x', sx + 12); sl.setAttribute('y', sy + 16);
       sl.setAttribute('font-size', '12'); sl.setAttribute('font-weight', '700');
       sl.setAttribute('fill', '#0078D4'); sl.setAttribute('font-family', 'Segoe UI, sans-serif');
-      sl.textContent = `📦 ${{sub.subscription}}`;
+      sl.textContent = sub.subscription;
       root.appendChild(sl);
     }});
   }}

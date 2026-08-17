@@ -279,15 +279,15 @@ scoutqa list-issues --execution-id <executionId>
 ```
 Showing 3 issues:
 
-🔴 019c-abc1
+ 019c-abc1
    Login button unresponsive on mobile
    Severity: critical | Category: usability | Status: open
 
-🟠 019c-abc2
+ 019c-abc2
    Missing form validation on email field
    Severity: high | Category: functional | Status: open
 
-🟡 019c-abc3
+ 019c-abc3
    Color contrast insufficient on footer links
    Severity: medium | Category: accessibility | Status: resolved
 ```

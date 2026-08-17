@@ -118,10 +118,10 @@ Use `@salesforce/sfdx-lwc-jest` mocking utilities:
 ### 3.1 XSS Prevention
 
 ```xml
-<!-- ❌ NEVER — renders raw user input as HTML -->
+<!--  NEVER — renders raw user input as HTML -->
 <apex:outputText value="{!userInput}" escape="false" />
 
-<!-- ✅ ALWAYS — auto-escaping on -->
+<!--  ALWAYS — auto-escaping on -->
 <apex:outputText value="{!userInput}" />
 <!-- Default escape="true" — platform HTML-encodes the output -->
 ```
@@ -135,11 +135,11 @@ Use `<apex:form>` for all postback actions — the platform injects a CSRF token
 ### 3.3 SOQL Injection Prevention in Controllers
 
 ```apex
-// ❌ NEVER
+//  NEVER
 String soql = 'SELECT Id FROM Account WHERE Name = \'' + ApexPages.currentPage().getParameters().get('name') + '\'';
 List<Account> results = Database.query(soql);
 
-// ✅ ALWAYS — bind variable
+//  ALWAYS — bind variable
 String nameParam = ApexPages.currentPage().getParameters().get('name');
 List<Account> results = [SELECT Id FROM Account WHERE Name = :nameParam];
 ```

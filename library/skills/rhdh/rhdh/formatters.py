@@ -153,7 +153,7 @@ class OutputFormatter:
             if status == "pass":
                 icon = f"{GREEN}✓{NC}"
             elif status == "warn":
-                icon = f"{YELLOW}⚠{NC}"
+                icon = f"{YELLOW}{NC}"
             else:
                 icon = f"{RED}✗{NC}"
 
@@ -238,7 +238,7 @@ class OutputFormatter:
     def log_warn(self, message: str) -> None:
         """Log warning message (human mode only)."""
         if self.is_human:
-            print(f"  {YELLOW}⚠{NC} {message}")
+            print(f"  {YELLOW}{NC} {message}")
             self._has_human_output = True
 
     def log_fail(self, message: str) -> None:

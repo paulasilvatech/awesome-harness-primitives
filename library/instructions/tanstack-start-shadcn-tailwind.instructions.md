@@ -148,13 +148,13 @@ Use Tailwind for styling with responsive design:
 Use semantic HTML first. Only add ARIA when no semantic equivalent exists:
 
 ```typescript
-// ✅ Good: Semantic HTML with minimal ARIA
+//  Good: Semantic HTML with minimal ARIA
 <button onClick={toggleMenu}>
   <MenuIcon aria-hidden="true" />
   <span className="sr-only">Toggle Menu</span>
 </button>
 
-// ✅ Good: ARIA only when needed (for dynamic states)
+//  Good: ARIA only when needed (for dynamic states)
 <button
   aria-expanded={isOpen}
   aria-controls="menu"
@@ -163,7 +163,7 @@ Use semantic HTML first. Only add ARIA when no semantic equivalent exists:
   Menu
 </button>
 
-// ✅ Good: Semantic form elements
+//  Good: Semantic form elements
 <label htmlFor="email">Email Address</label>
 <input id="email" type="email" />
 {errors.email && (
@@ -186,11 +186,11 @@ src/
 Use `@/` alias for all internal imports:
 
 ```typescript
-// ✅ Good
+//  Good
 import { Button } from '@/components/ui/button'
 import { userSchema } from '@/lib/schemas'
 
-// ❌ Bad
+//  Bad
 import { Button } from '../components/ui/button'
 ```
 

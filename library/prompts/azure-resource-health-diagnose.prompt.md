@@ -175,32 +175,32 @@ This workflow analyzes a specific Azure resource to assess its health status, di
 **Process**:
 1. **Display Health Assessment Summary**:
    ```
-   🏥 Azure Resource Health Assessment
+   Azure Resource Health Assessment
    
-   📊 Resource Overview:
+   Resource Overview:
    • Resource: [Name] ([Type])
    • Status: [Healthy/Warning/Critical]
    • Location: [Region]
    • Last Analyzed: [Timestamp]
    
-   🚨 Issues Identified:
+   Issues Identified:
    • Critical: X issues requiring immediate attention
    • High: Y issues affecting performance/reliability  
    • Medium: Z issues for optimization
    • Low: N informational items
    
-   🔍 Top Issues:
+   Top Issues:
    1. [Issue Type]: [Description] - Impact: [High/Medium/Low]
    2. [Issue Type]: [Description] - Impact: [High/Medium/Low]
    3. [Issue Type]: [Description] - Impact: [High/Medium/Low]
    
-   🛠️ Remediation Plan:
+   Remediation Plan:
    • Immediate Actions: X items
    • Short-term Fixes: Y items  
    • Long-term Improvements: Z items
    • Estimated Resolution Time: [Timeline]
    
-   ❓ Proceed with detailed remediation plan? (y/n)
+   Proceed with detailed remediation plan? (y/n)
    ```
 
 2. **Generate Detailed Report**:
@@ -211,16 +211,16 @@ This workflow analyzes a specific Azure resource to assess its health status, di
    **Resource**: [Full Resource ID]  
    **Overall Health**: [Status with color indicator]
    
-   ## 🔍 Executive Summary
+   ## Executive Summary
    [Brief overview of health status and key findings]
    
-   ## 📊 Health Metrics
+   ## Health Metrics
    - **Availability**: X% over last 24h
    - **Performance**: [Average response time/throughput]
    - **Error Rate**: X% over last 24h
    - **Resource Utilization**: [CPU/Memory/Storage percentages]
    
-   ## 🚨 Issues Identified
+   ## Issues Identified
    
    ### Critical Issues
    - **[Issue 1]**: [Description]
@@ -234,7 +234,7 @@ This workflow analyzes a specific Azure resource to assess its health status, di
      - **Impact**: [Performance/reliability impact]
      - **Recommended Fix**: [Solution steps]
    
-   ## 🛠️ Remediation Plan
+   ## Remediation Plan
    
    ### Phase 1: Immediate Actions (0-2 hours)
    ```bash
@@ -254,19 +254,19 @@ This workflow analyzes a specific Azure resource to assess its health status, di
    [Azure CLI commands and configuration changes]
    ```
    
-   ## 📈 Monitoring Recommendations
+   ## Monitoring Recommendations
    - **Alerts to Configure**: [List of recommended alerts]
    - **Dashboards to Create**: [Monitoring dashboard suggestions]
    - **Regular Health Checks**: [Recommended frequency and scope]
    
-   ## ✅ Validation Steps
+   ## Validation Steps
    - [ ] Verify issue resolution through logs
    - [ ] Confirm performance improvements
    - [ ] Test application functionality
    - [ ] Update monitoring and alerting
    - [ ] Document lessons learned
    
-   ## 📝 Prevention Measures
+   ## Prevention Measures
    - [Recommendations to prevent similar issues]
    - [Process improvements]
    - [Monitoring enhancements]
@@ -281,10 +281,10 @@ This workflow analyzes a specific Azure resource to assess its health status, di
 - **Service-Specific Issues**: Provide generic health assessment with limitations noted
 
 ## Success Criteria
-- ✅ Resource health status accurately assessed
-- ✅ All significant issues identified and categorized
-- ✅ Root cause analysis completed for major problems
-- ✅ Actionable remediation plan with specific steps provided
-- ✅ Monitoring and prevention recommendations included
-- ✅ Clear prioritization of issues by business impact
-- ✅ Implementation steps include validation and rollback procedures
+- Resource health status accurately assessed
+- All significant issues identified and categorized
+- Root cause analysis completed for major problems
+- Actionable remediation plan with specific steps provided
+- Monitoring and prevention recommendations included
+- Clear prioritization of issues by business impact
+- Implementation steps include validation and rollback procedures

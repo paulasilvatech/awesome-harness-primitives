@@ -541,7 +541,7 @@ OnSelect: =Collect(LocalCollection, {Name: TextInput1.Text})
 #### **Conditional Logic**:
 ```yaml
 Visible: =If(Toggle1.Value, true, false)
-Text: =Switch(Status, "New", "🆕", "Complete", "✅", "❓")
+Text: =Switch(Status, "New", "", "Complete", "", "")
 Fill: =If(Value < 0, Color.Red, Color.Green)
 ```
 

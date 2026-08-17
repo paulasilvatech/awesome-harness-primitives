@@ -1,9 +1,9 @@
 # Skeleton: 0.1-architecture.md
 
-> **⛔ Copy the template content below VERBATIM (excluding the outer code fence). Replace `[FILL]` placeholders. Do NOT add/rename/reorder sections.**
-> **⛔ Key Components table columns are EXACTLY: `Component | Type | Description`. DO NOT rename to `Role`, `Change`, `Function`.**
-> **⛔ Technology Stack table columns are EXACTLY: `Layer | Technologies` (2 columns). DO NOT add `Version` column or rename `Layer` to `Category`.**
-> **⛔ Security Infrastructure Inventory and Repository Structure sections are MANDATORY — do NOT omit them.**
+>** Copy the template content below VERBATIM (excluding the outer code fence). Replace `[FILL]` placeholders. Do NOT add/rename/reorder sections.**
+>** Key Components table columns are EXACTLY: `Component | Type | Description`. DO NOT rename to `Role`, `Change`, `Function`.**
+>** Technology Stack table columns are EXACTLY: `Layer | Technologies` (2 columns). DO NOT add `Version` column or rename `Layer` to `Category`.**
+>** Security Infrastructure Inventory and Repository Structure sections are MANDATORY — do NOT omit them.**
 
 ---
 
@@ -22,7 +22,7 @@
 | [FILL: PascalCase name] | [FILL: Process / Data Store / External Service / External Interactor] | [FILL: one-line description] |
 [END-REPEAT]
 
-<!-- ⛔ POST-TABLE CHECK: Verify Key Components:
+<!--  POST-TABLE CHECK: Verify Key Components:
   1. Every component has PascalCase name (not kebab-case or snake_case)
   2. Type is one of: Process / Data Store / External Service / External Interactor
   3. Row count matches the number of nodes in the Component Diagram below
@@ -49,7 +49,7 @@ sequenceDiagram
 
 [END-REPEAT]
 
-<!-- ⛔ POST-SECTION CHECK: Verify Top Scenarios:
+<!--  POST-SECTION CHECK: Verify Top Scenarios:
   1. At least 3 scenarios listed
   2. First 3 scenarios MUST have sequenceDiagram blocks
   3. Each sequence diagram has participant lines and message arrows
@@ -65,7 +65,7 @@ sequenceDiagram
 | Infrastructure | [FILL] |
 | Security | [FILL] |
 
-<!-- ⛔ POST-TABLE CHECK: Verify Technology Stack has all 5 rows filled. If Security row is empty, list security-relevant libraries/frameworks found in the code. -->
+<!--  POST-TABLE CHECK: Verify Technology Stack has all 5 rows filled. If Security row is empty, list security-relevant libraries/frameworks found in the code. -->
 
 ## Deployment Model
 
@@ -73,7 +73,7 @@ sequenceDiagram
 
 **Deployment Classification:** `[FILL: one of LOCALHOST_DESKTOP | LOCALHOST_SERVICE | AIRGAPPED | K8S_SERVICE | NETWORK_SERVICE]`
 
-<!-- ⛔ DEPLOYMENT CLASSIFICATION RULES:
+<!--  DEPLOYMENT CLASSIFICATION RULES:
   LOCALHOST_DESKTOP — Single-process console/GUI app, no network listeners (or localhost-only), single-user workstation. T1 FORBIDDEN.
   LOCALHOST_SERVICE — Daemon/service binding to 127.0.0.1 only. T1 FORBIDDEN.
   AIRGAPPED — No internet connectivity. T1 forbidden for network-originated attacks.
@@ -89,7 +89,7 @@ sequenceDiagram
 | [FILL: component name] | [FILL: port/address or "N/A — no listener"] | [FILL: Yes (mechanism) / No] | [FILL: one of: External / Internal Only / Localhost Only / No Listener] | [FILL: one of closed enum — see rules below] | [FILL: T1 / T2 / T3] |
 [END-REPEAT]
 
-<!-- ⛔ EXPOSURE TABLE RULES:
+<!--  EXPOSURE TABLE RULES:
   1. Every component from Key Components MUST have a row.
   2. "Listens On" = the actual bind address from code (e.g., "127.0.0.1:8080", "0.0.0.0:443", "N/A — no listener").
   3. "Reachability" MUST be one of these 4 values (closed enum):
@@ -106,7 +106,7 @@ sequenceDiagram
      - `Host/OS Access` — Reachability = No Listener (requires filesystem, console, or debug access)
      - `Admin Credentials` — requires admin credentials + host access
      - `Physical Access` — requires physical presence
-     ⛔ FORBIDDEN values: `Application Access`, `Host Access` (ambiguous — use `Local Process Access` or `Host/OS Access` instead)
+      FORBIDDEN values: `Application Access`, `Host Access` (ambiguous — use `Local Process Access` or `Host/OS Access` instead)
   5. "Derived Tier" is mechanically determined from Min Prerequisite:
      - `None` → T1
      - `Authenticated User`, `Privileged User`, `Internal Network`, `Local Process Access` → T2

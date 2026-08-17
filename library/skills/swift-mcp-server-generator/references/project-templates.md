@@ -530,12 +530,12 @@ final class ServerTests: XCTestCase {
 A Model Context Protocol server built with Swift.
 ## Features
 
-- ✅ Tools: greet, calculate
-- ✅ Resources: example data, configuration
-- ✅ Prompts: code-review
-- ✅ Graceful shutdown with ServiceLifecycle
-- ✅ Structured logging with swift-log
-- ✅ Full test coverage
+-  Tools: greet, calculate
+-  Resources: example data, configuration
+-  Prompts: code-review
+-  Graceful shutdown with ServiceLifecycle
+-  Structured logging with swift-log
+-  Full test coverage
 
 ## Requirements
 

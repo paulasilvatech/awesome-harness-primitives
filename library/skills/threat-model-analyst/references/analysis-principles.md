@@ -4,7 +4,7 @@ This file contains ALL rules for how to analyze code for security threats. It is
 
 ---
 
-## ⛔ CRITICAL: Verify Before Flagging
+## CRITICAL: Verify Before Flagging
 
 **NEVER flag a security gap without confirming it exists.** Many platforms have secure defaults.
 
@@ -70,7 +70,7 @@ Apply these frameworks during analysis:
 
 ### Sidecar Security Analysis
 
-⚠️ **Sidecars (Dapr, MISE, Envoy, etc.) are NOT separate components in the DFD** — they are co-located in the same pod as the primary container (see diagram-conventions.md Rule 2). However, sidecar communication MUST still be analyzed for security vulnerabilities.
+ **Sidecars (Dapr, MISE, Envoy, etc.) are NOT separate components in the DFD** — they are co-located in the same pod as the primary container (see diagram-conventions.md Rule 2). However, sidecar communication MUST still be analyzed for security vulnerabilities.
 
 **How to analyze sidecar threats:**
 - Sidecars with distinct threat surfaces (e.g., MISE auth bypass, Dapr mTLS) get their own `## Component` section in `2-stride-analysis.md` — but are NOT separate DFD nodes (see diagram-conventions.md Rule 2)
@@ -91,23 +91,23 @@ Apply these frameworks during analysis:
 5. **Infrastructure-layer check:** Explicitly check for: container security contexts, network policies, resource limits, image signing, secrets management, backup/DR controls, and monitoring/alerting gaps.
 6. **Exhaustive findings consolidation:** After STRIDE analysis is complete, scan the STRIDE output for ALL identified threats. Every threat MUST map to either:
    - A finding in `3-findings.md` (consolidated with related threats)
-   - A `🔄 Mitigated by Platform` entry in the Threat Coverage Verification table (for platform-handled threats only)
+   - A ` Mitigated by Platform` entry in the Threat Coverage Verification table (for platform-handled threats only)
    
-   **⛔ EVERY `Open` THREAT MUST HAVE A FINDING.** The tool does NOT have authority to accept risks, defer threats, or decide that a threat is "acceptable." That is the engineering team's decision. The tool's job is to identify ALL threats and create findings for them. The Coverage table should show `✅ Covered (FIND-XX)` for every Open threat — NEVER `⚠️ Accepted Risk`.
+   ** EVERY `Open` THREAT MUST HAVE A FINDING.** The tool does NOT have authority to accept risks, defer threats, or decide that a threat is "acceptable." That is the engineering team's decision. The tool's job is to identify ALL threats and create findings for them. The Coverage table should show ` Covered (FIND-XX)` for every Open threat — NEVER ` Accepted Risk`.
 
    If you have 40+ threats in STRIDE but only 10 findings, you are under-consolidating. Check for missed data store auth, operational controls, credential management, and supply chain issues.
 
-   **⛔ "ACCEPTED RISK" IS FORBIDDEN (MANDATORY):**
-   - **NEVER use `⚠️ Accepted Risk` as a Coverage table status.** This label implies the tool has accepted a risk on behalf of the engineering team. It has not. It cannot.
+   ** "ACCEPTED RISK" IS FORBIDDEN (MANDATORY):**
+   - **NEVER use ` Accepted Risk` as a Coverage table status.** This label implies the tool has accepted a risk on behalf of the engineering team. It has not. It cannot.
    - **NEVER use `Accepted` as a STRIDE Status value.** Use `Open`, `Mitigated`, or `Platform` only.
    - If you are tempted to write "Accepted Risk" → create a finding instead. The finding's remediation section tells the team what to do. The team decides whether to accept, fix, or defer.
 
-   **⛔ NEEDS REVIEW RESTRICTIONS (MANDATORY):**
-   - **Tier 1 threats (prerequisites = `None`) MUST NEVER be classified as "⚠️ Needs Review."** A threat exploitable by an unauthenticated external attacker cannot be deferred — it MUST become a finding.
+   ** NEEDS REVIEW RESTRICTIONS (MANDATORY):**
+   - **Tier 1 threats (prerequisites = `None`) MUST NEVER be classified as " Needs Review."** A threat exploitable by an unauthenticated external attacker cannot be deferred — it MUST become a finding.
    - **If a threat has a mitigation listed in the STRIDE analysis, it SHOULD become a finding.** The mitigation text is the remediation — use it to write the finding. Only defer to "Needs Review" if the mitigation is genuinely not actionable.
    - **DoS threats with `None` prerequisites are Tier 1 findings**, not hardening opportunities. An unauthenticated attacker flooding an API with no rate limiting is a directly exploitable vulnerability (CWE-770, CWE-400).
    - **Do NOT batch-classify entire STRIDE categories as Needs Review.** Each threat must be evaluated individually based on its prerequisites and exploitability.
-   - **"⚠️ Needs Review" is reserved for:** Tier 2/3 threats where no technical mitigation is possible (e.g., social engineering), or threats requiring business context the tool doesn't have.
+   - **" Needs Review" is reserved for:** Tier 2/3 threats where no technical mitigation is possible (e.g., social engineering), or threats requiring business context the tool doesn't have.
    - **The automated analysis does NOT have authority to accept risks** — it only identifies them. "Needs Review" signals that a human must decide.
    - **Maximum Needs Review ratio:** If more than 30% of threats are classified as "Needs Review", re-examine — you are likely under-reporting findings. Typical ratio: 10-20% for a well-analyzed codebase.
 7. **Minimum finding thresholds by repo size:**
@@ -220,7 +220,7 @@ Threats are classified into three exploitability tiers based on prerequisites:
 
 ### Tier Assignment Rules
 
-**⛔ CANONICAL PREREQUISITE → TIER MAPPING (deterministic, no exceptions):**
+** CANONICAL PREREQUISITE → TIER MAPPING (deterministic, no exceptions):**
 
 Prerequisites MUST use only these values (closed enum). The tier follows mechanically:
 
@@ -237,11 +237,11 @@ Prerequisites MUST use only these values (closed enum). The tier follows mechani
 | `{Component} Compromise` | **Tier 3** | Requires prior compromise of another component |
 | Any `A + B` combination | **Tier 3** | Multiple prerequisites = always Tier 3 |
 
-**⛔ FORBIDDEN prerequisite values:** `Application Access`, `Host Access` (ambiguous — use `Local Process Access` or `Host/OS Access`).
+** FORBIDDEN prerequisite values:** `Application Access`, `Host Access` (ambiguous — use `Local Process Access` or `Host/OS Access`).
 
 **Deployment context overrides:** If Deployment Classification is `LOCALHOST_DESKTOP` or `LOCALHOST_SERVICE`, the prerequisite `None` is FORBIDDEN for all components — use `Local Process Access` or `Host/OS Access` instead. The tier then follows from the corrected prerequisite.
 
-### ⛔ Prerequisite Determination (MANDATORY — Evidence-Based, Not Judgment-Based)
+### Prerequisite Determination (MANDATORY — Evidence-Based, Not Judgment-Based)
 
 **Prerequisites MUST be determined from deployment configuration evidence, not from general knowledge or assumptions.** Two independent analysis runs on the same code MUST assign the same prerequisites because they are objective facts about the deployment.
 
@@ -291,7 +291,7 @@ Prerequisites MUST use only these values (closed enum). The tier follows mechani
 | **.NET / Java / Node** | Startup config, middleware pipeline | `app.UseAuthentication()` enforced | No auth middleware, or auth disabled |
 | **Python (FastAPI/Flask)** | Middleware, dependency injection | `Depends(get_current_user)` on routes | No auth dependency, open routes |
 
-**⛔ NEVER assign prerequisites based on "what seems reasonable" or architecture assumptions.** Check the actual deployment config. The same component MUST get the same prerequisite across runs because the config doesn't change between runs.
+** NEVER assign prerequisites based on "what seems reasonable" or architecture assumptions.** Check the actual deployment config. The same component MUST get the same prerequisite across runs because the config doesn't change between runs.
 
 **Common violations:**
 - Assigning `Internal Network` to a component that has an ingress route → hides real external exposure
@@ -311,11 +311,11 @@ Prerequisites MUST use only these values (closed enum). The tier follows mechani
 | `PR:L` (Privileges Required: Low) | Requires authenticated user | **Cannot be Tier 1** — must be T2 |
 | `PR:N` + `AV:N` | No privileges, network accessible | Tier 1 candidate (confirm no deployment override) |
 
-⚠️ **If a finding has `AV:L` and `Tier 1`, this is ALWAYS an error.** Fix by either:
+ **If a finding has `AV:L` and `Tier 1`, this is ALWAYS an error.** Fix by either:
 - Changing the tier to T2/T3 (correct approach for localhost-only services), OR
 - Changing the CVSS AV to `AV:N` if the service is actually network-accessible (rare)
 
-⚠️ **If a finding has `PR:H` and `Tier 1`, this is ALWAYS an error.** Admin-required findings are T2 minimum.
+ **If a finding has `PR:H` and `Tier 1`, this is ALWAYS an error.** Admin-required findings are T2 minimum.
 
 ### Deployment Context Affects Tier Classification
 
@@ -327,11 +327,11 @@ Before assigning tiers, determine the system's deployment model from code, docs,
 
 | Classification | Description | T1 Allowed? | Min Prerequisite |
 |----------------|-------------|-------------|------------------|
-| `LOCALHOST_DESKTOP` | Console/GUI app, no network listeners (or localhost-only), single-user workstation | ❌ **NO** — all findings T2+ | `Host/OS Access` (T3) or `Local Process Access` (T2) |
-| `LOCALHOST_SERVICE` | Daemon/service binding to 127.0.0.1 only | ❌ **NO** — all findings T2+ | `Local Process Access` (T2) |
-| `AIRGAPPED` | No internet connectivity | ❌ for network-originated attacks | `Internal Network` |
-| `K8S_SERVICE` | Kubernetes Deployment with ClusterIP/LoadBalancer | ✅ YES | Depends on Service type |
-| `NETWORK_SERVICE` | Public API, cloud endpoint, internet-facing | ✅ YES | `None` (if no auth) |
+| `LOCALHOST_DESKTOP` | Console/GUI app, no network listeners (or localhost-only), single-user workstation | **NO** — all findings T2+ | `Host/OS Access` (T3) or `Local Process Access` (T2) |
+| `LOCALHOST_SERVICE` | Daemon/service binding to 127.0.0.1 only | **NO** — all findings T2+ | `Local Process Access` (T2) |
+| `AIRGAPPED` | No internet connectivity | for network-originated attacks | `Internal Network` |
+| `K8S_SERVICE` | Kubernetes Deployment with ClusterIP/LoadBalancer | YES | Depends on Service type |
+| `NETWORK_SERVICE` | Public API, cloud endpoint, internet-facing | YES | `None` (if no auth) |
 
 **The Component Exposure Table in `0.1-architecture.md` sets the prerequisite floor per component.** No threat or finding may have a lower prerequisite than the table permits. This table is filled in Step 1 and is binding on all subsequent analysis steps.
 
@@ -410,7 +410,7 @@ Reference: https://owasp.org/Top10/2025/
 - **External actors** (Operator, EndUser) **do NOT get** STRIDE sections — they are threat sources, not targets
 - If you have 20 elements and 2 are external actors, you write 18 STRIDE sections
 
-**⚠️ DO NOT include time estimates.** Never add "(hours)", "(days)", "(weeks)", "~1 hour", "~2 hours", or any duration/effort-to-fix estimates anywhere in the output. The effort level (Low/Medium/High) is sufficient.
+** DO NOT include time estimates.** Never add "(hours)", "(days)", "(weeks)", "~1 hour", "~2 hours", or any duration/effort-to-fix estimates anywhere in the output. The effort level (Low/Medium/High) is sufficient.
 
 ### Mitigation Type (OWASP-aligned)
 - **Redesign**: Eliminate the threat by changing architecture (OWASP: Avoid)

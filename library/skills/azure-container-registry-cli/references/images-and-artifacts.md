@@ -79,7 +79,7 @@ az acr repository delete --name {registry} --image app@sha256:{digest} --yes
 az acr repository delete --name {registry} --repository app --yes
 ```
 
-⚠️ Deleting by tag deletes the underlying manifest — other tags on the same image disappear too. Untag first if you only want to retire a tag name.
+ Deleting by tag deletes the underlying manifest — other tags on the same image disappear too. Untag first if you only want to retire a tag name.
 
 ## Purge Old Images (acr purge)
 
@@ -106,7 +106,7 @@ az acr task create --registry {registry} --name purge-old-images \
 
 `--filter` takes `repository:tag-regex` and can be repeated for multiple repos.
 
-⚠️ `--untagged` ignores `--ago`: it deletes **every** untagged manifest, including ones created moments ago (mid-push images, referrer artifacts). Omit `--untagged` if recent untagged manifests must survive — the age cutoff only applies to tagged images matched by `--filter`.
+ `--untagged` ignores `--ago`: it deletes **every** untagged manifest, including ones created moments ago (mid-push images, referrer artifacts). Omit `--untagged` if recent untagged manifests must survive — the age cutoff only applies to tagged images matched by `--filter`.
 
 ## Lock Images
 

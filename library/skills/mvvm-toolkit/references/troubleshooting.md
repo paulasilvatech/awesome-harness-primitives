@@ -10,7 +10,7 @@ The generators emit numbered diagnostics. The most common ones:
 
 | Code | Meaning | Fix |
 |------|---------|-----|
-| `MVVMTK0008` | The containing type (or an enclosing type) is not `partial` | Add `partial` to the class declaration **and** every enclosing type |
+| `MVVMTK0008` | The containing type (or an enclosing type) is not `partial` | Add `partial` to the class declaration **and ** every enclosing type |
 | `MVVMTK0016` | `[NotifyCanExecuteChangedFor]` target is not an accessible `IRelayCommand` property | Make sure the target is a `[RelayCommand]`-generated command (or a manually declared `IRelayCommand` property) on the same type |
 | `MVVMTK0017` | `[NotifyDataErrorInfo]` used outside `ObservableValidator` | Inherit from `ObservableValidator` or remove the attribute |
 | `MVVMTK0018` | `[NotifyPropertyChangedRecipients]` used outside `ObservableRecipient` | Inherit from `ObservableRecipient` or remove the attribute |
@@ -32,14 +32,14 @@ You named the field with PascalCase:
 
 ```csharp
 [ObservableProperty]
-private string Name;   // ❌ collides with generated property
+private string Name; // collides with generated property
 ```
 
 Use lowerCamel (or prefixed) instead:
 
 ```csharp
 [ObservableProperty]
-private string? name;   // ✅ generates Name
+private string? name; // generates Name
 ```
 
 ---
@@ -48,13 +48,13 @@ private string? name;   // ✅ generates Name
 
 Possible causes:
 
-1. **Same reference assigned.** The generator uses
+1. **Same reference assigned. ** The generator uses
    `EqualityComparer<T>.Default.Equals` to detect changes. For reference
    types where you mutated the same instance, the comparer returns `true`
    and notification is skipped. Replace the instance instead of mutating.
-2. **Property set to identical value.** Same value → no notification by
+2. **Property set to identical value. ** Same value → no notification by
    design.
-3. **Custom comparer needed.** For value types where default equality is
+3. **Custom comparer needed. ** For value types where default equality is
    wrong, write the property by hand and call
    `SetProperty(ref field, value, comparer)`.
 
@@ -73,7 +73,7 @@ Set `XamlRoot` before calling `ShowAsync()`. See the
 Default behavior: the wrapped task is awaited and the exception is
 rethrown on the synchronization context. If your method is `async void`,
 the generator wraps it as a sync `RelayCommand` and exceptions become
-unobserved. **Always return `Task` from `[RelayCommand]` methods.**
+unobserved. **Always return `Task` from `[RelayCommand]` methods. **
 
 If the UI binds to `ExecutionTask.Exception` to render errors, opt into
 `FlowExceptionsToTaskScheduler = true`:
@@ -98,8 +98,8 @@ private async Task LoadAsync(CancellationToken token) { /* ... */ }
 
 Checklist:
 
-1. The recipient is registered for the **exact** message type, not a base
-   type. Inheritance is **not** considered.
+1. The recipient is registered for the **exact ** message type, not a base
+   type. Inheritance is **not ** considered.
 2. The same `IMessenger` instance is used to send and register
    (`WeakReferenceMessenger.Default` vs an injected per-window messenger).
 3. The token (channel) matches between sender and receiver.

@@ -11,7 +11,7 @@ We do not need comments most of the time.
 
 ## Commenting Guidelines
 
-### ❌ AVOID These Comment Types
+### AVOID These Comment Types
 
 **Obvious Comments**
 ```javascript
@@ -35,7 +35,7 @@ function getUserName() {
 const tax = price * 0.08;  // Actually 8%
 ```
 
-### ✅ WRITE These Comment Types
+### WRITE These Comment Types
 
 **Complex Business Logic**
 ```javascript
@@ -87,7 +87,7 @@ Before writing a comment, ask:
 ```javascript
 /**
  * Calculate compound interest using the standard formula.
- * 
+ *
  * @param {number} principal - Initial amount invested
  * @param {number} rate - Annual interest rate (as decimal, e.g., 0.05 for 5%)
  * @param {number} time - Time period in years

@@ -175,33 +175,33 @@ You're reviewing an Electron-based desktop app with:
 
 ## Review Checklist
 
-1. ✅ Clear separation of main/renderer/integration logic
-2. ✅ IPC validation and security
-3. ✅ Correct async/await usage
-4. ✅ RxJS subscription and lifecycle management
-5. ✅ UI error handling and fallback UX
-6. ✅ Memory and resource handling in main process
-7. ✅ Performance optimizations
-8. ✅ Exception & error handling in main process
-9. ✅ Native integration robustness & error handling
-10. ✅ API orchestration optimized (batch/parallel where possible)
-11. ✅ No unhandled promise rejection
-12. ✅ No stale session state on UI
-13. ✅ Caching strategy in place for frequently used data
-14. ✅ No visual flicker or lag during batch scan
-15. ✅ Progressive enrichment for large scans
-16. ✅ Consistent UX across dialogs
+1. Clear separation of main/renderer/integration logic
+2. IPC validation and security
+3. Correct async/await usage
+4. RxJS subscription and lifecycle management
+5. UI error handling and fallback UX
+6. Memory and resource handling in main process
+7. Performance optimizations
+8. Exception & error handling in main process
+9. Native integration robustness & error handling
+10. API orchestration optimized (batch/parallel where possible)
+11. No unhandled promise rejection
+12. No stale session state on UI
+13. Caching strategy in place for frequently used data
+14. No visual flicker or lag during batch scan
+15. Progressive enrichment for large scans
+16. Consistent UX across dialogs
 
 ---
 
-## Feature Examples (🧪 for inspiration & linking docs)
+## Feature Examples ( for inspiration & linking docs)
 
 ### Feature A
 
-📈 `docs/sequence-diagrams/feature-a-sequence.puml`
-📊 `docs/dataflow-diagrams/feature-a-dfd.puml`
-🔗 `docs/api-call-diagrams/feature-a-api.puml`
-📄 `docs/user-flow/feature-a.md`
+ `docs/sequence-diagrams/feature-a-sequence.puml`
+ `docs/dataflow-diagrams/feature-a-dfd.puml`
+ `docs/api-call-diagrams/feature-a-api.puml`
+ `docs/user-flow/feature-a.md`
 
 ### Feature B
 
@@ -229,7 +229,7 @@ Overall assessment and highlights.
 
 ## Issues Found
 
-### 🔴 HIGH Priority Issues
+### HIGH Priority Issues
 
 - **File**: `path/file`
   - **Line**: #
@@ -237,7 +237,7 @@ Overall assessment and highlights.
   - **Impact**: Security/Performance/Critical
   - **Recommendation**: Suggested fix
 
-### 🟡 MEDIUM Priority Issues
+### MEDIUM Priority Issues
 
 - **File**: `path/file`
   - **Line**: #
@@ -245,7 +245,7 @@ Overall assessment and highlights.
   - **Impact**: Maintainability/Quality
   - **Recommendation**: Suggested improvement
 
-### 🟢 LOW Priority Issues
+### LOW Priority Issues
 
 - **File**: `path/file`
   - **Line**: #
@@ -255,13 +255,13 @@ Overall assessment and highlights.
 
 ## Architecture Review
 
-- ✅ Electron Main: Memory & Resource handling
-- ✅ Electron Main: Exception & Error handling
-- ✅ Electron Main: Performance
-- ✅ Electron Main: Security
-- ✅ Angular Renderer: Architecture & lifecycle
-- ✅ Angular Renderer: RxJS & error handling
-- ✅ Native Integration: Error handling & stability
+- Electron Main: Memory & Resource handling
+- Electron Main: Exception & Error handling
+- Electron Main: Performance
+- Electron Main: Security
+- Angular Renderer: Architecture & lifecycle
+- Angular Renderer: RxJS & error handling
+- Native Integration: Error handling & stability
 
 ## Positive Highlights
 
@@ -281,7 +281,7 @@ General advice for improvement.
 
 ### Priority Classification
 
-- **🔴 HIGH**: Security, performance, critical functionality, crashing, blocking, exception handling
-- **🟡 MEDIUM**: Maintainability, architecture, quality, error handling
-- **🟢 LOW**: Style, documentation, minor optimizations
+- **HIGH**: Security, performance, critical functionality, crashing, blocking, exception handling
+- **MEDIUM**: Maintainability, architecture, quality, error handling
+- **LOW**: Style, documentation, minor optimizations
 ```

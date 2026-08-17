@@ -45,13 +45,13 @@ RETURN
 ```dax
 // Hierarchical security with territory lookups
 =DimSalesTerritory[SalesTerritoryKey]=LOOKUPVALUE(
-    DimUserSecurity[SalesTerritoryID], 
-    DimUserSecurity[UserName], USERNAME(), 
+    DimUserSecurity[SalesTerritoryID],
+    DimUserSecurity[UserName], USERNAME(),
     DimUserSecurity[SalesTerritoryID], DimSalesTerritory[SalesTerritoryKey]
 )
 
 // Multiple condition security
-VAR UserTerritories = 
+VAR UserTerritories =
     FILTER(
         UserSecurity,
         UserSecurity[UserName] = USERNAME()
@@ -67,7 +67,7 @@ RETURN
 ```csharp
 // Static RLS with fixed roles
 var rlsidentity = new EffectiveIdentity(
-    username: "username@contoso.com", 
+    username: "username@contoso.com",
     roles: new List<string>{ "MyRole" },
     datasets: new List<string>{ datasetId.ToString()}
 );
@@ -227,7 +227,7 @@ Salesperson Filter = [EmailAddress] = USERNAME()
 // Manager can see all, others see their own
 VAR CurrentUser = USERNAME()
 VAR UserRole = LOOKUPVALUE(
-    UserRoles[Role], 
+    UserRoles[Role],
     UserRoles[Email], CurrentUser
 )
 RETURN
@@ -249,7 +249,7 @@ RETURN
 ```dax
 // Restrict access to recent data based on role
 VAR UserRole = LOOKUPVALUE(UserRoles[Role], UserRoles[Email], USERNAME())
-VAR CutoffDate = 
+VAR CutoffDate =
     SWITCH(
         UserRole,
         "Executive", DATE(1900,1,1),  // All historical data
@@ -266,12 +266,12 @@ RETURN
 ### 1. Role Validation Patterns
 ```dax
 // Security testing measure
-Security Test = 
+Security Test =
 VAR CurrentUsername = USERNAME()
 VAR ExpectedRole = "TestRole"
-VAR TestResult = 
+VAR TestResult =
     IF(
-        HASONEVALUE(SecurityRoles[Role]) && 
+        HASONEVALUE(SecurityRoles[Role]) &&
         VALUES(SecurityRoles[Role]) = ExpectedRole,
         "PASS: Role applied correctly",
         "FAIL: Incorrect role or multiple roles"
@@ -283,14 +283,14 @@ RETURN
 ### 2. Data Exposure Audit
 ```dax
 // Audit measure to track data access
-Data Access Audit = 
+Data Access Audit =
 VAR AccessibleRows = COUNTROWS(FactTable)
 VAR TotalRows = CALCULATE(COUNTROWS(FactTable), ALL(FactTable))
 VAR AccessPercentage = DIVIDE(AccessibleRows, TotalRows) * 100
 RETURN
-    "User: " & USERNAME() & 
-    " | Accessible: " & FORMAT(AccessibleRows, "#,0") & 
-    " | Total: " & FORMAT(TotalRows, "#,0") & 
+    "User: " & USERNAME() &
+    " | Accessible: " & FORMAT(AccessibleRows, "#,0") &
+    " | Total: " & FORMAT(TotalRows, "#,0") &
     " | Access: " & FORMAT(AccessPercentage, "0.00") & "%"
 ```
 
@@ -328,20 +328,20 @@ foreach ($workspace in $workspaces) {
 ### 3. Compliance Reporting
 ```dax
 // Compliance dashboard measures
-Users with Data Access = 
+Users with Data Access =
 CALCULATE(
     DISTINCTCOUNT(AuditLog[Username]),
     AuditLog[AccessType] = "DataAccess",
     AuditLog[Date] >= TODAY() - 30
 )
 
-High Privilege Users = 
+High Privilege Users =
 CALCULATE(
     DISTINCTCOUNT(UserRoles[Email]),
     UserRoles[Role] IN {"Admin", "Manager", "Executive"}
 )
 
-Security Violations = 
+Security Violations =
 CALCULATE(
     COUNTROWS(AuditLog),
     AuditLog[EventType] = "SecurityViolation",
@@ -351,13 +351,13 @@ CALCULATE(
 
 ## Best Practices and Anti-Patterns
 
-### ✅ Security Best Practices
+### Security Best Practices
 
 #### 1. Principle of Least Privilege
 ```dax
 // Always default to restrictive access
-Default Security = 
-VAR UserPermissions = 
+Default Security =
+VAR UserPermissions =
     FILTER(
         UserAccess,
         UserAccess[Email] = USERNAME()
@@ -373,7 +373,7 @@ RETURN
 #### 2. Explicit Role Validation
 ```dax
 // Validate expected roles explicitly
-Role-Based Filter = 
+Role-Based Filter =
 VAR UserRole = LOOKUPVALUE(UserRoles[Role], UserRoles[Email], USERNAME())
 VAR AllowedRoles = {"Analyst", "Manager", "Executive"}
 RETURN
@@ -389,12 +389,12 @@ RETURN
     )
 ```
 
-### ❌ Security Anti-Patterns to Avoid
+### Security Anti-Patterns to Avoid
 
 #### 1. Overly Permissive Defaults
 ```dax
-// ❌ AVOID: This grants full access to unexpected users
-Bad Security Filter = 
+//  AVOID: This grants full access to unexpected users
+Bad Security Filter =
 IF(
     USERNAME() = "SpecificUser",
     [Type] = "Internal",
@@ -404,8 +404,8 @@ IF(
 
 #### 2. Complex Security Logic
 ```dax
-// ❌ AVOID: Overly complex security that's hard to audit
-Overly Complex Security = 
+//  AVOID: Overly complex security that's hard to audit
+Overly Complex Security =
 IF(
     OR(
         AND(USERNAME() = "User1", WEEKDAY(TODAY()) <= 5),
@@ -444,7 +444,7 @@ public EmbedToken GetEmbedToken(Guid reportId, IList<Guid> datasetIds, [Optional
        roles: new List<string>{ "MyRole" },
        datasets: new List<string>{ datasetId.ToString()}
     );
-    
+
     var tokenRequest = new GenerateTokenRequestV2(
         reports: new List<GenerateTokenRequestV2Report>() { new GenerateTokenRequestV2Report(reportId) },
         datasets: datasetIds.Select(datasetId => new GenerateTokenRequestV2Dataset(datasetId.ToString())).ToList(),
@@ -463,13 +463,13 @@ public EmbedToken GetEmbedToken(Guid reportId, IList<Guid> datasetIds, [Optional
 ### 1. Access Pattern Analysis
 ```dax
 // Identify unusual access patterns
-Unusual Access Pattern = 
-VAR UserAccessCount = 
+Unusual Access Pattern =
+VAR UserAccessCount =
     CALCULATE(
         COUNTROWS(AccessLog),
         AccessLog[Date] >= TODAY() - 7
     )
-VAR AvgUserAccess = 
+VAR AvgUserAccess =
     CALCULATE(
         AVERAGE(AccessLog[AccessCount]),
         ALL(AccessLog[Username]),
@@ -478,7 +478,7 @@ VAR AvgUserAccess =
 RETURN
     IF(
         UserAccessCount > AvgUserAccess * 3,
-        "⚠️ High Activity",
+        " High Activity",
         "Normal"
     )
 ```
@@ -486,8 +486,8 @@ RETURN
 ### 2. Data Breach Detection
 ```dax
 // Detect potential data exposure
-Potential Data Exposure = 
-VAR UnexpectedAccess = 
+Potential Data Exposure =
+VAR UnexpectedAccess =
     CALCULATE(
         COUNTROWS(AccessLog),
         AccessLog[AccessResult] = "Denied",
@@ -496,7 +496,7 @@ VAR UnexpectedAccess =
 RETURN
     IF(
         UnexpectedAccess > 10,
-        "🚨 Multiple Access Denials - Review Required",
+        " Multiple Access Denials - Review Required",
         "Normal"
     )
 ```

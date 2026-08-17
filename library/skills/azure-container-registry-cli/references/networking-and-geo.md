@@ -9,7 +9,7 @@
 - [Connected Registry](#connected-registry)
 - [Registry Transfer Pipelines](#registry-transfer-pipelines)
 
-Geo-replication, private endpoints, public IP network rules, dedicated data endpoints, connected registries, and transfer pipelines require the **Premium** SKU. Zone redundancy is automatic in every tier.
+Geo-replication, private endpoints, public IP network rules, dedicated data endpoints, connected registries, and transfer pipelines require the **Premium ** SKU. Zone redundancy is automatic in every tier.
 
 ---
 
@@ -31,7 +31,7 @@ Pushes replicate automatically; clients keep pulling `{registry}.azurecr.io` and
 
 ## Zone Redundancy
 
-Zone redundancy is **enabled automatically for all registries, in all tiers (Basic/Standard/Premium), in regions that support availability zones** — no flag, SKU, or action required, and it cannot be disabled. Geo-replicas in supported regions are also zone-redundant by default.
+Zone redundancy is **enabled automatically for all registries, in all tiers (Basic/Standard/Premium), in regions that support availability zones ** — no flag, SKU, or action required, and it cannot be disabled. Geo-replicas in supported regions are also zone-redundant by default.
 
 Do not rely on the `zoneRedundancy` property or the legacy `--zone-redundancy` flag: the property is a deprecated artifact that may display `Disabled` even though the registry is fully zone-redundant. Registries in regions without availability-zone support are the only exception — migrate them (via `az acr import` or a transfer pipeline) to a supported region.
 
@@ -62,8 +62,8 @@ az acr private-endpoint-connection approve --registry-name {registry} --name {co
 ```
 
 Notes:
-- Each private endpoint creates records for the registry **and** its data endpoint(s) (`{registry}.{region}.data.azurecr.io`) — geo-replicated registries need one data record per region.
-- With public access disabled, standard ACR Tasks agents cannot reach the registry — use a dedicated agent pool attached to a subnet in the VNet, or enable trusted services **and** the task network bypass policy (see below).
+- Each private endpoint creates records for the registry **and ** its data endpoint(s) (`{registry}.{region}.data.azurecr.io`) — geo-replicated registries need one data record per region.
+- With public access disabled, standard ACR Tasks agents cannot reach the registry — use a dedicated agent pool attached to a subnet in the VNet, or enable trusted services **and ** the task network bypass policy (see below).
 
 ## Public Network Rules
 
@@ -80,7 +80,7 @@ az acr network-rule remove --name {registry} --ip-address 203.0.113.0/24
 az acr update --name {registry} --allow-trusted-services true
 ```
 
-⚠️ **Since June 1, 2025, `--allow-trusted-services` alone is NOT enough for ACR Tasks using a system-assigned managed identity** — without the task network bypass policy, their runs get 403 errors on a network-restricted registry. Enable it explicitly:
+**Since June 1, 2025, `--allow-trusted-services` alone is NOT enough for ACR Tasks using a system-assigned managed identity **— without the task network bypass policy, their runs get 403 errors on a network-restricted registry. Enable it explicitly:
 
 ```bash
 az resource update \

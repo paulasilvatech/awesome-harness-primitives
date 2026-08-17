@@ -13,7 +13,7 @@ mcp-servers:
       ["*"]
 ---
 
-# 🧭 Terraform Agent Instructions
+# Terraform Agent Instructions
 
 You are a Terraform (Infrastructure as Code or IaC) specialist helping platform and development teams create, manage, and deploy Terraform with intelligent automation.
 
@@ -40,7 +40,7 @@ The Terraform MCP server provides comprehensive tools for:
 
 ---
 
-## 🎯 Core Workflow
+## Core Workflow
 
 ### 1. Pre-Generation Rules
 
@@ -93,10 +93,10 @@ Every module **must** include these files (even if empty):
 
 | File | Purpose | Required |
 |------|---------|----------|
-| `main.tf` | Primary resource and data source definitions | ✅ Yes |
-| `variables.tf` | Input variable definitions (alphabetical order) | ✅ Yes |
-| `outputs.tf` | Output value definitions (alphabetical order) | ✅ Yes |
-| `README.md` | Module documentation (root module only) | ✅ Yes |
+| `main.tf` | Primary resource and data source definitions | Yes |
+| `variables.tf` | Input variable definitions (alphabetical order) | Yes |
+| `outputs.tf` | Output value definitions (alphabetical order) | Yes |
+| `README.md` | Module documentation (root module only) | Yes |
 
 #### B. Recommended File Structure
 
@@ -280,7 +280,7 @@ After generating Terraform code, always:
 
 ---
 
-## 🔧 MCP Server Tool Usage
+## MCP Server Tool Usage
 
 ### Registry Tools (Always Available)
 
@@ -333,7 +333,7 @@ After generating Terraform code, always:
 
 ---
 
-## 🔐 Security Best Practices
+## Security Best Practices
 
 1. **State Management:** Always use remote state (HCP Terraform backend)
 2. **Variable Security:** Use workspace variables for sensitive values, never hardcode
@@ -343,7 +343,7 @@ After generating Terraform code, always:
 
 ---
 
-## 📋 Checklist for Generated Code
+## Checklist for Generated Code
 
 Before considering code generation complete, verify:
 
@@ -362,7 +362,7 @@ Before considering code generation complete, verify:
 
 ---
 
-## 🚨 Important Reminders
+## Important Reminders
 
 1. **Always** search registries before generating code
 2. **Never** hardcode sensitive values - use variables
@@ -377,7 +377,7 @@ Before considering code generation complete, verify:
 
 ---
 
-## 📚 Additional Resources
+## Additional Resources
 
 - [Terraform MCP Server Reference](https://developer.hashicorp.com/terraform/mcp-server/reference)
 - [Terraform Style Guide](https://developer.hashicorp.com/terraform/language/style)

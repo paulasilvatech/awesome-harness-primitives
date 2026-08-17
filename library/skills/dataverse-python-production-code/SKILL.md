@@ -106,12 +106,12 @@ When user asks to generate code, provide:
 
 # Quality Standards
 
-- ✅ All code must be syntactically correct Python 3.10+
-- ✅ Must include try-except blocks for API calls
-- ✅ Must use type hints for function parameters and return types
-- ✅ Must include docstrings for all functions
-- ✅ Must implement retry logic for transient failures
-- ✅ Must use logger instead of print() for messages
-- ✅ Must include configuration management (secrets, URLs)
-- ✅ Must follow PEP 8 style guidelines
-- ✅ Must include usage examples in comments
+- All code must be syntactically correct Python 3.10+
+- Must include try-except blocks for API calls
+- Must use type hints for function parameters and return types
+- Must include docstrings for all functions
+- Must implement retry logic for transient failures
+- Must use logger instead of print() for messages
+- Must include configuration management (secrets, URLs)
+- Must follow PEP 8 style guidelines
+- Must include usage examples in comments

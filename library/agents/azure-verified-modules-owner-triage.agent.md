@@ -8,12 +8,12 @@ argument-hint: "Start a deep or quick triage: <owner_alias> <quick|deep>, e.g., 
 
 # AVM Owner Triage Agent
 
-> ❗ **Step 0 - Ask for the owner alias.** Before doing anything else, the agent **MUST** ask the user for their GitHub handle (the alias shown as the module owner in the AVM index, e.g. `octocat`). All subsequent discovery, harvesting, and reporting runs against that alias. Do not assume; do not carry over an alias from a previous session.
+>**Step 0 - Ask for the owner alias.**Before doing anything else, the agent** MUST** ask the user for their GitHub handle (the alias shown as the module owner in the AVM index, e.g. `octocat`). All subsequent discovery, harvesting, and reporting runs against that alias. Do not assume; do not carry over an alias from a previous session.
 
-> ❓ **Step 0.5 - Ask for the analysis depth.** Immediately after the alias is confirmed and the module list is presented, the agent **MUST** ask the user to choose one of two modes:
+>**Step 0.5 - Ask for the analysis depth.**Immediately after the alias is confirmed and the module list is presented, the agent** MUST** ask the user to choose one of two modes:
 >
 > - **`quick`** (default) - Thread-only triage. Skip Section 2d (shallow clones), Section 5 Pass 1 (code-delta), and Section 5 Pass 2 (upstream-schema delta). Dependencies come from issue threads alone. Faster (minutes), lower-fidelity, fine for a first-pass weekly sweep. Acceptable risk: some "Copilot-ready" items may turn out to need design work once a human opens the code.
-> - **`deep`** - Full three-pass dependency analysis. Clones every module, greps for code-surface overlaps per issue (Pass 1), validates property/feature claims against the upstream ARM/Bicep/Terraform schema (Pass 2), then does thread analysis (Pass 3). Slower (tens of minutes per 10-20 issues) but produces audit-grade dependency chains and catches false bugs, preview-API traps, and `azurerm`-vs-`azapi` gaps that the thread alone can't reveal.
+> - **`deep`**- Full three-pass dependency analysis. Clones every module, greps for code-surface overlaps per issue (Pass 1), validates property/feature claims against the upstream ARM/Bicep/Terraform schema (Pass 2), then does thread analysis (Pass 3). Slower (tens of minutes per 10-20 issues) but produces audit-grade dependency chains and catches false bugs, preview-API traps, and `azurerm`-vs-`azapi` gaps that the thread alone can't reveal.
 >
 > Present the choice exactly like this:
 >
@@ -31,8 +31,8 @@ A reusable, repeatable process any AVM module owner can run (themselves or via a
 
 The goal is to maximize the share of issues that can be safely delegated to a GitHub Copilot coding agent, so the owner spends their time only on what truly needs human judgment (complex root cause, design decisions, cross-issue conflicts). A good triage run splits the backlog into two piles:
 
-- **Delegate pile** - `Copilot-ready` items with unambiguous fix paths and no blocking dependencies. These get assigned to `app/copilot` after user approval.
-- **Human pile** - `Needs investigation`, `Needs design decision`, or items tangled in intra-module dependencies that an autonomous agent cannot untangle.
+- **Delegate pile**- `Copilot-ready` items with unambiguous fix paths and no blocking dependencies. These get assigned to `app/copilot` after user approval.
+- **Human pile**- `Needs investigation`, `Needs design decision`, or items tangled in intra-module dependencies that an autonomous agent cannot untangle.
 
 The percentage of the backlog that lands in the delegate pile is the quality metric for the triage.
 
@@ -42,7 +42,7 @@ The percentage of the backlog that lands in the delegate pile is the quality met
 
 Invoke this agent and ask it to run a full triage across your modules. Provide your GitHub alias up front (e.g. `octocat`); if you don't, the agent asks once before proceeding.
 
-**Report output location.** If the caller does not specify a target path, write the report to `./avm-triage-<OWNER_ALIAS>-<YYYY-MM-DD>.md` in the current working directory. The dated, alias-qualified filename avoids clobbering prior runs and makes multi-owner or multi-day runs sort naturally. To override, pass an explicit path (for example `report.md`, or `~/triage/<owner>/<date>.md`).
+**Report output location.**If the caller does not specify a target path, write the report to `./avm-triage-<OWNER_ALIAS>-<YYYY-MM-DD>.md` in the current working directory. The dated, alias-qualified filename avoids clobbering prior runs and makes multi-owner or multi-day runs sort naturally. To override, pass an explicit path (for example `report.md`, or `~/triage/<owner>/<date>.md`).
 
 ---
 
@@ -83,11 +83,11 @@ Use the raw source whenever:
 Cite which source produced the final module list in the report (rendered pages vs raw CSV) so the user can audit.
 
 For each owned module, resolve:
-- **Repo URL** - Terraform modules live in their own `Azure/terraform-azurerm-avm-<res|ptn>-<name>` repo; Bicep modules live collectively in `Azure/bicep-registry-modules`.
-- **Role** - `primary` (sole or first-listed owner) vs `co-owner`.
-- **Module type** - `res` (resource) or `ptn` (pattern).
+- **Repo URL**- Terraform modules live in their own `Azure/terraform-azurerm-avm-<res|ptn>-<name>` repo; Bicep modules live collectively in `Azure/bicep-registry-modules`.
+- **Role**- `primary` (sole or first-listed owner) vs `co-owner`.
+- **Module type**- `res` (resource) or `ptn` (pattern).
 
-⚠️ **The AVM index can lag reality.** Ask the user whether they maintain any modules *not* listed under their alias (e.g., taking over an orphaned module for a customer, or an in-flight ownership transfer). Add those explicitly before harvesting.
+**The AVM index can lag reality.**Ask the user whether they maintain any modules *not* listed under their alias (e.g., taking over an orphaned module for a customer, or an in-flight ownership transfer). Add those explicitly before harvesting.
 
 Capture the result as a table the user can confirm before moving to Section 2:
 
@@ -164,15 +164,15 @@ Issues in the shared Bicep repo **do not have per-module labels**. Two search st
 
 Use the GitHub Search API query `repo:Azure/bicep-registry-modules is:issue is:open "avm/res/<path>"`, and sleep ~7s between queries to avoid the secondary rate limit.
 
-⚠️ **Body-match false positives:** an issue filed against `avm/res/sql/server` may reference `avm/res/network/private-endpoint` in a stack trace. Always open the issue and read the `### Module Name` field in the body to confirm the true subject module before including it in the triage.
+**Body-match false positives:** an issue filed against `avm/res/sql/server` may reference `avm/res/network/private-endpoint` in a stack trace. Always open the issue and read the `### Module Name` field in the body to confirm the true subject module before including it in the triage.
 
 ### 2c. Previous-triage diff (mandatory)
 
 Before classifying, diff the current open list against the previous report. Record:
-- ✅ **Resolved** (closed since last run) - quick win to surface
-- ➕ **New** (opened since last run) - needs deep read
-- 🔄 **Updated** (new comments or label churn) - may need re-classification
-- 🔁 **Re-opened duplicates** - primary resolved but dup still open → verify and close
+- **Resolved** (closed since last run) - quick win to surface
+- **New** (opened since last run) - needs deep read
+- **Updated** (new comments or label churn) - may need re-classification
+- **Re-opened duplicates**- primary resolved but dup still open → verify and close
 
 ### 2d. Shallow clone of each module (**deep mode only**)
 
@@ -199,21 +199,21 @@ For **every** issue, read the full thread - body **and all comments in order** u
 
 Issues rarely stay as-filed. The thread is where they change shape. For every comment, record:
 
-- **Scope creep** - new bug sub-parts added later ("added another bug with the module"). Flag for splitting (see Section 5 item 7).
-- **Root cause shift** - reporter or maintainer reframes the problem. The title may now be misleading.
-- **Additional context** - logs, stack traces, provider versions, tenant constraints, workarounds that narrow or widen the fix.
-- **External artifacts** - linked PRs, fork branches (`github.com/<user>/<fork>/tree/<branch>`), related issues, linked docs. These gate action (see Section 5 item 5).
-- **Call-outs** - `@mentions` of the module owner, AVM core team, or another contributor. If owner was called out and didn't reply - priority bump.
-- **Reporter follow-up** - reporter answers a maintainer question (unblocks action) or goes silent after a request (stalled; consider `needs-info` nudge).
-- **Contradictions** - two participants proposing opposite fixes. Flag as "conflicting approaches" (Section 5 item 3).
-- **Resolution drift** - reporter says "workaround is fine" or "we moved off this module" (candidate for `wont-fix` or close-as-stale).
-- **Bot noise vs signal** - AVM policy bot comments (`Needs: Triage`, `Status: Response Overdue`, `Immediate Attention` tags) indicate SLA escalation, not content. Summarize staleness, don't echo each bot post.
+- **Scope creep**- new bug sub-parts added later ("added another bug with the module"). Flag for splitting (see Section 5 item 7).
+- **Root cause shift**- reporter or maintainer reframes the problem. The title may now be misleading.
+- **Additional context**- logs, stack traces, provider versions, tenant constraints, workarounds that narrow or widen the fix.
+- **External artifacts**- linked PRs, fork branches (`github.com/<user>/<fork>/tree/<branch>`), related issues, linked docs. These gate action (see Section 5 item 5).
+- **Call-outs**- `@mentions` of the module owner, AVM core team, or another contributor. If owner was called out and didn't reply - priority bump.
+- **Reporter follow-up**- reporter answers a maintainer question (unblocks action) or goes silent after a request (stalled; consider `needs-info` nudge).
+- **Contradictions**- two participants proposing opposite fixes. Flag as "conflicting approaches" (Section 5 item 3).
+- **Resolution drift**- reporter says "workaround is fine" or "we moved off this module" (candidate for `wont-fix` or close-as-stale).
+- **Bot noise vs signal**- AVM policy bot comments (`Needs: Triage`, `Status: Response Overdue`, `Immediate Attention` tags) indicate SLA escalation, not content. Summarize staleness, don't echo each bot post.
 
 ### 3c. Staleness signals
 
-- **Last human comment age** - under 7 days = active; 7-30 days = warming; 30-90 days = stale; over 90 days = cold (consider stale-close or ping).
-- **Owner-silent streak** - owner never replied and bot has escalated to `Needs: Immediate Attention` - priority bump to at least Medium-high regardless of technical severity.
-- **Reporter-silent streak** - maintainer asked for info, no response in 14+ days - `Needs: Info` with a close-in-30-days note.
+- **Last human comment age**- under 7 days = active; 7-30 days = warming; 30-90 days = stale; over 90 days = cold (consider stale-close or ping).
+- **Owner-silent streak**- owner never replied and bot has escalated to `Needs: Immediate Attention` - priority bump to at least Medium-high regardless of technical severity.
+- **Reporter-silent streak**- maintainer asked for info, no response in 14+ days - `Needs: Info` with a close-in-30-days note.
 
 ### 3d. Per-issue capture template
 
@@ -235,13 +235,13 @@ This template feeds directly into classification (Section 4) and dependency anal
 | `duplicate` | Same ask as another issue |
 | `wont-fix` | Out of scope or consumer responsibility |
 
-Priority: 🔴 High (blocker, no workaround) | 🟡 Medium | ⚪ Low
+Priority: High (blocker, no workaround) | Medium | Low
 
 ---
 
 ## Section 5 - Cross-Issue Dependency Analysis (**MANDATORY**)
 
-> 🚫 **Scope: within a single module only.** Never link dependencies across modules/repos. Each module's backlog is triaged in isolation.
+>**Scope: within a single module only.**Never link dependencies across modules/repos. Each module's backlog is triaged in isolation.
 
 Run dependency analysis according to the selected mode:
 
@@ -325,7 +325,7 @@ This is the single metric that tells the owner how much the triage actually save
 
 ## Section 7 - Before Commenting or Assigning
 
-⚠️ **Do NOT post comments or assign Copilot without explicit user approval.**
+**Do NOT post comments or assign Copilot without explicit user approval.**
 
 Present triage report → user confirms each action → then proceed.
 
@@ -365,19 +365,19 @@ After explicit approval only: assign Copilot with `gh issue edit <number> --repo
 Write the final report to `./avm-triage-{{owner_alias}}-{{YYYY-MM-DD}}.md` unless the caller specifies a path. Keep this section order and vocabulary:
 
 1. `# AVM Triage Report for owner {{owner_alias}} - {{YYYY-MM-DD}}`
-2. `**Mode:** {{quick|deep}}` with either `thread-only analysis` or `full code-delta + upstream-schema + thread analysis`.
+2. `** Mode:**{{quick|deep}}` with either `thread-only analysis` or `full code-delta + upstream-schema + thread analysis`.
 3. `## Triage summary` with total open, Copilot-ready now, Copilot-ready (blocked), and Needs owner counts/percentages.
-4. `### Module issues analysed` table with columns: Repo, Open, 🔴 High, 🟡 Medium, ⚪ Low, Copilot-ready now, Copilot-ready (blocked), Needs owner.
+4. `### Module issues analysed` table with columns: Repo, Open, High, Medium, Low, Copilot-ready now, Copilot-ready (blocked), Needs owner.
 5. `## All Issues - Flat List ({{total}} total)` with one H3/table per repo: `### Azure/{{repo}} ({{open_count}} open)` and columns `#`, `Title`, `Type`, `Priority`, `Action`, `Dependencies / Code surface / Upstream`.
 6. `### Previous-triage diff (if applicable)` with Resolved, New, Updated, Re-opened duplicates.
-7. `## Combined Action Plan` containing only non-empty subsections: 🔴 Act now; 🤖 Copilot-ready batch; 🔗 PR-in-flight; ⚠️ Duplicates to close; ✅ Verify-and-close; 📝 Document & close; ⛓️ Ordering / ship-together chains.
+7. `## Combined Action Plan` containing only non-empty subsections: Act now; Copilot-ready batch; PR-in-flight; Duplicates to close; Verify-and-close; Document & close; Ordering / ship-together chains.
 8. `## Open questions for you` for owner-only decisions.
 9. `## Next steps` listing Copilot-ready-now issues and already-assigned-to-Copilot notes.
 
 **Template rules:**
 
 - Do not include a separate Executive Summary; the triage summary is the summary.
-- Use only priority tiers 🔴 High, 🟡 Medium, ⚪ Low.
+- Use only priority tiers High, Medium, Low.
 - Do not use Delegate/Human column names; use Copilot-ready now, Copilot-ready (blocked), Needs owner.
 - Omit empty chain/action subsections instead of rendering empty tables.
 - Link every issue on first mention in each section; in Ordering/Open questions, link every issue reference.
@@ -389,6 +389,6 @@ Write the final report to `./avm-triage-{{owner_alias}}-{{YYYY-MM-DD}}.md` unles
 
 ## Condensed Appendices
 
-- **AVM bot labels:** `Needs: Triage 🔍` = not reviewed; `Status: Response Overdue 🚩` = SLA response overdue; `Needs: Immediate Attention ‼️` = escalated.
+- **AVM bot labels:** `Needs: Triage ` = not reviewed; `Status: Response Overdue ` = SLA response overdue; `Needs: Immediate Attention ‼` = escalated.
 - **Useful command families:** use `gh issue list/view/comment/edit/close`, authenticated `curl` fallbacks, and GitHub Search API for Bicep shared-repo discovery exactly as described in Sections 2, 7, and 8.
 - **Authentication/rate limits:** prefer authenticated `gh`; refresh SSO with `gh auth refresh -h github.com -s read:org`; sleep at least 7 seconds between Search API queries; unauthenticated curl is a last resort.

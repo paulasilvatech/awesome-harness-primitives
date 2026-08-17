@@ -11,25 +11,25 @@ Comprehensive code review guidelines for GitHub Copilot that can be adapted to a
 
 When performing a code review, respond in **English** (or specify your preferred language).
 
-> **Customization Tip**: Change to your preferred language by replacing "English" with "Portuguese (Brazilian)", "Spanish", "French", etc.
+>**Customization Tip**: Change to your preferred language by replacing "English" with "Portuguese (Brazilian)", "Spanish", "French", etc.
 
 ## Review Priorities
 
 When performing a code review, prioritize issues in the following order:
 
-### 🔴 CRITICAL (Block merge)
+### CRITICAL (Block merge)
 - **Security**: Vulnerabilities, exposed secrets, authentication/authorization issues
 - **Correctness**: Logic errors, data corruption risks, race conditions
 - **Breaking Changes**: API contract changes without versioning
 - **Data Loss**: Risk of data loss or corruption
 
-### 🟡 IMPORTANT (Requires discussion)
+### IMPORTANT (Requires discussion)
 - **Code Quality**: Severe violations of SOLID principles, excessive duplication
 - **Test Coverage**: Missing tests for critical paths or new functionality
 - **Performance**: Obvious performance bottlenecks (N+1 queries, memory leaks)
 - **Architecture**: Significant deviations from established patterns
 
-### 🟢 SUGGESTION (Non-blocking improvements)
+### SUGGESTION (Non-blocking improvements)
 - **Readability**: Poor naming, complex logic that could be simplified
 - **Optimization**: Performance improvements without functional impact
 - **Best Practices**: Minor deviations from conventions
@@ -62,13 +62,13 @@ When performing a code review, check for:
 
 ### Examples
 ```javascript
-// ❌ BAD: Poor naming and magic numbers
+//  BAD: Poor naming and magic numbers
 function calc(x, y) {
     if (x > 100) return y * 0.15;
     return y * 0.10;
 }
 
-// ✅ GOOD: Clear naming and constants
+//  GOOD: Clear naming and constants
 const PREMIUM_THRESHOLD = 100;
 const PREMIUM_DISCOUNT_RATE = 0.15;
 const STANDARD_DISCOUNT_RATE = 0.10;
@@ -89,7 +89,7 @@ function calculateDiscount(orderTotal, itemPrice) {
 
 ### Examples
 ```python
-# ❌ BAD: Silent failure and generic error
+# BAD: Silent failure and generic error
 def process_user(user_id):
     try:
         user = db.get(user_id)
@@ -97,7 +97,7 @@ def process_user(user_id):
     except:
         pass
 
-# ✅ GOOD: Explicit error handling
+# GOOD: Explicit error handling
 def process_user(user_id):
     if not user_id or user_id <= 0:
         raise ValueError(f"Invalid user_id: {user_id}")
@@ -126,10 +126,10 @@ When performing a code review, check for security issues:
 
 ### Examples
 ```java
-// ❌ BAD: SQL injection vulnerability
+//  BAD: SQL injection vulnerability
 String query = "SELECT * FROM users WHERE email = '" + email + "'";
 
-// ✅ GOOD: Parameterized query
+//  GOOD: Parameterized query
 PreparedStatement stmt = conn.prepareStatement(
     "SELECT * FROM users WHERE email = ?"
 );
@@ -137,10 +137,10 @@ stmt.setString(1, email);
 ```
 
 ```javascript
-// ❌ BAD: Exposed secret in code
+//  BAD: Exposed secret in code
 const API_KEY = "sk_live_abc123xyz789";
 
-// ✅ GOOD: Use environment variables
+//  GOOD: Use environment variables
 const API_KEY = process.env.API_KEY;
 ```
 
@@ -158,13 +158,13 @@ When performing a code review, verify test quality:
 
 ### Examples
 ```typescript
-// ❌ BAD: Vague name and assertion
+//  BAD: Vague name and assertion
 test('test1', () => {
     const result = calc(5, 10);
     expect(result).toBeTruthy();
 });
 
-// ✅ GOOD: Descriptive name and specific assertion
+//  GOOD: Descriptive name and specific assertion
 test('should calculate 10% discount for orders under $100', () => {
     const orderTotal = 50;
     const itemPrice = 20;
@@ -188,12 +188,12 @@ When performing a code review, check for performance issues:
 
 ### Examples
 ```python
-# ❌ BAD: N+1 query problem
+# BAD: N+1 query problem
 users = User.query.all()
 for user in users:
     orders = Order.query.filter_by(user_id=user.id).all()  # N+1!
 
-# ✅ GOOD: Use JOIN or eager loading
+# GOOD: Use JOIN or eager loading
 users = User.query.options(joinedload(User.orders)).all()
 for user in users:
     orders = user.orders
@@ -242,7 +242,7 @@ Explanation of the impact or reason for the suggestion.
 
 #### Critical Issue
 ````markdown
-**🔴 CRITICAL - Security: SQL Injection Vulnerability**
+** CRITICAL - Security: SQL Injection Vulnerability**
 
 The query on line 45 concatenates user input directly into the SQL string,
 creating a SQL injection vulnerability.
@@ -268,7 +268,7 @@ stmt.setString(1, email);
 
 #### Important Issue
 ````markdown
-**🟡 IMPORTANT - Testing: Missing test coverage for critical path**
+** IMPORTANT - Testing: Missing test coverage for critical path**
 
 The `processPayment()` function handles financial transactions but has no tests
 for the refund scenario.
@@ -293,7 +293,7 @@ test('should process full refund when order is cancelled', () => {
 
 #### Suggestion
 ````markdown
-**🟢 SUGGESTION - Readability: Simplify nested conditionals**
+** SUGGESTION - Readability: Simplify nested conditionals**
 
 The nested if statements on lines 30-40 make the logic hard to follow.
 

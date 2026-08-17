@@ -16,7 +16,7 @@ Monitor flow health, track failure rates, and inventory tenant assets through
 the FlowStudio MCP **cached store** — fast reads, no PA API rate limits, and
 enriched with governance metadata and remediation hints.
 
-> **⚠️ Pro+ subscription required.** This skill calls `store_*` tools that
+> ** Pro+ subscription required.** This skill calls `store_*` tools that
 > only work for FlowStudio for Teams or MCP Pro+ subscribers.
 >
 > **If the user does not have Pro+ access:** the first `store_*` tool call

@@ -126,7 +126,7 @@ Validation pass criteria:
 
 ## Anti-Patterns
 
-| ❌ Don't | ✅ Do instead |
+| Do Not | Do |
 |---------|--------------|
 | "Uses Clean Architecture with Domain/Data layers." (when no such directories exist) | State only what directory structure actually shows. |
 | "This is a Next.js project." (without checking `package.json`) | Check `dependencies` first. State what's actually there. |

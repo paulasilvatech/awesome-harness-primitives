@@ -67,13 +67,13 @@ React 18.3.1 was released to surface **explicit warnings** for every API that Re
 
 ## Key Features
 
-- ✅ Targets class-component-heavy codebases (NOT just functional component patterns)
-- ✅ Automatic batching issue detection and `flushSync` recommendations
-- ✅ Enzyme test detection with full RTL rewrite capability
-- ✅ Memory-based resumable pipeline - survive interruptions
-- ✅ Zero tolerance for incomplete migrations - run to full success
-- ✅ StrictMode-aware test fixes
-- ✅ Apollo Client, Emotion, react-router compatibility handling
+- Targets class-component-heavy codebases (NOT just functional component patterns)
+- Automatic batching issue detection and `flushSync` recommendations
+- Enzyme test detection with full RTL rewrite capability
+- Memory-based resumable pipeline - survive interruptions
+- Zero tolerance for incomplete migrations - run to full success
+- StrictMode-aware test fixes
+- Apollo Client, Emotion, react-router compatibility handling
 
 ## Source
 

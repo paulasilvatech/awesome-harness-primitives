@@ -38,7 +38,7 @@ copilot plugin install noob-mode@awesome-copilot
 | Feature | What it means for you |
 |---|---|
 | **Approval Translation** | Every time Copilot asks permission, it explains WHAT it wants to do, WHY, how RISKY it is, and what happens if you say yes or no |
-| **Risk Indicators** | Color-coded risk levels (🟢 Low, 🟡 Moderate, 🔴 High, ⛔ Critical) so you can instantly see if an action is safe |
+| **Risk Indicators** | Text risk levels (Low, Moderate, High, Critical) so you can instantly see if an action is safe |
 | **Jargon Detection** | Technical terms are automatically defined in plain English the first time they appear |
 | **Step-by-Step Plans** | Multi-step tasks start with a plain-English roadmap so you know what's coming |
 | **Output Translation** | Error messages and command results are translated into "here's what that means" |
@@ -55,18 +55,18 @@ Allow tool: bash with command "grep -r 'indemnification' ./contracts/"?
 
 **With Noob Mode:**
 ```
-📋 WHAT I'M ASKING TO DO:
+WHAT I'M ASKING TO DO:
 I want to search all files in your "contracts" folder for the word "indemnification."
 
-🎯 WHY:
+WHY:
 You asked me to find every mention of indemnification across your contracts.
 
-⚠️ RISK: 🔴 High (but safe in this case)
+RISK: High (but safe in this case)
 Running commands is generally high-risk, but this one only searches — it doesn't
 change or delete anything.
 
-✅ If you approve: I'll show you every file where "indemnification" appears.
-❌ If you decline: I can read files one by one instead, but it'll take longer.
+If you approve: I'll show you every file where "indemnification" appears.
+If you decline: I can read files one by one instead, but it'll take longer.
 ```
 
 ## How to Turn Off

@@ -56,7 +56,7 @@ Did [action] → [result/impact] → [evidence]
 
 ### Anti-Patterns
 
-| ❌ Don't | ✅ Do instead |
+| Do Not | Do instead |
 |---------|--------------|
 | "Fixed a bug in auth" | "Fixed token refresh race condition → eliminated 401s affecting 12% of API calls → PR #247" |
 | "Worked on dashboards" | "Built latency dashboard in Grafana → on-call detects P95 spikes in <2min → deployed to prod" |
@@ -72,11 +72,11 @@ Not every entry needs a metric. Use the strongest evidence available:
 
 | Strength | Evidence type | Example |
 |----------|--------------|---------|
-| 🥇 Best | Quantified metric | "Reduced P95 latency from 800ms to 120ms" |
-| 🥈 Strong | PR, commit, or doc link | "PR #312, design doc in wiki" |
-| 🥉 Good | Observable outcome | "Unblocked Team X", "Resolved Sev2 incident Y" |
-| ✅ Acceptable | Qualitative + context | "Reduced toil for on-call rotation — see updated runbook" |
-| ⚠️ Weak | Activity only | "Worked on auth" — reframe or mark `(evidence needed)` |
+|  Best | Quantified metric | "Reduced P95 latency from 800ms to 120ms"|
+|  Strong | PR, commit, or doc link | "PR #312, design doc in wiki"|
+|  Good | Observable outcome | "Unblocked Team X", "Resolved Sev2 incident Y"|
+| Acceptable | Qualitative + context | "Reduced toil for on-call rotation — see updated runbook"|
+|  Weak | Activity only | "Worked on auth"— reframe or mark `(evidence needed)` |
 
 Never invent a metric to fill the gap. Qualitative evidence with context beats fabricated numbers.
 
@@ -84,15 +84,15 @@ Never invent a metric to fill the gap. Qualitative evidence with context beats f
 
 | ID | Emoji | Use for |
 |----|-------|---------|
-| `pr` | 🚀 | Merged PRs, shipped features |
-| `bugfix` | 🐛 | Bug fixes, incident patches |
-| `infrastructure` | 🏗️ | Infra, deployments, migrations |
-| `investigation` | 🔍 | Root cause analysis, debugging |
-| `collaboration` | 🤝 | Reviews, mentoring, design discussions |
-| `tooling` | 🔧 | Dev tools, scripts, automation |
-| `oncall` | 🚨 | Incident response, on-call wins |
-| `design` | 📐 | Design docs, architecture decisions |
-| `documentation` | 📝 | Docs, runbooks, guides |
+| `pr` |  | Merged PRs, shipped features |
+| `bugfix` |  | Bug fixes, incident patches |
+| `infrastructure` |  | Infra, deployments, migrations |
+| `investigation` |  | Root cause analysis, debugging |
+| `collaboration` |  | Reviews, mentoring, design discussions |
+| `tooling` |  | Dev tools, scripts, automation |
+| `oncall` |  | Incident response, on-call wins |
+| `design` |  | Design docs, architecture decisions |
+| `documentation` |  | Docs, runbooks, guides |
 
 ## How to Help the User
 
@@ -163,10 +163,10 @@ Format as markdown grouped by week:
 ```markdown
 ## Week of 2025-04-14
 
-### 🚀 PRs & Features
+### PRs & Features
 - **Migrated auth service to managed identity** → eliminated 3 secret rotation incidents/quarter → PR #312
 
-### 🏗️ Infrastructure
+### Infrastructure
 - **Built CI pipeline for copilot-brag-sheet** → 107 tests across 3 OSes × 3 Node versions → shipped v1.0.0
 ```
 
@@ -191,7 +191,7 @@ When the user is preparing for a performance review (Connect, annual review, etc
 
 ### Strong vs weak entries
 
-| ✅ Strong | ❌ Weak |
+| Strong | Weak |
 |----------|--------|
 | Outcome-first, quantified | Activity list ("worked on X") |
 | Tied to customer/team impact | No beneficiary mentioned |

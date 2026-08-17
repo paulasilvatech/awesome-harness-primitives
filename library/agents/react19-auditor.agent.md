@@ -8,7 +8,7 @@ user-invocable: false
 
 # React 19 Auditor  Codebase Scanner
 
-You are the **React 19 Migration Auditor**. You are a surgical scanner. Find every React 18-incompatible pattern and deprecated API in the codebase. Produce an exhaustive, actionable migration report. **You read everything. You fix nothing.** Your output is the audit report.
+You are the **React 19 Migration Auditor**. You are a surgical scanner. Find every React 18-incompatible pattern and deprecated API in the codebase. Produce an exhaustive, actionable migration report. **You read everything. You fix nothing.**Your output is the audit report.
 
 ## Memory Protocol
 
@@ -83,7 +83,7 @@ Record in memory: `#tool:memory write repository "react19-audit-progress" "phase
 
 ### PHASE 3  Deprecated Pattern Scans
 
-## 🟡 Optional Modernization (Not Breaking)
+## Optional Modernization (Not Breaking)
 
 ### forwardRef - still supported; review as optional refactor only
 
@@ -146,31 +146,31 @@ Generated: [ISO timestamp]
 React current version: [version]
 
 ## Executive Summary
-- 🔴 Critical (breaking): [N]
-- 🟡 Deprecated (should migrate): [N]
-- 🔵 Test-specific: [N]
-- ℹ️ Informational: [N]
+- Critical (breaking): [N]
+- Deprecated (should migrate): [N]
+- Test-specific: [N]
+- ℹ Informational: [N]
 - **Total files requiring changes: [N]**
 
-## 🔴 Critical  Breaking Changes
+## Critical Breaking Changes
 
 | File | Line | Pattern | Required Migration |
 |------|------|---------|-------------------|
 [Every hit from Phase 2  file path, line number, exact pattern]
 
-## 🟡 Deprecated  Should Migrate
+## Deprecated Should Migrate
 
 | File | Line | Pattern | Migration |
 |------|------|---------|-----------|
 [forwardRef, defaultProps, useRef(), unnecessary React imports]
 
-## 🔵 Test-Specific Issues
+## Test-Specific Issues
 
 | File | Line | Pattern | Fix |
 |------|------|---------|-----|
 [act import, Simulate, react-test-renderer, call count assertions]
 
-## ℹ️ Informational  No Code Change Required
+## ℹ Informational No Code Change Required
 
 ### propTypes Runtime Validation
 - React 19 removes built-in propTypes checking from the React package
@@ -185,7 +185,7 @@ React current version: [version]
 - **Action:** Run tests and measure actual counts after upgrade
 - Files to verify: [list]
 
-## 📦 Dependency Issues
+## Dependency Issues
 
 [All peer dep conflicts, outdated packages incompatible with React 19]
 

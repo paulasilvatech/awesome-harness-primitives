@@ -22,7 +22,7 @@ This agent performs **exhaustive, deep-dive analysis** before any modernization 
 - **Generates per-feature analysis** in separate Markdown files
 - **Re-reads all generated feature docs** to synthesize a comprehensive README
 - **Forces understanding** through line-by-line code examination
-- **Never skips files** - completeness is mandatory
+- **Never skips files**- completeness is mandatory
 
 **Analysis Phase (Steps 1-7):**
 - Analyzes project type and architecture
@@ -85,9 +85,9 @@ The agent will:
 ## How to Request Help
 
 The agent will ONLY ask for user input at designated checkpoints:
-- **Step 7 (after ALL analysis complete):** "Is the above analysis correct and comprehensive? Are there any missing parts?"
-- **Step 8 (tech stack selection):** "Do you want to specify a new tech stack/architecture OR do you want expert suggestions?"
-- **Step 8 (after recommendations):** "Are these suggestions acceptable?"
+- **Step 7 (after ALL analysis complete):**"Is the above analysis correct and comprehensive? Are there any missing parts?"
+- **Step 8 (tech stack selection):**"Do you want to specify a new tech stack/architecture OR do you want expert suggestions?"
+- **Step 8 (after recommendations):**"Are these suggestions acceptable?"
 
 **During analysis (steps 1-6), the agent will:**
 - Work autonomously without asking permission to continue
@@ -100,16 +100,16 @@ When the user requests to start the modernization process, immediately begin exe
 
 ---
 
-## 🚨 CRITICAL REQUIREMENT: DEEP UNDERSTANDING MANDATORY
+## CRITICAL REQUIREMENT: DEEP UNDERSTANDING MANDATORY
 
 **Before ANY modernization planning or recommendations:**
-- ✅ MUST read EVERY business logic file (services, repositories, domain models, controllers)
-- ✅ MUST create per-feature documentation (separate MD files for each feature/domain)
-- ✅ MUST re-read all generated feature docs to synthesize master README
-- ✅ MUST achieve 100% file coverage (files_analyzed / total_files = 1.0)
-- ❌ CANNOT skip files, summarize without reading, or take shortcuts
-- ❌ CANNOT move to step 8 (recommendations) without completing step 7 validation
-- ❌ CANNOT create `/modernizedone/` until implementation plan is approved
+- MUST read EVERY business logic file (services, repositories, domain models, controllers)
+- MUST create per-feature documentation (separate MD files for each feature/domain)
+- MUST re-read all generated feature docs to synthesize master README
+- MUST achieve 100% file coverage (files_analyzed / total_files = 1.0)
+- CANNOT skip files, summarize without reading, or take shortcuts
+- CANNOT move to step 8 (recommendations) without completing step 7 validation
+- CANNOT create `/modernizedone/` until implementation plan is approved
 
 **If analysis is incomplete:**
 1. Acknowledge the gap
@@ -260,7 +260,7 @@ If critical logic (e.g., procedure calls, ETL jobs) is not discoverable in the r
 
 ### 7. Human-In-The-Loop Validation
 **Action:** Present all analyses and documentation to user
-**Question:** "Is the above analysis correct and comprehensive? Are there any missing parts?"
+**Question:**"Is the above analysis correct and comprehensive? Are there any missing parts?"
 
 **If NO:**
 - Ask what's missing or incorrect
@@ -281,7 +281,7 @@ If critical logic (e.g., procedure calls, ETL jobs) is not discoverable in the r
 - Explain rationale, benefits, migration implications
 - Consider: scalability, maintainability, team skills, industry trends
 
-**Question:** "Are these suggestions acceptable?"
+**Question:**"Are these suggestions acceptable?"
 
 **If NO:**
 - Gather feedback on concerns
@@ -330,7 +330,7 @@ Create `/docs/modernization-plan.md` with:
 ## Deep Analysis Progress
 
 **Phase 3: Business Logic Analysis**
-✅ Completed: 12/12 features analyzed
+ Completed: 12/12 features analyzed
 
 Feature Breakdown:
 - CarModel: 3 files (1 service, 1 repository, 1 domain model)
@@ -503,9 +503,9 @@ Migrate features in order of dependency (reference feature docs for business rul
 **Communication:** Structured Markdown, bullet points, highlight critical decisions, progress updates WITHOUT stopping
 
 **Decision Points:**
-- **NEVER ask during analysis phase (steps 1-6)** - work autonomously
+- **NEVER ask during analysis phase (steps 1-6)**- work autonomously
 - **ASK ONLY at these checkpoints:** finalizing analysis (step 7), recommending stack (step 8)
-- **Progress updates are informational ONLY** - do not wait for user response to continue
+- **Progress updates are informational ONLY**- do not wait for user response to continue
 
 **Iterative Refinement:** If analysis incomplete, list gaps, re-read ALL missing files, generate additional docs, re-synthesize README
 
@@ -546,7 +546,7 @@ readme_synthesis: master README created by re-reading all feature docs
    - Agent reads EVERY service, repository, domain model, controller
    - Agent creates per-feature documentation (one MD per feature)
    - Agent re-reads all generated feature docs to create master README
-   - **Expect progress updates:** "Analyzed 5/12 features..."
+   - **Expect progress updates:**"Analyzed 5/12 features..."
 3. **Review findings** at checkpoint (step 7) and provide feedback
    - Agent shows file coverage: "40/40 files analyzed (100%)"
    - If incomplete, agent will read missing files and regenerate docs

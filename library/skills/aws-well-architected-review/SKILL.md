@@ -96,9 +96,9 @@ For each finding, classify:
 ### Step 5: User Confirmation
 
 ```
-🏗️ AWS Well-Architected Review Summary
+ AWS Well-Architected Review Summary
 
-📊 Review Results:
+ Review Results:
 • IaC Files Analyzed: X
 • AWS Services Identified: Y
 • Total Findings: Z
@@ -106,13 +106,13 @@ For each finding, classify:
   • Medium Risk: B (should address soon)
   • Low Risk: C (nice to have)
 
-🔴 Top High Risk Findings:
+ Top High Risk Findings:
 1. [Pillar]: [Finding] — [Why it matters]
 2. [Pillar]: [Finding] — [Why it matters]
 
-💡 This will create Z individual GitHub issues + 1 EPIC issue.
+ This will create Z individual GitHub issues + 1 EPIC issue.
 
-❓ Proceed with creating GitHub issues? (y/n)
+ Proceed with creating GitHub issues? (y/n)
 ```
 
 ### Step 6: Create Individual Finding Issues
@@ -122,14 +122,14 @@ Label with "well-architected" and the pillar name (e.g., "security", "reliabilit
 
 **Body**:
 ````markdown
-## 🏗️ Well-Architected Finding: [Brief Title]
+## Well-Architected Finding: [Brief Title]
 
 **Pillar**: [Name] | **Risk Level**: [High/Medium/Low] | **Effort**: [Low/Medium/High]
 
-### 📋 Description
+### Description
 [Clear explanation of the finding and why it matters]
 
-### 🔧 Remediation
+### Remediation
 
 **IaC Fix** (preferred):
 ```hcl
@@ -150,11 +150,11 @@ aws s3api put-bucket-encryption --bucket <name> \
   --server-side-encryption-configuration '{"Rules":[{"ApplyServerSideEncryptionByDefault":{"SSEAlgorithm":"aws:kms"}}]}'
 ```
 
-### 📚 AWS Reference
+### AWS Reference
 - [WAF Best Practice Link]
 - [AWS Documentation Link]
 
-### ✅ Validation
+### Validation
 - [ ] Change implemented in IaC and deployed
 - [ ] AWS Config rule passes (if applicable)
 - [ ] Security Hub finding resolved (if applicable)
@@ -178,9 +178,9 @@ Label with "well-architected" and "epic".
 - **GitHub Creation Failure**: Output all findings as formatted markdown to console
 
 ## Success Criteria
-- ✅ All 6 WAF pillars reviewed against IaC and live infrastructure
-- ✅ All findings classified by risk level and pillar
-- ✅ Actionable remediation steps with IaC examples for each finding
-- ✅ GitHub issues created for team tracking
-- ✅ Architecture diagram generated for EPIC context
-- ✅ AWS documentation references included
+- All 6 WAF pillars reviewed against IaC and live infrastructure
+- All findings classified by risk level and pillar
+- Actionable remediation steps with IaC examples for each finding
+- GitHub issues created for team tracking
+- Architecture diagram generated for EPIC context
+- AWS documentation references included

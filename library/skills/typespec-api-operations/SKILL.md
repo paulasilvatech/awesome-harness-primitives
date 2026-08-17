@@ -196,7 +196,7 @@ op updateItem(
     type: "AdaptiveCard",
     title: "Delete Item",
     body: """
-    ⚠️ Are you sure you want to delete item #{{ function.parameters.id }}?
+     Are you sure you want to delete item #{{ function.parameters.id }}?
     This action cannot be undone.
     """
   }
@@ -283,7 +283,7 @@ namespace ItemsAPI {
     confirmation: #{
       type: "AdaptiveCard",
       title: "Delete Item",
-      body: "⚠️ Delete item #{{ function.parameters.id }}?"
+      body: " Delete item #{{ function.parameters.id }}?"
     }
   })
   op deleteItem(@path id: integer): void;
@@ -386,7 +386,7 @@ After adding operations, test with these prompts:
 ### Confirmations
 - Always add confirmations to destructive operations (DELETE, PATCH)
 - Show key details in confirmation body
-- Use warning emoji (⚠️) for irreversible actions
+- Use warning emoji () for irreversible actions
 
 ### Adaptive Cards
 - Keep cards simple and focused

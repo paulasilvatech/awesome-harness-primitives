@@ -291,7 +291,7 @@ def print_report(tour_path: str, result: dict) -> None:
     for e in errors:
         print(f"  {RED}✗ {e}{RESET}")
     for w in warnings:
-        print(f"  {YELLOW}⚠ {w}{RESET}")
+        print(f"  {YELLOW}Warning: {w}{RESET}")
     for i in info:
         print(f"  {DIM}ℹ {i}{RESET}")
 

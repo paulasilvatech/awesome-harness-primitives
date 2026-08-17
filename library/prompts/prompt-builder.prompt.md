@@ -77,14 +77,14 @@ Which VS Code tools does this prompt need? Omit `tools` when inherited tools are
 
 Based on analysis of existing prompts, I will ensure your prompt includes:
 
-✅ **Clear Structure**: Well-organized sections with logical flow
-✅ **Specific Instructions**: Actionable, unambiguous directions  
-✅ **Proper Context**: All necessary information for task completion
-✅ **Tool Integration**: Appropriate tool selection for the task
-✅ **Error Handling**: Guidance for edge cases and failures
-✅ **Output Standards**: Clear formatting and structure requirements
-✅ **Validation**: Criteria for measuring success
-✅ **Maintainability**: Easy to update and extend
+**Clear Structure**: Well-organized sections with logical flow
+**Specific Instructions**: Actionable, unambiguous directions
+**Proper Context**: All necessary information for task completion
+**Tool Integration**: Appropriate tool selection for the task
+**Error Handling**: Guidance for edge cases and failures
+**Output Standards**: Clear formatting and structure requirements
+**Validation**: Criteria for measuring success
+**Maintainability**: Easy to update and extend
 
 ## Next Steps
 

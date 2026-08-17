@@ -36,14 +36,14 @@ flushSync(() => {
 
 ## When to Use
 
-✅ Use when the user must see a specific UI state BEFORE an async operation starts:
+ Use when the user must see a specific UI state BEFORE an async operation starts:
 
 ```jsx
 flushSync(() => this.setState({ loading: true }));
 await expensiveAsyncOperation();
 ```
 
-✅ Use in multi-step progress flows where each step must visually complete before the next:
+ Use in multi-step progress flows where each step must visually complete before the next:
 
 ```jsx
 flushSync(() => this.setState({ status: 'validating' }));
@@ -52,11 +52,11 @@ flushSync(() => this.setState({ status: 'processing' }));
 await process();
 ```
 
-✅ Use in tests that must assert an intermediate UI state synchronously (avoid when possible - prefer `waitFor`).
+ Use in tests that must assert an intermediate UI state synchronously (avoid when possible - prefer `waitFor`).
 
 ## When NOT to Use
 
-❌ Don't use it to "fix" a reading-this.state-after-await bug - that's Category A (refactor instead):
+Do Not use it to "fix" a reading-this.state-after-await bug - that's Category A (refactor instead):
 
 ```jsx
 // WRONG - flushSync doesn't fix this
@@ -65,7 +65,7 @@ const data = await fetchData();
 if (this.state.loading) { ... } // still a race condition
 ```
 
-❌ Don't use it for every setState to "be safe" - it defeats React 18 concurrent rendering:
+Do Not use it for every setState to "be safe" - it defeats React 18 concurrent rendering:
 
 ```jsx
 // WRONG - excessive flushSync
@@ -77,7 +77,7 @@ async handleClick() {
 }
 ```
 
-❌ Don't use it inside a `useEffect` or `componentDidMount` to trigger immediate state - it causes nested render cycles.
+Do Not use it inside a `useEffect` or `componentDidMount` to trigger immediate state - it causes nested render cycles.
 
 ## Performance Note
 

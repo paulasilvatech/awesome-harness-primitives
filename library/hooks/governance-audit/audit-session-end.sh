@@ -50,9 +50,9 @@ python3 -c 'import json,sys; print(json.dumps({"timestamp":sys.argv[1],"event":"
   "$TIMESTAMP" "$TOTAL" "$THREATS" >> "$LOG_FILE"
 
 if [[ "$THREATS" -gt 0 ]]; then
-  echo "⚠️ Session ended: $THREATS threat(s) detected in $TOTAL events"
+  echo "Session ended: $THREATS threat(s) detected in $TOTAL events"
 else
-  echo "✅ Session ended: $TOTAL events, no threats"
+  echo "Session ended: $TOTAL events, no threats"
 fi
 
 exit 0

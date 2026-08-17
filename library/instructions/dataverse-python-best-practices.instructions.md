@@ -113,21 +113,21 @@ client = DataverseClient("https://yourorg.crm.dynamics.com", credential)
 **Best Practice**: Create one `DataverseClient` instance and reuse it throughout your application.
 
 ```python
-# ❌ ANTI-PATTERN: Creating new clients repeatedly
+# ANTI-PATTERN: Creating new clients repeatedly
 def fetch_account(account_id):
     credential = InteractiveBrowserCredential()
     client = DataverseClient("https://yourorg.crm.dynamics.com", credential)
     return client.get("account", account_id)
 
-# ✅ PATTERN: Singleton client
+# PATTERN: Singleton client
 class DataverseService:
     _instance = None
-    
+
     def __new__(cls):
         if cls._instance is None:
             credential = InteractiveBrowserCredential()
             cls._instance = DataverseClient(
-                "https://yourorg.crm.dynamics.com", 
+                "https://yourorg.crm.dynamics.com",
                 credential
             )
         return cls._instance
@@ -223,8 +223,8 @@ for page in client.get(
 ```python
 # SQL queries are read-only; use for complex analytics
 results = client.query_sql("""
-    SELECT TOP 10 name, creditlimit 
-    FROM account 
+    SELECT TOP 10 name, creditlimit
+    FROM account
     WHERE creditlimit > 50000
     ORDER BY name
 """)
@@ -321,7 +321,7 @@ def create_with_retry(table_name, record_data, max_retries=3):
         except HttpError as e:
             if attempt == max_retries - 1:
                 raise
-            
+
             # Exponential backoff: 1s, 2s, 4s
             backoff_seconds = 2 ** attempt
             print(f"Attempt {attempt + 1} failed. Retrying in {backoff_seconds}s...")
@@ -440,7 +440,7 @@ while True:
     page = client.get("account", top=page_size, skip=skip_count)
     if not page:
         break
-    
+
     print(f"Page {skip_count // page_size + 1}: {len(page)} records")
     skip_count += page_size
 ```
@@ -490,13 +490,13 @@ print(f"Chunked upload complete")
 
 ### Case Sensitivity Rules
 ```python
-# ❌ WRONG: Uppercase logical names
+# WRONG: Uppercase logical names
 results = client.get("account", filter="Name eq 'Contoso'")
 
-# ✅ CORRECT: Lowercase logical names
+# CORRECT: Lowercase logical names
 results = client.get("account", filter="name eq 'Contoso'")
 
-# ✅ Values ARE case-sensitive when needed
+# Values ARE case-sensitive when needed
 results = client.get("account", filter="name eq 'Contoso Ltd'")
 ```
 
@@ -552,7 +552,7 @@ client.flush_cache()
 
 ## 12. Performance Best Practices
 
-### Do's ✅
+### Do's
 1. **Use `select` parameter**: Only fetch needed columns
    ```python
    client.get("account", select=["name", "creditlimit"])
@@ -580,7 +580,7 @@ client.flush_cache()
    client.get("account", filter="creditlimit gt 50000")
    ```
 
-### Don'ts ❌
+### Don'ts
 1. **Don't fetch all columns**: Specify what you need
    ```python
    # Slow
@@ -635,7 +635,7 @@ def upsert_account(name, data):
 def create_with_recovery(records):
     """Create records with per-record error tracking."""
     results = {"success": [], "failed": []}
-    
+
     try:
         ids = client.create("account", records)
         results["success"] = ids
@@ -647,7 +647,7 @@ def create_with_recovery(records):
                 results["success"].append(ids[0])
             except Exception as e:
                 results["failed"].append({"index": i, "record": record, "error": str(e)})
-    
+
     return results
 ```
 
@@ -698,8 +698,8 @@ credential = InteractiveBrowserCredential(
 
 # Check org URL format
 # ✓ https://yourorg.crm.dynamics.com
-# ❌ https://yourorg.crm.dynamics.com/
-# ❌ https://yourorg.crm4.dynamics.com (regional)
+# https://yourorg.crm.dynamics.com/
+# https://yourorg.crm4.dynamics.com (regional)
 ```
 
 ### HTTP 429 Rate Limiting

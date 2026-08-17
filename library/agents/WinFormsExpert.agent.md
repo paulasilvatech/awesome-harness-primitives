@@ -18,13 +18,13 @@ When customer asks/requests will require the creation of new projects
 
 **Critical:**
 
-**📦 NUGET:** New projects or supporting class libraries often need special NuGet packages. 
+**NUGET:** New projects or supporting class libraries often need special NuGet packages.
 Follow these rules strictly:
  
 * Prefer well-known, stable, and widely adopted NuGet packages - compatible with the project's TFM.
 * Define the versions to the latest STABLE major version, e.g.: `[2.*,)`
 
-**⚙️ Configuration and App-wide HighDPI settings:** *app.config* files are discouraged for configuration for .NET.
+**Configuration and App-wide HighDPI settings:***app.config* files are discouraged for configuration for .NET.
 For setting the HighDpiMode, use e.g. `Application.SetHighDpiMode(HighDpiMode.SystemAware)` at application startup, not *app.config* nor *manifest* files.
 
 Note: `SystemAware` is standard for .NET, use `PerMonitorV2` when explicitly requested.
@@ -43,22 +43,22 @@ Note: `SystemAware` is standard for .NET, use `PerMonitorV2` when explicitly req
 ---
 
 
-## 🎯 Critical Generic WinForms Issue: Dealing with Two Code Contexts
+## Critical Generic WinForms Issue: Dealing with Two Code Contexts
 
 | Context | Files/Location | Language Level | Key Rule |
 |---------|----------------|----------------|----------|
-| **Designer Code** | *.designer.cs*, inside `InitializeComponent` | Serialization-centric (assume C# 2.0 language features) | Simple, predictable, parsable |
-| **Regular Code** | *.cs* files, event handlers, business logic | Modern C# 11-14 | Use ALL modern features aggressively |
+| **Designer Code**| *.designer.cs*, inside `InitializeComponent` | Serialization-centric (assume C# 2.0 language features) | Simple, predictable, parsable |
+| **Regular Code**| *.cs* files, event handlers, business logic | Modern C# 11-14 | Use ALL modern features aggressively |
 
 **Decision:** In *.designer.cs* or `InitializeComponent` → Designer rules. Otherwise → Modern C# rules.
 
 ---
 
-## 🚨 Designer File Rules (TOP PRIORITY)
+## Designer File Rules (TOP PRIORITY)
 
-⚠️ Make sure Diagnostic Errors and build/compile errors are eventually completely addressed!
+ Make sure Diagnostic Errors and build/compile errors are eventually completely addressed!
 
-### ❌ Prohibited in InitializeComponent
+### Prohibited in InitializeComponent
 
 | Category | Prohibited | Why |
 |----------|-----------|-----|
@@ -69,20 +69,20 @@ Note: `SystemAware` is standard for .NET, use `PerMonitorV2` when explicitly req
 
 **Allowed method calls:** Designer-supporting interface methods like `SuspendLayout`, `ResumeLayout`, `BeginInit`, `EndInit`
 
-### ❌ Prohibited in *.designer.cs* File
+### Prohibited in *.designer.cs* File
 
-❌ Method definitions (except `InitializeComponent`, `Dispose`, preserve existing additional constructors)  
-❌ Properties  
-❌ Lambda expressions, DO ALSO NOT bind events in `InitializeComponent` to Lambdas!
-❌ Complex logic
-❌ `??`/`?.`/`?[]` (null coalescing/conditional), `nameof()`
-❌ Collection Expressions
+ Method definitions (except `InitializeComponent`, `Dispose`, preserve existing additional constructors)
+ Properties
+ Lambda expressions, DO ALSO NOT bind events in `InitializeComponent` to Lambdas!
+ Complex logic
+ `??`/`?.`/`?[]` (null coalescing/conditional), `nameof()`
+ Collection Expressions
 
-### ✅ Correct Pattern
+### Correct Pattern
 
-✅ File-scope namespace definitions (preferred)
+ File-scope namespace definitions (preferred)
 
-### 📋 Required Structure of InitializeComponent Method
+### Required Structure of InitializeComponent Method
 
 | Order | Step | Example |
 |-------|------|---------|
@@ -186,22 +186,22 @@ private Button _btnAdopt;
 | Argument validation | Always; throw helpers for .NET 8+ | `ArgumentNullException.ThrowIfNull(control);` |
 | Using statements | Modern syntax | `using frmOptions modalOptionsDlg = new(); // Always dispose modal Forms!` |
 
-### Property Patterns (⚠️ CRITICAL - Common Bug Source!)
+### Property Patterns ( CRITICAL - Common Bug Source!)
 
 | Pattern | Behavior | Use Case | Memory |
 |---------|----------|----------|--------|
-| `=> new Type()` | Creates NEW instance EVERY access | ⚠️ LIKELY MEMORY LEAK! | Per-access allocation |
+| `=> new Type()` | Creates NEW instance EVERY access | LIKELY MEMORY LEAK! | Per-access allocation |
 | `{ get; } = new()` | Creates ONCE at construction | Use for: Cached/constant | Single allocation |
 | `=> _field ?? Default` | Computed/dynamic value | Use for: Calculated property | Varies |
 
 ```csharp
-// ❌ WRONG - Memory leak
+// WRONG - Memory leak
 public Brush BackgroundBrush => new SolidBrush(BackColor);
 
-// ✅ CORRECT - Cached
+// CORRECT - Cached
 public Brush BackgroundBrush { get; } = new SolidBrush(Color.White);
 
-// ✅ CORRECT - Dynamic
+// CORRECT - Dynamic
 public Font CurrentFont => _customFont ?? DefaultFont;
 ```
 
@@ -210,7 +210,7 @@ public Font CurrentFont => _customFont ?? DefaultFont;
 ### Prefer Switch Expressions over If-Else Chains
 
 ```csharp
-// ✅ NEW: Instead of countless IFs:
+// NEW: Instead of countless IFs:
 private Color GetStateColor(ControlState state) => state switch
 {
     ControlState.Normal => SystemColors.Control,
@@ -357,13 +357,13 @@ _tsmFile.CommandParameter = "File";
 | Sync function, returns T | `InvokeAsync<T>(Func<T>)` | Get control value |
 | Async operation, returns T | `InvokeAsync<T>(Func<CT, ValueTask<T>>)` | Async work + result |
 
-### ⚠️ Fire-and-Forget Trap
+### Fire-and-Forget Trap
 
 ```csharp
-// ❌ WRONG - Analyzer violation, fire-and-forget
+// WRONG - Analyzer violation, fire-and-forget
 await InvokeAsync<string>(() => await LoadDataAsync());
 
-// ✅ CORRECT - Use async overload
+// CORRECT - Use async overload
 await InvokeAsync<string>(async (ct) => await LoadDataAsync(ct), outerCancellationToken);
 ```
 

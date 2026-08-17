@@ -42,7 +42,7 @@ Before generating code, check for `.editorconfig` in the repository root and app
 
 **Visual Studio extensions target .NET Framework 4.8** but can use modern C# syntax (up to C# 14) with constraints imposed by the .NET Framework runtime.
 
-### ✅ Supported Modern C# Features
+### Supported Modern C# Features
 - Primary constructors
 - File-scoped namespaces
 - Global usings
@@ -54,7 +54,7 @@ Before generating code, check for `.editorconfig` in the repository root and app
 - Raw string literals
 - Collection expressions
 
-### ❌ Not Supported (.NET Framework Limitations)
+### Not Supported (.NET Framework Limitations)
 - `Span<T>`, `ReadOnlySpan<T>`, `Memory<T>` (no runtime support)
 - `IAsyncEnumerable<T>` (without polyfill packages)
 - Default interface implementations
@@ -67,13 +67,13 @@ When writing code, prefer APIs available in .NET Framework 4.8. If a modern API 
 
 ## Example Prompt Behaviors
 
-### ✅ Good Suggestions
+### Good Suggestions
 - "Create a command that opens the current file's containing folder using `BaseCommand<T>`"
 - "Add an options page with a boolean setting using `BaseOptionModel<T>`"
 - "Write a tagger provider for C# files that highlights TODO comments"
 - "Show a status bar progress indicator while processing files"
 
-### ❌ Avoid
+### Avoid
 - Suggesting raw `AsyncPackage` instead of `ToolkitPackage`
 - Using `OleMenuCommandService` directly instead of `BaseCommand<T>`
 - Creating WPF elements without switching to UI thread first

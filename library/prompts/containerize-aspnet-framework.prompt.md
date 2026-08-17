@@ -98,13 +98,13 @@ Any settings that are not specified will be set to default values. The default v
 
 ## Scope
 
-- ✅ App configuration modification to ensure config builders are used to read app settings and connection strings from the environment variables
-- ✅ Dockerfile creation and configuration for an ASP.NET application
-- ✅ Specifying multiple stages in the Dockerfile to build/publish the application and copy the output to the final image
-- ✅ Configuration of Windows container platform compatibility (Windows Server Core or Full)
-- ✅ Proper handling of dependencies (GAC assemblies, MSIs, COM components)
-- ❌ No infrastructure setup (assumed to be handled separately)
-- ❌ No code changes beyond those required for containerization
+- App configuration modification to ensure config builders are used to read app settings and connection strings from the environment variables
+- Dockerfile creation and configuration for an ASP.NET application
+- Specifying multiple stages in the Dockerfile to build/publish the application and copy the output to the final image
+- Configuration of Windows container platform compatibility (Windows Server Core or Full)
+- Proper handling of dependencies (GAC assemblies, MSIs, COM components)
+- No infrastructure setup (assumed to be handled separately)
+- No code changes beyond those required for containerization
 
 ## Execution Process
 

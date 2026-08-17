@@ -174,7 +174,7 @@ Customize the workflow based on detected stack:
 1. "Add StackHawk security testing configuration"
 2. "Add GitHub Actions workflow for automated security scans"
 
-**PR Title:** "Add StackHawk API Security Testing"
+**PR Title:**"Add StackHawk API Security Testing"
 
 **PR Description Template:**
 
@@ -184,28 +184,28 @@ Customize the workflow based on detected stack:
 This PR adds automated API security testing to your repository using StackHawk.
 
 ### Attack Surface Analysis
-🎯 **Risk Assessment:** This repository was identified as a candidate for security testing based on:
+**Risk Assessment:** This repository was identified as a candidate for security testing based on:
 - Active API/web application code detected
 - Authentication mechanisms in use
 - [Other risk indicators detected from code analysis]
 
 ### What I Detected
-- **Framework:** [DETECTED_FRAMEWORK]
-- **Language:** [DETECTED_LANGUAGE]
-- **Host Pattern:** [DETECTED_HOST or "Not conclusively detected - needs configuration"]
-- **Authentication:** [DETECTED_AUTH_TYPE or "Requires configuration"]
+- **Framework:**[DETECTED_FRAMEWORK]
+- **Language:**[DETECTED_LANGUAGE]
+- **Host Pattern:**[DETECTED_HOST or "Not conclusively detected - needs configuration"]
+- **Authentication:**[DETECTED_AUTH_TYPE or "Requires configuration"]
 
 ### What's Ready to Use
-✅ Valid stackhawk.yml configuration file
-✅ GitHub Actions workflow for automated scanning
-✅ [List other detected/configured items]
+ Valid stackhawk.yml configuration file
+ GitHub Actions workflow for automated scanning
+ [List other detected/configured items]
 
 ### What Needs Your Input
-⚠️ **Required GitHub Secrets:** Add these in Settings > Secrets and variables > Actions:
+**Required GitHub Secrets:** Add these in Settings > Secrets and variables > Actions:
 - `HAWK_API_KEY` - Your StackHawk API key (get it at https://app.stackhawk.com/settings/apikeys)
 - [Other required secrets based on detection]
 
-⚠️ **Configuration TODOs:**
+**Configuration TODOs:**
 - [List items needing manual input, e.g., "Update host URL in stackhawk.yml line 4"]
 - [Auth credential instructions if needed]
 

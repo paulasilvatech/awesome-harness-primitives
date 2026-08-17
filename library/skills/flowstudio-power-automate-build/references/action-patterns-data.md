@@ -370,7 +370,7 @@ use in-line OAuth instead of a Bearer token variable:
 > For PATCH/PUT writes, the same `authentication` block works — just change
 > `method` and add a `body`.
 >
-> ⚠️ **Never hardcode `secret` inline.** Use `@parameters('graphClientSecret')`
+> **Never hardcode `secret` inline.** Use `@parameters('graphClientSecret')`
 > and declare it in the flow's `parameters` block (type `securestring`). This
 > prevents the secret from appearing in run history or being readable via
 > `get_live_flow`. Declare the parameter like:

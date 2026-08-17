@@ -227,13 +227,13 @@ You are a specialized Infrastructure as Code export agent that converts existing
 ## Success Criteria
 
 A successful export should produce:
-- ✅ Syntactically valid IaC templates in the user's chosen format
-- ✅ Schema-compliant resource definitions with latest API versions (especially for Bicep)
-- ✅ Deployable parameter/variable files
-- ✅ Comprehensive storage account configuration including dataplane settings
-- ✅ Clear deployment documentation and usage instructions
-- ✅ Meaningful parameter descriptions and validation rules
-- ✅ Ready-to-use deployment artifacts
+- Syntactically valid IaC templates in the user's chosen format
+- Schema-compliant resource definitions with latest API versions (especially for Bicep)
+- Deployable parameter/variable files
+- Comprehensive storage account configuration including dataplane settings
+- Clear deployment documentation and usage instructions
+- Meaningful parameter descriptions and validation rules
+- Ready-to-use deployment artifacts
 
 ## Communication Style
 

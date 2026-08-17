@@ -67,13 +67,13 @@ PATTERNS=(
 )
 
 if [[ "${SKIP_SECRETS_SCAN:-}" == "true" ]]; then
-  echo "⏭️  Secrets scan skipped (SKIP_SECRETS_SCAN=true)"
+  echo "Secrets scan skipped (SKIP_SECRETS_SCAN=true)"
   exit 0
 fi
 
 # Ensure we are in a git repository
 if ! git rev-parse --is-inside-work-tree &>/dev/null; then
-  echo "⚠️  Not in a git repository, skipping secrets scan"
+  echo "Not in a git repository, skipping secrets scan"
   exit 0
 fi
 
@@ -116,7 +116,7 @@ else
 fi
 
 if [[ ${#FILES[@]} -eq 0 ]]; then
-  echo "✨ No modified files to scan"
+  echo "No modified files to scan"
   printf '{"timestamp":"%s","event":"scan_complete","mode":"%s","scope":"%s","status":"clean","files_scanned":0}\n' \
     "$TIMESTAMP" "$MODE" "$SCOPE" >> "$LOG_FILE"
   exit 0
@@ -227,7 +227,7 @@ scan_file() {
   done
 }
 
-echo "🔍 Scanning ${#FILES[@]} modified file(s) for secrets..."
+echo "Scanning ${#FILES[@]} modified file(s) for secrets..."
 
 for filepath in "${FILES[@]}"; do
   if [[ "$SCOPE" == "staged" ]]; then
@@ -244,7 +244,7 @@ done
 # Log results
 if [[ $FINDING_COUNT -gt 0 ]]; then
   echo ""
-  echo "⚠️  Found $FINDING_COUNT potential secret(s) in modified files:"
+  echo "Found $FINDING_COUNT potential secret(s) in modified files:"
   echo ""
   printf "  %-40s %-6s %-28s %s\n" "FILE" "LINE" "PATTERN" "SEVERITY"
   printf "  %-40s %-6s %-28s %s\n" "----" "----" "-------" "--------"
@@ -274,14 +274,14 @@ if [[ $FINDING_COUNT -gt 0 ]]; then
     "$TIMESTAMP" "$MODE" "$SCOPE" "${#FILES[@]}" "$FINDING_COUNT" "$FINDINGS_JSON" >> "$LOG_FILE"
 
   if [[ "$MODE" == "block" ]]; then
-    echo "🚫 Session blocked: resolve the findings above before committing."
+    echo "Session blocked: resolve the findings above before committing."
     echo "   Set SCAN_MODE=warn to log without blocking, or add patterns to SECRETS_ALLOWLIST."
     exit 2
   else
-    echo "💡 Review the findings above. Set SCAN_MODE=block to prevent commits with secrets."
+    echo "Review the findings above. Set SCAN_MODE=block to prevent commits with secrets."
   fi
 else
-  echo "✅ No secrets detected in ${#FILES[@]} scanned file(s)"
+  echo "No secrets detected in ${#FILES[@]} scanned file(s)"
   printf '{"timestamp":"%s","event":"scan_complete","mode":"%s","scope":"%s","status":"clean","files_scanned":%d}\n' \
     "$TIMESTAMP" "$MODE" "$SCOPE" "${#FILES[@]}" >> "$LOG_FILE"
 fi

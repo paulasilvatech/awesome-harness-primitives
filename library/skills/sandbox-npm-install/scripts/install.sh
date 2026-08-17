@@ -183,7 +183,7 @@ if [[ "$INSTALL_PLAYWRIGHT" == "true" ]]; then
     sudo npx playwright install-deps chromium
   else
     npx playwright install chromium
-    echo "⚠ System dependencies not installed (no root/sudo access)."
+    echo " System dependencies not installed (no root/sudo access)."
     echo "  Playwright tests may fail. Run: sudo npx playwright install-deps chromium"
   fi
 fi

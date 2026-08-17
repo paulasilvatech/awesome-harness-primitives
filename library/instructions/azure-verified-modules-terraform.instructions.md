@@ -34,7 +34,7 @@ More details on the AVM process can be found in the [Azure Verified Modules Cont
 
 ### Official AVM Index
 
-> **Note:** The following links always point to the latest version of the CSV files on the main branch. As intended, this means the files may change over time. If you require a point-in-time version, consider using a specific release tag in the URL.
+>**Note:** The following links always point to the latest version of the CSV files on the main branch. As intended, this means the files may change over time. If you require a point-in-time version, consider using a specific release tag in the URL.
 
 - **Terraform Resource Modules**: `https://raw.githubusercontent.com/Azure/Azure-Verified-Modules/refs/heads/main/docs/static/module-indexes/TerraformResourceModules.csv`
 - **Terraform Pattern Modules**: `https://raw.githubusercontent.com/Azure/Azure-Verified-Modules/refs/heads/main/docs/static/module-indexes/TerraformPatternModules.csv`
@@ -120,20 +120,20 @@ module "storage_account" {
 
 ### Module Usage
 
-- ✅ **Always** pin module and provider versions
-- ✅ **Start** with official examples from module documentation
-- ✅ **Review** all inputs and outputs before implementation
-- ✅ **Enable** telemetry: `enable_telemetry = true`
-- ✅ **Use** AVM utility modules for common patterns
-- ✅ **Follow** AzureRM provider requirements and constraints
+- **Always** pin module and provider versions
+- **Start** with official examples from module documentation
+- **Review** all inputs and outputs before implementation
+- **Enable** telemetry: `enable_telemetry = true`
+- **Use** AVM utility modules for common patterns
+- **Follow** AzureRM provider requirements and constraints
 
 ### Code Quality
 
-- ✅ **Always** run `terraform fmt` after making changes
-- ✅ **Always** run `terraform validate` after making changes
-- ✅ **Use** meaningful variable names and descriptions
-- ✅ **Add** proper tags and metadata
-- ✅ **Document** complex configurations
+- **Always** run `terraform fmt` after making changes
+- **Always** run `terraform validate` after making changes
+- **Use** meaningful variable names and descriptions
+- **Add** proper tags and metadata
+- **Document** complex configurations
 
 ### Validation Requirements
 

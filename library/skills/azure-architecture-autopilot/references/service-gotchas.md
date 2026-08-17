@@ -1,6 +1,6 @@
 # Service Gotchas (Stable)
 
-Per-service summary of **non-intuitive required properties**, **common mistakes**, and **PE mappings**.
+Per-service summary of **non-intuitive required properties **, ** common mistakes **, and ** PE mappings **.
 Only near-immutable patterns are included here. Dynamic values such as API version, SKU lists, and region are not included.
 
 ---
@@ -31,7 +31,7 @@ The mappings below are stable, but re-verify from the PE DNS integration documen
 | Service | groupId | Private DNS Zone |
 |---------|---------|-----------------|
 | Azure OpenAI / CognitiveServices | `account` | `privatelink.cognitiveservices.azure.com` |
-| ⚠️ (Foundry/AIServices additional) | `account` | `privatelink.openai.azure.com` ← **Both zones must be included in DNS Zone Group. OpenAI API DNS resolution fails if omitted** |
+| (Foundry/AIServices additional) | `account` | `privatelink.openai.azure.com` ←**Both zones must be included in DNS Zone Group. OpenAI API DNS resolution fails if omitted **|
 | Azure AI Search | `searchService` | `privatelink.search.windows.net` |
 | Storage (Blob/ADLS) | `blob` | `privatelink.blob.core.windows.net` |
 | Storage (DFS/ADLS Gen2) | `dfs` | `privatelink.dfs.core.windows.net` |
@@ -44,13 +44,13 @@ The mappings below are stable, but re-verify from the PE DNS integration documen
 | API Management | `Gateway` | `privatelink.azure-api.net` |
 | Event Hub | `namespace` | `privatelink.servicebus.windows.net` |
 | Service Bus | `namespace` | `privatelink.servicebus.windows.net` |
-| Monitor (AMPLS) | ⚠️ Complex configuration — see below | ⚠️ Multiple DNS Zones required — see below |
+| Monitor (AMPLS) | Complex configuration — see below | Multiple DNS Zones required — see below |
 
-> **ADLS Gen2 Note**: When `isHnsEnabled: true`, **both `blob` and `dfs` PEs are required**.
+> **ADLS Gen2 Note **: When `isHnsEnabled: true`, ** both `blob` and `dfs` PEs are required **.
 > - With only the `blob` PE, Blob API works, but Data Lake operations (file system creation, directory manipulation, `abfss://` protocol) will fail.
 > - DFS PE: groupId `dfs`, DNS Zone `privatelink.dfs.core.windows.net`
 >
-> **⚠️ Azure Monitor Private Link (AMPLS) Note**: Azure Monitor cannot be configured with a single PE + single DNS Zone. It connects through Azure Monitor Private Link Scope (AMPLS), and all **5 DNS Zones** are required:
+> **Azure Monitor Private Link (AMPLS) Note **: Azure Monitor cannot be configured with a single PE + single DNS Zone. It connects through Azure Monitor Private Link Scope (AMPLS), and all ** 5 DNS Zones **are required:
 > - `privatelink.monitor.azure.com`
 > - `privatelink.oms.opinsights.azure.com`
 > - `privatelink.ods.opinsights.azure.com`
@@ -64,7 +64,7 @@ The mappings below are stable, but re-verify from the PE DNS integration documen
 
 ## 3. Common Mistakes Checklist
 
-| Item | ❌ Incorrect Example | ✅ Correct Example |
+| Item | Incorrect Example | Correct Example |
 |------|---------------------|-------------------|
 | ADLS Gen2 HNS | `isHnsEnabled` omitted or `false` | `isHnsEnabled: true` |
 | PE Subnet | Policy not set | `privateEndpointNetworkPolicies: 'Disabled'` |
@@ -83,7 +83,7 @@ The mappings below are stable, but re-verify from the PE DNS integration documen
 
 ## 4. Service Relationship Decision Rules
 
-Described as **default selection rules** rather than absolute determinations.
+Described as **default selection rules ** rather than absolute determinations.
 
 ### Foundry vs Azure OpenAI vs AI Hub
 
@@ -101,7 +101,7 @@ Default rules:
     official documentation requires a separate resource
 ```
 
-> These rules are a **default selection guide** reflecting current MS recommendations.
+> These rules are a **default selection guide ** reflecting current MS recommendations.
 > Azure product relationships can change, so check MS Docs when uncertain.
 
 ### Monitoring

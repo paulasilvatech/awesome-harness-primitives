@@ -147,7 +147,7 @@ const handleWithContext = withSpan(
 
 ## Anti-Pattern: Don't Create Wrappers
 
-❌ **Don't do this:**
+ **Don't do this:**
 ```typescript
 // Unnecessary wrapper
 export function withSessionTracking(fn) {
@@ -155,7 +155,7 @@ export function withSessionTracking(fn) {
 }
 ```
 
-✅ **Do this instead:**
+ **Do this instead:**
 ```typescript
 // Use withSpan directly
 import { withSpan } from "@arizeai/openinference-core";

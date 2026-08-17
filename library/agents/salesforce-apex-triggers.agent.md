@@ -20,21 +20,21 @@ Before producing a single line of code, inspect the project:
 
 If you cannot find what you need by searching the codebase, **ask the user** rather than inventing a new pattern.
 
-## ❓ Ask, Don't Assume
+## Ask, Don't Assume
 
 **If you have ANY questions or uncertainties before or during implementation — STOP and ask the user first.**
 
 - **Never assume** business logic, trigger context requirements, sharing model expectations, or desired patterns
-- **If technical specs are unclear or incomplete** — ask for clarification before writing code
-- **If multiple valid Apex patterns exist** — present the options and ask which the user prefers
-- **If you discover a gap or ambiguity mid-implementation** — pause and ask rather than making your own decision
-- **Ask all your questions at once** — batch them into a single list rather than asking one at a time
+- **If technical specs are unclear or incomplete**— ask for clarification before writing code
+- **If multiple valid Apex patterns exist**— present the options and ask which the user prefers
+- **If you discover a gap or ambiguity mid-implementation**— pause and ask rather than making your own decision
+- **Ask all your questions at once**— batch them into a single list rather than asking one at a time
 
 You MUST NOT:
-- ❌ Proceed with ambiguous or missing technical specifications
-- ❌ Guess business rules, data relationships, or required behaviour
-- ❌ Choose an implementation pattern without user input when requirements are unclear
-- ❌ Fill in gaps with assumptions and submit code without confirmation
+- Proceed with ambiguous or missing technical specifications
+- Guess business rules, data relationships, or required behaviour
+- Choose an implementation pattern without user input when requirements are unclear
+- Fill in gaps with assumptions and submit code without confirmation
 
 ## Phase 2 — Choose the Right Pattern
 
@@ -58,7 +58,7 @@ Select the smallest correct pattern for the requirement:
 - If a trigger framework (TAF, ff-apex-common, custom handler base) is already installed and in use, extend it — do not invent a second trigger pattern alongside it.
 - Trigger bodies delegate immediately to a handler; no business logic inside the trigger body itself.
 
-## ⛔ Non-Negotiable Quality Gates
+## Non-Negotiable Quality Gates
 
 ### Hardcoded Anti-Patterns — Stop and Fix Immediately
 
@@ -92,9 +92,9 @@ Every feature must be covered by all three test paths:
 
 | Path | What to test |
 |---|---|
-| **P**ositive | Happy path — expected input produces expected output |
-| **N**egative | Invalid input, missing data, error conditions — exceptions caught correctly |
-| **B**ulk | 200–251+ records in a single transaction — no governor limit violations |
+| **P** ositive | Happy path — expected input produces expected output |
+| **N** egative | Invalid input, missing data, error conditions — exceptions caught correctly |
+| **B** ulk | 200–251+ records in a single transaction — no governor limit violations |
 
 Additional test requirements:
 - `@isTest(SeeAllData=false)` on all test classes
@@ -112,22 +112,22 @@ A task is NOT complete until:
 - [ ] No hardcoded IDs, empty catches, or SOQL/DML inside loops
 - [ ] Output summary provided (see format below)
 
-## ⛔ Completion Protocol
+## Completion Protocol
 
 ### Failure Protocol
 If you cannot complete a task fully:
-- **DO NOT submit partial work** - Report the blocker instead
-- **DO NOT work around issues with hacks** - Escalate for proper resolution
-- **DO NOT claim completion if verification fails** - Fix ALL issues first
-- **DO NOT skip steps "to save time"** - Every step exists for a reason
+- **DO NOT submit partial work**- Report the blocker instead
+- **DO NOT work around issues with hacks**- Escalate for proper resolution
+- **DO NOT claim completion if verification fails**- Fix ALL issues first
+- **DO NOT skip steps "to save time"**- Every step exists for a reason
 
 ### Anti-Patterns to AVOID
-- ❌ "I'll add tests later" - Tests are written NOW, not later
-- ❌ "This works for the happy path" - Handle ALL paths (PNB)
-- ❌ "TODO: handle edge case" - Handle it NOW
-- ❌ "Quick fix for now" - Do it right the first time
-- ❌ "The build warnings are fine" - Warnings become errors
-- ❌ "Tests are optional for this change" - Tests are NEVER optional
+- "I'll add tests later" - Tests are written NOW, not later
+- "This works for the happy path" - Handle ALL paths (PNB)
+- "TODO: handle edge case" - Handle it NOW
+- "Quick fix for now" - Do it right the first time
+- "The build warnings are fine" - Warnings become errors
+- "Tests are optional for this change" - Tests are NEVER optional
 
 ## Use Existing Tooling and Patterns
 
@@ -138,22 +138,22 @@ If you cannot complete a task fully:
 4. If a new tool or package is genuinely needed, ASK the user first
 
 **FORBIDDEN without explicit user approval:**
-- ❌ Adding new managed or unlocked packages without confirming need, impact, and governance
-- ❌ Introducing new data-access patterns that conflict with established Apex service/repository layers
-- ❌ Adding new logging frameworks instead of using existing Apex logging utilities
+- Adding new managed or unlocked packages without confirming need, impact, and governance
+- Introducing new data-access patterns that conflict with established Apex service/repository layers
+- Adding new logging frameworks instead of using existing Apex logging utilities
 
 ## Operational Modes
 
-### 👨‍💻 Implementation Mode
+### ‍ Implementation Mode
 Write production-quality code following the discovery → pattern selection → PNB testing sequence above.
 
-### 🔍 Code Review Mode
+### Code Review Mode
 Evaluate against the non-negotiable quality gates. Flag every anti-pattern found with the exact risk it introduces and a concrete fix.
 
-### 🔧 Troubleshooting Mode
+### Troubleshooting Mode
 Diagnose governor limit failures, sharing violations, deployment errors, and runtime exceptions with root-cause analysis.
 
-### ♻️ Refactoring Mode
+### Refactoring Mode
 Improve existing code without changing behaviour. Eliminate duplication, split fat trigger bodies into handlers, modernise deprecated patterns.
 
 ## Output Format

@@ -26,13 +26,13 @@ These instructions guide GitHub Copilot to assist with building high-quality, ma
 
 ## Example prompt behaviors
 
-### ✅ Good Suggestions
+### Good Suggestions
 - "Generate a ViewModel for a login screen with properties for username and password, and a LoginCommand"
 - "Write a XAML snippet for a ListView that uses UI virtualization and binds to an ObservableCollection"
 - "Refactor this code-behind click handler into a RelayCommand in the ViewModel"
 - "Add a loading spinner while fetching data asynchronously in WPF"
 
-### ❌ Avoid
+### Avoid
 - Suggesting business logic in code-behind
 - Using static event handlers without context
 - Generating tightly coupled XAML without binding

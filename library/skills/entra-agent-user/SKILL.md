@@ -232,21 +232,21 @@ Invoke-MgGraphRequest -Method POST `
 
 ## Agent User Capabilities
 
-- ✅ Added to Microsoft Entra groups (including dynamic groups)
-- ✅ Access user-only APIs (`idtyp=user` tokens)
-- ✅ Own a mailbox, calendar, and contacts
-- ✅ Participate in Teams chats and channels
-- ✅ Appear in org charts and People search
-- ✅ Added to administrative units
-- ✅ Assigned licenses
+- Added to Microsoft Entra groups (including dynamic groups)
+- Access user-only APIs (`idtyp=user` tokens)
+- Own a mailbox, calendar, and contacts
+- Participate in Teams chats and channels
+- Appear in org charts and People search
+- Added to administrative units
+- Assigned licenses
 
 ## Agent User Security Constraints
 
-- ❌ Cannot have passwords, passkeys, or interactive sign-in
-- ❌ Cannot be assigned privileged admin roles
-- ❌ Cannot be added to role-assignable groups
-- ❌ Permissions similar to guest users by default
-- ❌ Custom role assignment not available
+- Cannot have passwords, passkeys, or interactive sign-in
+- Cannot be assigned privileged admin roles
+- Cannot be added to role-assignable groups
+- Permissions similar to guest users by default
+- Custom role assignment not available
 
 ---
 

@@ -15,10 +15,10 @@ Always fetch the MS Docs Bicep reference for the services you intend to use and 
 
 ### Model Deployment Availability Check (Required When Using Foundry/OpenAI Models)
 
-Verify that the model name specified by the user is actually deployable in the target region **before generating Bicep**.
+Verify that the model name specified by the user is actually deployable in the target region **before generating Bicep **.
 Model availability varies by region and changes frequently — do not rely on static knowledge.
 
-**Verification Methods (in priority order):**
+**Verification Methods (in priority order): **
 1. Check the MS Docs model availability page: https://learn.microsoft.com/en-us/azure/ai-services/openai/concepts/models
 2. Or query directly via Azure CLI:
    ```powershell
@@ -26,7 +26,7 @@ Model availability varies by region and changes frequently — do not rely on st
    ```
    (When the Foundry resource already exists)
 
-**If the model is not available in the target region:**
+**If the model is not available in the target region: **
 - Inform the user and suggest available regions or alternative models
 - Do not substitute a different model or region without user approval
 
@@ -35,11 +35,11 @@ Model availability varies by region and changes frequently — do not rely on st
 The full URL registry is in `references/azure-dynamic-sources.md`. Refer to this file when fetching.
 Reference files are located under the `.github/skills/azure-architecture-autopilot/` path.
 
-> **Important**: Fetch directly from the URL using web_fetch to confirm the latest stable apiVersion. Do not blindly use hardcoded versions from reference files or previous conversations.
+> **Important **: Fetch directly from the URL using web_fetch to confirm the latest stable apiVersion. Do not blindly use hardcoded versions from reference files or previous conversations.
 
-> **Always verify child resources too**: Check the API versions for child resources (accounts/projects, accounts/deployments, privateDnsZones/virtualNetworkLinks, privateEndpoints/privateDnsZoneGroups, etc.) from the parent resource page. Parent and child API versions may differ.
+> **Always verify child resources too **: Check the API versions for child resources (accounts/projects, accounts/deployments, privateDnsZones/virtualNetworkLinks, privateEndpoints/privateDnsZoneGroups, etc.) from the parent resource page. Parent and child API versions may differ.
 
-> **Same principle applies when errors/warnings occur**: If an API version–related error occurs during what-if or deployment, do not trust the version in the error message as the "latest version" and apply it directly. Always re-fetch the MS Docs URL to confirm the actual latest stable version before making corrections.
+> **Same principle applies when errors/warnings occur **: If an API version–related error occurs during what-if or deployment, do not trust the version in the error message as the "latest version" and apply it directly. Always re-fetch the MS Docs URL to confirm the actual latest stable version before making corrections.
 
 ---
 
@@ -65,13 +65,13 @@ Reference files are located under the `.github/skills/azure-architecture-autopil
 
 When the user requests a service not covered by the v1 scope (`ai-data.md`):
 
-1. **Notify the user**: "This service is outside the v1 default scope. It will be generated on a best-effort basis by referencing MS Docs."
-2. **Fetch API version**: Construct the URL in the format `https://learn.microsoft.com/en-us/azure/templates/microsoft.{provider}/{resourceType}` and fetch
-3. **Identify resource type/required properties**: Confirm the resource type and required properties from the fetched Docs
-4. **Verify PE mapping**: Fetch `https://learn.microsoft.com/en-us/azure/private-link/private-endpoint-dns` to confirm groupId/DNS Zone
-5. **Apply common patterns**: Apply security/network/naming patterns from `azure-common-patterns.md`
-6. **Write Bicep**: Generate the module based on the above information
-7. **Hand off to reviewer**: Validate compilation with `az bicep build`
+1. **Notify the user **: "This service is outside the v1 default scope. It will be generated on a best-effort basis by referencing MS Docs."
+2. **Fetch API version **: Construct the URL in the format `https://learn.microsoft.com/en-us/azure/templates/microsoft.{provider}/{resourceType}` and fetch
+3. **Identify resource type/required properties **: Confirm the resource type and required properties from the fetched Docs
+4. **Verify PE mapping **: Fetch `https://learn.microsoft.com/en-us/azure/private-link/private-endpoint-dns` to confirm groupId/DNS Zone
+5. **Apply common patterns **: Apply security/network/naming patterns from `azure-common-patterns.md`
+6. **Write Bicep **: Generate the module based on the above information
+7. **Hand off to reviewer **: Validate compilation with `az bicep build`
 
 ## Input Information
 
@@ -109,12 +109,12 @@ The following information must be finalized upon completion of Phase 1:
 - Additional subnets handled via parameters as needed
 
 ### `ai.bicep`
-- **Microsoft Foundry resource** (`Microsoft.CognitiveServices/accounts`, `kind: 'AIServices'`) — Top-level AI resource
-  - `customSubDomainName: foundryName` required — **Cannot be changed after creation. If omitted, the resource must be deleted and recreated**
+- **Microsoft Foundry resource ** (`Microsoft.CognitiveServices/accounts`, `kind: 'AIServices'`) — Top-level AI resource
+  - `customSubDomainName: foundryName` required — **Cannot be changed after creation. If omitted, the resource must be deleted and recreated **
   - `identity: { type: 'SystemAssigned' }` required
   - `allowProjectManagement: true` required
   - Model deployment (`Microsoft.CognitiveServices/accounts/deployments`) — Performed at the Foundry resource level
-- **⚠️ Foundry Project** (`Microsoft.CognitiveServices/accounts/projects`) — **Must be created as a child resource**
+- **Foundry Project **(`Microsoft.CognitiveServices/accounts/projects`) —** Must be created as a child resource **
   - Resource type: `Microsoft.CognitiveServices/accounts/projects` (never create as a standalone `accounts` resource)
   - Use `parent: foundryAccount` in Bicep
   - Incorrect example: Creating a Project as a separate `kind: 'AIServices'` account → Not recognized in the portal
@@ -128,16 +128,16 @@ The following information must be finalized upon completion of Phase 1:
       properties: {}
     }
     ```
-- **Azure AI Search** — Semantic Ranking, vector search configuration
+- **Azure AI Search ** — Semantic Ranking, vector search configuration
 - Hub-based (`Microsoft.MachineLearningServices/workspaces`) should only be considered when the user explicitly requests it or when ML training/open-source models are needed. For standard AI/RAG workloads, Foundry (AIServices) is the default choice
 
-**⛔ CognitiveServices Prohibited Properties:**
+**CognitiveServices Prohibited Properties: **
 - `apiProperties.statisticsEnabled` — This property does not exist. Never use it. Causes `ApiPropertiesInvalid` error during deployment
 - `apiProperties.qnaAzureSearchEndpointId` — QnA Maker only. Do not use with Foundry
 - Do not arbitrarily add unvalidated properties to `properties.apiProperties`
 
 ### `storage.bicep`
-- ADLS Gen2: `isHnsEnabled: true` ← **Never omit this**
+- ADLS Gen2: `isHnsEnabled: true` ← **Never omit this **
 - Containers: raw, processed, curated (or as per requirements)
 - `allowBlobPublicAccess: false`, `minimumTlsVersion: 'TLS1_2'`
 
@@ -157,14 +157,14 @@ The following information must be finalized upon completion of Phase 1:
   3. `Microsoft.Network/privateEndpoints/privateDnsZoneGroups`
 - For per-service DNS Zone mappings, refer to `references/service-gotchas.md`
 
-**⚠️ Foundry/AIServices PE DNS Rules:**
+**Foundry/AIServices PE DNS Rules: **
 - PE groupId: `account`
-- DNS Zone Group must include **2 zones**:
+- DNS Zone Group must include **2 zones **:
   1. `privatelink.cognitiveservices.azure.com`
   2. `privatelink.openai.azure.com`
 - Including only one causes DNS resolution failure for OpenAI API calls → connection error
 
-**⚠️ ADLS Gen2 (isHnsEnabled: true) PE Rules:**
+**ADLS Gen2 (isHnsEnabled: true) PE Rules: **
 - 2 PEs required:
   1. `blob` → `privatelink.blob.core.windows.net`
   2. `dfs` → `privatelink.dfs.core.windows.net`
@@ -172,11 +172,11 @@ The following information must be finalized upon completion of Phase 1:
 
 ### `rbac.bicep` (or inline in main.bicep)
 
-**⚠️ RBAC Role Assignment — Never Omit**
+**RBAC Role Assignment — Never Omit **
 
-**Any service with a Managed Identity (`identity.type: 'SystemAssigned'`) must have RBAC role assignments created.**
+**Any service with a Managed Identity (`identity.type: 'SystemAssigned'`) must have RBAC role assignments created. **
 Having an identity without role assignments causes inter-service authentication failures.
-This is not optional — it is a **mandatory item**.
+This is not optional — it is a **mandatory item **.
 Omission will be reported as CRITICAL in Phase 3 review.
 
 - Required RBAC mappings:
@@ -192,7 +192,7 @@ Omission will be reported as CRITICAL in Phase 3 review.
 | Data Factory | Key Vault | `Key Vault Secrets User` | `4633458b-17de-408a-b874-0445c86b69e6` |
 | Databricks | Storage | `Storage Blob Data Contributor` | `ba92f5b4-2d11-453d-a403-e96b0029c9fe` |
 
-> **AKS Special Rule**: AKS uses `identityProfile.kubeletidentity.objectId`, not `identity.principalId`.
+> **AKS Special Rule **: AKS uses `identityProfile.kubeletidentity.objectId`, not `identity.principalId`.
 
 ```bicep
 // RBAC Example — Foundry → Storage Blob Data Contributor
@@ -208,24 +208,24 @@ resource foundryStorageRole 'Microsoft.Authorization/roleAssignments@2022-04-01'
 ```
 
 ### SQL Server Rules
-- **Password management**: Declare `@secure() param sqlAdminPassword string` in main.bicep and pass it to modules
+- **Password management **: Declare `@secure() param sqlAdminPassword string` in main.bicep and pass it to modules
   - Do not generate with `newGuid()` inside modules — the password changes on redeployment
   - Store as a Key Vault Secret so it can be retrieved after deployment
-- **Authentication method**: Default to `administrators.azureADOnlyAuthentication: true`
+- **Authentication method **: Default to `administrators.azureADOnlyAuthentication: true`
   - Many organizational policies (MCAPS, etc.) block standalone SQL authentication
   - AAD-only authentication + Managed Identity is the most secure configuration
 
 ### Network Secret Handling
-- **VPN Gateway shared key**: `@secure() param vpnSharedKey string` — `@secure()` is mandatory
+- **VPN Gateway shared key **: `@secure() param vpnSharedKey string` — `@secure()` is mandatory
 - Never include plaintext VPN keys in `.bicepparam` — provide at deployment time or use Key Vault reference
 - This rule applies the same as for SQL passwords
-- **Applies to**: VPN shared key, ExpressRoute authorization key, Wi-Fi PSK, and all other network secrets
+- **Applies to **: VPN shared key, ExpressRoute authorization key, Wi-Fi PSK, and all other network secrets
 - Module params must also include the `@secure()` decorator
 
-### ⚠️ Network Isolation Consistency Rules
-- When setting `publicNetworkAccess: 'Disabled'`, you **must** also create the corresponding PE for that service
+### Network Isolation Consistency Rules
+- When setting `publicNetworkAccess: 'Disabled'`, you **must ** also create the corresponding PE for that service
 - Setting publicNetworkAccess to Disabled without a PE makes the service unreachable → unusable after deployment
-- The Phase 3 reviewer must report this inconsistency as **CRITICAL**
+- The Phase 3 reviewer must report this inconsistency as **CRITICAL **
 - When an inconsistency is found: either add a PE module or revert publicNetworkAccess to Enabled
 
 ## Mandatory Coding Principles
@@ -238,7 +238,7 @@ param searchName string = 'srch-${uniqueString(resourceGroup().id)}'
 param storageName string = 'st${uniqueString(resourceGroup().id)}'  // No special characters allowed
 param keyVaultName string = 'kv-${uniqueString(resourceGroup().id)}'
 ```
-> **⚠️ Resources requiring `customSubDomainName` (Foundry, Cognitive Services, etc.) must include `uniqueString()`.**
+> **Resources requiring `customSubDomainName` (Foundry, Cognitive Services, etc.) must include `uniqueString()`. **
 > Static strings (e.g., `'my-rag-chatbot'`) may already be in use by another tenant, causing deployment failures.
 > The same applies to Foundry Project names — `'project-${uniqueString(resourceGroup().id)}'`
 
@@ -286,19 +286,19 @@ resource foundry 'Microsoft.CognitiveServices/accounts@<version fetched in Step 
 }
 ```
 
-### ⚠️ Bicep Code Quality Validation (Required After Generation)
+### Bicep Code Quality Validation (Required After Generation)
 
-**Module Declaration Validation:**
+**Module Declaration Validation: **
 - Verify that the `name:` property in each module block is not duplicated
 - Correct example: `name: 'deploy-sql'`
 - Incorrect example: `name: 'name: 'deploy-sql'` (duplicated name: → compilation error)
 
-**Duplicate Property Prevention:**
+**Duplicate Property Prevention: **
 - If the same property name appears more than once within a single resource block, it causes a compilation error
 - Especially common in complex resources like VPN Gateway (`gatewayType`), Firewall, AKS, etc.
 - Check for `BCP025: The property "xxx" is declared multiple times` in the `az bicep build` output
 
-**`az bicep build` Must Be Run:**
+**`az bicep build` Must Be Run: **
 - After generating all Bicep files, always run `az bicep build --file main.bicep`
 - Fix errors and recompile
 - Warnings (BCP081, etc.) can be ignored after verifying the API version in MS Docs
@@ -391,15 +391,15 @@ param projectPrefix = '<Project prefix>'
 When a `.bicepparam` file contains a `using` directive, additional `--parameters` flags cannot be used with `az deployment`.
 Therefore, `@secure()` parameters must follow these rules:
 
-- **Set a default value when possible**: `@secure() param password string = newGuid()`
-- **If user input is required for @secure() parameters**: Generate a JSON parameter file (`main.parameters.json`) alongside instead of using `.bicepparam`
-- **Never do this**: Generate a command that uses `.bicepparam` and `--parameters key=value` simultaneously
+- **Set a default value when possible **: `@secure() param password string = newGuid()`
+- **If user input is required for @secure() parameters **: Generate a JSON parameter file (`main.parameters.json`) alongside instead of using `.bicepparam`
+- **Never do this **: Generate a command that uses `.bicepparam` and `--parameters key=value` simultaneously
 
 ## Common Mistake Checklist
 
 The full checklist is in `references/service-gotchas.md`. Key summary:
 
-| Item | ❌ Incorrect | ✅ Correct |
+| Item | Incorrect | Correct |
 |------|--------|----------|
 | ADLS Gen2 | `isHnsEnabled` omitted | `isHnsEnabled: true` |
 | PE Subnet | Policy not set | `privateEndpointNetworkPolicies: 'Disabled'` |

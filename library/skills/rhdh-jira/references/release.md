@@ -56,11 +56,11 @@ Show the funnel as a count breakdown:
 ### Program Increment Funnel
 | Stage | Count | Features |
 |-------|-------|----------|
-| ⚠ Candidate Definition (blocked on PM) | 2 | RHDHPLAN-402, RHDHPLAN-410 |
-| ⚠ Defined but No Team | 1 | RHDHPLAN-415 |
-| 🔍 Exploration | 3 | ... |
-| ✅ Ready for Commitment | 2 | ... |
-| ✅ Fixversion Set | 4 | ... |
+|  Candidate Definition (blocked on PM) | 2 | RHDHPLAN-402, RHDHPLAN-410 |
+|  Defined but No Team | 1 | RHDHPLAN-415 |
+|  Exploration | 3 | ... |
+| Ready for Commitment | 2 | ... |
+| Fixversion Set | 4 | ... |
 ```
 
 ### Step 3 - Feature Status Matrix
@@ -69,10 +69,10 @@ Map each Feature to its Jira workflow status with color coding:
 
 | Icon | Status range |
 |------|-------------|
-| 🔴 | New, Refinement |
-| 🟡 | Backlog |
-| 🟢 | In Progress |
-| ✅ | Release Pending, Closed |
+|  | New, Refinement |
+|  | Backlog |
+|  | In Progress |
+| Yes | Release Pending, Closed |
 
 Include: key, summary, status, owner, team, size, stretch flag.
 
@@ -142,7 +142,7 @@ For each dependency:
 ### Dependencies (cross-team)
 | Source | Depends on | Target Team | Target Status | Risk |
 |--------|-----------|-------------|---------------|------|
-| RHIDP-200 (COPE) | RHIDP-300 | Install Method | New | 🔴 not started |
+| RHIDP-200 (COPE) | RHIDP-300 | Install Method | New |  not started |
 ```
 
 ### Step 9 - Blocker/Critical Bugs
@@ -250,16 +250,16 @@ Features: {count} | Readiness: {score}% | Mode: {mode}
 ### ⏳ Waiting on PM ({count})
 | Feature | Summary | Label | Days |
 
-### 🔗 Dependencies - cross-team (deep only)
+### Dependencies - cross-team (deep only)
 | Source | Depends on | Target Team | Status | Risk |
 
-### 🐛 Blocker Bugs ({count})
+### Blocker Bugs ({count})
 | Bug | Summary | Assignee | Days stale |
 
-### 📝 Release Notes Missing ({count}) (deep only)
+### Release Notes Missing ({count}) (deep only)
 | Issue | Type | Missing |
 
-### 📊 Stretch Features (descope candidates)
+### Stretch Features (descope candidates)
 | Feature | Summary | Owner | Status |
 
 ### Risk Assessment
@@ -272,7 +272,7 @@ After presenting the report:
 
 > "Fix issues? [y/N/edit]"
 
-**⚠ Automation warning:** Setting fix version on a Feature cascades to all child Epics automatically (Jira automation rule). Setting Epic status also cascades to parent Feature. See `references/workflows.md` Automation Rules. Warn the user before applying fix version changes.
+** Automation warning:** Setting fix version on a Feature cascades to all child Epics automatically (Jira automation rule). Setting Epic status also cascades to parent Feature. See `references/workflows.md` Automation Rules. Warn the user before applying fix version changes.
 
 Available actions (all require user confirmation):
 

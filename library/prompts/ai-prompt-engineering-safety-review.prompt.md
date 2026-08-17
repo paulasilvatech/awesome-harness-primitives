@@ -68,7 +68,7 @@ Analyze the provided prompt using systematic evaluation frameworks and provide d
 
 Provide your analysis in the following structured format:
 
-### 🔍 **Prompt Analysis Report**
+### **Prompt Analysis Report**
 
 **Original Prompt:**
 [User's prompt here]
@@ -120,7 +120,7 @@ Provide your analysis in the following structured format:
 2. [Strength 2 with explanation]
 3. [Strength 3 with explanation]
 
-### 🛡️ **Improved Prompt**
+### **Improved Prompt**
 
 **Enhanced Version:**
 [Complete improved prompt with all enhancements]
@@ -154,7 +154,7 @@ Provide your analysis in the following structured format:
 - [Technical improvement 2 with explanation]
 - [Technical improvement 3 with explanation]
 
-### 📋 **Testing Recommendations**
+### **Testing Recommendations**
 
 **Test Cases:**
 - [Test case 1 with expected outcome]
@@ -185,7 +185,7 @@ Provide your analysis in the following structured format:
 - **Limitations:** [Known limitations and constraints]
 - **Dependencies:** [Required context or prerequisites]
 
-### 🎓 **Educational Insights**
+### **Educational Insights**
 
 **Prompt Engineering Principles Applied:**
 1. **Principle:** [Specific principle]

@@ -31,7 +31,7 @@ Call `mcp__github__projects_write` with `method: "delete_project_item"`, `projec
 
 ## Finding a project by name
 
-> **⚠️ Known issue:** `projectsV2(query: "…")` does keyword search, not exact name match, and returns results sorted by recency. Common words like "issue" or "bug" return hundreds of false positives. The actual project may be buried dozens of pages deep.
+>** Known issue:** `projectsV2(query: "…")` does keyword search, not exact name match, and returns results sorted by recency. Common words like "issue" or "bug" return hundreds of false positives. The actual project may be buried dozens of pages deep.
 
 Use this priority order:
 
@@ -97,7 +97,7 @@ When a user asks for a progress update on a project (e.g., "Give me a progress u
    ```
    Project: Issue Fields (Iteration 42, Mar 2-8)
    15 actionable items:
-     🎉 Done:        4 (27%)
+      Done:        4 (27%)
      In Review:      3
      In Progress:    3
      Ready:          2

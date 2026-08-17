@@ -15,7 +15,7 @@ You **MUST iterate** and keep going until the problem is solved.
 ## .NET Project Upgrade Instructions
 
 This document provides structured guidance for upgrading a multi-project .NET solution to a higher framework version (e.g., .NET 6 → .NET 8). Upgrade this repository to the latest supported **.NET Core**, **.NET Standard**, or **.NET Framework** version depending on project type, while preserving build integrity, tests, and CI/CD pipelines.
-Follow the steps **sequentially** and **do not attempt to upgrade all projects at once**.  
+Follow the steps **sequentially** and **do not attempt to upgrade all projects at once**.
 
 ## Preparation
 1. **Identify Project Type**
@@ -41,7 +41,7 @@ Follow the steps **sequentially** and **do not attempt to upgrade all projects a
 2. Start with **independent class library projects** (least dependencies).
 3. Gradually move to projects with **higher dependencies** (e.g., APIs, Azure Functions).
 4. Ensure each project builds and passes tests before proceeding to the next.
-5. Post Builds are successful **only after success completion** update the CI/CD files  
+5. Post Builds are successful **only after success completion** update the CI/CD files
 
 ---
 
@@ -49,7 +49,7 @@ Follow the steps **sequentially** and **do not attempt to upgrade all projects a
 To identify dependencies:
 - Inspect the solution’s dependency graph.
 - Use the following approaches:
-  - **Visual Studio** → `Dependencies` in Solution Explorer.  
+  - **Visual Studio** → `Dependencies` in Solution Explorer.
   - **dotnet CLI** → run:
     ```bash
     dotnet list <ProjectName>.csproj reference
@@ -64,7 +64,7 @@ To identify dependencies:
 
 ## 3. Analyze Each Project
 For each project:
-1. Open the `*.csproj` file.  
+1. Open the `*.csproj` file.
    Example:
    ```xml
    <Project Sdk="Microsoft.NET.Sdk">
@@ -80,7 +80,7 @@ For each project:
 
 2. Check for:
    - `TargetFramework` → Change to the desired version (e.g., `net10.0`).
-   - `PackageReference` → Verify if each NuGet package supports the new framework.  
+   - `PackageReference` → Verify if each NuGet package supports the new framework.
      - Run:
        ```bash
        dotnet list package --outdated
@@ -175,48 +175,48 @@ After all projects are upgraded:
   dotnet tool install -g upgrade-assistant
   upgrade-assistant upgrade <SolutionName>.sln```
 
-- **Upgrade CI/CD Pipelines**: 
+- **Upgrade CI/CD Pipelines**:
   When upgrading .NET projects, remember that build pipelines must also reference the correct SDK, NuGet versions, and tasks.
-  a. Locate pipeline YAML files  
+  a. Locate pipeline YAML files
    - Check common folders such as:
      - .azuredevops/
      - .pipelines/
      - Deployment/
      - Root of the repo (*.yml)
 
-b. Scan for .NET SDK installation tasks  
+b. Scan for .NET SDK installation tasks
    Look for tasks like:
    - task: UseDotNet@2
      inputs:
        version: <current-sdk-version>
 
-   or  
+   or
    displayName: Use .NET Core sdk <current-sdk-version>
 
-c. Update SDK version to match the upgraded framework  
-   Replace the old version with the new target version.  
-   Example:  
+c. Update SDK version to match the upgraded framework
+   Replace the old version with the new target version.
+   Example:
    - task: UseDotNet@2
      displayName: Use .NET SDK <new-version>
      inputs:
        version: <new-version>
        includePreviewVersions: true   # optional, if upgrading to a preview release
 
-d. Update NuGet Tool version if required  
-   Ensure the NuGet installer task matches the upgraded framework’s needs.  
-   Example:  
+d. Update NuGet Tool version if required
+   Ensure the NuGet installer task matches the upgraded framework’s needs.
+   Example:
    - task: NuGetToolInstaller@0
      displayName: Use NuGet <new-version>
      inputs:
        versionSpec: <new-version>
        checkLatest: true
 
-e. Validate the pipeline after updates  
-   - Commit changes to a feature branch.  
+e. Validate the pipeline after updates
+   - Commit changes to a feature branch.
    - Trigger a CI build to confirm:
-     - The YAML is valid.  
-     - The SDK is installed successfully.  
-     - Projects restore, build, and test with the upgraded framework.  
+     - The YAML is valid.
+     - The SDK is installed successfully.
+     - Projects restore, build, and test with the upgraded framework.
 
 ---
 
@@ -246,7 +246,7 @@ Use this table as a sample to track the progress of the upgrade across all proje
 | Project B    | ☐ net10.0         | ☐                     | ☐                   | ☐             | ☐                   |       |
 | Project C    | ☐ net10.0         | ☐                     | ☐                   | ☐             | ☐                   |       |
 
-> ✅ Mark each column as you complete the step for every project.
+> Mark each column as you complete the step for every project.
 
 ## 11. Commit & PR Guidelines
 
@@ -272,19 +272,19 @@ For organizations with multiple repositories:
    - Open PRs for each repo.
 
 
-## 🔑 Notes & Best Practices
+## Notes & Best Practices
 
-- **Prefer Migration to Modern .NET**  
+- **Prefer Migration to Modern .NET**
   If on .NET Framework or .NET Standard, evaluate moving to .NET 8/10 for long-term support.
-- **Automate Tests Early**  
+- **Automate Tests Early**
   CI/CD should block merges if tests fail.
-- **Incremental Upgrades**  
+- **Incremental Upgrades**
   Large solutions may require upgrading one project at a time.
 
-  ### ✅ Example Agent Prompt
+  ### Example Agent Prompt
 
-  >  Upgrade this repository to the latest supported .NET version following the steps in `dotnet-upgrade-instructions.md`.  
-  >  Detect project type (.NET Core, Standard, or Framework) and apply the correct migration path.  
-  >  Ensure all tests pass and CI/CD workflows are updated.
+  > Upgrade this repository to the latest supported .NET version following the steps in `dotnet-upgrade-instructions.md`.
+  > Detect project type (.NET Core, Standard, or Framework) and apply the correct migration path.
+  > Ensure all tests pass and CI/CD workflows are updated.
 
 ---

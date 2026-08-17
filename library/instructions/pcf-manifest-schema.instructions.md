@@ -198,21 +198,21 @@ Defines platform actions that the component can invoke.
 ```xml
 <?xml version="1.0" encoding="utf-8" ?>
 <manifest>
-  <control namespace="SampleNamespace" 
-           constructor="SampleControl" 
-           version="1.0.0" 
-           display-name-key="Sample_Display_Key" 
-           description-key="Sample_Desc_Key" 
+  <control namespace="SampleNamespace"
+           constructor="SampleControl"
+           version="1.0.0"
+           display-name-key="Sample_Display_Key"
+           description-key="Sample_Desc_Key"
            control-type="standard">
-    
+
     <!-- Properties -->
-    <property name="sampleProperty" 
-              display-name-key="Property_Display_Key" 
-              description-key="Property_Desc_Key" 
-              of-type="SingleLine.Text" 
-              usage="bound" 
+    <property name="sampleProperty"
+              display-name-key="Property_Display_Key"
+              description-key="Property_Desc_Key"
+              of-type="SingleLine.Text"
+              usage="bound"
               required="true" />
-    
+
     <!-- Type Group Example -->
     <type-group name="numbers">
       <type>Whole.None</type>
@@ -220,22 +220,22 @@ Defines platform actions that the component can invoke.
       <type>FP</type>
       <type>Decimal</type>
     </type-group>
-    
+
     <property name="numericProperty"
               display-name-key="Numeric_Display_Key"
               of-type-group="numbers"
               usage="bound" />
-    
+
     <!-- Data Set Example -->
-    <data-set name="dataSetProperty" 
+    <data-set name="dataSetProperty"
               display-name-key="Dataset_Display_Key">
     </data-set>
-    
+
     <!-- Events -->
     <event name="onCustomEvent"
            display-name-key="Event_Display_Key"
            description-key="Event_Desc_Key" />
-    
+
     <!-- Resources -->
     <resources>
       <code path="index.ts" order="1" />
@@ -243,17 +243,17 @@ Defines platform actions that the component can invoke.
       <img path="img/icon.png" />
       <resx path="strings/SampleControl.1033.resx" version="1.0.0" />
     </resources>
-    
+
     <!-- Feature Usage -->
     <feature-usage>
       <uses-feature name="WebAPI" required="true" />
       <uses-feature name="Device.captureImage" required="false" />
     </feature-usage>
-    
+
     <!-- Platform Library -->
     <platform-library name="React" version="16.8.6" />
     <platform-library name="Fluent" version="8.29.0" />
-    
+
   </control>
 </manifest>
 ```
@@ -290,8 +290,8 @@ Common `of-type` values for properties:
 
 ## Platform Availability Legend
 
-- ✅ **Model-driven apps**: Fully supported
-- ✅ **Canvas apps**: Supported (may have limitations)
-- ✅ **Portals**: Supported in Power Pages
+- **Model-driven apps**: Fully supported
+- **Canvas apps**: Supported (may have limitations)
+- **Portals**: Supported in Power Pages
 
 Most manifest elements are available across all platforms, but some features (like certain Device APIs or platform actions) may be platform-specific. Always test in your target environment.

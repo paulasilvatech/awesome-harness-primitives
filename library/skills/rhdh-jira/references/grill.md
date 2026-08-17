@@ -16,12 +16,12 @@ After the grill questions are complete, present all inferred fields at once:
 
 > "Based on our discussion, here's what I'd set:"
 >
-> - **Priority**: Major - this is a functional gap, not a regression or blocker
-> - **Team**: COPE - you mentioned this is in the dynamic plugins area
-> - **Size**: M (3) - cross-team coordination + 4 AC items suggests ~3 sprints
-> - **Component**: Plugins - primary area of change
-> - **Assignee**: Allison Hill - top expertise in plugins per assign analysis
-> - **Labels**: `rhdh-2.1-candidate`, `demo` - customer-facing feature targeting 2.1
+> - **Priority **: Major - this is a functional gap, not a regression or blocker
+> - **Team **: COPE - you mentioned this is in the dynamic plugins area
+> - **Size **: M (3) - cross-team coordination + 4 AC items suggests ~3 sprints
+> - **Component **: Plugins - primary area of change
+> - **Assignee **: Allison Hill - top expertise in plugins per assign analysis
+> - **Labels **: `rhdh-2.1-candidate`, `demo` - customer-facing feature targeting 2.1
 >
 > "Adjust any of these? [y to confirm / list changes]"
 
@@ -29,12 +29,12 @@ After the grill questions are complete, present all inferred fields at once:
 
 | Field | Infer from |
 |-------|------------|
-| **Priority** | Severity of the problem, customer impact, blocker language, urgency words. Default to Major unless clear signals suggest otherwise. |
-| **Team** | Components mentioned, domain area, who the user is, parent issue's team, which team owns the affected code. |
-| **Size** | AC count, dependency count, complexity signals from the grill ("need to investigate", "multiple PRs", "cross-team"). Cross-reference against `references/sizing.md`. |
-| **Component** | Technical domain discussed (RBAC, plugins, catalog, helm, operator, CI/CD, docs). Match against known components in `references/fields.md`. Also check codebase context - if the user has been editing files during the session, infer from file paths (see below). |
-| **Assignee** | If the user is describing their own work, suggest them. Otherwise, run a lightweight expertise match from the conversation context (component + domain keywords against team roster). For deep analysis, suggest running `assign`. |
-| **Labels** | Customer-facing → `demo`. Release target mentioned → `rhdh-X.Y-candidate`. Stretch goal language → `stretch`. Support origin → `rhdh-customer`. |
+| **Priority ** | Severity of the problem, customer impact, blocker language, urgency words. Default to Major unless clear signals suggest otherwise. |
+| **Team ** | Components mentioned, domain area, who the user is, parent issue's team, which team owns the affected code. |
+| **Size ** | AC count, dependency count, complexity signals from the grill ("need to investigate", "multiple PRs", "cross-team"). Cross-reference against `references/sizing.md`. |
+| **Component ** | Technical domain discussed (RBAC, plugins, catalog, helm, operator, CI/CD, docs). Match against known components in `references/fields.md`. Also check codebase context - if the user has been editing files during the session, infer from file paths (see below). |
+| **Assignee ** | If the user is describing their own work, suggest them. Otherwise, run a lightweight expertise match from the conversation context (component + domain keywords against team roster). For deep analysis, suggest running `assign`. |
+| **Labels ** | Customer-facing → `demo`. Release target mentioned → `rhdh-X.Y-candidate`. Stretch goal language → `stretch`. Support origin → `rhdh-customer`. |
 
 ### Codebase-aware component inference
 
@@ -83,19 +83,19 @@ After the user proposes a size (T-shirt or story points):
 
 After the user describes scope and AC:
 
-- **Testing**: "Does QE need to be involved? Is there a test plan or automation needed?" If the issue type is an Epic or Feature and no testing consideration was mentioned, ask.
-- **Documentation**: "Does this change user-facing behavior? If so, docs need updating." If documentation wasn't mentioned for a user-facing change, flag it.
-- **Upstream**: "Is there upstream Backstage work that needs to land first? Or is this purely downstream?" Don't assume - ask if not clear from context.
-- **Security**: For features touching auth, RBAC, permissions, or API endpoints: "Any security considerations?"
-- **Migration/Breaking changes**: "Does this change existing behavior? Will users need to update their configuration?"
+- **Testing **: "Does QE need to be involved? Is there a test plan or automation needed?" If the issue type is an Epic or Feature and no testing consideration was mentioned, ask.
+- **Documentation **: "Does this change user-facing behavior? If so, docs need updating." If documentation wasn't mentioned for a user-facing change, flag it.
+- **Upstream **: "Is there upstream Backstage work that needs to land first? Or is this purely downstream?" Don't assume - ask if not clear from context.
+- **Security **: For features touching auth, RBAC, permissions, or API endpoints: "Any security considerations?"
+- **Migration/Breaking changes **: "Does this change existing behavior? Will users need to update their configuration?"
 
 Skip challenges that clearly don't apply. Don't ask about docs for a CI pipeline task. Don't ask about upstream for a purely downstream bug fix.
 
 ### Challenge scope
 
-- **Split signals**: If a single AC item is complex enough to be its own issue, say so: "This AC item - '{item}' - sounds like it could be a separate {Story/Epic}. Should we split it?"
-- **Overlap**: During the duplicate check (which runs after the grill), if related issues were found, revisit scope: "This overlaps with {KEY}. Should this issue be scoped to only the non-overlapping parts?"
-- **Scope creep markers**: If the user keeps adding "also it should..." or "and maybe we could..." - pause and ask: "We're growing the scope. Should some of this be a follow-up issue?"
+- **Split signals **: If a single AC item is complex enough to be its own issue, say so: "This AC item - '{item}' - sounds like it could be a separate {Story/Epic}. Should we split it?"
+- **Overlap **: During the duplicate check (which runs after the grill), if related issues were found, revisit scope: "This overlaps with {KEY}. Should this issue be scoped to only the non-overlapping parts?"
+- **Scope creep markers **: If the user keeps adding "also it should..." or "and maybe we could..." - pause and ask: "We're growing the scope. Should some of this be a follow-up issue?"
 
 ### Probe risks and unknowns
 
@@ -132,18 +132,18 @@ Not every behavior applies to every type. Use this as a guide:
 
 | Behavior | Feature | Epic | Story | Task | Bug |
 |----------|---------|------|-------|------|-----|
-| Challenge sizing | ✅ | ✅ | ✅ | ✅ (if SP set) | ❌ |
-| Completeness: testing | ✅ | ✅ | ✅ | ❌ | ❌ |
-| Completeness: docs | ✅ | ✅ | ✅ (if user-facing) | ❌ | ❌ |
-| Completeness: upstream | ✅ | ✅ | ✅ | ❌ | ❌ |
-| Completeness: security | ✅ | ✅ | ✅ | ✅ | ❌ |
-| Completeness: migration | ✅ | ✅ | ✅ | ❌ | ❌ |
-| Challenge scope | ✅ | ✅ | ✅ | ❌ | ❌ |
-| Probe risks | ✅ | ✅ | ❌ | ❌ | ❌ |
-| Cross-reference | ✅ | ✅ | ✅ | ✅ | ✅ |
-| Validate before creating | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Challenge sizing | Yes | Yes | Yes | (if SP set) | No |
+| Completeness: testing | Yes | Yes | Do | Do Not | No |
+| Completeness: docs | Yes | Yes | (if user-facing) | No | No |
+| Completeness: upstream | Yes | Yes | Do | Do Not | No |
+| Completeness: security | Yes | Yes | Yes | Do | Do Not |
+| Completeness: migration | Yes | Yes | Do | Do Not | No |
+| Challenge scope | Yes | Yes | Do | Do Not | No |
+| Probe risks | Yes | Do | Do Not | No | No |
+| Cross-reference | Yes | Yes | Yes | Yes | Yes |
+| Validate before creating | Yes | Yes | Yes | Yes | Yes |
 
-**Vulnerability** follows the Story column. Always requires Security component.
+**Vulnerability ** follows the Story column. Always requires Security component.
 
 Bugs skip most challenges - the goal is to capture the defect accurately, not challenge whether it should exist. Cross-reference and validation still apply (check for duplicates, ensure fields are set).
 
@@ -153,9 +153,9 @@ Tasks skip scope/risk challenges unless they're complex (multi-day, cross-system
 
 After the issue is created, proactively suggest comments for context that emerged during the grill but doesn't belong in the description:
 
-- **Decision trail**: "We discussed [alternative] but chose [approach] because [reason]."
-- **Elaboration**: "Additional context about [topic] that supports the decision."
-- **Abandoned paths**: "Initially considered [approach], abandoned because [reason]."
-- **Customer context**: "This was raised by [customer type/use case] - relevant for prioritization."
+- **Decision trail **: "We discussed [alternative] but chose [approach] because [reason]."
+- **Elaboration **: "Additional context about [topic] that supports the decision."
+- **Abandoned paths **: "Initially considered [approach], abandoned because [reason]."
+- **Customer context **: "This was raised by [customer type/use case] - relevant for prioritization."
 
 Present each suggestion with a recommended comment text. The user approves, edits, or skips each one.

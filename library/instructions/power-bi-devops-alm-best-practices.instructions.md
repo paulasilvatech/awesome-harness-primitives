@@ -57,14 +57,14 @@ git tag -a v1.2.0 -m "Release version 1.2.0"
 ```powershell
 # Automated deployment using Power BI REST API
 $url = "pipelines/{0}/Deploy" -f "Insert your pipeline ID here"
-$body = @{ 
+$body = @{
     sourceStageOrder = 0 # Development (0), Test (1)
     datasets = @(
         @{sourceId = "Insert your dataset ID here" }
-    )      
+    )
     reports = @(
         @{sourceId = "Insert your report ID here" }
-    )            
+    )
     dashboards = @(
         @{sourceId = "Insert your dashboard ID here" }
     )
@@ -82,7 +82,7 @@ $deployResult = Invoke-PowerBIRestMethod -Url $url -Method Post -Body $body | Co
 
 # Poll deployment status
 $url = "pipelines/{0}/Operations/{1}" -f "Insert your pipeline ID here",$deployResult.id
-$operation = Invoke-PowerBIRestMethod -Url $url -Method Get | ConvertFrom-Json    
+$operation = Invoke-PowerBIRestMethod -Url $url -Method Get | ConvertFrom-Json
 while($operation.Status -eq "NotStarted" -or $operation.Status -eq "Executing")
 {
     # Sleep for 5 seconds
@@ -122,7 +122,7 @@ steps:
     DataFile: 'data.zip'
   displayName: 'Export Power BI metadata'
 
-- task: PowerShell@2  
+- task: PowerShell@2
   inputs:
     targetType: 'inline'
     script: |
@@ -130,16 +130,16 @@ steps:
       $workspaceName = "$(WorkspaceName)"
       $pbipSemanticModelPath = "$(Build.ArtifactStagingDirectory)\$(ProjectName).SemanticModel"
       $pbipReportPath = "$(Build.ArtifactStagingDirectory)\$(ProjectName).Report"
-      
+
       # Download and install FabricPS-PBIP module
       New-Item -ItemType Directory -Path ".\modules" -ErrorAction SilentlyContinue | Out-Null
       @("https://raw.githubusercontent.com/microsoft/Analysis-Services/master/pbidevmode/fabricps-pbip/FabricPS-PBIP.psm1",
         "https://raw.githubusercontent.com/microsoft/Analysis-Services/master/pbidevmode/fabricps-pbip/FabricPS-PBIP.psd1") |% {
           Invoke-WebRequest -Uri $_ -OutFile ".\modules\$(Split-Path $_ -Leaf)"
       }
-      
+
       Import-Module ".\modules\FabricPS-PBIP" -Force
-      
+
       # Authenticate and deploy
       Set-FabricAuthToken -reset
       $workspaceId = New-FabricWorkspace -name $workspaceName -skipErrorIfExists
@@ -151,7 +151,7 @@ steps:
 ### 3. Fabric REST API Deployment
 ```powershell
 # Complete PowerShell deployment script
-# Parameters 
+# Parameters
 $workspaceName = "[Workspace Name]"
 $pbipSemanticModelPath = "[PBIP Path]\[Item Name].SemanticModel"
 $pbipReportPath = "[PBIP Path]\[Item Name].Report"
@@ -165,7 +165,7 @@ New-Item -ItemType Directory -Path ".\modules" -ErrorAction SilentlyContinue | O
     Invoke-WebRequest -Uri $_ -OutFile ".\modules\$(Split-Path $_ -Leaf)"
 }
 
-if(-not (Get-Module Az.Accounts -ListAvailable)) { 
+if(-not (Get-Module Az.Accounts -ListAvailable)) {
     Install-Module Az.Accounts -Scope CurrentUser -Force
 }
 Import-Module ".\modules\FabricPS-PBIP" -Force
@@ -202,7 +202,7 @@ $reportImport = Import-FabricItem -workspaceId $workspaceId -path $pbipReportPat
       "sensitivityLabel": "Internal"
     },
     "production": {
-      "workspaceId": "prod-workspace-id", 
+      "workspaceId": "prod-workspace-id",
       "dataSourceUrl": "prod-database.database.windows.net",
       "refreshSchedule": "hourly",
       "sensitivityLabel": "Confidential"
@@ -218,10 +218,10 @@ param(
     [Parameter(Mandatory=$true)]
     [ValidateSet("dev", "test", "prod")]
     [string]$Environment,
-    
+
     [Parameter(Mandatory=$true)]
     [string]$WorkspaceName,
-    
+
     [Parameter(Mandatory=$false)]
     [string]$DataSourceServer
 )
@@ -249,7 +249,7 @@ function Test-PowerBIDataQuality {
         [string]$WorkspaceId,
         [string]$DatasetId
     )
-    
+
     # Test 1: Row count validation
     $rowCountQuery = @"
         EVALUATE
@@ -260,8 +260,8 @@ function Test-PowerBIDataQuality {
             "Test", IF(COUNTROWS(Sales) >= 1000, "PASS", "FAIL")
         )
 "@
-    
-    # Test 2: Data freshness validation  
+
+    # Test 2: Data freshness validation
     $freshnessQuery = @"
         EVALUATE
         ADDCOLUMNS(
@@ -270,11 +270,11 @@ function Test-PowerBIDataQuality {
             "Test", IF(DATEDIFF(MAX(Sales[Date]), TODAY(), DAY) <= 1, "PASS", "FAIL")
         )
 "@
-    
+
     # Execute tests
     $rowCountResult = Invoke-PowerBIRestMethod -Url "groups/$WorkspaceId/datasets/$DatasetId/executeQueries" -Method Post -Body (@{queries=@(@{query=$rowCountQuery})} | ConvertTo-Json)
     $freshnessResult = Invoke-PowerBIRestMethod -Url "groups/$WorkspaceId/datasets/$DatasetId/executeQueries" -Method Post -Body (@{queries=@(@{query=$freshnessQuery})} | ConvertTo-Json)
-    
+
     return @{
         RowCountTest = $rowCountResult
         FreshnessTest = $freshnessResult
@@ -290,7 +290,7 @@ function Test-PowerBIPerformance {
         [string]$WorkspaceId,
         [string]$ReportId
     )
-    
+
     $performanceTests = @(
         @{
             Name = "Dashboard Load Time"
@@ -303,14 +303,14 @@ function Test-PowerBIPerformance {
             MaxDurationMs = 10000
         }
     )
-    
+
     $results = @()
     foreach ($test in $performanceTests) {
         $startTime = Get-Date
         $result = Invoke-PowerBIRestMethod -Url "groups/$WorkspaceId/datasets/$DatasetId/executeQueries" -Method Post -Body (@{queries=@(@{query=$test.Query})} | ConvertTo-Json)
         $endTime = Get-Date
         $duration = ($endTime - $startTime).TotalMilliseconds
-        
+
         $results += @{
             TestName = $test.Name
             Duration = $duration
@@ -318,7 +318,7 @@ function Test-PowerBIPerformance {
             Threshold = $test.MaxDurationMs
         }
     }
-    
+
     return $results
 }
 ```
@@ -338,7 +338,7 @@ function Test-PowerBIPerformance {
         "accessRight": "Admin"
       },
       {
-        "emailAddress": "powerbi-service-principal@contoso.com", 
+        "emailAddress": "powerbi-service-principal@contoso.com",
         "accessRight": "Member",
         "principalType": "App"
       }
@@ -374,12 +374,12 @@ function Get-PowerBICredentials {
         [string]$KeyVaultName,
         [string]$Environment
     )
-    
+
     # Retrieve secrets from Key Vault
     $servicePrincipalId = Get-AzKeyVaultSecret -VaultName $KeyVaultName -Name "PowerBI-ServicePrincipal-Id-$Environment" -AsPlainText
     $servicePrincipalSecret = Get-AzKeyVaultSecret -VaultName $KeyVaultName -Name "PowerBI-ServicePrincipal-Secret-$Environment" -AsPlainText
     $tenantId = Get-AzKeyVaultSecret -VaultName $KeyVaultName -Name "PowerBI-TenantId-$Environment" -AsPlainText
-    
+
     return @{
         ServicePrincipalId = $servicePrincipalId
         ServicePrincipalSecret = $servicePrincipalSecret
@@ -414,7 +414,7 @@ stages:
           if (-not (Test-Path "Model\model.tmdl")) {
             throw "Missing model.tmdl file"
           }
-          
+
           # Validate required files
           $requiredFiles = @("Report\report.json", "Model\tables")
           foreach ($file in $requiredFiles) {
@@ -422,8 +422,8 @@ stages:
               throw "Missing required file: $file"
             }
           }
-          
-          Write-Host "✅ Project validation passed"
+
+          Write-Host " Project validation passed"
 
 - stage: DeployTest
   displayName: 'Deploy to Test'
@@ -467,22 +467,22 @@ function Invoke-PowerBIRollback {
         [string]$BackupVersion,
         [string]$BackupLocation
     )
-    
+
     Write-Host "Initiating rollback to version: $BackupVersion"
-    
+
     # Step 1: Export current state as emergency backup
     $emergencyBackup = "emergency-backup-$(Get-Date -Format 'yyyyMMdd-HHmmss')"
     Export-PowerBIReport -WorkspaceId $WorkspaceId -BackupName $emergencyBackup
-    
+
     # Step 2: Restore from backup
     $backupPath = Join-Path $BackupLocation "$BackupVersion.pbix"
     if (Test-Path $backupPath) {
         Import-PowerBIReport -WorkspaceId $WorkspaceId -FilePath $backupPath -ConflictAction "Overwrite"
-        Write-Host "✅ Rollback completed successfully"
+        Write-Host " Rollback completed successfully"
     } else {
         throw "Backup file not found: $backupPath"
     }
-    
+
     # Step 3: Validate rollback
     Test-PowerBIDataQuality -WorkspaceId $WorkspaceId
 }
@@ -499,13 +499,13 @@ function Test-DeploymentHealth {
         [array]$ExpectedReports,
         [array]$ExpectedDatasets
     )
-    
+
     $healthCheck = @{
         Status = "Healthy"
         Issues = @()
         Timestamp = Get-Date
     }
-    
+
     # Check reports
     $reports = Get-PowerBIReport -WorkspaceId $WorkspaceId
     foreach ($expectedReport in $ExpectedReports) {
@@ -514,7 +514,7 @@ function Test-DeploymentHealth {
             $healthCheck.Status = "Unhealthy"
         }
     }
-    
+
     # Check datasets
     $datasets = Get-PowerBIDataset -WorkspaceId $WorkspaceId
     foreach ($expectedDataset in $ExpectedDatasets) {
@@ -527,7 +527,7 @@ function Test-DeploymentHealth {
             $healthCheck.Status = "Degraded"
         }
     }
-    
+
     return $healthCheck
 }
 ```
@@ -541,13 +541,13 @@ function Send-DeploymentNotification {
         [object]$DeploymentResult,
         [string]$Environment
     )
-    
+
     $color = switch ($DeploymentResult.Status) {
         "Success" { "28A745" }
         "Warning" { "FFC107" }
         "Failed" { "DC3545" }
     }
-    
+
     $teamsMessage = @{
         "@type" = "MessageCard"
         "@context" = "https://schema.org/extensions"
@@ -574,14 +574,14 @@ function Send-DeploymentNotification {
             }
         )
     }
-    
+
     Invoke-RestMethod -Uri $TeamsWebhookUrl -Method Post -Body ($teamsMessage | ConvertTo-Json -Depth 10) -ContentType 'application/json'
 }
 ```
 
 ## Best Practices Summary
 
-### ✅ DevOps Best Practices
+### DevOps Best Practices
 
 1. **Version Control Everything**
    - Use PBIP format for source control
@@ -603,7 +603,7 @@ function Send-DeploymentNotification {
    - Secret management with Key Vault
    - Role-based access controls
 
-### ❌ Anti-Patterns to Avoid
+### Anti-Patterns to Avoid
 
 1. **Manual Deployments**
    - Direct publishing from Desktop

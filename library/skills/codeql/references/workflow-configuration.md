@@ -82,7 +82,7 @@ on:
       - 'apps/**'
 ```
 
-> **Important:** `paths-ignore` and `paths` control whether the workflow runs. When the workflow does run, it analyzes ALL changed files in the PR (including those matched by `paths-ignore`), unless files are excluded via the CodeQL configuration file's `paths-ignore`.
+> **Important: ** `paths-ignore` and `paths` control whether the workflow runs. When the workflow does run, it analyzes ALL changed files in the PR (including those matched by `paths-ignore`), unless files are excluded via the CodeQL configuration file's `paths-ignore`.
 
 ### Workflow Dispatch (Manual Trigger)
 
@@ -171,17 +171,17 @@ strategy:
 
 | Language | `none` | `autobuild` | `manual` | Default Setup Mode |
 |---|:---:|:---:|:---:|---|
-| C/C++ | ✅ | ✅ | ✅ | `none` |
-| C# | ✅ | ✅ | ✅ | `none` |
-| Go | ❌ | ✅ | ✅ | `autobuild` |
-| Java | ✅ | ✅ | ✅ | `none` |
-| Kotlin | ❌ | ✅ | ✅ | `autobuild` |
-| Python | ✅ | ❌ | ❌ | `none` |
-| Ruby | ✅ | ❌ | ❌ | `none` |
-| Rust | ✅ | ✅ | ✅ | `none` |
-| Swift | ❌ | ✅ | ✅ | `autobuild` |
-| JavaScript/TypeScript | ✅ | ❌ | ❌ | `none` |
-| GitHub Actions | ✅ | ❌ | ❌ | `none` |
+| C/C++ | Yes | Yes | Yes | `none` |
+| C# | Yes | Yes | Yes | `none` |
+| Go | No | Yes | Yes | `autobuild` |
+| Java | Yes | Yes | Yes | `none` |
+| Kotlin | No | Yes | Yes | `autobuild` |
+| Python | Do | Do Not | No | `none` |
+| Ruby | Do | Do Not | No | `none` |
+| Rust | Yes | Yes | Yes | `none` |
+| Swift | No | Yes | Yes | `autobuild` |
+| JavaScript/TypeScript | Do | Do Not | No | `none` |
+| GitHub Actions | Do | Do Not | No | `none` |
 
 ## CodeQL Database Location
 

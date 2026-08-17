@@ -24,10 +24,10 @@ Workarounds and optimization strategies address these limitations.
 ### Use Select to Limit Columns
 
 ```python
-# ❌ SLOW - Retrieves all columns
+# SLOW - Retrieves all columns
 accounts = client.get("account", top=100)
 
-# ✅ FAST - Only retrieve needed columns
+# FAST - Only retrieve needed columns
 accounts = client.get(
     "account",
     select=["accountid", "name", "telephone1", "creditlimit"],
@@ -42,11 +42,11 @@ accounts = client.get(
 ### Use Filters Efficiently
 
 ```python
-# ❌ SLOW - Fetch all, filter in Python
+# SLOW - Fetch all, filter in Python
 all_accounts = client.get("account")
 active_accounts = [a for a in all_accounts if a.get("statecode") == 0]
 
-# ✅ FAST - Filter server-side
+# FAST - Filter server-side
 accounts = client.get(
     "account",
     filter="statecode eq 0",
@@ -92,7 +92,7 @@ for page in accounts:
 ### Lazy Pagination (Recommended)
 
 ```python
-# ✅ BEST - Generator yields one page at a time
+# BEST - Generator yields one page at a time
 pages = client.get(
     "account",
     top=5000,              # Total limit
@@ -112,11 +112,11 @@ for page in pages:  # Each iteration fetches one page
 ### Avoid Loading Everything into Memory
 
 ```python
-# ❌ SLOW - Loads all 100,000 records at once
+# SLOW - Loads all 100,000 records at once
 all_records = list(client.get("account", top=100000))
 process(all_records)
 
-# ✅ FAST - Process as you go
+# FAST - Process as you go
 for page in client.get("account", top=100000, page_size=5000):
     process(page)
 ```
@@ -128,7 +128,7 @@ for page in client.get("account", top=100000, page_size=5000):
 ### Bulk Create (Recommended)
 
 ```python
-# ✅ BEST - Single call with multiple records
+# BEST - Single call with multiple records
 payloads = [
     {"name": f"Account {i}", "telephone1": f"555-{i:04d}"}
     for i in range(1000)
@@ -139,7 +139,7 @@ ids = client.create("account", payloads)  # One API call for many records
 ### Bulk Update - Broadcast Mode
 
 ```python
-# ✅ FAST - Same update applied to many records
+# FAST - Same update applied to many records
 account_ids = ["id1", "id2", "id3", "..."]
 client.update("account", account_ids, {"statecode": 1})  # One call
 ```
@@ -147,7 +147,7 @@ client.update("account", account_ids, {"statecode": 1})  # One call
 ### Bulk Update - Per-Record Mode
 
 ```python
-# ✅ ACCEPTABLE - Different updates for each record
+# ACCEPTABLE - Different updates for each record
 account_ids = ["id1", "id2", "id3"]
 updates = [
     {"telephone1": "555-0100"},
@@ -185,13 +185,13 @@ def bulk_create_optimized(client, table_name, payloads, batch_size=200):
 ### Reuse Client Instance
 
 ```python
-# ❌ BAD - Creates new connection each time
+# BAD - Creates new connection each time
 def process_batch():
     for batch in batches:
         client = DataverseClient(...)  # Expensive!
         client.create("account", batch)
 
-# ✅ GOOD - Reuse connection
+# GOOD - Reuse connection
 client = DataverseClient(...)  # Create once
 
 def process_batch():
@@ -257,7 +257,7 @@ async def get_accounts_async(client):
     # For now, use sync with executor
     loop = asyncio.get_event_loop()
     accounts = await loop.run_in_executor(
-        None, 
+        None,
         lambda: list(client.get("account"))
     )
     return accounts
@@ -273,7 +273,7 @@ accounts = asyncio.run(get_accounts_async(client))
 ### Small Files (<128 MB)
 
 ```python
-# ✅ FAST - Single request
+# FAST - Single request
 client.upload_file(
     table_name="account",
     record_id=record_id,
@@ -285,7 +285,7 @@ client.upload_file(
 ### Large Files (>128 MB)
 
 ```python
-# ✅ OPTIMIZED - Chunked upload
+# OPTIMIZED - Chunked upload
 client.upload_file(
     table_name="account",
     record_id=record_id,
@@ -308,7 +308,7 @@ client.upload_file(
 ### SQL Alternative (Simple Queries)
 
 ```python
-# ✅ SOMETIMES FASTER - Direct SQL for SELECT only
+# SOMETIMES FASTER - Direct SQL for SELECT only
 # Limited support: single SELECT, optional WHERE/TOP/ORDER BY
 records = client.get(
     "account",
@@ -319,10 +319,10 @@ records = client.get(
 ### Complex Queries
 
 ```python
-# ❌ NOT SUPPORTED - JOINs, complex WHERE
+# NOT SUPPORTED - JOINs, complex WHERE
 sql="SELECT a.accountid, c.fullname FROM account a JOIN contact c ON a.accountid = c.parentcustomerid"
 
-# ✅ WORKAROUND - Get accounts, then contacts for each
+# WORKAROUND - Get accounts, then contacts for each
 accounts = client.get("account", select=["accountid", "name"])
 for account in accounts:
     contacts = client.get(
@@ -343,12 +343,12 @@ import gc
 
 def process_large_table(client, table_name):
     """Process millions of records without memory issues."""
-    
+
     for page in client.get(table_name, page_size=5000):
         for record in page:
             result = process_record(record)
             save_result(result)
-        
+
         # Force garbage collection between pages
         gc.collect()
 ```
@@ -360,18 +360,18 @@ import pandas as pd
 
 def load_to_dataframe_chunked(client, table_name, chunk_size=10000):
     """Load data to DataFrame in chunks."""
-    
+
     dfs = []
     for page in client.get(table_name, page_size=1000):
         df_chunk = pd.DataFrame(page)
         dfs.append(df_chunk)
-        
+
         # Combine when chunk threshold reached
         if len(dfs) >= chunk_size // 1000:
             df = pd.concat(dfs, ignore_index=True)
             process_chunk(df)
             dfs = []
-    
+
     # Process remaining
     if dfs:
         df = pd.concat(dfs, ignore_index=True)
@@ -390,7 +390,7 @@ from PowerPlatform.Dataverse.core.errors import DataverseError
 
 def call_with_backoff(func, max_retries=3):
     """Call function with exponential backoff for rate limits."""
-    
+
     for attempt in range(max_retries):
         try:
             return func()
@@ -418,22 +418,22 @@ ids = call_with_backoff(
 SDK doesn't have transactional guarantees:
 
 ```python
-# ⚠️ If bulk operation partially fails, some records may be created
+# If bulk operation partially fails, some records may be created
 
 def create_with_consistency_check(client, table_name, payloads):
     """Create records and verify all succeeded."""
-    
+
     try:
         ids = client.create(table_name, payloads)
-        
+
         # Verify all records created
         created = client.get(
             table_name,
             filter=f"isof(Microsoft.Dynamics.CRM.{table_name})"
         )
-        
+
         if len(ids) != count_created:
-            print(f"⚠️ Only {count_created}/{len(ids)} records created")
+            print(f" Only {count_created}/{len(ids)} records created")
             # Handle partial failure
     except Exception as e:
         print(f"Creation failed: {e}")

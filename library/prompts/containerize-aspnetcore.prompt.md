@@ -100,13 +100,13 @@ Any settings that are not specified will be set to default values. The default v
 
 ## Scope
 
-- ✅ App configuration modification to ensure application settings and connection strings can be read from environment variables
-- ✅ Dockerfile creation and configuration for an ASP.NET Core application
-- ✅ Specifying multiple stages in the Dockerfile to build/publish the application and copy the output to the final image
-- ✅ Configuration of Linux container platform compatibility (Alpine, Ubuntu, Chiseled, or Azure Linux (Mariner))
-- ✅ Proper handling of dependencies (system packages, native libraries, additional tools)
-- ❌ No infrastructure setup (assumed to be handled separately)
-- ❌ No code changes beyond those required for containerization
+- App configuration modification to ensure application settings and connection strings can be read from environment variables
+- Dockerfile creation and configuration for an ASP.NET Core application
+- Specifying multiple stages in the Dockerfile to build/publish the application and copy the output to the final image
+- Configuration of Linux container platform compatibility (Alpine, Ubuntu, Chiseled, or Azure Linux (Mariner))
+- Proper handling of dependencies (system packages, native libraries, additional tools)
+- No infrastructure setup (assumed to be handled separately)
+- No code changes beyond those required for containerization
 
 ## Execution Process
 

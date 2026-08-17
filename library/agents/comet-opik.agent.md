@@ -58,22 +58,22 @@ Do not continue with MCP commands until one of the configuration paths above is 
 
 ## MCP Setup Checklist
 
-1. **Server launch** – Copilot runs `npx -y opik-mcp`; keep Node.js ≥ 20.11.  
+1. **Server launch**– Copilot runs `npx -y opik-mcp`; keep Node.js ≥ 20.11.  
 2. **Load credentials**
    - **Preferred**: rely on `~/.opik.config` (populated by `opik configure`). Confirm readability via `opik config show --mask-api-key` or the Python snippet above; the MCP server reads this file automatically.
    - **Fallback**: set the environment variables below when running in CI or multi-workspace setups, or when `OPIK_CONFIG_PATH` points somewhere custom. Skip this if the config file already resolves the workspace and key.
 
 | Variable | Required | Example/Notes |
 | --- | --- | --- |
-| `COPILOT_MCP_OPIK_API_KEY` | ✅ | Workspace API key from https://www.comet.com/opik/<workspace>/get-started |
-| `COPILOT_MCP_OPIK_WORKSPACE` | ✅ for SaaS | Workspace slug, e.g., `platform-observability` |
+| `COPILOT_MCP_OPIK_API_KEY` | Yes | Workspace API key from https://www.comet.com/opik/<workspace>/get-started |
+| `COPILOT_MCP_OPIK_WORKSPACE` | for SaaS | Workspace slug, e.g., `platform-observability` |
 | `COPILOT_MCP_OPIK_API_BASE_URL` | optional | Defaults to `https://www.comet.com/opik/api`; use `http://localhost:5173/api` for OSS |
 | `COPILOT_MCP_OPIK_SELF_HOSTED` | optional | `"true"` when targeting OSS Opik |
 | `COPILOT_MCP_OPIK_TOOLSETS` | optional | Comma list, e.g., `integration,prompts,projects,traces,metrics` |
 | `COPILOT_MCP_OPIK_DEBUG` | optional | `"true"` writes `/tmp/opik-mcp.log` |
 
 3. **Map secrets in VS Code** (`.vscode/settings.json` → Copilot custom tools) before enabling the agent.  
-4. **Smoke test** – run `npx -y opik-mcp --apiKey <key> --transport stdio --debug true` once locally to ensure stdio is clear.
+4. **Smoke test**– run `npx -y opik-mcp --apiKey <key> --transport stdio --debug true` once locally to ensure stdio is clear.
 
 ## Core Responsibilities
 
@@ -97,9 +97,9 @@ Do not continue with MCP commands until one of the configuration paths above is 
 - `get-metrics` validates KPIs (latency P95, cost/request, success rate). Use this data to gate releases or explain regressions.
 
 ### 5. Incident & Quality Gates
-- **Bronze** – Basic traces and metrics exist for all entrypoints.
-- **Silver** – Prompts versioned in Opik, traces include user/context metadata, deployment notes updated.
-- **Gold** – SLIs/SLOs defined, runbooks reference Opik dashboards, regression or unit tests assert tracer coverage.
+- **Bronze**– Basic traces and metrics exist for all entrypoints.
+- **Silver**– Prompts versioned in Opik, traces include user/context metadata, deployment notes updated.
+- **Gold**– SLIs/SLOs defined, runbooks reference Opik dashboards, regression or unit tests assert tracer coverage.
 - During incidents, start with Opik data (traces + metrics). Summarize findings, point to remediation locations, and file TODOs for missing instrumentation.
 
 ## Tool Reference
@@ -142,15 +142,15 @@ Do not continue with MCP commands until one of the configuration paths above is 
 
 ## Testing & Verification
 
-1. **Static validation** – run `npm run validate:collections` before committing to ensure this agent metadata stays compliant.
-2. **MCP smoke test** – from repo root:
+1. **Static validation**– run `npm run validate:collections` before committing to ensure this agent metadata stays compliant.
+2. **MCP smoke test**– from repo root:
    ```bash
    COPILOT_MCP_OPIK_API_KEY=<key> COPILOT_MCP_OPIK_WORKSPACE=<workspace> \
    COPILOT_MCP_OPIK_TOOLSETS=integration,prompts,projects,traces,metrics \
    npx -y opik-mcp --debug true --transport stdio
    ```
    Expect `/tmp/opik-mcp.log` to show “Opik MCP Server running on stdio”.
-3. **Copilot agent QA** – install this agent, open Copilot Chat, and run prompts like:
+3. **Copilot agent QA**– install this agent, open Copilot Chat, and run prompts like:
    - “List Opik projects for this workspace.”
    - “Show the last 20 traces for <service> and summarize failures.”
    - “Fetch the latest prompt version for <prompt> and compare to repo template.”

@@ -163,7 +163,7 @@ This is a <sup>superscript</sup> text
 </blockquote>
 ```
 
-> ⚠️ The `markdown-alert-*` classes are GitHub-specific, not standard Markdown.
+> The `markdown-alert-*` classes are GitHub-specific, not standard Markdown.
 
 ---
 
@@ -412,7 +412,7 @@ Here is a footnote[^1].
 ```
 
 ```html
-<img class="emoji" alt="👍" src="...">
+<img class="emoji" alt="" src="...">
 ```
 
 (GitHub replaces emoji with `<img>` tags.)

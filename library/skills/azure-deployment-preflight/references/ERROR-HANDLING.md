@@ -28,7 +28,7 @@ ERROR: AADSTS700082: The refresh token has expired
 
 **Report Entry:**
 ```markdown
-#### ❌ Azure CLI Authentication Required
+#### Azure CLI Authentication Required
 
 - **Severity:** Error
 - **Source:** az cli
@@ -51,7 +51,7 @@ ERROR: not logged in, run `azd auth login` to login
 
 **Report Entry:**
 ```markdown
-#### ❌ Azure Developer CLI Authentication Required
+#### Azure Developer CLI Authentication Required
 
 - **Severity:** Error
 - **Source:** azd
@@ -80,7 +80,7 @@ AADSTS50173: The provided grant has expired
 
 **Detection:**
 ```
-AuthorizationFailed: The client '...' with object id '...' does not have authorization 
+AuthorizationFailed: The client '...' with object id '...' does not have authorization
 to perform action '...' over scope '...'
 ```
 
@@ -91,7 +91,7 @@ to perform action '...' over scope '...'
 
 **Report Entry:**
 ```markdown
-#### ⚠️ Limited Permission Validation
+#### Limited Permission Validation
 
 - **Severity:** Warning
 - **Source:** what-if
@@ -114,7 +114,7 @@ ResourceGroupNotFound: Resource group 'xxx' could not be found.
 
 **Report Entry:**
 ```markdown
-#### ❌ Resource Group Does Not Exist
+#### Resource Group Does Not Exist
 
 - **Severity:** Error
 - **Source:** what-if
@@ -157,7 +157,7 @@ InvalidSubscriptionId: Subscription '...' is not valid
 
 **Report Entry:**
 ```markdown
-#### ❌ Bicep Syntax Error
+#### Bicep Syntax Error
 
 - **Severity:** Error
 - **Source:** bicep build
@@ -215,7 +215,7 @@ az: command not found
 
 **Report Entry:**
 ```markdown
-#### ⏭️ Azure CLI Not Installed
+#### ⏭ Azure CLI Not Installed
 
 - **Severity:** Warning
 - **Source:** environment
@@ -239,7 +239,7 @@ bicep: command not found
 
 **Report Entry:**
 ```markdown
-#### ⏭️ Bicep CLI Not Installed
+#### ⏭ Bicep CLI Not Installed
 
 - **Severity:** Warning
 - **Source:** environment

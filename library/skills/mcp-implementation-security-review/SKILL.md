@@ -100,11 +100,11 @@ description: >-
 
 | Binding | Actual exposure |
 |---|---|
-| `host="0.0.0.0"` | 🔴 Network-exposed |
-| `host="127.0.0.1"` or `localhost` | 🟢 Local-only |
-| No explicit host (Express/Node) | 🔴 Defaults to `0.0.0.0` |
-| No explicit host (Python FastMCP) | 🟡 Depends on transport — verify |
-| Docker `ports: "8000:8000"` | 🔴 Network-exposed even if the process binds `127.0.0.1` inside the container |
+| `host="0.0.0.0"` | Network-exposed |
+| `host="127.0.0.1"` or `localhost` | Local-only |
+| No explicit host (Express/Node) | Defaults to `0.0.0.0` |
+| No explicit host (Python FastMCP) | Depends on transport — verify |
+| Docker `ports: "8000:8000"` | Network-exposed even if the process binds `127.0.0.1` inside the container |
 
 ### False Positive Filters
 
@@ -273,7 +273,7 @@ In every summary table below, the **Justification** cell must cite specific file
 
 | Control | Name | Status | Justification |
 |---|---|---|---|
-| MCP-01 | Auth & Identity isolation | ✅ PASS / ❌ FAIL / ⚠️ NEEDS INVESTIGATION / N/A | … |
+| MCP-01 | Auth & Identity isolation | PASS / FAIL / NEEDS INVESTIGATION / N/A | … |
 | MCP-02 | Secure Session Management | … | … |
 | MCP-03 | Rate limiting & abuse protection | … | … |
 | MCP-04 | Input schema validation | … | … |
@@ -297,7 +297,7 @@ Use **PASS** only when the code clearly satisfies the control. Use **FAIL** when
 
 | Risk | Status | Justification |
 |---|---|---|
-| MCP01:2025 | ✅ PASS / ❌ FAIL / ⚠️ NEEDS INVESTIGATION | … |
+| MCP01:2025 | PASS / FAIL / NEEDS INVESTIGATION | … |
 | MCP02:2025 | … | … |
 | MCP03:2025 | … | … |
 | MCP04:2025 | … | … |

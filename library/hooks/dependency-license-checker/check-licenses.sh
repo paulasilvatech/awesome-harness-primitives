@@ -21,13 +21,13 @@ INPUT=$(cat || true)
 # Early exit if disabled
 # ---------------------------------------------------------------------------
 if [[ "${SKIP_LICENSE_CHECK:-}" == "true" ]]; then
-  echo "⏭️  License check skipped (SKIP_LICENSE_CHECK=true)"
+  echo "License check skipped (SKIP_LICENSE_CHECK=true)"
   exit 0
 fi
 
 # Ensure we are in a git repository
 if ! git rev-parse --is-inside-work-tree &>/dev/null; then
-  echo "⚠️  Not in a git repository, skipping license check"
+  echo "Not in a git repository, skipping license check"
   exit 0
 fi
 
@@ -180,13 +180,13 @@ fi
 
 # Exit clean if no new dependencies found
 if [[ ${#NEW_DEPS[@]} -eq 0 ]]; then
-  echo "✅ No new dependencies detected"
+  echo "No new dependencies detected"
   printf '{"timestamp":"%s","event":"license_check_complete","mode":"%s","status":"clean","dependencies_checked":0}\n' \
     "$TIMESTAMP" "$MODE" >> "$LOG_FILE"
   exit 0
 fi
 
-echo "🔍 Checking licenses for ${#NEW_DEPS[@]} new dependency(ies)..."
+echo "Checking licenses for ${#NEW_DEPS[@]} new dependency(ies)..."
 
 # ---------------------------------------------------------------------------
 # Phase 2: Check license per dependency
@@ -349,7 +349,7 @@ printf '{"timestamp":"%s","event":"license_check_complete","mode":"%s","dependen
   "$TIMESTAMP" "$MODE" "${#RESULTS[@]}" "$FINDING_COUNT" "$FINDINGS_JSON" >> "$LOG_FILE"
 
 if [[ $FINDING_COUNT -gt 0 ]]; then
-  echo "⚠️  Found $FINDING_COUNT license violation(s):"
+  echo "Found $FINDING_COUNT license violation(s):"
   echo ""
   for violation in "${VIOLATIONS[@]}"; do
     IFS=$'\t' read -r pkg ecosystem license status <<< "$violation"
@@ -358,14 +358,14 @@ if [[ $FINDING_COUNT -gt 0 ]]; then
   echo ""
 
   if [[ "$MODE" == "block" ]]; then
-    echo "🚫 Session blocked: resolve license violations above before committing."
+    echo "Session blocked: resolve license violations above before committing."
     echo "   Set LICENSE_MODE=warn to log without blocking, or add packages to LICENSE_ALLOWLIST."
     exit 2
   else
-    echo "💡 Review the violations above. Set LICENSE_MODE=block to prevent commits with license issues."
+    echo "Review the violations above. Set LICENSE_MODE=block to prevent commits with license issues."
   fi
 else
-  echo "✅ All ${#RESULTS[@]} dependencies have compliant licenses"
+  echo "All ${#RESULTS[@]} dependencies have compliant licenses"
 fi
 
 exit 0

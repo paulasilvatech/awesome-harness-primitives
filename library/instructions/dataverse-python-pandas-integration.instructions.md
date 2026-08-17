@@ -30,13 +30,13 @@ pip install pandas
 ```
 
 ### When to Use PandasODataClient
-✅ **Use when you need:**
+**Use when you need:**
 - Data exploration and analysis
 - Working with tabular data
 - Integration with statistical/ML libraries
 - Efficient data manipulation
 
-❌ **Use DataverseClient instead when you need:**
+**Use DataverseClient instead when you need:**
 - Real-time CRUD operations only
 - File upload operations
 - Metadata operations
@@ -458,14 +458,14 @@ print(df.memory_usage(deep=True).sum() / 1024**2, "MB")
 ### Query Optimization
 ```python
 # Apply filters on server, not client
-# ✅ GOOD: Filter on server
+# GOOD: Filter on server
 accounts = client.get(
     "account",
     filter="creditlimit > 50000",  # Server-side filter
     select=["accountid", "name", "creditlimit"]
 )
 
-# ❌ BAD: Load all, filter locally
+# BAD: Load all, filter locally
 all_accounts = client.get("account")  # Loads everything
 filtered = [a for a in all_accounts if a['creditlimit'] > 50000]  # Client-side
 ```

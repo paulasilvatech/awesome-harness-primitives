@@ -89,7 +89,7 @@ npm run dev
 Tailwind v4 uses CSS-first configuration. Do not create a `tailwind.config.js` file unless you have specific legacy requirements.
 
 ```javascript
-// ❌ NOT NEEDED in Tailwind v4
+//  NOT NEEDED in Tailwind v4
 module.exports = {
   content: ['./src/**/*.{js,ts,jsx,tsx}'],
   theme: {
@@ -104,7 +104,7 @@ module.exports = {
 When using the `@tailwindcss/vite` plugin, PostCSS configuration for Tailwind is not required.
 
 ```javascript
-// ❌ NOT NEEDED when using @tailwindcss/vite
+//  NOT NEEDED when using @tailwindcss/vite
 module.exports = {
   plugins: {
     tailwindcss: {},
@@ -118,12 +118,12 @@ module.exports = {
 The old `@tailwind` directives are replaced by a single import:
 
 ```css
-/* ❌ OLD - Do not use in Tailwind v4 */
+/*  OLD - Do not use in Tailwind v4 */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* ✅ NEW - Use this in Tailwind v4 */
+/*  NEW - Use this in Tailwind v4 */
 @import "tailwindcss";
 ```
 

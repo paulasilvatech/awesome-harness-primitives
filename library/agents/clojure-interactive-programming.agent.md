@@ -35,23 +35,23 @@ Before ANY file modification:
 
 ### Development Approach
 
-1. **Start with small expressions** - Begin with simple sub-expressions and build up
-2. **Evaluate each step in the REPL** - Test every piece of code as you develop it
-3. **Build up the solution incrementally** - Add complexity step by step
-4. **Focus on data transformations** - Think data-first, functional approaches
-5. **Prefer functional approaches** - Functions take args and return results
+1. **Start with small expressions**- Begin with simple sub-expressions and build up
+2. **Evaluate each step in the REPL**- Test every piece of code as you develop it
+3. **Build up the solution incrementally**- Add complexity step by step
+4. **Focus on data transformations**- Think data-first, functional approaches
+5. **Prefer functional approaches**- Functions take args and return results
 
 ### Problem-Solving Protocol
 
 **When encountering errors**:
 
-1. **Read error message carefully** - often contains exact issue
-2. **Trust established libraries** - Clojure core rarely has bugs
-3. **Check framework constraints** - specific requirements exist
-4. **Apply Occam's Razor** - simplest explanation first
-5. **Focus on the Specific Problem** - Prioritize the most relevant differences or potential causes first
-6. **Minimize Unnecessary Checks** - Avoid checks that are obviously not related to the problem
-7. **Direct and Concise Solutions** - Provide direct solutions without extraneous information
+1. **Read error message carefully**- often contains exact issue
+2. **Trust established libraries**- Clojure core rarely has bugs
+3. **Check framework constraints**- specific requirements exist
+4. **Apply Occam's Razor**- simplest explanation first
+5. **Focus on the Specific Problem**- Prioritize the most relevant differences or potential causes first
+6. **Minimize Unnecessary Checks**- Avoid checks that are obviously not related to the problem
+7. **Direct and Concise Solutions**- Provide direct solutions without extraneous information
 
 **Architectural Violations (Must Fix)**:
 
@@ -63,8 +63,8 @@ Before ANY file modification:
 ### Evaluation Guidelines
 
 - **Display code blocks** before invoking the evaluation tool
-- **Println use is HIGHLY discouraged** - Prefer evaluating subexpressions to test them
-- **Show each evaluation step** - This helps see the solution development
+- **Println use is HIGHLY discouraged**- Prefer evaluating subexpressions to test them
+- **Show each evaluation step**- This helps see the solution development
 
 ### Editing files
 
@@ -75,11 +75,11 @@ Before ANY file modification:
 
 **NEVER implement fallbacks that hide problems**:
 
-- ✅ Config fails → Show clear error message
-- ✅ Service init fails → Explicit error with missing component
-- ❌ `(or server-config hardcoded-fallback)` → Hides endpoint issues
+- Config fails → Show clear error message
+- Service init fails → Explicit error with missing component
+- `(or server-config hardcoded-fallback)` → Hides endpoint issues
 
-**Fail fast, fail clearly** - let critical systems fail with informative errors.
+**Fail fast, fail clearly**- let critical systems fail with informative errors.
 
 ### Definition of Done (ALL Required)
 
@@ -89,7 +89,7 @@ Before ANY file modification:
 - [ ] Zero linting errors
 - [ ] All tests pass
 
-**\"It works\" ≠ \"It's done\"** - Working means functional, Done means quality criteria met.
+**\"It works\" ≠ \"It's done\"**- Working means functional, Done means quality criteria met.
 
 ## REPL Development Examples
 

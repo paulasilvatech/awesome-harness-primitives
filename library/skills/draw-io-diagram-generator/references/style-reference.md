@@ -107,14 +107,14 @@ Combine by addition: `3` = bold + italic, `5` = bold + underline, `7` = bold + i
 | Ellipse / Circle | `ellipse;` | ○ |
 | Diamond | `rhombus;` | ◇ |
 | Triangle | `triangle;` | △ |
-| Hexagon | `shape=hexagon;` | ⬡ |
-| Pentagon | `shape=mxgraph.basic.pentagon;` | ⬠ |
-| Star | `shape=mxgraph.basic.star;` | ★ |
-| Cross | `shape=mxgraph.basic.x;` | ✕ |
-| Cloud | `shape=cloud;` | ☁ |
-| Note / Callout | `shape=note;folded=1;` | 📝 |
-| Document | `shape=document;` | 📄 |
-| Cylinder (database) | `shape=cylinder3;` | 🗄 |
+| Hexagon | `shape=hexagon;` | |
+| Pentagon | `shape=mxgraph.basic.pentagon;` | |
+| Star | `shape=mxgraph.basic.star;` | |
+| Cross | `shape=mxgraph.basic.x;` | |
+| Cloud | `shape=cloud;` | |
+| Note / Callout | `shape=note;folded=1;` | |
+| Document | `shape=document;` | |
+| Cylinder (database) | `shape=cylinder3;` | |
 | Tape | `shape=tape;` | — |
 | Parallelogram | `shape=parallelogram;perimeter=parallelogramPerimeter;` | ▱ |
 

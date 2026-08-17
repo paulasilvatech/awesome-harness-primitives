@@ -36,5 +36,5 @@ CWD=$(pwd)
 python3 -c 'import json,sys; print(json.dumps({"timestamp":sys.argv[1],"event":"sessionStart","cwd":sys.argv[2]}))' \
   "$TIMESTAMP" "$CWD" >> "$LOG_DIR/session.log"
 
-echo "📝 Session logged"
+echo "Session logged"
 exit 0

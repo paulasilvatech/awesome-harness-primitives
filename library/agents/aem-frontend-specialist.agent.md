@@ -364,7 +364,7 @@ Design System Match:
   CSS Classes: "text-h2-mobile md:text-h2 font-display font-bold"
   Mobile: 45px Cal Sans
   Desktop: 65px Cal Sans
-  Validation: ✅ Pixel value matches + Font family matches
+ Validation: Pixel value matches + Font family matches
 
 # Wrong Approach:
 Figma "H2" → CSS "text-h2" (blindly matching names without validation)

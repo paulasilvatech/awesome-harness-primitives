@@ -24,7 +24,7 @@ tools for *operational health* outcomes. Don't try to memorize which skill
 "owns" which tool — pick by what the user is doing. For health checks and
 failure-rate dashboards, load `flowstudio-power-automate-monitoring` instead.
 
-> **⚠️ Pro+ subscription required.** This skill calls `store_*` tools that
+>** Pro+ subscription required.** This skill calls `store_*` tools that
 > only work for FlowStudio for Teams or MCP Pro+ subscribers.
 >
 > **If the user does not have Pro+ access:** the first `store_*` tool call

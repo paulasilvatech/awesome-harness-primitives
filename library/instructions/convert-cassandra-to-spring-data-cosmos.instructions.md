@@ -8,18 +8,18 @@ description: 'Step-by-step guide for converting Spring Boot Cassandra applicatio
 ## Applicability
 
 This guide applies to:
-- ✅ Spring Boot 2.x - 3.x applications (both reactive and non-reactive)
-- ✅ Maven and Gradle-based projects
-- ✅ Applications using Spring Data Cassandra, Cassandra DAOs, or DataStax drivers
-- ✅ Projects with or without Lombok
-- ✅ UUID-based or String-based entity identifiers
-- ✅ Both synchronous and reactive (Spring WebFlux) applications
+- Spring Boot 2.x - 3.x applications (both reactive and non-reactive)
+- Maven and Gradle-based projects
+- Applications using Spring Data Cassandra, Cassandra DAOs, or DataStax drivers
+- Projects with or without Lombok
+- UUID-based or String-based entity identifiers
+- Both synchronous and reactive (Spring WebFlux) applications
 
 This guide does NOT cover:
-- ❌ Non-Spring frameworks (Jakarta EE, Micronaut, Quarkus, plain Java)
-- ❌ Complex Cassandra features (materialized views, UDTs, counters, custom types)
-- ❌ Bulk data migration (code conversion only - data must be migrated separately)
-- ❌ Cassandra-specific features like lightweight transactions (LWT) or batch operations across partitions
+- Non-Spring frameworks (Jakarta EE, Micronaut, Quarkus, plain Java)
+- Complex Cassandra features (materialized views, UDTs, counters, custom types)
+- Bulk data migration (code conversion only - data must be migrated separately)
+- Cassandra-specific features like lightweight transactions (LWT) or batch operations across partitions
 
 ## Overview
 

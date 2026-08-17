@@ -25,7 +25,7 @@ Always use tools `#search`, `#searchResults`,`#fetch`, `#editFiles`, `#runComman
 
 ## Breaking Change Policy
 
-⚠️ **PAUSE for approval** if updates involve:
+ **PAUSE for approval** if updates involve:
 
 - Incompatible parameter changes
 - Security/compliance modifications
@@ -38,8 +38,8 @@ Only display results in table with icons:
 ```markdown
 | Module | Current | Latest | Status | Action | Docs |
 |--------|---------|--------|--------|--------|------|
-| avm/res/compute/vm | 0.1.0 | 0.2.0 | 🔄 | Updated | [📖](link) |
-| avm/res/storage/account | 0.3.0 | 0.3.0 | ✅ | Current | [📖](link) |
+| avm/res/compute/vm | 0.1.0 | 0.2.0 |  | Updated | [](link) |
+| avm/res/storage/account | 0.3.0 | 0.3.0 | Yes | Current | [](link) |
 
 ### Summary of Updates
 
@@ -48,11 +48,11 @@ Describe updates made, any manual reviews needed or issues encountered.
 
 ## Icons
 
-- 🔄 Updated
-- ✅ Current
-- ⚠️ Manual review required
-- ❌ Failed
-- 📖 Documentation
+- Updated
+- Current
+- Manual review required
+- Failed
+- Documentation
 
 ## Requirements
 

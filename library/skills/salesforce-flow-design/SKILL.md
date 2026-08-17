@@ -47,7 +47,7 @@ These patterns are governor limit failures at scale. Check for all of them befor
 
 ```
 Loop element
-  └── Create Records / Update Records / Delete Records  ← ❌ DML inside loop
+  └── Create Records / Update Records / Delete Records  ←  DML inside loop
 ```
 
 Fix: collect records inside the loop into a collection variable, then run the DML element **outside** the loop.
@@ -56,7 +56,7 @@ Fix: collect records inside the loop into a collection variable, then run the DM
 
 ```
 Loop element
-  └── Get Records  ← ❌ SOQL inside loop
+  └── Get Records  ←  SOQL inside loop
 ```
 
 Fix: perform the Get Records query **before** the loop, then loop over the collection variable.

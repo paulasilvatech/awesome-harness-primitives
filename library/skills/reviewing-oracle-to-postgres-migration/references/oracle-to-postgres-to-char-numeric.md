@@ -125,11 +125,11 @@ var sql = "SELECT CAST(id AS TEXT) AS id_text FROM entities WHERE CAST(status AS
 
 Search for `TO_CHAR` in:
 
-- ✅ Stored procedures and functions (DDL scripts)
-- ✅ Application data access layers (DAL classes)
-- ✅ Dynamic SQL builders
-- ✅ Reporting queries
-- ✅ ORM/Entity Framework raw SQL
+- Stored procedures and functions (DDL scripts)
+- Application data access layers (DAL classes)
+- Dynamic SQL builders
+- Reporting queries
+- ORM/Entity Framework raw SQL
 
 ## Error Messages to Watch For
 

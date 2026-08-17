@@ -13,7 +13,7 @@ Each example is sourced from a public GitHub repo with a direct link to the `.to
 
 **What makes it good:**
 - Intro step with an embedded SVG architecture diagram (raw GitHub URL inside the description)
-- Rich markdown per step with emoji section headers (`### 🎥 Tour Player`)
+- Rich markdown per step with emoji section headers (`###  Tour Player`)
 - Inline cross-file links inside descriptions: `[Gutter decorator](./src/player/decorator.ts)`
 - Uses the top-level `description` field as a subtitle for the tour itself
 
@@ -23,7 +23,7 @@ Each example is sourced from a public GitHub repo with a direct link to the `.to
 {
   "file": "src/player/index.ts",
   "line": 436,
-  "description": "### 🎥 Tour Player\n\nThe CodeTour player ...\n\n![Architecture](https://raw.githubusercontent.com/{owner}/{repo}/main/overview.svg)\n\nSee also: [Gutter decorator](./src/player/decorator.ts)"
+  "description": "###  Tour Player\n\nThe CodeTour player ...\n\n![Architecture](https://raw.githubusercontent.com/{owner}/{repo}/main/overview.svg)\n\nSee also: [Gutter decorator](./src/player/decorator.ts)"
 }
 ```
 
@@ -103,7 +103,7 @@ Each example is sourced from a public GitHub repo with a direct link to the `.to
 **Steps:** 28 · **Depth:** Deep
 
 **What makes it good:**
-- Uses **content-only checkpoint steps** (no `file` key) as progress milestones: "Check out your page! 🎉" and "Try it out!" between coding tasks
+- Uses **content-only checkpoint steps** (no `file` key) as progress milestones: "Check out your page! " and "Try it out!" between coding tasks
 - Terminal inline commands in descriptions: `>> npm install uuid; npm install styled-components`
 - Each file step shows the exact code the user should accept, in a markdown code fence, so they know the expected output
 
@@ -111,7 +111,7 @@ Each example is sourced from a public GitHub repo with a direct link to the `.to
 
 ```json
 {
-  "title": "Check out your page! 🎉",
+  "title": "Check out your page! ",
   "description": "Open the **Simple Browser** tab to see your to-do list. You should see all three tasks rendering from your data array.\n\nOnce you're happy with it, continue to add interactivity."
 }
 ```

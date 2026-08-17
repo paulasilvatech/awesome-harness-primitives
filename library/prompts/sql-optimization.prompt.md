@@ -9,18 +9,18 @@ tools: ['changes', 'codebase', 'editFiles', 'problems']
 
 Expert SQL performance optimization for ${selection} (or entire project if no selection). Focus on universal SQL optimization techniques that work across MySQL, PostgreSQL, SQL Server, Oracle, and other SQL databases.
 
-## 🎯 Core Optimization Areas
+## Core Optimization Areas
 
 ### Query Performance Analysis
 ```sql
--- ❌ BAD: Inefficient query patterns
+-- BAD: Inefficient query patterns
 SELECT * FROM orders o
 WHERE YEAR(o.created_at) = 2024
   AND o.customer_id IN (
       SELECT c.id FROM customers c WHERE c.status = 'active'
   );
 
--- ✅ GOOD: Optimized query with proper indexing hints
+-- GOOD: Optimized query with proper indexing hints
 SELECT o.id, o.customer_id, o.total_amount, o.created_at
 FROM orders o
 INNER JOIN customers c ON o.customer_id = c.id
@@ -36,10 +36,10 @@ WHERE o.created_at >= '2024-01-01'
 
 ### Index Strategy Optimization
 ```sql
--- ❌ BAD: Poor indexing strategy
+-- BAD: Poor indexing strategy
 CREATE INDEX idx_user_data ON users(email, first_name, last_name, created_at);
 
--- ✅ GOOD: Optimized composite indexing
+-- GOOD: Optimized composite indexing
 -- For queries filtering by email first, then sorting by created_at
 CREATE INDEX idx_users_email_created ON users(email, created_at);
 
@@ -53,7 +53,7 @@ WHERE status IS NOT NULL;
 
 ### Subquery Optimization
 ```sql
--- ❌ BAD: Correlated subquery
+-- BAD: Correlated subquery
 SELECT p.product_name, p.price
 FROM products p
 WHERE p.price > (
@@ -62,7 +62,7 @@ WHERE p.price > (
     WHERE p2.category_id = p.category_id
 );
 
--- ✅ GOOD: Window function approach
+-- GOOD: Window function approach
 SELECT product_name, price
 FROM (
     SELECT product_name, price,
@@ -72,11 +72,11 @@ FROM (
 WHERE price > avg_category_price;
 ```
 
-## 📊 Performance Tuning Techniques
+## Performance Tuning Techniques
 
 ### JOIN Optimization
 ```sql
--- ❌ BAD: Inefficient JOIN order and conditions
+-- BAD: Inefficient JOIN order and conditions
 SELECT o.*, c.name, p.product_name
 FROM orders o
 LEFT JOIN customers c ON o.customer_id = c.id
@@ -85,7 +85,7 @@ LEFT JOIN products p ON oi.product_id = p.id
 WHERE o.created_at > '2024-01-01'
   AND c.status = 'active';
 
--- ✅ GOOD: Optimized JOIN with filtering
+-- GOOD: Optimized JOIN with filtering
 SELECT o.id, o.total_amount, c.name, p.product_name
 FROM orders o
 INNER JOIN customers c ON o.customer_id = c.id AND c.status = 'active'
@@ -96,12 +96,12 @@ WHERE o.created_at > '2024-01-01';
 
 ### Pagination Optimization
 ```sql
--- ❌ BAD: OFFSET-based pagination (slow for large offsets)
+-- BAD: OFFSET-based pagination (slow for large offsets)
 SELECT * FROM products 
 ORDER BY created_at DESC 
 LIMIT 20 OFFSET 10000;
 
--- ✅ GOOD: Cursor-based pagination
+-- GOOD: Cursor-based pagination
 SELECT * FROM products 
 WHERE created_at < '2024-06-15 10:30:00'
 ORDER BY created_at DESC 
@@ -116,12 +116,12 @@ LIMIT 20;
 
 ### Aggregation Optimization
 ```sql
--- ❌ BAD: Multiple separate aggregation queries
+-- BAD: Multiple separate aggregation queries
 SELECT COUNT(*) FROM orders WHERE status = 'pending';
 SELECT COUNT(*) FROM orders WHERE status = 'shipped';
 SELECT COUNT(*) FROM orders WHERE status = 'delivered';
 
--- ✅ GOOD: Single query with conditional aggregation
+-- GOOD: Single query with conditional aggregation
 SELECT 
     COUNT(CASE WHEN status = 'pending' THEN 1 END) as pending_count,
     COUNT(CASE WHEN status = 'shipped' THEN 1 END) as shipped_count,
@@ -129,15 +129,15 @@ SELECT
 FROM orders;
 ```
 
-## 🔍 Query Anti-Patterns
+## Query Anti-Patterns
 
 ### SELECT Performance Issues
 ```sql
--- ❌ BAD: SELECT * anti-pattern
+-- BAD: SELECT * anti-pattern
 SELECT * FROM large_table lt
 JOIN another_table at ON lt.id = at.ref_id;
 
--- ✅ GOOD: Explicit column selection
+-- GOOD: Explicit column selection
 SELECT lt.id, lt.name, at.value
 FROM large_table lt
 JOIN another_table at ON lt.id = at.ref_id;
@@ -145,11 +145,11 @@ JOIN another_table at ON lt.id = at.ref_id;
 
 ### WHERE Clause Optimization
 ```sql
--- ❌ BAD: Function calls in WHERE clause
+-- BAD: Function calls in WHERE clause
 SELECT * FROM orders 
 WHERE UPPER(customer_email) = 'JOHN@EXAMPLE.COM';
 
--- ✅ GOOD: Index-friendly WHERE clause
+-- GOOD: Index-friendly WHERE clause
 SELECT * FROM orders 
 WHERE customer_email = 'john@example.com';
 -- Consider: CREATE INDEX idx_orders_email ON orders(LOWER(customer_email));
@@ -157,27 +157,27 @@ WHERE customer_email = 'john@example.com';
 
 ### OR vs UNION Optimization
 ```sql
--- ❌ BAD: Complex OR conditions
+-- BAD: Complex OR conditions
 SELECT * FROM products 
 WHERE (category = 'electronics' AND price < 1000)
    OR (category = 'books' AND price < 50);
 
--- ✅ GOOD: UNION approach for better optimization
+-- GOOD: UNION approach for better optimization
 SELECT * FROM products WHERE category = 'electronics' AND price < 1000
 UNION ALL
 SELECT * FROM products WHERE category = 'books' AND price < 50;
 ```
 
-## 📈 Database-Agnostic Optimization
+## Database-Agnostic Optimization
 
 ### Batch Operations
 ```sql
--- ❌ BAD: Row-by-row operations
+-- BAD: Row-by-row operations
 INSERT INTO products (name, price) VALUES ('Product 1', 10.00);
 INSERT INTO products (name, price) VALUES ('Product 2', 15.00);
 INSERT INTO products (name, price) VALUES ('Product 3', 20.00);
 
--- ✅ GOOD: Batch insert
+-- GOOD: Batch insert
 INSERT INTO products (name, price) VALUES 
 ('Product 1', 10.00),
 ('Product 2', 15.00),
@@ -186,7 +186,7 @@ INSERT INTO products (name, price) VALUES
 
 ### Temporary Table Usage
 ```sql
--- ✅ GOOD: Using temporary tables for complex operations
+-- GOOD: Using temporary tables for complex operations
 CREATE TEMPORARY TABLE temp_calculations AS
 SELECT customer_id, 
        SUM(total_amount) as total_spent,
@@ -202,11 +202,11 @@ JOIN customers c ON tc.customer_id = c.id
 WHERE tc.total_spent > 1000;
 ```
 
-## 🛠️ Index Management
+## Index Management
 
 ### Index Design Principles
 ```sql
--- ✅ GOOD: Covering index design
+-- GOOD: Covering index design
 CREATE INDEX idx_orders_covering 
 ON orders(customer_id, created_at) 
 INCLUDE (total_amount, status);  -- SQL Server syntax
@@ -215,13 +215,13 @@ INCLUDE (total_amount, status);  -- SQL Server syntax
 
 ### Partial Index Strategy
 ```sql
--- ✅ GOOD: Partial indexes for specific conditions
+-- GOOD: Partial indexes for specific conditions
 CREATE INDEX idx_orders_active 
 ON orders(created_at) 
 WHERE status IN ('pending', 'processing');
 ```
 
-## 📊 Performance Monitoring Queries
+## Performance Monitoring Queries
 
 ### Query Performance Analysis
 ```sql
@@ -250,7 +250,7 @@ CROSS APPLY sys.dm_exec_sql_text(qs.sql_handle) qt
 ORDER BY avg_elapsed_time DESC;
 ```
 
-## 🎯 Universal Optimization Checklist
+## Universal Optimization Checklist
 
 ### Query Structure
 - [ ] Avoiding SELECT * in production queries
@@ -286,7 +286,7 @@ ORDER BY avg_elapsed_time DESC;
 - [ ] Setting up alerts for slow queries
 - [ ] Regular index usage analysis
 
-## 📝 Optimization Methodology
+## Optimization Methodology
 
 1. **Identify**: Use database-specific tools to find slow queries
 2. **Analyze**: Examine execution plans and identify bottlenecks

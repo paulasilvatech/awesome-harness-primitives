@@ -219,9 +219,9 @@ def find_changed_clusters(frame_a, frame_b, threshold=30, min_pixels=300, dilate
 
 | Format | VS Code Preview | GitHub | Browser |
 |--------|----------------|--------|---------|
-| GIF | ✅ Animates | ✅ | ✅ |
-| WebP | ⚠️ Static only | ✅ | ✅ |
-| MP4 | ❌ Broken | ⚠️ | ✅ |
+| GIF | Animates | Yes | Yes |
+| WebP |  Static only | Yes | Yes |
+| MP4 | Broken |  | Yes |
 
 **GIF is the only universally supported animated format** across VS Code preview, GitHub markdown, and browsers.
 

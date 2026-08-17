@@ -106,8 +106,8 @@ Do they have incident response processes for tool failures?
 - [ ] "Who owns customer communication?" → Map to their escalation path
 
 **Positioning word choices:**
-- ✅ Teammate, augments, accelerates, you stay in control
-- ❌ Autonomous, replaces, fully automated, AI-first
+- Teammate, augments, accelerates, you stay in control
+- Autonomous, replaces, fully automated, AI-first
 
 **Demo structure:**
 1. Problem with quantified cost (30s)

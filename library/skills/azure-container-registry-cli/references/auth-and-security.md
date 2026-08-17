@@ -113,7 +113,7 @@ az aks check-acr --name {cluster} --resource-group {rg} --acr {registry}.azurecr
 
 `--attach-acr` requires Owner or User Access Administrator on the registry. Cross-subscription attach works by passing the full ACR resource ID.
 
-⚠️ `--attach-acr` assigns `AcrPull`, which is **not honored on ABAC-enabled registries** (`roleAssignmentMode` = `AbacRepositoryPermissions`). For those, assign the ABAC roles to the kubelet identity manually:
+ `--attach-acr` assigns `AcrPull`, which is **not honored on ABAC-enabled registries** (`roleAssignmentMode` = `AbacRepositoryPermissions`). For those, assign the ABAC roles to the kubelet identity manually:
 
 ```bash
 ACR_ID=$(az acr show --name {registry} --query id --output tsv)

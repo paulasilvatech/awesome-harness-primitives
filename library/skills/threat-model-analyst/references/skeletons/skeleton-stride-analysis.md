@@ -1,9 +1,9 @@
 # Skeleton: 2-stride-analysis.md
 
-> **⛔ Copy the template content below VERBATIM (excluding the outer code fence). Replace `[FILL]` placeholders. The "A" in STRIDE-A is ALWAYS "Abuse" — NEVER "Authorization".**
-> **⛔ Exploitability Tiers table MUST have EXACTLY 4 columns: `Tier | Label | Prerequisites | Assignment Rule`. DO NOT merge into 3 columns. DO NOT rename `Assignment Rule` to `Description`.**
-> **⛔ Summary table MUST include a `Link` column: `Component | Link | S | T | R | I | D | E | A | Total | T1 | T2 | T3 | Risk`**
-> **⛔ N/A Categories MUST use a table (`| Category | Justification |`), NOT prose/bullet points.**
+> **Copy the template content below VERBATIM (excluding the outer code fence). Replace `[FILL]` placeholders. The "A" in STRIDE-A is ALWAYS "Abuse" — NEVER "Authorization". **
+> **Exploitability Tiers table MUST have EXACTLY 4 columns: `Tier | Label | Prerequisites | Assignment Rule`. DO NOT merge into 3 columns. DO NOT rename `Assignment Rule` to `Description`. **
+> **Summary table MUST include a `Link` column: `Component | Link | S | T | R | I | D | E | A | Total | T1 | T2 | T3 | Risk`**
+> **N/A Categories MUST use a table (`| Category | Justification |`), NOT prose/bullet points. **
 
 ---
 
@@ -22,7 +22,7 @@ Threats are classified into three exploitability tiers based on the prerequisite
 | **Tier 2** | Conditional Risk | Single prerequisite: `Authenticated User`, `Privileged User`, `Internal Network`, or single `{Boundary} Access` | Requires exactly ONE form of access. The prerequisite field has ONE item. |
 | **Tier 3** | Defense-in-Depth | `Host/OS Access`, `Admin Credentials`, `{Component} Compromise`, `Physical Access`, or MULTIPLE prerequisites joined with `+` | Requires significant prior breach, infrastructure access, or multiple combined prerequisites. |
 
-<!-- ⛔ POST-TABLE CHECK: Verify this table has EXACTLY 4 columns (Tier|Label|Prerequisites|Assignment Rule). If you wrote 3 columns or named the 4th column 'Description' or 'Example' → FIX NOW before continuing. -->
+<!-- POST-TABLE CHECK: Verify this table has EXACTLY 4 columns (Tier|Label|Prerequisites|Assignment Rule). If you wrote 3 columns or named the 4th column 'Description' or 'Example' → FIX NOW before continuing. -->
 
 ## Summary
 
@@ -33,7 +33,7 @@ Threats are classified into three exploitability tiers based on the prerequisite
 [END-REPEAT]
 | **Totals** | | **[FILL]** | **[FILL]** | **[FILL]** | **[FILL]** | **[FILL]** | **[FILL]** | **[FILL]** | **[FILL]** | **[FILL]** | **[FILL]** | **[FILL]** | |
 
-<!-- ⛔ POST-TABLE CHECK: Verify this Summary table:
+<!-- POST-TABLE CHECK: Verify this Summary table:
   1. Has 14 columns: Component | Link | S | T | R | I | D | E | A | Total | T1 | T2 | T3 | Risk
   2. The 2nd column is a SEPARATE 'Link' column with `[Link](#anchor)` values — do NOT embed links inside the Component column
   3. S+T+R+I+D+E+A = Total for every row
@@ -87,7 +87,7 @@ Threats are classified into three exploitability tiers based on the prerequisite
 | [FILL: Spoofing/Tampering/Repudiation/Information Disclosure/Denial of Service/Elevation of Privilege/Abuse] | [FILL: 1-sentence justification] |
 [END-REPEAT]
 
-<!-- ⛔ POST-COMPONENT CHECK: Verify this component:
+<!-- POST-COMPONENT CHECK: Verify this component:
   1. Category column uses full names (not abbreviations like 'S', 'T', 'DoS')
   2. 'A' category is 'Abuse' (NEVER 'Authorization')
   3. Status column uses ONLY: Open, Mitigated, Platform
@@ -98,9 +98,9 @@ Threats are classified into three exploitability tiers based on the prerequisite
 [END-REPEAT]
 ```
 
-**STRIDE + Abuse Cases — the 7 categories are EXACTLY:**
+**STRIDE + Abuse Cases — the 7 categories are EXACTLY: **
 Spoofing | Tampering | Repudiation | Information Disclosure | Denial of Service | Elevation of Privilege | Abuse
 
-**Note:** The first 6 are standard STRIDE. "Abuse" is a supplementary category for business logic misuse (workflow manipulation, feature exploitation, API abuse). It is NOT "Authorization" — authorization issues belong under Elevation of Privilege (E).
+**Note: ** The first 6 are standard STRIDE. "Abuse" is a supplementary category for business logic misuse (workflow manipulation, feature exploitation, API abuse). It is NOT "Authorization" — authorization issues belong under Elevation of Privilege (E).
 
-**Valid Status values:** `Open` | `Mitigated` | `Platform` — NO other values permitted.
+**Valid Status values: ** `Open` | `Mitigated` | `Platform` — NO other values permitted.

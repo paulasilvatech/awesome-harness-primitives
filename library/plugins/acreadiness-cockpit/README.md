@@ -29,7 +29,7 @@ Drive [Microsoft AgentRC](https://github.com/microsoft/agentrc) from Copilot cha
 - **Repo Health** breakdown (8 pillars), each with an **AI relevance** badge (High/Medium/Low), *what it measures*, *why it matters for AI*, *current state*, *recommendation*
 - **AI Setup** breakdown (AI Tooling pillar)
 - **Extras** (informational only — agents-doc, pr-template, pre-commit, architecture-doc)
-- **Prioritised Remediation Plan** (🔴 Fix First / 🟡 Fix Next / 🔵 Plan)
+- **Prioritised Remediation Plan** (Fix First / Fix Next / Plan)
 - Embedded raw AgentRC JSON for reuse
 
 ## Prerequisites

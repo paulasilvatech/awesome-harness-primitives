@@ -93,7 +93,7 @@ python analyze_plan.py plan.json --format summary
 
 Example output:
 ```
-🟢 3 order-only | 🟡 1 set changes
+ 3 order-only |  1 set changes
 ```
 
 ## CI/CD Pipeline Usage
@@ -113,20 +113,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
-        
+
       - name: Terraform Init & Plan
         run: |
           terraform init
           terraform plan -out=plan.tfplan
           terraform show -json plan.tfplan > plan.json
-          
+
       - name: Analyze Set Diff
         run: |
           python path/to/analyze_plan.py plan.json --format markdown > analysis.md
-          
+
       - name: Comment PR
         uses: marocchino/sticky-pull-request-comment@v2
         with:
@@ -178,9 +178,9 @@ python analyze_plan.py plan.json --exclude virtual_network
 
 | Category | Meaning | Recommended Action |
 |----------|---------|-------------------|
-| 🟢 Order-only | False-positive diff, no actual change | Safe to ignore |
-| 🟡 Actual change | Set element added/removed/modified | Review the content, usually in-place update |
-| 🔴 Resource replacement | delete + create | Check for downtime impact |
+|  Order-only | False-positive diff, no actual change | Safe to ignore |
+|  Actual change | Set element added/removed/modified | Review the content, usually in-place update |
+|  Resource replacement | delete + create | Check for downtime impact |
 
 ## Custom Attribute Definitions
 

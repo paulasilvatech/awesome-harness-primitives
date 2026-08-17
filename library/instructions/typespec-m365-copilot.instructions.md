@@ -63,15 +63,15 @@ using TypeSpec.M365.Copilot.Actions; // For API plugins
 ```typescript
 @instructions("""
   You are a [specific role] specialized in [domain].
-  
+
   Your responsibilities include:
   - [Key responsibility 1]
   - [Key responsibility 2]
-  
+
   When helping users:
   - [Behavioral guideline 1]
   - [Behavioral guideline 2]
-  
+
   You should NOT:
   - [Constraint 1]
   - [Constraint 2]
@@ -308,18 +308,18 @@ namespace KnowledgeWorker {
 namespace ProjectAPI {
   @route("/projects") @get @action
   op list(): Project[];
-  
+
   @route("/projects/{id}") @get @action
   op get(@path id: string): Project;
-  
+
   @route("/projects") @post @action
   @capabilities(#{confirmation: ...})
   op create(@body project: CreateProject): Project;
-  
+
   @route("/projects/{id}") @patch @action
   @capabilities(#{confirmation: ...})
   op update(@path id: string, @body project: UpdateProject): Project;
-  
+
   @route("/projects/{id}") @delete @action
   @capabilities(#{confirmation: ...})
   op delete(@path id: string): void;
@@ -405,7 +405,7 @@ Include comments in TypeSpec for complex operations:
 ```typescript
 /**
  * Retrieves project details with associated tasks and team members.
- * 
+ *
  * @param id - Unique project identifier
  * @param includeArchived - Whether to include archived tasks
  * @returns Complete project information
@@ -421,16 +421,16 @@ op getProjectDetails(
 
 ## Common Pitfalls to Avoid
 
-1. ❌ Generic agent names ("Helper Bot")
-2. ❌ Vague instructions ("Help users with things")
-3. ❌ No capability scoping (accessing all data)
-4. ❌ Missing confirmations on destructive operations
-5. ❌ Overly complex Adaptive Cards
-6. ❌ Hard-coded credentials in TypeSpec files
-7. ❌ Missing error response models
-8. ❌ Inconsistent naming conventions
-9. ❌ Too many capabilities (use only what's needed)
-10. ❌ Instructions over 8,000 characters
+1. Generic agent names ("Helper Bot")
+2. Vague instructions ("Help users with things")
+3. No capability scoping (accessing all data)
+4. Missing confirmations on destructive operations
+5. Overly complex Adaptive Cards
+6. Hard-coded credentials in TypeSpec files
+7. Missing error response models
+8. Inconsistent naming conventions
+9. Too many capabilities (use only what's needed)
+10. Instructions over 8,000 characters
 
 ## Resources
 

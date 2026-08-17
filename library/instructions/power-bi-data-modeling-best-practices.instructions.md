@@ -31,7 +31,7 @@ Example Star Schema Structure:
 DimProduct (Dimension)          FactSales (Fact)              DimCustomer (Dimension)
 ├── ProductKey (PK)             ├── SalesKey (PK)             ├── CustomerKey (PK)
 ├── ProductName                 ├── ProductKey (FK)           ├── CustomerName
-├── Category                    ├── CustomerKey (FK)          ├── CustomerType  
+├── Category                    ├── CustomerKey (FK)          ├── CustomerType
 ├── SubCategory                 ├── DateKey (FK)              ├── Region
 └── UnitPrice                   ├── SalesAmount               └── RegistrationDate
                                ├── Quantity
@@ -48,7 +48,7 @@ DimDate (Dimension)             └── DiscountAmount
 
 #### Dimension Table Design
 ```
-✅ DO:
+DO:
 - Use surrogate keys (auto-incrementing integers) as primary keys
 - Include business keys for integration purposes
 - Create hierarchical attributes (Category > SubCategory > Product)
@@ -56,7 +56,7 @@ DimDate (Dimension)             └── DiscountAmount
 - Include "Unknown" records for missing dimension data
 - Keep dimension tables relatively narrow (focused attributes)
 
-❌ DON'T:
+DON'T:
 - Use natural business keys as primary keys in large models
 - Mix fact and dimension characteristics in same table
 - Create unnecessarily wide dimension tables
@@ -65,14 +65,14 @@ DimDate (Dimension)             └── DiscountAmount
 
 #### Fact Table Design
 ```
-✅ DO:
+DO:
 - Store data at the most granular level needed
 - Use foreign keys that match dimension table keys
 - Include only numeric, measurable columns
 - Maintain consistent grain across all fact table rows
 - Use appropriate data types (decimal for currency, integer for counts)
 
-❌ DON'T:
+DON'T:
 - Include descriptive text columns (these belong in dimensions)
 - Mix different grains in the same fact table
 - Store calculated values that can be computed at query time
@@ -99,9 +99,9 @@ DimDate (1) ← DateKey → (*) FactSales
 #### Many-to-Many Relationships (Use Sparingly)
 ```
 When to Use:
-✅ Genuine many-to-many business relationships
-✅ When bridging table pattern is not feasible
-✅ For advanced analytical scenarios
+Genuine many-to-many business relationships
+When bridging table pattern is not feasible
+For advanced analytical scenarios
 
 Best Practices:
 - Create explicit bridging tables when possible
@@ -129,9 +129,9 @@ Implementation:
 ### 2. Relationship Configuration Guidelines
 ```
 Filter Direction:
-✅ Single Direction: Default choice, best performance
-✅ Both Directions: Only when cross-filtering is required for business logic
-❌ Avoid: Circular relationship paths
+Single Direction: Default choice, best performance
+Both Directions: Only when cross-filtering is required for business logic
+Avoid: Circular relationship paths
 
 Cross-Filter Direction:
 - Dimension to Fact: Always single direction
@@ -139,9 +139,9 @@ Cross-Filter Direction:
 - Dimension to Dimension: Only when business logic requires it
 
 Referential Integrity:
-✅ Enable for DirectQuery sources when data quality is guaranteed  
-✅ Improves query performance by using INNER JOINs
-❌ Don't enable if source data has orphaned records
+Enable for DirectQuery sources when data quality is guaranteed
+Improves query performance by using INNER JOINs
+Don't enable if source data has orphaned records
 ```
 
 ## Storage Mode Optimization
@@ -149,10 +149,10 @@ Referential Integrity:
 ### 1. Import Mode Best Practices
 ```
 When to Use Import Mode:
-✅ Data size fits within capacity limits
-✅ Complex analytical calculations required
-✅ Historical data analysis with stable datasets
-✅ Need for optimal query performance
+Data size fits within capacity limits
+Complex analytical calculations required
+Historical data analysis with stable datasets
+Need for optimal query performance
 
 Optimization Strategies:
 - Remove unnecessary columns and rows
@@ -165,16 +165,16 @@ Optimization Strategies:
 #### Data Reduction Techniques for Import
 ```
 Vertical Filtering (Column Reduction):
-✅ Remove columns not used in reports or relationships
-✅ Remove calculated columns that can be computed in DAX
-✅ Remove intermediate columns used only in Power Query
-✅ Optimize data types (Integer vs. Decimal, Date vs. DateTime)
+Remove columns not used in reports or relationships
+Remove calculated columns that can be computed in DAX
+Remove intermediate columns used only in Power Query
+Optimize data types (Integer vs. Decimal, Date vs. DateTime)
 
 Horizontal Filtering (Row Reduction):
-✅ Filter to relevant time periods (e.g., last 3 years of data)
-✅ Filter to relevant business entities (active customers, specific regions)
-✅ Remove test, invalid, or cancelled transactions
-✅ Implement proper data archiving strategies
+Filter to relevant time periods (e.g., last 3 years of data)
+Filter to relevant business entities (active customers, specific regions)
+Remove test, invalid, or cancelled transactions
+Implement proper data archiving strategies
 
 Data Type Optimization:
 Text → Numeric: Convert codes to integers when possible
@@ -186,10 +186,10 @@ High Precision → Lower Precision: Match business requirements
 ### 2. DirectQuery Mode Best Practices
 ```
 When to Use DirectQuery Mode:
-✅ Data exceeds import capacity limits
-✅ Real-time data requirements
-✅ Security/compliance requires data to stay at source
-✅ Integration with operational systems
+Data exceeds import capacity limits
+Real-time data requirements
+Security/compliance requires data to stay at source
+Integration with operational systems
 
 Optimization Requirements:
 - Optimize source database performance
@@ -203,37 +203,37 @@ Optimization Requirements:
 #### DirectQuery Performance Optimization
 ```
 Database Optimization:
-✅ Create indexes on frequently filtered columns
-✅ Create indexes on relationship key columns
-✅ Use materialized views for complex joins
-✅ Implement appropriate database maintenance
-✅ Consider columnstore indexes for analytical workloads
+Create indexes on frequently filtered columns
+Create indexes on relationship key columns
+Use materialized views for complex joins
+Implement appropriate database maintenance
+Consider columnstore indexes for analytical workloads
 
 Model Design for DirectQuery:
-✅ Keep DAX measures simple
-✅ Avoid calculated columns on large tables
-✅ Use star schema design strictly
-✅ Minimize cross-table operations
-✅ Pre-aggregate data in source when possible
+Keep DAX measures simple
+Avoid calculated columns on large tables
+Use star schema design strictly
+Minimize cross-table operations
+Pre-aggregate data in source when possible
 
 Query Performance:
-✅ Apply filters early in report design
-✅ Use appropriate visual types
-✅ Limit high-cardinality filtering
-✅ Monitor and optimize slow queries
+Apply filters early in report design
+Use appropriate visual types
+Limit high-cardinality filtering
+Monitor and optimize slow queries
 ```
 
 ### 3. Composite Model Design
 ```
 When to Use Composite Models:
-✅ Combine historical (Import) with real-time (DirectQuery) data
-✅ Extend existing models with additional data sources
-✅ Balance performance with data freshness requirements
-✅ Integrate multiple DirectQuery sources
+Combine historical (Import) with real-time (DirectQuery) data
+Extend existing models with additional data sources
+Balance performance with data freshness requirements
+Integrate multiple DirectQuery sources
 
 Storage Mode Selection:
 Import: Small dimension tables, historical aggregated facts
-DirectQuery: Large fact tables, real-time operational data  
+DirectQuery: Large fact tables, real-time operational data
 Dual: Dimension tables that need to work with both Import and DirectQuery facts
 Hybrid: Fact tables combining historical (Import) with recent (DirectQuery) data
 ```
@@ -241,9 +241,9 @@ Hybrid: Fact tables combining historical (Import) with recent (DirectQuery) data
 #### Dual Storage Mode Strategy
 ```
 Use Dual Mode For:
-✅ Dimension tables that relate to both Import and DirectQuery facts
-✅ Small, slowly changing reference tables
-✅ Lookup tables that need flexible querying
+Dimension tables that relate to both Import and DirectQuery facts
+Small, slowly changing reference tables
+Lookup tables that need flexible querying
 
 Configuration:
 - Set dimension tables to Dual mode
@@ -257,18 +257,18 @@ Configuration:
 ### 1. Date Table Design
 ```
 Essential Date Table Attributes:
-✅ Continuous date range (no gaps)
-✅ Mark as date table in Power BI
-✅ Include standard hierarchy (Year > Quarter > Month > Day)
-✅ Add business-specific columns (FiscalYear, WorkingDay, Holiday)
-✅ Use Date data type for date column
+Continuous date range (no gaps)
+Mark as date table in Power BI
+Include standard hierarchy (Year > Quarter > Month > Day)
+Add business-specific columns (FiscalYear, WorkingDay, Holiday)
+Use Date data type for date column
 
 Date Table Implementation:
 DateKey (Integer): 20240315 (YYYYMMDD format)
 Date (Date): 2024-03-15
 Year (Integer): 2024
 Quarter (Text): Q1 2024
-Month (Text): March 2024  
+Month (Text): March 2024
 MonthNumber (Integer): 3
 DayOfWeek (Text): Friday
 IsWorkingDay (Boolean): TRUE
@@ -292,7 +292,7 @@ Type 2 SCD (History Preservation):
 
 Implementation Pattern:
 CustomerKey (Surrogate): 1, 2, 3, 4
-CustomerID (Business): 101, 101, 102, 103  
+CustomerID (Business): 101, 101, 102, 103
 CustomerName: "John Doe", "John Smith", "Jane Doe", "Bob Johnson"
 EffectiveDate: 2023-01-01, 2024-01-01, 2023-01-01, 2023-01-01
 ExpirationDate: 2023-12-31, 9999-12-31, 9999-12-31, 9999-12-31
@@ -333,14 +333,14 @@ DimStudent (1) ← StudentKey → (*) BridgeStudentCourse (*) ← CourseKey → 
 Bridge Table Structure:
 StudentCourseKey (PK): Surrogate key
 StudentKey (FK): Reference to DimStudent
-CourseKey (FK): Reference to DimCourse  
+CourseKey (FK): Reference to DimCourse
 EnrollmentDate: Additional context
 Grade: Additional context
 Status: Active, Completed, Dropped
 
 Relationship Configuration:
 - DimStudent to BridgeStudentCourse: One-to-Many
-- BridgeStudentCourse to DimCourse: Many-to-One  
+- BridgeStudentCourse to DimCourse: Many-to-One
 - Set one relationship to bi-directional for filter propagation
 - Hide bridge table from report view
 ```
@@ -350,60 +350,60 @@ Relationship Configuration:
 ### 1. Model Size Optimization
 ```
 Column Optimization:
-✅ Remove unused columns completely
-✅ Use smallest appropriate data types
-✅ Convert high-cardinality text to integers with lookup tables
-✅ Remove redundant calculated columns
+Remove unused columns completely
+Use smallest appropriate data types
+Convert high-cardinality text to integers with lookup tables
+Remove redundant calculated columns
 
-Row Optimization:  
-✅ Filter to business-relevant time periods
-✅ Remove invalid, test, or cancelled transactions
-✅ Archive historical data appropriately
-✅ Use incremental refresh for growing datasets
+Row Optimization:
+Filter to business-relevant time periods
+Remove invalid, test, or cancelled transactions
+Archive historical data appropriately
+Use incremental refresh for growing datasets
 
 Aggregation Strategies:
-✅ Pre-calculate common aggregations
-✅ Use summary tables for high-level reporting
-✅ Implement automatic aggregations in Premium
-✅ Consider OLAP cubes for complex analytical requirements
+Pre-calculate common aggregations
+Use summary tables for high-level reporting
+Implement automatic aggregations in Premium
+Consider OLAP cubes for complex analytical requirements
 ```
 
 ### 2. Relationship Performance
 ```
 Key Selection:
-✅ Use integer keys over text keys
-✅ Prefer surrogate keys over natural keys
-✅ Ensure referential integrity in source data
-✅ Create appropriate indexes on key columns
+Use integer keys over text keys
+Prefer surrogate keys over natural keys
+Ensure referential integrity in source data
+Create appropriate indexes on key columns
 
 Cardinality Optimization:
-✅ Set correct relationship cardinality
-✅ Use "Assume Referential Integrity" when appropriate
-✅ Minimize bidirectional relationships
-✅ Avoid many-to-many relationships when possible
+Set correct relationship cardinality
+Use "Assume Referential Integrity" when appropriate
+Minimize bidirectional relationships
+Avoid many-to-many relationships when possible
 
 Cross-Filtering Strategy:
-✅ Use single-direction filtering as default
-✅ Enable bi-directional only when required
-✅ Test performance impact of cross-filtering
-✅ Document business reasons for bi-directional relationships
+Use single-direction filtering as default
+Enable bi-directional only when required
+Test performance impact of cross-filtering
+Document business reasons for bi-directional relationships
 ```
 
 ### 3. Query Performance Patterns
 ```
 Efficient Model Patterns:
-✅ Proper star schema implementation
-✅ Normalized dimension tables
-✅ Denormalized fact tables
-✅ Consistent grain across related tables
-✅ Appropriate use of calculated tables and columns
+Proper star schema implementation
+Normalized dimension tables
+Denormalized fact tables
+Consistent grain across related tables
+Appropriate use of calculated tables and columns
 
 Query Optimization:
-✅ Pre-filter large datasets
-✅ Use appropriate visual types for data
-✅ Minimize complex DAX in reports
-✅ Leverage model relationships effectively
-✅ Consider DirectQuery for large, real-time datasets
+Pre-filter large datasets
+Use appropriate visual types for data
+Minimize complex DAX in reports
+Leverage model relationships effectively
+Consider DirectQuery for large, real-time datasets
 ```
 
 ## Security and Governance
@@ -415,8 +415,8 @@ Implementation Patterns:
 User-Based Security:
 [UserEmail] = USERPRINCIPALNAME()
 
-Role-Based Security:  
-VAR UserRole = 
+Role-Based Security:
+VAR UserRole =
     LOOKUPVALUE(
         UserRoles[Role],
         UserRoles[Email],
@@ -428,39 +428,39 @@ RETURN
 Dynamic Security:
 LOOKUPVALUE(
     UserRegions[Region],
-    UserRegions[Email], 
+    UserRegions[Email],
     USERPRINCIPALNAME()
 ) = Customers[Region]
 
 Best Practices:
-✅ Test with different user accounts
-✅ Keep security logic simple and performant
-✅ Document security requirements clearly
-✅ Use security roles, not individual user filters
-✅ Consider performance impact of complex RLS
+Test with different user accounts
+Keep security logic simple and performant
+Document security requirements clearly
+Use security roles, not individual user filters
+Consider performance impact of complex RLS
 ```
 
 ### 2. Data Governance
 ```
 Documentation Requirements:
-✅ Business definitions for all measures
-✅ Data lineage and source system mapping
-✅ Refresh schedules and dependencies
-✅ Security and access control documentation
-✅ Change management procedures
+Business definitions for all measures
+Data lineage and source system mapping
+Refresh schedules and dependencies
+Security and access control documentation
+Change management procedures
 
 Data Quality:
-✅ Implement data validation rules
-✅ Monitor for data completeness
-✅ Handle missing values appropriately
-✅ Validate business rule implementation
-✅ Regular data quality assessments
+Implement data validation rules
+Monitor for data completeness
+Handle missing values appropriately
+Validate business rule implementation
+Regular data quality assessments
 
 Version Control:
-✅ Source control for Power BI files
-✅ Environment promotion procedures
-✅ Change tracking and approval processes
-✅ Backup and recovery procedures
+Source control for Power BI files
+Environment promotion procedures
+Change tracking and approval processes
+Backup and recovery procedures
 ```
 
 ## Testing and Validation Framework
@@ -492,58 +492,58 @@ Data Quality Testing:
 ### 2. Validation Procedures
 ```
 Business Validation:
-✅ Compare report totals with source systems
-✅ Validate complex calculations with business users
-✅ Test edge cases and boundary conditions
-✅ Confirm business logic implementation
-✅ Verify report accuracy across different filters
+Compare report totals with source systems
+Validate complex calculations with business users
+Test edge cases and boundary conditions
+Confirm business logic implementation
+Verify report accuracy across different filters
 
 Technical Validation:
-✅ Performance testing with realistic data volumes
-✅ Concurrent user testing
-✅ Security testing with different user roles
-✅ Data refresh testing and monitoring
-✅ Disaster recovery testing
+Performance testing with realistic data volumes
+Concurrent user testing
+Security testing with different user roles
+Data refresh testing and monitoring
+Disaster recovery testing
 ```
 
 ## Common Anti-Patterns to Avoid
 
 ### 1. Schema Anti-Patterns
 ```
-❌ Snowflake Schema (Unless Necessary):
+Snowflake Schema (Unless Necessary):
 - Multiple normalized dimension tables
 - Complex relationship chains
 - Reduced query performance
 - More complex for business users
 
-❌ Single Large Table:
+Single Large Table:
 - Mixing facts and dimensions
 - Denormalized to extreme
 - Difficult to maintain and extend
 - Poor performance for analytical queries
 
-❌ Multiple Fact Tables with Direct Relationships:
+Multiple Fact Tables with Direct Relationships:
 - Many-to-many between facts
 - Complex filter propagation
 - Difficult to maintain consistency
 - Better to use shared dimensions
 ```
 
-### 2. Relationship Anti-Patterns  
+### 2. Relationship Anti-Patterns
 ```
-❌ Bidirectional Relationships Everywhere:
+Bidirectional Relationships Everywhere:
 - Performance impact
 - Unpredictable filter behavior
 - Maintenance complexity
 - Should be exception, not rule
 
-❌ Many-to-Many Without Business Justification:
+Many-to-Many Without Business Justification:
 - Often indicates missing dimension
 - Can hide data quality issues
 - Complex debugging and maintenance
 - Bridge tables usually better solution
 
-❌ Circular Relationships:
+Circular Relationships:
 - Ambiguous filter paths
 - Unpredictable results
 - Difficult debugging
@@ -559,8 +559,8 @@ let
     Source = Source,
 
     #"Added custom" = Table.TransformColumnTypes(
-        Table.AddColumn(Source, "Hash", each Binary.ToText( 
-            Text.ToBinary( 
+        Table.AddColumn(Source, "Hash", each Binary.ToText(
+            Text.ToBinary(
                 Text.Combine(
                     List.Transform({[FirstName],[LastName],[Region]}, each if _ = null then "" else _),
                 "|")),

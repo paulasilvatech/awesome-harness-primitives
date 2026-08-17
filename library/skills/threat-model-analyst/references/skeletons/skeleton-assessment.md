@@ -1,6 +1,6 @@
 # Skeleton: 0-assessment.md
 
-> **⛔ Copy the template content below VERBATIM (excluding the outer code fence). Replace `[FILL]` placeholders. Do NOT add/rename/reorder sections.**
+> **Copy the template content below VERBATIM (excluding the outer code fence). Replace `[FILL]` placeholders. Do NOT add/rename/reorder sections. **
 > `[FILL]` = single value | `[FILL-PROSE]` = paragraphs | `[REPEAT]...[END-REPEAT]` = N copies | `[CONDITIONAL]...[END-CONDITIONAL]` = include if condition met
 
 ---
@@ -27,7 +27,7 @@
 | [incremental-comparison.html](incremental-comparison.html) | Visual comparison report |
 [END-CONDITIONAL]
 
-<!-- ⛔ POST-TABLE CHECK: Verify Report Files:
+<!-- POST-TABLE CHECK: Verify Report Files:
   1. `0-assessment.md` is the FIRST row (not 0.1-architecture.md)
   2. All generated files are listed
   3. Conditional rows (1.2-threatmodel-summary.mmd, incremental-comparison.html) only if those files exist
@@ -47,8 +47,8 @@
 
 > **Note on threat counts:** This analysis identified [FILL: N] threats across [FILL: M] components. This count reflects comprehensive STRIDE-A coverage, not systemic insecurity. Of these, **[FILL: T1 count] are directly exploitable** without prerequisites (Tier 1). The remaining [FILL: T2+T3 count] represent conditional risks and defense-in-depth considerations.
 
-<!-- ⛔ POST-SECTION CHECK: Verify Executive Summary:
-  1. Risk Rating heading has NO emojis: `### Risk Rating: Elevated` not `### Risk Rating: 🟠 Elevated`
+<!-- POST-SECTION CHECK: Verify Executive Summary:
+  1. Risk Rating heading has NO emojis: `### Risk Rating: Elevated` not `### Risk Rating: Elevated`
   2. Note on threat counts blockquote is present
   3. Element count and boundary count match actual counts from 1-threatmodel.md
   If ANY check fails → FIX NOW. -->
@@ -59,14 +59,14 @@
 
 | Tier | Description | Threats | Findings | Priority |
 |------|-------------|---------|----------|----------|
-| [Tier 1](3-findings.md#tier-1--direct-exposure-no-prerequisites) | Directly exploitable | [FILL] | [FILL] | 🔴 Critical Risk |
-| [Tier 2](3-findings.md#tier-2--conditional-risk-authenticated--single-prerequisite) | Requires authenticated access | [FILL] | [FILL] | 🟠 Elevated Risk |
-| [Tier 3](3-findings.md#tier-3--defense-in-depth-prior-compromise--host-access) | Requires prior compromise | [FILL] | [FILL] | 🟡 Moderate Risk |
+| [Tier 1](3-findings.md#tier-1--direct-exposure-no-prerequisites) | Directly exploitable | [FILL] | [FILL] | Critical Risk |
+| [Tier 2](3-findings.md#tier-2--conditional-risk-authenticated--single-prerequisite) | Requires authenticated access | [FILL] | [FILL] | Elevated Risk |
+| [Tier 3](3-findings.md#tier-3--defense-in-depth-prior-compromise--host-access) | Requires prior compromise | [FILL] | [FILL] | Moderate Risk |
 | **Total** | | **[FILL]** | **[FILL]** | |
 
-<!-- ⛔ POST-TABLE CHECK: Verify Action Summary:
+<!-- POST-TABLE CHECK: Verify Action Summary:
   1. EXACTLY 4 data rows: Tier 1, Tier 2, Tier 3, Total — NO 'Mitigated', 'Platform', or 'Fixed' rows
-  2. Priority column is FIXED: Tier 1=🔴 Critical Risk, Tier 2=🟠 Elevated Risk, Tier 3=🟡 Moderate Risk — never changed based on counts
+  2. Priority column is FIXED: Tier 1= Critical Risk, Tier 2= Elevated Risk, Tier 3= Moderate Risk — never changed based on counts
   3. Threats column sums match 2-stride-analysis.md Totals row
   4. Findings column sums match 3-findings.md FIND- heading count
   5. Tier 1/2/3 cells are hyperlinks to 3-findings.md tier headings — verify anchors resolve
@@ -80,7 +80,7 @@
 | [FIND-XX](3-findings.md#find-xx-title-slug) | T[FILL] | [FILL] | [FILL] | [FILL] |
 [END-REPEAT]
 
-<!-- ⛔ POST-TABLE CHECK: Verify Priority by Tier and CVSS Score:
+<!-- POST-TABLE CHECK: Verify Priority by Tier and CVSS Score:
   1. Maximum 10 rows (top 10 findings only, not all findings)
   2. Sort order: ALL Tier 1 findings first (by CVSS desc), then Tier 2 (by CVSS desc), then Tier 3 (by CVSS desc)
   3. Every Finding cell is a hyperlink: [FIND-XX](3-findings.md#find-xx-title-slug)
@@ -231,7 +231,7 @@
 | Analysis Mode | `Incremental` |
 [END-CONDITIONAL]
 
-<!-- ⛔ POST-TABLE CHECK: Verify Report Metadata:
+<!-- POST-TABLE CHECK: Verify Report Metadata:
   1. ALL values wrapped in backticks: `value`
   2. Git Commit, Baseline Commit, Target Commit each include date in parentheses
   3. Duration field is present (not missing)
@@ -259,7 +259,7 @@
 | **OWASP** | OWASP Top 10:2025 mapping (e.g., A01:2025 – Broken Access Control) |
 ```
 
-**Critical format rules baked into this skeleton:**
+**Critical format rules baked into this skeleton: **
 - `0-assessment.md` is the FIRST row in Report Files (not `0.1-architecture.md`)
 - `## Analysis Context & Assumptions` uses `&` (never word "and")
 - `---` horizontal rules between EVERY pair of `## ` sections (minimum 6)

@@ -14,7 +14,7 @@
 
 ## 1. Use Only Ruff (Replaces black, isort, flake8)
 
-**Decision:** Use `ruff` as the single linting and formatting tool. Remove `black` and `isort`.
+**Decision: ** Use `ruff` as the single linting and formatting tool. Remove `black` and `isort`.
 
 | Old (avoid) | New (use) | What it does |
 |---|---|---|
@@ -25,7 +25,7 @@
 | `bandit` | `ruff check --select S` | Security linting |
 | All of the above | `ruff` | One tool, one config section |
 
-**Why ruff?**
+**Why ruff? **
 - 10–100× faster than the tools it replaces (written in Rust).
 - Single config section in `pyproject.toml` — no `.flake8`, `.isort.cfg`, `pyproject.toml[tool.black]` sprawl.
 - Actively maintained by Astral; follows the same rules as the tools it replaces.
@@ -176,7 +176,7 @@ repos:
         args: ["--maxkb=500"]
 ```
 
-### ❌ Remove these hooks (replaced by ruff)
+### Remove these hooks (replaced by ruff)
 
 ```yaml
 # DELETE or never add:
@@ -224,7 +224,7 @@ exclude_lines  = [
 
 ### asyncio_mode = "auto" — remove @pytest.mark.asyncio
 
-With `asyncio_mode = "auto"` set in `pyproject.toml`, **do not** add `@pytest.mark.asyncio`
+With `asyncio_mode = "auto"` set in `pyproject.toml`, **do not ** add `@pytest.mark.asyncio`
 to test functions. The decorator is redundant and will raise a warning in modern pytest-asyncio.
 
 ```python

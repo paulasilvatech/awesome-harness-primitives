@@ -148,19 +148,19 @@ description: "Java Spring Boot development standards"
 - **Documentation standards** (format, requirements)
 
 **STRICTLY AVOID in .instructions.md files:**
-- ❌ **Writing actual code examples or snippets**
-- ❌ **Detailed implementation steps**
-- ❌ **Test cases or specific test code**
-- ❌ **Boilerplate or template code**
-- ❌ **Function signatures or class definitions**
-- ❌ **Import statements or dependency lists**
+- **Writing actual code examples or snippets**
+- **Detailed implementation steps**
+- **Test cases or specific test code**
+- **Boilerplate or template code**
+- **Function signatures or class definitions**
+- **Import statements or dependency lists**
 
 **CORRECT .instructions.md content:**
-- ✅ **"Use descriptive variable names and follow camelCase"**
-- ✅ **"Prefer composition over inheritance"**
-- ✅ **"Write unit tests for all public methods"**
-- ✅ **"Use TypeScript strict mode for better type safety"**
-- ✅ **"Follow the repository's established error handling patterns"**
+- **"Use descriptive variable names and follow camelCase"**
+- **"Prefer composition over inheritance"**
+- **"Write unit tests for all public methods"**
+- **"Use TypeScript strict mode for better type safety"**
+- **"Follow the repository's established error handling patterns"**
 
 **Research Strategy with fetch tool:**
 1. **Check awesome-copilot first** - Always start here for ALL file types
@@ -392,16 +392,16 @@ jobs:
 ```
 
 **AVOID in workflows:**
-- ❌ Complex configuration setups
-- ❌ Multiple environment configurations
-- ❌ Advanced tooling setup
-- ❌ Custom scripts or complex logic
-- ❌ Multiple package managers
-- ❌ Database setup or external services
+- Complex configuration setups
+- Multiple environment configurations
+- Advanced tooling setup
+- Custom scripts or complex logic
+- Multiple package managers
+- Database setup or external services
 
 **INCLUDE only:**
-- ✅ Language/runtime setup
-- ✅ Basic dependency installation
-- ✅ Simple linting (if standard)
-- ✅ Basic test running
-- ✅ Standard build commands
+- Language/runtime setup
+- Basic dependency installation
+- Simple linting (if standard)
+- Basic test running
+- Standard build commands

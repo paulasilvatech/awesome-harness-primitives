@@ -4,7 +4,7 @@ This file contains ALL rules for creating Mermaid diagrams in threat model repor
 
 ---
 
-## ⛔ CRITICAL RULES — READ BEFORE DRAWING ANY DIAGRAM
+## CRITICAL RULES — READ BEFORE DRAWING ANY DIAGRAM
 
 These rules are the most frequently violated. Read them first, and re-check after every diagram.
 
@@ -21,9 +21,9 @@ VectorDbApi(("VectorDB API<br/>+ Dapr")):::process
 
 **DO NOT DO THIS — never create standalone sidecar nodes:**
 ```
-❌ MISE(("MISE Sidecar")):::process
-❌ DaprSidecar(("Dapr Sidecar")):::process
-❌ InferencingFlow -->|"localhost"| MISE
+ MISE(("MISE Sidecar")):::process
+ DaprSidecar(("Dapr Sidecar")):::process
+ InferencingFlow -->|"localhost"| MISE
 ```
 
 **Why:** Sidecars (Dapr, MISE/auth proxy, Envoy, Istio proxy, log collectors) share the Pod's network namespace, lifecycle, and security context with their primary container. They are NOT independent services.
@@ -35,8 +35,8 @@ VectorDbApi(("VectorDB API<br/>+ Dapr")):::process
 **DO NOT draw data flows between a primary container and its sidecars.** These are implicit from the co-location annotation.
 
 ```
-❌ InferencingFlow -->|"localhost:3500"| DaprSidecar
-❌ InferencingFlow -->|"localhost:8080"| MISE
+ InferencingFlow -->|"localhost:3500"| DaprSidecar
+ InferencingFlow -->|"localhost:8080"| MISE
 ```
 
 Intra-pod communication happens on localhost — it has no security boundary and should not appear in the diagram.
@@ -46,12 +46,12 @@ Intra-pod communication happens on localhost — it has no security boundary and
 When a sidecar makes a call that crosses a trust boundary (e.g., MISE → Azure AD, Dapr → Redis), draw the arrow **from the host container node** — never from a standalone sidecar node.
 
 ```
-✅ InferencingFlow -->|"HTTPS (MISE auth)"| AzureAD
-✅ IngestionAPI -->|"HTTPS (MISE auth)"| AzureAD
-✅ InferencingFlow -->|"TCP (Dapr)"| Redis
+ InferencingFlow -->|"HTTPS (MISE auth)"| AzureAD
+ IngestionAPI -->|"HTTPS (MISE auth)"| AzureAD
+ InferencingFlow -->|"TCP (Dapr)"| Redis
 
-❌ MISESidecar -->|"HTTPS"| AzureAD
-❌ DaprSidecar -->|"TCP"| Redis
+ MISESidecar -->|"HTTPS"| AzureAD
+ DaprSidecar -->|"TCP"| Redis
 ```
 
 If multiple pods have the same sidecar calling the same external target, draw one arrow per host container. Multiple arrows to the same target is correct.
@@ -61,8 +61,8 @@ If multiple pods have the same sidecar calling the same external target, draw on
 Do NOT add separate Element Table rows for sidecars. Describe them in the host container's description column:
 
 ```
-✅ | Inferencing Flow | Process | API service + MISE auth proxy + Dapr sidecar | Backend Services |
-❌ | MISE Sidecar     | Process | Auth proxy for Inferencing Flow              | Backend Services |
+ | Inferencing Flow | Process | API service + MISE auth proxy + Dapr sidecar | Backend Services |
+ | MISE Sidecar     | Process | Auth proxy for Inferencing Flow              | Backend Services |
 ```
 
 If a sidecar class has its own threat surface (e.g., MISE auth bypass), it gets a `## Component` section in STRIDE analysis — but it is still NOT a separate diagram node.
@@ -88,7 +88,7 @@ After drawing ANY diagram, verify:
 
 ## Color Palette
 
-> **⛔ CRITICAL: Use ONLY these exact hex codes. Do NOT invent colors, use Chakra UI colors (#4299E1, #48BB78, #E53E3E), Tailwind colors, or any other palette. The colors below are from ColorBrewer qualitative palettes for colorblind accessibility. COPY the classDef lines VERBATIM from this file.**
+>** CRITICAL: Use ONLY these exact hex codes. Do NOT invent colors, use Chakra UI colors (#4299E1, #48BB78, #E53E3E), Tailwind colors, or any other palette. The colors below are from ColorBrewer qualitative palettes for colorblind accessibility. COPY the classDef lines VERBATIM from this file.**
 
 These colors are shared across ALL Mermaid diagrams. Colors are from ColorBrewer qualitative palettes — designed for colorblind accessibility.
 
@@ -118,7 +118,7 @@ These colors are shared across ALL Mermaid diagrams. Colors are from ColorBrewer
 
 Every Mermaid diagram — flowchart and sequence — MUST include an `%%{init}%%` block that forces a white background. This ensures diagrams render correctly in dark themes.
 
-> **⛔ CRITICAL: Do NOT add `primaryColor`, `secondaryColor`, `tertiaryColor`, or ANY custom color keys to themeVariables. The init block controls ONLY the background and line color. ALL element colors come from classDef lines — never from themeVariables. If you add color overrides to themeVariables, they will BREAK the classDef palette.**
+>** CRITICAL: Do NOT add `primaryColor`, `secondaryColor`, `tertiaryColor`, or ANY custom color keys to themeVariables. The init block controls ONLY the background and line color. ALL element colors come from classDef lines — never from themeVariables. If you add color overrides to themeVariables, they will BREAK the classDef palette.**
 
 ### Flowchart Init Block
 

@@ -4,7 +4,7 @@ When you change how something looks — a layout, a chart, a form — the PR des
 
 This plugin teaches Copilot to capture screenshots of your web app (or any UI), annotate them with callouts, and embed them in the PR description. Once you get used to having up-to-date screenshots on every visual change, going back to text-only PRs feels like reviewing code with your eyes closed.
 
-## Demo 🎬
+## Demo
 
 It is 2009. You just added the feature to show labels on issues. You better include screenshots because this is huge.
 

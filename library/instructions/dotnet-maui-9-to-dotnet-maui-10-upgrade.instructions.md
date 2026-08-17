@@ -38,9 +38,9 @@ This guide helps you upgrade your .NET MAUI application from .NET 9 to .NET 10 b
 4. **Migrate ListView/TableView to CollectionView** (P0 - CRITICAL)
 5. **Fix deprecated APIs** - Animation methods, DisplayAlert, IsBusy, MediaPicker (P1)
 
-> ⚠️ **Major Breaking Changes**: 
-> - CommunityToolkit.Maui **must** be version 12.3.0 or later
-> - ListView and TableView are now obsolete (most significant migration effort)
+>**Major Breaking Changes**:
+>- CommunityToolkit.Maui **must** be version 12.3.0 or later
+>- ListView and TableView are now obsolete (most significant migration effort)
 
 ---
 
@@ -68,17 +68,17 @@ This guide helps you upgrade your .NET MAUI application from .NET 9 to .NET 10 b
 
 ### Optional: Linux Compatibility (GitHub Copilot, WSL, etc.)
 
-> 💡 **For Linux Development**: If you're building on Linux (e.g., GitHub Codespaces, WSL, or using GitHub Copilot), you can make your project compile on Linux by conditionally excluding iOS/Mac Catalyst targets:
+> **For Linux Development**: If you're building on Linux (e.g., GitHub Codespaces, WSL, or using GitHub Copilot), you can make your project compile on Linux by conditionally excluding iOS/Mac Catalyst targets:
 
 ```xml
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <!-- Start with Android (always supported) -->
     <TargetFrameworks>net10.0-android</TargetFrameworks>
-    
+
     <!-- Add iOS/Mac Catalyst only when NOT on Linux -->
     <TargetFrameworks Condition="!$([MSBuild]::IsOSPlatform('linux'))">$(TargetFrameworks);net10.0-ios;net10.0-maccatalyst</TargetFrameworks>
-    
+
     <!-- Add Windows only when on Windows -->
     <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net10.0-windows10.0.19041.0</TargetFrameworks>
   </PropertyGroup>
@@ -86,16 +86,16 @@ This guide helps you upgrade your .NET MAUI application from .NET 9 to .NET 10 b
 ```
 
 **Benefits:**
-- ✅ Compiles successfully on Linux (no iOS/Mac tools required)
-- ✅ Works with GitHub Codespaces and Copilot
-- ✅ Automatically includes correct targets based on build OS
-- ✅ No changes needed when switching between OS environments
+- Compiles successfully on Linux (no iOS/Mac tools required)
+- Works with GitHub Codespaces and Copilot
+- Automatically includes correct targets based on build OS
+- No changes needed when switching between OS environments
 
 **Reference:** [dotnet/maui#32186](https://github.com/dotnet/maui/pull/32186)
 
 ### Update Required NuGet Packages
 
-> ⚠️ **CRITICAL**: If you use CommunityToolkit.Maui, you **must** update to version 12.3.0 or later. Earlier versions are not compatible with .NET 10 and will cause compilation errors.
+>**CRITICAL**: If you use CommunityToolkit.Maui, you **must** update to version 12.3.0 or later. Earlier versions are not compatible with .NET 10 and will cause compilation errors.
 
 ```bash
 # Update CommunityToolkit.Maui (if you use it)
@@ -120,7 +120,7 @@ dotnet list package --outdated | grep ">" | cut -d '>' -f 1 | xargs -I {} dotnet
 
 ### MessagingCenter Made Internal
 
-**Status:** 🚨 **BREAKING** - `MessagingCenter` is now `internal` and cannot be accessed.
+**Status:**  **BREAKING** - `MessagingCenter` is now `internal` and cannot be accessed.
 
 **Error You'll See:**
 ```
@@ -145,7 +145,7 @@ MessagingCenter.Send(this, "UserLoggedIn", userData);
 public class UserLoggedInMessage
 {
     public UserData Data { get; set; }
-    
+
     public UserLoggedInMessage(UserData data)
     {
         Data = data;
@@ -156,13 +156,13 @@ public class UserLoggedInMessage
 #### Step 3: Update Send Calls
 
 ```csharp
-// ❌ OLD (Broken in .NET 10)
+//  OLD (Broken in .NET 10)
 using Microsoft.Maui.Controls;
 
 MessagingCenter.Send(this, "UserLoggedIn", userData);
 MessagingCenter.Send<App, string>(this, "StatusChanged", "Active");
 
-// ✅ NEW (Required)
+//  NEW (Required)
 using CommunityToolkit.Mvvm.Messaging;
 
 WeakReferenceMessenger.Default.Send(new UserLoggedInMessage(userData));
@@ -172,14 +172,14 @@ WeakReferenceMessenger.Default.Send(new StatusChangedMessage("Active"));
 #### Step 4: Update Subscribe Calls
 
 ```csharp
-// ❌ OLD (Broken in .NET 10)
+//  OLD (Broken in .NET 10)
 MessagingCenter.Subscribe<App, UserData>(this, "UserLoggedIn", (sender, data) =>
 {
     // Handle message
     CurrentUser = data;
 });
 
-// ✅ NEW (Required)
+//  NEW (Required)
 WeakReferenceMessenger.Default.Register<UserLoggedInMessage>(this, (recipient, message) =>
 {
     // Handle message
@@ -187,21 +187,21 @@ WeakReferenceMessenger.Default.Register<UserLoggedInMessage>(this, (recipient, m
 });
 ```
 
-#### ⚠️ Important Behavioral Difference: Duplicate Subscriptions
+#### Important Behavioral Difference: Duplicate Subscriptions
 
 **WeakReferenceMessenger** throws an `InvalidOperationException` if you try to register the same message type multiple times on the same recipient (MessagingCenter allowed this):
 
 ```csharp
-// ❌ This THROWS InvalidOperationException in WeakReferenceMessenger
+//  This THROWS InvalidOperationException in WeakReferenceMessenger
 WeakReferenceMessenger.Default.Register<UserLoggedInMessage>(this, (r, m) => Handler1(m));
-WeakReferenceMessenger.Default.Register<UserLoggedInMessage>(this, (r, m) => Handler2(m)); // ❌ THROWS!
+WeakReferenceMessenger.Default.Register<UserLoggedInMessage>(this, (r, m) => Handler2(m)); //  THROWS!
 
-// ✅ Solution 1: Unregister before re-registering
+//  Solution 1: Unregister before re-registering
 WeakReferenceMessenger.Default.Unregister<UserLoggedInMessage>(this);
 WeakReferenceMessenger.Default.Register<UserLoggedInMessage>(this, (r, m) => Handler1(m));
 
-// ✅ Solution 2: Handle multiple actions in one registration
-WeakReferenceMessenger.Default.Register<UserLoggedInMessage>(this, (r, m) => 
+//  Solution 2: Handle multiple actions in one registration
+WeakReferenceMessenger.Default.Register<UserLoggedInMessage>(this, (r, m) =>
 {
     Handler1(m);
     Handler2(m);
@@ -213,10 +213,10 @@ WeakReferenceMessenger.Default.Register<UserLoggedInMessage>(this, (r, m) =>
 #### Step 5: Unregister When Done
 
 ```csharp
-// ❌ OLD
+//  OLD
 MessagingCenter.Unsubscribe<App, UserData>(this, "UserLoggedIn");
 
-// ✅ NEW (CRITICAL - prevents memory leaks)
+//  NEW (CRITICAL - prevents memory leaks)
 WeakReferenceMessenger.Default.Unregister<UserLoggedInMessage>(this);
 
 // Or unregister all messages for this recipient
@@ -243,13 +243,13 @@ public partial class MainPage : ContentPage
     public MainPage()
     {
         InitializeComponent();
-        
+
         MessagingCenter.Subscribe<LoginViewModel, User>(this, "UserLoggedIn", (sender, user) =>
         {
             WelcomeLabel.Text = $"Welcome, {user.Name}!";
         });
     }
-    
+
     protected override void OnDisappearing()
     {
         base.OnDisappearing();
@@ -264,7 +264,7 @@ public partial class MainPage : ContentPage
 public class UserLoggedInMessage
 {
     public User User { get; }
-    
+
     public UserLoggedInMessage(User user)
     {
         User = user;
@@ -287,13 +287,13 @@ public partial class MainPage : ContentPage
     public MainPage()
     {
         InitializeComponent();
-        
+
         WeakReferenceMessenger.Default.Register<UserLoggedInMessage>(this, (recipient, message) =>
         {
             WelcomeLabel.Text = $"Welcome, {message.User.Name}!";
         });
     }
-    
+
     protected override void OnDisappearing()
     {
         base.OnDisappearing();
@@ -303,17 +303,17 @@ public partial class MainPage : ContentPage
 ```
 
 **Key Differences:**
-- ✅ Type-safe message classes
-- ✅ No magic strings
-- ✅ Better IntelliSense support
-- ✅ Easier to refactor
-- ⚠️ **Must remember to unregister!**
+- Type-safe message classes
+- No magic strings
+- Better IntelliSense support
+- Easier to refactor
+- **Must remember to unregister!**
 
 ---
 
 ### ListView and TableView Deprecated
 
-**Status:** 🚨 **DEPRECATED (P0)** - `ListView`, `TableView`, and all Cell types are now obsolete. Migrate to `CollectionView`.
+**Status:**  **DEPRECATED (P0)** - `ListView`, `TableView`, and all Cell types are now obsolete. Migrate to `CollectionView`.
 
 **Warning You'll See:**
 ```
@@ -377,7 +377,7 @@ grep -r "ListView\|TableView" --include="*.xaml" --include="*.cs" .
     <CollectionView.ItemTemplate>
         <DataTemplate>
             <VerticalStackLayout Padding="10">
-                <Label Text="{Binding Title}" 
+                <Label Text="{Binding Title}"
                        FontAttributes="Bold" />
                 <Label Text="{Binding Description}"
                        FontSize="12"
@@ -388,32 +388,32 @@ grep -r "ListView\|TableView" --include="*.xaml" --include="*.cs" .
 </CollectionView>
 ```
 
-> ⚠️ **Note:** CollectionView has `SelectionMode="None"` by default (selection disabled). You must explicitly set `SelectionMode="Single"` or `SelectionMode="Multiple"` to enable selection.
+>**Note:** CollectionView has `SelectionMode="None"` by default (selection disabled). You must explicitly set `SelectionMode="Single"` or `SelectionMode="Multiple"` to enable selection.
 
 **Code-behind changes:**
 ```csharp
-// ❌ OLD (ListView)
+//  OLD (ListView)
 void OnItemSelected(object sender, SelectedItemChangedEventArgs e)
 {
     if (e.SelectedItem == null)
         return;
-        
+
     var item = (MyItem)e.SelectedItem;
     // Handle selection
-    
+
     // Deselect
     ((ListView)sender).SelectedItem = null;
 }
 
-// ✅ NEW (CollectionView)
+//  NEW (CollectionView)
 void OnSelectionChanged(object sender, SelectionChangedEventArgs e)
 {
     if (e.CurrentSelection.Count == 0)
         return;
-        
+
     var item = (MyItem)e.CurrentSelection.FirstOrDefault();
     // Handle selection
-    
+
     // Deselect (optional)
     ((CollectionView)sender).SelectedItem = null;
 }
@@ -446,7 +446,7 @@ void OnSelectionChanged(object sender, SelectionChangedEventArgs e)
                    Padding="10,5" />
         </DataTemplate>
     </CollectionView.GroupHeaderTemplate>
-    
+
     <CollectionView.ItemTemplate>
         <DataTemplate>
             <VerticalStackLayout Padding="20,10">
@@ -459,7 +459,7 @@ void OnSelectionChanged(object sender, SelectionChangedEventArgs e)
 
 **Step 4: Context Actions → SwipeView**
 
-> ⚠️ **Platform Note:** SwipeView requires touch input. On Windows desktop, it only works with touch screens, not with mouse/trackpad. Consider providing alternative UI for desktop scenarios (e.g., buttons, right-click menu).
+>**Platform Note:** SwipeView requires touch input. On Windows desktop, it only works with touch screens, not with mouse/trackpad. Consider providing alternative UI for desktop scenarios (e.g., buttons, right-click menu).
 
 **Before (ListView with ContextActions):**
 ```xaml
@@ -467,12 +467,12 @@ void OnSelectionChanged(object sender, SelectionChangedEventArgs e)
     <DataTemplate>
         <ViewCell>
             <ViewCell.ContextActions>
-                <MenuItem Text="Delete" 
+                <MenuItem Text="Delete"
                          IsDestructive="True"
                          Command="{Binding Source={RelativeSource AncestorType={x:Type local:MyPage}}, Path=DeleteCommand}"
                          CommandParameter="{Binding .}" />
             </ViewCell.ContextActions>
-            
+
             <Label Text="{Binding Title}" Padding="10" />
         </ViewCell>
     </DataTemplate>
@@ -492,7 +492,7 @@ void OnSelectionChanged(object sender, SelectionChangedEventArgs e)
                               CommandParameter="{Binding .}" />
                 </SwipeItems>
             </SwipeView.RightItems>
-            
+
             <VerticalStackLayout Padding="10">
                 <Label Text="{Binding Title}" />
             </VerticalStackLayout>
@@ -512,18 +512,18 @@ TableView is commonly used for settings pages. Here are modern alternatives:
                 SelectionMode="None">
     <CollectionView.GroupHeaderTemplate>
         <DataTemplate>
-            <Label Text="{Binding Title}" 
+            <Label Text="{Binding Title}"
                    FontAttributes="Bold"
                    Margin="10,15,10,5" />
         </DataTemplate>
     </CollectionView.GroupHeaderTemplate>
-    
+
     <CollectionView.ItemTemplate>
         <DataTemplate>
             <Grid Padding="15,10" ColumnDefinitions="*,Auto">
-                <Label Text="{Binding Title}" 
+                <Label Text="{Binding Title}"
                        VerticalOptions="Center" />
-                <Switch Grid.Column="1" 
+                <Switch Grid.Column="1"
                         IsToggled="{Binding IsEnabled}"
                         IsVisible="{Binding ShowSwitch}" />
             </Grid>
@@ -544,9 +544,9 @@ TableView is commonly used for settings pages. Here are modern alternatives:
                        BackgroundColor="{StaticResource Gray100}"
                        Padding="15,10">
                     <Grid ColumnDefinitions="*,Auto">
-                        <Label Text="{Binding Title}" 
+                        <Label Text="{Binding Title}"
                               VerticalOptions="Center" />
-                        <Switch Grid.Column="1" 
+                        <Switch Grid.Column="1"
                                IsToggled="{Binding IsEnabled}" />
                     </Grid>
                 </Border>
@@ -561,16 +561,16 @@ TableView is commonly used for settings pages. Here are modern alternatives:
 If you used platform-specific ListView features, remove them:
 
 ```csharp
-// ❌ OLD - Remove these using statements (NOW OBSOLETE IN .NET 10)
+//  OLD - Remove these using statements (NOW OBSOLETE IN .NET 10)
 using Microsoft.Maui.Controls.PlatformConfiguration;
 using Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;
 using Microsoft.Maui.Controls.PlatformConfiguration.AndroidSpecific;
 
-// ❌ OLD - Remove ListView platform configurations (NOW OBSOLETE IN .NET 10)
+//  OLD - Remove ListView platform configurations (NOW OBSOLETE IN .NET 10)
 myListView.On<iOS>().SetSeparatorStyle(SeparatorStyle.FullWidth);
 myListView.On<Android>().IsFastScrollEnabled();
 
-// ❌ OLD - Remove Cell platform configurations (NOW OBSOLETE IN .NET 10)
+//  OLD - Remove Cell platform configurations (NOW OBSOLETE IN .NET 10)
 viewCell.On<iOS>().SetDefaultBackgroundColor(Colors.White);
 viewCell.On<Android>().SetIsContextActionsLegacyModeEnabled(false);
 ```
@@ -578,7 +578,7 @@ viewCell.On<Android>().SetIsContextActionsLegacyModeEnabled(false);
 **Migration:** CollectionView does not have platform-specific configurations in the same way. If you need platform-specific styling:
 
 ```csharp
-// ✅ NEW - Use conditional compilation
+//  NEW - Use conditional compilation
 #if IOS
 var backgroundColor = Colors.White;
 #elif ANDROID
@@ -618,7 +618,7 @@ Or in XAML:
     <CollectionView.EmptyView>
         <ContentView>
             <VerticalStackLayout Padding="50" VerticalOptions="Center">
-                <Label Text="No items found" 
+                <Label Text="No items found"
                        HorizontalTextAlignment="Center" />
             </VerticalStackLayout>
         </ContentView>
@@ -642,7 +642,7 @@ Or in XAML:
 <!-- Use ItemsLayout for spacing -->
 <CollectionView ItemsSource="{Binding Items}">
     <CollectionView.ItemsLayout>
-        <LinearItemsLayout Orientation="Vertical" 
+        <LinearItemsLayout Orientation="Vertical"
                           ItemSpacing="10" />
     </CollectionView.ItemsLayout>
     <!-- ... -->
@@ -653,17 +653,17 @@ Or in XAML:
 ```xaml
 <CollectionView ItemsSource="{Binding Items}">
     <CollectionView.Header>
-        <Label Text="My List" 
-               FontSize="24" 
+        <Label Text="My List"
+               FontSize="24"
                Padding="10" />
     </CollectionView.Header>
-    
+
     <CollectionView.Footer>
-        <Label Text="End of list" 
-               Padding="10" 
+        <Label Text="End of list"
+               Padding="10"
                HorizontalTextAlignment="Center" />
     </CollectionView.Footer>
-    
+
     <!-- ItemTemplate -->
 </CollectionView>
 ```
@@ -693,16 +693,16 @@ CollectionView uses `ItemSizingStrategy` to control item measurement:
 </CollectionView>
 ```
 
-> 💡 **Performance Tip:** If your list items have consistent heights, use `ItemSizingStrategy="MeasureFirstItem"` for better performance with large lists.
+> **Performance Tip:** If your list items have consistent heights, use `ItemSizingStrategy="MeasureFirstItem"` for better performance with large lists.
 
 #### .NET 10 Handler Changes (iOS/Mac Catalyst)
 
-> ℹ️ **.NET 10 uses new optimized CollectionView and CarouselView handlers** on iOS and Mac Catalyst by default, providing improved performance and stability.
+>ℹ **.NET 10 uses new optimized CollectionView and CarouselView handlers** on iOS and Mac Catalyst by default, providing improved performance and stability.
 
 **If you previously opted-in to the new handlers in .NET 9**, you should now **REMOVE** this code:
 
 ```csharp
-// ❌ REMOVE THIS in .NET 10 (these handlers are now default)
+//  REMOVE THIS in .NET 10 (these handlers are now default)
 #if IOS || MACCATALYST
 builder.ConfigureMauiHandlers(handlers =>
 {
@@ -721,7 +721,7 @@ The optimized handlers are used automatically in .NET 10 - no configuration need
 #if IOS || MACCATALYST
 builder.ConfigureMauiHandlers(handlers =>
 {
-    handlers.AddHandler<Microsoft.Maui.Controls.CollectionView, 
+    handlers.AddHandler<Microsoft.Maui.Controls.CollectionView,
                         Microsoft.Maui.Controls.Handlers.Items.CollectionViewHandler>();
 });
 #endif
@@ -776,7 +776,7 @@ These APIs still work in .NET 10 but show compiler warnings. They will be remove
 
 ### 1. Animation Methods
 
-**Status:** ⚠️ **DEPRECATED** - All sync animation methods replaced with async versions.
+**Status:**  **DEPRECATED** - All sync animation methods replaced with async versions.
 
 **Warning You'll See:**
 ```
@@ -803,12 +803,12 @@ warning CS0618: 'ViewExtensions.FadeTo(VisualElement, double, uint, Easing)' is 
 
 **Simple Animation:**
 ```csharp
-// ❌ OLD (Deprecated)
+//  OLD (Deprecated)
 await myButton.FadeTo(0, 500);
 await myButton.ScaleTo(1.5, 300);
 await myButton.TranslateTo(100, 100, 250);
 
-// ✅ NEW (Required)
+//  NEW (Required)
 await myButton.FadeToAsync(0, 500);
 await myButton.ScaleToAsync(1.5, 300);
 await myButton.TranslateToAsync(100, 100, 250);
@@ -816,12 +816,12 @@ await myButton.TranslateToAsync(100, 100, 250);
 
 **Sequential Animations:**
 ```csharp
-// ❌ OLD
+//  OLD
 await image.FadeTo(0, 300);
 await image.ScaleTo(0.5, 300);
 await image.FadeTo(1, 300);
 
-// ✅ NEW
+//  NEW
 await image.FadeToAsync(0, 300);
 await image.ScaleToAsync(0.5, 300);
 await image.FadeToAsync(1, 300);
@@ -829,14 +829,14 @@ await image.FadeToAsync(1, 300);
 
 **Parallel Animations:**
 ```csharp
-// ❌ OLD
+//  OLD
 await Task.WhenAll(
     image.FadeTo(0, 300),
     image.ScaleTo(0.5, 300),
     image.RotateTo(360, 300)
 );
 
-// ✅ NEW
+//  NEW
 await Task.WhenAll(
     image.FadeToAsync(0, 300),
     image.ScaleToAsync(0.5, 300),
@@ -867,10 +867,10 @@ cts.Cancel();
 `LayoutToAsync()` is deprecated with a special message: "Use Translation to animate layout changes."
 
 ```csharp
-// ❌ OLD (Deprecated)
+//  OLD (Deprecated)
 await view.LayoutToAsync(new Rect(100, 100, 200, 200), 250);
 
-// ✅ NEW (Use TranslateToAsync instead)
+//  NEW (Use TranslateToAsync instead)
 await view.TranslateToAsync(100, 100, 250);
 
 // Or animate Translation properties directly
@@ -882,7 +882,7 @@ animation.Commit(view, "MoveX", length: 250);
 
 ### 2. DisplayAlert and DisplayActionSheet
 
-**Status:** ⚠️ **DEPRECATED** - Sync methods replaced with async versions.
+**Status:**  **DEPRECATED** - Sync methods replaced with async versions.
 
 **Warning You'll See:**
 ```
@@ -893,12 +893,12 @@ warning CS0618: 'Page.DisplayAlert(string, string, string)' is obsolete: 'Use Di
 
 **DisplayAlert:**
 ```csharp
-// ❌ OLD (Deprecated)
+//  OLD (Deprecated)
 await DisplayAlert("Success", "Data saved successfully", "OK");
 await DisplayAlert("Error", "Failed to save", "Cancel");
 bool result = await DisplayAlert("Confirm", "Delete this item?", "Yes", "No");
 
-// ✅ NEW (Required)
+//  NEW (Required)
 await DisplayAlertAsync("Success", "Data saved successfully", "OK");
 await DisplayAlertAsync("Error", "Failed to save", "Cancel");
 bool result = await DisplayAlertAsync("Confirm", "Delete this item?", "Yes", "No");
@@ -906,7 +906,7 @@ bool result = await DisplayAlertAsync("Confirm", "Delete this item?", "Yes", "No
 
 **DisplayActionSheet:**
 ```csharp
-// ❌ OLD (Deprecated)
+//  OLD (Deprecated)
 string action = await DisplayActionSheet(
     "Choose an action",
     "Cancel",
@@ -914,7 +914,7 @@ string action = await DisplayActionSheet(
     "Edit", "Share", "Duplicate"
 );
 
-// ✅ NEW (Required)
+//  NEW (Required)
 string action = await DisplayActionSheetAsync(
     "Choose an action",
     "Cancel",
@@ -930,13 +930,13 @@ public class MyViewModel
 {
     private readonly IDispatcher _dispatcher;
     private readonly Page _page;
-    
+
     public MyViewModel(IDispatcher dispatcher, Page page)
     {
         _dispatcher = dispatcher;
         _page = page;
     }
-    
+
     public async Task ShowAlertAsync()
     {
         await _dispatcher.DispatchAsync(async () =>
@@ -951,7 +951,7 @@ public class MyViewModel
 
 ### 3. Page.IsBusy
 
-**Status:** ⚠️ **DEPRECATED** - Property will be removed in .NET 11.
+**Status:**  **DEPRECATED** - Property will be removed in .NET 11.
 
 **Warning You'll See:**
 ```
@@ -967,21 +967,21 @@ warning CS0618: 'Page.IsBusy' is obsolete: 'Page.IsBusy has been deprecated and 
 
 **Simple Page:**
 ```xaml
-<!-- ❌ OLD (Deprecated) -->
+<!--  OLD (Deprecated) -->
 <ContentPage IsBusy="{Binding IsLoading}">
     <StackLayout>
         <Label Text="Content here" />
     </StackLayout>
 </ContentPage>
 
-<!-- ✅ NEW (Recommended) -->
+<!--  NEW (Recommended) -->
 <ContentPage>
     <Grid>
         <!-- Main content -->
         <StackLayout>
             <Label Text="Content here" />
         </StackLayout>
-        
+
         <!-- Loading indicator overlay -->
         <ActivityIndicator IsRunning="{Binding IsLoading}"
                           IsVisible="{Binding IsLoading}"
@@ -994,7 +994,7 @@ warning CS0618: 'Page.IsBusy' is obsolete: 'Page.IsBusy has been deprecated and 
 
 **With Loading Overlay:**
 ```xaml
-<!-- ✅ Better: Custom loading overlay -->
+<!--  Better: Custom loading overlay -->
 <ContentPage>
     <Grid>
         <!-- Main content -->
@@ -1003,7 +1003,7 @@ warning CS0618: 'Page.IsBusy' is obsolete: 'Page.IsBusy has been deprecated and 
                 <Label Text="Your content here" />
             </VerticalStackLayout>
         </ScrollView>
-        
+
         <!-- Loading overlay -->
         <Grid IsVisible="{Binding IsLoading}"
               BackgroundColor="#80000000">
@@ -1022,7 +1022,7 @@ warning CS0618: 'Page.IsBusy' is obsolete: 'Page.IsBusy has been deprecated and 
 
 **In Code-Behind:**
 ```csharp
-// ❌ OLD (Deprecated)
+//  OLD (Deprecated)
 public partial class MyPage : ContentPage
 {
     async Task LoadDataAsync()
@@ -1039,7 +1039,7 @@ public partial class MyPage : ContentPage
     }
 }
 
-// ✅ NEW (Recommended)
+//  NEW (Recommended)
 public partial class MyPage : ContentPage
 {
     async Task LoadDataAsync()
@@ -1073,7 +1073,7 @@ public class MyViewModel : INotifyPropertyChanged
             OnPropertyChanged();
         }
     }
-    
+
     public async Task LoadDataAsync()
     {
         IsLoading = true;
@@ -1093,7 +1093,7 @@ public class MyViewModel : INotifyPropertyChanged
 
 ### 4. MediaPicker APIs
 
-**Status:** ⚠️ **DEPRECATED** - Single-selection methods replaced with multi-selection variants.
+**Status:**  **DEPRECATED** - Single-selection methods replaced with multi-selection variants.
 
 **Warning You'll See:**
 ```
@@ -1113,15 +1113,15 @@ warning CS0618: 'MediaPicker.PickVideoAsync(MediaPickerOptions)' is obsolete: 'S
 - Set `SelectionLimit > 1` for specific limits
 
 **Platform Notes:**
-- ✅ **iOS:** Selection limit enforced by native picker UI
-- ⚠️ **Android:** Not all custom pickers honor `SelectionLimit` - be aware!
-- ⚠️ **Windows:** `SelectionLimit` not supported - implement your own validation
+- **iOS:** Selection limit enforced by native picker UI
+- **Android:** Not all custom pickers honor `SelectionLimit` - be aware!
+- **Windows:** `SelectionLimit` not supported - implement your own validation
 
 #### Migration Examples
 
 **Simple Photo Picker (maintain single-selection behavior):**
 ```csharp
-// ❌ OLD (Deprecated)
+//  OLD (Deprecated)
 var photo = await MediaPicker.PickPhotoAsync(new MediaPickerOptions
 {
     Title = "Pick a photo"
@@ -1133,7 +1133,7 @@ if (photo != null)
     MyImage.Source = ImageSource.FromStream(() => stream);
 }
 
-// ✅ NEW (maintains same behavior - picks only 1 photo)
+//  NEW (maintains same behavior - picks only 1 photo)
 var photos = await MediaPicker.PickPhotosAsync(new MediaPickerOptions
 {
     Title = "Pick a photo",
@@ -1150,7 +1150,7 @@ if (photo != null)
 
 **Simple Video Picker (maintain single-selection behavior):**
 ```csharp
-// ❌ OLD (Deprecated)
+//  OLD (Deprecated)
 var video = await MediaPicker.PickVideoAsync(new MediaPickerOptions
 {
     Title = "Pick a video"
@@ -1161,7 +1161,7 @@ if (video != null)
     VideoPlayer.Source = video.FullPath;
 }
 
-// ✅ NEW (maintains same behavior - picks only 1 video)
+//  NEW (maintains same behavior - picks only 1 video)
 var videos = await MediaPicker.PickVideosAsync(new MediaPickerOptions
 {
     Title = "Pick a video",
@@ -1177,17 +1177,17 @@ if (video != null)
 
 **Photo Picker without Options (uses defaults):**
 ```csharp
-// ❌ OLD (Deprecated)
+//  OLD (Deprecated)
 var photo = await MediaPicker.PickPhotoAsync();
 
-// ✅ NEW (default SelectionLimit = 1, so same behavior)
+//  NEW (default SelectionLimit = 1, so same behavior)
 var photos = await MediaPicker.PickPhotosAsync();
 var photo = photos.FirstOrDefault();
 ```
 
 **Multi-Photo Selection (new capability):**
 ```csharp
-// ✅ NEW: Pick up to 5 photos
+//  NEW: Pick up to 5 photos
 var photos = await MediaPicker.PickPhotosAsync(new MediaPickerOptions
 {
     Title = "Pick up to 5 photos",
@@ -1200,7 +1200,7 @@ foreach (var photo in photos)
     // Process each photo
 }
 
-// ✅ NEW: Unlimited selection
+//  NEW: Unlimited selection
 var allPhotos = await MediaPicker.PickPhotosAsync(new MediaPickerOptions
 {
     Title = "Pick photos",
@@ -1210,7 +1210,7 @@ var allPhotos = await MediaPicker.PickPhotosAsync(new MediaPickerOptions
 
 **Multi-Video Selection (new capability):**
 ```csharp
-// ✅ NEW: Pick up to 3 videos
+//  NEW: Pick up to 3 videos
 var videos = await MediaPicker.PickVideosAsync(new MediaPickerOptions
 {
     Title = "Pick up to 3 videos",
@@ -1232,7 +1232,7 @@ var photos = await MediaPicker.PickPhotosAsync(new MediaPickerOptions
     SelectionLimit = 1
 });
 
-// ✅ Check for empty list
+//  Check for empty list
 if (photos.Count == 0)
 {
     await DisplayAlertAsync("Cancelled", "No photo selected", "OK");
@@ -1252,7 +1252,7 @@ try
         Title = "Pick a photo",
         SelectionLimit = 1
     });
-    
+
     if (photos.Count > 0)
     {
         await ProcessPhotoAsync(photos.First());
@@ -1284,7 +1284,7 @@ When migrating to the new MediaPicker APIs:
 #### Platform-Specific Validation (Windows & Android)
 
 ```csharp
-// ✅ Recommended: Validate selection limit on platforms that don't enforce it
+//  Recommended: Validate selection limit on platforms that don't enforce it
 var photos = await MediaPicker.PickPhotosAsync(new MediaPickerOptions
 {
     Title = "Pick up to 5 photos",
@@ -1295,8 +1295,8 @@ var photos = await MediaPicker.PickPhotosAsync(new MediaPickerOptions
 if (photos.Count > 5)
 {
     await DisplayAlertAsync(
-        "Too Many Photos", 
-        $"Please select up to 5 photos. You selected {photos.Count}.", 
+        "Too Many Photos",
+        $"Please select up to 5 photos. You selected {photos.Count}.",
         "OK"
     );
     return;
@@ -1310,7 +1310,7 @@ if (photos.Count > 5)
 **Note:** Capture methods (`CapturePhotoAsync`, `CaptureVideoAsync`) are **NOT** deprecated and remain unchanged:
 
 ```csharp
-// ✅ These still work as-is (no changes needed)
+//  These still work as-is (no changes needed)
 var photo = await MediaPicker.CapturePhotoAsync();
 var video = await MediaPicker.CaptureVideoAsync();
 ```
@@ -1320,14 +1320,14 @@ var video = await MediaPicker.CaptureVideoAsync();
 **For all existing single-selection code, use this pattern:**
 
 ```csharp
-// ❌ OLD
+//  OLD
 var photo = await MediaPicker.PickPhotoAsync(options);
 if (photo != null)
 {
     // Process photo
 }
 
-// ✅ NEW (drop-in replacement)
+//  NEW (drop-in replacement)
 var photos = await MediaPicker.PickPhotosAsync(options ?? new MediaPickerOptions { SelectionLimit = 1 });
 var photo = photos.FirstOrDefault();
 if (photo != null)
@@ -1344,7 +1344,7 @@ These changes are recommended but not required immediately. Consider migrating d
 
 ### Application.MainPage
 
-**Status:** ⚠️ **DEPRECATED** - Property will be removed in future version.
+**Status:**  **DEPRECATED** - Property will be removed in future version.
 
 **Warning You'll See:**
 ```
@@ -1354,7 +1354,7 @@ warning CS0618: 'Application.MainPage' is obsolete: 'This property is deprecated
 #### Migration Example
 
 ```csharp
-// ❌ OLD (Deprecated)
+//  OLD (Deprecated)
 public partial class App : Application
 {
     public App()
@@ -1362,7 +1362,7 @@ public partial class App : Application
         InitializeComponent();
         MainPage = new AppShell();
     }
-    
+
     // Changing page later
     public void SwitchToLoginPage()
     {
@@ -1370,19 +1370,19 @@ public partial class App : Application
     }
 }
 
-// ✅ NEW (Recommended)
+//  NEW (Recommended)
 public partial class App : Application
 {
     public App()
     {
         InitializeComponent();
     }
-    
+
     protected override Window CreateWindow(IActivationState? activationState)
     {
         return new Window(new AppShell());
     }
-    
+
     // Changing page later
     public void SwitchToLoginPage()
     {
@@ -1456,7 +1456,7 @@ Replace: DisplayActionSheetAsync(
 
 #### MediaPicker Methods
 
-**⚠️ Note:** MediaPicker migration requires manual code changes due to return type changes (`FileResult?` → `List<FileResult>`). Use these searches to find instances:
+** Note:** MediaPicker migration requires manual code changes due to return type changes (`FileResult?` → `List<FileResult>`). Use these searches to find instances:
 
 ```bash
 # Find PickPhotoAsync usages
@@ -1481,7 +1481,7 @@ var video = videos.FirstOrDefault();
 
 #### ListView/TableView Detection (Manual Migration Required)
 
-**⚠️ Note:** ListView/TableView migration CANNOT be automated. Use these searches to find instances:
+** Note:** ListView/TableView migration CANNOT be automated. Use these searches to find instances:
 
 ```bash
 # Find all ListView usages in XAML
@@ -1530,7 +1530,7 @@ cat migration-report.txt
 # Replace animation methods in all .cs files
 Get-ChildItem -Path . -Recurse -Filter *.cs | ForEach-Object {
     $content = Get-Content $_.FullName -Raw
-    
+
     # Animation methods
     $content = $content -replace '\.FadeTo\(', '.FadeToAsync('
     $content = $content -replace '\.ScaleTo\(', '.ScaleToAsync('
@@ -1542,15 +1542,15 @@ Get-ChildItem -Path . -Recurse -Filter *.cs | ForEach-Object {
     $content = $content -replace '\.ScaleYTo\(', '.ScaleYToAsync('
     $content = $content -replace '\.RelRotateTo\(', '.RelRotateToAsync('
     $content = $content -replace '\.RelScaleTo\(', '.RelScaleToAsync('
-    
+
     # Display methods
     $content = $content -replace 'DisplayAlert\(', 'DisplayAlertAsync('
     $content = $content -replace 'DisplayActionSheet\(', 'DisplayActionSheetAsync('
-    
+
     Set-Content $_.FullName $content
 }
 
-Write-Host "✅ Migration complete!"
+Write-Host " Migration complete!"
 ```
 
 ---
@@ -1661,7 +1661,7 @@ dotnet workload update
 
 1. **Forgot to unregister:**
    ```csharp
-   // ⚠️ Memory leak if you don't unregister
+   //  Memory leak if you don't unregister
    protected override void OnDisappearing()
    {
        base.OnDisappearing();
@@ -1671,11 +1671,11 @@ dotnet workload update
 
 2. **Wrong message type:**
    ```csharp
-   // ❌ Wrong
+   //  Wrong
    WeakReferenceMessenger.Default.Register<UserLoggedIn>(this, handler);
    WeakReferenceMessenger.Default.Send(new UserData());  // Wrong type!
-   
-   // ✅ Correct
+
+   //  Correct
    WeakReferenceMessenger.Default.Register<UserLoggedInMessage>(this, handler);
    WeakReferenceMessenger.Default.Send(new UserLoggedInMessage(userData));
    ```
@@ -1699,14 +1699,14 @@ dotnet workload update
 **Solution:** Migrate to `PickPhotosAsync` or `PickVideosAsync`:
 
 ```csharp
-// ❌ OLD
+//  OLD
 var photo = await MediaPicker.PickPhotoAsync(options);
 
-// ✅ NEW (maintain single-selection)
-var photos = await MediaPicker.PickPhotosAsync(new MediaPickerOptions 
-{ 
+//  NEW (maintain single-selection)
+var photos = await MediaPicker.PickPhotosAsync(new MediaPickerOptions
+{
     Title = options?.Title,
-    SelectionLimit = 1 
+    SelectionLimit = 1
 });
 var photo = photos.FirstOrDefault();
 ```
@@ -1745,11 +1745,11 @@ if (photos.Count > 5)
 **Cause:** Forgetting `await` keyword.
 
 ```csharp
-// ❌ Wrong - animation runs but code continues immediately
+//  Wrong - animation runs but code continues immediately
 view.FadeToAsync(0, 500);
 DoSomethingElse();
 
-// ✅ Correct - wait for animation to complete
+//  Correct - wait for animation to complete
 await view.FadeToAsync(0, 500);
 DoSomethingElse();
 ```
@@ -1776,13 +1776,13 @@ DoSomethingElse();
 
 **Solution:**
 ```csharp
-// ❌ OLD (ListView)
+//  OLD (ListView)
 void OnItemSelected(object sender, SelectedItemChangedEventArgs e)
 {
     var item = e.SelectedItem as MyItem;
 }
 
-// ✅ NEW (CollectionView)
+//  NEW (CollectionView)
 void OnSelectionChanged(object sender, SelectionChangedEventArgs e)
 {
     var item = e.CurrentSelection.FirstOrDefault() as MyItem;
@@ -1803,7 +1803,7 @@ warning CS0618: 'ListView' is obsolete: 'With the deprecation of ListView, this 
 **Solution:**
 1. Remove platform-specific ListView using statements:
    ```csharp
-   // ❌ Remove these
+   //  Remove these
    using Microsoft.Maui.Controls.PlatformConfiguration;
    using Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;
    using Microsoft.Maui.Controls.PlatformConfiguration.AndroidSpecific;
@@ -1811,7 +1811,7 @@ warning CS0618: 'ListView' is obsolete: 'With the deprecation of ListView, this 
 
 2. Remove platform-specific ListView calls:
    ```csharp
-   // ❌ Remove these
+   //  Remove these
    myListView.On<iOS>().SetSeparatorStyle(SeparatorStyle.FullWidth);
    myListView.On<Android>().IsFastScrollEnabled();
    viewCell.On<iOS>().SetDefaultBackgroundColor(Colors.White);
@@ -1827,14 +1827,14 @@ warning CS0618: 'ListView' is obsolete: 'With the deprecation of ListView, this 
 
 1. **Not using DataTemplate caching:**
    ```xaml
-   <!-- ❌ Bad performance -->
+   <!--  Bad performance -->
    <CollectionView.ItemTemplate>
        <DataTemplate>
            <ComplexView />
        </DataTemplate>
    </CollectionView.ItemTemplate>
-   
-   <!-- ✅ Better - use simpler templates -->
+
+   <!--  Better - use simpler templates -->
    <CollectionView.ItemTemplate>
        <DataTemplate>
            <VerticalStackLayout Padding="10">
@@ -1878,7 +1878,7 @@ warning CS0618: 'ListView' is obsolete: 'With the deprecation of ListView, this 
 **Should Fix (P1 - Deprecated):**
 - [ ] Update animation methods: add `Async` suffix
 - [ ] Update `DisplayAlert` → `DisplayAlertAsync`
-- [ ] Update `DisplayActionSheet` → `DisplayActionSheetAsync`  
+- [ ] Update `DisplayActionSheet` → `DisplayActionSheetAsync`
 - [ ] Replace `Page.IsBusy` with `ActivityIndicator`
 - [ ] Replace `PickPhotoAsync` → `PickPhotosAsync` (with `SelectionLimit = 1`)
 - [ ] Replace `PickVideoAsync` → `PickVideosAsync` (with `SelectionLimit = 1`)
@@ -1917,6 +1917,6 @@ finally { IsLoading = false; }
 
 ---
 
-**Document Version:** 2.0  
-**Last Updated:** November 2025  
+**Document Version:** 2.0
+**Last Updated:** November 2025
 **Applies To:** .NET MAUI 10.0.100 and later

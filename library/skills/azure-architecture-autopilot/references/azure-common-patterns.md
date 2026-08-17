@@ -106,14 +106,14 @@ foundry-{project}-{env}      Cognitive Services (Foundry)
 ### Dependency Management
 
 ```bicep
-// ✅ Correct: Implicit dependency via resource reference
+//  Correct: Implicit dependency via resource reference
 resource project '...' = {
   properties: {
     parentId: foundry.id  // foundry reference → automatically deploys foundry first
   }
 }
 
-// ❌ Avoid: Explicit dependsOn (use only when necessary)
+//  Avoid: Explicit dependsOn (use only when necessary)
 ```
 
 ---

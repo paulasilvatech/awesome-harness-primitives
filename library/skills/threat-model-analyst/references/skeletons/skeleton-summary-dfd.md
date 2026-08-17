@@ -1,10 +1,10 @@
 # Skeleton: 1.2-threatmodel-summary.mmd
 
-> **⛔ ALWAYS evaluate this skeleton after creating `1.1-threatmodel.mmd`.**
+>** ALWAYS evaluate this skeleton after creating `1.1-threatmodel.mmd`.**
 > Count elements (nodes with `(("..."))`, `[("...")]`, `["..."]`) and boundaries (`subgraph`) in the detailed DFD.
 > - If elements > 15 OR boundaries > 4 → this file is **REQUIRED**. Fill the template below.
 > - If elements ≤ 15 AND boundaries ≤ 4 → **SKIP** this file. Proceed to `1-threatmodel.md`.
-> **⛔ This is a raw Mermaid file. The template below is shown inside a code fence for readability only — do NOT include the fence in the output file. The `.mmd` file must start with `%%{init:` on line 1.**
+>** This is a raw Mermaid file. The template below is shown inside a code fence for readability only — do NOT include the fence in the output file. The `.mmd` file must start with `%%{init:` on line 1.**
 
 ---
 

@@ -6,12 +6,12 @@ Detailed specifications for each Excalidraw element type with visual examples an
 
 | Type | Visual | Primary Use | Text Support |
 |------|--------|-------------|--------------|
-| `rectangle` | □ | Boxes, containers, process steps | ✅ Yes |
-| `ellipse` | ○ | Emphasis, terminals, states | ✅ Yes |
-| `diamond` | ◇ | Decision points, choices | ✅ Yes |
-| `arrow` | → | Directional flow, relationships | ❌ No (use separate text) |
-| `line` | — | Connections, dividers | ❌ No |
-| `text` | A | Labels, annotations, titles | ✅ (Its purpose) |
+| `rectangle` | □ | Boxes, containers, process steps | Do |
+| `ellipse` | ○ | Emphasis, terminals, states | Do |
+| `diamond` | ◇ | Decision points, choices | Do |
+| `arrow` | → | Directional flow, relationships | No (use separate text) |
+| `line` | — | Connections, dividers | Do Not |
+| `text` | A | Labels, annotations, titles | (Its purpose) |
 
 ---
 

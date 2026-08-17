@@ -9,52 +9,52 @@ tools: ['changes', 'codebase', 'editFiles', 'problems']
 
 Expert PostgreSQL code review for ${selection} (or entire project if no selection). Focus on PostgreSQL-specific best practices, anti-patterns, and quality standards that are unique to PostgreSQL.
 
-## 🎯 PostgreSQL-Specific Review Areas
+## PostgreSQL-Specific Review Areas
 
 ### JSONB Best Practices
 ```sql
--- ❌ BAD: Inefficient JSONB usage
+-- BAD: Inefficient JSONB usage
 SELECT * FROM orders WHERE data->>'status' = 'shipped';  -- No index support
 
--- ✅ GOOD: Indexable JSONB queries
+-- GOOD: Indexable JSONB queries
 CREATE INDEX idx_orders_status ON orders USING gin((data->'status'));
 SELECT * FROM orders WHERE data @> '{"status": "shipped"}';
 
--- ❌ BAD: Deep nesting without consideration
+-- BAD: Deep nesting without consideration
 UPDATE orders SET data = data || '{"shipping":{"tracking":{"number":"123"}}}';
 
--- ✅ GOOD: Structured JSONB with validation
+-- GOOD: Structured JSONB with validation
 ALTER TABLE orders ADD CONSTRAINT valid_status 
 CHECK (data->>'status' IN ('pending', 'shipped', 'delivered'));
 ```
 
 ### Array Operations Review
 ```sql
--- ❌ BAD: Inefficient array operations
+-- BAD: Inefficient array operations
 SELECT * FROM products WHERE 'electronics' = ANY(categories);  -- No index
 
--- ✅ GOOD: GIN indexed array queries
+-- GOOD: GIN indexed array queries
 CREATE INDEX idx_products_categories ON products USING gin(categories);
 SELECT * FROM products WHERE categories @> ARRAY['electronics'];
 
--- ❌ BAD: Array concatenation in loops
+-- BAD: Array concatenation in loops
 -- This would be inefficient in a function/procedure
 
--- ✅ GOOD: Bulk array operations
+-- GOOD: Bulk array operations
 UPDATE products SET categories = categories || ARRAY['new_category']
 WHERE id IN (SELECT id FROM products WHERE condition);
 ```
 
 ### PostgreSQL Schema Design Review
 ```sql
--- ❌ BAD: Not using PostgreSQL features
+-- BAD: Not using PostgreSQL features
 CREATE TABLE users (
     id INTEGER,
     email VARCHAR(255),
     created_at TIMESTAMP
 );
 
--- ✅ GOOD: PostgreSQL-optimized schema
+-- GOOD: PostgreSQL-optimized schema
 CREATE TABLE users (
     id BIGSERIAL PRIMARY KEY,
     email CITEXT UNIQUE NOT NULL,  -- Case-insensitive email
@@ -69,14 +69,14 @@ CREATE INDEX idx_users_metadata ON users USING gin(metadata);
 
 ### Custom Types and Domains
 ```sql
--- ❌ BAD: Using generic types for specific data
+-- BAD: Using generic types for specific data
 CREATE TABLE transactions (
     amount DECIMAL(10,2),
     currency VARCHAR(3),
     status VARCHAR(20)
 );
 
--- ✅ GOOD: PostgreSQL custom types
+-- GOOD: PostgreSQL custom types
 CREATE TYPE currency_code AS ENUM ('USD', 'EUR', 'GBP', 'JPY');
 CREATE TYPE transaction_status AS ENUM ('pending', 'completed', 'failed', 'cancelled');
 CREATE DOMAIN positive_amount AS DECIMAL(10,2) CHECK (VALUE > 0);
@@ -88,7 +88,7 @@ CREATE TABLE transactions (
 );
 ```
 
-## 🔍 PostgreSQL-Specific Anti-Patterns
+## PostgreSQL-Specific Anti-Patterns
 
 ### Performance Anti-Patterns
 - **Avoiding PostgreSQL-specific indexes**: Not using GIN/GiST for appropriate data types
@@ -104,7 +104,7 @@ CREATE TABLE transactions (
 
 ### Function and Trigger Issues
 ```sql
--- ❌ BAD: Inefficient trigger function
+-- BAD: Inefficient trigger function
 CREATE OR REPLACE FUNCTION update_modified_time()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -113,7 +113,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- ✅ GOOD: Optimized trigger function
+-- GOOD: Optimized trigger function
 CREATE OR REPLACE FUNCTION update_modified_time()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -130,16 +130,16 @@ CREATE TRIGGER update_modified_time_trigger
     EXECUTE FUNCTION update_modified_time();
 ```
 
-## 📊 PostgreSQL Extension Usage Review
+## PostgreSQL Extension Usage Review
 
 ### Extension Best Practices
 ```sql
--- ✅ Check if extension exists before creating
+-- Check if extension exists before creating
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 CREATE EXTENSION IF NOT EXISTS "pg_trgm";
 
--- ✅ Use extensions appropriately
+-- Use extensions appropriately
 -- UUID generation
 SELECT uuid_generate_v4();
 
@@ -150,11 +150,11 @@ SELECT crypt('password', gen_salt('bf'));
 SELECT word_similarity('postgres', 'postgre');
 ```
 
-## 🛡️ PostgreSQL Security Review
+## PostgreSQL Security Review
 
 ### Row Level Security (RLS)
 ```sql
--- ✅ GOOD: Implementing RLS
+-- GOOD: Implementing RLS
 ALTER TABLE sensitive_data ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY user_data_policy ON sensitive_data
@@ -164,15 +164,15 @@ CREATE POLICY user_data_policy ON sensitive_data
 
 ### Privilege Management
 ```sql
--- ❌ BAD: Overly broad permissions
+-- BAD: Overly broad permissions
 GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO app_user;
 
--- ✅ GOOD: Granular permissions
+-- GOOD: Granular permissions
 GRANT SELECT, INSERT, UPDATE ON specific_table TO app_user;
 GRANT USAGE ON SEQUENCE specific_table_id_seq TO app_user;
 ```
 
-## 🎯 PostgreSQL Code Quality Checklist
+## PostgreSQL Code Quality Checklist
 
 ### Schema Design
 - [ ] Using appropriate PostgreSQL data types (CITEXT, JSONB, arrays)
@@ -201,7 +201,7 @@ GRANT USAGE ON SEQUENCE specific_table_id_seq TO app_user;
 - [ ] Using PostgreSQL's built-in encryption functions
 - [ ] Implementing audit trails with PostgreSQL features
 
-## 📝 PostgreSQL-Specific Review Guidelines
+## PostgreSQL-Specific Review Guidelines
 
 1. **Data Type Optimization**: Ensure PostgreSQL-specific types are used appropriately
 2. **Index Strategy**: Review index types and ensure PostgreSQL-specific indexes are utilized

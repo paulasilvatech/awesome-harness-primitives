@@ -10,9 +10,9 @@ Authentication setup: see `references/auth.md`. All examples below assume `AUTH`
 
 The caller provides:
 
-1. **Team ID** - Jira team UUID. If not provided, ask the user.
-2. **Board ID** - optional. If not provided, discover from `references/jql-patterns.md` board table or ask.
-3. **Sprint** - optional. Defaults to "plan the next sprint" (uses active sprint for carryover, next sprint as target).
+1. **Team ID ** - Jira team UUID. If not provided, ask the user.
+2. **Board ID ** - optional. If not provided, discover from `references/jql-patterns.md` board table or ask.
+3. **Sprint ** - optional. Defaults to "plan the next sprint" (uses active sprint for carryover, next sprint as target).
 
 ## Workflow
 
@@ -28,9 +28,9 @@ acli jira board list-sprints --board BOARD_ID --state future --json --recent 1
 
 Identify:
 
-- **Active sprint** (ending soon) - source for carryover
-- **Next sprint** (future) - target for planning
-- **Last 3 closed sprints** - source for velocity
+- **Active sprint ** (ending soon) - source for carryover
+- **Next sprint ** (future) - target for planning
+- **Last 3 closed sprints ** - source for velocity
 
 ### Step 2 - Carryover Report
 
@@ -45,7 +45,7 @@ curl -s -u "$AUTH" "$GRAPHQL_URL" -X POST \
   }'
 ```
 
-**Validation:** Flag any Epics in the sprint - only Bug, Task, or Story should be in sprints. "⚠ RHIDP-1234 is an Epic - Epics should be broken down into Stories/Tasks, not added to sprints."
+**Validation: ** Flag any Epics in the sprint - only Bug, Task, or Story should be in sprints. " RHIDP-1234 is an Epic - Epics should be broken down into Stories/Tasks, not added to sprints."
 
 Sum carryover SP. If carryover > avg velocity, flag: "Carryover ({N} SP) exceeds avg velocity ({M} SP) - sprint is overcommitted before adding new work."
 
@@ -103,7 +103,7 @@ Automatically generate issue-to-person recommendations from the ready queue. Use
 
 For each ready-for-planning issue, score against each team member using the same formula from `assign.md` (expertise × 3 + proximity × 2 - capacity × 1). Suggest assignments up to `available_SP`.
 
-**Framing:** "These are suggestions - team members self-select during planning."
+**Framing: ** "These are suggestions - team members self-select during planning."
 
 ### Step 8 - Critical Customer Bugs
 
@@ -171,7 +171,7 @@ Note: "Retro action items to consider for this sprint."
 | # | Issue | Summary | Assignee | Status | SP | Days |
 |---|-------|---------|----------|--------|----|------|
 
-⚠ Carryover ({sp} SP) vs avg velocity ({avg} SP): {assessment}
+ Carryover ({sp} SP) vs avg velocity ({avg} SP): {assessment}
 
 ### Velocity (last 3 sprints)
 | Sprint | Completed SP | Trend |
@@ -195,10 +195,10 @@ Avg velocity: {avg} SP − Carryover: {carry_sp} SP = **{available} SP available
 
 *Suggestions are recommendations - team members self-select during planning.*
 
-### 🚨 Critical Customer Bugs (exempt from capacity)
+### Critical Customer Bugs (exempt from capacity)
 | Issue | Summary | Priority | Assignee |
 
-### 🔧 Retro Action Items (Continuous Improvement)
+### Retro Action Items (Continuous Improvement)
 | Issue | Summary | Status |
 ```
 
@@ -214,7 +214,7 @@ Avg velocity: {avg} SP − Carryover: {carry_sp} SP = **{available} SP available
 
 ## Caveats
 
-1. **Velocity is SP-based.** Teams with inconsistent SP estimation will see noisy trends. Fall back to issue count if SP coverage < 50%.
-2. **Sprint fill suggestions reuse assign.md scoring.** If expertise profiles aren't cached, this step adds ~5-10 API calls.
-3. **Bug SP exemption.** The doc says "every item needs story points or needs to be time-boxed." Bugs in the ready queue without SP are still shown but flagged.
-4. **Release Pending items stay in sprint.** Per team convention, Release Pending items remain in the sprint and count toward capacity.
+1. **Velocity is SP-based. ** Teams with inconsistent SP estimation will see noisy trends. Fall back to issue count if SP coverage < 50%.
+2. **Sprint fill suggestions reuse assign.md scoring. ** If expertise profiles aren't cached, this step adds ~5-10 API calls.
+3. **Bug SP exemption. ** The doc says "every item needs story points or needs to be time-boxed." Bugs in the ready queue without SP are still shown but flagged.
+4. **Release Pending items stay in sprint. ** Per team convention, Release Pending items remain in the sprint and count toward capacity.

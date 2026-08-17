@@ -1,9 +1,9 @@
 # Skeleton: 1.1-threatmodel.mmd
 
-> **⛔ This is a raw Mermaid file — NO markdown wrapper. Line 1 MUST start with `%%{init:`.**
+>** This is a raw Mermaid file — NO markdown wrapper. Line 1 MUST start with `%%{init:`.**
 > **The init block, classDefs, and linkStyle are FIXED — never change colors/strokes.**
 > **Diagram direction is ALWAYS `flowchart LR` — NEVER `flowchart TB`.**
-> **⛔ The template below is shown inside a code fence for readability only — do NOT include the fence in the output file.**
+>** The template below is shown inside a code fence for readability only — do NOT include the fence in the output file.**
 
 ---
 
@@ -58,7 +58,7 @@ flowchart LR
 - All labels MUST be quoted in `""`
 - All subgraph IDs: `subgraph ID["Title"]`
 
-<!-- ⛔ POST-DFD GATE — IMMEDIATELY after creating this file:
+<!--  POST-DFD GATE — IMMEDIATELY after creating this file:
   1. Count element nodes: lines with (("...")), [("...")], ["..."] shapes
   2. Count boundaries: lines with 'subgraph'
   3. If elements > 15 OR boundaries > 4:
