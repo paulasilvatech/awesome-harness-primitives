@@ -5,6 +5,9 @@ argument-hint: "feature=NNN-feature-name"
 agent: "enterprise-architect"
 tools: ["read", "search"]
 ---
+> [!NOTE]
+> Reference snapshot: this file is kept as a quality example for primitive authors. It is not installed from this repository as an active primitive.
+
 # /architecture-review
 
 ## Objective

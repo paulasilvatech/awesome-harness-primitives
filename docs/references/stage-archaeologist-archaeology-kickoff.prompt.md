@@ -5,6 +5,9 @@ argument-hint: "path=01-archaeology/legacy-sifap/"
 agent: "archaeologist"
 tools: ["read", "search", "edit"]
 ---
+> [!NOTE]
+> Reference snapshot: this file is kept as a quality example for primitive authors. It is not installed from this repository as an active primitive.
+
 # /archaeology-kickoff
 
 ## Objective

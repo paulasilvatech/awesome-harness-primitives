@@ -2,12 +2,15 @@
 name: "postgresql-code-review"
 description: "Review existing PostgreSQL SQL, schema, and functions for PostgreSQL-specific anti-patterns, quality, and security — JSONB operations, array usage, custom types, schema design, function optimization, and Row Level Security (RLS). Use when the user asks to review, audit, or critique existing PostgreSQL code or a migration. To author or optimize new PostgreSQL features, use postgresql-optimization."
 ---
+> [!NOTE]
+> Reference snapshot: this file is kept as a quality example for primitive authors. It is not installed from this repository as an active primitive.
+
 # PostgreSQL code review
 
-Expert PostgreSQL code review for `${selection}` (or the entire project when nothing is selected). It focuses on the PostgreSQL-specific best practices, anti-patterns, and quality standards that are unique to PostgreSQL rather than generic SQL. To author or tune new PostgreSQL features instead of reviewing existing ones, use [`postgresql-optimization`](../postgresql-optimization/SKILL.md).
+Expert PostgreSQL code review for `${selection}` (or the entire project when nothing is selected). It focuses on the PostgreSQL-specific best practices, anti-patterns, and quality standards that are unique to PostgreSQL rather than generic SQL. To author or tune new PostgreSQL features instead of reviewing existing ones, use the skill `postgresql-optimization`.
 
 > [!IMPORTANT]
-> The SIFAP 2.0 backend reaches **PostgreSQL 16** through **JPA/Hibernate**. Application queries must use JPQL, Spring Data derived queries, or bound native parameters — never string-concatenated SQL. Schema lives in Flyway migrations under `backend/src/main/resources/db/migration/`. Where this skill and [`database.instructions.md`](../../instructions/database.instructions.md) overlap, the instruction file is authoritative.
+> The SIFAP 2.0 backend reaches **PostgreSQL 16** through **JPA/Hibernate**. Application queries must use JPQL, Spring Data derived queries, or bound native parameters — never string-concatenated SQL. Schema lives in Flyway migrations under `backend/src/main/resources/db/migration/`. Where this skill and the `database` instruction overlap, the instruction file is authoritative.
 
 ## When to invoke
 
@@ -261,4 +264,4 @@ CREATE INDEX idx_orders_data ON orders USING gin(data);
 - [ ] No user input is concatenated into SQL; every parameter is bound (JPQL, derived query, or bound native query).
 - [ ] PostgreSQL-specific types, index types (GIN/GiST/partial), and `CHECK`/`ENUM`/domain constraints are validated.
 - [ ] PII such as CPF or benefit amounts is masked in logs or documented with a column `COMMENT`.
-- [ ] Corrected SQL is paste-ready and any schema change stays rollback-safe (see [`database.instructions.md`](../../instructions/database.instructions.md)).
+- [ ] Corrected SQL is paste-ready and any schema change stays rollback-safe (see the `database` instruction).

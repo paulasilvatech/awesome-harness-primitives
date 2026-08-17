@@ -2,10 +2,13 @@
 description: "Use when designing or reviewing Modular Monolith architecture, package-by-feature boundaries, JPA mapping, and Strangler Fig migration."
 applyTo: "backend/src/main/java/**,backend/pom.xml,backend/build.gradle*"
 ---
+> [!NOTE]
+> Reference snapshot: this file is kept as a quality example for primitive authors. It is not installed from this repository as an active primitive.
+
 
 # Modular Monolith Architecture Guide
 
-This file activates when you work on Java source files or backend build configurations. It teaches the target architecture: a **Modular Monolith** — not microservices — with package-by-feature boundaries, bounded contexts, Adabas FDT to JPA mapping, Spring Boot 3.3 architectural conventions, and the Strangler Fig migration shape. It does **not** define controller, DTO, validation, or error-response details, which belong to [`backend.instructions.md`](backend.instructions.md); security belongs to [`security.instructions.md`](security.instructions.md); schema migrations belong to [`database.instructions.md`](database.instructions.md); and legacy-source reading belongs to [`natural-adabas.instructions.md`](natural-adabas.instructions.md).
+This file activates when you work on Java source files or backend build configurations. It teaches the target architecture: a **Modular Monolith** — not microservices — with package-by-feature boundaries, bounded contexts, Adabas FDT to JPA mapping, Spring Boot 3.3 architectural conventions, and the Strangler Fig migration shape. It does **not** define controller, DTO, validation, or error-response details, which belong to the `backend` instruction; security belongs to the `security` instruction; schema migrations belong to the `database` instruction; and legacy-source reading belongs to the `natural-adabas` instruction.
 
 ## Core Principle: One Deployable, Many Modules
 

@@ -2,6 +2,9 @@
 name: "ears-validate"
 description: "Use when validating requirements against EARS notation patterns. Triggers include \"EARS\", \"requirement review\", \"requirement quality\", \"shall statement\", and \"REQ-ID\"."
 ---
+> [!NOTE]
+> Reference snapshot: this file is kept as a quality example for primitive authors. It is not installed from this repository as an active primitive.
+
 # EARS validation
 
 ## When to invoke

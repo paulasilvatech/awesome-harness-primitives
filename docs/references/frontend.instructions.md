@@ -2,10 +2,13 @@
 description: "Use when building frontend UI components, pages, client interactions, component state, accessibility, and user-facing flows."
 applyTo: "frontend/app/**,frontend/components/**,frontend/src/app/**,frontend/src/components/**"
 ---
+> [!NOTE]
+> Reference snapshot: this file is kept as a quality example for primitive authors. It is not installed from this repository as an active primitive.
+
 
 # Frontend Conventions — Component Craft and Interaction
 
-This file activates when you build UI under `frontend/app/**` or `frontend/components/**`. It focuses on component craft, client interaction, component state, accessibility execution, and user-facing flows. It owns how components behave for users; [`frontend-spec.instructions.md`](frontend-spec.instructions.md) owns the platform contract for Next.js 15 App Router, strict TypeScript, Tailwind/shadcn styling, Server Components, and Server Actions — follow that file for those topics and do not restate them here.
+This file activates when you build UI under `frontend/app/**` or `frontend/components/**`. It focuses on component craft, client interaction, component state, accessibility execution, and user-facing flows. It owns how components behave for users; the `frontend-spec` instruction owns the platform contract for Next.js 15 App Router, strict TypeScript, Tailwind/shadcn styling, Server Components, and Server Actions — follow that file for those topics and do not restate them here.
 
 > [!NOTE]
 > `frontend/` does not exist yet; the team scaffolds it in Stage 3. These are the conventions the components must follow as they are written.
@@ -27,7 +30,7 @@ export function ResourceCard({ resource }: { resource: ResourceDto }) {
 }
 ```
 
-Keep the `'use client'` surface as small as possible: a Server Component fetches the data and passes it to a small Client Component that handles interaction (see [`frontend-spec.instructions.md`](frontend-spec.instructions.md)).
+Keep the `'use client'` surface as small as possible: a Server Component fetches the data and passes it to a small Client Component that handles interaction (see the `frontend-spec` instruction).
 
 ## Component State
 
@@ -56,7 +59,7 @@ Inputs are controlled (`value` + `onChange`). Derive values during render instea
 
 ## Client Interaction and Async Flows
 
-Mutations go through server actions, not client `fetch` (see [`frontend-spec.instructions.md`](frontend-spec.instructions.md)). Wrap the call in `useTransition` to drive a disabled/pending state, and reflect it with `aria-busy`.
+Mutations go through server actions, not client `fetch` (see the `frontend-spec` instruction). Wrap the call in `useTransition` to drive a disabled/pending state, and reflect it with `aria-busy`.
 
 ```tsx
 'use client';
@@ -128,4 +131,4 @@ Use semantic elements (`<button>`, `<nav>`, `<table>`) before reaching for ARIA;
 - [ ] Shared state uses Context only when justified; no unapproved state library
 - [ ] Async views render loading, empty, and error states
 - [ ] Inputs are labeled, keyboard-operable, and meet AA contrast
-- [ ] A colocated Testing Library test covers the interaction (see [`tests.instructions.md`](tests.instructions.md))
+- [ ] A colocated Testing Library test covers the interaction (see the testing instruction)

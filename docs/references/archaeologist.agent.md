@@ -8,6 +8,9 @@ handoffs:
     prompt: "Use the discovery artifacts from this stage to create the specification, bounded contexts, and ADRs."
     send: false
 ---
+> [!NOTE]
+> Reference snapshot: this file is kept as a quality example for primitive authors. It is not installed from this repository as an active primitive.
+
 # @archaeologist-agent
 
 ## Mission
@@ -71,15 +74,15 @@ The team completes Stage 1 when it can provide:
 - [ ] **Open-question log**: The **pair's 4 canonical mysteries** (`SIFAP-M-NN`; see `01-archaeology/mysteries-checklist.md`), each with `path:line` evidence, impact, an unconfirmed hypothesis, owner, and status
 - [ ] **Draft business rules**: At least 5 business rules stated in plain English and traced to the code that implements them
 
-## Available Prompts
+## VS Code-only Prompt References
 
 | Command | Purpose |
 |---------|---------|
-| [`/archaeology-kickoff`](../prompts/stage-archaeologist-archaeology-kickoff.prompt.md) | Scan the legacy folder and produce an initial inventory |
-| [`/extract-business-rules`](../prompts/stage-archaeologist-extract-business-rules.prompt.md) | Read a Natural program and extract conditional business rules |
-| [`/map-dependencies`](../prompts/stage-archaeologist-map-dependencies.prompt.md) | Trace CALLNAT, INCLUDE, and DDM-access edges in a dependency graph |
-| [`/catalog-mysteries`](../prompts/stage-archaeologist-catalog-mysteries.prompt.md) | Record open questions with evidence and pending human validation |
-| [`/discovery-report`](../prompts/stage-archaeologist-discovery-report.prompt.md) | Consolidate Stage 1 artifacts into a single handoff document for Stage 2 |
+| `/archaeology-kickoff` VS Code prompt | Scan the legacy folder and produce an initial inventory |
+| `/extract-business-rules` VS Code prompt | Read a Natural program and extract conditional business rules |
+| `/map-dependencies` VS Code prompt | Trace CALLNAT, INCLUDE, and DDM-access edges in a dependency graph |
+| `/catalog-mysteries` VS Code prompt | Record open questions with evidence and pending human validation |
+| `/discovery-report` VS Code prompt | Consolidate Stage 1 artifacts into a single handoff document for Stage 2 |
 
 ## Anti-Patterns This Agent Rejects
 

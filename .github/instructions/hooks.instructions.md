@@ -1,5 +1,5 @@
 ---
-applyTo: '.github/hooks/**, library/hooks/**'
+applyTo: '.github/hooks/**, hooks/**'
 description: 'Portable guidance for authoring safe, fast, and clear hooks and reusable hook examples'
 ---
 
@@ -23,11 +23,19 @@ A GitHub Copilot hook lives in `.github/hooks/` inside your repository:
 
 You can have multiple `.json` files — each one registers hooks for one or more events. The host loads all of them.
 
+## Discovery, Trust, and Path Resolution
+
+- Repository hooks in `.github/hooks/*.json` run only when the workspace is trusted. In non-interactive CLI or CI runs with a fresh `COPILOT_HOME`, seed `$COPILOT_HOME/config.json` with `{"trustedFolders":["/abs/path/to/repo"],"disableAllHooks":false}`; otherwise repository hooks are silently skipped.
+- User-level hooks and hooks in user settings are not gated by repository trust.
+- `disableAllHooks` in `config.json` or settings is a global kill switch for repo- and user-level hooks. The same key inside one `.github/hooks/<file>.json` is file-scoped and disables only that file's hooks; sibling hook files still run.
+- Relative `bash`, `command`, and `cwd` paths resolve from the workspace root (`-C` / current working directory), not from the hook config file's directory. Use absolute paths for user-level hooks that must work across repositories.
+
 ## The Config File
 
 Each `.json` file maps events to an array of hook entries.
 
 - **Command hooks** (`type: "command"`): run a local script. The host passes event JSON on stdin, your script responds through exit code and stdout.
+- **HTTP hooks** (`type: "http"`): call an HTTP endpoint with the event payload when supported by the host. Treat network hooks as higher risk: bound them with timeouts, avoid sending private code or prompts to third parties, and document what leaves the machine.
 
 ### Config example
 
@@ -56,26 +64,27 @@ Each `.json` file maps events to an array of hook entries.
 
 | Field | Required | What it does |
 | ---- | ---- | ---- |
-| `type` | yes | `"command"` for scripts |
-| `matcher` | no | Host-level filter — hook only fires when the tool name matches this value (e.g. `"bash"`, `"powershell"`, `"edit"`, `"create"`). Locally verified working in Copilot CLI v1.0.36; not yet used in repo hook samples. |
+| `type` | yes | `"command"` for scripts or `"http"` for HTTP hooks |
+| `matcher` | no | Optional host-level filter by tool name. The field is documented by the spec, but the current repository validation did not verify matcher behavior in CLI 1.0.81-0; keep in-script filtering as the reliable fallback. |
 | `bash` | one or both | Command line invoked on Unix / Bash-capable hosts |
 | `powershell` | one or both | Command line invoked on Windows / PowerShell-capable hosts |
 | `cwd` | no | Working directory, relative to repo root |
 | `timeoutSec` | no | Max seconds before the host kills the process (default 30) |
 | `env` | no | Extra process environment variables passed to the script |
+| `url`, `headers`, `allowedEnvVars` | HTTP only | Endpoint and request controls for HTTP hooks |
 
-### Why matchers matter
+### Matchers: documented, not yet validated here
 
-Without a matcher, every `preToolUse` hook fires on **every** tool call. Your script starts with boilerplate like:
+Without a verified matcher, every `preToolUse` hook may fire on **every** tool call. Keep defensive boilerplate like:
 
 ```bash
-tool_name="$(printf '%s' "$payload" | jq -r '.toolName')"
+tool_name="$(printf '%s' "$payload" | jq -r '.toolName // .tool_name // .toolInput.name // .tool_input.name // ""')"
 [[ "$tool_name" != "bash" ]] && exit 0
 ```
 
-With a matcher, the host does this filtering for you — no boilerplate, no process spawn for irrelevant tools. This will likely become the standard pattern once the feature stabilizes.
+If a future validated host applies `matcher`, it can skip irrelevant process spawns. Until then, treat `matcher` as an optimization only, not a correctness or security boundary.
 
-If your hooks must work on both the CLI and the cloud agent (or on older CLI versions), keep the in-script filtering as a fallback even when using matchers.
+If your hooks must work on multiple Copilot surfaces or versions, keep the in-script filtering as a fallback even when using matchers.
 
 ### `env` — static configuration for your script
 
@@ -116,7 +125,7 @@ Cross-platform example using Python through both entries:
 
 Every hook script follows the same basic contract: read JSON from stdin, do work, and respond through exit code, stdout, and stderr.
 
-**Important**: `toolArgs` is a **JSON string**, not a nested object. You must parse it a second time to access its fields.
+**Important**: payloads vary by event and surface. CLI payloads observed in the bundle include aliases such as `hook_event_name`, `transcriptPath`/`transcript_path`, `agentName`, `agent_display_name`, `sessionId`, `toolCalls`, `toolInput`/`tool_input`, `toolResult`/`tool_result`, `initialPrompt`/`initial_prompt`, `prompt`, `transformedPrompt`, `custom_instructions`, `last_assistant_message`, `stopReason`/`stop_reason`, `errorContext`/`error_context`, `recoverable`, `timestamp`, and `notification_type`. Tool arguments may appear as `toolArgs`/`tool_args` JSON strings or as `toolInput`/`tool_input` objects; validate and parse the fields you actually use.
 
 ### Reading stdin and responding — Bash and PowerShell
 
@@ -125,10 +134,10 @@ Every hook script follows the same basic contract: read JSON from stdin, do work
 ```bash
 #!/usr/bin/env bash
 set -euo pipefail
+command -v jq >/dev/null 2>&1 || { echo "jq is required by this hook" >&2; exit 2; }
 payload="$(cat)"
-tool_name="$(printf '%s' "$payload" | jq -r '.toolName')"
-tool_args="$(printf '%s' "$payload" | jq -r '.toolArgs')"
-command="$(printf '%s' "$tool_args" | jq -r '.command // ""')"
+tool_name="$(printf '%s' "$payload" | jq -r '.toolName // .tool_name // .toolInput.name // .tool_input.name // ""')"
+command="$(printf '%s' "$payload" | jq -r '(.toolArgs // .tool_args // .toolInput // .tool_input // "{}") | if type == "string" then (fromjson? // {}) else . end | .command // ""')"
 ```
 
 **PowerShell**:
@@ -136,7 +145,7 @@ command="$(printf '%s' "$tool_args" | jq -r '.command // ""')"
 ```powershell
 Set-StrictMode -Version Latest
 $payload = [Console]::In.ReadToEnd() | ConvertFrom-Json
-$toolArgs = $payload.toolArgs | ConvertFrom-Json
+$toolArgs = if ($payload.toolArgs) { $payload.toolArgs | ConvertFrom-Json } elseif ($payload.toolInput) { $payload.toolInput } else { @{} }
 $command = $toolArgs.command
 ```
 
@@ -161,7 +170,8 @@ exit 0
 | Channel | Purpose |
 | ---- | ---- |
 | exit `0` | Script succeeded — host continues unless stdout carried a structured deny |
-| non-zero exit | **Blocks the triggering action** and signals hook failure |
+| exit `2` | Blocks the triggering action; stderr is surfaced to the model |
+| other non-zero exit | Non-blocking hook error, logged by the host |
 | `stdout` | Structured machine-readable output — only for events that document a stdout schema (like `preToolUse`) |
 | `stderr` | Human-readable diagnostics for logs |
 
@@ -171,12 +181,12 @@ The deny mechanism **depends on the event**:
 
 | Event type | How to allow | How to deny / block |
 | ---- | ---- | ---- |
-| `preToolUse` | exit `0`, empty or `{"permissionDecision":"allow"}` on stdout | **Preferred**: exit `0` + `{"permissionDecision":"deny","permissionDecisionReason":"..."}` on stdout — gives the host a reason to show. **Also works**: non-zero exit blocks the tool call, but without a structured reason. |
-| `userPromptSubmitted` | exit `0` | Non-zero exit blocks the prompt (stdout is ignored for this event) |
-| `agentStop` | exit `0` | Non-zero exit blocks the action |
-| Other events (`sessionStart`, `sessionEnd`, `postToolUse`, `errorOccurred`) | exit `0` | Non-zero exit signals failure; the host may skip subsequent hooks for that event |
+| `preToolUse` | exit `0`, empty or `{"permissionDecision":"allow"}` on stdout | **Preferred**: exit `0` + `{"permissionDecision":"deny","permissionDecisionReason":"..."}` on stdout — gives the host a reason to show. **Also works**: exit `2` blocks the tool call, but without a structured reason. |
+| `userPromptSubmitted` | exit `0` | exit `2` blocks the prompt (stdout is ignored for this event) |
+| `agentStop` | exit `0` | exit `2` blocks the action |
+| Other events (`sessionStart`, `sessionEnd`, `postToolUse`, `errorOccurred`) | exit `0` | exit `2` is the only blocking code; other non-zero codes are non-blocking errors |
 
-**Rule of thumb**: if the event has a structured stdout schema (like `preToolUse`), use it — it gives a clean reason and is the officially documented deny path. For events without structured stdout, non-zero exit is the practical block mechanism — this is confirmed by repo samples and learning hub docs, though the official GitHub reference does not explicitly document "non-zero = block" as a contract guarantee.
+**Rule of thumb**: if the event has a structured stdout schema (like `preToolUse`), use it — it gives a clean reason. Use exit `2` when the hook must fail closed before it can produce structured output. Do not rely on exit `1` or other non-zero codes to block.
 
 ### Example 1: Commit gate — block commits until lint, types, and tests pass
 
@@ -208,15 +218,16 @@ The deny mechanism **depends on the event**:
 #!/usr/bin/env bash
 set -euo pipefail
 
+command -v jq >/dev/null 2>&1 || { echo "jq is required to evaluate commit policy" >&2; exit 2; }
 payload="$(cat)"
-tool_name="$(printf '%s' "$payload" | jq -r '.toolName')"
+tool_name="$(printf '%s' "$payload" | jq -r '.toolName // .tool_name // .toolInput.name // .tool_input.name // ""')"
 
 # Only gate bash commands that are git commits
 if [[ "$tool_name" != "bash" ]]; then exit 0; fi
-command="$(printf '%s' "$payload" | jq -r '.toolArgs' | jq -r '.command // ""')"
+command="$(printf '%s' "$payload" | jq -r '(.toolArgs // .tool_args // .toolInput // .tool_input // "{}") | if type == "string" then (fromjson? // {}) else . end | .command // ""')"
 if ! printf '%s' "$command" | grep -q "git commit"; then exit 0; fi
 
-CWD="$(printf '%s' "$payload" | jq -r '.cwd')"
+CWD="$(printf '%s' "$payload" | jq -r '.cwd // "."')"
 ERRORS=""
 
 # 1. TypeScript type check
@@ -258,7 +269,7 @@ exit 0
 | ---- | ---- | ---- | ---- |
 | All checks pass | empty | `0` | Commit proceeds |
 | Lint fails | `{"permissionDecision":"deny","permissionDecisionReason":"Cannot commit — fix these issues first:\n=== Lint Errors ===\n..."}` | `0` | Blocks commit; agent sees the errors and fixes them |
-| jq missing | empty | non-zero | Hook failure |
+| jq missing | empty | `2` | Blocks fail-closed because the policy cannot be evaluated |
 
 ### Example 2: Auto-format after file edits
 
@@ -290,9 +301,10 @@ exit 0
 #!/usr/bin/env bash
 set -euo pipefail
 
+command -v jq >/dev/null 2>&1 || { echo "jq is required by format-on-save hook" >&2; exit 1; }
 payload="$(cat)"
-tool_name="$(printf '%s' "$payload" | jq -r '.toolName')"
-result_type="$(printf '%s' "$payload" | jq -r '.toolResult.resultType // ""')"
+tool_name="$(printf '%s' "$payload" | jq -r '.toolName // .tool_name // .toolInput.name // .tool_input.name // ""')"
+result_type="$(printf '%s' "$payload" | jq -r '.toolResult.resultType // .tool_result.resultType // .tool_result.result_type // ""')"
 
 # Only format after successful file writes
 case "$tool_name" in
@@ -301,7 +313,7 @@ case "$tool_name" in
 esac
 [[ "$result_type" != "success" ]] && exit 0
 
-file_path="$(printf '%s' "$payload" | jq -r '.toolArgs' | jq -r '.path // ""')"
+file_path="$(printf '%s' "$payload" | jq -r '(.toolArgs // .tool_args // .toolInput // .tool_input // "{}") | if type == "string" then (fromjson? // {}) else . end | .path // ""')"
 [[ -z "$file_path" || ! -f "$file_path" ]] && exit 0
 
 # Run the project's formatter — adapt to your stack
@@ -354,13 +366,14 @@ exit 0
 #!/usr/bin/env bash
 set -euo pipefail
 
+command -v jq >/dev/null 2>&1 || { echo "jq is required to evaluate command policy" >&2; exit 2; }
 payload="$(cat)"
 block_mode="${BLOCK_MODE:-log}"
-tool_name="$(printf '%s' "$payload" | jq -r '.toolName')"
+tool_name="$(printf '%s' "$payload" | jq -r '.toolName // .tool_name // .toolInput.name // .tool_input.name // ""')"
 
 [[ "$tool_name" != "bash" ]] && exit 0
 
-command="$(printf '%s' "$payload" | jq -r '.toolArgs' | jq -r '.command // ""')"
+command="$(printf '%s' "$payload" | jq -r '(.toolArgs // .tool_args // .toolInput // .tool_input // "{}") | if type == "string" then (fromjson? // {}) else . end | .command // ""')"
 
 if printf '%s' "$command" | grep -qE 'rm -rf /|git reset --hard|git clean -fd|git push.*--force'; then
   # Truncate command to avoid leaking secrets in deny reason or logs
@@ -398,12 +411,18 @@ The full hooks reference is authoritative. **Always check it for the latest payl
 | `preToolUse` | **parsed** — `permissionDecision`, `modifiedArgs`/`updatedInput`, `additionalContext` | Guardrails, deny/block, argument modification |
 | `postToolUse` | ignored | Logging, formatting |
 | `postToolUseFailure` | — | Recovery after a failed tool run |
+| `preMcpToolCall` | — | MCP-specific guardrails |
+| `userPromptTransformed` | — | Prompt transformation audit |
 | `agentStop` | — | Final validation |
 | `subagentStart` | — | Subagent audit |
 | `subagentStop` | — | Subagent output validation |
 | `errorOccurred` | ignored | Diagnostics, alerts |
 | `preCompact` | — | Pre-compaction work |
 | `permissionRequest` | — | Approval workflow |
+| `notification` | — | Notification handling |
+| `postResult` | — | Final result handling |
+
+The spec documents additional camelCase events that older samples may omit. Prefer camelCase names: `sessionStart`, `sessionEnd`, `userPromptSubmitted`, `userPromptTransformed`, `preToolUse`, `postToolUse`, `postToolUseFailure`, `preMcpToolCall`, `permissionRequest`, `preCompact`, `errorOccurred`, `agentStop`, `subagentStart`, `subagentStop`, `notification`, and `postResult`.
 
 ### Payload schemas for common events
 
@@ -463,11 +482,15 @@ The field is `prompt` — the exact text the user submitted.
   "timestamp": 1704614600000,
   "cwd": "/path/to/project",
   "toolName": "bash",
-  "toolArgs": "{\"command\":\"rm -rf dist\",\"description\":\"Clean build directory\"}"
+  "toolArgs": "{\"command\":\"rm -rf dist\",\"description\":\"Clean build directory\"}",
+  "toolInput": {
+    "command": "rm -rf dist",
+    "description": "Clean build directory"
+  }
 }
 ```
 
-`toolArgs` is a **JSON string** — parse it a second time to access its fields.
+Observed payloads may use `toolName` plus `toolArgs` as a JSON string, or `toolInput`/`tool_input` as an object. Parse defensively and support aliases where practical.
 
 **`preToolUse` stdout output** — the host parses stdout for:
 
@@ -486,6 +509,9 @@ The field is `prompt` — the exact text the user submitted.
   "cwd": "/path/to/project",
   "toolName": "bash",
   "toolArgs": "{\"command\":\"npm test\"}",
+  "toolInput": {
+    "command": "npm test"
+  },
   "toolResult": {
     "resultType": "success",
     "textResultForLlm": "All tests passed (15/15)"
@@ -580,9 +606,9 @@ Do **not** introduce a new compiled runtime just to implement an ordinary hook.
 
 ### GitHub Copilot: CLI, VS Code, and Cloud Agent
 
-The same `.github/hooks/*.json` config, the same payload schema, and the same script contract work across CLI, VS Code, and the cloud agent. Event names accept both camelCase (`preToolUse`) and PascalCase (`PreToolUse`). The documented payload field for tool arguments is `toolArgs` (a JSON string).
+The same `.github/hooks/*.json` shape is intended to be portable across CLI, VS Code, and the cloud agent, but do not assume byte-identical payloads or identical discovery behavior on every surface. The CLI measurements in this repository are authoritative for CLI behavior; qualify VS Code/cloud claims unless you have tested them on those surfaces. Event names accept both camelCase (`preToolUse`) and PascalCase (`PreToolUse`), but prefer camelCase. Tool arguments may arrive as `toolArgs`/`tool_args` JSON strings or `toolInput`/`tool_input` objects.
 
-One thing to know: the cloud agent only loads hooks from the repository's **default branch**. If your hooks.json is only on a feature branch, the cloud agent won't see it.
+One thing to know: the cloud agent only loads hooks from the repository's **default branch**. If your hook config is only on a feature branch, the cloud agent won't see it.
 
 ### Claude Code
 
@@ -590,7 +616,7 @@ Claude Code uses a different hook system:
 
 - Settings in `~/.claude/settings.json` and `.claude/settings.json`
 - Different event names and matcher syntax (regex, `if` conditions)
-- Exit 2 = block, exit 1 = non-blocking error (not the same as GitHub Copilot)
+- Exit 2 = block, exit 1 = non-blocking error
 - 5 hook types (command, http, mcp_tool, prompt, agent)
 - 29+ events including `FileChanged`, `CwdChanged`, `ConfigChange`
 

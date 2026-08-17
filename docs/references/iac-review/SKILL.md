@@ -2,6 +2,9 @@
 name: "iac-review"
 description: "Use when reviewing Terraform, Bicep, or CloudFormation, checking drift, or hardening infrastructure code. Triggers include \"review terraform\", \"review bicep\", \"IaC review\", \"drift detection\", and \"state file\"."
 ---
+> [!NOTE]
+> Reference snapshot: this file is kept as a quality example for primitive authors. It is not installed from this repository as an active primitive.
+
 # IaC review
 
 ## When to invoke

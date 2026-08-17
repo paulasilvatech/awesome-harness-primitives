@@ -24,8 +24,7 @@ Every agent file must include YAML frontmatter with the following fields:
 ---
 description: 'Brief description of the agent purpose and capabilities'
 name: 'Agent Display Name'
-tools: ['read', 'edit', 'search']
-model: 'Claude Sonnet 4.5'
+tools: ['read', 'edit', 'grep', 'glob']
 target: 'vscode'
 ---
 ```
@@ -49,11 +48,10 @@ target: 'vscode'
 - If omitted, agent has access to all available tools
 - See "Tool Configuration" section below for details
 
-#### **model** (STRONGLY RECOMMENDED)
-- Specifies which AI model the agent should use
-- Supported in VS Code, JetBrains IDEs, Eclipse, and Xcode
-- Example: `'Claude Sonnet 4.5'`, `'gpt-4'`, `'gpt-4o'`
-- Choose based on agent complexity and required capabilities
+#### **model** (OPTIONAL)
+- Prefer omitting `model` so the agent inherits the user's current session model
+- If specified, use a current lowercase model ID recognized by the target surface
+- Unknown or display-name-only values can warn and fall back rather than selecting the intended model
 
 #### **target** (OPTIONAL)
 - Specifies target environment: `'vscode'` or `'github-copilot'`
@@ -77,8 +75,12 @@ target: 'vscode'
 
 #### **mcp-servers** (OPTIONAL, Organization/Enterprise only)
 - Configure MCP servers available only to this agent
-- Only supported for organization/enterprise level agents
+- Supported by GitHub Copilot CLI/cloud agent; ignored by VS Code
 - See "MCP Server Configuration" section below
+
+#### **argument-hint** (OPTIONAL, VS Code only)
+- Provides a UI hint for arguments in VS Code
+- Ignored by GitHub Copilot CLI/cloud agent
 
 #### **handoffs** (OPTIONAL, VS Code only)
 - Enable guided sequential workflows that transition between agents with suggested next steps
@@ -106,7 +108,7 @@ Define handoffs in the agent file's YAML frontmatter using the `handoffs` field:
 ---
 description: 'Brief description of the agent'
 name: 'Agent Name'
-tools: ['search', 'read']
+tools: ['grep', 'glob', 'read']
 handoffs:
   - label: Start Implementation
     agent: implementation
@@ -177,7 +179,7 @@ Here's an example of three agents with handoffs creating a complete workflow:
 ---
 description: 'Generate an implementation plan for new features or refactoring'
 name: 'Planner'
-tools: ['search', 'read']
+tools: ['grep', 'glob', 'read']
 handoffs:
   - label: Implement Plan
     agent: implementer
@@ -199,7 +201,7 @@ Do not write any code - focus only on planning.
 ---
 description: 'Implement code based on a plan or specification'
 name: 'Implementer'
-tools: ['read', 'edit', 'search', 'execute']
+tools: ['read', 'edit', 'grep', 'glob', 'execute']
 handoffs:
   - label: Review Implementation
     agent: reviewer
@@ -221,7 +223,7 @@ Implement the solution completely and thoroughly.
 ---
 description: 'Review code for quality, security, and best practices'
 name: 'Reviewer'
-tools: ['read', 'search']
+tools: ['read', 'grep', 'glob']
 handoffs:
   - label: Back to Planning
     agent: planner
@@ -262,7 +264,7 @@ tools: ['*']
 
 **Enable specific tools**:
 ```yaml
-tools: ['read', 'edit', 'search', 'execute']
+tools: ['read', 'edit', 'grep', 'glob', 'execute']
 ```
 
 **Enable MCP server tools**:
@@ -270,24 +272,30 @@ tools: ['read', 'edit', 'search', 'execute']
 tools: ['read', 'edit', 'github/*', 'playwright/navigate']
 ```
 
-**Disable all tools**:
+**Restrict to the always-on floor only**:
 ```yaml
 tools: []
 ```
+The CLI still keeps its always-on floor (`skill` and `sql`) even when the list is empty.
 
-### Standard Tool Aliases
+### Standard CLI Tool Tokens
 
-All aliases are case-insensitive:
+`tools:` is an allow-list filter. Unrecognized names are silently dropped and grant nothing, so do not use alias-looking tokens from other surfaces.
 
-| Alias | Alternative Names | Category | Description |
+| Token | Related tokens | Category | Description |
 |-------|------------------|----------|-------------|
-| `execute` | shell, Bash, powershell | Shell execution | Execute commands in appropriate shell |
-| `read` | Read, NotebookRead, view | File reading | Read file contents |
-| `edit` | Edit, MultiEdit, Write, NotebookEdit | File editing | Edit and modify files |
-| `search` | Grep, Glob, search | Code search | Search for files or text in files |
-| `agent` | custom-agent, Task | Agent invocation | Invoke other custom agents |
-| `web` | WebSearch, WebFetch | Web access | Fetch web content and search |
-| `todo` | TodoWrite | Task management | Create and manage task lists (VS Code only) |
+| `read` / `view` | — | File reading | Read file contents |
+| `create` | — | File creation | Create files |
+| `edit` | `editFiles` | File editing | Edit and modify files |
+| `execute` / `bash` | `shell`, `runCommands` | Shell execution | Execute commands in a shell |
+| `agent` / `task` | — | Agent invocation | Invoke other custom agents |
+| `grep` | — | Text search | Search file contents |
+| `glob` | — | File search | Find files by path pattern |
+| `web_fetch` | — | Web fetch | Fetch a specific URL |
+| `web_search` | — | Web search | Search the web |
+| `session_store_sql` | — | Session history | Query session history |
+
+Do **not** use `search`, `web`, `todo`, `all`, `terminal`, `run`, `codebase`, `changes`, `fetch`, or `githubRepo`: in the CLI these are no-op tokens that grant no capability. Use `grep`/`glob`, `web_fetch`/`web_search`, or omit `tools:` (or use `['*']`) for full access.
 
 ### Built-in MCP Server Tools
 
@@ -328,7 +336,7 @@ The recommended approach is **prompt-based orchestration**:
 1) Enable agent invocation by including `agent` in the orchestrator's tools list:
 
 ```yaml
-tools: ['read', 'edit', 'search', 'agent']
+tools: ['read', 'edit', 'grep', 'glob', 'agent']
 ```
 
 2) For each step, invoke a sub-agent by providing:
@@ -413,12 +421,12 @@ Expected: write ${basePath}/analysis/report.md
 
 ### ⚠️ Tool Availability Requirement
 
-**Critical**: If a sub-agent requires specific tools (e.g., `edit`, `execute`, `search`), the orchestrator must include those tools in its own `tools` list. Sub-agents cannot access tools that aren't available to their parent orchestrator.
+**Critical**: If a sub-agent requires specific tools (e.g., `edit`, `execute`, `grep`, `glob`), the orchestrator must include those tools in its own `tools` list. Sub-agents cannot access tools that aren't available to their parent orchestrator.
 
 **Example**:
 ```yaml
 # If your sub-agents need to edit files, execute commands, or search code
-tools: ['read', 'edit', 'search', 'execute', 'agent']
+tools: ['read', 'edit', 'grep', 'glob', 'execute', 'agent']
 ```
 
 The orchestrator's tool permissions act as a ceiling for all invoked sub-agents. Plan your tool list carefully to ensure all sub-agents have the tools they need.
@@ -589,7 +597,7 @@ Task:
 4. Return a concise summary (files created/updated, key decisions, issues).
 ```
 
-The sub-agent receives all necessary context embedded in the prompt. Variables are resolved before sending the prompt, so the sub-agent works with concrete paths and values, not variable placeholders.
+The sub-agent receives all necessary context embedded in the prompt. The runtime does not automatically resolve placeholders like `${projectName}`; the orchestrator must substitute concrete paths and values before sending the prompt.
 
 ### Real-World Example: Code Review Orchestrator
 
@@ -834,9 +842,9 @@ Lower-level configurations override higher-level ones with the same name.
 ### Tool Processing
 - `tools` list filters available tools (built-in and MCP)
 - No tools specified = all tools enabled
-- Empty list (`[]`) = all tools disabled
+- Empty list (`[]`) = no tools beyond the CLI always-on floor (`skill`, `sql`)
 - Specific list = only those tools enabled
-- Unrecognized tool names are ignored (allows environment-specific tools)
+- Unrecognized tool names are silently ignored; this is dangerous because a misspelled or no-op token quietly removes capability
 
 ### MCP Server Processing Order
 1. Out-of-the-box MCP servers (e.g., GitHub MCP)
@@ -852,7 +860,7 @@ Each level can override settings from previous levels.
 - [ ] `description` wrapped in single quotes
 - [ ] `name` specified (optional but recommended)
 - [ ] `tools` configured appropriately (or intentionally omitted)
-- [ ] `model` specified for optimal performance
+- [ ] `model` omitted unless a specific supported model ID is required
 - [ ] `target` set if environment-specific
 - [ ] Use `user-invocable: false` to hide from picker while allowing subagent invocation
 - [ ] Use `disable-model-invocation: true` to prevent subagent invocation while keeping picker visibility
@@ -892,22 +900,22 @@ Each level can override settings from previous levels.
 
 ### Implementation Planner
 **Purpose**: Create detailed technical plans and specifications
-**Tools**: Limited to `['read', 'search', 'edit']`
+**Tools**: Limited to `['read', 'grep', 'glob', 'edit']`
 **Approach**: Analyze requirements, create documentation, avoid implementation
 
 ### Code Reviewer
 **Purpose**: Review code quality and provide feedback
-**Tools**: `['read', 'search']` only
+**Tools**: `['read', 'grep', 'glob']` only
 **Approach**: Analyze, suggest improvements, no direct modifications
 
 ### Refactoring Specialist
 **Purpose**: Improve code structure and maintainability
-**Tools**: `['read', 'search', 'edit']`
+**Tools**: `['read', 'grep', 'glob', 'edit']`
 **Approach**: Analyze patterns, propose refactorings, implement safely
 
 ### Security Auditor
 **Purpose**: Identify security issues and vulnerabilities
-**Tools**: `['read', 'search', 'web']`
+**Tools**: `['read', 'grep', 'glob', 'web_fetch', 'web_search']`
 **Approach**: Scan code, check against OWASP, report findings
 
 ## Common Mistakes to Avoid
@@ -985,11 +993,12 @@ Each level can override settings from previous levels.
 - ✅ Fully supports all standard frontmatter properties
 - ✅ Repository and org/enterprise level agents
 - ✅ MCP server configuration (org/enterprise)
-- ❌ Does not support `model`, `argument-hint`, `handoffs` properties
+- ⚠️ `model` is optional; prefer omitting it unless a supported lowercase model ID is required
+- ❌ Does not support VS Code-only `argument-hint` and `handoffs` properties
 
 ### VS Code / JetBrains / Eclipse / Xcode
-- ✅ Supports `model` property for AI model selection
-- ✅ Supports `argument-hint` and `handoffs` properties
+- ✅ Supports optional `model` property for AI model selection
+- ✅ VS Code supports `argument-hint` and `handoffs` properties
 - ✅ User profile and workspace-level agents
 - ❌ Cannot configure MCP servers at repository level
 - ⚠️ Some properties may behave differently

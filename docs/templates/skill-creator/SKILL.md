@@ -55,8 +55,11 @@ Supported optional keys in this repository:
 - `license`
 - `user-invocable`
 - `disable-model-invocation`
+- `allowed-tools`
+- `metadata`
+- `tags`
 
-Avoid tool-specific fields such as `allowed-tools`. Use experimental fields such as `context` only when the target agent explicitly supports them and the repository policy allows them.
+Do not use unsupported top-level keys such as `context`, `compatibility`, `authors`, `category`, or `version`. Put annotations such as compatibility, author, and version under `metadata` when needed.
 
 ## Workflow
 
@@ -118,8 +121,8 @@ python3 .github/skills/skill-creator/scripts/validate_skill.py .github/skills/<s
 Also run repository gates when working in this repository:
 
 ```bash
-/bin/bash .github/scripts/audit-skills.sh
-/bin/bash .github/scripts/audit-primitives.sh
+python3 library/scripts/validate_primitives.py --strict
+python3 library/scripts/generate_catalog.py --check
 ```
 
 Fix every error before claiming the skill is ready.
@@ -147,7 +150,6 @@ Before delivery, confirm:
 - Every bundled script compiles or has a documented runtime requirement.
 - Documentation is in English.
 - User-facing copy writes "GitHub Copilot" in full.
-- No em dashes are present.
 
 ## Bundled resources
 
