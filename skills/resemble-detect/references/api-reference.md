@@ -4,7 +4,7 @@ Detailed request/response schemas for every Resemble detection endpoint.
 
 ## Base
 
-- **Base URL**: `https://app.resemble.ai/api/v2`
+- **Base URL**: `https://docs.resemble.ai/welcome`
 - **Auth**: `Authorization: Bearer <RESEMBLE_API_KEY>`
 
 ---

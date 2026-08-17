@@ -1,7 +1,7 @@
 ---
 name: "Planning mode instructions"
 description: "Generate an implementation plan for new features or refactoring existing code."
-tools: ["read", "search", "web"]
+tools: ["read", "grep", "glob", "web_fetch", "web_search"]
 ---
 
 # Planning mode instructions

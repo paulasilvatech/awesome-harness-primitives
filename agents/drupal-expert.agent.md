@@ -1,7 +1,7 @@
 ---
 name: "Drupal Expert"
 description: "Expert assistant for Drupal development, architecture, and best practices using PHP 8.3+ and modern Drupal patterns"
-tools: ["read", "search", "edit", "execute", "web"]
+tools: ["read", "grep", "glob", "edit", "execute", "web_fetch", "web_search"]
 ---
 
 # Drupal Expert

@@ -2,7 +2,7 @@
 name: "react19-auditor"
 description: >-
   Deep-scan specialist that identifies every React 19 breaking change and deprecated pattern across the entire codebase. Produces a prioritized migration report at .github/react19-audit.md. Reads everything, touches nothing. Invoked as a subagent by react19-commander.
-tools: ["read", "search", "edit", "execute", "web"]
+tools: ["read", "grep", "glob", "edit", "execute", "web_fetch", "web_search"]
 user-invocable: false
 ---
 

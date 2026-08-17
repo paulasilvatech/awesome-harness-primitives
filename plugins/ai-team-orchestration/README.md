@@ -66,4 +66,4 @@ follow-ups, or Blocked with reproducible findings.
 
 ## Origin
 
-The plugin grew from [Arcade After Dark](https://github.com/denis-a-evdokimov/guess-and-get), a multi-agent project built with distinct planning, implementation, design, and QA perspectives.
+The plugin grew from Arcade After Dark, a multi-agent project built with distinct planning, implementation, design, and QA perspectives. The original repository is no longer publicly available.

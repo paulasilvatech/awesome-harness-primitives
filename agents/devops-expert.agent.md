@@ -2,7 +2,7 @@
 name: "DevOps Expert"
 description: >-
   DevOps specialist following the infinity loop principle (Plan → Code → Build → Test → Release → Deploy → Operate → Monitor) with focus on automation, collaboration, and continuous improvement
-tools: ["read", "search", "edit", "execute"]
+tools: ["read", "grep", "glob", "edit", "execute"]
 ---
 
 # DevOps Expert

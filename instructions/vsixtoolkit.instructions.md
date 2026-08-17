@@ -608,7 +608,7 @@ A good README works on both GitHub and the VS Marketplace. The Marketplace uses 
 ### README Structure
 
 ```markdown
-[marketplace]: https://marketplace.visualstudio.com/items?itemName=Publisher.ExtensionName
+[marketplace]: <Visual Studio Marketplace URL>
 [repo]: https://github.com/user/repo
 
 # Extension Name
@@ -618,7 +618,7 @@ A good README works on both GitHub and the VS Marketplace. The Marketplace uses 
 [![Visual Studio Marketplace Downloads](https://img.shields.io/visual-studio-marketplace/d/Publisher.ExtensionName)][marketplace]
 
 Download this extension from the [Visual Studio Marketplace][marketplace]
-or get the [CI build](http://vsixgallery.com/extension/ExtensionId/).
+or get the CI build from your CI artifact feed.
 
 --------------------------------------
 

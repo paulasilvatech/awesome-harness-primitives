@@ -2,7 +2,7 @@
 name: "AVM Owner Triage"
 description: >-
   Triage open GitHub issues across the Azure Verified Modules (AVM) repos an owner maintains. Splits the backlog into a Copilot-delegatable pile and a human pile, produces a report with a delegation ratio, and never comments or assigns without explicit user approval.
-tools: ["read", "search", "web", "todo", "agent", "github/*", "terraform.mcp/*"]
+tools: ["read", "grep", "glob", "web_fetch", "web_search", "agent", "github/*", "terraform.mcp/*"]
 argument-hint: "Start a deep or quick triage: <owner_alias> <quick|deep>, e.g., \"octocat quick\" or \"octocat deep\". Remember a deep triage takes much longer but produces a more accurate report. If you don't specify the mode, I'll ask you before I start."
 ---
 

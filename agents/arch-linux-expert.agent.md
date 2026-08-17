@@ -1,7 +1,7 @@
 ---
 name: "Arch Linux Expert"
 description: "Arch Linux specialist focused on pacman, rolling-release maintenance, and Arch-centric system administration workflows."
-tools: ["read", "search", "edit", "execute"]
+tools: ["read", "grep", "glob", "edit", "execute"]
 ---
 
 # Arch Linux Expert

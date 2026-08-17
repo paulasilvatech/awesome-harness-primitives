@@ -37,7 +37,7 @@ Filename must match `^[A-Za-z0-9._-]+\.agent\.md$`.
 name: my-agent                     # OPTIONAL — defaults to filename
 description: >-                    # REQUIRED — the only truly required field
   What the agent does and when to select it.
-tools: ["read", "edit", "search"]  # OPTIONAL — omit or ["*"] = all tools; [] = no tools
+tools: ["read", "grep", "glob", "edit"]  # OPTIONAL allow-list — omit or ["*"] = all tools. Not "search"/"web": see §1.3
 model: claude-sonnet-4.5           # OPTIONAL — string or prioritized array
 target: github-copilot             # OPTIONAL — "vscode" | "github-copilot"
 user-invocable: true               # OPTIONAL — default true; false hides from /agent picker
@@ -78,31 +78,46 @@ errors, which is precisely why they are dangerous: a misspelled tool list degrad
 
 ### 1.3 `tools:` vocabulary
 
-The CLI resolves **portable aliases** (case-insensitive):
+`tools:` is an **allow-list filter**, not an additive grant. Omitting it gives the agent the full tool set;
+declaring it restricts the agent to the listed tokens. **Unrecognized tokens are silently dropped with no
+warning**, so a typo or a VS Code-only name quietly removes capability instead of failing loudly.
 
-| Alias | Compatible spellings | Meaning |
-| --- | --- | --- |
-| `execute` | `shell`, `bash`, `powershell` | Run shell commands |
-| `read` | `view`, `Read`, `NotebookRead` | Read files |
-| `edit` | `write`, `create`, `Edit`, `MultiEdit`, `Write`, `NotebookEdit` | Modify files |
-| `search` | `grep`, `glob`, `Grep`, `Glob` | Search files and content |
-| `agent` | `task`, `custom-agent`, `Task` | Invoke subagents |
-| `web` | `web_fetch`, `web_search`, `WebSearch`, `WebFetch` | Network access |
-| `todo` | `TodoWrite`, `update_todo` | Task lists |
+Every row below was measured against CLI 1.0.81-0 by declaring a single token and dumping the resulting
+tool schema — see [HARNESS-VALIDATION.md](HARNESS-VALIDATION.md).
 
-Native CLI tool names observed in BUNDLE `definitions/*.agent.yaml`:
-`grep`, `glob`, `view`, `bash`, `read_bash`, `stop_bash`, `powershell`, `read_powershell`, `stop_powershell`, `lsp`.
+**Always-on floor** (present even when every token is invalid): `skill`, `sql`.
+
+| Token | Net tools granted beyond the floor |
+| --- | --- |
+| `*` | everything (22 beyond floor) — equivalent to omitting `tools:` |
+| `read` / `view` | `view` |
+| `create` | `create` |
+| `edit` / `editFiles` | `create`, `edit` (`editFiles` grants only `edit`) |
+| `execute` / `bash` / `shell` / `runCommands` | `bash`, `list_bash`, `read_bash`, `stop_bash` |
+| `agent` / `task` | `list_agents`, `read_agent`, `task`, `write_agent` |
+| `grep` | `grep` |
+| `glob` | `glob` |
+| `web_fetch` | `web_fetch` |
+| `web_search` | `web_search` |
+| `session_store_sql` | `session_store_sql` |
+| `fetch_copilot_cli_documentation` | `fetch_copilot_cli_documentation` |
+| `write_agent`, `read_agent`, `list_agents`, `read_bash`, `stop_bash`, `list_bash` | the same-named tool |
+
+> **No-op tokens — these grant nothing and are enforced as errors by rule `AG017`:**
+> `search`, `web`, `todo`, `all`, `terminal`, `run`, `codebase`, `changes`, `fetch`, `githubRepo`, `search/codebase`.
+>
+> `search` is the dangerous one: it reads as "let this agent search code" but grants **no** search capability.
+> Use `grep` and `glob` explicitly. Likewise use `web_fetch` and `web_search` instead of `web`.
+> `todo` is unnecessary because the `sql` tool that backs task lists is always in the floor.
+>
+> `sql` and `skill` are also no-ops as tokens, but harmlessly so — they are already in the floor.
 
 MCP / namespaced tools use `server/tool` or `server/*`, matching BUNDLE regex
-`^([a-zA-Z0-9_.-]+/[a-zA-Z0-9_.-]+)(?::(.+))?$` — for example `github-mcp-server/search_code`.
+`^([a-zA-Z0-9_.-]+/(?:\*|[a-zA-Z0-9_.-]+))(?::(.+))?$` — for example `github-mcp-server/search_code`.
 
-**VS Code-only tool names are ignored by the CLI**: `codebase`, `editFiles`, `vscodeAPI`, `openSimpleBrowser`,
-`findTestFiles`, `githubRepo`, `terminalLastCommand`, `terminalSelection`, `testFailure`, `problems`, `usages`,
-`changes`, `runCommands`, `runTasks`, `runTests`, `searchResults`, `extensions`, `new`, `fetch`, and their
-`namespace/name` variants such as `search/codebase` or `edit/editFiles`.
-
-> **Consequence:** an agent whose `tools:` list contains *only* VS Code names has an empty effective tool set
-> in the CLI. Always include portable aliases so the agent works in both harnesses.
+**Recommendation.** For a general-purpose agent, omit `tools:` entirely (or use `["*"]`) so it keeps full
+capability as the CLI adds tools. Declare an explicit list only when you deliberately want to restrict the
+agent, and then always spell out `grep`/`glob`/`web_fetch`/`web_search` rather than the alias-looking no-ops.
 
 ### 1.4 `model:`
 

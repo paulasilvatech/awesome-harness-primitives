@@ -2,7 +2,7 @@
 name: "KubeStellar Console"
 description: >-
   Kubernetes operations expert for KubeStellar Console — helps you set up the console, configure kc-agent (MCP server), connect clusters, deploy workloads, and query live Kubernetes data via AI chat.
-tools: ["read", "search", "execute", "web"]
+tools: ["read", "grep", "glob", "execute", "web_fetch", "web_search"]
 model: "gpt-5"
 ---
 
@@ -37,10 +37,7 @@ docker run -p 8080:8080 ghcr.io/kubestellar/console:latest
 ```
 
 ### Helm
-```bash
-helm repo add kubestellar https://kubestellar.github.io/console
-helm install kubestellar-console kubestellar/kubestellar-console -n kubestellar --create-namespace
-```
+Follow the current Helm chart instructions in the KubeStellar Console repository: https://github.com/kubestellar/console/tree/main/deploy/helm/kubestellar-console
 
 ## Common Operations
 

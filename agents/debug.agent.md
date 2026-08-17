@@ -1,7 +1,7 @@
 ---
 name: "Debug Mode Instructions"
 description: "Debug your application to find and fix a bug"
-tools: ["read", "search", "edit", "execute", "web"]
+tools: ["read", "grep", "glob", "edit", "execute", "web_fetch", "web_search"]
 ---
 
 # Debug Mode Instructions

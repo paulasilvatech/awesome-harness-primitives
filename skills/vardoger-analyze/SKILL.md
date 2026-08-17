@@ -59,7 +59,7 @@ Install options:
   # Or run without installing:
   uvx vardoger --help
 
-If you do not have pipx, see https://pipx.pypa.io/stable/installation/.
+If you do not have pipx, see https://pipx.pypa.io/stable/.
 
 Project page: https://github.com/dstrupl/vardoger
 

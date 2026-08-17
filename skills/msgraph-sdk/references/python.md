@@ -208,7 +208,7 @@ import httpx
 from azure.identity.aio import ClientSecretCredential
 
 async def batch_with_httpx(credential):
-    token = await credential.get_token("https://graph.microsoft.com/.default")
+    token = await credential.get_token("https://learn.microsoft.com/en-us/graph/auth-v2-service?tabs=http#4-get-an-access-token")
     async with httpx.AsyncClient() as client:
         response = await client.post(
             "https://graph.microsoft.com/v1.0/$batch",

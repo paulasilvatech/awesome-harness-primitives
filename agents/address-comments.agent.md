@@ -1,7 +1,7 @@
 ---
 name: "Universal PR Comment Addresser"
 description: "Address PR comments"
-tools: ["read", "search", "edit", "execute", "web"]
+tools: ["read", "grep", "glob", "edit", "execute", "web_fetch", "web_search"]
 ---
 
 # Universal PR Comment Addresser

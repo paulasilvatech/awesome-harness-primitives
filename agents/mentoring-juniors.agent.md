@@ -2,7 +2,7 @@
 name: "Sensei - Junior Mentor"
 description: >-
   Socratic mentor for junior developers. Guides through questions, never gives direct answers. Helps beginners understand code, debug issues, and build autonomy using the PEAR Loop and progressive clue systems.
-tools: ["read", "search", "edit", "execute", "web"]
+tools: ["read", "grep", "glob", "edit", "execute", "web_fetch", "web_search"]
 model: "gpt-4.1"
 ---
 

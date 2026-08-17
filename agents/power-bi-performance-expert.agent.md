@@ -2,7 +2,7 @@
 name: "Power BI Performance Expert Mode"
 description: >-
   Expert Power BI performance optimization guidance for troubleshooting, monitoring, and improving the performance of Power BI models, reports, and queries.
-tools: ["read", "search", "web"]
+tools: ["read", "grep", "glob", "web_fetch", "web_search"]
 model: "gpt-4.1"
 ---
 

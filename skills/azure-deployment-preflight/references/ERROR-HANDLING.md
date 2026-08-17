@@ -165,7 +165,7 @@ InvalidSubscriptionId: Subscription '...' is not valid
 - **Code:** BCP064
 - **Message:** Found unexpected tokens in interpolated expression
 - **Remediation:** Check the string interpolation syntax at line 22
-- **Documentation:** https://learn.microsoft.com/en-us/azure/azure-resource-manager/bicep/diagnostics/bcp064
+- **Documentation:** https://learn.microsoft.com/en-us/azure/azure-resource-manager/bicep/bicep-core-diagnostics#bcp064
 ```
 
 ### Module Not Found

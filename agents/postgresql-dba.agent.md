@@ -1,7 +1,7 @@
 ---
 name: "PostgreSQL Database Administrator"
 description: "Work with PostgreSQL databases using the PostgreSQL extension."
-tools: ["read", "search", "edit", "execute"]
+tools: ["read", "grep", "glob", "edit", "execute"]
 ---
 
 # PostgreSQL Database Administrator

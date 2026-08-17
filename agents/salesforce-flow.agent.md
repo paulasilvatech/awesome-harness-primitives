@@ -1,7 +1,7 @@
 ---
 name: "Salesforce Flow Development"
 description: "Implement business automation using Salesforce Flow following declarative automation best practices."
-tools: ["read", "search", "edit", "execute"]
+tools: ["read", "grep", "glob", "edit", "execute"]
 ---
 
 # Salesforce Flow Development Agent

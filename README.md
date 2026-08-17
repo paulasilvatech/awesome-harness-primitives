@@ -1,6 +1,6 @@
 # Copilot Primitives
 
-[![Validate primitives](https://github.com/paulanunes85/copilot-primitives/actions/workflows/validate-primitives.yml/badge.svg)](https://github.com/paulanunes85/copilot-primitives/actions/workflows/validate-primitives.yml)
+[![Validate primitives](https://github.com/paulasilvatech/copilot-primitives/actions/workflows/validate-primitives.yml/badge.svg)](https://github.com/paulasilvatech/copilot-primitives/actions/workflows/validate-primitives.yml)
 
 A curated, spec-validated collection of GitHub Copilot CLI primitives for the Copilot CLI harness. The repository currently contains **224 agents**, **192 instruction files**, **407 skills**, **93 plugin manifests**, and **8 hook packages**, validated against Copilot CLI **1.0.81-0**.
 
@@ -40,7 +40,7 @@ For a generated, alphabetized inventory, see [docs/CATALOG.md](docs/CATALOG.md).
 This repository publishes **70 installable plugin entries** through `.github/plugin/marketplace.json`.
 
 ```sh
-copilot plugin marketplace add paulanunes85/copilot-primitives
+copilot plugin marketplace add paulasilvatech/copilot-primitives
 ```
 
 Then use the in-session plugin commands:

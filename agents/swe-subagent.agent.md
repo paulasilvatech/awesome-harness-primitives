@@ -1,7 +1,7 @@
 ---
 name: "SWE"
 description: "Senior software engineer subagent for implementation tasks: feature development, debugging, refactoring, and testing."
-tools: ["read", "search", "edit", "execute", "web", "todo", "agent"]
+tools: ["read", "grep", "glob", "edit", "execute", "web_fetch", "web_search", "agent"]
 ---
 
 ## Identity

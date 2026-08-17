@@ -2,7 +2,7 @@
 name: "Atlassian Requirements to Jira"
 description: >-
   Transform requirements documents into structured Jira epics and user stories with intelligent duplicate detection, change management, and user-approved creation workflow.
-tools: ["web"]
+tools: ["web_fetch", "web_search"]
 ---
 
 ## 🔒 SECURITY CONSTRAINTS & OPERATIONAL LIMITS

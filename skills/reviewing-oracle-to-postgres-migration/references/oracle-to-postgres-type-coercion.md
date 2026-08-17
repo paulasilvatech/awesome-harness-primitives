@@ -170,7 +170,7 @@ SELECT ac040.stakeholder_id,
 
 - [PostgreSQL Type Casting Documentation](https://www.postgresql.org/docs/current/sql-syntax.html)
 - [Oracle Type Conversion Documentation](https://docs.oracle.com/database/121/SQLRF/sql_elements003.htm)
-- [Npgsql Exception: Operator Does Not Exist](https://www.npgsql.org/doc/api/NpgsqlException.html)
+- [Npgsql Exception: Operator Does Not Exist](https://www.npgsql.org/doc/api/Npgsql.NpgsqlException.html)
 
 ## Related Issues
 

@@ -101,4 +101,4 @@ Phoenix recognizes: `thread_id`, `session_id`, `conversation_id`
 ## See Also
 
 - **TypeScript sessions:** `sessions-typescript.md`
-- **Session docs:** https://docs.arize.com/phoenix/tracing/sessions
+- **Session docs:** https://arize.com/docs/phoenix/tracing/how-to-tracing

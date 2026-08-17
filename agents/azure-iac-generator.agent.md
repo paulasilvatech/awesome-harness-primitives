@@ -2,7 +2,7 @@
 name: "azure-iac-generator"
 description: >-
   Central hub for generating Infrastructure as Code (Bicep, ARM, Terraform, Pulumi) with format-specific validation and best practices. Use this skill when the user asks to generate, create, write, or build infrastructure code, deployment code, or IaC templates in any format (Bicep, ARM Templates, Terraform, Pulumi).
-tools: ["read", "search", "edit", "execute", "web", "agent", "azure-mcp/azureterraformbestpractices", "azure-mcp/bicepschema", "azure-mcp/search", "pulumi-mcp/get-type"]
+tools: ["read", "grep", "glob", "edit", "execute", "web_fetch", "web_search", "agent", "azure-mcp/azureterraformbestpractices", "azure-mcp/bicepschema", "azure-mcp/search", "pulumi-mcp/get-type"]
 argument-hint: "Describe your infrastructure requirements and preferred IaC format. Can receive handoffs from export/migration agents."
 ---
 

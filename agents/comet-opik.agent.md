@@ -2,7 +2,7 @@
 name: "Comet Opik"
 description: >-
   Unified Comet Opik agent for instrumenting LLM apps, managing prompts/projects, auditing prompts, and investigating traces/metrics via the latest Opik MCP server.
-tools: ["read", "search", "edit", "execute", "opik/*"]
+tools: ["read", "grep", "glob", "edit", "execute", "opik/*"]
 mcp-servers: "{'opik': {'type': 'local', 'command': 'npx', 'args': ['-y', 'opik-mcp'], 'env': {'OPIK_API_KEY': 'COPILOT_MCP_OPIK_API_KEY', 'OPIK_API_BASE_URL': 'COPILOT_MCP_OPIK_API_BASE_URL', 'OPIK_WORKSPACE_NAME': 'COPILOT_MCP_OPIK_WORKSPACE', 'OPIK_SELF_HOSTED': 'COPILOT_MCP_OPIK_SELF_HOSTED', 'OPIK_TOOLSETS': 'COPILOT_MCP_OPIK_TOOLSETS', 'DEBUG_MODE': 'COPILOT_MCP_OPIK_DEBUG'}, 'tools': ['*']}}"
 ---
 
@@ -37,7 +37,7 @@ You are the all-in-one Comet Opik specialist for this repository. Integrate the 
      [opik]
      api_key = <key>
      workspace = <workspace>
-     url_override = https://www.comet.com/opik/api/
+     url_override = https://www.comet.com/opik/api
      ```
    - Validate setup without leaking secrets:
      ```bash
@@ -127,7 +127,7 @@ Do not continue with MCP commands until one of the configuration paths above is 
   Always mask tokens in logs; never echo secrets back to the user.
 
 ### 7. Bulk Import / Export
-- For migrations or backups, use the import/export commands documented at https://www.comet.com/docs/opik/tracing/import_export_commands.
+- For migrations or backups, use the import/export commands documented at https://www.comet.com/docs/opik/v1/tracing/import_export_commands.
 - **Export examples**:
   ```bash
   opik traces export --project-id <uuid> --output traces.ndjson

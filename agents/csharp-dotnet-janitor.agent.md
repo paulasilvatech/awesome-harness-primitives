@@ -1,7 +1,7 @@
 ---
 name: "C#/.NET Janitor"
 description: "Perform janitorial tasks on C#/.NET code including cleanup, modernization, and tech debt remediation."
-tools: ["read", "search", "edit", "execute", "web", "github/*"]
+tools: ["read", "grep", "glob", "edit", "execute", "web_fetch", "web_search", "github/*"]
 ---
 
 # C#/.NET Janitor

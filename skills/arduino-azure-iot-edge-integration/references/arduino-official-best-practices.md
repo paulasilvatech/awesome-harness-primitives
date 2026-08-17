@@ -4,7 +4,7 @@ Use these official Arduino resources before finalizing firmware or hardware guid
 
 ## Official References
 
-- Arduino main guide: <https://www.arduino.cc/en/Guide>
+- Arduino main guide: <https://docs.arduino.cc/learn/starting-guide/getting-started-arduino/>
 - Arduino docs home: <https://docs.arduino.cc/>
 - Getting started path: <https://docs.arduino.cc/learn/starting-guide/getting-started-arduino/>
 - Arduino IDE usage: <https://docs.arduino.cc/learn/starting-guide/the-arduino-software-ide/>
@@ -13,7 +13,7 @@ Use these official Arduino resources before finalizing firmware or hardware guid
 - Arduino memory guide: <https://docs.arduino.cc/learn/programming/memory-guide/>
 - Arduino debugging fundamentals: <https://docs.arduino.cc/learn/microcontrollers/debugging/>
 - Arduino low-power design guide: <https://docs.arduino.cc/learn/electronics/low-power/>
-- Arduino communication protocols index: <https://docs.arduino.cc/learn/communication/>
+- Arduino communication protocols index: <https://docs.arduino.cc/learn/communication/uart/>
 - Arduino style guide for libraries: <https://docs.arduino.cc/learn/contributions/arduino-library-style-guide/>
 
 ## Firmware Best Practices

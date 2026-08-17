@@ -1,7 +1,7 @@
 ---
 name: "Technical spike research mode"
 description: "Systematically research and validate technical spike documents through exhaustive investigation and controlled experimentation."
-tools: ["read", "search", "edit", "execute", "web", "todo", "agent"]
+tools: ["read", "grep", "glob", "edit", "execute", "web_fetch", "web_search", "agent"]
 ---
 
 # Technical spike research mode

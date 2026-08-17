@@ -2,7 +2,7 @@
 name: "Accessibility Runtime Tester"
 description: >-
   Runtime accessibility specialist for keyboard flows, focus management, dialog behavior, form errors, and evidence-backed WCAG validation in the browser.
-tools: ["read", "search", "execute", "web"]
+tools: ["read", "grep", "glob", "execute", "web_fetch", "web_search"]
 ---
 
 # Accessibility Runtime Tester

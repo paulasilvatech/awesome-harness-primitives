@@ -15,7 +15,7 @@ Analyze current repository context and suggest relevant copilot-instruction file
 1. **Fetch Available Instructions**: Extract instruction list and descriptions from [awesome-copilot README.instructions.md](https://github.com/github/awesome-copilot/blob/main/docs/README.instructions.md). Must use `#fetch` tool.
 2. **Scan Local Instructions**: Discover existing instruction files in `.github/instructions/` folder
 3. **Extract Descriptions**: Read front matter from local instruction files to get descriptions and `applyTo` patterns
-4. **Fetch Remote Versions**: For each local instruction, fetch the corresponding version from awesome-copilot repository using raw GitHub URLs (e.g., `https://raw.githubusercontent.com/github/awesome-copilot/main/instructions/<filename>`)
+4. **Fetch Remote Versions**: For each local instruction, fetch the corresponding version from awesome-copilot repository using raw GitHub URLs (e.g., `https://raw.githubusercontent.com/github/awesome-copilot/main/instructions/{filename}`)
 5. **Compare Versions**: Compare local instruction content with remote versions to identify:
    - Instructions that are up-to-date (exact match)
    - Instructions that are outdated (content differs)
@@ -55,8 +55,8 @@ Display analysis results in structured table comparing awesome-copilot instructi
 | Awesome-Copilot Instruction | Description | Already Installed | Similar Local Instruction | Suggestion Rationale |
 |------------------------------|-------------|-------------------|---------------------------|---------------------|
 | [blazor.instructions.md](https://github.com/github/awesome-copilot/blob/main/instructions/blazor.instructions.md) | Blazor development guidelines | ✅ Yes | blazor.instructions.md | Already covered by existing Blazor instructions |
-| [reactjs.instructions.md](https://github.com/github/awesome-copilot/blob/main/instructions/reactjs.instructions.md) | ReactJS development standards | ❌ No | None | Would enhance React development with established patterns |
-| [java.instructions.md](https://github.com/github/awesome-copilot/blob/main/instructions/java.instructions.md) | Java development best practices | ⚠️ Outdated | java.instructions.md | applyTo pattern differs: remote uses `'**/*.java'` vs local `'*.java'` - Update recommended |
+| [pcf-react-platform-libraries.instructions.md](https://github.com/github/awesome-copilot/blob/main/instructions/pcf-react-platform-libraries.instructions.md) | ReactJS development standards | ❌ No | None | Would enhance React development with established patterns |
+| [java-junit5-assertions.instructions.md](https://github.com/github/awesome-copilot/blob/main/instructions/java-junit5-assertions.instructions.md) | Java development best practices | ⚠️ Outdated | java-junit5-assertions.instructions.md | applyTo pattern differs: remote uses `'**/*.java'` vs local `'*.java'` - Update recommended |
 
 ## Local Instructions Discovery Process
 
@@ -68,7 +68,7 @@ Display analysis results in structured table comparing awesome-copilot instructi
 ## Version Comparison Process
 
 1. For each local instruction file, construct the raw GitHub URL to fetch the remote version:
-   - Pattern: `https://raw.githubusercontent.com/github/awesome-copilot/main/instructions/<filename>`
+   - Pattern: `https://raw.githubusercontent.com/github/awesome-copilot/main/instructions/{filename}`
 2. Fetch the remote version using the `#fetch` tool
 3. Compare entire file content (including front matter and body)
 4. Identify specific differences:

@@ -1,7 +1,7 @@
 ---
 name: "one-shot-feature-issue-planner"
 description: "Cloud Agent to Turn a single new-feature request into a complete, issue-ready implementation plan without follow-up questions."
-tools: ["read", "search", "web"]
+tools: ["read", "grep", "glob", "web_fetch", "web_search"]
 ---
 
 # One-Shot Feature Issue Planner

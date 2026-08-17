@@ -1,7 +1,7 @@
 ---
 name: "Salesforce Visualforce Development"
 description: "Implement Visualforce pages and controllers following Salesforce MVC architecture and best practices."
-tools: ["read", "search", "edit", "execute"]
+tools: ["read", "grep", "glob", "edit", "execute"]
 ---
 
 # Salesforce Visualforce Development Agent

@@ -1,7 +1,7 @@
 ---
 name: "RUG"
 description: "Pure orchestration agent that decomposes requests, delegates all work to subagents, validates outcomes, and repeats until complete."
-tools: ["read", "search", "web", "todo", "agent"]
+tools: ["read", "grep", "glob", "web_fetch", "web_search", "agent"]
 ---
 
 ## Identity

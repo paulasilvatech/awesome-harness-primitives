@@ -313,7 +313,7 @@ Instructions for generating high-quality Power Apps Code Apps using TypeScript, 
   // config/development.json
   {
     "powerPlatform": {
-      "environmentUrl": "https://dev-env.crm.dynamics.com",
+      "environmentUrl": "https://<dev-environment>.crm.dynamics.com",
       "apiVersion": "9.2"
     },
     "features": {

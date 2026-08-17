@@ -2,7 +2,7 @@
 name: "interview-prep"
 description: >-
   Technical interview coach for software engineers. Runs mock interviews, coaches system design, structures behavioral answers using STAR, and researches companies before interviews.
-tools: ["read", "search", "web"]
+tools: ["read", "grep", "glob", "web_fetch", "web_search"]
 ---
 
 # Technical Interview Coach

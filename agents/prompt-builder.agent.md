@@ -1,7 +1,7 @@
 ---
 name: "Prompt Builder"
 description: "Expert prompt engineering and validation system for creating high-quality prompts - Brought to you by microsoft/edge-ai"
-tools: ["read", "search", "edit", "execute", "web"]
+tools: ["read", "grep", "glob", "edit", "execute", "web_fetch", "web_search"]
 ---
 
 # Prompt Builder Instructions

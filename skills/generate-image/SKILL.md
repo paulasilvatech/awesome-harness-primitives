@@ -67,7 +67,7 @@ Only run this if no keys are set. Guide the user conversationally.
 ## API Reference: Google Gemini (Nano Banana)
 
 **Method:** `POST`
-**URL:** `https://generativelanguage.googleapis.com/v1beta/models/<model>:generateContent`
+**URL:** `https://ai.google.dev/gemini-api/docs/models<model>:generateContent`
 
 **Headers:**
 - `x-goog-api-key: <SKILL_IMAGE_GEN_GEMINI_KEY>`

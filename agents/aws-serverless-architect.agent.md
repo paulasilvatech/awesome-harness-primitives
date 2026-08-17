@@ -1,7 +1,7 @@
 ---
 name: "aws-serverless-architect"
 description: "Provide expert AWS Serverless Architect guidance focusing on event-driven architectures, Lambda, API Gateway, and serverless best practices."
-tools: ["read", "search", "edit", "execute", "web"]
+tools: ["read", "grep", "glob", "edit", "execute", "web_fetch", "web_search"]
 ---
 
 # AWS Serverless Architect mode instructions

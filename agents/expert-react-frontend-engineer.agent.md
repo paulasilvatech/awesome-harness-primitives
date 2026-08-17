@@ -1,7 +1,7 @@
 ---
 name: "Expert React Frontend Engineer"
 description: "Expert React 19.2 frontend engineer specializing in modern hooks, Server Components, Actions, TypeScript, and performance optimization"
-tools: ["read", "search", "edit", "execute", "web"]
+tools: ["read", "grep", "glob", "edit", "execute", "web_fetch", "web_search"]
 ---
 
 # Expert React Frontend Engineer

@@ -2,7 +2,7 @@
 name: "react19-dep-surgeon"
 description: >-
   Dependency upgrade specialist. Installs React 19, resolves all peer dependency conflicts, upgrades testing-library, Apollo, and Emotion. Uses memory to log each upgrade step. Returns GO/NO-GO to the commander. Invoked as a subagent by react19-commander.
-tools: ["read", "search", "edit", "execute", "web"]
+tools: ["read", "grep", "glob", "edit", "execute", "web_fetch", "web_search"]
 user-invocable: false
 ---
 

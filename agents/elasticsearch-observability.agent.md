@@ -1,7 +1,7 @@
 ---
 name: "elasticsearch-agent"
 description: "Our expert AI assistant for debugging code (O11y), optimizing vector search (RAG), and remediating security threats using live Elastic data."
-tools: ["read", "search", "edit", "execute", "elastic-mcp/*"]
+tools: ["read", "grep", "glob", "edit", "execute", "elastic-mcp/*"]
 mcp-servers:
   elastic-mcp:
     type: "remote"

@@ -109,6 +109,10 @@ def is_placeholder(url: str) -> bool:
     if NAMESPACE_URI_RE.match(url):
         return True
     host = host_of(url)
+    # A public host always has a dot. Dotless hosts come from regex literals and
+    # split strings in scripts (e.g. "https://hooks\.slack\.com/..."), not links.
+    if host and "." not in host:
+        return True
     if LOCAL_HOST_RE.match(host):
         return True
     return bool(PLACEHOLDER_URL_RE.search(url)) or bool(PLACEHOLDER_HOST_RE.match(host))
@@ -144,8 +148,12 @@ def probe(url: str, timeout: float) -> tuple[str, int | None, str]:
                     return "REDIRECT", code, final
                 return "OK", code, ""
         except urllib.error.HTTPError as e:
-            if e.code in (403, 405, 406, 429) and method == "HEAD":
-                continue  # retry with GET
+            # HEAD is unreliable: many servers return 404/405/500 for HEAD on
+            # pages that serve fine over GET. Never conclude from a HEAD failure.
+            if method == "HEAD":
+                continue
+            if e.code in (405, 501):
+                return "OK", e.code, "method not allowed (endpoint alive)"
             if e.code in (401, 403, 429) or host_of(url) in KNOWN_BOT_BLOCKERS:
                 return "BLOCKED", e.code, e.reason or ""
             return "BROKEN", e.code, e.reason or ""

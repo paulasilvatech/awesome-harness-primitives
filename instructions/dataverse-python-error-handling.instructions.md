@@ -62,7 +62,7 @@ try:
     # Bad credentials or expired token
     credential = InteractiveBrowserCredential()
     client = DataverseClient(
-        base_url="https://invalid-org.crm.dynamics.com",
+        base_url="https://<invalid-org>.crm.dynamics.com",
         credential=credential
     )
     records = client.get("account")

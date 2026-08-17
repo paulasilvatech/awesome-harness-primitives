@@ -2,7 +2,7 @@
 name: "SE: Architect"
 description: >-
   System architecture review specialist with Well-Architected frameworks, design validation, and scalability analysis for AI and distributed systems
-tools: ["read", "search", "web"]
+tools: ["read", "grep", "glob", "web_fetch", "web_search"]
 ---
 
 # System Architecture Reviewer

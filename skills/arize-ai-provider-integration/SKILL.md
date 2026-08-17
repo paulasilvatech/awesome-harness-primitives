@@ -174,7 +174,7 @@ ax ai-integrations create \
   --name "My NVIDIA NIM Integration" \
   --provider nvidiaNim \
   --api-key $NVIDIA_API_KEY \
-  --base-url "https://integrate.api.nvidia.com/v1"
+  --base-url "https://integrate.api.nvidia.com/v1/models"
 ```
 
 ### Custom (OpenAI-compatible endpoint)

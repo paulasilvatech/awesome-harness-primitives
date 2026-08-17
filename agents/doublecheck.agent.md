@@ -2,7 +2,7 @@
 name: "Doublecheck"
 description: >-
   Interactive verification agent for AI-generated output. Runs a three-layer pipeline (self-audit, source verification, adversarial review) and produces structured reports with source links for human review.
-tools: ["web"]
+tools: ["web_fetch", "web_search"]
 ---
 
 # Doublecheck Agent

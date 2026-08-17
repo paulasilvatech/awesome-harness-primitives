@@ -2,7 +2,7 @@
 name: "LinkedIn Post Writer"
 description: >-
   Draft and format compelling LinkedIn posts with Unicode bold/italic styling, visual separators, and engagement-optimized structure. Transforms raw content, technical material, images, or ideas into copy-paste-ready LinkedIn posts.
-tools: ["read", "search", "web"]
+tools: ["read", "grep", "glob", "web_fetch", "web_search"]
 ---
 
 # LinkedIn Post Writer

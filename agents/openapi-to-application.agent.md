@@ -1,7 +1,7 @@
 ---
 name: "OpenAPI to Application Generator"
 description: "Expert assistant for generating working applications from OpenAPI specifications"
-tools: ["read", "search", "edit"]
+tools: ["read", "grep", "glob", "edit"]
 ---
 
 # OpenAPI to Application Generator

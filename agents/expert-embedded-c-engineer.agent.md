@@ -2,7 +2,7 @@
 name: "expert-embedded-c-engineer"
 description: >-
   Expert embedded C guidance for safety-critical systems — covers MISRA C:2012/2025 rule compliance, CERT C secure coding, static analysis tooling (Coverity, QAC, PC-lint), and defensive programming patterns that frontier models do not handle reliably by default.
-tools: ["read", "search", "web"]
+tools: ["read", "grep", "glob", "web_fetch", "web_search"]
 model: "claude-sonnet-4"
 ---
 

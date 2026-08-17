@@ -701,7 +701,7 @@ Configure markdown in `hugo.toml`:
 ### [`gomarkdown/markdown`](../references/gomarkdown.md)
 
 - Official documentation: <https://pkg.go.dev/github.com/gomarkdown/markdown>
-- Advanced configuration: <https://pkg.go.dev/github.com/gomarkdown/markdown@v0.0.0-20250810172220-2e2c11897d1a/html>
+- Advanced configuration: <https://pkg.go.dev/github.com/gomarkdown/markdown/html>
 - Markdown processing: <https://blog.kowalczyk.info/article/cxn3/advanced-markdown-processing-in-go.html>
 - GitHub repository: <https://github.com/gomarkdown/markdown>
 

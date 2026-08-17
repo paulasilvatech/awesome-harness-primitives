@@ -42,7 +42,7 @@ Use this skill when you need to:
 
 Before using msstore, you need to create an Azure AD application with Partner Center access:
 
-1. Go to [Partner Center](https://partner.microsoft.com/dashboard)
+1. Go to [Partner Center](https://learn.microsoft.com/en-us/partner-center/)
 2. Navigate to **Account settings** > **User management** > **Azure AD applications**
 3. Create a new application and note the **Tenant ID**, **Client ID**, and **Client Secret**
 4. Grant the application appropriate permissions (Manager or Developer role)

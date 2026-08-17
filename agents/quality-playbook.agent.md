@@ -2,7 +2,7 @@
 name: "quality-playbook"
 description: >-
   Run a complete quality engineering audit on any codebase. Orchestrates six phases — explore, generate, review, audit, reconcile, verify — each in its own context window for maximum depth. Then runs iteration strategies to find even more bugs. Finds the 35% of real defects that structural code review alone cannot catch.
-tools: ["read", "search", "web"]
+tools: ["read", "grep", "glob", "web_fetch", "web_search"]
 ---
 
 # Quality Playbook — Orchestrator Agent

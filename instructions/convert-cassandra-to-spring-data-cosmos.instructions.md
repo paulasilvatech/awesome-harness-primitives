@@ -308,7 +308,7 @@ INFO c.azure.identity.ChainedTokenCredential : Azure Identity => Attempted crede
 
 **Success indicators**:
 ```
-INFO c.a.c.i.RxDocumentClientImpl : Initializing DocumentClient [1] with serviceEndpoint [https://your-account.documents.azure.com:443/]
+INFO c.a.c.i.RxDocumentClientImpl : Initializing DocumentClient [1] with serviceEndpoint [https://<your-account>.documents.azure.com:443/]
 INFO c.a.c.i.GlobalEndpointManager : db account retrieved {...}
 INFO c.a.c.implementation.SessionContainer : Registering a new collection resourceId [...]
 INFO o.s.b.w.embedded.tomcat.TomcatWebServer : Tomcat started on port(s): 8944 (http)
@@ -586,7 +586,7 @@ Add cosmos profile configuration:
 
 ```properties
 # application-cosmos.properties
-azure.cosmos.uri=https://your-cosmos-account.documents.azure.com:443/
+azure.cosmos.uri=https://<your-cosmos-account>.documents.azure.com:443/
 azure.cosmos.database=your-database-name
 ```
 
@@ -1018,7 +1018,7 @@ spring:
 
 azure:
   cosmos:
-    uri: ${COSMOS_URI:https://your-account.documents.azure.com:443/}
+    uri: ${COSMOS_URI:https://<your-account>.documents.azure.com:443/}
     database: ${COSMOS_DATABASE:your-database}
 ```
 

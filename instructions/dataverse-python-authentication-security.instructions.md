@@ -162,7 +162,7 @@ records = client.get("account")
 
 ```python
 # .env file (git-ignored)
-DATAVERSE_URL=https://myorg-dev.crm.dynamics.com
+DATAVERSE_URL=https://<your-org>.crm.dynamics.com
 
 # Python code
 import os
@@ -306,7 +306,7 @@ from azure.identity import DefaultAzureCredential
 # Retrieve secrets from Azure Key Vault
 credential = DefaultAzureCredential()
 client = SecretClient(
-    vault_url="https://mykeyvault.vault.azure.net",
+    vault_url="https://<your-key-vault-name>.vault.azure.net",
     credential=credential
 )
 
@@ -428,7 +428,7 @@ import json
 from azure.identity import DefaultAzureCredential
 
 credential = DefaultAzureCredential()
-token = credential.get_token("https://dataverse.dynamics.com/.default")
+token = credential.get_token("https://<your-org>.crm.dynamics.com/.default")
 
 # Decode token to verify tenant
 import base64

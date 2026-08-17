@@ -1,7 +1,7 @@
 ---
 name: "Terratest Module Testing"
 description: "Generate and refactor Go Terratest suites for Terraform modules, including CI-safe patterns, staged tests, and negative-path validation."
-tools: ["read", "search", "edit", "execute"]
+tools: ["read", "grep", "glob", "edit", "execute"]
 model: "gpt-5"
 ---
 

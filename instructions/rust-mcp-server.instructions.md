@@ -711,5 +711,5 @@ CMD ["my-mcp-server"]
 - [rmcp Documentation](https://docs.rs/rmcp)
 - [rmcp-macros Documentation](https://docs.rs/rmcp-macros)
 - [Examples Repository](https://github.com/modelcontextprotocol/rust-sdk/tree/main/examples)
-- [MCP Specification](https://spec.modelcontextprotocol.io/)
+- [MCP Specification](https://modelcontextprotocol.io/specification/2026-07-28)
 - [Rust Async Book](https://rust-lang.github.io/async-book/)

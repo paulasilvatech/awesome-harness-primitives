@@ -2,7 +2,7 @@
 name: "react19-migrator"
 description: >-
   Source code migration engine. Rewrites every deprecated React pattern to React 19 APIs - forwardRef, defaultProps, ReactDOM.render, legacy context, string refs, useRef(). Uses memory to checkpoint progress per file. Never touches test files. Returns zero-deprecated-pattern confirmation to commander.
-tools: ["read", "search", "edit", "execute"]
+tools: ["read", "grep", "glob", "edit", "execute"]
 user-invocable: false
 ---
 

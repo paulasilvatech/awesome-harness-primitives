@@ -167,7 +167,7 @@ The scoring formula structure is adapted from established risk quantification fr
 | Tier Weight × Exposure Likelihood | OWASP Risk Rating Methodology — https://owasp.org/www-community/OWASP_Risk_Rating_Methodology |
 | Completeness Factor | FAIR (Factor Analysis of Information Risk) model — https://www.fairinstitute.org/ |
 | Population Scale normalization | CVSS v4.0 Attack Scale metric — https://www.first.org/cvss/v4-0/ |
-| Context multipliers | GDPR recitals 75, 91 (special categories increase risk level) — https://gdpr-info.eu/recital-75-gdpr/ |
+| Context multipliers | GDPR recitals 75, 91 (special categories increase risk level) — https://gdpr-info.eu/recitals/no-75/ |
 
 **What the formula is NOT:** It is not a legally recognized standard. It is a planning heuristic based on accepted risk frameworks, producing a relative score to compare exposure vectors — not an absolute prediction of breach cost.
 

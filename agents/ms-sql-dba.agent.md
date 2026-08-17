@@ -1,7 +1,7 @@
 ---
 name: "MS-SQL Database Administrator"
 description: "Work with Microsoft SQL Server databases using the MS SQL extension."
-tools: ["read", "search", "edit", "execute"]
+tools: ["read", "grep", "glob", "edit", "execute"]
 ---
 
 # MS-SQL Database Administrator

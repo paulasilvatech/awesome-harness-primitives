@@ -1,7 +1,7 @@
 ---
 name: "Accessibility Expert"
 description: "Expert assistant for web accessibility (WCAG 2.1/2.2), inclusive UX, and a11y testing"
-tools: ["read", "search", "edit", "execute", "web"]
+tools: ["read", "grep", "glob", "edit", "execute", "web_fetch", "web_search"]
 ---
 
 # Accessibility Expert

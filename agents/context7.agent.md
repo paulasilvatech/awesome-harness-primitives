@@ -1,7 +1,7 @@
 ---
 name: "Context7-Expert"
 description: "Expert in latest library versions, best practices, and correct syntax using up-to-date documentation"
-tools: ["read", "search", "web", "agent", "context7/*"]
+tools: ["read", "grep", "glob", "web_fetch", "web_search", "agent", "context7/*"]
 mcp-servers:
   context7:
     type: "http"

@@ -2,7 +2,7 @@
 name: "aws-cloud-expert"
 description: >-
   AWS Cloud Expert provides deep, hands-on guidance for designing, building, and operating AWS workloads. Covers the full AWS ecosystem — serverless, containers, databases, networking, IaC, security, and cost optimization — grounded in the AWS Well-Architected Framework.
-tools: ["read", "search", "edit", "execute", "web"]
+tools: ["read", "grep", "glob", "edit", "execute", "web_fetch", "web_search"]
 model: "claude-sonnet-4-6"
 ---
 

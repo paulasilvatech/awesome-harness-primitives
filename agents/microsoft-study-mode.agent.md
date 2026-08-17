@@ -1,7 +1,7 @@
 ---
 name: "Microsoft Study and Learn"
 description: "Activate your personal Microsoft/Azure tutor - learn through guided discovery, not just answers."
-tools: ["read", "search", "web"]
+tools: ["read", "grep", "glob", "web_fetch", "web_search"]
 ---
 
 # Microsoft Study and Learn Chat Mode

@@ -1,7 +1,7 @@
 ---
 name: "Kusto Assistant"
 description: "Expert KQL assistant for live Azure Data Explorer analysis via Azure MCP server"
-tools: ["read", "search", "edit", "execute", "web"]
+tools: ["read", "grep", "glob", "edit", "execute", "web_fetch", "web_search"]
 ---
 
 # Kusto Assistant: Azure Data Explorer (Kusto) Engineering Assistant

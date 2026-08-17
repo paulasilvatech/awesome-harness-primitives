@@ -1,7 +1,7 @@
 ---
 name: "terraform-aws-implement"
 description: "Act as an AWS Terraform Infrastructure as Code coding specialist that creates and reviews Terraform for AWS resources."
-tools: ["read", "search", "edit", "execute", "web", "todo", "agent"]
+tools: ["read", "grep", "glob", "edit", "execute", "web_fetch", "web_search", "agent"]
 ---
 
 # AWS Terraform Infrastructure Implementation

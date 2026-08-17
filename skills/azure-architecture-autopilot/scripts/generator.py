@@ -527,7 +527,7 @@ def generate_html(services: list, connections: list, title: str, vnet_info: str 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>{title}</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;600;700&family=Inter:wght@400;500;600&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400%3B600%3B700&family=Inter:wght@400%3B500%3B600&display=swap');
   * {{ box-sizing: border-box; margin: 0; padding: 0; }}
   body {{ font-family: 'Segoe UI', 'Inter', -apple-system, sans-serif; background: #f3f2f1; color: #323130; }}
 

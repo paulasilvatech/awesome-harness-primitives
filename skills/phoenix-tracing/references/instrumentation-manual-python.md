@@ -179,4 +179,4 @@ def process_query(query: str):
 
 - **Span attributes:** `span-chain.md`, `span-retriever.md`, `span-tool.md`, `span-llm.md`, `span-agent.md`, `span-embedding.md`, `span-reranker.md`, `span-guardrail.md`, `span-evaluator.md`
 - **Auto-instrumentation:** `instrumentation-auto-python.md` for framework integrations
-- **API docs:** https://docs.arize.com/phoenix/tracing/manual-instrumentation
+- **API docs:** https://arize.com/docs/phoenix/tracing/how-to-tracing

@@ -2,7 +2,7 @@
 name: "react19-commander"
 description: >-
   Master orchestrator for React 19 migration. Invokes specialist subagents in sequence - auditor, dep-surgeon, migrator, test-guardian - and gates advancement between steps. Uses memory to track migration state across the pipeline. Zero tolerance for incomplete migrations.
-tools: ["read", "search", "edit", "execute", "agent"]
+tools: ["read", "grep", "glob", "edit", "execute", "agent"]
 argument-hint: "Just activate to start the React 19 migration."
 ---
 

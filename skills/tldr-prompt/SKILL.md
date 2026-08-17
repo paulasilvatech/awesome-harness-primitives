@@ -59,12 +59,12 @@ considered **Ambiguous Queries**
   - If the user provides raw text without a **specific file** or **URL**, identify the topic:
     * Prompts, agents, instructions, collections → Search workspace first
       - If no relevant files found, check https://github.com/github/awesome-copilot and resolve to
-      https://raw.githubusercontent.com/github/awesome-copilot/refs/heads/main/{{folder}}/{{filename}}
-      (e.g., https://raw.githubusercontent.com/github/awesome-copilot/refs/heads/main/prompts/java-junit.prompt.md)
+      https://raw.githubusercontent.com/github/awesome-copilot/main/{folder}/{filename}
+      (e.g., https://raw.githubusercontent.com/github/awesome-copilot/main/instructions/java-junit5-assertions.instructions.md)
     * MCP servers → Prioritize https://modelcontextprotocol.io/ and
-    https://code.visualstudio.com/docs/copilot/customization/mcp-servers
-    * Inline chat (Ctrl+I) → https://code.visualstudio.com/docs/copilot/inline-chat
-    * Chat view/general → https://code.visualstudio.com/docs/copilot/ and
+    https://code.visualstudio.com/docs/agent-customization/mcp-servers
+    * Inline chat (Ctrl+I) → https://code.visualstudio.com/docs/chat/inline-chat
+    * Chat view/general → https://code.visualstudio.com/docs/agents/overview and
     https://docs.github.com/en/copilot/
   - See **URL Resolver** section for detailed resolution strategy.
 
@@ -81,18 +81,18 @@ resolve to:
      - If NO relevant files found, or data in files from `agents`, `collections`, `instructions`, or
      `prompts` folders is irrelevant to query → Search https://github.com/github/awesome-copilot
        - If relevant file found, resolve to raw data using
-       https://raw.githubusercontent.com/github/awesome-copilot/refs/heads/main/{{folder}}/{{filename}}
-       (e.g., https://raw.githubusercontent.com/github/awesome-copilot/refs/heads/main/prompts/java-junit.prompt.md)
+       https://raw.githubusercontent.com/github/awesome-copilot/main/{folder}/{filename}
+       (e.g., https://raw.githubusercontent.com/github/awesome-copilot/main/instructions/java-junit5-assertions.instructions.md)
    - MCP servers → https://modelcontextprotocol.io/ or
-   https://code.visualstudio.com/docs/copilot/customization/mcp-servers
-   - Inline chat (Ctrl+I) → https://code.visualstudio.com/docs/copilot/inline-chat
-   - Chat tools/agents → https://code.visualstudio.com/docs/copilot/chat/
-   - General Copilot → https://code.visualstudio.com/docs/copilot/ or
+   https://code.visualstudio.com/docs/agent-customization/mcp-servers
+   - Inline chat (Ctrl+I) → https://code.visualstudio.com/docs/chat/inline-chat
+   - Chat tools/agents → https://code.visualstudio.com/docs/chat/chat-overview
+   - General Copilot → https://code.visualstudio.com/docs/agents/overview or
    https://docs.github.com/en/copilot/
 
 2. **Search strategy**:
    - For workspace files: Use search tools to find matching files in ${workspaceFolder}
-   - For GitHub awesome-copilot: Fetch raw content from https://raw.githubusercontent.com/github/awesome-copilot/refs/heads/main/
+   - For GitHub awesome-copilot: Fetch raw content from https://raw.githubusercontent.com/github/awesome-copilot/main/README.md
    - For documentation: Use fetch tool with the most relevant URL from above
 
 3. **Fetch content**:
@@ -167,7 +167,7 @@ Please retry with one of these inputs.
 **User**
 
 ```bash
-/tldr-prompt "Prompt files relevant to Java"
+/tldr-prompt "Instruction files relevant to Java"
 ```
 
 **Agent Response when Relevant Workspace Files Found**
@@ -182,14 +182,14 @@ From the search results, I'll produce a tldr output for each file found.
 ```text
 I'll check https://github.com/github/awesome-copilot
 Found:
-- https://github.com/github/awesome-copilot/blob/main/prompts/java-docs.prompt.md
-- https://github.com/github/awesome-copilot/blob/main/prompts/java-junit.prompt.md
+- https://github.com/github/awesome-copilot/blob/main/instructions/java-junit5-assertions.instructions.md
+- https://github.com/github/awesome-copilot/blob/main/instructions/java-junit5-assertions.instructions.md
 
 Now let me fetch the raw content:
-- https://raw.githubusercontent.com/github/awesome-copilot/refs/heads/main/prompts/java-docs.prompt.md
-- https://raw.githubusercontent.com/github/awesome-copilot/refs/heads/main/prompts/java-junit.prompt.md
+- https://raw.githubusercontent.com/github/awesome-copilot/main/instructions/java-junit5-assertions.instructions.md
+- https://raw.githubusercontent.com/github/awesome-copilot/main/instructions/java-junit5-assertions.instructions.md
 
-I'll create a tldr summary for each prompt file.
+I'll create a tldr summary for each instruction file.
 ```
 
 ### UNAMBIGUOUS QUERIES
@@ -213,13 +213,13 @@ I'll read the file typescript-mcp-server-generator.prompt.md and create a tldr s
 **User**
 
 ```bash
-/tldr-prompt "How do MCP servers work?" #fetch https://code.visualstudio.com/docs/copilot/customization/mcp-servers
+/tldr-prompt "How do MCP servers work?" #fetch https://code.visualstudio.com/docs/agent-customization/mcp-servers
 ```
 
 **Agent**
 
 ```text
-I'll fetch the MCP server documentation from https://code.visualstudio.com/docs/copilot/customization/mcp-servers
+I'll fetch the MCP server documentation from https://code.visualstudio.com/docs/agent-customization/mcp-servers
 and create a tldr summary of how MCP servers work.
 ```
 

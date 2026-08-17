@@ -2,7 +2,7 @@
 name: "Expert Vue.js Frontend Engineer"
 description: >-
   Expert Vue.js frontend engineer specializing in Vue 3 Composition API, reactivity, state management, testing, and performance with TypeScript
-tools: ["read", "search", "edit", "execute", "web"]
+tools: ["read", "grep", "glob", "edit", "execute", "web_fetch", "web_search"]
 ---
 
 # Expert Vue.js Frontend Engineer

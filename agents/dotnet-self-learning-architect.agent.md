@@ -2,7 +2,7 @@
 name: ".NET Self-Learning Architect"
 description: >-
   Senior .NET architect for complex delivery: designs .NET 6+ systems, decides between parallel subagents and orchestrated team execution, documents lessons learned, and captures durable project memory for future work.
-tools: ["read", "search", "edit", "execute", "web", "todo", "agent"]
+tools: ["read", "grep", "glob", "edit", "execute", "web_fetch", "web_search", "agent"]
 ---
 
 # Dotnet Self-Learning Architect

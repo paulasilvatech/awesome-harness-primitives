@@ -1,7 +1,7 @@
 ---
 name: "Idea Generator"
 description: "Brainstorm and develop new application ideas through fun, interactive questioning until ready for specification creation."
-tools: ["read", "search", "execute", "web"]
+tools: ["read", "grep", "glob", "execute", "web_fetch", "web_search"]
 ---
 
 # Idea Generator mode instructions

@@ -618,7 +618,7 @@ Include at end of Executive Summary:
 | CVSS 4.0 | https://www.first.org/cvss/v4.0/specification-document | Risk scoring |
 | CWE | https://cwe.mitre.org/ | Weakness classification |
 | STRIDE | https://learn.microsoft.com/en-us/azure/security/develop/threat-modeling-tool-threats | Threat enumeration methodology |
-| NIST SP 800-53 Rev. 5 | https://csrc.nist.gov/pubs/sp/800-53/r5/upd1/final | Control mapping |
+| NIST SP 800-53 Rev. 5 | https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final | Control mapping |
 
 ### Component Documentation
 | Component | Documentation URL | Relevant Section |

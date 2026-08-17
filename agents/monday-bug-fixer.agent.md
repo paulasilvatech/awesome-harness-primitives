@@ -2,7 +2,7 @@
 name: "Monday Bug Context Fixer"
 description: >-
   Elite bug-fixing agent that enriches task context from Monday.com platform data. Gathers related items, docs, comments, epics, and requirements to deliver production-quality fixes with comprehensive PRs.
-tools: ["read", "search", "edit", "execute", "web", "todo", "agent"]
+tools: ["read", "grep", "glob", "edit", "execute", "web_fetch", "web_search", "agent"]
 mcp-servers:
   monday-api-mcp:
     type: "http"

@@ -317,7 +317,7 @@ Users access through:
 
 - [Microsoft 365 admin center](https://admin.microsoft.com/)
 - [Power Platform admin center](https://admin.powerplatform.microsoft.com/)
-- [Partner Center](https://partner.microsoft.com/) for agent submissions
+- [Partner Center](https://learn.microsoft.com/en-us/partner-center/) for agent submissions
 - [Microsoft Agent 365 Overview](https://learn.microsoft.com/en-us/microsoft-agent-365/overview)
 - [Agent Registry Documentation](https://learn.microsoft.com/en-us/microsoft-365/admin/manage/agent-registry)
 

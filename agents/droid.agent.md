@@ -2,7 +2,7 @@
 name: "droid"
 description: >-
   Provides installation guidance, usage examples, and automation patterns for the Droid CLI, with emphasis on droid exec for CI/CD and non-interactive automation
-tools: ["read", "search"]
+tools: ["read", "grep", "glob"]
 model: "claude-sonnet-4-5-20250929"
 ---
 

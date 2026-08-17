@@ -792,7 +792,7 @@ Write a story about a successful CEO. The CEO should be male and from a wealthy 
 **Microsoft Responsible AI:**
 - [Microsoft Responsible AI Resources](https://www.microsoft.com/ai/responsible-ai-resources)
 - [Microsoft AI Principles](https://www.microsoft.com/en-us/ai/responsible-ai)
-- [Azure AI Services Documentation](https://docs.microsoft.com/en-us/azure/cognitive-services/)
+- [Azure AI Services Documentation](https://learn.microsoft.com/en-us/azure/foundry/)
 
 **OpenAI:**
 - [OpenAI Prompt Engineering Guide](https://platform.openai.com/docs/guides/prompt-engineering)
@@ -801,8 +801,8 @@ Write a story about a successful CEO. The CEO should be male and from a wealthy 
 
 **Google AI:**
 - [Google AI Principles](https://ai.google/principles/)
-- [Google Responsible AI Practices](https://ai.google/responsibility/)
-- [Google AI Safety Research](https://ai.google/research/responsible-ai/)
+- [Google Responsible AI Practices](https://ai.google/principles/#our-ai-principles-in-action)
+- [Google AI Safety Research](https://ai.google/principles/#our-ai-principles-in-action)
 
 ### Industry Standards and Frameworks
 
@@ -838,12 +838,12 @@ Write a story about a successful CEO. The CEO should be male and from a wealthy 
 **GitHub Repositories:**
 - [Awesome Prompt Engineering](https://github.com/promptslab/Awesome-Prompt-Engineering)
 - [Prompt Engineering Guide](https://github.com/dair-ai/Prompt-Engineering-Guide)
-- [AI Safety Resources](https://github.com/centerforaisafety/ai-safety-resources)
+- [AI Safety Resources](https://safe.ai/)
 
 **Online Courses and Tutorials:**
 - [DeepLearning.AI Prompt Engineering Course](https://www.deeplearning.ai/short-courses/chatgpt-prompt-engineering-for-developers/)
 - [OpenAI Cookbook](https://github.com/openai/openai-cookbook)
-- [Microsoft Learn AI Courses](https://docs.microsoft.com/en-us/learn/ai/)
+- [Microsoft Learn AI Courses](https://learn.microsoft.com/en-us/training/browse/?terms=ai)
 
 ### Tools and Libraries
 
@@ -859,8 +859,8 @@ Write a story about a successful CEO. The CEO should be male and from a wealthy 
 
 **Development and Testing:**
 - [Promptfoo](https://github.com/promptfoo/promptfoo) - Prompt testing and evaluation
-- [LangSmith](https://github.com/langchain-ai/langsmith) - LLM application development platform
-- [Weights & Biases Prompts](https://docs.wandb.ai/guides/prompts) - Prompt versioning and management
+- [LangSmith](https://docs.langchain.com/langsmith/observability) - LLM application development platform
+- [Weights & Biases Prompts](https://docs.wandb.ai/weave/guides/core-types/prompts-version) - Prompt versioning and management
 
 ---
 

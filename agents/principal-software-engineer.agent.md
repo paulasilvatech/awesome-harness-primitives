@@ -2,7 +2,7 @@
 name: "Principal software engineer"
 description: >-
   Provide principal-level software engineering guidance with focus on engineering excellence, technical leadership, and pragmatic implementation.
-tools: ["read", "search", "edit", "execute", "web", "todo", "agent", "github/*"]
+tools: ["read", "grep", "glob", "edit", "execute", "web_fetch", "web_search", "agent", "github/*"]
 ---
 
 # Principal software engineer mode instructions

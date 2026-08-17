@@ -1,7 +1,7 @@
 ---
 name: "Azure AVM Bicep mode"
 description: "Create, update, or review Azure IaC in Bicep using Azure Verified Modules (AVM)."
-tools: ["read", "search", "edit", "execute", "web"]
+tools: ["read", "grep", "glob", "edit", "execute", "web_fetch", "web_search"]
 ---
 
 # Azure AVM Bicep mode

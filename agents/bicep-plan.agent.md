@@ -1,7 +1,7 @@
 ---
 name: "Bicep Planning"
 description: "Act as implementation planner for your Azure Bicep Infrastructure as Code task."
-tools: ["read", "search", "edit", "execute", "web", "todo"]
+tools: ["read", "grep", "glob", "edit", "execute", "web_fetch", "web_search"]
 ---
 
 # Azure Bicep Infrastructure Planning

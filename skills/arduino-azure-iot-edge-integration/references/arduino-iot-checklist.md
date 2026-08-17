@@ -4,7 +4,7 @@ Use this checklist before finalizing architecture or implementation guidance.
 
 ## 0) Official Arduino Baseline
 
-- Official references reviewed from <https://www.arduino.cc/en/Guide> and <https://docs.arduino.cc/>.
+- Official references reviewed from <https://docs.arduino.cc/learn/starting-guide/getting-started-arduino/> and <https://docs.arduino.cc/>.
 - Language/API calls validated against <https://docs.arduino.cc/language-reference/>.
 - Best practices reviewed from `references/arduino-official-best-practices.md`.
 

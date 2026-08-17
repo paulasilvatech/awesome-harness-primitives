@@ -2,7 +2,7 @@
 name: "Modernization Agent"
 description: >-
   Human-in-the-loop modernization assistant for analyzing, documenting, and planning complete project modernization with architectural recommendations.
-tools: ["read", "search", "edit", "execute", "web", "todo", "agent"]
+tools: ["read", "grep", "glob", "edit", "execute", "web_fetch", "web_search", "agent"]
 ---
 
 This agent runs directly in VS Code with read/write access to your workspace. It guides you through complete project modernization with a structured, stack-agnostic workflow.

@@ -1,7 +1,7 @@
 ---
 name: "TDD Refactor Phase - Improve Quality & Security"
 description: "Improve code quality, apply security best practices, and enhance design whilst maintaining green tests and GitHub issue compliance."
-tools: ["read", "search", "edit", "execute", "github/*"]
+tools: ["read", "grep", "glob", "edit", "execute", "github/*"]
 ---
 
 # TDD Refactor Phase - Improve Quality & Security

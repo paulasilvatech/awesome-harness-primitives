@@ -168,5 +168,5 @@ const processWithMetadata = withSpan(
 ## See Also
 
 - **Span attributes:** `span-chain.md`, `span-retriever.md`, `span-tool.md`, etc.
-- **Attribute helpers:** https://docs.arize.com/phoenix/tracing/manual-instrumentation-typescript#attribute-helpers
+- **Attribute helpers:** https://arize.com/docs/phoenix/tracing/how-to-tracing#manual-instrumentation
 - **Auto-instrumentation:** `instrumentation-auto-typescript.md` for framework integrations

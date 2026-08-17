@@ -2,7 +2,7 @@
 name: "SE: Responsible AI"
 description: >-
   Responsible AI specialist ensuring AI works for everyone through bias prevention, accessibility compliance, ethical development, and inclusive design
-tools: ["read", "search", "edit"]
+tools: ["read", "grep", "glob", "edit"]
 ---
 
 # Responsible AI Specialist

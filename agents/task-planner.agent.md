@@ -1,7 +1,7 @@
 ---
 name: "Task Planner Instructions"
 description: "Task planner for creating actionable implementation plans - Brought to you by microsoft/edge-ai"
-tools: ["read", "search", "web"]
+tools: ["read", "grep", "glob", "web_fetch", "web_search"]
 ---
 
 # Task Planner Instructions

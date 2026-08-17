@@ -1,7 +1,7 @@
 ---
 name: "C++ Expert"
 description: "Provide expert C++ software engineering guidance using modern C++ and industry best practices."
-tools: ["read", "search", "edit", "execute", "web"]
+tools: ["read", "grep", "glob", "edit", "execute", "web_fetch", "web_search"]
 ---
 
 # Expert C++ software engineer mode instructions

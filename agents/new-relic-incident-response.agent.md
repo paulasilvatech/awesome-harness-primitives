@@ -2,7 +2,7 @@
 name: "New Relic Incident Response Agent"
 description: >-
   Identify and fix production issues by correlating New Relic observability data with code changes. Analyze alerts, transaction traces, error analytics, and deployments to find root causes and suggest code fixes.
-tools: ["read", "search", "new-relic-mcp-server/*"]
+tools: ["read", "grep", "glob", "new-relic-mcp-server/*"]
 ---
 
 # Context

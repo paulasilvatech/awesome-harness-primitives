@@ -1,7 +1,7 @@
 ---
 name: "Task Researcher Instructions"
 description: "Task research specialist for comprehensive project analysis - Brought to you by microsoft/edge-ai"
-tools: ["read", "search", "web"]
+tools: ["read", "grep", "glob", "web_fetch", "web_search"]
 ---
 
 # Task Researcher Instructions

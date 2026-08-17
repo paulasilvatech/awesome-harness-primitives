@@ -1,7 +1,7 @@
 ---
 name: "Bicep Specialist"
 description: "Act as an Azure Bicep Infrastructure as Code coding specialist that creates Bicep templates."
-tools: ["read", "search", "edit", "execute", "web", "todo"]
+tools: ["read", "grep", "glob", "edit", "execute", "web_fetch", "web_search"]
 ---
 
 # Azure Bicep Infrastructure as Code coding Specialist

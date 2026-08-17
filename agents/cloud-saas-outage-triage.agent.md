@@ -2,7 +2,7 @@
 name: "Cloud and SaaS Outage Triage"
 description: >-
   Distinguish upstream cloud or SaaS incidents from application failures before changing code, using live official-feed status and incident timelines.
-tools: ["read", "search", "outagedeck/*"]
+tools: ["read", "grep", "glob", "outagedeck/*"]
 mcp-servers:
   outagedeck:
     type: "http"

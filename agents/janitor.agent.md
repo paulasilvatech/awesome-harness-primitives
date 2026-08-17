@@ -1,7 +1,7 @@
 ---
 name: "Universal Janitor"
 description: "Perform janitorial tasks on any codebase including cleanup, simplification, and tech debt remediation."
-tools: ["read", "search", "edit", "execute", "web", "github/*"]
+tools: ["read", "grep", "glob", "edit", "execute", "web_fetch", "web_search", "github/*"]
 ---
 
 # Universal Janitor

@@ -1,7 +1,7 @@
 ---
 name: "Specification"
 description: "Generate or update specification documents for new or existing functionality."
-tools: ["read", "search", "edit", "execute", "web"]
+tools: ["read", "grep", "glob", "edit", "execute", "web_fetch", "web_search"]
 ---
 
 # Specification mode instructions

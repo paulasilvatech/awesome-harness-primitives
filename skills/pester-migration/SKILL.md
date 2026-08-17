@@ -30,7 +30,7 @@ Detailed, symptom-driven guides live in `references/` — load the one(s) for th
 | [v4-to-v5.md](references/v4-to-v5.md) | The big one. Discovery/Run phases, `BeforeAll` setup, `$PSScriptRoot`, `BeforeDiscovery`, `-ForEach`, mock scoping, `Should -Throw` wildcards, `Invoke-Pester` → `New-PesterConfiguration`. |
 | [v5-to-v6.md](references/v5-to-v6.md) | PowerShell 5.1/7.4+ only, per-file discovery+run, empty `-ForEach` throws, duplicate setup blocks throw, name `<...>` templates evaluate, `Assert-MockCalled` removed, mocks no longer fall through, code-coverage tracer, legacy `Invoke-Pester` params removed. |
 
-Canonical source: the official migration guides at https://pester.dev/docs/migrations/ — this skill
+Canonical source: the official migration guides at https://pester.dev/docs/migrations/v4-to-v5 — this skill
 mirrors them. When in doubt, prefer the website.
 
 ## Step 0 — Detect where you are and where you're going

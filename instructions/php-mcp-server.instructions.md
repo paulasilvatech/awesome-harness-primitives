@@ -805,5 +805,5 @@ npx @modelcontextprotocol/inspector php /path/to/server.php
 - [Server Builder Documentation](https://github.com/modelcontextprotocol/php-sdk/blob/main/docs/server-builder.md)
 - [Transport Documentation](https://github.com/modelcontextprotocol/php-sdk/blob/main/docs/transports.md)
 - [Examples](https://github.com/modelcontextprotocol/php-sdk/blob/main/docs/examples.md)
-- [MCP Specification](https://spec.modelcontextprotocol.io/)
+- [MCP Specification](https://modelcontextprotocol.io/specification/2026-07-28)
 - [Model Context Protocol](https://modelcontextprotocol.io/)

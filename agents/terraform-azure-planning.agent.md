@@ -1,7 +1,7 @@
 ---
 name: "Azure Terraform Infrastructure Planning"
 description: "Act as implementation planner for your Azure Terraform Infrastructure as Code task."
-tools: ["read", "search", "edit", "execute", "web", "todo"]
+tools: ["read", "grep", "glob", "edit", "execute", "web_fetch", "web_search"]
 ---
 
 # Azure Terraform Infrastructure Planning

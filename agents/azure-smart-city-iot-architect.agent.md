@@ -2,7 +2,7 @@
 name: "Azure Smart City IoT Architect"
 description: >-
   Design Azure IoT and Smart City architectures with clear platform engineering reasoning, requiring mandatory review of Azure IoT Edge documentation before recommending edge solutions.
-tools: ["read", "search", "edit", "execute", "web"]
+tools: ["read", "grep", "glob", "edit", "execute", "web_fetch", "web_search"]
 ---
 
 # Azure Smart City IoT Architect

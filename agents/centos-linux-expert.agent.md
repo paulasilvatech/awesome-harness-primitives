@@ -1,7 +1,7 @@
 ---
 name: "CentOS Linux Expert"
 description: "CentOS (Stream/Legacy) Linux specialist focused on RHEL-compatible administration, yum/dnf workflows, and enterprise hardening."
-tools: ["read", "search", "edit", "execute"]
+tools: ["read", "grep", "glob", "edit", "execute"]
 ---
 
 # CentOS Linux Expert

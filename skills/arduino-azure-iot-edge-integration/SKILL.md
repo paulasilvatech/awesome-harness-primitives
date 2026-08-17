@@ -30,7 +30,7 @@ If documentation cannot be consulted, proceed with explicit assumptions and high
 
 Before proposing firmware, wiring, or communication implementation details, consult official Arduino sources first:
 
-- https://www.arduino.cc/en/Guide
+- https://docs.arduino.cc/learn/starting-guide/getting-started-arduino/
 - https://docs.arduino.cc/
 - https://docs.arduino.cc/language-reference/
 - references/arduino-official-best-practices.md

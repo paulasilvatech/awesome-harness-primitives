@@ -2,7 +2,7 @@
 name: "Power BI Visualization Expert Mode"
 description: >-
   Expert Power BI report design and visualization guidance using Microsoft best practices for creating effective, performant, and user-friendly reports and dashboards.
-tools: ["read", "search", "edit", "execute", "web"]
+tools: ["read", "grep", "glob", "edit", "execute", "web_fetch", "web_search"]
 model: "gpt-4.1"
 ---
 

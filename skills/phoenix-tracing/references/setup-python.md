@@ -127,5 +127,5 @@ response = client.chat.completions.create(
 
 ## API Reference
 
-- [Python OTEL API Docs](https://arize-phoenix.readthedocs.io/projects/otel/en/latest/)
-- [Python Client API Docs](https://arize-phoenix.readthedocs.io/projects/client/en/latest/)
+- [Python OTEL API Docs](https://arize.com/docs/phoenix/tracing/how-to-tracing/setup-tracing)
+- [Python Client API Docs](https://arize.com/docs/phoenix)

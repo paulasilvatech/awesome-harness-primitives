@@ -3,7 +3,7 @@
 Complete operator-by-operator mapping from classic Pester v5 assertions to the
 Pester v6 `Should-*` assertions. Every signature here was taken from the Pester v6
 command reference. For the authoritative, always-current parameters and examples,
-open `https://pester.dev/docs/commands/<Name>` (e.g. `.../Should-Be`).
+open `https://pester.dev/docs/commands/Should<Name>` (e.g. `.../Should-Be`).
 
 Conventions used below:
 - `$x` = the actual value (piped, or passed with `-Actual`).

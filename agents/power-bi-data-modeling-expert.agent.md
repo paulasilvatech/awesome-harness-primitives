@@ -2,7 +2,7 @@
 name: "Power BI Data Modeling Expert Mode"
 description: >-
   Expert Power BI data modeling guidance using star schema principles, relationship design, and Microsoft best practices for optimal model performance and usability.
-tools: ["read", "search", "edit", "execute", "web"]
+tools: ["read", "grep", "glob", "edit", "execute", "web_fetch", "web_search"]
 model: "gpt-4.1"
 ---
 

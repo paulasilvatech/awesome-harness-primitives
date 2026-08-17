@@ -21,8 +21,8 @@
 
 ## Blogs and Community
 
-- [Overview post with a collection of videos and blogs](https://blogs.msdn.microsoft.com/commandline/learn-about-windows-console-and-windows-subsystem-for-linux-wsl/)
-- [Command-Line blog](https://blogs.msdn.microsoft.com/commandline/)
+- [Overview post with a collection of videos and blogs](https://devblogs.microsoft.com/commandline/learn-about-windows-console-and-windows-subsystem-for-linux-wsl/)
+- [Command-Line blog](https://devblogs.microsoft.com/commandline/)
 - [Windows Subsystem for Linux Blog](https://learn.microsoft.com/en-us/archive/blogs/wsl/)
 - [GitHub issue tracker: WSL](https://github.com/microsoft/WSL/issues)
 - [GitHub issue tracker: WSL documentation](https://github.com/MicrosoftDocs/WSL/issues)

@@ -32,7 +32,7 @@ import { DefaultAzureCredential } from "@azure/identity";
 
 const credential = new DefaultAzureCredential();
 const authProvider = new TokenCredentialAuthenticationProvider(credential, {
-  scopes: ["https://graph.microsoft.com/.default"],
+  scopes: ["https://learn.microsoft.com/en-us/graph/auth-v2-service?tabs=http#4-get-an-access-token"],
 });
 
 const graphClient = Client.initWithMiddleware({ authProvider });
@@ -50,7 +50,7 @@ const credential = new ClientSecretCredential(
 );
 
 const authProvider = new TokenCredentialAuthenticationProvider(credential, {
-  scopes: ["https://graph.microsoft.com/.default"],
+  scopes: ["https://learn.microsoft.com/en-us/graph/auth-v2-service?tabs=http#4-get-an-access-token"],
 });
 
 const graphClient = Client.initWithMiddleware({ authProvider });
@@ -70,7 +70,7 @@ const credential = new OnBehalfOfCredential({
 });
 
 const authProvider = new TokenCredentialAuthenticationProvider(credential, {
-  scopes: ["https://graph.microsoft.com/.default"],
+  scopes: ["https://learn.microsoft.com/en-us/graph/auth-v2-service?tabs=http#4-get-an-access-token"],
 });
 
 const graphClient = Client.initWithMiddleware({ authProvider });

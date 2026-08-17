@@ -205,7 +205,7 @@ Connected | Connected
 
 * [https://en.wikipedia.org/wiki/Breadboard](https://en.wikipedia.org/wiki/Breadboard)
 * [https://learn.sparkfun.com/tutorials/how-to-use-a-breadboard](https://learn.sparkfun.com/tutorials/how-to-use-a-breadboard)
-* [https://www.allaboutcircuits.com/technical-articles/using-a-breadboard/](https://www.allaboutcircuits.com/technical-articles/using-a-breadboard/)
+* [https://learn.adafruit.com/breadboards-for-beginners](https://learn.adafruit.com/breadboards-for-beginners)
 
 ---
 

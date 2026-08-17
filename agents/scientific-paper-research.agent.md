@@ -1,7 +1,7 @@
 ---
 name: "Scientific Paper Research"
 description: "Research agent that searches scientific papers and retrieves structured experimental data from full-text studies using the BGPT MCP server."
-tools: ["read", "search", "edit", "bgpt/*"]
+tools: ["read", "grep", "glob", "edit", "bgpt/*"]
 mcp-servers:
   bgpt:
     type: "sse"

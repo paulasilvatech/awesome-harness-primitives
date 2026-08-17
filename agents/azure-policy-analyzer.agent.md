@@ -2,7 +2,7 @@
 name: "Azure Policy Analyzer"
 description: >-
   Analyze Azure Policy compliance posture (NIST SP 800-53, MCSB, CIS, ISO 27001, PCI DSS, SOC 2), auto-discover scope, and return a structured single-pass risk report with evidence and remediation commands.
-tools: ["read", "search", "edit", "execute", "web", "todo", "azure-mcp/*"]
+tools: ["read", "grep", "glob", "edit", "execute", "web_fetch", "web_search", "azure-mcp/*"]
 argument-hint: "Describe the Azure Policy analysis task. Scope is auto-detected unless explicitly provided."
 ---
 

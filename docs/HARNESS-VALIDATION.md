@@ -371,3 +371,93 @@ Files in the current directory:
 ### Verdict on the 160-agent tool rewrite
 
 The rewrite away from unsupported/bogus tool names was **justified**. This CLI treats `tools:` as a filter, emits no warning for unrecognized tool names, and can silently cripple an agent. VS Code names were not uniformly ignored to zero in this exact test (`editFiles` mapped to `edit`, `runCommands` exposed shell helpers), but the resulting set was still different and smaller than the portable list and lacked `view`/`create`. Bogus-only is conclusively crippled.
+
+## Tool token vocabulary — net grants
+Follow-up C date: 2026-08-17. Workspace: `/Volumes/T9/harness-check/vocab-ws`; isolated config: `COPILOT_HOME=/Volumes/T9/harness-check/copilot-home`. Each probe agent used a single `tools:` token and was invoked with `--agent <probe> -p "Reply only: ok" --allow-all --no-color --log-level debug --no-remote --silent`. Full `tool_schemas` were parsed from the debug log.
+All successful token probes returned `ok`, wrote no stderr, and emitted no agent frontmatter warnings for the `tools:` token. Failed transient auth/network runs for four tokens were rerun successfully. Example run output:
+```text
+tok-read rc=0 out='ok' err=''
+tok-search rc=0 out='ok' err=''
+tok-write-agent rc 0 out ok err
+tok-bogus rc 0 out ok err
+```
+The always-on floor was measured with `tools: ["totally_made_up_tool_zzz"]` and is subtracted below:
+
+```text
+floor ['skill', 'sql']
+```
+| token | valid? | net tools granted beyond floor | count |
+|---|---:|---|---:|
+| `read` | Yes | `view` | 1 |
+| `search` | No | — | 0 |
+| `edit` | Yes | `create`, `edit` | 2 |
+| `execute` | Yes | `bash`, `list_bash`, `read_bash`, `stop_bash` | 4 |
+| `web` | No | — | 0 |
+| `todo` | No | — | 0 |
+| `agent` | Yes | `list_agents`, `read_agent`, `task`, `write_agent` | 4 |
+| `view` | Yes | `view` | 1 |
+| `create` | Yes | `create` | 1 |
+| `bash` | Yes | `bash`, `list_bash`, `read_bash`, `stop_bash` | 4 |
+| `glob` | Yes | `glob` | 1 |
+| `grep` | Yes | `grep` | 1 |
+| `web_fetch` | Yes | `web_fetch` | 1 |
+| `web_search` | Yes | `web_search` | 1 |
+| `task` | Yes | `list_agents`, `read_agent`, `task`, `write_agent` | 4 |
+| `sql` | No | — | 0 |
+| `skill` | No | — | 0 |
+| `write_agent` | Yes | `write_agent` | 1 |
+| `read_agent` | Yes | `read_agent` | 1 |
+| `list_agents` | Yes | `list_agents` | 1 |
+| `read_bash` | Yes | `read_bash` | 1 |
+| `stop_bash` | Yes | `stop_bash` | 1 |
+| `list_bash` | Yes | `list_bash` | 1 |
+| `session_store_sql` | Yes | `session_store_sql` | 1 |
+| `fetch_copilot_cli_documentation` | Yes | `fetch_copilot_cli_documentation` | 1 |
+| `all` | No | — | 0 |
+| `*` | Yes | `bash`, `create`, `edit`, `fetch_copilot_cli_documentation`, `github-mcp-server-get_copilot_space`, `github-mcp-server-get_file_contents`, `github-mcp-server-list_copilot_spaces`, `github-mcp-server-search_code`, `github-mcp-server-search_users`, `glob`, `grep`, `list_agents`, `list_bash`, `read_agent`, `read_bash`, `session_store_sql`, `stop_bash`, `task`, `view`, `web_fetch`, `web_search`, `write_agent` | 22 |
+| `shell` | Yes | `bash`, `list_bash`, `read_bash`, `stop_bash` | 4 |
+| `terminal` | No | — | 0 |
+| `run` | No | — | 0 |
+| `runCommands` | Yes | `bash`, `list_bash`, `read_bash`, `stop_bash` | 4 |
+| `codebase` | No | — | 0 |
+| `editFiles` | Yes | `edit` | 1 |
+| `search/codebase` | No | — | 0 |
+| `changes` | No | — | 0 |
+| `fetch` | No | — | 0 |
+| `githubRepo` | No | — | 0 |
+| `totally_made_up_tool_zzz` | No | — | 0 |
+
+### Combination checks
+
+| probe | `tools:` value | net tools granted beyond floor | net count | total schema count |
+|---|---|---|---:|---:|
+| `combo-read-grep-glob` | `['read', 'grep', 'glob']` | `glob`, `grep`, `view` | 3 | 5 |
+| `combo-wildcard` | `['*']` | `bash`, `create`, `edit`, `fetch_copilot_cli_documentation`, `github-mcp-server-get_copilot_space`, `github-mcp-server-get_file_contents`, `github-mcp-server-list_copilot_spaces`, `github-mcp-server-search_code`, `github-mcp-server-search_users`, `glob`, `grep`, `list_agents`, `list_bash`, `read_agent`, `read_bash`, `session_store_sql`, `stop_bash`, `task`, `view`, `web_fetch`, `web_search`, `write_agent` | 22 | 24 |
+| `combo-empty` | `[]` | — | 0 | 2 |
+| `combo-full-candidate` | `['bash', 'create', 'edit', 'fetch_copilot_cli_documentation', 'glob', 'grep', 'task', 'view', 'web_fetch', 'web_search', 'write_agent', 'read_agent', 'list_agents', 'read_bash', 'stop_bash', 'list_bash', 'session_store_sql']` | `bash`, `create`, `edit`, `fetch_copilot_cli_documentation`, `glob`, `grep`, `list_agents`, `list_bash`, `read_agent`, `read_bash`, `session_store_sql`, `stop_bash`, `task`, `view`, `web_fetch`, `web_search`, `write_agent` | 17 | 19 |
+
+Raw evidence excerpt from the parser output:
+
+```text
+read count 3 net ['view']
+search count 2 net []
+grep count 3 net ['grep']
+glob count 3 net ['glob']
+* count 24 net ['bash', 'create', 'edit', 'fetch_copilot_cli_documentation', 'github-mcp-server-get_copilot_space', 'github-mcp-server-get_file_contents', 'github-mcp-server-list_copilot_spaces', 'github-mcp-server-search_code', 'github-mcp-server-search_users', 'glob', 'grep', 'list_agents', 'list_bash', 'read_agent', 'read_bash', 'session_store_sql', 'stop_bash', 'task', 'view', 'web_fetch', 'web_search', 'write_agent']
+totally_made_up_tool_zzz count 2 net []
+combo-read-grep-glob count 5 net ['glob', 'grep', 'view']
+combo-wildcard count 24 net ['bash', 'create', 'edit', 'fetch_copilot_cli_documentation', 'github-mcp-server-get_copilot_space', 'github-mcp-server-get_file_contents', 'github-mcp-server-list_copilot_spaces', 'github-mcp-server-search_code', 'github-mcp-server-search_users', 'glob', 'grep', 'list_agents', 'list_bash', 'read_agent', 'read_bash', 'session_store_sql', 'stop_bash', 'task', 'view', 'web_fetch', 'web_search', 'write_agent']
+combo-empty count 2 net []
+```
+
+### Answers
+
+1. **Always-on floor:** `skill`, `sql`. These appear even with a bogus-only `tools:` list and with `tools: []`.
+2. **Valid tokens (grant at least one net tool):** `read`, `edit`, `execute`, `agent`, `view`, `create`, `bash`, `glob`, `grep`, `web_fetch`, `web_search`, `task`, `write_agent`, `read_agent`, `list_agents`, `read_bash`, `stop_bash`, `list_bash`, `session_store_sql`, `fetch_copilot_cli_documentation`, `*`, `shell`, `runCommands`, `editFiles`.
+3. **No-op tokens / landmines (grant nothing beyond the floor):** `search`, `web`, `todo`, `sql`, `skill`, `all`, `terminal`, `run`, `codebase`, `search/codebase`, `changes`, `fetch`, `githubRepo`, `totally_made_up_tool_zzz`. No warnings were emitted for these no-ops.
+4. **Recommended minimal token set for full 24-tool capability:** either omit `tools:` entirely or use `tools: ["*"]`. Both produced the full 24-tool schema. `tools: ["all"]` is a no-op. An explicit list of common concrete tool names tested as `combo-full-candidate` yielded only 19 total tools and did not include the GitHub MCP tools, so it is not equivalent to full capability.
+5. **Correct tokens for code search:** use exact concrete tokens `grep` and `glob`. The migrated alias `search` is a no-op in this CLI. The combination `tools: ["read", "grep", "glob"]` granted `view`, `grep`, and `glob`, confirming aliases and concrete names compose.
+
+### Migration implication
+
+The previous 160-file rewrite away from VS Code-only/bogus names was directionally justified because `tools:` is a filter and unrecognized tokens silently cripple agents. However, the specific portable alias `search` is **not sufficient** for Copilot CLI 1.0.81-0: agents that need search must include `grep` and/or `glob` explicitly, or omit `tools:` / use `"*"` for full capability.

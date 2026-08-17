@@ -1,7 +1,7 @@
 ---
 name: "Salesforce UI Development (Aura & LWC)"
 description: "Implement Salesforce UI components using Lightning Web Components and Aura components following Lightning framework best practices."
-tools: ["read", "search", "edit", "execute"]
+tools: ["read", "grep", "glob", "edit", "execute"]
 ---
 
 # Salesforce UI Development Agent (Aura & LWC)

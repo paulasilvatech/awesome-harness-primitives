@@ -1,7 +1,7 @@
 ---
 name: ".NET Upgrade"
 description: "Perform janitorial tasks on C#/.NET code including cleanup, modernization, and tech debt remediation."
-tools: ["read", "search", "edit", "execute", "web"]
+tools: ["read", "grep", "glob", "edit", "execute", "web_fetch", "web_search"]
 ---
 
 # .NET Upgrade Collection

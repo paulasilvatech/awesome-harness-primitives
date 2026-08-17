@@ -2,7 +2,7 @@
 name: "Power BI DAX Expert Mode"
 description: >-
   Expert Power BI DAX guidance using Microsoft best practices for performance, readability, and maintainability of DAX formulas and calculations.
-tools: ["read", "search", "web"]
+tools: ["read", "grep", "glob", "web_fetch", "web_search"]
 model: "gpt-4.1"
 ---
 

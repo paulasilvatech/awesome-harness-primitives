@@ -504,7 +504,7 @@ window.addEventListener("keydown", (event) => {
 **Code Example:**
 
 ```html
-<script src="https://js.leapmotion.com/leap-0.6.4.min.js"></script>
+<script src="https://unpkg.com/leapjs@0.6.4/leap-0.6.4.min.js"></script>
 ```
 
 ```javascript

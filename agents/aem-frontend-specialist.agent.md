@@ -1,7 +1,7 @@
 ---
 name: "AEM Front-End Specialist"
 description: "Expert assistant for developing AEM components using HTL, Tailwind CSS, and Figma-to-code workflows with design system integration"
-tools: ["read", "search", "edit", "web"]
+tools: ["read", "grep", "glob", "edit", "web_fetch", "web_search"]
 ---
 
 # AEM Front-End Specialist

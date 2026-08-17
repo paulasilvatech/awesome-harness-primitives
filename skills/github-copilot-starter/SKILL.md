@@ -79,7 +79,7 @@ For each, fetch the most specific match from awesome-copilot agents. If none exi
 
 **Agent Attribution**: When using content from awesome-copilot agents, add attribution comments:
 ```markdown
-<!-- Based on/Inspired by: https://github.com/github/awesome-copilot/blob/main/agents/[filename].agent.md -->
+<!-- Based on/Inspired by: https://github.com/github/awesome-copilot/blob/main/agents/{filename}.agent.md -->
 ```
 
 ### 5. `.github/workflows/` Directory (only if user uses GitHub Actions)
@@ -112,12 +112,12 @@ For each file, follow these principles:
 
 **Attribution Format**: When using content from awesome-copilot, add this comment at the top of the file:
 ```md
-<!-- Based on/Inspired by: https://github.com/github/awesome-copilot/blob/main/instructions/[filename].instructions.md -->
+<!-- Based on/Inspired by: https://github.com/github/awesome-copilot/blob/main/instructions/{filename}.instructions.md -->
 ```
 
 **Examples:**
 ```md
-<!-- Based on: https://github.com/github/awesome-copilot/blob/main/instructions/react.instructions.md -->
+<!-- Based on: https://github.com/github/awesome-copilot/blob/main/instructions/nodejs-javascript-vitest.instructions.md -->
 ---
 applyTo: "**/*.jsx,**/*.tsx"
 description: "React development best practices"
@@ -127,8 +127,8 @@ description: "React development best practices"
 ```
 
 ```md
-<!-- Inspired by: https://github.com/github/awesome-copilot/blob/main/instructions/java.instructions.md -->
-<!-- and: https://github.com/github/awesome-copilot/blob/main/instructions/spring-boot.instructions.md -->
+<!-- Inspired by: https://github.com/github/awesome-copilot/blob/main/instructions/java-junit5-assertions.instructions.md -->
+<!-- and: https://github.com/github/awesome-copilot/blob/main/instructions/springboot.instructions.md -->
 ---
 applyTo: "**/*.java"
 description: "Java Spring Boot development standards"

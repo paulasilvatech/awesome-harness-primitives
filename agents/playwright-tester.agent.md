@@ -1,7 +1,7 @@
 ---
 name: "Playwright Tester Mode"
 description: "Testing mode for Playwright tests"
-tools: ["read", "search", "edit", "execute", "web"]
+tools: ["read", "grep", "glob", "edit", "execute", "web_fetch", "web_search"]
 ---
 
 ## Core Responsibilities

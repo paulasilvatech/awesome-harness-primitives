@@ -2,7 +2,7 @@
 name: "Azure SaaS Architect mode instructions"
 description: >-
   Provide expert Azure SaaS Architect guidance focusing on multitenant applications using Azure Well-Architected SaaS principles and Microsoft best practices.
-tools: ["read", "search", "edit", "execute", "web"]
+tools: ["read", "grep", "glob", "edit", "execute", "web_fetch", "web_search"]
 ---
 
 # Azure SaaS Architect mode instructions

@@ -1,7 +1,7 @@
 ---
 name: "aws-principal-architect"
 description: "Provide expert AWS Principal Architect guidance using AWS Well-Architected Framework principles and AWS best practices."
-tools: ["read", "search", "web"]
+tools: ["read", "grep", "glob", "web_fetch", "web_search"]
 ---
 
 # AWS Principal Architect

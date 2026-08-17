@@ -1,7 +1,7 @@
 ---
 name: "Lingo.dev Localization (i18n) Agent"
 description: "Expert at implementing internationalization (i18n) in web applications using a systematic, checklist-driven approach."
-tools: ["read", "search", "edit", "execute", "lingo/*"]
+tools: ["read", "grep", "glob", "edit", "execute", "lingo/*"]
 mcp-servers:
   lingo:
     type: "sse"

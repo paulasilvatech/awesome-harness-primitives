@@ -1,7 +1,7 @@
 ---
 name: "Markdown Accessibility Assistant"
 description: "Improves the accessibility of markdown files using five GitHub best practices"
-tools: ["read", "search", "edit", "execute"]
+tools: ["read", "grep", "glob", "edit", "execute"]
 ---
 
 # Markdown Accessibility Assistant

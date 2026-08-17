@@ -1,7 +1,7 @@
 ---
 name: "stackhawk-security-onboarding"
 description: "Automatically set up StackHawk security testing for your repository with generated configuration and GitHub Actions workflow"
-tools: ["read", "search", "edit", "execute", "stackhawk-mcp/*"]
+tools: ["read", "grep", "glob", "edit", "execute", "stackhawk-mcp/*"]
 mcp-servers: "{'stackhawk-mcp': {'type': 'local', 'command': 'uvx', 'args': ['stackhawk-mcp'], 'tools': ['*'], 'env': {'STACKHAWK_API_KEY': 'COPILOT_MCP_STACKHAWK_API_KEY'}}}"
 ---
 
@@ -218,9 +218,9 @@ This PR adds automated API security testing to your repository using StackHawk.
 Security testing catches vulnerabilities before they reach production, reducing risk and compliance burden. Automated scanning in your CI/CD pipeline provides continuous security validation.
 
 ### Documentation
-- StackHawk Configuration Guide: https://docs.stackhawk.com/stackhawk-cli/configuration/
+- StackHawk Configuration Guide: https://docs.stackhawk.com/hawkscan/configuration/
 - GitHub Actions Integration: https://docs.stackhawk.com/continuous-integration/github-actions.html
-- Understanding Your Findings: https://docs.stackhawk.com/findings/
+- Understanding Your Findings: https://docs.stackhawk.com/vulnerabilities/
 ```
 
 ## Handling Uncertainty

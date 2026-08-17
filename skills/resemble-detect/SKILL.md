@@ -55,7 +55,7 @@ When multiple capabilities apply (e.g., user wants deepfake detection AND intell
 ## Required Setup
 
 - **API Key**: Bearer token from the Resemble AI dashboard (set as `RESEMBLE_API_KEY`)
-- **Base URL**: `https://app.resemble.ai/api/v2`
+- **Base URL**: `https://docs.resemble.ai/welcome`
 - **Auth Header**: `Authorization: Bearer <RESEMBLE_API_KEY>`
 - **Media Requirement**: All media must be at a publicly accessible HTTPS URL
 

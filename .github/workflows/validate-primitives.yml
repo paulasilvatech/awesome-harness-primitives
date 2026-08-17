@@ -46,3 +46,28 @@ jobs:
         run: |
           python3 scripts/generate_catalog.py --out "$RUNNER_TEMP/CATALOG.md"
           diff -u docs/CATALOG.md "$RUNNER_TEMP/CATALOG.md"
+
+  links:
+    name: External link audit (advisory)
+    runs-on: ubuntu-latest
+    # Network-dependent, so this reports but never blocks a merge.
+    continue-on-error: true
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Audit external links
+        run: |
+          {
+            echo "## External link audit"
+            echo
+            echo '```'
+            python3 scripts/check_links.py --only-problems || true
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"

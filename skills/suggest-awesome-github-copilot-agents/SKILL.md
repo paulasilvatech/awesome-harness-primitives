@@ -15,7 +15,7 @@ Analyze current repository context and suggest relevant Custom Agents files from
 1. **Fetch Available Custom Agents**: Extract Custom Agents list and descriptions from [awesome-copilot README.agents.md](https://github.com/github/awesome-copilot/blob/main/docs/README.agents.md). Must use `fetch` tool.
 2. **Scan Local Custom Agents**: Discover existing custom agent files in `.github/agents/` folder
 3. **Extract Descriptions**: Read front matter from local custom agent files to get descriptions
-4. **Fetch Remote Versions**: For each local agent, fetch the corresponding version from awesome-copilot repository using raw GitHub URLs (e.g., `https://raw.githubusercontent.com/github/awesome-copilot/main/agents/<filename>`)
+4. **Fetch Remote Versions**: For each local agent, fetch the corresponding version from awesome-copilot repository using raw GitHub URLs (e.g., `https://raw.githubusercontent.com/github/awesome-copilot/main/agents/{filename}`)
 5. **Compare Versions**: Compare local agent content with remote versions to identify:
    - Agents that are up-to-date (exact match)
    - Agents that are outdated (content differs)
@@ -69,7 +69,7 @@ Display analysis results in structured table comparing awesome-copilot custom ag
 ## Version Comparison Process
 
 1. For each local agent file, construct the raw GitHub URL to fetch the remote version:
-   - Pattern: `https://raw.githubusercontent.com/github/awesome-copilot/main/agents/<filename>`
+   - Pattern: `https://raw.githubusercontent.com/github/awesome-copilot/main/agents/{filename}`
 2. Fetch the remote version using the `fetch` tool
 3. Compare entire file content (including front matter, tools array, and body)
 4. Identify specific differences:

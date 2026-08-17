@@ -190,7 +190,7 @@ from PowerPlatform.Dataverse.client import DataverseClient
 def dataverse_client():
     """Real client for integration testing."""
     client = DataverseClient(
-        base_url="https://myorg-dev.crm.dynamics.com",
+        base_url="https://<your-org>.crm.dynamics.com",
         credential=InteractiveBrowserCredential()
     )
     return client

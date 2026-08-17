@@ -1,7 +1,7 @@
 ---
 name: "terminal-helper"
 description: "Fast terminal syntax and command helper for PowerShell and Bash"
-tools: ["read", "search"]
+tools: ["read", "grep", "glob"]
 ---
 
 # Terminal Helper

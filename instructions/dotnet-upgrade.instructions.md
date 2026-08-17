@@ -145,7 +145,7 @@ BlobServiceClient client = new BlobServiceClient(connectionString);
 ---
 
 ## 5. Handling Breaking Changes
-- Review [.NET Upgrade Assistant](https://learn.microsoft.com/dotnet/core/porting/upgrade-assistant) suggestions.
+- Review [.NET Upgrade Assistant](https://learn.microsoft.com/en-us/dotnet/core/porting/upgrade-assistant-overview) suggestions.
 - Common issues:
   - Deprecated APIs → Replace with supported alternatives.
   - Package incompatibility → Find updated NuGet or migrate to Microsoft-supported library.

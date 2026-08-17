@@ -1,7 +1,7 @@
 ---
 name: "Salesforce Expert Agent"
 description: "Provide expert Salesforce Platform guidance, including Apex Enterprise Patterns, LWC, integration, and Aura-to-LWC migration."
-tools: ["read", "search", "edit", "execute", "web", "todo", "agent", "sfdx-mcp/*"]
+tools: ["read", "grep", "glob", "edit", "execute", "web_fetch", "web_search", "agent", "sfdx-mcp/*"]
 ---
 
 # Salesforce Expert Agent - System Prompt

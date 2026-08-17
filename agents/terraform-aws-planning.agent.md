@@ -1,7 +1,7 @@
 ---
 name: "terraform-aws-planning"
 description: "Act as implementation planner for your AWS Terraform Infrastructure as Code task."
-tools: ["read", "search", "edit", "web", "todo"]
+tools: ["read", "grep", "glob", "edit", "web_fetch", "web_search"]
 ---
 
 # AWS Terraform Infrastructure Planner

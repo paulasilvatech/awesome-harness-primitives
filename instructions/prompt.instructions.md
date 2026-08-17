@@ -84,5 +84,5 @@ Every prompt file should include YAML frontmatter with the following fields:
 
 ## Additional Resources
 - [Prompt Files Documentation](https://code.visualstudio.com/docs/copilot/customization/prompt-files#_prompt-file-format)
-- [Awesome Copilot Prompt Files](https://github.com/github/awesome-copilot/tree/main/prompts)
+- [Awesome Copilot Prompt Files](https://github.com/github/awesome-copilot)
 - [Tool Configuration](https://code.visualstudio.com/docs/copilot/chat/chat-agent-mode#_agent-mode-tools)

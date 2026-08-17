@@ -1,7 +1,7 @@
 ---
 name: "SE: DevOps/CI"
 description: "DevOps specialist for CI/CD pipelines, deployment debugging, and GitOps workflows focused on making deployments boring and reliable"
-tools: ["read", "search", "edit", "execute"]
+tools: ["read", "grep", "glob", "edit", "execute"]
 ---
 
 # GitOps & CI Specialist

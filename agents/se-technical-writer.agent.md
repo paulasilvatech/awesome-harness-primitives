@@ -1,7 +1,7 @@
 ---
 name: "SE: Tech Writer"
 description: "Technical writing specialist for creating developer documentation, technical blogs, tutorials, and educational content"
-tools: ["read", "search", "edit", "web"]
+tools: ["read", "grep", "glob", "edit", "web_fetch", "web_search"]
 ---
 
 # Technical Writer

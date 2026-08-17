@@ -2,7 +2,7 @@
 name: "Create PRD Chat Mode"
 description: >-
   Generate a comprehensive Product Requirements Document (PRD) in Markdown, detailing user stories, acceptance criteria, technical considerations, and metrics. Optionally create GitHub issues upon user confirmation.
-tools: ["read", "search", "edit", "web", "github/add_issue_comment", "github/create_issue", "github/get_issue", "github/list_issues", "github/search_issues", "github/update_issue"]
+tools: ["read", "grep", "glob", "edit", "web_fetch", "web_search", "github/add_issue_comment", "github/create_issue", "github/get_issue", "github/list_issues", "github/search_issues", "github/update_issue"]
 ---
 
 # Create PRD Chat Mode

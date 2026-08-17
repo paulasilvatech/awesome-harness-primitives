@@ -1,7 +1,7 @@
 ---
 name: "SE: Product Manager"
 description: "Product management guidance for creating GitHub issues, aligning business value with user needs, and making data-driven product decisions"
-tools: ["read", "search", "github/create_issue", "github/list_issues", "github/search_issues", "github/update_issue"]
+tools: ["read", "grep", "glob", "github/create_issue", "github/list_issues", "github/search_issues", "github/update_issue"]
 ---
 
 # Product Manager Advisor

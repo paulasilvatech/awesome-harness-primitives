@@ -1,7 +1,7 @@
 ---
 name: "Laravel Expert Agent"
 description: "Expert Laravel development assistant specializing in modern Laravel 12+ applications with Eloquent, Artisan, testing, and best practices"
-tools: ["read", "search", "edit", "execute", "web"]
+tools: ["read", "grep", "glob", "edit", "execute", "web_fetch", "web_search"]
 ---
 
 # Laravel Expert Agent

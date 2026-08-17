@@ -2,7 +2,7 @@
   "name": "copilot-primitives",
   "description": "Spec-validated GitHub Copilot CLI primitives packaged as installable plugins.",
   "owner": {
-    "name": "paulanunes85"
+    "name": "paulasilvatech"
   },
   "plugins": [
     {

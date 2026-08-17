@@ -54,6 +54,22 @@ VSCODE_ONLY = {
     "runcommands", "runtasks", "runtests", "searchresults", "extensions", "new", "fetch",
 }
 AG_RETIRED_KEYS = {"infer", "mode", "hidden", "agents", "agent", "title"}
+# Tokens the CLI accepts without complaint but which grant zero tools. Verified
+# empirically against CLI 1.0.81-0; see docs/HARNESS-VALIDATION.md. Declaring one
+# silently removes capability, so these are errors rather than warnings.
+NOOP_TOOLS: dict[str, list[str]] = {
+    "search": ["grep", "glob"],
+    "web": ["web_fetch", "web_search"],
+    "todo": [],
+    "all": ["*"],
+    "terminal": ["bash"],
+    "run": ["bash"],
+    "codebase": ["grep", "glob", "view"],
+    "fetch": ["web_fetch"],
+    "changes": [],
+    "githubrepo": [],
+    "search/codebase": ["grep", "glob"],
+}
 AG_VSCODE_KEYS = {"argument-hint", "handoffs"}
 IN_VALID_KEYS = {"applyTo", "name", "description", "excludeAgent"}
 SK_VALID_KEYS = {"name", "description", "user-invocable", "disable-model-invocation", "allowed-tools", "argument-hint", "license", "metadata", "tags"}
@@ -145,7 +161,13 @@ class Validator:
             if tool_list and all(is_vscode_only_tool(t) for t in tool_list):
                 self.add(kind, p, "AG009", "WARNING", "tools contains only VS Code-only names; CLI effective tool set is empty")
             for t in tool_list:
-                if not is_recognized_tool(t):
+                if t.lower() in NOOP_TOOLS:
+                    self.add(
+                        kind, p, "AG017", "ERROR",
+                        f"Tool token '{t}' is a no-op in the Copilot CLI and grants nothing; "
+                        f"use {' + '.join(NOOP_TOOLS[t.lower()]) or 'nothing (remove it)'}",
+                    )
+                elif not is_recognized_tool(t):
                     self.add(kind, p, "AG010", "INFO", f"Unrecognized tool name '{t}'")
         for k in sorted(AG_RETIRED_KEYS & set(fm)):
             self.add(kind, p, "AG011", "WARNING", f"Retired/invalid key present: {k}")

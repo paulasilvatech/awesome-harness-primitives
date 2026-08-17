@@ -1,7 +1,7 @@
 ---
 name: "Salesforce Apex & Triggers Development"
 description: "Implement Salesforce business logic using Apex classes and triggers with production-quality code following Salesforce best practices."
-tools: ["read", "search", "edit", "execute"]
+tools: ["read", "grep", "glob", "edit", "execute"]
 ---
 
 # Salesforce Apex & Triggers Development Agent

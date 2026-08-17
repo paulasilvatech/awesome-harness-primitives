@@ -14,14 +14,14 @@
 
 - [Windows versions](https://ss64.com/nt/ver.html)
 - [RSAT](https://ss64.com/links/ps.html#kits)
-- [Domain Services Tools](https://docs.microsoft.com/previous-versions/windows/it-pro/windows-server-2012-R2-and-2012/cc771131(v=ws.11))
+- [Domain Services Tools](https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2012-r2-and-2012/cc771131%28v=ws.11%29)
 - [RSAT Download](https://www.microsoft.com/download/details.aspx?id=45520)
-- [RSAT KBase](https://docs.microsoft.com/troubleshoot/windows-server/system-management-components/remote-server-administration-tools)
+- [RSAT KBase](https://learn.microsoft.com/en-us/troubleshoot/windows-server/system-management-components/remote-server-administration-tools)
 - [DISM /Add-Capability](https://ss64.com/nt/dism.html)
 - [Microsoft Security Compliance Toolkit](https://www.microsoft.com/download/details.aspx?id=55319)
-- [Security Toolkit Release notes (2020)](https://techcommunity.microsoft.com/t5/microsoft-security-baselines/new-amp-updated-security-tools/ba-p/1631613)
-- [Policy Analyzer Release notes](https://techcommunity.microsoft.com/t5/microsoft-security-baselines/new-tool-policy-analyzer/ba-p/701049)
-- [Microsoft PowerToys](https://docs.microsoft.com/windows/powertoys/)
+- [Security Toolkit Release notes (2020)](https://techcommunity.microsoft.com/blog/microsoft-security-baselines/new--updated-security-tools/1631613)
+- [Policy Analyzer Release notes](https://learn.microsoft.com/en-us/archive/blogs/secguide/new-tool-policy-analyzer)
+- [Microsoft PowerToys](https://learn.microsoft.com/en-us/windows/powertoys/)
 - [File Locksmith](https://learn.microsoft.com/windows/powertoys/file-locksmith)
 - [Keyboard Manager](https://learn.microsoft.com/en-us/windows/powertoys/keyboard-manager)
 - [PowerToys Releases (Github)](https://github.com/microsoft/PowerToys/releases)
@@ -29,15 +29,15 @@
 - [IE 11 Enterprise Mode Site List Manager](https://www.microsoft.com/download/details.aspx?id=49974)
 - [Local Administrator Password Solution (LAPS)](https://www.microsoft.com/download/details.aspx?id=46899)
 - [LAPS howto](https://learn-powershell.net/2016/10/08/setting-up-local-administrator-password-solution-laps/)
-- [Sysinternals Suite](https://docs.microsoft.com/sysinternals/downloads/sysinternals-suite)
+- [Sysinternals Suite](https://learn.microsoft.com/en-us/sysinternals/downloads/sysinternals-suite)
 - [Account Lockout Status](https://www.microsoft.com/download/details.aspx?id=15201)
 - [Account Lockout and Management Tools](https://www.microsoft.com/download/details.aspx?id=18465)
 - [Microsoft Security Compliance Toolkit 1.0](https://www.microsoft.com/download/details.aspx?id=55319)
-- [How to disable SMB 1 (or 2/3 for testing)](https://docs.microsoft.com/windows-server/storage/file-server/troubleshoot/detect-enable-and-disable-smbv1-v2-v3)
+- [How to disable SMB 1 (or 2/3 for testing)](https://learn.microsoft.com/en-us/windows-server/storage/file-server/troubleshoot/detect-enable-and-disable-smbv1-v2-v3)
 - [File, Folder and Share Permission Utility Tool](https://web.archive.org/web/20200318052717/https://gallery.technet.microsoft.com/scriptcenter/File-Folder-and-Share-f788312b)
 - [File Checksum Integrity Verifier](https://web.archive.org/web/20150302180951/https://support.microsoft.com/kb/841290)
 - [CERTUTIL](https://ss64.com/nt/certutil.html)
-- [Policy Analyzer](https://docs.microsoft.com/archive/blogs/secguide/new-tool-policy-analyzer)
+- [Policy Analyzer](https://learn.microsoft.com/en-us/archive/blogs/secguide/new-tool-policy-analyzer)
 - [Group Policy Management Console SP1](https://www.microsoft.com/download/details.aspx?id=21895)
 - [Object Settings spreadsheet 2003/2008/2008R2/Win7](https://www.microsoft.com/download/details.aspx?id=25250)
 - [Microsoft PowerToys (Github)](https://github.com/Microsoft/PowerToys)
@@ -50,12 +50,12 @@
 - [Windows ADK 23H2](https://www.microsoft.com/en-us/download/details.aspx?id=105667)
 - [Windows ADK 24H2](https://www.microsoft.com/en-us/download/details.aspx?id=106254)
 - [Windows Server 25](https://www.microsoft.com/en-us/download/details.aspx?id=106295)
-- [Microsoft Deployment Toolkit](https://docs.microsoft.com/mem/configmgr/mdt/)
-- [Windows Assessment and Deployment Kit](https://docs.microsoft.com/windows-hardware/get-started/adk-install)
+- [Microsoft Deployment Toolkit](https://learn.microsoft.com/en-us/intune/configmgr/mdt/)
+- [Windows Assessment and Deployment Kit](https://learn.microsoft.com/en-us/windows-hardware/get-started/adk-install)
 - [Rufus USB formatting tool](https://rufus.ie/en/)
 - [Windows 10 Update Assistant 22H2](https://www.microsoft.com/software-download/windows10)
 - [Windows 10 ISO](https://www.microsoft.com/software-download/windows10ISO)
-- [Windows 10 Pro for Workstations](https://www.microsoft.com/p/windows-10-pro-for-workstations/dg7gmgf0dw9s)
+- Windows 10 Pro for Workstations
 - [Locale Builder 2.0](https://www.microsoft.com/download/details.aspx?id=41158)
 
 ## Package Management
@@ -69,7 +69,7 @@
 
 ## Command-line Utilities
 
-- [SysInternals](https://docs.microsoft.com/sysinternals/)
+- [SysInternals](https://learn.microsoft.com/en-us/sysinternals/)
 - [bottom](https://github.com/ClementTsang/bottom) — cross-platform graphical process/system monitor
 - [Caffeine.exe](https://www.zhornsoftware.co.uk/caffeine/index.html) — prevent sleep/lock
 - [CMDebug](https://jpsoft.com/products/cmdebug.html) — batch file debugger

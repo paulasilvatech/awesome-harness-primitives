@@ -2,7 +2,7 @@
 name: "sast-sca-security-analyzer"
 description: >-
   Use when: performing SAST (Static Application Security Testing), SCA (Software Composition Analysis), scanning source code or binaries for security flaws, auditing third-party dependency vulnerabilities, checking policy compliance, generating structured security reports, identifying CWE-mapped flaws with file/line precision, reviewing open-source license risk, or producing CI/CD-gate security findings.
-tools: ["read", "search", "web"]
+tools: ["read", "grep", "glob", "web_fetch", "web_search"]
 argument-hint: "Describe what to scan (e.g. 'scan src/ for SAST flaws', 'SCA audit of package.json', 'full SAST+SCA on the authentication module', 'policy compliance check for PCI-DSS')"
 ---
 

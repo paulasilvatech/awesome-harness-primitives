@@ -1,7 +1,7 @@
 ---
 name: "TDD Green Phase - Make Tests Pass Quickly"
 description: "Implement minimal code to satisfy GitHub issue requirements and make failing tests pass without over-engineering."
-tools: ["read", "search", "edit", "execute", "github/*"]
+tools: ["read", "grep", "glob", "edit", "execute", "github/*"]
 ---
 
 # TDD Green Phase - Make Tests Pass Quickly

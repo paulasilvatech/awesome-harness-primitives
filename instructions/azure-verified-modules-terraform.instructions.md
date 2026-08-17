@@ -20,7 +20,7 @@ Azure Verified Modules (AVM) are pre-built, tested, and validated Terraform and 
 ```
 
 These commands must be run before any pull request is created or updated to ensure compliance with the Azure Verified Modules standards and prevent CI/CD pipeline failures.
-More details on the AVM process can be found in the [Azure Verified Modules Contribution documentation](https://azure.github.io/Azure-Verified-Modules/contributing/terraform/testing/).
+More details on the AVM process can be found in the [Azure Verified Modules Contribution documentation](https://azure.github.io/Azure-Verified-Modules/contributing/terraform/contribution-flow/).
 
 **Failure to run these tests will cause PR validation failures and prevent successful merges.**
 

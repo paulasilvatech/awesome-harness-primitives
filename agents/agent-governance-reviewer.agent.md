@@ -2,7 +2,7 @@
 name: "Agent Governance Reviewer"
 description: >-
   AI agent governance expert that reviews code for safety issues, missing governance controls, and helps implement policy enforcement, trust scoring, and audit trails in agent systems.
-tools: ["read", "search", "execute"]
+tools: ["read", "grep", "glob", "execute"]
 model: "gpt-4o"
 ---
 

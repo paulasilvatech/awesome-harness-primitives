@@ -150,7 +150,7 @@ Gem Team is designed to work out of the box with smart defaults. You can customi
 ## Learn More
 
 - [Documentation](https://mubaidr.github.io/gem-team/)
-- [Contributing](https://mubaidr.github.io/gem-team/5.resources/2.contributing.html)
+- [Contributing](https://github.com/mubaidr/gem-team)
 - [License](LICENSE)
 
 ## Support

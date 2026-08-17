@@ -1,7 +1,7 @@
 ---
 name: "Technical Debt Remediation Plan"
 description: "Generate technical debt remediation plans for code, tests, and documentation."
-tools: ["read", "search", "web"]
+tools: ["read", "grep", "glob", "web_fetch", "web_search"]
 ---
 
 # Technical Debt Remediation Plan

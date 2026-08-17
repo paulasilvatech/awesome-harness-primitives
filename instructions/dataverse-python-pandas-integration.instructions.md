@@ -547,6 +547,6 @@ print("Report saved to industry_analysis.csv")
 ## 12. Related Resources
 
 - [Pandas Documentation](https://pandas.pydata.org/docs/)
-- [Official Example: quickstart_pandas.py](https://github.com/microsoft/PowerPlatform-DataverseClient-Python/blob/main/examples/quickstart_pandas.py)
+- [Official examples](https://github.com/microsoft/PowerPlatform-DataverseClient-Python/tree/main/examples)
 - [SDK for Python README](https://github.com/microsoft/PowerPlatform-DataverseClient-Python/blob/main/README.md)
 - [Microsoft Learn: Working with data](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/sdk-python/work-data)

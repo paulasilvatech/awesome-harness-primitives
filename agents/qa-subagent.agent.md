@@ -1,7 +1,7 @@
 ---
 name: "QA"
 description: "Meticulous QA subagent for test planning, bug hunting, edge-case analysis, and implementation verification."
-tools: ["read", "search", "web", "todo", "agent"]
+tools: ["read", "grep", "glob", "web_fetch", "web_search", "agent"]
 ---
 
 ## Identity

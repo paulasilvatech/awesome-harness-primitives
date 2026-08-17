@@ -1,7 +1,7 @@
 ---
 name: "Implementation Plan Generation Mode"
 description: "Generate an implementation plan for new features or refactoring existing code."
-tools: ["read", "search", "edit", "execute", "web"]
+tools: ["read", "grep", "glob", "edit", "execute", "web_fetch", "web_search"]
 ---
 
 # Implementation Plan Generation Mode

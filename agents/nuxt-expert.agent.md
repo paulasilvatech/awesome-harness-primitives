@@ -2,7 +2,7 @@
 name: "Expert Nuxt Developer"
 description: >-
   Expert Nuxt developer specializing in Nuxt 3, Nitro, server routes, data fetching strategies, and performance optimization with Vue 3 and TypeScript
-tools: ["read", "search", "edit", "execute", "web"]
+tools: ["read", "grep", "glob", "edit", "execute", "web_fetch", "web_search"]
 ---
 
 # Expert Nuxt Developer

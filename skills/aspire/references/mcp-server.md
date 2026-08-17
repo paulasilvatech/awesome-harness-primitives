@@ -123,7 +123,7 @@ builder.Build().Run();
 
 The `aspire mcp init` command supports:
 
-- [VS Code](https://code.visualstudio.com/docs/copilot/customization/mcp-servers) (GitHub Copilot)
+- [VS Code](https://code.visualstudio.com/docs/agent-customization/mcp-servers) (GitHub Copilot)
 - [Copilot CLI](https://docs.github.com/en/copilot/how-tos/use-copilot-agents/use-copilot-cli#add-an-mcp-server)
 - [Claude Code](https://docs.claude.com/en/docs/claude-code/mcp)
 - [OpenCode](https://opencode.ai/docs/mcp-servers/)

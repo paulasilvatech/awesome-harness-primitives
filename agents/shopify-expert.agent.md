@@ -1,7 +1,7 @@
 ---
 name: "Shopify Expert"
 description: "Expert Shopify development assistant specializing in theme development, Liquid templating, app development, and Shopify APIs"
-tools: ["read", "search", "edit", "execute", "web"]
+tools: ["read", "grep", "glob", "edit", "execute", "web_fetch", "web_search"]
 ---
 
 # Shopify Expert
@@ -582,7 +582,7 @@ export async function action({ request }) {
 }
 ```
 
-Access via: `https://yourstore.myshopify.com/apps/your-app-proxy-path`
+Access via: `https://<your-store>.myshopify.com/apps/<your-app-proxy-path>`
 
 ## Shopify CLI Commands Reference
 

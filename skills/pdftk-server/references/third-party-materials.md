@@ -86,7 +86,7 @@ The GNU LIBICONV Library is distributed in the hope that it will be useful, but 
 
 [Click to read the GNU Library General Public License](https://www.pdflabs.com/docs/pdftk-license/gnu_lgpl_license_2.txt).
 
-Download the libiconv source code from: http://www.gnu.org/software/libiconv/
+Download the libiconv source code from: https://ftp.gnu.org/pub/gnu/libiconv/
 
 ## Apache Batik
 

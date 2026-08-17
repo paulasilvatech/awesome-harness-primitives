@@ -19,6 +19,6 @@ All files in flat `rules/` directory with semantic prefixes:
 
 - [OpenInference Spec](https://github.com/Arize-ai/openinference/tree/main/spec)
 - [Phoenix Documentation](https://docs.arize.com/phoenix)
-- [Python OTEL API](https://arize-phoenix.readthedocs.io/projects/otel/en/latest/)
-- [Python Client API](https://arize-phoenix.readthedocs.io/projects/client/en/latest/)
+- [Python OTEL API](https://arize.com/docs/phoenix/tracing/how-to-tracing/setup-tracing)
+- [Python Client API](https://arize.com/docs/phoenix)
 - [TypeScript API](https://arize-ai.github.io/phoenix/)

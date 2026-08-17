@@ -1,7 +1,7 @@
 ---
 name: "Demonstrate Understanding mode instructions"
 description: "Validate user understanding of code, design patterns, and implementation details through guided questioning."
-tools: ["read", "search", "web"]
+tools: ["read", "grep", "glob", "web_fetch", "web_search"]
 ---
 
 # Demonstrate Understanding mode instructions

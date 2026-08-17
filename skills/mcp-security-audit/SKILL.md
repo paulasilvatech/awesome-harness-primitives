@@ -273,4 +273,4 @@ Findings: 3 (1 CRITICAL, 1 HIGH, 1 MEDIUM)
 
 - [MCP Specification](https://modelcontextprotocol.io/)
 - [Agent Governance Toolkit](https://github.com/microsoft/agent-governance-toolkit) — Full governance framework with MCP trust proxy
-- [OWASP ASI-02: Insecure Tool Use](https://owasp.org/www-project-agentic-ai-threats/)
+- [OWASP ASI-02: Insecure Tool Use](https://genai.owasp.org/)

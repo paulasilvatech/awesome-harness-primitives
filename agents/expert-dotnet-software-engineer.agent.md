@@ -1,7 +1,7 @@
 ---
 name: "Expert .NET software engineer mode instructions"
 description: "Provide expert .NET software engineering guidance using modern software design patterns."
-tools: ["read", "search", "edit", "execute", "web"]
+tools: ["read", "grep", "glob", "edit", "execute", "web_fetch", "web_search"]
 ---
 
 # Expert .NET software engineer mode instructions

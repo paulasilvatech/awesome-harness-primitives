@@ -1,7 +1,7 @@
 ---
 name: "Mentor mode"
 description: "Help mentor the engineer by providing guidance and support."
-tools: ["read", "search", "web"]
+tools: ["read", "grep", "glob", "web_fetch", "web_search"]
 ---
 
 # Mentor mode instructions

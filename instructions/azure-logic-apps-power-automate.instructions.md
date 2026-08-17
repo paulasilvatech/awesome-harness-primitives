@@ -1930,14 +1930,14 @@ Implement comprehensive security measures for Logic Apps and Power Automate work
 
 ## Additional Resources
 
-- [Azure Logic Apps Documentation](https://docs.microsoft.com/en-us/azure/logic-apps/)
-- [Power Automate Documentation](https://docs.microsoft.com/en-us/power-automate/)
-- [Workflow Definition Language Schema](https://docs.microsoft.com/en-us/azure/logic-apps/logic-apps-workflow-definition-language)
-- [Power Automate vs Logic Apps Comparison](https://docs.microsoft.com/en-us/azure/azure-functions/functions-compare-logic-apps-ms-flow-webjobs)
-- [Enterprise Integration Patterns](https://docs.microsoft.com/en-us/azure/logic-apps/enterprise-integration-overview)
-- [Logic Apps B2B Documentation](https://docs.microsoft.com/en-us/azure/logic-apps/logic-apps-enterprise-integration-b2b)
-- [Azure Logic Apps Limits and Configuration](https://docs.microsoft.com/en-us/azure/logic-apps/logic-apps-limits-and-config)
-- [Logic Apps Performance Optimization](https://docs.microsoft.com/en-us/azure/logic-apps/logic-apps-performance-optimization)
-- [Logic Apps Security Overview](https://docs.microsoft.com/en-us/azure/logic-apps/logic-apps-securing-a-logic-app)
-- [API Management and Logic Apps Integration](https://docs.microsoft.com/en-us/azure/api-management/api-management-create-api-logic-app)
-- [Logic Apps Standard Networking](https://docs.microsoft.com/en-us/azure/logic-apps/connect-virtual-network-vnet-isolated-environment)
+- [Azure Logic Apps Documentation](https://learn.microsoft.com/en-us/azure/logic-apps/)
+- [Power Automate Documentation](https://learn.microsoft.com/en-us/power-automate/)
+- [Workflow Definition Language Schema](https://learn.microsoft.com/en-us/azure/logic-apps/workflow-definition-language-schema)
+- [Power Automate vs Logic Apps Comparison](https://learn.microsoft.com/en-us/azure/azure-functions/functions-compare-logic-apps-ms-flow-webjobs)
+- [Enterprise Integration Patterns](https://learn.microsoft.com/en-us/azure/logic-apps/logic-apps-enterprise-integration-overview)
+- [Logic Apps B2B Documentation](https://learn.microsoft.com/en-us/azure/logic-apps/logic-apps-enterprise-integration-b2b)
+- [Azure Logic Apps Limits and Configuration](https://learn.microsoft.com/en-us/azure/logic-apps/logic-apps-limits-and-config)
+- Logic Apps performance optimization: use concurrency, batching, connector limits, and monitoring guidance from the Azure Logic Apps documentation.
+- [Logic Apps Security Overview](https://learn.microsoft.com/en-us/azure/logic-apps/logic-apps-securing-a-logic-app)
+- [API Management and Logic Apps Integration](https://learn.microsoft.com/en-us/azure/api-management/import-logic-app-as-api)
+- [Logic Apps Standard Networking](https://learn.microsoft.com/en-us/azure/logic-apps/single-tenant-overview-compare)

@@ -1,7 +1,7 @@
 ---
 name: "Critical thinking mode instructions"
 description: "Challenge assumptions and encourage critical thinking to ensure the best possible solution and outcomes."
-tools: ["read", "search", "execute", "web"]
+tools: ["read", "grep", "glob", "execute", "web_fetch", "web_search"]
 ---
 
 # Critical thinking mode instructions

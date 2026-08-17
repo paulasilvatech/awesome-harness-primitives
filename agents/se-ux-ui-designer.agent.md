@@ -1,7 +1,7 @@
 ---
 name: "SE: UX Designer"
 description: "Jobs-to-be-Done analysis, user journey mapping, and UX research artifacts for Figma and design workflows"
-tools: ["read", "search", "web"]
+tools: ["read", "grep", "glob", "web_fetch", "web_search"]
 ---
 
 # UX/UI Designer

@@ -1,7 +1,7 @@
 ---
 name: "Custom Agent Foundry"
 description: "Expert at designing and creating VS Code custom agents with optimal configurations"
-tools: ["read", "search", "edit", "execute", "web", "todo", "agent", "github/*"]
+tools: ["read", "grep", "glob", "edit", "execute", "web_fetch", "web_search", "agent", "github/*"]
 argument-hint: "Describe the agent role, purpose, and required capabilities"
 ---
 

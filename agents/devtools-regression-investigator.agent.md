@@ -2,7 +2,7 @@
 name: "DevTools Regression Investigator"
 description: >-
   Browser regression specialist for reproducing broken user flows, collecting console and network evidence, and narrowing likely root causes with Chrome DevTools MCP.
-tools: ["read", "search", "web"]
+tools: ["read", "grep", "glob", "web_fetch", "web_search"]
 ---
 
 # DevTools Regression Investigator

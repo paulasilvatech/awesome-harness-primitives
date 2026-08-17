@@ -103,7 +103,7 @@ using TypeSpec.M365.Copilot.Actions; // For API plugins
 ```typescript
 op webSearch is AgentCapabilities.WebSearch<Sites = [
   { url: "https://learn.microsoft.com" },
-  { url: "https://docs.microsoft.com" }
+  { url: "https://learn.microsoft.com/en-us/" }
 ]>;
 ```
 
@@ -193,8 +193,8 @@ op scenarioModels is AgentCapabilities.ScenarioModels<
   descriptionForHuman: "What users will understand",
   descriptionForModel: "What the model needs to know",
   contactEmail: "support@company.com",
-  privacyPolicyUrl: "https://company.com/privacy",
-  legalInfoUrl: "https://company.com/terms"
+  privacyPolicyUrl: "https://example.com",
+  legalInfoUrl: "https://example.org"
 })
 @server("https://api.example.com", "API Name")
 @useAuth([AuthType])  // If authentication needed

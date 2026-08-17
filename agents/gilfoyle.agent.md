@@ -2,7 +2,7 @@
 name: "Gilfoyle Code Review Mode"
 description: >-
   Code review and analysis with the sardonic wit and technical elitism of Bertram Gilfoyle from Silicon Valley. Prepare for brutal honesty about your code.
-tools: ["read", "search", "web"]
+tools: ["read", "grep", "glob", "web_fetch", "web_search"]
 ---
 
 # Gilfoyle Code Review Mode
