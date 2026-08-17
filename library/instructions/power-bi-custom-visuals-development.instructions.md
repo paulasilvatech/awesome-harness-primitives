@@ -1,810 +1,205 @@
 ---
-applyTo: '**/*.{ts,tsx,js,jsx,json,less,css}'
-description: 'Comprehensive Power BI custom visuals development guide covering React, D3.js integration, TypeScript patterns, testing frameworks, and advanced visualization techniques.'
+applyTo: "**/*.{ts,tsx,js,jsx,json,less,css}"
+description: "Enforces Power BI custom visual conventions for pbiviz projects, TypeScript, React, D3, formatting models, interactivity, testing, performance, and packaging."
 ---
 
-# Power BI Custom Visuals Development Best Practices
+# Power BI Custom Visuals Conventions — Visual Framework and Web Rendering
 
-## Overview
-This document provides comprehensive instructions for developing custom Power BI visuals using modern web technologies including React, D3.js, TypeScript, and advanced testing frameworks, based on Microsoft's official guidance and community best practices.
+These instructions apply to TypeScript, JavaScript, JSON, LESS, and CSS files that implement Microsoft Power BI custom visuals. They are authoritative for `pbiviz` project shape, Power BI visual lifecycle code, TypeScript configuration, React and D3 integration, formatting panes, selections, tooltips, landing pages, tests, and rendering performance in matched files; broader project security, accessibility, package-management, and release primitives win where they define stricter rules.
 
-## Development Environment Setup
+## Project Initialization and Configuration
 
-### 1. Project Initialization
+Use the Power BI custom visuals toolchain instead of hand-assembling a visual package.
+
+| Concern | Convention |
+| --- | --- |
+| Tooling | Install with `npm install -g powerbi-visuals-tools`, scaffold with `pbiviz new MyCustomVisual`, and run locally with `pbiviz start`. |
+| API package | Import the visual API from `powerbi-visuals-api`; keep API aliases explicit so lifecycle signatures remain readable. |
+| Source entry | Keep the visual entry at `src/visual.ts`; import visual styles from `style/visual.less`. |
+| TypeScript target | Configure `jsx: "react"`, `types: ["react", "react-dom"]`, `allowJs: false`, `emitDecoratorMetadata: true`, `experimentalDecorators: true`, `target: "es6"`, `sourceMap: true`, `moduleResolution: "node"`, and `declaration: true`. |
+| Compiler output | Use `outDir: "./.tmp/build/"`; the token `tmp/build/` identifies the generated build folder and must not be treated as source. |
+| Libraries | Include `lib: ["es2015", "dom"]` for browser and ES2015 APIs. |
+
+## Visual Lifecycle and Data Views
+
+Every visual class implements `IVisual` and treats `update` as an idempotent render request driven by `VisualUpdateOptions`.
+
+| API | Convention |
+| --- | --- |
+| `VisualConstructorOptions` | Read `options.element` into a private `HTMLElement` such as `target` or `element`; read `options.host` into `IVisualHost` when selections, colors, events, or tooltips are needed. |
+| `VisualUpdateOptions` | Read `options.dataViews[0]`, check for missing data, and use `options.viewport.width` and `options.viewport.height` for layout. |
+| `DataView` | Guard absent `dataView`, `dataView.single`, `dataView.categorical`, `categorical.categories[0]`, and `categorical.values[0]` before rendering. |
+| `DataViewSingle` | Use `singleDataView.value.toString()` only after checking `singleDataView` and `singleDataView.value`. |
+| `getFormattingModel()` | Return `this.formattingSettingsService.buildFormattingModel(this.formattingSettings)` when the visual exposes modern formatting pane settings. |
+
+Keep update methods short. Transform Power BI `DataView` objects into visual-specific models before rendering React components or D3 selections.
+
+## React Visual Integration
+
+Use React only for component UI and keep Power BI host interactions in the visual wrapper.
+
+| Pattern | Convention |
+| --- | --- |
+| Imports | Use `import * as React from "react"` and `import * as ReactDOM from "react-dom"`; the `react-dom` dependency owns mounting. |
+| Root component | Create a `React.ComponentElement<any, any>` from `React.createElement(ReactCircleCard, props)` and render it into `options.element` with `ReactDOM.render`. |
+| Component file | Import components from `src/component`; keep CSS classes such as `react-circle-card` and `data-point` stable for styling and tests. |
+| Props | Define `ReactCircleCardProps` with arrays such as `data: number[]`, `categories: string[]`, and optional `size` and `color`. |
+| Data parsing | Use `dataView.categorical?.values?.[0]?.values || []` and `dataView.categorical?.categories?.[0]?.values || []` to create props only after `dataView` exists. |
+| Rendering edge cases | Handle empty `data` and empty `categories` without throwing; avoid `Math.max(...data)` and `Math.min(...data)` when arrays may be empty. |
+
+## D3 Rendering and Data Joins
+
+Use D3 for scalable SVG rendering, transitions, and data joins; keep selections typed and update-friendly.
+
+| D3 element | Convention |
+| --- | --- |
+| Selection type | Define `type Selection<T extends d3.BaseType> = d3.Selection<T, any, any, any>` when using typed D3 selections. |
+| SVG root | Create an `svg` with class `visual-svg`, then append a `g` with class `visual-container`. |
+| Scales | Use `d3.scaleBand().domain(...).range([0, width]).padding(0.1)` and `d3.scaleLinear().domain([0, d3.max(data, d => d.value)]).range([height, 0])`; handle undefined maxima. |
+| Data join | Use `selectAll('.bar').data(data)`, `enter().append('rect')`, `merge(bars)`, and `exit().remove()` so repeated updates converge. |
+| Bar attributes | Set `x`, `y`, `width`, `height`, and `fill` from transformed data; protect `xScale(d.category)` and `yScale(d.value)` from undefined values. |
+| Interactive circles | Use `.data-circle` elements, `cx`, `cy`, `r`, `fill`, `stroke`, and `stroke-width`; preserve template strings such as `${d.strokeWidth}px`. |
+
+Do not append new SVG roots on every `update`. Create long-lived containers in the constructor and update attributes and data-bound elements in place.
+
+Preserve `${d.strokeWidth}px` when documenting D3 stroke-width template strings.
+
+## Formatting, Interactivity, Dialogs, and Tooltips
+
+Use supported Power BI utility packages for formatting, selection, color, and tooltips.
+
+| Feature | Convention |
+| --- | --- |
+| Formatting model | Import `formattingSettings` from `powerbi-visuals-utils-formattingmodel`; extend `formattingSettings.CompositeFormattingSettingsModel`, define `formattingSettings.SimpleCard[]`, and create cards such as `ColorCardSettings`, `DataPointCardSettings`, and `GeneralCardSettings`. |
+| Formatting controls | Use `formattingSettings.ColorPicker` with `name: "defaultColor"`, `displayName: "Default color"`, and `value: { value: "#3498db" }`; use `formattingSettings.ToggleSwitch` for boolean options such as `showAllDataPoints`. |
+| Selections | Import `interactivitySelectionService` and `baseBehavior` from `powerbi-visuals-utils-interactivityutils`; model `VisualDataPoint extends interactivitySelectionService.SelectableDataPoint` with `value`, `category`, `color`, and `selectionId: ISelectionId`. |
+| Selection manager | Create `ISelectionManager` with `this.host.createSelectionManager()`; call `this.selectionManager.select(d.selectionId, event.ctrlKey)` for click selection. |
+| Behavior | Extend `baseBehavior.BaseBehavior<VisualDataPoint>` and implement `bindClick()` plus `bindContextMenu()` with `handleSelection`, `handleClearSelection`, and `handleContextMenu`. |
+| Dialogs | Use `DialogConstructorOptions`, `DialogAction.Save`, `DialogAction.Cancel`, `DialogUtils.closeDialog(action, data)`, and a React `DialogContent` rendered into the supplied dialog container. |
+| Conditional formatting | Use `ColorHelper` from `powerbi-visuals-utils-colorutils` with `options.host.colorPalette`, `{ objectName: "dataPoint", propertyName: "fill" }`, and default `"#3498db"`. |
+| Tooltips | Use `createTooltipServiceWrapper`, `ITooltipServiceWrapper`, and `TooltipEventArgs<VisualDataPoint>` from `powerbi-visuals-utils-tooltiputils`; include fields such as `Category`, `Value`, and `Percentage`. |
+
+For tooltip strings, keep formatting deterministic and preserve examples such as `${d.category}: ${d.value}` and `${((dataPoint.value / this.totalValue) * 100).toFixed(1)}%` when documenting category/value and percentage content.
+
+## Visual API and Example Name Inventory
+
+Preserve framework and example identifiers that Power BI developers search for when applying these conventions.
+
+| Identifier | Convention |
+| --- | --- |
+| `VisualFormattingSettingsModel`, `FormattingModel`, `ColorCardSettings`, `DataPointCardSettings`, `GeneralCardSettings` | Use these names around formatting pane models and return `powerbi.visuals.FormattingModel` from `getFormattingModel()`. |
+| `VisualBehavior`, `AdvancedD3Visual`, `OptimizedVisual`, `CustomDialog` | Use these names for examples covering behavior binding, D3 interaction, queued rendering, and dialog integration. |
+| `HandleLandingPage`, `SampleLandingPage`, `LandingPage`, `LandingPageRemoved` | Keep landing-page code and tests aligned with the existing naming pattern when refactoring. |
+| `PrimitiveValue`, `ISelectionId`, `ISelectionManager`, `IVisualHost`, `IViewport` | Keep Power BI host types explicit in data points, selections, and test hosts. |
+| `React.FC` | Use for function component examples when the project already uses React type aliases; typed props remain required either way. |
+| `MouseEvent` and `KeyboardEvent` | Use native DOM events in `VisualTestUtils.d3Click` and `VisualTestUtils.d3KeyEvent` helpers. |
+
+## Landing Page and Empty Data States
+
+Render an explicit landing page when no data roles are populated and remove it once data appears.
+
+| State | Convention |
+| --- | --- |
+| Empty metadata | Check `!options.dataViews || !options.dataViews[0]?.metadata?.columns?.length` before showing onboarding content. |
+| Landing flags | Track `isLandingPageOn`, `LandingPageRemoved`, and `LandingPage` consistently so the landing page is not appended repeatedly. |
+| DOM shape | Create a `landing-page` wrapper containing `landing-page-content`, a heading, an instruction such as "Add data to get started", and a `landing-page-icon`. |
+| Removal | Call `this.LandingPage.remove()` once when data becomes available. |
+
+## Test Harness and Component Tests
+
+Use the established webpack, Jest, Testing Library, and Power BI test utility patterns.
+
+| Test concern | Convention |
+| --- | --- |
+| Webpack | Use `devtool: 'source-map'`, `mode: 'development'`, `ts-loader` for `.tsx?`, `json-loader` for `.json`, and `coverage-istanbul-loader` with `enforce: 'post'` on `src`. |
+| Generated test output | Write webpack test output to `.tmp/test`; the token `tmp/test` marks generated output. |
+| Externals | Set `"powerbi-visuals-api": '{}'` and use `webpack.ProvidePlugin({ 'powerbi-visuals-api': null })` for tests that mock the host API. |
+| Resolve | Resolve `['.tsx', '.ts', '.js', '.css']`. |
+| DOM testing | Use `@testing-library/react`, `@testing-library/jest-dom`, `render`, `screen`, `toBeInTheDocument`, `querySelectorAll`, `toHaveLength`, `toHaveStyle`, and `toBeNull`. |
+| Visual utilities | Keep `VisualTestUtils.d3Click`, `VisualTestUtils.d3KeyEvent`, `createVisualHost`, and `createUpdateOptions` available for host-level tests. |
+| Host mocks | Mock `SelectionIdBuilder`, `SelectionManager`, `ColorPalette`, `EventService`, `TooltipService`, `IViewport`, `VisualDataChangeOperationKind.Create`, and `VisualUpdateType.Data`. |
+
+## Performance and Data Reduction
+
+Reduce data before rendering and schedule expensive work carefully.
+
+| Pattern | Convention |
+| --- | --- |
+| Capabilities data reduction | In `dataViewMappings`, use `categorical`, `categories`, `for: { in: "category" }`, `dataReductionAlgorithm.window.count: 300`, `values.group.by: "series"`, `select.for.in: "measure"`, and `dataReductionAlgorithm.top.count: 100` when visuals cannot render unlimited points. |
+| Render queue | Use `requestAnimationFrame`, `animationFrameId`, and a `renderQueue` when multiple updates arrive faster than the browser can paint. |
+| Change detection | Compare transformed data before rerendering; if using `JSON.stringify`, document that the data size is bounded by reduction settings. |
+| D3 update pattern | Reuse selections and remove exits rather than clearing the entire SVG. |
+| React update pattern | Recreate props and rerender the React root only when parsed Power BI data or formatting settings changed. |
+
+## Good / Bad Examples
+
+The examples below illustrate update-safe rendering.
+
+**Good:**
+
 ```typescript
-// Install Power BI visuals tools globally
-npm install -g powerbi-visuals-tools
+public update(options: VisualUpdateOptions): void {
+    const dataView: DataView | undefined = options.dataViews?.[0];
 
-// Create new visual project
-pbiviz new MyCustomVisual
-cd MyCustomVisual
+    if (!dataView?.categorical?.categories?.[0] || !dataView.categorical.values?.[0]) {
+        this.showLandingPage(options);
+        return;
+    }
 
-// Start development server
-pbiviz start
-```
-
-### 2. TypeScript Configuration
-```json
-{
-    "compilerOptions": {
-        "jsx": "react",
-        "types": ["react", "react-dom"],
-        "allowJs": false,
-        "emitDecoratorMetadata": true,
-        "experimentalDecorators": true,
-        "target": "es6",
-        "sourceMap": true,
-        "outDir": "./.tmp/build/",
-        "moduleResolution": "node",
-        "declaration": true,
-        "lib": [
-            "es2015",
-            "dom"
-        ]
-    },
-    "files": [
-        "./src/visual.ts"
-    ]
+    const dataPoints = this.transformData(dataView);
+    this.renderChart(dataPoints, options.viewport.width, options.viewport.height);
 }
 ```
 
-## Core Visual Development Patterns
+Why: The visual validates the `DataView`, handles the empty state, transforms data before rendering, and uses viewport dimensions from Power BI.
 
-### 1. Basic Visual Structure
+**Bad:**
+
 ```typescript
-"use strict";
-import powerbi from "powerbi-visuals-api";
-
-import DataView = powerbi.DataView;
-import VisualConstructorOptions = powerbi.extensibility.visual.VisualConstructorOptions;
-import VisualUpdateOptions = powerbi.extensibility.visual.VisualUpdateOptions;
-import IVisual = powerbi.extensibility.visual.IVisual;
-import IVisualHost = powerbi.extensibility.IVisualHost;
-
-import "./../style/visual.less";
-
-export class Visual implements IVisual {
-    private target: HTMLElement;
-    private host: IVisualHost;
-
-    constructor(options: VisualConstructorOptions) {
-        this.target = options.element;
-        this.host = options.host;
-    }
-
-    public update(options: VisualUpdateOptions) {
-        const dataView: DataView = options.dataViews[0];
-
-        if (!dataView) {
-            return;
-        }
-
-        // Visual update logic here
-    }
-
-    public getFormattingModel(): powerbi.visuals.FormattingModel {
-        return this.formattingSettingsService.buildFormattingModel(this.formattingSettings);
-    }
+public update(options: VisualUpdateOptions): void {
+    const values = options.dataViews[0].categorical.values[0].values;
+    d3.select(this.target).append("svg");
+    ReactDOM.render(React.createElement(ReactCircleCard, { data: values }), this.target);
 }
 ```
 
-### 2. Data View Processing
-```typescript
-// Single data mapping example
-export class Visual implements IVisual {
-    private valueText: HTMLParagraphElement;
-
-    constructor(options: VisualConstructorOptions) {
-        this.target = options.element;
-        this.host = options.host;
-        this.valueText = document.createElement("p");
-        this.target.appendChild(this.valueText);
-    }
-
-    public update(options: VisualUpdateOptions) {
-        const dataView: DataView = options.dataViews[0];
-        const singleDataView: DataViewSingle = dataView.single;
-
-        if (!singleDataView || !singleDataView.value ) {
-            return;
-        }
-
-        this.valueText.innerText = singleDataView.value.toString();
-    }
-}
-```
-
-## React Integration
-
-### 1. React Visual Setup
-```typescript
-import * as React from "react";
-import * as ReactDOM from "react-dom";
-import ReactCircleCard from "./component";
-
-export class Visual implements IVisual {
-    private target: HTMLElement;
-    private reactRoot: React.ComponentElement<any, any>;
-
-    constructor(options: VisualConstructorOptions) {
-        this.reactRoot = React.createElement(ReactCircleCard, {});
-        this.target = options.element;
-
-        ReactDOM.render(this.reactRoot, this.target);
-    }
-
-    public update(options: VisualUpdateOptions) {
-        const dataView: DataView = options.dataViews[0];
-
-        if (dataView) {
-            const reactProps = this.parseDataView(dataView);
-            this.reactRoot = React.createElement(ReactCircleCard, reactProps);
-            ReactDOM.render(this.reactRoot, this.target);
-        }
-    }
-
-    private parseDataView(dataView: DataView): any {
-        // Transform Power BI data for React component
-        return {
-            data: dataView.categorical?.values?.[0]?.values || [],
-            categories: dataView.categorical?.categories?.[0]?.values || []
-        };
-    }
-}
-```
-
-### 2. React Component with Props
-```typescript
-// React component for Power BI visual
-import * as React from "react";
-
-export interface ReactCircleCardProps {
-    data: number[];
-    categories: string[];
-    size?: number;
-    color?: string;
-}
-
-export const ReactCircleCard: React.FC<ReactCircleCardProps> = (props) => {
-    const { data, categories, size = 200, color = "#3498db" } = props;
-
-    const maxValue = Math.max(...data);
-    const minValue = Math.min(...data);
-
-    return (
-        <div className="react-circle-card">
-            {data.map((value, index) => {
-                const radius = ((value - minValue) / (maxValue - minValue)) * size / 2;
-                return (
-                    <div key={index} className="data-point">
-                        <div
-                            className="circle"
-                            style={{
-                                width: radius * 2,
-                                height: radius * 2,
-                                backgroundColor: color,
-                                borderRadius: '50%'
-                            }}
-                        />
-                        <span className="label">{categories[index]}: {value}</span>
-                    </div>
-                );
-            })}
-        </div>
-    );
-};
-
-export default ReactCircleCard;
-```
-
-## D3.js Integration
-
-### 1. D3 with TypeScript
-```typescript
-import * as d3 from "d3";
-type Selection<T extends d3.BaseType> = d3.Selection<T, any, any, any>;
-
-export class Visual implements IVisual {
-    private svg: Selection<SVGElement>;
-    private container: Selection<SVGElement>;
-    private host: IVisualHost;
-
-    constructor(options: VisualConstructorOptions) {
-        this.host = options.host;
-        this.svg = d3.select(options.element)
-            .append('svg')
-            .classed('visual-svg', true);
-
-        this.container = this.svg
-            .append('g')
-            .classed('visual-container', true);
-    }
-
-    public update(options: VisualUpdateOptions) {
-        const dataView = options.dataViews[0];
-
-        if (!dataView) {
-            return;
-        }
-
-        const width = options.viewport.width;
-        const height = options.viewport.height;
-
-        this.svg
-            .attr('width', width)
-            .attr('height', height);
-
-        // D3 data binding and visualization logic
-        this.renderChart(dataView, width, height);
-    }
-
-    private renderChart(dataView: DataView, width: number, height: number): void {
-        const data = this.transformData(dataView);
-
-        // Create scales
-        const xScale = d3.scaleBand()
-            .domain(data.map(d => d.category))
-            .range([0, width])
-            .padding(0.1);
-
-        const yScale = d3.scaleLinear()
-            .domain([0, d3.max(data, d => d.value)])
-            .range([height, 0]);
-
-        // Bind data and create bars
-        const bars = this.container.selectAll('.bar')
-            .data(data);
-
-        bars.enter()
-            .append('rect')
-            .classed('bar', true)
-            .merge(bars)
-            .attr('x', d => xScale(d.category))
-            .attr('y', d => yScale(d.value))
-            .attr('width', xScale.bandwidth())
-            .attr('height', d => height - yScale(d.value))
-            .style('fill', '#3498db');
-
-        bars.exit().remove();
-    }
-
-    private transformData(dataView: DataView): any[] {
-        // Transform Power BI DataView to D3-friendly format
-        const categorical = dataView.categorical;
-        const categories = categorical.categories[0];
-        const values = categorical.values[0];
-
-        return categories.values.map((category, index) => ({
-            category: category.toString(),
-            value: values.values[index] as number
-        }));
-    }
-}
-```
-
-### 2. Advanced D3 Patterns
-```typescript
-// Complex D3 visualization with interactions
-export class AdvancedD3Visual implements IVisual {
-    private svg: Selection<SVGElement>;
-    private tooltip: Selection<HTMLDivElement>;
-    private selectionManager: ISelectionManager;
-
-    constructor(options: VisualConstructorOptions) {
-        this.host = options.host;
-        this.selectionManager = this.host.createSelectionManager();
-
-        // Create main SVG
-        this.svg = d3.select(options.element)
-            .append('svg');
-
-        // Create tooltip
-        this.tooltip = d3.select(options.element)
-            .append('div')
-            .classed('tooltip', true)
-            .style('opacity', 0);
-    }
-
-    private createInteractiveElements(data: VisualDataPoint[]): void {
-        const circles = this.svg.selectAll('.data-circle')
-            .data(data);
-
-        const circlesEnter = circles.enter()
-            .append('circle')
-            .classed('data-circle', true);
-
-        circlesEnter.merge(circles)
-            .attr('cx', d => d.x)
-            .attr('cy', d => d.y)
-            .attr('r', d => d.radius)
-            .style('fill', d => d.color)
-            .style('stroke', d => d.strokeColor)
-            .style('stroke-width', d => `${d.strokeWidth}px`)
-            .on('click', (event, d) => {
-                // Handle selection
-                this.selectionManager.select(d.selectionId, event.ctrlKey);
-            })
-            .on('mouseover', (event, d) => {
-                // Show tooltip
-                this.tooltip
-                    .style('opacity', 1)
-                    .style('left', (event.pageX + 10) + 'px')
-                    .style('top', (event.pageY - 10) + 'px')
-                    .html(`${d.category}: ${d.value}`);
-            })
-            .on('mouseout', () => {
-                // Hide tooltip
-                this.tooltip.style('opacity', 0);
-            });
-
-        circles.exit().remove();
-    }
-}
-```
-
-## Advanced Visual Features
-
-### 1. Custom Formatting Model
-```typescript
-import { formattingSettings } from "powerbi-visuals-utils-formattingmodel";
-
-export class VisualFormattingSettingsModel extends formattingSettings.CompositeFormattingSettingsModel {
-    // Color settings card
-    public colorCard: ColorCardSettings = new ColorCardSettings();
-
-    // Data point settings card
-    public dataPointCard: DataPointCardSettings = new DataPointCardSettings();
-
-    // General settings card
-    public generalCard: GeneralCardSettings = new GeneralCardSettings();
-
-    public cards: formattingSettings.SimpleCard[] = [this.colorCard, this.dataPointCard, this.generalCard];
-}
-
-export class ColorCardSettings extends formattingSettings.SimpleCard {
-    name: string = "colorCard";
-    displayName: string = "Color";
-
-    public defaultColor: formattingSettings.ColorPicker = new formattingSettings.ColorPicker({
-        name: "defaultColor",
-        displayName: "Default color",
-        value: { value: "#3498db" }
-    });
-
-    public showAllDataPoints: formattingSettings.ToggleSwitch = new formattingSettings.ToggleSwitch({
-        name: "showAllDataPoints",
-        displayName: "Show all",
-        value: false
-    });
-}
-```
-
-### 2. Interactivity and Selections
-```typescript
-import { interactivitySelectionService, baseBehavior } from "powerbi-visuals-utils-interactivityutils";
-
-export interface VisualDataPoint extends interactivitySelectionService.SelectableDataPoint {
-    value: powerbi.PrimitiveValue;
-    category: string;
-    color: string;
-    selectionId: ISelectionId;
-}
-
-export class VisualBehavior extends baseBehavior.BaseBehavior<VisualDataPoint> {
-    protected bindClick() {
-        // Implement click behavior for data point selection
-        this.behaviorOptions.clearCatcher.on('click', () => {
-            this.selectionHandler.handleClearSelection();
-        });
-
-        this.behaviorOptions.elementsSelection.on('click', (event, dataPoint) => {
-            event.stopPropagation();
-            this.selectionHandler.handleSelection(dataPoint, event.ctrlKey);
-        });
-    }
-
-    protected bindContextMenu() {
-        // Implement context menu behavior
-        this.behaviorOptions.elementsSelection.on('contextmenu', (event, dataPoint) => {
-            this.selectionHandler.handleContextMenu(
-                dataPoint ? dataPoint.selectionId : null,
-                {
-                    x: event.clientX,
-                    y: event.clientY
-                }
-            );
-            event.preventDefault();
-        });
-    }
-}
-```
-
-### 3. Landing Page Implementation
-```typescript
-export class Visual implements IVisual {
-    private element: HTMLElement;
-    private isLandingPageOn: boolean;
-    private LandingPageRemoved: boolean;
-    private LandingPage: d3.Selection<any>;
-
-    constructor(options: VisualConstructorOptions) {
-        this.element = options.element;
-    }
-
-    public update(options: VisualUpdateOptions) {
-        this.HandleLandingPage(options);
-    }
-
-    private HandleLandingPage(options: VisualUpdateOptions) {
-        if(!options.dataViews || !options.dataViews[0]?.metadata?.columns?.length){
-            if(!this.isLandingPageOn) {
-                this.isLandingPageOn = true;
-                const SampleLandingPage: Element = this.createSampleLandingPage();
-                this.element.appendChild(SampleLandingPage);
-                this.LandingPage = d3.select(SampleLandingPage);
-            }
-        } else {
-            if(this.isLandingPageOn && !this.LandingPageRemoved){
-                this.LandingPageRemoved = true;
-                this.LandingPage.remove();
-            }
-        }
-    }
-
-    private createSampleLandingPage(): Element {
-        const landingPage = document.createElement("div");
-        landingPage.className = "landing-page";
-        landingPage.innerHTML = `
-            <div class="landing-page-content">
-                <h2>Custom Visual</h2>
-                <p>Add data to get started</p>
-                <div class="landing-page-icon"></div>
-            </div>
-        `;
-        return landingPage;
-    }
-}
-```
-
-## Testing Framework
-
-### 1. Unit Testing Setup
-```typescript
-// Webpack configuration for testing
-const path = require('path');
-const webpack = require("webpack");
-
-module.exports = {
-    devtool: 'source-map',
-    mode: 'development',
-    module: {
-        rules: [
-            {
-                test: /\.tsx?$/,
-                use: 'ts-loader',
-                exclude: /node_modules/
-            },
-            {
-                test: /\.json$/,
-                loader: 'json-loader'
-            },
-            {
-                test: /\.tsx?$/i,
-                enforce: 'post',
-                include: path.resolve(__dirname, 'src'),
-                exclude: /(node_modules|resources\/js\/vendor)/,
-                loader: 'coverage-istanbul-loader',
-                options: { esModules: true }
-            }
-        ]
-    },
-    externals: {
-        "powerbi-visuals-api": '{}'
-    },
-    resolve: {
-        extensions: ['.tsx', '.ts', '.js', '.css']
-    },
-    output: {
-        path: path.resolve(__dirname, ".tmp/test")
-    },
-    plugins: [
-        new webpack.ProvidePlugin({
-            'powerbi-visuals-api': null
-        })
-    ]
-};
-```
-
-### 2. Visual Testing Utilities
-```typescript
-// Test utilities for Power BI visuals
-export class VisualTestUtils {
-    public static d3Click(element: JQuery, x: number, y: number): void {
-        const event = new MouseEvent('click', {
-            clientX: x,
-            clientY: y,
-            button: 0
-        });
-        element[0].dispatchEvent(event);
-    }
-
-    public static d3KeyEvent(element: JQuery, typeArg: string, keyArg: string, keyCode: number): void {
-        const event = new KeyboardEvent(typeArg, {
-            key: keyArg,
-            code: keyArg,
-            keyCode: keyCode
-        });
-        element[0].dispatchEvent(event);
-    }
-
-    public static createVisualHost(): IVisualHost {
-        return {
-            createSelectionIdBuilder: () => new SelectionIdBuilder(),
-            createSelectionManager: () => new SelectionManager(),
-            colorPalette: new ColorPalette(),
-            eventService: new EventService(),
-            tooltipService: new TooltipService()
-        } as IVisualHost;
-    }
-
-    public static createUpdateOptions(dataView: DataView, viewport?: IViewport): VisualUpdateOptions {
-        return {
-            dataViews: [dataView],
-            viewport: viewport || { width: 500, height: 500 },
-            operationKind: VisualDataChangeOperationKind.Create,
-            type: VisualUpdateType.Data
-        };
-    }
-}
-```
-
-### 3. Component Testing
-```typescript
-// Jest test for React component
-import * as React from 'react';
-import { render, screen } from '@testing-library/react';
-import '@testing-library/jest-dom';
-import ReactCircleCard from '../src/component';
-
-describe('ReactCircleCard', () => {
-    const mockProps = {
-        data: [10, 20, 30],
-        categories: ['A', 'B', 'C'],
-        size: 200,
-        color: '#3498db'
-    };
-
-    test('renders with correct data points', () => {
-        render(<ReactCircleCard {...mockProps} />);
-
-        expect(screen.getByText('A: 10')).toBeInTheDocument();
-        expect(screen.getByText('B: 20')).toBeInTheDocument();
-        expect(screen.getByText('C: 30')).toBeInTheDocument();
-    });
-
-    test('applies correct styling', () => {
-        render(<ReactCircleCard {...mockProps} />);
-
-        const circles = document.querySelectorAll('.circle');
-        expect(circles).toHaveLength(3);
-
-        circles.forEach(circle => {
-            expect(circle).toHaveStyle('backgroundColor: #3498db');
-            expect(circle).toHaveStyle('borderRadius: 50%');
-        });
-    });
-
-    test('handles empty data gracefully', () => {
-        const emptyProps = { ...mockProps, data: [], categories: [] };
-        const { container } = render(<ReactCircleCard {...emptyProps} />);
-
-        expect(container.querySelector('.data-point')).toBeNull();
-    });
-});
-```
-
-## Advanced Patterns
-
-### 1. Dialog Box Implementation
-```typescript
-import DialogConstructorOptions = powerbi.extensibility.visual.DialogConstructorOptions;
-import DialogAction = powerbi.DialogAction;
-import * as ReactDOM from 'react-dom';
-import * as React from 'react';
-
-export class CustomDialog {
-    private dialogContainer: HTMLElement;
-
-    constructor(options: DialogConstructorOptions) {
-        this.dialogContainer = options.element;
-        this.initializeDialog();
-    }
-
-    private initializeDialog(): void {
-        const dialogContent = React.createElement(DialogContent, {
-            onSave: this.handleSave.bind(this),
-            onCancel: this.handleCancel.bind(this)
-        });
-
-        ReactDOM.render(dialogContent, this.dialogContainer);
-    }
-
-    private handleSave(data: any): void {
-        // Process save action
-        this.closeDialog(DialogAction.Save, data);
-    }
-
-    private handleCancel(): void {
-        // Process cancel action
-        this.closeDialog(DialogAction.Cancel);
-    }
-
-    private closeDialog(action: DialogAction, data?: any): void {
-        // Close dialog with action and optional data
-        powerbi.extensibility.visual.DialogUtils.closeDialog(action, data);
-    }
-}
-```
-
-### 2. Conditional Formatting Integration
-```typescript
-import powerbiVisualsApi from "powerbi-visuals-api";
-import { ColorHelper } from "powerbi-visuals-utils-colorutils";
-
-export class Visual implements IVisual {
-    private colorHelper: ColorHelper;
-
-    constructor(options: VisualConstructorOptions) {
-        this.colorHelper = new ColorHelper(
-            options.host.colorPalette,
-            { objectName: "dataPoint", propertyName: "fill" },
-            "#3498db"  // Default color
-        );
-    }
-
-    private applyConditionalFormatting(dataPoints: VisualDataPoint[]): VisualDataPoint[] {
-        return dataPoints.map(dataPoint => {
-            // Get conditional formatting color
-            const color = this.colorHelper.getColorForDataPoint(dataPoint.dataViewObject);
-
-            return {
-                ...dataPoint,
-                color: color,
-                strokeColor: this.darkenColor(color, 0.2),
-                strokeWidth: 2
-            };
-        });
-    }
-
-    private darkenColor(color: string, amount: number): string {
-        // Utility function to darken a color for stroke
-        const colorObj = d3.color(color);
-        return colorObj ? colorObj.darker(amount).toString() : color;
-    }
-}
-```
-
-### 3. Tooltip Integration
-```typescript
-import { createTooltipServiceWrapper, TooltipEventArgs, ITooltipServiceWrapper } from "powerbi-visuals-utils-tooltiputils";
-
-export class Visual implements IVisual {
-    private tooltipServiceWrapper: ITooltipServiceWrapper;
-
-    constructor(options: VisualConstructorOptions) {
-        this.tooltipServiceWrapper = createTooltipServiceWrapper(
-            options.host.tooltipService,
-            options.element
-        );
-    }
-
-    private addTooltips(selection: d3.Selection<any, VisualDataPoint, any, any>): void {
-        this.tooltipServiceWrapper.addTooltip(
-            selection,
-            (tooltipEvent: TooltipEventArgs<VisualDataPoint>) => {
-                const dataPoint = tooltipEvent.data;
-                return [
-                    {
-                        displayName: "Category",
-                        value: dataPoint.category
-                    },
-                    {
-                        displayName: "Value",
-                        value: dataPoint.value.toString()
-                    },
-                    {
-                        displayName: "Percentage",
-                        value: `${((dataPoint.value / this.totalValue) * 100).toFixed(1)}%`
-                    }
-                ];
-            }
-        );
-    }
-}
-```
-
-## Performance Optimization
-
-### 1. Data Reduction Strategies
-```json
-// Visual capabilities with data reduction
-"dataViewMappings": {
-    "categorical": {
-        "categories": {
-            "for": { "in": "category" },
-            "dataReductionAlgorithm": {
-                "window": {
-                    "count": 300
-                }
-            }
-        },
-        "values": {
-            "group": {
-                "by": "series",
-                "select": [{
-                    "for": {
-                        "in": "measure"
-                    }
-                }],
-                "dataReductionAlgorithm": {
-                    "top": {
-                        "count": 100
-                    }
-                }
-            }
-        }
-    }
-}
-```
-
-### 2. Efficient Rendering Patterns
-```typescript
-export class OptimizedVisual implements IVisual {
-    private animationFrameId: number;
-    private renderQueue: (() => void)[] = [];
-
-    public update(options: VisualUpdateOptions) {
-        // Queue render operation instead of immediate execution
-        this.queueRender(() => this.performUpdate(options));
-    }
-
-    private queueRender(renderFunction: () => void): void {
-        this.renderQueue.push(renderFunction);
-
-        if (!this.animationFrameId) {
-            this.animationFrameId = requestAnimationFrame(() => {
-                this.processRenderQueue();
-            });
-        }
-    }
-
-    private processRenderQueue(): void {
-        // Process all queued render operations
-        while (this.renderQueue.length > 0) {
-            const renderFunction = this.renderQueue.shift();
-            if (renderFunction) {
-                renderFunction();
-            }
-        }
-
-        this.animationFrameId = null;
-    }
-
-    private performUpdate(options: VisualUpdateOptions): void {
-        // Use virtual DOM or efficient diffing strategies
-        const currentData = this.transformData(options.dataViews[0]);
-
-        if (this.hasDataChanged(currentData)) {
-            this.renderVisualization(currentData);
-            this.previousData = currentData;
-        }
-    }
-
-    private hasDataChanged(newData: any[]): boolean {
-        // Efficient data comparison
-        return JSON.stringify(newData) !== JSON.stringify(this.previousData);
-    }
-}
-```
-
-Remember: Custom visual development requires understanding both Power BI's visual framework and modern web development practices. Focus on creating reusable, testable, and performant visualizations that enhance the Power BI ecosystem.
+Why: The visual assumes data exists, appends a new SVG on every update, mixes D3 and React ownership of the same target, and bypasses explicit parsing and empty-state handling.
+
+## Conventions
+
+| Rule | Rationale |
+|---|---|
+| Use `powerbi-visuals-tools`, `pbiviz new`, `pbiviz start`, `powerbi-visuals-api`, `src/visual.ts`, and `style/visual.less` | The visual stays compatible with the Power BI packaging and host lifecycle |
+| Implement `IVisual` with guarded constructor and `update` logic using `VisualConstructorOptions`, `VisualUpdateOptions`, `DataView`, and viewport dimensions | Host-driven updates do not crash on missing data or resize-only events |
+| Keep React components behind typed props and render them through `ReactDOM.render` from the wrapper visual | React remains a presentation layer, not the owner of Power BI host services |
+| Use D3 typed selections, stable SVG containers, and enter/merge/exit data joins | Repeated updates converge without duplicated DOM nodes |
+| Use utility packages for formatting, selections, colors, interactivity, and tooltips | The visual behaves consistently with Power BI expectations |
+| Show a landing page when no data roles are assigned | Users receive a clear setup state instead of a blank visual |
+| Test with webpack, Jest, Testing Library, and mocked Power BI host services | Rendering, interactivity, and formatting behavior fail before packaging |
+| Use data reduction, `requestAnimationFrame`, and bounded change detection for large datasets | Visuals remain responsive inside Power BI reports |
+
+## Do / Do Not
+
+| Do | Do not |
+|---|---|
+| Guard every access to `options.dataViews[0]`, `dataView.single`, and `dataView.categorical` | Assume Power BI always supplies populated data views |
+| Transform `DataView` into `VisualDataPoint` or component props before rendering | Bind raw Power BI objects directly throughout React or D3 code |
+| Reuse `visual-svg`, `visual-container`, `.bar`, and `data-circle` selections | Append new root DOM nodes on every `update` |
+| Use `ISelectionManager`, `ISelectionId`, and utility behaviors for selection and context menus | Implement host selection state with ad hoc CSS classes only |
+| Use `ColorHelper`, formatting cards, and `getFormattingModel()` for user-configurable appearance | Hardcode colors and settings that should appear in the formatting pane |
+| Add tooltips with `createTooltipServiceWrapper` | Build unmanaged HTML-only tooltips that ignore Power BI services |
+| Keep generated `.tmp/build/` and `.tmp/test` output out of source review | Treat generated build and test output as authored code |
+| Use `dataReductionAlgorithm` limits and render queues for large visuals | Let unbounded categories, series, or synchronous renders freeze reports |
+
+## Checklist Before Opening a PR
+
+- [ ] The project uses `powerbi-visuals-tools`, `powerbi-visuals-api`, `src/visual.ts`, and `style/visual.less` with the expected TypeScript compiler options.
+- [ ] `IVisual` constructor and `update` code guard missing `DataView`, `DataViewSingle`, categorical categories, categorical values, and viewport changes.
+- [ ] React components have typed props, handle empty arrays, and keep host service access in the visual wrapper.
+- [ ] D3 code uses typed selections, stable containers, scale guards, and enter/merge/exit joins.
+- [ ] Formatting model, color, selection, context menu, dialog, and tooltip code use supported Power BI utility packages.
+- [ ] Landing page code handles empty metadata and removes the `landing-page` once data exists.
+- [ ] Tests cover React rendering, empty data, Power BI host utilities, selection events, and update options.
+- [ ] Performance-sensitive visuals define data reduction limits and avoid unnecessary rerenders.
+- [ ] Generated `.tmp/build/`, `.tmp/test`, and dependency folders such as `node_modules` are not edited as source.
+- [ ] No unrelated edits, relative primitive links, or leftover placeholders remain.

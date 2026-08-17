@@ -1,23 +1,28 @@
 ---
-applyTo: '**/*.{pbix,md,json,txt}'
-description: 'Comprehensive Power BI report design and visualization best practices based on Microsoft guidance for creating effective, accessible, and performant reports and dashboards.'
+applyTo: "**/*.{pbix,md,json,txt}"
+description: "Enforces Power BI report design, visualization, accessibility, interaction, performance, mobile, testing, and governance conventions for report artifacts and supporting documentation."
 ---
 
-# Power BI Report Design and Visualization Best Practices
+# Power BI Report Design Conventions — Effective Reports and Dashboards
 
-## Overview
-This document provides comprehensive instructions for designing effective, accessible, and performant Power BI reports and dashboards following Microsoft's official guidance and user experience best practices.
+These instructions apply to Power BI report files and supporting report-design documentation matched by `**/*.{pbix,md,json,txt}`. They are authoritative for visual selection, page layout, interactions, formatting, accessibility, performance, mobile behavior, testing, and custom visual governance in Power BI reports and dashboards; source-system modeling, DAX semantics, deployment pipelines, and tenant administration win where they define stricter project rules.
 
-## Fundamental Design Principles
+## Information Architecture and User Experience
 
-### 1. Information Architecture
-**Visual Hierarchy** - Organize information by importance:
-- **Primary**: Key metrics, KPIs, most critical insights (top-left, header area)
-- **Secondary**: Supporting details, trends, comparisons (main body)
-- **Tertiary**: Filters, controls, navigation elements (sidebars, footers)
+Design every report around the decision the user must make, then make the most important insight easiest to find.
 
-**Content Structure**:
-```
+| Concern | Convention | Rationale |
+| --- | --- | --- |
+| Visual hierarchy | Put primary KPIs, key metrics, and critical insights in the `top-left` or header area; place secondary trends and comparisons in the body; place tertiary filters, navigation, and notes in sidebars or footers. | Users scan reports before reading details, so the most important information must appear first. |
+| Content structure | Use a header for title and KPIs, a main content area for primary and supporting visuals, and a footer for filters, navigation, and notes. | A predictable report page layout reduces cognitive load and supports repeat use. |
+| Clarity | Give every visual, slicer, button, and note a clear purpose. | Decorative or ambiguous elements distract from decisions. |
+| Consistency | Reuse styling, colors, terminology, and interactions across pages and reports. | Consistency lets users transfer learning between views. |
+| Context | Include time periods, definitions, units, methodology notes, and data caveats where interpretation depends on them. | Users need enough context to trust the numbers. |
+| Action | Prefer action-oriented titles, subtitles, and callouts that identify what changed and what to do next. | Reports should guide data-driven decisions rather than merely display data. |
+
+Use this canonical layout shape unless the audience or device constraints require a different composition:
+
+```text
 Report Page Layout:
 ┌─────────────────────────────────────┐
 │ Header: Title, KPIs, Key Metrics    │
@@ -32,721 +37,205 @@ Report Page Layout:
 └─────────────────────────────────────┘
 ```
 
-### 2. User Experience Principles
-**Clarity**: Every element should have a clear purpose and meaning
-**Consistency**: Use consistent styling, colors, and interactions across all reports
-**Context**: Provide sufficient context for users to interpret data correctly
-**Action**: Guide users toward actionable insights and decisions
+## Chart Selection
 
-## Chart Type Selection Guidelines
+Choose the visual that matches the analytical question, not the one that looks most impressive.
 
-### 1. Comparison Visualizations
-```
-Bar/Column Charts:
-Comparing categories or entities
-Ranking items by value
-Showing changes over discrete time periods
-When category names are long (use horizontal bars)
+| Question | Preferred visual | Rules |
+| --- | --- | --- |
+| Compare categories, rank items, compare entities, or show discrete period changes | `Bar/Column` charts | Start axes at zero for comparison, sort by value for ranking, use consistent colors within groups, limit to 7-10 categories, and prefer horizontal bars when category names are long. |
+| Show continuous trends, seasonality, cycles, patterns, forecasting, projections, or multiple metrics over time | Line charts | Use consistent time intervals, start the Y-axis at zero for absolute values, use different line styles for multiple series, and add data point markers for sparse data. |
+| Show simple parts-of-whole composition where percentages matter more than absolutes | `Pie/Donut` charts | Limit to 5-7 categories; avoid them for similar-sized segments, many categories, or change over time. Use stacked bars when readability matters more than circular composition. |
+| Show composition and totals together | Stacked charts | Use regular stacked charts for absolute plus relative values, 100% stacked charts for proportions, and clustered charts for side-by-side sub-categories. |
+| Show correlation, outliers, clustering, quadrant analysis, risk vs. return, or performance vs. cost efficiency | Scatter plots or bubble charts | Use size for a third dimension, color for categories, trend lines when appropriate, and labels for outliers or key points. |
+| Show dense patterns across two categorical dimensions | Heat maps and conditional formatting | Use colorblind-friendly scales, data labels when space permits, clear legends, and map-style background colors only when values remain readable. |
+| Show transaction-level detail | Tables or matrices | Keep columns purposeful, support drill-through instead of crowding overview pages, and verify performance with realistic data. |
+| Show high-level status or simple aggregations | Card, KPI, or Gauge | Use for landing-page summaries and real-time monitoring when the measure is simple and interpretation is immediate. |
 
-Best Practices:
-- Start axis at zero for accurate comparison
-- Sort categories by value for ranking
-- Use consistent colors within category groups
-- Limit to 7-10 categories for readability
+## Page Layout and Navigation
 
-Example Use Cases:
-- Sales by product category
-- Revenue by region
-- Employee count by department
-- Customer satisfaction by service type
-```
+Use page patterns deliberately.
 
-```
-Line Charts:
-Showing trends over continuous time periods
-Comparing multiple metrics over time
-Identifying patterns, seasonality, cycles
-Forecasting and projection scenarios
+| Pattern | Use when | Required conventions |
+| --- | --- | --- |
+| Single page dashboard | Executive summaries, simple KPI tracking, real-time monitoring, mobile-first scenarios. | Limit to 6-8 visuals, group related content, maintain clear hierarchy, and test responsive design. |
+| Multi-page report | Complex analytics, different personas, detailed drill-down analysis, comprehensive business reporting. | Organize pages as executive summary, detailed analysis, operational details, and appendix when those layers exist. |
+| Tab navigation | Related content areas, different views of the same data, role-based sections, or daily/weekly/monthly analysis. | Use descriptive tab names, consistent layouts, clear active-tab styling, and importance-based tab order. |
+| Bookmark navigation | Predefined scenarios, filtered views, story-telling sequences, and guided analysis paths. | Name bookmarks descriptively, group related bookmarks, and test restored filter and visual state thoroughly. |
+| Button navigation | Custom flows, action-oriented interactions, drill-down paths, or external links. | Use consistent styling, clear labels, touch-appropriate sizing, and visible interaction feedback. |
 
-Best Practices:
-- Use consistent time intervals
-- Start Y-axis at zero when showing absolute values
-- Use different line styles for multiple series
-- Include data point markers for sparse data
+Do not create circular navigation loops, hidden navigation, or broken drill-through behavior. Hide drillthrough pages from main navigation when they exist only as contextual targets.
 
-Example Use Cases:
-- Monthly sales trends
-- Website traffic over time
-- Stock price movements
-- Performance metrics tracking
-```
+## Interaction Design
 
-### 2. Composition Visualizations
-```
-Pie/Donut Charts:
-Parts-of-whole relationships
-Maximum 5-7 categories
-When percentages are more important than absolute values
-Simple composition scenarios
+Make interactions discoverable, purposeful, and performant.
 
-Limitations:
-Difficult to compare similar-sized segments
-Not suitable for many categories
-Hard to show changes over time
+| Interaction | Convention | Rationale |
+| --- | --- | --- |
+| Default tooltips | Include relevant dimensions, formatted values, related metrics not shown in the visual, and concise explanatory text. | Tooltips add context without cluttering the canvas. |
+| Report page tooltips | Use a dedicated tooltip page of about 320x240 pixels, match main report styling, filter it correctly, and test fast loading. | Mini-dashboard tooltips help users inspect detail without leaving the source visual. |
+| Drillthrough | Use for summary-to-detail and contextual analysis, such as monthly sales summary to transaction-level detail or product performance to product analysis. | Drillthrough preserves overview pages while supporting detailed exploration. |
+| Cross-filtering | Enable it only when visuals have a clear logical relationship and the performance impact is acceptable. | Thoughtful cross-filtering improves analysis; indiscriminate cross-highlighting confuses users and slows pages. |
+| Disabled interactions | Disable cross-filtering for independent analysis, misleading relationships, high-cardinality slicers, large datasets, or pages with too many visuals. | Users should not infer a relationship the data model does not support. |
 
-Alternative: Use stacked bar charts for better readability
-
-Example Use Cases:
-- Market share by competitor
-- Budget allocation by category
-- Customer segments by type
-```
-
-```
-Stacked Charts:
-Showing composition and total simultaneously
-Comparing composition across categories
-Multiple sub-categories within main categories
-When you need both part and whole perspective
-
-Types:
-- 100% Stacked: Focus on proportions
-- Regular Stacked: Show both absolute and relative values
-- Clustered: Compare sub-categories side-by-side
-
-Example Use Cases:
-- Sales by product category and region
-- Revenue breakdown by service type over time
-- Employee distribution by department and level
-```
-
-### 3. Relationship and Distribution Visualizations
-```
-Scatter Plots:
-Correlation between two continuous variables
-Outlier identification
-Clustering analysis
-Performance quadrant analysis
-
-Best Practices:
-- Use size for third dimension (bubble chart)
-- Apply color coding for categories
-- Include trend lines when appropriate
-- Label outliers and key points
-
-Example Use Cases:
-- Sales vs. marketing spend by product
-- Customer satisfaction vs. loyalty scores
-- Risk vs. return analysis
-- Performance vs. cost efficiency
-```
-
-```
-Heat Maps:
-Showing patterns across two categorical dimensions
-Performance matrices
-Time-based pattern analysis
-Dense data visualization
-
-Configuration:
-- Use color scales that are colorblind-friendly
-- Include data labels when space permits
-- Provide clear legend with value ranges
-- Consider using conditional formatting
-
-Example Use Cases:
-- Sales performance by month and product
-- Website traffic by hour and day of week
-- Employee performance ratings by department and quarter
-```
-
-## Report Layout and Navigation Design
-
-### 1. Page Layout Strategies
-```
-Single Page Dashboard:
-Executive summaries
-Real-time monitoring
-Simple KPI tracking
-Mobile-first scenarios
-
-Design Guidelines:
-- Maximum 6-8 visuals per page
-- Clear visual hierarchy
-- Logical grouping of related content
-- Responsive design considerations
-```
-
-```
-Multi-Page Report:
-Complex analytical scenarios
-Different user personas
-Detailed drill-down analysis
-Comprehensive business reporting
-
-Page Organization:
-Page 1: Executive Summary (high-level KPIs)
-Page 2: Detailed Analysis (trends, comparisons)
-Page 3: Operational Details (transaction-level data)
-Page 4: Appendix (methodology, definitions)
-```
-
-### 2. Navigation Patterns
-```
-Tab Navigation:
-Related content areas
-Different views of same data
-User role-based sections
-Temporal analysis (daily, weekly, monthly)
-
-Implementation:
-- Use descriptive tab names
-- Maintain consistent layout across tabs
-- Highlight active tab clearly
-- Consider tab ordering by importance
-```
-
-```
-Bookmark Navigation:
-Predefined scenarios
-Filtered views
-Story-telling sequences
-Guided analysis paths
-
-Best Practices:
-- Create bookmarks for common filter combinations
-- Use descriptive bookmark names
-- Group related bookmarks
-- Test bookmark functionality thoroughly
-```
-
-```
-Button Navigation:
-Custom navigation flows
-Action-oriented interactions
-Drill-down scenarios
-External link integration
-
-Button Design:
-- Use consistent styling
-- Clear, action-oriented labels
-- Appropriate sizing for touch interfaces
-- Visual feedback for interactions
-```
-
-## Interactive Features Implementation
-
-### 1. Tooltip Design Strategy
-```
-Default Tooltips:
-Additional context information
-Formatted numeric values
-Related metrics not shown in visual
-Explanatory text for complex measures
-
-Configuration:
-- Include relevant dimensions
-- Format numbers appropriately
-- Keep text concise and readable
-- Use consistent formatting
-
-Example:
-Visual: Sales by Product Category
-Tooltip:
-- Product Category: Electronics
-- Total Sales: $2.3M (↑15% vs last year)
-- Order Count: 1,247 orders
-- Avg Order Value: $1,845
-```
-
-```
-Report Page Tooltips:
-Complex additional information
-Mini-dashboard for context
-Detailed breakdowns
-Visual explanations
-
-Design Requirements:
-- Optimal size: 320x240 pixels
-- Match main report styling
-- Fast loading performance
-- Meaningful additional insights
-
-Implementation:
-1. Create dedicated tooltip page
-2. Set page type to "Tooltip"
-3. Configure appropriate filters
-4. Enable tooltip on target visuals
-5. Test with realistic data
-```
-
-### 2. Drillthrough Implementation
-```
-Drillthrough Scenarios:
-
-Summary to Detail:
-Source: Monthly Sales Summary
-Target: Transaction-level details for selected month
-Filter: Month, Product Category, Region
-
-Context Enhancement:
-Source: Product Performance Metric
-Target: Comprehensive product analysis
-Content: Sales trends, customer feedback, inventory levels
-
-Design Guidelines:
-Clear visual indication of drillthrough availability
-Consistent styling between source and target pages
-Automatic back button (provided by Power BI)
-Contextual filters properly applied
-Hidden drillthrough pages from main navigation
-
-Implementation Steps:
-1. Create target drillthrough page
-2. Add drillthrough filters in Fields pane
-3. Design page with filtered context in mind
-4. Test drillthrough functionality
-5. Configure source visuals for drillthrough
-```
-
-### 3. Cross-Filtering Strategy
-```
-When to Enable Cross-Filtering:
-Related visuals showing different perspectives
-Clear logical connections between visuals
-Enhanced analytical understanding
-Reasonable performance impact
-
-When to Disable Cross-Filtering:
-Independent analysis requirements
-Performance concerns with large datasets
-Confusing or misleading interactions
-Too many visuals causing cluttered highlighting
-
-Configuration Best Practices:
-- Edit interactions thoughtfully for each visual pair
-- Test with realistic data volumes and user scenarios
-- Provide clear visual feedback for selections
-- Consider mobile touch interaction experience
-- Document interaction design decisions
-```
+Use Edit interactions for each visual pair, test with realistic data volumes and user scenarios, provide clear selection feedback, consider mobile touch behavior, and document non-obvious interaction decisions.
 
 ## Visual Design and Formatting
 
-### 1. Color Strategy
-```
-Color Usage Hierarchy:
+Color, typography, and spacing must communicate meaning before decoration.
 
-Semantic Colors (Consistent Meaning):
-- Green: Positive performance, growth, success, on-target
-- Red: Negative performance, decline, alerts, over-budget
-- Blue: Neutral information, base metrics, corporate branding
-- Orange: Warnings, attention needed, moderate concern
-- Gray: Inactive, disabled, or reference information
+| Area | Convention | Rationale |
+| --- | --- | --- |
+| Semantic colors | Use green for positive performance, growth, success, and on-target status; red for negative performance, decline, alerts, and over-budget status; blue for neutral information and corporate branding; orange for warnings; gray for inactive or reference information. | Stable color meaning improves recognition across reports. |
+| Brand integration | Use the corporate palette consistently, keep at least a 4.5:1 contrast ratio for normal text, and test projectors, mobile, print, and colorblind contexts. | Reports must remain legible beyond the designer's screen. |
+| Color accessibility | Do not rely only on color; pair color with labels, icons, patterns, shapes, or data labels. Avoid red-green combinations without alternatives and test with tools such as Colour Oracle. | About 8% of males have colorblindness; color alone excludes users. |
+| Typography | Use 18-24pt bold report titles, 16-20pt semi-bold page titles, 14-16pt semi-bold section headers, 12-14pt visual titles, 10-12pt body text, 9-11pt data labels, and 8-10pt `Captions/Legends`. | A consistent hierarchy makes reports scannable. |
+| Font choice | Use clear sans-serif fonts, a maximum of two font families, high contrast, adequate white space, and left-aligned body text. | Readability matters more than visual novelty. |
+| Titles and labels | Use clear, descriptive, action-oriented language; avoid unexplained jargon and abbreviations such as `CSAT`; include time periods and units. | Users should understand a visual without asking the author. |
+| Spacing | Use consistent grid multiples such as 8px, 16px, and 24px; align visuals; group related content; separate unrelated areas with white space. | Layout discipline keeps pages professional and reduces overload. |
 
-Brand Integration:
-Use corporate color palette consistently
-Maintain accessibility standards (4.5:1 contrast ratio minimum)
-Consider colorblind accessibility (8% of males affected)
-Test colors in different contexts (projectors, mobile, print)
+## Performance and Data Volume
 
-Color Application:
-Primary Color: Main brand color for key metrics and highlights
-Secondary Colors: Supporting brand colors for categories
-Accent Colors: High-contrast colors for alerts and callouts
-Neutral Colors: Backgrounds, text, borders, inactive states
-```
+Prefer focused pages and server-side reduction over crowded canvases and expensive interactions.
 
-```
-Accessibility-First Color Design:
-
-Colorblind Considerations:
-Don't rely solely on color to convey information
-Use patterns, shapes, or text labels as alternatives
-Test with colorblind simulation tools
-Use high contrast color combinations
-Provide alternative visual cues (icons, patterns)
-
-Implementation:
-- Red-Green combinations: Add blue or use different saturations
-- Use tools like Colour Oracle for testing
-- Include data labels where color is the primary differentiator
-- Consider grayscale versions of reports for printing
-```
-
-### 2. Typography and Readability
-```
-Font Hierarchy:
-
-Report Titles: 18-24pt, Bold, Corporate font or clear sans-serif
-Page Titles: 16-20pt, Semi-bold, Consistent with report title
-Section Headers: 14-16pt, Semi-bold, Used for content grouping
-Visual Titles: 12-14pt, Semi-bold, Descriptive and concise
-Body Text: 10-12pt, Regular, Used in text boxes and descriptions
-Data Labels: 9-11pt, Regular, Clear and not overlapping
-Captions/Legends: 8-10pt, Regular, Supplementary information
-
-Readability Guidelines:
-Minimum 10pt font size for data visualization
-High contrast between text and background
-Consistent font family throughout report (max 2 families)
-Adequate white space around text elements
-Left-align text for readability (except centered titles)
-```
-
-```
-Content Writing Best Practices:
-
-Titles and Labels:
-Clear, descriptive, and action-oriented
-Avoid jargon and technical abbreviations
-Use consistent terminology throughout
-Include time periods and context when relevant
-
-Examples:
-Good: "Monthly Sales Revenue by Product Category"
-Poor: "Sales Data"
-
-Good: "Customer Satisfaction Score (1-10 scale)"
-Poor: "CSAT"
-
-Data Storytelling:
-Use subtitles to provide context
-Include methodology notes where necessary
-Explain unusual data points or outliers
-Provide actionable insights in text boxes
-```
-
-### 3. Layout and Spacing
-```
-Visual Spacing:
-Grid System: Use consistent spacing multiples (8px, 16px, 24px)
-Padding: Adequate white space around content areas
-Margins: Consistent margins between visual elements
-Alignment: Use alignment guides for professional appearance
-
-Visual Grouping:
-Related Content: Group related visuals with consistent spacing
-Separation: Use white space to separate unrelated content areas
-Visual Hierarchy: Use size, color, and spacing to indicate importance
-Balance: Distribute visual weight evenly across the page
-```
-
-## Performance Optimization for Reports
-
-### 1. Visual Performance Guidelines
-```
-Visual Count Management:
-Maximum 6-8 visuals per page for optimal performance
-Use tabbed navigation for complex scenarios
-Implement drill-through instead of cramming details
-Consider multiple focused pages vs. one cluttered page
-
-Query Optimization:
-Apply filters early in design process
-Use page-level filters for common filtering scenarios
-Avoid high-cardinality fields in slicers when possible
-Pre-filter large datasets to relevant subsets
-
-Performance Testing:
-Test with realistic data volumes
-Monitor Performance Analyzer results
-Test concurrent user scenarios
-Validate mobile performance
-Check different network conditions
-```
-
-### 2. Loading Performance Optimization
-```
-Initial Page Load:
-Minimize visuals on landing page
-Use summary views with drill-through to details
-Apply default filters to reduce initial data volume
-Consider progressive disclosure of information
-
-Interaction Performance:
-Optimize slicer queries and combinations
-Use efficient cross-filtering patterns
-Minimize complex calculated visuals
-Implement appropriate caching strategies
-
-Visual Selection for Performance:
-Fast Loading: Card, KPI, Gauge (simple aggregations)
-Moderate: Bar, Column, Line charts (standard aggregations)
-Slower: Scatter plots, Maps, Custom visuals (complex calculations)
-Slowest: Matrix, Table with many columns (detailed data)
-```
+| Performance area | Convention | Rationale |
+| --- | --- | --- |
+| Visual count | Keep most pages to 6-8 visuals and split complex stories across tabs, drill-through, or focused pages. | Fewer visuals reduce query fan-out and improve readability. |
+| Query reduction | Apply filters early, use page-level filters for common scenarios, avoid high-cardinality fields in slicers, and pre-filter large datasets. | Smaller result sets improve load and interaction time. |
+| Initial load | Put summary views on landing pages, use default filters, minimize landing-page visuals, and progressively disclose detail. | Users get useful information before expensive detail loads. |
+| Interaction load | Optimize slicer combinations, efficient cross-filtering, calculated visuals, and caching strategies. | Fast interaction keeps exploration fluid. |
+| Visual performance | Prefer Card, KPI, and Gauge for simple aggregations; expect bar, column, and line charts to be moderate; treat scatter plots, maps, custom visuals, matrix, and wide tables as heavier. | Visual choice affects rendering and query cost. |
+| Testing | Use Performance Analyzer, realistic data volumes, concurrent user scenarios, mobile performance checks, and different network conditions. | Performance must be measured under representative use. |
 
 ## Mobile and Responsive Design
 
-### 1. Mobile Layout Strategy
-```
-Mobile-First Design Principles:
-Portrait orientation as primary layout
-Touch-friendly interaction targets (minimum 44px)
-Simplified navigation patterns
-Reduced visual density and information overload
-Key metrics prominently displayed
+Design mobile layouts intentionally instead of trusting the desktop canvas to shrink.
 
-Mobile Layout Considerations:
-Screen Sizes: Design for smallest target device first
-Touch Interactions: Ensure buttons and slicers are easily tappable
-Scrolling: Vertical scrolling acceptable, horizontal scrolling problematic
-Text Size: Increase font sizes for mobile readability
-Visual Selection: Prefer simple chart types for mobile
-```
-
-### 2. Responsive Design Implementation
-```
-Power BI Mobile Layout:
-1. Switch to Mobile layout view in Power BI Desktop
-2. Rearrange visuals for portrait orientation
-3. Resize and reposition for mobile screens
-4. Test key interactions work with touch
-5. Verify text remains readable at mobile sizes
-
-Adaptive Content:
-Prioritize most important information
-Hide or consolidate less critical visuals
-Use drill-through for detailed analysis
-Simplify filter interfaces
-Ensure data refresh works on mobile connections
-
-Testing Strategy:
-Test on actual mobile devices
-Verify performance on slower networks
-Check battery usage during extended use
-Validate offline capabilities where applicable
-```
+| Mobile concern | Convention | Rationale |
+| --- | --- | --- |
+| Layout | Use portrait orientation as the primary mobile layout and design for the smallest target screen first. | Mobile users need a focused reading path. |
+| Touch | Use touch-friendly targets of at least 44px and make buttons and slicers easy to tap. | Small controls cause interaction errors. |
+| Density | Reduce visual density, prioritize key metrics, hide or consolidate less critical visuals, and use drill-through for detail. | Mobile screens cannot carry desktop complexity. |
+| Scrolling | Prefer vertical scrolling; avoid horizontal scrolling. | Horizontal scrolling hides context and breaks comparison. |
+| Implementation | Use Power BI Desktop Mobile layout view, rearrange visuals for portrait, resize for mobile screens, and test key interactions with touch. | Mobile layout is a separate design surface. |
+| Testing | Test actual iOS and Android devices, the Power BI Mobile app, slower networks, battery impact, mobile refresh, and offline needs where applicable. | Emulators do not catch all device and network issues. |
 
 ## Accessibility and Inclusive Design
 
-### 1. Universal Design Principles
-```
-Visual Accessibility:
-High contrast ratios (minimum 4.5:1)
-Colorblind-friendly color schemes
-Alternative text for images and icons
-Consistent navigation patterns
-Clear visual hierarchy
+Meet inclusive design requirements as report design constraints, not post-build cleanup.
 
-Interaction Accessibility:
-Keyboard navigation support
-Screen reader compatibility
-Clear focus indicators
-Logical tab order
-Descriptive link text and button labels
+| Requirement | Convention | Rationale |
+| --- | --- | --- |
+| Visual accessibility | Use high contrast, alternative text for images and icons, clear hierarchy, and colorblind-friendly schemes. | Users must perceive and understand the report without relying on one sensory channel. |
+| Interaction accessibility | Support keyboard navigation, screen readers, clear focus indicators, logical tab order, and descriptive link and button labels. | Reports must be operable without a mouse. |
+| Content accessibility | Use plain language, consistent terminology, context for abbreviations and acronyms, and alternative formats when needed. | Cognitive accessibility improves comprehension for all users. |
+| Multi-sensory design | Use patterns, shapes, text labels, and data tables alongside color; add audio descriptions for complex visuals only when the delivery channel supports them. | Redundant cues make meaning resilient. |
+| Testing | Use screen readers, keyboard-only navigation, colorblind simulation, disability feedback, and regular accessibility audits. | Accessibility defects are easiest to find by using assistive paths. |
 
-Content Accessibility:
-Plain language explanations
-Consistent terminology
-Context for abbreviations and acronyms
-Alternative formats when needed
-```
+## Conditional Formatting and Custom Visuals
 
-### 2. Inclusive Design Implementation
-```
-Multi-Sensory Design:
-Don't rely solely on color to convey information
-Use patterns, shapes, and text labels
-Include audio descriptions for complex visuals
-Provide data in multiple formats
+Use advanced visuals only when they add interpretable signal.
 
-Cognitive Accessibility:
-Clear, simple language
-Logical information flow
-Consistent layouts and interactions
-Progressive disclosure of complexity
-Help and guidance text where needed
+| Technique | Convention | Rationale |
+| --- | --- | --- |
+| Data bars | Use consistent scale across rows and colors that remain visible on mobile. | Data bars support quick comparison inside tables. |
+| Background colors | Use heat map-style or red/yellow/green status thresholds only when the legend and values make the rule clear. | Conditional colors should explain status, not hide data. |
+| Font formatting | Use size, color, bold, and italics sparingly to mark importance, performance, emphasis, and secondary information. | Too much formatting becomes chart junk. |
+| Thresholds | Document rules such as green `>110% of target`, yellow `90-110% of target`, and red `<90% of target`. | Users need to understand status calculations. |
+| Custom visuals | Prefer Microsoft AppSource certified visuals with active support, regular updates, clear documentation, acceptable performance, accessibility compliance, and known security and data handling. | Custom visuals add supply-chain and maintenance risk. |
+| Governance | Require approval, maintain an approved list, document use cases, monitor maintenance, and define fallback strategies if a custom visual becomes unavailable. | Reports should not depend on unmanaged extensions. |
 
-Testing for Accessibility:
-Use screen readers to test navigation
-Test keyboard-only navigation
-Verify with colorblind simulation tools
-Get feedback from users with disabilities
-Regular accessibility audits
-```
+## Testing and Quality Assurance
 
-## Advanced Visualization Techniques
+Validate reports as products, not screenshots.
 
-### 1. Conditional Formatting
-```
-Dynamic Visual Enhancement:
+| Test area | Required checks |
+| --- | --- |
+| Visual functionality | Charts display data correctly, filters work, cross-filtering behaves as intended, drill-through works, tooltips are relevant, bookmarks restore state, and export functions work. |
+| Interaction | Button navigation works, slicer combinations behave correctly, pages load within acceptable time, mobile layouts display properly, responsive design adapts, and print layouts remain readable. |
+| Data accuracy | Totals match source systems, calculations produce expected results, filters do not accidentally exclude data, date ranges are correct, business rules are implemented, and edge cases are handled. |
+| Usability | Test with actual business users, observe pain points, time common tasks, gather feedback on clarity and usefulness, and include different user skill levels. |
+| Performance | Test realistic volumes, concurrent users, network variations, mobile devices, and refresh behavior during peak usage. |
+| Cross-platform | Test Chrome, Firefox, Edge, Safari, iOS, Android, Power BI Mobile app, different resolutions, and network speeds. |
+| Review process | Include developer testing, peer review, business review, user acceptance, performance review, and accessibility review. |
+| Documentation | Maintain report purpose, target audience, data sources, refresh schedule, business rules, calculation explanations, user guide, training material, limitations, workarounds, maintenance, and update procedures. |
+| Continuous improvement | Review usage analytics, collect feedback, monitor performance, update content relevance and accuracy, and adopt useful platform features deliberately. |
 
-Data Bars:
-Quick visual comparison within tables
-Consistent scale across all rows
-Appropriate color choices (light to dark)
-Consider mobile visibility
+## Anti-Patterns
 
-Background Colors:
-Heat map-style formatting
-Status-based coloring (red/yellow/green)
-Performance thresholds
-Trend indicators
+Remove or redesign patterns that create confusion, exclusion, or slow performance.
 
-Font Formatting:
-Size based on importance or values
-Color based on performance metrics
-Bold for emphasis and highlights
-Italics for secondary information
+| Anti-pattern | Avoid | Rationale |
+| --- | --- | --- |
+| Chart junk | Unnecessary 3D effects, excessive animation, decorative elements, and over-complicated effects. | Decoration steals attention from insight. |
+| Information overload | Too many visuals, cluttered layouts, insufficient white space, competing focal points, and overwhelming color. | Users cannot act when every element demands attention. |
+| Poor color choices | Red-green meaning without alternatives, low contrast, inconsistent meanings, and over-use of bright saturated colors. | Color misuse causes errors and accessibility failures. |
+| Navigation confusion | Inconsistent patterns, hidden options, unexpected drill-through, and circular loops. | Users lose orientation and trust. |
+| Performance problems | Too many visuals, inefficient cross-filtering, unnecessary real-time refresh, and large unfiltered datasets. | Slow reports discourage use and hide insights. |
+| Mobile unfriendly design | Small touch targets, horizontal scrolling, unreadable text, and non-functional interactions. | Mobile users need a usable report, not a shrunken desktop page. |
 
-Implementation Examples:
-Sales Performance Table:
-- Green background: >110% of target
-- Yellow background: 90-110% of target
-- Red background: <90% of target
-- Data bars: Relative performance within each category
+## Good / Bad Examples
+
+The examples below illustrate page design density and interaction discipline.
+
+**Good:**
+
+```text
+Executive Summary page
+- Header: report title, date range, 3 KPI cards
+- Body: one ranked bar chart, one trend line, one supporting composition chart
+- Footer: page-level filters, notes, and a drill-through button to transaction-level detail
+- Interactions: cross-filtering only between related visuals; tooltip page sized 320x240 pixels
 ```
 
-### 2. Custom Visuals Integration
-```
-Custom Visual Selection Criteria:
+Why: The page uses visual hierarchy, limits the visual count, keeps detail behind drill-through, and makes interactions purposeful.
 
-Evaluation Framework:
-Active community support and regular updates
-Microsoft AppSource certification (preferred)
-Clear documentation and examples
-Performance characteristics acceptable
-Accessibility compliance
+**Bad:**
 
-Due Diligence:
-Test thoroughly with your data types and volumes
-Verify mobile compatibility
-Check refresh and performance impact
-Review security and data handling
-Plan for maintenance and updates
-
-Governance:
-Approval process for custom visuals
-Standard set of approved custom visuals
-Documentation of approved visuals and use cases
-Monitoring and maintenance procedures
-Fallback strategies if custom visual becomes unavailable
+```text
+Executive Summary page
+- 16 visuals, 5 slicers, 3 custom visuals, 2 maps, 4 tables, and decorative shapes
+- Red/green status only, no labels, low contrast, tiny text, and horizontal mobile scrolling
+- Every visual cross-filters every other visual, including unrelated metrics
 ```
 
-## Report Testing and Quality Assurance
+Why: The page creates information overload, accessibility failures, confusing cross-filtering, weak mobile usability, and likely performance problems.
 
-### 1. Functional Testing Checklist
-```
-Visual Functionality:
-□ All charts display data correctly
-□ Filters work as intended
-□ Cross-filtering behaves appropriately
-□ Drill-through functions correctly
-□ Tooltips show relevant information
-□ Bookmarks restore correct state
-□ Export functions work properly
+## Conventions
 
-Interaction Testing:
-□ Button navigation functions correctly
-□ Slicer combinations work as expected
-□ Report pages load within acceptable time
-□ Mobile layout displays properly
-□ Responsive design adapts correctly
-□ Print layouts are readable
+| Rule | Rationale |
+|---|---|
+| Put primary insights in the header or top-left area and organize secondary and tertiary content around them. | Users scan pages before interpreting detail. |
+| Match chart types to comparison, trend, composition, relationship, distribution, or detail questions. | Visual mismatch leads to misinterpretation. |
+| Keep most pages to 6-8 visuals and move details into drill-through or separate pages. | Focused pages are easier to read and faster to load. |
+| Use semantic, accessible colors and never rely on color alone. | Reports must work for colorblind and assistive-technology users. |
+| Use consistent typography, spacing, labels, and terminology. | Consistency reduces cognitive load and review friction. |
+| Configure tooltips, bookmarks, buttons, and cross-filtering intentionally. | Interactions must explain data rather than surprise users. |
+| Test reports with realistic data, users, devices, networks, and accessibility paths. | Report quality depends on behavior under real conditions. |
+| Govern custom visuals before adopting them. | Custom visuals can add performance, security, accessibility, and maintenance risk. |
 
-Data Accuracy:
-□ Totals match source systems
-□ Calculations produce expected results
-□ Filters don't inadvertently exclude data
-□ Date ranges are correct
-□ Business rules are properly implemented
-□ Edge cases handled appropriately
-```
+## Do / Do Not
 
-### 2. User Experience Testing
-```
-Usability Testing:
-Test with actual business users
-Observe user behavior and pain points
-Time common tasks and interactions
-Gather feedback on clarity and usefulness
-Test with different user skill levels
+| Do | Do not |
+|---|---|
+| Use bar or column charts for category comparison and ranking. | Use pie or donut charts for many categories or similar-sized segments. |
+| Use line charts for continuous time trends. | Mix inconsistent time intervals in one trend visual. |
+| Use stacked charts when composition and totals both matter. | Force parts-of-whole or `of-whole` analysis into hard-to-read circular charts. |
+| Enable drill-through for detail pages and hide those pages from main navigation. | Cram transaction-level detail onto overview pages. |
+| Use labels, icons, patterns, and text with color. | Rely on red/yellow/green or red-green color alone. |
+| Use Performance Analyzer and realistic volumes. | Guess at performance from a tiny sample dataset. |
+| Design and test the Power BI Mobile layout separately. | Assume the desktop canvas is automatically mobile-friendly. |
+| Approve and document custom visuals. | Add unsupported custom visuals because they look impressive. |
 
-Performance Testing:
-Load testing with realistic data volumes
-Concurrent user testing
-Network condition variations
-Mobile device performance
-Refresh performance during peak usage
+## Checklist Before Opening a PR
 
-Cross-Platform Testing:
-Desktop browsers (Chrome, Firefox, Edge, Safari)
-Mobile devices (iOS, Android)
-Power BI Mobile app
-Different screen resolutions
-Various network speeds
-```
-
-### 3. Quality Assurance Framework
-```
-Review Process:
-1. Developer Testing: Initial functionality verification
-2. Peer Review: Design and technical review by colleagues
-3. Business Review: Content accuracy and usefulness validation
-4. User Acceptance: Testing with end users
-5. Performance Review: Load and response time validation
-6. Accessibility Review: Compliance with accessibility standards
-
-Documentation:
-Report purpose and target audience
-Data sources and refresh schedule
-Business rules and calculation explanations
-User guide and training materials
-Known limitations and workarounds
-Maintenance and update procedures
-
-Continuous Improvement:
-Regular usage analytics review
-User feedback collection and analysis
-Performance monitoring and optimization
-Content relevance and accuracy updates
-Technology and feature adoption
-```
-
-## Common Anti-Patterns to Avoid
-
-### 1. Design Anti-Patterns
-```
-Chart Junk:
-- Unnecessary 3D effects
-- Excessive animation
-- Decorative elements that don't add value
-- Over-complicated visual effects
-
-Information Overload:
-- Too many visuals on single page
-- Cluttered layouts with insufficient white space
-- Multiple competing focal points
-- Overwhelming color usage
-
-Poor Color Choices:
-- Red-green combinations without alternatives
-- Low contrast ratios
-- Inconsistent color meanings
-- Over-use of bright or saturated colors
-```
-
-### 2. Interaction Anti-Patterns
-```
-Navigation Confusion:
-- Inconsistent navigation patterns
-- Hidden or unclear navigation options
-- Broken or unexpected drill-through behavior
-- Circular navigation loops
-
-Performance Problems:
-- Too many visuals causing slow loading
-- Inefficient cross-filtering
-- Unnecessary real-time refresh
-- Large datasets without proper filtering
-
-Mobile Unfriendly:
-- Small touch targets
-- Horizontal scrolling requirements
-- Unreadable text on mobile
-- Non-functional mobile interactions
-```
-
-Remember: Always design with your specific users and use cases in mind. Test early and often with real users and realistic data to ensure your reports effectively communicate insights and enable data-driven decision making.
+- [ ] The report has clear primary, secondary, and tertiary information hierarchy.
+- [ ] Chart choices match the analytical questions and avoid chart junk.
+- [ ] Each page stays focused, usually within 6-8 visuals, with detail moved to drill-through or separate pages.
+- [ ] Navigation, bookmarks, buttons, tooltips, and cross-filtering are tested with realistic scenarios.
+- [ ] Colors, typography, spacing, labels, legends, and notes meet accessibility and readability conventions.
+- [ ] Mobile layout is designed in Power BI Desktop and tested with touch interactions.
+- [ ] Performance is checked with realistic data volumes, slicers, cross-filtering, and network conditions.
+- [ ] Data accuracy, filters, calculations, date ranges, exports, and edge cases are verified.
+- [ ] Custom visuals are approved, documented, accessible, performant, and have fallback plans.
+- [ ] Documentation covers purpose, audience, data sources, refresh schedule, business rules, limitations, and maintenance.

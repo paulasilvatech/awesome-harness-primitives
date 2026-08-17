@@ -1,12 +1,13 @@
 ---
-applyTo: '.github/hooks/**, hooks/**'
-description: 'Portable guidance for authoring safe, fast, and clear hooks and reusable hook examples'
+applyTo: ".github/hooks/**,hooks/**"
+description: "Enforces portable hook conventions for discovery, trust, configuration, scripts, events, payloads, blocking, examples, security, packaging, and cross-surface behavior."
 ---
 
-# Hook Authoring Guidelines
+# Hook Authoring Conventions — Safe Lifecycle Automation
 
-Hooks are **small, deterministic commands or scripts** that run at specific lifecycle events.
-An awesome hook does one clear job, runs quickly, and makes its side effects explicit.
+This file applies to repository and reusable hook configurations and scripts under `.github/hooks/**` and `hooks/**`. It is authoritative for safe, fast, deterministic hook design, discovery, trust behavior, path resolution, config fields, script contracts, payload parsing, exit codes, blocking semantics, event usage, examples, portability, packaging, and anti-patterns; the official GitHub Copilot hooks reference wins for current payload schemas and host support, while repository security policy wins where it is stricter.
+
+Hooks are **small, deterministic commands or scripts** that run at specific lifecycle events. An awesome hook does one clear job, runs quickly, and makes its side effects explicit.
 
 ## Folder Structure
 
@@ -400,8 +401,8 @@ exit 0
 
 The full hooks reference is authoritative. **Always check it for the latest payload shapes** before writing a hook:
 
-- [Hooks configuration reference](https://docs.github.com/en/copilot/reference/hooks-configuration)
-- [About hooks](https://docs.github.com/en/copilot/concepts/agents/cloud-agent/about-hooks)
+- Hooks configuration reference
+- About hooks
 
 | Event | stdout | Typical use |
 | ---- | ---- | ---- |
@@ -426,7 +427,7 @@ The spec documents additional camelCase events that older samples may omit. Pref
 
 ### Payload schemas for common events
 
-These are the payload shapes from the hooks reference. Always verify against the [official reference](https://docs.github.com/en/copilot/reference/hooks-configuration) for the latest fields.
+These are the payload shapes from the hooks reference. Always verify against the official hooks configuration reference for the latest fields.
 
 **`sessionStart`**
 
@@ -621,3 +622,53 @@ Claude Code uses a different hook system:
 - 29+ events including `FileChanged`, `CwdChanged`, `ConfigChange`
 
 The shared best practice is the same: keep hooks small, deterministic, explicit about I/O, and strict about side effects.
+
+## Conventions
+
+| Rule | Rationale |
+| --- | --- |
+| Keep one hook focused on one responsibility | Small hooks are easier to trust, debug, disable, and reuse |
+| Default to observe-first behavior unless blocking or mutation is explicitly required | Hooks run in the critical path and should not surprise users or agents |
+| Keep hooks synchronous, bounded by `timeoutSec`, and non-interactive | Lifecycle hooks must return quickly and cannot wait for prompts |
+| Make scripts deterministic and idempotent | Re-runs should not create drift or duplicate side effects |
+| Treat prompts, tool arguments, tool output, transcripts, and payload fields as untrusted and sensitive | Hook input may be hostile, private, or malformed |
+| Redact secrets, credentials, tokens, and private content from stdout, stderr, and logs | Logs and deny reasons often outlive the session |
+| Parse both camelCase and snake_case payload aliases when portability matters | CLI, VS Code, cloud agent, and future hosts may differ in payload shape |
+| Use structured stdout for `preToolUse` decisions and exit `2` only when the event blocks by exit code or the hook must fail closed | Structured output gives the agent a clear reason and avoids ambiguous failures |
+| Keep in-script tool filtering even when `matcher` is present | Matcher behavior can vary by host and version; script filtering is the reliable boundary |
+| Avoid branch, index, and worktree mutation by default | Git-destructive behavior risks data loss and hidden state changes |
+| Package reusable hooks with config, scripts, purpose, dependencies, side effects, and disable path | Consumers need to understand what runs, what it reads, what it writes, and what it blocks |
+
+## Do / Do Not
+
+| Do | Do not |
+| --- | --- |
+| Place repository hook configs in `.github/hooks/*.json` with scripts under `.github/hooks/scripts/` | Assume hooks in a feature branch are visible to the cloud agent before they reach the default branch |
+| Seed `$COPILOT_HOME/config.json` with trusted folders for non-interactive CLI or CI runs that need repository hooks | Expect untrusted workspaces to load repository hooks silently |
+| Use `disableAllHooks` deliberately as a global or file-scoped kill switch | Hide a disable switch inside undocumented behavior |
+| Resolve relative `bash`, `powershell`, `command`, and `cwd` paths from the workspace root | Resolve script paths as if they were relative to the JSON file |
+| Provide both `bash` and `powershell` for published cross-platform hooks | Claim cross-platform support with only one platform entry |
+| Read stdin once, validate the fields used, and keep stdout machine-readable when the event parses it | Mix diagnostics and JSON on stdout |
+| Use Bash `set -euo pipefail` and PowerShell `Set-StrictMode -Version Latest` | Let unset variables, failed commands, or loose parsing pass silently |
+| Use `jq`, Python, Node.js, PowerShell 7, or an existing project CLI when they are already reasonable dependencies | Introduce a compiled runtime for an ordinary hook |
+| Use HTTP hooks only with explicit timeouts, allowed environment variables, and documented outbound data | Send private code, prompts, or tool output to third parties by default |
+| Test scripts by piping representative JSON payloads into them manually | Validate hooks only by waiting for a live agent event |
+
+## Checklist Before Opening a PR
+
+- [ ] Hook configs live under `.github/hooks/*.json` or the reusable `hooks/**` package and use `version`, `hooks`, event names, `type`, command entries, `cwd`, `timeoutSec`, and `env` intentionally.
+- [ ] Repository trust, `$COPILOT_HOME/config.json`, `trustedFolders`, and `disableAllHooks` behavior are documented for the target surface.
+- [ ] Relative paths are valid from the workspace root; user-level hooks use absolute paths when they must work across repositories.
+- [ ] Scripts read stdin once, parse payload aliases defensively, validate required fields, and quote shell variables.
+- [ ] Blocking hooks use structured `permissionDecision` and `permissionDecisionReason` for `preToolUse`, or exit `2` only where that event requires it.
+- [ ] stdout is clean machine-readable output when parsed; stderr carries human diagnostics.
+- [ ] Hook runtime is bounded, deterministic, non-interactive, idempotent, and free of background daemons or watchers.
+- [ ] Logs and deny reasons redact prompts, secrets, credentials, tokens, large outputs, and private content.
+- [ ] Cross-platform claims are backed by Bash and PowerShell entries or a shared runtime exposed through both.
+- [ ] Representative `sessionStart`, `userPromptSubmitted`, `preToolUse`, `postToolUse`, `errorOccurred`, and `agentStop` payloads have been tested manually where those events are used.
+- [ ] The hook package documents trigger event, purpose, side effects, dependencies, disable path, inputs, outputs, writes, and blocks.
+
+## References
+
+- Hooks configuration reference: https://docs.github.com/en/copilot/reference/hooks-configuration
+- About hooks: https://docs.github.com/en/copilot/concepts/agents/cloud-agent/about-hooks

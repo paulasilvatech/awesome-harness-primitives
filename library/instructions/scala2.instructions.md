@@ -1,11 +1,11 @@
 ---
-applyTo: '**/*.scala, **/build.sbt, **/build.sc'
-description: 'Scala 2.12/2.13 programming language coding conventions and best practices following Databricks style guide for functional programming, type safety, and production code quality.'
+applyTo: "**/*.scala,**/build.sbt,**/build.sc"
+description: "Enforces Scala 2.12/2.13 conventions for functional style, type safety, formatting, SBT configuration, performance, concurrency, and testing."
 ---
 
-# Scala Best Practices
+# Scala 2 Conventions — Functional Production Code
 
-Based on the [Databricks Scala Style Guide](https://github.com/databricks/scala-style-guide)
+This file applies to Scala source files and Scala build definitions matched by the `applyTo` globs. It is authoritative for Scala 2.12/2.13 language style, functional programming defaults, type-safety rules, SBT hygiene, performance escape hatches, concurrency patterns, and tests in those files; project-specific architecture, dependency policy, and framework instructions win where they define stricter rules. Follow the Databricks Scala Style Guide as the baseline and use these conventions when the guide leaves room for local judgment.
 
 ## Core Principles
 
@@ -818,17 +818,91 @@ val uri = new java.net.URI("http://example.com")
 // Not: val url = new java.net.URL("http://example.com")
 ```
 
-## Summary
+## Good / Bad Examples
 
-1. **Write simple code** - Optimize for readability and maintainability
-2. **Use immutable data** - val, immutable collections, case classes
-3. **Avoid language features** - Limit implicits, avoid symbolic methods
-4. **Type public APIs** - Explicit types for methods and fields
-5. **Prefer explicit over implicit** - Clear is better than concise
-6. **Use standard libraries** - Don't reinvent the wheel
-7. **Follow naming conventions** - PascalCase, camelCase, UPPER_CASE
-8. **Keep methods small** - Rule of 30
-9. **Handle errors explicitly** - Option, Either, exceptions with @throws
-10. **Profile before optimizing** - Measure, don't guess
+The examples below illustrate the default Scala 2 stance: immutable, typed, explicit code for normal paths, and measured escape hatches only for performance-critical code.
 
-For complete details, see the [Databricks Scala Style Guide](https://github.com/databricks/scala-style-guide).
+**Good:**
+
+```scala
+import scala.util.control.NonFatal
+
+final case class User(id: Long, name: String, email: String)
+
+def findUserById(id: Long): Option[User] =
+  Option(database.lookup(id))
+
+def updateAge(user: User, age: Int): Either[ValidationError, User] =
+  if (age < 0) Left(InvalidAge(age)) else Right(user.copy(age = age))
+
+try {
+  dangerousOperation()
+} catch {
+  case NonFatal(e) => logger.error("Operation failed", e)
+}
+```
+
+Why: The code uses immutable case-class updates, explicit `Option` and `Either` results, a typed public method boundary, and `NonFatal` exception handling without hiding side-effects.
+
+**Bad:**
+
+```scala
+case class User(name: String, var age: Int)
+
+def getUser(id: Long) = database.lookup(id).get
+
+def calculateTotal(items: List[Item]): BigDecimal = {
+  println(items.size)
+  saveToDatabase(items.map(_.price).sum)
+  items.map(_.price).sum
+}
+```
+
+Why: The code mutates a case class, relies on inferred public API types, calls `get`, mixes pure calculation with side-effects, and makes failure behavior hard to review.
+
+## Conventions
+
+| Rule | Rationale |
+| --- | --- |
+| Prefer simple, immutable Scala 2.12/2.13 code using `val`, immutable collections, and case-class `copy` updates. | Readability and value semantics survive long-term maintenance better than mutation. |
+| Keep pure functions deterministic and isolate side-effect boundaries with explicit result types. | Tests stay predictable and reviewers can see where effects occur. |
+| Use `PascalCase`, `camelCase`, lowercase ASCII packages, and `UPPER_CASE` companion-object constants such as `DEFAULT_PORT`, `MAX_RETRIES`, and `TIMEOUT_MS`. | Names match the Databricks style guide and avoid ambiguous local conventions. |
+| Format with 100-character lines, 2-space blocks, 4-space wrapped parameter indentation, spaces around operators, uppercase `L` long literals, and braces for multi-line blocks and try-catch. | Consistent layout prevents style churn and hard-to-read parser edge cases. |
+| Keep methods under 30 lines and classes under 30 methods. | The Rule of 30 keeps review units small enough to reason about. |
+| Use absolute imports, ordered import groups, and wildcard imports only for implicits or six or more imported names. | Imports stay deterministic and do not hide dependency sources. |
+| Avoid non-symbolic infix calls, class-level `apply`, constructor destructuring, call-by-name, multiple parameter lists except implicits, overloaded implicits, and unnecessary symbolic methods. | These features make call sites harder to trace in production Scala 2 code. |
+| Type public, implicit, and non-obvious values explicitly; rely on inference only when the type is clear within three seconds. | Public contracts remain stable and compiler errors stay localized. |
+| Model absence and validation with `Option` and `Either`; use `@throws` for Java-facing exception contracts and catch `NonFatal` before interruption-sensitive exceptions. | Failure behavior is explicit without swallowing thread interruption or process-control signals. |
+| Prefer immutable collections and readable chains; switch to `while`, `null`, `private[this]`, Java collections, or atomic/concurrent primitives only in measured performance-critical paths. | Normal code stays safe while hot paths can avoid avoidable allocation and accessor overhead. |
+| Configure SBT with explicit `scalaVersion`, `organization`, `libraryDependencies`, and `scalacOptions` including `-encoding UTF-8`, `-feature`, `-unchecked`, `-deprecation`, and `-Xfatal-warnings`. | Build settings document the supported Scala line and fail risky compiler warnings early. |
+
+## Do / Do Not
+
+| Do | Do not |
+| --- | --- |
+| Use `val`, immutable `List`/`Map`, and `copy` for updates. | Put `var` in case class constructor parameters or expose mutable collections by default. |
+| Keep pure calculations separate from logging, persistence, and network effects. | Hide side-effects inside methods that look like pure value calculations. |
+| Declare side-effecting methods with parentheses and call them with parentheses. | Declare state-changing methods as nullary accessors. |
+| Use `Option()` to guard nullable values and `getOrElse`, `map`, `flatMap`, or `fold` to consume them. | Wrap nullable values with `Some()` or call `.get` unless the invariant is proven locally. |
+| Use sealed traits and case classes for algebraic data types. | Encode closed variants as raw strings or unvalidated primitives. |
+| Use `@scala.annotation.tailrec` on tail-recursive methods. | Use recursion for ordinary loops or leave tail recursion unchecked. |
+| Use `java.util.concurrent.ConcurrentHashMap`, synchronized maps, or `AtomicBoolean` for shared mutable state. | Prefer `@volatile` or unsynchronized mutable maps for compound concurrent updates. |
+| Measure before using `while`, `null`, `private[this]`, or Java collections for speed. | Optimize ordinary business code before profiling. |
+| Intercept specific exceptions in ScalaTest. | Use broad `intercept[Exception]` assertions. |
+| Use `System.nanoTime()` with `TimeUnit.NANOSECONDS` for durations and `java.net.URI` instead of `java.net.URL`. | Measure elapsed time with `currentTimeMillis` or rely on `URL.equals` DNS behavior. |
+
+## Checklist Before Opening a PR
+
+- [ ] Public and implicit APIs have explicit result types.
+- [ ] New values default to `val` and immutable collections; any `var`, `null`, Java collection, or `while` loop is justified by performance or interoperability.
+- [ ] Methods stay under 30 lines, classes stay under 30 methods, and lines stay within 100 characters.
+- [ ] Imports are absolute, grouped, and avoid wildcard imports except for implicits or six or more entities.
+- [ ] Absence, validation, and errors use `Option`, `Either`, `@throws`, and `NonFatal` according to the conventions above.
+- [ ] Concurrency uses explicit synchronization, concurrent collections, or atomic variables.
+- [ ] SBT settings preserve Scala 2.12/2.13 compatibility and strict compiler options.
+- [ ] Tests intercept specific exceptions and cover behavior rather than implementation noise.
+
+## References
+
+- Databricks Scala Style Guide: https://github.com/databricks/scala-style-guide
+- Example URI literal preserved for URL/URI guidance: http://example.com

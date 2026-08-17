@@ -1,46 +1,30 @@
 ---
-applyTo: '**/*.py'
-description: 'Production best practices for Python Dataverse SDK installation, authentication, CRUD operations, testing, and deployment.'
+applyTo: "**/*.py"
+description: "Enforces production Python conventions for the PowerPlatform Dataverse SDK, including installation, authentication, client reuse, CRUD operations, metadata, paging, files, OData, cache, testing, deployment, and troubleshooting."
 ---
 
-# Dataverse SDK for Python - Best Practices Guide
+# Dataverse Python Conventions — Production SDK Usage
 
-## Overview
-Production-ready patterns and best practices extracted from Microsoft's official PowerPlatform-DataverseClient-Python repository, examples, and recommended workflows.
+These instructions apply to Python code that uses the `PowerPlatform-Dataverse-Client` SDK and Azure Identity to integrate with Microsoft Dataverse. They are authoritative for SDK installation assumptions, authentication patterns, `DataverseClient` lifecycle, CRUD usage, table/column metadata, paging, file operations, OData filters, cache management, error handling, testing, deployment hygiene, and troubleshooting in matched Python files; project-specific secret management, CI packaging, and enterprise authentication policies win when they are stricter.
 
-## 1. Installation & Environment Setup
+## Installation, Dependencies, and Versions
 
-### Production Installation
-```bash
-# Install the published SDK from PyPI
-pip install PowerPlatform-Dataverse-Client
+Use the published SDK for application code and editable installs only when developing the SDK itself.
 
-# Install Azure Identity for authentication
-pip install azure-identity
+| Scenario | Command or dependency | Convention | Rationale |
+| --- | --- | --- | --- |
+| Production SDK install | `pip install PowerPlatform-Dataverse-Client` | Install the published PyPI package. | Application builds should consume released artifacts. |
+| Authentication dependency | `pip install azure-identity` | Use Azure Identity credentials for token acquisition. | SDK authentication integrates with Azure and Microsoft Entra patterns. |
+| Optional data manipulation | `pip install pandas` | Add `pandas` only when tabular manipulation is required. | Avoid unnecessary runtime dependencies. |
+| SDK development | `git clone https://github.com/microsoft/PowerPlatform-DataverseClient-Python.git`, `cd PowerPlatform-DataverseClient-Python`, `pip install -e .` | Use editable mode for live SDK development. | Source edits should be visible without repeated package builds. |
+| Development tools | `pip install pytest pytest-cov black isort mypy ruff` | Use the project-approved test, coverage, formatting, import sorting, type-checking, and linting tools when the repo opts into them. | Consistent local checks reduce CI failures. |
+| Python | Python `>= 3.10`; recommended Python 3.11+; supported 3.10, 3.11, 3.12, 3.13, 3.14. | Do not target older interpreters. | The SDK support matrix starts at Python 3.10. |
+| Core dependencies | `azure-identity >= 1.17.0`, `azure-core >= 1.30.2`, `requests >= 2.32.0`. | Keep dependency ranges compatible with the SDK. | Authentication and HTTP behavior depend on these libraries. |
+| Optional dependencies | `pandas`, `reportlab`. | Use `reportlab` only for PDF-oriented examples or features. | Optional packages should match actual functionality. |
+| Development tool versions | `pytest >= 7.0.0`, `black >= 23.0.0`, `mypy >= 1.0.0`, `ruff >= 0.1.0`. | Match these minimums when introducing local tooling. | Older tool versions may lack expected checks. |
 
-# Optional: pandas integration for data manipulation
-pip install pandas
-```
+Verify imports with the real SDK names before adding application code:
 
-### Development Installation
-```bash
-# Clone the repository
-git clone https://github.com/microsoft/PowerPlatform-DataverseClient-Python.git
-cd PowerPlatform-DataverseClient-Python
-
-# Install in editable mode for live development
-pip install -e .
-
-# Install development dependencies
-pip install pytest pytest-cov black isort mypy ruff
-```
-
-### Python Version Support
-- **Minimum**: Python 3.10
-- **Recommended**: Python 3.11+ for best performance
-- **Supported**: Python 3.10, 3.11, 3.12, 3.13, 3.14
-
-### Verify Installation
 ```python
 from PowerPlatform.Dataverse import __version__
 from PowerPlatform.Dataverse.client import DataverseClient
@@ -50,691 +34,264 @@ print(f"SDK Version: {__version__}")
 print("Installation successful!")
 ```
 
----
+## Authentication and Configuration
 
-## 2. Authentication Patterns
+Choose credentials by runtime context and keep secrets outside source code.
 
-### Interactive Development (Browser-Based)
+| Context | Credential | Pattern | Rationale |
+| --- | --- | --- | --- |
+| Local interactive development, interactive testing, and single-user scenarios | `InteractiveBrowserCredential` | `credential = InteractiveBrowserCredential()` then `DataverseClient("https://yourorg.crm.dynamics.com", credential)`. | Browser sign-in is simple and user-scoped. |
+| Server-side applications, Azure automation, and scheduled jobs | `ClientSecretCredential` | Pass `tenant_id`, `client_id`, and `client_secret` from secure configuration. | Non-interactive jobs need application credentials. |
+| Highly secure environments and certificate-pinning requirements | `ClientCertificateCredential` | Use `certificate_path="path/to/certificate.pem"`. | Certificates reduce reliance on shared secrets. |
+| Local testing with Azure CLI installed and Azure DevOps pipelines | `AzureCliCredential` | Reuse the signed-in CLI identity. | CLI authentication avoids copying credentials during development. |
+
+Use `DataverseConfig` only for supported settings. Set `language_code=1033` when English (US) responses are required. Treat `http_retries`, `http_backoff`, and `http_timeout` as reserved for internal use unless the SDK documentation explicitly exposes them.
+
 ```python
-from azure.identity import InteractiveBrowserCredential
+from PowerPlatform.Dataverse.core.config import DataverseConfig
 from PowerPlatform.Dataverse.client import DataverseClient
-
-credential = InteractiveBrowserCredential()
-client = DataverseClient("https://yourorg.crm.dynamics.com", credential)
-```
-
-**When to use:** Local development, interactive testing, single-user scenarios.
-
-### Production (Client Secret)
-```python
 from azure.identity import ClientSecretCredential
-from PowerPlatform.Dataverse.client import DataverseClient
 
-credential = ClientSecretCredential(
-    tenant_id="your-tenant-id",
-    client_id="your-client-id",
-    client_secret="your-client-secret"
-)
-client = DataverseClient("https://yourorg.crm.dynamics.com", credential)
+config = DataverseConfig(language_code=1033)
+credential = ClientSecretCredential(tenant_id, client_id, client_secret)
+client = DataverseClient("https://yourorg.crm.dynamics.com", credential, config)
 ```
 
-**When to use:** Server-side applications, Azure automation, scheduled jobs.
+## Client Lifecycle
 
-### Certificate-Based Authentication
-```python
-from azure.identity import ClientCertificateCredential
-from PowerPlatform.Dataverse.client import DataverseClient
+Create one `DataverseClient` per logical application configuration and reuse it.
 
-credential = ClientCertificateCredential(
-    tenant_id="your-tenant-id",
-    client_id="your-client-id",
-    certificate_path="path/to/certificate.pem"
-)
-client = DataverseClient("https://yourorg.crm.dynamics.com", credential)
-```
-
-**When to use:** Highly secure environments, certificate-pinning requirements.
-
-### Azure CLI Authentication
-```python
-from azure.identity import AzureCliCredential
-from PowerPlatform.Dataverse.client import DataverseClient
-
-credential = AzureCliCredential()
-client = DataverseClient("https://yourorg.crm.dynamics.com", credential)
-```
-
-**When to use:** Local testing with Azure CLI installed, Azure DevOps pipelines.
-
----
-
-## 3. Singleton Client Pattern
-
-**Best Practice**: Create one `DataverseClient` instance and reuse it throughout your application.
+| Pattern | Convention | Rationale |
+| --- | --- | --- |
+| Singleton service | Wrap `DataverseClient` construction in an application service such as `DataverseService` and reuse the instance. | Reusing the client avoids repeated authentication and connection setup. |
+| Repeated function construction | Do not create a new credential and client inside every `fetch_account` call. | Repeated construction is slow and can amplify throttling. |
+| Dependency injection | Pass the client or service into workers, handlers, and repositories. | Tests can substitute fakes and configuration stays centralized. |
 
 ```python
-# ANTI-PATTERN: Creating new clients repeatedly
-def fetch_account(account_id):
-    credential = InteractiveBrowserCredential()
-    client = DataverseClient("https://yourorg.crm.dynamics.com", credential)
-    return client.get("account", account_id)
-
-# PATTERN: Singleton client
 class DataverseService:
     _instance = None
 
     def __new__(cls):
         if cls._instance is None:
             credential = InteractiveBrowserCredential()
-            cls._instance = DataverseClient(
-                "https://yourorg.crm.dynamics.com",
-                credential
-            )
+            cls._instance = DataverseClient("https://yourorg.crm.dynamics.com", credential)
         return cls._instance
 
-# Usage
 service = DataverseService()
 account = service.get("account", account_id)
 ```
 
----
+## CRUD Operations
 
-## 4. Configuration Optimization
+Use the SDK methods directly and shape payloads to minimize network and server work.
 
-### Connection Settings
+| Operation | API | Convention | Rationale |
+| --- | --- | --- | --- |
+| Create one record | `client.create("account", record_data)` | Store the returned `created_ids` and use `record_id = created_ids[0]` when one record is expected. | The SDK returns IDs consistently for single and bulk creates. |
+| Bulk create | `client.create("account", records)` | Send a list when creating multiple records; the SDK automatically uses `CreateMultiple` for arrays larger than one record. | Manual loops are slower and harder to recover. |
+| Read by ID | `client.get("account", "account-guid-here")` | Use the table logical name and the record GUID. | Direct reads are simpler and cheaper than filtered scans. |
+| Query with OData | `client.get("account", filter=..., select=..., orderby=..., top=..., page_size=...)` | Use lowercase logical names, a `select` list, server-side `filter`, `orderby`, `top`, and `page_size`. | Server-side filtering and column selection reduce payload size. |
+| SQL analytics | `client.query_sql("SELECT TOP 10 name, creditlimit FROM account WHERE creditlimit > 50000 ORDER BY name")` | Use `query_sql` only for read-only analytics; never assume DML is allowed. | SQL support can be disabled by org policy and should not mutate data. |
+| Single update | `client.update("account", "account-guid", data)` | Send only changed columns. | Minimal updates reduce side effects and payload size. |
+| Bulk update broadcast | `client.update("account", account_ids, data)` | Use a list such as `account_ids = ["id1", "id2", "id3"]` when all selected records receive the same values, such as `manager-guid`. | Broadcast updates avoid repeated calls for identical changes. |
+| Paired update | Loop over `{record_id: data}` updates. | Use separate calls when each record has different values. | The SDK pattern distinguishes broadcast data from per-record data. |
+| Delete one record | `client.delete("account", "account-guid")` | Delete by logical table name and GUID. | Direct deletion is explicit. |
+| Bulk delete | `client.delete("account", record_ids, use_bulk_delete=True)` | Use `record_ids` and `use_bulk_delete=True` for large lists. | The SDK can route large deletes through optimized bulk behavior such as `BulkDelete`. |
+
+Keep CRUD placeholders recognizable in examples and tests: `record_data`, `account_id`, `record_id`, `account_ids`, `record_ids`, `created_ids`, `table_name`, and `filter` should name the real value they carry. Preserve review labels such as `PATTERN`, `ANTI-PATTERN`, `Create/update`, and `Table/column` when converting examples into prose so reviewers can map old guidance to the new convention.
+
+## OData, SQL, Paging, and Large Results
+
+Push work to Dataverse while keeping result sets bounded.
+
+| Concern | Convention | Rationale |
+| --- | --- | --- |
+| Case sensitivity | Use lowercase logical names in OData filters: `name eq 'Contoso'`, not `Name eq 'Contoso'`. Schema-name existence checks may be case-insensitive, but API names and values remain case-sensitive when the business value requires it. | Dataverse logical names are the API contract; values are data. |
+| Filter examples | Use `eq`, `gt`, `lt`, `contains`, `and`, `or`, and `not`: `(name eq 'Contoso') and (creditlimit gt 50000)`, `(industrycode eq 1) or (industrycode eq 2)`, `not(statecode eq 1)`. | Standard OData operators keep filters understandable. |
+| Select | Always pass `select=["name", "creditlimit", "telephone1"]` or the minimal required columns. | Fetching all columns is slow and can expose unnecessary data. |
+| Expand | Use `expand=["parentaccountid($select=name)"]` with a matching `select=["name", "parentaccountid"]` only when related data is needed. | Expands are useful but can increase payload and query cost. |
+| Page iteration | Iterate pages: `for page in client.get("account", top=500, page_size=500): ...`. | Streaming page-by-page avoids loading everything at once. |
+| Accumulation | Use `all_accounts` only when the caller truly needs every row in memory. | Large in-memory lists can exhaust workers. |
+| Manual paging | Use `skip_count` and `page_size` only for complex paging scenarios. | SDK pagination is preferred for normal reads. |
+| Read-only SQL | Use `SELECT`, `FROM`, `WHERE`, and `ORDER BY` in `query_sql`; do not issue DML. | SQL queries are read-only and may be disabled. |
+| Fallback | If SQL is unavailable, fall back to OData `client.get`. | Org policy should not break core read paths. |
+
+Use the vocabulary from diagnostic examples consistently: `WRONG` means an uppercase logical-name filter, `CORRECT` means lowercase logical names, `AND/OR` names compound OData operations, `SELECT` marks read-only SQL, and `CRUD` covers create, read, update, and delete paths.
+
+## Error Handling, Recovery, and Rate Limits
+
+Catch SDK-specific exceptions before broad exceptions and make retries bounded.
+
+| Exception or condition | Convention | Rationale |
+| --- | --- | --- |
+| `DataverseError` | Catch as the base SDK failure only after more specific exceptions. | Specific handlers keep recovery precise. |
+| `ValidationError` | Handle validation-specific failures near input construction. | Invalid payloads should not be retried blindly. |
+| `MetadataError` | Treat table/column lookup and metadata operations as configuration or schema failures. | Metadata failures usually need a fix, not a retry loop. |
+| `HttpError` | Retry only transient failures and propagate persistent HTTP errors. | Unbounded retry hides outages and wastes quota. |
+| `SQLParseError` | Correct the SQL query or fall back to OData. | Syntax errors are deterministic. |
+| Retry helper | Use bounded `create_with_retry(table_name, record_data, max_retries=3)` with exponential `backoff_seconds = 2 ** attempt`. | Bounded backoff handles transient failures without infinite loops. |
+| HTTP 429 | Reduce request frequency, wait before retrying, and lower page size such as `top=500` instead of `top=5000`. | Throttling is a capacity signal. |
+| Bulk recovery | Use `create_with_recovery(records)` to collect `success` and `failed` entries and retry individual records only after a bulk failure. | Per-record recovery preserves successful work and exposes bad rows. |
+
+Use `HttpError` for HTTP-level errors and avoid catching `Exception` unless the code records enough context and re-raises or maps the failure intentionally.
+
+## Metadata, Tables, Columns, and Cache
+
+Treat metadata operations as schema changes that require exact names and cache awareness.
+
+| Task | API | Convention | Rationale |
+| --- | --- | --- | --- |
+| Create custom table | `client.create_table("new_CustomTable", primary_column_schema_name="new_Name", columns=columns)` | Define columns with types such as `string`, `int`, `decimal`, `bool`, `datetime`, or an `IntEnum` such as `Priority` values `LOW`, `MEDIUM`, `HIGH` for option set/picklist fields. | Schema creation should express Dataverse column intent clearly. |
+| Read table metadata | `client.get_table_info("account")` | Use returned `table_info` keys: `table_schema_name`, `table_logical_name`, `entity_set_name`, and `primary_id_attribute`. | Metadata drives correct API calls and diagnostics. |
+| List tables | `client.list_tables()` | Print or inspect each table's schema and logical names before using custom names. | Discovery prevents spelling and casing mistakes. |
+| Add columns | `client.create_columns("new_CustomTable", {"new_Status": "string", "new_Priority": "int"})` | Add columns deliberately and document their purpose. | Metadata changes affect downstream clients. |
+| Delete columns | `client.delete_columns("new_CustomTable", ["new_Status", "new_Priority"])` | Delete only when callers and reports no longer depend on the columns. | Column deletion can break integrations. |
+| Delete table | `client.delete_table("new_CustomTable")` | Treat table deletion as destructive and environment-gated. | Table deletion risks data loss. |
+| Cache | `client.flush_cache()` | Flush cache after metadata changes, bulk deletes, or metadata synchronization. | Cached metadata can become stale after schema changes. |
+
+When troubleshooting `MetadataError: Table Not Found`, list tables and use the exact schema or logical name, including `new_customprefixed_table` when that is the real name.
+
+## File Operations
+
+Use the SDK file APIs and choose chunking by size.
+
+| File scenario | API | Convention | Rationale |
+| --- | --- | --- | --- |
+| Small file upload | `client.upload_file(table_name="account", record_id=record_id, file_column_name="new_documentfile", file_path=file_path)` | Use a single PATCH-style upload for files under 128 MB, such as `document.pdf`. | Small uploads do not need chunk orchestration. |
+| Large file upload | `client.upload_file(..., file_column_name="new_videofile", file_path=Path("large_video.mp4"), chunk_size=4 * 1024 * 1024)` | Let the SDK chunk large files and set `chunk_size` deliberately, commonly 4 MB chunks. | Chunking avoids request size limits and improves recovery. |
+| Paths | Use `Path` objects for `file_path`. | Path handling stays portable and testable. |
+
+## Performance Patterns
+
+Favor server-side filtering, batch APIs, selected columns, and client reuse.
+
+| Do | Do not | Rationale |
+| --- | --- | --- |
+| Use `select` to fetch only needed columns. | Call `client.get("account")` when only two columns are needed. | Smaller payloads are faster and safer. |
+| Batch create/update records, such as `client.create("account", [record1, record2, record3])`. | Create records one-by-one in loops. | Batch APIs reduce network overhead. |
+| Use paging and `process_page(page)` for streaming work. | Convert all results with `list(client.get("account"))` by default. | Paging keeps memory bounded. |
+| Reuse `DataverseClient(url, credential)` throughout the app. | Instantiate a new client inside every loop iteration. | Client reuse avoids repeated authentication. |
+| Apply server-side filters such as `creditlimit gt 50000`. | Fetch broad data and filter locally without reason. | Dataverse can reduce data before transfer. |
+
+## Upsert and Recovery Patterns
+
+Use explicit lookup-then-create/update logic when the SDK call path does not provide a native upsert abstraction.
+
 ```python
-from PowerPlatform.Dataverse.core.config import DataverseConfig
-from PowerPlatform.Dataverse.client import DataverseClient
-from azure.identity import ClientSecretCredential
+def upsert_account(name, data):
+    results = list(client.get("account", filter=f"name eq '{name}'"))
+    if results:
+        account_id = results[0]["accountid"]
+        client.update("account", account_id, data)
+        return account_id, "updated"
 
-config = DataverseConfig(
-    language_code=1033,  # English (US)
-    # Note: http_retries, http_backoff, http_timeout are reserved for internal use
-)
+    ids = client.create("account", {"name": name, **data})
+    return ids[0], "created"
+```
+
+Why: `upsert_account` makes lookup, update, and create behavior explicit; production code should still escape or parameterize user-provided filter values where the SDK supports it.
+
+Use `create_with_recovery` for bulk creates that need per-record error tracking. Return a result shape with `success` and `failed` entries so callers can retry or report exact failures.
+
+## Troubleshooting
+
+Diagnose common failures with the fastest safe check.
+
+| Symptom | Check | Fix |
+| --- | --- | --- |
+| `ImportError: No module named 'PowerPlatform'` | Run `pip show PowerPlatform-Dataverse-Client` and verify `which python` points to the intended virtual environment. | Reinstall with `pip install --upgrade PowerPlatform-Dataverse-Client` in the active environment. |
+| Authentication failed | Try `InteractiveBrowserCredential(tenant_id="your-tenant-id")`, verify credentials have Dataverse access, and confirm org URL shape. | Use `https://yourorg.crm.dynamics.com`, avoid accidental trailing slash `https://yourorg.crm.dynamics.com/` unless the SDK accepts it, and use regional hosts such as `https://yourorg.crm4.dynamics.com` when appropriate. |
+| HTTP 429 rate limiting | Inspect request frequency and page size. | Add exponential backoff, reduce concurrency, and lower `top` from 5000 to 500 when needed. |
+| Metadata table not found | Run `client.list_tables()` and inspect `table_schema_name` and `table_logical_name`. | Use the exact schema or logical name expected by the API. |
+| SQL query not enabled | Wrap `query_sql()` and catch the SDK error. | Fall back to OData `client.get`. |
+
+Keep examples with placeholders such as `your-client-id`, `your-client-secret`, `your-tenant-id`, `account-guid`, `account-guid-here`, and `manager-guid` as placeholders only; do not commit real credentials or tenant-specific secrets.
+
+## Good / Bad Examples
+
+The examples below illustrate secure configuration, client reuse, OData filtering, selected columns, and bounded paging.
+
+**Good:**
+
+```python
+from azure.identity import ClientSecretCredential
+from PowerPlatform.Dataverse.client import DataverseClient
 
 credential = ClientSecretCredential(tenant_id, client_id, client_secret)
-client = DataverseClient("https://yourorg.crm.dynamics.com", credential, config)
-```
+client = DataverseClient("https://yourorg.crm.dynamics.com", credential)
 
-**Key configuration options:**
-- `language_code`: Language for API responses (default: 1033 for English)
-
----
-
-## 5. CRUD Operations Best Practices
-
-### Create Operations
-
-#### Single Record
-```python
-record_data = {
-    "name": "Contoso Ltd",
-    "telephone1": "555-0100",
-    "creditlimit": 100000.00,
-}
-created_ids = client.create("account", record_data)
-record_id = created_ids[0]
-print(f"Created: {record_id}")
-```
-
-#### Bulk Create (Automatically Optimized)
-```python
-# SDK automatically uses CreateMultiple for arrays > 1 record
-records = [
-    {"name": f"Company {i}", "creditlimit": 50000 + (i * 1000)}
-    for i in range(100)
-]
-created_ids = client.create("account", records)
-print(f"Created {len(created_ids)} records")
-```
-
-**Performance**: Bulk create is optimized internally; no manual batching required.
-
-### Read Operations
-
-#### Single Record by ID
-```python
-account = client.get("account", "account-guid-here")
-print(account.get("name"))
-```
-
-#### Query with Filtering & Selection
-```python
-# Returns paginated results (generator)
 for page in client.get(
     "account",
     filter="creditlimit gt 50000",
     select=["name", "creditlimit", "telephone1"],
     orderby="name",
-    top=100
+    top=500,
+    page_size=500,
 ):
-    for account in page:
-        print(f"{account['name']}: ${account['creditlimit']}")
+    process_page(page)
 ```
 
-**Key parameters:**
-- `filter`: OData filter (must use **lowercase** logical names)
-- `select`: Fields to retrieve (improves performance)
-- `orderby`: Sort results
-- `top`: Max records per page (default: 5000)
-- `page_size`: Override page size for pagination
+Why: The code reuses a configured client, filters on the server, selects only needed columns, orders results, and processes bounded pages.
 
-#### SQL Queries (Read-Only)
+**Bad:**
+
 ```python
-# SQL queries are read-only; use for complex analytics
-results = client.query_sql("""
-    SELECT TOP 10 name, creditlimit
-    FROM account
-    WHERE creditlimit > 50000
-    ORDER BY name
-""")
-
-for row in results:
-    print(f"{row['name']}: ${row['creditlimit']}")
+def load_accounts():
+    credential = InteractiveBrowserCredential()
+    client = DataverseClient("https://yourorg.crm.dynamics.com", credential)
+    all_accounts = list(client.get("account"))
+    return [row for row in all_accounts if row.get("creditlimit", 0) > 50000]
 ```
 
-**Limitations:**
-- Read-only (SELECT only, no DML)
-- Useful for complex joins and analytics
-- May be disabled by org policy
-
-### Update Operations
-
-#### Single Record
-```python
-client.update("account", "account-guid", {
-    "creditlimit": 150000.00,
-    "name": "Updated Company Name"
-})
-```
-
-#### Bulk Update (Broadcast Same Change)
-```python
-# Update all selected records with same data
-account_ids = ["id1", "id2", "id3"]
-client.update("account", account_ids, {
-    "industrycode": 1,  # Retail
-    "accountmanagerid": "manager-guid"
-})
-```
-
-#### Paired Updates (1:1 Record Updates)
-```python
-# For different updates per record, send multiple calls
-updates = {
-    "id1": {"creditlimit": 100000},
-    "id2": {"creditlimit": 200000},
-    "id3": {"creditlimit": 300000},
-}
-for record_id, data in updates.items():
-    client.update("account", record_id, data)
-```
-
-### Delete Operations
-
-#### Single Record
-```python
-client.delete("account", "account-guid")
-```
-
-#### Bulk Delete (Optimized)
-```python
-# SDK automatically uses BulkDelete for large lists
-record_ids = ["id1", "id2", "id3", ...]
-client.delete("account", record_ids, use_bulk_delete=True)
-```
-
----
-
-## 6. Error Handling & Recovery
-
-### Exception Hierarchy
-```python
-from PowerPlatform.Dataverse.core.errors import (
-    DataverseError,           # Base class
-    ValidationError,          # Validation failures
-    MetadataError,           # Table/column operations
-    HttpError,               # HTTP-level errors
-    SQLParseError            # SQL query syntax errors
-)
-
-try:
-    client.create("account", {"name": None})  # Invalid
-except ValidationError as e:
-    print(f"Validation failed: {e}")
-    # Handle validation-specific logic
-except DataverseError as e:
-    print(f"General SDK error: {e}")
-    # Handle other SDK errors
-```
-
-### Retry Logic Pattern
-```python
-import time
-from PowerPlatform.Dataverse.core.errors import HttpError
-
-def create_with_retry(table_name, record_data, max_retries=3):
-    """Create record with exponential backoff retry logic."""
-    for attempt in range(max_retries):
-        try:
-            return client.create(table_name, record_data)
-        except HttpError as e:
-            if attempt == max_retries - 1:
-                raise
-
-            # Exponential backoff: 1s, 2s, 4s
-            backoff_seconds = 2 ** attempt
-            print(f"Attempt {attempt + 1} failed. Retrying in {backoff_seconds}s...")
-            time.sleep(backoff_seconds)
-
-# Usage
-created_ids = create_with_retry("account", {"name": "Contoso"})
-```
-
-### 429 (Request Rate Limit) Handling
-```python
-import time
-from PowerPlatform.Dataverse.core.errors import HttpError
-
-try:
-    accounts = client.get("account", top=5000)
-except HttpError as e:
-    if "429" in str(e):
-        # Rate limited; wait and retry
-        print("Rate limited. Waiting 60 seconds...")
-        time.sleep(60)
-        accounts = client.get("account", top=5000)
-    else:
-        raise
-```
-
----
-
-## 7. Table & Column Management
-
-### Create Custom Table
-```python
-from enum import IntEnum
-
-class Priority(IntEnum):
-    LOW = 1
-    MEDIUM = 2
-    HIGH = 3
-
-# Define columns with types
-columns = {
-    "new_Title": "string",
-    "new_Quantity": "int",
-    "new_Amount": "decimal",
-    "new_Completed": "bool",
-    "new_Priority": Priority,  # Creates option set/picklist
-    "new_CreatedDate": "datetime"
-}
-
-table_info = client.create_table(
-    "new_CustomTable",
-    primary_column_schema_name="new_Name",
-    columns=columns
-)
-
-print(f"Created table: {table_info['table_schema_name']}")
-```
-
-### Get Table Metadata
-```python
-table_info = client.get_table_info("account")
-print(f"Schema Name: {table_info['table_schema_name']}")
-print(f"Logical Name: {table_info['table_logical_name']}")
-print(f"Entity Set: {table_info['entity_set_name']}")
-print(f"Primary ID: {table_info['primary_id_attribute']}")
-```
-
-### List All Tables
-```python
-tables = client.list_tables()
-for table in tables:
-    print(f"{table['table_schema_name']} ({table['table_logical_name']})")
-```
-
-### Column Management
-```python
-# Add columns to existing table
-client.create_columns("new_CustomTable", {
-    "new_Status": "string",
-    "new_Priority": "int"
-})
-
-# Delete columns
-client.delete_columns("new_CustomTable", ["new_Status", "new_Priority"])
-
-# Delete table
-client.delete_table("new_CustomTable")
-```
-
----
-
-## 8. Paging & Large Result Sets
-
-### Pagination Pattern
-```python
-# Retrieve all accounts in pages
-all_accounts = []
-for page in client.get(
-    "account",
-    top=500,      # Records per page
-    page_size=500
-):
-    all_accounts.extend(page)
-    print(f"Retrieved page with {len(page)} records")
-
-print(f"Total: {len(all_accounts)} records")
-```
-
-### Manual Paging with Continuation Tokens
-```python
-# For complex paging scenarios
-skip_count = 0
-page_size = 1000
-
-while True:
-    page = client.get("account", top=page_size, skip=skip_count)
-    if not page:
-        break
-
-    print(f"Page {skip_count // page_size + 1}: {len(page)} records")
-    skip_count += page_size
-```
-
----
-
-## 9. File Operations
-
-### Upload Small Files (< 128 MB)
-```python
-from pathlib import Path
-
-file_path = Path("document.pdf")
-record_id = "account-guid"
-
-# Single PATCH upload
-response = client.upload_file(
-    table_name="account",
-    record_id=record_id,
-    file_column_name="new_documentfile",
-    file_path=file_path
-)
-print(f"Upload successful: {response}")
-```
-
-### Upload Large Files with Chunking
-```python
-from pathlib import Path
-
-file_path = Path("large_video.mp4")
-record_id = "account-guid"
-
-# SDK automatically chunks large files
-response = client.upload_file(
-    table_name="account",
-    record_id=record_id,
-    file_column_name="new_videofile",
-    file_path=file_path,
-    chunk_size=4 * 1024 * 1024  # 4 MB chunks
-)
-print(f"Chunked upload complete")
-```
-
----
-
-## 10. OData Filter Optimization
-
-### Case Sensitivity Rules
-```python
-# WRONG: Uppercase logical names
-results = client.get("account", filter="Name eq 'Contoso'")
-
-# CORRECT: Lowercase logical names
-results = client.get("account", filter="name eq 'Contoso'")
-
-# Values ARE case-sensitive when needed
-results = client.get("account", filter="name eq 'Contoso Ltd'")
-```
-
-### Filter Expression Examples
-```python
-# Equality
-client.get("account", filter="name eq 'Contoso'")
-
-# Greater than / Less than
-client.get("account", filter="creditlimit gt 50000")
-client.get("account", filter="createdon lt 2024-01-01")
-
-# String contains
-client.get("account", filter="contains(name, 'Ltd')")
-
-# AND/OR operations
-client.get("account", filter="(name eq 'Contoso') and (creditlimit gt 50000)")
-client.get("account", filter="(industrycode eq 1) or (industrycode eq 2)")
-
-# NOT operation
-client.get("account", filter="not(statecode eq 1)")
-```
-
-### Select & Expand
-```python
-# Select specific columns (improves performance)
-client.get("account", select=["name", "creditlimit", "telephone1"])
-
-# Expand related records
-client.get(
-    "account",
-    expand=["parentaccountid($select=name)"],
-    select=["name", "parentaccountid"]
-)
-```
-
----
-
-## 11. Cache Management
-
-### Flushing Cache
-```python
-# Clear SDK internal cache after bulk operations
-client.flush_cache()
-
-# Useful after:
-# - Metadata changes (table/column creation)
-# - Bulk deletes
-# - Metadata synchronization
-```
-
----
-
-## 12. Performance Best Practices
-
-### Do's
-1. **Use `select` parameter**: Only fetch needed columns
-   ```python
-   client.get("account", select=["name", "creditlimit"])
-   ```
-
-2. **Batch operations**: Create/update multiple records at once
-   ```python
-   ids = client.create("account", [record1, record2, record3])
-   ```
-
-3. **Use paging**: Don't load all records at once
-   ```python
-   for page in client.get("account", top=1000):
-       process_page(page)
-   ```
-
-4. **Reuse client instance**: Create once, use many times
-   ```python
-   client = DataverseClient(url, credential)  # Once
-   # Reuse throughout app
-   ```
-
-5. **Apply filters on server**: Let Dataverse filter before returning
-   ```python
-   client.get("account", filter="creditlimit gt 50000")
-   ```
-
-### Don'ts
-1. **Don't fetch all columns**: Specify what you need
-   ```python
-   # Slow
-   client.get("account")
-   ```
-
-2. **Don't create records in loops**: Batch them
-   ```python
-   # Slow
-   for record in records:
-       client.create("account", record)
-   ```
-
-3. **Don't load all results at once**: Use pagination
-   ```python
-   # Slow
-   all_accounts = list(client.get("account"))
-   ```
-
-4. **Don't create new clients repeatedly**: Reuse singleton
-   ```python
-   # Inefficient
-   for i in range(100):
-       client = DataverseClient(url, credential)
-   ```
-
----
-
-## 13. Common Patterns Summary
-
-### Pattern: Upsert (Create or Update)
-```python
-def upsert_account(name, data):
-    """Create account or update if exists."""
-    try:
-        # Try to find existing
-        results = list(client.get("account", filter=f"name eq '{name}'"))
-        if results:
-            account_id = results[0]['accountid']
-            client.update("account", account_id, data)
-            return account_id, "updated"
-        else:
-            ids = client.create("account", {"name": name, **data})
-            return ids[0], "created"
-    except Exception as e:
-        print(f"Upsert failed: {e}")
-        raise
-```
-
-### Pattern: Bulk Operation with Error Recovery
-```python
-def create_with_recovery(records):
-    """Create records with per-record error tracking."""
-    results = {"success": [], "failed": []}
-
-    try:
-        ids = client.create("account", records)
-        results["success"] = ids
-    except Exception as e:
-        # If bulk fails, try individual records
-        for i, record in enumerate(records):
-            try:
-                ids = client.create("account", record)
-                results["success"].append(ids[0])
-            except Exception as e:
-                results["failed"].append({"index": i, "record": record, "error": str(e)})
-
-    return results
-```
-
----
-
-## 14. Dependencies & Versions
-
-### Core Dependencies
-- **azure-identity** >= 1.17.0 (Authentication)
-- **azure-core** >= 1.30.2 (HTTP client)
-- **requests** >= 2.32.0 (HTTP requests)
-- **Python** >= 3.10
-
-### Optional Dependencies
-- **pandas** (Data manipulation)
-- **reportlab** (PDF generation for file examples)
-
-### Development Tools
-- **pytest** >= 7.0.0 (Testing)
-- **black** >= 23.0.0 (Code formatting)
-- **mypy** >= 1.0.0 (Type checking)
-- **ruff** >= 0.1.0 (Linting)
-
----
-
-## 15. Troubleshooting Common Issues
-
-### ImportError: No module named 'PowerPlatform'
-```bash
-# Verify installation
-pip show PowerPlatform-Dataverse-Client
-
-# Reinstall
-pip install --upgrade PowerPlatform-Dataverse-Client
-
-# Check virtual environment is activated
-which python  # Should show venv path
-```
-
-### Authentication Failed
-```python
-# Verify credentials have Dataverse access
-# Try interactive auth first for testing
-from azure.identity import InteractiveBrowserCredential
-credential = InteractiveBrowserCredential(
-    tenant_id="your-tenant-id"  # Specify if multiple tenants
-)
-
-# Check org URL format
-# ✓ https://yourorg.crm.dynamics.com
-# https://yourorg.crm.dynamics.com/
-# https://yourorg.crm4.dynamics.com (regional)
-```
-
-### HTTP 429 Rate Limiting
-```python
-# Reduce request frequency
-# Implement exponential backoff (see Error Handling section)
-# Reduce page size
-client.get("account", top=500)  # Instead of 5000
-```
-
-### MetadataError: Table Not Found
-```python
-# Verify table exists (schema name is case-insensitive for existence, but case-sensitive for API)
-tables = client.list_tables()
-print([t['table_schema_name'] for t in tables])
-
-# Use exact schema name
-table_info = client.get_table_info("new_customprefixed_table")
-```
-
-### SQL Query Not Enabled
-```python
-# query_sql() requires org config
-# If disabled, fallback to OData
-try:
-    results = client.query_sql("SELECT * FROM account")
-except Exception:
-    # Fallback to OData
-    results = client.get("account")
-```
-
----
-
-## Reference Links
-- [Official Repository](https://github.com/microsoft/PowerPlatform-DataverseClient-Python)
-- [PyPI Package](https://pypi.org/project/PowerPlatform-Dataverse-Client/)
-- [Azure Identity Documentation](https://learn.microsoft.com/en-us/python/api/overview/azure/identity-readme)
-- [Dataverse Web API Documentation](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/webapi/overview)
+Why: The code creates a new interactive client in a function, fetches every column and row, loads all results into memory, and filters locally.
+
+## Conventions
+
+| Rule | Rationale |
+|---|---|
+| Use `PowerPlatform-Dataverse-Client` with supported Python and dependency versions. | Unsupported runtimes and libraries can fail at import or authentication time. |
+| Choose `InteractiveBrowserCredential`, `ClientSecretCredential`, `ClientCertificateCredential`, or `AzureCliCredential` according to runtime context. | Authentication should match whether the process is interactive, automated, certificate-based, or CLI-backed. |
+| Reuse a `DataverseClient` instead of constructing clients repeatedly. | Client reuse reduces authentication overhead and throttling risk. |
+| Use `select`, `filter`, `orderby`, `top`, and `page_size` for reads. | Dataverse should do filtering, sorting, and paging before data reaches Python. |
+| Treat `query_sql` as read-only and optional by org policy. | SQL support may be disabled and must not mutate data. |
+| Use SDK-specific exceptions and bounded retries with exponential backoff. | Precise error handling prevents infinite retry and masks fewer defects. |
+| Flush cache after metadata changes, bulk deletes, or metadata synchronization. | Stale metadata can make valid table and column operations fail. |
+| Use `upload_file` with chunking for large files and direct upload for small files under 128 MB. | File upload behavior should fit request limits and recovery needs. |
+| Never commit real tenant IDs, client secrets, certificates, or org-specific credentials. | Secrets in source code create security incidents. |
+
+## Do / Do Not
+
+| Do | Do not |
+|---|---|
+| Install production code with `pip install PowerPlatform-Dataverse-Client`. | Depend on an editable SDK checkout for application runtime. |
+| Store `tenant_id`, `client_id`, `client_secret`, and `certificate_path` in secure configuration. | Hardcode `your-client-id`, `your-client-secret`, or real secrets in source files. |
+| Use lowercase Dataverse logical names in OData filters. | Write filters such as `Name eq 'Contoso'` when the logical name is `name`. |
+| Use bulk `create`, broadcast `update`, and `use_bulk_delete=True` where appropriate. | Loop individual CRUD calls when an SDK batch pattern fits. |
+| Iterate pages and stream work through `process_page`. | Materialize `all_accounts` unless every row is truly required. |
+| Use `get_table_info`, `list_tables`, `create_columns`, and `delete_columns` for metadata work. | Guess table and column names after receiving `MetadataError`. |
+| Use `flush_cache` after schema or bulk delete changes. | Keep using cached metadata after table/column changes. |
+| Fall back from disabled SQL to OData. | Make `query_sql` the only path for critical reads. |
+
+## Checklist Before Opening a PR
+
+- [ ] Python version and dependencies match the supported SDK matrix.
+- [ ] Authentication uses the correct Azure Identity credential for the runtime and no secrets are committed.
+- [ ] `DataverseClient` construction is centralized and reused.
+- [ ] CRUD calls use server-side `filter`, `select`, `orderby`, `top`, and `page_size` where applicable.
+- [ ] Bulk create, update, delete, upsert, and recovery logic use SDK patterns rather than unnecessary loops.
+- [ ] SQL usage is read-only and has an OData fallback when org policy disables SQL.
+- [ ] Error handling catches SDK-specific exceptions and uses bounded retry for transient `HttpError` or HTTP 429 cases.
+- [ ] Metadata changes use exact table and column names and call `flush_cache` when cache may be stale.
+- [ ] File uploads choose direct or chunked `upload_file` behavior based on file size.
+- [ ] Troubleshooting notes preserve safe placeholders and do not include real credentials or tenant-specific secrets.
+
+## References
+
+- Official Repository: https://github.com/microsoft/PowerPlatform-DataverseClient-Python
+- SDK development clone URL: https://github.com/microsoft/PowerPlatform-DataverseClient-Python.git
+- PyPI Package: https://pypi.org/project/PowerPlatform-Dataverse-Client/
+- Azure Identity Documentation: https://learn.microsoft.com/en-us/python/api/overview/azure/identity-readme
+- Dataverse Web API Documentation: https://learn.microsoft.com/en-us/power-apps/developer/data-platform/webapi/overview
+- Example Dataverse org URL: https://yourorg.crm.dynamics.com
+- Example Dataverse org URL with slash: https://yourorg.crm.dynamics.com/
+- Example regional Dataverse org URL: https://yourorg.crm4.dynamics.com

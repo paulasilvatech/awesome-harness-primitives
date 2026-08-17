@@ -1,14 +1,11 @@
 ---
-applyTo: '**/*.{yaml,yml,md,pa.yaml}'
-description: 'Comprehensive guide for working with Power Apps Canvas Apps YAML structure based on Microsoft Power Apps YAML schema v3.0. Covers Power Fx formulas, control structures, data types, and source control best practices.'
+applyTo: "**/*.{yaml,yml,md,pa.yaml}"
+description: "Enforces Power Apps canvas app YAML schema v3.0, Power Fx formula, control, data source, component, and source-control conventions."
 ---
 
-# Power Apps Canvas Apps YAML Structure Guide
+# Power Apps Canvas YAML Conventions — Schema and Power Fx
 
-## Overview
-This document provides comprehensive instructions for working with YAML code for Power Apps canvas apps based on the official Microsoft Power Apps YAML schema (v3.0) and Power Fx documentation.
-
-**Official Schema Source**: https://raw.githubusercontent.com/microsoft/PowerApps-Tooling/refs/heads/master/schemas/pa-yaml/v3.0/pa.schema.yaml
+This file applies to Power Apps canvas app YAML, related extracted source files, and documentation matched by the `applyTo` globs. It is authoritative for `.pa.yaml` structure, Power Fx formula syntax, control and component definitions, data-source declarations, editor metadata, and source-control hygiene; the official Microsoft Power Apps YAML schema v3.0 wins on schema shape, and Power Apps Studio runtime behavior wins where an imported app behaves differently from static YAML expectations.
 
 ## Power Fx Design Principles
 Power Fx is the formula language used throughout Power Apps canvas apps. It follows these core principles:
@@ -824,4 +821,96 @@ Properties:
   Items: =FirstN(Filter(DataSource, Status = "Active"), 50)
 ```
 
-Remember: This guide provides comprehensive coverage of Power Apps Canvas Apps YAML structure and Power Fx formulas. Always validate your YAML against the official schema and test formulas in the Power Apps Studio environment.
+## Good / Bad Examples
+
+The examples below illustrate schema-shaped YAML, formula prefixes, and delegable data access.
+
+**Good:**
+
+```yaml
+Screens:
+  BrowseScreen:
+    Properties:
+      Fill: =RGBA(255, 255, 255, 1)
+    Children:
+      - SearchInput:
+          Control: TextInput
+          Properties:
+            Default: =""
+      - ResultsGallery:
+          Control: Gallery
+          Properties:
+            Items: =Filter(SharePointList, Status = "Active")
+            TemplateSize: =100
+          Children:
+            - TitleLabel:
+                Control: Label
+                Properties:
+                  Text: =ThisItem.Title
+                  Width: =Parent.TemplateWidth - 20
+```
+
+Why: The YAML follows the `Screens` → `Children` → `Control` → `Properties` shape, every formula starts with `=`, and the gallery uses a delegation-friendly `Filter`.
+
+**Bad:**
+
+```yaml
+Screens:
+  BrowseScreen:
+    Children:
+      - ResultsGallery:
+          Properties:
+            Items: Sort(DataSource, If(Active, Name, ""))
+      - Label1:
+          Control: label
+          Properties:
+            Text: Hello World
+```
+
+Why: The control type casing is invalid, formulas are missing the `=` prefix, the data expression is non-delegable, and required schema fields are inconsistent.
+
+## Conventions
+
+| Rule | Rationale |
+| --- | --- |
+| Validate `.pa.yaml` files against the [Microsoft Power Apps YAML schema v3.0](https://raw.githubusercontent.com/microsoft/PowerApps-Tooling/refs/heads/master/schemas/pa-yaml/v3.0/pa.schema.yaml). | The schema is the authoritative contract for root keys, control shapes, and property names. |
+| Preserve the top-level `App`, `Screens`, `ComponentDefinitions`, `DataSources`, and `EditorState` structure. | Studio and source-control tooling expect these sections to carry application-level settings, UI definitions, reusable components, connections, and editor metadata. |
+| Start every Power Fx formula with `=` and use `null` without quotes for absent values. | YAML scalars and formulas are otherwise ambiguous and may be interpreted as literal text. |
+| Keep `Children` arrays ordered from bottom z-index to top z-index. | Canvas rendering depends on array order, with the last child on top. |
+| Use exact schema casing for `Control`, `Properties`, `ComponentName`, `DefinitionType`, `Type`, and standard property names. | Power Apps identifiers are case-sensitive in the schema and Studio import path. |
+| Use `ControlType@major.minor.patch` only when a specific control version is required. | Version pins such as `Button@2.1.0` make upgrades deliberate instead of accidental. |
+| Define custom components with clear `CustomProperties`, `PropertyKind`, `DataType`, `Default`, and descriptions. | Reusable components need explicit contracts for makers and callers. |
+| Keep data sources minimal and descriptive, including `TableLogicalName` for tables and `ConnectorId` such as `shared_office365users` for actions. | Connection metadata should remain reviewable and portable across environments. |
+| Prefer delegable `Filter`, `Sort`, and `SortByColumns` formulas for large data sources. | Server-side operations avoid row-limit surprises and performance regressions. |
+| Treat files under `\src` as source-control review artifacts and avoid editing unstable extracted JSON. | Power Apps source format is designed around `.pa.yaml`; JSON payloads are not stable for merges. |
+
+## Do / Do Not
+
+| Do | Do not |
+| --- | --- |
+| Use `App.Properties.StartScreen` for the initial screen. | Hide app startup behavior in unrelated controls. |
+| Use descriptive screen, component, data source, and custom property names. | Rely on ambiguous generated names when the intent is business-critical. |
+| Use `Parent`, `Self`, and `ThisItem` for container, control, and gallery context. | Hardcode dimensions or data context that should follow layout or item scope. |
+| Use `IfError`, `Notify`, `IsBlank`, `IsError`, `IsNumeric`, and `IsMatch` for validation and user feedback. | Let behavior formulas fail silently or accept invalid input. |
+| Use `Set`, `UpdateContext`, `Collect`, `ClearCollect`, and `Clear` intentionally for state. | Accumulate unused collections or global variables without a lifecycle. |
+| Use `Patch`, `Filter`, `LookUp`, `FirstN`, and delegable queries with large data sources. | Download unnecessary rows with non-delegable formulas such as `Len` filters over large tables. |
+| Use container-based layouts with `Parent.Width`, `Parent.Height`, `Parent.TemplateWidth`, and `Parent.TemplateHeight`. | Position every control with fragile fixed coordinates when responsive layout is required. |
+| Keep Power Platform CLI commands such as `pac canvas list` and `pac canvas download --name "MyApp" --extract-to-directory "C:\path\to\destination"` documented when source acquisition is relevant. | Treat `.msapp` extraction or Dataverse Git Integration as a license to hand-edit unsupported artifacts. |
+
+## Checklist Before Opening a PR
+
+- [ ] Frontmatter `applyTo` remains one quoted comma-separated glob string.
+- [ ] YAML validates against the Power Apps YAML schema v3.0.
+- [ ] Root sections use only the expected `App`, `Screens`, `ComponentDefinitions`, `DataSources`, and `EditorState` shapes.
+- [ ] Every control has a correctly cased `Control` property and valid optional `Group`, `Variant`, `MetadataKey`, `Layout`, `IsLocked`, and `Children` fields.
+- [ ] Every formula starts with `=` unless the value is intentionally `null`.
+- [ ] Children order preserves z-index and visual layering.
+- [ ] Components define `DefinitionType`, custom property kinds, data types, defaults, and descriptions.
+- [ ] Data source names, `Type`, `ConnectorId`, and `Parameters` are descriptive and environment-portable.
+- [ ] Large data operations use delegation-friendly formulas or explicitly limit rows.
+- [ ] Source-control changes stay in supported `.pa.yaml` files under `\src`; unstable extracted JSON is not edited.
+
+## References
+
+- Microsoft Power Apps YAML schema v3.0: https://raw.githubusercontent.com/microsoft/PowerApps-Tooling/refs/heads/master/schemas/pa-yaml/v3.0/pa.schema.yaml
+- Example URL literal preserved for Power Fx `Launch`: https://example.com

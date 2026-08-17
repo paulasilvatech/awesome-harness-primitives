@@ -1,15 +1,15 @@
 ---
-applyTo: '**/*.rs'
-description: 'Best practices for building Model Context Protocol servers in Rust using the official rmcp SDK with async/await patterns'
+applyTo: "**/*.rs"
+description: "Enforces Rust Model Context Protocol server conventions for rmcp dependencies, handlers, tools, prompts, resources, transports, errors, tests, authentication, observability, and deployment."
 ---
 
-# Rust MCP Server Development Best Practices
+# Rust MCP Server Conventions — rmcp Servers
 
-This guide provides best practices for building Model Context Protocol (MCP) servers using the official Rust SDK (`rmcp`).
+These instructions apply to Rust source files that implement Model Context Protocol servers with the official `rmcp` SDK. They are authoritative for `rmcp` dependency shape, async server construction, `ServerHandler` behavior, tools, prompts, resources, transports, protocol errors, tests, OAuth wiring, tracing, and release packaging in matched `**/*.rs` files; project-specific architecture, security, and deployment primitives win where they define stricter requirements.
 
-## Installation and Setup
+## Dependencies and Project Layout
 
-### Add Dependencies
+### Cargo dependencies
 
 Add the `rmcp` crate to your `Cargo.toml`:
 
@@ -32,7 +32,7 @@ rmcp-macros = "0.8"
 schemars = { version = "0.8", features = ["derive"] }
 ```
 
-### Project Structure
+### Project structure
 
 Organize your Rust MCP server project:
 
@@ -56,9 +56,9 @@ my-mcp-server/
     └── integration_tests.rs
 ```
 
-## Server Implementation
+## Server Runtime and Handler Shape
 
-### Basic Server Setup
+### Stdio server setup
 
 Create a server with stdio transport:
 
@@ -93,7 +93,7 @@ async fn main() -> anyhow::Result<()> {
 }
 ```
 
-### ServerHandler Implementation
+### ServerHandler implementation
 
 Implement the `ServerHandler` trait:
 
@@ -144,9 +144,9 @@ impl ServerHandler for MyServerHandler {
 }
 ```
 
-## Tool Development
+## Tools and Routers
 
-### Using Macros for Tools
+### Declarative tools
 
 Use the `#[tool]` macro for declarative tool definitions:
 
@@ -187,7 +187,7 @@ pub async fn calculate(params: Parameters<CalculateParams>) -> Result<f64, Strin
 }
 ```
 
-### Tool Router with Macros
+### Tool routers
 
 Use `#[tool_router]` and `#[tool_handler]` macros:
 
@@ -223,7 +223,7 @@ impl ServerHandler for ToolsHandler {
 }
 ```
 
-### Tool Annotations
+### Tool annotations
 
 Use annotations to provide hints about tool behavior:
 
@@ -253,7 +253,7 @@ pub async fn search_data(params: Parameters<SearchParams>) -> Vec<String> {
 }
 ```
 
-### Returning Rich Content
+### Rich content
 
 Return structured content from tools:
 
@@ -269,9 +269,9 @@ async fn analyze_code(params: Parameters<CodeParams>) -> ToolResponseContent {
 }
 ```
 
-## Prompt Implementation
+## Prompts
 
-### Prompt Handler
+### Prompt handlers
 
 Implement prompt handlers:
 
@@ -327,9 +327,9 @@ async fn get_prompt(
 }
 ```
 
-## Resource Implementation
+## Resources
 
-### Resource Handlers
+### Resource handlers
 
 Implement resource handlers:
 
@@ -374,9 +374,9 @@ async fn read_resource(
 }
 ```
 
-## Transport Options
+## Transports
 
-### Stdio Transport
+### Stdio transport
 
 Standard input/output transport for CLI integration:
 
@@ -389,7 +389,7 @@ let server = Server::builder()
     .build(transport)?;
 ```
 
-### SSE (Server-Sent Events) Transport
+### SSE transport
 
 HTTP-based SSE transport:
 
@@ -407,7 +407,7 @@ let server = Server::builder()
 server.run(signal::ctrl_c()).await?;
 ```
 
-### Streamable HTTP Transport
+### Streamable HTTP transport
 
 HTTP streaming transport with Axum:
 
@@ -423,7 +423,7 @@ let listener = tokio::net::TcpListener::bind("127.0.0.1:3000").await?;
 axum::serve(listener, app).await?;
 ```
 
-### Custom Transports
+### Custom transports
 
 Implement custom transports (TCP, Unix Socket, WebSocket):
 
@@ -434,9 +434,9 @@ use tokio::net::TcpListener;
 // See examples/transport/ for TCP, Unix Socket, WebSocket implementations
 ```
 
-## Error Handling
+## Error Handling and Result Boundaries
 
-### ErrorData Usage
+### MCP errors
 
 Return proper MCP errors:
 
@@ -466,7 +466,7 @@ async fn call_tool(
 }
 ```
 
-### Anyhow Integration
+### Application errors
 
 Use `anyhow` for application-level errors:
 
@@ -487,7 +487,7 @@ async fn load_config() -> Result<Config> {
 
 ## Testing
 
-### Unit Tests
+### Unit tests
 
 Write unit tests for tools and handlers:
 
@@ -522,7 +522,7 @@ mod tests {
 }
 ```
 
-### Integration Tests
+### Integration tests
 
 Test complete server interactions:
 
@@ -541,7 +541,7 @@ async fn test_server_list_tools() {
 
 ## Progress Notifications
 
-### Reporting Progress
+### Progress reporting
 
 Send progress notifications during long-running operations:
 
@@ -572,7 +572,7 @@ async fn process_large_file(
 
 ## OAuth Authentication
 
-### OAuth Integration
+### OAuth configuration
 
 Implement OAuth for secure access:
 
@@ -591,9 +591,9 @@ let oauth_provider = OAuthProvider::new(oauth_config);
 // See examples/servers/complex_auth_sse.rs for complete implementation
 ```
 
-## Performance Best Practices
+## Performance and State
 
-### Async Operations
+### Async operations
 
 Use async/await for non-blocking operations:
 
@@ -612,7 +612,7 @@ async fn fetch_data(params: Parameters<FetchParams>) -> Result<String, String> {
 }
 ```
 
-### State Management
+### Shared state
 
 Use `Arc` and `RwLock` for shared state:
 
@@ -641,7 +641,7 @@ impl ServerState {
 
 ## Logging and Tracing
 
-### Setup Tracing
+### Tracing setup
 
 Configure tracing for observability:
 
@@ -669,9 +669,9 @@ async fn my_tool(params: Parameters<MyParams>) -> String {
 }
 ```
 
-## Deployment
+## Packaging and Deployment
 
-### Binary Distribution
+### Binary distribution
 
 Build optimized release binaries:
 
@@ -681,7 +681,7 @@ cargo build --release --target x86_64-pc-windows-msvc
 cargo build --release --target x86_64-apple-darwin
 ```
 
-### Cross-Compilation
+### Cross-compilation
 
 Use cross for cross-platform builds:
 
@@ -690,7 +690,7 @@ cargo install cross
 cross build --release --target aarch64-unknown-linux-gnu
 ```
 
-### Docker Deployment
+### Docker deployment
 
 Create a Dockerfile:
 
@@ -705,11 +705,83 @@ RUN apt-get update && apt-get install -y ca-certificates
 COPY --from=builder /app/target/release/my-mcp-server /usr/local/bin/
 CMD ["my-mcp-server"]
 ```
+## Good / Bad Examples
 
-## Additional Resources
+The examples below illustrate tool implementation that preserves async execution, typed parameters, annotations, and MCP error boundaries.
+
+**Good:**
+
+```rust
+#[tool(name = "calculate", annotations(read_only_hint = true, idempotent_hint = true))]
+pub async fn calculate(params: Parameters<CalculateParams>) -> Result<f64, String> {
+    let p = params.inner();
+    match p.operation.as_str() {
+        "divide" if p.b == 0.0 => Err("Division by zero".to_string()),
+        "divide" => Ok(p.a / p.b),
+        "add" => Ok(p.a + p.b),
+        _ => Err(format!("Unknown operation: {}", p.operation)),
+    }
+}
+```
+
+Why: The tool is asynchronous, uses `Parameters<CalculateParams>`, declares read-only and idempotent behavior, and returns a typed success or explicit error.
+
+**Bad:**
+
+```rust
+fn calculate(operation: String) -> f64 {
+    if operation == "divide" { 1.0 / 0.0 } else { 0.0 }
+}
+```
+
+Why: The function is not an MCP `#[tool]`, has no schema-bearing parameter type, hides failure semantics, and cannot be routed through `ToolRouter` or `ServerHandler`.
+
+## Conventions
+
+| Rule | Rationale |
+| --- | --- |
+| Declare `rmcp = { version = "0.8.1", features = ["server"] }`, `tokio`, `serde`, `serde_json`, `anyhow`, `tracing`, and `tracing-subscriber` in `Cargo.toml` for SDK servers; add `rmcp-macros` and `schemars` when using macros. | Explicit dependencies keep server, macro, schema, async runtime, and observability behavior reproducible. |
+| Keep `src/main.rs`, `handler.rs`, `tools/`, `prompts/`, `resources/`, and `tests/integration_tests.rs` separated by MCP concern. | Routing, protocol handling, and feature implementations remain navigable as servers grow. |
+| Build servers with `Server::builder()`, `StdioTransport::new()`, `ServerCapabilities`, `ServerHandler`, `RequestContext<RoleServer>`, and `ErrorData`. | The handler advertises only supported capabilities and returns protocol-correct failures. |
+| Define tools with `#[tool]`, `Parameters<T>`, `JsonSchema`, and `ToolRouter`; use `#[tool_router]` and `#[tool_handler]` when macro routing fits. | Clients receive accurate schemas and the server avoids hand-written dispatch drift. |
+| Set tool annotations such as `read_only_hint`, `destructive_hint`, `idempotent_hint`, and `open_world_hint` truthfully. | Hosts use these hints to protect users from unsafe or surprising tool execution. |
+| Use `Prompt`, `PromptArgument`, `PromptMessage`, `GetPromptResult`, `Resource`, `ResourceContents`, and `ReadResourceResult` for prompts and resources. | Prompt and resource responses stay compatible with the MCP model. |
+| Choose `StdioTransport`, `SseServerTransport`, `StreamableHttpTransport`, or custom `Transport` based on the hosting boundary. | CLI, HTTP, Axum, TCP, Unix Socket, and WebSocket deployments have different lifecycle and security needs. |
+| Return `ErrorData::invalid_params` for protocol validation failures and `anyhow::Context` for application setup failures. | Clients receive actionable MCP errors while internal operations keep diagnostic context. |
+| Cover tool behavior and server interactions with `#[tokio::test]` unit and integration tests. | Async behavior, routing, and list/call handlers fail before release. |
+| Use `ProgressNotification`, OAuth `OAuthConfig`/`OAuthProvider`, `Arc<RwLock<_>>`, and `tracing` only when the server behavior requires them. | Long-running, authenticated, stateful, and observable servers need explicit primitives rather than ad hoc globals. |
+| Build release artifacts with `cargo build --release`, `cross build --release`, or a Docker multi-stage build. | Distribution targets remain optimized and reproducible. |
+
+## Do / Do Not
+
+| Do | Do not |
+| --- | --- |
+| Use `async`/`await` throughout tool, prompt, resource, and transport handlers. | Block the runtime or hide async work behind synchronous wrappers. |
+| Advertise only implemented `tools`, `prompts`, and `resources` in `ServerCapabilities`. | Claim capabilities that the `ServerHandler` does not implement. |
+| Return `ToolResponseContent` with `TextContent` or `ImageContent` when a tool needs rich content. | Flatten structured results into ambiguous strings when the model supports richer responses. |
+| Validate parameters and return `ErrorData` or `Result<_, String>` with clear messages. | Panic, unwrap untrusted input, or return empty success for failed operations. |
+| Use `context.notify_progress(ProgressNotification { progress, total })` for long-running tools. | Leave users without feedback during large file or network operations. |
+| Read `CLIENT_ID` and `CLIENT_SECRET` from the environment for OAuth examples. | Hardcode credentials, token endpoints, or client secrets in source. |
+| Use `VS`-independent Rust tests and target-specific release builds. | Ship an untested debug binary as the server artifact. |
+
+## Checklist Before Opening a PR
+
+- [ ] `Cargo.toml` contains the required `rmcp`, async runtime, serialization, error, tracing, macro, and schema dependencies used by the server.
+- [ ] Server capabilities match the implemented `ServerHandler` methods for tools, prompts, and resources.
+- [ ] Tool parameters derive `Deserialize` and `JsonSchema`, use `Parameters<T>`, and expose truthful annotations.
+- [ ] Prompt and resource handlers validate names and URIs and return `ErrorData::invalid_params` for unknown requests.
+- [ ] Transport selection matches the deployment boundary: stdio for CLI, SSE or streamable HTTP for networked servers, custom `Transport` only when needed.
+- [ ] Long-running operations use async I/O, progress notifications when useful, and shared state through `Arc<RwLock<_>>` or another safe primitive.
+- [ ] OAuth configuration reads `CLIENT_ID` and `CLIENT_SECRET` from the environment and preserves the configured authorization and token endpoints.
+- [ ] Unit tests and integration tests cover tool success, tool errors, and server list/call behavior.
+- [ ] Release, cross-compilation, or Docker packaging commands have been run for the intended target.
+
+## References
 
 - [rmcp Documentation](https://docs.rs/rmcp)
 - [rmcp-macros Documentation](https://docs.rs/rmcp-macros)
 - [Examples Repository](https://github.com/modelcontextprotocol/rust-sdk/tree/main/examples)
 - [MCP Specification](https://modelcontextprotocol.io/specification/2026-07-28)
 - [Rust Async Book](https://rust-lang.github.io/async-book/)
+- OAuth authorization example endpoint: https://auth.example.com/authorize
+- OAuth token example endpoint: https://auth.example.com/token

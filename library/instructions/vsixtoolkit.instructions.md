@@ -1,22 +1,15 @@
 ---
-applyTo: '**/*.cs, **/*.vsct, **/*.xaml, **/source.extension.vsixmanifest'
-description: 'Guidelines for Visual Studio extension (VSIX) development using Community.VisualStudio.Toolkit'
+applyTo: "**/*.cs,**/*.vsct,**/*.xaml,**/source.extension.vsixmanifest"
+description: "Enforces Community.VisualStudio.Toolkit conventions for Visual Studio extension packages, commands, options, MEF components, threading, theming, VSCT, validation, NuGet dependencies, README, and Marketplace metadata."
 ---
 
-# Visual Studio Extension Development with Community.VisualStudio.Toolkit
+# VSIX Toolkit Conventions — Community.VisualStudio.Toolkit Extensions
 
-## Scope
+These instructions apply to C#, VSCT, XAML, and VSIX manifest files in Visual Studio extensions built with `Community.VisualStudio.Toolkit`. They are authoritative for toolkit package structure, async commands, options pages, MEF editor components, threading, analyzer rules, theme-aware UI, VS SDK helper usage, VSCT command tables, validation, NuGet dependencies, README presentation, and Marketplace manifest metadata; project-specific product requirements and repository style rules win where they are stricter.
 
-**These instructions apply ONLY to Visual Studio extensions using `Community.VisualStudio.Toolkit`.**
+## Applicability and Goals
 
-Verify the project uses the toolkit by checking for:
-- `Community.VisualStudio.Toolkit.*` NuGet package reference
-- `ToolkitPackage` base class (not raw `AsyncPackage`)
-- `BaseCommand<T>` pattern for commands
-
-**If the project uses raw VSSDK (`AsyncPackage` directly) or the new `VisualStudio.Extensibility` model, do not apply these instructions.**
-
-## Goals
+Apply these conventions ONLY when the project uses the `Community.VisualStudio.Toolkit`: a `Community.VisualStudio.Toolkit.*` NuGet package reference, a `ToolkitPackage` base class rather than raw `AsyncPackage`, and the `BaseCommand<T>` command pattern. If a project uses raw VSSDK `AsyncPackage` directly or the newer `VisualStudio.Extensibility` model, do not apply these toolkit-specific conventions.
 
 - Generate async-first, thread-safe extension code
 - Use toolkit abstractions (`VS.*` helpers, `BaseCommand<T>`, `BaseOptionModel<T>`)
@@ -25,7 +18,7 @@ Verify the project uses the toolkit by checking for:
 - Produce testable, maintainable extension code
 - **Adhere to `.editorconfig` settings** when present in the repository
 
-## Code Style (.editorconfig)
+## Code Style and .editorconfig
 
 **If an `.editorconfig` file exists in the repository, all generated and modified code MUST follow its rules.**
 
@@ -65,9 +58,9 @@ Before generating code, check for `.editorconfig` in the repository root and app
 ### Best Practice
 When writing code, prefer APIs available in .NET Framework 4.8. If a modern API is needed, check if a polyfill NuGet package exists (e.g., `Microsoft.Bcl.AsyncInterfaces` for `IAsyncEnumerable<T>`).
 
-## Example Prompt Behaviors
+## Suggested Extension Behaviors
 
-### Good Suggestions
+### Good suggestions
 - "Create a command that opens the current file's containing folder using `BaseCommand<T>`"
 - "Add an options page with a boolean setting using `BaseOptionModel<T>`"
 - "Write a tagger provider for C# files that highlights TODO comments"
@@ -84,7 +77,7 @@ When writing code, prefer APIs available in .NET Framework 4.8. If a modern API 
 
 ```
 src/
-├── Commands/           # Command handlers (menu items, toolbar buttons)
+├── Commands/           # Command handlers (menu items, toolbar buttons; Menu/Command definitions)
 ├── Options/            # Settings/options pages
 ├── Services/           # Business logic and services
 ├── Tagging/            # ITagger implementations (syntax highlighting, outlining)
@@ -101,7 +94,7 @@ src/
 
 ## Community.VisualStudio.Toolkit Patterns
 
-### Global Usings
+### Global usings
 
 Extensions using the toolkit should have these global usings in the Package file:
 
@@ -112,7 +105,7 @@ global using Microsoft.VisualStudio.Shell;
 global using Task = System.Threading.Tasks.Task;
 ```
 
-### Package Class
+### Package class
 
 ```csharp
 [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
@@ -151,7 +144,7 @@ internal sealed class YourCommand : BaseCommand<YourCommand>
 }
 ```
 
-### Options Pages
+### Options pages
 
 ```csharp
 internal partial class OptionsProvider
@@ -172,7 +165,7 @@ public class General : BaseOptionModel<General>
 
 ## MEF Components
 
-### Tagger Providers
+### Tagger providers
 
 Use `[Export]` and appropriate `[ContentType]` attributes:
 
@@ -201,7 +194,7 @@ internal sealed class YourTaggerProvider : IViewTaggerProvider
 }
 ```
 
-### QuickInfo Sources
+### QuickInfo sources
 
 ```csharp
 [Export(typeof(IAsyncQuickInfoSourceProvider))]
@@ -218,7 +211,7 @@ internal sealed class YourQuickInfoSourceProvider : IAsyncQuickInfoSourceProvide
 }
 ```
 
-### Suggested Actions (Light Bulb)
+### Suggested actions
 
 ```csharp
 [Export(typeof(ISuggestedActionsSourceProvider))]
@@ -233,9 +226,9 @@ internal sealed class YourSuggestedActionsSourceProvider : ISuggestedActionsSour
 }
 ```
 
-## Threading Guidelines
+## Threading and Analyzer Rules
 
-### Always switch to UI thread for WPF operations
+### UI thread access
 
 ```csharp
 await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
@@ -252,7 +245,7 @@ ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
 });
 ```
 
-## VSSDK & Threading Analyzer Rules
+### VSSDK and VSTHRD analyzers
 
 Extensions should enforce these analyzer rules. Add to `.editorconfig`:
 
@@ -280,7 +273,7 @@ dotnet_diagnostic.VSTHRD*.severity = error
 
 **All UI must respect VS themes (Light, Dark, Blue, High Contrast)**
 
-### WPF Theming with Environment Colors
+### WPF theming with environment colors
 
 ```xml
 <!-- MyControl.xaml -->
@@ -293,7 +286,7 @@ dotnet_diagnostic.VSTHRD*.severity = error
 </UserControl>
 ```
 
-### Toolkit Auto-Theming (Recommended)
+### Toolkit auto-theming
 
 The toolkit provides automatic theming for WPF UserControls:
 
@@ -318,7 +311,7 @@ For dialog windows, use `DialogWindow`:
 </platform:DialogWindow>
 ```
 
-### Common Theme Color Tokens
+### Common theme color tokens
 
 | Category | Token | Usage |
 |----------|-------|-------|
@@ -327,7 +320,7 @@ For dialog windows, use `DialogWindow`:
 | **Command Bar** | `EnvironmentColors.CommandBarTextActiveBrushKey` | Menu items |
 | **Links** | `EnvironmentColors.ControlLinkTextBrushKey` | Hyperlinks |
 
-### Theme-Aware Icons
+### Theme-aware icons
 
 Use `KnownMonikers` from the VS Image Catalog for theme-aware icons:
 
@@ -343,7 +336,7 @@ In VSCT:
 
 ## Common VS SDK APIs
 
-### VS Helper Methods (Community.VisualStudio.Toolkit)
+### VS helper methods
 
 ```csharp
 // Status bar
@@ -376,7 +369,7 @@ VS.Events.SolutionEvents.OnAfterOpenProject += OnAfterOpenProject;
 VS.Events.DocumentEvents.Saved += OnDocumentSaved;
 ```
 
-### Working with Settings
+### Settings
 
 ```csharp
 // Read settings synchronously
@@ -398,7 +391,7 @@ await general.SaveAsync();
 General.Saved += OnSettingsSaved;
 ```
 
-### Text Buffer Operations
+### Text buffers
 
 ```csharp
 // Get snapshot
@@ -429,7 +422,7 @@ if (docView?.TextView != null)
 
 ## VSCT Command Table
 
-### Menu/Command Structure
+### Menu and command structure
 
 ```xml
 <Commands package="YourPackage">
@@ -472,9 +465,9 @@ if (docView?.TextView != null)
 </Symbols>
 ```
 
-## Best Practices
+## Reliability, Performance, and Content Types
 
-### 1. Performance
+### Performance
 
 - Check file/buffer size before processing large documents
 - Use `NormalizedSnapshotSpanCollection` for efficient span operations
@@ -487,7 +480,7 @@ if (buffer.CurrentSnapshot.Length > 150000)
     return null;
 ```
 
-### 2. Error Handling
+### Error handling
 
 - Wrap external operations in try-catch
 - Log errors appropriately
@@ -504,7 +497,7 @@ catch (Exception ex)
 }
 ```
 
-### 3. Disposable Resources
+### Disposable resources
 
 - Implement `IDisposable` on taggers and other long-lived objects
 - Unsubscribe from events in Dispose
@@ -520,7 +513,7 @@ public void Dispose()
 }
 ```
 
-### 4. Content Types
+### Content types
 
 Common content types for `[ContentType]` attribute:
 - `"text"` - All text files
@@ -533,7 +526,7 @@ Common content types for `[ContentType]` attribute:
 - `"XML"` - XML files
 - `"JSON"` - JSON files
 
-### 5. Images and Icons
+### Images and icons
 
 Use `KnownMonikers` from the VS Image Catalog:
 
@@ -595,17 +588,11 @@ Test in VS Experimental Instance before release.
 | `Microsoft.VisualStudio.Threading.Analyzers` | Threading analyzers |
 | `Microsoft.VisualStudio.SDK.Analyzers` | VSSDK analyzers |
 
-## Resources
-
-- [Community.VisualStudio.Toolkit](https://github.com/VsixCommunity/Community.VisualStudio.Toolkit)
-- [VS Extensibility Docs](https://learn.microsoft.com/en-us/visualstudio/extensibility/)
-- [VSIX Community Samples](https://github.com/VsixCommunity/Samples)
-
 ## README and Marketplace Presentation
 
 A good README works on both GitHub and the VS Marketplace. The Marketplace uses the README.md as the extension's description page.
 
-### README Structure
+### README structure
 
 ```markdown
 [marketplace]: <Visual Studio Marketplace URL>
@@ -638,7 +625,7 @@ Description with screenshot...
 [Apache 2.0](LICENSE)
 ```
 
-### README Best Practices
+### README best practices
 
 | Element | Guideline |
 |---------|-----------|
@@ -652,7 +639,7 @@ Description with screenshot...
 | **Tables** | Great for comparing options or listing features |
 | **Links** | Use reference-style links at top for cleaner markdown |
 
-### VSIX Manifest (source.extension.vsixmanifest)
+### VSIX manifest
 
 ```xml
 <Metadata>
@@ -667,7 +654,7 @@ Description with screenshot...
 </Metadata>
 ```
 
-### Manifest Best Practices
+### Manifest best practices
 
 | Element | Guideline |
 |---------|-----------|
@@ -678,7 +665,7 @@ Description with screenshot...
 | **PreviewImage** | 200x200 PNG, can be same as Icon or a feature screenshot |
 | **MoreInfo** | Link to GitHub repo for documentation and issues |
 
-### Writing Tips
+### Writing tips
 
 1. **Lead with benefits, not features** - "Stop wrestling with XML comments" beats "XML comment formatter"
 2. **Show, don't tell** - Screenshots are more convincing than descriptions
@@ -686,3 +673,100 @@ Description with screenshot...
 4. **Keep the description scannable** - Short paragraphs, bullet points, tables
 5. **Include keyboard shortcuts** - Users love productivity tips
 6. **Add a "Why" section** - Explain the problem before the solution
+## Good / Bad Examples
+
+The examples below illustrate the core VSIX rule: use toolkit commands, async execution, and UI-thread switching instead of blocking raw VSSDK patterns.
+
+**Good:**
+
+```csharp
+[Command(PackageIds.YourCommandId)]
+internal sealed class YourCommand : BaseCommand<YourCommand>
+{
+    protected override async Task ExecuteAsync(OleMenuCmdEventArgs e)
+    {
+        await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+        await VS.StatusBar.ShowMessageAsync("Working...");
+    }
+}
+```
+
+Why: The command uses `BaseCommand<T>`, returns `Task`, switches to the UI thread before Visual Studio UI work, and uses toolkit `VS.*` helpers.
+
+**Bad:**
+
+```csharp
+internal sealed class YourCommand
+{
+    public void Execute()
+    {
+        ThreadHelper.JoinableTaskFactory.Run(async () =>
+        {
+            await VS.Commands.ExecuteAsync("View.TaskList");
+        });
+    }
+}
+```
+
+Why: The command bypasses toolkit registration, blocks with `JoinableTaskFactory.Run`, and violates VSTHRD guidance that prevents deadlocks.
+
+## Conventions
+
+| Rule | Rationale |
+| --- | --- |
+| Apply these rules only to `Community.VisualStudio.Toolkit` extensions using `ToolkitPackage`, `BaseCommand<T>`, and toolkit `VS.*` helpers. | Raw VSSDK and `VisualStudio.Extensibility` projects use different abstractions and threading contracts. |
+| Follow repository `.editorconfig` rules for indentation, line endings, final newlines, naming, `var`, expression bodies, braces, analyzer severity, and suppressions. | Generated and modified code must blend with the project and respect configured analyzer gates. |
+| Target .NET Framework 4.8 APIs even when using modern C# syntax up to C# 14. | Modern syntax can compile while runtime types such as `Span<T>`, `ReadOnlySpan<T>`, `Memory<T>`, `IAsyncEnumerable<T>`, default interface implementations, `Index`, and `Range` may not be available without support packages. |
+| Structure extensions around `Commands/`, `Options/`, `Services/`, `Tagging/`, `Adornments/`, `QuickInfo/`, `SuggestedActions/`, `Handlers/`, `Resources/`, `source.extension.vsixmanifest`, `VSCommandTable.vsct`, `VSCommandTable.cs`, and `*Package.cs`. | Conventional layout makes commands, MEF components, manifests, and generated IDs easy to locate. |
+| Use `PackageRegistration`, `InstalledProductRegistration`, `ProvideMenuResource`, `Guid`, `ProvideOptionPage`, `ToolkitPackage`, and `RegisterCommandsAsync` for package setup. | Toolkit packages load asynchronously and register commands consistently. |
+| Use `[Command]`, `PackageIds`, `BaseCommand<T>`, `ExecuteAsync`, and `BeforeQueryStatus` for commands. | Toolkit command plumbing avoids direct `OleMenuCommandService` use and supports enabled, checked, and visible state. |
+| Use `BaseOptionPage<T>`, `BaseOptionModel<T>`, `Category`, `DisplayName`, `Description`, `DefaultValue`, `GetLiveInstanceAsync`, `Save`, `SaveAsync`, and `Saved` for settings. | Options pages remain profile-aware, typed, and easy to synchronize. |
+| Use MEF attributes such as `Export`, `ContentType`, `TagType`, `TextViewRole`, `Name`, and `Order` on taggers, QuickInfo, and suggested actions. | Visual Studio discovers editor features through precise MEF metadata. |
+| Switch with `ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync()` before WPF, COM, shell, or UI operations. | Visual Studio UI objects require the main thread and VSTHRD analyzers catch violations. |
+| Enforce `dotnet_diagnostic.VSSDK*.severity = error` and `dotnet_diagnostic.VSTHRD*.severity = error`. | VSSDK001, VSSDK002, VSTHRD001, VSTHRD002, VSTHRD010, VSTHRD100, and VSTHRD110 prevent common load and deadlock bugs. |
+| Theme UI with `EnvironmentColors`, `toolkit:Themes.UseVsTheme="True"`, `DialogWindow`, and `KnownMonikers`. | Extensions must work in Light, Dark, Blue, and High Contrast themes. |
+| Build and verify with `msbuild /t:rebuild`, analyzers, and the VS Experimental Instance before release. | VSIX defects often appear only after package load, manifest, command table, and analyzer validation. |
+| Keep README and `source.extension.vsixmanifest` marketplace metadata aligned. | The Marketplace uses `README.md`, manifest `DisplayName`, `Description`, `MoreInfo`, `License`, `Icon`, `PreviewImage`, and `Tags` to present the extension. |
+
+## Do / Do Not
+
+| Do | Do not |
+| --- | --- |
+| Use `ToolkitPackage` for the package class. | Suggest raw `AsyncPackage` when the toolkit is in use. |
+| Use `BaseCommand<T>` and `[Command(PackageIds.YourCommandId)]`. | Use `OleMenuCommandService` directly for normal toolkit commands. |
+| Use `async`/`await`, `RunAsync`, and `SwitchToMainThreadAsync`. | Use `.Result`, `.Wait()`, `Task.Run` for UI work, `JoinableTaskFactory.Run`, or `async void`. |
+| Use `VS.StatusBar`, `VS.Solutions`, `VS.Documents`, `VS.Commands`, `VS.Settings`, `VS.MessageBox`, and `VS.Events`. | Reimplement common shell operations through lower-level services without need. |
+| Use `DynamicResource` with `EnvironmentColors.ToolWindowBackgroundBrushKey`, `EnvironmentColors.ToolWindowTextBrushKey`, `EnvironmentColors.CommandBarTextActiveBrushKey`, and `EnvironmentColors.ControlLinkTextBrushKey`. | Hardcode colors or ignore high contrast. |
+| Use `KnownMonikers.Settings`, `ImageCatalogGuid`, `IconIsMoniker`, and `DynamicVisibility` in VSCT where appropriate. | Ship bitmap-only or non-theme-aware icons for shell commands. |
+| Use `NormalizedSnapshotSpanCollection`, size checks such as `buffer.CurrentSnapshot.Length > 150000`, caching, and `ConfigureAwait(false)` in library code. | Parse huge buffers synchronously on the UI thread. |
+| Unsubscribe events and implement `IDisposable` for long-lived taggers. | Leak event handlers or editor objects. |
+| Use `[VsTestMethod]` only for tests requiring VS context and test business logic separately. | Require a VS shell for simple service logic tests. |
+| Keep Marketplace screenshots under 1MB, 800-1200px wide, and stored under `art/`. | Publish a README without screenshots, badges, keyboard shortcuts, or a clear hook line. |
+
+## Checklist Before Opening a PR
+
+- [ ] The project uses `Community.VisualStudio.Toolkit.*`, `ToolkitPackage`, and `BaseCommand<T>`; raw VSSDK or `VisualStudio.Extensibility` projects are excluded.
+- [ ] `.editorconfig` style and analyzer severity settings are respected.
+- [ ] Code targets .NET Framework 4.8-compatible APIs or includes a justified polyfill such as `Microsoft.Bcl.AsyncInterfaces`.
+- [ ] Package registration uses toolkit patterns and command IDs match `VSCommandTable.vsct` and `VSCommandTable.cs`.
+- [ ] Commands, options, MEF components, and text buffer operations follow the toolkit and VS SDK API conventions above.
+- [ ] WPF, COM, shell, and UI operations switch to the UI thread before access.
+- [ ] UI uses VS theme resources, `toolkit:Themes.UseVsTheme`, `DialogWindow`, and `KnownMonikers` instead of hardcoded colors or icons.
+- [ ] VSSDK and VSTHRD analyzers are enabled and clean.
+- [ ] Errors are logged with `await ex.LogAsync()` and do not crash Visual Studio.
+- [ ] Disposable components unsubscribe events and release editor resources.
+- [ ] `msbuild /t:rebuild` passes and the extension has been tested in the VS Experimental Instance when behavior changes.
+- [ ] README and `source.extension.vsixmanifest` metadata stay aligned for Marketplace presentation.
+
+## References
+
+- [Community.VisualStudio.Toolkit](https://github.com/VsixCommunity/Community.VisualStudio.Toolkit)
+- [VS Extensibility Docs](https://learn.microsoft.com/en-us/visualstudio/extensibility/)
+- [VSIX Community Samples](https://github.com/VsixCommunity/Samples)
+- XAML presentation namespace: http://schemas.microsoft.com/winfx/2006/xaml/presentation
+- XAML namespace: http://schemas.microsoft.com/winfx/2006/xaml
+- README repository placeholder: https://github.com/user/repo
+- README build badge placeholder: https://github.com/user/repo/actions/workflows/build.yaml/badge.svg
+- Marketplace version badge placeholder: https://img.shields.io/visual-studio-marketplace/v/Publisher.ExtensionName
+- Marketplace downloads badge placeholder: https://img.shields.io/visual-studio-marketplace/d/Publisher.ExtensionName
+- Manifest `MoreInfo` placeholder token: https://github.com/user/repo</MoreInfo

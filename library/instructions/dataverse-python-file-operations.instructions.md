@@ -1,654 +1,171 @@
 ---
-applyTo: '**/*.py'
-description: 'Python Dataverse SDK guidance for file uploads, chunking, validation, and practical file-operation examples.'
+applyTo: "**/*.py"
+description: "Enforces Python Dataverse SDK conventions for file uploads, chunking, validation, retries, audit logging, and practical file-operation workflows."
 ---
 
-# Dataverse SDK for Python - File Operations & Practical Examples
+# Dataverse Python File Operations Conventions — Uploads, Chunking, and Auditability
 
-## Overview
-Complete guide to file upload operations, chunking strategies, and practical real-world examples using the PowerPlatform-DataverseClient-Python SDK.
+These instructions apply to Python files that use the PowerPlatform-DataverseClient-Python SDK for Dataverse file columns and related file workflows. They are authoritative for `DataverseClient` upload patterns, file-size decisions, chunking, validation, retry behavior, audit logging, integrity checks, and practical create-upload-query flows in matched Python files; project-wide Python, authentication, and security primitives win where they define stricter dependency, credential, or secret-handling rules. Keep these rules as conventions for reliable Dataverse file operations, not as a procedural runbook.
 
----
+## Client, Authentication, and File Column Basics
 
-## 1. File Upload Fundamentals
+Use `from pathlib import Path` for file paths and `from PowerPlatform.Dataverse.client import DataverseClient` for SDK access. Build clients with Azure credentials such as `from azure.identity import ClientSecretCredential` only when the project already uses service-principal authentication, and pass the Dataverse environment URL to `DataverseClient`, for example `DataverseClient("https://yourorg.crm.dynamics.com", credential)`. Never hardcode real tenant IDs, client IDs, client secrets, record IDs, or production organization URLs in source.
 
-### Small File Upload (< 128 MB)
+Use `client.upload_file(table_name=..., record_id=..., file_column_name=..., file_path=...)` for file columns. Keep Dataverse logical names explicit: examples include `account`, `new_documentfile`, `new_videofile`, `new_largemedifile`, `new_contractfile`, `new_specfile`, `new_designfile`, `new_customerdocument`, `new_documentname`, `new_documenttype`, `new_customerid`, `new_uploadeddate`, `new_filesize`, `new_mediagallery`, `new_galleryname`, `new_createddate`, `new_mediaitem`, `new_itemname`, `new_mediatype`, `new_description`, `new_galleryid`, `new_mediafile`, `new_backuprecord`, `new_tablename`, `new_recordcount`, `new_backupdate`, `new_status`, `new_backupfile`, `new_report`, `new_reportname`, `new_reporttype`, `new_generateddate`, `new_reportfile`, `new_errormessage`, and `new_filehash`.
+
+## Upload Strategy and Chunking
+
+| File class | Convention | Rationale |
+| --- | --- | --- |
+| Small file | Use a single SDK upload when `file_size <= 128 * 1024 * 1024` (`< 128 MB`). | Documents, images, and PDFs under `128 MB` avoid unnecessary chunk management. |
+| Large file | Use `chunk_size=4 * 1024 * 1024` for files `> 128 MB`, with `8 * 1024 * 1024` only when timeouts require larger chunks. | Large videos, databases, archives, and `large_file.zip` need chunked transfer to avoid request limits. |
+| Automatic decision | Compute `file_path.stat().st_size`, set `max_single_patch = 128 * 1024 * 1024`, and pass `chunk_size = None` or a chunk size. | Strategy selection stays deterministic and testable. |
+| Progress tracking | Log file name, size in MB, and a pre-upload SHA-256 hash. | Operators can prove what was uploaded and investigate corruption. |
+| Batch uploads | Iterate a `files_dict` mapping `{column_name: file_path}` and return `{"success": [], "failed": []}`. | Multi-column uploads should report partial success rather than hiding failures. |
+| Retry | Catch `HttpError`, retry up to `max_retries=3`, and use exponential backoff `2 ** attempt`. | Transient Dataverse or network errors should not fail immediately. |
+
+Preserve SDK argument names exactly: `table_name`, `record_id`, `file_column_name`, `file_path`, and `chunk_size`. Keep wrapper names intention-revealing, such as `upload_file_smart`, `upload_with_tracking`, `batch_upload_files`, `upload_with_retry`, `upload_customer_document`, `create_media_gallery`, `backup_table_data`, `generate_and_store_report`, `validate_file_for_upload`, `validate_file_type`, `log_file_upload`, `upload_with_logging`, `check_upload_space`, and `verify_uploaded_file`.
+
+## Validation, Integrity, and Audit Logging
+
+Validate existence, size, type, space, and integrity before or after upload.
+
+| Check | Required pattern | Failure prevented |
+| --- | --- | --- |
+| Existence | `if not file_path.exists(): raise FileNotFoundError(...)` | Clear failure when a path is wrong. |
+| Size | Compare `file_path.stat().st_size` with `max_size_mb * 1024 * 1024`, commonly `max_size_mb=500` or `max_size_mb=128`. | Oversized uploads fail before expensive transfer. |
+| Type | Define `ALLOWED_EXTENSIONS = {'.pdf', '.docx', '.xlsx', '.jpg', '.png', '.mp4', '.zip'}` and compare `file_path.suffix.lower()`. | Unsupported files are rejected consistently. |
+| Disk buffer | Use `shutil.disk_usage(file_path.parent)` and require `file_size * 1.1` free space. | Local export or temp-buffer workflows avoid mid-operation disk failures. |
+| Hash | Use `hashlib.sha256()` and read files in binary mode (`'rb'`) with `1024 * 1024` chunks. | `new_filehash` mismatches detect corruption. |
+| Audit | Write JSON lines to `upload_audit.log` with `timestamp`, `table`, `record_id`, `file_name`, `file_size`, `status`, and `error`. | Upload attempts remain traceable for support and compliance. |
+
+Use `datetime.now().isoformat()` for record timestamps such as `new_uploadeddate`, `new_createddate`, `new_backupdate`, and `new_generateddate` when no project-wide time abstraction exists. Use `json.dump(..., indent=2, default=str)` for JSON export and `json.dumps(log_entry) + "\n"` for audit log records.
+
+## Dataverse Create, Query, Update, and Status Patterns
+
+When a file belongs to a Dataverse record, create the metadata record first with `client.create(table, record)`, take the created ID from `ids[0]`, upload the file to the file column, then query or update status as needed. Query related records with `client.get(table, filter=..., select=[...], top=5000)` and iterate pages before records. Update status with `client.update(table, id, {...})` after the file operation succeeds or fails.
+
+Use enum classes derived from `IntEnum` for Dataverse option-set values: `DocumentType.CONTRACT = 1`, `DocumentType.INVOICE = 2`, `DocumentType.SPECIFICATION = 3`, `DocumentType.OTHER = 4`; `MediaType.PHOTO = 1`, `MediaType.VIDEO = 2`, `MediaType.DOCUMENT = 3`; `ReportStatus.PENDING = 1`, `ReportStatus.PROCESSING = 2`, `ReportStatus.COMPLETED = 3`, and `ReportStatus.FAILED = 4`. Preserve literal report identifiers such as `SALES_SUMMARY` when they are data contracts.
+
+For generated reports and backups, write files under a caller-provided project path such as `backups`, name backups with `f"{table_name}_{backup_time.strftime('%Y%m%d_%H%M%S')}.json"`, and clean up generated report files with `report_file.unlink(missing_ok=True)` in `finally` after upload and status update. Do not use forbidden temporary directories or leave generated files behind when the workflow expects cleanup.
+
+## Dataverse Workflow Names and Data Variables
+
+Keep workflow variable names recognizable when refactoring examples because they connect metadata creation, file upload, query, status, and audit operations: `account_id`, `customer_id`, `customer-guid-here`, `doc_path`, `doc_type`, `doc_record`, `doc_ids`, `doc_id`, `gallery_name`, `gallery_ids`, `gallery_id`, `media_files`, `media_info`, `item_ids`, `item_id`, `backup_file`, `backup_ids`, `backup_id`, `all_records`, `output_dir`, `report_type`, `report_time`, `report_ids`, `report_id`, `sales_data`, `large_video`, `original_hash`, `local_path`, `local_hash`, `remote_hash`, `log_file`, `max_size_bytes`, `backoff_seconds`, `exist_ok`, and `real-world`. Preserve placeholder credential names such as `tenant-id`, `client-id`, `client-secret`, `tenant_id`, `client_id`, and `client_secret` only as examples; real values must come from secure configuration. Raise `ValueError` for invalid sizes, extensions, and hash mismatches.
+
+## Error Handling and Troubleshooting
+
+Import SDK exceptions from `PowerPlatform.Dataverse.core.errors`, especially `HttpError` for upload retries and `DataverseError` where broader Dataverse failures need handling. Catch narrow exceptions where possible, log enough context to identify the table, record, column, and file, and re-raise after recording failure state.
+
+| Issue | Convention | Rationale |
+| --- | --- | --- |
+| File upload timeout | Increase `chunk_size` from `4 * 1024 * 1024` to `8 * 1024 * 1024` for very large files. | Larger chunks can reduce request overhead when the service and network tolerate them. |
+| Insufficient disk space | Check `total, used, free = shutil.disk_usage(file_path.parent)` and compare with `required_space = file_size * 1.1`. | Backups and generated files need room for source plus buffer. |
+| File corruption | Compare local `hashlib.sha256(f.read()).hexdigest()` with `remote_data.get("new_filehash")`. | Hash mismatch proves the uploaded bytes are not the expected bytes. |
+| Partial batch failure | Keep `results["success"]` and `results["failed"]` entries with `column`, `file`, `response`, and `error`. | Callers can retry failed columns without repeating successful uploads. |
+
+## Good / Bad Examples
+
+The examples below illustrate deterministic strategy selection, validation, and retry-safe upload boundaries.
+
+**Good:**
+
 ```python
 from pathlib import Path
-from PowerPlatform.Dataverse.client import DataverseClient
-
-file_path = Path("document.pdf")
-record_id = "account-guid"
-
-# Single PATCH upload for small files
-response = client.upload_file(
-    table_name="account",
-    record_id=record_id,
-    file_column_name="new_documentfile",
-    file_path=file_path
-)
-
-print(f"Upload successful: {response}")
-```
-
-**When to use:** Documents, images, PDFs under 128 MB
-
-### Large File Upload with Chunking
-```python
-from pathlib import Path
-
-file_path = Path("large_video.mp4")
-record_id = "account-guid"
-
-# SDK automatically handles chunking for large files
-response = client.upload_file(
-    table_name="account",
-    record_id=record_id,
-    file_column_name="new_videofile",
-    file_path=file_path,
-    chunk_size=4 * 1024 * 1024  # 4 MB chunks
-)
-
-print("Chunked upload complete")
-```
-
-**When to use:** Large videos, databases, archives > 128 MB
-
-### Upload with Progress Tracking
-```python
 import hashlib
-from pathlib import Path
-
-def calculate_file_hash(file_path):
-    """Calculate SHA-256 hash of file."""
-    hash_obj = hashlib.sha256()
-    with open(file_path, 'rb') as f:
-        for chunk in iter(lambda: f.read(1024*1024), b''):
-            hash_obj.update(chunk)
-    return hash_obj.hexdigest()
-
-def upload_with_tracking(client, table_name, record_id, column_name, file_path):
-    """Upload file with validation tracking."""
-    file_path = Path(file_path)
-    file_size = file_path.stat().st_size
-
-    print(f"Starting upload: {file_path.name} ({file_size / 1024 / 1024:.2f} MB)")
-
-    # Calculate hash before upload
-    original_hash = calculate_file_hash(file_path)
-    print(f"File hash: {original_hash}")
-
-    # Perform upload
-    response = client.upload_file(
-        table_name=table_name,
-        record_id=record_id,
-        file_column_name=column_name,
-        file_path=file_path
-    )
-
-    print(f"✓ Upload complete")
-    return response
-
-# Usage
-upload_with_tracking(client, "account", account_id, "new_documentfile", "report.pdf")
-```
-
----
-
-## 2. Upload Strategies & Configuration
-
-### Automatic Chunking Decision
-```python
-def upload_file_smart(client, table_name, record_id, column_name, file_path):
-    """Upload with automatic strategy selection."""
-    file_path = Path(file_path)
-    file_size = file_path.stat().st_size
-    max_single_patch = 128 * 1024 * 1024  # 128 MB
-
-    if file_size <= max_single_patch:
-        print(f"Using single PATCH (file < 128 MB)")
-        chunk_size = None  # SDK will use single request
-    else:
-        print(f"Using chunked upload (file > 128 MB)")
-        chunk_size = 4 * 1024 * 1024  # 4 MB chunks
-
-    response = client.upload_file(
-        table_name=table_name,
-        record_id=record_id,
-        file_column_name=column_name,
-        file_path=file_path,
-        chunk_size=chunk_size
-    )
-
-    return response
-
-# Usage
-upload_file_smart(client, "account", account_id, "new_largemedifile", "video.mp4")
-```
-
-### Batch File Uploads
-```python
-from pathlib import Path
-from PowerPlatform.Dataverse.core.errors import HttpError
-
-def batch_upload_files(client, table_name, record_id, files_dict):
-    """
-    Upload multiple files to different columns of same record.
-
-    Args:
-        table_name: Table name
-        record_id: Record ID
-        files_dict: {"column_name": "file_path", ...}
-
-    Returns:
-        {"success": [...], "failed": [...]}
-    """
-    results = {"success": [], "failed": []}
-
-    for column_name, file_path in files_dict.items():
-        try:
-            print(f"Uploading {Path(file_path).name} to {column_name}...")
-            response = client.upload_file(
-                table_name=table_name,
-                record_id=record_id,
-                file_column_name=column_name,
-                file_path=file_path
-            )
-            results["success"].append({
-                "column": column_name,
-                "file": Path(file_path).name,
-                "response": response
-            })
-            print(f"  ✓ Uploaded successfully")
-        except HttpError as e:
-            results["failed"].append({
-                "column": column_name,
-                "file": Path(file_path).name,
-                "error": str(e)
-            })
-            print(f"   Upload failed: {e}")
-
-    return results
-
-# Usage
-files = {
-    "new_contractfile": "contract.pdf",
-    "new_specfile": "specification.docx",
-    "new_designfile": "design.png"
-}
-results = batch_upload_files(client, "account", account_id, files)
-print(f"Success: {len(results['success'])}, Failed: {len(results['failed'])}")
-```
-
-### Resume Failed Uploads
-```python
-from pathlib import Path
 import time
 from PowerPlatform.Dataverse.core.errors import HttpError
 
+MAX_SINGLE_PATCH = 128 * 1024 * 1024
+DEFAULT_CHUNK_SIZE = 4 * 1024 * 1024
+
+
+def calculate_file_hash(file_path: Path) -> str:
+    hash_obj = hashlib.sha256()
+    with file_path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            hash_obj.update(chunk)
+    return hash_obj.hexdigest()
+
+
 def upload_with_retry(client, table_name, record_id, column_name, file_path, max_retries=3):
-    """Upload with exponential backoff retry logic."""
-    file_path = Path(file_path)
+    path = Path(file_path)
+    if not path.exists():
+        raise FileNotFoundError(f"File not found: {path}")
+
+    chunk_size = None if path.stat().st_size <= MAX_SINGLE_PATCH else DEFAULT_CHUNK_SIZE
+    file_hash = calculate_file_hash(path)
 
     for attempt in range(max_retries):
         try:
-            print(f"Upload attempt {attempt + 1}/{max_retries}: {file_path.name}")
             response = client.upload_file(
                 table_name=table_name,
                 record_id=record_id,
                 file_column_name=column_name,
-                file_path=file_path,
-                chunk_size=4 * 1024 * 1024
+                file_path=path,
+                chunk_size=chunk_size,
             )
-            print(f"✓ Upload successful")
-            return response
-        except HttpError as e:
+            return {"response": response, "sha256": file_hash}
+        except HttpError:
             if attempt == max_retries - 1:
-                print(f" Upload failed after {max_retries} attempts")
                 raise
-
-            # Exponential backoff: 1s, 2s, 4s
-            backoff_seconds = 2 ** attempt
-            print(f" Upload failed. Retrying in {backoff_seconds}s...")
-            time.sleep(backoff_seconds)
-
-# Usage
-upload_with_retry(client, "account", account_id, "new_documentfile", "contract.pdf")
+            time.sleep(2 ** attempt)
 ```
 
----
+Why: The code validates the path, chooses single PATCH or chunking at `128 MB`, computes integrity metadata, retries only SDK HTTP failures, and preserves exact SDK parameter names.
 
-## 3. Real-World Examples
-
-### Example 1: Customer Document Management System
+**Bad:**
 
 ```python
-from pathlib import Path
-from datetime import datetime
-from enum import IntEnum
-from PowerPlatform.Dataverse.client import DataverseClient
-from azure.identity import ClientSecretCredential
-
-class DocumentType(IntEnum):
-    CONTRACT = 1
-    INVOICE = 2
-    SPECIFICATION = 3
-    OTHER = 4
-
-# Setup
-credential = ClientSecretCredential(
-    tenant_id="tenant-id",
-    client_id="client-id",
-    client_secret="client-secret"
-)
-client = DataverseClient("https://yourorg.crm.dynamics.com", credential)
-
-def upload_customer_document(customer_id, doc_path, doc_type):
-    """Upload document for customer."""
-    doc_path = Path(doc_path)
-
-    # Create document record
-    doc_record = {
-        "new_documentname": doc_path.stem,
-        "new_documenttype": doc_type,
-        "new_customerid": customer_id,
-        "new_uploadeddate": datetime.now().isoformat(),
-        "new_filesize": doc_path.stat().st_size
-    }
-
-    doc_ids = client.create("new_customerdocument", doc_record)
-    doc_id = doc_ids[0]
-
-    # Upload file
-    print(f"Uploading {doc_path.name}...")
-    client.upload_file(
-        table_name="new_customerdocument",
-        record_id=doc_id,
-        file_column_name="new_documentfile",
-        file_path=doc_path
-    )
-
-    print(f"✓ Document uploaded and linked to customer")
-    return doc_id
-
-# Usage
-customer_id = "customer-guid-here"
-doc_id = upload_customer_document(
-    customer_id,
-    "contract.pdf",
-    DocumentType.CONTRACT
-)
-
-# Query uploaded documents
-docs = client.get(
-    "new_customerdocument",
-    filter=f"new_customerid eq '{customer_id}'",
-    select=["new_documentname", "new_documenttype", "new_uploadeddate"]
-)
-
-for page in docs:
-    for doc in page:
-        print(f"- {doc['new_documentname']} ({doc['new_uploadeddate']})")
+def upload(client, path):
+    return client.upload_file("account", "account-guid", "new_file", path)
 ```
 
-### Example 2: Media Gallery with Thumbnails
-
-```python
-from pathlib import Path
-from enum import IntEnum
-from PowerPlatform.Dataverse.client import DataverseClient
-
-class MediaType(IntEnum):
-    PHOTO = 1
-    VIDEO = 2
-    DOCUMENT = 3
-
-def create_media_gallery(client, gallery_name, media_files):
-    """
-    Create media gallery with multiple files.
-
-    Args:
-        gallery_name: Gallery name
-        media_files: [{"file": path, "type": MediaType, "description": text}, ...]
-    """
-    # Create gallery record
-    gallery_ids = client.create("new_mediagallery", {
-        "new_galleryname": gallery_name,
-        "new_createddate": datetime.now().isoformat()
-    })
-    gallery_id = gallery_ids[0]
-
-    # Create and upload media items
-    for media_info in media_files:
-        file_path = Path(media_info["file"])
-
-        # Create media item record
-        item_ids = client.create("new_mediaitem", {
-            "new_itemname": file_path.stem,
-            "new_mediatype": media_info["type"],
-            "new_description": media_info.get("description", ""),
-            "new_galleryid": gallery_id,
-            "new_filesize": file_path.stat().st_size
-        })
-        item_id = item_ids[0]
-
-        # Upload media file
-        print(f"Uploading {file_path.name}...")
-        client.upload_file(
-            table_name="new_mediaitem",
-            record_id=item_id,
-            file_column_name="new_mediafile",
-            file_path=file_path
-        )
-        print(f"  ✓ {file_path.name}")
-
-    return gallery_id
-
-# Usage
-media_files = [
-    {"file": "photo1.jpg", "type": MediaType.PHOTO, "description": "Product shot 1"},
-    {"file": "photo2.jpg", "type": MediaType.PHOTO, "description": "Product shot 2"},
-    {"file": "demo.mp4", "type": MediaType.VIDEO, "description": "Product demo video"},
-    {"file": "manual.pdf", "type": MediaType.DOCUMENT, "description": "User manual"}
-]
-
-gallery_id = create_media_gallery(client, "Q4 Product Launch", media_files)
-print(f"Created gallery: {gallery_id}")
-```
-
-### Example 3: Backup & Archival System
-
-```python
-from pathlib import Path
-from datetime import datetime, timedelta
-from PowerPlatform.Dataverse.client import DataverseClient
-from PowerPlatform.Dataverse.core.errors import DataverseError
-import json
-
-def backup_table_data(client, table_name, output_dir):
-    """
-    Backup table data to JSON files and create archive record.
-    """
-    output_dir = Path(output_dir)
-    output_dir.mkdir(exist_ok=True)
-
-    backup_time = datetime.now()
-    backup_file = output_dir / f"{table_name}_{backup_time.strftime('%Y%m%d_%H%M%S')}.json"
-
-    print(f"Backing up {table_name}...")
-
-    # Retrieve all records
-    all_records = []
-    for page in client.get(table_name, top=5000):
-        all_records.extend(page)
-
-    # Write to JSON
-    with open(backup_file, 'w') as f:
-        json.dump(all_records, f, indent=2, default=str)
-
-    print(f"  ✓ Exported {len(all_records)} records")
-
-    # Create backup record in Dataverse
-    backup_ids = client.create("new_backuprecord", {
-        "new_tablename": table_name,
-        "new_recordcount": len(all_records),
-        "new_backupdate": backup_time.isoformat(),
-        "new_status": 1  # Completed
-    })
-    backup_id = backup_ids[0]
-
-    # Upload backup file
-    print(f"Uploading backup file...")
-    client.upload_file(
-        table_name="new_backuprecord",
-        record_id=backup_id,
-        file_column_name="new_backupfile",
-        file_path=backup_file
-    )
-
-    return backup_id
-
-# Usage
-backup_id = backup_table_data(client, "account", "backups")
-print(f"Backup created: {backup_id}")
-```
-
-### Example 4: Automated Report Generation & Storage
-
-```python
-from pathlib import Path
-from datetime import datetime
-from enum import IntEnum
-from PowerPlatform.Dataverse.client import DataverseClient
-import json
-
-class ReportStatus(IntEnum):
-    PENDING = 1
-    PROCESSING = 2
-    COMPLETED = 3
-    FAILED = 4
-
-def generate_and_store_report(client, report_type, data):
-    """
-    Generate report from data and store in Dataverse.
-    """
-    report_time = datetime.now()
-
-    # Generate report file (simulated)
-    report_file = Path(f"report_{report_type}_{report_time.strftime('%Y%m%d_%H%M%S')}.json")
-    with open(report_file, 'w') as f:
-        json.dump(data, f, indent=2)
-
-    # Create report record
-    report_ids = client.create("new_report", {
-        "new_reportname": f"{report_type} Report",
-        "new_reporttype": report_type,
-        "new_generateddate": report_time.isoformat(),
-        "new_status": ReportStatus.PROCESSING,
-        "new_recordcount": len(data.get("records", []))
-    })
-    report_id = report_ids[0]
-
-    try:
-        # Upload report file
-        print(f"Uploading report: {report_file.name}")
-        client.upload_file(
-            table_name="new_report",
-            record_id=report_id,
-            file_column_name="new_reportfile",
-            file_path=report_file
-        )
-
-        # Update status to completed
-        client.update("new_report", report_id, {
-            "new_status": ReportStatus.COMPLETED
-        })
-
-        print(f"✓ Report stored successfully")
-        return report_id
-
-    except Exception as e:
-        print(f" Report generation failed: {e}")
-        client.update("new_report", report_id, {
-            "new_status": ReportStatus.FAILED,
-            "new_errormessage": str(e)
-        })
-        raise
-    finally:
-        # Clean up temp file
-        report_file.unlink(missing_ok=True)
-
-# Usage
-sales_data = {
-    "month": "January",
-    "records": [
-        {"product": "A", "sales": 10000},
-        {"product": "B", "sales": 15000},
-        {"product": "C", "sales": 8000}
-    ]
-}
-
-report_id = generate_and_store_report(client, "SALES_SUMMARY", sales_data)
-```
-
----
-
-## 4. File Management Best Practices
-
-### File Size Validation
-```python
-from pathlib import Path
-
-def validate_file_for_upload(file_path, max_size_mb=500):
-    """Validate file before upload."""
-    file_path = Path(file_path)
-
-    if not file_path.exists():
-        raise FileNotFoundError(f"File not found: {file_path}")
-
-    file_size = file_path.stat().st_size
-    max_size_bytes = max_size_mb * 1024 * 1024
-
-    if file_size > max_size_bytes:
-        raise ValueError(f"File too large: {file_size / 1024 / 1024:.2f} MB > {max_size_mb} MB")
-
-    return file_size
-
-# Usage
-try:
-    size = validate_file_for_upload("document.pdf", max_size_mb=128)
-    print(f"File valid: {size / 1024 / 1024:.2f} MB")
-except (FileNotFoundError, ValueError) as e:
-    print(f"Validation failed: {e}")
-```
-
-### Supported File Types Validation
-```python
-from pathlib import Path
-
-ALLOWED_EXTENSIONS = {'.pdf', '.docx', '.xlsx', '.jpg', '.png', '.mp4', '.zip'}
-
-def validate_file_type(file_path):
-    """Validate file extension."""
-    file_path = Path(file_path)
-
-    if file_path.suffix.lower() not in ALLOWED_EXTENSIONS:
-        raise ValueError(f"Unsupported file type: {file_path.suffix}")
-
-    return True
-
-# Usage
-try:
-    validate_file_type("document.pdf")
-    print("File type valid")
-except ValueError as e:
-    print(f"Invalid: {e}")
-```
-
-### Upload Logging & Audit Trail
-```python
-from pathlib import Path
-from datetime import datetime
-import json
-
-def log_file_upload(table_name, record_id, file_path, status, error=None):
-    """Log file upload for audit trail."""
-    file_path = Path(file_path)
-
-    log_entry = {
-        "timestamp": datetime.now().isoformat(),
-        "table": table_name,
-        "record_id": record_id,
-        "file_name": file_path.name,
-        "file_size": file_path.stat().st_size if file_path.exists() else 0,
-        "status": status,
-        "error": error
-    }
-
-    # Append to log file
-    log_file = Path("upload_audit.log")
-    with open(log_file, 'a') as f:
-        f.write(json.dumps(log_entry) + "\n")
-
-    return log_entry
-
-# Usage in upload wrapper
-def upload_with_logging(client, table_name, record_id, column_name, file_path):
-    """Upload with audit logging."""
-    try:
-        client.upload_file(
-            table_name=table_name,
-            record_id=record_id,
-            file_column_name=column_name,
-            file_path=file_path
-        )
-        log_file_upload(table_name, record_id, file_path, "SUCCESS")
-    except Exception as e:
-        log_file_upload(table_name, record_id, file_path, "FAILED", str(e))
-        raise
-```
-
----
-
-## 5. Troubleshooting File Operations
-
-### Common Issues & Solutions
-
-#### Issue: File Upload Timeout
-```python
-# For very large files, increase chunk size strategically
-response = client.upload_file(
-    table_name="account",
-    record_id=record_id,
-    file_column_name="new_file",
-    file_path="large_file.zip",
-    chunk_size=8 * 1024 * 1024  # 8 MB chunks
-)
-```
-
-#### Issue: Insufficient Disk Space
-```python
-import shutil
-from pathlib import Path
-
-def check_upload_space(file_path):
-    """Check if system has space for file + temp buffer."""
-    file_path = Path(file_path)
-    file_size = file_path.stat().st_size
-
-    # Get disk space
-    total, used, free = shutil.disk_usage(file_path.parent)
-
-    # Need file_size + 10% buffer
-    required_space = file_size * 1.1
-
-    if free < required_space:
-        raise OSError(f"Insufficient disk space: {free / 1024 / 1024:.0f} MB free, {required_space / 1024 / 1024:.0f} MB needed")
-
-    return True
-```
-
-#### Issue: File Corruption During Upload
-```python
-import hashlib
-
-def verify_uploaded_file(local_path, remote_data):
-    """Verify uploaded file integrity."""
-    # Calculate local hash
-    with open(local_path, 'rb') as f:
-        local_hash = hashlib.sha256(f.read()).hexdigest()
-
-    # Compare with metadata
-    remote_hash = remote_data.get("new_filehash")
-
-    if local_hash != remote_hash:
-        raise ValueError("File corruption detected: hash mismatch")
-
-    return True
-```
-
----
-
-## Reference
-- [Official File Upload Example](https://github.com/microsoft/PowerPlatform-DataverseClient-Python/blob/main/examples/advanced/file_upload.py)
-- [File Upload Best Practices](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/file-column-data)
+Why: Positional arguments obscure the Dataverse contract, there is no size decision, validation, chunk size, retry, audit log, or integrity signal.
+
+## Conventions
+
+| Rule | Rationale |
+| --- | --- |
+| Use `Path` for file inputs and convert early. | Path operations, size checks, suffix checks, and cleanup stay platform-safe. |
+| Use named `client.upload_file` arguments: `table_name`, `record_id`, `file_column_name`, `file_path`, and `chunk_size`. | Dataverse file operations remain self-documenting and resistant to argument-order mistakes. |
+| Use single PATCH below or at `128 MB`; use chunked upload above `128 MB`. | The upload path matches Dataverse file-column behavior and avoids request-size failures. |
+| Default chunking to `4 MB` and increase to `8 MB` only for timeout troubleshooting. | Chunk sizes balance reliability and request overhead. |
+| Validate existence, max size, allowed extension, disk buffer, and hash when the workflow depends on file integrity. | Bad input and local-environment failures surface before remote mutation. |
+| Use `HttpError` retry with bounded exponential backoff. | Transient failures are retried without hiding persistent failures. |
+| Return structured batch results with success and failure lists. | Multi-file operations stay observable and retryable. |
+| Create metadata records before upload and update status after upload. | Dataverse records remain queryable and status reflects the file operation. |
+| Use `IntEnum` for option-set values such as document, media, and report status. | Magic integers get meaningful names without changing the Dataverse payload. |
+| Clean up generated report files after upload when they are intermediate artifacts. | Local workspaces do not accumulate stale generated data. |
+
+## Do / Do Not
+
+| Do | Do not |
+| --- | --- |
+| Use `DataverseClient` with a credential object and an environment URL. | Hardcode real secrets, tenant IDs, or production URLs in examples or source. |
+| Upload with named SDK arguments. | Rely on positional `upload_file` calls. |
+| Compute `file_size = file_path.stat().st_size` before choosing upload strategy. | Treat all files as the same size class. |
+| Keep `ALLOWED_EXTENSIONS` explicit and compare lowercase suffixes. | Accept arbitrary file extensions silently. |
+| Catch `HttpError` for retryable upload failures. | Catch all exceptions and continue as if upload succeeded. |
+| Log `SUCCESS` and `FAILED` audit records with context. | Print only a success message and lose failure details. |
+| Compare local SHA-256 to `new_filehash` when integrity metadata exists. | Assume upload integrity without verification when corruption is suspected. |
+| Use `client.get(..., top=5000)` page iteration for exports. | Assume a single response contains all Dataverse records. |
+| Set `ReportStatus.COMPLETED` or `ReportStatus.FAILED` after report upload. | Leave records stuck in `ReportStatus.PROCESSING`. |
+
+## Checklist Before Opening a PR
+
+- [ ] File uploads use `Path` and named `client.upload_file` parameters.
+- [ ] Files at or below `128 MB` use single upload; larger files use chunking with an intentional `chunk_size`.
+- [ ] Upload wrappers validate existence, max size, allowed extension, and disk space when those constraints apply.
+- [ ] Integrity-sensitive uploads calculate or compare SHA-256 hashes and preserve `new_filehash` metadata where used.
+- [ ] Batch uploads return structured `success` and `failed` results.
+- [ ] Retry logic catches `HttpError`, uses bounded exponential backoff, and re-raises after the final attempt.
+- [ ] Metadata records are created before file upload and status fields are updated after success or failure.
+- [ ] Audit logs include table, record ID, file name, file size, status, and error context.
+- [ ] Generated backup or report files are created under an intentional project path and cleaned up when temporary.
+- [ ] No real Dataverse secrets, tenant IDs, client IDs, client secrets, or production organization URLs are committed.
+
+## References
+
+- PowerPlatform Dataverse Python file upload example: https://github.com/microsoft/PowerPlatform-DataverseClient-Python/blob/main/examples/advanced/file_upload.py
+- Dataverse file column documentation: https://learn.microsoft.com/en-us/power-apps/developer/data-platform/file-column-data

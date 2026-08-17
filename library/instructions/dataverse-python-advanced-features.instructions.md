@@ -1,16 +1,15 @@
 ---
-applyTo: '**/*.py'
-description: 'Advanced Python Dataverse SDK patterns for option sets, complex filtering, SQL queries, metadata operations, and production use.'
+applyTo: "**/*.py"
+description: "Enforces advanced Python Dataverse SDK conventions for option sets, OData filters, SQL analysis, metadata operations, record batches, relationships, error handling, cache hygiene, and production performance."
 ---
 
-# Dataverse SDK for Python - Advanced Features Guide
+# Dataverse Python Conventions — Advanced SDK Features
 
-## Overview
-Comprehensive guide to advanced Dataverse SDK features including enums, complex filtering, SQL queries, metadata operations, and production patterns. Based on official Microsoft walkthrough examples.
+These instructions apply to Python files that use the PowerPlatform Dataverse SDK for advanced table, query, metadata, and production data operations. They are authoritative for option set modeling, formatted values, OData filters, read-only SQL, metadata APIs, single and multiple record operations, paging, relationships, cache invalidation, and Dataverse-specific error handling; authentication, environment management, and broader application architecture primitives win where they define stricter rules.
 
-## 1. Working with Option Sets & Picklists
+## Option Sets and Picklists
 
-### Using IntEnum for Type Safety
+### IntEnum type safety
 ```python
 from enum import IntEnum
 from PowerPlatform.Dataverse.client import DataverseClient
@@ -35,7 +34,7 @@ record_data = {
 ids = client.create("new_tasktable", record_data)
 ```
 
-### Handling Formatted Values
+### Formatted values
 ```python
 # When retrieving records, picklist values are returned as integers
 record = client.get("new_tasktable", record_id)
@@ -47,7 +46,7 @@ print(f"Priority (Raw): {priority_int}")
 print(f"Priority (Formatted): {priority_formatted}")
 ```
 
-### Creating Tables with Enum Columns
+### Enum-backed columns
 ```python
 from enum import IntEnum
 
@@ -82,9 +81,9 @@ print(f"Created table with {len(columns)} columns including enums")
 
 ---
 
-## 2. Advanced Filtering & Querying
+## Advanced Filtering and Querying
 
-### Complex OData Filters
+### OData filters
 ```python
 # Simple equality
 filter1 = "name eq 'Contoso'"
@@ -114,7 +113,7 @@ filter10 = "(creditlimit gt 50000) and ((industrycode eq 1) or (industrycode eq 
 results = client.get("account", filter=filter10, select=["name", "creditlimit"])
 ```
 
-### Retrieve with Related Records (Expand)
+### Related records with expand
 ```python
 # Expand parent account information
 accounts = client.get(
@@ -130,7 +129,7 @@ for page in accounts:
         print(f"Account: {account['name']}, Parent: {parent_name}")
 ```
 
-### SQL Queries for Complex Analysis
+### Read-only SQL analysis
 ```python
 # SQL queries are read-only but powerful for analytics
 sql = """
@@ -150,7 +149,7 @@ for row in results:
     print(f"{row['AccountName']}: {row['ContactCount']} contacts")
 ```
 
-### Paging with SQL Queries
+### SQL paging
 ```python
 # SQL queries return paginated results by default
 sql = "SELECT TOP 10000 name, creditlimit FROM account ORDER BY name"
@@ -165,9 +164,9 @@ print(f"Total: {len(all_results)} rows")
 
 ---
 
-## 3. Metadata Operations
+## Metadata Operations
 
-### Creating Complex Tables
+### Complex table creation
 ```python
 from enum import IntEnum
 from datetime import datetime
@@ -201,7 +200,7 @@ print(f"  Primary Key: {table_info['primary_id_attribute']}")
 print(f"  Columns: {', '.join(table_info.get('columns_created', []))}")
 ```
 
-### Inspecting Table Metadata
+### Table metadata inspection
 ```python
 # Get detailed table information
 table_info = client.get_table_info("account")
@@ -214,7 +213,7 @@ print(f"Primary ID: {table_info.get('primary_id_attribute')}")
 print(f"Primary Name: {table_info.get('primary_name_attribute')}")
 ```
 
-### Listing All Tables in Organization
+### Organization table listing
 ```python
 # Retrieve all tables (may be large result set)
 all_tables = []
@@ -231,7 +230,7 @@ for table in custom_tables[:5]:
     print(f"  - {table['table_schema_name']}")
 ```
 
-### Managing Columns Dynamically
+### Dynamic columns and tables
 ```python
 # Add columns to existing table
 client.create_columns("new_TaskTable", {
@@ -252,7 +251,7 @@ client.delete_table("new_TaskTable")
 
 ---
 
-## 4. Single vs. Multiple Record Operations
+## Single and Multiple Record Operations
 
 ### Single Record Operations
 ```python
@@ -271,7 +270,7 @@ client.delete("account", record_id)
 
 ### Multiple Record Operations
 
-#### Create Multiple Records
+### Create multiple records
 ```python
 # Create list of records
 records = [
@@ -284,7 +283,7 @@ created_ids = client.create("account", records)
 print(f"Created {len(created_ids)} records: {created_ids}")
 ```
 
-#### Update Multiple Records (Broadcast)
+### Broadcast updates
 ```python
 # Apply same update to multiple records
 account_ids = ["id1", "id2", "id3"]
@@ -295,7 +294,7 @@ client.update("account", account_ids, {
 print(f"Updated {len(account_ids)} records with same data")
 ```
 
-#### Delete Multiple Records
+### Multiple deletes
 ```python
 # Delete multiple records with optimized bulk delete
 record_ids = ["id1", "id2", "id3", "id4", "id5"]
@@ -305,9 +304,9 @@ print(f"Deleted {len(record_ids)} records")
 
 ---
 
-## 5. Data Manipulation Patterns
+## Data Manipulation Patterns
 
-### Retrieve, Modify, Update Pattern
+### Retrieve, modify, update
 ```python
 # Retrieve single record
 account = client.get("account", record_id)
@@ -321,7 +320,7 @@ client.update("account", record_id, {"creditlimit": new_amount})
 print(f"Updated creditlimit: {original_amount} → {new_amount}")
 ```
 
-### Batch Processing Pattern
+### Batch processing
 ```python
 # Retrieve in batches with paging
 batch_size = 100
@@ -345,7 +344,7 @@ for page in client.get("account", top=batch_size, filter="statecode eq 0"):
 print(f"Processed {processed} accounts")
 ```
 
-### Conditional Operations Pattern
+### Conditional operations
 ```python
 from PowerPlatform.Dataverse.core.errors import DataverseError
 
@@ -371,7 +370,7 @@ safe_update("account", account_id, {"creditlimit": 100000}, "statecode", 0)
 
 ---
 
-## 6. Formatted Values & Display
+## Display and Formatted Values
 
 ### Retrieving Formatted Values
 ```python
@@ -400,9 +399,9 @@ print(f"Industry: {industry_formatted or industry}")  # "Technology" or 1
 
 ---
 
-## 7. Performance Optimization
+## Performance Optimization
 
-### Column Selection Strategy
+### Column selection
 ```python
 # Retrieve all columns (slow, uses more bandwidth)
 account = client.get("account", record_id)
@@ -415,7 +414,7 @@ account = client.get(
 )
 ```
 
-### Filtering on Server
+### Server-side filtering
 ```python
 # Retrieve all, filter locally (inefficient)
 all_accounts = []
@@ -429,7 +428,7 @@ for page in client.get("account", filter="creditlimit gt 100000"):
     large_accounts.extend(page)
 ```
 
-### Paging Large Result Sets
+### Large result paging
 ```python
 # Load all results at once (memory intensive)
 all_accounts = list(client.get("account"))
@@ -443,7 +442,7 @@ for page in client.get("account", top=1000):
     print(f"Processed: {processed}")
 ```
 
-### Batch Operations
+### Batch operations
 ```python
 # Individual creates in loop (slow)
 for account_data in accounts:
@@ -455,9 +454,9 @@ created_ids = client.create("account", accounts)
 
 ---
 
-## 8. Error Handling in Advanced Scenarios
+## Error Handling
 
-### Handling Metadata Errors
+### Metadata errors
 ```python
 from PowerPlatform.Dataverse.core.errors import MetadataError
 
@@ -468,7 +467,7 @@ except MetadataError as e:
     # Handle table creation specific errors
 ```
 
-### Handling Validation Errors
+### Validation errors
 ```python
 from PowerPlatform.Dataverse.core.errors import ValidationError
 
@@ -479,7 +478,7 @@ except ValidationError as e:
     # Handle validation specific errors
 ```
 
-### Handling HTTP Errors
+### HTTP errors
 ```python
 from PowerPlatform.Dataverse.core.errors import HttpError
 
@@ -494,7 +493,7 @@ except HttpError as e:
         print(f"HTTP error: {e}")
 ```
 
-### Handling SQL Errors
+### SQL errors
 ```python
 from PowerPlatform.Dataverse.core.errors import SQLParseError
 
@@ -506,9 +505,9 @@ except SQLParseError as e:
 
 ---
 
-## 9. Working with Relationships
+## Relationships
 
-### Creating Related Records
+### Related record creation
 ```python
 # Create parent account
 parent_ids = client.create("account", {
@@ -527,7 +526,7 @@ child_ids = client.create("account", children)
 print(f"Created {len(child_ids)} child accounts")
 ```
 
-### Querying Related Records
+### Related record queries
 ```python
 # Get account with child accounts
 account = client.get("account", account_id)
@@ -546,9 +545,9 @@ for page in children:
 
 ---
 
-## 10. Cleanup & Housekeeping
+## Cleanup and Housekeeping
 
-### Clearing SDK Cache
+### SDK cache clearing
 ```python
 # After bulk operations, clear metadata cache
 client.flush_cache()
@@ -559,7 +558,7 @@ client.flush_cache()
 # - Metadata synchronization across environments
 ```
 
-### Safe Table Deletion
+### Safe table deletion
 ```python
 from PowerPlatform.Dataverse.core.errors import MetadataError
 
@@ -589,7 +588,7 @@ delete_table_safe("new_TempTable")
 
 ---
 
-## 11. Comprehensive Example: Full Workflow
+## Comprehensive Example
 
 ```python
 from enum import IntEnum
@@ -687,8 +686,74 @@ except (MetadataError, DataverseError) as e:
 ```
 
 ---
+## Good / Bad Examples
 
-## Reference
+The examples below illustrate keeping Dataverse filtering, selection, and paging on the server instead of loading unnecessary records into Python memory.
+
+**Good:**
+
+```python
+large_accounts = []
+for page in client.get("account", filter="creditlimit gt 100000", select=["accountid", "name", "creditlimit"], top=1000):
+    large_accounts.extend(page)
+```
+
+Why: The query filters on Dataverse, selects only required columns, and processes paged results.
+
+**Bad:**
+
+```python
+all_accounts = []
+for page in client.get("account"):
+    all_accounts.extend(page)
+large_accounts = [a for a in all_accounts if a.get("creditlimit", 0) > 100000]
+```
+
+Why: The client retrieves every column and every record before filtering, which wastes bandwidth, memory, and API quota.
+
+## Conventions
+
+| Rule | Rationale |
+| --- | --- |
+| Model option sets and picklists with `IntEnum` classes such as `Priority`, `TaskStatus`, and `TaskPriority`. | Enum values keep Python code readable while Dataverse receives the expected integer values. |
+| Preserve formatted-value annotations such as `new_priority@OData.Community.Display.V1.FormattedValue`, `creditlimit@OData.Community.Display.V1.FormattedValue`, and `industrycode@OData.Community.Display.V1.FormattedValue`. | Raw values are for persistence and comparisons; formatted values are for display. |
+| Use `client.get(..., filter=..., select=..., expand=...)` for OData querying and related records. | Server-side filtering, projection, and expansion reduce payload size and avoid local joins. |
+| Keep `client.query_sql(sql)` read-only and page through results. | SQL is powerful for analysis but should not become an unbounded mutation path. |
+| Use metadata APIs `create_table`, `get_table_info`, `list_tables`, `create_columns`, `delete_columns`, and `delete_table` deliberately. | Metadata operations change organization shape and require cache and error hygiene. |
+| Use `client.create`, `client.update`, and `client.delete` for both single records and list inputs; set `use_bulk_delete=True` for optimized bulk deletes when appropriate. | The SDK supports single and multiple operations without hand-rolled loops for every case. |
+| Process large result sets page by page with `top`, `filter`, and `select`. | Paged processing avoids memory spikes and reduces Dataverse API load. |
+| Catch `DataverseError`, `MetadataError`, `ValidationError`, `HttpError`, and `SQLParseError` at the boundary that can recover or report clearly. | Advanced SDK failures need specific user feedback and safe rollback behavior. |
+| Call `client.flush_cache()` after massive delete operations, table or column creation or deletion, and metadata synchronization across environments. | Stale metadata cache can make subsequent operations target old table or column definitions. |
+| Use credentials such as `InteractiveBrowserCredential` with `DataverseClient("https://yourorg.crm.dynamics.com", credential)` in examples, not embedded secrets. | Authentication remains explicit and avoids hardcoded credentials. |
+
+## Do / Do Not
+
+| Do | Do not |
+| --- | --- |
+| Use `IntEnum` members like `NOT_STARTED`, `IN_PROGRESS`, `COMPLETED`, `LOW`, `MEDIUM`, and `HIGH` for option sets. | Scatter magic integers through record dictionaries. |
+| Select columns such as `accountid`, `name`, `creditlimit`, and `telephone1` explicitly. | Retrieve all columns when only a few fields are needed. |
+| Use OData operators `eq`, `gt`, `lt`, `contains`, `startswith`, `endswith`, `and`, `or`, and `not` in server filters. | Pull all records into Python and filter locally. |
+| Use `expand=["parentaccountid($select=name,creditlimit)"]` for parent data. | Issue avoidable follow-up requests for every related row. |
+| Use `query_sql` for read-only reporting with `SELECT`, `COUNT`, `LEFT JOIN`, `GROUP BY`, `ORDER BY`, and `TOP`. | Treat SQL queries as a write or migration mechanism. |
+| Use `safe_update`-style precondition checks for conditional updates. | Update records without verifying required state such as `statecode`. |
+| Flush cache after metadata changes. | Keep using stale metadata after table or column changes. |
+| Delete tables through checked helpers such as `delete_table_safe`. | Drop tables without verifying existence and handling `MetadataError`. |
+
+## Checklist Before Opening a PR
+
+- [ ] Option set and picklist values are represented with `IntEnum` where type safety improves readability.
+- [ ] OData queries use `filter`, `select`, `expand`, and `top` to limit data at the server.
+- [ ] SQL uses `client.query_sql(sql)` only for read-only analysis and is consumed page by page.
+- [ ] Metadata changes use the SDK metadata APIs and clear the SDK cache when table or column shape changes.
+- [ ] Single and multiple record operations use the SDK's list-aware `create`, `update`, and `delete` methods.
+- [ ] Batch processing avoids unbounded in-memory result sets.
+- [ ] Relationship code stores parent IDs and queries children with explicit filters and selected columns.
+- [ ] Error handling catches the specific Dataverse exception type that the caller can recover from.
+- [ ] Examples and tests avoid hardcoded credentials and use the intended Dataverse organization URL placeholder.
+
+## References
+
 - [Official Walkthrough Example](https://github.com/microsoft/PowerPlatform-DataverseClient-Python/blob/main/examples/advanced/walkthrough.py)
 - [OData Filter Syntax](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/webapi/query-data-web-api)
 - [Table/Column Metadata](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/webapi/create-update-entity-definitions-using-web-api)
+- Example Dataverse organization URL: https://yourorg.crm.dynamics.com

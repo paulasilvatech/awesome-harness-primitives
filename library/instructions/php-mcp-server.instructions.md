@@ -1,804 +1,225 @@
 ---
-applyTo: '**/*.php'
-description: 'Best practices for building Model Context Protocol servers in PHP using the official PHP SDK with attribute-based discovery and multiple transport options'
+applyTo: "**/*.php"
+description: "Enforces PHP Model Context Protocol server conventions for the official PHP SDK, capability discovery, transports, sessions, errors, testing, performance, framework integration, deployment, and client configuration."
 ---
 
-# PHP MCP Server Development Best Practices
+# PHP MCP Server Conventions — SDK Servers and Capabilities
 
-This guide provides best practices for building Model Context Protocol (MCP) servers using the official PHP SDK maintained in collaboration with The PHP Foundation.
+These instructions apply to PHP files that implement Model Context Protocol servers with the official `mcp/sdk` package maintained with The PHP Foundation. They are authoritative for PHP MCP server structure, Composer setup, SDK capability registration, transports, sessions, error handling, testing, caching, deployment, and MCP client configuration in matched files; project architecture, security, and hosting primitives win where they define stricter deployment or secret-handling requirements.
 
-## Installation and Setup
+## Composer Package and Project Shape
 
-### Install via Composer
+Use Composer, PHP 8.2 or newer, PSR-4 autoloading, and one explicit server entry point. Keep MCP capabilities grouped by concern so attribute discovery and manual registration remain predictable.
 
-```bash
-composer require mcp/sdk
-```
+| Concern | Convention |
+| --- | --- |
+| Package install | Require the SDK with `composer require mcp/sdk`; keep `mcp/sdk` in `require` and testing tools such as `phpunit/phpunit` in `require-dev`. |
+| PHP baseline | Set `"php": "^8.2"` when the server uses attributes, enums, promoted properties, and strict typing. |
+| Autoloading | Use a namespace such as `App\\` mapped to `src/`; require `vendor/autoload.php` from the executable entry point with `require_once`. |
+| Entry point | Keep `server.php` or `app/server.php` as the CLI entry; start it with `#!/usr/bin/env php`, `declare(strict_types=1)`, and executable permissions when deployed as a command. |
+| Layout | Use `my-mcp-server/`, `composer.json`, `src/Tools`, `src/Resources`, `src/Prompts`, `src/Server.php`, `server.php`, `README.txt`, and `tests/ToolsTest.php` as the default shape for attribute-based MCP servers. |
+| Package naming | Use a Composer package name such as `your-org/mcp-server`; keep placeholders like `your-org` out of production manifests. |
 
-### Project Structure
+## Server Construction and Discovery
 
-Organize your PHP MCP server project:
+Build servers through `Server::builder()` and make registration choices explicit.
 
-```
-my-mcp-server/
-├── composer.json
-├── src/
-│   ├── Tools/
-│   │   ├── Calculator.php
-│   │   └── FileManager.php
-│   ├── Resources/
-│   │   ├── ConfigProvider.php
-│   │   └── DataProvider.php
-│   ├── Prompts/
-│   │   └── PromptGenerator.php
-│   └── Server.php
-├── server.php           # Server entry point
-└── tests/
-    └── ToolsTest.php
-```
+| SDK API | Use |
+| --- | --- |
+| `setServerInfo('My MCP Server', '1.0.0')` | Publish stable server metadata for clients and inspectors. |
+| `setDiscovery(__DIR__, ['.'])` | Scan a small, known root for attributes in simple servers. |
+| `setDiscovery(basePath: __DIR__, scanDirs: ['.', 'src'], excludeDirs: ['vendor', 'tests'], cache: $cache)` | Use named arguments when discovery needs exclusions or caching. |
+| `addTool([Calculator::class, 'add'], 'add')` and `addTool([Calculator::class, 'multiply'], 'multiply')` | Register tools manually when discovery is undesirable or the public name must be fixed. |
+| `addResource([Config::class, 'getSettings'], 'config://app/settings')` | Register a resource URI such as `config://app/settings` without relying on scanning. |
+| `build()` then `run($transport)` | Construct once, choose a transport, and run through the SDK instead of hand-rolling JSON-RPC. |
 
-### Composer Configuration
+Cache discovery in production with PSR-16. `Psr16Cache` over `FilesystemAdapter('mcp-discovery')` is acceptable for local deployments; `Psr16Cache` over `RedisAdapter` with `\Redis`, `connect('127.0.0.1', 6379)`, and a stable key namespace is better for multi-process hosts. Limit `scanDirs` to `src`, `src/Tools`, and `src/Resources`, and exclude `vendor`, `tests`, `var`, and `cache`.
 
-```json
-{
-    "name": "your-org/mcp-server",
-    "description": "MCP Server for...",
-    "type": "project",
-    "require": {
-        "php": "^8.2",
-        "mcp/sdk": "^0.1"
-    },
-    "require-dev": {
-        "phpunit/phpunit": "^10.0"
-    },
-    "autoload": {
-        "psr-4": {
-            "App\\": "src/"
-        }
-    }
-}
-```
+## Tools, Schemas, and Return Content
 
-## Server Implementation
+Tools are public callable capabilities. Keep names stable, parameter schemas specific, and return content explicit.
 
-### Basic Server with Attribute Discovery
+| Capability pattern | Convention |
+| --- | --- |
+| Simple tool | Annotate methods with `#[McpTool]`; document parameters and return values with PHPDoc where it improves generated schemas. |
+| Custom tool name | Use `#[McpTool(name: 'read_file')]` or `#[McpTool(name: 'create_user')]` when the protocol name should be snake_case rather than the PHP method name. |
+| Validation | Apply `#[Schema(format: 'email')]`, `#[Schema(minimum: 18, maximum: 120)]`, and `#[Schema(pattern: '^[A-Z][a-z]+$', description: 'Capitalized first name')]` to parameters that need client-visible constraints. |
+| Complex content | Return `TextContent`, `TextContent::code($code, 'php')`, and `ImageContent(data: base64_encode($imageData), mimeType: 'image/png')` for mixed text and image responses. |
+| Calculations | Prefer `match($operation)` for closed choices such as `add`, `subtract`, `multiply`, and `divide`; throw `\InvalidArgumentException` for invalid operations and division by zero. |
+| File tools | Guard `file_exists($path)`, `is_readable($filename)`, and `file_get_contents(...)`; throw `\InvalidArgumentException` for bad input and `\RuntimeException` for unreadable server state. |
 
-Create your server entry point:
+Do not expose filesystem reads, network fetches, or mutation tools without validation. A tool such as `readFileContent(string $path): string` must restrict paths according to the project security model before returning `file_get_contents($path)`.
 
-```php
-#!/usr/bin/env php
-<?php
+## Resources, Resource Templates, and Prompt Capabilities
 
-declare(strict_types=1);
+Use MCP resources for addressable data and MCP prompts for reusable prompt messages. Preserve MIME types and URI templates because clients use them for routing and rendering.
 
-require_once __DIR__ . '/vendor/autoload.php';
+| Attribute or type | Convention |
+| --- | --- |
+| `#[McpResource(uri: 'config://app/settings', name: 'app_settings', mimeType: 'application/json')]` | Use for static resources such as `app/settings`; return arrays only when the SDK can serialize them deterministically. |
+| `#[McpResourceTemplate(uriTemplate: 'user://{userId}/profile/{section}', name: 'user_profile', description: 'User profile data by section', mimeType: 'application/json')]` | Keep function parameters in the same order as URI variables such as `userId` then `section`. |
+| `TextResourceContents` | Return text resources with explicit `uri`, `mimeType: 'text/plain'`, and `text`. |
+| `BlobResourceContents` | Return binary resources with explicit `uri`, `mimeType: 'image/png'`, and base64-encoded `blob`. |
+| `#[McpPrompt(name: 'code_review')]` | Use for reusable prompts that accept arguments such as `language`, `code`, and `focus`. |
+| `PromptMessage`, `Role::Assistant`, `Role::User`, `TextContent`, `ImageContent` | Use typed prompt messages for mixed content such as `image/jpeg`; plain `['role' => 'user', 'content' => ...]` arrays are acceptable only for simple text. |
 
-use Mcp\Server;
-use Mcp\Server\Transport\StdioTransport;
+Do not route MCP prompt capabilities through editor-only prompt assets. MCP prompt capabilities belong in PHP classes under `src/Prompts`.
 
-$server = Server::builder()
-    ->setServerInfo('My MCP Server', '1.0.0')
-    ->setDiscovery(__DIR__, ['.'])
-    ->build();
+## Completion Providers and Enums
 
-$transport = new StdioTransport();
+Use completions to constrain user-facing arguments before a tool, prompt, or template is invoked.
 
-$server->run($transport);
-```
+| Completion shape | Convention |
+| --- | --- |
+| Static values | Use `#[CompletionProvider(values: ['blog', 'article', 'tutorial', 'guide'])]` and `#[CompletionProvider(values: ['beginner', 'intermediate', 'advanced'])]` for short, stable vocabularies. |
+| Backed enum | Use `#[CompletionProvider(enum: Priority::class)]` with `enum Priority: string` and cases `LOW = 'low'`, `MEDIUM = 'medium'`, and `HIGH = 'high'`. |
+| Unit enum | Use `#[CompletionProvider(enum: Status::class)]` with cases `DRAFT`, `PUBLISHED`, and `ARCHIVED` when only names matter. |
+| Custom provider | Implement `ProviderInterface` in a class such as `UserIdCompletionProvider`; inject services such as `DatabaseService` and return values from `getCompletions(string $currentValue): array`. |
 
-### Server with Caching
+## SDK Class and Example Name Inventory
 
-Use PSR-16 cache for better performance:
+Preserve SDK-facing names from examples when refactoring so documentation, tests, and generated schemas remain searchable.
 
-```php
-use Symfony\Component\Cache\Adapter\FilesystemAdapter;
-use Symfony\Component\Cache\Psr16Cache;
+| Name | Convention |
+| --- | --- |
+| `Calculator`, `CalculatorTest`, `FileManager`, `UserManager`, `ReportGenerator` | Use these as examples of tool classes and their PHPUnit coverage; keep methods such as `add`, `multiply`, `readFileContent`, `createUser`, `generateReport`, and `getChart` tied to tool behavior. |
+| `ConfigProvider`, `DataProvider`, `FileProvider`, `UserProvider`, `PromptGenerator` | Use these as examples of resource, data, file, template, and prompt capability classes. |
+| `{$language}\n{$code}\n` | Preserve this interpolation shape when documenting a `code_review` prompt body that embeds a language-tagged fenced code sample. |
+| `text/plain`, `application/json`, `image/png`, `image/jpeg` | Keep MIME types explicit in resources, blobs, and prompt content. |
+| `command-line` and `web-based` | Use these terms to distinguish `StdioTransport` CLI integration from HTTP transport integration. |
 
-$cache = new Psr16Cache(new FilesystemAdapter('mcp-discovery'));
+## Transport and Session Boundaries
 
-$server = Server::builder()
-    ->setServerInfo('My MCP Server', '1.0.0')
-    ->setDiscovery(
-        basePath: __DIR__,
-        scanDirs: ['.', 'src'],
-        excludeDirs: ['vendor', 'tests'],
-        cache: $cache
-    )
-    ->build();
-```
+Choose the transport by integration shape and isolate session storage from application state.
 
-### Manual Registration
+| Scenario | Convention |
+| --- | --- |
+| Command-line integration | Use `StdioTransport` and run with `php /absolute/path/to/server.php`; this is the default for local MCP clients. |
+| Web-based integration | Use `StreamableHttpTransport`, `Psr17Factory`, `createServerRequestFromGlobals()`, `$response->getHeaders()`, `http_response_code($response->getStatusCode())`, and `echo $response->getBody()` when embedding in a PHP web endpoint. |
+| In-memory sessions | Use `setSession(ttl: 7200)` for short-lived default sessions; `7200` means two hours. |
+| File sessions | Use `FileSessionStore(__DIR__ . '/sessions')` only when the directory is protected and cleaned by deployment policy. |
+| Custom in-memory store | Use `InMemorySessionStore(3600)` when a one-hour TTL is required explicitly. |
 
-Register capabilities programmatically:
+Do not mix transport code into tool classes. The server entry point owns `StdioTransport` or `StreamableHttpTransport`; tools, resources, prompts, and completion providers remain transport-neutral.
 
-```php
-use App\Tools\Calculator;
-use App\Resources\Config;
+## Framework Integration and Deployment
 
-$server = Server::builder()
-    ->setServerInfo('My MCP Server', '1.0.0')
-    ->addTool([Calculator::class, 'add'], 'add')
-    ->addTool([Calculator::class, 'multiply'], 'multiply')
-    ->addResource([Config::class, 'getSettings'], 'config://app/settings')
-    ->build();
-```
+Integrate through the framework's normal command or bundle surface and keep production images reproducible.
 
-## Tool Development
+| Platform | Convention |
+| --- | --- |
+| Laravel | Put the command in `app/Console/Commands/McpServer.php`, extend `Illuminate\Console\Command`, set `$signature = 'mcp:serve'`, use `app_path()` with scan directories `Tools` and `Resources`, then run a `StdioTransport`. |
+| Symfony | Prefer `symfony/mcp-bundle`; install with `composer require symfony/mcp-bundle` instead of hand-copying bundle internals. |
+| Docker | Base CLI images on `FROM php:8.2-cli`, install extensions with `docker-php-ext-install pdo pdo_mysql`, `COPY --from=composer:latest /usr/bin/composer /usr/bin/composer`, `WORKDIR /app`, `COPY . /app`, and `RUN composer install --no-dev --optimize-autoloader`. |
+| Executable server | Add `RUN chmod +x /app/server.php` and use `CMD ["php", "/app/server.php"]`. |
+| systemd | Use `[Unit]`, `Description=MCP PHP Server`, `After=network.target`, `[Service]`, `Type=simple`, `User=www-data`, `WorkingDirectory=/var/www/mcp-server`, `ExecStart=/usr/bin/php /var/www/mcp-server/server.php`, `Restart=always`, and `[Install] WantedBy=multi-user.target`. |
 
-### Simple Tool with Attribute
+## Client Configuration and Inspection
 
-```php
-<?php
+Keep MCP client configuration absolute and inspectable.
 
-namespace App\Tools;
+| Client or tool | Convention |
+| --- | --- |
+| Claude Desktop | Configure `"mcpServers": { "php-server": { "command": "php", "args": ["/absolute/path/to/server.php"] } }`; never use a relative `path/to/server.php` in committed examples. |
+| MCP Inspector | Test locally with `npx @modelcontextprotocol/inspector php /path/to/server.php` before asking clients to connect. |
+| Server naming | Keep names such as `php-server` stable because users reference them in client configuration. |
 
-use Mcp\Capability\Attribute\McpTool;
+## Performance and Runtime Settings
 
-class Calculator
-{
-    /**
-     * Adds two numbers together.
-     * 
-     * @param int $a The first number
-     * @param int $b The second number
-     * @return int The sum of the two numbers
-     */
-    #[McpTool]
-    public function add(int $a, int $b): int
-    {
-        return $a + $b;
-    }
-}
-```
+Use cache and OPcache settings deliberately in production.
 
-### Tool with Custom Name
+| Setting | Convention |
+| --- | --- |
+| Discovery cache | Enable `mcp-discovery` cache or Redis-backed PSR-16 cache for attribute discovery. |
+| Scan scope | Scan only `src`, `src/Tools`, and `src/Resources`; exclude generated and dependency directories. |
+| OPcache | Set `opcache.enable=1`, `opcache.memory_consumption=256`, `opcache.interned_strings_buffer=16`, `opcache.max_accelerated_files=10000`, and `opcache.validate_timestamps=0` for immutable production deployments. |
+| Autoloader | Use `composer install --no-dev --optimize-autoloader` in production images. |
 
-```php
-use Mcp\Capability\Attribute\McpTool;
+## Testing and Error Handling
 
-class FileManager
-{
-    /**
-     * Reads file content from the filesystem.
-     */
-    #[McpTool(name: 'read_file')]
-    public function readFileContent(string $path): string
-    {
-        if (!file_exists($path)) {
-            throw new \InvalidArgumentException("File not found: {$path}");
-        }
-        
-        return file_get_contents($path);
-    }
-}
-```
+Test capability classes as ordinary PHP units and test discovery separately.
 
-### Tool with Validation and Schema
+| Test target | Convention |
+| --- | --- |
+| Tool behavior | Use `PHPUnit\Framework\TestCase`, instantiate `Calculator`, call methods such as `add(5, 3)`, and assert with `assertSame(8, $result)`. |
+| Error paths | Use `expectException(\InvalidArgumentException::class)` and `expectExceptionMessage('Division by zero')` for rejected inputs. |
+| Discovery | Build a test server with `Server::builder()->setServerInfo('Test Server', '1.0.0')->setDiscovery(__DIR__ . '/../src', ['.'])->build()`, call `getCapabilities()`, and assert `tools` exists and is not empty. |
+| JSON-RPC errors | Let the SDK convert exceptions into JSON-RPC error responses; do not invent parallel error envelopes. |
+
+## Good / Bad Examples
+
+The examples below illustrate safe tool boundaries and transport-neutral capability code.
+
+**Good:**
 
 ```php
-use Mcp\Capability\Attribute\{McpTool, Schema};
-
-class UserManager
-{
-    #[McpTool(name: 'create_user')]
-    public function createUser(
-        #[Schema(format: 'email')]
-        string $email,
-        
-        #[Schema(minimum: 18, maximum: 120)]
-        int $age,
-        
-        #[Schema(
-            pattern: '^[A-Z][a-z]+$',
-            description: 'Capitalized first name'
-        )]
-        string $firstName
-    ): array
-    {
-        return [
-            'id' => uniqid(),
-            'email' => $email,
-            'age' => $age,
-            'firstName' => $firstName
-        ];
-    }
-}
-```
-
-### Tool with Complex Return Types
-
-```php
-use Mcp\Schema\Content\{TextContent, ImageContent};
-
-class ReportGenerator
-{
-    #[McpTool]
-    public function generateReport(string $type): array
-    {
-        return [
-            new TextContent('Report generated:'),
-            TextContent::code($this->generateCode($type), 'php'),
-            new TextContent('Summary: All checks passed.')
-        ];
-    }
-    
-    #[McpTool]
-    public function getChart(string $chartType): ImageContent
-    {
-        $imageData = $this->generateChartImage($chartType);
-        
-        return new ImageContent(
-            data: base64_encode($imageData),
-            mimeType: 'image/png'
-        );
-    }
-}
-```
-
-### Tool with Match Expression
-
-```php
-#[McpTool(name: 'calculate')]
-public function performCalculation(float $a, float $b, string $operation): float
-{
-    return match($operation) {
-        'add' => $a + $b,
-        'subtract' => $a - $b,
-        'multiply' => $a * $b,
-        'divide' => $b != 0 ? $a / $b : 
-            throw new \InvalidArgumentException('Division by zero'),
-        default => throw new \InvalidArgumentException('Invalid operation')
-    };
-}
-```
-
-## Resource Implementation
-
-### Static Resource
-
-```php
-<?php
-
-namespace App\Resources;
-
-use Mcp\Capability\Attribute\McpResource;
-
-class ConfigProvider
-{
-    /**
-     * Provides the current application configuration.
-     */
-    #[McpResource(
-        uri: 'config://app/settings',
-        name: 'app_settings',
-        mimeType: 'application/json'
-    )]
-    public function getSettings(): array
-    {
-        return [
-            'version' => '1.0.0',
-            'debug' => false,
-            'features' => ['auth', 'logging']
-        ];
-    }
-}
-```
-
-### Resource Template with Variables
-
-```php
-use Mcp\Capability\Attribute\McpResourceTemplate;
-
-class UserProvider
-{
-    /**
-     * Retrieves user profile information by ID and section.
-     */
-    #[McpResourceTemplate(
-        uriTemplate: 'user://{userId}/profile/{section}',
-        name: 'user_profile',
-        description: 'User profile data by section',
-        mimeType: 'application/json'
-    )]
-    public function getUserProfile(string $userId, string $section): array
-    {
-        // Variable order must match URI template order
-        return $this->users[$userId][$section] ?? 
-            throw new \InvalidArgumentException("Profile section not found");
-    }
-}
-```
-
-### Resource with File Content
-
-```php
-use Mcp\Schema\Content\{TextResourceContents, BlobResourceContents};
-
-class FileProvider
-{
-    #[McpResource(uri: 'file://readme.txt', mimeType: 'text/plain')]
-    public function getReadme(): TextResourceContents
-    {
-        return new TextResourceContents(
-            uri: 'file://readme.txt',
-            mimeType: 'text/plain',
-            text: file_get_contents(__DIR__ . '/README.txt')
-        );
-    }
-    
-    #[McpResource(uri: 'file://image.png', mimeType: 'image/png')]
-    public function getImage(): BlobResourceContents
-    {
-        $imageData = file_get_contents(__DIR__ . '/image.png');
-        
-        return new BlobResourceContents(
-            uri: 'file://image.png',
-            mimeType: 'image/png',
-            blob: base64_encode($imageData)
-        );
-    }
-}
-```
-
-## Prompt Implementation
-
-### Basic Prompt
-
-```php
-<?php
-
-namespace App\Prompts;
-
-use Mcp\Capability\Attribute\McpPrompt;
-
-class PromptGenerator
-{
-    /**
-     * Generates a code review request prompt.
-     */
-    #[McpPrompt(name: 'code_review')]
-    public function reviewCode(string $language, string $code, string $focus = 'general'): array
-    {
-        return [
-            ['role' => 'assistant', 'content' => 'You are an expert code reviewer.'],
-            ['role' => 'user', 'content' => "Review this {$language} code focusing on {$focus}:\n\n```{$language}\n{$code}\n```"]
-        ];
-    }
-}
-```
-
-### Prompt with Mixed Content
-
-```php
-use Mcp\Schema\Content\{TextContent, ImageContent};
-use Mcp\Schema\PromptMessage;
-use Mcp\Schema\Enum\Role;
-
-#[McpPrompt]
-public function analyzeImage(string $imageUrl, string $question): array
-{
-    $imageData = file_get_contents($imageUrl);
-    
-    return [
-        new PromptMessage(Role::Assistant, [
-            new TextContent('You are an image analysis expert.')
-        ]),
-        new PromptMessage(Role::User, [
-            new TextContent($question),
-            new ImageContent(
-                data: base64_encode($imageData),
-                mimeType: 'image/jpeg'
-            )
-        ])
-    ];
-}
-```
-
-## Completion Providers
-
-### Value List Completion
-
-```php
-use Mcp\Capability\Attribute\{McpPrompt, CompletionProvider};
-
-#[McpPrompt]
-public function generateContent(
-    #[CompletionProvider(values: ['blog', 'article', 'tutorial', 'guide'])]
-    string $contentType,
-    
-    #[CompletionProvider(values: ['beginner', 'intermediate', 'advanced'])]
-    string $difficulty
-): array
-{
-    return [
-        ['role' => 'user', 'content' => "Create a {$difficulty} level {$contentType}"]
-    ];
-}
-```
-
-### Enum Completion
-
-```php
-enum Priority: string
-{
-    case LOW = 'low';
-    case MEDIUM = 'medium';
-    case HIGH = 'high';
-}
-
-enum Status
-{
-    case DRAFT;
-    case PUBLISHED;
-    case ARCHIVED;
-}
-
-#[McpResourceTemplate(uriTemplate: 'tasks/{taskId}')]
-public function getTask(
-    string $taskId,
-    
-    #[CompletionProvider(enum: Priority::class)]
-    string $priority,
-    
-    #[CompletionProvider(enum: Status::class)]
-    string $status
-): array
-{
-    return $this->tasks[$taskId] ?? [];
-}
-```
-
-### Custom Completion Provider
-
-```php
-use Mcp\Capability\Prompt\Completion\ProviderInterface;
-
-class UserIdCompletionProvider implements ProviderInterface
-{
-    public function __construct(
-        private DatabaseService $db
-    ) {}
-
-    public function getCompletions(string $currentValue): array
-    {
-        return $this->db->searchUserIds($currentValue);
-    }
-}
-
-#[McpResourceTemplate(uriTemplate: 'user://{userId}/profile')]
-public function getUserProfile(
-    #[CompletionProvider(provider: UserIdCompletionProvider::class)]
-    string $userId
-): array
-{
-    return $this->users[$userId] ?? 
-        throw new \InvalidArgumentException('User not found');
-}
-```
-
-## Transport Options
-
-### Stdio Transport
-
-For command-line integration (default):
-
-```php
-use Mcp\Server\Transport\StdioTransport;
-
-$transport = new StdioTransport();
-$server->run($transport);
-```
-
-### HTTP Transport
-
-For web-based integration:
-
-```php
-use Mcp\Server\Transport\StreamableHttpTransport;
-use Nyholm\Psr7\Factory\Psr17Factory;
-
-$psr17Factory = new Psr17Factory();
-
-$request = $psr17Factory->createServerRequestFromGlobals();
-
-$transport = new StreamableHttpTransport(
-    $request,
-    $psr17Factory,  // Response factory
-    $psr17Factory   // Stream factory
-);
-
-$response = $server->run($transport);
-
-// Send response in your web framework
-foreach ($response->getHeaders() as $name => $values) {
-    foreach ($values as $value) {
-        header("$name: $value", false);
-    }
-}
-
-http_response_code($response->getStatusCode());
-echo $response->getBody();
-```
-
-## Session Management
-
-### In-Memory Sessions (Default)
-
-```php
-$server = Server::builder()
-    ->setServerInfo('My Server', '1.0.0')
-    ->setSession(ttl: 7200) // 2 hours
-    ->build();
-```
-
-### File-Based Sessions
-
-```php
-use Mcp\Server\Session\FileSessionStore;
-
-$server = Server::builder()
-    ->setServerInfo('My Server', '1.0.0')
-    ->setSession(new FileSessionStore(__DIR__ . '/sessions'))
-    ->build();
-```
-
-### Custom Session Store
-
-```php
-use Mcp\Server\Session\InMemorySessionStore;
-
-$server = Server::builder()
-    ->setServerInfo('My Server', '1.0.0')
-    ->setSession(new InMemorySessionStore(3600))
-    ->build();
-```
-
-## Error Handling
-
-### Exception Handling in Tools
-
-```php
-#[McpTool]
+#[McpTool(name: 'divide_numbers')]
 public function divideNumbers(float $a, float $b): float
 {
     if ($b === 0.0) {
         throw new \InvalidArgumentException('Division by zero is not allowed');
     }
-    
+
     return $a / $b;
 }
+```
 
+Why: The tool has a stable protocol name, validates invalid input before computation, and lets the SDK convert the exception into a JSON-RPC error response.
+
+**Bad:**
+
+```php
 #[McpTool]
 public function processFile(string $filename): string
 {
-    if (!file_exists($filename)) {
-        throw new \InvalidArgumentException("File not found: {$filename}");
-    }
-    
-    if (!is_readable($filename)) {
-        throw new \RuntimeException("File not readable: {$filename}");
-    }
-    
     return file_get_contents($filename);
 }
 ```
 
-### Custom Error Responses
+Why: The tool exposes unrestricted file access, omits `file_exists` and `is_readable` checks, and gives clients unpredictable PHP warnings instead of clear MCP errors.
 
-The SDK automatically converts exceptions into JSON-RPC error responses that MCP clients understand.
+## Conventions
 
-## Testing
+| Rule | Rationale |
+|---|---|
+| Use `composer require mcp/sdk`, PHP `^8.2`, PSR-4 autoloading, and `declare(strict_types=1)` | Attribute-based discovery and typed SDK contracts require a modern, deterministic PHP runtime |
+| Keep `server.php` responsible for `Server::builder()`, `setServerInfo`, discovery or manual registration, transport creation, and `run` | Capabilities stay testable and transport-neutral |
+| Prefer attribute discovery with bounded `scanDirs`, `excludeDirs`, and PSR-16 cache in production | Startup remains fast and does not scan dependencies or tests |
+| Validate tool inputs with PHP checks and `Schema` attributes | Clients receive useful schemas and server code rejects unsafe input before side effects |
+| Use typed content classes for text, images, resources, blobs, prompt messages, and roles | MCP clients can render and route responses correctly |
+| Choose `StdioTransport` for CLI clients and `StreamableHttpTransport` with PSR-17 factories for HTTP integration | Each transport follows the SDK-supported request and response lifecycle |
+| Configure sessions with explicit TTLs and protected stores | Long-running clients keep context without leaking or persisting stale state indefinitely |
+| Test tools, error paths, and discovery with PHPUnit | Capability behavior and SDK registration fail before deployment |
+| Enable discovery cache, OPcache, and optimized Composer autoloading in production | Runtime overhead stays bounded for CLI and web integrations |
+| Keep Docker, systemd, Laravel, Symfony, Claude Desktop, and MCP Inspector examples absolute and reproducible | Operators can run the same server consistently across environments |
 
-### PHPUnit Tests for Tools
+## Do / Do Not
 
-```php
-<?php
+| Do | Do not |
+|---|---|
+| Put MCP tools in `src/Tools`, resources in `src/Resources`, and prompts in `src/Prompts` | Mix tools, resources, prompts, transport code, and framework commands in one class |
+| Use `#[McpTool]`, `#[McpResource]`, `#[McpResourceTemplate]`, `#[McpPrompt]`, and `CompletionProvider` intentionally | Depend on accidental public methods or undocumented reflection behavior |
+| Return `TextContent`, `ImageContent`, `TextResourceContents`, `BlobResourceContents`, or `PromptMessage` when content type matters | Return untyped arrays for mixed media or resource content that clients must render precisely |
+| Throw `\InvalidArgumentException` for invalid client input and `\RuntimeException` for unreadable server state | Let PHP warnings, notices, or fatal errors become the protocol response |
+| Use `StdioTransport` for local command-line clients and `StreamableHttpTransport` for HTTP endpoints | Write custom JSON-RPC loops around the SDK |
+| Run `npx @modelcontextprotocol/inspector php /path/to/server.php` before publishing configuration | Ask users to debug uninspected client setup |
+| Install production dependencies with `composer install --no-dev --optimize-autoloader` | Ship development packages and unoptimized autoloaders in runtime images |
+| Preserve absolute paths such as `/absolute/path/to/server.php` in client examples | Commit relative paths or machine-specific placeholders as production configuration |
 
-namespace Tests;
+## Checklist Before Opening a PR
 
-use PHPUnit\Framework\TestCase;
-use App\Tools\Calculator;
+- [ ] Composer configuration includes `mcp/sdk`, PHP `^8.2`, PSR-4 autoloading, and test-only packages under `require-dev`.
+- [ ] Server construction uses `Server::builder()`, `setServerInfo`, discovery or manual registration, `build()`, and an SDK transport.
+- [ ] Attribute discovery scans only intended directories and excludes `vendor`, `tests`, `var`, and `cache`.
+- [ ] Tools, resources, resource templates, prompts, and completions use stable MCP names, URI templates, MIME types, and schemas.
+- [ ] File, network, and calculation tools validate inputs and throw explicit exceptions for invalid or unsafe states.
+- [ ] Sessions use an explicit TTL or protected session store.
+- [ ] PHPUnit covers ordinary tool behavior, error behavior, and capability discovery.
+- [ ] Production deployment uses discovery cache, OPcache settings, and optimized Composer autoloading.
+- [ ] Docker, systemd, Laravel, Symfony, Claude Desktop, and MCP Inspector examples remain absolute and runnable.
+- [ ] No relative primitive links, editor-only prompt asset references, unrelated edits, or placeholder package names remain.
 
-class CalculatorTest extends TestCase
-{
-    private Calculator $calculator;
-    
-    protected function setUp(): void
-    {
-        $this->calculator = new Calculator();
-    }
-    
-    public function testAdd(): void
-    {
-        $result = $this->calculator->add(5, 3);
-        $this->assertSame(8, $result);
-    }
-    
-    public function testDivideByZero(): void
-    {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Division by zero');
-        
-        $this->calculator->divide(10, 0);
-    }
-}
-```
-
-### Testing Server Discovery
-
-```php
-public function testServerDiscoversTools(): void
-{
-    $server = Server::builder()
-        ->setServerInfo('Test Server', '1.0.0')
-        ->setDiscovery(__DIR__ . '/../src', ['.'])
-        ->build();
-    
-    $capabilities = $server->getCapabilities();
-    
-    $this->assertArrayHasKey('tools', $capabilities);
-    $this->assertNotEmpty($capabilities['tools']);
-}
-```
-
-## Performance Best Practices
-
-### Use Discovery Caching
-
-Always use caching in production:
-
-```php
-use Symfony\Component\Cache\Adapter\RedisAdapter;
-use Symfony\Component\Cache\Psr16Cache;
-
-$redis = new \Redis();
-$redis->connect('127.0.0.1', 6379);
-
-$cache = new Psr16Cache(new RedisAdapter($redis));
-
-$server = Server::builder()
-    ->setServerInfo('My Server', '1.0.0')
-    ->setDiscovery(
-        basePath: __DIR__,
-        scanDirs: ['src'],
-        excludeDirs: ['vendor', 'tests', 'var'],
-        cache: $cache
-    )
-    ->build();
-```
-
-### Optimize Scan Directories
-
-Only scan necessary directories:
-
-```php
-$server = Server::builder()
-    ->setDiscovery(
-        basePath: __DIR__,
-        scanDirs: ['src/Tools', 'src/Resources'],  // Specific dirs
-        excludeDirs: ['vendor', 'tests', 'var', 'cache']
-    )
-    ->build();
-```
-
-### Use OPcache
-
-Enable OPcache in production for better PHP performance:
-
-```ini
-; php.ini
-opcache.enable=1
-opcache.memory_consumption=256
-opcache.interned_strings_buffer=16
-opcache.max_accelerated_files=10000
-opcache.validate_timestamps=0
-```
-
-## Framework Integration
-
-### Laravel Integration
-
-```php
-// app/Console/Commands/McpServer.php
-namespace App\Console\Commands;
-
-use Illuminate\Console\Command;
-use Mcp\Server;
-use Mcp\Server\Transport\StdioTransport;
-
-class McpServer extends Command
-{
-    protected $signature = 'mcp:serve';
-    protected $description = 'Start MCP server';
-    
-    public function handle()
-    {
-        $server = Server::builder()
-            ->setServerInfo('Laravel MCP Server', '1.0.0')
-            ->setDiscovery(app_path(), ['Tools', 'Resources'])
-            ->build();
-        
-        $transport = new StdioTransport();
-        $server->run($transport);
-    }
-}
-```
-
-### Symfony Integration
-
-```php
-// Use symfony/mcp-bundle for native integration
-composer require symfony/mcp-bundle
-```
-
-## Deployment
-
-### Docker Deployment
-
-```dockerfile
-FROM php:8.2-cli
-
-# Install extensions
-RUN docker-php-ext-install pdo pdo_mysql
-
-# Install Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-
-# Set working directory
-WORKDIR /app
-
-# Copy application
-COPY . /app
-
-# Install dependencies
-RUN composer install --no-dev --optimize-autoloader
-
-# Make server executable
-RUN chmod +x /app/server.php
-
-CMD ["php", "/app/server.php"]
-```
-
-### Systemd Service
-
-```ini
-[Unit]
-Description=MCP PHP Server
-After=network.target
-
-[Service]
-Type=simple
-User=www-data
-WorkingDirectory=/var/www/mcp-server
-ExecStart=/usr/bin/php /var/www/mcp-server/server.php
-Restart=always
-
-[Install]
-WantedBy=multi-user.target
-```
-
-## Configuration for MCP Clients
-
-### Claude Desktop Configuration
-
-```json
-{
-  "mcpServers": {
-    "php-server": {
-      "command": "php",
-      "args": ["/absolute/path/to/server.php"]
-    }
-  }
-}
-```
-
-### MCP Inspector Testing
-
-```bash
-npx @modelcontextprotocol/inspector php /path/to/server.php
-```
-
-## Additional Resources
+## References
 
 - [Official PHP SDK Repository](https://github.com/modelcontextprotocol/php-sdk)
 - [MCP Elements Documentation](https://github.com/modelcontextprotocol/php-sdk/blob/main/docs/mcp-elements.md)

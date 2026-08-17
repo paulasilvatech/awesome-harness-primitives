@@ -129,8 +129,9 @@ Use the specific CollectionView and XAML members below rather than carrying List
 | Swipe actions | `SwipeView`, `SwipeView.RightItems`, `SwipeItems`, `SwipeItem`, `CommandParameter`, and command names such as `DeleteCommand` | `MenuItem`, `IsDestructive`, and `ViewCell.ContextActions` |
 | Binding to an ancestor command | `RelativeSource` with `AncestorType` and explicit `CommandParameter` | Event handlers hidden inside cell classes |
 | Toggle rows | `Switch`, `IsToggled`, `IsEnabled`, and `ShowSwitch` in a template | `SwitchCell` |
+| Image rows | `Image`, `ImageUrl`, `AspectFill`, `HeightRequest`, `WidthRequest`, and `Image.Behaviors` when caching behavior is needed | Unbounded images inside a virtualized list |
 
-Keep template layout properties explicit. Use `Grid`, `ColumnDefinitions`, `Grid.Column`, `HorizontalOptions`, `VerticalOptions`, `HorizontalTextAlignment`, `BackgroundColor`, `Grid.BackgroundColor`, `StaticResource`, `TextColor`, `StrokeThickness`, and `TypeArguments` intentionally so migrated XAML remains readable. Use `Colors.Transparent` and other `Colors.*` values for code-only platform branches when a style or resource is not the clearer option.
+Keep template layout properties explicit. Use `Grid`, `ColumnDefinitions`, `Grid.Column`, `HorizontalOptions`, `VerticalOptions`, `HorizontalTextAlignment`, `BackgroundColor`, `Grid.BackgroundColor`, `StaticResource`, `TextColor`, `StrokeThickness`, and `TypeArguments` intentionally so migrated XAML remains readable. Use `StackLayout` only when touching legacy XAML that already uses it; prefer `VerticalStackLayout`, `Grid`, or `FlexLayout` for new migrated templates. Use `Colors.Transparent` and other `Colors.*` values for code-only platform branches when a style or resource is not the clearer option.
 
 ## Platform-Specific ListView and Handler Changes
 
@@ -147,13 +148,13 @@ viewCell.On<iOS>().SetDefaultBackgroundColor(Colors.White);
 viewCell.On<Android>().SetIsContextActionsLegacyModeEnabled(false);
 ```
 
-Move platform styling into XAML `OnPlatform`, conditional compilation, styles, or template-level properties instead of carrying obsolete `ListView` extensions forward. Keep `IOS`, `ANDROID`, and `MACCATALYST` compilation symbols only where platform behavior truly differs.
+Move platform styling into XAML `OnPlatform`, conditional compilation, styles, or template-level properties instead of carrying obsolete `ListView` extensions forward. Remove namespaces ending in `Specific.ListView` with the old platform extension calls. Keep `IOS`, `ANDROID`, and `MACCATALYST` compilation symbols only where platform behavior truly differs.
 
 .NET 10 uses optimized `CollectionView` and `CarouselView` handlers on iOS/Mac Catalyst by default. If a .NET 9 app opted-in to the new handlers in `MauiProgram`, REMOVE the `ConfigureMauiHandlers` customization, including code such as `handlers.AddHandler<CollectionView, CollectionViewHandler2>()` and `handlers.AddHandler<CarouselView, CarouselViewHandler2>()`. Reverting `Microsoft.Maui.Controls.CollectionView` to the legacy handler with `Microsoft.Maui.Controls.Handlers.Items.CollectionViewHandler` belongs only behind an issue-specific workaround, because the default optimized handlers should be the normal path.
 
 ## Deprecated Async API Replacements
 
-Replace obsolete synchronous-looking APIs with the .NET 10 async names and preserve `await`. Most obsolete animation members are `ViewExtensions` methods over `VisualElement`; forgetting `await` changes flow control even when the animation or dialog still appears.
+Replace obsolete synchronous-looking APIs with the .NET 10 async names and preserve `await`. Most obsolete animation members are `ViewExtensions` methods over `VisualElement`; for example, `ViewExtensions.FadeTo` becomes `FadeToAsync`. Forgetting `await` changes flow control even when the animation or dialog still appears.
 
 | Deprecated method | Replacement | Example |
 | --- | --- | --- |
@@ -173,7 +174,7 @@ Replace obsolete synchronous-looking APIs with the .NET 10 async names and prese
 
 Use `Task.WhenAll` for parallel animations only when the UI intent is simultaneous motion. Use cancellation-aware async APIs where animation cancellation matters, and catch `TaskCanceledException` only where cancellation is expected.
 
-Use `CancellationTokenSource` only when the code actually owns cancellation, and dispose it according to normal C# ownership rules. In ViewModels, route UI dialogs through the dispatcher when necessary: a `MyViewModel` example may call `DispatchAsync` to invoke `Page.DisplayAlert` replacements such as `DisplayAlertAsync` on the UI thread, but production code should depend on an app-specific dialog abstraction where one exists.
+Use `CancellationTokenSource` only when the code actually owns cancellation, and dispose it according to normal C# ownership rules. In ViewModels, route UI dialogs through the dispatcher when necessary: a `MyViewModel` example may call `ShowAlertAsync` and `DispatchAsync` to invoke `Page.DisplayAlert` replacements such as `DisplayAlertAsync` on the UI thread, but production code should depend on an app-specific dialog abstraction where one exists.
 
 ## Loading State and Application Windows
 
@@ -204,6 +205,8 @@ Replace single-selection picker methods with multi-selection variants and explic
 | `MediaPicker.CaptureVideoAsync` | unchanged | Keep as-is. |
 
 Set `MediaPickerOptions.SelectionLimit` deliberately: `SelectionLimit = 1` preserves single-selection, `SelectionLimit > 1` allows a specific multi-selection count, and `SelectionLimit = 0` allows unlimited multi-select. The default behavior is single selection, but explicit limits are easier to audit during migration.
+
+Keep the short method names searchable during review: `PickPhotoAsync()`, `PickPhotosAsync()`, `PickVideoAsync()`, `PickVideosAsync()`, `CapturePhotoAsync`, and `CaptureVideoAsync`.
 
 Handle cancellation as an empty list, not `null`: use `photos.Count == 0`, not `photo == null`, before processing. After `PickPhotosAsync`, use `var photo = photos.FirstOrDefault();`; after `PickVideosAsync`, use `var video = videos.FirstOrDefault();`. Keep permission handling with `PermissionException` and show errors through `DisplayAlertAsync`.
 

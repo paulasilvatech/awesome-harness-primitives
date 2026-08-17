@@ -25,19 +25,19 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | AEM Front-End Specialist | Expert AEM front-end agent for HTL, Tailwind CSS, ClientLibs, accessibility, and Figma-to-code component workflows. Use when building or reviewing production-ready AEM components. |
 | Agent Governance Reviewer | AI agent governance expert that reviews code for safety issues, missing governance controls, and helps implement policy enforcement, trust scoring, and audit trails in agent syste… |
 | ai-readiness-reporter | Runs an AgentRC readiness assessment and produces a self-contained static HTML dashboard at reports/index.html. Use when asked to assess, audit, score, report on, or visualize rep… |
-| ai-team-dev | AI development team (Nova, Sage, Milo). Use when implementing features, fixing bugs, writing tests, improving user experience, or preparing a pull request across the project's act… |
-| ai-team-producer | AI team producer (Remy). Use when planning work, clarifying scope, coordinating Dev and optional QA, triaging issues, maintaining project context, or preparing and merging pull re… |
+| ai-team-dev | AI development team agent for implementing features, fixing bugs, writing tests, improving UX, and preparing pull requests across the repository's actual stack. |
+| ai-team-producer | AI team producer agent for planning, scoping, coordinating Dev and optional QA, triaging issues, maintaining context, and preparing or merging pull requests. Never writes applicat… |
 | ai-team-qa | Optional AI QA engineer (Ivy). Use when testing behavior, running automated or exploratory checks, filing reproducible bugs, verifying fixes, or providing release confidence for c… |
-| Amplitude Experiment Implementation | This custom agent uses Amplitude's MCP tools to deploy new experiments inside of Amplitude, enabling seamless variant testing capabilities and rollout of product features. |
-| API Architect | Your role is that of an API architect. Help mentor the engineer by providing guidance, support, and working code. |
+| Amplitude Experiment Implementation | Amplitude experiment implementation agent for issue-driven feature work, instrumentation, experiment creation, and variant wrapping. Use when deploying product experiments through… |
+| API Architect | API architecture agent for designing and generating working client-to-external-service connectivity. Use when an engineer needs layered REST client code with optional resiliency. |
 | apify-integration-expert | Expert agent for integrating Apify Actors into codebases. Use when teams need Actor selection, workflow design, JavaScript/TypeScript or Python implementation, testing, and produc… |
 | Arch Linux Expert | Arch Linux specialist focused on pacman, rolling-release maintenance, and Arch-centric system administration workflows. |
 | arm-migration-agent | Arm Cloud Migration Assistant accelerates moving x86 workloads to Arm infrastructure. It scans the repository for architecture assumptions, portability issues, container base imag… |
 | Atlassian Requirements to Jira | Transform requirements documents into structured Jira epics and user stories with duplicate detection, change previews, approval gates, and secure backlog creation. Use when conve… |
 | AVM Owner Triage | Triage open GitHub issues across the Azure Verified Modules (AVM) repos an owner maintains. Use when an AVM owner needs a quick or deep backlog split into Copilot-ready and human-… |
-| AWS Incident Triage | On-call SRE agent that drives structured CloudWatch-based incident investigation from alarms through root-cause hypothesis. |
-| aws-cloud-expert | AWS Cloud Expert provides deep, hands-on guidance for designing, building, and operating AWS workloads. Covers the full AWS ecosystem — serverless, containers, databases, networki… |
-| aws-principal-architect | Provide expert AWS Principal Architect guidance using AWS Well-Architected Framework principles and AWS best practices. |
+| AWS Incident Triage | On-call SRE agent for structured CloudWatch-based incident investigation. Use when alarms, anomalies, or production AWS symptoms need evidence-backed triage. |
+| aws-cloud-expert | AWS Cloud Expert provides hands-on guidance for designing, building, deploying, and operating AWS workloads. Use for serverless, containers, databases, networking, IaC, security,… |
+| aws-principal-architect | AWS Principal Architect guidance agent for Well-Architected reviews, cloud-native designs, AWS best practices, and enterprise deployment trade-offs. |
 | aws-serverless-architect | Provide expert AWS Serverless Architect guidance focusing on event-driven architectures, Lambda, API Gateway, and serverless best practices. |
 | Azure AVM Bicep mode | Create, update, or review Azure IaC in Bicep using Azure Verified Modules (AVM). |
 | Azure AVM Terraform mode | Create, update, or review Azure IaC in Terraform using Azure Verified Modules (AVM). |
@@ -46,61 +46,61 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | Azure Principal Architect mode instructions | Provide expert Azure Principal Architect guidance using Azure Well-Architected Framework principles and Microsoft best practices. |
 | Azure SaaS Architect mode instructions | Provide Azure SaaS architecture guidance for multitenant applications. Use when B2B, B2C, or hybrid SaaS decisions need Well-Architected SaaS and Microsoft best-practice alignment. |
 | Azure Smart City IoT Architect | Design Azure IoT and Smart City architectures with clear platform engineering reasoning, requiring mandatory review of Azure IoT Edge documentation before recommending edge soluti… |
-| Azure Terraform IaC Implementation Specialist | Act as an Azure Terraform Infrastructure as Code coding specialist that creates and reviews Terraform for Azure resources. |
+| Azure Terraform IaC Implementation Specialist | Azure Terraform IaC coding specialist. Use to create, validate, and review Terraform for Azure resources from INFRA plans. |
 | Azure Terraform Infrastructure Planning | Create deterministic Azure Terraform implementation plans under .terraform-planning-files. Use for Azure IaC planning before implementation. |
 | azure-iac-exporter | Export existing Azure resources to Infrastructure as Code templates through Azure Resource Graph, Azure Resource Manager API analysis, data-plane inspection, and IaC generation. U… |
 | azure-iac-generator | Generates production-ready Infrastructure as Code in Bicep, ARM, Terraform, or Pulumi. Use when users request infrastructure code, deployment templates, or IaC with Azure-first va… |
 | Bicep Planning | Azure Bicep IaC implementation planner. Use when an Azure resource goal needs a deterministic plan under .bicep-planning-files/. |
-| Bicep Specialist | Act as an Azure Bicep Infrastructure as Code coding specialist that creates Bicep templates. |
+| Bicep Specialist | Azure Bicep Infrastructure as Code specialist for creating, validating, formatting, and linting Bicep templates. Use when Azure IaC must be implemented in .bicep files. |
 | Blueprint Mode | Execute software tasks through Blueprint workflows with strict verification, self-correction, and minimal communication. Use for structured autonomous engineering work. |
 | C# Expert | Expert C#/.NET development support for design, implementation, debugging, async, testing, performance, security, and modernization. Use when working on .NET or C# code. |
 | C# MCP Server Expert | Expert assistant for developing Model Context Protocol (MCP) servers in C#. Use for SDK design, tools, prompts, resources, testing, and debugging. |
-| C#/.NET Janitor | Perform janitorial tasks on C#/.NET code including cleanup, modernization, and tech debt remediation. |
-| C++ Expert | Provide expert C++ software engineering guidance using modern C++ and industry best practices. |
-| CAST Imaging Impact Analysis Agent | Specialized agent for comprehensive change impact assessment and risk analysis in software systems using CAST Imaging |
-| CAST Imaging Software Discovery Agent | Specialized agent for comprehensive software application discovery and architectural mapping through static code analysis using CAST Imaging |
-| CAST Imaging Structural Quality Advisor Agent | Specialized agent for identifying, analyzing, and providing remediation guidance for code quality issues using CAST Imaging |
+| C#/.NET Janitor | Perform janitorial tasks on C#/.NET code. Use for cleanup, modernization, performance tuning, test coverage, documentation, and tech debt remediation. |
+| C++ Expert | Provides expert C++ engineering guidance and implementation using modern C++, architecture, testing, CI/CD, and legacy-code practices. Use for C++ design, refactoring, debugging,… |
+| CAST Imaging Impact Analysis Agent | Specialized agent for comprehensive change impact assessment and risk analysis in software systems using CAST Imaging. |
+| CAST Imaging Software Discovery Agent | Specialized agent for comprehensive software application discovery and architectural mapping through static code analysis using CAST Imaging. |
+| CAST Imaging Structural Quality Advisor Agent | Specialized agent for identifying, analyzing, and providing remediation guidance for code quality issues using CAST Imaging. Use for structural quality, security, Green IT, and IS… |
 | Caveman Mode | Terse, low-token responses. Minimal words, no fluff. Full capabilities preserved. Use when: optimize token usage, low-token mode, concise output, caveman mode, reduce verbosity, t… |
 | CentOS Linux Expert | CentOS (Stream/Legacy) Linux specialist focused on RHEL-compatible administration, yum/dnf workflows, and enterprise hardening. |
-| Clojure Interactive Programming | Expert Clojure pair programmer with REPL-first methodology, architectural oversight, and interactive problem-solving. Enforces quality standards, prevents workarounds, and develop… |
+| Clojure Interactive Programming | REPL-first Clojure pair programmer for incremental development, debugging, refactoring, and architectural integrity. Use when Clojure changes must be evaluated before editing file… |
 | Cloud and SaaS Outage Triage | Distinguish upstream cloud or SaaS incidents from application failures before changing code, using live official-feed status and incident timelines. |
 | Comet Opik | Unified Comet Opik agent for LLM tracing, prompt governance, workspace/project management, metrics investigation, imports/exports, and Opik MCP or CLI diagnostics. |
 | Context Architect | Plans and executes multi-file code changes by identifying relevant context, dependencies, risks, and validation paths before editing. |
 | Context7-Expert | Documentation-first library and framework expert that uses Context7 and version checks before answering API, syntax, best-practice, migration, or code-generation questions. Use wh… |
 | copilot-primitive-architect | Advises on Copilot primitive architecture: type routing, responsibility boundaries, and read-only reviews; does not create skills or primitives. |
-| Create PRD Chat Mode | Generate a comprehensive Product Requirements Document (PRD) in Markdown, detailing user stories, acceptance criteria, technical considerations, and metrics. Optionally create Git… |
-| Critical thinking mode instructions | Challenge assumptions and encourage critical thinking to ensure the best possible solution and outcomes. |
+| Create PRD Chat Mode | Creates comprehensive Product Requirements Documents in Markdown with user stories, acceptance criteria, technical considerations, metrics, and optional GitHub issue creation afte… |
+| Critical thinking mode instructions | Challenges assumptions with concise questions and root-cause probing. Use when an engineer needs to think harder before choosing a solution. |
 | Custom Agent Foundry | Design and create GitHub Copilot custom agents with scoped tools, frontmatter, handoffs, and clear behavior. Use when a user wants a new or improved agent. |
 | Debian Linux Expert | Debian Linux specialist focused on stable system administration, apt-based package management, and Debian policy-aligned practices. |
-| Debug Mode Instructions | Debug your application to find and fix a bug |
+| Debug Mode Instructions | Debug your application to find and fix a bug. Use for systematic reproduction, root-cause analysis, targeted fixes, verification, and final bug reports. |
 | Declarative Agents Architect | Architect Microsoft 365 Copilot declarative agents using schema v1.5, TypeSpec, Agents Toolkit, capability selection, testing, and enterprise deployment best practices. |
-| Defender Scout KQL | Generates, validates, and optimizes KQL queries for Microsoft Defender XDR Advanced Hunting across Endpoint, Identity, Office 365, Cloud Apps, and Identity. |
+| Defender Scout KQL | Generates, validates, optimizes, and explains Microsoft Defender XDR Advanced Hunting KQL. Use for Endpoint, Identity, Office 365, Cloud Apps, alerts, email, and vulnerability que… |
 | Delphi Expert | Expert Delphi/Object Pascal development support for VCL, FMX, FireDAC, legacy modernization, debugging, architecture, testing, and production-quality code tasks. Use when Delphi-s… |
 | Demonstrate Understanding mode instructions | Validate user understanding of code, design patterns, and implementation details through guided questioning. |
 | devils-advocate | Critical challenge agent that stress-tests ideas, proposals, and decisions by raising the strongest objections, risks, assumptions, and edge cases. Use when a plan needs adversari… |
 | DevOps Expert | DevOps lifecycle specialist for Plan → Code → Build → Test → Release → Deploy → Operate → Monitor. Use when teams need automation, collaboration, IaC, CI/CD, monitoring, or contin… |
 | DevTools Regression Investigator | Browser regression specialist for reproducing broken user flows, collecting console and network evidence, and narrowing likely root causes with Chrome DevTools MCP. |
 | DiffblueCover | Expert agent for creating unit tests for java applications using Diffblue Cover. |
-| dotnet-fullstack-mentor | Opinionated mentor for .NET full-stack development, guiding career progression from junior to staff levels with expertise in Clean Architecture, Aspire, and C# best practices. |
-| Doublecheck | Interactive verification agent for AI-generated output. Runs a three-layer pipeline (self-audit, source verification, adversarial review) and produces structured reports with sour… |
+| dotnet-fullstack-mentor | Opinionated mentor for .NET full-stack development. Use for career progression from junior to staff levels, Clean Architecture, Aspire, C# internals, and Microsoft ecosystem trade… |
+| Doublecheck | Interactive verification agent for AI-generated output. Use when AI output needs claim extraction, source verification, adversarial review, and source-linked risk reporting before… |
 | droid | Provides installation guidance, usage examples, and automation patterns for the Droid CLI. Use when developers need secure droid exec usage for CI/CD, non-interactive automation,… |
 | Drupal Expert | Expert Drupal development assistant for custom modules, entities, themes, services, configuration, security, performance, testing, and deployment. Use when building or reviewing D… |
 | Dynatrace Expert | Dynatrace observability and security agent for incident response, deployment validation, production error triage, performance regression detection, release health checks, DQL assi… |
 | elasticsearch-agent | Our expert AI assistant for debugging code (O11y), optimizing vector search (RAG), and remediating security threats using live Elastic data. |
 | Electron Code Review Mode Instructions | Review Electron desktop apps with Node.js main process, Angular renderer, and native integration layers. Use when code needs security, async, IPC, RxJS, memory, performance, and n… |
 | Ember | An AI partner that helps people discover AI collaboration by working on real problems with warmth, honesty, stories, and direct challenge. Use when someone needs partnership, not… |
-| Expert .NET software engineer mode instructions | Provide expert .NET software engineering guidance using modern software design patterns. |
-| Expert Nuxt Developer | Expert Nuxt developer specializing in Nuxt 3, Nitro, server routes, data fetching strategies, and performance optimization with Vue 3 and TypeScript |
+| Expert .NET software engineer mode instructions | Provides expert .NET engineering guidance and implementation using modern C#, architecture, testing, performance, security, and DevOps practices. Use for .NET design, refactoring,… |
+| Expert Nuxt Developer | Expert Nuxt developer for Nuxt 3, Nitro, server routes, data fetching, rendering modes, migration, testing, and performance. Use when building or refactoring production Nuxt apps. |
 | Expert React Frontend Engineer | Expert React 19.2 frontend engineer for modern hooks, Server Components, Actions, TypeScript, accessibility, testing, and performance work. Use when building, reviewing, or modern… |
-| Expert Vue.js Frontend Engineer | Expert Vue.js frontend engineer specializing in Vue 3 Composition API, reactivity, state management, testing, and performance with TypeScript |
+| Expert Vue.js Frontend Engineer | Expert Vue.js frontend engineer for Vue 3 Composition API, TypeScript, component architecture, Pinia, routing, testing, accessibility, migration, and performance. |
 | expert-embedded-c-engineer | Expert embedded C guidance for safety-critical systems -- covers MISRA C:2012/2025 rule compliance, CERT C secure coding, static analysis tooling (Coverity, QAC, PC-lint), and def… |
 | Fedora Linux Expert | Fedora (Red Hat family) Linux specialist focused on dnf, SELinux, and modern systemd-based workflows. |
-| Frontend Performance Investigator | Runtime web-performance specialist for diagnosing Core Web Vitals, Lighthouse regressions, layout shifts, long tasks, and slow network paths with Chrome DevTools MCP. |
+| Frontend Performance Investigator | Runtime web-performance specialist for Core Web Vitals, Lighthouse regressions, layout shifts, long tasks, slow networks, and browser trace diagnosis. |
 | gem-browser-tester | E2E browser testing, UI/UX validation, visual regression. Use when task acceptance criteria require browser-flow verification. |
 | gem-code-simplifier | Refactoring specialist: removes dead code, reduces complexity, consolidates duplicates. Use as a non-user-invocable agent for behavior-preserving simplification tasks. |
 | gem-critic | Challenges assumptions, finds edge cases, spots over-engineering and logic gaps. Use as a non-user-invocable critique agent before planning or implementation. |
 | gem-debugger | Root-cause analysis agent for stack trace diagnosis, regression bisection, error reproduction, and structured debugging. Use as a read-only subagent when error context must be dia… |
-| gem-designer | UI/UX design specialist: layouts, themes, color schemes, design systems, accessibility. |
+| gem-designer | Creates or validates UI/UX design specs, DESIGN.md files, themes, tokens, accessibility, and responsive layouts. Use for design-only work. |
 | gem-designer-mobile | Designs or validates mobile UI/UX for iOS, Android, and cross-platform apps using HIG, Material 3, safe areas, touch targets, and DESIGN.md. |
 | gem-devops | Deploy infrastructure, manage CI/CD, configure containers, and verify operational readiness. Use when a GEM task delegates deployment or DevOps work. |
 | gem-documentation-writer | Write and update technical docs, README files, PRDs, diagrams, walkthroughs, and AGENTS.md. Use when a GEM task delegates documentation work. |
@@ -112,68 +112,68 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | gem-researcher | Codebase exploration agent for patterns, dependencies, architecture discovery, and bounded evidence collection. Use as a non-implementing subagent when research mode and budget mu… |
 | gem-reviewer | Security auditing, code review, OWASP scanning, PRD compliance verification. |
 | gem-skill-creator | Extract reusable high-confidence patterns into scoped skill packages. Use when a GEM plan delegates pattern-to-skill documentation work. |
-| Gilfoyle Code Review Mode | Code review and analysis with the sardonic wit and technical elitism of Bertram Gilfoyle from Silicon Valley. Prepare for brutal honesty about your code. |
+| Gilfoyle Code Review Mode | Code review and analysis with sardonic, technically elitist delivery inspired by Bertram Gilfoyle. Use when the user wants brutal but accurate critique without code edits. |
 | GitHub Actions Expert | GitHub Actions specialist focused on secure CI/CD workflows, action pinning, OIDC authentication, permissions least privilege, and supply-chain security. Use to create, review, or… |
 | GitHub Actions Node Runtime Upgrade | Upgrade a GitHub Actions JavaScript/TypeScript action to a newer Node runtime version (e.g., node20 to node24) with major version bump, CI updates, and full validation |
 | GitHub Actions Windows ARM64 wheel builder | Adds native Windows ARM64 wheel builds and tests to Python package GitHub Actions workflows with the windows-11-arm runner. Use when a package needs win_arm64 wheels without regre… |
-| Gitmoji Setup | Sets up gitmoji (https://gitmoji.dev) commit tooling in a repository — audits the existing hook manager and commit convention, then installs the right option without clobbering ex… |
+| Gitmoji Setup | Sets up gitmoji (https://gitmoji.dev) commit tooling in a repository by auditing hooks and conventions, then installing a safe prefill hook, picker, or commitlint enforcement with… |
 | Go MCP Server Development Expert | Expert assistant for building Model Context Protocol (MCP) servers in Go using the official SDK. Use for Go MCP tool, resource, prompt, transport, and testing guidance. |
 | High-Level Big Picture Architect (HLBPA) | Creates and reviews high-level architecture documentation focused on major flows, contracts, interfaces, behaviors, failure modes, and Mermaid diagrams. Use for big-picture system… |
 | Idea Generator | Brainstorm and develop new application ideas through interactive questioning until ready for specification creation. Use when a user has a vague app idea or wants ideation before… |
 | Implementation Plan Generation Mode | Creates deterministic, machine-readable implementation plans for features, refactors, upgrades, architecture, data, infrastructure, design, and process work. Use when humans or AI… |
 | interview-prep | Technical interview coach for software engineers. Runs mock interviews, coaches system design, structures behavioral answers using STAR, and researches companies before interviews. |
 | Java MCP Expert | Expert assistance for building Model Context Protocol servers in Java using reactive streams, the official MCP Java SDK, and Spring Boot integration. Use when designing, implement… |
-| JFrog Security Agent | The dedicated Application Security agent for automated security remediation. Verifies package and version compliance, and suggests vulnerability fixes using JFrog security intelli… |
+| JFrog Security Agent | Dedicated application-security agent for policy-compliant open source vulnerability remediation with JFrog security intelligence. Use when dependency fixes must satisfy JFrog Cura… |
 | Kotlin MCP Server Development Expert | Expert Kotlin MCP server assistant for official SDK design, tools, resources, prompts, transports, schemas, coroutines, Gradle, and tests. Use when building MCP servers in Kotlin. |
 | KubeStellar Console | Kubernetes operations expert for KubeStellar Console — helps you set up the console, configure kc-agent (MCP server), connect clusters, deploy workloads, and query live Kubernetes… |
-| Kusto Assistant | Expert KQL assistant for live Azure Data Explorer analysis via Azure MCP server |
+| Kusto Assistant | Expert KQL assistant for live Azure Data Explorer analysis via Azure MCP server. Use when users need schema discovery, query construction, execution, and data-backed answers. |
 | Laravel Expert Agent | Expert Laravel development assistant specializing in modern Laravel 12+ applications with Eloquent, Artisan, testing, and best practices. Use when building, reviewing, or fixing L… |
-| launchdarkly-flag-cleanup | A specialized GitHub Copilot agent that uses the LaunchDarkly MCP server to safely automate feature flag cleanup workflows. This agent determines removal readiness, identifies the… |
-| Lingo.dev Localization (i18n) Agent | Expert at implementing internationalization (i18n) in web applications using a systematic, checklist-driven approach. |
+| launchdarkly-flag-cleanup | Safely removes obsolete LaunchDarkly feature flags by checking LaunchDarkly state, choosing the forward value, updating code, and preparing PR-ready cleanup notes. Use for feature… |
+| Lingo.dev Localization (i18n) Agent | Lingo.dev i18n implementation agent for checklist-driven internationalization in web applications. Use when adding or validating multi-language support. |
 | LinkedIn Post Writer | Draft and format compelling LinkedIn posts with Unicode bold/italic styling, visual separators, and engagement-optimized structure. Transforms raw content, technical material, ima… |
 | Markdown Accessibility Assistant | Improves existing Markdown accessibility using GitHub best practices. Use when documentation needs descriptive links, alt text review, heading fixes, plain-language suggestions, o… |
 | MAUI Expert | Support .NET MAUI cross-platform apps with controls, XAML, handlers, performance, and navigation guidance. Use when building or reviewing MAUI UI and app patterns. |
 | MCP M365 Agent Expert | Expert assistant for building MCP-based declarative agents for Microsoft 365 Copilot with Model Context Protocol integration |
-| Mentor mode | Help mentor the engineer by providing guidance and support. |
-| Meta Agentic Project Scaffold | Finds and installs relevant awesome-copilot prompts, instructions, and chat modes to scaffold agentic project workflows. Use when creating reusable Copilot workflow assets for an… |
+| Mentor mode | Guides engineers through features or refactors with Socratic questions, codebase context, and supportive challenge. Use when learning and judgment matter more than direct answers. |
+| Meta Agentic Project Scaffold | Finds, copies, and installs relevant awesome-copilot prompts, instructions, and chat modes. Use when scaffolding reusable Copilot workflow assets for an application project. |
 | Microsoft Learn Contributor | Microsoft Learn documentation contributor and reviewer. Use when writing, editing, or reviewing Learn articles for Microsoft Writing Style Guide, accessibility, Markdown, metadata… |
-| Microsoft Study and Learn | Activate your personal Microsoft/Azure tutor - learn through guided discovery, not just answers. |
+| Microsoft Study and Learn | Acts as a Microsoft and Azure tutor using guided discovery, practice, and verified learning resources. Use when the user wants to study rather than receive direct answers. |
 | modernization | Human-in-the-loop modernization agent for exhaustive project analysis, feature documentation, architecture recommendations, and migration planning. Use when a repository needs com… |
 | Monday Bug Context Fixer | Elite bug-fixing agent that enriches task context from Monday.com platform data. Use when a Monday bug item ID needs full context discovery, root-cause analysis, production-qualit… |
-| mongodb-performance-advisor | Analyze MongoDB database performance, offer query and index optimization insights and provide actionable recommendations to improve overall usage of the database. |
-| MS-SQL Database Administrator | Work with Microsoft SQL Server databases using the MS SQL extension. |
+| mongodb-performance-advisor | Analyze MongoDB database performance, query patterns, aggregation pipelines, indexes, logs, and Atlas Performance Advisor output. Use when MongoDB workloads need read-only optimiz… |
+| MS-SQL Database Administrator | Manages and troubleshoots Microsoft SQL Server databases with DBA discipline. Use for T-SQL, performance, backup/restore, security, migration, and SQL Server 2025+ compatibility t… |
 | neo4j-docker-client-generator | Generates simple Python Neo4j client libraries from GitHub issues using schema introspection, Pydantic models, repositories, pytest, and testcontainers. Use for clean starter clie… |
 | Neon Migration Specialist | Safe Postgres migrations with zero-downtime using Neon's branching workflow. Test schema changes in isolated database branches, validate thoroughly, then apply to production—all a… |
-| Neon Performance Analyzer | Identify and fix slow Postgres queries automatically using Neon's branching workflow. Analyzes execution plans, tests optimizations in isolated database branches, and provides cle… |
+| Neon Performance Analyzer | Identify and fix slow Postgres queries using Neon's database branching workflow. Use for execution-plan analysis, isolated optimization tests, and before/after performance metrics. |
 | New Relic Incident Response Agent | Correlate New Relic alerts, traces, errors, deployments, and code changes during production incidents. Use when engineers need root cause analysis and safe remediation guidance. |
 | Next.js Expert | Expert Next.js 16 developer specializing in App Router, Server Components, Cache Components, Turbopack, React Compiler, React 19.2, TypeScript, routing, caching, performance, and… |
-| octopus-release-notes-with-mcp | Generate release notes for a release in Octopus Deploy. The tools for this MCP server provide access to the Octopus Deploy APIs. |
+| octopus-release-notes-with-mcp | Generates Octopus Deploy release notes from deployment, release, and commit evidence. Use when a project, environment, and space need markdown release notes. |
 | one-shot-feature-issue-planner | Cloud Agent to Turn a single new-feature request into a complete, issue-ready implementation plan without follow-up questions. Use when a feature idea must become a GitHub issue d… |
-| OpenAPI to Application Generator | Expert assistant for generating working applications from OpenAPI specifications |
+| OpenAPI to Application Generator | OpenAPI-to-application agent for analyzing OpenAPI 3.0+ specs and generating complete, framework-aligned applications from API contracts. |
 | Oracle-to-PostgreSQL Migration Expert | Agent for Oracle-to-PostgreSQL application migrations. Educates users on migration concepts, pitfalls, and best practices; makes code edits and runs commands directly. |
-| PagerDuty Incident Responder | Responds to PagerDuty incidents by analyzing incident context, identifying recent code changes, and suggesting fixes via GitHub PRs. |
+| PagerDuty Incident Responder | Responds to PagerDuty incidents by analyzing incident context, recent code changes, and remediation PR options. Use when a PagerDuty incident ID or affected service needs code-awa… |
 | PHP MCP Expert | Expert PHP MCP server developer using the official PHP SDK, attributes, discovery, transports, testing, deployment, and performance patterns. Use when building or debugging PHP MC… |
 | Pimcore Expert | Build and review Pimcore CMS, DAM, PIM, and E-Commerce solutions with Symfony conventions. Use when Pimcore data models, documents, assets, APIs, workflows, or performance need ex… |
 | Plan Mode - Strategic Planning & Architecture | Strategic planning and architecture assistant focused on thoughtful analysis before implementation. Use when developers need codebase understanding, requirement clarification, ris… |
-| Planning mode instructions | Generate an implementation plan for new features or refactoring existing code. |
+| Planning mode instructions | Implementation planning agent for new features and refactors. Use when the user needs a Markdown plan without code edits. |
 | Platform SRE for Kubernetes | SRE-focused Kubernetes specialist prioritizing reliability, safe rollouts/rollbacks, security defaults, and operational verification for production-grade deployments |
 | Playwright Tester Mode | Explores web apps and generates or improves Playwright tests from observed user flows. Use when creating, debugging, or strengthening Playwright coverage. |
-| PostgreSQL Database Administrator | Work with PostgreSQL databases using the PostgreSQL extension. |
+| PostgreSQL Database Administrator | PostgreSQL DBA agent for inspecting databases, optimizing SQL, backups, restores, monitoring, and security. Use when work must be performed against a PostgreSQL database rather th… |
 | Power BI Data Modeling Expert Mode | Expert Power BI data modeling agent for star schema design, relationship strategy, storage-mode decisions, RLS, and model performance. Use when a Power BI semantic model needs Mic… |
 | Power BI DAX Expert Mode | Expert Power BI DAX guidance using Microsoft best practices for performance, readability, and maintainability of DAX formulas and calculations. Use when designing, optimizing, deb… |
 | Power BI Performance Expert Mode | Expert Power BI performance optimization guidance for troubleshooting, monitoring, and improving Power BI models, reports, DAX, DirectQuery, capacity, refresh, and query performan… |
 | Power BI Visualization Expert Mode | Expert Power BI report design and visualization guidance using Microsoft best practices. Use when report visuals, layout, accessibility, interactions, mobile design, or user exper… |
 | Power Platform Expert | Power Platform expert for Code Apps, canvas apps, Dataverse, connectors, ALM, security, and enterprise best practices. Use for implementation guidance and architecture decisions. |
 | Power Platform MCP Integration Expert | Design Power Platform custom connectors with MCP integration for Copilot Studio. Use for connector schemas, OAuth, JSON-RPC, and deployment guidance. |
-| Principal software engineer | Provide principal-level software engineering guidance with focus on engineering excellence, technical leadership, and pragmatic implementation. |
+| Principal software engineer | Principal-level software engineering agent for pragmatic implementation, design guidance, technical leadership, quality strategy, and debt management. Use when work needs senior e… |
 | Project Architecture Planner | Holistic software architecture planner that evaluates tech stacks, designs scalability roadmaps, performs cloud-agnostic cost analysis, reviews existing codebases, and delivers in… |
 | Project Documenter | Generates professional MS Word project documentation with draw.io architecture diagrams and embedded PNG images. Use when any software project needs discovered architecture, stack… |
 | Prompt Builder | Expert prompt engineering agent for creating, improving, researching, and validating prompts with Prompt Tester feedback. Use when prompts need structured engineering, source anal… |
-| Prompt Engineer | A specialized chat mode for analyzing and improving prompts. Every user input is treated as a prompt to be improved. It first provides a detailed analysis of the original prompt w… |
+| Prompt Engineer | Analyze and improve prompts by treating every user input as a prompt to rewrite. Use when a task needs a detailed system prompt with structured reasoning and output rules. |
 | PySpark Expert Agent | Diagnose PySpark performance bottlenecks, distributed execution pitfalls, and suggest Spark-native rewrites and safer distributed patterns (incl. mapInPandas guidance). Use when P… |
 | Python MCP Server Expert | Expert assistant for developing Model Context Protocol (MCP) servers in Python. Use for FastMCP, tools, resources, prompts, transports, and testing. |
 | Python Notebook Sample Builder | Builds verified Python notebooks that demonstrate Azure and AI features. Use when creating hands-on VS Code notebook samples. |
-| QA | Meticulous QA subagent for test planning, bug hunting, edge-case analysis, and implementation verification. |
+| QA | Meticulous QA subagent for test planning, bug hunting, edge-case analysis, and implementation verification. Use when software needs risk-based testing or bug reports. |
 | quality-playbook | Orchestrates the Quality Playbook skill across exploration, generation, review, audit, reconciliation, verification, and iterations. Use when a codebase needs deep quality enginee… |
 | react18-auditor | Deep-scan specialist for React 16/17 class-component codebases targeting React 18.3.1. Finds unsafe lifecycle methods, legacy context, batching vulnerabilities, event delegation a… |
 | react18-batching-fixer | React 18 automatic batching regression specialist for class-component codebases. Use when async setState chains, Promises, setTimeout handlers, or native event handlers may rely o… |
@@ -186,8 +186,8 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | react19-dep-surgeon | Dependency upgrade specialist that installs React 19, resolves peer dependency conflicts, upgrades Testing Library, Apollo, and Emotion, and returns GO/NO-GO. Use as a subagent of… |
 | react19-migrator | Migrates React source files to React 19 APIs from an audit report. Use to rewrite deprecated source patterns while leaving test files untouched. |
 | react19-test-guardian | Test suite fixer and verification specialist. Use when react19-commander needs a hidden subagent to migrate all tests to React 19 compatibility and keep fixing until npm test repo… |
-| reepl-linkedin | AI-powered LinkedIn content creation, scheduling, and analytics agent. Create posts, carousels, and manage your LinkedIn presence with GitHub Copilot. |
-| Refine Requirement or Issue | Refine the requirement or issue with Acceptance Criteria, Technical Considerations, Edge Cases, and NFRs |
+| reepl-linkedin | LinkedIn content strategy agent for Reepl-powered post drafting, carousel planning, scheduling guidance, analytics review, and voice-profile alignment. Use when creating or improv… |
+| Refine Requirement or Issue | Refines GitHub issues into clear requirements with acceptance criteria, technical considerations, edge cases, NFRs, and estimation notes. Use when an existing issue needs product-… |
 | Repo Architect Agent | Bootstraps and validates agentic project structures for GitHub Copilot (VS Code) and OpenCode CLI workflows. Use after `opencode /init`, VS Code Copilot initialization, or migrati… |
 | Ruby MCP Expert | Expert Ruby MCP server agent. Use when building, testing, or reviewing Model Context Protocol servers in Ruby with the official MCP Ruby SDK and Rails integration. |
 | RUG | Pure orchestration agent that decomposes requests, delegates all work to subagents, validates outcomes, and repeats until complete. |
@@ -201,8 +201,8 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | Scientific Paper Research | Research agent that searches scientific papers and retrieves structured experimental data from full-text studies using the BGPT MCP server. |
 | SE: Architect | Review system architecture with Well-Architected, security, reliability, scalability, cost, and AI concerns. Use before major design commitments. |
 | SE: DevOps/CI | DevOps specialist for CI/CD pipelines, deployment debugging, and GitOps workflows. Use when deployments, build failures, branch protections, health checks, monitoring, or rollback… |
-| SE: Product Manager | Product management guidance for creating GitHub issues, aligning business value with user needs, and making data-driven product decisions |
-| SE: Responsible AI | Responsible AI specialist ensuring AI works for everyone through bias prevention, accessibility compliance, ethical development, and inclusive design |
+| SE: Product Manager | Guides product discovery and GitHub issue creation with user need, business value, metrics, labels, epics, and actionable acceptance criteria. Use for product management decisions. |
+| SE: Responsible AI | Reviews and guides AI, accessibility, privacy, and inclusive design decisions. Use when code or features may affect fairness, accessibility, personal data, or automated decisions. |
 | SE: Security | Reviews code for OWASP Top 10, OWASP LLM risks, Zero Trust, reliability, and enterprise security readiness. Use for security-focused code review. |
 | SE: Tech Writer | Technical writing specialist for creating developer documentation, technical blogs, tutorials, and educational content. Use when complex technical material must become clear, accu… |
 | SE: UX Designer | Create Jobs-to-be-Done analysis, user journeys, user flows, and Figma-ready UX research artifacts. Use before UI design when user goals, context, and accessibility requirements ne… |
@@ -219,42 +219,42 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | Task Researcher Instructions | Research project context, external references, alternatives, and implementation guidance into `.copilot-tracking/research/`. Use when planning needs verified evidence before imple… |
 | TaxCore Technical Writer | A domain-expert technical writer for the TaxCore electronic fiscal invoicing ecosystem. Use this agent to create, improve, or review documentation for TaxCore applications — inclu… |
 | TDD Green Phase - Make Tests Pass Quickly | Implement minimal code to satisfy GitHub issue requirements and make failing tests pass without over-engineering. |
-| TDD Red Phase - Write Failing Tests First | Guide test-first development by writing failing tests that describe desired behaviour from GitHub issue context before implementation exists. |
-| TDD Refactor Phase - Improve Quality & Security | Improve code quality, apply security best practices, and enhance design whilst maintaining green tests and GitHub issue compliance. |
+| TDD Red Phase - Write Failing Tests First | Guide test-first development by writing one failing test from GitHub issue context before implementation exists. Use for the Red phase of TDD. |
+| TDD Refactor Phase - Improve Quality & Security | Improve code quality, apply security best practices, and enhance design while keeping tests green. Use during the TDD refactor phase with GitHub issue acceptance criteria. |
 | Technical Debt Remediation Plan | Generate technical debt remediation plans for code, tests, and documentation. |
-| Technical spike research mode | Systematically research and validate technical spike documents through exhaustive investigation and controlled experimentation. |
+| Technical spike research mode | Researches and validates technical spike documents through exhaustive investigation, source-backed evidence, and controlled experiments. Use when a spike path is provided. |
 | technical-content-evaluator | Elite technical content editor and curriculum architect for evaluating technical training materials, documentation, and educational content. Use when technical content needs evide… |
 | terminal-helper | Fast terminal syntax and command helper for PowerShell and Bash |
 | Terraform Agent | Terraform infrastructure specialist with automated HCP Terraform workflows. Use when generating, reviewing, testing, or operating Terraform code with registry intelligence, worksp… |
 | Terraform IaC Reviewer | Terraform-focused agent that reviews and creates safer IaC changes with emphasis on state safety, least privilege, module patterns, drift detection, and plan/apply discipline. Use… |
 | terraform-aws-implement | AWS Terraform Infrastructure as Code coding specialist that creates and reviews Terraform for AWS resources. Use for bounded AWS Terraform implementation with security, reliabilit… |
-| terraform-aws-planning | Act as implementation planner for your AWS Terraform Infrastructure as Code task. |
+| terraform-aws-planning | Plans AWS Terraform infrastructure before implementation. Use when an IaC task needs workload classification, WAF alignment, modules, resources, phases, and diagrams. |
 | Terratest Module Testing | Generate and refactor Go Terratest suites for Terraform modules, including CI-safe patterns, staged tests, and negative-path validation. |
 | Thinking Beast Mode | Autonomous problem-solving agent for complex coding tasks requiring deep investigation, current research, iterative implementation, and rigorous validation. Use when the user need… |
 | Trojan Skill Hunter | Audits agent, skill, instruction, hook, MCP, and plugin contributions for hidden prompt injection, unicode steganography, tool poisoning, supply-chain drift, and excessive agency… |
-| TypeScript MCP Server Expert | Expert assistant for developing Model Context Protocol (MCP) servers in TypeScript |
+| TypeScript MCP Server Expert | Expert assistant for developing Model Context Protocol (MCP) servers in TypeScript. Use for SDK patterns, transports, tools, resources, prompts, testing, and debugging. |
 | Ultimate Transparent Thinking Beast Mode | Autonomous coding agent for transparent, exhaustive problem solving. Use when a task needs persistent planning, implementation, validation, and risk surfacing. |
-| Universal Janitor | Perform janitorial tasks on any codebase including cleanup, simplification, and tech debt remediation. |
-| Universal PR Comment Addresser | Address PR comments |
+| Universal Janitor | Perform janitorial tasks on any codebase. Use for cleanup, simplification, unused-code removal, dependency hygiene, and safe tech debt remediation. |
+| Universal PR Comment Addresser | PR comment addressing agent for resolving review feedback with focused code changes, tests, commits, and next-comment progression. |
 | VS Code Insiders Accessibility Tracker | Tracks and analyzes VS Code Insiders accessibility improvements. Use when investigating released accessibility fixes, issues, and feature history. |
-| VSCode Tour Expert | Expert agent for creating and maintaining VSCode CodeTour files with comprehensive schema support and best practices |
+| VSCode Tour Expert | Creates and maintains VS Code CodeTour .tour walkthroughs. Use for onboarding tours, feature tours, schema fixes, and tour drift review. |
 | WG Code Alchemist | Refactors code using Clean Code and SOLID principles. Use when transforming code smells into maintainable implementations. |
 | WG Code Sentinel | Reviews code and configuration for security vulnerabilities. Use when assessing application security risks and mitigations. |
 | WinForms Expert | Support development of .NET (OOP) WinForms Designer compatible Apps. Use when building or fixing WinForms UI, designer code, data binding, async UI, or layout behavior. |
-| Workshop TA | Room coordinator for a multi-agent workshop. Sees all desks, routes work, tracks state, manages journals, and emits coordination signals. Not a desk — the person who sees the whol… |
+| Workshop TA | Coordinates multi-agent workshops by creating workshops, opening desks, reading journals and bench artifacts, routing work, writing signals, and summarizing room state. Use for wo… |
 
 ## Instructions
 
 | Instruction | applyTo | Description |
 | --- | --- | --- |
 | .NET Framework Upgrade Specialist | **/*.{csproj,vbproj,fsproj,sln,props,targets} | Conventions for .NET project upgrades covering project sequencing, target framework selection, breaking changes, validation, and CI updates. |
-| a11y | **/*.{html,htm,css,scss,sass,js,jsx,ts,tsx,vue,svelte,astro} | Comprehensive web accessibility standards based on WCAG 2.2 AA, with 38+ anti-patterns, legal enforcement context (EAA, ADA Title II), WAI-ARIA patterns, and framework-specific fi… |
+| a11y | **/*.{html,htm,css,scss,sass,js,jsx,ts,tsx,vue,svelte,astro} | Comprehensive web accessibility conventions based on WCAG 2.2 AA, legal enforcement context, WAI-ARIA rules, anti-patterns, and framework-specific fixes for modern web frameworks. |
 | agent-safety | ** | Guidelines for building safe, governed AI agent systems. Apply when writing code that uses agent frameworks, tool-calling LLMs, or multi-agent orchestration to ensure proper safet… |
 | agent-skills | **/skills/**/SKILL.md | Guidelines for creating high-quality Agent Skills for GitHub Copilot |
-| agents | **/*.agent.md | Guidelines for creating custom agent files for GitHub Copilot |
-| ai-prompt-engineering-safety-best-practices | **/*.{md,txt,prompt,yml,yaml,json} | Comprehensive best practices for AI prompt engineering, safety frameworks, bias mitigation, and responsible AI usage for Copilot and LLMs. |
+| agents | **/*.agent.md | Enforces conventions for GitHub Copilot custom agent files, including frontmatter, tools, handoffs, orchestration, MCP configuration, naming, and validation. |
+| ai-prompt-engineering-safety-best-practices | **/*.{md,txt,prompt,yml,yaml,json} | Enforces prompt engineering, safety, bias mitigation, security, privacy, evaluation, and responsible AI conventions for Copilot and LLM prompt assets. |
 | ansible | **/*.yaml, **/*.yml | Ansible conventions and best practices |
-| apex | **/*.cls, **/*.trigger | Guidelines and best practices for Apex development on the Salesforce Platform |
+| apex | **/*.cls,**/*.trigger | Enforces Apex conventions for Salesforce Platform classes and triggers, including bulkification, governor limits, security, testing, asynchronous processing, integrations, and dep… |
 | arch-linux | ** | Guidance for Arch Linux administration, pacman workflows, and rolling-release best practices. |
 | aspnet-rest-apis | **/*.cs, **/*.json | Guidelines for building REST APIs with ASP.NET |
 | astro | **/*.astro, **/*.ts, **/*.js, **/*.md, **/*.mdx | Astro 7 development standards and best practices for content-driven websites |
@@ -266,7 +266,7 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | azure-functions-csharp | **/*.cs, **/host.json, **/local.settings.json, **/*.csproj | Guidelines and best practices for building Azure Functions in C# using the isolated worker model |
 | azure-functions-typescript | **/*.ts,**/*.js,**/host.json,**/local.settings.json,**/function.json,**/package.json | Conventions for Azure Functions apps in TypeScript and JavaScript, including async Node.js patterns, dependency choices, and function configuration. |
 | azure-iot-edge-architecture | **/*.bicep,**/*.tf,**/*iot*.md,**/*smart-city*.md,**/*edge*.md | Conventions for Azure IoT Edge architecture guidance, requiring documentation review before proposing edge IoT designs or implementations. |
-| azure-logic-apps-power-automate | **/*.json,**/*.logicapp.json,**/workflow.json,**/*-definition.json,**/*.flow.json | Guidelines for developing Azure Logic Apps and Power Automate workflows with best practices for Workflow Definition Language (WDL), integration patterns, and enterprise automation |
+| azure-logic-apps-power-automate | **/*.json,**/*.logicapp.json,**/workflow.json,**/*-definition.json,**/*.flow.json | Enforces Azure Logic Apps and Power Automate workflow conventions for WDL structure, triggers, actions, reliability, security, integration patterns, DevOps, monitoring, and cost g… |
 | azure-naming | **/*.bicep,**/*.tf,**/*.tfvars,**/*.bicepparam,**/infra/**,**/infrastructure/** | Azure resource naming conventions based on Microsoft CAF (Cloud Adoption Framework). Use when creating, reviewing, or suggesting names for Azure resources. |
 | azure-verified-modules-bicep | **/*.bicep, **/*.bicepparam | Azure Verified Modules (AVM) and Bicep |
 | azure-verified-modules-terraform | **/*.terraform, **/*.tf, **/*.tfvars, **/*.tfstate, **/*.tflint.hcl, **/*.tf.json, **/*.tfvars.json | Azure Verified Modules (AVM) and Terraform |
@@ -280,11 +280,11 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | codexer | **/*.py | Advanced Python research assistant with Context 7 MCP integration, focusing on speed, reliability, and 10+ years of software development expertise |
 | coldfusion-cfc | **/*.cfc | ColdFusion Coding Standards for CFC component and application patterns |
 | coldfusion-cfm | **/*.cfm | ColdFusion cfm files and application patterns |
-| containerization-docker-best-practices | **/Dockerfile,**/Dockerfile.*,**/*.dockerfile,**/docker-compose*.yml,**/docker-compose*.yaml,**/compose*.yml,**/compose*.yaml | Comprehensive best practices for creating optimized, secure, and efficient Docker images and managing containers. Covers multi-stage builds, image layer optimization, security sca… |
+| containerization-docker-best-practices | **/Dockerfile,**/Dockerfile.*,**/*.dockerfile,**/docker-compose*.yml,**/docker-compose*.yaml,**/compose*.yml,**/compose*.yaml | Enforces Dockerfile and Compose conventions for optimized, secure, reproducible container images and container runtime configuration. |
 | context-engineering | ** | Guidelines for structuring code and projects to maximize GitHub Copilot effectiveness through better context management |
 | context7 | ** | Use Context7 for authoritative external docs and API references when local context is insufficient |
-| convert-cassandra-to-spring-data-cosmos | **/*.java,**/pom.xml,**/build.gradle,**/application*.properties,**/application*.yml,**/application*.conf | Step-by-step guide for converting Spring Boot Cassandra applications to use Azure Cosmos DB with Spring Data Cosmos |
-| convert-jpa-to-spring-data-cosmos | **/*.java,**/pom.xml,**/build.gradle,**/application*.properties | Step-by-step guide for converting Spring Boot JPA applications to use Azure Cosmos DB with Spring Data Cosmos |
+| convert-cassandra-to-spring-data-cosmos | **/*.java,**/pom.xml,**/build.gradle,**/application*.properties,**/application*.yml,**/application*.conf | Enforces conventions for converting Spring Boot Cassandra data access to Azure Cosmos DB with Spring Data Cosmos, including dependencies, configuration, repositories, entities, te… |
+| convert-jpa-to-spring-data-cosmos | **/*.java,**/pom.xml,**/build.gradle,**/application*.properties | Enforces conventions for converting Spring Boot JPA applications to Azure Cosmos DB with Spring Data Cosmos, including dependencies, configuration, entity mapping, repositories, s… |
 | copilot-primitive-authoring | library/agents/*.agent.md,library/instructions/*.instructions.md,library/skills/**/SKILL.md,library/prompts/*.prompt.md,.github/agents/*.agent.md,.github/instructions/*.instructions.md,.github/skills/**/SKILL.md,.github/prompts/*.prompt.md | Require routing, canonical paths, frontmatter, mirror, and validation conventions when editing Copilot primitives. |
 | copilot-thought-logging | ** | See process Copilot is following where you can edit this to reshape the interaction or save when follow up may be needed |
 | cpp-language-service-tools | **/*.cpp,**/*.h,**/*.hpp,**/*.cc,**/*.cxx,**/*.c | Conventions for using C++ language service tools for symbol references, symbol information, and call hierarchy instead of manual code inspection. |
@@ -295,17 +295,17 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | csharp-razorpages | **/*.cshtml,**/*.cshtml.cs | Conventions for ASP.NET Core Razor Pages covering page models, handlers, binding, security, validation, and Entity Framework usage. |
 | dart-n-flutter | **/*.dart | Instructions for writing Dart and Flutter code following the official recommendations. |
 | dataverse-python | **/*.py | Getting-started guidance for installing, authenticating, and performing basic Python Dataverse SDK operations. |
-| dataverse-python-advanced-features | **/*.py | Advanced Python Dataverse SDK patterns for option sets, complex filtering, SQL queries, metadata operations, and production use. |
+| dataverse-python-advanced-features | **/*.py | Enforces advanced Python Dataverse SDK conventions for option sets, OData filters, SQL analysis, metadata operations, record batches, relationships, error handling, cache hygiene,… |
 | dataverse-python-agentic-workflows | **/*.py | Preview guidance for building agentic Python workflows that use Dataverse as an enterprise data source. |
 | dataverse-python-api-reference | **/*.py | Detailed reference for Python Dataverse SDK client methods, table operations, queries, and SDK models. |
 | dataverse-python-authentication-security | **/*.py | Authentication and security patterns for Python Dataverse SDK apps using Azure Identity and secure credential handling. |
-| dataverse-python-best-practices | **/*.py | Production best practices for Python Dataverse SDK installation, authentication, CRUD operations, testing, and deployment. |
+| dataverse-python-best-practices | **/*.py | Enforces production Python conventions for the PowerPlatform Dataverse SDK, including installation, authentication, client reuse, CRUD operations, metadata, paging, files, OData,… |
 | dataverse-python-error-handling | **/*.py | Error handling, troubleshooting, retry, and diagnostics patterns for Python Dataverse SDK integrations. |
-| dataverse-python-file-operations | **/*.py | Python Dataverse SDK guidance for file uploads, chunking, validation, and practical file-operation examples. |
+| dataverse-python-file-operations | **/*.py | Enforces Python Dataverse SDK conventions for file uploads, chunking, validation, retries, audit logging, and practical file-operation workflows. |
 | dataverse-python-modules | **/*.py | Complete module reference for the Python Dataverse SDK package hierarchy, configuration, models, and helpers. |
 | dataverse-python-pandas-integration | **/*.py | Guidance for integrating the Python Dataverse SDK with pandas DataFrames for analytics and data science workflows. |
 | dataverse-python-performance-optimization | **/*.py | Performance optimization guidance for Python Dataverse SDK queries, batching, pagination, and large data operations. |
-| dataverse-python-real-world-usecases | **/*.py | Real-world Python Dataverse SDK templates for migration, synchronization, reporting, and automation scenarios. |
+| dataverse-python-real-world-usecases | **/*.py | Conventions for real-world Python Dataverse SDK migration, synchronization, data quality, enrichment, reporting, workflow automation, and scheduled jobs. |
 | dataverse-python-sdk | **/*.py | Quickstart instructions for installing, authenticating, and using the Python Dataverse SDK. |
 | dataverse-python-testing-debugging | **/*.py | Testing and debugging strategies for Python Dataverse SDK code, including mocks, integration tests, and diagnostics. |
 | debian-linux | ** | Guidance for Debian-based Linux administration, apt workflows, and Debian policy conventions. |
@@ -315,7 +315,7 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | dotnet-architecture-good-practices | **/*.cs,**/*.csproj,**/Program.cs,**/*.razor | DDD and .NET architecture guidelines |
 | dotnet-framework | **/*.csproj, **/*.cs | Guidance for working with .NET Framework projects. Includes project structure, C# language version, NuGet management, and best practices. |
 | dotnet-maui | **/*.xaml, **/*.cs | .NET MAUI component and application patterns |
-| dotnet-maui-9-to-dotnet-maui-10-upgrade | **/*.csproj, **/*.cs, **/*.xaml | Instructions for upgrading .NET MAUI applications from version 9 to version 10, including breaking changes, deprecated APIs, and migration strategies for ListView to CollectionVie… |
+| dotnet-maui-9-to-dotnet-maui-10-upgrade | **/*.csproj,**/*.cs,**/*.xaml | Enforces .NET MAUI 9 to .NET MAUI 10 upgrade conventions for target frameworks, package compatibility, breaking API replacements, obsolete controls, deprecated async APIs, media p… |
 | dotnet-wpf | **/*.xaml,**/*.cs | Conventions for .NET WPF applications covering MVVM structure, XAML and C# patterns, UI behavior, performance, and testing. |
 | draw-io | **/*.drawio,**/*.drawio.svg,**/*.drawio.png | Use when creating, editing, or reviewing draw.io diagrams and mxGraph XML in .drawio, .drawio.svg, or .drawio.png files. |
 | exclude-prompt-data | ** | Write only the resulting content into files. Never echo prompt instructions, rationale, or meta-commentary into documentation, comments, or code being produced from a prompt. |
@@ -324,14 +324,14 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | generate-modern-terraform-code-for-azure | **/*.tf | Conventions for modern Terraform code targeting Azure, including provider usage, modules, variables, outputs, state, and idempotency. |
 | gilfoyle-code-review | ** | Gilfoyle-style code review instructions that channel the sardonic technical supremacy of Silicon Valley's most arrogant systems architect. |
 | GitHub Copilot SDK C# Instructions | **/*.cs,**/*.csproj | Conventions for building C# applications with the GitHub Copilot SDK, including client setup, sessions, permissions, and error handling. |
-| GitHub Copilot SDK Go Instructions | **/*.go,**/go.mod | Conventions for building Go applications with the GitHub Copilot SDK, including client setup, sessions, permissions, and error handling. |
-| GitHub Copilot SDK Java Instructions | **/*.java,**/pom.xml,**/build.gradle,**/build.gradle.kts | Conventions for building Java applications with the GitHub Copilot SDK, including client setup, virtual threads, sessions, permissions, and error handling. |
-| GitHub Copilot SDK Node.js Instructions | **/*.ts,**/*.js,**/package.json | Conventions for building Node.js and TypeScript applications with the GitHub Copilot SDK, including client setup, sessions, permissions, and error handling. |
-| GitHub Copilot SDK Python Instructions | **/*.py,**/pyproject.toml,**/setup.py | Conventions for building Python applications with the GitHub Copilot SDK, including async client setup, sessions, permissions, and error handling. |
+| GitHub Copilot SDK Go Instructions | **/*.go,**/go.mod | Enforces Go conventions for applications that use the GitHub Copilot SDK, including client setup, sessions, events, tools, permissions, providers, and cleanup. |
+| GitHub Copilot SDK Java Instructions | **/*.java,**/pom.xml,**/build.gradle,**/build.gradle.kts | Enforces Java conventions for applications using the GitHub Copilot SDK, including client setup, virtual threads, sessions, permissions, events, tools, BYOK, MCP servers, and clea… |
+| GitHub Copilot SDK Node.js Instructions | **/*.ts,**/*.js,**/package.json | Conventions for building Node.js and TypeScript applications with the GitHub Copilot SDK, including client setup, sessions, permissions, tools, streaming, lifecycle, and error han… |
+| GitHub Copilot SDK Python Instructions | **/*.py,**/pyproject.toml,**/setup.py | Enforces Python conventions for GitHub Copilot SDK applications, including async client setup, sessions, permissions, custom tools, streaming, BYOK, and cleanup. |
 | github-actions-ci-cd-best-practices | .github/workflows/*.yml,.github/workflows/*.yaml | Comprehensive guide for building robust, secure, and efficient CI/CD pipelines using GitHub Actions. Covers workflow structure, jobs, steps, environment variables, secret manageme… |
 | go | **/*.go,**/go.mod,**/go.sum | Instructions for writing Go code following idiomatic Go practices and community standards |
 | go-mcp-server | **/*.go, **/go.mod, **/go.sum | Best practices and patterns for building Model Context Protocol (MCP) servers in Go using the official github.com/modelcontextprotocol/go-sdk package. |
-| hooks | .github/hooks/**, hooks/** | Portable guidance for authoring safe, fast, and clear hooks and reusable hook examples |
+| hooks | .github/hooks/**,hooks/** | Enforces portable hook conventions for discovery, trust, configuration, scripts, events, payloads, blocking, examples, security, packaging, and cross-surface behavior. |
 | html-css-style-color-guide | **/*.html, **/*.css, **/*.js | Color usage guidelines and styling rules for HTML elements to ensure accessible, professional designs. |
 | instructions | **/*.instructions.md | Guidelines for creating high-quality custom instruction files for GitHub Copilot |
 | java-11-to-java-17-upgrade | **/*.java,**/*.gradle,**/*.gradle.kts,**/pom.xml | Comprehensive best practices for adopting new Java 17 features since the release of Java 11. |
@@ -384,20 +384,20 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | pcf-react-platform-libraries | **/*.{ts,tsx,js,json,xml,pcfproj,csproj} | React controls and platform libraries for PCF components |
 | pcf-sample-components | **/*.{ts,tsx,js,json,xml,pcfproj,csproj} | How to use and run PCF sample components from the PowerApps-Samples repository |
 | pcf-tooling | **/*.{ts,tsx,js,json,xml,pcfproj,csproj} | Get Microsoft Power Platform CLI tooling for Power Apps Component Framework |
-| performance-optimization | **/*.{html,htm,css,scss,sass,js,jsx,ts,tsx,vue,svelte,astro} | Comprehensive web performance standards based on Core Web Vitals (LCP, INP, CLS), with 50+ anti-patterns, detection regex, framework-specific fixes for modern web frameworks, and… |
-| php-mcp-server | **/*.php | Best practices for building Model Context Protocol servers in PHP using the official PHP SDK with attribute-based discovery and multiple transport options |
+| performance-optimization | **/*.{html,htm,css,scss,sass,js,jsx,ts,tsx,vue,svelte,astro} | Enforces Core Web Vitals performance conventions for web UI files, including LCP, INP, CLS, loading, rendering, media, bundles, and framework-specific fixes. |
+| php-mcp-server | **/*.php | Enforces PHP Model Context Protocol server conventions for the official PHP SDK, capability discovery, transports, sessions, errors, testing, performance, framework integration, d… |
 | php-symfony | **/*.php, **/*.yaml, **/*.yml, **/*.xml, **/*.twig | Symfony development standards aligned with official Symfony Best Practices |
 | playwright-dotnet | **/*.cs | Playwright .NET test generation instructions |
 | playwright-python | **/*.py | Playwright Python AI test generation instructions based on official documentation. |
 | playwright-typescript | **/*.spec.ts,**/*.test.ts,**/*.spec.tsx,**/*.test.tsx,**/playwright.config.ts,tests/**/*.ts,tests/**/*.tsx | Conventions for Playwright tests in TypeScript covering test structure, selectors, assertions, fixtures, execution, and quality checks. |
 | Power Platform Connectors Schema Development Instructions | **/*.{json,md} | Comprehensive development guidelines for Power Platform Custom Connectors using JSON Schema definitions. Covers API definitions (Swagger 2.0), API properties, and settings configu… |
-| power-apps-canvas-yaml | **/*.{yaml,yml,md,pa.yaml} | Comprehensive guide for working with Power Apps Canvas Apps YAML structure based on Microsoft Power Apps YAML schema v3.0. Covers Power Fx formulas, control structures, data types… |
+| power-apps-canvas-yaml | **/*.{yaml,yml,md,pa.yaml} | Enforces Power Apps canvas app YAML schema v3.0, Power Fx formula, control, data source, component, and source-control conventions. |
 | power-apps-code-apps | **/*.{ts,tsx,js,jsx}, **/vite.config.*, **/package.json, **/tsconfig.json, **/power.config.json | Power Apps Code Apps development standards and best practices for TypeScript, React, and Power Platform integration |
-| power-bi-custom-visuals-development | **/*.{ts,tsx,js,jsx,json,less,css} | Comprehensive Power BI custom visuals development guide covering React, D3.js integration, TypeScript patterns, testing frameworks, and advanced visualization techniques. |
-| power-bi-data-modeling-best-practices | **/*.{pbix,md,json,txt} | Comprehensive Power BI data modeling best practices based on Microsoft guidance for creating efficient, scalable, and maintainable semantic models using star schema principles. |
+| power-bi-custom-visuals-development | **/*.{ts,tsx,js,jsx,json,less,css} | Enforces Power BI custom visual conventions for pbiviz projects, TypeScript, React, D3, formatting models, interactivity, testing, performance, and packaging. |
+| power-bi-data-modeling-best-practices | **/*.{pbix,md,json,txt} | Enforces Power BI semantic model conventions for star schema design, relationships, storage modes, performance, security, governance, testing, and advanced modeling patterns. |
 | power-bi-dax-best-practices | **/*.{pbix,dax,md,txt} | Comprehensive Power BI DAX best practices and patterns based on Microsoft guidance for creating efficient, maintainable, and performant DAX formulas. |
 | power-bi-devops-alm-best-practices | **/*.{yml,yaml,ps1,json,pbix,pbir} | Comprehensive guide for Power BI DevOps, Application Lifecycle Management (ALM), CI/CD pipelines, deployment automation, and version control best practices. |
-| power-bi-report-design-best-practices | **/*.{pbix,md,json,txt} | Comprehensive Power BI report design and visualization best practices based on Microsoft guidance for creating effective, accessible, and performant reports and dashboards. |
+| power-bi-report-design-best-practices | **/*.{pbix,md,json,txt} | Enforces Power BI report design, visualization, accessibility, interaction, performance, mobile, testing, and governance conventions for report artifacts and supporting documentat… |
 | power-bi-security-rls-best-practices | **/*.{pbix,dax,md,txt,json,csharp,powershell} | Comprehensive Power BI Row-Level Security (RLS) and advanced security patterns implementation guide with dynamic security, best practices, and governance strategies. |
 | power-platform-mcp-development | **/*.{json,csx,md} | Instructions for developing Power Platform custom connectors with Model Context Protocol (MCP) integration for Microsoft Copilot Studio |
 | powershell | **/*.ps1,**/*.psm1 | PowerShell cmdlet and scripting best practices based on Microsoft guidelines |
@@ -408,18 +408,18 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | quarkus | **/*.java,**/pom.xml,**/build.gradle,**/build.gradle.kts,**/application.properties,**/application.yaml,**/application.yml | Conventions for Quarkus applications using Java 17 or later, covering project structure, REST resources, data access, configuration, and testing. |
 | quarkus-mcp-server-sse | * | Quarkus and MCP Server with HTTP SSE transport development standards and instructions |
 | r | **/*.R, **/*.r, **/*.Rmd, **/*.rmd, **/*.qmd | R language and document formats (R, Rmd, Quarto): coding standards and Copilot guidance for idiomatic, safe, and consistent code generation. |
-| ruby-mcp-server | **/*.rb, **/Gemfile, **/*.gemspec, **/Rakefile | Best practices and patterns for building Model Context Protocol (MCP) servers in Ruby using the official MCP Ruby SDK gem. |
+| ruby-mcp-server | **/*.rb,**/Gemfile,**/*.gemspec,**/Rakefile | Enforces Ruby MCP server conventions for SDK setup, tools, resources, prompts, transports, context, configuration, responses, notifications, testing, and clients. |
 | ruby-on-rails | **/*.rb | Ruby on Rails coding conventions and guidelines |
 | rust | **/*.rs | Rust programming language coding conventions and best practices |
-| rust-mcp-server | **/*.rs | Best practices for building Model Context Protocol servers in Rust using the official rmcp SDK with async/await patterns |
+| rust-mcp-server | **/*.rs | Enforces Rust Model Context Protocol server conventions for rmcp dependencies, handlers, tools, prompts, resources, transports, errors, tests, authentication, observability, and d… |
 | scala-spark | **/*.scala, **/build.sbt, **/build.sc | Best practices for building Apache Spark applications in Scala, covering DataFrames, Datasets, SparkSQL, performance tuning, testing, and production deployment patterns. |
-| scala2 | **/*.scala, **/build.sbt, **/build.sc | Scala 2.12/2.13 programming language coding conventions and best practices following Databricks style guide for functional programming, type safety, and production code quality. |
-| security-and-owasp | ** | Comprehensive secure coding standards based on OWASP Top 10 2025, with 55+ anti-patterns, detection regex, framework-specific fixes for modern web and backend frameworks, and AI/L… |
+| scala2 | **/*.scala,**/build.sbt,**/build.sc | Enforces Scala 2.12/2.13 conventions for functional style, type safety, formatting, SBT configuration, performance, concurrency, and testing. |
+| security-and-owasp | ** | Enforces OWASP-aligned secure coding conventions for web, backend, frontend, API, dependency, logging, and AI/LLM changes. |
 | self-explanatory-code-commenting | ** | Guidelines for GitHub Copilot to write comments to achieve self-explanatory code with less comments. Examples are in JavaScript but it should work on any language that has comment… |
 | shell | **/*.sh | Shell scripting best practices and conventions for bash, sh, zsh, and other shells |
 | spec-driven-workflow-v1 | ** | Specification-Driven Workflow v1 provides a structured approach to software development, ensuring that requirements are clearly defined, designs are meticulously planned, and impl… |
 | springboot | **/*.java, **/*.kt | Guidelines for building Spring Boot base applications |
-| springboot-4-migration | **/*.java, **/*.kt, **/build.gradle.kts, **/build.gradle, **/settings.gradle.kts, **/gradle/libs.versions.toml, **/*.properties, **/*.yml, **/*.yaml | Comprehensive guide for migrating Spring Boot applications from 3.x to 4.0, focusing on Gradle Kotlin DSL and version catalogs |
+| springboot-4-migration | **/*.java,**/*.kt,**/build.gradle.kts,**/build.gradle,**/settings.gradle.kts,**/gradle/libs.versions.toml,**/*.properties,**/*.yml,**/*.yaml | Enforces Spring Boot 3.x to 4.0 migration conventions for Java, Kotlin, Gradle, version catalogs, configuration, tests, and production readiness. |
 | sql-sp-generation | **/*.sql | Guidelines for generating SQL statements and stored procedures |
 | svelte | **/*.svelte, **/*.ts, **/*.js, **/*.css, **/*.scss, **/*.json | Svelte 5 and SvelteKit 2 development standards and best practices for component-based user interfaces and full-stack applications |
 | swift-mcp-server | **/*.swift, **/Package.swift, **/Package.resolved | Best practices and patterns for building Model Context Protocol (MCP) servers in Swift using the official MCP Swift SDK package. |
@@ -436,7 +436,7 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | update-code-from-shorthand | **/${input:file} | Shorthand code will be in the file provided from the prompt or raw data in the prompt, and will be used to update the code file when the prompt has the text `UPDATE CODE FROM SHOR… |
 | update-docs-on-code-change | **/*.{md,js,mjs,cjs,ts,tsx,jsx,py,java,cs,go,rb,php,rs,cpp,c,h,hpp} | Automatically update README.md and documentation files when application code changes require documentation updates |
 | use-cliche-data-in-docs | **/*.{md,js,mjs,cjs,ts,tsx,jsx,py,json} | Ensure documentation and examples use only generic, cliche placeholder data — never real or sensitive data sourced from local scripts, configuration, task files, or prompt context. |
-| vsixtoolkit | **/*.cs, **/*.vsct, **/*.xaml, **/source.extension.vsixmanifest | Guidelines for Visual Studio extension (VSIX) development using Community.VisualStudio.Toolkit |
+| vsixtoolkit | **/*.cs,**/*.vsct,**/*.xaml,**/source.extension.vsixmanifest | Enforces Community.VisualStudio.Toolkit conventions for Visual Studio extension packages, commands, options, MEF components, threading, theming, VSCT, validation, NuGet dependenci… |
 | vue | **/*.vue, **/*.ts, **/*.js, **/*.css, **/*.scss | Comprehensive Vue 3 development standards and best practices: Composition API, `<script setup>`, the full reactivity system, compiler macros (defineModel/defineSlots/defineOptions… |
 | winui3 | **/*.xaml, **/*.cs, **/*.csproj | WinUI 3 and Windows App SDK coding guidelines. Prevents common UWP API misuse, enforces correct XAML namespaces, threading, windowing, and MVVM patterns for desktop Windows apps. |
 | wordpress | wp-content/plugins/**,wp-content/themes/**,**/*.php,**/*.inc,**/*.js,**/*.jsx,**/*.ts,**/*.tsx,**/*.css,**/*.scss,**/*.json | Coding, security, and testing rules for WordPress plugins and themes |

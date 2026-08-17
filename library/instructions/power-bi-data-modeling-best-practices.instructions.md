@@ -1,12 +1,11 @@
 ---
-applyTo: '**/*.{pbix,md,json,txt}'
-description: 'Comprehensive Power BI data modeling best practices based on Microsoft guidance for creating efficient, scalable, and maintainable semantic models using star schema principles.'
+applyTo: "**/*.{pbix,md,json,txt}"
+description: "Enforces Power BI semantic model conventions for star schema design, relationships, storage modes, performance, security, governance, testing, and advanced modeling patterns."
 ---
 
-# Power BI Data Modeling Best Practices
+# Power BI Data Modeling Conventions — Semantic Models
 
-## Overview
-This document provides comprehensive instructions for designing efficient, scalable, and maintainable Power BI semantic models following Microsoft's official guidance and dimensional modeling best practices.
+This file applies to Power BI semantic model artifacts, documentation, JSON metadata, and text design notes matched by the `applyTo` globs. It is authoritative for efficient, scalable, and maintainable Power BI data modeling using Microsoft guidance, star schema principles, dimensional modeling, relationships, storage mode choices, performance, security, governance, and validation; source-system contracts, enterprise security policy, and report visual design rules win when they define stricter requirements.
 
 ## Star Schema Design Principles
 
@@ -636,4 +635,44 @@ plot_relationship_metadata(relationships)
 }
 ```
 
-Remember: Always validate your model design with business users and test with realistic data volumes and usage patterns. Use Power BI's built-in tools like Performance Analyzer and DAX Studio for optimization and debugging.
+## Conventions
+
+| Rule | Rationale |
+| --- | --- |
+| Design semantic models as star schemas with clear dimension tables and fact tables at a consistent grain | Star schemas keep filtering predictable, aggregation efficient, and business meaning understandable |
+| Use surrogate integer keys, business keys for integration, and `Unknown` dimension records where source data can be missing | Stable keys and explicit missing-data handling prevent orphaned facts and broken filters |
+| Keep fact tables granular, numeric, and free of descriptive text columns | Facts should aggregate cleanly while dimensions provide descriptive context |
+| Prefer one-to-many, single-direction relationships from dimensions to facts | This is the standard Power BI pattern for performance and unambiguous filter propagation |
+| Use many-to-many, bidirectional relationships, and one-to-one relationships only with documented business justification | These patterns add ambiguity, performance cost, or security risk when used casually |
+| Choose Import, DirectQuery, Dual, Hybrid, or Composite storage modes based on data size, freshness, security, and performance requirements | Storage mode controls query behavior, capacity usage, and operational complexity |
+| Maintain a continuous marked date table with standard and business-specific attributes | Date intelligence, role-playing dimensions, and fiscal reporting require a reliable calendar |
+| Optimize model size by removing unused rows and columns, choosing narrow data types, and preserving query folding for incremental refresh | Smaller models refresh faster, query faster, and consume less capacity |
+| Implement RLS with simple, tested rules such as `USERPRINCIPALNAME()` and role tables | Security filters must be understandable, performant, and verifiable |
+| Document measures, lineage, refresh schedules, security rules, and change management expectations | Semantic models are shared contracts, not private implementation details |
+| Validate with business users, realistic data volumes, Power BI built-in Performance Analyzer, and DAX Studio | Correctness and performance must be proven against real usage patterns |
+
+## Do / Do Not
+
+| Do | Do not |
+| --- | --- |
+| Model facts and dimensions separately with shared dimensions between facts | Mix fact and dimension characteristics in one large table |
+| Use integer surrogate keys for relationships and keep business keys as attributes | Use high-cardinality text keys as primary relationship keys in large models |
+| Keep dimensions focused, hierarchical, and descriptive | Create unnecessarily wide dimension tables full of unused attributes |
+| Store facts at the most granular level needed with consistent grain | Mix daily, monthly, and transaction-level rows in the same fact table |
+| Use bridge tables for genuine many-to-many relationships when possible | Connect fact tables directly or enable many-to-many without justification |
+| Enable `Assume Referential Integrity` only when source data quality is guaranteed | Enable it when orphaned records can exist |
+| Use `USERELATIONSHIP` for inactive role-playing date relationships | Duplicate date logic without explaining the business role |
+| Keep DAX simple in DirectQuery models and pre-aggregate in the source when possible | Push complex calculated columns and cross-table operations into DirectQuery models |
+| Test RLS, refresh, totals, filters, and performance with realistic roles and volumes | Ship a model validated only against a small developer sample |
+| Use Performance Analyzer and DAX Studio to diagnose bottlenecks | Guess at performance issues without measurement |
+
+## Checklist Before Opening a PR
+
+- [ ] Star schema design is explicit, with dimension tables and fact tables at documented grain.
+- [ ] Relationship keys, cardinality, filter direction, and referential integrity settings are justified.
+- [ ] Storage modes are chosen intentionally across Import, DirectQuery, Dual, Hybrid, and Composite models.
+- [ ] Date tables, SCD handling, role-playing dimensions, bridge tables, and partition strategies preserve business meaning.
+- [ ] Model size, query performance, incremental refresh, and query folding have been tested with realistic data volumes.
+- [ ] RLS, data governance, lineage, refresh schedules, and access controls are documented and validated.
+- [ ] Measure totals, filters, relationships, security rules, and refresh behavior match source-system and business expectations.
+- [ ] Performance Analyzer and DAX Studio have been used when optimization or debugging is required.

@@ -1,29 +1,27 @@
 ---
-applyTo: '**/*.rb, **/Gemfile, **/*.gemspec, **/Rakefile'
-description: 'Best practices and patterns for building Model Context Protocol (MCP) servers in Ruby using the official MCP Ruby SDK gem.'
+applyTo: "**/*.rb,**/Gemfile,**/*.gemspec,**/Rakefile"
+description: "Enforces Ruby MCP server conventions for SDK setup, tools, resources, prompts, transports, context, configuration, responses, notifications, testing, and clients."
 ---
 
-# Ruby MCP Server Development Guidelines
+# Ruby MCP Server Conventions — Official SDK
 
-When building MCP servers in Ruby, follow these best practices and patterns using the official Ruby SDK.
+This file applies to Ruby MCP server code, Gemfiles, gemspecs, and Rakefiles matched by the `applyTo` globs. It is authoritative for using the official `mcp` Ruby SDK to define servers, tools, resources, prompts, transports, server context, configuration, structured responses, custom methods, notifications, resource templates, error handling, tests, and clients; application security policy, deployment topology, and organization-wide Ruby style rules win when they are stricter.
 
-## Installation
+## Dependency and Server Initialization
 
-Add the MCP gem to your Gemfile:
+Depend on the official MCP Ruby SDK through the application bundle:
 
 ```ruby
 gem 'mcp'
 ```
 
-Then run:
+Keep dependency installation reproducible through Bundler:
 
 ```bash
 bundle install
 ```
 
-## Server Setup
-
-Create an MCP server instance:
+Initialize each server with an explicit name and version:
 
 ```ruby
 require 'mcp'
@@ -566,19 +564,6 @@ response = client.call_tool(
 )
 ```
 
-## Best Practices
-
-1. **Use classes for complex tools** - Better organization and testability
-2. **Define input/output schemas** - Ensure type safety and validation
-3. **Add annotations** - Help clients understand tool behavior
-4. **Include structured content** - Provide both text and structured data
-5. **Use server_context** - Pass authentication and request context
-6. **Configure exception reporting** - Monitor errors in production
-7. **Implement instrumentation** - Track performance metrics
-8. **Send notifications** - Keep clients updated on changes
-9. **Validate inputs** - Check parameters before processing
-10. **Follow Ruby conventions** - Use snake_case, proper indentation
-
 ## Common Patterns
 
 ### Authenticated Tool
@@ -627,3 +612,95 @@ class DynamicPrompt < MCP::Prompt
   end
 end
 ```
+## Good / Bad Examples
+
+The examples below illustrate a tool that declares schemas, annotations, structured content, and explicit error behavior.
+
+**Good:**
+
+```ruby
+class LookupTool < MCP::Tool
+  tool_name 'lookup'
+  description 'Look up a record by identifier'
+
+  input_schema(
+    properties: { id: { type: 'string' } },
+    required: ['id']
+  )
+
+  output_schema(
+    properties: { id: { type: 'string' }, status: { type: 'string' } },
+    required: ['id', 'status']
+  )
+
+  annotations(read_only_hint: true, idempotent_hint: true)
+
+  def self.call(id:, server_context:)
+    record = Repository.fetch_for_user(id, server_context[:user_id])
+    body = { id: record.id, status: record.status }
+    output_schema.validate_result(body)
+    MCP::Tool::Response.new([{ type: 'text', text: body.to_json }], structured_content: body)
+  rescue Repository::NotFound => e
+    MCP::Tool::Response.new([{ type: 'text', text: e.message }], is_error: true)
+  end
+end
+```
+
+Why: The tool is testable, describes its contract, uses `server_context` for authorization context, validates structured output, and returns `is_error: true` for expected domain failures.
+
+**Bad:**
+
+```ruby
+server.define_tool(name: 'lookup') do |args|
+  data = Repository.fetch(args['id'])
+  data.to_json
+end
+```
+
+Why: The tool omits schemas, annotations, `server_context`, structured content, and explicit error handling, so clients cannot reason about behavior or failure shape.
+
+## Conventions
+
+| Rule | Rationale |
+| --- | --- |
+| Depend on `gem 'mcp'` and install through `bundle install` | The official SDK and Bundler keep server code reproducible |
+| Initialize `MCP::Server.new` with explicit `name` and `version` where the server is published | Clients and logs need stable identity and compatibility information |
+| Use `MCP::Tool` classes for complex tools and `server.define_tool` blocks only for simple tools | Classes are easier to test, reuse, and document; blocks keep trivial behavior compact |
+| Define `input/output` schemas through `input_schema`, `output_schema`, and `annotations` for every tool that has a stable contract | Clients use schemas and hints to validate inputs, interpret outputs, and assess side effects |
+| Return `MCP::Tool::Response` with `structured_content` when data has structure | Text-only JSON forces clients to parse display content and loses type expectations |
+| Use `MCP::Resource`, `resources_read_handler`, and `MCP::ResourceTemplate` for readable data surfaces | Resources keep data access separate from actions and support dynamic URI patterns |
+| Define prompts with `MCP::Prompt`, `MCP::Prompt::Argument`, `MCP::Prompt::Result`, `MCP::Prompt::Message`, and `MCP::Content::Text` | Prompt contracts stay discoverable and typed for MCP clients |
+| Choose `MCP::Server::Transports::StdioTransport`, Rails `handle_json`, or `MCP::Server::Transports::StreamableHTTPTransport` based on host requirements | Transport choice determines process lifetime, HTTP behavior, and notification support |
+| Pass request data through `server_context` and avoid global request state | Tools and prompts need authorization, request IDs, and user context without hidden coupling |
+| Configure `exception_reporter` and `instrumentation_callback` for production servers | Errors and latency need centralized monitoring |
+| Send `notify_tools_list_changed`, `notify_prompts_list_changed`, and `notify_resources_list_changed` when capabilities change | Connected clients need fresh capability lists |
+| Validate inputs, handle expected failures with `is_error: true`, and re-raise unexpected exceptions | Users receive actionable errors while monitoring still sees defects |
+| Test tool calls, content length, text matches, and `is_error` with Minitest or the project test runner | MCP behavior should be verified without a live client |
+| Follow Ruby conventions such as `snake_case` names and consistent indentation | MCP code remains idiomatic and maintainable |
+
+## Do / Do Not
+
+| Do | Do not |
+| --- | --- |
+| Use classes for complex tools | Hide complex behavior in anonymous blocks |
+| Define input and output schemas for stable tool contracts | Accept arbitrary parameters without validation |
+| Add `read_only_hint`, `destructive_hint`, `idempotent_hint`, and `open_world_hint` accurately | Mark mutating or external tools as read-only or closed-world |
+| Include both text content and `structured_content` for structured results | Return only a JSON string when clients need typed data |
+| Use `server_context` for `user_id`, `request_id`, and authorization context | Read authentication state from globals inside tools |
+| Configure exception reporting and instrumentation | Let production errors and latency disappear into process logs |
+| Use notifications after changing tools, prompts, or resources | Leave connected clients with stale capability metadata |
+| Return `is_error: true` for expected validation or domain failures | Raise every user-facing error as an unexpected exception |
+| Test tools and invalid input paths directly | Rely only on manual client testing |
+| Use `MCP::Client::HTTP` and `MCP::Client.new` for Ruby clients | Hardcode protocol calls without SDK abstractions |
+
+## Checklist Before Opening a PR
+
+- [ ] The server depends on `gem 'mcp'` and Bundler-managed installation remains reproducible.
+- [ ] `MCP::Server.new` declares stable identity and registers the intended tools, resources, prompts, templates, and context.
+- [ ] Tools define schemas, annotations, structured content, and expected error responses.
+- [ ] Resources, resource templates, and prompts expose typed names, arguments, MIME types, and URI patterns.
+- [ ] Stdio, Rails HTTP, Streamable HTTP, or client transports match the deployment surface.
+- [ ] `server_context` carries request and authentication context without leaking secrets into responses or logs.
+- [ ] `exception_reporter`, `instrumentation_callback`, custom methods, and list-change notifications are configured where production behavior requires them.
+- [ ] Tests cover successful calls, invalid input, `is_error`, content shape, and authorization-sensitive behavior.
+- [ ] Ruby naming and indentation conventions are followed.
