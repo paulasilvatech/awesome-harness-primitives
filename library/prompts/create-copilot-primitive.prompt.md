@@ -1,8 +1,9 @@
 ---
 name: 'create-copilot-primitive'
-description: 'Create a Copilot primitive from this repository's templates and reference patterns.'
+description: 'Create a Copilot primitive from this repository''s templates and reference patterns.'
 argument-hint: 'type=<agent|instructions|skill|prompt> name=<kebab-name> intent=<goal> destination=<response|edit|path>'
 ---
+
 # /create-copilot-primitive
 
 ## Objective

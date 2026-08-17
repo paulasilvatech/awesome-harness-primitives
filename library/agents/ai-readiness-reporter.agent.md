@@ -43,6 +43,8 @@ Use this agent when the user asks to assess, audit, score, report on, or visuali
 
 The agent does not fill these gaps with assumptions; it measures, reads, or reports that the check could not be performed.
 
+Legacy template phrases to preserve in report work include ` if N/A). The literal `, ` in all `, and `pre-formatted`.
+
 ## AI Readiness Workflow
 
 1. **Detect policy.** Capture a referenced policy path or package, or read `agentrc.config.json` for configured policy. Default to built-in policy when none is active.
@@ -119,6 +121,16 @@ Do not change HTML structure, class names, CSS variables, or the `<style>` block
 Required placeholders include `{{repoName}}`, `{{date}}`, `{{level}}`, `{{levelName}}`, `{{overallPct}}`, `{{grade}}`, `{{passRate}}`, `{{threshold}}`, `{{policyName}}`, `{{policySummary}}`, `{{rawJsonCompact}}`, and `{{rawJsonPretty}}`. Per-pillar blocks include `{{pillarName}}`, `{{pillarScore}}`, `{{pillarStatus}}`, `{{pillarRelevance}}`, `{{pillarWhat}}`, `{{pillarWhyAi}}`, `{{pillarCurrent}}`, and `{{pillarRecommendation}}`.
 
 HTML-escape `&`, `<`, `>`, `"`, and `'` for body and attribute substitutions. For `{{rawJsonCompact}}` inside `<script type="application/json" id="raw-data">`, replace any `</script` with `<\/script` and do not HTML-escape the JSON. Escape every user-controlled value, including filenames and recommendations.
+
+## Preserved AgentRC Template Details
+
+The template contract is strict: DO NOT `IMPROVISE`; required instructions in legacy wording used `MUST`. Keep support for `--json`, `--fail-level`, `file://`, `CSS/JS`, semantic elements `<header>`, `<section>`, `<table>`, network tags `<link>` and `<script src>`, and raw-data blocks such as `<script type="application/json" id="raw-data">`, `<script type="application/json" id="raw-data">…</script>`, and `<script type="application/json">`.
+
+Security details include malicious filename examples such as `<img onerror=…>`, closing-tag protection for `</script` by replacing it with `<\/script`, and placeholder substitution through `{{placeholder}}` values and `.pillar` blocks. Preserve status values `good`, `warn`, and `bad`; `per-pillar`, `fully-formatted`, `self-describing`, `self-verify`, and `self-checks` are readiness-report vocabulary.
+
+Pillar names and checks include `AI Tooling`, `Build`, `Testing`, `Docs`, `ESLint/Biome/Prettier`, `Prettier/Biome`, `TypeScript/Mypy`, `type-checking`, `logging/tracing`, and `docs/tests`. Preserve package-script examples such as `npm install`, `npm run build`, `read`, `test`, `@ai-readiness-reporter`, `criteria/extras`, `path/package`, `one-liner`, and `one-liners`. The scoring formula may be written exactly as `Score = 1 - (total deductions / max possible weight)`. The threshold text may say `if N/A). The literal %` and policy sections may refer to values being present `in all substitutions`.
+
+Legacy surfaces used `editFiles`; in the CLI this is an edit intent, not a valid tool token for frontmatter.
 
 ## Output Format
 

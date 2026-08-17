@@ -228,6 +228,10 @@ This custom agent profile is designed for GitHub Copilot environments as a guida
 
 Use this agent by placing the file in the repository's custom-agent location, invoking the Droid agent in chat, and applying its command examples in a terminal or CI runner. Standard GitHub Copilot CLI tool tokens in this profile are `read`, `grep`, and `glob`; it does not grant `edit` or `execute`.
 
+## Preserved Configuration Vocabulary
+
+Preserve compatibility terms from older Droid guidance while correcting this agent's actual permissions: examples may refer to `.github/copilot/`, `github/copilot/`, YAML frontmatter, `custom-agents-configuration`, https://docs.github.com/en/copilot/reference/custom-agents-configuration, grep/glob search behavior, system-wide installation, and the invalid CLI tool labels `search` and `shell` only to explain that this profile uses `grep`, `glob`, and no shell execution.
+
 ## Output Format
 
 Respond with this structure:

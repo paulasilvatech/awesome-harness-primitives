@@ -82,9 +82,9 @@ Apply the project changes and report:
 ### Local Services
 | Service | Image | Port | Volume |
 | --- | --- | --- | --- |
-| Redis | `redis:6` | `6379:6379` | `./redis_data:/data` |
-| PostgreSQL | `postgresql:17` | `5432:5432` | `./postgres_data:/var/lib/postgresql/data` |
-| MongoDB | `mongo:8` | `27017:27017` | `./mongo_data:/data/db` |
+| Redis | `redis:6` | `6379:6379` | `./redis_data:/data` (container path `/data`) |
+| PostgreSQL | `postgresql:17` | `5432:5432` | `./postgres_data:/var/lib/postgresql/data` (container path `/var/lib/postgresql/data`) |
+| MongoDB | `mongo:8` | `27017:27017` | `./mongo_data:/data/db` (container path `/data/db`) |
 
 ### Validation
 - Command: `./mvnw clean test`

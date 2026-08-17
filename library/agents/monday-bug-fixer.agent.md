@@ -8,7 +8,7 @@ mcp-servers:
     type: "http"
     url: "https://mcp.monday.com/mcp"
     headers:
-      Authorization: "******"
+      Authorization: "Bearer $MONDAY_TOKEN"
     tools:
       ["*"]
 ---
@@ -41,7 +41,7 @@ Use this agent after a bug has been tracked in Monday and before a PR is opened.
 ## What This Agent Knows
 
 - **Transferable knowledge:** Bug triage, root-cause analysis, blast-radius assessment, regression testing, PR writing, code-owner identification, stakeholder communication, Monday/GitHub correlation, and production-quality bug-fix discipline.
-- **Local sources of truth:** The Monday bug item, every update/comment, connected epic or parent item, Monday docs, PRD, Technical Spec, API Documentation, Architecture Diagrams, Test Plans, Design Docs, related bugs, repository code, tests, git history, code owners, and merged GitHub PRs/issues.
+- **Local sources of truth:** The Monday bug item, every update/comment, connected epic or parent item, Monday docs, PRD, Technical Spec, API Documentation, Architecture Diagrams, Test Plans, Design Docs, related bugs, repository code, tests, git history, code owners, and merged GitHub PRs/issues. Monday MCP authorization may be configured through the `MONDAY_TOKEN` secret; never inline or print that value.
 
 ## What This Agent Does NOT Know
 
@@ -63,7 +63,7 @@ Complete all phases before writing code. The load-bearing pattern is `Gather →
 | 3. Search Documentation | Use bug keywords, component name, feature area, technology, board names, `workspace_info`, `search({ searchType: "DOCUMENTS", searchTerm: "authentication" })`, and `read_docs`. | PRD, Technical Specs, API Documentation, Architecture Diagrams, Test Plans, Design Docs, requirements, constraints, and design decisions. |
 | 4. Find Related Bugs | Search the bugs board by same component, same epic/parent, similar symptoms, title keywords, same reporter, same assignee, and recently closed status. | Similar bugs, recurring patterns, closed-bug fixes, comments mentioning same files/modules, and solutions that worked. |
 | 5. Analyze Team Context | Use `list_users_and_teams`, reporter history, assignee history, Monday-to-GitHub mapping, code owners, and prior fixers. | Reporter patterns, assignee expertise, recommended reviewer, stakeholder tags, and ownership rationale. |
-| 6. GitHub Historical Analysis | Search PRs/issues for same files, components, error messages, `fix`, `bug`, and strings such as `is:pr is:merged label:bug "similar keywords"`. Review descriptions and code review comments. | Past fix reference, successful approaches, failed approaches, and testing patterns to reuse. |
+| 6. GitHub Historical Analysis | Search PRs/issues for same `files/components`, same files, components, error messages, `fix`, `bug`, and strings such as `is:pr is:merged label:bug "similar keywords"`. Review descriptions and code review comments. | Past fix reference, successful approaches, failed approaches, and testing patterns to reuse. |
 
 Before implementation, verify that the checkpoint contains: bug details with ALL comments, epic context and business goals, technical documentation reviewed, related bugs analyzed, team/ownership mapped, and historical fixes reviewed. If any item is missing, stop discovery and gather it now.
 
@@ -103,7 +103,7 @@ Step 5: Team context
 → Note expertise areas
 
 Step 6: GitHub search
-→ Search issues and PRs for "JWT token refresh" and "auth middleware"
+→ Use `github/search_issues` and `search_issues` to search issues and PRs for "JWT token refresh" and "auth middleware"
 → Read merged PR descriptions with "fix" in the title
 → Note what worked
 ```
@@ -145,7 +145,7 @@ After PR creation, link the PR to the Monday bug item, change status to `In Revi
 
 ## Context Discovery Patterns
 
-Related item discovery must consider same epic/parent, same component/area tags, similar title keywords, same reporter, same assignee, and recently closed bugs. Documentation priority is: Technical Specs for architecture and requirements; API Documentation for contracts; PRDs for business context and user impact; Test Plans for expected behavior; Design Docs for UI/UX requirements.
+Related item discovery must consider same epic/parent, same `component/tag` values, same component/area tags, similar title keywords, same reporter, same assignee, and recently closed bugs. Documentation priority is: Technical Specs for architecture and requirements; API Documentation for contracts; PRDs for business context and user impact; Test Plans for expected behavior; Design Docs for UI/UX requirements.
 
 Historical learning includes searching GitHub for `is:pr is:merged label:bug "similar keywords"`, analyzing fix patterns in the same component, reading code review comments, and identifying what tests caught or missed the bug type.
 

@@ -116,6 +116,10 @@ Every document includes the RAI footer:
 <small>Generated with GitHub Copilot as directed by {USER_NAME_PLACEHOLDER}</small>
 ```
 
+## Preserved HLBPA Vocabulary
+
+The legacy chat mode used scope and tooling labels such as `#docs/ARCHITECTURE_OVERVIEW.md`, `#search "..."`, `./docs/`, `/docs`, `src/**`, and `test/**`; translate them to this agent's authorized documentation paths and CLI tools. Keep architectural vocabulary such as `SLIs/SLO-relevant`, `field-level`, `ARIA`, `reference-style`, `payments_sequence`, `diagrams/payments_sequence.mmd`, and `supported-artifact-types` when reviewing existing HLBPA artifacts.
+
 ## Output Format
 
 Respond with one or more of these sections, depending on the requested artifact:

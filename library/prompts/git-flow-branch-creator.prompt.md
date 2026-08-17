@@ -114,7 +114,7 @@ git checkout -b feature/user-registration-api develop
 Follow these steps in order.
 
 **Step 1 — Inspect the repository state.**
-Run `git status`. Identify the current branch, staged files, unstaged files, untracked files, and whether local work could conflict with a branch switch. If no changes are detected, inform the user and suggest checking `git status` or making changes first.
+Run `git status`. Identify the current branch, staged files, unstaged files, untracked files, and whether local work could conflict with a branch switch. If no changes are detected in `git status/diff`, inform the user and suggest checking `git status` or making changes first.
 
 **Step 2 — Inspect changed content.**
 Run `git diff` for unstaged changes and `git diff --cached` for staged changes. Capture relevant portions of the diff. Do not include sensitive values in the final report.
@@ -152,7 +152,7 @@ For mixed changes, prioritize the most significant change type or suggest splitt
 Cover `edge-cases`: `mixed-changes`, `no-changes`, `existing-branch`, and `conflicting-names`.
 
 **Step 7 — Validate execution safety.**
-Confirm that the repository can switch branches safely, the current branch is an appropriate starting point, the remote repository is up to date when that can be checked, the target branch exists, the proposed name does not conflict, and the user has appropriate permissions.
+Confirm that the repository can switch branches safely, the current branch is an appropriate starting point such as `develop` for `features/releases` or `master` for hotfixes, the remote repository is up to date when that can be checked, target branch `develop/master` exists, the proposed name does not conflict, and the user has appropriate permissions.
 
 Cover `validation`, `pre-analysis`, `analysis-quality`, and `execution-safety` before branch creation.
 

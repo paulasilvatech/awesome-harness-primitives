@@ -108,7 +108,7 @@ Report completion with:
 ## Definition of Done
 
 - [ ] `llms.txt` exists at the repository root.
-- [ ] The file follows https://llmstxt.org/ with one H1, an optional blockquote summary, optional additional context paragraphs without headings, and H2 file-list sections.
+- [ ] The file follows https://llmstxt.org/ with one H1 `repository/project` name, an optional blockquote summary, optional additional context paragraphs without headings, and H2 file-list sections.
 - [ ] The project name and summary accurately reflect repository evidence.
 - [ ] Essential files are grouped logically and prioritized for LLM understanding.
 - [ ] Every link follows `[descriptive-name](relative-url): optional description` and resolves from the repository root.

@@ -22,7 +22,7 @@ Editing policy: modify only documentation and content artifacts requested by the
 
 - **Start with the reader's problem.** Explain why the topic matters before diving into how it works.
 - **Make complexity feel manageable.** Use progressive disclosure, concrete examples, short paragraphs, and signposting from simple to complex.
-- **Verify technical claims.** Check code examples, dependency versions, performance statements, security advice, and links before presenting them as fact.
+- **Verify technical claims.** Check that code examples `compile/run`, dependency versions, performance statements, security advice, and links before presenting them as fact.
 - **Adapt tone to audience.** Write differently for junior developers, senior engineers, technical leaders, and non-technical stakeholders.
 - **Prefer usable structure over clever prose.** Use headings, bullets, numbered procedures, tables, and checklists when they help readers act.
 - **Preserve terminology consistency.** Define terms on first use and reuse the same names throughout the artifact.
@@ -165,7 +165,7 @@ Use conversational yet authoritative language for technical blogs, clear objecti
 
 ### Architecture Decision Record
 
-Follow the Michael Nygard ADR format at https://github.com/joelparkerhenderson/architecture-decision-record and the ADR GitHub organization guidance at https://adr.github.io/.
+Follow the Michael Nygard ADR format at <https://github.com/joelparkerhenderson/architecture-decision-record> and the ADR GitHub organization guidance at <https://adr.github.io/>.
 
 ```markdown
 # ADR-[Number]: [Short Title of Decision]
@@ -200,7 +200,7 @@ Follow the Michael Nygard ADR format at https://github.com/joelparkerhenderson/a
 - [Links to related docs, RFCs, benchmarks]
 ```
 
-ADR best practices: keep one decision per ADR, keep accepted ADRs immutable, create a new ADR when context changes, include metrics or data that informed the decision, and link references.
+ADR best practices: keep one decision per ADR, keep accepted ADRs immutable, create a new ADR when context changes, include `metrics/data` that informed the decision, and link references.
 
 ### User guide
 
@@ -252,7 +252,7 @@ A: [Clear answer with link to deeper docs if needed]
 - [Community forum/support]
 ```
 
-User guides should be task-oriented, not feature-oriented. Prefer "How to export data" over "Export feature", include screenshots for UI-heavy steps when image paths exist, and test with actual users before publishing when possible. Reference the Write the Docs beginner guide: https://www.writethedocs.org/guide/writing/beginners-guide-to-docs/.
+User guides should be task-oriented, not feature-oriented. Prefer "How to export data" over "Export feature", include screenshots and `images/diagrams` for UI-heavy steps when image paths exist, and test with actual users before publishing when possible. Reference the Write the Docs beginner guide: <https://www.writethedocs.org/guide/writing/beginners-guide-to-docs/>.
 
 ## Technical Writing Workflow
 
@@ -273,7 +273,7 @@ During drafting, mark uncertain claims with `[TODO]` for `fact-checking`. Make t
 | Code blocks | Always include a language identifier. |
 | Command examples | Show both the command and expected output when practical. |
 | File paths | Use consistent relative or absolute paths. |
-| Versions | Include version numbers for tools and libraries when relevant and verified. |
+| Versions | Include version numbers for `tools/libraries` when relevant and verified. |
 | Headers | Use Title Case for Levels 1-2 and sentence case for Levels 3+. |
 | Lists | Use bullets for unordered items and numbers for sequences. |
 | Emphasis | Use bold for UI elements and italics for first use of terms. |

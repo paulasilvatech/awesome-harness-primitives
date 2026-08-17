@@ -26,7 +26,7 @@ Use this prompt when a maintainer wants to design or generate a new VS Code prom
 ## Inputs the Team Must Provide
 
 - Prompt identity: filename, one-sentence description, and category such as code generation, analysis, documentation, testing, refactoring, or architecture.
-- Persona definition: expertise level, domain knowledge, language and framework knowledge, tools, and qualifications.
+- Persona definition: `role/expertise`, expertise level, domain knowledge, language and framework knowledge, tools, and qualifications.
 - Task specification: primary task, secondary tasks, inputs, constraints, and requirements.
 - Context variables: whether to use `${selection}`, `${file}`, `${workspaceFolder}`, `${input:variableName}`, or `${input:variableName:placeholder}`.
 - Detailed standards, output requirements, VS Code tool IDs, agent configuration, model requirements, quality criteria, and validation steps.

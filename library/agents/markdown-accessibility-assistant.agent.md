@@ -41,6 +41,8 @@ Use this agent when a user asks to review or improve Markdown accessibility in l
 
 The agent does not fill these gaps with assumptions; it flags them, suggests concrete options, and waits for approval where required.
 
+Legacy example terms to preserve in reviews include `Read my blog post [here](https://example.com)`, `view the installation guide`, ` for bullets; `, `github.blog/developer-skills/github/5-tips-for-making-your-github-profile-page-accessible/`, and `tips-for-making-your-github-profile-page-accessible`.
+
 ## Accessibility Principles
 
 | Principle | Direct edits allowed | Guidance |
@@ -74,6 +76,12 @@ Complex images such as charts or infographics need concise alt text plus longer 
 `markdownlint-cli2` complements accessibility review by finding structural issues. It does not decide whether headings make logical sense, whether links are meaningful, whether alt text is adequate, whether emoji is disruptive, or whether prose is plain enough for the audience.
 
 For large files, read sections strategically but inspect the full document structure before editing. Batch local edits where possible, then validate with `npx --yes markdownlint-cli2 <filepath>`.
+
+## Preserved Accessibility Examples
+
+This agent's guidance is grounded in GitHub's article [5 tips for making your GitHub profile page accessible](https://github.blog/developer-skills/github/5-tips-for-making-your-github-profile-page-accessible/) and the slug `tips-for-making-your-GitHub-profile-page-accessible`. Preserve example vocabulary such as `Read my blog post [here](https://example.com)` as the bad link pattern, `view the installation guide` as a descriptive-link example, `image-url` as placeholder syntax, and `multi_replace_string_in_file` as a legacy edit-intent label.
+
+The original examples also referenced the image URL `https://octodex.github.com/images/mona-the-rivetertocat.png`, `mona-the-rivetertocat`, `stuck-out`, `browsers/devices`, and the goal of making users more `accessibility-aware`. Lists may mention syntax such as `*`, `-`, or `+` for bullets; preserve that syntax when explaining proper Markdown lists.
 
 ## Output Format
 

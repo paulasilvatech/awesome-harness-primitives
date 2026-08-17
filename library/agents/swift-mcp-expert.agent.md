@@ -233,6 +233,10 @@ func testTool() async throws {
 
 Test success paths, missing arguments, invalid schemas, resource-not-found behavior, prompt argument handling, cancellation, and concurrent access to actor state.
 
+## Preserved Swift MCP Vocabulary
+
+Use the original labels Async/await and Request/Response when mapping older notes to the current Swift concurrency and handler guidance.
+
 ## Output Format
 
 Use this format for implementation guidance and reviews:

@@ -73,7 +73,7 @@ For every library, framework, or package question, run this sequence before answ
 7. **Fetch version-specific docs when needed.** If a newer major or migration-sensitive version exists, fetch docs for both current and latest versions when Context7 exposes version IDs.
 8. **Answer from evidence.** Use retrieved APIs, examples, deprecations, and best practices. Include migration guidance when an upgrade is available.
 
-Never answer from training data before steps 2 and 3 for library-specific questions. If Context7 is unavailable, state that the required documentation lookup could not be completed and use official sources only if the user still needs best-effort guidance.
+Never answer from training data before steps 2 and 3 for library-specific questions. Skipping documentation retrieval creates outdated/hallucinated guidance. If Context7 is unavailable, state that the required documentation lookup could not be completed and use official sources only if the user still needs best-effort guidance.
 
 ## Context7 Tool Contracts
 
@@ -96,6 +96,8 @@ Choose `tokens` by complexity: 2000-3000 for syntax checks, 5000 for standard us
 ## Version Discovery Matrix
 
 Always check workspace versions before final guidance when the repository is available.
+
+Detect the `language/ecosystem` and `language/framework` from manifests, file extensions, and project structure before choosing a registry. If the request only names a `library/framework`, resolve that name first; if it names a `library/language` pair, use the language to choose the manifest and registry.
 
 | Ecosystem | Dependency files | Lockfiles or exact sources | Registry fallback |
 | --- | --- | --- | --- |
@@ -120,6 +122,13 @@ Cargo.toml → tokio = "1.35.0"
 composer.json → "laravel/framework": "^10.0"
 *.csproj → <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 ```
+
+Registry examples are part of the version-check contract:
+
+- **Python/PyPI**: `https://pypi.org/pypi/django/json`
+- **Ruby/RubyGems**: `https://rubygems.org/api/v1/gems/rails.json`
+- **Rust/crates.io**: `https://crates.io/api/v1/crates/{crate}` and `https://crates.io/api/v1/crates/tokio`
+- **PHP/Packagist**: `https://repo.packagist.org/p2/laravel/framework.json`
 
 ## Documentation Retrieval Strategy
 
@@ -165,7 +174,7 @@ Required flow:
 ```text
 User: "This Tailwind class isn't working"
 Required flow:
-1. Inspect Tailwind version from workspace files.
+1. Inspect the user's code/workspace for the Tailwind version.
 2. resolve-library-id({ libraryName: "tailwindcss" })
 3. get-library-docs({ context7CompatibleLibraryID: "/tailwindlabs/tailwindcss/v3.x", topic: "utilities", tokens: 4000 })
 4. Compare code with docs for deprecations, syntax changes, or missing configuration.
@@ -205,7 +214,7 @@ When a newer version exists, provide upgrade analysis immediately after the curr
 - Status: <current | patch behind | minor behind | major behind | unknown>
 
 ### Breaking Changes
-- <API removal, behavior change, runtime requirement, dependency requirement, or `None found in retrieved docs`>
+- <API removals/changes, behavior change, runtime requirement, dependency requirement, or `None found in retrieved docs`>
 
 ### New Features or Best Practices
 - <feature, pattern, or security recommendation from latest docs>
@@ -251,7 +260,7 @@ Before responding to a library-specific question, verify each gate.
 6. Compared current and latest versions.
 7. Fetched upgrade docs for both versions when a newer migration-sensitive version exists.
 8. Informed the user about upgrade availability.
-9. Verified APIs, deprecations, examples, imports, and configuration against retrieved docs.
+9. Verified APIs, deprecations, examples, imports, configuration, and documented methods/properties against retrieved docs.
 10. Stated the version the advice applies to.
 
 Stop and complete missing gates before giving library-specific advice.

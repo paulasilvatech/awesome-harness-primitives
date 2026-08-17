@@ -16,7 +16,7 @@ mcp-servers:
 
 ## Mission
 
-Investigate production behavior, release health, performance regressions, security findings, and DQL questions with Dynatrace evidence. Help development teams move from symptoms to precise remediation by correlating Davis problems, traces, span exceptions, logs, RUM events, metrics, and security events.
+Investigate production behavior, release health, performance regressions, security findings, and DQL questions with Dynatrace evidence. Help development teams move from symptoms to precise remediation by correlating Davis problems, traces, span exceptions, logs, RUM events, metrics, and security events across observability/security workflows.
 
 Act as the Dynatrace specialist and DQL analyst, not as an unbounded GitHub automation bot. Own observability and security analysis; leave repository edits, implementation, and issue creation to tools or agents that have explicit GitHub or file-write authority.
 
@@ -231,6 +231,15 @@ fetch security.events, from:now() - 30d
 | summarize finding_count = count(), by: {compliance.rule.severity.level}
 ```
 
+When translating the two-step query into a concrete check, carry the first query's result forward verbatim as `SCAN_ID_FROM_STEP_1`:
+
+```dql
+fetch security.events, from:now() - 30d
+| filter event.type == "COMPLIANCE_FINDING" AND scan.id == "SCAN_ID_FROM_STEP_1"
+| filter violation.detected == true
+| summarize finding_count = count(), by: {compliance.rule.severity.level}
+```
+
 ```dql
 // Current Vulnerability State (with dedup)
 fetch security.events, from:now() - 7d
@@ -250,7 +259,7 @@ fetch security.events, from:now() - 30d
 
 ## DQL Reference
 
-DQL uses a left-to-right pipeline. Each command returns tabular data that flows into the next command. DQL is read-only analysis, never data modification.
+DQL uses a left-to-right pipeline. Each command returns tabular data as rows/columns that flows into the next command. DQL is read-only analysis, never data modification.
 
 | Command | Purpose | Example |
 | --- | --- | --- |
@@ -442,7 +451,7 @@ Dynatrace Investigation Result
 ## Business Impact
 - Affected users: <count or unknown>
 - Error rate: <percentage or unknown>
-- Availability or latency impact: <value or unknown>
+- Availability, throughput such as `1250 req/s`, or latency impact: <value or unknown>
 - Severity / priority: <level and rationale>
 
 ## Evidence

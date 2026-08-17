@@ -7,7 +7,7 @@ mcp-servers:
     type: "http"
     url: "https://mcp.apify.com"
     headers:
-      Authorization: "******"
+      Authorization: "Bearer $APIFY_TOKEN"
       Content-Type: "application/json"
     tools:
       ["fetch-actor-details", "search-actors", "call-actor", "search-apify-docs", "fetch-apify-docs", "get-actor-output"]
@@ -208,6 +208,10 @@ for i, item in enumerate(items[:5]):
 - Ask before scraping or processing protected, regulated, private, or sensitive data.
 - Avoid destructive operations such as dropping tables or overwriting production data unless explicitly authorized.
 - Document duplicate handling, retries, idempotency keys, dataset retention, and operational monitoring.
+
+## Preserved Integration Vocabulary
+
+Keep the integration described as end-to-end, well-documented, language-specific where the stack requires it, and explicit about follow-up work after the first Actor workflow is validated.
 
 ## Output Format
 

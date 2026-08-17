@@ -116,6 +116,14 @@ Use creative patterns only when the brief requires personality or the existing s
 - **Claymorphism:** soft 3D, rounded `20pt`, pastels, and spring animations.
 - **Layout innovation:** asymmetric lists, overlapping cards with negative margin and z-index, horizontal scroll with `snapToInterval` and 20% peek, custom shape FABs, and bottom sheets with `24pt` top radius, gradient or blur backdrop, and styled handle.
 
+## Preserved Source Terms
+
+Carry these exact source terms as workflow vocabulary: `knowledge_sources`, `skills_guidelines`, `output_format`, `MANDATORY`, `IMPORTANT`, `CRITICAL`, `MUST`, `NEVER`, `SPEC`, `ASCII`, `STE100`, `ARIA`, `Batch/join`, `dependency-free`, `repeatable/bulk`, `arg-only`, `non-zero`, `tool/terminal`, `pre-existing`, `action/command.`, `head/tail`, `changed_tokens`, and `orchestrator/user`.
+
+Carry these exact mobile design terms as technical vocabulary: `HIG/Material`, `HIG/M3`, `iOS/Android/cross-platform.`, `VoiceOver/TalkBack.`, `accessibilityLabel/role/hint.`, `notch/dynamic`, `island/status`, `bar/home`, `loading/empty/error`, `reduced-motion`, `positions/colors`, `hex/px`, `bullet/item.`, `44pt/48dp.`, `iOS/48dp`, `Pro/Roboto.`, `R400`, `SB600`, `M500`, `B700`, `Satoshi/DM`, `Sans/Plus`, `expo-font/react-native-google-fonts/embed.`, `full-bleed`, `hero/onboarding`, `Premium/media/onboarding.`, `gradient/blur`, `off-white`, `Stack/Tab/Drawer/Modal.`, `alerts/actions.`, `em-dashes`, and `in-stack`.
+
+Carry the exact section name `DESIGN.md Spec Compliance` when explaining DESIGN.md validation.
+
 ## Output Format
 
 Return JSON only:

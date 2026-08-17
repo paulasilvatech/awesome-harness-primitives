@@ -327,7 +327,7 @@ Naming and size guidance:
 
 ## Output Format
 
-After scaffolding or validation, respond with:
+After scaffolding or validation, respond with a **Summary** of what was `created/validated`, then:
 
 ```markdown
 ## Scaffolding Complete

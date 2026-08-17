@@ -110,7 +110,7 @@ For mobile, design portrait-first, use touch-friendly targets, simplify navigati
 
 ## Color, Typography, and Accessibility
 
-Use semantic colors consistently: green for positive growth or success, red for negative decline or alerts, blue for neutral information, and orange for warnings or attention. Maintain at least a 4.5:1 contrast ratio for normal text where possible, never rely solely on color, use colorblind-friendly palettes, test with accessibility tools, provide alternative cues, and ensure branding still works across visualizations, printing, and export.
+Use semantic colors consistently: green for positive growth or success, red for negative decline or alerts, blue for neutral information, and orange for warnings or attention. Maintain at least a 4.5:1 contrast ratio for normal text where possible, never rely solely on color, use colorblind-friendly palettes, test with accessibility tools, provide alternative cues, and ensure branding still works across visualizations and `printing/export` scenarios.
 
 Use sans-serif fonts for digital display, minimum 10pt body text, a consistent hierarchy, and limited font families. Page titles commonly use 18-24pt bold, section headers 14-16pt semi-bold, body text 10-12pt regular, and captions 8-10pt light. Use concise action-oriented labels, clear axis titles, meaningful chart titles, and explanatory subtitles when they help interpretation.
 

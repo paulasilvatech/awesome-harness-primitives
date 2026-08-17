@@ -191,12 +191,16 @@ Security testing catches vulnerabilities before they reach production, reducing 
 
 Commit messages, when commits are requested, are `Add StackHawk security testing configuration` and `Add GitHub Actions workflow for automated security scans`.
 
+## Preserved Source Terms
+
+Carry these exact source terms as detection vocabulary and PR wording: `CRITICAL`, `FIRST`, `STEP`, `Documentation/Config`, `Library/Package`, `Maven/Gradle`, `OpenAPI/Swagger`, `HOST/PORT`, `localhost:PORT`, `http://localhost:PORT`, `authentication/authorization`, `server/API`, `library/docs`, `library/documentation/etc`, `high-risk`, `review/update`, `detected/configured`, `token/cookie/oauth/external`, and `http://localhost:3000`.
+
 ## Output Format
 
 When setup proceeds, respond with:
 
 ```markdown
-# StackHawk Onboarding Summary
+**StackHawk Onboarding Summary**
 
 **Decision:** <configured | skipped | update-offered | needs-confirmation>
 

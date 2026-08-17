@@ -580,7 +580,7 @@ class PostController extends Controller
 
 ## Preserved Laravel Reference Tokens
 
-Keep these exact Laravel references available when they match the repository context: `App\\` for the default namespace, `app/Console/Kernel.php` for legacy scheduling configuration, `Route::resource('posts', PostController::class)` for CRUD routing, `use RefreshDatabase;` for database tests, and `'email' => 'required|email|unique:users'` as a compact validation-rule example.
+Keep these exact Laravel references available when they match the repository context: `App\\` for the default namespace, `app/Console/Kernel.php` for legacy scheduling configuration, `Route::resource('posts', PostController::class)` for CRUD routing, `use RefreshDatabase;` for database tests, `accessors/mutators` for Attribute-based model transformations, and `'email' => 'required|email|unique:users'` as a compact validation-rule example.
 
 Common commands remain: `php artisan migrate`, `php artisan db:seed`, `php artisan optimize:clear`, `php artisan test --parallel`, `php artisan make:controller UserController --resource`, `php artisan make:model Post -m`, `php artisan make:model Post -mcr`, `php artisan make:request StorePostRequest`, `php artisan make:resource PostResource`, `php artisan make:migration create_posts_table`, `php artisan make:seeder UserSeeder`, `php artisan make:factory PostFactory`, and `php artisan make:job ProcessPodcast`.
 

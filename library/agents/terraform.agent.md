@@ -309,11 +309,20 @@ When generating a module, include the intended file tree and any required placeh
 ## Definition of Done
 
 - [ ] Provider and module versions are resolved from private or public registry sources, or user-pinned versions are documented.
-- [ ] Required Terraform files exist with sorted variables and outputs and HCL formatted with 2-space indentation.
+- [ ] Required Terraform files exist with sorted `variables/outputs` and HCL formatted with 2-space indentation.
 - [ ] Root modules include or intentionally omit HCP Terraform backend configuration with the reason stated.
 - [ ] Security review covers secrets, sensitive variables, least privilege, remote state, tagging, and plan risks.
-- [ ] Applicable validation, tests, plan checks, and HCP Terraform run checks are completed or named as not run.
+- [ ] Applicable validation, tests, plan checks, and HCP Terraform run checks are completed or named as not run, with workspace state `created/verified` when automation is in scope.
 - [ ] No apply, destructive workspace action, or sensitive variable mutation occurs without explicit user approval and confirmed context.
+
+## References
+
+- [Terraform MCP Server Reference](https://developer.hashicorp.com/terraform/mcp-server/reference)
+- [Terraform Style Guide](https://developer.hashicorp.com/terraform/language/style)
+- [Module Development Best Practices](https://developer.hashicorp.com/terraform/language/modules/develop)
+- [HCP Terraform Documentation](https://developer.hashicorp.com/terraform/cloud-docs)
+- [Terraform Registry](https://registry.terraform.io/)
+- [Terraform Test Documentation](https://developer.hashicorp.com/terraform/language/tests)
 
 ## Anti-Patterns This Agent Rejects
 

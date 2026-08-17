@@ -76,7 +76,7 @@ Follow this ordered workflow because later classifications depend on earlier evi
 
 Before doing anything else, ask for the GitHub handle shown as the module owner in the AVM index. Do not infer it from Git config, prior reports, or previous sessions.
 
-Immediately after alias confirmation and module presentation, ask for analysis depth. `quick` skips Section 2d, Section 5 Pass 1, and Section 5 Pass 2. `deep` clones every module, greps for code-surface overlaps, validates upstream schema, then performs thread analysis. Deep mode can take tens of minutes per 10-20 issues; quick mode is minutes and lower fidelity.
+Immediately after alias confirmation and module presentation, ask for analysis depth. `quick` skips Section 2d, Section 5 Pass 1, and Section 5 Pass 2. `deep` clones every module, greps for code-surface overlaps, validates `property/feature` claims against upstream ARM/Bicep/Terraform schema, then performs thread analysis. Deep mode can take tens of minutes per 10-20 issues; quick mode is minutes and lower fidelity.
 
 ## Module Discovery
 
@@ -201,7 +201,9 @@ Staleness rules:
 | Owner never replied and bot escalated to `Needs: Immediate Attention ‼` | priority bump to at least Medium-high |
 | Maintainer asked for info and reporter is silent 14+ days | `Needs: Info` with close-in-30-days note |
 
-Classification types are `bug`, `provider-update`, `feature-request`, `documentation`, `enhancement`, `duplicate`, and `wont-fix`. Priority tiers are High, Medium, and Low only.
+Classification types are `bug`, `provider-update`, `feature-request`, `documentation`, `enhancement`, `duplicate`, and `wont-fix`. Use `provider-update` when AzureRM provider changes a `resource/attribute`. Priority tiers are High, Medium, and Low only.
+
+Per-issue capture should include the issue `number/title`, filed date, last human comment and age, reporter follow-up status, owner response status, linked PR/branch, scope changes, external mentions, bot escalation, and one key signal from the thread.
 
 Per-issue capture template:
 
@@ -225,8 +227,8 @@ Dependency analysis is mandatory and always intra-module only.
 In `quick` mode, run only thread-declared dependency analysis and label dependencies as thread-claimed. In `deep` mode, run three passes:
 
 1. **Code-delta analysis.** Infer code surface from issue text, linked PRs/branches, symbols, resource names, variables, module inputs, provider pins, and shallow clone inspection. Record `Code surface: <files>; symbols: <names>; overlaps: #<n>, #<n>; blocked by PR/branch: <ref or none>`. Chain issues only when they overlap files/symbols, touch the same PR branch, require incompatible provider/API pins, or must ship together to avoid conflicts.
-2. **Upstream-schema delta.** Validate missing/unsupported property claims against Azure resource reference for Bicep/ARM/AzAPI schemas on learn.microsoft.com, Terraform Registry provider docs/API for `hashicorp/azurerm`, and Terraform Registry provider docs/API for `Azure/azapi` when fallback is needed. Prefer enabled MCP documentation or Terraform tools; otherwise use web fetches. Record `Upstream: {rp}/{resource}@{api-version}; property present: yes/no; pivot: bicep|terraform; preview: yes/no; azurerm covers: yes/no; azapi type: Microsoft.X/Y@vZ`.
-3. **Thread-declared analysis.** Identify duplicates, overlaps, ordering dependencies, conflicting approaches, shared root causes, blocking PRs/fork branches, must-ship-together pairs, multi-part issues that should be split, and duplicates of already-closed issues that need verify-and-close.
+2. **Upstream-schema delta.** Validate missing/unsupported property claims against Azure resource reference for Bicep/ARM/AzAPI schemas on learn.microsoft.com, Terraform Registry provider docs/API for `hashicorp/azurerm`, and Terraform Registry provider docs/API for `Azure/azapi` when fallback is needed. Prefer enabled MCP documentation or Terraform tools; otherwise use `authenticated/public` web fetches. Record `Upstream: {rp}/{resource}@{api-version}; property present: yes/no; pivot: bicep|terraform; preview: yes/no; azurerm covers: yes/no; azapi type: Microsoft.X/Y@vZ`.
+3. **Thread-declared analysis.** Identify `duplicates/overlaps`, ordering dependencies, conflicting approaches, shared root causes, blocking PRs/fork branches, must-ship-together pairs, multi-part issues that should be split, and duplicates of already-closed issues that need verify-and-close.
 
 Every issue lands in one of two piles.
 

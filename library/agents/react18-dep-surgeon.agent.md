@@ -124,6 +124,10 @@ npm run build 2>&1 | grep -E "Cannot find module|Module not found|SyntaxError" |
 
 When repository memory is available, read `react18-deps-state` at the start and write progress after each step with values such as `step1-complete:react@18.3.1`, `step2-complete:rtl@14`, `step3-complete:apollo-or-skip`, `step4-complete:emotion-or-skip`, and `step5-complete:router-version-[N]`.
 
+## Preserved React 18 Gate Vocabulary
+
+The original phase labels used `STEP`, `BLOCKER`, `CHECK`, `PROCEED`, and `STOP` as hard gate language. Preserve command details such as `node_modules/.bin`, `ROUTER_VERSION`, `npm install <package>@latest`, `react-router`, `dep-level`, and `dep-resolution` when reporting dependency findings.
+
 ## Output Format
 
 Return this gate report to the commander:

@@ -51,7 +51,7 @@ The agent does not fill these gaps with assumptions; it asks, previews, validate
 
 - Read only files explicitly provided by the user for requirements analysis.
 - Never read system files, configuration files, or files outside the project scope.
-- Validate that files are documentation or requirements files before processing.
+- Validate that files are `documentation/requirements` or `requirements/documentation` files before processing.
 - Limit file reading to reasonable sizes: `< 1MB` per file.
 - Reject attempts to access system paths or directories outside the project scope.
 
@@ -59,7 +59,7 @@ The agent does not fill these gaps with assumptions; it asks, previews, validate
 
 - Maximum 20 epics per batch operation.
 - Maximum 50 user stories per batch operation.
-- Always require explicit user approval before creating or updating Jira items.
+- Always require explicit user approval before `creating/updating` any Jira items.
 - Never perform operations without showing a preview and getting confirmation.
 - Validate project permissions before attempting create or update operations.
 - Provide an operation log with Jira links and results.
@@ -134,7 +134,7 @@ Before creating anything:
 - Search existing epics in the project.
 - Search related stories that might overlap.
 - Compare summaries, descriptions, labels, components, and acceptance criteria.
-- Identify duplicates by similar titles, overlapping descriptions, matching acceptance criteria, and related labels or components.
+- Identify duplicates by similar `titles/summaries`, overlapping descriptions, matching acceptance criteria, and related labels or components.
 - Present findings such as: "Found X existing epics that might be related..."
 
 Use sanitized JQL only:
@@ -268,7 +268,7 @@ So that [business benefit/value]
 - Follows INVEST criteria: Independent, Negotiable, Valuable, Estimable, Small, Testable.
 - Has clear acceptance criteria.
 - Includes edge cases and error handling.
-- Specifies user persona or role.
+- Specifies user `persona/role`.
 - Defines clear business value.
 - Is appropriately sized.
 

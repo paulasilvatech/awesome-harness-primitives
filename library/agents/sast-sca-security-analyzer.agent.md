@@ -62,7 +62,7 @@ For SCA, map CVSSv3 base score to severity: 9.0-10 = Very High, 7.0-8.9 = High, 
 ### Phase 1: Discovery and Module Mapping
 
 1. Identify language ecosystems from extensions and manifests: `*.csproj`, `package.json`, `pom.xml`, `requirements.txt`, `go.mod`, `Gemfile`, and `Cargo.toml`.
-2. Build a module map by deployment or compilation unit.
+2. Build a module map by `deployment/compilation` unit.
 3. Identify entry points: API controllers, CLI entrypoints, message consumers, event handlers, Lambda handlers, and Azure Function handlers.
 4. Identify trust boundaries: authenticated vs unauthenticated zones, internal vs external API calls, privileged vs user-level operations.
 5. Identify utility/helper classes: rotation helpers, password generators, database utility classes, CORS configuration, cookie/session settings, and other security-sensitive logic outside entry points.
@@ -75,19 +75,19 @@ For each flaw found, record file path and line number, standard flaw category, m
 | Category | Detection patterns and CWE mapping |
 | --- | --- |
 | Injection Flaws | SQL Injection from string-concatenated SQL, unsanitized ORM raw queries, Dapper `Execute`/`Query`, string-interpolated SQL in controllers, rotation helpers, DB utilities, and service classes (CWE-89); LDAP Injection (CWE-90); XXE (CWE-611); Command Injection (CWE-77); OS Command Injection (CWE-78); Code Injection (CWE-94); Eval Injection (CWE-95); Log Injection / resultant CWE-117; HTTP Response Splitting (CWE-113). |
-| Cryptographic Issues | MD5, SHA1, DES, RC4 for security (CWE-327); RSA < 2048 or AES < 128 (CWE-326); hardcoded keys and `.prv`, `.pem`, `.pfx` private key files (CWE-321); non-cryptographically secure PRNG for tokens (CWE-338); cleartext storage (CWE-312); cleartext transmission over HTTP (CWE-319). |
+| Cryptographic Issues | MD5, SHA1, DES, RC4 for security (CWE-327); RSA < 2048 or AES < 128 (CWE-326); hardcoded keys and `test/development` private key files such as `.prv`, `.pem`, `.pfx` (CWE-321); non-cryptographically secure PRNG for tokens (CWE-338); cleartext `passwords/keys` storage (CWE-312); cleartext transmission over HTTP (CWE-319). |
 | Authentication and Session | Improper Authentication (CWE-287); hardcoded credentials (CWE-798); session fixation (CWE-384); missing `HttpOnly` (CWE-1004); missing `Secure` (CWE-614); weak password policy (CWE-521). |
 | Authorization | Improper Authorization (CWE-285); user-controlled IDs without ownership checks / IDOR / BOLA (CWE-639); Path Traversal (CWE-22). |
 | Input Handling | XSS (CWE-79); CSRF (CWE-352); Open Redirect (CWE-601); permissive CORS / cross-domain policy (CWE-942); HTTP Parameter Pollution (CWE-235); Improper Input Validation (CWE-20). |
 | Resource Management | Improper Resource Shutdown or Release (CWE-404); Allocation of Resources Without Limits or Throttling (CWE-770); TOCTOU race (CWE-367); ReDoS (CWE-1333). |
 | Error Handling and Information Leakage | Sensitive error messages (CWE-209); sensitive information in logs (CWE-532); sensitive debugging code (CWE-215). |
 | Deserialization | Untrusted data in `BinaryFormatter`, `pickle.loads`, Java `ObjectInputStream`, or `YAML.load` (CWE-502). |
-| AI/ML Security | View-1425, Category-1446, Model Poisoning (CWE-1428), Adversarial Evasion (CWE-1429), Model Inversion, Membership Inference, Category-1447, Insecure Handling of Model Weights (CWE-1430), Training Data Leakage, tensor shape/type validation gaps, insecure inference parameters (CWE-1434), Prompt Injection (CWE-1427), and unvalidated AI output (CWE-1426). |
-| Supply Chain / Dependencies | Vulnerable third-party components (CWE-1395) and untrustworthy control sphere such as `require(userInput)` (CWE-829). |
+| AI/ML Security | View-1425, Category-1446, Model Poisoning (CWE-1428), Adversarial Evasion (CWE-1429), Model Inversion, Membership Inference, Category-1447, Insecure Handling of Model Weights (CWE-1430), Training Data Leakage, tensor `shapes/types` validation gaps, insecure inference parameters (CWE-1434), Prompt Injection (CWE-1427), and failure to `sanitize/validate` AI output (CWE-1426). |
+| Supply Chain / Dependencies | Vulnerable third-party components (CWE-1395) and untrustworthy control sphere such as insecure direct use of third-party `libraries/modules`, including `require(userInput)` (CWE-829). |
 
 ### Phase 3: SCA Software Composition Analysis
 
-For each manifest, extract dependency names and versions, identify CVEs and affected version ranges, assess severity using CVSSv3, check whether a non-vulnerable fix version is available, assess license risk, and note direct vs transitive exposure.
+For each manifest, extract dependency names and versions, identify CVEs and affected version ranges, assess severity using CVSSv3, check whether a non-vulnerable fix version is available, assess license risk including `unknown/proprietary` licenses, and note direct vs transitive exposure.
 
 Audit ecosystems:
 
@@ -109,14 +109,14 @@ Report PASS, FAIL, or CONDITIONAL for applicable policies:
 | PCI-DSS v4.0 | Req 6.2 secure development, 6.3 vulnerability management, no hardcoded creds, and TLS enforcement. |
 | CWE Top 25 (2025/2026) | Flag findings matching Top 25 Most Dangerous Software Weaknesses (View-1435). |
 | NIST SP 800-53 | SA-11, IA-5, and SC-28. |
-| HIPAA | PHI exposure paths, audit logging, encryption at rest and transit. |
+| HIPAA | PHI exposure paths, audit logging, encryption at `rest/transit`. |
 | GDPR | PII exposure, consent enforcement, and right-to-erasure support. |
 
 ## Language-Specific Detection Patterns
 
 | Language | Patterns to inspect |
 | --- | --- |
-| C# / .NET | `SqlCommand` concatenation, `Process.Start(userInput)`, `BinaryFormatter.Deserialize`, `XmlReader` without `DtdProcessing.Prohibit`, `MD5.Create()`, `SHA1.Create()`, `new Random()` for secrets, embedded `.prv`/`.pem`/`.pfx`, missing `HttpOnly` or `Secure`, `Response.Redirect(userInput)`, missing `[Authorize]`, secrets in `appsettings.json`, `Console.WriteLine` or `ILogger` with sensitive data. |
+| C# / .NET | `SqlCommand` concatenation, `Process.Start(userInput)`, `BinaryFormatter.Deserialize`, `XmlReader` without `DtdProcessing.Prohibit`, `MD5.Create()`, `SHA1.Create()`, `new Random()` for secrets, embedded `.prv`/`.pem`/`.pfx`, missing `HttpOnly` or `Secure`, `Response.Redirect(userInput)`, missing `[Authorize]` on `controllers/actions`, secrets in `appsettings.json`, `Console.WriteLine` or `ILogger` with sensitive data. |
 | JavaScript / TypeScript | Template literals in `db.query()`, `eval(userInput)`, `new Function(userInput)`, `res.redirect(req.query.url)`, `innerHTML = userInput`, `Math.random()` for security, missing `helmet()` or CSP headers, `require(userInput)`, committed `.env` secrets. |
 | Python | `cursor.execute(f"SELECT ... {userInput}")`, `subprocess.call(cmd, shell=True)`, `pickle.loads(userdata)`, `yaml.load(data)`, `hashlib.md5(password)`, `random.random` for tokens instead of `os.urandom` or stronger APIs, `app.debug = True`, high LLM `temperature`, unsanitized LLM prompting. |
 | Java / Kotlin | `stmt.executeQuery("SELECT ... " + userInput)`, `Runtime.exec(userInput)`, `ObjectInputStream.readObject()`, `MessageDigest.getInstance("MD5")`, missing `@PreAuthorize` or `@Secured`, `DocumentBuilderFactory` without `FEATURE_SECURE_PROCESSING`. |

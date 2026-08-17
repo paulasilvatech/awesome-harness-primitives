@@ -49,7 +49,7 @@ Execute these steps in order because later artifacts depend on earlier discovery
 
 1. **Read context sources.** Check for `Agents.md`, `AGENTS.md`, `README.md`, `.github/copilot-instructions.md`, `ARCHITECTURE.md`, `docs/`, and `CONTRIBUTING.md`; read what exists and skip what does not.
 2. **Detect the technology stack.** Inspect `.csproj`, `.sln`, `pom.xml`, `build.gradle`, `package.json`, `requirements.txt`, `pyproject.toml`, `go.mod`, `Cargo.toml`, framework configuration, dependency manifests, and lockfiles.
-3. **Map the codebase.** List the directory structure up to three levels deep; find entry points such as `Program.cs`, `Main.java`, `index.ts`, `main.py`; find configuration such as `appsettings.json`, `application.yml`, and `.env`; discover interfaces, contracts, factories, services, handlers, models, entities, Dockerfiles, and the 10-20 most important source files.
+3. **Map the codebase.** List the directory structure up to three levels deep; find entry points such as `Program.cs`, `Main.java`, `index.ts`, `main.py`; find configuration such as `appsettings.json`, `application.yml`, and `.env`; discover `interfaces/contracts`, factories, services, handlers, `models/entities`, Dockerfiles, and the 10-20 most important source files.
 4. **Identify architecture patterns.** Record communication style, design patterns, data flow, cross-cutting behavior, extension points, deployment shape, and operational boundaries.
 5. **Generate draw.io diagrams.** Create `docs/diagrams/` and write required `.drawio` files in valid `mxGraphModel` XML.
 6. **Export PNG images.** Run the bundled draw.io export script when dependencies are available; if export fails, preserve `.drawio` files and use Mermaid fallback diagrams in Markdown.
@@ -160,7 +160,7 @@ audience: Engineering Team, Architects, Stakeholders
 ---
 ```
 
-Include these sections in order: Executive Summary, Architecture Overview, Processing Pipeline, Core Components, API Contracts / Message Schemas, Infrastructure & Deployment, Extension Patterns, Rules & Anti-Patterns, Dependencies, and Code Structure.
+Include these sections in order: Executive Summary, Architecture Overview, Processing Pipeline, Core Components, API Contracts / Message Schemas, Infrastructure & Deployment, Extension Patterns, Rules & Anti-Patterns, Dependencies, and Code Structure. Core Components must include `interface/implementation` tables when the code exposes interfaces and concrete types. API Contracts / Message Schemas must include `input/output` property tables when request, response, event, or message schemas exist.
 
 Use these image references when PNG export succeeds:
 
@@ -179,6 +179,10 @@ Use these image references when PNG export succeeds:
 | Source file not found | Note the gap and continue with available files. |
 | Unrecognized tech stack | Document observable facts and identify missing evidence. |
 | PNG unavailable | Keep `.drawio` artifacts and make the Markdown readable without embedded images. |
+
+## Preserved Documentation Vocabulary
+
+Preserve source terminology when documenting or auditing generated artifacts: `docs/diagrams/*.drawio`, `docs/diagrams/*.drawio.png`, Class/module-level relationships, entity/DTO hierarchy, interface/implementation tables, interfaces/contracts, models/entities, module-level dependencies, class/method references, file/class references, front-matter extraction, high-level architecture, how-to extension guidance, information-oriented reference, understanding-oriented explanation, input/output schemas, one-time dependency installation, project-specific rules, step-by-step walkthroughs, and NEVER modifying source code.
 
 ## Output Format
 
@@ -220,7 +224,7 @@ Documentation Generation Summary
 - [ ] Required draw.io files exist under `docs/diagrams/` and use evidence-based C4 Context, Container, and Component views.
 - [ ] PNG export was attempted with the bundled draw.io script, or Mermaid fallback was embedded and reported.
 - [ ] `docs/project-summary.docx` was generated with the bundled converter, or the converter failure was reported with the Markdown preserved.
-- [ ] At least five file, class, method, or diagram references were spot-checked against actual repository files.
+- [ ] At least five `file/class`, `class/method`, or diagram references were spot-checked against actual repository files.
 
 ## Anti-Patterns This Agent Rejects
 

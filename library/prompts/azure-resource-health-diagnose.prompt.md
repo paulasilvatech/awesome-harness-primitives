@@ -18,8 +18,8 @@ Use this prompt when an Azure resource is deployed and running but shows health 
 ## Preconditions
 
 - Azure MCP server is configured and authenticated.
-- The target Azure resource is identified by name and optionally resource group or subscription.
-- The resource is deployed and running enough to generate logs or telemetry.
+- The target Azure resource is identified by name and optionally `resource group/subscription`.
+- The resource is deployed and running enough to generate `logs/telemetry`.
 - Prefer Azure MCP tools (`azmcp-*`) over direct Azure CLI when available.
 - The user has sufficient Azure RBAC permissions to inspect health, metrics, logs, and configuration.
 
@@ -166,7 +166,7 @@ Follow these steps in order.
 Retrieve diagnostic and troubleshooting best practices with the Azure MCP best practices tool. Focus on health monitoring, log analysis, issue resolution patterns, and remediation recommendations.
 
 **Step 2 — Discover and identify the resource.**
-If only a resource name is provided, search across subscriptions using `azmcp-subscription-list`. Use `az resource list --name <resource-name>` as Azure CLI fallback to find matching resources. If multiple matches are found, prompt the user to specify subscription or resource group. Gather resource type, current status, location, tags, configuration, associated services, and dependencies.
+If only a resource name is provided, search across subscriptions using `azmcp-subscription-list`. Use `az resource list --name <resource-name>` as Azure CLI fallback to find matching resources. If multiple matches are found, prompt the user to specify `subscription/resource group`. Gather resource type, current status, location, tags, configuration, associated services, and dependencies.
 
 **Step 3 — Detect resource type.**
 Choose the diagnostic path by resource type: Web Apps and Function Apps use application logs, performance metrics, and dependency tracking; Virtual Machines use system logs, performance counters, and boot diagnostics; Cosmos DB uses request metrics, throttling, and partition statistics; Storage Accounts use access logs, performance metrics, and availability; SQL Database uses query performance, connection logs, and resource utilization; Application Insights uses application telemetry, exceptions, and dependencies; Key Vault uses access logs, certificate status, and secret usage; Service Bus uses message metrics, dead letter queues, and throughput.
@@ -232,13 +232,13 @@ Identify recurring error patterns or anomalies. Correlate errors with deployment
 Classify severity as Critical for service unavailable, data loss, or security breaches; High for performance degradation, intermittent failures, or high error rates; Medium for warnings, suboptimal configuration, or minor performance issues; Low for informational alerts or optimization opportunities. Classify root causes as configuration issues, resource constraints, network issues, application issues, external dependencies, or security issues such as authentication failures and certificate expiration.
 
 **Step 10 — Assess impact.**
-Determine business impact and affected users or systems. Evaluate data integrity and security implications. Assess recovery time objectives and priorities.
+Determine business impact and affected `users/systems`. Evaluate data integrity and security implications. Assess recovery time objectives and priorities.
 
 **Step 11 — Generate remediation phases.**
 For immediate actions, include emergency fixes to restore service availability, temporary workarounds to mitigate impact, and escalation procedures for complex issues. For short-term fixes, include configuration adjustments, resource scaling, application updates, patches, and monitoring or alerting improvements. For long-term improvements, include architectural changes for resilience, preventive measures, monitoring enhancements, documentation, and process improvements. Include implementation steps with Azure CLI commands, testing, validation, rollback plans, and monitoring to verify resolution.
 
 **Step 12 — Handle errors and limitations.**
-For Resource Not Found, provide guidance on resource name and location specification. For Authentication Issues, guide Azure authentication setup. For Insufficient Permissions, list required RBAC roles. For No Logs Available, suggest enabling diagnostic settings and waiting for data. For Query Timeouts, break analysis into smaller time windows. For Service-Specific Issues with limited telemetry, provide a generic health assessment and state limitations.
+For Resource Not Found, provide guidance on resource `name/location` specification. For Authentication Issues, guide Azure authentication setup. For Insufficient Permissions, list required RBAC roles. For No Logs Available, suggest enabling diagnostic settings and waiting for data. For Query Timeouts, break analysis into smaller time windows. For Service-Specific Issues with limited telemetry, provide a generic health assessment and state limitations.
 
 ## Invocation Example
 

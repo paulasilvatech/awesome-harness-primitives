@@ -138,6 +138,10 @@ Use feature branches such as `upgrade/<project>-to-<targetVersion>`. Commit freq
 
 Automation may check for new SDK releases with `dotnet --list-sdks`, run nightly package checks, and open PRs for outdated frameworks, but automation must still preserve the same restore/build/test gates.
 
+## Preserved Upgrade Vocabulary
+
+The legacy collection also used these upgrade labels and phrases as request or evidence vocabulary: `dotnet-upgrade`, `upgrade-analysis`, `context-aware`, `ready-to-use`, `project-level`, `per-project`, `post-upgrade`, and `top-level`. Treat `JSON/logging/DI.` as shorthand for compatibility fixes across JSON serialization, logging, and dependency injection. The `.NET Upgrade Assistant` remains a valid analysis aid when available.
+
 ## Output Format
 
 For an assessment or completed upgrade, respond with:

@@ -172,7 +172,7 @@ render(
 
 | Pattern | Identify with | Corrective action |
 | --- | --- | --- |
-| Async `act()` update | `Warning: Not wrapped in act(...)`, `act() not returned` | Use `await act(async () => {...})`, `waitFor`, or `findBy*`. |
+| Async `act()` update | `Warning: Not wrapped in act(...)`, `act() not returned`, or `act()` `warnings/failures` | Use `await act(async () => {...})`, `waitFor`, or `findBy*`. |
 | Automatic batching | `fireEvent` followed by immediate state `expect` | Wrap intermediate and final state assertions in `await waitFor(...)`. |
 | RTL v14 `userEvent` | `grep -rn "userEvent\." src/ --include="*.test.*" \| grep -v "await\|userEvent\.setup"` | Use `const user = userEvent.setup();` and `await user.click(...)`. |
 | StrictMode counts | `Expected 2, received 1` or similar | Run the failing test with verbose output and update to the actual count. |

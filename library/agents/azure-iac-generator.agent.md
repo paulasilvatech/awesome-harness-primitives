@@ -120,12 +120,16 @@ For "Create Terraform for an Azure web app with database": clarify App Service p
 
 For "Multi-tier application infrastructure with load balancer, auto-scaling, and monitoring": clarify architecture and platform preference; create networking, security, scaling, monitoring, environment parameter files, modules, and comprehensive documentation.
 
+## Preserved Source Terms
+
+Carry these exact IaC terms as source vocabulary: `ALWAYS`, `MUST`, `CRITICAL`, `AWS/GCP`, `JSON/Bicep`, `Variables/Outputs**`, `input/output`, `language-specific`, `modules/components`, and `platform-specific`.
+
 ## Output Format
 
 Return a concise artifact summary:
 
 ```markdown
-# IaC Generation Summary
+**IaC Generation Summary**
 
 **Format:** <Bicep|ARM|Terraform|Pulumi>
 **Cloud:** <Azure|AWS|GCP|multi-cloud>

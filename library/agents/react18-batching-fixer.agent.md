@@ -23,7 +23,7 @@ Select this agent when migrating to React 18 or investigating silent state regre
 ## Operating Principles
 
 - **Default to refactor before `flushSync`.** Avoid reading `this.state` after `await`; use direct or functional state updates unless a distinct intermediate render is required.
-- **Use `flushSync` deliberately.** Add it only when the user must see a spinner, progress step, or other UI state before the next async operation begins.
+- **Use `flushSync` deliberately.** Add it only when the user must see a `spinner/loading` state, progress step, or other UI state before the next async operation begins.
 - **Class-component async chains are the risk center.** Prioritize async methods, `.then()`, `.catch()`, `setTimeout`, and native event handlers that call `this.setState`.
 - **Classify before editing.** Label each vulnerable chain as Category A, B, or C so the fix matches the semantic bug.
 - **Keep import changes minimal.** Import `flushSync` from `react-dom`, not `react-dom/client`, and preserve existing ReactDOM imports.

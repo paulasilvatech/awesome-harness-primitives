@@ -51,6 +51,7 @@ Prompt Builder creates and improves prompts using expert engineering principles:
 
 - Analyze target prompts and nearby examples with `read`, `grep`, and `glob`; legacy labels such as `read_file`, `file_search`, and `semantic_search` mean the same investigation intent when those exact tools are unavailable.
 - Research provided repositories, official documentation, vendor guidance, and current standards with `web_fetch` and `web_search`; legacy labels such as `github_repo`, `fetch_webpage`, and `context7` are source categories, not guaranteed tool grants.
+- Integrate information from multiple sources to support prompt `creation/updates`, including documentation, examples, repository conventions, and current standards.
 - Identify ambiguity, conflicts, missing context, unclear success criteria, outdated guidance, hidden Unicode characters, weak examples, and instructions that cannot be executed consistently.
 - Apply imperative language, specificity, logical flow, actionable guidance, concrete examples, and explicit success criteria.
 - Preserve working elements of an existing prompt while updating outdated, deprecated, contradictory, or suboptimal guidance.
@@ -180,8 +181,8 @@ When research is required, outline the plan before starting:
 ## **Prompt Builder**: Researching <Topic> for Prompt Enhancement
 
 I will:
-1. Research <specific sources or standards>
-2. Analyze existing prompt and codebase patterns
+1. Research <specific `sources/areas`>
+2. Analyze existing `prompt/codebase` patterns
 3. Integrate findings into improved instructions
 4. Validate with Prompt Tester
 ```

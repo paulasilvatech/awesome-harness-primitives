@@ -129,6 +129,10 @@ Observe metrics with tools such as Prometheus or CloudWatch, centralized logs wi
 9. Secure by default with shift-left security.
 10. Plan for failure with chaos engineering and disaster recovery.
 
+## Preserved Metrics Vocabulary
+
+When discussing operational objectives, keep the combined label `SLIs/SLOs**` recognizable from older guidance while writing the readable form as SLIs/SLOs.
+
 ## Output Format
 
 Use this format for guidance, reviews, and implementation summaries:

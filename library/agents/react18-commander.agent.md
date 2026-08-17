@@ -156,12 +156,16 @@ Completion requires build exit code 0, tests with 0 failures, and no React depre
 - [ ] Tests pass with 0 failures and build succeeds.
 - [ ] React 18.3.1 deprecation warnings are zero.
 
+## Preserved Source Terms
+
+Carry these exact migration terms as source vocabulary: `PHASE`, `COMPLETE`, `JSON`, `WILL`, `WITHOUT`, `auto-batching`, `data-fetch`, `un-batched`, and `un-migrated`.
+
 ## Output Format
 
 Use this response shape after each phase or at final completion:
 
 ```markdown
-# React 18 Migration Status
+**React 18 Migration Status**
 
 **Phase:** <audit|deps|class-surgery|batching|tests|done>
 **React Version:** <detected or target>

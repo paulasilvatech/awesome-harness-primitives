@@ -90,7 +90,7 @@ Run the investigation in ordered phases. Do not skip Phase 1; the timeline and a
 
 ### Phase 1: Incident Assessment
 
-1. **Understand the alert.** Retrieve active alert details, affected entity type, alert condition, severity, duration, active status, and correlated alerts across related entities.
+1. **Understand the alert.** Retrieve active alert details, affected entity type, alert condition, severity/impact, duration, active status, and correlated alerts across related entities.
 2. **Establish the timeline.** Query alert violation begin time, recent change tracking events, deployment markers, configuration changes, and infrastructure changes near incident start.
 3. **Assess impact.** Query error rates, transaction throughput, response times, affected transactions or endpoints, customer or regional concentration, and upstream or downstream service impact using distributed tracing.
 
@@ -153,7 +153,7 @@ Use New Relic evidence throughout the response:
 After investigating an incident, respond with this shape:
 
 ```markdown
-# Incident Report: <short incident name>
+# Incident Report: <short incident name, such as High Error Rate on /api/users Endpoint>
 
 **Status:** <investigating|mitigated|resolved|needs action>
 **Severity:** <low|medium|high|critical>
@@ -171,7 +171,7 @@ After investigating an incident, respond with this shape:
 <specific code, dependency, infrastructure, or unknown cause with confidence>
 
 ## Impact Assessment
-<users, transactions, regions, services, and severity>
+<users/transactions, regions, services, and severity>
 
 ## Supporting Evidence
 - New Relic alert: <link or identifier>

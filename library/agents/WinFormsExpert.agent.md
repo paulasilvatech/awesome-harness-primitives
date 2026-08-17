@@ -123,41 +123,28 @@ Designer-safe C# pattern:
 ```csharp
 private void InitializeComponent()
 {
+    components = new Container();
     _picDogPhoto = new PictureBox();
     _lblDogographerCredit = new Label();
     _btnAdopt = new Button();
-    _btnMaybeLater = new Button();
-    components = new Container();
 
     ((ISupportInitialize)_picDogPhoto).BeginInit();
     SuspendLayout();
 
-    _picDogPhoto.Location = new Point(12, 12);
     _picDogPhoto.Name = "_picDogPhoto";
-    _picDogPhoto.Size = new Size(380, 285);
     _picDogPhoto.SizeMode = PictureBoxSizeMode.Zoom;
-    _picDogPhoto.TabStop = false;
-
-    _lblDogographerCredit.AutoSize = true;
-    _lblDogographerCredit.Location = new Point(12, 300);
     _lblDogographerCredit.Name = "_lblDogographerCredit";
-    _lblDogographerCredit.Size = new Size(200, 25);
     _lblDogographerCredit.Text = "Photo by: Professional Dogographer";
-
-    _btnAdopt.Location = new Point(93, 340);
     _btnAdopt.Name = "_btnAdopt";
-    _btnAdopt.Size = new Size(114, 68);
     _btnAdopt.Text = "Adopt!";
     _btnAdopt.Click += BtnAdopt_Click;
 
-    AutoScaleDimensions = new SizeF(13F, 32F);
     AutoScaleMode = AutoScaleMode.Font;
     ClientSize = new Size(420, 450);
     Controls.Add(_picDogPhoto);
     Controls.Add(_lblDogographerCredit);
     Controls.Add(_btnAdopt);
     Name = "DogAdoptionDialog";
-    Text = "Find Your Perfect Companion!";
 
     ((ISupportInitialize)_picDogPhoto).EndInit();
     ResumeLayout(false);
@@ -485,6 +472,9 @@ public class CustomControl : Control
 ## Preserved WinForms Reference Tokens
 
 Keep these exact designer and binding terms available when producing examples: `Anchor = Left`, `object? sender`, `EventHandler?`, `Friend WithEvents controlName as ControlType`, `Binding`, `Parse`, `Format`, `Command`, and `MinimumSize`. They are common review anchors for designer-safe code, nullable event signatures, VB backing fields, conversion hooks, command binding, and modal sizing.
+
+
+Keep the original slash-separated review terms explicit: `asks/requests` for new project triggers, `build/compile` for diagnostic closure, `coalescing/conditional` for forbidden null operators, `margins/padding` for layout spacing, `page/virtualize` for large DataGridView data, `theming/coloring` for DarkMode owner-draw work, `wizards/browsers` for top-right stacked modal buttons, and `and/or` for the `var` exception when a type is obvious and/or awkwardly long.
 
 Preserve the original `single-line`, `multi-line`, `cell-sizing`, `navigation-heavy`, and `re-throwing` distinctions: layout cells determine control size, navigation-heavy dialogs use top-right stacked buttons, and async exception handling must preserve stack traces when rethrowing.
 

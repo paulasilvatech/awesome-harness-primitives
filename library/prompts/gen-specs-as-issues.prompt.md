@@ -80,7 +80,7 @@ Return issue-ready specifications in this format, and create real GitHub issues 
 [Specific technical needs and constraints]
 
 ### Implementation Plan
-[Step-by-step approach with simple code examples]
+[Step-by-step approach with simple code examples, including key `modules/files` to create or modify]
 
 ### Acceptance Criteria
 [Clear list of requirements to consider the feature complete]
@@ -93,7 +93,7 @@ Return issue-ready specifications in this format, and create real GitHub issues 
 - **Blocked by:** [List of issues this one depends on]
 
 ### Implementation Size
-- **Estimated effort:** [Small/Medium/Large]
+- **Estimated effort:** [Small/Medium/Large and estimated `complexity/effort` for sprint planning]
 - **Sub-issues:** [Links to sub-issues if this is a parent issue]
 ```
 

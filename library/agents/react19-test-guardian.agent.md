@@ -228,6 +228,10 @@ Return to commander only when `Tests: X passed, X total` has zero failures, no t
 | `not wrapped in act(...)` | Async state update | Wrap in `await act(async () => {...})` |
 | `Warning: ReactDOM.render is no longer supported` | Old render in setup | Update to `createRoot` or RTL `render` as appropriate |
 
+## Preserved Audit Labels
+
+Keep legacy audit labels visible when migrating tests: REMOVED, CHANGED, JUST, ONLY, `baseline: [N] failures`, `import { act } from 'react-dom/test-utils'`, `grep -rn "Simulate\." src/ --include="*.test.*"`, and React's historical re-throw error logging behavior.
+
 ## Output Format
 
 Return to `react19-commander` with:

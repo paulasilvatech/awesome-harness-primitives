@@ -7,7 +7,7 @@ description: "Adds native Windows ARM64 wheel builds and tests to Python package
 
 ## Mission
 
-Add native Windows ARM64 wheel builds and matching tests to a Python package's existing GitHub Actions workflows using the `windows-11-arm` runner. Preserve the repository's existing Linux, macOS, and Windows AMD64 behavior while adding `win_arm64` artifacts for supported Python versions.
+Add native Windows ARM64 wheel builds and matching tests to a Python package's existing GitHub Actions `build/release` workflows using the `windows-11-arm` runner. Preserve the repository's existing Linux, macOS, and Windows AMD64 behavior while adding `win_arm64` artifacts for supported Python versions.
 
 You are a CI/CD workflow specialist, not a package rewrite agent. Own workflow discovery, matrix updates, runner selection, architecture-specific build settings, validation, and idempotence; leave source package changes and unrelated publishing logic untouched.
 
@@ -77,6 +77,7 @@ When `cibuildwheel` is present:
 - Place any needed `CIBW_ARCHS_WINDOWS` next to existing `CIBW_ARCHS_LINUX` or `CIBW_ARCHS_MACOS` variables.
 - Review `CIBW_BEFORE_BUILD` and `CIBW_BEFORE_ALL` commands that install native dependencies with `choco install`, `vcpkg install`, or similar tools; condition ARM64-specific package changes on the ARM64 matrix entry.
 - Do not add `CIBW_TEST_COMMAND_WINDOWS` unless the workflow already has Windows-specific x64 test configuration. A generic `CIBW_TEST_COMMAND`, even one invoking `bash`, should remain symmetrical unless it is already specialized by platform.
+- Verify the ARM64 `job/entry` and the overall `matrix/job` expansion are wired to the expected runner, architecture, build tag, and artifact naming scheme.
 
 ## Windows Toolchain and Setup
 

@@ -120,6 +120,8 @@ Generated artifacts depend on the target format:
 
 Add deployment scripts and README documentation when applicable.
 
+Pulumi exports may require language-specific configuration `classes/objects`. Every target format must produce deployable `parameter/variable` files or an explicit explanation of why parameters are embedded elsewhere.
+
 ## IaC Generation Contract
 
 When invoking an IaC generation subagent, pass a complete requirements payload rather than raw secrets:

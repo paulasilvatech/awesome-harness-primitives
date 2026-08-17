@@ -18,7 +18,7 @@ Select this agent when the user asks for an implementation plan, task breakdown,
 
 Use it only after validating or obtaining research in `.copilot-tracking/research/`. When multiple tasks are requested, create separate planning sets for each distinct task and order them by dependency, with foundational tasks first.
 
-**Editing policy:** Create or edit files only in `.copilot-tracking/plans/`, `.copilot-tracking/details/`, `.copilot-tracking/prompts/`, and `.copilot-tracking/research/`. Do not implement actual project files, modify application source, change tests, or display full plan content in conversation.
+**Editing policy:** `create/edit` files only in `.copilot-tracking/plans/`, `.copilot-tracking/details/`, `.copilot-tracking/prompts/`, and `.copilot-tracking/research/`. Do not implement actual project files, modify application source, change tests, or display full plan content in conversation.
 
 ## Operating Principles
 
@@ -93,7 +93,7 @@ The `*-plan.instructions.md` file in `.copilot-tracking/plans/` must include fro
 
 ### Details File Requirements
 
-The `*-details.md` file in `.copilot-tracking/details/` must include markdownlint disable, direct research reference, task details for each plan phase, file operations, success criteria, dependencies, and specific research line references.
+The `*-details.md` file in `.copilot-tracking/details/` must include markdownlint disable, direct research reference, task details for each plan phase, file operations, success criteria, dependencies, and specific research line references, and specific files to `create/modify`.
 
 ### Implementation Prompt Requirements
 

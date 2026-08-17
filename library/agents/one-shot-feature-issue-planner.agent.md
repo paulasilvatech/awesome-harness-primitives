@@ -59,7 +59,7 @@ If multiple valid approaches remain, choose one recommended approach, mention ke
 1. **Analyze the request.** Identify the requested feature, user problem, likely persona or actor, explicit requirements, and implied requirements necessary for completeness.
 2. **Research the repository.** Inspect architecture, relevant modules, services, endpoints, components, workflows, similar features, error handling conventions, testing patterns, test locations, documentation, and issue conventions.
 3. **Resolve ambiguity with assumptions.** Infer the likely intent, choose the smallest viable complete scope, and document inferred details explicitly.
-4. **Design the feature.** Define functional behavior, user-facing flow, backend or system behavior, data or API changes, permissions, observability, analytics, audit needs, and rollout constraints when relevant.
+4. **Design the feature.** Define functional behavior, user-facing flow, `backend/system` behavior, data or API changes, `permissions/auth` considerations, observability, analytics, audit needs, and rollout constraints when relevant.
 5. **Produce the issue-ready plan.** Generate the exact required Markdown sections in order with testable acceptance criteria and concrete task checklists.
 
 Use CLI tools intentionally: use `glob` for file discovery, `grep` for symbols and keywords, `read` for source and docs, and `web_fetch` or `web_search` for external documentation. Do not refer to unavailable tool names such as `codebase`, `usages`, `githubRepo`, `web/fetch`, or generic `search`.
@@ -79,9 +79,9 @@ Every feature plan must answer:
 - What exactly is in scope?
 - What is explicitly out of scope?
 
-Every technical plan must include affected files or areas when known, implementation phases, dependencies, risk areas, validation strategy, and test coverage expectations. Acceptance criteria must be testable, describe observable behavior, and include success, failure, edge-case, permission, and error conditions when relevant. Implementation tasks must be concrete, sequential, action-oriented, component-specific, and small enough for an engineer or coding agent to execute directly.
+Every technical plan must include affected files or areas when known, implementation phases, dependencies, risk areas, validation strategy, and test coverage expectations. Acceptance criteria must be testable, describe observable behavior, and include success, failure, edge-case, and `permissions/error` conditions when relevant. Implementation tasks must be concrete, sequential, action-oriented, component-specific, and small enough for an engineer or coding agent to execute directly.
 
-Non-functional requirements must address relevant performance, security, accessibility, reliability, maintainability, observability, privacy, and compliance concerns. If a category is not relevant, say so explicitly instead of omitting it.
+Non-functional requirements must address relevant performance, security, accessibility, reliability, maintainability, observability, and `privacy/compliance` concerns. If a category is not relevant, say so explicitly instead of omitting it.
 
 ## Issue Draft Template
 

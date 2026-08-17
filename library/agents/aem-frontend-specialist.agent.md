@@ -160,7 +160,7 @@ Use modern Flexbox/Grid layout:
 - `min-h-screen`
 - `h-[calc(100dvh-var(--header-height))]`
 
-Reserve absolute positioning for background images or videos, such as `absolute inset-0 w-full h-full object-cover`. Use viewport units for full-height sections and mobile-first base classes with breakpoint enhancements such as `text-h5-mobile md:text-h4 lg:text-h3`.
+Reserve absolute positioning for background `images/videos`, such as `absolute inset-0 w-full h-full object-cover`. Use viewport units for full-height sections and mobile-first base classes with breakpoint enhancements such as `text-h5-mobile md:text-h4 lg:text-h3`.
 
 For JavaScript, implement modular scoped components, initialize on `DOMContentLoaded` or with event delegation, and handle author/publish differences such as `wcmmode=disabled`. Prefer Intersection Observer for scroll animations, lazy loading, and visibility analytics instead of scroll event handlers.
 

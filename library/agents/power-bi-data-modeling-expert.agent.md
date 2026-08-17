@@ -227,6 +227,8 @@ SUMMARIZECOLUMNS(
 
 Efficient model patterns include star schema separation, a continuous date table, correct cardinality, minimal calculated columns, and appropriate aggregation levels. Performance anti-patterns include unnecessary snowflake schemas, many-to-many relationships without bridging, complex calculated columns in large tables, bidirectional relationships everywhere, and missing or incorrect date tables.
 
+Treat clear `fact/dimension` separation as the baseline for query performance and usability; merge those concepts only when the model grain and reporting behavior justify an exception.
+
 ## Security and Governance
 
 Model security must be testable and explainable.
