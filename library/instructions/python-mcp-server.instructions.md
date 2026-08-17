@@ -1,11 +1,13 @@
 ---
-applyTo: '**/*.py, **/pyproject.toml, **/requirements.txt'
-description: 'Instructions for building Model Context Protocol (MCP) servers using the Python SDK'
+applyTo: "**/*.py,**/pyproject.toml,**/requirements.txt"
+description: "Enforces Model Context Protocol Python SDK conventions for FastMCP tools, resources, prompts, transports, context, structured output, lifespan, and testing."
 ---
 
-# Python MCP Server Development
+# Python MCP Server Conventions — FastMCP Servers
 
-## Instructions
+These instructions apply to files matched by `**/*.py,**/pyproject.toml,**/requirements.txt`. They are authoritative for python mcp server code, configuration, examples, validation commands, API names, and runtime constraints in those files; stricter repository-specific security, deployment, testing, or platform primitives win on conflict. Treat the rules as passive conventions injected into matching files, not as a step-by-step workflow.
+
+## SDK Registration and Capabilities
 
 - Use **uv** for project management: `uv init mcp-server-demo` and `uv add "mcp[cli]"`
 - Import FastMCP from `mcp.server.fastmcp`: `from mcp.server.fastmcp import FastMCP`
@@ -202,3 +204,52 @@ async def risky_operation(input: str) -> str:
     except Exception as e:
         return f"Error: {str(e)}"
 ```
+
+## Good / Bad Examples
+
+The examples below show the boundary between an acceptable convention and the closest common anti-pattern.
+
+**Good:**
+
+```python
+@mcp.tool()
+def get_weather(city: str) -> WeatherData:
+    """Get weather for a city."""
+    return WeatherData(temperature=22.5, condition="sunny", humidity=65.0)
+```
+
+Why: The tool uses type hints, a docstring, and structured output.
+
+**Bad:**
+
+```python
+@mcp.tool()
+def get_weather(city):
+    return {"temp": 22.5}
+```
+
+Why: The tool omits schema-driving types and returns an ad hoc shape.
+
+## Conventions
+
+| Rule | Rationale |
+| --- | --- |
+| Use `uv`, `mcp[cli]`, and `FastMCP` for standard projects. | Official tools keep development consistent. |
+| Register with decorators and complete type hints. | FastMCP derives schemas from types. |
+| Use `Context` for logs, progress, elicitation, sampling, and lifespan resources. | Context exposes MCP capabilities safely. |
+
+## Do / Do Not
+
+| Do | Do not |
+| --- | --- |
+| Use `uv`, `mcp[cli]`, and `FastMCP` for standard projects. | Do not ignore this rule: Use `uv`, `mcp[cli]`, and `FastMCP` for standard projects. |
+| Register with decorators and complete type hints. | Do not ignore this rule: Register with decorators and complete type hints. |
+| Use `Context` for logs, progress, elicitation, sampling, and lifespan resources. | Do not ignore this rule: Use `Context` for logs, progress, elicitation, sampling, and lifespan resources. |
+
+## Checklist Before Opening a PR
+
+- [ ] The change stays inside the matched `applyTo` scope.
+- [ ] The authoritative conventions above are applied to new or modified code.
+- [ ] Named commands, paths, API names, configuration keys, and version constraints remain intact.
+- [ ] Relevant validation, linting, build, or test commands from this instruction pass.
+- [ ] No secrets, unsupported APIs, placeholder prompt references, or relative primitive links were added.

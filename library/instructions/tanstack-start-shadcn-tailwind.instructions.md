@@ -1,11 +1,13 @@
 ---
-applyTo: '**/*.ts, **/*.tsx, **/*.js, **/*.jsx, **/*.css, **/*.scss, **/*.json'
-description: 'Guidelines for building TanStack Start applications'
+applyTo: "**/*.ts,**/*.tsx,**/*.js,**/*.jsx,**/*.css,**/*.scss,**/*.json"
+description: "Enforces TanStack Start, React, Shadcn/ui, Tailwind CSS, Zod, routing, data fetching, accessibility, and import conventions."
 ---
 
-# TanStack Start with Shadcn/ui Development Guide
+# TanStack Start Conventions — Shadcn Tailwind Applications
 
-You are an expert TypeScript developer specializing in TanStack Start applications with modern React patterns.
+These instructions apply to files matched by `**/*.ts,**/*.tsx,**/*.js,**/*.jsx,**/*.css,**/*.scss,**/*.json`. They are authoritative for tanstack start code, configuration, examples, validation commands, API names, and runtime constraints in those files; stricter repository-specific security, deployment, testing, or platform primitives win on conflict. Treat the rules as passive conventions injected into matching files, not as a step-by-step workflow.
+
+Use strict TypeScript and modern React patterns for TanStack Start applications.
 
 ## Tech Stack
 - TypeScript (strict mode)
@@ -210,3 +212,54 @@ npx shadcn@latest add button card input dialog
 - Prefer Shadcn components over custom UI
 - Use `@/` imports consistently
 - Follow accessibility best practices
+
+## Good / Bad Examples
+
+The examples below show the boundary between an acceptable convention and the closest common anti-pattern.
+
+**Good:**
+
+```typescript
+export const Route = createFileRoute('/users')({
+  loader: async () => ({ users: userListSchema.parse(await fetchUsers()) }),
+  component: UserList,
+  errorBoundary: ({ error }) => <ErrorState message={error.message} />,
+  pendingBoundary: () => <Spinner aria-label="Loading users" />,
+});
+```
+
+Why: The route validates loader data and defines pending and error boundaries.
+
+**Bad:**
+
+```typescript
+export const Route = createFileRoute('/users')({
+  component: () => <Users data={(window as any).users} />,
+});
+```
+
+Why: The route relies on `any`, global data, and no loading or error state.
+
+## Conventions
+
+| Rule | Rationale |
+| --- | --- |
+| Use strict TypeScript with no `any`, function components, typed props, and `@/` imports. | Static types and stable imports make refactors safer. |
+| Use route loaders for SSR data and TanStack Query for updates. | Data ownership matches render timing. |
+| Validate external data with Zod schemas in `src/lib/schemas.ts`. | Runtime validation protects typed state. |
+
+## Do / Do Not
+
+| Do | Do not |
+| --- | --- |
+| Use strict TypeScript with no `any`, function components, typed props, and `@/` imports. | Do not ignore this rule: Use strict TypeScript with no `any`, function components, typed props, and `@/` imports. |
+| Use route loaders for SSR data and TanStack Query for updates. | Do not ignore this rule: Use route loaders for SSR data and TanStack Query for updates. |
+| Validate external data with Zod schemas in `src/lib/schemas.ts`. | Do not ignore this rule: Validate external data with Zod schemas in `src/lib/schemas.ts`. |
+
+## Checklist Before Opening a PR
+
+- [ ] The change stays inside the matched `applyTo` scope.
+- [ ] The authoritative conventions above are applied to new or modified code.
+- [ ] Named commands, paths, API names, configuration keys, and version constraints remain intact.
+- [ ] Relevant validation, linting, build, or test commands from this instruction pass.
+- [ ] No secrets, unsupported APIs, placeholder prompt references, or relative primitive links were added.

@@ -1,166 +1,112 @@
 ---
-applyTo: '**/*.xaml, **/*.cs, **/*.csproj'
-description: 'WinUI 3 and Windows App SDK coding guidelines. Prevents common UWP API misuse, enforces correct XAML namespaces, threading, windowing, and MVVM patterns for desktop Windows apps.'
+applyTo: "**/*.xaml,**/*.cs,**/*.csproj"
+description: "Enforces WinUI 3 and Windows App SDK conventions for XAML, namespaces, threading, windowing, dialogs, MVVM, project setup, styling, accessibility, testing, and resources."
 ---
 
-# WinUI 3 / Windows App SDK
+# WinUI 3 Conventions — Windows App SDK Desktop Apps
 
-## Critical Rules — NEVER Use Legacy UWP APIs
+These instructions apply to WinUI 3 XAML, C# code, and project files for Windows App SDK desktop applications. They are authoritative for avoiding legacy UWP APIs, using Microsoft.UI namespaces, threading, windowing, dialogs, MVVM, binding, styling, accessibility, performance, tests, and resources in matched files; project-specific UX, security, localization, and test primitives win when they define stricter app-wide standards.
 
-These UWP patterns are **wrong** for WinUI 3 desktop apps. Always use the Windows App SDK equivalent.
+## Windows App SDK API Boundaries
 
-- **NEVER** use `Windows.UI.Popups.MessageDialog`. Use `ContentDialog` with `XamlRoot` set.
-- **NEVER** show a `ContentDialog` without setting `dialog.XamlRoot = this.Content.XamlRoot` first.
-- **NEVER** use `CoreDispatcher.RunAsync` or `Dispatcher.RunAsync`. Use `DispatcherQueue.TryEnqueue`.
-- **NEVER** use `Window.Current`. Track the main window via a static `App.MainWindow` property.
-- **NEVER** use `Windows.UI.Xaml.*` namespaces. Use `Microsoft.UI.Xaml.*`.
-- **NEVER** use `Windows.UI.Composition`. Use `Microsoft.UI.Composition`.
-- **NEVER** use `Windows.UI.Colors`. Use `Microsoft.UI.Colors`.
-- **NEVER** use `ApplicationView` or `CoreWindow` for window management. Use `Microsoft.UI.Windowing.AppWindow`.
-- **NEVER** use `CoreApplicationViewTitleBar`. Use `AppWindowTitleBar`.
-- **NEVER** use `GetForCurrentView()` patterns (e.g., `UIViewSettings.GetForCurrentView()`). These do not exist in desktop WinUI 3. Use `AppWindow` APIs instead.
-- **NEVER** use UWP `PrintManager` directly. Use `IPrintManagerInterop` with a window handle.
-- **NEVER** use `DataTransferManager` directly for sharing. Use `IDataTransferManagerInterop` with a window handle.
-- **NEVER** use UWP `IBackgroundTask`. Use `Microsoft.Windows.AppLifecycle` activation.
-- **NEVER** use `WebAuthenticationBroker`. Use `OAuth2Manager` (Windows App SDK 1.7+).
+Use Windows App SDK and WinUI 3 APIs, not legacy UWP APIs. Replace `Windows.UI.Popups.MessageDialog` with `ContentDialog` and set `dialog.XamlRoot = this.Content.XamlRoot` before `ShowAsync()`. Replace `CoreDispatcher.RunAsync` and `Dispatcher.RunAsync` with `DispatcherQueue.TryEnqueue`. Track the main window through `App.MainWindow` instead of `Window.Current`. Use `Microsoft.UI.Xaml.*`, `Microsoft.UI.Composition`, and `Microsoft.UI.Colors`, not `Windows.UI.Xaml.*`, `Windows.UI.Composition`, or `Windows.UI.Colors`. Use `Microsoft.UI.Windowing.AppWindow`, `AppWindowTitleBar`, and `AppWindow` APIs instead of `ApplicationView`, `CoreWindow`, `CoreApplicationViewTitleBar`, or `GetForCurrentView()` patterns such as `UIViewSettings.GetForCurrentView()`.
 
-## XAML Patterns
+Use `IPrintManagerInterop` and `IDataTransferManagerInterop` with a window handle for print and share. Use `Microsoft.Windows.AppLifecycle` activation instead of UWP `IBackgroundTask`. Use `OAuth2Manager` for authentication when Windows App SDK 1.7+ is available instead of `WebAuthenticationBroker`.
 
-- The default XAML namespace maps to `Microsoft.UI.Xaml`, not `Windows.UI.Xaml`.
-- Prefer `{x:Bind}` over `{Binding}` for compiled, type-safe, higher-performance bindings.
-- Set `x:DataType` on `DataTemplate` elements when using `{x:Bind}` — this is required for compiled bindings in templates. On Page/UserControl, `x:DataType` enables compile-time binding validation but is not strictly required if the DataContext does not change.
-- Use `Mode=OneWay` for dynamic values, `Mode=OneTime` for static, `Mode=TwoWay` only for editable inputs.
-- Do not bind static constants — set them directly in XAML.
+## XAML, Binding, and Layout
 
-## Threading
+The default XAML namespace maps to `Microsoft.UI.Xaml`. Prefer `{x:Bind}` over `{Binding}` for compiled, type-safe, higher-performance binding; under NativeAOT only `{x:Bind}` works. Set `x:DataType` on `DataTemplate` when using `{x:Bind}` and on Page/UserControl when compile-time validation is useful. Use `Mode=OneWay` for dynamic values, `Mode=OneTime` for static values, and `Mode=TwoWay` only for editable inputs. Set static constants directly in XAML.
 
-- Use `DispatcherQueue.TryEnqueue(() => { ... })` to update UI from background threads.
-- `TryEnqueue` returns `bool`, not a `Task` — it is fire-and-forget.
-- Check thread access with `DispatcherQueue.HasThreadAccess` before dispatching.
-- WinUI 3 uses standard STA (not ASTA). No built-in reentrancy protection — be cautious with async code that pumps messages.
+Use a 4px grid system for margins, padding, and spacing: 4, 8, 12, 16, and 24. Prefer `Grid` over deeply nested `StackPanel` chains. Use `Auto` for content-sized rows or columns, `*` for proportional sizing, and avoid fixed pixel sizes. Use `VisualStateManager` with `AdaptiveTrigger` at 640px and 1008px. Use `ControlCornerRadius` for 4px controls and `OverlayCornerRadius` for 8px cards, dialogs, and flyouts.
 
-## Windowing
+## Threading, Windowing, Dialogs, and Pickers
 
-- Get the `AppWindow` from a WinUI 3 `Window` via `WindowNative.GetWindowHandle` → `Win32Interop.GetWindowIdFromWindow` → `AppWindow.GetFromWindowId`.
-- Use `AppWindow` for resize, move, title, and presenter operations.
-- Custom title bar: use `AppWindow.TitleBar` properties, not `CoreApplicationViewTitleBar`.
-- Track the main window as `App.MainWindow` (a static property set in `OnLaunched`).
+Use `DispatcherQueue.HasThreadAccess` before dispatching UI updates and `DispatcherQueue.TryEnqueue(() => { ... })` for background-thread UI work. `TryEnqueue` returns `bool`, not `Task`; treat it as fire-and-forget. WinUI 3 uses standard STA, not ASTA, so avoid async code that accidentally pumps messages.
 
-## Dialogs and Pickers
+Get an `AppWindow` from `WindowNative.GetWindowHandle`, `Win32Interop.GetWindowIdFromWindow`, and `AppWindow.GetFromWindowId`. Use `AppWindow` for resize, move, title, presenter operations, and `AppWindow.TitleBar` custom title bar properties. Initialize file and folder pickers with `WinRT.Interop.InitializeWithWindow.Initialize(picker, hwnd)` using a `hwnd` from `WindowNative.GetWindowHandle(App.MainWindow)`.
 
-- **ContentDialog**: Always set `dialog.XamlRoot = this.Content.XamlRoot` before calling `ShowAsync()`.
-- **File/Folder Pickers**: Initialize with `WinRT.Interop.InitializeWithWindow.Initialize(picker, hwnd)` where `hwnd` comes from `WindowNative.GetWindowHandle(App.MainWindow)`.
-- **Share/Print**: Use COM interop interfaces (`IDataTransferManagerInterop`, `IPrintManagerInterop`) with window handles.
+## MVVM, Project Setup, and C# Style
 
-## MVVM and Data Binding
+Use `CommunityToolkit.Mvvm` with `[ObservableProperty]` and `[RelayCommand]` for MVVM infrastructure. Use `Microsoft.Extensions.DependencyInjection` for services and ViewModels. Keep Views focused on layout and bindings; keep logic in ViewModels and services. Use `async`/`await` for I/O and long-running work.
 
-- Prefer `CommunityToolkit.Mvvm` (`[ObservableProperty]`, `[RelayCommand]`) for MVVM infrastructure.
-- Use `Microsoft.Extensions.DependencyInjection` for service registration and injection.
-- Keep UI (Views) focused on layout and bindings; keep logic in ViewModels and services.
-- Use `async`/`await` for I/O and long-running work to keep the UI responsive.
+Target `net10.0-windows10.0.22621.0` or the appropriate TFM for the project's SDK, set `<UseWinUI>true</UseWinUI>`, reference a stable `Microsoft.WindowsAppSDK` NuGet package, and use `System.Text.Json` source generators for JSON serialization. Use file-scoped namespaces, nullable reference types, `is null` / `is not null`, pattern matching, PascalCase for types/methods/properties, camelCase for private fields, Allman braces, explicit built-in types, and `var` only when the type is obvious.
 
-## Project Setup
+## Typography, Theming, Materials, Motion, and Controls
 
-- Target `net10.0-windows10.0.22621.0` (or appropriate TFM for the project's target SDK).
-- Set `<UseWinUI>true</UseWinUI>` in the project file.
-- Reference the latest stable `Microsoft.WindowsAppSDK` NuGet package.
-- Use `System.Text.Json` with source generators for JSON serialization.
+Use built-in TextBlock styles: `CaptionTextBlockStyle`, `BodyTextBlockStyle`, `BodyStrongTextBlockStyle`, `SubtitleTextBlockStyle`, `TitleTextBlockStyle`, `TitleLargeTextBlockStyle`, and `DisplayTextBlockStyle`. Keep Segoe UI Variable as the default font and use sentence casing for UI text.
 
-## C# Code Style
+Use `{ThemeResource}` for brushes and colors so Light, Dark, and High Contrast themes work. Do not hardcode `#FFFFFF`, `Colors.White`, `FontSize`, `FontWeight`, or `FontFamily` when built-in resources fit. Use `TextFillColorPrimaryBrush`, `CardBackgroundFillColorDefaultBrush`, `CardStrokeColorDefaultBrush`, `ControlStrokeColorDefaultBrush`, `SystemAccentColor`, and `Light1`–`Light3` or `Dark1`–`Dark3` variants.
 
-- Use file-scoped namespaces.
-- Enable nullable reference types. Use `is null` / `is not null` instead of `== null`.
-- Prefer pattern matching over `as`/`is` with null checks.
-- PascalCase for types, methods, properties. camelCase for private fields.
-- Allman brace style (opening brace on its own line).
-- Prefer explicit types for built-in types; use `var` only when the type is obvious.
+Use `MicaBackdrop` for app window backdrop, Acrylic only for transient flyouts, menus, and navigation panes, `LayerFillColorDefaultBrush` over Mica, and `ThemeShadow` plus Z-axis `Translation` for elevation: cards 4–8 px, flyouts 32 px, dialogs 128 px. Prefer `EntranceThemeTransition`, `RepositionThemeTransition`, `ContentThemeTransition`, and `AddDeleteThemeTransition` over custom storyboard animations.
 
-## Accessibility
+Use `NavigationView`, `InfoBar`, `TeachingTip`, `NumberBox`, `ToggleSwitch`, `ItemsView`, `ListView`, `GridView`, `ItemsRepeater`, and `Expander` for their intended controls. Prefer `ItemsView` for modern collections, `ListView`/`GridView` for standard virtualized lists and built-in selection, and `ItemsRepeater` only for fully custom virtualizing layouts.
 
-- Set `AutomationProperties.Name` on all interactive controls.
-- Use `AutomationProperties.HeadingLevel` on section headers.
-- Hide decorative elements with `AutomationProperties.AccessibilityView="Raw"`.
-- Ensure full keyboard navigation (Tab, Enter, Space, arrow keys).
-- Meet WCAG color contrast requirements.
+## Accessibility, Performance, Settings, Error Handling, Testing, and Resources
 
-## Performance
+Set `AutomationProperties.Name` on interactive controls, `AutomationProperties.HeadingLevel` on section headers, and `AutomationProperties.AccessibilityView="Raw"` on decorative elements. Ensure keyboard navigation with Tab, Enter, Space, and arrow keys and meet WCAG contrast.
 
-- Prefer `{x:Bind}` (compiled) over `{Binding}` (reflection-based).
-- **NativeAOT:** Under Native AOT compilation, `{Binding}` (reflection-based) does not work at all. Only `{x:Bind}` (compiled bindings) is supported. If the project uses NativeAOT, use `{x:Bind}` exclusively.
-- Use `x:Load` or `x:DeferLoadStrategy` for UI elements that are not immediately needed.
-- Use `ItemsRepeater` with virtualization for large lists.
-- Avoid deep layout nesting — prefer `Grid` over nested `StackPanel` chains.
-- Use `async`/`await` for all I/O; never block the UI thread.
+Use `x:Load` or `x:DeferLoadStrategy` for deferred UI, virtualization for large lists, async I/O, and no UI thread blocking. For packaged apps, `ApplicationData.Current.LocalSettings` works; for unpackaged apps, use a custom settings file such as JSON under `Environment.GetFolderPath(SpecialFolder.LocalApplicationData)` and check packaging status before assuming `ApplicationData` exists.
 
-## App Settings (Packaged vs Unpackaged)
+Wrap `async void` event handlers in try/catch, use `InfoBar` with `Severity = Error` for routine user-facing errors, and handle `App.UnhandledException` for logging and graceful recovery. For tests that instantiate `Microsoft.UI.Xaml` controls, pages, or user controls, use a Unit Test App (WinUI in Desktop) project and `[UITestMethod]`; use `[TestMethod]` for pure logic. Put testable business logic in a Class Library (WinUI in Desktop) project and build before test discovery. Store strings in `Resources.resw`, use `x:Uid`, and reference DPI-qualified images such as `logo.scale-200.png` through `ms-appx:///Assets/logo.png`.
 
-- **Packaged apps**: `ApplicationData.Current.LocalSettings` works as expected.
-- **Unpackaged apps**: Use a custom settings file (e.g., JSON in `Environment.GetFolderPath(SpecialFolder.LocalApplicationData)`).
-- Do not assume `ApplicationData` is always available — check packaging status first.
+## Technical Vocabulary
 
-## Typography
+Preserve these source terms when they apply to edits in this domain: `== null` `AdaptiveTrigger` `ApplicationData` `ControlCornerRadius` `DataTransferManager` `File/Folder` `NEVER` `OnLaunched` `OverlayCornerRadius` `PrintManager` `Share/Print**` `VisualStateManager` `Window` `Windows.UI.Xaml` `in-app` `on/off` `reflection-based` `rows/columns`.
 
-- **Always** use built-in TextBlock styles (`CaptionTextBlockStyle`, `BodyTextBlockStyle`, `BodyStrongTextBlockStyle`, `SubtitleTextBlockStyle`, `TitleTextBlockStyle`, `TitleLargeTextBlockStyle`, `DisplayTextBlockStyle`).
-- Prefer using the built-in TextBlock styles over hardcoding `FontSize`, `FontWeight`, or `FontFamily`.
-- Font: Segoe UI Variable is the default — do not change it.
-- Use sentence casing for all UI text.
+Include `DataContext` considerations when using `{Binding}`; prefer `NumberBox` over `TextBox` for numeric input and `ToggleSwitch` over `CheckBox` for on/off settings.
 
+## Good / Bad Examples
 
-## Theming & Colors
+The examples below show safe dialog and threading conventions.
 
-- **Always** use `{ThemeResource}` for brushes and colors to support Light, Dark, and High Contrast themes automatically.
-- **Never** hardcode color values (`#FFFFFF`, `Colors.White`, etc.) for UI elements. Use theme resources like `TextFillColorPrimaryBrush`, `CardBackgroundFillColorDefaultBrush`, `CardStrokeColorDefaultBrush`.
-- Use `SystemAccentColor` (and `Light1`–`Light3`, `Dark1`–`Dark3` variants) for the user's accent color palette.
-- For borders: use `CardStrokeColorDefaultBrush` or `ControlStrokeColorDefaultBrush`.
+**Good:**
 
-## Spacing & Layout
+```csharp
+var dialog = new ContentDialog { XamlRoot = Content.XamlRoot, Title = "Saved" };
+await dialog.ShowAsync();
+DispatcherQueue.TryEnqueue(() => StatusText.Text = "Done");
+```
 
-- Use a **4px grid system**: all margins, padding, and spacing values must be multiples of 4px.
-- Standard spacing: 4 (compact), 8 (controls), 12 (small gutters), 16 (content padding), 24 (large gutters).
-- Prefer `Grid` over deeply nested `StackPanel` chains for performance.
-- Use `Auto` for content-sized rows/columns, `*` for proportional sizing. Avoid fixed pixel sizes.
-- Use `VisualStateManager` with `AdaptiveTrigger` for responsive layouts at breakpoints (640px, 1008px).
-- Use `ControlCornerRadius` (4px) for small controls and `OverlayCornerRadius` (8px) for cards, dialogs, flyouts.
+Why: It uses WinUI 3 dialog rooting and `DispatcherQueue` instead of UWP APIs.
 
-## Materials & Elevation
+**Bad:**
 
-- Use **Mica** (`MicaBackdrop`) for the app window backdrop. Requires transparent layers above to show through.
-- Use **Acrylic** for transient surfaces only (flyouts, menus, navigation panes).
-- Use `LayerFillColorDefaultBrush` for content layers above Mica.
-- Use `ThemeShadow` with Z-axis `Translation` for elevation. Cards: 4–8 px, Flyouts: 32 px, Dialogs: 128 px.
+```csharp
+await new Windows.UI.Popups.MessageDialog("Saved").ShowAsync();
+await Window.Current.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => { });
+```
 
-## Motion & Transitions
+Why: It uses UWP dialog, `Window.Current`, and dispatcher patterns that are wrong for WinUI 3 desktop apps.
 
-- Use built-in theme transitions (`EntranceThemeTransition`, `RepositionThemeTransition`, `ContentThemeTransition`, `AddDeleteThemeTransition`).
-- Avoid custom storyboard animations when a built-in transition exists.
+## Conventions
 
-## Control Selection
+| Rule | Rationale |
+|---|---|
+| Use Windows App SDK APIs and `Microsoft.UI.*` namespaces | UWP APIs are missing or incorrect in WinUI 3 desktop apps |
+| Set `XamlRoot` before every `ContentDialog.ShowAsync()` | Dialogs need the correct visual tree root to render |
+| Use `DispatcherQueue.TryEnqueue` and check `HasThreadAccess` | UI updates must run on the UI thread without assuming a `Task` return |
+| Prefer `{x:Bind}` and typed templates | Binding errors surface at compile time and NativeAOT remains compatible |
+| Keep View logic in ViewModels and services | Views remain layout-focused and testable |
+| Use theme resources, built-in typography, and semantic controls | Apps support accessibility, theming, and platform consistency |
+| Use WinUI test app infrastructure for XAML tests | Plain MSTest or xUnit projects lack XAML runtime and UI thread support |
 
-- Use `NavigationView` for primary app navigation (not custom sidebars).
-- Use `InfoBar` for persistent in-app notifications (not custom banners).
-- Use `TeachingTip` for contextual guidance (not custom popups).
-- Use `NumberBox` for numeric input (not TextBox with manual validation).
-- Use `ToggleSwitch` for on/off settings (not CheckBox).
-- Use `ItemsView` as the modern collection control for displaying data with built-in selection, virtualization, and layout flexibility.
-- Use `ListView`/`GridView` for standard virtualized lists and grids, especially when built-in selection support is needed.
-- Use `ItemsRepeater` only for fully custom virtualizing layouts where you need complete control over rendering and do not need built-in selection or interaction handling.
-- Use `Expander` for collapsible sections (not custom visibility toggling).
+## Do / Do Not
 
-## Error Handling
+| Do | Do not |
+|---|---|
+| Use `Microsoft.UI.Xaml.*` | Use `Windows.UI.Xaml.*` |
+| Use `AppWindow` and `AppWindowTitleBar` | Use `ApplicationView`, `CoreWindow`, or `CoreApplicationViewTitleBar` |
+| Initialize pickers and share/print APIs with a window handle | Call UWP picker, share, or print APIs without interop |
+| Use `{ThemeResource}` and built-in TextBlock styles | Hardcode colors, fonts, weights, or sizes |
+| Use `InfoBar` for routine errors | Use `ContentDialog` for every error message |
+| Use Unit Test App (WinUI in Desktop) for XAML tests | Instantiate WinUI 3 XAML types from plain MSTest or xUnit projects |
 
-- Always wrap `async void` event handlers in try/catch to prevent unhandled crashes.
-- Use `InfoBar` (with `Severity = Error`) for user-facing error messages, not `ContentDialog` for routine errors.
-- Handle `App.UnhandledException` for logging and graceful recovery.
+## Checklist Before Opening a PR
 
-## Testing
-
-- **NEVER** use a plain MSTest or xUnit project for tests that instantiate WinUI 3 XAML types. Use a **Unit Test App (WinUI in Desktop)** project, which provides the Xaml runtime and UI thread.
-- Use `[TestMethod]` for pure logic tests. Use `[UITestMethod]` for any test that creates or interacts with `Microsoft.UI.Xaml` types (controls, pages, user controls).
-- Place testable business logic in a **Class Library (WinUI in Desktop)** project, separate from the main app.
-- Build the solution before running tests to enable Visual Studio test discovery.
-
-## Resources & Localization
-
-- Store user-facing strings in `Resources.resw` files, not in code or XAML literals.
-- Use `x:Uid` in XAML for localized text binding.
-- Use DPI-qualified image assets (`logo.scale-200.png`); reference without scale qualifier (`ms-appx:///Assets/logo.png`).
+- [ ] No legacy UWP API, `Windows.UI.*` namespace, `Window.Current`, `CoreWindow`, or `GetForCurrentView()` pattern remains.
+- [ ] Dialogs, pickers, share, and print APIs have the correct `XamlRoot` or window handle.
+- [ ] UI-thread updates use `DispatcherQueue` correctly.
+- [ ] XAML uses `{x:Bind}`, `x:DataType`, binding modes, layout, spacing, and controls appropriately.
+- [ ] MVVM, DI, C# style, project TFM, `<UseWinUI>true</UseWinUI>`, and `Microsoft.WindowsAppSDK` references are correct.
+- [ ] Theme, typography, materials, motion, accessibility, localization, and resources follow platform conventions.
+- [ ] Tests use the correct WinUI test project type when XAML runtime is required.

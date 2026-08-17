@@ -1,9 +1,11 @@
 ---
-applyTo: '**/*.{ts,tsx,js,json,xml,pcfproj,csproj,css,html}'
-description: 'Best practices and guidance for developing PCF code components'
+applyTo: "**/*.{ts,tsx,js,json,xml,pcfproj,csproj,css,html}"
+description: "Enforces Power Apps Component Framework conventions for lifecycle, hosts, WebAPI use, bundling, React, Fluent UI, accessibility, styling, and ALM."
 ---
 
-# Best Practices and Guidance for Code Components
+# PCF Code Component Conventions — Power Apps Controls
+
+These instructions apply to files matched by `**/*.{ts,tsx,js,json,xml,pcfproj,csproj,css,html}`. They are authoritative for pcf code component code, configuration, examples, validation commands, API names, and runtime constraints in those files; stricter repository-specific security, deployment, testing, or platform primitives win on conflict. Treat the rules as passive conventions injected into matching files, not as a step-by-step workflow.
 
 Developing, deploying, and maintaining code components needs a combination of knowledge across multiple areas. This article outlines established best practices and guidance for professionals developing code components.
 
@@ -210,10 +212,87 @@ Code components shouldn't use the HTML web storage objects, like `window.localSt
 
 See the article on [Code component application lifecycle management (ALM)](https://learn.microsoft.com/en-us/power-apps/developer/component-framework/code-components-alm) for best practices on code components with ALM/Azure DevOps/GitHub.
 
-## Related Articles
+## Related Vendor Articles
 
 - [What are code components](https://learn.microsoft.com/en-us/power-apps/developer/component-framework/custom-controls-overview)
 - [Code components for canvas apps](https://learn.microsoft.com/en-us/power-apps/developer/component-framework/component-framework-for-canvas-apps)
 - [Create and build a code component](https://learn.microsoft.com/en-us/power-apps/developer/component-framework/create-custom-controls-using-pcf)
 - [Learn Power Apps component framework](https://learn.microsoft.com/en-us/training/paths/use-power-apps-component-framework)
 - [Use code components in Power Pages](https://learn.microsoft.com/en-us/power-apps/maker/portals/component-framework)
+
+## Good / Bad Examples
+
+The examples below show the boundary between an acceptable convention and the closest common anti-pattern.
+
+**Good:**
+
+```typescript
+public init(context: ComponentFramework.Context<IInputs>, notifyOutputChanged: () => void): void {
+  this.context = context;
+  this.notifyOutputChanged = notifyOutputChanged;
+}
+public destroy(): void { ReactDOM.unmountComponentAtNode(this.container); }
+```
+
+Why: The component uses lifecycle ownership for setup and cleanup.
+
+**Bad:**
+
+```typescript
+public updateView(context: ComponentFramework.Context<IInputs>): void {
+  window.localStorage.setItem('value', context.parameters.value.raw ?? '');
+  context.parameters.dataset.refresh();
+  this.notifyOutputChanged();
+}
+```
+
+Why: The component stores browser data, refreshes a dataset, and notifies on every update.
+
+## Conventions
+
+| Rule | Rationale |
+| --- | --- |
+| Use `init`, `updateView`, and `destroy` for their lifecycle responsibilities. | Host lifecycle separates setup, rendering, and cleanup. |
+| Avoid unsupported context internals, host DOM access, and direct `formContext`. | Unsupported host APIs break cross-host components. |
+| Limit `context.WebApi`, dataset `refresh`, and `notifyOutputChanged` frequency. | API limits and event propagation affect performance. |
+
+## Do / Do Not
+
+| Do | Do not |
+| --- | --- |
+| Use `init`, `updateView`, and `destroy` for their lifecycle responsibilities. | Do not ignore this rule: Use `init`, `updateView`, and `destroy` for their lifecycle responsibilities. |
+| Avoid unsupported context internals, host DOM access, and direct `formContext`. | Do not ignore this rule: Avoid unsupported context internals, host DOM access, and direct `formContext`. |
+| Limit `context.WebApi`, dataset `refresh`, and `notifyOutputChanged` frequency. | Do not ignore this rule: Limit `context.WebApi`, dataset `refresh`, and `notifyOutputChanged` frequency. |
+
+## Checklist Before Opening a PR
+
+- [ ] The change stays inside the matched `applyTo` scope.
+- [ ] The authoritative conventions above are applied to new or modified code.
+- [ ] Named commands, paths, API names, configuration keys, and version constraints remain intact.
+- [ ] Relevant validation, linting, build, or test commands from this instruction pass.
+- [ ] No secrets, unsupported APIs, placeholder prompt references, or relative primitive links were added.
+
+## References
+
+- https://developer.microsoft.com/fluentui#/get-started/web
+- https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA
+- https://github.com/microsoft/fluentui
+- https://learn.microsoft.com/en-us/office/dev/add-ins/concepts/browsers-used-by-office-web-add-ins
+- https://learn.microsoft.com/en-us/power-apps/developer/component-framework/code-components-alm
+- https://learn.microsoft.com/en-us/power-apps/developer/component-framework/code-components-alm#building-pcfproj-code-component-projects
+- https://learn.microsoft.com/en-us/power-apps/developer/component-framework/component-framework-for-canvas-apps
+- https://learn.microsoft.com/en-us/power-apps/developer/component-framework/create-custom-controls-using-pcf
+- https://learn.microsoft.com/en-us/power-apps/developer/component-framework/custom-controls-overview
+- https://learn.microsoft.com/en-us/power-apps/developer/component-framework/debugging-custom-controls
+- https://learn.microsoft.com/en-us/power-apps/developer/component-framework/debugging-custom-controls#es5-vs-es6
+- https://learn.microsoft.com/en-us/power-apps/developer/component-framework/reference/
+- https://learn.microsoft.com/en-us/power-apps/developer/component-framework/reference/control/updateview
+- https://learn.microsoft.com/en-us/power-apps/developer/component-framework/reference/react-control/updateview
+- https://learn.microsoft.com/en-us/power-apps/maker/portals/component-framework
+- https://learn.microsoft.com/en-us/power-platform/admin/supported-web-browsers-and-mobile-devices
+- https://learn.microsoft.com/en-us/powerapps/developer/model-driven-apps/best-practices/business-logic/interact-http-https-resources-asynchronously
+- https://learn.microsoft.com/en-us/powerapps/maker/canvas-apps/accessible-apps
+- https://learn.microsoft.com/en-us/powerapps/maker/canvas-apps/limits-and-config
+- https://learn.microsoft.com/en-us/powerapps/maker/canvas-apps/performance-tips
+- https://learn.microsoft.com/en-us/training/paths/use-power-apps-component-framework
+- https://powerapps.microsoft.com/blog/considerations-for-optimized-performance-in-power-apps/

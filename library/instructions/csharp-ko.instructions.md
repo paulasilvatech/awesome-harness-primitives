@@ -1,77 +1,136 @@
 ---
 applyTo: '**/*.cs'
-description: 'C# 애플리케이션 개발을 위한 코드 작성 규칙 by @jgkim999'
+description: 'C# coding conventions for naming, formatting, language features, performance, exception handling, security, and documentation.'
 ---
 
-# C# 코드 작성 규칙
+# C# Coding Conventions — Korean Team Style
 
-## 명명 규칙 (Naming Conventions)
+These instructions apply to C# files matched by the `applyTo` glob. They are authoritative for Korean-language C# style expectations around naming, formatting, readability, language features, exception handling, performance, security, and XML documentation; project `.editorconfig`, framework-specific primitives, and public API compatibility rules win when they define stricter constraints.
 
-일관된 명명 규칙은 코드 가독성의 핵심입니다. Microsoft의 가이드라인을 따르는 것을 권장합니다.
+## Naming Conventions
 
-| 요소 | 명명 규칙 | 예시 |
-|------|-----------|------|
-| 인터페이스 | 접두사 'I' + PascalCase | `IAsyncRepository`, `ILogger` |
-| 공개(public) 멤버 | 파스칼 케이스 (PascalCase) | `public int MaxCount;`, `public void GetData()` |
-| 매개변수, 지역 변수 | 카멜 케이스 (camelCase) | `int userCount`, `string customerName` |
-| 비공개/내부 필드 | 밑줄(_) + 카멜 케이스 | `private string _connectionString;` |
-| 상수 (const) | 파스칼 케이스 (PascalCase) | `public const int DefaultTimeout = 5000;` |
-| 제네릭 형식 매개변수 | 접두사 'T' + 설명적인 이름 | `TKey`, `TValue`, `TResult` |
-| 비동기 메서드 | 'Async' 접미사 | `GetUserAsync`, `DownloadFileAsync` |
+Follow Microsoft-style naming so code is predictable across the application.
 
-## 코드 서식 및 가독성 (Formatting & Readability)
+| Element | Convention | Example |
+| --- | --- | --- |
+| Interfaces | Prefix `I` plus `PascalCase` | `IAsyncRepository`, `ILogger` |
+| Public members | `PascalCase` | `public int MaxCount;`, `public void GetData()` |
+| Parameters and local variables | `camelCase` | `int userCount`, `string customerName` |
+| Private and internal fields | `_` plus `camelCase` | `private string _connectionString;` |
+| Constants | `PascalCase` | `public const int DefaultTimeout = 5000;` |
+| Generic type parameters | Prefix `T` plus a descriptive name | `TKey`, `TValue`, `TResult` |
+| Async methods | Add the `Async` suffix | `GetUserAsync`, `DownloadFileAsync` |
 
-일관된 서식은 코드를 시각적으로 파싱하기 쉽게 만듭니다.
+Use names that communicate purpose without abbreviations. Keep Korean comments acceptable when the team context requires them, but keep identifiers idiomatic C#.
 
-| 항목 | 규칙 | 설명 |
-|------|------|------|
-| 들여쓰기 | 4개의 공백 사용 | 탭 대신 4개의 공백을 사용합니다. cs 파일은 반드시 4개의 공백을 사용합니다. |
-| 괄호 | 항상 중괄호 {} 사용 | 제어문(if, for, while 등)이 한 줄이더라도 항상 중괄호를 사용합니다. |
-| 빈 줄 | 논리적 분리 | 메서드 정의, 속성 정의, 논리적으로 분리된 코드 블록 사이에 빈 줄을 추가합니다. |
-| 문장 작성 | 한 줄에 하나의 문장 | 한 줄에는 하나의 문장만 작성합니다. |
-| var 키워드 | 형식이 명확할 때만 사용 | 변수의 형식을 오른쪽에서 명확하게 유추할 수 있을 때만 var를 사용합니다. |
-| 네임스페이스 | 파일 범위 네임스페이스 사용 | C# 10 이상에서는 파일 범위 네임스페이스를 사용하여 불필요한 들여쓰기를 줄입니다. |
-| 주석 | XML 형식 주석 작성 | 작성한 class나 함수에 항상 xml 형식의 주석을 작성합니다. |
+Preserve the naming examples `ILogger`, `TKey`, `TValue`, and `TResult` as standalone examples when documenting C# conventions.
 
-## 언어 기능 사용 (Language Features)
+## Formatting and Readability
 
-최신 C# 기능을 활용하여 코드를 더 간결하고 효율적으로 만드세요.
+- Indent `.cs` files with 4 spaces, not tabs.
+- Always use braces `{}` for control statements such as `if`, `for`, and `while`, even when the body is one line.
+- Add blank lines between method definitions, property definitions, and logical code blocks.
+- Write one statement per line.
+- Use `var` only when the type is obvious from the right-hand side.
+- Use file-scoped namespaces in C# 10 or later to reduce unnecessary indentation.
+- Add XML documentation comments for classes and functions when they are authored or changed.
 
-| 기능 | 설명 | 예시/참고 |
-|------|------|------|
-| 비동기 프로그래밍 | I/O 바운드 작업에 async/await 사용 | `async Task<string> GetDataAsync()` |
-| ConfigureAwait | 라이브러리 코드에서 컨텍스트 전환 오버헤드 감소 | `await SomeMethodAsync().ConfigureAwait(false)` |
-| LINQ | 컬렉션 데이터 쿼리 및 조작 | `users.Where(u => u.IsActive).ToList()` |
-| 표현식 기반 멤버 | 간단한 메서드/속성을 간결하게 표현 | `public string Name => _name;` |
-| Nullable Reference Types | 컴파일 타임 NullReferenceException 방지 | `#nullable enable` |
-| using 선언 | IDisposable 객체의 간결한 처리 | `using var stream = new FileStream(...);` |
+## Language Features
 
-## 성능 및 예외 처리 (Performance & Exception Handling)
+Use modern C# features where they improve clarity and the target framework supports them.
 
-견고하고 빠른 애플리케이션을 위한 지침입니다.
+| Feature | Convention | Example |
+| --- | --- | --- |
+| Async programming | Use `async`/`await` (`async/await`) for I/O-bound work | `async Task<string> GetDataAsync()` |
+| `ConfigureAwait` | Use `.ConfigureAwait(false)` in library code where context capture is unnecessary | `await SomeMethodAsync().ConfigureAwait(false)` |
+| LINQ | Use LINQ for clear collection querying and transformation | `users.Where(u => u.IsActive).ToList()` |
+| Expression-bodied members | Use for simple methods or properties | `public string Name => _name;` |
+| Nullable Reference Types | Enable nullable analysis to catch `NullReferenceException` risks | `#nullable enable` |
+| `using` declarations | Use concise disposal for `IDisposable` objects | `using var stream = new FileStream(...);` |
 
-### 예외 처리
+## Exceptions and Performance
 
-처리할 수 있는 구체적인 예외만 catch 하세요. catch (Exception)와 같이 일반적인 예외를 잡는 것은 피해야 합니다.
+- Catch only specific exceptions that the code can handle.
+- Avoid `catch (Exception)` unless the boundary is intentionally translating or logging unexpected failures.
+- Do not use exceptions for ordinary control flow.
+- Use `StringBuilder` instead of repeated `+` concatenation in loops or hot paths.
+- Use Entity Framework Core `.AsNoTracking()` for read-only queries.
+- Avoid unnecessary object allocations, especially inside loops.
 
-예외는 프로그램 흐름 제어를 위해 사용하지 마세요. 예외는 예상치 못한 오류 상황에만 사용되어야 합니다.
+## Security and Configuration
 
-### 성능
-s
-문자열을 반복적으로 연결할 때는 + 연산자 대신 StringBuilder를 사용하세요.
+| Security area | Rule | Rationale |
+| --- | --- | --- |
+| Input validation | Validate all external data from users, APIs, files, and services | External input cannot be trusted |
+| SQL injection prevention | Use parameterized queries or an ORM such as Entity Framework | SQL text must not contain concatenated untrusted values |
+| Sensitive data | Store passwords, connection strings such as `private string _connectionString;`, and API keys in Secret Manager, Azure Key Vault, environment variables, or another configuration management tool | Secrets must not be hardcoded in source |
 
-Entity Framework Core 사용 시, 읽기 전용 쿼리에는 .AsNoTracking()을 사용하여 성능을 향상시키세요.
+Integrate these rules into `.editorconfig` and code review so style and safety stay consistent over time.
 
-불필요한 객체 할당을 피하고, 특히 루프 내에서는 주의하세요.
+## Good / Bad Examples
 
-## 보안 (Security)
+The examples below illustrate naming, async suffixes, braces, and specific exception handling.
 
-안전한 코드를 작성하기 위한 기본 원칙입니다.
+**Good:**
 
-| 보안 영역 | 규칙 | 설명 |
-|------|------|------|
-| 입력 유효성 검사 | 모든 외부 데이터 검증 | 외부(사용자, API 등)로부터 들어오는 모든 데이터는 신뢰하지 않고 항상 유효성을 검사하세요. |
-| SQL 삽입 방지 | 매개변수화된 쿼리 사용 | 항상 매개변수화된 쿼리나 Entity Framework와 같은 ORM을 사용하여 SQL 삽입 공격을 방지하세요. |
-| 민감한 데이터 보호 | 구성 관리 도구 사용 | 비밀번호, 연결 문자열, API 키 등은 소스 코드에 하드코딩하지 말고 Secret Manager, Azure Key Vault 등을 사용하세요. |
+```csharp
+public async Task<string> GetUserNameAsync(int userId)
+{
+    try
+    {
+        return await _userService.GetNameAsync(userId).ConfigureAwait(false);
+    }
+    catch (UserNotFoundException)
+    {
+        return string.Empty;
+    }
+}
+```
 
-이 규칙들을 프로젝트의 .editorconfig 파일과 팀의 코드 리뷰 프로세스에 통합하여 지속적으로 고품질 코드를 유지하는 것을 목표로 해야 합니다.
+Why: The method uses `PascalCase`, an `Async` suffix, braces, `ConfigureAwait(false)` for library-style code, and a specific exception.
+
+**Bad:**
+
+```csharp
+public async Task<string> getname(int id)
+{
+    try { return await svc.Get(id); }
+    catch (Exception) { return ""; }
+}
+```
+
+Why: The method violates C# naming, omits clear dependency naming, compresses statements, and catches every exception indiscriminately.
+
+## Conventions
+
+| Rule | Rationale |
+|---|---|
+| Use `PascalCase`, `camelCase`, `_camelCase`, `I` interfaces, `T` generic parameters, and `Async` suffixes as defined | Naming communicates role and follows C# expectations |
+| Format `.cs` files with 4 spaces, braces, blank logical separation, and one statement per line | Consistent formatting makes code easy to parse visually |
+| Use `var` only when the type is obvious and prefer file-scoped namespaces in C# 10+ | Readability improves without unnecessary verbosity |
+| Document classes and functions with XML comments when authored or changed | Public and team-facing APIs remain understandable |
+| Use `async`/`await`, LINQ, expression-bodied members, nullable reference types, and `using` declarations where appropriate | Modern language features reduce boilerplate and runtime mistakes |
+| Catch specific exceptions and avoid exceptions for flow control | Error handling stays intentional and debuggable |
+| Use `StringBuilder`, `.AsNoTracking()`, and allocation awareness in hot paths | Performance issues are prevented before profiling |
+| Validate external data, parameterize SQL, and store secrets outside source | Common security failures are avoided |
+
+## Do / Do Not
+
+| Do | Do not |
+|---|---|
+| Name interfaces like `IAsyncRepository` and async methods like `GetUserAsync` | Use unclear abbreviations or omit `Async` on asynchronous methods |
+| Use 4-space indentation and braces on all control statements | Mix tabs or write brace-less one-line control flow |
+| Use file-scoped namespaces in C# 10+ | Add unnecessary namespace indentation in modern projects |
+| Enable `#nullable enable` where the project supports nullable analysis | Ignore nullable warnings that can become `NullReferenceException` |
+| Catch `UserNotFoundException` or another specific exception | Use broad `catch (Exception)` as routine flow |
+| Use Secret Manager, Azure Key Vault, or environment variables for secrets | Hardcode passwords, connection strings, or API keys |
+
+## Checklist Before Opening a PR
+
+- [ ] C# names follow the interface, public member, local, field, constant, generic, and async conventions.
+- [ ] `.cs` formatting uses 4 spaces, braces, blank logical separation, and one statement per line.
+- [ ] `var`, file-scoped namespaces, XML comments, and modern language features are used where appropriate.
+- [ ] Async I/O uses `async`/`await` and library code avoids unnecessary context capture with `.ConfigureAwait(false)` where applicable.
+- [ ] Exception handling catches specific exceptions and does not use exceptions for normal flow.
+- [ ] String concatenation, Entity Framework Core read queries, and loop allocations are performance-aware.
+- [ ] External input is validated, SQL is parameterized or handled by Entity Framework, and secrets are not hardcoded.

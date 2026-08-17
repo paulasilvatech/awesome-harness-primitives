@@ -1,129 +1,151 @@
 ---
-applyTo: '**/*.{ts,tsx,js,json,xml,pcfproj,csproj}'
-description: 'How to use and run PCF sample components from the PowerApps-Samples repository'
+applyTo: "**/*.{ts,tsx,js,json,xml,pcfproj,csproj}"
+description: "Enforces conventions for using, building, packaging, and trying PowerApps-Samples PCF sample components in model-driven and canvas apps."
 ---
 
-# How to Use the Sample Components
+# PCF Sample Component Conventions — PowerApps-Samples Usage
 
-All the sample components listed under this section are available to download from [github.com/microsoft/PowerApps-Samples/tree/master/component-framework](https://github.com/microsoft/PowerApps-Samples/tree/master/component-framework) so that you can try them out in your model-driven or canvas apps.
+These instructions apply to PCF sample component code, manifests, project files, and solution files matched by the PCF globs. They are authoritative for using the Microsoft PowerApps-Samples component-framework samples as learning material, restoring/building sample controls, packaging sample solutions, and importing them into model-driven or canvas apps; product-specific PCF, React platform-library, dependent-library, and Power Pages instructions win where they describe a narrower host behavior.
 
-The individual sample component topics under this section provide you an overview of the sample component, its visual appearance, and a link to the complete sample component.
+## Source Repository and Prerequisites
 
-## Before You Can Try the Sample Components
+Use the official `github.com/microsoft/PowerApps-Samples` repository as the source of sample components. Download or clone the repository before modifying a sample, and install Power Platform CLI for Windows when following the documented sample workflow. Open a Developer Command Prompt for Visual Studio when commands require MSBuild and Visual Studio tooling.
 
-To try the sample components, you must first:
+| Requirement | Convention |
+| --- | --- |
+| Source | Use `github.com/microsoft/PowerApps-Samples/tree/master/component-framework` |
+| Local setup | Download or clone `github.com/microsoft/PowerApps-Samples` |
+| CLI | Install Power Platform CLI for Windows |
+| Shell | Use Developer Command Prompt for Visual Studio on Windows sample workflows |
+| Working folder | Navigate to `component-framework`, then the individual sample folder such as `IncrementControl` |
 
-- [Download](https://docs.github.com/repositories/working-with-files/using-files/downloading-source-code-archives#downloading-source-code-archives-from-the-repository-view) or [clone](https://docs.github.com/repositories/creating-and-managing-repositories/cloning-a-repository) this repository [github.com/microsoft/PowerApps-Samples](https://github.com/microsoft/PowerApps-Samples).
-- Install [Install Power Platform CLI for Windows](https://learn.microsoft.com/en-us/power-platform/developer/cli/introduction#install-power-platform-cli-for-windows).
+## Sample Build and Solution Packaging
 
-## Try the Sample Components
+Treat the published sample flow as a convention, not as a reusable runbook. Restore dependencies in the component folder with `npm install`, restore MSBuild projects with `msbuild /t:restore`, create a solution folder such as `IncrementControlSolution`, initialize the solution, add a reference to the `.pcfproj`, and build a solution zip.
 
-Follow the steps in the [README.md](https://github.com/microsoft/PowerApps-Samples/blob/master/component-framework/README.md) to generate solutions containing the controls so you can import and try the sample components in your model-driven or canvas app.
+| Command or path | Purpose |
+| --- | --- |
+| `npm install` | Restore package dependencies for the selected component |
+| `msbuild /t:restore` | Restore MSBuild project dependencies |
+| `mkdir IncrementControlSolution` | Create a solution project folder beside the control |
+| `cd IncrementControlSolution` | Work inside the solution folder |
+| `pac solution init --publisher-name powerapps_samples --publisher-prefix sample` | Create `IncrementControlSolution.cdsproj` with sample publisher metadata |
+| `pac solution add-reference --path ../../IncrementControl` | Reference the folder containing the `.pcfproj` |
+| `pac solution add-reference --path ../../IncrementControl/IncrementControl.pcfproj` | Reference the project file directly when that form is clearer |
+| `msbuild /t:rebuild /restore /p:Configuration=Release` | Build a release solution package |
+| `msbuild` | Build using the current project defaults |
+| `IncrementControlSolution\bin\debug` | Expected sample output folder for the generated solution zip |
 
-## How to Run the Sample Components
+## Import and App Usage
 
-Use the following steps to import and try the sample components in your model-driven or canvas app.
+Import the generated solution zip manually through `make.powerapps.com` or by using Power Apps CLI deployment commands after connecting to the target environment. Add code components to model-driven apps by configuring them on fields or entities, and add them to canvas apps through the component framework support documented for canvas apps.
 
-### Step-by-Step Process
+## Sample Catalog
 
-1. **Download or clone the repository**
-   - [Download](https://docs.github.com/repositories/working-with-files/using-files/downloading-source-code-archives#downloading-source-code-archives-from-the-repository-view) or [clone](https://docs.github.com/repositories/creating-and-managing-repositories/cloning-a-repository) [github.com/microsoft/PowerApps-Samples](https://github.com/microsoft/PowerApps-Samples).
+Keep sample names exact when referring to them because the repository uses these folders and topics as discoverable examples.
 
-2. **Open Developer Command Prompt**
-   - Open a [Developer Command Prompt for Visual Studio](https://learn.microsoft.com/visualstudio/ide/reference/command-prompt-powershell) and navigate to the `component-framework` folder.
-   - On Windows, you can type `developer command prompt` in Start to open a developer command prompt.
+| Sample | Demonstrates |
+| --- | --- |
+| `AngularJSFlipControl` | AngularJS-based sample control pattern |
+| `CanvasGridControl` | Canvas grid control behavior |
+| `ChoicesPickerControl` | Choices picker UI |
+| `ChoicesPickerReactControl` | React choices picker variant |
+| `CodeInterpreterControl` | Code interpreter sample behavior |
+| `ControlStateAPI` | Control state API usage |
+| `DataSetGrid` | Dataset grid control |
+| `DeviceApiControl` | Device API interactions |
+| `FacepileReactControl` | React facepile control |
+| `FluentThemingAPIControl` | Fluent theming API behavior |
+| `FormattingAPIControl` | Formatting API usage |
+| `IFrameControl` | IFrame rendering |
+| `ImageUploadControl` | Image upload behavior |
+| `IncrementControl` | Basic increment control and solution packaging example |
+| `LinearInputControl` | Linear input behavior |
+| `LocalizationAPIControl` | Localization API usage |
+| `LookupSimpleControl` | Lookup sample behavior |
+| `MapControl` | Map rendering |
+| `ModelDrivenGridControl` | Model-driven grid behavior |
+| `MultiSelectOptionSetControl` | Multi-select option set behavior |
+| `NavigationAPIControl` | Navigation API usage |
+| `ObjectOutputControl` | Object output binding |
+| `PowerAppsGridCustomizerControl` | Grid customization |
+| `PropertySetTableControl` | Property set table behavior |
+| `ReactStandardControl` | Standard React control baseline |
+| `TableControl` | Table control behavior |
+| `TableGrid` | Table grid behavior |
+| `WebAPIControl` | Web API interaction |
 
-3. **Install dependencies**
-   - Navigate to the component you want to try, for example `IncrementControl`, and run:
-   ```bash
-   npm install
-   ```
+## Sample Workflow Terminology
 
-4. **Restore project**
-   - After the command has completed, run:
-   ```bash
-   msbuild /t:restore
-   ```
+Preserve the documented sample workflow terms: open a `developer command prompt`, run `pac solution init`, create `IncrementControlSolution.cdsproj`, and pass a valid `path` to `pac solution add-reference`. These names map to official sample instructions and should remain exact when documenting the workflow.
 
-5. **Create solution folder**
-   - Create a new folder inside the sample component folder:
-   ```bash
-   mkdir IncrementControlSolution
-   ```
+## Good / Bad Examples
 
-6. **Navigate to solution folder**
-   ```bash
-   cd IncrementControlSolution
-   ```
+The examples below illustrate referencing a sample control from a solution folder.
 
-7. **Initialize solution**
-   - Inside the folder you created, run the `pac solution init` command:
-   ```bash
-   pac solution init --publisher-name powerapps_samples --publisher-prefix sample
-   ```
-   > **Note**: This command creates a new file named `IncrementControlSolution.cdsproj` in the folder.
+**Good:**
 
-8. **Add component reference**
-   - Run the `pac solution add-reference` command with the `path` set to the location of the `.pcfproj` file:
-   ```bash
-   pac solution add-reference --path ../../IncrementControl
-   ```
-   or
-   ```bash
-   pac solution add-reference --path ../../IncrementControl/IncrementControl.pcfproj
-   ```
-   > **Important**: Reference the folder that contains the `.pcfproj` file for the control you want to add.
+```bash
+pac solution init --publisher-name powerapps_samples --publisher-prefix sample
+pac solution add-reference --path ../../IncrementControl/IncrementControl.pcfproj
+msbuild /t:rebuild /restore /p:Configuration=Release
+```
 
-9. **Build the solution**
-   - To generate a zip file from your solution project, run the following three commands:
-   ```bash
-   msbuild /t:restore
-   msbuild /t:rebuild /restore /p:Configuration=Release
-   msbuild
-   ```
-   - The generated solution zip file becomes in the `IncrementControlSolution\bin\debug` folder.
+Why: The solution has sample publisher metadata, references the control project explicitly, and produces a release package.
 
-10. **Import the solution**
-    - Now that you have the zip file, you have two options:
-      - Manually [import the solution](https://learn.microsoft.com/powerapps/maker/data-platform/import-update-export-solutions) into your environment using [make.powerapps.com](https://make.powerapps.com/).
-      - Alternatively, to import the solution using Power Apps CLI commands, see the [Connecting to your environment](https://learn.microsoft.com/powerapps/developer/component-framework/import-custom-controls#connecting-to-your-environment) and [Deployment](https://learn.microsoft.com/powerapps/developer/component-framework/import-custom-controls#deploying-code-components) sections.
+**Bad:**
 
-11. **Add components to apps**
-    - Finally, to add code components to your model-driven and canvas apps, see:
-      - [Add components to model-driven apps](https://learn.microsoft.com/powerapps/developer/component-framework/add-custom-controls-to-a-field-or-entity)
-      - [Add components to canvas apps](https://learn.microsoft.com/powerapps/developer/component-framework/component-framework-for-canvas-apps#add-components-to-a-canvas-app)
+```bash
+pac solution add-reference --path ../../SomeUnknownFolder
+msbuild
+```
 
-## Available Sample Components
+Why: The reference path may not contain a `.pcfproj`, and the build does not restore or request the release configuration.
 
-The repository contains numerous sample components including:
+## Conventions
 
-- AngularJSFlipControl
-- CanvasGridControl
-- ChoicesPickerControl
-- ChoicesPickerReactControl
-- CodeInterpreterControl
-- ControlStateAPI
-- DataSetGrid
-- DeviceApiControl
-- FacepileReactControl
-- FluentThemingAPIControl
-- FormattingAPIControl
-- IFrameControl
-- ImageUploadControl
-- IncrementControl
-- LinearInputControl
-- LocalizationAPIControl
-- LookupSimpleControl
-- MapControl
-- ModelDrivenGridControl
-- MultiSelectOptionSetControl
-- NavigationAPIControl
-- ObjectOutputControl
-- PowerAppsGridCustomizerControl
-- PropertySetTableControl
-- ReactStandardControl
-- TableControl
-- TableGrid
-- WebAPIControl
+| Rule | Rationale |
+| --- | --- |
+| Use Microsoft PowerApps-Samples as the source of sample components | Keeps examples aligned with official PCF sample code |
+| Restore both npm and MSBuild dependencies before building | PCF samples depend on JavaScript and solution project packages |
+| Initialize a solution folder beside the selected sample control | Keeps generated `.cdsproj` artifacts separate from control source |
+| Reference the folder or `.pcfproj` that contains the control | `pac solution add-reference` needs the PCF project boundary |
+| Import the generated zip through maker portal or Power Apps CLI | Samples must be installed in an environment before app authors can try them |
+| Preserve exact sample component names | Names map to documented folders and topics |
 
-Each sample demonstrates different aspects of the Power Apps component framework and can serve as a learning resource or starting point for your own components.
+## Do / Do Not
+
+| Do | Do not |
+| --- | --- |
+| Use `npm install` and `msbuild /t:restore` before solution builds | Build a fresh sample without restoring dependencies |
+| Use `pac solution init --publisher-name powerapps_samples --publisher-prefix sample` for sample walkthroughs | Invent publisher metadata that obscures sample provenance |
+| Reference `../../IncrementControl` or `../../IncrementControl/IncrementControl.pcfproj` | Point to a folder that does not contain the control project |
+| Build release packages with `msbuild /t:rebuild /restore /p:Configuration=Release` | Assume a default `msbuild` always produces the package you need |
+| Import through `make.powerapps.com` or documented CLI deployment flow | Treat the generated zip as active before importing it |
+| Add controls to model-driven or canvas apps through supported component configuration | Copy sample source files directly into an app without packaging |
+
+## Checklist Before Opening a PR
+
+- [ ] The sample came from `github.com/microsoft/PowerApps-Samples` under `component-framework`.
+- [ ] Power Platform CLI and Visual Studio MSBuild prerequisites are acknowledged for Windows sample workflows.
+- [ ] `npm install` and `msbuild /t:restore` are used before building the solution.
+- [ ] The solution folder and `.cdsproj` are separate from the component source folder.
+- [ ] `pac solution add-reference` points to the selected sample folder or `.pcfproj`.
+- [ ] The generated solution zip is imported before testing in a model-driven or canvas app.
+- [ ] Sample names remain exact and discoverable.
+
+## References
+
+- Sample components: https://github.com/microsoft/PowerApps-Samples/tree/master/component-framework
+- PowerApps-Samples repository: https://github.com/microsoft/PowerApps-Samples
+- Component README: https://github.com/microsoft/PowerApps-Samples/blob/master/component-framework/README.md
+- Download source archives: https://docs.github.com/repositories/working-with-files/using-files/downloading-source-code-archives#downloading-source-code-archives-from-the-repository-view
+- Clone a repository: https://docs.github.com/repositories/creating-and-managing-repositories/cloning-a-repository
+- Power Platform CLI for Windows: https://learn.microsoft.com/en-us/power-platform/developer/cli/introduction#install-power-platform-cli-for-windows
+- Developer Command Prompt: https://learn.microsoft.com/visualstudio/ide/reference/command-prompt-powershell
+- Import solutions: https://learn.microsoft.com/powerapps/maker/data-platform/import-update-export-solutions
+- Maker portal: https://make.powerapps.com/
+- Connect to your environment: https://learn.microsoft.com/powerapps/developer/component-framework/import-custom-controls#connecting-to-your-environment
+- Deploy code components: https://learn.microsoft.com/powerapps/developer/component-framework/import-custom-controls#deploying-code-components
+- Add components to model-driven apps: https://learn.microsoft.com/powerapps/developer/component-framework/add-custom-controls-to-a-field-or-entity
+- Add components to canvas apps: https://learn.microsoft.com/powerapps/developer/component-framework/component-framework-for-canvas-apps#add-components-to-a-canvas-app

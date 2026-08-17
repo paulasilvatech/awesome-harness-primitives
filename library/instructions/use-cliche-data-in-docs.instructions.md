@@ -1,114 +1,62 @@
 ---
-applyTo: '**/*.{md,js,mjs,cjs,ts,tsx,jsx,py,json}'
-description: 'Ensure documentation and examples use only generic, cliche placeholder data — never real or sensitive data sourced from local scripts, configuration, task files, or prompt context.'
+applyTo: "**/*.{md,js,mjs,cjs,ts,tsx,jsx,py,json}"
+description: "Enforces generic cliche placeholder data in documentation, examples, templates, comments, and sample configuration instead of real or sensitive implementation data."
 ---
 
-# Use Cliche Data in Documentation
+# Cliche Documentation Data Conventions — Placeholder Safety
 
-When updating or writing documentation for a tool, **never include real data** that was provided in prompts, local configuration, scripts, task files, or any other implementation-specific source. Documentation must use only generic, commonly recognized placeholder data that cannot expose sensitive information.
+These instructions apply to documentation, examples, sample scripts, templates, README content, CHANGELOG entries, and committed comments in matched Markdown, JavaScript, TypeScript, Python, and JSON files. They are authoritative for replacing real implementation data with generic cliche placeholders; product requirements, runtime code, or local configuration may contain real values only when those values are required for execution and are not copied into documentation.
 
-## Why This Matters
+## Public Documentation Boundary
 
-A tool's source code and local configuration often contain real names, real email addresses, real organization details, and real domain names. These values are necessary for the tool to function, but they have **no place in public-facing documentation**. Leaking real data into docs can expose:
+Never include real data from prompts, local files, scripts, configuration, task files, map or filter files, git-ignored files, or implementation-specific sources in documentation. Documentation examples use only well-known, fictional, or obviously placeholder values. A stranger should be able to read every example and learn nothing about the real users, clients, organizations, accounts, domains, or operations behind the tool.
 
-- Internal business names and contacts
-- Email addresses and domain names
-- Client or customer identifiers
-- Account names and credentials
-- Organization-specific terminology that reveals private operations
+Real data may exist in runtime code, local scripts, local configuration, git-ignored files, and prompt context when needed to build or configure a tool. It does not belong in README.md, docs folders, example templates, CHANGELOG.md entries, or committed code comments.
 
-## Core Rule
+## Data That Must Be Replaced
 
-> **If data came from a prompt, a local file, a script, a config, or a task — it does NOT go into documentation.**
->
-> Documentation examples use only well-known, fictional, or obviously placeholder data.
+Replace values originating from `config.json`, `.env`, account modules, batch scripts, shell scripts, task runners, user prompts, JSON mappings, extraction rules, git-ignored files, and environment-specific configuration. Treat real names, email addresses, organization details, domain names, client identifiers, account names, credentials, and organization-specific terminology as documentation leaks.
 
-## What Counts as Real Data
+A word from real data may appear only when it is a common English word used in its ordinary sense and not as an example value.
 
-Any value that originates from:
+## Approved Placeholder Data
 
-- **Local configuration files** (e.g., `config.json`, `.env`, account modules)
-- **Scripts and task files** (e.g., batch scripts, shell scripts, task runners)
-- **Prompt context** (e.g., data the user supplies when asking an agent to build or update the tool)
-- **Map or filter files** (e.g., JSON mappings, data extraction rules)
-- **Git-ignored files** (e.g., files excluded from version control that contain environment-specific values)
-
-## Approved Placeholder Data for Documentation
-
-Use these generic, cliche substitutes in all documentation and examples:
-
-| Category | Approved Placeholder Examples |
+| Category | Approved examples |
 | --- | --- |
-| **People** | Jane Doe, John Smith, Alice, Bob |
-| **Email addresses** | `jane.doe@example.com`, `admin@example.org` |
-| **Organizations** | Acme Corp, Contoso, Northwind Traders |
-| **Domains** | `example.com`, `example.org`, `example.net` |
-| **Addresses** | 123 Main Street, Suite 100, Springfield |
-| **Phone numbers** | `(555) 123-4567` |
-| **Accounts / usernames** | `demo-user`, `test-account` |
-| **File paths** | `accounts/acme.mjs`, `config/reports.json` |
-| **Project names** | My Project, Sample App, Demo Tool |
+| People | Jane Doe, John Smith, Alice, Bob |
+| Email addresses | `jane.doe@example.com`, `admin@example.org` |
+| Organizations | Acme Corp, Contoso, Northwind Traders |
+| Domains | `example.com`, `example.org`, `example.net` |
+| Addresses | 123 Main Street, Suite 100, Springfield |
+| Phone numbers | `(555) 123-4567` |
+| Accounts and usernames | `demo-user`, `test-account` |
+| File paths | `accounts/acme.mjs`, `config/reports.json` |
+| Project names | My Project, Sample App, Demo Tool |
 
-## Match the Placeholder to the Context
+## Context-Matched Placeholders
 
-A placeholder is only correct if it is **plausible in the surrounding context**. A generic name that violates OS conventions, tooling norms, or the workflow being described is just as misleading as a real value. Pick substitutes that fit the platform, the tool, and the role the value plays.
-
-### Choose Paths That Match the Platform
-
-| OS / context | Use | Avoid |
+| OS or context | Use | Avoid |
 | --- | --- | --- |
-| Windows, per-user data | `C:\Users\<user>\AppData\Local\AcmeApp\` | `/home/user/...`, `~/.config/...` |
-| Windows, per-machine shared data | `C:\ProgramData\AcmeApp\` | `C:\Users\<user>\...` |
-| Windows, temporary | `%TEMP%\acme\` or `C:\Users\<user>\AppData\Local\Temp\acme\` | `/tmp/acme/` |
-| POSIX, per-user data | `~/.config/acme/`, `~/.local/share/acme/` | `C:\Users\<user>\...` |
-| POSIX, temporary | `/tmp/acme/` | `%TEMP%\acme\` |
-| Cross-platform examples | Show both, or use `<config-dir>/acme/` | Picking one silently |
+| Windows per-user data | `C:\Users\<user>\AppData\Local\AcmeApp\` | `/home/user/...`, `~/.config/...` |
+| Windows machine-wide data | `C:\ProgramData\AcmeApp\` | `C:\Users\<user>\...` |
+| Windows temporary | `%TEMP%\acme\` or `C:\Users\<user>\AppData\Local\Temp\acme\` | `/tmp/acme/` |
+| POSIX per-user data | `~/.config/acme/`, `~/.local/share/acme/` | `C:\Users\<user>\...` |
+| POSIX temporary | `/tmp/acme/` | `%TEMP%\acme\` |
+| Cross-platform examples | `<config-dir>/acme/` or show both forms | One platform silently |
 
-When the surrounding text or code is OS-specific (a `.bat` file, a `.jsx` running on Windows, a `bash` snippet), the path placeholder must match that OS. When the docs are platform-neutral, either show both forms or use a clearly abstract token (`<install-dir>`, `<config-dir>`).
-
-### Match the Scope to the Workflow
-
-The placeholder must sit in a location that makes sense for the kind of data it represents:
-
-| Data role | Plausible placeholder location |
+| Data role | Plausible location |
 | --- | --- |
-| Per-user logs and runtime output | User-profile folder (`C:\Users\<user>\AppData\Local\<App>\logs\`, `~/.local/state/<app>/`) |
-| Per-user settings | User config folder (`%APPDATA%\<App>\`, `~/.config/<app>/`) |
+| Per-user logs and runtime output | `C:\Users\<user>\AppData\Local\<App>\logs\`, `~/.local/state/<app>/` |
+| Per-user settings | `%APPDATA%\<App>\`, `~/.config/<app>/` |
 | Machine-wide shared state | `C:\ProgramData\<App>\`, `/var/lib/<app>/` |
-| Project-local working files | Repository-relative paths (`./build/`, `./tmp/`) |
-| Generated output artifacts | Project output folder (`./dist/`, `./out/`) |
+| Project-local working files | `./build/`, `./tmp/` |
+| Generated output artifacts | `./dist/`, `./out/` |
 
-A user-driven script that writes a debug log should not place that log in `C:\ProgramData\…` (machine-shared); a service that maintains shared state should not place it in `~/.config/…` (per-user). Pick the location a real implementation of that role would pick.
+Match identifiers to the domain: use `acme-corp` or `northwind-traders` for CRM, `springfield` or `region-west` for geographic data, and `demo-app` or `sample-project` for developer tooling.
 
-### Match the Identifier to the Domain
+## Documentation Examples
 
-When the example uses an identifier (account name, project name, dataset key), choose a placeholder consistent with the surrounding domain vocabulary.
-
-- A CRM example: `acme-corp`, `northwind-traders`.
-- A geographic dataset example: `springfield`, `region-west`.
-- A developer tooling example: `demo-app`, `sample-project`.
-
-Do not mix domains (`acme-corp` inside a geographic-data example reads as wrong even though both names are approved generically).
-
-### Self-Check
-
-Before committing a placeholder, ask:
-
-- Does the path syntax match the OS shown in the same code block?
-- Does the location match the **role** of the data (user vs. machine, runtime vs. config, local vs. shared)?
-- Does the identifier match the **domain** of the surrounding example?
-
-If any answer is no, swap the placeholder for one that fits.
-
-## How to Apply This Rule
-
-### When Adding a Feature
-
-If you add a feature using real account data (e.g., a script named after a real client), document the feature using a fictional account name instead.
-
-**Real implementation file:** an account module configured for a specific business
-
-**Documentation example:**
+When documenting a feature built with real account data, replace the real account with a fictional one.
 
 ```javascript
 // accounts/acme.mjs — Example account configuration
@@ -119,11 +67,7 @@ export default {
 };
 ```
 
-### When Updating Configuration Docs
-
-If a config file references real domains, real paths, or real credentials, replace every real value with a placeholder before including it in documentation.
-
-**Documentation example:**
+When documenting configuration, replace real domains, paths, and credentials.
 
 ```json
 {
@@ -134,11 +78,7 @@ If a config file references real domains, real paths, or real credentials, repla
 }
 ```
 
-### When Writing Script Examples
-
-If a script automates a task for a specific organization, the documentation example must use a generic organization name and generic parameters.
-
-**Documentation example:**
+When documenting scripts, use generic organizations and parameters.
 
 ```batch
 @echo off
@@ -146,21 +86,57 @@ REM Example: Run the extraction task for Acme Corp
 node extractEmail.mjs --account acme --task download
 ```
 
-## The Boundary Between Code and Docs
+## Technical Vocabulary
 
-| Context | Real Data Allowed? |
-| --- | --- |
-| Local scripts and config files used at runtime | Yes |
-| Git-ignored files with environment-specific values | Yes |
-| Prompt data provided to build or configure the tool | Yes (in code only) |
-| README.md, docs/ folder, and example templates | **No — use placeholders only** |
-| CHANGELOG.md entries | **No — describe changes generically** |
-| Code comments in committed source files | **No — keep generic** |
+Preserve these source terms when they apply to edits in this domain: `.bat` `.jsx` `<install-dir>` `C:\ProgramData\…` `bash` `geographic-data` `install-dir` `machine-shared` `per-machine` `public-facing` `user-driven` `~/.config/…`.
 
-## One Exception
+## Good / Bad Examples
 
-A word from real data may appear in documentation **only** if it is a common English word used in its ordinary sense and **not** in the context of an example. For instance, the word "development" is acceptable in a sentence like "This tool is under active development" even if it also appears in a real organization name.
+The examples below show replacing implementation-specific values with cliche data.
 
-## Summary
+**Good:**
 
-Documentation is public. Implementation data is private. Keep them separate. Every example in every doc file should pass a simple test: *could a stranger read this and learn nothing about the real users, clients, or organizations behind this tool?* If the answer is no, replace the data with cliche placeholders.
+```md
+Configure the sample account `acme` with `admin@example.org` and write output to `./dist/`.
+```
+
+Why: The account, email, and path are generic and plausible for documentation.
+
+**Bad:**
+
+```md
+Copy the customer domain and account ID from the local `.env` file into the README example.
+```
+
+Why: It instructs authors to leak local implementation data into public docs.
+
+## Conventions
+
+| Rule | Rationale |
+|---|---|
+| Replace prompt, script, config, task, and git-ignored data before documenting | Local implementation data can expose private organizations or accounts |
+| Use only approved cliche placeholders in public examples | Familiar placeholders communicate shape without leaking reality |
+| Match placeholder syntax to the OS shown in the example | Incorrect paths mislead readers and make examples unusable |
+| Match placeholder location to data role | User, machine, runtime, config, and generated data belong in different places |
+| Match identifiers to the example domain | Generic data still needs to be plausible in context |
+| Keep CHANGELOG and committed comments generic | Public history and source comments are documentation too |
+
+## Do / Do Not
+
+| Do | Do not |
+|---|---|
+| Use Jane Doe, Acme Corp, Contoso, and `example.com` | Use real people, customers, organizations, or domains |
+| Use `accounts/acme.mjs` and `config/reports.json` in docs | Copy local account module names when they identify real entities |
+| Use platform-correct placeholders such as `%TEMP%\acme\` in Windows examples | Mix POSIX paths into Windows-only snippets |
+| Use `<config-dir>` for platform-neutral examples | Pretend one OS path fits all platforms |
+| Describe changes generically in CHANGELOG.md | Include private account names in release notes |
+| Keep real values only in runtime code when required | Move runtime secrets, contacts, or domains into README examples |
+
+## Checklist Before Opening a PR
+
+- [ ] Documentation examples contain only approved cliche or clearly abstract placeholder values.
+- [ ] No value from prompts, local config, scripts, task files, maps, filters, or git-ignored files appears in docs.
+- [ ] Paths match the operating system and data role shown in the example.
+- [ ] Identifiers match the surrounding domain vocabulary without revealing real entities.
+- [ ] README.md, docs content, CHANGELOG.md, templates, and committed comments are free of real data.
+- [ ] Runtime code and documentation remain separated when real values are required for execution.

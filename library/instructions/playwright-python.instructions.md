@@ -1,36 +1,62 @@
 ---
-applyTo: '**/*.py'
-description: 'Playwright Python AI test generation instructions based on official documentation.'
+applyTo: "**/*.py"
+description: "Enforces Playwright Python test conventions for Pytest structure, resilient locators, web-first assertions, synchronization, and execution."
+name: "Playwright Python Conventions"
 ---
 
-# Playwright Python Test Generation Instructions
+# Playwright Python Conventions — Pytest Browser Tests
 
-## Test Writing Guidelines
+These instructions apply to Python files that create or maintain Playwright tests with Pytest. They are authoritative for Playwright Python test structure, locator choice, assertion style, synchronization, file naming, and execution conventions in matched files; project-specific test layout, fixtures, and CI commands win when they define stricter local rules.
 
-### Code Quality Standards
-- **Locators**: Prioritize user-facing, role-based locators (get_by_role, get_by_label, get_by_text) for resilience and accessibility.
-- **Assertions**: Use auto-retrying web-first assertions via the expect API (e.g., expect(page).to_have_title(...)). Avoid expect(locator).to_be_visible() unless specifically testing for a change in an element's visibility, as more specific assertions are generally more reliable.
-- **Timeouts**: Rely on Playwright's built-in auto-waiting mechanisms. Avoid hard-coded waits or increased default timeouts.
-- **Clarity**: Use descriptive test titles (e.g., def test_navigation_link_works():) that clearly state their intent. Add comments only to explain complex logic, not to describe simple actions like "click a button."
+## Test Structure and Imports
 
-### Test Structure
-- **Imports**: Every test file should begin with from playwright.sync_api import Page, expect.
-- **Fixtures**: Use the page: Page fixture as an argument in your test functions to interact with the browser page.
-- **Setup**: Place navigation steps like page.goto() at the beginning of each test function. For setup actions shared across multiple tests, use standard Pytest fixtures.
+Use Pytest conventions and Playwright's synchronous API consistently so generated tests are discoverable, typed, and easy to debug.
 
-### File Organization
-- **Location**: Store test files in a dedicated tests/ directory or follow the existing project structure.
-- **Naming**: Test files must follow the test_<feature-or-page>.py naming convention to be discovered by Pytest.
-- **Scope**: Aim for one test file per major application feature or page.
+| Concern | Convention |
+| --- | --- |
+| Imports | Start Playwright test files with `from playwright.sync_api import Page, expect`; add `import re` or `import pytest` only when the test uses them. |
+| Browser fixture | Accept the `page: Page` fixture in each test function that drives the browser. |
+| Test names | Use descriptive `test_<feature_or_page>.py` file names and `def test_navigation_link_works(page: Page):`-style function names. |
+| Navigation | Put `page.goto()` at the beginning of the test or in a standard Pytest fixture when setup is shared. |
+| Shared setup | Use `@pytest.fixture(scope="function", autouse=True)` only when every test in the file requires the same browser state. |
+| Organization | Store tests under `tests/` or the existing project test structure, with one file per major feature or page. |
 
-## Assertion Best Practices
-- **Element Counts**: Use expect(locator).to_have_count() to assert the number of elements found by a locator.
-- **Text Content**: Use expect(locator).to_have_text() for exact text matches and expect(locator).to_contain_text() for partial matches.
-- **Navigation**: Use expect(page).to_have_url() to verify the page URL.
-- **Assertion Style**: Prefer `expect` over `assert` for more reliable UI tests.
+Keep comments for non-obvious flow only. Do not comment obvious actions such as clicking a button.
 
+## Locators and User-Facing Behavior
 
-## Example
+Prioritize role-based locators that describe how users and assistive technologies find elements.
+
+- Prefer `page.get_by_role()`, `page.get_by_label()`, and `page.get_by_text()` before CSS or XPath selectors.
+- Include accessible names in role locators, for example `page.get_by_role("link", name="Get started")`.
+- Use specific locators that survive layout changes and validate accessibility assumptions.
+- Scope locators when repeated text or roles exist on the page instead of relying on the first match by accident.
+- Avoid implementation selectors unless the application has no accessible surface for the interaction being tested.
+
+## Assertions and Synchronization
+
+Use Playwright's auto-waiting and web-first assertions instead of manual timing.
+
+| Scenario | Preferred assertion |
+| --- | --- |
+| Page title | `expect(page).to_have_title(...)` |
+| Page URL | `expect(page).to_have_url(...)` |
+| Element count | `expect(locator).to_have_count(...)` |
+| Exact text | `expect(locator).to_have_text(...)` |
+| Partial text | `expect(locator).to_contain_text(...)` |
+| Visibility transition | `expect(locator).to_be_visible()` only when visibility itself is the behavior under test |
+
+Prefer `expect` over raw `assert` for UI state because Playwright retries until the condition is met or the timeout expires. Rely on Playwright's built-in auto-waiting and avoid hard-coded waits, sleeps, or increased default timeouts unless the application has a documented timing boundary.
+
+## Execution and Failure Analysis
+
+Run tests from the terminal with `pytest` or the repository's existing Pytest command. When a test fails, inspect the failure output, screenshot or trace artifacts if configured, the selected locator, and the intended user behavior before changing timeouts. Use `pytest -k <name>` for focused reruns and keep failure fixes tied to the root cause.
+
+## Good / Bad Examples
+
+The examples below illustrate resilient locators, setup through Pytest, and web-first assertions.
+
+**Good:**
 
 ```python
 import re
@@ -39,24 +65,70 @@ from playwright.sync_api import Page, expect
 
 @pytest.fixture(scope="function", autouse=True)
 def before_each_after_each(page: Page):
-    # Go to the starting url before each test.
     page.goto("https://playwright.dev/")
 
 def test_main_navigation(page: Page):
     expect(page).to_have_url("https://playwright.dev/")
 
 def test_has_title(page: Page):
-    # Expect a title "to contain" a substring.
     expect(page).to_have_title(re.compile("Playwright"))
 
 def test_get_started_link(page: Page):
     page.get_by_role("link", name="Get started").click()
-    
-    # Expects page to have a heading with the name of Installation.
     expect(page.get_by_role("heading", name="Installation")).to_be_visible()
 ```
 
-## Test Execution Strategy
+Why: The test uses the `page: Page` fixture, typed imports, user-facing locators, auto-retrying `expect` assertions, and shared navigation only where every test needs it.
 
-1. **Execution**: Tests are run from the terminal using the pytest command.
-2. **Debug Failures**: Analyze test failures and identify root causes
+**Bad:**
+
+```python
+import time
+
+
+def test_get_started_link(page):
+    page.goto("https://playwright.dev/")
+    time.sleep(5)
+    page.locator(".navbar a:nth-child(1)").click()
+    assert page.locator("h1").inner_text() == "Installation"
+```
+
+Why: The test omits typing, waits with a hard-coded sleep, uses brittle implementation selectors, and replaces web-first assertions with a non-retrying `assert`.
+
+## Conventions
+
+| Rule | Rationale |
+| --- | --- |
+| Import `Page` and `expect` from `playwright.sync_api` in test files | Tests stay typed and use Playwright's retrying assertion model. |
+| Use the `page: Page` fixture instead of constructing browser objects manually | Pytest and Playwright manage browser lifecycle consistently. |
+| Prefer role, label, and text locators | Tests validate user-facing behavior and are resilient to DOM refactors. |
+| Use `expect` assertions such as `to_have_title`, `to_have_url`, `to_have_count`, `to_have_text`, and `to_contain_text` | Assertions wait for the UI to reach the expected state. |
+| Avoid hard-coded waits and default timeout inflation | Auto-waiting exposes real synchronization issues instead of hiding them. |
+| Keep tests organized as `test_<feature-or-page>.py` under `tests/` or the existing structure | Pytest discovery remains predictable. |
+| Debug failures by identifying root cause before editing assertions or timeouts | Tests remain meaningful instead of becoming flaky acceptance of any behavior. |
+
+## Do / Do Not
+
+| Do | Do not |
+| --- | --- |
+| Use `page.get_by_role("button", name="Save")` or another user-facing locator | Use CSS or XPath selectors when an accessible locator exists. |
+| Put `page.goto()` at the start of a test or shared fixture | Hide navigation in unrelated helper code. |
+| Use `expect(page).to_have_url()` for navigation checks | Compare `page.url` with raw `assert` for asynchronous navigation. |
+| Use `expect(locator).to_have_text()` or `to_contain_text()` for text | Read `inner_text()` and assert immediately. |
+| Use `expect(locator).to_be_visible()` when visibility is the behavior | Use visibility as a vague substitute for a more specific assertion. |
+| Run focused tests with `pytest -k <name>` while debugging | Increase global timeouts to compensate for unknown failures. |
+
+## Checklist Before Opening a PR
+
+- [ ] Test files use `test_<feature-or-page>.py` names and live under `tests/` or the existing test structure.
+- [ ] Playwright tests import `Page` and `expect` from `playwright.sync_api`.
+- [ ] Browser-driving tests accept the `page: Page` fixture.
+- [ ] Navigation setup uses `page.goto()` directly in the test or a justified Pytest fixture.
+- [ ] Locators prefer `get_by_role`, `get_by_label`, or `get_by_text` with accessible names where possible.
+- [ ] Assertions use Playwright `expect` web-first assertions instead of raw UI `assert` checks.
+- [ ] No hard-coded sleeps or unjustified timeout increases were introduced.
+- [ ] Failing tests were debugged to root cause before changing locator or assertion behavior.
+
+## References
+
+- Playwright documentation site: https://playwright.dev/

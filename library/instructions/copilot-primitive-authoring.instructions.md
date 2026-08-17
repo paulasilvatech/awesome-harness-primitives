@@ -1,13 +1,11 @@
 ---
-description: "Require routing, canonical paths, frontmatter, mirror, and validation conventions when editing Copilot primitives."
+description: "Requires routing, canonical paths, frontmatter, tool-token, mirror, and validation conventions when editing Copilot primitives. Use when authoring or reviewing agents, instructions, skills, prompts, or installed mirrors."
 applyTo: "library/agents/*.agent.md,library/instructions/*.instructions.md,library/skills/**/SKILL.md,library/prompts/*.prompt.md,.github/agents/*.agent.md,.github/instructions/*.instructions.md,.github/skills/**/SKILL.md,.github/prompts/*.prompt.md"
 ---
 
-# Copilot Primitive Authoring Conventions
+# Copilot Primitive Authoring Conventions — Harness-Compatible Files
 
-## Scope and Stack Context
-
-These instructions apply to Copilot primitive files matched by the `applyTo` globs: agents, instructions, skills, and VS Code prompts under `library/` and installed mirrors under `.github/`. They define passive authoring invariants for this repository. They do not define an ordered creation or review workflow; use the `copilot-primitive-authoring` skill for procedure.
+These instructions apply to Copilot primitive files matched by the `applyTo` globs: agents, instructions, skills, VS Code prompts, and installed mirrors under `library/` or `.github/`. They are authoritative for passive authoring invariants, routing, canonical paths, frontmatter, tool tokens, validation, and cross-primitive references in matched files; `docs/COPILOT-HARNESS-SPEC.md` wins for runtime discovery, schema, and validation semantics.
 
 ## Authoritative Sources and Precedence
 
@@ -21,29 +19,34 @@ When sources conflict, `docs/COPILOT-HARNESS-SPEC.md` wins over instruction-auth
 
 ## Responsibility Split
 
-This file owns passive conventions that apply while editing primitive files. The `copilot-primitive-authoring` skill owns ordered authoring steps, evidence gathering, validation sequencing, and delivery format. Agents own persona, judgment boundary, and authority. Instructions own passive conventions. Skills own reusable procedures or criteria. Prompts own explicit VS Code actions.
+This file owns passive conventions that apply while editing primitive files. The `copilot-primitive-authoring` skill owns ordered authoring steps, evidence gathering, validation sequencing, and delivery format. The `copilot-primitive-architect` agent owns ambiguous type choices and consultative suite-level architecture reviews. Agents own persona, judgment boundary, and authority. Instructions own passive conventions. Skills own reusable procedures or criteria. Prompts own explicit VS Code actions.
 
-## Core Conventions
+## Routing and Canonical Paths
 
-| Rule | Rationale |
-| --- | --- |
-| Treat `library/` as the canonical source for reusable primitives; do not edit `.github/` mirrors or plugin copies directly. | Mirrors can be regenerated or synchronized, so direct edits drift and disappear. |
-| Route by primitive type before authoring or review: `skill` uses the `skill-creator` skill; `agent`, `instructions`, and `prompt` use the `copilot-primitive-authoring` skill; ambiguous type choices or consultative architecture reviews use the `copilot-primitive-architect` agent. | Agent Skills have separate packaging rules, and ambiguous suite-level decisions need architectural judgment before procedural work begins. |
-| Consult references of the same primitive type as the target artifact. | Same-type examples prevent agent, instructions, skill, and prompt responsibilities from bleeding into each other. |
-| Use a valid kebab-case primitive name with no path separators, `..`, leading or trailing hyphen, or double hyphen. Save it only at its canonical path: `library/agents/<name>.agent.md`, `library/instructions/<name>.instructions.md`, `library/skills/<name>/SKILL.md`, or `library/prompts/<name>.prompt.md`. | Canonical names and destinations keep discovery, catalog generation, mirroring, and plugin packaging deterministic. |
-| Make every `description` a discovery surface that states what the primitive does and when to use it. | Agents and skills are selected from descriptions before full bodies load. |
-| Keep instruction `applyTo` present and set to one quoted, comma-separated glob string. | Without `applyTo`, an instruction file is not applied automatically. |
-| Reference other primitives by installed name and type, not by relative link. | Runtime installation paths differ; semantic names survive copying and packaging. |
-| Use relative paths only inside the same skill package, such as `references/`, `scripts/`, `assets/`, or `templates/`. | Skill resources travel with the skill; cross-primitive links do not. |
+| Primitive | Canonical library path | Routing convention |
+| --- | --- | --- |
+| Agent | `library/agents/<name>.agent.md` | Use the `copilot-primitive-authoring` skill for procedure. |
+| Instruction | `library/instructions/<name>.instructions.md` | Use the `copilot-primitive-authoring` skill for procedure. |
+| Skill | `library/skills/<name>/SKILL.md` | Use the `skill-creator` skill. |
+| Prompt | `library/prompts/<name>.prompt.md` | Use the `copilot-primitive-authoring` skill for procedure; treat prompts as VS Code-only. |
+
+Treat `library/` as the canonical source for reusable primitives. Do not edit `.github/` mirrors or plugin copies directly unless a task explicitly targets an installed mirror. Use a valid kebab-case primitive name with no path separators, `..`, leading or trailing hyphen, or double hyphen.
 
 ## Frontmatter and Runtime Fields
 
-- Use only fields recognized by the target primitive type. For instructions, only `applyTo`, `description`, `name`, and `excludeAgent` are recognized.
+- Use only fields recognized by the target primitive type.
+- For instructions, only `applyTo`, `description`, `name`, and `excludeAgent` are recognized.
+- Keep instruction `applyTo` present and set to one quoted, comma-separated glob string.
+- Make every `description` a discovery surface that states what the primitive does and when to use it.
 - For agents, treat `tools` as an allow-list filter, not a grant request. Omit it or use `["*"]` only when unrestricted access is intentional.
-- Do not use CLI no-op tool tokens: `search`, `web`, `todo`, `all`, `terminal`, `run`, `codebase`, `changes`, `fetch`, or `githubRepo`. They are silently ignored.
-- Use valid CLI tokens for the intended capability: `read`, `grep`, `glob`, `edit`, `execute`, `web_fetch`, and `web_search`.
+- Do not use CLI no-op tool tokens: `search`, `web`, `todo`, `all`, `terminal`, `run`, `codebase`, `changes`, `fetch`, or `githubRepo`.
+- Use valid CLI tokens for intended capabilities: `read`, `grep`, `glob`, `edit`, `execute`, `web_fetch`, and `web_search`.
 - For skills, set `name` to kebab-case and make it exactly match the parent directory. Keep `SKILL.md` under 500 lines, preferably under 200, and move bulk material into bundled resources.
 - Treat prompts as VS Code-only files. They are repository primitives for authoring and distribution, but they are not discovered or executed by Copilot CLI.
+
+## Cross-Primitive References and Mirrors
+
+Reference other primitives by installed name and type, not by relative link. Use relative paths only inside the same skill package, such as `references/`, `scripts/`, `assets/`, or `templates/`. Consult references of the same primitive type as the target artifact so agent, instruction, skill, and prompt responsibilities do not bleed into one another.
 
 ## Good / Bad Examples
 
@@ -67,6 +70,18 @@ tools: ["search", "web", "todo", "terminal"]
 
 Why: the description is not actionable for discovery, and the listed tools are no-op tokens in the CLI.
 
+## Conventions
+
+| Rule | Rationale |
+| --- | --- |
+| Treat `library/` as the canonical source and avoid direct `.github/` mirror edits. | Mirrors can be regenerated or synchronized, so direct edits drift and disappear. |
+| Route `skill` work to `skill-creator`, and route `agent`, `instructions`, and `prompt` work to `copilot-primitive-authoring`. | Agent Skills have separate packaging rules, and other primitive types share authoring procedure. |
+| Use valid kebab-case names and canonical paths. | Discovery, catalog generation, mirroring, and plugin packaging remain deterministic. |
+| Keep descriptions actionable and include when to use the primitive. | Agents and skills are selected from descriptions before full bodies load. |
+| Use only recognized frontmatter fields and valid tool tokens. | Unknown fields or no-op tokens silently break runtime behavior. |
+| Reference primitives by name and type rather than relative links. | Runtime installation paths differ, but semantic names survive copying and packaging. |
+| Validate primitives with repository scripts before delivery. | Markdown shape alone does not prove harness compatibility. |
+
 ## Do / Do Not
 
 | Do | Do not |
@@ -75,6 +90,7 @@ Why: the description is not actionable for discovery, and the listed tools are n
 | Keep responsibilities separate between agent, instructions, skill, and prompt files. | Put a workflow in instructions or passive conventions in a skill procedure. |
 | Use concise examples that prove the convention. | Add long tutorials or unrelated reference material to the primitive body. |
 | Apply validation appropriate to the primitive type. | Treat a clean-looking Markdown file as runtime-compatible without type-specific checks. |
+| Use `read`, `grep`, `glob`, `edit`, `execute`, `web_fetch`, and `web_search` where those capabilities are needed. | Use `search`, `web`, `todo`, `all`, `terminal`, `run`, `codebase`, `changes`, `fetch`, or `githubRepo` as CLI tool tokens. |
 
 ## Checklist Before Opening a PR
 

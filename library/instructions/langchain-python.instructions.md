@@ -1,9 +1,11 @@
 ---
-applyTo: '**/*.py'
-description: 'Instructions for using LangChain with Python'
+applyTo: "**/*.py"
+description: "Enforces LangChain Python conventions for Runnable composition, chat models, vector stores, prompts, tracing, testing, security, and privacy."
 ---
 
-# LangChain Python Instructions
+# LangChain Python Conventions — Runnable Applications
+
+These instructions apply to files matched by `**/*.py`. They are authoritative for langchain python code, configuration, examples, validation commands, API names, and runtime constraints in those files; stricter repository-specific security, deployment, testing, or platform primitives win on conflict. Treat the rules as passive conventions injected into matching files, not as a step-by-step workflow.
 
 These instructions guide GitHub Copilot in generating code and documentation for LangChain applications in Python. Focus on LangChain-specific patterns, APIs, and best practices.
 
@@ -135,8 +137,8 @@ LangChain offers a consistent interface for chat models with additional features
 
 Integrations are either:
 
-1. Official: packaged `langchain-<provider>` integrations maintained by the LangChain team or provider.
-2. Community: contributed integrations (in `langchain-community`).
+- Official: packaged `langchain-<provider>` integrations maintained by the LangChain team or provider.
+- Community: contributed integrations (in `langchain-community`).
 
 Chat models typically follow a naming convention with a `Chat` prefix (e.g., `ChatOpenAI`, `ChatAnthropic`, `ChatOllama`). Models without the `Chat` prefix (or with an `LLM` suffix) often implement the older string-in/string-out interface and are less preferred for modern chat workflows.
 
@@ -227,3 +229,54 @@ Models have a finite context window measured in tokens. When designing conversat
 - Validate any user-supplied URLs and inputs to avoid SSRF and injection attacks.
 - Document data retention and add an API to erase user data on request.
 - Limit stored PII and encrypt sensitive fields at rest.
+
+## Good / Bad Examples
+
+The examples below show the boundary between an acceptable convention and the closest common anti-pattern.
+
+**Good:**
+
+```python
+chain = prompt | chat_model | output_parser
+result = chain.invoke(input_data, config={"tags": ["rag"], "metadata": {"request_id": request_id}})
+```
+
+Why: The chain composes Runnables with LCEL and tracing metadata.
+
+**Bad:**
+
+```python
+result = chat_model.invoke(f"Answer with this context: {context} {question}")
+```
+
+Why: The prompt, model call, and business logic are collapsed into one string.
+
+## Conventions
+
+| Rule | Rationale |
+| --- | --- |
+| Compose chains with LCEL Runnables and `RunnableConfig`. | Composition preserves batching, streaming, tracing, and schemas. |
+| Use chat model integrations and explicit message types. | Consistent messages improve portability. |
+| Validate inputs, outputs, vectorstore documents, and structured responses. | LLM and retrieval outputs are untrusted. |
+
+## Do / Do Not
+
+| Do | Do not |
+| --- | --- |
+| Compose chains with LCEL Runnables and `RunnableConfig`. | Do not ignore this rule: Compose chains with LCEL Runnables and `RunnableConfig`. |
+| Use chat model integrations and explicit message types. | Do not ignore this rule: Use chat model integrations and explicit message types. |
+| Validate inputs, outputs, vectorstore documents, and structured responses. | Do not ignore this rule: Validate inputs, outputs, vectorstore documents, and structured responses. |
+
+## Checklist Before Opening a PR
+
+- [ ] The change stays inside the matched `applyTo` scope.
+- [ ] The authoritative conventions above are applied to new or modified code.
+- [ ] Named commands, paths, API names, configuration keys, and version constraints remain intact.
+- [ ] Relevant validation, linting, build, or test commands from this instruction pass.
+- [ ] No secrets, unsupported APIs, placeholder prompt references, or relative primitive links were added.
+
+## References
+
+- https://python.langchain.com/docs/integrations/vectorstores/
+
+##

@@ -1,9 +1,11 @@
 ---
-applyTo: '**/*.bicep, **/*.bicepparam'
-description: 'Azure Verified Modules (AVM) and Bicep'
+applyTo: "**/*.bicep,**/*.bicepparam"
+description: "Enforces Azure Verified Modules Bicep discovery, registry references, version pinning, symbolic names, parameters, security, builds, and PR readiness."
 ---
 
-# Azure Verified Modules (AVM) Bicep
+# Azure Verified Modules Bicep Conventions — Registry Modules and Builds
+
+These instructions apply to files matched by `**/*.bicep,**/*.bicepparam`. They are authoritative for azure verified modules bicep code, configuration, examples, validation commands, API names, and runtime constraints in those files; stricter repository-specific security, deployment, testing, or platform primitives win on conflict. Treat the rules as passive conventions injected into matching files, not as a step-by-step workflow.
 
 ## Overview
 
@@ -31,10 +33,10 @@ Azure Verified Modules (AVM) are pre-built, tested, and validated Bicep modules 
 
 ### From Examples
 
-1. Review module README in `https://github.com/Azure/bicep-registry-modules/tree/main/avm/res/{service}/{resource}`
-2. Copy example code from module documentation
-3. Reference module using `br/public:avm/res/{service}/{resource}:{version}`
-4. Configure required and optional parameters
+- Review module README in `https://github.com/Azure/bicep-registry-modules/tree/main/avm/res/{service}/{resource}`
+- Copy example code from module documentation
+- Reference module using `br/public:avm/res/{service}/{resource}:{version}`
+- Configure required and optional parameters
 
 ### Example Usage
 
@@ -167,20 +169,20 @@ az bicep build --file main.bicep
 
 When working with Bicep:
 
-1. Check for existing AVM modules before creating resources
-2. Use official module examples as starting points
-3. Run `az bicep build` after all changes
-4. Update accompanying `.bicepparam` files
-5. Document customizations or deviations from examples
+- Check for existing AVM modules before creating resources
+- Use official module examples as starting points
+- Run `az bicep build` after all changes
+- Update accompanying `.bicepparam` files
+- Document customizations or deviations from examples
 
 ## Troubleshooting
 
 ### Common Issues
 
-1. **Module Version**: Always specify exact version in module reference
-2. **Missing Dependencies**: Ensure resources are created before dependent modules
-3. **Validation Failures**: Run `az bicep build` to identify syntax/type errors
-4. **Parameter Files**: Ensure `.bicepparam` files are updated when parameters change
+- **Module Version**: Always specify exact version in module reference
+- **Missing Dependencies**: Ensure resources are created before dependent modules
+- **Validation Failures**: Run `az bicep build` to identify syntax/type errors
+- **Parameter Files**: Ensure `.bicepparam` files are updated when parameters change
 
 ### Support Resources
 
@@ -189,7 +191,7 @@ When working with Bicep:
 - **Bicep Documentation**: `https://learn.microsoft.com/azure/azure-resource-manager/bicep/`
 - **Best Practices**: `https://learn.microsoft.com/azure/azure-resource-manager/bicep/best-practices`
 
-## Compliance Checklist
+## AVM Submission Readiness
 
 Before submitting any Bicep code:
 
@@ -203,3 +205,65 @@ Before submitting any Bicep code:
 - [ ] Types imported/defined where appropriate
 - [ ] Comments added for complex logic
 - [ ] Follows lowerCamelCase naming convention
+
+## Good / Bad Examples
+
+The examples below show the boundary between an acceptable convention and the closest common anti-pattern.
+
+**Good:**
+
+```bicep
+module storageAccount 'br/public:avm/res/storage/storage-account:0.30.0' = {
+  name: 'storage-account-deployment'
+  scope: resourceGroup()
+  params: { name: storageAccountName, location: location }
+}
+```
+
+Why: The declaration uses a pinned AVM public registry module.
+
+**Bad:**
+
+```bicep
+resource storage 'Microsoft.Storage/storageAccounts@latest' = {
+  name: storageAccountName
+  location: location
+}
+```
+
+Why: The declaration bypasses AVM and floats the resource API version.
+
+## Conventions
+
+| Rule | Rationale |
+| --- | --- |
+| Prefer `br/public:avm/res/{service}/{resource}:{version}` and `br/public:avm/ptn/{pattern}:{version}` modules. | AVM modules encode Azure best practices. |
+| Pin every registry module to a semantic version such as `:0.30.0`. | Upgrades stay reviewable. |
+| Run `az bicep upgrade` when needed and `az bicep build --file main.bicep` after changes. | Build catches syntax and type failures. |
+
+## Do / Do Not
+
+| Do | Do not |
+| --- | --- |
+| Prefer `br/public:avm/res/{service}/{resource}:{version}` and `br/public:avm/ptn/{pattern}:{version}` modules. | Do not ignore this rule: Prefer `br/public:avm/res/{service}/{resource}:{version}` and `br/public:avm/ptn/{pattern}:{version}` modules. |
+| Pin every registry module to a semantic version such as `:0.30.0`. | Do not ignore this rule: Pin every registry module to a semantic version such as `:0.30.0`. |
+| Run `az bicep upgrade` when needed and `az bicep build --file main.bicep` after changes. | Do not ignore this rule: Run `az bicep upgrade` when needed and `az bicep build --file main.bicep` after changes. |
+
+## Checklist Before Opening a PR
+
+- [ ] The change stays inside the matched `applyTo` scope.
+- [ ] The authoritative conventions above are applied to new or modified code.
+- [ ] Named commands, paths, API names, configuration keys, and version constraints remain intact.
+- [ ] Relevant validation, linting, build, or test commands from this instruction pass.
+- [ ] No secrets, unsupported APIs, placeholder prompt references, or relative primitive links were added.
+
+## References
+
+- https://azure.github.io/Azure-Verified-Modules/
+- https://github.com/Azure/bicep-registry-modules
+- https://github.com/Azure/bicep-registry-modules/tree/main/avm/res
+- https://github.com/Azure/bicep-registry-modules/tree/main/avm/res/{service}/{resource}
+- https://learn.microsoft.com/azure/azure-resource-manager/bicep/
+- https://learn.microsoft.com/azure/azure-resource-manager/bicep/best-practices
+- https://raw.githubusercontent.com/Azure/Azure-Verified-Modules/refs/heads/main/docs/static/module-indexes/BicepPatternModules.csv
+- https://raw.githubusercontent.com/Azure/Azure-Verified-Modules/refs/heads/main/docs/static/module-indexes/BicepResourceModules.csv

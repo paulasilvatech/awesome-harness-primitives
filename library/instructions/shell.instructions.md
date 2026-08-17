@@ -1,132 +1,135 @@
 ---
-applyTo: '**/*.sh'
-description: 'Shell scripting best practices and conventions for bash, sh, zsh, and other shells'
+applyTo: "**/*.sh"
+description: "Enforces safe, readable shell scripting conventions for bash, sh, zsh, automation, parsers, cleanup, and static analysis."
 ---
 
-# Shell Scripting Guidelines
+# Shell Scripting Conventions — Safe Automation
 
-Instructions for writing clean, safe, and maintainable shell scripts for bash, sh, zsh, and other shells.
+These instructions apply to shell scripts matched by `**/*.sh`, including Bash, POSIX `sh`, zsh, and related automation scripts. They are authoritative for shell safety, structure, parsing, quoting, cleanup, and script readability; explicit project portability requirements or runtime constraints win when they require a narrower shell or a different command set.
 
-## General Principles
+## Safety and Failure Behavior
 
-- Generate code that is clean, simple, and concise
-- Ensure scripts are easily readable and understandable
-- Add comments where helpful for understanding how the script works
-- Generate concise and simple echo outputs to provide execution status
-- Avoid unnecessary echo output and excessive logging
-- Use shellcheck for static analysis when available
-- Assume scripts are for automation and testing rather than production systems unless specified otherwise
-- Prefer safe expansions: double-quote variable references (`"$var"`), use `${var}` for clarity, and avoid `eval`
-- Use modern Bash features (`[[ ]]`, `local`, arrays) when portability requirements allow; fall back to POSIX constructs only when needed
-- Choose reliable parsers for structured data instead of ad-hoc text processing
+- Enable `set -euo pipefail` in Bash scripts so errors, unset variables, and pipeline failures stop execution early.
+- Validate required parameters before execution and emit clear error messages with context to `stderr`.
+- Use `trap` for cleanup and unexpected exits; ensure temporary resources are removed when the script terminates.
+- Declare immutable values with `readonly` or `declare -r` after assignment to prevent accidental reassignment.
+- Double-quote variable references (`"$var"`) and use `${var}` where it improves clarity.
+- Avoid `eval`; do not construct commands from untrusted or partially validated strings.
 
-## Error Handling & Safety
+## Script Structure and Portability
 
-- Always enable `set -euo pipefail` to fail fast on errors, catch unset variables, and surface pipeline failures
-- Validate all required parameters before execution
-- Provide clear error messages with context
-- Use `trap` to clean up temporary resources or handle unexpected exits when the script terminates
-- Declare immutable values with `readonly` (or `declare -r`) to prevent accidental reassignment
-- Use `mktemp` to create temporary files or directories safely and ensure they are removed in your cleanup handler
+- Start with an explicit shebang such as `#!/bin/bash` unless the script must be POSIX `sh` or zsh.
+- Include a concise header comment explaining the script's purpose.
+- Define default values at the top, then functions, then argument parsing, then `main "$@"`.
+- Keep main execution flow small and readable by extracting reusable functions.
+- Use modern Bash features (`[[ ]]`, `local`, arrays) when Bash is the contract; fall back to POSIX constructs only when portability requires it.
+- Assume scripts are for automation and testing rather than production systems unless the repository states otherwise.
+- Generate concise status output; avoid excessive `echo` logging.
 
-## Script Structure
+## JSON, YAML, and Structured Data
 
-- Start with a clear shebang: `#!/bin/bash` unless specified otherwise
-- Include a header comment explaining the script's purpose
-- Define default values for all variables at the top
-- Use functions for reusable code blocks
-- Create reusable functions instead of repeating similar blocks of code
-- Keep the main execution flow clean and readable
+| Data shape | Preferred parser | Required handling |
+| --- | --- | --- |
+| JSON | `jq` | Quote filters, use `--raw-output` for plain strings, and treat parser errors as fatal |
+| YAML | `yq` or JSON converted through `yq` plus `jq` | Document the dependency and fail fast when missing |
+| Other structured formats | The most reliable parser available | Avoid ad hoc `grep`, `awk`, or shell splitting when structure matters |
 
-## Working with JSON and YAML
+Check required fields explicitly, handle missing paths with patterns such as `// empty`, and do not use parsed values until the parser command has succeeded.
 
-- Prefer dedicated parsers (`jq` for JSON, `yq` for YAML—or `jq` on JSON converted via `yq`) over ad-hoc text processing with `grep`, `awk`, or shell string splitting
-- When `jq`/`yq` are unavailable or not appropriate, choose the next most reliable parser available in your environment, and be explicit about how it should be used safely
-- Validate that required fields exist and handle missing/invalid data paths explicitly (e.g., by checking `jq` exit status or using `// empty`)
-- Quote jq/yq filters to prevent shell expansion and prefer `--raw-output` when you need plain strings
-- Treat parser errors as fatal: combine with `set -euo pipefail` or test command success before using results
-- Document parser dependencies at the top of the script and fail fast with a helpful message if `jq`/`yq` (or alternative tools) are required but not installed
+## Temporary Resources and Cleanup
+
+Use safe temporary directory creation and cleanup handlers in scripts. When this repository's execution environment forbids temporary directories, use a project-local scratch path instead; otherwise `mktemp` is the standard shell convention for avoiding name collisions.
 
 ```bash
 #!/bin/bash
-
-# ============================================================================
-# Script Description Here
-# ============================================================================
-
 set -euo pipefail
 
-cleanup() {
-    # Remove temporary resources or perform other teardown steps as needed
-    if [[ -n "${TEMP_DIR:-}" && -d "$TEMP_DIR" ]]; then
-        rm -rf "$TEMP_DIR"
-    fi
-}
-
-trap cleanup EXIT
-
-# Default values
 RESOURCE_GROUP=""
 REQUIRED_PARAM=""
 OPTIONAL_PARAM="default-value"
 readonly SCRIPT_NAME="$(basename "$0")"
-
 TEMP_DIR=""
 
-# Functions
-usage() {
-    echo "Usage: $SCRIPT_NAME [OPTIONS]"
-    echo "Options:"
-    echo "  -g, --resource-group   Resource group (required)"
-    echo "  -h, --help            Show this help"
-    exit 0
-}
-
-validate_requirements() {
-    if [[ -z "$RESOURCE_GROUP" ]]; then
-        echo "Error: Resource group is required"
-        exit 1
+cleanup() {
+    if [[ -n "${TEMP_DIR:-}" && -d "$TEMP_DIR" ]]; then
+        rm -rf "$TEMP_DIR"
     fi
 }
-
-main() {
-    validate_requirements
-
-    TEMP_DIR="$(mktemp -d)"
-    if [[ ! -d "$TEMP_DIR" ]]; then
-        echo "Error: failed to create temporary directory" >&2
-        exit 1
-    fi
-    
-    echo "============================================================================"
-    echo "Script Execution Started"
-    echo "============================================================================"
-    
-    # Main logic here
-    
-    echo "============================================================================"
-    echo "Script Execution Completed"
-    echo "============================================================================"
-}
-
-# Parse arguments
-while [[ $# -gt 0 ]]; do
-    case $1 in
-        -g|--resource-group)
-            RESOURCE_GROUP="$2"
-            shift 2
-            ;;
-        -h|--help)
-            usage
-            ;;
-        *)
-            echo "Unknown option: $1"
-            exit 1
-            ;;
-    esac
-done
-
-# Execute main function
-main "$@"
-
+trap cleanup EXIT
 ```
+
+The identifiers `_DIR`, `_GROUP`, `_NAME`, and `_PARAM` appear in common script variables such as `TEMP_DIR`, `RESOURCE_GROUP`, `SCRIPT_NAME`, and `REQUIRED_PARAM`; keep their intent visible when adapting examples.
+
+## Argument Parsing and Requirements
+
+- Provide a `usage()` function for supported options and `--help`.
+- Parse arguments with `while [[ $# -gt 0 ]]; do case $1 in ... esac done` in Bash scripts.
+- Shift option arguments deliberately and validate that an option requiring a value received one.
+- Fail with `exit 1` for invalid input and `exit 0` for help output.
+- Check command dependencies such as `jq`, `yq`, or cloud CLIs before relying on them.
+
+## Tooling and Static Analysis
+
+- Run `shellcheck` when available and address findings instead of suppressing them by default.
+- Prefer reliable parsers over brittle text pipelines; use `grep`, `awk`, and string splitting only when their input shape is intentionally plain text.
+- Keep comments focused on non-obvious control flow, safety choices, parser assumptions, and cleanup responsibilities.
+
+## Compatibility and Terminology
+
+Preserve shell terms from the original guidance: document `OPTIONS` in usage output, accept flags such as `-g` and `--resource-group`, keep helper names like `validate_requirements` meaningful, and use `double-quote` discipline for expansions. Avoid `ad-hoc` parsing, handle `missing/invalid` data paths explicitly, and document combined `jq/yq` parser dependencies when both tools are acceptable.
+
+## Good / Bad Examples
+
+The examples below illustrate safe argument validation and quoting.
+
+**Good:**
+
+```bash
+if [[ -z "${RESOURCE_GROUP:-}" ]]; then
+    echo "Error: resource group is required" >&2
+    exit 1
+fi
+az group show --name "$RESOURCE_GROUP" >/dev/null
+```
+
+Why: The script guards unset or empty input, reports context, quotes the value, and avoids command construction.
+
+**Bad:**
+
+```bash
+az group show --name $RESOURCE_GROUP
+```
+
+Why: The variable may be unset, word-split, or glob-expanded, and the script gives no actionable error.
+
+## Conventions
+
+| Rule | Rationale |
+| --- | --- |
+| Use `set -euo pipefail` for Bash automation | Failures surface at the line that caused them instead of corrupting later work |
+| Quote variables and avoid `eval` | Prevents word splitting, glob expansion, and command injection |
+| Keep defaults, functions, parsing, and `main` separated | Scripts remain readable and easy to test |
+| Use `trap` and safe temporary-resource handling | Cleanup runs even on failure or interruption |
+| Use `jq` and `yq` for structured data | Parsers preserve structure that text filters cannot safely infer |
+| Run `shellcheck` when available | Static analysis catches portability, quoting, and control-flow mistakes |
+
+## Do / Do Not
+
+| Do | Do not |
+| --- | --- |
+| Use `#!/bin/bash` when relying on Bash features | Use Bash arrays or `[[ ]]` under a POSIX `sh` shebang |
+| Validate `RESOURCE_GROUP`, `REQUIRED_PARAM`, and other inputs before use | Assume required arguments are present |
+| Write concise status messages | Flood automation logs with noisy `echo` output |
+| Use `readonly SCRIPT_NAME` and clear defaults | Scatter mutable globals throughout the script |
+| Quote `jq` and `yq` filters | Let the shell expand parser expressions |
+| Clean temporary resources in a `trap` | Leave scratch files or directories behind after failure |
+
+## Checklist Before Opening a PR
+
+- [ ] The shebang matches the shell features used by the script.
+- [ ] Required parameters are validated with clear errors.
+- [ ] Variables are quoted and no unsafe `eval` pattern is introduced.
+- [ ] Cleanup uses `trap` for temporary resources or documents why none are created.
+- [ ] Structured JSON or YAML uses `jq`, `yq`, or an explicit reliable parser.
+- [ ] Output is concise and useful for automation logs.
+- [ ] `shellcheck` findings are resolved or narrowly justified.

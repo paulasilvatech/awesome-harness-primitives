@@ -1,112 +1,89 @@
 ---
-applyTo: '**/azure-pipelines.yml, **/azure-pipelines*.yml, **/*.pipeline.yml'
-description: 'Best practices for Azure DevOps Pipeline YAML files'
+applyTo: '**/azure-pipelines.yml,**/azure-pipelines*.yml,**/*.pipeline.yml'
+description: 'Enforces Azure DevOps Pipeline YAML conventions for structure, triggers, variables, security, testing, deployments, templates, caching, and observability.'
 ---
 
-# Azure DevOps Pipeline YAML Best Practices
+# Azure DevOps Pipeline YAML Conventions — Reliable CI/CD
 
-## General Guidelines
+These instructions apply to Azure DevOps YAML pipeline definitions, templates, and related pipeline YAML files. They are authoritative for pipeline structure, naming, triggers, variables, security, build/test/deploy flow, templates, performance, and observability; organization-wide Azure DevOps governance, service connection policy, and repository build/test instructions win where they are stricter.
 
-- Use YAML syntax consistently with proper indentation (2 spaces)
-- Always include meaningful names and display names for pipelines, stages, jobs, and steps
-- Implement proper error handling and conditional execution
-- Use variables and parameters to make pipelines reusable and maintainable
-- Follow the principle of least privilege for service connections and permissions
-- Include comprehensive logging and diagnostics for troubleshooting
+## General Pipeline Design
 
-## Pipeline Structure
+- Use YAML syntax consistently with 2-space indentation.
+- Include meaningful names and display names for pipelines, stages, jobs, and steps.
+- Implement error handling and conditional execution deliberately.
+- Use variables and parameters for reusable, maintainable pipelines.
+- Follow least privilege for service connections and permissions.
+- Include comprehensive logging and diagnostics for troubleshooting.
+- Organize complex pipelines with stages for visualization and control.
+- Use jobs to group related steps and enable parallel execution where appropriate.
+- Declare dependencies between stages and jobs explicitly.
+- Keep pipeline files focused and modular; split large pipelines into templates or multiple files.
 
-- Organize complex pipelines using stages for better visualization and control
-- Use jobs to group related steps and enable parallel execution when possible
-- Implement proper dependencies between stages and jobs
-- Use templates for reusable pipeline components
-- Keep pipeline files focused and modular - split large pipelines into multiple files
+## Build, Test, and Artifacts
 
-## Build Best Practices
+| Concern | Convention |
+| --- | --- |
+| Agent consistency | Use specific agent pool versions and VM images. |
+| Caching | Cache dependencies such as npm, NuGet, and Maven to improve performance. |
+| Artifacts | Publish artifacts with meaningful names and retention policies. |
+| Versioning | Use build variables for version numbers and build metadata. |
+| Quality gates | Include linting, testing, and security scans. |
+| Reproducibility | Keep builds environment-independent and repeatable. |
+| Unit tests | Run unit tests as part of the build process. |
+| Test results | Publish standard formats such as JUnit and VSTest. |
+| Coverage | Include code coverage reporting and quality gates. |
+| Integration/E2E | Run integration and end-to-end tests in appropriate stages. |
+| Fail-fast | Fail fast on test failures for quick feedback. |
+| Test optimization | Use test impact analysis when available. |
 
-- Use specific agent pool versions and VM images for consistency
-- Cache dependencies (npm, NuGet, Maven, etc.) to improve build performance
-- Implement proper artifact management with meaningful names and retention policies
-- Use build variables for version numbers and build metadata
-- Include code quality gates (linting, testing, security scans)
-- Ensure builds are reproducible and environment-independent
+## Security, Variables, and Parameters
 
-## Testing Integration
+- Use Azure Key Vault for sensitive configuration and secrets.
+- Manage secrets with variable groups and mark sensitive variables as secrets.
+- Use service connections with minimal required permissions.
+- Enable dependency vulnerability and static analysis scans.
+- Add approval gates for production deployments.
+- Use managed identities when possible instead of service principals.
+- Use variable groups for shared configuration across pipelines.
+- Use runtime parameters for flexible execution.
+- Use conditional variables based on branches or environments.
+- Document variable purposes and expected values.
+- Use variable templates for complex variable logic.
+- Never hardcode sensitive values directly in YAML files.
 
-- Run unit tests as part of the build process
-- Publish test results in standard formats (JUnit, VSTest, etc.)
-- Include code coverage reporting and quality gates
-- Implement integration and end-to-end tests in appropriate stages
-- Use test impact analysis when available to optimize test execution
-- Fail fast on test failures to provide quick feedback
+## Deployment Strategy and Environments
 
-## Security Considerations
+Implement environment promotion such as dev → staging → production. Use deployment jobs with environment targeting, blue-green or canary strategies where appropriate, rollback mechanisms, health checks, and infrastructure as code with ARM, Bicep, or Terraform for consistent deployments. Keep configuration management explicit per environment, and protect production with approval gates and health validation.
 
-- Use Azure Key Vault for sensitive configuration and secrets
-- Implement proper secret management with variable groups
-- Use service connections with minimal required permissions
-- Enable security scans (dependency vulnerabilities, static analysis)
-- Implement approval gates for production deployments
-- Use managed identities when possible instead of service principals
+## Templates, Triggers, and Performance
 
-## Deployment Strategies
-
-- Implement proper environment promotion (dev → staging → production)
-- Use deployment jobs with proper environment targeting
-- Implement blue-green or canary deployment strategies when appropriate
-- Include rollback mechanisms and health checks
-- Use infrastructure as code (ARM, Bicep, Terraform) for consistent deployments
-- Implement proper configuration management per environment
-
-## Variable and Parameter Management
-
-- Use variable groups for shared configuration across pipelines
-- Implement runtime parameters for flexible pipeline execution
-- Use conditional variables based on branches or environments
-- Secure sensitive variables and mark them as secrets
-- Document variable purposes and expected values
-- Use variable templates for complex variable logic
-
-## Performance Optimization
-
-- Use parallel jobs and matrix strategies when appropriate
-- Implement proper caching strategies for dependencies and build outputs
-- Use shallow clone for Git operations when full history isn't needed
-- Optimize Docker image builds with multi-stage builds and layer caching
-- Monitor pipeline performance and optimize bottlenecks
-- Use pipeline resource triggers efficiently
+- Use templates for reusable pipeline components.
+- Create pipeline templates for common patterns.
+- Use `extends` templates for complete pipeline inheritance.
+- Use step templates for reusable task sequences.
+- Use variable templates for complex variable logic.
+- Version templates appropriately for stability.
+- Document template parameters and usage examples.
+- Implement appropriate triggers for different branch types.
+- Use path filters to trigger builds only when relevant files change.
+- Configure CI/CD triggers for main or master branches.
+- Use pull request triggers for code validation.
+- Use scheduled triggers for maintenance tasks.
+- Consider resource triggers for multi-repository scenarios.
+- Use parallel jobs and matrix strategies when appropriate.
+- Use shallow clone for Git operations when full history is unnecessary.
+- Optimize Docker image builds with multi-stage builds and layer caching.
+- Monitor pipeline performance and optimize bottlenecks.
+- Use pipeline resource triggers efficiently.
 
 ## Monitoring and Observability
 
-- Include comprehensive logging throughout the pipeline
-- Use Azure Monitor and Application Insights for deployment tracking
-- Implement proper notification strategies for failures and successes
-- Include deployment health checks and automated rollback triggers
-- Use pipeline analytics to identify improvement opportunities
-- Document pipeline behavior and troubleshooting steps
-
-## Template and Reusability
-
-- Create pipeline templates for common patterns
-- Use extends templates for complete pipeline inheritance
-- Implement step templates for reusable task sequences
-- Use variable templates for complex variable logic
-- Version templates appropriately for stability
-- Document template parameters and usage examples
-
-## Branch and Trigger Strategy
-
-- Implement appropriate triggers for different branch types
-- Use path filters to trigger builds only when relevant files change
-- Configure proper CI/CD triggers for main/master branches
-- Use pull request triggers for code validation
-- Implement scheduled triggers for maintenance tasks
-- Consider resource triggers for multi-repository scenarios
+Include comprehensive logging throughout the pipeline, use Azure Monitor and Application Insights for deployment tracking, implement notifications for failures and successes, include deployment health checks and automated rollback triggers, use pipeline analytics to identify improvement opportunities, and document pipeline behavior and troubleshooting steps.
 
 ## Example Structure
 
 ```yaml
-# azure-pipelines.yml
 trigger:
   branches:
     include:
@@ -135,13 +112,13 @@ stages:
             displayName: 'Use .NET SDK'
             inputs:
               version: '8.x'
-          
+
           - task: DotNetCoreCLI@2
             displayName: 'Restore dependencies'
             inputs:
               command: 'restore'
               projects: '**/*.csproj'
-          
+
           - task: DotNetCoreCLI@2
             displayName: 'Build application'
             inputs:
@@ -173,13 +150,70 @@ stages:
                     package: '$(Pipeline.Workspace)/drop/**/*.zip'
 ```
 
-## Common Anti-Patterns to Avoid
+## Anti-Patterns
 
-- Hardcoding sensitive values directly in YAML files
-- Using overly broad triggers that cause unnecessary builds
-- Mixing build and deployment logic in a single stage
-- Not implementing proper error handling and cleanup
-- Using deprecated task versions without upgrade plans
-- Creating monolithic pipelines that are difficult to maintain
-- Not using proper naming conventions for clarity
-- Ignoring pipeline security best practices
+Avoid hardcoding sensitive values in YAML, overly broad triggers, mixing build and deployment logic in a single stage, missing error handling or cleanup, deprecated task versions without upgrade plans, monolithic pipelines that are difficult to maintain, unclear naming conventions, and ignored pipeline security practices.
+
+## Good / Bad Examples
+
+The examples below illustrate secure variable handling.
+
+**Good:**
+
+```yaml
+variables:
+  - group: shared-variables
+```
+
+Why: Shared and secret values can be managed centrally and protected.
+
+**Bad:**
+
+```yaml
+variables:
+  sqlPassword: 'P@ssw0rd!'
+```
+
+Why: Hardcoded secrets in YAML leak through source control and logs.
+
+## Branch Vocabulary
+
+Treat `main/master` as the legacy branch shorthand for trigger guidance; prefer the repository's actual default branch when configuring CI/CD.
+
+
+## Conventions
+
+| Rule | Rationale |
+| --- | --- |
+| Use stages, jobs, dependencies, and display names consistently | Pipeline runs are readable and diagnosable |
+| Put shared logic in templates and parameters | Pipelines stay reusable without monolithic YAML |
+| Use specific VM images and cache dependencies | Builds remain reproducible and fast |
+| Publish tests, coverage, and artifacts in standard formats | Quality signals and release outputs remain visible |
+| Store secrets in Key Vault or secret variable groups | Sensitive data stays outside source control |
+| Use deployment jobs, environments, approvals, health checks, and rollback | Production releases are controlled and recoverable |
+| Use branch, path, PR, scheduled, and resource triggers intentionally | Pipelines run when useful without wasting capacity |
+| Add logging, notifications, Azure Monitor, Application Insights, and analytics | Failures and regressions become observable |
+
+## Do / Do Not
+
+| Do | Do not |
+| --- | --- |
+| Use 2-space YAML indentation | Mix indentation styles |
+| Name stages, jobs, and steps clearly | Leave generated or ambiguous labels |
+| Use variable groups, runtime parameters, and templates | Hardcode environment-specific values repeatedly |
+| Cache npm, NuGet, Maven, and Docker layers where appropriate | Reinstall every dependency from scratch unnecessarily |
+| Use service connections with least privilege | Reuse broad production permissions everywhere |
+| Split build, test, and deployment concerns | Hide deployment logic inside a generic build stage |
+| Version reusable templates | Change shared templates without stability control |
+
+## Checklist Before Opening a PR
+
+- [ ] YAML uses 2-space indentation and meaningful display names.
+- [ ] Stages, jobs, dependencies, and conditions model the intended build/test/deploy flow.
+- [ ] Variables, runtime parameters, variable groups, and templates avoid duplication and document expected values.
+- [ ] Secrets use Azure Key Vault, secret variables, or protected variable groups; no secrets are hardcoded.
+- [ ] Build steps use pinned agent images, caching, artifacts, version metadata, and quality gates.
+- [ ] Unit, integration, E2E, test results, and coverage publication are included where applicable.
+- [ ] Deployment jobs target environments with approvals, health checks, rollback, and IaC where needed.
+- [ ] Triggers, path filters, PR validation, schedules, and resource triggers are scoped deliberately.
+- [ ] Logging, notifications, Azure Monitor, Application Insights, and troubleshooting documentation are present where needed.

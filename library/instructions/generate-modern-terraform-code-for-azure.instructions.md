@@ -1,83 +1,136 @@
 ---
 applyTo: '**/*.tf'
-description: 'Conventions for modern Terraform code targeting Azure, including provider usage, modules, variables, outputs, state, and idempotency.'
+description: 'Conventions for modern Terraform code targeting Azure, including provider choice, modules, variables, outputs, state, idempotency, documentation, validation, and testing.'
 ---
 
-# Modern Terraform for Azure Conventions
+# Modern Terraform for Azure Conventions — Provider and Module Hygiene
 
-Always target the latest stable Terraform version and Azure providers. In code, specify the required Terraform and provider versions to enforce this. Keep provider versions updated to get new features and fixes.
+These instructions apply to Terraform files matched by the `applyTo` glob. They are authoritative for modern Azure Terraform layout, provider selection, variables, outputs, modules, state, idempotency, documentation, diagrams, validation, and test expectations; organization-specific infrastructure policy, security baselines, and deployment pipelines win where they define stricter provider, version, or resource rules.
 
-## 2. Organize Code Cleanly
-Structure Terraform configurations with logical file separation:
+## Versioning and Provider Selection
 
-- Use `main.tf` for resources
-- Use `variables.tf` for inputs
-- Use `outputs.tf` for outputs
-- Follow consistent naming conventions and formatting (`terraform fmt`)
+Always target stable Terraform and Azure provider releases that the project can support, and specify versions in code so the toolchain is reproducible. Prefer the `azurerm` provider for most Azure resources because it is stable and broad. Use `azapi` only for the latest Azure features or resources not yet supported in `azurerm`, and document that choice in a code comment. Both providers may be used together, but default to `azurerm` when in doubt.
 
-This makes the code easy to navigate and maintain.
+Avoid adding additional providers or external modules beyond project scope without confirmation. If a special provider such as `random` or `tls` is needed, explain why in a comment and keep the dependency narrow. Keep tool versions and documentation up-to-date.
 
-## 3. Encapsulate in Modules
+## File Layout and Formatting
 
-Use Terraform modules to group reusable infrastructure components. For any resource set that will be used in multiple contexts:
+Structure configurations by responsibility:
 
-- Create a module with its own variables/outputs
-- Reference it rather than duplicating code
-- This promotes reuse and consistency
+| File | Purpose |
+| --- | --- |
+| `main.tf` | Resources |
+| `variables.tf` | Inputs |
+| `outputs.tf` | Outputs |
+| `locals.tf` | Shared computed values when useful |
+| `terraform.tf` | `terraform {}` block, required Terraform version, and provider requirements |
 
-## 4. Leverage Variables and Outputs
+Run `terraform fmt` so formatting stays consistent. Keep names and layout predictable enough that future modules can be compared quickly.
 
-- **Parameterize** all configurable values using variables with types and descriptions
-- **Provide default values** where appropriate for optional variables
-- **Use outputs** to expose key resource attributes for other modules or user reference
-- **Mark sensitive values** accordingly to protect secrets
+## Modules, Variables, and Outputs
 
-## 5. Provider Selection (AzureRM vs AzAPI)
+- Encapsulate reusable infrastructure components in modules.
+- Create a module with its own variables and outputs for resource sets used in multiple contexts.
+- Reference modules instead of duplicating resource blocks.
+- Parameterize configurable values with variables.
+- Give every variable a type and description.
+- Provide defaults only for optional values.
+- Use outputs to expose key resource attributes required by callers or other modules.
+- Mark sensitive variables and outputs as `sensitive = true`; avoid outputting secrets where possible.
 
-- **Use `azurerm` provider** for most scenarios – it offers high stability and covers the majority of Azure services
-- **Use `azapi` provider** only for cases where you need:
-  - The very latest Azure features
-  - A resource not yet supported in `azurerm`
-- **Document the choice** in code comments
-- Both providers can be used together if needed, but prefer `azurerm` when in doubt
+## Idempotency and Drift
 
-## 6. Minimal Dependencies
+Write configurations that can be applied repeatedly with the same result. Avoid scripts that run on every apply, resources that conflict when created twice, and side effects outside Terraform state. Test idempotency by applying twice when safe; the second `terraform apply` should produce zero changes. Use lifecycle settings or conditional expressions only when they intentionally handle drift or externally managed changes.
+Treat any non-idempotent action as an exception that requires a documented reason.
 
-- **Do not introduce** additional providers or modules beyond the project's scope without confirmation
-- If a special provider (e.g., `random`, `tls`) or external module is needed:
-  - Add a comment to explain
-  - Ensure the user approves it
-- Keep the infrastructure stack lean and avoid unnecessary complexity
+## State Management
 
-## 7. Ensure Idempotency
+Use a remote backend, such as Azure Storage with state locking, for shared Terraform state. Never commit state files to source control. Treat state as Terraform-managed data, not a document to edit by hand. Remote state prevents team conflicts and reduces the risk of leaked infrastructure details.
 
-- Write configurations that can be applied repeatedly with the same outcome
-- **Avoid non-idempotent actions**:
-  - Scripts that run on every apply
-  - Resources that might conflict if created twice
-- **Test by doing multiple `terraform apply` runs** and ensure the second run results in zero changes
-- Use resource lifecycle settings or conditional expressions to handle drift or external changes gracefully
+## Documentation, Diagrams, and Automation
 
-## 8. State Management
+- Keep infrastructure documentation up to date.
+- Update `README.md` when variables, outputs, variables/outputs tables, usage instructions, or module behavior change.
+- Consider `terraform-docs` for automated variable and output documentation.
+- Update architecture diagrams after significant infrastructure changes.
+- Consider CI pipelines and pre-commit hooks for formatting, linting, validation, and plan checks.
 
-- **Use a remote backend** (like Azure Storage with state locking) to store Terraform state securely
-- Enable team collaboration
-- **Never commit state files** to source control
-- This prevents conflicts and keeps the infrastructure state consistent
+## Validation and Testing
 
-## 9. Document and Diagram
+Run `terraform validate` and review `terraform plan` before applying changes. Use automated checks where the project supports them. Prefer fast local validation before opening a PR, then rely on CI for broader environment checks.
 
-- **Maintain up-to-date documentation**
-- **Update README.md** with any new variables, outputs, or usage instructions whenever the code changes
-- Consider using tools like `terraform-docs` for automation
-- **Update architecture diagrams** to reflect infrastructure changes after each significant update
-- Well-documented code and diagrams ensure the whole team understands the infrastructure
+## Good / Bad Examples
 
-## 10. Validate and Test Changes
+The examples below illustrate provider intent and typed variables.
 
-- **Run `terraform validate`** and review the `terraform plan` output before applying changes
-- Catch errors or unintended modifications early
-- **Consider implementing automated checks**:
-  - CI pipeline
-  - Pre-commit hooks
-  - Enforce formatting, linting, and basic validation
+**Good:**
+
+```hcl
+terraform {
+  required_version = ">= 1.6.0"
+
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = "~> 3.0"
+    }
+  }
+}
+
+variable "location" {
+  type        = string
+  description = "Azure region for the resources."
+}
+```
+
+Why: Versions are explicit, the stable AzureRM provider is preferred, and the variable has a type and description.
+
+**Bad:**
+
+```hcl
+resource "azurerm_resource_group" "rg" {
+  name     = "example"
+  location = "eastus"
+}
+```
+
+Why: The configurable location is hardcoded and provider or Terraform version requirements are not shown.
+
+## Conventions
+
+| Rule | Rationale |
+|---|---|
+| Specify required Terraform and provider versions | Reproducible infrastructure avoids accidental upgrades |
+| Prefer `azurerm`; use `azapi` only for unsupported or latest Azure features and document the reason | Stable providers reduce maintenance risk while preserving access to new Azure APIs |
+| Split Terraform into `main.tf`, `variables.tf`, `outputs.tf`, `locals.tf`, and `terraform.tf` where applicable | Files remain navigable by responsibility |
+| Encapsulate reusable resource sets in modules with typed variables and useful outputs | Infrastructure stays reusable and consistent |
+| Keep provider and module dependencies minimal and justified | Lean stacks are easier to audit and maintain |
+| Ensure idempotency and verify a second `terraform apply` reports zero changes when safe | Repeated deployments must converge |
+| Use remote state such as Azure Storage with locking and never commit state files | Team collaboration remains safe and state does not leak |
+| Update `README.md`, diagrams, and generated docs such as `terraform-docs` output when behavior changes | Consumers understand variables, outputs, and architecture |
+| Run `terraform fmt`, `terraform validate`, and review `terraform plan` | Formatting, syntax, and unintended changes are caught early |
+
+## Do / Do Not
+
+| Do | Do not |
+|---|---|
+| Use `azurerm` for ordinary Azure resources | Reach for `azapi` without a feature-gap reason |
+| Add a comment for special providers such as `random` or `tls` | Add providers or modules outside scope without confirmation |
+| Parameterize configurable values | Hardcode environment-specific values into resources |
+| Mark secrets and secret-bearing outputs `sensitive = true` | Output secrets as ordinary values |
+| Store state in a remote backend with locking | Commit Terraform state files |
+| Use lifecycle settings for deliberate drift handling | Hide unmanaged drift without documenting intent |
+| Review `terraform plan` before apply | Apply changes without understanding planned modifications |
+
+## Checklist Before Opening a PR
+
+- [ ] Required Terraform and Azure provider versions are specified and stable.
+- [ ] `azurerm` is used by default, and any `azapi`, `random`, `tls`, or external provider/module use is justified.
+- [ ] Files are organized as `main.tf`, `variables.tf`, `outputs.tf`, `locals.tf`, and `terraform.tf` where applicable.
+- [ ] Variables are typed and described, optional defaults are deliberate, and outputs expose only needed attributes.
+- [ ] Sensitive values are marked `sensitive = true` and secrets are not output unnecessarily.
+- [ ] Modules replace duplicated reusable resource sets.
+- [ ] Configuration is idempotent and safe repeated applies converge.
+- [ ] Remote state with locking is used and no state file is committed.
+- [ ] `README.md`, `terraform-docs` output, and diagrams are updated when infrastructure behavior changes.
+- [ ] `terraform fmt`, `terraform validate`, and `terraform plan` have been run or are covered by CI.

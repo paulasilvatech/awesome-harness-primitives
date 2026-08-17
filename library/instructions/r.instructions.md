@@ -1,116 +1,133 @@
 ---
-applyTo: '**/*.R, **/*.r, **/*.Rmd, **/*.rmd, **/*.qmd'
-description: 'R language and document formats (R, Rmd, Quarto): coding standards and Copilot guidance for idiomatic, safe, and consistent code generation.'
+applyTo: "**/*.R,**/*.r,**/*.Rmd,**/*.rmd,**/*.qmd"
+description: "Enforces idiomatic R, R Markdown, and Quarto conventions for style, reproducibility, data wrangling, plotting, errors, security, Shiny, tooling, and tests."
 ---
 
-# R Programming Language Instructions
+# R Conventions — Reproducible Analysis Code
 
-## Purpose
+These instructions apply to R scripts, R Markdown, and Quarto files matched by the R globs. They are authoritative for R style, vectorization, paths, reproducibility, package qualification, data wrangling, plotting, errors, security, Shiny, documents, tooling, and Copilot suggestions; project-specific style, statistical methodology, security, and reproducibility policies win when stricter.
 
-Help GitHub Copilot generate idiomatic, safe, and maintainable R code across projects.
+## Core R Style and Reproducibility
 
-## Core Conventions
+- Match the project's existing style: tidyverse vs base R, `%>%` vs `|>`, and package qualification patterns.
+- Prefer clear vectorized code, small functions, and explicit returns over hidden side effects.
+- Use `lower_snake_case` for objects and files; avoid dots in names.
+- Qualify non-base calls in examples and snippets, such as `dplyr::mutate()` and `stringr::str_detect()`; use `library()` in project code only when that is the repository norm.
+- Never call `setwd()`; use project-relative paths such as `here::here()` and portable helpers from `fs`.
+- Use `withr::with_seed()` locally around stochastic operations instead of setting global seed state.
+- Validate user inputs with typed checks and allowlists.
+- Avoid `eval(parse())`, unvalidated shell calls, and unparameterized SQL.
 
-- **Match the project’s style.** If the file shows a preference (tidyverse vs. base R, `%>%` vs. `|>`), follow it.
-- **Prefer clear, vectorized code.** Keep functions small and avoid hidden side effects.
-- **Qualify non-base functions in examples/snippets**, e.g., `dplyr::mutate()`, `stringr::str_detect()`. In project code, using `library()` is acceptable when that’s the repo norm.
-- **Naming:** `lower_snake_case` for objects/files; avoid dots in names.
-- **Side effects:** Never call `setwd()`; prefer project-relative paths (e.g., `here::here()`).
-- **Reproducibility:** Set seeds locally around stochastic operations using `withr::with_seed()`.
-- **Validation:** Validate and constrain user inputs; use typed checks and allowlists where possible.
-- **Safety:** Avoid `eval(parse())`, unvalidated shell calls, and unparameterized SQL.
+## Pipes, Data Wrangling, and I/O
 
-### Pipe Operators
+| Concern | Convention |
+| --- | --- |
+| Native pipe | Prefer `|>` in R `>= 4.1.0` when no magrittr features are needed |
+| Magrittr pipe | Continue `%>%` when the project uses magrittr or needs `.`, `%T>%`, or `%$%` |
+| Consistency | Do not mix `|>` and `%>%` in the same script without a clear technical reason |
+| Data frames | Prefer tibbles in tidyverse-heavy files; use base `data.frame()` in base-style files |
+| Iteration | Use `purrr::map_*()` in tidyverse code; use `vapply()` or `Map()` in base-style code when clearer or type-stable |
+| Strings and dates | Use `stringr` and `lubridate` where present; otherwise use clear base helpers such as `nchar()`, `substr()`, and `as.Date()` with explicit formats |
+| I/O | Prefer explicit typed readers such as `readr::read_csv()` and make parsing assumptions explicit |
 
-- **Native pipe `|>` (R ≥ 4.1.0):** Prefer in R ≥ 4.1 (no extra dependency).
-- **Magrittr pipe `%>%`:** Continue using in projects already committed to magrittr or when you need features like `.`, `%T>%`, or `%$%`.
-- **Be consistent:** Don't mix `|>` and `%>%` within the same script unless there's a clear technical reason.
+## Performance and Tooling
 
-## Performance Considerations
+- For large datasets, consider `data.table` and benchmark with the real workload.
+- Use `dtplyr` when dplyr syntax should translate to data.table operations.
+- Profile before optimizing with `profvis::profvis()`.
+- Cache repeated expensive work with `memoise::memoise()` when inputs and invalidation are clear.
+- Prefer vectorized operations over loops; use loops only when they are clearer and not a bottleneck.
+- Format with `styler` using tidyverse style, two-space indents, and approximately 100-character lines.
+- Lint with `lintr` configured through `.lintr`; consider `precommit` hooks to run linting and formatting.
+- Document exported functions with roxygen2 tags such as `@param`, `@return`, and `@examples`.
+- Manage dependencies with `renv` and snapshot after adding packages.
 
-- **Large datasets:** consider `data.table`; benchmark with your workload.
-- **dplyr compatibility:** Use `dtplyr` to write dplyr syntax that translates to data.table operations automatically for performance gains.
-- **Profiling:** Use `profvis::profvis()` to identify performance bottlenecks in your code. Profile before optimizing.
-- **Caching:** Use `memoise::memoise()` to cache expensive function results. Particularly useful for repeated API calls or complex computations.
-- **Vectorization:** Prefer vectorized operations over loops. Use `purrr::map_*()` family or `apply()` family for remaining iteration needs.
+## Error Handling and Security
 
-## Tooling & Quality
+| Situation | Preferred pattern |
+| --- | --- |
+| Tidyverse condition | `rlang::abort()` or `rlang::warn()` |
+| Base condition | `stop()` or `warning()` |
+| Recoverable fallback | `purrr::possibly()` for a typed fallback value |
+| Capture result and error | `purrr::safely()` |
+| Fine-grained base control | `tryCatch()` |
+| Shell command | `processx::run()` or `sys::exec_wait()` with validated arguments |
+| SQL | Parameterized `DBI` queries |
+| User path | Normalize and sanitize with helpers such as `fs::path_sanitize()` and allowlists |
+| Credentials | Use `Sys.getenv()`, config outside VCS, or `keyring` |
 
-- **Formatting:** `styler` (tidyverse style), two-space indents, ~100-char lines.
-- **Linting:** `lintr` configured via `.lintr`.
-- **Pre-commit:** consider `precommit` hooks to lint/format automatically.
-- **Docs:** roxygen2 for exported functions (`@param`, `@return`, `@examples`).
-- **Tests:** prefer small, pure, composable functions that are easy to unit test.
-- **Dependencies:** manage with `renv`; snapshot after adding packages.
-- **Paths:** prefer `fs` and `here` for portability.
+Keep return structures consistent: use typed outputs for normal flows and structured lists only when error details are required.
 
-## Data Wrangling & I/O
+## Shiny, R Markdown, and Quarto
 
-- **Data frames:** prefer tibbles in tidyverse-heavy files; otherwise base `data.frame()` is fine.
-- **Iteration:** use `purrr` in tidyverse code. In base-style code, prefer type-stable, vectorized patterns such as `vapply()`
-   (for atomic outputs) or `Map()` (for elementwise operations) instead of explicit `for` loops when they improve clarity or performance.
-- **Strings & Dates:** use `stringr`/`lubridate` where already present; otherwise use clear base helpers (e.g., `nchar()`, `substr()`, `as.Date()` with explicit format).
-- **I/O:** prefer explicit, typed readers (e.g., `readr::read_csv()`); make parsing assumptions explicit.
+- Modularize Shiny UI and server logic for non-trivial apps.
+- Use `eventReactive()` and `observeEvent()` for explicit dependencies.
+- Validate Shiny inputs with `req()` and clear user-friendly messages.
+- Use database connection pooling with `pool`; avoid long-lived global objects.
+- Isolate expensive Shiny computations and use `reactiveVal()` or `reactiveValues()` for small state.
+- Keep R Markdown and Quarto chunks focused with explicit options such as `echo`, `message`, and `warning`.
+- Avoid global state in documents; use local helpers and `withr::with_seed()` for deterministic chunks.
 
-## Plotting
+## Copilot Suggestion Bias
 
-- Prefer `ggplot2` for publication-quality plots. Keep layers readable and label axes and units.
+When the current file uses tidyverse, suggest tidyverse-first patterns such as `dplyr::across()` instead of superseded verbs. When the file uses base R, suggest base idioms. Prefer small helper functions over long pipelines, type-stable code over implicit coercion, vectorized or tidy solutions over loops when idiomatic, and explain trade-offs when multiple approaches are equivalent.
 
-## Error Handling
+## R Idioms and Example Terms
 
-- In tidyverse contexts, use `rlang::abort()` / `rlang::warn()` for structured conditions; in base-only code, use `stop()` / `warning()`.
-- For recoverable operations:
-- Use `purrr::possibly()` when you want a typed fallback value of the same type (simpler).
-- Use `purrr::safely()` when you need to capture both results and errors for later inspection or logging.
-- Use `tryCatch()` in base R for fine-grained control or compatibility with non-tidyverse code.
-- Prefer consistent return structures—typed outputs for normal flows, structured lists only when error details are required.
+Preserve R terms from the original guidance: use `ggplot2` for `publication-quality` plots, use `apply()` family helpers where clear, and keep `purrr` patterns for tidyverse iteration. In `base-only` or `non-tidyverse` files, prefer base idioms. Sanitize `user-provided` paths, use `here` style project paths, run `lint/format` hooks where configured, and remember that `TRUE` is the R logical constant. Example documentation may include `safe_log`, `z_score`, `z-score`, and `z-scores`; examples/snippets** should qualify non-base calls. For `fine-grained` error handling, use `tryCatch()` when tidyverse condition helpers are not appropriate. Use `lower_snake_case` for `objects/files`.
 
-## Security Best Practices
+## Good / Bad Examples
 
-- **Command execution:** Prefer `processx::run()` or `sys::exec_wait()` over `system()`; validate and sanitize all arguments.
-- **Database queries:** Use parameterized `DBI` queries to prevent SQL injection.
-- **File paths:** Normalize and sanitize user-provided paths (e.g., `fs::path_sanitize()`), and validate against allowlists.
-- **Credentials:** Never hardcode secrets. Use env vars (`Sys.getenv()`), config outside VCS, or `keyring`.
+The examples below illustrate reproducible, qualified, type-stable transformation.
 
-## Shiny
-
-- Modularize UI and server logic for non-trivial apps. Use `eventReactive()` / `observeEvent()` for explicit dependencies.
-- Validate inputs with `req()` and clear, user-friendly messages.
-- Use connection pooling (`pool`) for databases; avoid long-lived global objects.
-- Isolate expensive computations and prefer `reactiveVal()` / `reactiveValues()` for small state.
-
-## R Markdown / Quarto
-
-- Keep chunks focused; prefer explicit chunk options (`echo`, `message`, `warning`).
-- Avoid global state; prefer local helpers. Use `withr::with_seed()` for deterministic chunks.
-
-## Copilot-Specific Guidance
-
-- If the current file uses tidyverse, **suggest tidyverse-first patterns** (e.g., `dplyr::across()` instead of superseded verbs). If base-R style is present, **use base idioms**.
-- Qualify non-base calls in suggestions (e.g., `dplyr::mutate()`).
-- Suggest vectorized or tidy solutions over loops when idiomatic.
-- Prefer small helper functions over long pipelines.
-- When multiple approaches are equivalent, prefer readability and type stability and explain the trade-offs.
-
----
-
-## Minimal Examples
+**Good:**
 
 ```r
-# Base R variant
-scores <- data.frame(id = 1:5, x = c(1, 3, 2, 5, 4))
-safe_log <- function(x) tryCatch(log(x), error = function(e) NA_real_)
-scores$z <- vapply(scores$x, safe_log, numeric(1))
-
-# Tidyverse variant (if this file uses tidyverse)
 result <- tibble::tibble(id = 1:5, x = c(1, 3, 2, 5, 4)) |>
-dplyr::mutate(z = purrr::map_dbl(x, purrr::possibly(log, otherwise = NA_real_))) |>
-dplyr::filter(z > 0)
-
-# Example reusable helper with roxygen2 doc
-#' Compute the z-score of a numeric vector
-#' @param x A numeric vector
-#' @return Numeric vector of z-scores
-#' @examples z_score(c(1, 2, 3))
-z_score <- function(x) (x - mean(x, na.rm = TRUE)) / stats::sd(x, na.rm = TRUE)
+  dplyr::mutate(z = purrr::map_dbl(x, purrr::possibly(log, otherwise = NA_real_))) |>
+  dplyr::filter(z > 0)
 ```
+
+Why: The code qualifies non-base functions, uses the native pipe consistently, and returns a typed numeric vector.
+
+**Bad:**
+
+```r
+setwd('/analysis')
+result <- eval(parse(text = user_input))
+```
+
+Why: The code changes global state and evaluates untrusted text.
+
+## Conventions
+
+| Rule | Rationale |
+| --- | --- |
+| Match tidyverse or base style already present in the file | Mixed idioms make R code harder to maintain |
+| Use project-relative paths and local seeds | Analyses remain reproducible across machines and documents |
+| Qualify non-base functions in examples | Suggestions remain clear without assuming attached packages |
+| Prefer vectorized, type-stable functions | R failures often come from implicit coercion and shape changes |
+| Use structured error handling and parameterized external calls | Failures stay inspectable and secure |
+| Use `styler`, `lintr`, roxygen2, tests, and `renv` | Tooling keeps style, docs, quality, and dependencies reproducible |
+
+## Do / Do Not
+
+| Do | Do not |
+| --- | --- |
+| Use `here::here()` and `fs` helpers | Call `setwd()` in scripts or chunks |
+| Use `withr::with_seed()` around randomness | Set global seed state unnecessarily |
+| Use `processx::run()` or `sys::exec_wait()` with validated args | Pass unvalidated input to `system()` |
+| Use parameterized `DBI` queries | Build SQL with string concatenation from user input |
+| Use `purrr::possibly()`, `purrr::safely()`, or `tryCatch()` deliberately | Return inconsistent ad hoc error shapes |
+| Use `reactiveVal()`, `reactiveValues()`, and `pool` appropriately in Shiny | Store long-lived global mutable objects in Shiny apps |
+
+## Checklist Before Opening a PR
+
+- [ ] R code matches the file's tidyverse or base style and uses one pipe style consistently.
+- [ ] Object and file names use `lower_snake_case` and avoid dot-style names.
+- [ ] Paths are project-relative; no `setwd()` is introduced.
+- [ ] Random operations use local seeding with `withr::with_seed()` where determinism matters.
+- [ ] Inputs, shell arguments, SQL parameters, file paths, and credentials follow the security rules.
+- [ ] Data wrangling, I/O, plotting, Shiny, and document chunks are explicit and reproducible.
+- [ ] Exported functions have roxygen2 docs and tests where behavior changed.
+- [ ] Formatting, linting, and dependency snapshots follow `styler`, `lintr`, `precommit`, and `renv` where configured.

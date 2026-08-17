@@ -1,189 +1,130 @@
 ---
 applyTo: '**/*.{ts,tsx,js,jsx,json,xml,css,html}'
-description: 'PCF community resources including gallery, videos, blogs, and development tools'
+description: 'Guides Power Apps Component Framework work toward PCF community resources, gallery discovery, videos, blogs, tools, contribution practices, and support channels.'
 ---
 
-# PCF Community Resources
+# PCF Community Resource Conventions — Discovery and Contribution
 
-The Power Apps Component Framework has a vibrant community that creates and shares resources, tools, and knowledge. This guide provides links to key community resources.
+These instructions apply to Power Apps Component Framework component code, manifests, styles, samples, and documentation. They are authoritative for using PCF community resources, PCF Gallery discovery, community videos, blogs, development tools, contribution hygiene, and support channels; official Microsoft Power Platform, project security, and repository-specific PCF engineering standards win for implementation details.
 
 ## PCF Gallery
 
-**[PCF Gallery](https://pcf.gallery)**
+Use PCF Gallery as the central hub for discovering, sharing, and learning from community Power Apps Component Framework components: https://pcf.gallery.
 
-The PCF Gallery is the central hub for discovering, sharing, and learning about PCF components.
+| Need | PCF Gallery convention |
+| --- | --- |
+| Discover components | Browse components by category and search for specific functionality. |
+| Evaluate reuse | Review demonstrations, screenshots, source code links, installation instructions, component ratings, and reviews. |
+| Learn patterns | Study real-world component implementations before designing similar controls. |
+| Share work | Submit your own component with clear source code, screenshots, demos, and installation guidance. |
+| Avoid duplication | Check the gallery before building a component that may already exist. |
 
-**What You'll Find:**
-- Community-created components
-- Component demonstrations and screenshots
-- Source code links
-- Installation instructions
-- Component ratings and reviews
-- Search and filtering capabilities
+## Community Videos and Blogs
 
-**How to Use:**
-- Browse components by category
-- Search for specific functionality
-- Download components for your projects
-- Submit your own components to share with the community
-- Learn from real-world component implementations
+Use community education sources to clarify patterns before inventing local conventions.
 
-## Community Videos
+| Topic | Recommended community sources |
+| --- | --- |
+| Getting started | `Getting started with code components with OOB React and Fluent UI` by PowerfulDevs; `Getting Started With Power Apps Component Framework` by April Dunnam. |
+| Manifest structure | `Power Apps Component Framework Manifest File Explained` by April Dunnam. |
+| React and platform libraries | `Easier Development with React Controls and Platform Libraries` by Scott Durow; `Using React and the Fluent UI in Power Apps Component Framework` by Microsoft. |
+| Framework overview | `Understanding the Power Apps Component Framework` and `Deep Dive: Power Apps Component Framework API` by PowerfulDevs. |
+| Debugging | `How to Debug Power Apps Component Framework Components` by April Dunnam. |
+| Advanced scenarios | `Power Apps Component Framework: Datasets with React and Azure Maps` by Nishant Rana; `How to Upload and Display Images with Power Apps Component Framework` by April Dunnam. |
+| Styling and theming | `Using Fluent UI Components in Power Apps Component Framework` by Sancho Harker; `Power Apps Component Framework: Styling and Theming` by Microsoft. |
+| End-to-end learning | `Power Apps Component Framework End to End Series` by April Dunnam plus community channels and Microsoft's official documentation. |
 
-Learn from expert developers through these comprehensive video tutorials:
-
-### Getting Started
-- **Getting started with code components with OOB React and Fluent UI by PowerfulDevs** - Introduction to building components with React and Fluent UI
-- **Getting Started With Power Apps Component Framework by April Dunnam** - Beginner-friendly introduction to PCF
-
-### Deep Dives
-- **Power Apps Component Framework Manifest File Explained by April Dunnam** - Detailed explanation of the manifest structure
-- **Easier Development with React Controls and Platform Libraries by Scott Durow** - Using React and platform-provided libraries
-- **Understanding the Power Apps Component Framework by PowerfulDevs** - Comprehensive overview of the framework
-
-### Debugging & Development
-- **How to Debug Power Apps Component Framework Components by April Dunnam** - Debugging techniques and tools
-- **Using React and the Fluent UI in Power Apps Component Framework by Microsoft** - Official guidance on React/Fluent UI integration
-
-### Advanced Topics
-- **Power Apps Component Framework: Datasets with React and Azure Maps by Nishant Rana** - Working with datasets and external APIs
-- **How to Upload and Display Images with Power Apps Component Framework by April Dunnam** - Image handling in components
-- **Deep Dive: Power Apps Component Framework API by PowerfulDevs** - Comprehensive API exploration
-
-### Styling & Theming
-- **Using Fluent UI Components in Power Apps Component Framework by Sancho Harker** - Styling with Fluent UI
-- **Power Apps Component Framework: Styling and Theming by Microsoft** - Official theming guidance
-
-### Additional Resources
-- **Power Apps Component Framework End to End Series by April Dunnam** - Complete walkthrough series
-- More videos available through community channels and Microsoft's official documentation
-
-## Community Blogs
-
-Stay updated with these excellent community blogs:
-
-1. **Sancho Harker** - Advanced PCF techniques and best practices
-2. **Benedikt Bergmann** - Component architecture and patterns
-3. **Andrew Butenko** - PCF development tips and tools
-4. **Nishant Rana** - Integration scenarios and advanced features
-5. **OlivierFlying** - Performance optimization and debugging
-6. **Ramakrishnan Raman** - Real-world implementation examples
-7. **Temmy Wahyu Raharjo** - Component design patterns
-8. **Scott Durow** - Platform libraries and React components
-9. **Guido Preite** - Enterprise PCF development
-10. **Ulrikke Akerbæk** - Canvas apps and PCF integration
-
-**Topics Covered:**
-- Component development tutorials
-- Best practices and patterns
-- Performance optimization
-- Integration with external services
-- Troubleshooting common issues
-- New feature announcements
-- Real-world use cases
+Follow community blogs for component development tutorials, best practices and patterns, performance optimization, external service integration, troubleshooting, feature announcements, and real-world use cases. Useful authors include Sancho Harker, Benedikt Bergmann, Andrew Butenko, Nishant Rana, OlivierFlying, Ramakrishnan Raman, Temmy Wahyu Raharjo, Scott Durow, Guido Preite, and Ulrikke Akerbæk.
 
 ## Community Tools
 
-### PCF Builder for XrmToolBox
+| Tool | Use it for | Best fit |
+| --- | --- | --- |
+| PCF Builder for XrmToolBox | Visual manifest editor, boilerplate generation, resource management, property configuration UI, quick component scaffolding, component testing, and XrmToolBox ecosystem integration. | Rapid prototyping, learning PCF structure, quick component setup, and manifest validation. |
+| PCF Builder for VS Code | VS Code extension support, IntelliSense, code completion, command palette integration, manifest schema validation, code snippets, integrated terminal commands, and built-in debugging support. | Developers who prefer Visual Studio Code and a modern streamlined workflow. |
 
-**What It Does:**
-- Simplifies PCF component creation
-- Provides visual manifest editor
-- Generates boilerplate code
-- Streamlines component testing
+Use these tools to accelerate setup and validation, not to bypass code review, testing, or project standards.
 
-**Key Features:**
-- Visual manifest designer
-- Property configuration UI
-- Resource management
-- Quick component scaffolding
-- Integration with XrmToolBox ecosystem
+## Community Engagement and Resource Selection
 
-**Best For:**
-- Rapid prototyping
-- Learning PCF structure
-- Quick component setup
-- Manifest validation
+- Contribute components to PCF Gallery, publish source code on GitHub, and write blog posts when implementations teach reusable patterns.
+- Learn from others by browsing PCF Gallery, watching community videos, and reading blogs before choosing an approach.
+- Get help through Microsoft Learn Q&A forums, Power Apps Community forums, GitHub repository issues and discussions, and Twitter/LinkedIn Power Platform community channels.
+- Stay updated by following community bloggers, subscribing to YouTube channels, joining Power Platform user groups, and attending community calls and events.
+- Use Microsoft Learn for official documentation and tutorials, Power Platform Community for forums, GitHub for source repositories and samples, Power CAT (Customer Advisory Team) for enterprise guidance and patterns, and user groups for local or virtual meetups.
 
-### PCF Builder for VS Code
+## Contribution Quality
 
-**What It Does:**
-- Integrates PCF development into Visual Studio Code
-- Provides IntelliSense and code completion
-- Simplifies workflow without leaving the editor
+When sharing PCF work, contribute components and knowledge back to the community, provide feedback, report issues, suggest improvements, answer questions, and help other developers. Include clear documentation, test across target platforms, follow established patterns and naming conventions, and ensure components work before sharing.
 
-**Key Features:**
-- VS Code extension
-- Command palette integration
-- Manifest schema validation
-- Code snippets for common patterns
-- Integrated terminal commands
+To prepare a component for PCF Gallery, create a well-documented component, test across target platforms, prepare screenshots and demos, submit to `pcf.gallery`, include a source code link with GitHub recommended, and provide clear installation instructions.
 
-**Best For:**
-- Developers who prefer VS Code
-- Streamlined workflow
-- Modern development experience
-- Built-in debugging support
+## Resource Decision Rules
 
-## How to Engage with the Community
+| Situation | Preferred resource |
+| --- | --- |
+| Just starting | Watch April Dunnam's `Getting Started` video. |
+| Need an existing component | Browse PCF Gallery. |
+| Learning best practices | Read community blogs. |
+| Want quick setup | Use PCF Builder tools. |
+| Debugging issues | Watch debugging videos and read troubleshooting blogs. |
+| Advanced techniques | Follow Scott Durow and PowerfulDevs content. |
 
-### Contribute Components
-- Share your components on PCF Gallery
-- Publish source code on GitHub
-- Write blog posts about your implementation
+## Good / Bad Examples
 
-### Learn from Others
-- Browse PCF Gallery for inspiration
-- Watch community videos for tutorials
-- Read blogs for best practices and tips
+The examples below illustrate resource-driven component selection.
 
-### Get Help
-- Microsoft Learn Q&A forums
-- Power Apps Community forums
-- GitHub repository issues and discussions
-- Twitter/LinkedIn Power Platform community
+**Good:**
 
-### Stay Updated
-- Follow community bloggers
-- Subscribe to YouTube channels
-- Join Power Platform user groups
-- Attend community calls and events
+```text
+Before creating a dataset map control, review PCF Gallery and Nishant Rana's dataset and Azure Maps material, then document why a custom implementation is still needed.
+```
 
-## Community Best Practices
+Why: The approach checks community prior art and records the implementation rationale.
 
-1. **Share Your Work**: Contribute components and knowledge back to the community
-2. **Provide Feedback**: Report issues and suggest improvements
-3. **Document Well**: Include clear documentation with your components
-4. **Test Thoroughly**: Ensure components work across platforms before sharing
-5. **Follow Standards**: Use established patterns and naming conventions
-6. **Be Helpful**: Answer questions and help other developers
+**Bad:**
 
-## Additional Resources
+```text
+Build a custom map control from scratch without checking existing gallery components or community debugging guidance.
+```
 
-- **Microsoft Learn**: Official documentation and tutorials
-- **Power Platform Community**: Forums and discussion boards
-- **GitHub**: Source code repositories and samples
-- **Power CAT (Customer Advisory Team)**: Enterprise guidance and patterns
-- **User Groups**: Local and virtual meetups
+Why: The approach risks duplicated work and misses known PCF patterns.
 
-## Contributing to PCF Gallery
+## PCF Community Vocabulary
 
-To add your component to PCF Gallery:
+Use the community terms `React/Fluent` and `platform-provided` when discussing OOB React, Fluent UI, React controls, and platform-provided libraries.
 
-1. Create a well-documented component
-2. Test across target platforms
-3. Prepare screenshots and demos
-4. Submit to pcf.gallery
-5. Include source code link (GitHub recommended)
-6. Provide clear installation instructions
 
-## Finding the Right Resource
+## Conventions
 
-- **Just Starting?** → Watch April Dunnam's "Getting Started" video
-- **Need a Component?** → Browse PCF Gallery
-- **Learning Best Practices?** → Read community blogs
-- **Want Quick Setup?** → Use PCF Builder tools
-- **Debugging Issues?** → Watch debugging videos and read troubleshooting blogs
-- **Advanced Techniques?** → Follow Scott Durow and PowerfulDevs content
+| Rule | Rationale |
+| --- | --- |
+| Check PCF Gallery before building reusable controls | Existing components and implementations can prevent duplicated work |
+| Use community videos and blogs to learn concrete PCF patterns | Real-world examples expose manifest, debugging, styling, and API details |
+| Use PCF Builder for XrmToolBox or VS Code for scaffolding and validation | Tooling reduces setup mistakes while preserving reviewability |
+| Share components with source, screenshots, demos, and installation instructions | Community users need enough context to evaluate and install controls |
+| Test thoroughly across target platforms before sharing | Components must work reliably in the environments users will adopt |
+| Prefer official Microsoft Learn for authoritative platform behavior | Community guidance should not override official platform contracts |
 
-The PCF community is welcoming and eager to help. Don't hesitate to reach out, ask questions, and share your own experiences!
+## Do / Do Not
+
+| Do | Do not |
+| --- | --- |
+| Browse categories and search PCF Gallery for similar functionality | Assume no community component exists |
+| Use GitHub source links and reviews to evaluate quality | Download components without inspecting source or installation guidance |
+| Learn debugging from April Dunnam and community troubleshooting posts | Debug PCF issues without using known framework techniques |
+| Use established naming conventions and documented patterns | Share undocumented or untested components |
+| Ask for help in Microsoft Learn Q&A, Power Apps Community, or GitHub issues | Treat community support channels as a substitute for reproducible bug reports |
+
+## Checklist Before Opening a PR
+
+- [ ] PCF Gallery was checked for comparable components, demos, source links, and installation patterns.
+- [ ] Relevant community videos, blogs, or official Microsoft documentation informed any unfamiliar PCF pattern.
+- [ ] PCF Builder tooling was used where it improves manifest validation, scaffolding, or debugging.
+- [ ] New or changed components include clear documentation, screenshots or demos when applicable, and installation notes.
+- [ ] Components were tested across the target platforms before being shared or recommended.
+- [ ] Support or contribution guidance points to Microsoft Learn Q&A, Power Apps Community, GitHub issues/discussions, or Power Platform community channels as appropriate.
+
+## References
+
+- PCF Gallery: <https://pcf.gallery>

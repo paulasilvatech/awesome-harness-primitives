@@ -1,111 +1,138 @@
 ---
-applyTo: '**/*.{ts,tsx,js,json,xml,pcfproj,csproj}'
-description: 'Understanding code components structure and implementation'
+applyTo: "**/*.{ts,tsx,js,json,xml,pcfproj,csproj}"
+description: "Enforces Power Apps component framework code component conventions for manifests, TypeScript lifecycle methods, resources, outputs, state, cleanup, packaging, and solution reuse."
 ---
 
-# Code Components
+# PCF Code Component Conventions — Manifest, Lifecycle, and Resources
 
-Code components are a type of solution component that can be included in a solution file and imported into different environments. They can be added to both model-driven and canvas apps.
+These instructions apply to Power Apps component framework component files matched by the PCF TypeScript, XML, project, and resource globs. They are authoritative for code component structure, `ControlManifest.Input.xml`, lifecycle methods, resources, outputs, state, cleanup, and solution packaging; canvas-app, event, and theming instructions win for their narrower PCF concerns. Code components are solution components that can be imported into environments and used in model-driven and canvas apps, with identical definition and implementation but different configuration surfaces.
 
-## Three Core Elements
+## Component Shape and Manifest
 
-Code components consist of three elements:
+Code components consist of three core elements: manifest, component implementation, and resources.
 
-1. **Manifest**
-2. **Component implementation**
-3. **Resources**
+- Define metadata in `ControlManifest.Input.xml`.
+- Use the manifest to declare the component name, constructor, namespace, data kind, configurable properties, and required resource files.
+- Declare whether configured data is a `field` or a `dataset`.
+- Treat manifest properties as configuration columns whose runtime values are available to the component through `context.parameters.<property name from manifest>`.
+- Keep manifest metadata accurate so the application filters valid components for the current configuration context.
+- Preserve the relationship between the manifest namespace and constructor and the runtime object creation pattern `new <"namespace on manifest">.<"constructor on manifest">()`.
 
-> **Note**: The definition and implementation of code components using Power Apps component framework is the same for both model-driven and canvas apps. The only difference is the configuration part.
+## TypeScript Implementation Lifecycle
 
-## Manifest
+- Implement code components in TypeScript.
+- Use the Power Platform CLI to auto-generates or generate the initial `index.ts` stub with `pac pcf init`.
+- Implement the required lifecycle methods `init`, `updateView`, and `destroy`.
+- Implement `getOutputs` when the component writes values back to the host.
+- Keep `init(context, notifyOutputChanged, state, container)` focused on setup, initial context capture, event wiring, and DOM mounting.
+- Use `updateView(context)` to reflect app data changes in the component UI.
+- Call `notifyOutputChanged` when user interaction changes data that the host should retrieve asynchronously.
+- Return changed values from `getOutputs` for `field` components and other output-enabled properties.
+- Implement `destroy` to detach event handlers and release resources when the page closes.
 
-The manifest is the `ControlManifest.Input.xml` metadata file that defines a component. It is an XML document that describes:
+| Method | Requirement | Purpose |
+| --- | --- | --- |
+| `init` | Required | Called when the page loads and receives `context`, `notifyOutputChanged`, `state`, and `container`. |
+| `updateView` | Required | Called when app data changes and passes the new context object. |
+| `getOutputs` | Optional | Returns changed values after `notifyOutputChanged`. |
+| `destroy` | Required | Runs when the page closes and must remove cleanup code such as event handlers. |
 
-- The name of the component
-- The kind of data that can be configured, either a `field` or a `dataset`
-- Any properties that can be configured in the application when the component is added
-- A list of resource files that the component needs
+## Context, State, and Data Flow
 
-### Manifest Purpose
+- Read inputs through `context.parameters.<property name from manifest>`.
+- Use the framework APIs available on `context` instead of assuming host-specific globals.
+- Treat `container` as the HTML div element where the component appends or mounts UI.
+- Use `setControlState` only for component data that should be available during the next page load in the same session.
+- Remember that memory allocated by a code component is cleared when the user navigates away, except browser-retained references such as event handlers if `destroy` fails to remove them.
 
-When a user configures a code component, the data in the manifest file filters the available components so that only valid components for the context are available for configuration. The properties defined in the manifest file are rendered as configuration columns so that users can specify values. These property values are then available to the component at runtime.
+## Resources and Packaging
 
-More information: [Manifest schema reference](https://learn.microsoft.com/en-us/power-apps/developer/component-framework/manifest-schema-reference/)
+- Declare resources in the manifest `resources` node.
+- Include at least one `code` resource; the generated `index.ts` file is the usual code resource.
+- Declare additional CSS files, image web resources, and Resx web resources for localization when the component requires them.
+- Package and distribute code components through solutions so they can be imported into different environments.
 
-## Component Implementation
+## Good / Bad Examples
 
-Code components are implemented using TypeScript. Each code component must include an object that implements the methods described in the code component interface. The [Power Platform CLI](https://learn.microsoft.com/en-us/power-platform/developer/cli/introduction) auto-generates an `index.ts` file with stubbed implementations using the `pac pcf init` command.
+The examples below illustrate lifecycle and output discipline.
 
-### Required Methods
-
-The component object implements these lifecycle methods:
-
-- **init** (Required) - Called when the page loads
-- **updateView** (Required) - Called when app data changes
-- **getOutputs** (Optional) - Returns values when user changes data
-- **destroy** (Required) - Called when the page closes
-
-### Component Lifecycle
-
-#### Page Load
-
-When the page loads, the application creates an object using data from the manifest:
-
-```typescript
-var obj = new <"namespace on manifest">.<"constructor on manifest">();
-```
-
-Example:
-```typescript
-var controlObj = new SampleNameSpace.LinearInputComponent();
-```
-
-The page then initializes the component:
+**Good:**
 
 ```typescript
-controlObj.init(context, notifyOutputChanged, state, container);
+public init(context, notifyOutputChanged, state, container): void {
+  this.notifyOutputChanged = notifyOutputChanged;
+  this.container = container;
+  this.input = context.parameters.sampleProperty.raw ?? "";
+}
+
+public updateView(context): void {
+  this.input = context.parameters.sampleProperty.raw ?? "";
+  this.render();
+}
+
+public destroy(): void {
+  this.button?.removeEventListener("click", this.onClick);
+}
 ```
 
-**Init Parameters:**
+Why: The component reads through `context.parameters`, updates when context changes, and cleans up event handlers.
 
-| Parameter | Description |
-|-----------|-------------|
-| `context` | Contains all information about how the component is configured and all parameters. Access input properties via `context.parameters.<property name from manifest>`. Includes Power Apps component framework APIs. |
-| `notifyOutputChanged` | Alerts the framework whenever the component has new outputs ready to be retrieved asynchronously. |
-| `state` | Contains component data from the previous page load if explicitly stored using `setControlState` method. |
-| `container` | An HTML div element to which developers can append HTML elements for the UI. |
+**Bad:**
 
-#### User Changes Data
+```typescript
+public updateView(context): void {
+  document.body.appendChild(document.createElement("button"));
+}
+```
 
-When a user interacts with your component to change data, call the `notifyOutputChanged` method passed in the `init` method. The platform responds by calling the `getOutputs` method, which returns values with the changes made by the user. For a `field` component, this would typically be the new value.
+Why: The component ignores `container`, leaks DOM on every update, and has no cleanup path in `destroy`.
 
-#### App Changes Data
 
-If the platform changes the data, it calls the `updateView` method of the component and passes the new context object as a parameter. This method should be implemented to update the values displayed in the component.
+- Preserve sample namespace patterns such as `SampleNameSpace`, `LinearInputComponent`, and `SampleNameSpace.LinearInputComponent` when explaining manifest constructor mapping.
+## Conventions
 
-#### Page Close
+| Rule | Rationale |
+| --- | --- |
+| Keep manifest, implementation, and resources aligned | The platform discovers and configures components from manifest metadata |
+| Use `ControlManifest.Input.xml` to define `field`, `dataset`, properties, and resources | Runtime behavior depends on accurate manifest declarations |
+| Implement `init`, `updateView`, and `destroy`; add `getOutputs` for outputs | The framework lifecycle requires predictable setup, rendering, output, and cleanup |
+| Call `notifyOutputChanged` before expecting the host to call `getOutputs` | Output propagation is asynchronous and host-controlled |
+| Use `setControlState` only for same-session component state | State persistence stays intentional and bounded |
+| Remove event handlers in `destroy` | Browser-retained handlers can leak memory after page close |
+| Use solution packaging for distribution | Code components are solution components imported into environments |
 
-When a user navigates away from the page, the code component loses scope and all memory allocated for objects is cleared. However, some methods (like event handlers) may stay and consume memory based on browser implementation.
+## Do / Do Not
 
-**Best Practices:**
-- Implement the `setControlState` method to store information for the next time within the same session
-- Implement the `destroy` method to remove cleanup code such as event handlers when the page closes
+| Do | Do not |
+| --- | --- |
+| Generate stubs with `pac pcf init` and refine them | Invent lifecycle signatures that do not match the framework |
+| Read configuration from `context.parameters.<property name from manifest>` | Hardcode property values or depend on host globals |
+| Append UI into the provided `container` | Attach component UI arbitrarily to `document.body` |
+| Declare CSS, image web resources, and Resx web resources in the manifest | Load undeclared resources and hope packaging finds them |
+| Use `notifyOutputChanged` and `getOutputs` for user changes | Mutate host data without notifying the framework |
+| Clean up in `destroy` | Leave event handlers, timers, or subscriptions alive |
 
-## Resources
+## Checklist Before Opening a PR
 
-The resource node in the manifest file refers to the resources that the component requires to implement its visualization. Each code component must have a resource file to construct its visualization. The `index.ts` file generated by the tooling is a `code` resource. There must be at least 1 code resource.
+- [ ] `ControlManifest.Input.xml` declares component name, namespace, constructor, `field` or `dataset`, properties, and resources accurately.
+- [ ] TypeScript implementation includes `init`, `updateView`, `destroy`, and `getOutputs` when outputs are needed.
+- [ ] Runtime input reads use `context.parameters.<property name from manifest>`.
+- [ ] User changes call `notifyOutputChanged` before outputs are retrieved.
+- [ ] `setControlState` is used only for same-session state that genuinely needs persistence.
+- [ ] `destroy` removes event handlers and cleanup code.
+- [ ] Resources include at least one code resource and any CSS, image web resources, or Resx web resources required.
+- [ ] Packaging expectations for solution import and environment reuse are preserved.
 
-### Additional Resources
+## Related Primitives
 
-You can define additional resource files in the manifest:
+- `pcf-canvas-apps` instruction: use it for canvas app enablement, import, Studio safety, and maker configuration conventions.
+- `pcf-events` instruction: use it for custom event declaration and handling.
+- `pcf-fluent-modern-theming` instruction: use it for Fluent UI theming and platform library conventions.
 
-- CSS files
-- Image web resources
-- Resx web resources for localization
+## References
 
-More information: [resources element](https://learn.microsoft.com/en-us/power-apps/developer/component-framework/manifest-schema-reference/resources)
-
-## Related Resources
-
-- [Create and build a code component](https://learn.microsoft.com/en-us/power-apps/developer/component-framework/create-custom-controls-using-pcf)
-- [Learn how to package and distribute extensions using solutions](https://learn.microsoft.com/en-us/power-platform/alm/solution-concepts-alm)
+- Manifest schema reference: <https://learn.microsoft.com/en-us/power-apps/developer/component-framework/manifest-schema-reference/>
+- Resources element: <https://learn.microsoft.com/en-us/power-apps/developer/component-framework/manifest-schema-reference/resources>
+- Power Platform CLI: <https://learn.microsoft.com/en-us/power-platform/developer/cli/introduction>
+- Create and build a code component: <https://learn.microsoft.com/en-us/power-apps/developer/component-framework/create-custom-controls-using-pcf>
+- Package and distribute extensions using solutions: <https://learn.microsoft.com/en-us/power-platform/alm/solution-concepts-alm>

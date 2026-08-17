@@ -1,56 +1,38 @@
 ---
-applyTo: '**/*.drawio,**/*.drawio.svg,**/*.drawio.png'
-description: 'Use when creating, editing, or reviewing draw.io diagrams and mxGraph XML in .drawio, .drawio.svg, or .drawio.png files.'
+applyTo: "**/*.drawio,**/*.drawio.svg,**/*.drawio.png"
+description: "Enforces draw.io and mxGraph XML conventions for diagram structure, styles, layout, naming, validation, and rendering."
 ---
 
-# draw.io Diagram Standards
+# draw.io Diagram Conventions — mxGraph XML Quality
 
-> **Skill**: Load `.github/skills/draw-io/SKILL.md` for full workflow, XML recipes, and troubleshooting before generating or editing any `.drawio` file.
+These instructions apply to `.drawio`, `.drawio.svg`, and `.drawio.png` files containing draw.io mxGraph XML. They are authoritative for XML structure, semantic palette, diagram-type patterns, layout, naming, validation, and renderability; the `draw-io` skill owns detailed workflow recipes, troubleshooting, and helper scripts when a full diagram-generation task is required.
 
----
+## Diagram Planning and Type Selection
 
-## Required Workflow
+Identify the diagram type before writing XML: flowchart, architecture, sequence, ER, UML, network, or BPMN. Plan tiers, actors, entities, pages, containers, and connector direction before generating cells. Use an appropriate template or minimal skeleton from the `draw-io` skill when one exists, but keep the final XML self-contained and valid after installation.
 
-Follow these steps for every draw.io task:
+## mxGraph XML Structure
 
-1. **Identify** the diagram type (flowchart / architecture / sequence / ER / UML / network / BPMN)
-2. **Select** the matching template from `.github/skills/draw-io/templates/` and adapt it, or start from the minimal skeleton
-3. **Plan** the layout on paper before writing XML — define tiers, actors, or entities first
-4. **Generate** valid mxGraph XML following the rules below
-5. **Validate** using `python .github/skills/draw-io/scripts/validate-drawio.py <file>`
-6. **Confirm** the file renders by opening it in VS Code with the draw.io extension (`hediet.vscode-drawio`)
-
----
-
-## XML Structure Rules (Non-Negotiable)
+Every generated file uses an `mxfile` with one or more `diagram` elements. Set `modified` to the current ISO 8601 timestamp when generating a new file and keep a current draw.io version such as `26.0.0` when produced by the editor.
 
 ```xml
-<!-- Set modified to the current ISO 8601 timestamp when generating a new file -->
 <mxfile host="Electron" modified="" version="26.0.0">
   <diagram id="unique-id" name="Page Name">
-    <mxGraphModel ...>
+    <mxGraphModel>
       <root>
-        <mxCell id="0" />                          <!-- REQUIRED: always first -->
-        <mxCell id="1" parent="0" />               <!-- REQUIRED: always second -->
-        <!-- all other cells go here -->
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
       </root>
     </mxGraphModel>
   </diagram>
 </mxfile>
 ```
 
-- `id="0"` and `id="1"` **must** be present and must be the first two cells — no exceptions
-- Every cell `id` must be **unique** within the diagram
-- Every vertex (`vertex="1"`) must have a child `<mxGeometry x y width height as="geometry">`
-- Every edge (`edge="1"`) must have `source`/`target` pointing to existing vertex ids — **exception**: floating edges (sequence diagram lifelines) use `<mxPoint as="sourcePoint">` and `<mxPoint as="targetPoint">` inside `<mxGeometry>` instead of `source`/`target` attributes
-- Every cell except id=0 must have `parent` pointing to an existing id
-- Children of a container (swimlane) use **coordinates relative to their parent**, not the canvas
+`<mxCell id="0" />` and `<mxCell id="1" parent="0" />` must be the first two cells. Every cell `id` is unique within the diagram. Every vertex with `vertex="1"` has `<mxGeometry x="..." y="..." width="..." height="..." as="geometry" />`. Every edge with `edge="1"` has `source` and `target` pointing to existing vertex ids; floating sequence lifeline edges instead use `<mxPoint as="sourcePoint">` and `<mxPoint as="targetPoint">` inside `<mxGeometry>`. Every cell except id `0` has a valid `parent`. Children of swimlane containers use coordinates relative to the parent, not the canvas. Escape bare `&`, `<`, and `>` in attribute values.
 
----
+## Style and Semantic Palette
 
-## Mandatory Style Conventions
-
-### Semantic Color Palette — Use consistently across the project
+Use `whiteSpace=wrap;html=1;` on vertex shapes. Use `html=1` when labels contain HTML tags such as `<b>`, `<i>`, or `<br>`. Use `edgeStyle=orthogonalEdgeStyle;html=1;` for standard connectors.
 
 | Role | fillColor | strokeColor |
 |---|---|---|
@@ -61,84 +43,86 @@ Follow these steps for every draw.io task:
 | Neutral / Interface | `#f5f5f5` | `#666666` |
 | External / Partner | `#e1d5e7` | `#9673a6` |
 
-### Always include on vertex shapes
-
-```
-whiteSpace=wrap;html=1;
-```
-
-### Use `html=1` whenever a label contains HTML tags (`<b>`, `<i>`, `<br>`)
-
-### Standard connectors
-
-```
-edgeStyle=orthogonalEdgeStyle;html=1;
-```
-
----
-
-## Diagram-Type Quick Reference
+## Diagram-Type Patterns
 
 | Type | Container | Key shapes | Connector style |
 |---|---|---|---|
-| Flowchart | None | `ellipse` (start/end), `rounded=1` (process), `rhombus` (decision) | `orthogonalEdgeStyle` |
-| Architecture | `swimlane` per tier | `rounded=1` services, cloud/DB shapes | `orthogonalEdgeStyle` with labels |
-| Sequence | None | `mxgraph.uml.actor`, dashed lifeline edges | `endArrow=block` (sync), `endArrow=open;dashed=1` (return) |
+| Flowchart | None | `ellipse` start/end, `rounded=1` process, `rhombus` decision | `orthogonalEdgeStyle` |
+| Architecture | `swimlane` per tier | `rounded=1` services, cloud and DB shapes | `orthogonalEdgeStyle` with labels |
+| Sequence | None | `mxgraph.uml.actor`, dashed lifeline edges | `endArrow=block` sync, `endArrow=open;dashed=1` return |
 | ER Diagram | `shape=table;childLayout=tableLayout` | `shape=tableRow`, `shape=partialRectangle` | `entityRelationEdgeStyle;endArrow=ERmany;startArrow=ERone` |
-| UML Class | `swimlane` per class | text rows for attributes/methods | `endArrow=block;endFill=0` (inherit), `dashed=1` (realize) |
+| UML Class | `swimlane` per class | text rows for attributes and methods | `endArrow=block;endFill=0` inherit, `dashed=1` realize |
 
----
+## Layout, Files, and Validation
 
-## Layout Best Practices
+Align coordinates to a 10 px grid. Keep 40–60 px gaps between same-row shapes and 80–120 px gaps between tier rows. Use standard sizes of `120 × 60` px for process shapes and `200 × 100` px for decision diamonds. Default canvas is A4 landscape `1169 × 827` px. Keep pages under 40 cells; split larger diagrams into multiple pages. Add a title text cell to every page with `style="text;strokeColor=none;fillColor=none;fontSize=18;fontStyle=1;align=center;"`.
 
-- Align all coordinates to the **10 px grid** (values divisible by 10)
-- **Horizontal**: 40–60 px gap between same-row shapes
-- **Vertical**: 80–120 px gap between tier rows
-- Standard shape size: `120 × 60` px (process), `200 × 100` px (decision diamond)
-- Default canvas: A4 landscape `1169 × 827` px
-- Maximum **40 cells per page** — split into multiple pages for larger diagrams
-- Add a **title text cell** at top of every page:
-  ```
-  style="text;strokeColor=none;fillColor=none;fontSize=18;fontStyle=1;align=center;"
-  ```
+Use `.drawio` for version-controlled diagrams and `.drawio.svg` for diagrams embedded in Markdown. Name files in kebab-case, such as `order-flow.drawio` and `database-schema.drawio`. Store diagrams under `docs/` or `architecture/` near the code they explain. Use one `<diagram>` element per logical view within a multi-page `<mxfile>`.
 
----
+Validate with the draw.io validator provided by the `draw-io` skill and confirm rendering in VS Code with the draw.io extension `hediet.vscode-drawio`.
 
-## File and Naming Conventions
+## Technical Vocabulary
 
-- Extension: `.drawio` for version-controlled diagrams, `.drawio.svg` for files embedded in Markdown
-- Naming: `kebab-case` — e.g. `order-flow.drawio`, `database-schema.drawio`
-- Location: `docs/` or `architecture/` alongside the code they document
-- Multi-page: use one `<diagram>` element per logical view within the same `<mxfile>`
+Preserve these source terms when they apply to edits in this domain: `.github/skills/draw-io/SKILL.md` `.github/skills/draw-io/references/drawio-xml-schema.md` `.github/skills/draw-io/references/shape-libraries.md` `.github/skills/draw-io/references/style-reference.md` `.github/skills/draw-io/scripts/add-shape.py` `.github/skills/draw-io/scripts/validate-drawio.py` `.github/skills/draw-io/templates/` `<mxGeometry x y width height as="geometry">` `REQUIRED` `SKILL` `add-shape` `attributes/methods` `cloud/DB` `drawio-xml-schema` `edge="1"` `github/skills/draw-io/SKILL.md` `github/skills/draw-io/references/drawio-xml-schema.md` `github/skills/draw-io/references/shape-libraries.md` `github/skills/draw-io/references/style-reference.md` `github/skills/draw-io/scripts/add-shape.py` `github/skills/draw-io/scripts/validate-drawio.py` `github/skills/draw-io/templates/` `shape-libraries` `style-reference` `to-use` `validate-drawio`.
 
----
+## Good / Bad Examples
 
-## Validation Checklist (run before every commit)
+The examples below show required root cell ordering.
 
-- [ ] `<mxCell id="0" />` and `<mxCell id="1" parent="0" />` are the first two cells
-- [ ] All cell ids are unique within their diagram
-- [ ] All edge `source`/`target` ids resolve to existing vertices
-- [ ] All vertex cells have `<mxGeometry as="geometry">`
-- [ ] All cells (except id=0) have a valid `parent`
-- [ ] XML is well-formed — no unclosed tags, no bare `&`, `<`, `>` in attribute values
-- [ ] Semantic color palette used consistently
-- [ ] Title cell present on every page
+**Good:**
 
-```bash
-# Run automated validation
-python .github/skills/draw-io/scripts/validate-drawio.py <file.drawio>
+```xml
+<root>
+  <mxCell id="0" />
+  <mxCell id="1" parent="0" />
+  <mxCell id="start" value="Start" vertex="1" parent="1">
+    <mxGeometry x="40" y="40" width="120" height="60" as="geometry" />
+  </mxCell>
+</root>
 ```
 
----
+Why: Root cells are first, the vertex has geometry, and coordinates align to the grid.
 
-## Reference Files
+**Bad:**
 
-| File | Use For |
+```xml
+<root>
+  <mxCell id="start" value="Start" vertex="1" parent="1" />
+  <mxCell id="1" parent="0" />
+</root>
+```
+
+Why: The required root cells are missing or out of order and the vertex has no geometry.
+
+## Conventions
+
+| Rule | Rationale |
 |---|---|
-| `.github/skills/draw-io/SKILL.md` | Full agent workflow, recipes, troubleshooting |
-| `.github/skills/draw-io/references/drawio-xml-schema.md` | Complete mxCell attribute reference |
-| `.github/skills/draw-io/references/style-reference.md` | All style keys, shape names, edge types |
-| `.github/skills/draw-io/references/shape-libraries.md` | Shape library catalog with style strings |
-| `.github/skills/draw-io/templates/` | Ready-to-use `.drawio` templates per diagram type |
-| `.github/skills/draw-io/scripts/validate-drawio.py` | XML structure validator |
-| `.github/skills/draw-io/scripts/add-shape.py` | CLI: add a shape to an existing diagram |
+| Keep `id="0"` and `id="1"` as the first two cells | draw.io expects the root hierarchy in that order |
+| Give every vertex geometry and every edge resolvable endpoints or points | Diagrams cannot render or route correctly without geometry and references |
+| Use the semantic color palette consistently | Colors communicate meaning across diagrams |
+| Align to the 10 px grid and keep standard gaps | Layout remains readable and easy to edit |
+| Keep pages under 40 cells and split complex diagrams | Large pages become unreadable and hard to maintain |
+| Use kebab-case diagram filenames near related docs or architecture | Files remain discoverable and portable |
+| Validate XML and render in the editor before review | Structural validity does not guarantee visual correctness |
+
+## Do / Do Not
+
+| Do | Do not |
+|---|---|
+| Use `whiteSpace=wrap;html=1;` on vertex styles | Let long labels overflow shapes |
+| Use `edgeStyle=orthogonalEdgeStyle;html=1;` for standard connectors | Mix connector styles without semantic reason |
+| Use swimlane-relative coordinates for children | Position container children using canvas coordinates |
+| Use `mxPoint` source/target points for floating sequence lifelines | Add broken `source` or `target` ids to floating edges |
+| Use `.drawio.svg` for Markdown embeds | Embed editor-only `.drawio` files directly in Markdown |
+| Escape XML attribute special characters | Leave bare `&`, `<`, or `>` in labels |
+
+## Checklist Before Opening a PR
+
+- [ ] `<mxCell id="0" />` and `<mxCell id="1" parent="0" />` are the first two cells.
+- [ ] Cell ids are unique and every non-root cell has a valid `parent`.
+- [ ] Edge `source` and `target` ids resolve, or floating sequence edges use `mxPoint` geometry.
+- [ ] Every vertex has `<mxGeometry as="geometry">`.
+- [ ] XML is well-formed with escaped special characters.
+- [ ] Palette, shape styles, connector styles, 10 px grid, gaps, page size, title cell, and cell count limits are satisfied.
+- [ ] The diagram validates and renders in `hediet.vscode-drawio`.

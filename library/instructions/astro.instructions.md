@@ -1,35 +1,28 @@
 ---
-applyTo: '**/*.astro, **/*.ts, **/*.js, **/*.md, **/*.mdx'
-description: 'Astro 7 development standards and best practices for content-driven websites'
+applyTo: '**/*.astro,**/*.ts,**/*.js,**/*.md,**/*.mdx'
+description: 'Enforces Astro 7 conventions for content-driven websites, islands architecture, Content Layer API, TypeScript, routing, actions, sessions, performance, styling, SEO, and images.'
 ---
 
-# Astro Development Instructions
+# Astro Development Conventions — Content-Driven Islands
 
-Instructions for building high-quality Astro applications following the content-driven, server-first architecture with modern best practices.
+These instructions apply to Astro components, TypeScript, JavaScript, Markdown, and MDX in Astro 7.x projects. They are authoritative for server-first Astro architecture, Islands Architecture, Content Layer API, TypeScript integration, selective hydration, server islands, actions, sessions, API routes, styling, SEO, images, and data fetching; project-specific framework, accessibility, deployment, and security policies win when stricter.
 
-> [!NOTE]
-> Examples and APIs in this guide target Astro 7.x.
+## Architecture and Project Context
 
-## Project Context
-- Astro 7.x with Islands Architecture and the Content Layer API
-- TypeScript for type safety and better DX with auto-generated types
-- Content-driven websites (blogs, marketing, e-commerce, documentation)
-- Server-first rendering with selective client-side hydration
-- Support for multiple UI frameworks (React, Vue, Svelte, Solid, etc.)
-- Static site generation (SSG) by default with optional server-side rendering (SSR)
+Use Astro 7.x for content-driven websites such as blogs, marketing sites, e-commerce, and documentation. Default to server-first rendering and static site generation (SSG), add server-side rendering (SSR) only for dynamic requirements, and use multiple UI frameworks such as React, Vue, Svelte, or Solid only where interactivity requires them.
 
-## Development Standards
+- Embrace Islands Architecture: server-render by default and hydrate selectively.
+- Use Content Collections and the Content Layer API for type-safe Markdown and MDX.
+- Structure projects by feature or content type for scalability.
+- Use component-based architecture with clear separation of concerns.
+- Implement progressive enhancement.
+- Prefer Multi-Page App (MPA) patterns over Single-Page App (SPA) patterns.
+- Default to zero JavaScript and add interactivity only where needed.
 
-### Architecture
-- Embrace the Islands Architecture: server-render by default, hydrate selectively
-- Organize content with Content Collections for type-safe Markdown/MDX management
-- Structure projects by feature or content type for scalability
-- Use component-based architecture with clear separation of concerns
-- Implement progressive enhancement patterns
-- Follow Multi-Page App (MPA) approach over Single-Page App (SPA) patterns
+## TypeScript, Components, and Content Collections
 
-### TypeScript Integration
-- Extend Astro's base config in `tsconfig.json`:
+Extend Astro's base config in `tsconfig.json`, include generated types, and run `astro sync` after changing collections or config.
+
 ```json
 {
   "extends": "astro/tsconfigs/base",
@@ -37,25 +30,17 @@ Instructions for building high-quality Astro applications following the content-
   "exclude": ["dist"]
 }
 ```
-- Types are auto-generated in `.astro/types.d.ts`; run `astro sync` after changing collections or config
-- Define component props with TypeScript interfaces
-- Leverage auto-generated types for content collections and the Content Layer API
 
-### Component Design
-- Use `.astro` components for static, server-rendered content
-- Import framework components (React, Vue, Svelte) only when interactivity is needed
-- Follow Astro's component script structure: frontmatter at top, template below
-- Use meaningful component names following PascalCase convention
-- Keep components focused and composable
-- Implement proper prop validation and default values
-- Write valid, fully-closed HTML: the compiler errors on unclosed tags and does not auto-correct invalid nesting (e.g. block elements inside `<p>`)
+| Area | Convention |
+| --- | --- |
+| Types | Use TypeScript for props and content; generated types live in `.astro/types.d.ts`. |
+| Components | Use `.astro` components for static server-rendered content and import framework components only for interactivity. |
+| Structure | Keep frontmatter at the top and template below; use PascalCase component names. |
+| HTML | Write valid, fully closed HTML; the compiler errors on unclosed tags and does not auto-correct invalid nesting such as block elements inside `<p>`. |
+| Collections | Define collections in `src/content.config.ts` with `defineCollection`, `glob()`, `file()`, and schema validation. |
+| Zod | Import `z` from `astro/zod`, not `astro:content`; prefer top-level helpers such as `z.email()` and `z.url()`. |
+| Queries | Use type-safe `getCollection()` and `getEntry()`. |
 
-### Content Collections
-- Define collections in `src/content.config.ts` with the Content Layer API
-- Use built-in loaders: `glob()` for file-based content, `file()` for a single data file
-- Import `z` from `astro/zod` (not from `astro:content`) and prefer top-level Zod helpers such as `z.email()` and `z.url()`
-- Query content with type-safe `getCollection()` and `getEntry()`
-- Example collection definition:
 ```typescript
 import { defineCollection } from 'astro:content';
 import { z } from 'astro/zod';
@@ -73,44 +58,13 @@ const blog = defineCollection({
 export const collections = { blog };
 ```
 
-### View Transitions & Client-Side Routing
-- Enable with the `<ClientRouter />` component in your layout `<head>`
-- Import from `astro:transitions`: `import { ClientRouter } from 'astro:transitions'`
-- Provides SPA-like navigation without full page reloads
-- Customize transition animations with CSS and view-transition-name
-- Maintain state across page navigations with persistent islands
-- Use `transition:persist` directive to preserve component state
+## Routing, Transitions, Server Islands, Actions, and Sessions
 
-### Performance Optimization
-- Default to zero JavaScript - only add interactivity where needed
-- Use client directives strategically (`client:load`, `client:idle`, `client:visible`)
-- Implement lazy loading for images and components
-- Optimize static assets with Astro's built-in optimization
-- Leverage Content Layer API for faster content loading and builds
-- Minimize bundle size by avoiding unnecessary client-side JavaScript
+- Enable view transitions and client-side routing with `<ClientRouter />` in the layout `<head>` and `import { ClientRouter } from 'astro:transitions'`.
+- Customize animations with CSS and `view-transition-name`.
+- Preserve component state across navigations with persistent islands and `transition:persist`.
+- Use `server:defer` to render a server island on demand without blocking the rest of the page; provide fallback content with `slot="fallback"` and configure an SSR adapter for on-demand rendering.
 
-### Styling
-- Use scoped styles in `.astro` components by default
-- Implement CSS preprocessing (Sass, Less) when needed
-- Use CSS custom properties for theming and design systems
-- Follow mobile-first responsive design principles
-- Ensure accessibility with semantic HTML and proper ARIA attributes
-- Consider utility-first frameworks (Tailwind CSS) for rapid development
-- Astro strips whitespace using JSX rules by default (`compressHTML: 'jsx'`); add an explicit `{" "}` between inline elements when a visible space is required
-
-### Client-Side Interactivity
-- Use framework components (React, Vue, Svelte) for interactive elements
-- Choose the right hydration strategy based on user interaction patterns
-- Implement state management within framework boundaries
-- Handle client-side routing carefully to maintain MPA benefits
-- Use Web Components for framework-agnostic interactivity
-- Share state between islands using stores or custom events
-
-### Server Islands
-- Use `server:defer` to render a server island on demand without blocking the rest of the page
-- Provide fallback content for the loading state via a `slot="fallback"`
-- Requires an SSR adapter (on-demand rendering) to be configured
-- Example:
 ```astro
 ---
 import Avatar from '../components/Avatar.astro';
@@ -120,13 +74,11 @@ import Avatar from '../components/Avatar.astro';
 </Avatar>
 ```
 
-### Actions
-- Define type-safe server functions in `src/actions/index.ts` and prefer them over ad-hoc API routes for mutations and form handling
-- Validate input with a Zod schema; set `accept: 'form'` to handle HTML form submissions
-- Call actions from the client via the `astro:actions` module and handle the `{ data, error }` result
-- Example:
+- Define type-safe server functions in `src/actions/index.ts`; prefer actions over ad-hoc API routes for mutations and form handling.
+- Validate action input with Zod and set `accept: 'form'` for HTML form submissions.
+- Call actions from the client via `astro:actions` and handle `{ data, error }`.
+
 ```typescript
-// src/actions/index.ts
 import { defineAction } from 'astro:actions';
 import { z } from 'astro/zod';
 
@@ -135,46 +87,96 @@ export const server = {
     accept: 'form',
     input: z.object({ email: z.email() }),
     handler: async ({ email }) => {
-      // persist the subscription
       return { success: true };
     },
   }),
 };
 ```
 
-### Sessions
-- Read and write server-side state with `Astro.session` (`get`, `set`) instead of overloading cookies
-- Requires an SSR adapter with session storage configured
-- Useful for carts, flash messages, and other per-visitor data that should not live on the client
+- Read and write server-side state with `Astro.session` (`get`, `set`) instead of overloading cookies; configure SSR session storage.
+- Use `Astro.session` for carts, flash messages, and other per-visitor data that should not live on the client.
+- Create API routes in `src/pages/api/` for dynamic functionality, use proper HTTP methods and status codes, validate requests, handle errors, secure environment variables, and use middleware for authentication or request processing.
 
-### API Routes and SSR
-- Create API routes in `src/pages/api/` for dynamic functionality
-- Use proper HTTP methods and status codes
-- Implement request validation and error handling
-- Enable SSR mode for dynamic content requirements
-- Use middleware for authentication and request processing
-- Handle environment variables securely
+## Performance, Styling, SEO, Images, and Data
 
-### SEO and Meta Management
-- Use Astro's built-in SEO components and meta tag management
-- Implement proper Open Graph and Twitter Card metadata
-- Generate sitemaps automatically for better search indexing
-- Use semantic HTML structure for better accessibility and SEO
-- Implement structured data (JSON-LD) for rich snippets
-- Optimize page titles and descriptions for search engines
+| Concern | Convention |
+| --- | --- |
+| Hydration | Use client directives strategically: `client:load`, `client:idle`, and `client:visible`. |
+| Assets | Optimize static assets with Astro's built-in optimization and lazy load images and components. |
+| Content performance | Leverage Content Layer API for faster content loading and builds. |
+| Bundle size | Minimize client-side JavaScript and avoid unnecessary framework imports. |
+| Styling | Use scoped styles by default, CSS custom properties for theming, Sass or Less only when needed, and mobile-first responsive design. |
+| Accessibility | Use semantic HTML and proper ARIA attributes. |
+| Whitespace | Astro strips whitespace using JSX rules by default (`compressHTML: 'jsx'`); add explicit `{" "}` between inline elements when visible space is required. |
+| Interactivity | Use framework components, Web Components, stores, or custom events for island state and client behavior. |
+| SEO | Manage page titles, descriptions, Open Graph, Twitter Card metadata, sitemaps, semantic structure, and JSON-LD structured data. |
+| Images | Use Astro's `<Image />` component, responsive `srcset`, WebP, AVIF, lazy loading, build-time optimization, and proper `alt` text. |
+| Data fetching | Fetch data at build time in frontmatter, use dynamic imports for conditional loading, cache expensive operations during builds, use Astro's built-in `fetch`, and provide loading states and fallbacks. |
 
-### Image Optimization
-- Use Astro's `<Image />` component for automatic optimization
-- Implement responsive images with proper srcset generation
-- Use WebP and AVIF formats for modern browsers
-- Lazy load images below the fold
-- Provide proper alt text for accessibility
-- Optimize images at build time for better performance
+## Good / Bad Examples
 
-### Data Fetching
-- Fetch data at build time in component frontmatter
-- Use dynamic imports for conditional data loading
-- Implement proper error handling for external API calls
-- Cache expensive operations during build process
-- Use Astro's built-in fetch with automatic TypeScript inference
-- Handle loading states and fallbacks appropriately
+The examples below illustrate selective hydration.
+
+**Good:**
+
+```astro
+---
+import StaticHero from '../components/StaticHero.astro';
+import SearchBox from '../components/SearchBox.tsx';
+---
+<StaticHero />
+<SearchBox client:idle />
+```
+
+Why: Static content stays server-rendered and only the interactive search island hydrates.
+
+**Bad:**
+
+```astro
+---
+import App from '../components/App.tsx';
+---
+<App client:load />
+```
+
+Why: Hydrating the whole page as a client app defeats Astro's server-first MPA model.
+
+## Astro Compatibility Vocabulary
+
+Preserve Astro terms `NOTE`, `Markdown/MDX`, `astro:transitions`, `auto-generated`, `file-based`, `framework-agnostic`, `fully-closed`, `high-quality`, and `utility-first`. The Zod import warning remains ` (not from ` `) and prefer top-level Zod helpers such as ` when maintaining migrated wording around `astro/zod` and `astro:content`.
+
+
+## Conventions
+
+| Rule | Rationale |
+| --- | --- |
+| Server-render by default and hydrate islands selectively | Astro performance depends on shipping little or no JavaScript by default |
+| Use Content Collections and the Content Layer API | Content becomes typed, validated, and faster to build |
+| Run `astro sync` after config or collection changes | Generated types in `.astro/types.d.ts` stay accurate |
+| Import `z` from `astro/zod` and loaders from `astro/loaders` | Astro 7 content schemas use the current APIs |
+| Use `ClientRouter`, `transition:persist`, `server:defer`, actions, and `Astro.session` only for their intended routing, island, mutation, and state needs | Advanced runtime features remain deliberate and maintainable |
+| Keep HTML valid and explicit about whitespace | Astro's compiler and JSX whitespace behavior are strict |
+| Use `<Image />`, semantic HTML, metadata, and structured data | Pages remain performant, accessible, and discoverable |
+
+## Do / Do Not
+
+| Do | Do not |
+| --- | --- |
+| Use `.astro` components for static content | Import a framework component when no interactivity exists |
+| Use `client:idle` or `client:visible` for non-critical islands | Hydrate everything with `client:load` by default |
+| Define mutations in `src/actions/index.ts` | Create ad-hoc API routes for simple form actions |
+| Use `Astro.session` for server-side visitor state | Overload cookies with application state |
+| Add `slot="fallback"` for `server:defer` islands | Leave deferred server content with no loading state |
+| Use `glob()` or `file()` loaders in `src/content.config.ts` | Query untyped Markdown manually |
+| Add explicit `{" "}` where inline whitespace must render | Assume JSX whitespace compression preserves every visual space |
+
+## Checklist Before Opening a PR
+
+- [ ] Astro code follows server-first Islands Architecture and avoids unnecessary client JavaScript.
+- [ ] TypeScript extends `astro/tsconfigs/base`, includes `.astro/types.d.ts`, and `astro sync` was run after collection or config changes.
+- [ ] Content collections use `src/content.config.ts`, `defineCollection`, `glob()` or `file()`, and `z` from `astro/zod`.
+- [ ] Components use focused `.astro` files or framework islands only when interactivity requires them.
+- [ ] View transitions, `ClientRouter`, `transition:persist`, `server:defer`, actions, and `Astro.session` are used only where their runtime behavior is needed.
+- [ ] API routes, middleware, environment variables, and SSR behavior are validated and secure.
+- [ ] Styling is scoped, responsive, accessible, and explicit about JSX whitespace where needed.
+- [ ] SEO metadata, sitemaps, Open Graph, Twitter Card, JSON-LD, and image optimization are correct for changed pages.

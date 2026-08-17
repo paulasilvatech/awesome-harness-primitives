@@ -1,9 +1,11 @@
 ---
-applyTo: '**/*.py'
-description: 'Complete module reference for the Python Dataverse SDK package hierarchy, configuration, models, and helpers.'
+applyTo: "**/*.py"
+description: "Enforces Python Dataverse SDK package, client, configuration, error, metadata, SQL, and file-operation conventions."
 ---
 
-# Dataverse SDK for Python — Complete Module Reference
+# Dataverse Python SDK Conventions — Module Usage
+
+These instructions apply to files matched by `**/*.py`. They are authoritative for dataverse python sdk code, configuration, examples, validation commands, API names, and runtime constraints in those files; stricter repository-specific security, deployment, testing, or platform primitives win on conflict. Treat the rules as passive conventions injected into matching files, not as a step-by-step workflow.
 
 ## Package Hierarchy
 
@@ -221,8 +223,67 @@ from PowerPlatform.Dataverse.core.errors import (
 )
 ```
 
-## References
+## SDK Documentation Sources
 
 - SDK overview: https://learn.microsoft.com/en-us/power-apps/developer/data-platform/sdk-python/overview
 - API reference: https://learn.microsoft.com/en-us/python/api/dataverse-sdk-docs-python/dataverse-overview?view=dataverse-sdk-python-latest
 - Client: https://learn.microsoft.com/en-us/python/api/powerplatform-dataverse-client/powerplatform.dataverse.client.dataverseclient?view=dataverse-sdk-python-latest
+
+## Good / Bad Examples
+
+The examples below show the boundary between an acceptable convention and the closest common anti-pattern.
+
+**Good:**
+
+```python
+try:
+    rows = client.query_sql("select name from account")
+except DataverseError as error:
+    details = error.to_dict()
+    raise RuntimeError(details["message"]) from error
+```
+
+Why: The call uses the high-level client surface and structured SDK errors.
+
+**Bad:**
+
+```python
+rows = client.get("account")
+print(rows)
+```
+
+Why: The call ignores structured errors and leaks behavior through printing.
+
+## Conventions
+
+| Rule | Rationale |
+| --- | --- |
+| Use `DataverseClient` as the high-level API. | The client wraps OData, metadata, SQL, and file behavior. |
+| Configure through immutable `DataverseConfig`. | Connection behavior stays explicit. |
+| Catch `DataverseError` subclasses. | SDK errors carry status and retry details. |
+
+## Do / Do Not
+
+| Do | Do not |
+| --- | --- |
+| Use `DataverseClient` as the high-level API. | Do not ignore this rule: Use `DataverseClient` as the high-level API. |
+| Configure through immutable `DataverseConfig`. | Do not ignore this rule: Configure through immutable `DataverseConfig`. |
+| Catch `DataverseError` subclasses. | Do not ignore this rule: Catch `DataverseError` subclasses. |
+
+## Checklist Before Opening a PR
+
+- [ ] The change stays inside the matched `applyTo` scope.
+- [ ] The authoritative conventions above are applied to new or modified code.
+- [ ] Named commands, paths, API names, configuration keys, and version constraints remain intact.
+- [ ] Relevant validation, linting, build, or test commands from this instruction pass.
+- [ ] No secrets, unsupported APIs, placeholder prompt references, or relative primitive links were added.
+
+## References
+
+- https://learn.microsoft.com/en-us/power-apps/developer/data-platform/sdk-python/overview
+-
+- https://learn.microsoft.com/en-us/python/api/dataverse-sdk-docs-python/dataverse-overview?view=dataverse-sdk-python-latest
+-
+- https://learn.microsoft.com/en-us/python/api/powerplatform-dataverse-client/powerplatform.dataverse.client.dataverseclient?view=dataverse-sdk-python-latest
+
+- https://org.crm.dynamics.com

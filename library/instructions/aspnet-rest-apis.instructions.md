@@ -1,110 +1,144 @@
 ---
-applyTo: '**/*.cs, **/*.json'
-description: 'Guidelines for building REST APIs with ASP.NET'
+applyTo: "**/*.cs,**/*.json"
+description: "Enforces ASP.NET Core REST API conventions for resource design, controllers, Minimal APIs, data access, authentication, validation, documentation, logging, testing, performance, and deployment."
 ---
 
-# ASP.NET REST API Development
+# ASP.NET REST API Conventions — Controllers, Minimal APIs, and Operations
 
-## Instruction
-- Guide users through building their first REST API using ASP.NET Core 10.
-- Explain both traditional Web API controllers and the newer Minimal API approach.
-- Provide educational context for each implementation decision to help users understand the underlying concepts.
-- Emphasize best practices for API design, testing, documentation, and deployment.
-- Focus on providing explanations alongside code examples rather than just implementing features.
+These instructions apply to C# and JSON files that define ASP.NET Core REST APIs. They are authoritative for REST resource design, controller-based APIs, Minimal APIs, data access boundaries, authentication and authorization, validation, error handling, documentation, observability, testing, performance, and deployment; broader C#, security, and hosting primitives win where they define stricter project-wide rules. Use ASP.NET Core 10 conventions when the target project is on that stack, and preserve educational explanations only in samples or learning-oriented code.
 
 ## API Design Fundamentals
 
-- Explain REST architectural principles and how they apply to ASP.NET Core APIs.
-- Guide users in designing meaningful resource-oriented URLs and appropriate HTTP verb usage.
-- Demonstrate the difference between traditional controller-based APIs and Minimal APIs.
-- Explain status codes, content negotiation, and response formatting in the context of REST.
-- Help users understand when to choose Controllers vs. Minimal APIs based on project requirements.
+- Design meaningful resource-oriented URLs and use HTTP verbs according to REST semantics.
+- Explain REST architectural principles when adding instructional samples, but keep production code focused on implementation.
+- Use status codes, content negotiation, and response formatting consistently.
+- Choose controller-based APIs when attributes, filters, or established controller conventions improve clarity.
+- Choose Minimal APIs when the endpoint set is small, route-group organization is clear, or reduced ceremony improves readability.
+- Keep both approaches consistent in authentication, validation, versioning, documentation, and error responses.
 
-## Project Setup and Structure
+## Project Structure and Configuration
 
-- Guide users through creating a new ASP.NET Core 10 Web API project with the appropriate templates.
-- Explain the purpose of each generated file and folder to build understanding of the project structure.
-- Demonstrate how to organize code using feature folders or domain-driven design principles.
-- Show proper separation of concerns with models, services, and data access layers.
-- Explain the Program.cs and configuration system in ASP.NET Core 10 including environment-specific settings.
+- Use appropriate ASP.NET Core 10 Web API templates for new samples or scaffolding.
+- Organize code with feature folders or domain-driven design principles where the project structure supports it.
+- Keep models, services, and data access layers separated.
+- Keep `Program.cs` understandable: routing, middleware, dependency injection, configuration, and environment-specific settings should be easy to review.
+- Explain generated files and folders only when the change is intentionally educational.
 
-## Building Controller-Based APIs
+## Controller-Based APIs
 
-- Guide the creation of RESTful controllers with proper resource naming and HTTP verb implementation.
-- Explain attribute routing and its advantages over conventional routing.
-- Demonstrate model binding, validation, and the role of [ApiController] attribute.
-- Show how dependency injection works within controllers.
-- Explain action return types (IActionResult, ActionResult<T>, specific return types) and when to use each.
+- Use RESTful controllers with resource names and HTTP verb attributes that match the operation.
+- Prefer attribute routing when endpoint shape matters.
+- Use `[ApiController]` so model binding, validation, and error behavior are explicit.
+- Use dependency injection for controllers instead of constructing services manually.
+- Select action return types intentionally: `IActionResult`, `ActionResult<T>`, or specific result types depending on the contract and readability.
 
-## Implementing Minimal APIs
+## Minimal APIs
 
-- Guide users through implementing the same endpoints using the Minimal API syntax.
-- Explain the endpoint routing system and how to organize route groups.
-- Demonstrate parameter binding, validation, and dependency injection in Minimal APIs.
-- Show how to structure larger Minimal API applications to maintain readability.
-- Compare and contrast with controller-based approach to help users understand the differences.
+- Use Minimal API syntax for endpoint sets where route handlers remain readable.
+- Organize larger Minimal API applications with route groups.
+- Use endpoint routing, parameter binding, validation, and dependency injection deliberately.
+- Keep route handlers thin; delegate business logic to services.
+- Compare with controller-based APIs only when the tradeoff affects maintainability or project consistency.
 
-## Data Access Patterns
+## Data Access, Authentication, and Authorization
 
-- Guide the implementation of a data access layer using Entity Framework Core.
-- Explain different options (SQL Server, SQLite, In-Memory) for development and production.
-- Demonstrate repository pattern implementation and when it's beneficial.
-- Show how to implement database migrations and data seeding.
-- Explain efficient query patterns to avoid common performance issues.
+- Use Entity Framework Core for data access when it matches the project stack.
+- Choose SQL Server, SQLite, or In-Memory storage deliberately for development and production scenarios.
+- Use the repository pattern only when it provides a real boundary or improves testability.
+- Apply migrations and data seeding through established EF Core mechanisms.
+- Use efficient query patterns to avoid unbounded reads, N+1 behavior, and unnecessary tracking.
+- Implement authentication using JWT tokens, OAuth 2.0, OpenID Connect, or Microsoft Entra ID as required.
+- Use role-based and policy-based authorization consistently across controllers and Minimal APIs.
 
-## Authentication and Authorization
+## Validation, Error Responses, and Documentation
 
-- Guide users through implementing authentication using JWT Bearer tokens.
-- Explain OAuth 2.0 and OpenID Connect concepts as they relate to ASP.NET Core.
-- Show how to implement role-based and policy-based authorization.
-- Demonstrate integration with Microsoft Entra ID (formerly Azure AD).
-- Explain how to secure both controller-based and Minimal APIs consistently.
+- Validate input with data annotations or FluentValidation.
+- Customize validation responses only when the API contract requires it.
+- Use global exception handling middleware for unexpected failures.
+- Return consistent standardized errors with Problem Details aligned to RFC 9457.
+- Version APIs intentionally and document versioning for controller-based and Minimal APIs.
+- Maintain Swagger/OpenAPI metadata for endpoints, parameters, responses, authentication, and consumer-facing documentation.
 
-## Validation and Error Handling
+## Logging, Monitoring, Performance, and Deployment
 
-- Guide the implementation of model validation using data annotations and FluentValidation.
-- Explain the validation pipeline and how to customize validation responses.
-- Demonstrate a global exception handling strategy using middleware.
-- Show how to create consistent error responses across the API.
-- Explain problem details (RFC 9457) implementation for standardized error responses.
-
-## API Versioning and Documentation
-
-- Guide users through implementing and explaining API versioning strategies.
-- Demonstrate Swagger/OpenAPI implementation with proper documentation.
-- Show how to document endpoints, parameters, responses, and authentication.
-- Explain versioning in both controller-based and Minimal APIs.
-- Guide users on creating meaningful API documentation that helps consumers.
-
-## Logging and Monitoring
-
-- Guide the implementation of structured logging using Serilog or other providers.
-- Explain the logging levels and when to use each.
-- Demonstrate integration with Application Insights for telemetry collection.
-- Show how to implement custom telemetry and correlation IDs for request tracking.
-- Explain how to monitor API performance, errors, and usage patterns.
+- Use structured logging with Serilog or configured providers.
+- Use Application Insights for telemetry collection when available.
+- Include custom telemetry and correlation IDs when request tracking or distributed diagnostics require them.
+- Monitor API performance, errors, and usage patterns.
+- Use asynchronous programming for I/O-bound work.
+- Apply caching strategies such as in-memory, distributed, and response caching when they match the data lifetime.
+- Use pagination, filtering, sorting, compression, and benchmarks for large data sets and performance-sensitive endpoints.
+- Containerize APIs with .NET's built-in container support where appropriate: `dotnet publish --os linux --arch x64 -p:PublishProfile=DefaultContainer`.
+- Keep CI/CD, Azure App Service, Azure Container Apps, health checks, readiness probes, and environment-specific deployment settings explicit.
 
 ## Testing REST APIs
 
-- Guide users through creating unit tests for controllers, Minimal API endpoints, and services.
-- Explain integration testing approaches for API endpoints.
-- Demonstrate how to mock dependencies for effective testing.
-- Show how to test authentication and authorization logic.
-- Explain test-driven development principles as applied to API development.
+- Unit test controllers, Minimal API endpoint logic, and services.
+- Use integration tests for endpoint routing, serialization, validation, authentication, and authorization.
+- Mock dependencies where doing so isolates behavior without hiding contract issues.
+- Apply test-driven development principles when the project workflow expects them.
 
-## Performance Optimization
+## Good / Bad Examples
 
-- Guide users on implementing caching strategies (in-memory, distributed, response caching).
-- Explain asynchronous programming patterns and why they matter for API performance.
-- Demonstrate pagination, filtering, and sorting for large data sets.
-- Show how to implement compression and other performance optimizations.
-- Explain how to measure and benchmark API performance.
+The examples below illustrate thin route handlers and standardized responses.
 
-## Deployment and DevOps
+**Good:**
 
-- Guide users through containerizing their API using .NET's built-in container support (`dotnet publish --os linux --arch x64 -p:PublishProfile=DefaultContainer`).
-- Explain the differences between manual Dockerfile creation and .NET's container publishing features.
-- Explain CI/CD pipelines for ASP.NET Core applications.
-- Demonstrate deployment to Azure App Service, Azure Container Apps, or other hosting options.
-- Show how to implement health checks and readiness probes.
-- Explain environment-specific configurations for different deployment stages.
+```csharp
+app.MapGet("/orders/{id:guid}", async (Guid id, IOrderService orders) =>
+{
+    var order = await orders.FindAsync(id);
+
+    return order is null ? Results.NotFound() : Results.Ok(order);
+});
+```
+
+Why: The Minimal API endpoint uses route constraints, DI, async service delegation, and explicit status outcomes.
+
+**Bad:**
+
+```csharp
+app.MapGet("/getOrder", () => db.Orders.ToList());
+```
+
+Why: The endpoint is not resource-oriented, hides data access inside the handler, and returns an unbounded data set.
+
+
+- Keep Deployment and DevOps concerns explicit for ASP.NET Core API delivery.
+## Conventions
+
+| Rule | Rationale |
+| --- | --- |
+| Design resource-oriented URLs with correct HTTP verbs and status codes | API consumers get predictable REST semantics |
+| Keep controllers and Minimal API handlers thin | Business logic stays testable in services |
+| Use `[ApiController]`, route groups, binding, validation, and DI intentionally | Framework behavior remains explicit and consistent |
+| Use EF Core, migrations, seeding, and efficient queries deliberately | Data access stays reliable and performant |
+| Secure both controller-based and Minimal APIs with JWT, OAuth 2.0, OpenID Connect, Microsoft Entra ID, roles, and policies as required | Authorization gaps should not depend on endpoint style |
+| Use FluentValidation or data annotations plus Problem Details under RFC 9457 | Input and error contracts stay standardized |
+| Maintain Swagger/OpenAPI and API versioning metadata | Consumers can discover and migrate API contracts |
+| Test units, integrations, authentication, and authorization paths | Critical API behavior is verified before deployment |
+
+## Do / Do Not
+
+| Do | Do not |
+| --- | --- |
+| Use resource nouns and HTTP verbs | Create action-style URLs such as `/getOrder` |
+| Use controllers or Minimal APIs based on project needs | Mix styles randomly without organization |
+| Delegate business logic to services | Put business rules directly in route handlers or controllers |
+| Return `ActionResult<T>`, `IActionResult`, or specific results intentionally | Return whatever shape happens to serialize |
+| Use Problem Details for standardized errors | Throw raw exceptions for expected validation failures |
+| Document authentication and responses in Swagger/OpenAPI | Leave secured endpoints undocumented |
+| Add pagination, filtering, and sorting for large data sets | Return unbounded collections from public endpoints |
+| Add health checks and readiness probes for deployed APIs | Deploy without operational checks |
+
+## Checklist Before Opening a PR
+
+- [ ] Endpoints use resource-oriented routes, appropriate HTTP verbs, status codes, content negotiation, and response formatting.
+- [ ] Controllers or Minimal APIs are chosen intentionally and organized consistently.
+- [ ] Models, services, and data access are separated and route handlers remain thin.
+- [ ] EF Core usage, migrations, seeding, and query patterns are efficient for the expected data size.
+- [ ] Authentication and authorization work consistently for controller-based and Minimal APIs.
+- [ ] Validation uses data annotations or FluentValidation and errors use Problem Details under RFC 9457.
+- [ ] Swagger/OpenAPI and API versioning metadata are accurate.
+- [ ] Unit and integration tests cover endpoint behavior, authentication, and authorization.
+- [ ] Performance features and deployment concerns such as caching, compression, health checks, readiness probes, and container publishing are addressed where relevant.

@@ -1,15 +1,17 @@
 ---
-applyTo: '**/*.terraform, **/*.tf, **/*.tfvars, **/*.tfstate, **/*.tflint.hcl, **/*.tf.json, **/*.tfvars.json'
-description: ' Azure Verified Modules (AVM) and Terraform'
+applyTo: "**/*.terraform,**/*.tf,**/*.tfvars,**/*.tfstate,**/*.tflint.hcl,**/*.tf.json,**/*.tfvars.json"
+description: "Enforces Azure Verified Modules Terraform discovery, source naming, version pinning, telemetry, validation, and PR readiness when authoring Terraform IaC."
 ---
 
-# Azure Verified Modules (AVM) Terraform
+# Azure Verified Modules Terraform Conventions — Registry Modules and PR Gates
+
+These instructions apply to files matched by `**/*.terraform,**/*.tf,**/*.tfvars,**/*.tfstate,**/*.tflint.hcl,**/*.tf.json,**/*.tfvars.json`. They are authoritative for azure verified modules terraform code, configuration, examples, validation commands, API names, and runtime constraints in those files; stricter repository-specific security, deployment, testing, or platform primitives win on conflict. Treat the rules as passive conventions injected into matching files, not as a step-by-step workflow.
 
 ## Overview
 
 Azure Verified Modules (AVM) are pre-built, tested, and validated Terraform and Bicep modules that follow Azure best practices. Use these modules to create, update, or review Azure Infrastructure as Code (IaC) with confidence.
 
-## Custom Instructions for GitHub Copilot Agents
+## AVM Validation Gates
 
 **IMPORTANT**: When GitHub Copilot Agent or GitHub Copilot Coding Agent is working on this repository, the following local unit tests MUST be executed to comply with PR checks. Failure to run these tests will cause PR validation failures:
 
@@ -45,17 +47,17 @@ More details on the AVM process can be found in the [Azure Verified Modules Cont
 
 ### From Examples
 
-1. Copy the example code from the module documentation
-2. Replace `source = "../../"` with `source = "Azure/avm-res-{service}-{resource}/azurerm"`
-3. Add `version = "~> 1.0"` (use latest available)
-4. Set `enable_telemetry = true`
+- Copy the example code from the module documentation
+- Replace `source = "../../"` with `source = "Azure/avm-res-{service}-{resource}/azurerm"`
+- Add `version = "~> 1.0"` (use latest available)
+- Set `enable_telemetry = true`
 
 ### From Scratch
 
-1. Copy the Provision Instructions from module documentation
-2. Configure required and optional inputs
-3. Pin the module version
-4. Enable telemetry
+- Copy the Provision Instructions from module documentation
+- Configure required and optional inputs
+- Pin the module version
+- Enable telemetry
 
 ### Example Usage
 
@@ -164,10 +166,10 @@ terraform validate
 
 When working with AVM repositories:
 
-1. Always check for existing modules before creating new resources
-2. Use the official examples as starting points
-3. Run all validation tests before committing
-4. Document any customizations or deviations from examples
+- Always check for existing modules before creating new resources
+- Use the official examples as starting points
+- Run all validation tests before committing
+- Document any customizations or deviations from examples
 
 ## Common Patterns
 
@@ -203,10 +205,10 @@ module "virtual_network" {
 
 ### Common Issues
 
-1. **Version Conflicts**: Always check compatibility between module and provider versions
-2. **Missing Dependencies**: Ensure all required resources are created first
-3. **Validation Failures**: Run AVM validation tools before committing
-4. **Documentation**: Always refer to the latest module documentation
+- **Version Conflicts**: Always check compatibility between module and provider versions
+- **Missing Dependencies**: Ensure all required resources are created first
+- **Validation Failures**: Run AVM validation tools before committing
+- **Documentation**: Always refer to the latest module documentation
 
 ### Support Resources
 
@@ -214,7 +216,7 @@ module "virtual_network" {
 - **GitHub Issues**: Report issues in the specific module's GitHub repository
 - **Community**: Azure Terraform Provider GitHub discussions
 
-## Compliance Checklist
+## AVM Submission Readiness
 
 Before submitting any AVM-related code:
 
@@ -227,3 +229,68 @@ Before submitting any AVM-related code:
 - [ ] AVM PR checks pass (`./avm pr-check`)
 - [ ] Documentation is updated
 - [ ] Examples are tested and working
+
+## Good / Bad Examples
+
+The examples below show the boundary between an acceptable convention and the closest common anti-pattern.
+
+**Good:**
+
+```hcl
+module "storage_account" {
+  source  = "Azure/avm-res-storage-storageaccount/azurerm"
+  version = "~> 0.1"
+  enable_telemetry = true
+}
+```
+
+Why: The module uses the AVM registry source, a pinned version, and telemetry.
+
+**Bad:**
+
+```hcl
+module "storage_account" {
+  source = "../../"
+}
+```
+
+Why: The module keeps a relative example source and omits AVM runtime expectations.
+
+## Conventions
+
+| Rule | Rationale |
+| --- | --- |
+| Prefer AVM Terraform modules before raw AzureRM resources and use `Azure/avm-res-{service}-{resource}/azurerm`, `Azure/avm-ptn-{pattern}/azurerm`, or `Azure/avm-utl-{utility}/azurerm` sources. | AVM modules carry tested Azure defaults and consistent interfaces. |
+| Pin module and provider versions with `version = "~> 1.0"` or exact production versions. | Pinned versions prevent unreviewed registry changes. |
+| Run `terraform fmt -recursive`, `terraform validate`, `./avm pre-commit`, `./avm tflint`, and `./avm pr-check`. | These gates match AVM PR validation. |
+
+## Do / Do Not
+
+| Do | Do not |
+| --- | --- |
+| Prefer AVM Terraform modules before raw AzureRM resources and use `Azure/avm-res-{service}-{resource}/azurerm`, `Azure/avm-ptn-{pattern}/azurerm`, or `Azure/avm-utl-{utility}/azurerm` sources. | Do not ignore this rule: Prefer AVM Terraform modules before raw AzureRM resources and use `Azure/avm-res-{service}-{resource}/azurerm`, `Azure/avm-ptn-{pattern}/azurerm`, or `Azure/avm-utl-{utility}/azurerm` sources. |
+| Pin module and provider versions with `version = "~> 1.0"` or exact production versions. | Do not ignore this rule: Pin module and provider versions with `version = "~> 1.0"` or exact production versions. |
+| Run `terraform fmt -recursive`, `terraform validate`, `./avm pre-commit`, `./avm tflint`, and `./avm pr-check`. | Do not ignore this rule: Run `terraform fmt -recursive`, `terraform validate`, `./avm pre-commit`, `./avm tflint`, and `./avm pr-check`. |
+
+## Checklist Before Opening a PR
+
+- [ ] The change stays inside the matched `applyTo` scope.
+- [ ] The authoritative conventions above are applied to new or modified code.
+- [ ] Named commands, paths, API names, configuration keys, and version constraints remain intact.
+- [ ] Relevant validation, linting, build, or test commands from this instruction pass.
+- [ ] No secrets, unsupported APIs, placeholder prompt references, or relative primitive links were added.
+
+## References
+
+- https://azure.github.io/Azure-Verified-Modules/
+- https://azure.github.io/Azure-Verified-Modules/contributing/terraform/contribution-flow/
+- https://github.com/Azure/terraform-azurerm-avm-ptn-aks-enterprise
+- https://github.com/Azure/terraform-azurerm-avm-res-storage-storageaccount
+- https://github.com/Azure/terraform-azurerm-avm-{type}-{service}-{resource}
+- https://raw.githubusercontent.com/Azure/Azure-Verified-Modules/refs/heads/main/docs/static/module-indexes/TerraformPatternModules.csv
+- https://raw.githubusercontent.com/Azure/Azure-Verified-Modules/refs/heads/main/docs/static/module-indexes/TerraformResourceModules.csv
+- https://raw.githubusercontent.com/Azure/Azure-Verified-Modules/refs/heads/main/docs/static/module-indexes/TerraformUtilityModules.csv
+- https://registry.terraform.io/modules/Azure/avm-res-storage-storageaccount/azurerm/latest
+- https://registry.terraform.io/modules/Azure/{module}/azurerm/latest
+- https://registry.terraform.io/v1/modules/Azure/avm-res-storage-storageaccount/azurerm/versions
+- https://registry.terraform.io/v1/modules/Azure/{module}/azurerm/versions

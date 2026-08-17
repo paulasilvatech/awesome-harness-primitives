@@ -1,53 +1,48 @@
 ---
-applyTo: '**/*.{ts,tsx,js,json,xml,pcfproj,csproj}'
-description: 'Style components with modern theming using Fluent UI'
+applyTo: "**/*.{ts,tsx,js,json,xml,pcfproj,csproj}"
+description: "Enforces Power Apps component framework modern theming conventions with Fluent UI React v9, v8 migration themes, non-Fluent token usage, and custom theme providers."
 ---
 
-# Style Components with Modern Theming (Preview)
+# PCF Fluent Modern Theming Conventions — Fluent UI and Theme Tokens
 
-[This topic is pre-release documentation and is subject to change.]
+These instructions apply to PCF component files that style components for model-driven or canvas apps using modern theming. They are authoritative for Fluent UI React v9 platform libraries, Fluent UI v8 migration themes, non-Fluent token consumption, custom `FluentProvider` usage, portal styling, and theming checks; general PCF lifecycle and canvas-app configuration instructions win for their narrower responsibilities. Treat this preview guidance as subject to change and verify against official documentation when platform behavior matters.
 
-Developers need to be able to style their components so they look like the rest of the application they're included in. They can do this when modern theming is in effect for either a canvas app (via the [Modern controls and themes](https://learn.microsoft.com/en-us/power-apps/maker/canvas-apps/controls/modern-controls/overview-modern-controls) feature) or model-driven app (through the [new refreshed look](https://learn.microsoft.com/en-us/power-apps/user/modern-fluent-design)).
+## Modern Theming Context
 
-Use modern theming, which is based on [Fluent UI React v9](https://react.fluentui.dev/), to style your component. This approach is recommended to get the best performance and theming experience for your component.
-
-## Four Ways to Apply Modern Theming
-
-1. **Fluent UI v9 controls**
-2. **Fluent UI v8 controls**
-3. **Non-Fluent UI controls**
-4. **Custom theme providers**
+- Style components so they look like the application that hosts them.
+- Use modern theming when it is active for canvas apps through Modern controls and themes or for model-driven apps through the new refreshed look.
+- Prefer modern theming based on Fluent UI React v9 for the best performance and theming experience.
+- Use the theme data supplied through `fluentDesignLanguage` and `context.fluentDesignLanguage` instead of hardcoded brand colors when the component should match the host.
 
 ## Fluent UI v9 Controls
 
-Wrapping Fluent UI v9 controls as a component is the easiest way to utilize modern theming because the modern theme is automatically applied to these controls. The only prerequisite is to ensure your component adds a dependency on the [React controls & platform libraries](https://learn.microsoft.com/en-us/power-apps/developer/component-framework/react-controls-platform-libraries).
+Wrapping Fluent UI v9 controls is the preferred path because modern theme tokens are automatically applied when the component depends on platform libraries.
 
-This approach allows your component to use the same React and Fluent libraries as the platform, and therefore share the same React context that passes the theme tokens down to the component.
+- Add a dependency on React controls and platform libraries when using Fluent UI v9 controls.
+- Use the same React and Fluent libraries as the platform so the component shares the React context that passes theme tokens down.
+- Keep the platform library declarations in the manifest resources.
 
 ```xml
 <resources>
-  <code path="index.ts" order="1"/>
-  <!-- Dependency on React controls & platform libraries -->
+  <code path="index.ts" order="1" />
   <platform-library name="React" version="16.14.0" />
   <platform-library name="Fluent" version="9.46.2" />
 </resources>
 ```
 
-## Fluent UI v8 Controls
+## Fluent UI v8, Non-Fluent Controls, and Custom Providers
 
-Fluent provides a migration path for applying v9 theme constructs when you use Fluent UI v8 controls in your component. Use the `createV8Theme` function included in the [Fluent's v8 to v9 migration package](https://www.npmjs.com/package/@fluentui/react-migration-v8-v9) to create a v8 theme based on v9 theme tokens:
+- For Fluent UI v8 controls, use `createV8Theme` from `@fluentui/react-migration-v8-v9` to create a v8 theme from v9 theme tokens.
+- Pass `context.fluentDesignLanguage.brand` and `context.fluentDesignLanguage.theme` into `createV8Theme`.
+- For non-Fluent UI controls, read theme tokens directly from `context.fluentDesignLanguage.theme`, such as `fontSizeBase300`.
+- For component-level theme isolation or custom styling, create a `FluentProvider` and pass a token theme such as `context.fluentDesignLanguage.tokenTheme` or a deliberate custom theme.
 
 ```typescript
 const theme = createV8Theme(
   context.fluentDesignLanguage.brand,
   context.fluentDesignLanguage.theme
 );
-return <ThemeProvider theme={theme}></ThemeProvider>;
 ```
-
-## Non-Fluent UI Controls
-
-If your component doesn't use Fluent UI, you can take a dependency directly on the v9 theme tokens available through the `fluentDesignLanguage` context parameter. Use this parameter to get access to all [theme](https://learn.microsoft.com/en-us/power-apps/developer/component-framework/reference/theming) tokens so it can reference any aspect of the theme to style itself.
 
 ```typescript
 <span style={{ fontSize: context.fluentDesignLanguage.theme.fontSizeBase300 }}>
@@ -55,52 +50,100 @@ If your component doesn't use Fluent UI, you can take a dependency directly on t
 </span>
 ```
 
-## Custom Theme Providers
-
-When your component requires styling that is different from the current theme of the app, create your own `FluentProvider` and pass your own set of theme tokens to be used by your component.
-
-```typescript
+```tsx
 <FluentProvider theme={context.fluentDesignLanguage.tokenTheme}>
   {/* your control */}
 </FluentProvider>
 ```
 
-## Sample Controls
+## Opt-Outs, Portals, and Detection
 
-Examples for each of these use cases are available at [Modern Theming API control](https://learn.microsoft.com/en-us/power-apps/developer/component-framework/sample-controls/modern-theming-api-control).
+- If a Fluent UI v9 control has platform library dependencies but should not use modern theming, wrap it in a component-level `FluentProvider` with `customFluentV9Theme`.
+- Alternatively wrap the control in `IdPrefixProvider` or `IdPrefixContext.Provider` and set a custom `idPrefix` so the component does not receive platform theme tokens.
+- Rewrap Fluent v9 controls that rely on React Portal in `FluentProvider` so portal content receives styles.
+- Check whether modern theming is enabled by testing `context.fluentDesignLanguage?.tokenTheme`.
+- In model-driven applications, check `context.appSettings.getIsFluentThemingEnabled()` when app settings are available.
 
-## FAQ
-
-### Q: My control uses Fluent UI v9 and has a dependency on the platform libraries, but I don't want to utilize modern theming. How can I disable it for my component?
-
-A: You can do this two different ways:
-
-**Option 1**: Create your own component-level `FluentProvider`
-
-```typescript
+```tsx
 <FluentProvider theme={customFluentV9Theme}>
   {/* your control */}
 </FluentProvider>
 ```
 
-**Option 2**: Wrap your control inside `IdPrefixContext.Provider` and set your own `idPrefix` value. This prevents your component from getting theme tokens from the platform.
-
-```typescript
+```tsx
 <IdPrefixProvider value="custom-control-prefix">
   <Label weight="semibold">This label is not getting Modern Theming</Label>
 </IdPrefixProvider>
 ```
 
-### Q: Some of my Fluent UI v9 controls aren't getting styles
+## Good / Bad Examples
 
-A: Fluent v9 controls that rely on the React Portal need to be rewrapped in the theme provider to ensure styling is properly applied. You can use `FluentProvider`.
+The examples below illustrate host-aware token use.
 
-### Q: How can I check if modern theming is enabled?
+**Good:**
 
-A: You can check if tokens are available: `context.fluentDesignLanguage?.tokenTheme`. Or in model-driven applications you can check app settings: `context.appSettings.getIsFluentThemingEnabled()`.
+```tsx
+const tokenTheme = context.fluentDesignLanguage?.tokenTheme;
 
-## Related Articles
+return (
+  <FluentProvider theme={tokenTheme}>
+    <Button appearance="primary">Save</Button>
+  </FluentProvider>
+);
+```
 
-- [Theming (Power Apps component framework API reference)](https://learn.microsoft.com/en-us/power-apps/developer/component-framework/reference/theming)
-- [Modern Theming API control](https://learn.microsoft.com/en-us/power-apps/developer/component-framework/sample-controls/modern-theming-api-control)
-- [Use modern themes in canvas apps (preview)](https://learn.microsoft.com/en-us/power-apps/maker/canvas-apps/controls/modern-controls/modern-theming)
+Why: The component uses platform theme tokens and a provider boundary so Fluent controls render consistently.
+
+**Bad:**
+
+```tsx
+return <button style={{ background: "#0078d4", color: "white" }}>Save</button>;
+```
+
+Why: The hardcoded color ignores host theme tokens, high contrast changes, and app-level brand configuration.
+
+
+- Use `ThemeProvider` for Fluent UI v8 controls when that library requires the v8 provider shape.
+## Conventions
+
+| Rule | Rationale |
+| --- | --- |
+| Prefer Fluent UI React v9 platform libraries for modern themed components | Platform context applies theme tokens automatically and improves performance |
+| Declare `React` `16.14.0` and `Fluent` `9.46.2` platform libraries when using that platform-library approach | The manifest must share the host React and Fluent dependencies |
+| Use `createV8Theme` for Fluent UI v8 controls | v8 controls need a compatibility theme built from v9 tokens |
+| Read `context.fluentDesignLanguage.theme` for non-Fluent controls | Custom HTML stays aligned with host colors, typography, and spacing |
+| Use `FluentProvider` for custom themes and portal content | Provider boundaries keep theming explicit and fix portal styling |
+| Use `IdPrefixProvider` or `IdPrefixContext.Provider` to opt out deliberately | Components should not accidentally inherit or reject host themes |
+| Check `context.fluentDesignLanguage?.tokenTheme` or `context.appSettings.getIsFluentThemingEnabled()` before relying on modern theming | Components handle hosts where modern theming is unavailable |
+
+## Do / Do Not
+
+| Do | Do not |
+| --- | --- |
+| Use Fluent UI React v9 and platform libraries when possible | Recreate Fluent styling with hardcoded CSS |
+| Build v8 themes with `createV8Theme` | Mix v8 controls with v9 tokens without an adapter |
+| Use `context.fluentDesignLanguage.brand`, `.theme`, and `.tokenTheme` | Assume one fixed brand color or font scale |
+| Rewrap portal-based controls in `FluentProvider` | Let portal content render outside the theme context |
+| Use `customFluentV9Theme` or `IdPrefixProvider` for deliberate opt-out | Disable theming accidentally through missing providers |
+| Verify preview behavior against docs | Treat pre-release theming APIs as permanently stable |
+
+## Checklist Before Opening a PR
+
+- [ ] The component uses modern theming when it should match canvas or model-driven app styling.
+- [ ] Fluent UI v9 controls declare React controls and platform libraries where required.
+- [ ] Fluent UI v8 controls use `createV8Theme` with `context.fluentDesignLanguage.brand` and `context.fluentDesignLanguage.theme`.
+- [ ] Non-Fluent controls read theme values from `context.fluentDesignLanguage.theme` instead of hardcoded colors.
+- [ ] `FluentProvider` wraps custom themes and portal-based Fluent controls.
+- [ ] Opt-out behavior uses `customFluentV9Theme`, `IdPrefixProvider`, or `IdPrefixContext.Provider` deliberately.
+- [ ] Modern theming availability is checked with `context.fluentDesignLanguage?.tokenTheme` or `context.appSettings.getIsFluentThemingEnabled()`.
+
+## References
+
+- Modern controls and themes: <https://learn.microsoft.com/en-us/power-apps/maker/canvas-apps/controls/modern-controls/overview-modern-controls>
+- New refreshed look: <https://learn.microsoft.com/en-us/power-apps/user/modern-fluent-design>
+- Fluent UI React v9: <https://react.fluentui.dev/>
+- React controls and platform libraries: <https://learn.microsoft.com/en-us/power-apps/developer/component-framework/react-controls-platform-libraries>
+- Fluent UI v8 to v9 migration package: <https://www.npmjs.com/package/@fluentui/react-migration-v8-v9>
+- Theming API reference: <https://learn.microsoft.com/en-us/power-apps/developer/component-framework/reference/theming>
+- Modern Theming API control: <https://learn.microsoft.com/en-us/power-apps/developer/component-framework/sample-controls/modern-theming-api-control>
+- Use modern themes in canvas apps: <https://learn.microsoft.com/en-us/power-apps/maker/canvas-apps/controls/modern-controls/modern-theming>

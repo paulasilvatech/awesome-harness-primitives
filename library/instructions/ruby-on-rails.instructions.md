@@ -1,124 +1,179 @@
 ---
-applyTo: '**/*.rb'
-description: 'Ruby on Rails coding conventions and guidelines'
+applyTo: "**/*.rb"
+description: "Enforces Ruby on Rails conventions for models, controllers, routing, persistence, APIs, frontend integration, jobs, testing, configuration, and maintainability."
 ---
 
-# Ruby on Rails
+# Ruby on Rails Conventions — Application Code Discipline
 
-## General Guidelines
+These instructions apply to Ruby files matched by `**/*.rb` in Rails applications. They are authoritative for Rails structure, naming, controllers, models, services, persistence, APIs, background jobs, tests, and maintainable Ruby style; repository-specific architecture, security, and test framework rules win when they define stricter conventions.
 
-- Follow the RuboCop Style Guide and use tools like `rubocop`, `standardrb`, or `rufo` for consistent formatting.
-- Use snake_case for variables/methods and CamelCase for classes/modules.
-- Keep methods short and focused; use early returns, guard clauses, and private methods to reduce complexity.
-- Favor meaningful names over short or generic ones.
-- Comment only when necessary — avoid explaining the obvious.
-- Apply the Single Responsibility Principle to classes, methods, and modules.
-- Prefer composition over inheritance; extract reusable logic into modules or services.
-- Keep controllers thin — move business logic into models, services, or command/query objects.
-- Apply the “fat model, skinny controller” pattern thoughtfully and with clean abstractions.
-- Extract business logic into service objects for reusability and testability.
-- Use partials or view components to reduce duplication and simplify views.
-- Use `unless` for negative conditions, but avoid it with `else` for clarity.
-- Avoid deeply nested conditionals — favor guard clauses and method extractions.
-- Use safe navigation (`&.`) instead of multiple `nil` checks.
-- Prefer `.present?`, `.blank?`, and `.any?` over manual nil/empty checks.
-- Follow RESTful conventions in routing and controller actions.
-- Use Rails generators to scaffold resources consistently.
+## Ruby Style and Application Structure
+
+- Follow the RuboCop Style Guide and the formatter already used by the project, such as `rubocop`, `standardrb`, or `rufo`.
+- Use `snake_case` for variables and methods, and `CamelCase` for classes and modules.
+- Keep methods short and focused with early returns, guard clauses, and private methods.
+- Prefer meaningful names over short generic names; comment complex paths with YARD or RDoc only when the code needs explanation.
+- Apply the Single Responsibility Principle and prefer composition over inheritance.
+- Use Rails generators such as `rails generate` to scaffold models, controllers, and migrations consistently.
+- Construct file paths with `Rails.root.join(...)` instead of hardcoding separators.
+
+## Controllers, Routing, and Authorization
+
+- Follow RESTful routing with `resources` and conventional controller actions.
+- Keep controllers thin; put business logic in models, service objects, command/query objects, or other focused collaborators.
+- Use `before_action` callbacks sparingly for loading and authorization, not business logic.
 - Use strong parameters to whitelist attributes securely.
-- Prefer enums and typed attributes for better model clarity and validations.
-- Keep migrations database-agnostic; avoid raw SQL when possible.
-- Always add indexes for foreign keys and frequently queried columns.
-- Define `null: false` and `unique: true` at the DB level, not just in models.
-- Use `find_each` for iterating over large datasets to reduce memory usage.
-- Scope queries in models or use query objects for clarity and reuse.
-- Use `before_action` callbacks sparingly — avoid business logic in them.
-- Use `Rails.cache` to store expensive computations or frequently accessed data.
-- Construct file paths with `Rails.root.join(...)` instead of hardcoding.
-- Use `class_name` and `foreign_key` in associations for explicit relationships.
-- Keep secrets and config out of the codebase using `Rails.application.credentials` or ENV variables.
-- Write isolated unit tests for models, services, and helpers.
-- Cover end-to-end logic with request/system tests.
-- Use background jobs (ActiveJob) for non-blocking operations like sending emails or calling APIs.
-- Use `FactoryBot` (RSpec) or fixtures (Minitest) to set up test data cleanly.
-- Avoid using `puts` — debug with `byebug`, `pry`, or logger utilities.
-- Document complex code paths and methods with YARD or RDoc.
+- Define authorization policies in `app/policies` when access rules require reusable policy logic.
+- Use namespaced routes such as `/api/v1/` for API versioning.
 
-## App Directory Structure
+## Models, Persistence, and Queries
 
-- Define service objects in the `app/services` directory to encapsulate business logic.
-- Use form objects located in `app/forms` to manage validation and submission logic.
-- Implement JSON serializers in the `app/serializers` directory to format API responses.
-- Define authorization policies in `app/policies` to control user access to resources.
-- Structure the GraphQL API by organizing schemas, queries, and mutations inside `app/graphql`.
-- Create custom validators in `app/validators` to enforce specialized validation logic.
-- Isolate and encapsulate complex ActiveRecord queries in `app/queries` for better reuse and testability.
-- Define custom data types and coercion logic in the `app/types` directory to extend or override ActiveModel type behavior.
+| Concern | Convention |
+| --- | --- |
+| Associations | Use `class_name` and `foreign_key` when relationships are not conventional |
+| Validation | Prefer enums, typed attributes, and validations that make model state clear |
+| Migrations | Keep migrations database-agnostic and avoid raw SQL when possible |
+| Constraints | Add `null: false`, `unique: true`, indexes for foreign keys, and indexes for frequently queried columns at the database level |
+| Large datasets | Use `find_each` instead of loading entire relations |
+| Query reuse | Put scoped queries in models or query objects under `app/queries` |
+| Caching | Use `Rails.cache` for expensive computations or frequently accessed data |
 
-## Commands
+Keep secrets and configuration out of source by using `Rails.application.credentials` or environment variables. Do not rely only on model validations for uniqueness or nullability when the database can enforce the invariant.
 
-- Use `rails generate` to create new models, controllers, and migrations.
-- Use `rails db:migrate` to apply database migrations.
-- Use `rails db:seed` to populate the database with initial data.
-- Use `rails db:rollback` to revert the last migration.
-- Use `rails console` to interact with the Rails application in a REPL environment.
-- Use `rails server` to start the development server.
-- Use `rails test` to run the test suite.
-- Use `rails routes` to list all defined routes in the application.
-- Use `rails assets:precompile` to compile assets for production.
+## App Directories and Boundaries
 
+Use conventional application directories for focused responsibilities:
 
-## API Development Best Practices
+| Directory | Responsibility |
+| --- | --- |
+| `app/services` | Service objects that encapsulate reusable business logic |
+| `app/forms` | Form objects that manage validation and submission flows |
+| `app/serializers` | JSON serializers such as `ActiveModel::Serializer` or `fast_jsonapi` |
+| `app/policies` | Authorization policies |
+| `app/graphql` | GraphQL schemas, queries, and mutations |
+| `app/validators` | Custom validators |
+| `app/queries` | Complex ActiveRecord query objects |
+| `app/types` | Custom data types and coercion logic for ActiveModel |
 
-- Structure routes using Rails' `resources` to follow RESTful conventions.
-- Use namespaced routes (e.g., `/api/v1/`) for versioning and forward compatibility.
-- Serialize responses using `ActiveModel::Serializer` or `fast_jsonapi` for consistent output.
-- Return proper HTTP status codes for each response (e.g., 200 OK, 201 Created, 422 Unprocessable Entity).
-- Use `before_action` filters to load and authorize resources, not business logic.
-- Leverage pagination (e.g., `kaminari` or `pagy`) for endpoints returning large datasets.
-- Rate limit and throttle sensitive endpoints using middleware or gems like `rack-attack`.
-- Return errors in a structured JSON format including error codes, messages, and details.
-- Sanitize and whitelist input parameters using strong parameters.
-- Use custom serializers or presenters to decouple internal logic from response formatting.
-- Avoid N+1 queries by using `includes` when eager loading related data.
-- Implement background jobs for non-blocking tasks like sending emails or syncing with external APIs.
-- Log request/response metadata for debugging, observability, and auditing.
-- Document endpoints using OpenAPI (Swagger), `rswag`, or `apipie-rails`.
-- Use CORS headers (`rack-cors`) to allow cross-origin access to your API when needed.
-- Ensure sensitive data is never exposed in API responses or error messages.
+Use partials or view components to reduce duplication and keep views focused on presentation.
 
-## Frontend Development Best Practices
+## API Development
 
-- Use `app/javascript` as the main directory for managing JavaScript packs, modules, and frontend logic in Rails 6+ with Webpacker or esbuild.
-- Structure your JavaScript by components or domains, not by file types, to keep things modular.
-- Leverage Hotwire (Turbo + Stimulus) for real-time updates and minimal JavaScript in Rails-native apps.
-- Use Stimulus controllers for binding behavior to HTML and managing UI logic declaratively.
-- Organize styles using SCSS modules, Tailwind, or BEM conventions under `app/assets/stylesheets`.
-- Keep view logic clean by extracting repetitive markup into partials or components.
-- Use semantic HTML tags and follow accessibility (a11y) best practices across all views.
-- Avoid inline JavaScript and styles; instead, move logic to separate `.js` or `.scss` files for clarity and reusability.
-- Optimize assets (images, fonts, icons) using the asset pipeline or bundlers for caching and compression.
-- Use `data-*` attributes to bridge frontend interactivity with Rails-generated HTML and Stimulus.
-- Test frontend functionality using system tests (Capybara) or integration tests with tools like Cypress or Playwright.
-- Use environment-specific asset loading to prevent unnecessary scripts or styles in production.
-- Follow a design system or component library to keep UI consistent and scalable.
-- Optimize time-to-first-paint (TTFP) and asset loading using lazy loading, Turbo Frames, and deferring JS.
+- Return proper HTTP status codes such as `200 OK`, `201 Created`, and `422 Unprocessable Entity`.
+- Serialize responses with `ActiveModel::Serializer`, `fast_jsonapi`, custom serializers, or presenters so internal models do not leak into response contracts.
+- Paginate large endpoints with `kaminari` or `pagy`.
+- Avoid N+1 queries with `includes` when eager loading related data.
+- Rate limit sensitive endpoints with middleware or gems such as `rack-attack`.
+- Return structured JSON errors with codes, messages, and details.
+- Log request and response metadata for debugging, observability, and auditing without exposing sensitive data.
+- Document endpoints with OpenAPI (Swagger), `rswag`, or `apipie-rails`.
+- Use `rack-cors` only when cross-origin access is required and configured deliberately.
 
-## Testing Guidelines
+## Frontend and Assets
 
-- Write unit tests for models using `test/models` (Minitest) or `spec/models` (RSpec) to validate business logic.
-- Use fixtures (Minitest) or factories with `FactoryBot` (RSpec) to manage test data cleanly and consistently.
-- Organize controller specs under `test/controllers` or `spec/requests` to test RESTful API behavior.
-- Prefer `before` blocks in RSpec or `setup` in Minitest to initialize common test data.
-- Avoid hitting external APIs in tests — use `WebMock`, `VCR`, or `stub_request` to isolate test environments.
-- Use `system tests` in Minitest or `feature specs` with Capybara in RSpec to simulate full user flows.
-- Isolate slow and expensive tests (e.g., external services, file uploads) into separate test types or tags.
-- Run test coverage tools like `SimpleCov` to ensure adequate code coverage.
-- Avoid `sleep` in tests; use `perform_enqueued_jobs` (Minitest) or `ActiveJob::TestHelper` with RSpec.
-- Use database cleaning tools (`rails test:prepare`, `DatabaseCleaner`, or `transactional_fixtures`) to maintain clean state between tests.
-- Test background jobs by enqueuing and performing jobs using `ActiveJob::TestHelper` or `have_enqueued_job` matchers.
-- Ensure tests run consistently across environments using CI tools (e.g., GitHub Actions, CircleCI).
-- Use custom matchers (RSpec) or custom assertions (Minitest) for reusable and expressive test logic.
-- Tag tests by type (e.g., `:model`, `:request`, `:feature`) for faster and targeted test runs.
-- Avoid brittle tests — don’t rely on specific timestamps, randomized data, or order unless explicitly necessary.
-- Write integration tests for end-to-end flows across multiple layers (model, view, controller).
-- Keep tests fast, reliable, and as DRY as production code.
+- Use `app/javascript` for JavaScript packs, modules, and frontend logic in Rails 6+ projects using Webpacker or esbuild.
+- Organize JavaScript by components or domains, not by file type alone.
+- Use Hotwire, Turbo, and Stimulus for Rails-native interactivity when they fit the app.
+- Organize styles with SCSS modules, Tailwind, or BEM conventions under `app/assets/stylesheets`.
+- Use semantic HTML and accessibility practices; avoid inline JavaScript and inline styles.
+- Use `data-*` attributes to bridge Rails-rendered HTML and Stimulus behavior.
+- Optimize assets through the asset pipeline or bundlers, use environment-specific asset loading, and improve time-to-first-paint (`TTFP`) with lazy loading, Turbo Frames, and deferred JavaScript where appropriate.
+
+## Background Jobs, Debugging, and Commands
+
+Use ActiveJob for non-blocking work such as sending emails, syncing with APIs, and other slow operations. Debug with `byebug`, `pry`, or logger utilities instead of `puts`.
+
+| Command | Purpose |
+| --- | --- |
+| `rails db:migrate` | Apply migrations |
+| `rails db:seed` | Populate initial data |
+| `rails db:rollback` | Revert the last migration |
+| `rails console` | Inspect the app in a REPL |
+| `rails server` | Start the development server |
+| `rails test` | Run the test suite |
+| `rails routes` | List routes |
+| `rails assets:precompile` | Compile production assets |
+
+## Testing
+
+- Write isolated unit tests for models, services, and helpers using `test/models` for Minitest or `spec/models` for RSpec.
+- Cover end-to-end logic with request, system, feature, or integration tests using tools such as Capybara, Cypress, or Playwright.
+- Use fixtures in Minitest or `FactoryBot` in RSpec to set up test data.
+- Use `before` in RSpec or `setup` in Minitest for common state.
+- Stub external APIs with `WebMock`, `VCR`, or `stub_request`.
+- Avoid `sleep`; use `perform_enqueued_jobs`, `ActiveJob::TestHelper`, or `have_enqueued_job` matchers.
+- Keep database state clean with `rails test:prepare`, `DatabaseCleaner`, or `transactional_fixtures`.
+- Use `SimpleCov` when coverage tracking is part of the project, and keep tests fast, reliable, and not dependent on timestamps, random order, or randomized data unless controlled.
+
+## Rails Idioms and Test Labels
+
+Use Rails predicates such as `.present?`, `.blank?`, and `.any?` instead of manual `nil/empty` checks. Use `unless` for negative conditions only when it stays clear, and avoid `unless` with `else`. Preserve naming language for `variables/methods` and `classes/modules.` while keeping Ruby style idiomatic. Recognize `request/response` API metadata, `CORS`, `rack-cors`, `real-time` Hotwire behavior, `.scss` assets, `system tests`, `feature specs`, `test/controllers`, `spec/requests`, and RSpec tags such as `:model`, `:request`, and `:feature`.
+
+## Good / Bad Examples
+
+The examples below illustrate thin controllers and service boundaries.
+
+**Good:**
+
+```ruby
+class OrdersController < ApplicationController
+  def create
+    order = Orders::Create.call(order_params)
+    render json: OrderSerializer.new(order), status: :created
+  end
+
+  private
+
+  def order_params
+    params.require(:order).permit(:customer_id, :sku)
+  end
+end
+```
+
+Why: The controller validates input boundaries, delegates business work, serializes output, and returns an explicit status.
+
+**Bad:**
+
+```ruby
+class OrdersController < ApplicationController
+  def create
+    puts params.inspect
+    Order.create!(params[:order])
+  end
+end
+```
+
+Why: The action logs unsafely, skips strong parameters, embeds persistence directly, and returns no structured response.
+
+## Conventions
+
+| Rule | Rationale |
+| --- | --- |
+| Follow RuboCop-compatible style and Rails naming | Consistent Ruby is easier to review and maintain |
+| Keep controllers thin with strong parameters and RESTful routes | HTTP glue stays separate from business behavior |
+| Put reusable business, form, query, policy, serializer, GraphQL, validator, and type logic in the appropriate `app/` directory | Boundaries stay discoverable |
+| Enforce indexes, nullability, and uniqueness at the database level | Database constraints protect data beyond model validation |
+| Use explicit serializers, status codes, pagination, rate limiting, and structured errors for APIs | Clients receive stable contracts and predictable failures |
+| Test models, services, APIs, jobs, and user flows with isolated dependencies | Regressions are caught without slow or brittle tests |
+
+## Do / Do Not
+
+| Do | Do not |
+| --- | --- |
+| Use `find_each` for large relation iteration | Load large datasets into memory unnecessarily |
+| Use `includes` to prevent N+1 queries | Hide query explosions behind view rendering |
+| Use `Rails.cache` for expensive stable computations | Recompute the same costly value on every request |
+| Use `Rails.application.credentials` or ENV variables for secrets | Commit credentials or API keys |
+| Use `byebug`, `pry`, or logger utilities | Leave `puts` debugging in application code |
+| Use ActiveJob for slow email or API work | Block request threads with non-critical external calls |
+
+## Checklist Before Opening a PR
+
+- [ ] Ruby style matches the project's RuboCop, `standardrb`, or `rufo` setup.
+- [ ] Controllers are thin, RESTful, authorized, and use strong parameters.
+- [ ] Business logic, forms, queries, policies, serializers, GraphQL code, validators, and custom types live in the appropriate `app/` directories.
+- [ ] Migrations include indexes, foreign-key indexes, `null: false`, and uniqueness constraints where needed.
+- [ ] API endpoints return explicit statuses, serialized responses, structured errors, and no sensitive data.
+- [ ] Frontend code uses Rails asset and Hotwire conventions when present.
+- [ ] Background work uses ActiveJob when requests should not block.
+- [ ] Tests cover unit, request/system, jobs, and integrations without external API calls or brittle sleeps.

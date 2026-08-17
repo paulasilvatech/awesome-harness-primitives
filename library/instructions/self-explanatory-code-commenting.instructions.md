@@ -1,162 +1,102 @@
 ---
-applyTo: '**'
-description: 'Guidelines for GitHub Copilot to write comments to achieve self-explanatory code with less comments. Examples are in JavaScript but it should work on any language that has comments.'
+applyTo: "**"
+description: "Enforces self-explanatory code comments that explain why, constraints, and risks while avoiding obvious, redundant, stale, decorative, or historical comments."
 ---
 
-# Self-explanatory Code Commenting Instructions
+# Self-Explanatory Code Commenting Conventions — Explain Why, Not What
+
+These instructions apply to comments in any programming language and to committed examples that include comments. They are authoritative for when comments add value, when code should be refactored instead, and which comment annotations are acceptable; language-specific documentation, public API, and generated-code conventions win when they require stricter doc comment formats.
 
 ## Core Principle
-**Write code that speaks for itself. Comment only when necessary to explain WHY, not WHAT.**
-We do not need comments most of the time.
 
-## Commenting Guidelines
+Write code that speaks for itself. Comment only when necessary to explain why a decision exists, what external constraint applies, or which non-obvious risk a maintainer must preserve. Do not comment ordinary mechanics that better names or simpler structure could make clear.
 
-### AVOID These Comment Types
+## Comments to Avoid
 
-**Obvious Comments**
-```javascript
-// Bad: States the obvious
-let counter = 0;  // Initialize counter to zero
-counter++;  // Increment counter by one
-```
+Avoid obvious comments such as `let counter = 0; // Initialize counter to zero`, redundant comments such as `return user.name; // Return the user's name`, outdated comments that contradict code, dead-code comments such as `// const oldFunction = () => { ... };`, changelog comments such as `Modified by John on 2023-01-15`, and decorative divider comments such as `//=====================================`. Remove stale comments instead of updating code around them.
 
-**Redundant Comments**
-```javascript
-// Bad: Comment repeats the code
-function getUserName() {
-    return user.name;  // Return the user's name
-}
-```
+## Comments to Write
 
-**Outdated Comments**
-```javascript
-// Bad: Comment doesn't match the code
-// Calculate tax at 5% rate
-const tax = price * 0.08;  // Actually 8%
-```
+Write comments for complex business logic, non-obvious algorithms, regex patterns, external API constraints, operational gotchas, configuration rationale, and constants whose value comes from a contract or risk tradeoff. Examples include progressive tax brackets, Floyd-Warshall all-pairs shortest paths, email regex intent, GitHub API rate limit: 5000 requests/hour for authenticated users, `MAX_RETRIES = 3`, and `API_TIMEOUT = 5000` when the timeout leaves buffer against an AWS Lambda 15s limit.
 
-### WRITE These Comment Types
-
-**Complex Business Logic**
-```javascript
-// Good: Explains WHY this specific calculation
-// Apply progressive tax brackets: 10% up to 10k, 20% above
-const tax = calculateProgressiveTax(income, [0.10, 0.20], [10000]);
-```
-
-**Non-obvious Algorithms**
-```javascript
-// Good: Explains the algorithm choice
-// Using Floyd-Warshall for all-pairs shortest paths
-// because we need distances between all nodes
-for (let k = 0; k < vertices; k++) {
-    for (let i = 0; i < vertices; i++) {
-        for (let j = 0; j < vertices; j++) {
-            // ... implementation
-        }
-    }
-}
-```
-
-**Regex Patterns**
-```javascript
-// Good: Explains what the regex matches
-// Match email format: username@domain.extension
-const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-```
-
-**API Constraints or Gotchas**
-```javascript
-// Good: Explains external constraint
-// GitHub API rate limit: 5000 requests/hour for authenticated users
-await rateLimiter.wait();
-const response = await fetch(githubApiUrl);
-```
+Use public API documentation comments when consumers need parameter, return, exception, or usage information. For example, a compound-interest API can document `principal`, `rate`, `time`, `compoundFrequency`, and the returned final amount.
 
 ## Decision Framework
 
-Before writing a comment, ask:
-1. **Is the code self-explanatory?** → No comment needed
-2. **Would a better variable/function name eliminate the need?** → Refactor instead
-3. **Does this explain WHY, not WHAT?** → Good comment
-4. **Will this help future maintainers?** → Good comment
+Before writing a comment, ask whether the code is self-explanatory, whether a better variable or function name would remove the need, whether the comment explains why rather than what, and whether it will help future maintainers. If a rename or extraction solves the problem, refactor instead of commenting.
 
-## Special Cases for Comments
+## Annotation Tags
 
-### Public APIs
+Use annotations sparingly and keep each one actionable.
+
+| Tag | Use |
+| --- | --- |
+| `TODO` | Planned follow-up with enough context to act |
+| `FIXME` | Known defect that needs correction |
+| `HACK` | Temporary workaround for a named constraint, such as a library v2.1.0 bug |
+| `NOTE` | Non-obvious assumption, such as UTC timezone behavior |
+| `WARNING` | Dangerous behavior, such as mutation of the original array |
+| `PERF` | Hot-path or caching consideration |
+| `SECURITY` | Security-critical constraint, such as validating input before SQL use |
+| `BUG` | Reproducible edge-case failure |
+| `REFACTOR` | Known extraction or design cleanup |
+| `DEPRECATED` | Replacement API and removal expectation, such as `newApiFunction()` before v3.0 |
+
+## Technical Vocabulary
+
+Preserve these source terms when they apply to edits in this domain: `AVOID` `FUNCTIONS` `UTILITY` `WHAT` `WRITE` `variable/function`.
+
+Examples may use JavaScript, but the rule applies to any language that supports comments.
+
+## Good / Bad Examples
+
+The examples below show when a comment adds durable context.
+
+**Good:**
+
 ```javascript
-/**
- * Calculate compound interest using the standard formula.
- *
- * @param {number} principal - Initial amount invested
- * @param {number} rate - Annual interest rate (as decimal, e.g., 0.05 for 5%)
- * @param {number} time - Time period in years
- * @param {number} compoundFrequency - How many times per year interest compounds (default: 1)
- * @returns {number} Final amount after compound interest
- */
-function calculateCompoundInterest(principal, rate, time, compoundFrequency = 1) {
-    // ... implementation
-}
+// Apply progressive tax brackets: 10% up to 10k, 20% above.
+const tax = calculateProgressiveTax(income, [0.10, 0.20], [10000]);
 ```
 
-### Configuration and Constants
+Why: The comment explains business policy that is not fully visible from the call.
+
+**Bad:**
+
 ```javascript
-// Good: Explains the source or reasoning
-const MAX_RETRIES = 3;  // Based on network reliability studies
-const API_TIMEOUT = 5000;  // AWS Lambda timeout is 15s, leaving buffer
+let counter = 0; // Initialize counter to zero
+counter++; // Increment counter by one
 ```
 
-### Annotations
-```javascript
-// TODO: Replace with proper user authentication after security review
-// FIXME: Memory leak in production - investigate connection pooling
-// HACK: Workaround for bug in library v2.1.0 - remove after upgrade
-// NOTE: This implementation assumes UTC timezone for all calculations
-// WARNING: This function modifies the original array instead of creating a copy
-// PERF: Consider caching this result if called frequently in hot path
-// SECURITY: Validate input to prevent SQL injection before using in query
-// BUG: Edge case failure when array is empty - needs investigation
-// REFACTOR: Extract this logic into separate utility function for reusability
-// DEPRECATED: Use newApiFunction() instead - this will be removed in v3.0
-```
+Why: The comments repeat syntax and add maintenance noise.
 
-## Anti-Patterns to Avoid
+## Conventions
 
-### Dead Code Comments
-```javascript
-// Bad: Don't comment out code
-// const oldFunction = () => { ... };
-const newFunction = () => { ... };
-```
+| Rule | Rationale |
+|---|---|
+| Prefer self-documenting names and small functions over explanatory comments | Clear code ages better than prose attached to unclear code |
+| Comment why, constraints, and risks rather than what the next line does | Maintainers need intent that code cannot express alone |
+| Keep comments accurate, grammatical, professional, and close to the code they describe | Misleading comments are worse than no comments |
+| Use public API docs for externally consumed contracts | Consumers need stable parameter and return information |
+| Use annotation tags only when actionable | Marker comments without context become permanent clutter |
+| Delete commented-out code and changelog comments | Version control already preserves history |
 
-### Changelog Comments
-```javascript
-// Bad: Don't maintain history in comments
-// Modified by John on 2023-01-15
-// Fixed bug reported by Sarah on 2023-02-03
-function processData() {
-    // ... implementation
-}
-```
+## Do / Do Not
 
-### Divider Comments
-```javascript
-// Bad: Don't use decorative comments
-//=====================================
-// UTILITY FUNCTIONS
-//=====================================
-```
+| Do | Do not |
+|---|---|
+| Explain a non-obvious algorithm choice like Floyd-Warshall | Narrate a simple loop increment |
+| Document external constraints such as API rate limits | Copy implementation details already obvious from names |
+| Explain constants such as `MAX_RETRIES` and `API_TIMEOUT` when derived from policy | Leave magic numbers unexplained |
+| Use `TODO`, `FIXME`, `HACK`, `SECURITY`, or `DEPRECATED` with context | Drop vague marker comments without an action |
+| Remove stale or contradictory comments | Preserve comments that no longer match the code |
+| Refactor names before adding comments | Use comments to compensate for confusing names |
 
-## Quality Checklist
+## Checklist Before Opening a PR
 
-Before committing, ensure your comments:
-- [ ] Explain WHY, not WHAT
-- [ ] Are grammatically correct and clear
-- [ ] Will remain accurate as code evolves
-- [ ] Add genuine value to code understanding
-- [ ] Are placed appropriately (above the code they describe)
-- [ ] Use proper spelling and professional language
-
-## Summary
-
-Remember: **The best comment is the one you don't need to write because the code is self-documenting.**
+- [ ] New comments explain why, constraints, risks, public API contracts, or non-obvious behavior.
+- [ ] Obvious, redundant, stale, decorative, dead-code, and changelog comments were removed.
+- [ ] Variable, function, and type names were improved where naming could replace a comment.
+- [ ] Annotation comments are actionable and use the approved tags.
+- [ ] Public API comments are accurate and useful to callers.
+- [ ] Comments are grammatically correct, professional, and placed next to the code they describe.

@@ -1,11 +1,13 @@
 ---
-applyTo: '**/*.{cljs,cljc,edn}'
-description: 'Expert assistance for Joyride User Script projects - REPL-driven ClojureScript and user space automation of VS Code'
+applyTo: "**/*.{cljs,cljc,edn}"
+description: "Enforces Joyride user script conventions for SCI ClojureScript, REPL-driven VS Code automation, async evaluation, flares, disposables, and file edits."
 ---
 
-# Joyride User Scripts Project Assistant
+# Joyride User Project Conventions — REPL-Driven VS Code Automation
 
-You are an expert Clojure interactive programmer specializing in Joyride - VS Code automation in user space. Joyride runs SCI ClojureScript in VS Code's Extension Host with full access to the VS Code API. Your main tool is **Joyride evaluation** with which you test and validate code directly in VS Code's runtime environment. The REPL is your superpower - use it to provide tested, working solutions rather than theoretical suggestions.
+These instructions apply to files matched by `**/*.{cljs,cljc,edn}`. They are authoritative for joyride user project code, configuration, examples, validation commands, API names, and runtime constraints in those files; stricter repository-specific security, deployment, testing, or platform primitives win on conflict. Treat the rules as passive conventions injected into matching files, not as a step-by-step workflow.
+
+Use Joyride as a REPL-driven ClojureScript environment for VS Code automation in user space. Joyride runs SCI ClojureScript in VS Code's Extension Host with full access to the VS Code API. Prefer Joyride evaluation to validate code directly in the VS Code runtime; use the REPL as the primary feedback loop for tested behavior.
 
 ## Essential Information Sources
 
@@ -204,3 +206,61 @@ Joyride Flares provide a convenient way to create WebView panels and sidebar vie
 ## Editing files
 
 Develop using the REPL. Yet, sometimes you need to edit file. And when you do, prefer structural editing tools.
+
+## Good / Bad Examples
+
+The examples below show the boundary between an acceptable convention and the closest common anti-pattern.
+
+**Good:**
+
+```clojure
+(in-ns 'my.joyride.script)
+(require '[promesa.core :as p] '[joyride.core :as joyride] '["vscode" :as vscode])
+(p/let [choice (vscode/window.showQuickPick #js ["A" "B"])]
+  (when choice (vscode/window.showInformationMessage (str "Selected " choice))))
+```
+
+Why: The evaluation targets a namespace, uses Promesa, and uses VS Code APIs asynchronously.
+
+**Bad:**
+
+```clojure
+(println "Pick something")
+(load-file "script.cljs")
+```
+
+Why: The code relies on console output and unsupported `load-file`.
+
+## Conventions
+
+| Rule | Rationale |
+| --- | --- |
+| Use Joyride evaluation and namespace-targeted `(in-ns ...)` blocks. | The REPL verifies behavior in VS Code. |
+| Use `joyride.core/load-file` and `joyride.core/slurp`. | Joyride file APIs are async and workspace-aware. |
+| Register disposables with `(joyride/extension-context)`. | VS Code automation must clean up resources. |
+
+## Do / Do Not
+
+| Do | Do not |
+| --- | --- |
+| Use Joyride evaluation and namespace-targeted `(in-ns ...)` blocks. | Do not ignore this rule: Use Joyride evaluation and namespace-targeted `(in-ns ...)` blocks. |
+| Use `joyride.core/load-file` and `joyride.core/slurp`. | Do not ignore this rule: Use `joyride.core/load-file` and `joyride.core/slurp`. |
+| Register disposables with `(joyride/extension-context)`. | Do not ignore this rule: Register disposables with `(joyride/extension-context)`. |
+
+## Checklist Before Opening a PR
+
+- [ ] The change stays inside the matched `applyTo` scope.
+- [ ] The authoritative conventions above are applied to new or modified code.
+- [ ] Named commands, paths, API names, configuration keys, and version constraints remain intact.
+- [ ] Relevant validation, linting, build, or test commands from this instruction pass.
+- [ ] No secrets, unsupported APIs, placeholder prompt references, or relative primitive links were added.
+
+## References
+
+- https://example.com
+- https://github.com/BetterThanTomorrow/joyride/blob/master/doc/api.md#joyrideflare
+- https://github.com/BetterThanTomorrow/joyride/blob/master/examples/.joyride/src/flares_examples.cljs
+- https://raw.githubusercontent.com/BetterThanTomorrow/joyride/master/assets/llm-contexts/agent-joyride-eval.md
+
+- https://raw.githubusercontent.com/BetterThanTomorrow/joyride/master/assets/llm-contexts/user-assistance.md
+

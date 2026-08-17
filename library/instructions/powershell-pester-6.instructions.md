@@ -1,9 +1,11 @@
 ---
-applyTo: '**/*.Tests.ps1'
-description: 'PowerShell Pester testing best practices based on Pester v6 conventions'
+applyTo: "**/*.Tests.ps1"
+description: "Enforces Pester v6 conventions for PowerShell test discovery, block structure, assertions, mocks, data-driven cases, tags, skips, and configuration."
 ---
 
-# PowerShell Pester v6 Testing Guidelines
+# PowerShell Pester 6 Conventions — Test Suites
+
+These instructions apply to files matched by `**/*.Tests.ps1`. They are authoritative for powershell pester 6 code, configuration, examples, validation commands, API names, and runtime constraints in those files; stricter repository-specific security, deployment, testing, or platform primitives win on conflict. Treat the rules as passive conventions injected into matching files, not as a step-by-step workflow.
 
 This guide provides PowerShell-specific instructions for creating automated tests with the PowerShell Pester v6 module. Pester v6 runs on Windows PowerShell 5.1 and PowerShell 7.4+. Follow the general PowerShell scripting guidance in the `powershell` instructions.
 
@@ -225,3 +227,51 @@ Invoke-Pester -Configuration $config
 ```
 
 **Key Sections**: Run (Path, Exit), Filter (Tag, ExcludeTag), Output (Verbosity), TestResult (Enabled, OutputFormat), CodeCoverage (Enabled, Path), Should (ErrorAction), Debug
+
+## Good / Bad Examples
+
+The examples below show the boundary between an acceptable convention and the closest common anti-pattern.
+
+**Good:**
+
+```powershell
+BeforeAll { . $PSScriptRoot/Get-UserInfo.ps1 }
+Describe 'Get-UserInfo' {
+  It 'returns a user object' { Get-UserInfo -Username 'TestUser' | Should -Not -BeNullOrEmpty }
+}
+```
+
+Why: The test imports inside lifecycle blocks and keeps runtime work inside Pester blocks.
+
+**Bad:**
+
+```powershell
+$user = Get-UserInfo -Username 'TestUser'
+Describe 'Get-UserInfo' { It 'works' { $user | Should -Not -BeNullOrEmpty } }
+```
+
+Why: The test runs discovery-time code outside Pester blocks.
+
+## Conventions
+
+| Rule | Rationale |
+| --- | --- |
+| Keep executable code inside Pester blocks. | Discovery-time side effects are fragile in v6. |
+| Use `Should -Invoke` and `Should -InvokeVerifiable`. | Removed mock assertions no longer work. |
+| Configure execution with `New-PesterConfiguration` outside tests. | Suite behavior belongs to invocation config. |
+
+## Do / Do Not
+
+| Do | Do not |
+| --- | --- |
+| Keep executable code inside Pester blocks. | Do not ignore this rule: Keep executable code inside Pester blocks. |
+| Use `Should -Invoke` and `Should -InvokeVerifiable`. | Do not ignore this rule: Use `Should -Invoke` and `Should -InvokeVerifiable`. |
+| Configure execution with `New-PesterConfiguration` outside tests. | Do not ignore this rule: Configure execution with `New-PesterConfiguration` outside tests. |
+
+## Checklist Before Opening a PR
+
+- [ ] The change stays inside the matched `applyTo` scope.
+- [ ] The authoritative conventions above are applied to new or modified code.
+- [ ] Named commands, paths, API names, configuration keys, and version constraints remain intact.
+- [ ] Relevant validation, linting, build, or test commands from this instruction pass.
+- [ ] No secrets, unsupported APIs, placeholder prompt references, or relative primitive links were added.

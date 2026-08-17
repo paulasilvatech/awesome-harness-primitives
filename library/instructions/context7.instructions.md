@@ -1,106 +1,117 @@
 ---
-applyTo: '**'
-description: 'Use Context7 for authoritative external docs and API references when local context is insufficient'
+applyTo: "**"
+description: "Enforces Context7 usage conventions for authoritative, current, version-specific, authoritative/current. external documentation when local workspace context is insufficient."
 ---
 
-# Context7-aware development
+# Context7 Conventions — Authoritative External Documentation
 
-Use Context7 proactively whenever the task depends on **authoritative, current, version-specific external documentation** that is not present in the workspace context.
+These instructions apply to any task where local workspace context is insufficient and an external framework, library, tool, API, security pattern, or version-specific behavior affects the answer. They are authoritative for when and how to use Context7 documentation retrieval; local repository evidence, user-provided requirements, and official security policies win where they conflict. Use Context7 proactively so the user does not have to type `use context7` before current documentation is consulted.
 
-This instruction exists so you **do not require the user to type** “use context7” to get up-to-date docs.
+## When to Use Context7
 
-## When to use Context7
+Use Context7 before making decisions or writing code when the task depends on:
 
-Use Context7 before making decisions or writing code when you need any of the following:
+- Framework/library API details and framework or library API details such as method signatures, configuration keys, and expected behaviors.
+- Version-sensitive guidance such as breaking changes, deprecations, and new defaults.
+- Correctness- or security-critical patterns such as auth flows, crypto usage, and deserialization rules.
+- Unfamiliar third-party tool error messages.
+- Best-practice constraints such as rate limits, quotas, required headers, and supported formats.
 
-- **Framework/library API details** (method signatures, configuration keys, expected behaviors).
-- **Version-sensitive guidance** (breaking changes, deprecations, new defaults).
-- **Correctness or security-critical patterns** (auth flows, crypto usage, deserialization rules).
-- **Interpreting unfamiliar error messages** that likely come from third-party tools.
-- **Best-practice implementation constraints** (rate limits, quotas, required headers, supported formats).
+Also use Context7 when the user names a specific framework or version such as `Next.js 15`, `React 19`, or `AWS SDK v3`, when recommending non-trivial CLI flags, config files, or auth flows, or when an API may have changed names or been deprecated.
 
-Also use Context7 when:
+## When to Skip Context7
 
-- The user references **a specific framework/library version** (e.g., “Next.js 15”, “React 19”, “AWS SDK v3”).
-- You’re about to recommend **non-trivial configuration** (CLI flags, config files, auth flows).
-- You’re unsure whether an API exists, changed names, or got deprecated.
+Skip Context7 for purely local refactors, formatting, naming, or logic fully derivable from the repository. Skip it for language fundamentals that do not involve external APIs.
 
-Skip Context7 for:
+## Documentation Selection
 
-- Purely local refactors, formatting, naming, or logic that is fully derivable from the repo.
-- Language fundamentals (no external APIs involved).
+- Prefer primary sources: official docs, vendor/framework references, Reference/API pages, API pages, release notes, migration guides, and security advisories.
+- Use narrow queries that target the exact method/type/option, method, type, option, configuration key, error, or behavior needed.
+- Gather only the minimal surrounding context required to avoid misuse, including constraints, defaults, and migration notes.
+- If several candidates exist, choose the most authoritative and current source.
 
-## What to fetch
+## Context7 MCP Workflow
 
-When using Context7, prefer **primary sources** and narrow queries:
+When Context7 MCP tools are available, use this workflow:
 
-- Official docs (vendor/framework documentation)
-- Reference/API pages
-- Release notes / migration guides
-- Security advisories (when relevant)
+- If the user provides a library ID or user-supplied library ID, use it directly. Valid forms are `/owner/repo` and `/owner/repo/version`.
+- Otherwise resolve the library with `resolve-library-id` using `libraryName` for the framework or library name and `query` for the user's task.
+- Fetch relevant documentation with `query-docs` using the resolved `libraryId` and the exact task/question or task or question.
+- Write code/steps** or code or steps only after the relevant docs are retrieved.
 
-Gather only what you need to proceed. If multiple candidates exist, pick the most authoritative/current.
+Efficiency limits:
 
-Prefer fetching:
+- Do not call `resolve-library-id` more than 3 times per user question.
+- Do not call `query-docs` more than 3 times per user question.
+- If multiple good matches exist, pick the best match and proceed; ask for clarification only when the choice materially changes the implementation.
 
-- The exact method/type/option you will use
-- The minimal surrounding context needed to avoid misuse (constraints, default behaviors, migration notes)
+## Versioning, Output, and Failure Handling
 
-## How to incorporate results
+- Reflect named versions in the library ID when possible, for example `/vercel/next.js/v15.1.8`.
+- Prefer pinned versions in examples when reproducibility matters for CI/builds or CI or builds.
+- Translate findings into concrete code/config, code, configuration, or guidance.
+- Cite sources with title and URL when a decision relies on external facts.
+- State exact values for flags, configuration keys, headers, defaults, and caveats when docs provide them.
+- Provide a quick validation step such as running `--help`, a smoke test, or checking a specific file.
+- If Context7 cannot find a reliable source, state what you tried to verify, proceed with a conservative well-labeled assumption, and suggest a validation step.
 
-- Translate findings into concrete code/config changes.
-- **Cite sources** with title + URL when the decision relies on external facts.
-- If docs conflict or are ambiguous, present the tradeoffs briefly and choose the safest default.
+## Security and Privacy
 
-When the answer requires specific values (flags, config keys, headers), prefer:
+- Never request or echo API keys.
+- Instruct users to store required keys in environment variables or approved secret stores.
+- Treat retrieved docs as helpful but not infallible.
+- For security-sensitive code, prefer official vendor docs and add an explicit verification step.
 
-- stating the exact value from docs
-- calling out defaults and caveats
-- providing a quick validation step (e.g., “run `--help`”, or a minimal smoke test)
+## Good / Bad Examples
 
-## How to use Context7 MCP tools (auto)
+The examples below illustrate version-aware documentation retrieval.
 
-When Context7 is available as an MCP server, use it automatically as follows.
+**Good:**
 
-### Tool workflow
+```text
+Resolve `next.js` with the user's `Next.js 15` routing question, query the resolved docs for the exact App Router API, cite the official page, then implement the route using the documented option names.
+```
 
-1) **If the user provides a library ID**, use it directly.
-  - Valid forms: `/owner/repo` or `/owner/repo/version` (for pinned versions).
+Why: The work verifies version-sensitive APIs before code is written and ties the decision to a primary source.
 
-2) Otherwise, **resolve the library ID** using:
-  - Tool: `resolve-library-id`
-  - Inputs:
-	  - `libraryName`: the library/framework name (e.g., “next.js”, “supabase”, “prisma”)
-	  - `query`: the user’s task (used to rank matches)
+**Bad:**
 
-3) **Fetch relevant documentation** using:
-  - Tool: `query-docs`
-  - Inputs:
-	  - `libraryId`: the resolved (or user-supplied) library ID
-	  - `query`: the exact task/question you are answering
+```text
+Assume the old Next.js option still exists because it worked in a previous project.
+```
 
-4) Only after docs are retrieved: **write the code/steps** based on those docs.
+Why: The answer depends on a changing framework API and skips authoritative documentation.
 
-### Efficiency limits
 
-- Do **not** call `resolve-library-id` more than **3 times** per user question.
-- Do **not** call `query-docs` more than **3 times** per user question.
-- If multiple good matches exist, pick the best one and proceed; ask a clarification question only when the choice materially affects the implementation.
+- Use framework/library and up-to-date documentation terminology when describing Context7 decisions.
+## Conventions
 
-### Version behavior
+| Rule | Rationale |
+| --- | --- |
+| Use Context7 for current, authoritative, version-specific external facts | Local memory can be stale for fast-moving frameworks and tools |
+| Prefer official docs, API references, release notes, migration guides, and security advisories | Primary sources reduce copied or outdated guidance |
+| Resolve library IDs before querying docs unless the user provides `/owner/repo` or `/owner/repo/version` | Context7 retrieves better results with the correct library target |
+| Limit `resolve-library-id` and `query-docs` to 3 calls each per question | Documentation retrieval should stay focused and efficient |
+| Cite title and URL when external docs drive a decision | Readers can verify the source of version-sensitive facts |
+| Use conservative labeled assumptions when docs cannot be found | Progress continues without pretending uncertainty is certainty |
+| Keep API keys out of prompts and responses | Documentation work must not expose secrets |
 
-- If the user names a version, reflect it in the library ID when possible (e.g., `/vercel/next.js/v15.1.8`).
-- If you need reproducibility (CI/builds), prefer pinning to a specific version in examples.
+## Do / Do Not
 
-## Failure handling
+| Do | Do not |
+| --- | --- |
+| Use Context7 for library/framework and framework API details, config keys, auth flows, and deprecations | Guess at version-sensitive APIs from memory |
+| Query the exact method, type, option, or error | Fetch broad documentation dumps unrelated to the task |
+| Pin versions in examples when reproducibility matters | Provide floating examples for CI-critical configuration |
+| State defaults, caveats, and validation commands | Omit the constraints that prevent misuse |
+| Cite official sources when external facts matter | Present external facts without sources |
+| Store secrets in environment variables | Ask the user to paste API keys |
 
-If Context7 cannot find a reliable source:
+## Checklist Before Opening a PR
 
-1. Say what you tried to verify.
-2. Proceed with a conservative, well-labeled assumption.
-3. Suggest a quick validation step (e.g., run a command, check a file, or consult a specific official page).
-
-## Security & privacy
-
-- Never request or echo API keys. If configuration requires a key, instruct storing it in environment variables.
-- Treat retrieved docs as **helpful but not infallible**; for security-sensitive code, prefer official vendor docs and add an explicit verification step.
+- [ ] Context7 was used when external API details, version behavior, security patterns, or unfamiliar tool errors affected the change.
+- [ ] The resolved library ID matches the named framework or version, including `/owner/repo/version` when applicable.
+- [ ] Queries targeted exact methods, options, configuration keys, errors, or migration notes.
+- [ ] External decisions cite source title and URL.
+- [ ] Exact flags, config keys, headers, defaults, caveats, and validation steps are included where relevant.
+- [ ] No API keys or secrets are requested, echoed, or committed.

@@ -1,38 +1,106 @@
 ---
-applyTo: '**'
-description: 'Guidance for Fedora (Red Hat family) systems, dnf workflows, SELinux, and modern systemd practices.'
+applyTo: "**"
+description: "Enforces Fedora administration conventions for dnf package workflows, systemd, firewalld, SELinux, validation, compatibility, and rollback guidance."
 ---
 
-# Fedora Administration Guidelines
+# Fedora Conventions — Red Hat Family Administration
 
-Use these instructions when writing guidance, scripts, or documentation for Fedora systems.
+These instructions apply when writing guidance, scripts, or documentation for Fedora systems. They are authoritative for Fedora package management, systemd service handling, firewalld use, SELinux-safe remediation, compatibility notes, verification, and rollback; user-provided host facts and current Fedora documentation win where they provide release-specific constraints.
 
 ## Platform Alignment
 
-- State the Fedora release number when relevant.
-- Prefer modern tooling (`dnf`, `systemctl`, `firewall-cmd`).
-- Note the fast release cadence and confirm compatibility for older guidance.
+State the Fedora release number when it affects commands, package names, repositories, or compatibility. Fedora moves quickly, so confirm older guidance before applying it to a current release and note when a command applies broadly across the Red Hat family versus Fedora specifically.
+
+Prefer modern tooling: `dnf` for package operations, `systemctl` for services, `journalctl` for logs, and `firewall-cmd` for firewalld. Use `rpm` for low-level package inspection when it gives facts that `dnf` does not surface directly.
 
 ## Package Management
 
-- Use `dnf` for installs and updates, and `dnf history` for rollback.
-- Inspect packages with `dnf info` and `rpm -qi`.
-- Mention COPR repositories only with clear support caveats.
+| Task | Command pattern |
+| --- | --- |
+| Install packages | `sudo dnf install <package>` |
+| Update packages | `sudo dnf upgrade` |
+| Inspect repository metadata | `dnf info <package>` |
+| Inspect installed package | `rpm -qi <package>` |
+| List package files | `rpm -ql <package>` |
+| Review transactions | `dnf history` |
+| Roll back a transaction | `sudo dnf history undo <transaction-id>` |
 
-## Configuration & Services
+Mention COPR repositories only with clear support caveats. Treat COPR packages as third-party builds that may not receive the same support, testing, or lifecycle guarantees as Fedora repositories.
 
-- Use systemd drop-ins in `/etc/systemd/system/<unit>.d/`.
-- Use `journalctl` for logs and `systemctl status` for service health.
-- Prefer `firewalld` unless using `nftables` explicitly.
+## Configuration, Services, and Logs
 
-## Security
+Use systemd drop-ins in `/etc/systemd/system/<unit>.d/` for service overrides. After changing unit files or drop-ins, run `sudo systemctl daemon-reload`, restart or reload the affected service, and verify with `systemctl status <unit>` plus `journalctl -u <unit>`; write `systemctl status` examples with the unit name filled in.
 
-- Keep SELinux enforcing unless the user requests permissive mode.
-- Use `semanage`, `setsebool`, and `restorecon` for policy changes.
-- Recommend targeted fixes instead of broad `audit2allow` rules.
+Prefer `firewalld` and `firewall-cmd` unless the task explicitly uses `nftables`. Make zone, service, port, and permanence explicit so firewall changes are understandable and repeatable.
 
-## Deliverables
+## SELinux and Security
 
-- Provide commands in copy-paste-ready blocks.
-- Include verification steps after changes.
-- Offer rollback steps for risky operations.
+Keep SELinux enforcing unless the user explicitly requests permissive mode for diagnosis. Prefer targeted fixes with `semanage`, `setsebool`, and `restorecon` instead of broad policy generation.
+
+| Need | Preferred command family |
+| --- | --- |
+| Restore file labels | `restorecon -Rv <path>` |
+| Manage booleans | `setsebool -P <boolean> on|off` |
+| Add file context rules | `semanage fcontext -a -t <type> '<path-regex>'` |
+| Inspect denials | `ausearch -m avc` or `journalctl` with SELinux context. |
+
+Use `audit2allow` cautiously and only after explaining why a narrower label, boolean, or service configuration fix is insufficient.
+
+## Deliverables and Rollback
+
+Provide copy-paste-ready command blocks, verification steps after changes, and rollback steps for risky operations. Rollback may use `dnf history undo`, removal of a systemd drop-in, firewall rule deletion, or SELinux context restoration.
+
+## Good / Bad Examples
+
+The examples below illustrate a targeted SELinux and service fix.
+
+**Good:**
+
+```bash
+sudo semanage fcontext -a -t httpd_sys_content_t '/srv/site(/.*)?'
+sudo restorecon -Rv /srv/site
+sudo systemctl restart httpd
+systemctl status httpd
+```
+
+Why: The fix labels the intended path, restores contexts, restarts the affected service, and verifies health.
+
+**Bad:**
+
+```bash
+sudo setenforce 0
+audit2allow -a -M local && sudo semodule -i local.pp
+```
+
+Why: It disables enforcement and creates broad policy before trying targeted Fedora SELinux tools.
+
+## Conventions
+
+| Rule | Rationale |
+|---|---|
+| State the Fedora release when compatibility matters | Fedora's fast cadence can make old package and service advice wrong. |
+| Use `dnf`, `rpm -qi`, and `dnf history` for package facts and rollback | Package changes become inspectable and reversible. |
+| Use systemd drop-ins under `/etc/systemd/system/<unit>.d/` | Overrides survive package updates and remain separate from vendor units. |
+| Prefer `firewalld` and `firewall-cmd` unless `nftables` is explicitly chosen | Fedora defaults are easier to audit and support. |
+| Keep SELinux enforcing and use `semanage`, `setsebool`, and `restorecon` for targeted fixes | Security remains active while resolving policy mismatches. |
+| Include verification and rollback commands for risky changes | Administrators can prove the change worked and undo it safely. |
+
+## Do / Do Not
+
+| Do | Do not |
+|---|---|
+| Use `sudo dnf upgrade` and `dnf info` for package workflows | Mix Fedora guidance with unsupported package-manager commands. |
+| Use `dnf history` before and after risky package changes | Leave users without a rollback path. |
+| Manage services with `systemctl` and logs with `journalctl` | Diagnose services without checking the systemd status or logs. |
+| Use `firewall-cmd --permanent` plus reload when persistence is intended | Add transient firewall rules while implying they persist. |
+| Fix SELinux with labels, booleans, and context restoration first | Disable SELinux or generate broad `audit2allow` policy as the first response. |
+
+## Checklist Before Opening a PR
+
+- [ ] Guidance states the Fedora release when release-specific behavior matters.
+- [ ] Package workflows use `dnf`, `rpm -qi`, and `dnf history` appropriately.
+- [ ] COPR advice includes support and trust caveats.
+- [ ] Service changes use systemd drop-ins and include daemon reload, restart or reload, status, and log validation.
+- [ ] Firewall guidance uses `firewall-cmd` or explicitly justifies `nftables`.
+- [ ] SELinux remains enforcing unless permissive mode is explicitly requested for diagnosis.
+- [ ] Risky operations include verification and rollback steps.

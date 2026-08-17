@@ -1,29 +1,25 @@
 ---
-applyTo: '**/*.{ts,tsx,js,json,xml,pcfproj,csproj}'
-description: 'Define and handle custom events in PCF components'
+applyTo: "**/*.{ts,tsx,js,json,xml,pcfproj,csproj}"
+description: "Enforces Power Apps component framework event conventions for manifest event declarations, canvas Power Fx handlers, model-driven addEventHandler usage, payloads, callbacks, and event raising."
 ---
 
-# Define Events (Preview)
+# PCF Event Conventions — Custom Events and Host Handlers
 
-[This topic is pre-release documentation and is subject to change.]
+These instructions apply to PCF component files that define or handle custom events for canvas apps and model-driven apps. They are authoritative for event manifest declarations, component data flow, canvas Power Fx handlers, model-driven `addEventHandler` registration, payloads, callbacks, and event invocation; general PCF lifecycle and canvas app instructions win for broader component implementation and environment setup. Treat event APIs as preview and pre-release behavior and verify host availability before relying on custom event features.
 
-A common requirement when building custom components with the Power Apps Component Framework is the ability to react to events generated within the control. These events can be invoked either due to user interaction or programmatically via code. For example, an application can have a code component that lets a user build a product bundle. This component can also raise an event which could show product information in another area of the application.
+## Component Data Flow and Event Scope
 
-## Component Data Flow
+- Use the standard PCF data flow for ordinary value updates: inputs flow from the hosting app into the control, updated data flows out to the hosting form or page, and bound-field updates trigger the `OnChange` event.
+- Use custom events only when field updates are not enough for the scenario.
+- Remember that custom events occur separately for each instance of a code component in the app.
+- Keep events purposeful: a custom event should represent a meaningful interaction or programmatic condition the host needs to handle.
 
-The common data flow for a code component is data flowing from the hosting application into the control as inputs and updated data flowing out of the control to the hosting form or page. This diagram shows the standard pattern of data flow for a typical PCF component:
+## Manifest Event Declarations
 
-![Shows that data update from the code component to the binding field triggers the OnChange event](https://learn.microsoft.com/en-us/power-apps/developer/component-framework/media/component-events-onchange-example.png)
-
-The data update from the code component to the bound field triggers the `OnChange` event. For most component scenarios, this is enough and makers just add a handler to trigger subsequent actions. However, a more complicated control might require events to be raised that aren't field updates. The event mechanism allows code components to define events that have separate event handlers.
-
-## Using Events
-
-The event mechanism in PCF is based on the standard event model in JavaScript. The component can define events in the manifest file and raise these events in the code. The hosting application can listen to these events and react to them.
-
-### Define Events in Manifest
-
-The component defines events using the [event element](https://learn.microsoft.com/en-us/power-apps/developer/component-framework/manifest-schema-reference/event) in the manifest file. This data allows the respective hosting application to react to events in different ways.
+- Define custom events in the manifest with the `event` element.
+- Provide stable `name`, `display-name-key`, and `description-key` values.
+- Keep related properties and events together so makers understand the event contract.
+- Use manifest data so the hosting application can expose and react to events correctly.
 
 ```xml
 <property
@@ -46,15 +42,17 @@ The component defines events using the [event element](https://learn.microsoft.c
 />
 ```
 
-### Canvas Apps Event Handling
+## Canvas App Event Handling
 
-Canvas apps react to the event using Power Fx expressions:
+- Let makers configure canvas app event responses with Power Fx expressions on the PCF control properties pane.
+- Keep event names and descriptions maker-friendly because they appear in the designer.
+- Prefer normal bound-field `OnChange` behavior when a data update is the only signal the app needs.
 
-![Shows the custom events in the canvas apps designer](https://learn.microsoft.com/en-us/power-apps/developer/component-framework/media/custom-events-in-canvas-designer.png)
+## Model-Driven App Event Handling
 
-### Model-Driven Apps Event Handling
-
-Model Driven Apps use the [addEventHandler method](https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/addeventhandler) to associate event handlers to custom events for a component.
+- Use the model-driven Client API `addEventHandler` method to associate handlers with custom events.
+- Retrieve the control through the form context and register each event handler explicitly.
+- Register handlers per component instance; do not assume one registration covers every instance.
 
 ```javascript
 const controlName1 = "cr116_personid";
@@ -68,13 +66,12 @@ this.onLoad = function (executionContext) {
 }
 ```
 
-> **Note**: These events occur separately for each instance of the code component in the app.
+## Payloads, Callbacks, and Invocation
 
-## Defining an Event for Model-Driven Apps
-
-For model-driven apps you can pass a payload with the event allowing for more complex scenarios. For example in the diagram below the component passes a callback function in the event allowing the script handling to call back to the component.
-
-![In this example, the component passes a callback function in the event allowing the script handling to call back to the component](https://learn.microsoft.com/en-us/power-apps/developer/component-framework/media/passing-payload-in-events.png)
+- For model-driven apps, pass a payload with the event when the handler needs more context.
+- Include callback functions in payloads only when the handler must call back into the component.
+- Document payload shape so handlers know properties such as `message` and `callBackFunction`.
+- Use the PCF Events API when calling events from component code.
 
 ```javascript
 this.onSampleControl1CustomEvent1 = function (params) {
@@ -89,14 +86,80 @@ this.onSampleControl2CustomEvent2 = function (params) {
 }
 ```
 
-## Defining an Event for Canvas Apps
+## Good / Bad Examples
 
-Makers configure an event using Power Fx on the PCF control in the properties pane.
+The examples below illustrate when to use events instead of bound-field updates.
 
-## Calling an Event
+**Good:**
 
-See how to call an event in [Events](https://learn.microsoft.com/en-us/power-apps/developer/component-framework/reference/events).
+```xml
+<event
+  name="bundleCompleted"
+  display-name-key="BundleCompleted_Display_Key"
+  description-key="BundleCompleted_Description_Key"
+/>
+```
 
-## Next Steps
+Why: The event name represents a meaningful interaction that another canvas or model-driven app area can handle without pretending it is a field value change.
 
-[Tutorial: Define a custom event in a component](https://learn.microsoft.com/en-us/power-apps/developer/component-framework/tutorial-define-event)
+**Bad:**
+
+```xml
+<event
+  name="click"
+  display-name-key="click"
+  description-key="click"
+/>
+```
+
+Why: The event is too generic for makers and scripts to understand, and a normal control interaction or bound value update may already cover it.
+
+
+- Treat JavaScript event handlers as host integration code with stable names and documented payloads.
+## Conventions
+
+| Rule | Rationale |
+| --- | --- |
+| Prefer bound-field updates and `OnChange` for ordinary data flow | Existing host behavior is simpler and more predictable |
+| Define custom events with manifest `event` elements | Hosts discover event contracts from manifest metadata |
+| Use maker-friendly `display-name-key` and `description-key` values | Canvas designers and model-driven customizers need clear event choices |
+| Configure canvas app handlers through Power Fx | Canvas apps expose event behavior in the control properties pane |
+| Use `addEventHandler` for model-driven custom events | Model-driven apps bind handlers through the Client API |
+| Pass payloads and callbacks only for complex model-driven scenarios | Event contracts stay understandable and testable |
+| Treat each component instance independently | Events are raised and handled per instance |
+
+## Do / Do Not
+
+| Do | Do not |
+| --- | --- |
+| Use custom events for meaningful interactions beyond field updates | Create events for every click or implementation detail |
+| Keep event names stable and descriptive | Rename event names casually after makers or scripts depend on them |
+| Document payload properties such as `message` and `callBackFunction` | Pass undocumented objects to host scripts |
+| Register model-driven handlers with `formContext.getControl(...).addEventHandler(...)` | Assume handlers are globally registered |
+| Use Power Fx for canvas app event behavior | Expect canvas apps to use model-driven Client API handlers |
+| Verify preview event API availability | Assume every host supports every event feature |
+
+## Checklist Before Opening a PR
+
+- [ ] Bound-field updates and `OnChange` are used when custom events are not necessary.
+- [ ] Manifest events use stable `name`, `display-name-key`, and `description-key` values.
+- [ ] Canvas app behavior can be configured with Power Fx on the control properties pane.
+- [ ] Model-driven handlers use `addEventHandler` on the correct control instance.
+- [ ] Payloads and callbacks are documented, including `message` and `callBackFunction` when present.
+- [ ] Event behavior is verified per component instance.
+- [ ] Preview API availability is checked for the target host.
+
+## Related Primitives
+
+- `pcf-code-components` instruction: use it for general manifest, lifecycle, resources, outputs, state, and cleanup rules.
+- `pcf-canvas-apps` instruction: use it for canvas app enablement, import, and Studio security conventions.
+
+## References
+
+- Event element: <https://learn.microsoft.com/en-us/power-apps/developer/component-framework/manifest-schema-reference/event>
+- Component events OnChange example image: <https://learn.microsoft.com/en-us/power-apps/developer/component-framework/media/component-events-onchange-example.png>
+- Custom events in canvas designer image: <https://learn.microsoft.com/en-us/power-apps/developer/component-framework/media/custom-events-in-canvas-designer.png>
+- addEventHandler method: <https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/addeventhandler>
+- Passing payload in events image: <https://learn.microsoft.com/en-us/power-apps/developer/component-framework/media/passing-payload-in-events.png>
+- Events API: <https://learn.microsoft.com/en-us/power-apps/developer/component-framework/reference/events>
+- Tutorial: Define a custom event in a component: <https://learn.microsoft.com/en-us/power-apps/developer/component-framework/tutorial-define-event>

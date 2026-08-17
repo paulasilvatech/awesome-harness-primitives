@@ -1,11 +1,13 @@
 ---
-applyTo: '**/*.ts, **/*.js, **/package.json'
-description: 'Instructions for building Model Context Protocol (MCP) servers using the TypeScript SDK'
+applyTo: "**/*.ts,**/*.js,**/package.json"
+description: "Enforces Model Context Protocol TypeScript SDK conventions for tools, resources, prompts, transports, schemas, errors, and testing."
 ---
 
-# TypeScript MCP Server Development
+# TypeScript MCP Server Conventions — SDK Servers
 
-## Instructions
+These instructions apply to files matched by `**/*.ts,**/*.js,**/package.json`. They are authoritative for typescript mcp server code, configuration, examples, validation commands, API names, and runtime constraints in those files; stricter repository-specific security, deployment, testing, or platform primitives win on conflict. Treat the rules as passive conventions injected into matching files, not as a step-by-step workflow.
+
+## SDK Registration and Capabilities
 
 - Use the **@modelcontextprotocol/sdk** npm package: `npm install @modelcontextprotocol/sdk`
 - Import from specific paths: `@modelcontextprotocol/sdk/server/mcp.js`, `@modelcontextprotocol/sdk/server/stdio.js`, etc.
@@ -226,3 +228,50 @@ server.registerTool(
     }
 );
 ```
+
+## Good / Bad Examples
+
+The examples below show the boundary between an acceptable convention and the closest common anti-pattern.
+
+**Good:**
+
+```typescript
+server.registerTool('calculate', { title: 'Calculator', inputSchema: { a: z.number(), b: z.number() }, outputSchema: { result: z.number() } }, async ({ a, b }) => {
+  const output = { result: a + b };
+  return { content: [{ type: 'text', text: JSON.stringify(output) }], structuredContent: output };
+});
+```
+
+Why: The tool has metadata, zod schemas, display content, and structured content.
+
+**Bad:**
+
+```typescript
+server.tool('calculate', async (args: any) => String(args.a + args.b));
+```
+
+Why: The tool uses an older shape, `any`, and ambiguous text only.
+
+## Conventions
+
+| Rule | Rationale |
+| --- | --- |
+| Use `@modelcontextprotocol/sdk` imports from specific paths. | Specific ESM paths match SDK packaging. |
+| Use `registerTool()`, `registerResource()`, and `registerPrompt()` with `title` and zod schemas. | Modern registration improves UX and validation. |
+| Return `content` plus `structuredContent` and set `isError: true` for handled failures. | Clients need display, data, and error signals. |
+
+## Do / Do Not
+
+| Do | Do not |
+| --- | --- |
+| Use `@modelcontextprotocol/sdk` imports from specific paths. | Do not ignore this rule: Use `@modelcontextprotocol/sdk` imports from specific paths. |
+| Use `registerTool()`, `registerResource()`, and `registerPrompt()` with `title` and zod schemas. | Do not ignore this rule: Use `registerTool()`, `registerResource()`, and `registerPrompt()` with `title` and zod schemas. |
+| Return `content` plus `structuredContent` and set `isError: true` for handled failures. | Do not ignore this rule: Return `content` plus `structuredContent` and set `isError: true` for handled failures. |
+
+## Checklist Before Opening a PR
+
+- [ ] The change stays inside the matched `applyTo` scope.
+- [ ] The authoritative conventions above are applied to new or modified code.
+- [ ] Named commands, paths, API names, configuration keys, and version constraints remain intact.
+- [ ] Relevant validation, linting, build, or test commands from this instruction pass.
+- [ ] No secrets, unsupported APIs, placeholder prompt references, or relative primitive links were added.

@@ -1,88 +1,117 @@
 ---
-applyTo: '**/*.prompt.md'
-description: 'Guidelines for creating high-quality prompt files for GitHub Copilot'
+applyTo: "**/*.prompt.md"
+description: "Enforces VS Code Copilot prompt file conventions for frontmatter, naming, inputs, tools, workflow, output, validation, and maintenance. Use when authoring reusable Copilot Chat prompt files."
 ---
 
-# Copilot Prompt Files Guidelines
+# Copilot Prompt File Conventions — VS Code Reusable Prompts
 
-Instructions for creating effective and maintainable prompt files that guide GitHub Copilot in delivering consistent, high-quality outcomes across any repository.
+These instructions apply to VS Code Copilot prompt files matched by the `applyTo` glob. They are authoritative for prompt frontmatter, file naming, placement, body structure, input variables, tool declarations, guardrails, output definitions, examples, quality checks, and maintenance; organization-specific prompt metadata and workspace standards win where they define stricter prompt-file requirements.
 
 ## Scope and Principles
-- Target audience: maintainers and contributors authoring reusable prompts for Copilot Chat.
-- Goals: predictable behaviour, clear expectations, minimal permissions, and portability across repositories.
-- Primary references: VS Code documentation on prompt files and organization-specific conventions.
+
+Write prompt files for maintainers and contributors authoring reusable prompts for Copilot Chat. Optimize for predictable behaviour, clear expectations, minimal permissions, and portability across repositories. Follow VS Code prompt file documentation and organization-specific conventions when they apply.
 
 ## Frontmatter Requirements
 
-Every prompt file should include YAML frontmatter with the following fields:
+Every high-quality prompt file should include YAML frontmatter with one field per line and consistent quoting, with single quotes preferred for readability and version control clarity.
 
-### Required/Recommended Fields
+| Field | Required/Recommended | Description |
+| --- | --- | --- |
+| `description` | Recommended | A short description of the prompt as a single sentence with an actionable outcome. |
+| `name` | Optional | The name shown after typing `/` in chat; defaults to filename when omitted. |
+| `agent` | Recommended | The agent to use: `ask`, `edit`, `agent`, or a custom agent name; defaults to the current agent. |
+| `model` | Optional | The language model to use; defaults to the currently selected model. |
+| `tools` | Optional | List of tool/tool set names available for this prompt. |
+| `argument-hint` | Optional | Hint text shown in chat input to guide user interaction. |
 
-| Field | Required | Description |
-|-------|----------|-------------|
-| `description` | Recommended | A short description of the prompt (single sentence, actionable outcome) |
-| `name` | Optional | The name shown after typing `/` in chat. Defaults to filename if not specified |
-| `agent` | Recommended | The agent to use: `ask`, `edit`, `agent`, or a custom agent name. Defaults to current agent |
-| `model` | Optional | The language model to use. Defaults to the currently selected model |
-| `tools` | Optional | List of tool/tool set names available for this prompt |
-| `argument-hint` | Optional | Hint text shown in chat input to guide user interaction |
-
-### Guidelines
-
-- Use consistent quoting (single quotes recommended) and keep one field per line for readability and version control clarity
-- If `tools` are specified and the current agent is `ask` or `edit`, the default agent becomes `agent`
-- Preserve any additional metadata (`language`, `tags`, `visibility`, etc.) required by your organization
+If `tools` are specified and the current agent is `ask` or `edit`, the default agent becomes `agent`. Preserve additional metadata such as `language`, `tags`, or `visibility` when the organization requires it.
 
 ## File Naming and Placement
-- Use kebab-case filenames ending with `.prompt.md` and store them under `.github/prompts/` unless your workspace standard specifies another directory.
-- Provide a short filename that communicates the action (for example, `generate-readme.prompt.md` rather than `prompt1.prompt.md`).
 
-## Body Structure
-- Start with an `#` level heading that matches the prompt intent so it surfaces well in Quick Pick search.
-- Organize content with predictable sections. Recommended baseline: `Mission` or `Primary Directive`, `Scope & Preconditions`, `Inputs`, `Workflow` (step-by-step), `Output Expectations`, and `Quality Assurance`.
-- Adjust section names to fit the domain, but retain the logical flow: why → context → inputs → actions → outputs → validation.
-- Reference related prompts or instruction files using relative links to aid discoverability.
+Use kebab-case filenames ending with `.prompt.md` and store them under `.github/prompts/` unless the workspace standard specifies another directory. Choose a short filename that communicates the action, such as `generate-readme.prompt.md`, not `prompt1.prompt.md`.
 
-## Input and Context Handling
-- Use `${input:variableName[:placeholder]}` for required values and explain when the user must supply them. Provide defaults or alternatives where possible.
-- Call out contextual variables such as `${selection}`, `${file}`, `${workspaceFolder}` only when they are essential, and describe how Copilot should interpret them.
-- Document how to proceed when mandatory context is missing (for example, “Request the file path and stop if it remains undefined”).
+## Body Structure and Inputs
 
-## Tool and Permission Guidance
-- Limit `tools` to the smallest set that enables the task. List them in the preferred execution order when the sequence matters.
-- If the prompt inherits tools from a chat mode, mention that relationship and state any critical tool behaviours or side effects.
-- Warn about destructive operations (file creation, edits, terminal commands) and include guard rails or confirmation steps in the workflow.
+Start with one `#` heading that matches the prompt intent so it surfaces well in Quick Pick search. Organize content with predictable sections such as `Mission` or `Primary Directive`, `Scope & Preconditions`, `Inputs`, `Workflow` (step-by-step), `Output Expectations`, and `Quality Assurance`. Adjust headings to fit the domain, but preserve the logical flow: why → context → inputs → actions → outputs → validation.
 
-## Instruction Tone and Style
-- Write in direct, imperative sentences targeted at Copilot (for example, “Analyze”, “Generate”, “Summarize”).
-- Keep sentences short and unambiguous, following Google Developer Documentation translation best practices to support localization.
-- Avoid idioms, humor, or culturally specific references; favor neutral, inclusive language.
+Use `${input:variableName[:placeholder]}` for required values and explain when the user must provide them. Mention contextual variables such as `${selection}`, `${file}`, and `${workspaceFolder}` only when essential, and describe how Copilot should interpret them. Define how to proceed when mandatory context is missing, for example: request the file path and stop if it remains undefined.
 
-## Output Definition
-- Specify the format, structure, and location of expected results (for example, “Create `docs/adr/adr-XXXX.md` using the template below”).
-- Include success criteria and failure triggers so Copilot knows when to halt or retry.
-- Provide validation steps—manual checks, automated commands, or acceptance criteria lists—that reviewers can execute after running the prompt.
+## Tools, Permissions, and Guardrails
 
-## Examples and Reusable Assets
-- Embed Good/Bad examples or scaffolds (Markdown templates, JSON stubs) that the prompt should produce or follow.
-- Maintain reference tables (capabilities, status codes, role descriptions) inline to keep the prompt self-contained. Update these tables when upstream resources change.
-- Link to authoritative documentation instead of duplicating lengthy guidance.
+Limit `tools` to the smallest set that enables the task. List tools in preferred execution order when sequence matters. If a prompt inherits tools from a chat mode, mention that relationship and state any critical tool behaviours or side effects. Warn about destructive operations such as file creation, edits, or terminal commands and include guard rails or confirmation steps in the workflow.
 
-## Quality Assurance Checklist
-- [ ] Frontmatter fields are complete, accurate, and least-privilege.
-- [ ] Inputs include placeholders, default behaviours, and fallbacks.
+## Tone, Output, Examples, and Maintenance
+
+Write direct, imperative sentences targeted at Copilot, such as Analyze, Generate, or Summarize. Keep sentences short and unambiguous, following Google Developer Documentation translation best practices to support localization. Avoid idioms, humor, and culturally specific references.
+
+Specify the format, structure, and location of expected results, such as `Create docs/adr/adr-XXXX.md using the template below`. Include success criteria and failure triggers so Copilot knows when to halt or retry. Provide validation steps, manual checks, automated commands, or acceptance criteria that reviewers can run.
+
+Embed Good/Bad examples or scaffolds such as Markdown templates and JSON stubs when they help the prompt produce consistent output. Keep reference tables inline when they are necessary and self-contained. Link to authoritative documentation instead of duplicating lengthy guidance. Version-control prompts with the code they affect, review them periodically, and extract broadly useful guidance into instruction files or shared prompt packs when appropriate.
+
+## Good / Bad Examples
+
+The examples below illustrate discovery-ready frontmatter and concrete input handling.
+
+**Good**
+
+```yaml
+---
+name: 'generate-readme'
+description: 'Generate a concise README for the selected project. Use when repository documentation is missing or stale.'
+agent: 'agent'
+tools: ['codebase', 'editFiles', 'search']
+argument-hint: '${input:projectPath:Path to the project}'
+---
+```
+
+Why: the prompt has a clear command name, actionable description, explicit agent, least-privilege tools, and an input placeholder.
+
+**Bad**
+
+```yaml
+---
+description: 'Do stuff.'
+tools: ['all']
+---
+```
+
+Why: the discovery surface is vague and the tool declaration is not least-privilege.
+
+## Conventions
+
+| Rule | Rationale |
+| --- | --- |
+| Use YAML frontmatter with `description`, optional `name`, recommended `agent`, optional `model`, optional `tools`, and optional `argument-hint`. | VS Code can discover and run prompts predictably. |
+| Use kebab-case filenames under `.github/prompts/` unless the workspace standard differs. | Prompt files are easy to find and invoke. |
+| Structure bodies around mission, scope, inputs, workflow, output, and quality assurance. | Copilot receives enough context to act consistently. |
+| Define `${input:variableName[:placeholder]}`, `${selection}`, `${file}`, and `${workspaceFolder}` usage precisely. | Missing or ambiguous context does not lead to unsafe guesses. |
+| Keep tools least-privilege and document destructive side effects. | Prompt execution avoids unnecessary permissions and unintended edits. |
+| Specify output location, format, success criteria, failure triggers, and validation. | Reviewers can verify whether the prompt did the requested work. |
+| Maintain prompts with their owning code and update links, tools, and model requirements over time. | Prompt behavior stays aligned with the repository. |
+
+## Do / Do Not
+
+| Do | Do not |
+| --- | --- |
+| Write direct imperative instructions such as Analyze, Generate, and Summarize. | Use idioms, humor, or culturally specific references. |
+| Include Good/Bad examples, templates, or JSON stubs when they improve consistency. | Duplicate long authoritative documentation inside the prompt. |
+| Tell Copilot to halt, retry, or request missing context when required inputs are absent. | Let the prompt invent mandatory paths, selections, or workspace facts. |
+| Test prompts in VS Code with `Chat: Run Prompt`. | Assume Markdown validity means the prompt executes correctly. |
+| Keep security, compliance, and privacy references current. | Leave stale tool lists, model requirements, or linked documents. |
+
+## Checklist Before Opening a PR
+
+- [ ] Frontmatter fields are complete, accurate, consistently quoted, and least-privilege.
+- [ ] The filename is kebab-case, action-oriented, and placed under `.github/prompts/` or the workspace standard directory.
+- [ ] Inputs include placeholders, default behaviours, and fallbacks for missing context.
 - [ ] Workflow covers preparation, execution, and post-processing without gaps.
-- [ ] Output expectations include formatting and storage details.
-- [ ] Validation steps are actionable (commands, diff checks, review prompts).
+- [ ] Output expectations include formatting, storage details, success criteria, and failure triggers.
+- [ ] Validation steps are actionable through commands, diff checks, review prompts, or acceptance criteria.
 - [ ] Security, compliance, and privacy policies referenced by the prompt are current.
-- [ ] Prompt executes successfully in VS Code (`Chat: Run Prompt`) using representative scenarios.
+- [ ] Prompt executes successfully in VS Code with `Chat: Run Prompt` using representative scenarios.
 
-## Maintenance Guidance
-- Version-control prompts alongside the code they affect; update them when dependencies, tooling, or review processes change.
-- Review prompts periodically to ensure tool lists, model requirements, and linked documents remain valid.
-- Coordinate with other repositories: when a prompt proves broadly useful, extract common guidance into instruction files or shared prompt packs.
+## References
 
-## Additional Resources
-- [Prompt Files Documentation](https://code.visualstudio.com/docs/copilot/customization/prompt-files#_prompt-file-format)
-- [Awesome Copilot Prompt Files](https://github.com/github/awesome-copilot)
-- [Tool Configuration](https://code.visualstudio.com/docs/copilot/chat/chat-agent-mode#_agent-mode-tools)
+- Prompt Files Documentation: https://code.visualstudio.com/docs/copilot/customization/prompt-files#_prompt-file-format
+- Awesome Copilot Prompt Files: https://github.com/github/awesome-copilot
+- Tool Configuration: https://code.visualstudio.com/docs/copilot/chat/chat-agent-mode#_agent-mode-tools

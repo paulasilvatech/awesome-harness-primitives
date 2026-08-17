@@ -1,18 +1,18 @@
 ---
-applyTo: '**/*.{ts,tsx,js}'
-description: 'Complete PCF API reference with all interfaces and their availability in model-driven and canvas apps'
+applyTo: "**/*.{ts,tsx,js}"
+description: "Enforces Power Apps Component Framework API conventions and availability checks for model-driven and canvas apps."
 ---
 
-# Power Apps Component Framework API Reference
+# Power Apps Component Framework Conventions — API Availability
 
-The Power Apps component framework provides a rich set of APIs that enable you to create powerful code components. This reference lists all available interfaces and their availability across different app types.
+These instructions apply to TypeScript and JavaScript code for Power Apps Component Framework (PCF) code components. They are authoritative for PCF API availability, namespace usage, lifecycle methods, platform compatibility, type safety, null checks, error handling, and performance in matched files; project-specific component architecture and Dataverse security rules win when they define stricter target-app behavior.
 
 ## API Availability
 
-The following table shows all API interfaces available in the Power Apps component framework, along with their availability in model-driven apps and canvas apps.
+Check API availability for the target platform before using an interface. `AttributeMetadata` is model-driven only; the other listed interfaces are available in both model-driven apps and canvas apps.
 
 | API | Model-driven apps | Canvas apps |
-|-----|------------------|-------------|
+|---|---|---|
 | AttributeMetadata | Yes | No |
 | Client | Yes | Yes |
 | Column | Yes | Yes |
@@ -41,122 +41,82 @@ The following table shows all API interfaces available in the Power Apps compone
 | Utility | Yes | Yes |
 | WebApi | Yes | Yes |
 
-## Key API Namespaces
+## Context and Data APIs
 
-### Context APIs
+The `Context` object is passed to component lifecycle methods and exposes `Client`, `Device`, `Factory`, `Formatting`, `Mode`, `Navigation`, `Resources`, `UserSettings`, `Utils`, and `WebApi`. Use `context.client.getFormFactor()` and `context.client.isOffline()` to adapt behavior. Use `context.userSettings.locale`, number formatting, security roles, and `NumberFormattingInfo` for user-specific display. Use `context.utils.getEntityMetadata`, `context.utils.hasEntityPrivilege`, and `context.utils.lookupObjects` when metadata or lookup behavior is needed.
 
-The `Context` object provides access to all framework capabilities and is passed to your component's lifecycle methods. It contains:
+Use `DataSet`, `Column`, `Entity`, `Filtering`, `Linking`, `Paging`, and `SortStatus` for tabular data. Access records through `context.parameters.dataset.records` and sorting through `context.parameters.dataset.sorting`; check null or undefined before reading optional API objects.
 
-- **Client**: Information about the client (form factor, network status)
-- **Device**: Device capabilities (camera, location, microphone)
-- **Factory**: Factory methods for creating framework objects
-- **Formatting**: Number and date formatting
-- **Mode**: Component mode and tracking
-- **Navigation**: Navigation methods
-- **Resources**: Access to resources (images, strings)
-- **UserSettings**: User settings (locale, number format, security roles)
-- **Utils**: Utility methods (getEntityMetadata, hasEntityPrivilege, lookupObjects)
-- **WebApi**: Dataverse Web API methods
+## UI, Metadata, and Lifecycle APIs
 
-### Data APIs
+Use `Popup`, `PopupService`, and `Mode` for UI behavior and rendering mode. Use `AttributeMetadata` only in model-driven components for detailed column metadata, and `PropertyHelper` for property metadata helpers. Implement `StandardControl` lifecycle methods consistently: `init()` initializes the component, `updateView()` updates the UI when context changes, `getOutputs()` returns output values, and `destroy()` cleans up resources.
 
-- **DataSet**: Work with tabular data
-- **Column**: Access column metadata and data
-- **Entity**: Access record data
-- **Filtering**: Define data filtering
-- **Linking**: Define relationships
-- **Paging**: Handle data pagination
-- **SortStatus**: Manage sorting
+## WebApi, Device, and Formatting Patterns
 
-### UI APIs
+Use `context.webAPI.retrieveMultipleRecords("account", "?$select=name")` for retrieve queries and `context.webAPI.createRecord("contact", data)` for create operations. Use `context.device.captureImage()` and `context.device.getCurrentPosition()` only after confirming the target app and device support the capability. Use `context.formatting.formatDateLong(date)` and `context.formatting.formatDecimal(value)` instead of hand-coded locale formatting.
 
-- **Popup**: Create popup dialogs
-- **PopupService**: Manage popup lifecycle
-- **Mode**: Get component rendering mode
+## Technical Vocabulary
 
-### Metadata APIs
+Preserve these source terms when they apply to edits in this domain: `null/undefined` `try-catch`.
 
-- **AttributeMetadata**: Column metadata (model-driven only)
-- **PropertyHelper**: Property metadata helpers
+Keep TypeScript definitions accurate so IntelliSense exposes the PCF API surface correctly.
 
-### Standard Control
+## Good / Bad Examples
 
-- **StandardControl**: Base interface for all code components with lifecycle methods:
-  - `init()`: Initialize component
-  - `updateView()`: Update component UI
-  - `destroy()`: Cleanup resources
-  - `getOutputs()`: Return output values
+The examples below show target-platform and null-safe API usage.
 
-## Usage Guidelines
+**Good:**
 
-### Model-Driven vs Canvas Apps
+```typescript
+const formFactor = context.client.getFormFactor();
+const userLocale = context.userSettings.locale;
+const records = context.parameters.dataset?.records ?? {};
+```
 
-Some APIs are only available in model-driven apps due to platform differences:
+Why: The code uses PCF context APIs and guards optional dataset access.
 
-- **AttributeMetadata**: Model-driven only - provides detailed column metadata
-- Most other APIs are available in both platforms
+**Bad:**
 
-### API Version Compatibility
+```typescript
+const metadata = context.parameters.field.attributes;
+const name = context.parameters.dataset.records[id].getValue('name');
+```
 
-- Always check the API availability for your target platform (model-driven or canvas)
-- Some APIs may have different behaviors across platforms
-- Test components in the target environment to ensure compatibility
+Why: It assumes model-driven metadata and dataset records are always available, which can break canvas apps or empty states.
 
-### Common Patterns
+## Conventions
 
-1. **Accessing Context APIs**
-   ```typescript
-   // In init or updateView
-   const userLocale = context.userSettings.locale;
-   const isOffline = context.client.isOffline();
-   ```
+| Rule | Rationale |
+|---|---|
+| Verify API availability for model-driven apps and canvas apps | PCF components can run in different hosts with different capabilities |
+| Use `Context` lifecycle data instead of globals | Components stay portable across Power Apps hosts |
+| Implement `init()`, `updateView()`, `getOutputs()`, and `destroy()` cleanly | The framework relies on predictable lifecycle behavior |
+| Use TypeScript and generated PCF types | API misuse is caught before runtime |
+| Check null and undefined before reading context members | Canvas/model-driven differences and empty data sets do not crash components |
+| Wrap WebApi, device, and navigation calls in error handling | Host API failures produce recoverable UI states |
+| Cache API results only when the data is stable and invalidation is clear | Repeated calls hurt performance, but stale data breaks correctness |
 
-2. **Working with DataSet**
-   ```typescript
-   // Access dataset records
-   const records = context.parameters.dataset.records;
-   
-   // Get sorted columns
-   const sortedColumns = context.parameters.dataset.sorting;
-   ```
+## Do / Do Not
 
-3. **Using WebApi**
-   ```typescript
-   // Retrieve records
-   context.webAPI.retrieveMultipleRecords("account", "?$select=name");
-   
-   // Create record
-   context.webAPI.createRecord("contact", data);
-   ```
+| Do | Do not |
+|---|---|
+| Use `context.webAPI.retrieveMultipleRecords` and `createRecord` for Dataverse access | Bypass the PCF `WebApi` with ad hoc host calls |
+| Use `context.formatting.formatDateLong` and `formatDecimal` | Hand-code date or number formatting |
+| Use `context.device.captureImage` and `getCurrentPosition` behind capability checks | Assume every host has the same device APIs |
+| Clean up listeners and resources in `destroy()` | Leave timers, subscriptions, or DOM handlers alive |
+| Test in the target model-driven or canvas environment | Assume behavior is identical across app types |
+| Use `AttributeMetadata` only for model-driven apps | Use model-driven-only APIs in canvas components |
 
-4. **Device Capabilities**
-   ```typescript
-   // Capture image
-   context.device.captureImage();
-   
-   // Get current position
-   context.device.getCurrentPosition();
-   ```
+## Checklist Before Opening a PR
 
-5. **Formatting**
-   ```typescript
-   // Format date
-   context.formatting.formatDateLong(date);
-   
-   // Format number
-   context.formatting.formatDecimal(value);
-   ```
+- [ ] Target app type is known and every PCF API used is available for that platform.
+- [ ] `Context`, `Client`, `Device`, `Formatting`, `Navigation`, `Resources`, `UserSettings`, `Utility`, and `WebApi` usage is typed and null-safe.
+- [ ] Dataset code handles `DataSet`, `Column`, `Entity`, `Filtering`, `Linking`, `Paging`, and `SortStatus` correctly.
+- [ ] `StandardControl` lifecycle methods `init()`, `updateView()`, `getOutputs()`, and `destroy()` remain focused and complete.
+- [ ] WebApi, device, and navigation calls have error handling and appropriate caching.
+- [ ] Component behavior was tested in the target model-driven or canvas environment.
 
-## Best Practices
+## References
 
-1. **Type Safety**: Use TypeScript for type checking and IntelliSense
-2. **Null Checks**: Always check for null/undefined before accessing API objects
-3. **Error Handling**: Wrap API calls in try-catch blocks
-4. **Platform Detection**: Check `context.client.getFormFactor()` to adapt behavior
-5. **API Availability**: Verify API availability for your target platform before use
-6. **Performance**: Cache API results when appropriate to avoid repeated calls
-
-## Additional Resources
-
-- For detailed documentation on each API, refer to the [Power Apps component framework API reference](https://learn.microsoft.com/power-apps/developer/component-framework/reference/)
-- Sample code for each API is available in the [PowerApps-Samples repository](https://github.com/microsoft/PowerApps-Samples/tree/master/component-framework)
+- Power Apps component framework API reference: https://learn.microsoft.com/power-apps/developer/component-framework/reference/
+- PowerApps-Samples component framework repository: https://github.com/microsoft/PowerApps-Samples/tree/master/component-framework

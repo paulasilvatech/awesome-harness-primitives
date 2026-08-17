@@ -1,63 +1,53 @@
 ---
-applyTo: '**/${input:file}'
-description: 'Shorthand code will be in the file provided from the prompt or raw data in the prompt, and will be used to update the code file when the prompt has the text `UPDATE CODE FROM SHORTHAND`.'
+applyTo: "**/${input:file}"
+description: "Interprets UPDATE CODE FROM SHORTHAND prompts and replaces marked shorthand regions with valid code for the required target file."
 ---
 
-# Update Code from Shorthand
+# Update Code from Shorthand Conventions — Marker-Driven Code Expansion
 
-One or more files will be provided in the prompt. For each file in the prompt, look for the markers
-`${openMarker}` and `${closeMarker}`.
+These instructions apply only to the file identified by `${input:file}` when the user prompt starts with `UPDATE CODE FROM SHORTHAND`. They are authoritative for interpreting `${openPrompt}`, `${REQUIRED_FILE}`, `${openMarker}`, `${closeMarker}`, and shorthand `()=>` regions; normal language-specific instructions for the target file win for syntax, idioms, tests, and formatting after the shorthand intent has been converted into real code.
 
-All the content between the edit markers may include natural language and shorthand; convert it into
-valid code appropriate for the target file type and its extension.
+## Activation and Inputs
 
-## Role
+Apply these conventions only when the prompt begins exactly with `UPDATE CODE FROM SHORTHAND`. If the prompt does not begin with that text, ignore this file and do not infer a shorthand edit mode. The prompt or provided files must identify `${REQUIRED_FILE}` and contain matching edit markers.
 
-Expert 10x software engineer. Great at problem solving and generating creative solutions when given
-shorthand instructions, similar to brainstorming. The shorthand is like a hand-drawn sketch a client
-gives an architect. You extract the big picture and apply expert judgment to produce a complete,
-high-quality implementation.
+| Variable | Required meaning |
+| --- | --- |
+| `REQUIRED_FILE` / `${REQUIRED_FILE}` | The target file to update, usually `${input:file}` |
+| `openPrompt` | The literal activation text `UPDATE CODE FROM SHORTHAND` |
+| `language:comment` | A single-line or multi-line comment syntax appropriate for the target language |
+| `openMarker` / `${openMarker}` | The marker `${language:comment} start-shorthand` |
+| `closeMarker` / `${closeMarker}` | The marker `${language:comment} end-shorthand` |
+| `_FILE` | Preserved identifier pattern used by `REQUIRED_FILE` |
 
-## Rules for Updating Code File from Shorthand
+## Marker Interpretation
 
-- The text `${openPrompt}` at the very start of the prompt.
-- The `${REQUIRED_FILE}` following the `${openPrompt}`.
-- Edit markers in the code file or prompt - like:
+- Find the region between `${openMarker}` and `${closeMarker}` in the target file or prompt.
+- Treat all content between edit markers as natural language, shorthand, pseudocode, or mixed-language notes that must become valid code for the target file type.
+- Remove the marker lines themselves after applying the update.
+- Remove all occurrences of `start-shorthand` and `end-shorthand`, including comment forms such as `// start-shorthand` and `// end-shorthand`.
+- If a shorthand comment says `REMOVE COMMENT`, `NOTE`, or similar, remove that comment and replace the surrounding line with correct syntax, functions, methods, or code blocks as needed.
+
+## Shorthand Semantics
+
+The shorthand key `()=>` means the line is mostly intent and partly pseudocode. Use expert engineering judgment to infer the complete implementation, preserve the big picture, and produce maintainable code instead of transliterating the shorthand literally.
+
+| Shorthand content | Convention | Rationale |
+| --- | --- | --- |
+| `()=>` with a named goal | Implement the named behavior in idiomatic target-language code | The shorthand is a sketch, not final syntax |
+| Natural-language comments | Convert to executable code or meaningful retained comments | Output files should not contain planning notes |
+| Mixed language fragments | Translate concepts into the target extension's syntax | The target file type controls validity |
+| Data-only instruction | Format and update `JSON`, `XML`, or other data without inventing application code | Some prompts ask for data edits, not code |
+
+## Data File Handling
+
+When text after the file name says `no need to edit code`, treat the target as a data file such as `JSON` or `XML`. Focus on formatting existing data. When it also says `add data`, add entries that match the existing data shape, ordering, indentation, and schema cues.
+
+## Prompt-Back Boundary
+
+If a user asks to edit a code file but provides marker text without the activation prompt, do not silently apply this mode. The safe response is to ask whether they meant to prepend the prompt with `UPDATE CODE FROM SHORTHAND`; once activated, apply the marker rules exactly.
 
 ```text
- ${openMarker} 
- ()=> shorthand code 
- ${closeMarker}
-```
-
-- Use the shorthand to edit, or sometimes essentially create the contents of a code file.
-- If any comment has the text `REMOVE COMMENT`, `NOTE`, or similar within the comment, that
-**comment** is to be removed; and in all probability that line will need the correct syntax,
-function, method, or blocks of code.
-- If any text, following the file name implies `no need to edit code`, then in all probability this
-is to update a data file i.e. `JSON` or `XML` and means the edits should be focused on formatting
-the data.
-- If any text, following the file name implies `no need to edit code` and `add data`, then in all
-probability this is to update a data file i.e. `JSON` or `XML` and means the edits should be focused
-on formatting and adding additional data matching the existing format of the data file.
-
-### When to Apply Instructions and Rules
-
-- This is only relevant when the text `${openPrompt}` is at the start of the prompt.
-  - If the text `${openPrompt}` is not at the start of the prompt, discard these instructions for
-  that prompt.
-- The `${REQUIRED_FILE}` will have two markers:
-  1. Opening `${openMarker}`
-  2. Closing `${closeMarker}`
-  - Call these `edit markers`.
-- The content between the edit markers determines what to update in the `${REQUIRED_FILE}` or other
-referenced files.
-- After applying the updates, remove the `${openMarker}` and `${closeMarker}` lines from the
-affected file(s).
-
-#### Prompt Back Following Rules
-
-```bash
 [user]
 > Edit the code file ${REQUIRED_FILE}.
 [agent]
@@ -66,65 +56,63 @@ affected file(s).
 > ${openMarker} - edit the code file ${REQUIRED_FILE}.
 ```
 
-## Remember to
+## Example Interpretation Notes
 
-- Remove all occurrences of the openMarker or `${language:comment} start-shorthand`.
-  - e.g. `// start-shorthand`.
-- Remove all occurrences of the closeMarker or `${language:comment} end-shorthand`.
-  - e.g. `// end-shorthand`.
+Treat the shorthand as a `hand-drawn` sketch that identifies intent, not final syntax. In examples that target browser code, preserve concrete anchors such as `id="a"` and convert parsed markdown to `HTML` only when the target code actually needs that behavior. The phrase `edit markers` refers to the opening and closing marker pair around the shorthand region.
 
-## Shorthand Key
+## Good / Bad Examples
 
-- **`()=>`** = 90% comment and 10% pseudo code blocks of mixed languages.
-  - When lines have `()=>` as the starting set of characters, use your **role** to determine a
-solution for the goal.
+The examples below illustrate converting shorthand into real code and deleting markers.
 
-## Variables
-
-- REQUIRED_FILE = `${input:file}`;
-- openPrompt = "UPDATE CODE FROM SHORTHAND";
-- language:comment = "Single or multi-line comment of programming language.";
-- openMarker = "${language:comment} start-shorthand";
-- closeMarker = "${language:comment} end-shorthand";
-
-## Use Example
-
-### Prompt Input
-
-```bash
-[user prompt]
-UPDATE CODE FROM SHORTHAND 
-#file:script.js 
-Use #file:index.html:94-99 to see where converted
-markdown to html will be parsed `id="a"`.
-```
-
-### Code File
+**Good:**
 
 ```js
-// script.js
-// Parse markdown file, applying HTML to render output.
+function applyHtmlToParsedMarkdown(lines) {
+  return lines.map(renderMarkdownLine).join("");
+}
 
-var file = "file.md";
-var xhttp = new XMLHttpRequest();
-xhttp.onreadystatechange = function() {
- if (this.readyState == 4 && this.status == 200) {
-  let data = this.responseText;
-  let a = document.getElementById("a");
-  let output = "";
-  // start-shorthand
-  ()=> let apply_html_to_parsed_markdown = (md) => {
-   ()=> md.forEach(line => {
-    // Depending on line data use a regex to insert html so markdown is converted to html
-    ()=> output += line.replace(/^(regex to add html elements from markdonw line)(.*)$/g, $1$1);
-   });
-   // Output the converted file from markdown to html.
-   return output;
-  };
-  ()=>a.innerHTML = apply_html_to_parsed_markdown(data);
-  // end-shorthand
- }
-};
-xhttp.open("GET", file, true);
-xhttp.send();
+document.getElementById("a").innerHTML = applyHtmlToParsedMarkdown(data.split("\n"));
 ```
+
+Why: The shorthand goal becomes valid JavaScript, helper names express intent, and marker comments are gone.
+
+**Bad:**
+
+```js
+// start-shorthand
+()=> let apply_html_to_parsed_markdown = (md) => {
+// end-shorthand
+```
+
+Why: The output still contains shorthand, markers, and invalid mixed syntax.
+
+## Conventions
+
+| Rule | Rationale |
+| --- | --- |
+| Activate only when the prompt starts with `UPDATE CODE FROM SHORTHAND` | Prevents accidental edits from ordinary comments or notes |
+| Convert marker content into valid code for `${REQUIRED_FILE}` | The target file must remain syntactically usable |
+| Remove `${openMarker}`, `${closeMarker}`, `start-shorthand`, and `end-shorthand` | Marker scaffolding is not part of the final implementation |
+| Remove `REMOVE COMMENT`, `NOTE`, and similar planning comments | The final file should contain implementation, not instructions to the agent |
+| Treat `no need to edit code` as a data-formatting instruction | Avoids inventing code when the requested change is `JSON` or `XML` data |
+| Apply language-specific conventions after interpreting shorthand | The final code should match the surrounding project style |
+
+## Do / Do Not
+
+| Do | Do not |
+| --- | --- |
+| Use `()=>` lines as intent to implement | Leave `()=>` shorthand in the updated file |
+| Preserve the user's required behavior and file target | Apply shorthand to unrelated files |
+| Remove all marker lines after updating | Keep `${openMarker}` or `${closeMarker}` in source |
+| Format data files according to their existing shape | Treat every shorthand request as application code |
+| Ask for activation when the prompt omits `UPDATE CODE FROM SHORTHAND` | Guess that marker text should trigger this mode silently |
+| Produce complete, high-quality implementation | Copy the shorthand sketch verbatim |
+
+## Checklist Before Opening a PR
+
+- [ ] The prompt starts with `UPDATE CODE FROM SHORTHAND` before this mode is applied.
+- [ ] `${REQUIRED_FILE}` or `${input:file}` is the file actually updated.
+- [ ] Every shorthand region between `${openMarker}` and `${closeMarker}` is converted to valid target-file content.
+- [ ] All `start-shorthand`, `end-shorthand`, `REMOVE COMMENT`, `NOTE`, and `()=>` scaffolding is removed unless it is legitimate domain data.
+- [ ] Data-only requests preserve `JSON`, `XML`, or target data formatting and schema cues.
+- [ ] The final file follows the language-specific conventions and contains no unrelated edits.

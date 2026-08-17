@@ -1,87 +1,95 @@
 ---
-applyTo: '**/*.md'
-description: 'Markdown accessibility guidelines based on GitHub''s 5 best practices for inclusive documentation'
+applyTo: "**/*.md"
+description: "Enforces Markdown accessibility conventions for links, image alt text, headings, plain language, lists, emoji, multimedia, and review priority. Use when writing or reviewing Markdown documentation."
 ---
 
-# Markdown Accessibility Review Guidelines
+# Markdown Accessibility Conventions — Inclusive Documentation
 
-When reviewing markdown files, check for the following accessibility issues based on GitHub's [5 tips for making your GitHub profile page accessible](https://github.blog/developer-skills/github/5-tips-for-making-your-github-profile-page-accessible/) and the Smashing Magazine article [Improving The Accessibility Of Your Markdown](https://www.smashingmagazine.com/2021/09/improving-accessibility-of-markdown/). Flag violations and suggest fixes with clear explanations of the accessibility impact.
+These instructions apply to Markdown documentation and reviews. They are authoritative for accessible links, alt text, heading hierarchy, plain language, lists, emoji, multimedia, tables, and review tone in matched files; project documentation style guides and legal accessibility requirements win where they define stricter standards.
 
-## 1. Descriptive Links
+## Links and Images
 
-- Flag generic link text such as "click here," "here," "this," "read more," or "link."
-- Link text must make sense when read out of context, because assistive technology can present links as an isolated list.
-- Flag multiple links on the same page that share identical text but point to different destinations.
-- Bare URLs in prose should be converted to descriptive links.
+Use descriptive links that make sense out of context. Flag generic link text such as `click here`, `here`, `this`, `read more`, or `link`. Flag multiple links on the same page with identical text that point to different destinations. Convert bare URLs in prose to descriptive links.
 
-Bad: `Read my blog post [here](https://example.com)`
-Good: `Read my blog post "[Crafting an accessible resume](https://example.com)"`
+**Good:** `Read my blog post "[Crafting an accessible resume](https://example.com)"`
+**Bad:** `Read my blog post [here](https://example.com)`
 
-## 2. Image Alternative (alt) Text
+For images, flag empty alt text such as `![](path/to/image.png)` unless the image is explicitly decorative. Flag alt text that is a filename such as `img_1234.jpg` or a generic placeholder such as `screenshot` or `image`. Keep alt text succinct and descriptive, include text visible in the image, use `screenshot of` where relevant, and do not prefix with `image of` because screen readers announce images automatically. For charts and infographics, summarize the data in alt text and provide longer descriptions through `<details>` tags or linked content. Present alt text changes as recommendations for the author to review.
 
-- Flag images with empty alt text (e.g., `![](path/to/image.png)`) unless they are explicitly decorative.
-- Flag alt text that is a filename (e.g., `img_1234.jpg`) or generic placeholder (e.g., `screenshot`, `image`).
-- Alt text should be succinct and descriptive. Include any text visible in the image.
-- Use "screenshot of" where relevant, but do not prefix with "image of" since screen readers announce that automatically.
-- For complex images (charts, infographics), suggest summarizing the data in alt text and providing longer descriptions via `<details>` tags or linked content.
-- When suggesting alt text improvements, present them as recommendations for the author to review. Alt text requires understanding of visual content and context that only the author can properly assess.
+## Heading Hierarchy and Plain Language
 
-## 3. Heading Hierarchy
+Use only one H1 (`#`) per document as the page title. In projects where H1 is auto-generated from front matter, start content at H2. Do not skip heading levels, such as `##` followed by `####`, and flag bold text such as `**text**` used as a visual substitute for a heading. Proper heading structure helps assistive technology users navigate by section and helps sighted users scan content.
 
-- There must be only one H1 (`#`) per document, used as the page title. Note: in projects where H1 is auto-generated from front matter, start content at H2.
-- Headings must follow a logical hierarchy and never skip levels (e.g., `##` followed by `####` is a violation).
-- Flag bold text (`**text**`) used as a visual substitute for a proper heading.
-- Proper heading structure allows assistive technology users to navigate by section and helps sighted users scan content.
+Favor short sentences, common words, and active voice. Flag unnecessarily complex or jargon-heavy language, long dense paragraphs, and UI navigation described only by visual breadcrumb notation or icon names. Write actions as sequential plain-language steps first, such as `open Settings, then select Preferences`; visual context such as `(gear icon > Preferences)` may follow only as supplemental information. Present language improvements as recommendations for the author to review.
 
-## 4. Plain Language
+## Lists, Emoji, Multimedia, and Tables
 
-- Flag unnecessarily complex or jargon-heavy language that could be simplified.
-- Favor short sentences, common words, and active voice.
-- Flag long, dense paragraphs that could be broken into smaller sections or lists.
-- When describing UI navigation, write actions as sequential steps in plain language first (e.g., "open Settings, then select Preferences"). Use generic, stable labels rather than icon names or visual descriptions.
-- A parenthetical visual reference may follow as supplemental context (e.g., "(gear icon > Preferences)"), but never use visual breadcrumb notation or icon names as the sole way to describe a navigation path.
-- When suggesting plain language improvements, present them as recommendations for the author to review. Language decisions require understanding of audience, context, and tone.
+Use proper Markdown list syntax with `-`, `*`, `+`, or `1.`. Flag emoji or special characters used as bullets, and flag sequential plain text that should be a list. Use emoji sparingly, flag multiple consecutive emoji, and ensure emoji never carry meaning that is not also communicated in text. Provide captions for videos and transcripts for recorded audio. Do not auto-play audio or video. Prefer animations paused on page load. Avoid opening links in a new tab or window. Do not rely on bold or italics for critical information because screen readers often do not announce emphasis. Use tables for data only; avoid layout tables, nested tables, and complex tables that standard Markdown cannot represent accessibly.
 
-## 5. Lists and Emoji Usage
+## Review Priority and Tone
 
-### Lists
+Prioritize issues in this order: missing or empty alt text, skipped heading levels or hierarchy issues, non-descriptive link text, emoji used as bullet points or list markers, plain language improvements, multimedia, then other issues. Explain the accessibility impact and affected users, such as screen reader users, people with cognitive disabilities, or non-native speakers. Keep suggestions actionable and specific without removing the author's personality or voice.
 
-- Flag emoji or special characters used as bullet points instead of proper markdown list syntax (`-`, `*`, `+`, or `1.`).
-- Flag sequential items in plain text that should be structured as a proper list.
-- Proper list markup allows screen readers to announce list context (e.g., "item 1 of 3").
+## Good / Bad Examples
 
-### Emoji
+The examples below illustrate accessible links and headings.
 
-- Flag multiple consecutive emoji, which are disruptive to screen reader users since each emoji name is read aloud in full (e.g., "rocket" "sparkles" "fire").
-- Flag emoji used to convey meaning that is not also communicated in text.
-- Emoji should be used sparingly and thoughtfully.
+**Good**
 
-## 6. Multimedia
+```markdown
+# Deployment guide
 
-- Provide captions for videos and transcripts for recorded audio.
-- Do not auto-play audio and video.
-- It's recommended that animated images and other animations are paused on page load.
+## Configure credentials
 
-## 7. Other
+Read [GitHub's profile accessibility tips](https://github.blog/developer-skills/github/5-tips-for-making-your-github-profile-page-accessible/).
+```
 
-- Links: Avoid opening links in a new tab or window.
-- Bold and Italics: Screen readers often don't announce bold or italic emphasis, so critical information should not rely on this styling alone.
-- Tables: Use tables for data only. Do not use tables for page layout. Avoid nested tables. Avoid complex tables as they are difficult to represent in an accessible format in standard Markdown.
+Why: the document has one H1, a proper H2, and descriptive link text.
 
-## Review Priority
+**Bad**
 
-When multiple issues exist, prioritize in this order:
+```markdown
+# Deployment guide
 
-1. Missing or empty alt text on images
-2. Skipped heading levels or heading hierarchy issues
-3. Non-descriptive link text
-4. Emoji used as bullet points or list markers
-5. Plain language improvements
-6. Multimedia
-7. Other
+#### Credentials
 
-## Review Tone
+Read more [here](https://www.smashingmagazine.com/2021/09/improving-accessibility-of-markdown/).
+```
 
-- Explain the accessibility impact of each issue, specifying which users are affected (e.g., screen reader users, people with cognitive disabilities, non-native speakers).
-- Do not remove personality or voice from the writing. Accessibility and engaging content are not mutually exclusive.
-- Keep suggestions actionable and specific.
+Why: the heading skips levels and the link text is not meaningful out of context.
+
+## Conventions
+
+| Rule | Rationale |
+| --- | --- |
+| Use descriptive, unique link text and avoid bare URLs in prose. | Assistive technology can present links as an isolated list. |
+| Provide succinct, contextual alt text and longer descriptions for complex images. | Screen reader users need equivalent content for visual information. |
+| Keep one H1 and a logical heading hierarchy without skipped levels. | Headings provide navigation and document structure. |
+| Use plain language and sequential UI instructions. | People with cognitive disabilities and non-native speakers can follow the content. |
+| Use proper Markdown lists and sparing emoji with text equivalents. | Screen readers announce list context and emoji names predictably. |
+| Provide captions, transcripts, and non-autoplay multimedia. | Audio and video content remains accessible to more users. |
+
+## Do / Do Not
+
+| Do | Do not |
+| --- | --- |
+| Recommend alt text changes for author review. | Invent visual meaning when image context is unclear. |
+| Use `<label>`-like descriptive text in Markdown links. | Use `click here`, `here`, `this`, `read more`, or `link` as link text. |
+| Break dense paragraphs into sections or lists. | Preserve jargon-heavy blocks when simpler language works. |
+| Use tables only for data. | Use tables for page layout or nested complex structures. |
+| Explain impact and affected users in review comments. | Remove voice or personality in the name of accessibility. |
+
+## Checklist Before Opening a PR
+
+- [ ] Link text is descriptive, unique when destinations differ, and not a bare URL in prose.
+- [ ] Images have meaningful alt text or are explicitly decorative; complex images have longer descriptions.
+- [ ] The document has one H1 and headings do not skip levels.
+- [ ] Plain language, short sentences, active voice, and sequential UI instructions are used where appropriate.
+- [ ] Lists use Markdown list syntax, and emoji do not carry meaning alone.
+- [ ] Videos have captions, audio has transcripts, and media does not auto-play.
+- [ ] Tables are for data only and avoid nested or overly complex structures.
+
+## References
+
+- GitHub accessibility tips: https://github.blog/developer-skills/github/5-tips-for-making-your-github-profile-page-accessible/
+- Improving The Accessibility Of Your Markdown: https://www.smashingmagazine.com/2021/09/improving-accessibility-of-markdown/

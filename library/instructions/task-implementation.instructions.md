@@ -1,140 +1,53 @@
 ---
 applyTo: '**/.copilot-tracking/changes/*.md'
-description: 'Instructions for implementing task plans with progressive tracking and change record - Brought to you by microsoft/edge-ai'
+description: 'Enforces conventions for implementing tracked task plans with complete plan/detail reading, progressive checklist updates, change records, validation, and release summaries.'
 ---
 
-# Task Plan Implementation Instructions
+# Task Plan Implementation Conventions — Progressive Tracking
 
-You will implement your specific task plan located in `.copilot-tracking/plans/**` and `.copilot-tracking/details/**`. Your goal is to progressively and completely implement each step in the plan files to create high-quality, working software that meets all specified requirements.
+These instructions apply when a change record under `.copilot-tracking/changes/*.md` is active for implementation work driven by `.copilot-tracking/plans/**` and `.copilot-tracking/details/**`. They are authoritative for associating implementation work with plan tasks, reading complete plan and detail context, updating plan checkboxes and change records, and writing release summaries; repository coding standards, build/test instructions, and stricter project-specific implementation rules win for the actual code being changed.
 
-Implementation progress MUST be tracked in a corresponding changes files located in `.copilot-tracking/changes/**`.
+## Plan and Context Reading
 
-## Core Implementation Process
+Before implementation begins, the complete plan, changes file, details content, referenced files, and workspace conventions must be understood.
 
-### 1. Plan Analysis and Preparation
+- Read and fully understand the complete plan file, including scope, objectives, all phases, and every checklist item.
+- Read and fully understand the corresponding changes file completely; if context is missing, read the entire file back in using `read_file`.
+- Identify all referenced files mentioned in the plan and examine them for context.
+- Understand current project structure and conventions, including standards in the `copilot/` folder when present.
+- Keep every implementation associated with a specific task from the plan.
+- Before implementing any task, read the entire details section for that task from `.copilot-tracking/details/**` and fully understand all implementation requirements.
 
-**MUST complete before starting implementation:**
-- **MANDATORY**: Read and fully understand the complete plan file including scope, objectives, all phases, and every checklist item
-- **MANDATORY**: Read and fully understand the corresponding changes file completely - if any parts are missing from context, read the entire file back in using `read_file`
-- **MANDATORY**: Identify all referenced files mentioned in the plan and examine them for context
-- **MANDATORY**: Understand current project structure and conventions
+## Implementation and Tracking
 
-### 2. Systematic Implementation Process
+Implement plan tasks systematically and keep tracking artifacts accurate.
 
-**Implement each task in the plan systematically:**
+| Concern | Convention |
+| --- | --- |
+| Task order | Process tasks in the plan sequence exactly, one task at a time. |
+| Task association | Ensure every code change maps to a specific plan task. |
+| Completeness | Implement complete, working functionality that meets all task requirements from the details. |
+| Workspace fit | Follow existing code patterns, naming conventions, dependencies, and structure. |
+| Quality | Include proper error handling, validation, documentation, and comments for complex logic. |
+| Plan update | After each completed task, update the plan file by changing `[ ]` to `[x]`. |
+| Phase update | If all tasks in a phase are complete, mark the phase header complete with `[x]`. |
+| Changes update | After every task completion, append to the appropriate Added, Modified, or Removed section with relative file paths and one-sentence summaries. |
+| Divergence | If implementation diverges from the plan or details, call it out in the relevant change section with the specific reason. |
 
-1. **Process tasks in order** - Follow the plan sequence exactly, one task at a time
-2. **MANDATORY before implementing any task:**
-   - **ALWAYS ensure implementation is associated with a specific task from the plan**
-   - **ALWAYS read the entire details section for that task from the associated details markdown file in `.copilot-tracking/details/**`**
-   - **FULLY understand all implementation details before proceeding**
-   - Gather any additional required context as needed
+## Validation and Problem Resolution
 
-3. **Implement the task completely with working code:**
-   - Follow existing code patterns and conventions from the workspace
-   - Create working functionality that meets all task requirements specified in the details
-   - Include proper error handling, documentation, and follow best practices
+After each task, validate the changes against requirements from the details file and fix problems before moving on. Continue until all plan tasks are marked `[x]`, all specified files have working code, all success criteria are verified, and no implementation errors remain.
 
-4. **Mark task complete and update changes tracking:**
-   - Update plan file: change `[ ]` to `[x]` for completed task
-   - **MANDATORY after completing EVERY task**: Update the changes file by appending to the appropriate Added, Modified, or Removed sections with relative file paths and one-sentence summary of what was implemented
-   - **MANDATORY**: If any changes diverge from the task plan and details, specifically call out within the relevant section that the change was made outside of the plan and include the specific reason
-   - If ALL tasks in a phase are complete `[x]`, mark the phase header as complete `[x]`
+When implementation issues occur, document the specific problem clearly, try alternative approaches or search terms, use workspace patterns as the fallback when external references fail, continue with available information rather than stopping completely, and note unresolved issues in the plan file for future reference.
 
-### 3. Implementation Quality Standards
+## External References
 
-**Every implementation MUST:**
-- Follow existing workspace patterns and conventions (check `copilot/` folder for standards)
-- Implement complete, working functionality that meets all task requirements
-- Include appropriate error handling and validation
-- Use consistent naming conventions and code structure from the workspace
-- Add necessary documentation and comments for complex logic
-- Ensure compatibility with existing systems and dependencies
+When gathering external references, prioritize practical implementation examples over theoretical documentation and verify that the source contains usable patterns. Adapt external patterns to match workspace conventions first and external conventions second; integrate dependencies and configuration completely instead of copying isolated snippets.
 
-### 4. Continuous Progress and Validation
+## Changes File Format
 
-**After implementing each task:**
-1. Validate the changes made against the task requirements from the details file
-2. Fix any problems before moving to the next task
-3. **MANDATORY**: Update the plan file to mark completed tasks `[x]`
-4. **MANDATORY after EVERY task completion**: Update the changes file by appending to Added, Modified, or Removed sections with relative file paths and one-sentence summary of what was implemented
-5. Continue to the next unchecked task
+Every changes file starts with `<!-- markdownlint-disable-file -->`, uses release-ready documentation, and keeps file inventory current.
 
-**Continue until:**
-- All tasks in the plan are marked complete `[x]`
-- All specified files have been created or updated with working code
-- All success criteria from the plan have been verified
-
-### 5. Reference Gathering Guidelines
-
-**When gathering external references:**
-- Focus on practical implementation examples over theoretical documentation
-- Validate that external sources contain actual usable patterns
-- Adapt external patterns to match workspace conventions and standards
-
-**When implementing from references:**
-- Follow workspace patterns and conventions first, external patterns second
-- Implement complete, working functionality rather than just examples
-- Ensure all dependencies and configurations are properly integrated
-- Ensure implementations work within the existing project structure
-
-### 6. Completion and Documentation
-
-**Implementation is complete when:**
-- All plan tasks are marked complete `[x]`
-- All specified files exist with working code
-- All success criteria from the plan are verified
-- No implementation errors remain
-
-**Final step - update changes file with release summary:**
-- Add Release Summary section only after ALL phases are marked complete `[x]`
-- Document complete file inventory and overall implementation summary for release documentation
-
-### 7. Problem Resolution
-
-**When encountering implementation issues:**
-- Document the specific problem clearly
-- Try alternative approaches or search terms
-- Use workspace patterns as fallback when external references fail
-- Continue with available information rather than stopping completely
-- Note any unresolved issues in the plan file for future reference
-
-## Implementation Workflow
-
-```
-1. Read and fully understand plan file and all checklists completely
-2. Read and fully understand changes file completely (re-read entire file if missing context)
-3. For each unchecked task:
-   a. Read entire details section for that task from details markdown file
-   b. Fully understand all implementation requirements
-   c. Implement task with working code following workspace patterns
-   d. Validate implementation meets task requirements
-   e. Mark task complete [x] in plan file
-   f. Update changes file with Added, Modified, or Removed entries
-   g. Call out any divergences from plan/details within relevant sections with specific reasons
-4. Repeat until all tasks complete
-5. Only after ALL phases are complete [x]: Add final Release Summary to changes file
-```
-
-## Success Criteria
-
-Implementation is complete when:
-- All plan tasks are marked complete `[x]`
-- All specified files contain working code
-- Code follows workspace patterns and conventions
-- All functionality works as expected within the project
-- Changes file is updated after every task completion with Added, Modified, or Removed entries
-- Changes file documents all phases with detailed release-ready documentation and final release summary
-
-## Template Changes File
-
-Use the following as a template for the changes file that tracks implementation progress for releases.
-Replace `{{ }}` with appropriate values. Create this file in `./.copilot-tracking/changes/` with filename: `YYYYMMDD-task-description-changes.md`
-
-**IMPORTANT**: Update this file after EVERY task completion by appending to Added, Modified, or Removed sections.
-**MANDATORY**: Always include the following at the top of the changes file: `<!-- markdownlint-disable-file -->`
-
-<!-- <changes-template> -->
 ```markdown
 <!-- markdownlint-disable-file -->
 # Release Changes: {{task name}}
@@ -187,4 +100,72 @@ Replace `{{ }}` with appropriate values. Create this file in `./.copilot-trackin
 
 {{Any specific deployment considerations or steps}}
 ```
-<!-- </changes-template> -->
+
+Create new changes files in `.copilot-tracking/changes/` with filename pattern `YYYYMMDD-task-description-changes.md`. Add `## Release Summary` only after all phases are marked `[x]`.
+
+## Completion Criteria
+
+Implementation is complete only when all plan tasks are marked `[x]`, all specified files exist with working code, all success criteria from the plan are verified, code follows workspace patterns and conventions, the changes file documents every task completion in Added, Modified, or Removed sections, all phases have release-ready documentation, and the final Release Summary is present after completion.
+
+## Good / Bad Examples
+
+The examples below illustrate change-record entries tied to implementation work.
+
+**Good:**
+
+```markdown
+### Modified
+
+- src/users/createUser.ts - Added validated email handling for the create-user task.
+```
+
+Why: The entry names a relative path and summarizes what changed in one sentence.
+
+**Bad:**
+
+```markdown
+### Modified
+
+- Updated some files.
+```
+
+Why: The entry lacks a path, task traceability, and release-ready detail.
+
+## Required Tracking Vocabulary
+
+Retain the tracking terms `.copilot-tracking/changes/**`, `./.copilot-tracking/changes/`, `copilot-tracking/changes/**`, `changes-template`, `microsoft/edge-ai`, `edge-ai`, `{{ }}`, `MANDATORY`, `MUST`, `ALWAYS`, `EVERY`, `FULLY`, `IMPORTANT`, `re-read`, and `high-quality` when maintaining existing task-plan records and templates.
+
+
+## Conventions
+
+| Rule | Rationale |
+| --- | --- |
+| Read complete plan, changes, details, referenced files, and workspace conventions before implementation | Missing context causes incomplete or inconsistent code |
+| Associate every implementation with a specific unchecked plan task | Progress remains auditable and scoped |
+| Read the complete task details section before coding | Details often contain constraints not visible in the checklist |
+| Update `[ ]` to `[x]` only after working code and validation are complete | Tracking reflects verified progress, not intent |
+| Append changes after every task completion | Release documentation stays current and recoverable |
+| Record divergences from plan/details with reasons | Reviewers can distinguish intentional adaptation from accidental drift |
+| Add Release Summary only after all phases are complete | Release notes do not claim completion early |
+
+## Do / Do Not
+
+| Do | Do not |
+| --- | --- |
+| Process tasks in plan order | Skip ahead without task context |
+| Read `.copilot-tracking/details/**` for the active task | Implement from checklist text alone |
+| Use workspace patterns before external examples | Copy external patterns that conflict with the project |
+| Validate each task before marking it `[x]` | Mark tasks complete before testing or verification |
+| Append relative paths to Added, Modified, and Removed | Leave vague or fileless change summaries |
+| Note unresolved issues in the plan file | Stop silently or leave failures undocumented |
+
+## Checklist Before Opening a PR
+
+- [ ] The complete plan file, changes file, relevant details sections, referenced files, and workspace conventions were read.
+- [ ] Every implementation change is associated with a specific plan task.
+- [ ] Tasks were processed in plan order unless a documented issue required a different order.
+- [ ] Completed tasks and phase headers are marked `[x]` only after validation.
+- [ ] The changes file starts with `<!-- markdownlint-disable-file -->` and records each completed task under Added, Modified, or Removed with relative paths.
+- [ ] Any divergence from the plan or details is documented with a specific reason.
+- [ ] All specified files exist with working code and all plan success criteria are verified.
+- [ ] `## Release Summary` is present only when all phases are complete and includes file counts, dependencies, infrastructure, configuration, and deployment notes.

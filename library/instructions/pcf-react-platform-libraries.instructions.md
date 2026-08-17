@@ -1,66 +1,41 @@
 ---
-applyTo: '**/*.{ts,tsx,js,json,xml,pcfproj,csproj}'
-description: 'React controls and platform libraries for PCF components'
+applyTo: "**/*.{ts,tsx,js,json,xml,pcfproj,csproj}"
+description: "Enforces Power Apps component framework React control and platform-library conventions for virtual controls, manifest resources, CLI creation, supported versions, and host limitations."
 ---
 
-# React Controls & Platform Libraries
+# PCF React Platform Library Conventions — Virtual Controls
 
-When you use React and platform libraries, you're using the same infrastructure used by the Power Apps platform. This means you no longer have to package React and Fluent libraries individually for each control. All controls share a common library instance and version to provide a seamless and consistent experience.
+These instructions apply to PCF React controls and related manifests, TypeScript, JavaScript, JSON, and project files. They are authoritative for using platform React and Fluent libraries, creating virtual controls with `pac pcf init`, manifest `platform-library` entries, `ReactControl.init`, `ReactControl.updateView`, bundle expectations, supported versions, and host limitations; general PCF, dependent-library, sample, and Power Pages instructions win for their narrower scenarios.
 
-## Benefits
+## Platform Library Model
 
-By reusing the existing platform React and Fluent libraries, you can expect:
+Use React and Fluent platform libraries when a PCF control should share the same infrastructure used by the Power Apps platform. Shared platform instances reduce control bundle size, optimize solution packaging, improve runtime transfer and rendering, and keep design and theme alignment with the Power Apps Fluent design system. With GA release, existing virtual controls continue to function, but rebuild and deploy them with the latest CLI version `>=1.37` to support future platform React version upgrades.
 
-- **Reduced control bundle size**
-- **Optimized solution packaging**
-- **Faster runtime transfer, scripting, and control rendering**
-- **Design and theme alignment with the Power Apps Fluent design system**
+## Prerequisites and Control Creation
 
-> **Note**: With GA release, all existing virtual controls will continue to function. However, they should be rebuilt and deployed using the latest CLI version (>=1.37) to facilitate future platform React version upgrades.
+Install Visual Studio Code and Microsoft Power Platform CLI. If Power Platform CLI for Windows is already installed, update it with `pac install latest`; Power Platform Tools for Visual Studio Code should update automatically.
 
-## Prerequisites
-
-As with any component, you must install [Visual Studio Code](https://code.visualstudio.com/Download) and the [Microsoft Power Platform CLI](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/powerapps-cli#install-microsoft-power-platform-cli).
-
-> **Note**: If you have already installed Power Platform CLI for Windows, make sure you are running the latest version by using the `pac install latest` command. The Power Platform Tools for Visual Studio Code should update automatically.
-
-## Create a React Component
-
-> **Note**: These instructions expect that you have created code components before. If you have not, see [Create your first component](https://learn.microsoft.com/en-us/power-apps/developer/component-framework/implementing-controls-using-typescript).
-
-There's a new `--framework` (`-fw`) parameter for the `pac pcf init` command. Set the value of this parameter to `react`.
-
-### Command Parameters
+Create a React control by using `pac pcf init` with the `--framework` or `-fw` parameter set to `react`.
 
 | Parameter | Value |
-|-----------|-------|
-| --name | ReactSample |
-| --namespace | SampleNamespace |
-| --template | field |
-| --framework | react |
-| --run-npm-install | true (default) |
-
-### PowerShell Command
-
-The following PowerShell command uses the parameter shortcuts and creates a React component project and runs `npm-install`:
+| --- | --- |
+| `--name` / `-n` | `ReactSample` |
+| `--namespace` / `-ns` | `SampleNamespace` |
+| `--template` / `-t` | `field` |
+| `--framework` / `-fw` | `react` |
+| `--run-npm-install` / `-npm` | `true` by default |
 
 ```powershell
 pac pcf init -n ReactSample -ns SampleNamespace -t field -fw react -npm
 ```
 
-You can now build and view the control in the test harness as usual using `npm start`.
+Build and view the control in the test harness with `npm start`, then package it inside solutions for model-driven apps, custom pages, and canvas apps like standard code components.
 
-After you build the control, you can package it inside solutions and use it for model-driven apps (including custom pages) and canvas apps like standard code components.
+## Manifest and Runtime Differences
 
-## Differences from Standard Components
+React controls are virtual controls. In `ControlManifest.Input.xml`, set the `control` element `control-type` attribute to `virtual`; changing this value alone does not convert a standard control into a React control.
 
-### ControlManifest.Input.xml
-
-The [control element](https://learn.microsoft.com/en-us/power-apps/developer/component-framework/manifest-schema-reference/control) `control-type` attribute is set to `virtual` rather than `standard`.
-
-> **Note**: Changing this value does not convert a component from one type to another.
-
-Within the [resources element](https://learn.microsoft.com/en-us/power-apps/developer/component-framework/manifest-schema-reference/resources), find two new [platform-library element](https://learn.microsoft.com/en-us/power-apps/developer/component-framework/manifest-schema-reference/platform-library) child elements:
+Inside the `resources` element, keep `code path="index.ts"` and add `platform-library` entries for React and Fluent as needed.
 
 ```xml
 <resources>
@@ -70,54 +45,103 @@ Within the [resources element](https://learn.microsoft.com/en-us/power-apps/deve
 </resources>
 ```
 
-> **Note**: For more information about valid platform library versions, see Supported platform libraries list.
+Remove the `platform-library` entry whose `name` is `Fluent` when the control does not use Fluent. React controls do not render the DOM directly: `ReactControl.init` has no `div` parameter, and `ReactControl.updateView` returns a `ReactElement` that describes the control UI. Because React and Fluent are shared, `bundle.js` should not include those libraries and should be smaller than a bundled standard control.
 
-**Recommendation**: We recommend using platform libraries for Fluent 8 and 9. If you don't use Fluent, you should remove the `platform-library` element where the `name` attribute value is `Fluent`.
-
-### Index.ts
-
-The [ReactControl.init](https://learn.microsoft.com/en-us/power-apps/developer/component-framework/reference/react-control/init) method for control initialization doesn't have `div` parameters because React controls don't render the DOM directly. Instead [ReactControl.updateView](https://learn.microsoft.com/en-us/power-apps/developer/component-framework/reference/react-control/updateview) returns a ReactElement that has the details of the actual control in React format.
-
-### bundle.js
-
-React and Fluent libraries aren't included in the package because they're shared, therefore the size of bundle.js is smaller.
-
-## Sample Controls
-
-The following controls are included in the samples. They function the same as their standard versions but offer better performance since they are virtual controls.
-
-| Sample | Description | Link |
-|--------|-------------|------|
-| ChoicesPickerReact | The standard ChoicesPickerControl converted to be a React Control | ChoicesPickerReact Sample |
-| FacepileReact | The ReactStandardControl converted to be a React Control | FacepileReact |
-
-## Supported Platform Libraries List
-
-Platform libraries are made available both at the build and runtime to the controls that are using platform libraries capability. Currently, the following versions are provided by the platform and are the highest currently supported versions.
+## Supported Platform Libraries
 
 | Library | Package | Build Version | Runtime Version |
-|---------|---------|---------------|-----------------|
-| React | react | 16.14.0 | 17.0.2 (Model), 16.14.0 (Canvas) |
-| Fluent | @fluentui/react | 8.29.0 | 8.29.0 |
-| Fluent | @fluentui/react | 8.121.1 | 8.121.1 |
-| Fluent | @fluentui/react-components | >=9.4.0 <=9.46.2 | 9.68.0 |
+| --- | --- | --- | --- |
+| `React` | `react` | `16.14.0` | `17.0.2 (Model)`, `16.14.0 (Canvas)` |
+| `Fluent` | `@fluentui/react` | `8.29.0` | `8.29.0` |
+| `Fluent` | `@fluentui/react` | `8.121.1` | `8.121.1` |
+| `Fluent` | `@fluentui/react-components` | `>=9.4.0 <=9.46.2` | `9.68.0` |
 
-> **Note**: The application might load a higher compatible version of a platform library at runtime, but the version might not be the latest version available. Fluent 8 and Fluent 9 are each supported but can not both be specified in the same manifest.
+The application may load a higher compatible runtime version, but it may not be the latest available version. Fluent 8 and Fluent 9 are each supported, but they cannot both be specified in the same manifest.
 
-## FAQ
+## Samples and Host Limitations
 
-### Q: Can I convert an existing standard control to a React control using platform libraries?
+Use `ChoicesPickerReact` and `FacepileReact` as sample references: `ChoicesPickerReact` is the standard `ChoicesPickerControl` converted to a React Control, and `FacepileReact` is the `ReactStandardControl` converted to a React Control. Do not convert an existing standard control in place; create a new control with the React template and update the manifest and `index.ts` methods by comparing standard and React samples.
 
-A: No. You must create a new control using the new template and then update the manifest and index.ts methods. For reference, compare the standard and react samples described above.
+React controls and platform libraries are supported for canvas and model-driven apps. They are not supported for Power Pages; in Power Pages, React controls do not update based on changes in other fields.
 
-### Q: Can I use React controls & platform libraries with Power Pages?
+## CLI and Standard-Control Terminology
 
-A: No. React controls & platform libraries are currently only supported for canvas and model-driven apps. In Power Pages, React controls don't update based on changes in other fields.
+The creation example is a `PowerShell` command, and the CLI option may be described as running `npm-install`. Keep the distinction between a React virtual control and a `standard` PCF control explicit; changing `control-type` alone does not convert a standard control.
 
-## Related Articles
+## Good / Bad Examples
 
-- [What are code components?](https://learn.microsoft.com/en-us/power-apps/developer/component-framework/custom-controls-overview)
-- [Code components for canvas apps](https://learn.microsoft.com/en-us/power-apps/developer/component-framework/component-framework-for-canvas-apps)
-- [Create and build a code component](https://learn.microsoft.com/en-us/power-apps/developer/component-framework/create-custom-controls-using-pcf)
-- [Learn Power Apps component framework](https://learn.microsoft.com/en-us/training/paths/use-power-apps-component-framework)
-- [Use code components in Power Pages](https://learn.microsoft.com/en-us/power-apps/maker/portals/component-framework)
+The examples below illustrate valid virtual-control manifest resources.
+
+**Good:**
+
+```xml
+<control control-type="virtual">
+  <resources>
+    <code path="index.ts" order="1" />
+    <platform-library name="React" version="16.14.0" />
+  </resources>
+</control>
+```
+
+Why: The control is virtual and declares the platform React dependency instead of bundling React.
+
+**Bad:**
+
+```xml
+<control control-type="standard">
+  <resources>
+    <code path="index.ts" order="1" />
+  </resources>
+</control>
+```
+
+Why: A standard control without `platform-library` entries does not use the platform React library model.
+
+## Conventions
+
+| Rule | Rationale |
+| --- | --- |
+| Create React PCF controls with `pac pcf init -fw react` | The template generates the correct virtual-control shape |
+| Set `control-type` to `virtual` and declare `platform-library` resources | Platform libraries are available only through the manifest contract |
+| Keep `ReactControl.init` and `ReactControl.updateView` signatures aligned with React control expectations | React controls return `ReactElement` instead of rendering directly into a `div` |
+| Use supported React and Fluent build versions | Unsupported library versions can fail at build or runtime |
+| Do not specify Fluent 8 and Fluent 9 together | The platform supports each family separately, not simultaneously |
+| Avoid Power Pages for React platform-library controls | React controls do not update reliably from other fields in Power Pages |
+
+## Do / Do Not
+
+| Do | Do not |
+| --- | --- |
+| Update CLI with `pac install latest` and use CLI `>=1.37` for rebuilt virtual controls | Rely on old CLI output for future platform React upgrades |
+| Use `npm start` to view the control in the test harness | Assume packaging succeeded without local harness validation |
+| Remove the Fluent `platform-library` when Fluent is unused | Declare unused platform libraries |
+| Create a new React control when converting from standard | Flip only `control-type` and call it converted |
+| Use `ChoicesPickerReact` and `FacepileReact` as sample comparisons | Infer React control behavior from standard controls alone |
+| Use these controls in canvas and model-driven apps | Use React controls and platform libraries in Power Pages |
+
+## Checklist Before Opening a PR
+
+- [ ] The control was created or migrated through the React template pattern using `-fw react`.
+- [ ] `ControlManifest.Input.xml` uses `control-type="virtual"` and correct `platform-library` entries.
+- [ ] `index.ts` uses `ReactControl.init` and `ReactControl.updateView` with React control semantics.
+- [ ] React and Fluent versions match the supported platform library table.
+- [ ] Fluent 8 and Fluent 9 are not both specified.
+- [ ] `bundle.js` does not include platform React or Fluent libraries unnecessarily.
+- [ ] The control is targeted to model-driven apps, custom pages, or canvas apps, not Power Pages.
+- [ ] `npm start` or equivalent local harness validation was run before packaging.
+
+## References
+
+- Visual Studio Code: https://code.visualstudio.com/Download
+- Power Platform CLI: https://learn.microsoft.com/en-us/power-apps/developer/data-platform/powerapps-cli#install-microsoft-power-platform-cli
+- Create your first component: https://learn.microsoft.com/en-us/power-apps/developer/component-framework/implementing-controls-using-typescript
+- Manifest `control`: https://learn.microsoft.com/en-us/power-apps/developer/component-framework/manifest-schema-reference/control
+- Manifest `resources`: https://learn.microsoft.com/en-us/power-apps/developer/component-framework/manifest-schema-reference/resources
+- Manifest `platform-library`: https://learn.microsoft.com/en-us/power-apps/developer/component-framework/manifest-schema-reference/platform-library
+- ReactControl.init: https://learn.microsoft.com/en-us/power-apps/developer/component-framework/reference/react-control/init
+- ReactControl.updateView: https://learn.microsoft.com/en-us/power-apps/developer/component-framework/reference/react-control/updateview
+- What are code components: https://learn.microsoft.com/en-us/power-apps/developer/component-framework/custom-controls-overview
+- Canvas code components: https://learn.microsoft.com/en-us/power-apps/developer/component-framework/component-framework-for-canvas-apps
+- Create and build a code component: https://learn.microsoft.com/en-us/power-apps/developer/component-framework/create-custom-controls-using-pcf
+- Learn PCF: https://learn.microsoft.com/en-us/training/paths/use-power-apps-component-framework
+- Power Pages code components: https://learn.microsoft.com/en-us/power-apps/maker/portals/component-framework
