@@ -7,9 +7,9 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 
 | Primitive type | Count |
 | --- | ---: |
-| Agents | 224 |
-| Instructions | 192 |
-| Skills | 418 |
+| Agents | 225 |
+| Instructions | 193 |
+| Skills | 419 |
 | Plugins | 93 |
 | Hooks | 8 |
 
@@ -67,6 +67,7 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | Comet Opik | Unified Comet Opik agent for instrumenting LLM apps, managing prompts/projects, auditing prompts, and investigating traces/metrics via the latest Opik MCP server. |
 | Context Architect | An agent that helps plan and execute multi-file changes by identifying relevant context and dependencies |
 | Context7-Expert | Expert in latest library versions, best practices, and correct syntax using up-to-date documentation |
+| copilot-primitive-architect | Architects Copilot primitives by classifying authoring needs, applying harness contracts, and reviewing drafts; use when choosing or refining agents, instructions, skills, or VS C… |
 | Create PRD Chat Mode | Generate a comprehensive Product Requirements Document (PRD) in Markdown, detailing user stories, acceptance criteria, technical considerations, and metrics. Optionally create Git… |
 | Critical thinking mode instructions | Challenge assumptions and encourage critical thinking to ensure the best possible solution and outcomes. |
 | Custom Agent Foundry | Expert at designing and creating VS Code custom agents with optimal configurations |
@@ -284,6 +285,7 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | context7 | ** | Use Context7 for authoritative external docs and API references when local context is insufficient |
 | convert-cassandra-to-spring-data-cosmos | **/*.java,**/pom.xml,**/build.gradle,**/application*.properties,**/application*.yml,**/application*.conf | Step-by-step guide for converting Spring Boot Cassandra applications to use Azure Cosmos DB with Spring Data Cosmos |
 | convert-jpa-to-spring-data-cosmos | **/*.java,**/pom.xml,**/build.gradle,**/application*.properties | Step-by-step guide for converting Spring Boot JPA applications to use Azure Cosmos DB with Spring Data Cosmos |
+| copilot-primitive-authoring | library/agents/*.agent.md,library/instructions/*.instructions.md,library/skills/**/SKILL.md,library/prompts/*.prompt.md,.github/agents/*.agent.md,.github/instructions/*.instructions.md,.github/skills/**/SKILL.md,.github/prompts/*.prompt.md | Use when editing Copilot primitive source files for agents, instructions, skills, and VS Code prompts in this repository. |
 | copilot-thought-logging | ** | See process Copilot is following where you can edit this to reshape the interaction or save when follow up may be needed |
 | cpp-language-service-tools | **/*.cpp, **/*.h, **/*.hpp, **/*.cc, **/*.cxx, **/*.c | You are an expert at using C++ language service tools (GetSymbolReferences_CppTools, GetSymbolInfo_CppTools, GetSymbolCallHierarchy_CppTools). Instructions for calling C++ Tools f… |
 | csharp | **/*.cs | Guidelines for building C# applications |
@@ -542,6 +544,7 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | copilot-cli-quickstart | Use this skill when someone wants to learn GitHub Copilot CLI from scratch. Offers interactive step-by-step tutorials with separate Developer and Non-Developer tracks, plus on-dem… |
 | copilot-instructions-blueprint-generator | Technology-agnostic blueprint generator for creating comprehensive copilot-instructions.md files that guide GitHub Copilot to produce code consistent with project standards, archi… |
 | copilot-pr-autopilot | Copilot left 14 review comments on your PR — half are nits. Hours of fix → reply → resolve → re-request, and each round lands MORE comments. This skill runs loop engineering: auto… |
+| copilot-primitive-authoring | Author and review GitHub Copilot primitives in this repository. Use when asked to create an agent, instructions file, prompt, primitive suite, authoring workflow, or to validate p… |
 | copilot-sdk | Build agentic applications with GitHub Copilot SDK. Use when embedding AI agents in apps, creating custom tools, implementing streaming responses, managing sessions, connecting to… |
 | copilot-spaces | Use Copilot Spaces to provide project-specific context to conversations. Use this skill when users mention a "Copilot space", want to load context from a shared knowledge base, di… |
 | copilot-usage-metrics | Retrieve and display GitHub Copilot usage metrics for organizations and enterprises using the GitHub CLI and REST API. Use this skill when the user asks about; copilot usage metri… |

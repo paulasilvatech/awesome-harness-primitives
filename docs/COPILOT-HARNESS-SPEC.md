@@ -28,7 +28,12 @@ CLI version validated against: **1.0.81-0**.
 Precedence on filename collision: **User → Repository → Organization → Enterprise**.
 Deduplication key is the filename with `.md` / `.agent.md` stripped.
 
-Filename must match `^[A-Za-z0-9._-]+\.agent\.md$`.
+**Runtime observed:** CLI 1.0.81-0 discovered both `*.agent.md` and plain `*.md` files in
+`.github/agents/` — see [HARNESS-VALIDATION.md](HARNESS-VALIDATION.md#agentmd-vs-md).
+
+**Policy recommended:** this repository accepts only `^[A-Za-z0-9._-]+\.agent\.md$` for portability,
+clarity, and validator consistency. Treat plain `.md` agent discovery as runtime tolerance, not as an
+authoring target.
 
 ### 1.2 Frontmatter
 
@@ -39,17 +44,18 @@ description: >-                    # REQUIRED — the only truly required field
   What the agent does and when to select it.
 tools: ["read", "grep", "glob", "edit"]  # OPTIONAL allow-list — omit or ["*"] = all tools. Not "search"/"web": see §1.3
 model: claude-sonnet-4.5           # OPTIONAL — string or prioritized array
-target: github-copilot             # OPTIONAL — "vscode" | "github-copilot"
+target: github-copilot             # OPTIONAL — VS Code/static metadata; CLI warns and ignores it
 user-invocable: true               # OPTIONAL — default true; false hides from /agent picker
 disable-model-invocation: false    # OPTIONAL — default false; true blocks auto-delegation
-mcp-servers:                       # OPTIONAL — CLI/cloud only, ignored by VS Code
+mcp-servers:                       # OPTIONAL — CLI/cloud only, ignored by VS Code; each server requires tools
   my-server:
     type: local                    # "local" | "stdio" | "http" | "sse"
     command: my-cmd
     args: ["--flag"]
     env: { TOKEN: "${{ secrets.TOKEN }}" }
-argument-hint: "<path>"            # OPTIONAL — VS Code only, ignored by CLI
-handoffs: []                       # OPTIONAL — VS Code only, ignored by CLI
+    tools: ["*"]
+argument-hint: "<path>"            # OPTIONAL — VS Code only; CLI warns and ignores it
+handoffs: []                       # OPTIONAL — VS Code only; CLI warns and ignores it
 metadata: {}                       # OPTIONAL — annotation passthrough
 ---
 ```
@@ -62,19 +68,25 @@ metadata: {}                       # OPTIONAL — annotation passthrough
 | `name` | optional | optional | Defaults to filename |
 | `tools` | optional | optional | See §1.3 |
 | `model` | optional | optional | String or array of strings |
-| `target` | optional | optional | `vscode` \| `github-copilot` |
+| `target` | ignored (debug warning) | optional | Accepted but not a recognized CLI runtime field; see warning matrix |
 | `user-invocable` | optional | optional | BUNDLE-confirmed key |
 | `disable-model-invocation` | optional | optional | BUNDLE-confirmed key |
-| `mcp-servers` | optional | ignored | BUNDLE-confirmed key |
-| `argument-hint` | ignored | optional | VS Code only |
-| `handoffs` | ignored | optional | VS Code only |
+| `mcp-servers` | optional | ignored | BUNDLE-confirmed key; every server entry requires `tools` |
+| `argument-hint` | ignored (debug warning) | optional | VS Code only |
+| `handoffs` | ignored (debug warning) | optional | VS Code only |
 | `infer` | **RETIRED** | **RETIRED** | Replace with the two fields above |
 | `mode`, `hidden`, `agents`, `agent`, `title` | **not an agent field** | — | Remove |
 
 Body: Markdown, **max 30 000 characters**.
 
-Unrecognized frontmatter keys and unrecognized tool names are **silently ignored** — they do not raise
-errors, which is precisely why they are dangerous: a misspelled tool list degrades silently.
+**Runtime observed:** recognized CLI fields are accepted with no warning. Unknown frontmatter keys are
+accepted but ignored with debug-log warnings, not terminal output; for example `target` logs
+`unknown field ignored: target`. A malformed `mcp-servers` entry without per-server `tools` logs
+`custom agent markdown frontmatter is malformed: mcp-servers.probe-server.tools: Required`. See
+[HARNESS-VALIDATION.md](HARNESS-VALIDATION.md#frontmatter-warning-matrix).
+
+Unrecognized tool names are different: they are **silently ignored** with no warning, so a misspelled
+tool list can still degrade capability silently.
 
 ### 1.3 `tools:` vocabulary
 
@@ -174,6 +186,13 @@ BUNDLE ships this requirement text verbatim inside `runtime.node`:
 > Every generated skill must validate all of the following:
 > `name` — 1-64 characters, kebab-case, must match the parent skill directory name.
 > `description` — 1-1024 characters, must state both **what** the skill does and **when** to use it.
+
+**Runtime observed:** CLI 1.0.81-0 accepted a project skill whose frontmatter `name` differed from its
+directory and listed it by frontmatter name — see
+[HARNESS-VALIDATION.md](HARNESS-VALIDATION.md#skill-name-vs-directory-mismatch).
+
+**Policy recommended:** this repository still requires `name == directory` because that is the bundled
+generation guidance and validator policy.
 
 ```yaml
 ---
