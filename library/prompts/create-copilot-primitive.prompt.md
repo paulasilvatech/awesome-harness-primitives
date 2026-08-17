@@ -122,19 +122,26 @@ Runtime context:
 
 Follow these steps in order:
 
-1. **Validate inputs.** Confirm that primitive type, name, intent, and destination are present and unambiguous. The name must match valid kebab-case with lowercase letters and digits separated by single hyphens, and it must not contain path separators, `..`, a leading hyphen, a trailing hyphen, or a double hyphen. If any required value is missing or invalid, ask for it and stop before drafting or editing.
-2. **Choose and verify the target path.** Map the type and validated name to exactly one canonical source path:
-   - `agent` -> `library/agents/<name>.agent.md`
-   - `instructions` -> `library/instructions/<name>.instructions.md`
-   - `skill` -> `library/skills/<name>/SKILL.md`
-   - `prompt` -> `library/prompts/<name>.prompt.md`
-   If the destination is an exact path, it must exactly match the canonical source path. If it does not match, reject it and stop. For `edit`, write only the canonical source path.
-3. **Route before loading skills.** For `skill`, use the `skill-creator` skill. For `agent`, `instructions`, or `prompt`, use the `copilot-primitive-authoring` skill. For an ambiguous type, a choice between types, or consultative architectural review, use the `copilot-primitive-architect` agent and stop the creation workflow until the type is explicit.
-4. **Inspect sources.** Use the appropriate template from `docs/templates/`, the harness rules from `docs/COPILOT-HARNESS-SPEC.md`, and style patterns from reference files of the same primitive type as the target artifact. Do not copy outdated relative primitive links from references; cite related primitives by name and type.
-5. **Draft the primitive.** Fill the selected template with the requested intent. Remove template setup notes, unused alternatives, and all authoring placeholders. For prompts, keep valid frontmatter on line 1 with `name` and `description`; include `argument-hint` only when useful; omit `agent` unless explicitly requested; declare `tools` only with exact VS Code tool IDs when necessary; use the ten mandatory prompt sections in order, including `## Inputs the Team Must Provide`.
-6. **Apply tool vocabulary rules.** For agents and skills, do not use no-op tokens such as `search`, `web`, or `todo`; use `grep`, `glob`, `web_fetch`, and `web_search` when those capabilities are required.
-7. **Deliver conditionally.** If the destination is `response`, return the primitive content in Chat. If the destination is `edit`, apply only the approved edit. If the destination is an exact path, write only that path and only when editing tools are available.
-8. **Validate and report.** Check the Definition of Done. For `agent`, `instructions`, or `skill`, run `python3 library/scripts/validate_primitives.py --strict` and `python3 library/scripts/generate_catalog.py --check`. For `prompt`, do not use repository validators as evidence; manually verify valid YAML frontmatter starts on line 1 with non-empty `name` and `description`, a non-empty body, and no authoring placeholders; publish manually to `.github/prompts/` only if VS Code discovery requires it; test with **Chat: Run Prompt** in a representative scenario. Report the artifact path or Chat-only result, the validation evidence, and any unresolved blockers.
+**Step 1 — Validate inputs.** Confirm that primitive type, name, intent, and destination are present and unambiguous. The name must match valid kebab-case with lowercase letters and digits separated by single hyphens, and it must not contain path separators, `..`, a leading hyphen, a trailing hyphen, or a double hyphen. If any required value is missing or invalid, ask for it and stop before drafting or editing.
+
+**Step 2 — Choose and verify the target path.** Map the type and validated name to exactly one canonical source path:
+- `agent` -> `library/agents/<name>.agent.md`
+- `instructions` -> `library/instructions/<name>.instructions.md`
+- `skill` -> `library/skills/<name>/SKILL.md`
+- `prompt` -> `library/prompts/<name>.prompt.md`
+If the destination is an exact path, it must exactly match the canonical source path. If it does not match, reject it and stop. For `edit`, write only the canonical source path.
+
+**Step 3 — Route before loading skills.** For `skill`, use the `skill-creator` skill. For `agent`, `instructions`, or `prompt`, use the `copilot-primitive-authoring` skill. For an ambiguous type, a choice between types, or consultative architectural review, use the `copilot-primitive-architect` agent and stop the creation workflow until the type is explicit.
+
+**Step 4 — Inspect sources.** Use the appropriate template from `docs/templates/`, the harness rules from `docs/COPILOT-HARNESS-SPEC.md`, and style patterns from reference files of the same primitive type as the target artifact. Do not copy outdated relative primitive links from references; cite related primitives by name and type.
+
+**Step 5 — Draft the primitive.** Fill the selected template with the requested intent. Remove template setup notes, unused alternatives, and all authoring placeholders. For prompts, keep valid frontmatter on line 1 with `name` and `description`; include `argument-hint` only when useful; omit `agent` unless explicitly requested; declare `tools` only with exact VS Code tool IDs when necessary; use the ten mandatory prompt sections in order, including `## Inputs the Team Must Provide`.
+
+**Step 6 — Apply tool vocabulary rules.** For agents and skills, do not use no-op tokens such as `search`, `web`, or `todo`; use `grep`, `glob`, `web_fetch`, and `web_search` when those capabilities are required.
+
+**Step 7 — Deliver conditionally.** If the destination is `response`, return the primitive content in Chat. If the destination is `edit`, apply only the approved edit. If the destination is an exact path, write only that path and only when editing tools are available.
+
+**Step 8 — Validate and report.** Check the Definition of Done. For `agent`, `instructions`, or `skill`, run `python3 library/scripts/validate_primitives.py --strict` and `python3 library/scripts/generate_catalog.py --check`. For `prompt`, do not use repository validators as evidence; manually verify valid YAML frontmatter starts on line 1 with non-empty `name` and `description`, a non-empty body, and no authoring placeholders; publish manually to `.github/prompts/` only if VS Code discovery requires it; test with **Chat: Run Prompt** in a representative scenario. Report the artifact path or Chat-only result, the validation evidence, and any unresolved blockers.
 
 ## Invocation Example
 

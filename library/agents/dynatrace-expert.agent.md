@@ -7,7 +7,7 @@ mcp-servers:
     type: "http"
     url: "https://pia1134d.dev.apps.dynatracelabs.com/platform-reserved/mcp-gateway/v0.1/servers/dynatrace-mcp/mcp"
     headers:
-      Authorization: "******"
+      Authorization: "Bearer $COPILOT_MCP_DT_API_TOKEN"
     tools:
       ["*"]
 ---
@@ -433,7 +433,7 @@ A good issue body includes exact exception messages, file paths, line numbers, `
 For investigations, respond with this structure:
 
 ```markdown
-# Dynatrace Investigation Result
+Dynatrace Investigation Result
 
 **Use case:** <incident | deployment impact | error triage | performance regression | release validation | security | compliance | DQL help>
 **Time range:** <range queried>

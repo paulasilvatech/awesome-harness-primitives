@@ -53,9 +53,9 @@ Use this prompt when a maintainer wants to design or generate a new VS Code prom
 
 ## Output Format
 
-Generate the prompt file in this structure:
+Generate the prompt file in this structure. Use the outer fence only for this prompt-builder output description; the generated prompt may include its own fenced blocks.
 
-```markdown
+````markdown
 ---
 name: '[kebab-case prompt name]'
 description: '[Single actionable sentence from requirements]'
@@ -104,6 +104,33 @@ model: '[only if a specific model is required]'
 
 ## Validation
 [Validation skeleton]
+```
+
+## Definition of Done
+
+- [ ] [Verifiable success criterion]
+
+## Prompt Body
+
+**Step 1 — Validate inputs.** [Instruction]
+
+**Step 2 — Gather evidence.** [Instruction]
+
+**Step 3 — Produce the result.** [Instruction]
+
+## Invocation Example
+
+```
+/[prompt-name] target=example
+```
+````
+
+When explaining adjacent primitive types, use the current section names:
+
+```markdown
+Instructions use an authority paragraph instead of `## Scope and Stack Context` and close with `## Checklist Before Opening a PR`.
+Agents use `## What This Agent Knows`, `## What This Agent Does NOT Know`, and `## Anti-Patterns This Agent Rejects`.
+Prompts use `## Inputs the Team Must Provide` and the ten mandatory sections shown above.
 ```
 
 ## Definition of Done

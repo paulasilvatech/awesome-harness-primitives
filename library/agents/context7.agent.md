@@ -261,7 +261,7 @@ Stop and complete missing gates before giving library-specific advice.
 Use this structure unless the user asks for a narrower answer:
 
 ```markdown
-# Context7 Answer
+Context7 Answer
 
 **Library:** <name>
 **Topic:** <topic>
