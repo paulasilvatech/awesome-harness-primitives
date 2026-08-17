@@ -66,7 +66,7 @@ The formats do not share one mandatory body outline. Use the contract that match
   primitives.
 - **Output:** instructions do not define a standalone result; they constrain work performed on matching
   files.
-- **Quality gate:** use `Verification Checklist`, keep the body non-empty, and keep the file focused and
+- **Quality gate:** use `Checklist Before Opening a PR`, keep the body non-empty, and keep the file focused and
   roughly two pages or less.
 
 ### Skill

@@ -1,77 +1,198 @@
 ---
 applyTo: '**/*.razor,**/*.razor.cs,**/*.razor.css'
-description: 'Conventions for Blazor components and applications covering structure, naming, state, validation, performance, and API integration.'
+description: 'Enforces Blazor component conventions for Razor structure, naming, state, validation, performance, caching, API integration, testing, security, and API documentation.'
+name: 'Blazor Conventions'
 ---
 
-# Blazor Conventions
+# Blazor Conventions — Component UI and Integration
 
-- Write idiomatic and efficient Blazor and C# code.
-- Follow .NET and Blazor conventions.
-- Use Razor Components appropriately for component-based UI development.
-- Prefer inline functions for smaller components but separate complex logic into code-behind or service classes.
-- Async/await should be used where applicable to ensure non-blocking UI operations.
+This file applies to Blazor Razor components, code-behind files, and component-scoped CSS. It is authoritative for Blazor component structure, lifecycle usage, state, validation, rendering, and API integration in the matched files; broader project architecture, backend security, and testing primitives remain authoritative where they define stricter project-wide rules.
 
-## Naming Conventions
+## Component Structure and Separation of Concerns
 
-- Follow PascalCase for component names, method names, and public members.
-- Use camelCase for private fields and local variables.
-- Prefix interface names with "I" (e.g., IUserService).
+Write idiomatic, efficient Blazor and C# code that follows .NET and Blazor conventions.
 
-## Blazor and .NET Specific Guidelines
+- Use Razor Components for component-based UI development.
+- Keep small components readable with inline functions when the logic is simple.
+- Move complex logic into code-behind files or service classes instead of growing markup-heavy components.
+- Keep components, services, API clients, and validation concerns separated.
+- Use `async`/`await` for UI actions, API calls, and any operation that could block the UI thread.
 
-- Utilize Blazor's built-in features for component lifecycle (e.g., OnInitializedAsync, OnParametersSetAsync).
-- Use data binding effectively with @bind.
-- Leverage Dependency Injection for services in Blazor.
-- Structure Blazor components and services following Separation of Concerns.
-- Always use the latest version C#, currently C# 14 features like record types, pattern matching, and global usings.
+## Naming and C# Style
 
-## Error Handling and Validation
+| Element | Convention |
+| --- | --- |
+| Components | `PascalCase` |
+| Methods | `PascalCase` |
+| Public members | `PascalCase` |
+| Private fields | `camelCase` |
+| Local variables | `camelCase` |
+| Interfaces | Prefix with `I`, for example `IUserService` |
 
-- Implement proper error handling for Blazor pages and API calls.
-- Use logging for error tracking in the backend and consider capturing UI-level errors in Blazor with tools like ErrorBoundary.
-- Implement validation using FluentValidation or DataAnnotations in forms.
+Use current C# features supported by the project, including record types, pattern matching, global usings, and C# 14 features when the target SDK supports them.
 
-## Blazor API and Performance Optimization
+## Lifecycle, Binding, and Dependency Injection
 
-- Utilize Blazor server-side or WebAssembly optimally based on the project requirements.
-- Use asynchronous methods (async/await) for API calls or UI actions that could block the main thread.
-- Optimize Razor components by reducing unnecessary renders and using StateHasChanged() efficiently.
-- Minimize the component render tree by avoiding re-renders unless necessary, using ShouldRender() where appropriate.
-- Use EventCallbacks for handling user interactions efficiently, passing only minimal data when triggering events.
+- Use Blazor lifecycle methods intentionally, especially `OnInitializedAsync` for initial asynchronous loading and `OnParametersSetAsync` for parameter-driven updates.
+- Use `@bind` where two-way binding is the clearest expression of form state.
+- Use Blazor Dependency Injection for services instead of manually constructing service dependencies inside components.
+- Prefer `EventCallback` for user interactions and component-to-parent notifications.
+- Pass only the minimal data needed through `EventCallback` payloads.
 
-## Caching Strategies
+## Error Handling, Validation, and User Feedback
 
-- Implement in-memory caching for frequently used data, especially for Blazor Server apps. Use IMemoryCache for lightweight caching solutions.
-- For Blazor WebAssembly, utilize localStorage or sessionStorage to cache application state between user sessions.
-- Consider Distributed Cache strategies (like Redis or SQL Server Cache) for larger applications that need shared state across multiple users or clients.
-- Cache API calls by storing responses to avoid redundant calls when data is unlikely to change, thus improving the user experience.
+- Handle errors in Blazor pages and API calls instead of allowing silent failures.
+- Use backend logging for server-side error tracking.
+- Capture UI-level errors in Blazor with tools such as `ErrorBoundary` when a component subtree can fail independently.
+- Validate forms with FluentValidation or DataAnnotations.
+- When an API call fails, catch the error and provide useful feedback in the UI.
 
-## State Management Libraries
+## API Integration and Documentation
 
-- Use Blazor's built-in Cascading Parameters and EventCallbacks for basic state sharing across components.
-- Implement advanced state management solutions using libraries like Fluxor or BlazorState when the application grows in complexity.
-- For client-side state persistence in Blazor WebAssembly, consider using Blazored.LocalStorage or Blazored.SessionStorage to maintain state between page reloads.
-- For server-side Blazor, use Scoped Services and the StateContainer pattern to manage state within user sessions while minimizing re-renders.
+- Use `HttpClient` or another appropriate injected service for calls to external APIs and backend APIs.
+- Keep API communication behind services when it would otherwise add networking details directly to components.
+- Document backend API services with Swagger/OpenAPI.
+- Add XML documentation for API models and API methods when those comments improve generated Swagger documentation.
 
-## API Design and Integration
+## Rendering and Performance
 
-- Use HttpClient or other appropriate services to communicate with external APIs or your own backend.
-- Implement error handling for API calls using try-catch and provide proper user feedback in the UI.
+- Choose Blazor Server or Blazor WebAssembly based on project requirements rather than assuming one hosting model fits every application.
+- Reduce unnecessary renders by keeping state changes focused and using `StateHasChanged()` only when an explicit render is required.
+- Use `ShouldRender()` when a component has a clear, measurable reason to skip rerendering.
+- Minimize the component render tree by avoiding avoidable nested components, repeated fragments, or redundant state updates.
+- Keep interaction handlers efficient and avoid passing more data than the handler needs.
+- Profile performance issues with IDE diagnostics tools or cross-platform tools such as `dotnet-trace` and `dotnet-counters`.
+
+## Caching and State Management
+
+| Scenario | Preferred approach |
+| --- | --- |
+| Frequently used server-side data | In-memory caching with `IMemoryCache` for lightweight Blazor Server caching |
+| WebAssembly state between user sessions | `localStorage` or `sessionStorage` |
+| Larger applications with shared state across users or clients | Distributed cache such as Redis or SQL Server Cache |
+| Data that rarely changes | Cache API responses to avoid redundant calls |
+| Basic component state sharing | Cascading Parameters and `EventCallback` |
+| Complex application state | Fluxor or BlazorState when application complexity justifies it |
+| WebAssembly client-side persistence | Blazored.LocalStorage or Blazored.SessionStorage |
+| Server-side per-user session state | Scoped services and the StateContainer pattern |
+
+Use state and cache mechanisms to improve user experience while minimizing unnecessary rerenders.
 
 ## Testing and Debugging
 
-- All unit testing and integration testing should run cross-IDE (Visual Studio, VS Code, JetBrains Rider) so contributors aren't gated on a paid SKU.
-- Test Blazor components and services using xUnit, NUnit, or MSTest.
-- Use Moq or NSubstitute for mocking dependencies during tests.
-- Debug Blazor UI issues using browser developer tools, and use your IDE's debugger for backend and server-side issues.
-- For performance profiling and optimization, use your IDE's diagnostics tools or `dotnet-trace` / `dotnet-counters` for cross-platform profiling.
+- Keep unit and integration tests runnable across Visual Studio, VS Code, and JetBrains Rider so contributors are not gated on a paid SKU.
+- Test Blazor components and services with xUnit, NUnit, or MSTest.
+- Mock dependencies with Moq or NSubstitute.
+- Debug UI issues with browser developer tools.
+- Debug backend and server-side issues with the IDE debugger.
 
 ## Security and Authentication
 
-- Implement Authentication and Authorization in the Blazor app where necessary using ASP.NET Identity or JWT tokens for API authentication.
-- Use HTTPS for all web communication and ensure proper CORS policies are implemented.
+- Implement authentication and authorization when the Blazor application requires protected user flows.
+- Use ASP.NET Identity or JWT tokens for API authentication as appropriate for the application.
+- Use HTTPS for all web communication.
+- Configure CORS policies deliberately for the required origins instead of relying on permissive defaults.
 
-## API Documentation and Swagger
+## Good / Bad Examples
 
-- Use Swagger/OpenAPI for API documentation for your backend API services.
-- Ensure XML documentation for models and API methods for enhancing Swagger documentation.
+The examples below illustrate separating API work, validation feedback, and rendering state from component markup.
+
+**Good:**
+
+```razor
+@inject IUserService UserService
+
+@if (loadError is not null)
+{
+    <ErrorBoundary>
+        <p role="alert">@loadError</p>
+    </ErrorBoundary>
+}
+else if (users is null)
+{
+    <p>Loading users...</p>
+}
+else
+{
+    <UserList Users="users" OnSelected="HandleSelected" />
+}
+
+@code {
+    private IReadOnlyList<UserDto>? users;
+    private string? loadError;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            users = await UserService.GetUsersAsync();
+        }
+        catch (HttpRequestException)
+        {
+            loadError = "Users could not be loaded.";
+        }
+    }
+
+    private Task HandleSelected(UserDto user) => UserService.SelectAsync(user.Id);
+}
+```
+
+Why: The component uses DI, asynchronous lifecycle loading, API error handling, user feedback, and `EventCallback`-style interaction without embedding networking details in the UI.
+
+**Bad:**
+
+```razor
+@code {
+    private List<UserDto> users = new();
+
+    protected override void OnInitialized()
+    {
+        var client = new HttpClient();
+        users = client.GetFromJsonAsync<List<UserDto>>("/api/users").Result!;
+        StateHasChanged();
+    }
+}
+```
+
+Why: The component manually creates dependencies, blocks the UI thread, omits error handling, and forces a render instead of using Blazor's asynchronous lifecycle conventions.
+
+## Conventions
+
+| Rule | Rationale |
+|---|---|
+| Keep simple component logic inline and move complex logic to code-behind or services | Components stay readable and maintain separation of concerns |
+| Use `PascalCase` for components, methods, and public members; use `camelCase` for private fields and locals | C# and Blazor code remains idiomatic and consistent |
+| Use lifecycle methods, `@bind`, DI, and `EventCallback` according to Blazor conventions | Components integrate with the framework instead of fighting it |
+| Handle API and UI errors and validate forms with FluentValidation or DataAnnotations | Users receive feedback and invalid data is rejected early |
+| Use async APIs for blocking work and optimize rerenders with focused state changes, `StateHasChanged()`, and `ShouldRender()` | UI remains responsive and render work stays bounded |
+| Choose caching and state mechanisms that fit the hosting model and data-sharing needs | State remains durable where needed without adding unnecessary complexity |
+| Keep tests cross-IDE and use xUnit, NUnit, or MSTest with Moq or NSubstitute | Contributors can validate behavior without a paid IDE dependency |
+| Use authentication, authorization, HTTPS, and deliberate CORS policies for protected apps | User flows and API access remain secure |
+| Maintain Swagger/OpenAPI and useful XML documentation for backend APIs | API consumers get accurate discoverable contracts |
+
+## Do / Do Not
+
+| Do | Do not |
+|---|---|
+| Use Razor Components for component-based UI | Put unrelated UI, networking, and domain logic into one component |
+| Inject services through Blazor DI | Instantiate service and API dependencies manually inside components |
+| Use `OnInitializedAsync` and `OnParametersSetAsync` for asynchronous and parameter-driven work | Block lifecycle methods with `.Result` or `.Wait()` |
+| Use `@bind` when it clearly expresses form state | Reimplement simple two-way binding with unnecessary plumbing |
+| Use `EventCallback` with minimal payloads | Pass large mutable objects when only an identifier or small value is needed |
+| Validate forms with FluentValidation or DataAnnotations | Accept form input without explicit validation |
+| Cache stable data with the cache mechanism that matches the hosting model | Re-fetch unchanged data on every render or interaction |
+| Profile performance with IDE diagnostics, `dotnet-trace`, or `dotnet-counters` | Guess at render or runtime bottlenecks without measurement |
+| Use HTTPS and deliberate CORS policies | Allow insecure or overly broad API communication defaults |
+
+## Checklist Before Opening a PR
+
+- [ ] Components use Razor Components idiomatically and keep complex logic in code-behind or services.
+- [ ] Names follow `PascalCase`, `camelCase`, and `IInterface` conventions.
+- [ ] Lifecycle methods, `@bind`, DI, and `EventCallback` are used where they fit the component behavior.
+- [ ] API calls and UI failures have error handling and user feedback.
+- [ ] Forms use FluentValidation or DataAnnotations when validation is required.
+- [ ] Rendering changes avoid unnecessary rerenders and use `StateHasChanged()` or `ShouldRender()` only when justified.
+- [ ] Caching and state management match Blazor Server or Blazor WebAssembly requirements.
+- [ ] Tests can run in Visual Studio, VS Code, and JetBrains Rider using the approved test and mock frameworks.
+- [ ] Protected flows use authentication, authorization, HTTPS, and deliberate CORS configuration.
+- [ ] Backend API documentation remains accurate through Swagger/OpenAPI and useful XML comments.

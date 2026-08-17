@@ -71,7 +71,7 @@ Why: {{WHY_THE_BAD_EXAMPLE_BREAKS_THE_CONVENTION}}
 | {{PREFERRED_PRACTICE_2}} | {{MISTAKE_2}} |
 | {{PREFERRED_PRACTICE_3}} | {{MISTAKE_3}} |
 
-## Verification Checklist
+## Checklist Before Opening a PR
 
 - [ ] The change stays within `{{SCOPE_DESCRIPTION}}` and respects the responsibility split.
 - [ ] The implementation follows the authoritative sources and the conventions above.

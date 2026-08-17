@@ -1,312 +1,526 @@
 ---
 applyTo: '**/*.{cs,ts,java}'
-description: 'Enforces Object Calisthenics principles for business domain code to ensure clean, maintainable, and robust code'
+description: 'Enforces the original 9 Object Calisthenics rules for business domain code, with pragmatic exemptions for DTOs, API contracts, configuration, infrastructure, and tests.'
+name: 'Object Calisthenics Conventions'
 ---
 
-# Object Calisthenics Rules
+# Object Calisthenics Conventions — Domain Object Discipline
 
->**Warning:** This file contains the 9 original Object Calisthenics rules. No additional rules must be added, and none of these rules should be replaced or removed.
->Examples may be added later if needed.
+This file applies to C#, TypeScript, and Java business domain code, especially aggregates, entities, value objects, domain services, application services, and use case handlers. It is authoritative for the original 9 Object Calisthenics rules in this scope; when DTO, API contract, configuration, infrastructure, or test conventions conflict, apply the explicit exemptions in this file without adding, replacing, or removing any of the 9 rules.
 
-## Objective
-This rule enforces the principles of Object Calisthenics to ensure clean, maintainable, and robust code in the backend, **primarily for business domain code**.
+## Scope and Exemptions
 
-## Scope and Application
-- **Primary focus**: Business domain classes (aggregates, entities, value objects, domain services)
-- **Secondary focus**: Application layer services and use case handlers
-- **Exemptions**:
-  - DTOs (Data Transfer Objects)
-  - API models/contracts
-  - Configuration classes
-  - Simple data containers without business logic
-  - Infrastructure code where flexibility is needed
+Apply the rules strictly to business domain code:
 
-## Key Principles
+- Aggregates
+- Entities
+- Value objects
+- Domain services
+- Application services
+- Use case handlers
 
+Relax the rules where the original instruction explicitly allows pragmatism:
 
-1. **One Level of Indentation per Method**:
-   - Ensure methods are simple and do not exceed one level of indentation.
+| Code type | Exemption |
+| --- | --- |
+| DTOs and data transfer objects | Rules 3, 8, and 9 may be relaxed; public getters and setters are acceptable |
+| API models and contracts | Data-shape concerns may outweigh domain encapsulation |
+| Configuration classes | Framework binding may require simple public properties |
+| Simple data containers without business logic | Do not force domain-object ceremony where no behavior exists |
+| Infrastructure code | Flexibility may be needed for framework, persistence, or integration seams |
+| Tests | Rules may be relaxed for readability and maintainability; test behavior rather than object state |
 
-   ```csharp
-   // Bad Example - this method has multiple levels of indentation
-   public void SendNewsletter() {
-         foreach (var user in users) {
-            if (user.IsActive) {
-               // Do something
-               mailer.Send(user.Email);
-            }
-         }
-   }
-   // Good Example - Extracted method to reduce indentation
-   public void SendNewsletter() {
-       foreach (var user in users) {
-           SendEmail(user);
-       }
-   }
-   private void SendEmail(User user) {
-       if (user.IsActive) {
-           mailer.Send(user.Email);
-       }
-   }
+Do not add a tenth rule, replace any rule, or remove any rule. Examples and organization may change, but the original 9 rules remain the complete rule set.
 
-   // Good Example - Filtering users before sending emails
-   public void SendNewsletter() {
-       var activeUsers = users.Where(user => user.IsActive);
+## Rule 1: One Level of Indentation per Method
 
-       foreach (var user in activeUsers) {
-           mailer.Send(user.Email);
-       }
-   }
-   ```
-2. **Don't Use the ELSE Keyword**:
+Keep each method at one level of indentation. Extract nested logic into intention-revealing methods or filter the input before iteration.
 
-   - Avoid using the `else` keyword to reduce complexity and improve readability.
-   - Use early returns to handle conditions instead.
-   - Use Fail Fast principle
-   - Use Guard Clauses to validate inputs and conditions at the beginning of methods.
-
-   ```csharp
-   // Bad Example - Using else
-   public void ProcessOrder(Order order) {
-       if (order.IsValid) {
-           // Process order
-       } else {
-           // Handle invalid order
-       }
-   }
-   // Good Example - Avoiding else
-   public void ProcessOrder(Order order) {
-       if (!order.IsValid) return;
-       // Process order
-   }
-   ```
-
-   Sample Fail fast principle:
-   ```csharp
-   public void ProcessOrder(Order order) {
-       if (order == null) throw new ArgumentNullException(nameof(order));
-       if (!order.IsValid) throw new InvalidOperationException("Invalid order");
-       // Process order
-   }
-   ```
-
-3. **Wrapping All Primitives and Strings**:
-   - Avoid using primitive types directly in your code.
-   - Wrap them in classes to provide meaningful context and behavior.
-
-   ```csharp
-   // Bad Example - Using primitive types directly
-   public class User {
-       public string Name { get; set; }
-       public int Age { get; set; }
-   }
-   // Good Example - Wrapping primitives
-   public class User {
-       private string name;
-       private Age age;
-       public User(string name, Age age) {
-           this.name = name;
-           this.age = age;
-       }
-   }
-   public class Age {
-       private int value;
-       public Age(int value) {
-           if (value < 0) throw new ArgumentOutOfRangeException(nameof(value), "Age cannot be negative");
-           this.value = value;
-       }
-   }
-   ```
-
-4. **First Class Collections**:
-   - Use collections to encapsulate data and behavior, rather than exposing raw data structures.
-First Class Collections: a class that contains an array as an attribute should not contain any other attributes
+**Bad:**
 
 ```csharp
-   // Bad Example - Exposing raw collection
-   public class Group {
-      public int Id { get; private set; }
-      public string Name { get; private set; }
-      public List<User> Users { get; private set; }
+public void SendNewsletter()
+{
+    foreach (var user in users)
+    {
+        if (user.IsActive)
+        {
+            mailer.Send(user.Email);
+        }
+    }
+}
+```
 
-      public int GetNumberOfUsersIsActive() {
-         return Users
+**Good:**
+
+```csharp
+public void SendNewsletter()
+{
+    foreach (var user in users)
+    {
+        SendEmail(user);
+    }
+}
+
+private void SendEmail(User user)
+{
+    if (user.IsActive)
+    {
+        mailer.Send(user.Email);
+    }
+}
+```
+
+**Good:**
+
+```csharp
+public void SendNewsletter()
+{
+    var activeUsers = users.Where(user => user.IsActive);
+
+    foreach (var user in activeUsers)
+    {
+        mailer.Send(user.Email);
+    }
+}
+```
+
+## Rule 2: Do Not Use the `else` Keyword
+
+Avoid `else` to reduce branching complexity and improve readability. Prefer early returns, fail-fast checks, and guard clauses at the beginning of methods.
+
+**Bad:**
+
+```csharp
+public void ProcessOrder(Order order)
+{
+    if (order.IsValid)
+    {
+        Process(order);
+    }
+    else
+    {
+        Reject(order);
+    }
+}
+```
+
+**Good:**
+
+```csharp
+public void ProcessOrder(Order order)
+{
+    if (!order.IsValid) return;
+
+    Process(order);
+}
+```
+
+**Good:**
+
+```csharp
+public void ProcessOrder(Order order)
+{
+    if (order is null) throw new ArgumentNullException(nameof(order));
+    if (!order.IsValid) throw new InvalidOperationException("Invalid order");
+
+    Process(order);
+}
+```
+
+## Rule 3: Wrap All Primitives and Strings
+
+Do not model domain concepts with raw primitives or strings when the value has meaning or behavior. Wrap values in small types that validate invariants and expose intention.
+
+**Bad:**
+
+```csharp
+public class User
+{
+    public string Name { get; set; }
+    public int Age { get; set; }
+}
+```
+
+**Good:**
+
+```csharp
+public class User
+{
+    private readonly UserName name;
+    private readonly Age age;
+
+    public User(UserName name, Age age)
+    {
+        this.name = name;
+        this.age = age;
+    }
+}
+
+public class Age
+{
+    private readonly int value;
+
+    public Age(int value)
+    {
+        if (value < 0)
+        {
+            throw new ArgumentOutOfRangeException(nameof(value), "Age cannot be negative");
+        }
+
+        this.value = value;
+    }
+}
+```
+
+## Rule 4: Use First Class Collections
+
+Encapsulate collections in dedicated classes instead of exposing raw data structures. A class that contains an array or collection as an attribute should not contain any other attributes; the collection wrapper owns collection behavior.
+
+**Bad:**
+
+```csharp
+public class Group
+{
+    public int Id { get; private set; }
+    public string Name { get; private set; }
+    public List<User> Users { get; private set; }
+
+    public int GetNumberOfUsersIsActive()
+    {
+        return Users
             .Where(user => user.IsActive)
             .Count();
-      }
-   }
+    }
+}
+```
 
-   // Good Example - Encapsulating collection behavior
-   public class Group {
-      public int Id { get; private set; }
-      public string Name { get; private set; }
+**Good:**
 
-      public GroupUserCollection userCollection { get; private set; } // The list of users is encapsulated in a class
+```csharp
+public class Group
+{
+    public int Id { get; private set; }
+    public string Name { get; private set; }
+    public GroupUserCollection UserCollection { get; private set; }
 
-      public int GetNumberOfUsersIsActive() {
-         return userCollection
+    public int GetNumberOfUsersIsActive()
+    {
+        return UserCollection
             .GetActiveUsers()
             .Count();
-      }
-   }
-   ```
+    }
+}
+```
 
-5. **One Dot per Line**:
-   - Avoid violating Law of Demeter by only having a single dot per line.
+## Rule 5: One Dot per Line
 
-   ```csharp
-   // Bad Example - Multiple dots in a single line
-   public void ProcessOrder(Order order) {
-       var userEmail = order.User.GetEmail().ToUpper().Trim();
-       // Do something with userEmail
-   }
-   // Good Example - One dot per line
-   public class User {
-     public NormalizedEmail GetEmail() {
-       return NormalizedEmail.Create(/*...*/);
-     }
-   }
-   public class Order {
-     /*...*/
-     public NormalizedEmail ConfirmationEmail() {
-       return User.GetEmail();
-     }
-   }
-   public void ProcessOrder(Order order) {
-       var confirmationEmail = order.ConfirmationEmail();
-       // Do something with confirmationEmail
-   }
-   ```
+Avoid Law of Demeter violations by keeping only one member-access dot per line. Ask objects for the domain result you need instead of navigating through their internals.
 
-6. **Don't abbreviate**:
-   - Use meaningful names for classes, methods, and variables.
-   - Avoid abbreviations that can lead to confusion.
+**Bad:**
 
-   ```csharp
-   // Bad Example - Abbreviated names
-   public class U {
-       public string N { get; set; }
-   }
-   // Good Example - Meaningful names
-   public class User {
-       public string Name { get; set; }
-   }
-   ```
+```csharp
+public void ProcessOrder(Order order)
+{
+    var userEmail = order.User.GetEmail().ToUpper().Trim();
+    SendConfirmation(userEmail);
+}
+```
 
-7. **Keep entities small (Class, method, namespace or package)**:
-   - Limit the size of classes and methods to improve code readability and maintainability.
-   - Each class should have a single responsibility and be as small as possible.
+**Good:**
 
-   Constraints:
-   - Maximum 10 methods per class
-   - Maximum 50 lines per class
-   - Maximum 10 classes per package or namespace
+```csharp
+public class User
+{
+    public NormalizedEmail GetEmail()
+    {
+        return NormalizedEmail.Create(/*...*/);
+    }
+}
 
-   ```csharp
-   // Bad Example - Large class with multiple responsibilities
-   public class UserManager {
-       public void CreateUser(string name) { /*...*/ }
-       public void DeleteUser(int id) { /*...*/ }
-       public void SendEmail(string email) { /*...*/ }
-   }
+public class Order
+{
+    public NormalizedEmail ConfirmationEmail()
+    {
+        return User.GetEmail();
+    }
+}
 
-   // Good Example - Small classes with single responsibility
-   public class UserCreator {
-       public void CreateUser(string name) { /*...*/ }
-   }
-   public class UserDeleter {
-       public void DeleteUser(int id) { /*...*/ }
-   }
+public void ProcessOrder(Order order)
+{
+    var confirmationEmail = order.ConfirmationEmail();
+    SendConfirmation(confirmationEmail);
+}
+```
 
-   public class UserUpdater {
-       public void UpdateUser(int id, string name) { /*...*/ }
-   }
-   ```
+## Rule 6: Do Not Abbreviate
 
+Use meaningful names for classes, methods, variables, packages, and namespaces. Avoid abbreviations that make intent ambiguous.
 
-8. **No Classes with More Than Two Instance Variables**:
-   - Encourage classes to have a single responsibility by limiting the number of instance variables.
-   - Limit the number of instance variables to two to maintain simplicity.
-   - Do not count ILogger or any other logger as instance variable.
+**Bad:**
 
-   ```csharp
-   // Bad Example - Class with multiple instance variables
-   public class UserCreateCommandHandler {
-      // Bad: Too many instance variables
-      private readonly IUserRepository userRepository;
-      private readonly IEmailService emailService;
-      private readonly ILogger logger;
-      private readonly ISmsService smsService;
+```csharp
+public class U
+{
+    public string N { get; set; }
+}
+```
 
-      public UserCreateCommandHandler(IUserRepository userRepository, IEmailService emailService, ILogger logger, ISmsService smsService) {
-         this.userRepository = userRepository;
-         this.emailService = emailService;
-         this.logger = logger;
-         this.smsService = smsService;
-      }
-   }
+**Good:**
 
-   // Good: Class with two instance variables
-   public class UserCreateCommandHandler {
-      private readonly IUserRepository userRepository;
-      private readonly INotificationService notificationService;
-      private readonly ILogger logger; // This is not counted as instance variable
+```csharp
+public class User
+{
+    public string Name { get; set; }
+}
+```
 
-      public UserCreateCommandHandler(IUserRepository userRepository, INotificationService notificationService, ILogger logger) {
-         this.userRepository = userRepository;
-         this.notificationService = notificationService;
-         this.logger = logger;
-      }
-   }
-   ```
+## Rule 7: Keep Entities Small
 
-9. **No Getters/Setters in Domain Classes**:
-   - Avoid exposing setters for properties in domain classes.
-   - Use private constructors and static factory methods for object creation.
-   - **Note**: This rule applies primarily to domain classes, not DTOs or data transfer objects.
+Keep classes, methods, packages, and namespaces small enough to remain readable and single-purpose.
 
-   ```csharp
-   // Bad Example - Domain class with public setters
-   public class User {  // Domain class
-       public string Name { get; set; } // Avoid this in domain classes
-   }
+| Entity | Constraint |
+| --- | --- |
+| Class | Maximum 50 lines |
+| Class methods | Maximum 10 methods per class |
+| Package or namespace | Maximum 10 classes |
 
-   // Good Example - Domain class with encapsulation
-   public class User {  // Domain class
-       private string name;
-       private User(string name) { this.name = name; }
-       public static User Create(string name) => new User(name);
-   }
+Each class should have one responsibility and be as small as possible.
 
-   // Acceptable Example - DTO with public setters
-   public class UserDto {  // DTO - exemption applies
-       public string Name { get; set; } // Acceptable for DTOs
-   }
-   ```
+**Bad:**
 
-## Implementation Guidelines
-- **Domain Classes**:
-  - Use private constructors and static factory methods for creating instances.
-  - Avoid exposing setters for properties.
-  - Apply all 9 rules strictly for business domain code.
+```csharp
+public class UserManager
+{
+    public void CreateUser(string name) { /*...*/ }
+    public void DeleteUser(int id) { /*...*/ }
+    public void SendEmail(string email) { /*...*/ }
+}
+```
 
-- **Application Layer**:
-  - Apply these rules to use case handlers and application services.
-  - Focus on maintaining single responsibility and clean abstractions.
+**Good:**
 
-- **DTOs and Data Objects**:
-  - Rules 3 (wrapping primitives), 8 (two instance variables), and 9 (no getters/setters) may be relaxed for DTOs.
-  - Public properties with getters/setters are acceptable for data transfer objects.
+```csharp
+public class UserCreator
+{
+    public void CreateUser(string name) { /*...*/ }
+}
 
-- **Testing**:
-  - Ensure tests validate the behavior of objects rather than their state.
-  - Test classes may have relaxed rules for readability and maintainability.
+public class UserDeleter
+{
+    public void DeleteUser(int id) { /*...*/ }
+}
 
-- **Code Reviews**:
-  - Enforce these rules during code reviews for domain and application code.
-  - Be pragmatic about infrastructure and DTO code.
+public class UserUpdater
+{
+    public void UpdateUser(int id, string name) { /*...*/ }
+}
+```
+
+## Rule 8: No Classes with More Than Two Instance Variables
+
+Limit each class to two instance variables to keep responsibilities narrow. Do not count `ILogger` or any other logger as an instance variable for this rule.
+
+**Bad:**
+
+```csharp
+public class UserCreateCommandHandler
+{
+    private readonly IUserRepository userRepository;
+    private readonly IEmailService emailService;
+    private readonly ILogger logger;
+    private readonly ISmsService smsService;
+
+    public UserCreateCommandHandler(
+        IUserRepository userRepository,
+        IEmailService emailService,
+        ILogger logger,
+        ISmsService smsService)
+    {
+        this.userRepository = userRepository;
+        this.emailService = emailService;
+        this.logger = logger;
+        this.smsService = smsService;
+    }
+}
+```
+
+**Good:**
+
+```csharp
+public class UserCreateCommandHandler
+{
+    private readonly IUserRepository userRepository;
+    private readonly INotificationService notificationService;
+    private readonly ILogger logger;
+
+    public UserCreateCommandHandler(
+        IUserRepository userRepository,
+        INotificationService notificationService,
+        ILogger logger)
+    {
+        this.userRepository = userRepository;
+        this.notificationService = notificationService;
+        this.logger = logger;
+    }
+}
+```
+
+## Rule 9: No Getters or Setters in Domain Classes
+
+Do not expose setters on domain classes. Create domain objects through private constructors and static factory methods, and expose behavior instead of mutable state. This rule applies primarily to domain classes; DTOs and data transfer objects are exempt where public getters and setters are needed.
+
+**Bad:**
+
+```csharp
+public class User
+{
+    public string Name { get; set; }
+}
+```
+
+**Good:**
+
+```csharp
+public class User
+{
+    private readonly string name;
+
+    private User(string name)
+    {
+        this.name = name;
+    }
+
+    public static User Create(string name) => new User(name);
+}
+```
+
+**Acceptable for DTOs:**
+
+```csharp
+public class UserDto
+{
+    public string Name { get; set; }
+}
+```
+
+## Layer Application
+
+| Layer | Application |
+| --- | --- |
+| Domain classes | Use private constructors and static factory methods; avoid setters; apply all 9 rules strictly |
+| Application layer | Apply the rules to use case handlers and application services, focusing on single responsibility and clean abstractions |
+| DTOs and data objects | Relax rules 3, 8, and 9 when data transfer shape requires primitives, several properties, or public getters and setters |
+| Tests | Validate object behavior rather than state; relax rules only when readability and maintainability require it |
+| Code reviews | Enforce the rules for domain and application code; stay pragmatic for infrastructure and DTO code |
+
+## Good / Bad Examples
+
+The examples below illustrate applying several rules together: guard clauses instead of `else`, wrapped primitives, small domain behavior, and no public setters in a domain object.
+
+**Good:**
+
+```csharp
+public class Order
+{
+    private readonly OrderLines lines;
+    private readonly CustomerEmail customerEmail;
+
+    private Order(OrderLines lines, CustomerEmail customerEmail)
+    {
+        this.lines = lines;
+        this.customerEmail = customerEmail;
+    }
+
+    public static Order Create(OrderLines lines, CustomerEmail customerEmail)
+    {
+        if (lines is null) throw new ArgumentNullException(nameof(lines));
+        if (customerEmail is null) throw new ArgumentNullException(nameof(customerEmail));
+
+        return new Order(lines, customerEmail);
+    }
+
+    public Invoice DraftInvoice()
+    {
+        return lines.ToInvoiceFor(customerEmail);
+    }
+}
+```
+
+Why: The domain class has two instance variables, wraps meaningful values, uses guard clauses, avoids setters, and asks its collection object for behavior.
+
+**Bad:**
+
+```csharp
+public class Order
+{
+    public List<OrderLine> Lines { get; set; }
+    public string Email { get; set; }
+    public decimal Total { get; set; }
+
+    public Invoice DraftInvoice()
+    {
+        if (Lines.Count > 0)
+        {
+            return new Invoice(Email.Trim().ToUpper(), Total);
+        }
+        else
+        {
+            return Invoice.Empty();
+        }
+    }
+}
+```
+
+Why: The domain class exposes setters, uses primitives for domain concepts, has more than two instance variables, uses `else`, navigates through raw collection state, and chains multiple dots on one line.
+
+## Conventions
+
+| Rule | Rationale |
+|---|---|
+| Keep each method to one level of indentation | Nested control flow hides intent and makes extraction harder |
+| Avoid `else`; use early returns, fail-fast checks, and guard clauses | Branching stays linear and invalid states exit early |
+| Wrap primitives and strings that represent domain concepts | Value objects carry validation, behavior, and meaning |
+| Encapsulate collections as first class collections | Collection behavior stays near the data and raw structures do not leak |
+| Keep one dot per line | Objects collaborate through behavior instead of exposing internals |
+| Use complete, meaningful names without abbreviations | Names communicate intent without local tribal knowledge |
+| Keep classes under 50 lines, classes under 10 methods, and packages or namespaces under 10 classes | Small units preserve single responsibility and reviewability |
+| Limit classes to two instance variables, excluding loggers | Object responsibilities stay narrow and composable |
+| Avoid getters and setters in domain classes; use private constructors and static factories | Domain objects protect invariants and expose behavior, not mutable state |
+| Apply all 9 rules strictly to business domain code and pragmatically to exempt code | The discipline improves domain design without fighting DTOs, infrastructure, or tests |
+
+## Do / Do Not
+
+| Do | Do not |
+|---|---|
+| Extract nested logic into named methods or filtered inputs | Add multiple indentation levels inside a method |
+| Use guard clauses and fail-fast validation | Add `else` branches for normal control flow |
+| Model meaningful values as value objects | Pass raw strings and primitives through domain behavior |
+| Put collection behavior in a first class collection | Expose raw lists and arrays from domain objects |
+| Ask an object for the result you need | Chain through another object's internals with multiple dots |
+| Write full names for classes, methods, variables, packages, and namespaces | Abbreviate names into unclear codes such as `U` or `N` |
+| Split responsibilities into small classes and packages | Let managers, helpers, or namespaces grow without clear ownership |
+| Keep at most two non-logger instance variables per class | Inject or store several collaborators in one class |
+| Create domain objects with private constructors and static factories | Expose public setters on domain classes |
+| Relax rules 3, 8, and 9 for DTOs when needed | Force DTOs, API contracts, configuration, or tests into domain-object shapes |
+
+## Checklist Before Opening a PR
+
+- [ ] Domain and application code applies exactly the original 9 Object Calisthenics rules.
+- [ ] No method exceeds one indentation level unless the file is explicitly exempt.
+- [ ] No domain or application method introduces an `else` where a guard clause, early return, or fail-fast check would work.
+- [ ] Domain primitives and strings with business meaning are wrapped in value objects.
+- [ ] Raw domain collections are hidden behind first class collection objects.
+- [ ] Domain code avoids multi-dot navigation and asks collaborators for behavior.
+- [ ] New names are meaningful and do not rely on abbreviations.
+- [ ] Classes stay within 50 lines and 10 methods; packages or namespaces stay within 10 classes.
+- [ ] Classes have no more than two non-logger instance variables.
+- [ ] Domain classes avoid public setters and use private constructors plus static factory methods where object creation needs control.
+- [ ] DTOs, API contracts, configuration, infrastructure, and tests use only the documented exemptions.
+- [ ] Tests focus on object behavior rather than exposing or asserting internal state.
 
 ## References
-- [Object Calisthenics - Original 9 Rules by Jeff Bay](https://www.cs.helsinki.fi/u/luontola/tdd-2009/ext/ObjectCalisthenics.pdf)
-- [ThoughtWorks - Object Calisthenics](https://www.thoughtworks.com/insights/blog/object-calisthenics)
-- [Clean Code: A Handbook of Agile Software Craftsmanship - Robert C. Martin](https://www.oreilly.com/library/view/clean-code-a/9780136083238/)
+
+- Object Calisthenics - Original 9 Rules by Jeff Bay: https://www.cs.helsinki.fi/u/luontola/tdd-2009/ext/ObjectCalisthenics.pdf
+- ThoughtWorks - Object Calisthenics: https://www.thoughtworks.com/insights/blog/object-calisthenics
+- Clean Code: A Handbook of Agile Software Craftsmanship, Robert C. Martin: https://www.oreilly.com/library/view/clean-code-a/9780136083238/

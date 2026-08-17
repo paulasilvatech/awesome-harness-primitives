@@ -76,7 +76,7 @@ Why: the description is not actionable for discovery, and the listed tools are n
 | Use concise examples that prove the convention. | Add long tutorials or unrelated reference material to the primitive body. |
 | Apply validation appropriate to the primitive type. | Treat a clean-looking Markdown file as runtime-compatible without type-specific checks. |
 
-## Verification Checklist
+## Checklist Before Opening a PR
 
 - [ ] The edited file is the canonical `library/` source unless the task explicitly targets an installed mirror.
 - [ ] Frontmatter uses only recognized fields for the primitive type.

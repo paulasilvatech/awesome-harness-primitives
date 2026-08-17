@@ -1,65 +1,129 @@
 ---
 name: 'java-junit'
-description: 'Guide JUnit 5 unit test design with standard, parameterized, assertion, mocking, and organization best practices.'
+description: 'Design or review JUnit 5 unit tests with parameterized tests, assertions, mocking, and maintainable organization.'
 agent: 'agent'
 tools: ['changes', 'codebase', 'editFiles', 'problems', 'search']
+argument-hint: 'target=<class-or-test-file> scope=<unit-or-component>'
 ---
 
-# JUnit 5+ Best Practices
+# /java-junit
 
-Your goal is to help me write effective unit tests with JUnit 5, covering both standard and data-driven testing approaches.
+## Objective
 
-## Project Setup
+Design or review JUnit 5 unit tests for a Java class, package, or selected code so the tests are focused, maintainable, independent, and executable through the repository's existing Maven or Gradle workflow.
 
-- Use a standard Maven or Gradle project structure.
-- Place test source code in `src/test/java`.
-- Include dependencies for `junit-jupiter-api`, `junit-jupiter-engine`, and `junit-jupiter-params` for parameterized tests.
-- Use build tool commands to run tests: `mvn test` or `gradle test`.
+## When to Invoke
 
-## Test Structure
+Use this prompt when adding new unit tests, refactoring existing JUnit tests, or reviewing whether Java tests cover behavior without coupling to execution order or implementation details.
 
-- Test classes should have a `Test` suffix, e.g., `CalculatorTests` for a `Calculator` class.
-- Use `@Test` for test methods.
-- Follow the Arrange-Act-Assert (AAA) pattern.
-- Name tests using a descriptive convention, like `methodName_should_expectedBehavior_when_scenario`.
-- Use `@BeforeEach` and `@AfterEach` for per-test setup and teardown.
-- Use `@BeforeAll` and `@AfterAll` for per-class setup and teardown (must be static methods).
-- Use `@DisplayName` to provide a human-readable name for test classes and methods.
+## Preconditions
 
-## Standard Tests
+- The target Java production code or existing test file is available in the workspace.
+- The project uses, or is intended to use, JUnit 5 through Maven or Gradle.
+- Test changes are permitted in `src/test/java` or the repository's established test source tree.
+- Existing project conventions, dependencies, and test commands are preferred over new tooling.
 
-- Keep tests focused on a single behavior.
-- Avoid testing multiple conditions in one test method.
-- Make tests independent and idempotent (can run in any order).
-- Avoid test interdependencies.
+## Inputs
 
-## Data-Driven (Parameterized) Tests
+- `target` — the class, package, selected code, or test file to test or review.
+- `scope` — `unit`, `component`, or another explicit boundary for what the tests may exercise.
+- Existing build tool context — Maven or Gradle, including the command used to run the relevant tests.
+- Any required collaborators, edge cases, or behavior that must be covered.
+- Ask the user for anything that is missing, especially the target or test scope, and stop before editing if the missing information would change the test design.
 
-- Use `@ParameterizedTest` to mark a method as a parameterized test.
-- Use `@ValueSource` for simple literal values (strings, ints, etc.).
-- Use `@MethodSource` to refer to a factory method that provides test arguments as a `Stream`, `Collection`, etc.
-- Use `@CsvSource` for inline comma-separated values.
-- Use `@CsvFileSource` to use a CSV file from the classpath.
-- Use `@EnumSource` to use enum constants.
+## What I Will Do
 
-## Assertions
+- Inspect the target behavior and the existing test style before writing or changing tests.
+- Place tests in the standard test source tree and follow the repository's Maven or Gradle layout.
+- Use JUnit Jupiter annotations, assertions, lifecycle hooks, and parameterized sources where they improve clarity.
+- Structure tests around Arrange-Act-Assert and one behavior per test.
+- Use Mockito or the project's existing mocking framework to isolate dependencies when unit tests require test doubles.
+- Run the smallest existing Maven or Gradle test command that validates the affected tests when command execution is available.
 
-- Use the static methods from `org.junit.jupiter.api.Assertions` (e.g., `assertEquals`, `assertTrue`, `assertNotNull`).
-- For more fluent and readable assertions, consider using a library like AssertJ (`assertThat(...).is...`).
-- Use `assertThrows` or `assertDoesNotThrow` to test for exceptions.
-- Group related assertions with `assertAll` to ensure all assertions are checked before the test fails.
-- Use descriptive messages in assertions to provide clarity on failure.
+## What I Will NOT Do
 
-## Mocking and Isolation
+- Add integration-test infrastructure, containers, external services, or database dependencies for a unit-test request.
+- Change production code solely to make tests pass unless the requested scope includes implementation fixes.
+- Introduce a new assertion or mocking library when the project already has a clear standard.
+- Depend on test execution order except when an existing ordered-test contract is explicit and justified.
+- Hide unstable tests with `@Disabled` without a reason and a clear follow-up.
+- Test multiple unrelated behaviors in one method or assert private implementation details instead of observable behavior.
 
-- Use a mocking framework like Mockito to create mock objects for dependencies.
-- Use `@Mock` and `@InjectMocks` annotations from Mockito to simplify mock creation and injection.
-- Use interfaces to facilitate mocking.
+## Output Format
 
-## Test Organization
+Return or apply the test changes, then report the result in this format:
 
-- Group tests by feature or component using packages.
-- Use `@Tag` to categorize tests (e.g., `@Tag("fast")`, `@Tag("integration")`).
-- Use `@TestMethodOrder(MethodOrderer.OrderAnnotation.class)` and `@Order` to control test execution order when strictly necessary.
-- Use `@Disabled` to temporarily skip a test method or class, providing a reason.
-- Use `@Nested` to group tests in a nested inner class for better organization and structure.
+```markdown
+## JUnit Test Result
+
+### Target
+- `src/main/java/com/example/Calculator.java`
+
+### Tests Added or Updated
+- `CalculatorTests.add_should_returnSum_when_inputsArePositive`
+- `CalculatorTests.divide_should_throwArithmeticException_when_divisorIsZero`
+- `CalculatorTests.isValid_should_matchExpectedResult_when_valueComesFromCsvSource`
+
+### Practices Applied
+- Arrange-Act-Assert structure
+- `@ParameterizedTest` with `@CsvSource`
+- `assertThrows` for exception behavior
+- Mockito isolation for `RateProvider`
+
+### Validation
+- Command: `mvn -Dtest=CalculatorTests test`
+- Result: passed
+
+### Notes
+- No ordered tests were introduced.
+```
+
+## Definition of Done
+
+- [ ] Tests compile under the repository's existing Maven or Gradle configuration.
+- [ ] Test classes and methods use clear names that describe behavior and scenario.
+- [ ] Each test focuses on one behavior and can run independently in any order.
+- [ ] Parameterized tests are used for meaningful data variation, not for unrelated cases.
+- [ ] Assertions are specific, readable, and include exception checks where behavior requires them.
+- [ ] Mocks isolate external dependencies without mocking the unit under test.
+- [ ] The relevant existing test command was run, or the reason it could not run is reported.
+
+## Prompt Body
+
+Follow these steps in order. Preserve existing project conventions unless they conflict with reliable JUnit 5 unit testing.
+
+**Step 1 — Confirm the test boundary.**
+Identify the class, method, package, or selected code under test. Determine whether the requested scope is a unit test or a broader component test. If the target or boundary is unclear, ask for it before editing.
+
+**Step 2 — Check the project setup.**
+Use the existing Maven or Gradle structure. Prefer `src/test/java` for test source code. Confirm that JUnit Jupiter is already available or expected through `junit-jupiter-api`, `junit-jupiter-engine`, and `junit-jupiter-params` when parameterized tests are needed. Use the repository's existing commands, usually `mvn test`, a targeted `mvn -Dtest=... test`, `gradle test`, or a targeted Gradle test task.
+
+**Step 3 — Name and organize the tests.**
+Use a `Test` or repository-standard suffix such as `CalculatorTests` for `Calculator`. Group tests by feature or component using packages. Use descriptive method names such as `methodName_should_expectedBehavior_when_scenario`. Add `@DisplayName` to clarify classes or methods when it improves readability.
+
+**Step 4 — Structure each standard test.**
+Use `@Test` for single-scenario tests. Apply Arrange-Act-Assert. Keep each method focused on one behavior. Avoid combining multiple conditions in one test. Keep tests independent, idempotent, and free of interdependencies.
+
+**Step 5 — Use lifecycle hooks carefully.**
+Use `@BeforeEach` and `@AfterEach` for per-test setup and teardown. Use `@BeforeAll` and `@AfterAll` for per-class setup and teardown, with static methods when required by the test instance lifecycle. Do not hide important Arrange steps in shared setup when doing so makes individual tests unclear.
+
+**Step 6 — Add data-driven tests when the behavior varies by input.**
+Use `@ParameterizedTest` for repeated behavior over multiple inputs. Use `@ValueSource` for simple literal values, `@CsvSource` for inline tabular examples, `@CsvFileSource` for classpath CSV data, `@EnumSource` for enum constants, and `@MethodSource` when arguments need a factory method that returns a `Stream`, `Collection`, or equivalent supported source.
+
+**Step 7 — Choose precise assertions.**
+Use static methods from `org.junit.jupiter.api.Assertions`, such as `assertEquals`, `assertTrue`, `assertNotNull`, `assertThrows`, and `assertDoesNotThrow`. Use AssertJ only when the project already uses it or when adding it is explicitly approved. Group related assertions with `assertAll` so one failure does not hide other checks. Add descriptive assertion messages when they clarify a failure.
+
+**Step 8 — Isolate dependencies with mocks.**
+Use Mockito or the repository's existing mocking framework for collaborators that make the test slow, nondeterministic, or external. Use `@Mock` and `@InjectMocks` when they simplify mock creation and injection. Prefer interfaces for mockable dependencies. Do not mock value objects or the behavior of the unit under test.
+
+**Step 9 — Organize larger test classes.**
+Use `@Nested` to group related scenarios. Use `@Tag` for categories such as `fast` or `integration` when the repository uses tags. Use `@TestMethodOrder(MethodOrderer.OrderAnnotation.class)` and `@Order` only when ordering is strictly necessary and documented. Use `@Disabled` only with a reason.
+
+**Step 10 — Validate and report.**
+Run the narrowest existing test command that covers the changed tests. If execution is unavailable, report the exact command that should be run and why it was not run. Summarize changed tests, practices applied, and any remaining coverage gaps.
+
+## Invocation Example
+
+```
+/java-junit target=src/main/java/com/example/Calculator.java scope=unit
+```
