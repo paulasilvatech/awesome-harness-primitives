@@ -1,295 +1,133 @@
 ---
-name: "git-flow-branch-creator"
+name: git-flow-branch-creator
+allowed-tools: [bash]
 description: >-
-  Analyze git status and diffs, choose the appropriate Git Flow branch type, and create a
-  correctly named branch. Use this skill when the user asks to start feature, bugfix, release,
-  hotfix, or support work using the nvie Git Flow model.
+  Analyze git status and diffs, classify work using the nvie Git Flow branching model, generate a semantic branch name, and create the branch from the correct source branch. Use this skill when the user asks to start a feature, bugfix, release, hotfix, or support branch, create a Git Flow branch, or choose a branch name from current changes.
 ---
 
-# Git Flow Branch Creator
+# Git Flow branch creator
 
-```xml
-<instructions>
-	<title>Git Flow Branch Creator</title>
-	<description>This prompt analyzes your current git changes using git status and git diff (or git diff --cached), then intelligently determines the appropriate branch type according to the Git Flow branching model and creates a semantic branch name.</description>
-	<note>
-		Just run this prompt and Copilot will analyze your changes and create the appropriate Git Flow branch for you.
-	</note>
-</instructions>
+Inspect current Git changes, classify the work under Git Flow, create a descriptive branch from the correct source branch, and report the evidence, command, and next steps.
+
+## When to invoke
+
+- "Create a Git Flow branch for these changes."
+- "Start a feature branch from develop."
+- "Create a hotfix branch for this production bug."
+- "Name and create the right branch for my diff."
+- "Prepare a release branch for version 2.1.0."
+
+## Prerequisites and context
+
+- Requires a Git repository with Git Flow-style base branches.
+- Use `develop` as the source for `feature` and `release` branches.
+- Use `master` as the source for `hotfix` branches unless the repository has an explicitly different production branch.
+- Preserve uncommitted changes; `git checkout -b` carries them to the new branch when possible.
+
+## Branch classification
+
+| Branch type | Purpose | Branch from | Merge to | Naming | Indicators |
+| --- | --- | --- | --- | --- | --- |
+| `feature` | New features, enhancements, non-critical improvements | `develop` | `develop` | `feature/descriptive-name` or `feature/ticket-number-description` | New functionality, UI/UX improvements, new API endpoints or methods, non-breaking database schema additions, new configuration options, non-critical performance improvements. |
+| `release` | Release preparation, version bumps, final testing | `develop` | `develop` and `master` | `release-X.Y.Z` | Version number changes, build configuration updates, documentation finalization, minor pre-release bug fixes, release notes updates, dependency version locks. |
+| `hotfix` | Critical production bug fixes requiring immediate deployment | `master` | `develop` and `master` | `hotfix-X.Y.Z` or `hotfix/critical-issue-description` | Security vulnerability fixes, critical production bugs, data corruption fixes, service outage resolution, emergency configuration changes. |
+
+Decision tree:
+
+1. If the change fixes a critical production issue, security vulnerability, outage, data corruption, or emergency config problem, choose `hotfix`.
+2. Else if the change prepares a release through version bump, release notes, final docs, build config, dependency locks, or release stabilization, choose `release`.
+3. Else choose `feature` for additive, developmental, or non-critical corrective work.
+4. If changes mix unrelated feature, hotfix, and release concerns, recommend splitting before creating a branch unless one concern clearly dominates.
+
+## Branch naming
+
+| Type | Format | Examples |
+| --- | --- | --- |
+| Feature | `feature/[ticket-number-]descriptive-name` | `feature/user-authentication`, `feature/PROJ-123-shopping-cart`, `feature/api-rate-limiting`, `feature/dashboard-redesign` |
+| Release | `release-X.Y.Z` | `release-1.2.0`, `release-2.1.0`, `release-1.0.0` |
+| Hotfix | `hotfix-X.Y.Z` or `hotfix/critical-description` | `hotfix-1.2.1`, `hotfix/security-patch`, `hotfix/payment-gateway-fix`, `hotfix-2.1.1` |
+
+Name rules:
+
+- Use lowercase kebab-case.
+- Include a ticket number when visible in the user request, branch, commit text, or filenames.
+- Keep the name concise but descriptive.
+- Avoid vague names such as `feature/changes` or `hotfix/fix`.
+- If a branch name already exists, append a small suffix such as `-2` or choose the next most specific name.
+
+## Procedure
+
+1. Run `git status` and identify current branch, staged files, unstaged files, and untracked files.
+2. Run `git diff --cached` when staged changes exist; run `git diff` for unstaged changes. Use both when both staged and unstaged work matter.
+3. Classify the change nature by files modified, scope, urgency, and whether the work is additive, corrective, or release-preparatory.
+4. Select `feature`, `release`, or `hotfix` using the decision tree.
+5. Verify the source branch exists locally or remotely: `develop` for feature/release, `master` for hotfix.
+6. Generate a semantic branch name that follows the type's format.
+7. Check for name conflicts with local and remote branches.
+8. Create and switch to the branch with `git checkout -b [branch-name] [source-branch]`.
+9. Verify with `git status --short --branch` and report next steps: commit changes, push branch, open PR, or split work.
+
+## Examples
+
+| Scenario | Analysis | Branch | Command |
+| --- | --- | --- | --- |
+| Added a new user registration API endpoint | New functionality, additive, not critical. | `feature/user-registration-api` | `git checkout -b feature/user-registration-api develop` |
+| Fixed critical security vulnerability in authentication | Security fix, production-critical, immediate deployment. | `hotfix/auth-security-patch` | `git checkout -b hotfix/auth-security-patch master` |
+| Updated version to 2.1.0 and finalized release notes | Release preparation, version bump, documentation. | `release-2.1.0` | `git checkout -b release-2.1.0 develop` |
+| Improved database query performance and updated caching | Non-critical performance enhancement. | `feature/database-performance-optimization` | `git checkout -b feature/database-performance-optimization develop` |
+
+## Gotchas
+
+- **Do not create a hotfix from `develop`**: Git Flow hotfixes start from production (`master`) and merge back to both `master` and `develop`.
+- **Do not hide mixed work in one branch**: if unrelated release, hotfix, and feature changes are present, split them before branch creation.
+- **Do not assume no changes means no branch**: if the user explicitly requested a branch name for planned work, create it from their intent even when the diff is empty.
+- **Use `--no-ff` at merge time**: branch creation does not merge, but Git Flow preserves branch history with `--no-ff` merges and release tags on `master`.
+
+## Troubleshooting
+
+| Symptom | Likely cause | Resolution |
+| --- | --- | --- |
+| `develop` or `master` does not exist locally | Branch exists only on remote or repository uses a different production branch. | Check `git branch -a`; use `origin/develop`, `origin/master`, or the repository's documented base. |
+| `git checkout -b` fails because branch exists | Local name conflict. | Choose a more specific name or append `-2`. |
+| Checkout would overwrite files | Uncommitted changes conflict with source branch. | Stop and report the conflict; do not stash or discard without explicit user request. |
+| No diff is present | Planned branch or clean working tree. | Classify from the user request; otherwise report that there is no change evidence. |
+
+
+## Legacy field mapping
+
+The original Git Flow prompt used XML-style field names. Preserve their meaning when reporting analysis or translating old output: `analysis-framework`, `branch-types`, `branch-type`, `branch-from`, `merge-to`, `feature-branches`, `release-branches`, `hotfix-branches`, `naming-conventions`, `analysis-process`, `change-scope`, `files-modified`, `urgency-level`, `decision-tree`, `if-yes`, `if-no`, `use-kebab-case`, `be-descriptive`, `include-context`, `keep-concise`, `edge-cases`, `mixed-changes`, `no-changes`, `existing-branch`, `conflicting-names`, `validation`, `pre-analysis`, `analysis-quality`, `execution-safety`, `execution-protocol`, `analysis-summary`, `git-status`, `git-diff`, `change-analysis`, `branch-decision`, `branch-creation`, `next-steps`, `fallback-options`, `alternative-names`, `manual-override`, `gitflow-reference`, `main-branches`, `supporting-branches`, `merge-strategy`, `develop/master`, `features/releases`, `feature/hotfix/release`, and `status/diff`.
+
+## Output template
+
+```markdown
+## Git Flow branch result
+
+**Status:** created | blocked | recommendation only
+**Current branch before:** `<branch>`
+**Branch type:** `feature | release | hotfix`
+**New branch:** `<branch-name>`
+**Source branch:** `develop | master | <other>`
+
+### Evidence
+- `git status`: <summary>
+- `git diff` / `git diff --cached`: <summary of relevant changes>
+- Classification: <why this branch type fits>
+
+### Command
+```bash
+git checkout -b <branch-name> <source-branch>
 ```
 
-### Workflow
-
-**Follow these steps:**
-
-1. Run `git status` to review the current repository state and changed files.
-2. Run `git diff` (for unstaged changes) or `git diff --cached` (for staged changes) to analyze the nature of changes.
-3. Analyze the changes using the Git Flow Branch Analysis Framework below.
-4. Determine the appropriate branch type based on the analysis.
-5. Generate a semantic branch name following Git Flow conventions.
-6. Create the branch and switch to it automatically.
-7. Provide a summary of the analysis and next steps.
-
-### Git Flow Branch Analysis Framework
-
-```xml
-<analysis-framework>
-	<branch-types>
-		<feature>
-			<purpose>New features, enhancements, non-critical improvements</purpose>
-			<branch-from>develop</branch-from>
-			<merge-to>develop</merge-to>
-			<naming>feature/descriptive-name or feature/ticket-number-description</naming>
-			<indicators>
-				<indicator>New functionality being added</indicator>
-				<indicator>UI/UX improvements</indicator>
-				<indicator>New API endpoints or methods</indicator>
-				<indicator>Database schema additions (non-breaking)</indicator>
-				<indicator>New configuration options</indicator>
-				<indicator>Performance improvements (non-critical)</indicator>
-			</indicators>
-		</feature>
-
-		<release>
-			<purpose>Release preparation, version bumps, final testing</purpose>
-			<branch-from>develop</branch-from>
-			<merge-to>develop AND master</merge-to>
-			<naming>release-X.Y.Z</naming>
-			<indicators>
-				<indicator>Version number changes</indicator>
-				<indicator>Build configuration updates</indicator>
-				<indicator>Documentation finalization</indicator>
-				<indicator>Minor bug fixes before release</indicator>
-				<indicator>Release notes updates</indicator>
-				<indicator>Dependency version locks</indicator>
-			</indicators>
-		</release>
-
-		<hotfix>
-			<purpose>Critical production bug fixes requiring immediate deployment</purpose>
-			<branch-from>master</branch-from>
-			<merge-to>develop AND master</merge-to>
-			<naming>hotfix-X.Y.Z or hotfix/critical-issue-description</naming>
-			<indicators>
-				<indicator>Security vulnerability fixes</indicator>
-				<indicator>Critical production bugs</indicator>
-				<indicator>Data corruption fixes</indicator>
-				<indicator>Service outage resolution</indicator>
-				<indicator>Emergency configuration changes</indicator>
-			</indicators>
-		</hotfix>
-	</branch-types>
-</analysis-framework>
+### Next steps
+- <commit, push, PR, split work, or release-tag guidance>
 ```
 
-### Branch Naming Conventions
+## Quality gate
 
-```xml
-<naming-conventions>
-	<feature-branches>
-		<format>feature/[ticket-number-]descriptive-name</format>
-		<examples>
-			<example>feature/user-authentication</example>
-			<example>feature/PROJ-123-shopping-cart</example>
-			<example>feature/api-rate-limiting</example>
-			<example>feature/dashboard-redesign</example>
-		</examples>
-	</feature-branches>
-
-	<release-branches>
-		<format>release-X.Y.Z</format>
-		<examples>
-			<example>release-1.2.0</example>
-			<example>release-2.1.0</example>
-			<example>release-1.0.0</example>
-		</examples>
-	</release-branches>
-
-	<hotfix-branches>
-		<format>hotfix-X.Y.Z OR hotfix/critical-description</format>
-		<examples>
-			<example>hotfix-1.2.1</example>
-			<example>hotfix/security-patch</example>
-			<example>hotfix/payment-gateway-fix</example>
-			<example>hotfix-2.1.1</example>
-		</examples>
-	</hotfix-branches>
-</naming-conventions>
-```
-
-### Analysis Process
-
-```xml
-<analysis-process>
-	<step-1>
-		<title>Change Nature Analysis</title>
-		<description>Examine the types of files modified and the nature of changes</description>
-		<criteria>
-			<files-modified>Look at file extensions, directory structure, and purpose</files-modified>
-			<change-scope>Determine if changes are additive, corrective, or preparatory</change-scope>
-			<urgency-level>Assess if changes address critical issues or are developmental</urgency-level>
-		</criteria>
-	</step-1>
-
-	<step-2>
-		<title>Git Flow Classification</title>
-		<description>Map the changes to appropriate Git Flow branch type</description>
-		<decision-tree>
-			<question>Are these critical fixes for production issues?</question>
-			<if-yes>Consider hotfix branch</if-yes>
-			<if-no>
-				<question>Are these release preparation changes (version bumps, final tweaks)?</question>
-				<if-yes>Consider release branch</if-yes>
-				<if-no>Default to feature branch</if-no>
-			</if-no>
-		</decision-tree>
-	</step-2>
-
-	<step-3>
-		<title>Branch Name Generation</title>
-		<description>Create semantic, descriptive branch name</description>
-		<guidelines>
-			<use-kebab-case>Use lowercase with hyphens</use-kebab-case>
-			<be-descriptive>Name should clearly indicate the purpose</be-descriptive>
-			<include-context>Add ticket numbers or project context when available</include-context>
-			<keep-concise>Avoid overly long names</keep-concise>
-		</guidelines>
-	</step-3>
-</analysis-process>
-```
-
-### Edge Cases and Validation
-
-```xml
-<edge-cases>
-	<mixed-changes>
-		<scenario>Changes include both features and bug fixes</scenario>
-		<resolution>Prioritize the most significant change type or suggest splitting into multiple branches</resolution>
-	</mixed-changes>
-
-	<no-changes>
-		<scenario>No changes detected in git status/diff</scenario>
-		<resolution>Inform user and suggest checking git status or making changes first</resolution>
-	</no-changes>
-
-	<existing-branch>
-		<scenario>Already on a feature/hotfix/release branch</scenario>
-		<resolution>Analyze if new branch is needed or if current branch is appropriate</resolution>
-	</existing-branch>
-
-	<conflicting-names>
-		<scenario>Suggested branch name already exists</scenario>
-		<resolution>Append incremental suffix or suggest alternative name</resolution>
-	</conflicting-names>
-</edge-cases>
-```
-
-### Examples
-
-```xml
-<examples>
-	<example-1>
-		<scenario>Added new user registration API endpoint</scenario>
-		<analysis>New functionality, additive changes, not critical</analysis>
-		<branch-type>feature</branch-type>
-		<branch-name>feature/user-registration-api</branch-name>
-		<command>git checkout -b feature/user-registration-api develop</command>
-	</example-1>
-
-	<example-2>
-		<scenario>Fixed critical security vulnerability in authentication</scenario>
-		<analysis>Security fix, critical for production, immediate deployment needed</analysis>
-		<branch-type>hotfix</branch-type>
-		<branch-name>hotfix/auth-security-patch</branch-name>
-		<command>git checkout -b hotfix/auth-security-patch master</command>
-	</example-2>
-
-	<example-3>
-		<scenario>Updated version to 2.1.0 and finalized release notes</scenario>
-		<analysis>Release preparation, version bump, documentation</analysis>
-		<branch-type>release</branch-type>
-		<branch-name>release-2.1.0</branch-name>
-		<command>git checkout -b release-2.1.0 develop</command>
-	</example-3>
-
-	<example-4>
-		<scenario>Improved database query performance and updated caching</scenario>
-		<analysis>Performance improvement, non-critical enhancement</analysis>
-		<branch-type>feature</branch-type>
-		<branch-name>feature/database-performance-optimization</branch-name>
-		<command>git checkout -b feature/database-performance-optimization develop</command>
-	</example-4>
-</examples>
-```
-
-### Validation Checklist
-
-```xml
-<validation>
-	<pre-analysis>
-		<check>Repository is in a clean state (no uncommitted changes that would conflict)</check>
-		<check>Current branch is appropriate starting point (develop for features/releases, master for hotfixes)</check>
-		<check>Remote repository is up to date</check>
-	</pre-analysis>
-
-	<analysis-quality>
-		<check>Change analysis covers all modified files</check>
-		<check>Branch type selection follows Git Flow principles</check>
-		<check>Branch name is semantic and follows conventions</check>
-		<check>Edge cases are considered and handled</check>
-	</analysis-quality>
-
-	<execution-safety>
-		<check>Target branch (develop/master) exists and is accessible</check>
-		<check>Proposed branch name doesn't conflict with existing branches</check>
-		<check>User has appropriate permissions to create branches</check>
-	</execution-safety>
-</validation>
-```
-
-### Final Execution
-
-```xml
-<execution-protocol>
-	<analysis-summary>
-		<git-status>Output of git status command</git-status>
-		<git-diff>Relevant portions of git diff output</git-diff>
-		<change-analysis>Detailed analysis of what changes represent</change-analysis>
-		<branch-decision>Explanation of why specific branch type was chosen</branch-decision>
-	</analysis-summary>
-
-	<branch-creation>
-		<command>git checkout -b [branch-name] [source-branch]</command>
-		<confirmation>Verify branch creation and current branch status</confirmation>
-		<next-steps>Provide guidance on next actions (commit changes, push branch, etc.)</next-steps>
-	</branch-creation>
-
-	<fallback-options>
-		<alternative-names>Suggest 2-3 alternative branch names if primary suggestion isn't suitable</alternative-names>
-		<manual-override>Allow user to specify different branch type if analysis seems incorrect</manual-override>
-	</fallback-options>
-</execution-protocol>
-```
-
-### Git Flow Reference
-
-```xml
-<gitflow-reference>
-	<main-branches>
-		<master>Production-ready code, every commit is a release</master>
-		<develop>Integration branch for features, latest development changes</develop>
-	</main-branches>
-
-	<supporting-branches>
-		<feature>Branch from develop, merge back to develop</feature>
-		<release>Branch from develop, merge to both develop and master</release>
-		<hotfix>Branch from master, merge to both develop and master</hotfix>
-	</supporting-branches>
-
-	<merge-strategy>
-		<flag>Always use --no-ff flag to preserve branch history</flag>
-		<tagging>Tag releases on master branch</tagging>
-		<cleanup>Delete branches after successful merge</cleanup>
-	</merge-strategy>
-</gitflow-reference>
-```
+- [ ] `git status` was reviewed before branch creation.
+- [ ] `git diff`, `git diff --cached`, or the explicit user request was used as classification evidence.
+- [ ] Branch type follows Git Flow: `feature` and `release` from `develop`, `hotfix` from `master`.
+- [ ] Branch name is lowercase kebab-case and matches the selected type's format.
+- [ ] Existing local and remote branch names were checked before creation.
+- [ ] Branch creation was verified with `git status --short --branch`.
+- [ ] Mixed or conflicting changes were reported instead of silently misclassified.

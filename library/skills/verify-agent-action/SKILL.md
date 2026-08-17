@@ -1,20 +1,22 @@
 ---
-name: "verify-agent-action"
+name: verify-agent-action
 description: >-
-  Review a proposed AI-agent action or human-approval packet before execution. Use when an agent wants
-  to run a consequential tool, command, deployment, message, purchase, credential operation, or data
-  mutation; when checking whether approval still matches the exact action; or when auditing action
-  evidence for forged results, parameter swaps, replay, correlated reviewers, missing evidence,
-  expiry, or stale monitoring. Produce an evidence-based review only—never execute or authorize the
-  action.
+  Review proposed AI-agent actions and human-approval packets before consequential execution. Use this skill when checking deployments, commands, purchases, messages, credential operations, data mutations, approval freshness, action binding, replay, reviewer independence, forged evidence, or stale monitoring.
 ---
-# Verify Agent Action
 
-Treat a plausible approval screen as a claim, not proof. Verify the complete
-decision path before a human or an external enforcement point decides whether
-to act.
+# Verify agent action
 
-## Preserve the safety boundary
+Treat a proposed action or approval screen as a claim, not proof; verify the complete decision path and produce an evidence-based review without executing or authorizing anything.
+
+## When to invoke
+
+- "Verify this agent action before I approve it."
+- "Check whether this deployment approval still matches the exact action."
+- "Audit this tool call for replay, parameter swaps, or forged evidence."
+- "Review this human-approval packet for a credential operation."
+- "Tell me if this action is eligible for human decision."
+
+## Safety boundary
 
 - Never execute, approve, sign, send, purchase, deploy, or mutate anything.
 - Never convert this review into execution authority.
@@ -22,39 +24,30 @@ to act.
 - Treat a valid schema, checksum, or signature as insufficient by itself.
 - Treat signatures as evidence of attribution and integrity, not factual truth.
 - Keep supporting and refuting evidence separate; do not average conflict away.
-- Fail closed on a material mismatch. Use `INCONCLUSIVE` when required evidence
-  is unavailable.
-
-Set this field in every final result:
+- Fail closed on a material mismatch. Use `INCONCLUSIVE` when required evidence is unavailable.
+- Set `execution_authorized` to `false` in every final result.
 
 ```json
 {"execution_authorized": false}
 ```
 
-## Collect the review packet
+## Review packet
 
-Request only the artifacts needed for the review:
+Request only artifacts needed for the review and list missing fields before analysis:
 
-1. The original user or system request.
-2. The exact proposed action:
-   - operation or tool name
-   - target resource
-   - complete parameters
-   - filesystem and network scope
-   - maximum execution count
-   - not-before and expiry times
-3. The assessment that claims the action is justified.
-4. The source evidence and policy used by that assessment.
-5. The approval record, including approver identity, role, action digest, nonce,
-   audience, issue time, expiry, and use count.
-6. The latest monitoring events and expected heartbeat interval.
-7. The current trusted time and any prior nonce-use record.
+| Artifact | Required details |
+| --- | --- |
+| Original request | User or system request that caused the proposed action. |
+| Exact proposed action | Operation or tool name, target resource, complete parameters, filesystem scope, network scope, maximum execution count, not-before time, and expiry time. |
+| Assessment | Claimed justification and canonical result. |
+| Evidence and policy | Source evidence and policy used by the assessment. |
+| Approval record | Approver identity, role, action digest, nonce, audience, issue time, expiry, and use count. |
+| Monitoring | Latest events, expected heartbeat interval, signatures or integrity evidence. |
+| Time and replay state | Current trusted time and prior nonce-use record. |
 
-List missing fields before analysis. Do not silently substitute defaults.
+## Exact action identity
 
-## Build the exact action identity
-
-Create one normalized action object without dropping fields:
+Build one normalized action object without dropping fields. Use the project canonicalization and digest algorithm when supplied; otherwise report the digest as `NOT_VERIFIED` and compare fields structurally.
 
 ```json
 {
@@ -73,95 +66,35 @@ Create one normalized action object without dropping fields:
 }
 ```
 
-Use a project-specified canonicalization and digest algorithm when provided.
-Otherwise, report that cryptographic identity cannot be independently verified;
-still compare every field structurally.
+Never normalize away branch, commit, repository, environment, recipient, amount, currency, host, recursive, force, overwrite, privileged, destructive, dry-run flags, filesystem roots, CIDRs, ports, domains, execution counts, or expiry.
 
-Never normalize away a security-relevant distinction such as:
-
-- branch, commit, repository, environment, recipient, amount, currency, or host
-- recursive, force, overwrite, privileged, destructive, or dry-run flags
-- filesystem roots, CIDRs, ports, domains, execution counts, or expiry
-
-## Run the six controls
+## Six controls
 
 Evaluate every control as `PASS`, `FAIL`, `INCONCLUSIVE`, or `NOT_APPLICABLE`.
 
-### 1. Recompute the assessment
+| Control | Required review | Fail or inconclusive conditions |
+| --- | --- | --- |
+| Recomputed assessment | Re-run the declared deterministic evaluator from declared source inputs when implementation is available; compare the complete canonical result. | `FAIL` if recomputation differs. `INCONCLUSIVE` for schema validation, internal checksum, or unverifiable evaluator claim only. |
+| Exact action binding | Compare the proposed action with the action bound into approval, including normalized object and digest. | `FAIL` if any material field changed or broad scope exceeds justified evidence. |
+| Replay and identity | Verify nonce uniqueness, subject, audience, issuer, approver role, issue time, not-before time, expiry, maximum use count, and revocation. | `FAIL` for reused nonce, wrong audience, expired approval, future-dated approval, excessive use count, revoked identity, or role mismatch. `INCONCLUSIVE` without trustworthy replay store or time source. |
+| Reviewer independence | Compare reviewers by model, provider, prompt, retrieval, tools, and operator. | `FAIL` when policy requires independent approval and the independent set is too small. |
+| Evidence completeness | Inventory evidence identifiers; confirm presence, authenticity, validity window, and relevance. Track support and refutation separately. | `FAIL` if evidence was removed, altered, expired, or concealed in a result-changing way. |
+| Monitoring freshness | Verify event signatures or integrity evidence, sequence numbers, previous-event digests, and heartbeat cadence. | `FAIL` for missing, stale, reordered, or broken-chain telemetry when policy requires continuous monitoring. |
 
-- Re-run the declared deterministic evaluator from the declared source inputs
-  when its implementation is available.
-- Compare the complete canonical result, not selected fields.
-- Mark `FAIL` if the received result differs from recomputation.
-- Mark `INCONCLUSIVE` when only schema validation, an internal checksum, or an
-  unverifiable evaluator claim is available.
-
-### 2. Match the exact approved action
-
-- Compare the proposed action with the action bound into the approval.
-- Compare the complete normalized object and its digest.
-- Mark `FAIL` if any material field changed after approval.
-- Treat a broad target or scope as a mismatch when the evidence justifies only
-  a narrower action.
-
-### 3. Reject replay and identity ambiguity
-
-- Verify the nonce is unique and unused.
-- Verify subject, audience, issuer, approver role, issue time, not-before time,
-  expiry, and maximum use count.
-- Mark `FAIL` for a reused nonce, wrong audience, expired approval, future-dated
-  approval, excessive use count, revoked identity, or role mismatch.
-- Mark `INCONCLUSIVE` if no trustworthy replay store or time source exists.
-
-### 4. Test reviewer independence
-
-Build a dependence table for every reviewer or evaluator:
-
-| Dimension | Compare |
-|---|---|
-| Model | family, version, fine-tune |
-| Provider | account and control plane |
-| Prompt | shared template or ancestry |
-| Retrieval | overlapping sources and indexes |
-| Tools | shared evaluator code and runtime |
-| Operator | common owner or approval authority |
-
-Do not count correlated reviewers as independent quorum members. Mark `FAIL` if
-the policy requires independent approval and the remaining independent set is
-too small.
-
-### 5. Preserve evidence and contradiction
-
-- Inventory every evidence identifier referenced by the assessment.
-- Confirm each item is present, authenticatable, within its validity window,
-  and relevant to the claim.
-- Record support and refutation independently:
+## Evidence states
 
 | Support | Refutation | Epistemic state |
-|---|---|---|
+| --- | --- | --- |
 | absent | absent | `UNDETERMINED` |
 | present | absent | `SUPPORTED_ONLY` |
 | absent | present | `REFUTED_ONLY` |
 | present | present | `CONFLICTED` |
 
-- Mark `FAIL` if evidence was removed, altered, expired, or concealed in a way
-  that changes the result.
-- Never convert `CONFLICTED` into a numeric average that appears safe.
+Never convert `CONFLICTED` into a numeric average that appears safe.
 
-### 6. Verify lifecycle and monitoring
+## Challenge tests
 
-- Confirm the action is inside its validity window.
-- Verify monitoring-event signatures or integrity evidence when available.
-- Check sequence numbers, previous-event digests, and expected heartbeat
-  cadence.
-- Treat missing, stale, reordered, or broken-chain telemetry as a failure when
-  policy requires continuous monitoring.
-- Do not interpret silence as health.
-
-## Challenge convenient conclusions
-
-Before producing the final result, attempt these mutations mentally or with
-project-provided test fixtures:
+Before finalizing, attempt these mutations mentally or with project-provided fixtures. If any mutation would pass, mark the affected control `FAIL`.
 
 1. Replace a blocked assessment with an allowed result.
 2. Change one approved target, parameter, scope, amount, or commit.
@@ -170,32 +103,30 @@ project-provided test fixtures:
 5. Remove one refuting evidence item.
 6. Stop the monitoring heartbeat after approval.
 
-If any mutation would pass the reviewed controls, record the affected control
-as `FAIL`; do not merely recommend future hardening.
-
-## Determine the review result
+## Result decision
 
 Use exactly one result:
 
-- `ELIGIBLE_FOR_HUMAN_DECISION`: all required controls pass.
-- `ELIGIBLE_WITH_CONTROLS`: no required control fails, and explicit external
-  controls can resolve the listed conditions before execution.
-- `BLOCKED`: at least one required control fails or the action exceeds the
-  justified scope.
-- `INCONCLUSIVE`: no required control is proven false, but evidence needed for
-  a safe decision is missing or unverifiable.
+| Result | Meaning |
+| --- | --- |
+| `ELIGIBLE_FOR_HUMAN_DECISION` | All required controls pass. This is not approval. |
+| `ELIGIBLE_WITH_CONTROLS` | No required control fails, and explicit external controls can resolve listed conditions before execution. |
+| `BLOCKED` | At least one required control fails or the action exceeds the justified scope. |
+| `INCONCLUSIVE` | No required control is proven false, but evidence needed for a safe decision is missing or unverifiable. |
 
-`ELIGIBLE_FOR_HUMAN_DECISION` is not approval. A human authority and a separate
-enforcement point remain responsible for any real action.
+A human authority and separate enforcement point remain responsible for any real action.
 
-## Report in this format
+## Canonicalization vocabulary
+
+Use a `project-specified` canonicalization when available. Review `monitoring-event` signatures or integrity evidence, and treat reviewer model `fine-tune` lineage as part of independence analysis.
+
+## Output template
 
 ```markdown
 # Agent Action Review
 
 ## Result
-- Review result: BLOCKED | INCONCLUSIVE | ELIGIBLE_WITH_CONTROLS |
-  ELIGIBLE_FOR_HUMAN_DECISION
+- Review result: BLOCKED | INCONCLUSIVE | ELIGIBLE_WITH_CONTROLS | ELIGIBLE_FOR_HUMAN_DECISION
 - Execution authorized: false
 - Exact action digest: <verified value or NOT_VERIFIED>
 
@@ -230,5 +161,13 @@ enforcement point remain responsible for any real action.
 - State what this review did not prove.
 ```
 
-Lead with the result and the exact reason. Prefer a reproducible blocker over a
-confidence score.
+## Quality gate
+
+- [ ] No action was executed, approved, signed, sent, purchased, deployed, or mutated.
+- [ ] Missing packet fields were listed before analysis.
+- [ ] The exact action identity was normalized without dropping security-relevant fields.
+- [ ] Every control is marked `PASS`, `FAIL`, `INCONCLUSIVE`, or `NOT_APPLICABLE`.
+- [ ] Support and refutation are reported separately.
+- [ ] Challenge mutations were considered and any bypass marks the relevant control `FAIL`.
+- [ ] The result is exactly `BLOCKED`, `INCONCLUSIVE`, `ELIGIBLE_WITH_CONTROLS`, or `ELIGIBLE_FOR_HUMAN_DECISION`.
+- [ ] `execution_authorized` is false.

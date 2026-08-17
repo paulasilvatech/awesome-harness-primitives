@@ -1,289 +1,182 @@
 ---
-name: "gdpr-compliant"
+name: gdpr-compliant
 description: >-
-  Apply GDPR-compliant engineering practices across your codebase. Use this skill whenever you are
-  designing APIs, writing data models, building authentication flows, implementing logging, handling
-  user data, writing retention/deletion jobs, designing cloud infrastructure, or reviewing pull
-  requests for privacy compliance. Trigger this skill for any task involving personal data, user
-  accounts, cookies, analytics, emails, audit logs, encryption, pseudonymization, anonymization, data
-  exports, breach response, CI/CD pipelines that process real data, or any question framed as "is this
-  GDPR-compliant?". Inspired by CNIL developer guidance and GDPR Articles 5, 25, 32, 33, 35.
----
-# GDPR Engineering Skill
-
-Actionable GDPR reference for engineers, architects, DevOps, and tech leads.
-Inspired by CNIL developer guidance and GDPR Articles 5, 25, 32, 33, 35.
-
-> **Golden Rule:** Collect less. Store less. Expose less. Retain less.
-
-For deep dives, read the reference files in `references/`:
-- `references/data-rights.md` — user rights endpoints, DSR workflow, RoPA
-- `references/security.md` — encryption, hashing, secrets, anonymization
-- `references/operations.md` — cloud, CI/CD, incident response, architecture patterns
-
+  Apply GDPR-compliant engineering practices across code, APIs, data models, authentication, logging, retention, deletion jobs, cloud infrastructure, and pull requests. Use this skill when handling personal data, user accounts, cookies, analytics, emails, audit logs, encryption, pseudonymization, anonymization, data exports, breach response, CI/CD pipelines with real data, or questions asking whether a design is GDPR-compliant.
 ---
 
-## 1. Core GDPR Principles (Article 5)
+# GDPR-compliant engineering
+
+Use this skill to translate GDPR principles into concrete engineering decisions for data collection, APIs, logs, retention, security, cloud infrastructure, and pull request review, then return a compliance verdict with required fixes.
+
+## When to invoke
+
+- "Is this API GDPR-compliant?"
+- "Review this data model for privacy and retention issues."
+- "Design user data export, deletion, consent, or audit logging."
+- "Check whether our logging, analytics, cookies, or emails expose personal data."
+- "Assess GDPR compliance for a pull request, CI/CD pipeline, or cloud design."
+
+## Core GDPR principles
+
+Golden rule: collect less, store less, expose less, retain less. Inspired by CNIL developer guidance and GDPR Articles 5, 25, 32, 33, and 35.
 
 | Principle | Engineering obligation |
-|---|---|
-| Lawfulness, fairness, transparency | Document legal basis for every processing activity in the RoPA |
-| Purpose limitation | Data collected for purpose A **MUST NOT** be reused for purpose B without a new legal basis |
-| Data minimization | Collect only fields with a documented business need today |
-| Accuracy | Provide update endpoints; propagate corrections to downstream stores |
-| Storage limitation | Define TTL at schema design time — never after |
-| Integrity & confidentiality | Encrypt at rest and in transit; restrict and audit access |
-| Accountability | Maintain evidence of compliance; RoPA ready for DPA inspection at any time |
+| --- | --- |
+| Lawfulness, fairness, transparency | Document legal basis for every processing activity in the RoPA. |
+| Purpose limitation | Data collected for purpose A must not be reused for purpose B without a new legal basis. |
+| Data minimization | Collect only fields with a documented business need today. |
+| Accuracy | Provide update endpoints and propagate corrections to downstream stores. |
+| Storage limitation | Define TTL at schema design time, never after. |
+| Integrity & confidentiality | Encrypt at rest and in transit; restrict and audit access. |
+| Accountability | Maintain evidence of compliance; keep the RoPA ready for DPA inspection at any time. |
 
----
+## Privacy by design and data minimization
 
-## 2. Privacy by Design & by Default
+| Area | Must do | Must not do |
+| --- | --- | --- |
+| New processing | Update the RoPA, document legal basis, and sign a DPA with every sub-processor before data flows. | Ship a new data collection feature without a legal basis or store personal data in a system not listed in the RoPA. |
+| High-risk processing | Conduct a DPIA before biometrics, health data, large-scale profiling, or systematic monitoring. | Treat high-risk processing as a normal feature toggle. |
+| Defaults | Default optional data collection to off; users opt in. | Enable analytics, tracking, or telemetry by default without explicit consent. |
+| Models and DTOs | Map every DTO/model field to a business need; use separate DTOs for create, read, and update. | Reuse the same object everywhere or keep undocumented fields. |
+| Responses | Return only what the caller is authorized to see; use projections. | Include DOB, national ID, health, or other sensitive fields in default list/search projections. |
+| Identifiers | Use UUIDs or opaque public identifiers. | Use sequential integer IDs in public URLs. |
+| URLs | Keep personal data out of path segments and query parameters because CDN logs and browser history retain them. | Put PII in GET query params, URL paths, or referrers. |
 
-**MUST**
-- Add `CreatedAt`, `RetentionExpiresAt` to every table holding personal data at creation time.
-- Default all optional data collection to **off**. Users opt in; they never opt out of a default-on setting.
-- Conduct a **DPIA** before building high-risk processing (biometrics, health data, large-scale profiling, systematic monitoring).
-- Update the **RoPA** with every new feature that introduces a processing activity.
-- Sign a **DPA** with every sub-processor before data flows to them.
+Mask sensitive values at the edge, for example return `****1234` for card numbers and never the full value.
 
-**MUST NOT**
-- Ship a new data collection feature without a documented legal basis.
-- Enable analytics, tracking, or telemetry by default without explicit consent.
-- Store personal data in a system not listed in the RoPA.
+## Storage limitation, retention, and erasure
 
----
-
-## 3. Data Minimization
-
-**MUST**
-- Map every DTO/model field to a concrete business need. Remove undocumented fields.
-- Use **separate DTOs** for create, read, and update — never reuse the same object.
-- Return only what the caller is authorized to see — use response projections.
-- Mask sensitive values at the edge: return `****1234` for card numbers, never the full value.
-- Exclude sensitive fields (DOB, national ID, health) from default list/search projections.
-
-**MUST NOT**
-- Log full request/response bodies if they may contain personal data.
-- Include personal data in URL path segments or query parameters (CDN logs, browser history).
-- Collect `dateOfBirth`, national ID, or health data without an explicit legal basis.
-
----
-
-## 4. Purpose Limitation
-
-**MUST**
-- Document the purpose of every processing activity in code comments and in the RoPA.
-- Obtain a new legal basis or perform a compatibility analysis before reusing data for a secondary purpose.
-
-**MUST NOT**
-- Share personal data collected for service delivery with advertising networks without explicit consent.
-- Use support ticket content to train ML models without a separate legal basis and user notice.
-
----
-
-## 5. Storage Limitation & Retention
-
-**MUST**
-- Every table holding personal data **MUST** have a defined retention period.
-- Enforce retention automatically via a scheduled job (Hangfire, cron) — never a manual process.
-- Anonymize or delete data when retention expires — never leave expired data silently in production.
-
-**Recommended defaults**
+Every table holding personal data must have a defined retention period, `CreatedAt`, and `RetentionExpiresAt`. Enforce retention automatically with a scheduled job such as Hangfire or cron; never rely on a manual process. Use soft-delete with `DeletedAt` only as a temporary erasure window, then hard-delete or anonymize after the erasure request window, commonly 30 days.
 
 | Data type | Max retention |
-|---|---|
+| --- | --- |
 | Auth / audit logs | 12–24 months |
 | Session / refresh tokens | 30–90 days |
 | Email / notification logs | 6 months |
 | Inactive user accounts | 12 months after last login → notify → delete |
-| Payment records | As required by tax law (7–10 years), minimized |
+| Payment records | As required by tax law, commonly 7–10 years, minimized |
 | Analytics events | 13 months |
 
-**SHOULD**
-- Add `RetentionExpiresAt` column — compute at insert time.
-- Use soft-delete (`DeletedAt`) with a scheduled hard-delete after the erasure request window (30 days).
+Do not retain personal data indefinitely "in case it becomes useful later." When erasing a user, anonymize records that must be retained for financial or audit reasons rather than deleting them.
 
-**MUST NOT**
-- Retain personal data indefinitely "in case it becomes useful later."
+## API, logging, and error handling rules
 
----
+| Topic | Required rule |
+| --- | --- |
+| Authentication | Authenticate every endpoint that returns or accepts personal data. |
+| Actor identity | Extract the acting user from the JWT, never from the request body. |
+| Ownership | Validate ownership on every resource: `if (resource.OwnerId != currentUserId) return 403`. |
+| Sensitive endpoints | Rate-limit login, data export, and password reset. |
+| Browser policy | Set `Referrer-Policy: no-referrer` and an explicit `CORS` allowlist. |
+| CORS | Never use `Access-Control-Allow-Origin: *` on authenticated APIs. |
+| API errors | Use Problem Details (RFC 7807); return generic errors and a correlation ID. |
+| Server logs | Log full error detail server-side with correlation ID. |
 
-## 6. API Design Rules
+Never return stack traces, internal paths, database errors, file paths, class names, line numbers, or personal data in API error responses. Replace errors such as `Column 'email' violates unique constraint on table 'users'` with `A user with this email address already exists.`
 
-**MUST**
-- MUST NOT include personal data in URL paths or query parameters.
-  - `GET /users/{userId}`
-- Authenticate all endpoints that return or accept personal data.
-- Extract the acting user's identity from the JWT — never from the request body.
-- Validate ownership on every resource: `if (resource.OwnerId != currentUserId) return 403`.
-- Use UUIDs or opaque identifiers — never sequential integers as public resource IDs.
+Logging requirements:
 
-**SHOULD**
-- Rate-limit sensitive endpoints (login, data export, password reset).
-- Set `Referrer-Policy: no-referrer` and an explicit `CORS` allowlist.
+- Anonymize IPs in application logs: mask the last octet for IPv4, for example `192.168.1.xxx`, and the last 80 bits for IPv6.
+- Never log passwords, tokens, session IDs, credentials, card numbers, national IDs, health data, full request bodies, or full response bodies where PII may be present.
+- Log events, not data: prefer `"User {UserId} updated email"` over old and new email addresses.
+- Use structured logging with `userId` as an internal identifier, not an email address.
+- Separate audit logs for sensitive access and admin actions from application logs because retention and ACLs differ.
 
-**MUST NOT**
-- Return stack traces, internal paths, or database errors in API responses.
-- Use `Access-Control-Allow-Origin: *` on authenticated APIs.
-
----
-
-## 7. Logging Rules
-
-**MUST**
-- Anonymize IPs in application logs — mask last octet (IPv4) or last 80 bits (IPv6).
-  - `192.168.1.xxx`
-- MUST NOT log: passwords, tokens, session IDs, credentials, card numbers, national IDs, health data.
-- MUST NOT log full request/response bodies where PII may be present.
-- Enforce log retention — purge automatically after the defined period.
-
-**SHOULD**
-- Log **events** not data: `"User {UserId} updated email"` not `"Email changed from a@b.com to c@d.com"`.
-- Use structured logging (JSON) with `userId` as an internal identifier, not the email address.
-- Separate audit logs (sensitive access, admin actions) from application logs — different retention and ACLs.
-
----
-
-## 8. Error Handling
-
-**MUST**
-- Return generic error messages — never expose stack traces, internal paths, or DB errors.
-  - `"Column 'email' violates unique constraint on table 'users'"`
-  - `"A user with this email address already exists."`
-- Use **Problem Details (RFC 7807)** for all error responses.
-- Log the full error server-side with a correlation ID; return only the correlation ID to the client.
-
-**MUST NOT**
-- Include file paths, class names, or line numbers in error responses.
-- Include personal data in error messages (e.g., "User john@example.com not found").
-
----
-
-## 9. Encryption (summary — see `references/security.md` for full detail)
+## Security, encryption, and secrets
 
 | Scope | Minimum standard |
-|---|---|
-| Standard personal data | AES-256 disk/volume encryption |
-| Sensitive data (health, financial, biometric) | AES-256 **column-level** + envelope encryption via KMS |
-| In transit | TLS 1.2+ (prefer 1.3); HSTS enforced |
-| Keys | HSM-backed KMS; rotate DEKs annually |
+| --- | --- |
+| Standard personal data | AES-256 disk/volume encryption. |
+| Sensitive data: health, financial, biometric | AES-256 column-level encryption plus envelope encryption through KMS. |
+| In transit | TLS 1.2+; prefer TLS 1.3 and enforce HSTS. |
+| Keys | HSM-backed KMS; rotate DEKs annually. |
+| Passwords | Argon2id preferred, or bcrypt with cost ≥ 12; use a unique salt per password and store only the hash. |
+| Secrets | Store in Azure Key Vault, AWS Secrets Manager, GCP Secret Manager, HashiCorp Vault, or another KMS. |
+| Secret scanning | Use pre-commit hooks such as `gitleaks` or `detect-secrets`. |
 
-**MUST NOT** allow TLS 1.0/1.1, null cipher suites, or hardcoded encryption keys.
+`.gitignore` must include `.env`, `.env.*`, `*.pem`, `*.key`, `*.pfx`, `*.p12`, and `secrets/`. Rotate secrets on developer offboarding, annual schedule, or suspected compromise. Do not allow TLS 1.0/1.1, null cipher suites, hardcoded encryption keys, committed secrets, plaintext environment variable defaults, plaintext reset tokens, passwords in URLs, or passwords in logs.
 
----
+Anonymization is irreversible and falls outside GDPR scope. Pseudonymization is reversible with a key and remains personal data. Store the pseudonymization key in KMS, never in the same database as the pseudonymized data. Do not call data "anonymized" if linkage attacks can re-identify it.
 
-## 10. Password Hashing
+## Testing, infrastructure, and PR review
 
-**MUST**
-- Use **Argon2id** (recommended) or **bcrypt** (cost ≥ 12). Never MD5, SHA-1, or SHA-256.
-- Use a unique salt per password. Store only the hash.
+Use synthetic data in dev, staging, and CI. Do not use production personal data or restore production DB backups to non-production without scrubbing PII first. Use generators such as `Bogus` for .NET and `Faker` for JS, Python, or Ruby. Use `@example.com` for all test email addresses.
 
-**MUST NOT**
-- Log passwords in any form. Transmit passwords in URLs. Store reset tokens in plaintext.
+PR review checklist:
 
----
+| Area | Checks |
+| --- | --- |
+| Data model | New PII column has purpose and retention; sensitive fields use column-level encryption; public identifiers are not sequential integer PKs. |
+| API | No PII in URL paths or query parameters; all personal data endpoints are authenticated; ownership checks prevent cross-user access; sensitive endpoints are rate-limited. |
+| Logging | No passwords, tokens, credentials, full request/response bodies, or raw IPs; IPs are anonymized. |
+| Infrastructure | No public storage buckets or public-IP databases; cloud resources tagged with `DataClassification`; encryption at rest enabled; new regions are EEA-compliant or covered by SCCs. |
+| Secrets and CI/CD | No secrets in source or config; new secrets are in KMS and inventory; CI/CD secrets are masked in pipeline logs. |
+| Retention and erasure | Retention enforcement job or policy covers new stores and fields; erasure pipeline includes the new data store. |
+| User rights and governance | Data export includes new personal data fields; RoPA updated; DPA signed for sub-processors; DPIA triggered for high-risk processing. |
 
-## 11. Secrets Management
-
-**MUST**
-- Store all secrets in a KMS: Azure Key Vault, AWS Secrets Manager, GCP Secret Manager, or HashiCorp Vault.
-- Use pre-commit hooks (`gitleaks`, `detect-secrets`) to prevent secret commits.
-- Rotate secrets on developer offboarding, annual schedule, or suspected compromise.
-
-**`.gitignore` MUST include:** `.env`, `.env.*`, `*.pem`, `*.key`, `*.pfx`, `*.p12`, `secrets/`
-
-**MUST NOT**
-- Commit secrets to source code. Store secrets as plain-text environment variable defaults.
-
----
-
-## 12. Anonymization & Pseudonymization (summary — see `references/security.md`)
-
-- **Anonymization** = irreversible → falls outside GDPR scope. Use for retained records after erasure.
-- **Pseudonymization** = reversible with a key → still personal data, reduced risk.
-- When erasing a user, anonymize records that must be retained (financial, audit) rather than deleting them.
-- Store the pseudonymization key in the KMS — never in the same database as the pseudonymized data.
-
-**MUST NOT** call data "anonymized" if re-identification is possible through linkage attacks.
-
----
-
-## 13. Testing with Fake Data
-
-**MUST**
-- MUST NOT use production personal data in dev, staging, or CI environments.
-- MUST NOT restore production DB backups to non-production without scrubbing PII first.
-- Use synthetic data generators: `Bogus` (.NET), `Faker` (JS/Python/Ruby).
-- Use `@example.com` for all test email addresses.
-
----
-
-## 14. Anti-Patterns
+Common anti-patterns and corrections:
 
 | Anti-pattern | Correct approach |
-|---|---|
-| PII in URLs | Opaque UUIDs as public identifiers |
-| Logging full request bodies | Log structured event metadata only |
-| "Keep forever" schema | TTL defined at design time |
-| Production data in dev/test | Synthetic data + scrubbing pipeline |
-| Shared credentials across teams | Individual accounts + RBAC |
-| Hardcoded secrets | KMS + secret manager |
-| `Access-Control-Allow-Origin: *` on auth APIs | Explicit CORS allowlist |
-| Storing consent with profile data | Dedicated consent store |
-| PII in GET query params | POST body or authenticated session |
-| Sequential integer IDs in public URLs | UUIDs |
-| "Anonymized" data with quasi-identifiers | Apply k-anonymity, test linkage resistance |
-| Mixing backup regions outside EEA | Explicit region lockdown on backup jobs |
+| --- | --- |
+| PII in URLs | Opaque UUIDs as public identifiers. |
+| Logging full request bodies | Log structured event metadata only. |
+| "Keep forever" schema | TTL defined at design time. |
+| Production data in dev/test | Synthetic data plus scrubbing pipeline. |
+| Shared credentials across teams | Individual accounts plus RBAC. |
+| Hardcoded secrets | KMS plus secret manager. |
+| `Access-Control-Allow-Origin: *` on auth APIs | Explicit CORS allowlist. |
+| Storing consent with profile data | Dedicated consent store. |
+| PII in GET query params | POST body or authenticated session. |
+| Sequential integer IDs in public URLs | UUIDs. |
+| "Anonymized" data with quasi-identifiers | Apply k-anonymity and test linkage resistance. |
+| Mixing backup regions outside EEA | Explicit region lockdown on backup jobs. |
 
----
+## Progressive disclosure and bundled resources
 
-## 15. PR Review Checklist
+Read bundled references only when the task needs depth beyond this summary:
 
-### Data model
-- Every new PII column has a documented purpose and retention period.
-- Sensitive fields (health, financial, national ID) use column-level encryption.
-- No sequential integer PKs as public-facing identifiers.
+- `references/data-rights.md`: user rights endpoints, DSR workflow, and RoPA.
+- `references/Security.md`: encryption, hashing, secrets, anonymization, and pseudonymization.
+- `references/operations.md`: referenced by the original skill for cloud, CI/CD, incident response, and architecture patterns, but not currently bundled in this package.
 
-### API
-- No PII in URL paths or query parameters.
-- All endpoints returning personal data are authenticated.
-- Ownership checks present — user cannot access another user's resource.
-- Rate limiting applied to sensitive endpoints.
 
-### Logging
-- No passwords, tokens, or credentials logged.
-- IPs anonymized (last octet masked).
-- No full request/response bodies logged where PII may be present.
+## GDPR vocabulary and examples
 
-### Infrastructure
-- No public storage buckets or public-IP databases.
-- New cloud resources tagged with `DataClassification`.
-- Encryption at rest enabled for new storage resources.
-- New geographic regions for data storage are EEA-compliant or covered by SCCs.
+Use the original engineering vocabulary when reviewing privacy work: DevOps, `MUST`, `SHOULD`, `JSON`, ENISA, OWASP, NIST, `references/`, `references/security.md`, `retention/deletion`, `default-on`, `plain-text`, `public-facing`, `re-identification`, `dateOfBirth`, and `JS/Python/Ruby`. The canonical examples are `GET /users/{userId}`, `"Column 'email' violates unique constraint on table 'users'"`, `"A user with this email address already exists."`, and `"Email changed from a@b.com to c@d.com"`.
 
-### Secrets & CI/CD
-- No secrets in source code or committed config files.
-- New secrets added to KMS and secrets inventory document.
-- CI/CD secrets masked in pipeline logs.
+## Output template
 
-### Retention & erasure
-- Retention enforcement job or policy covers new data store or field.
-- Erasure pipeline updated to cover new data store.
+```markdown
+### GDPR engineering result
 
-### User rights & governance
-- Data export endpoint includes any new personal data field.
-- RoPA updated if a new processing activity is introduced.
-- New sub-processors have a signed DPA and a RoPA entry.
-- DPIA triggered if the change involves high-risk processing.
+**Status:** compliant | changes required | blocked
+**Scope reviewed:** <API/model/logging/infrastructure/PR/files>
+**Personal data involved:** <fields/categories or none found>
+**Legal basis / purpose evidence:** <documented basis or missing>
 
----
+| Area | Finding | Severity | Required change | Evidence |
+| --- | --- | --- | --- | --- |
+| Data minimization | <finding> | High | <change> | `<file/field/endpoint>` |
+| Retention | <finding> | Medium | <change> | `<table/job/policy>` |
+| Security | <finding> | High | <change> | `<config/code/log>` |
 
-> **Golden Rule:** Collect less. Store less. Expose less. Retain less.
->
-> Every byte of personal data you do not collect is a byte you cannot lose,
-> cannot breach, and cannot be held liable for.
+**User rights impact**
+- Export: <covered/missing>
+- Rectification: <covered/missing>
+- Erasure: <covered/missing>
+- Consent/RoPA/DPIA/DPA: <status>
 
----
+**Validation**
+- <check performed>: pass | fail | blocked, <evidence>
+```
 
-*Inspired by CNIL developer GDPR guidance, GDPR Articles 5, 25, 32, 33, 35,
-ENISA, OWASP, and NIST engineering best practices.*
+## Quality gate
+
+- [ ] Every personal data field has a documented purpose, legal basis, and retention period.
+- [ ] Data minimization, purpose limitation, storage limitation, and accountability are explicitly checked.
+- [ ] No personal data appears in URL paths, query parameters, raw logs, stack traces, or default projections.
+- [ ] Authenticated endpoints derive identity from JWT and enforce ownership checks.
+- [ ] Encryption, password hashing, KMS-backed secret storage, and secret scanning are covered where relevant.
+- [ ] Retention, erasure, export, rectification, RoPA, DPA, and DPIA impacts are reported.
+- [ ] Non-production environments use synthetic or scrubbed data only.
+- [ ] The result states whether the design is compliant, needs changes, or is blocked by missing evidence.

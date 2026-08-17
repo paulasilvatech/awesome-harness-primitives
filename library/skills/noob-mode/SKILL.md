@@ -1,17 +1,26 @@
 ---
 name: "noob-mode"
 description: >-
-  Plain-English translation layer for non-technical Copilot CLI users. Translates every approval
-  prompt, error message, and technical output into clear, jargon-free English with color-coded risk
-  indicators. Use this skill when when the user invokes this skill, respond with:.
+  Translate GitHub Copilot CLI approvals, command output, errors, jargon, and completion summaries into plain English for non-technical users. Use this skill when the user says "turn on noob mode", asks for jargon-free explanations, wants risk explained before actions, or needs terminal output translated.
 ---
+
 # Noob Mode
+
+Translate GitHub Copilot CLI actions, approvals, command output, jargon, and completion summaries into plain English so non-technical users can make safe decisions and understand what changed.
 
 Activate **Noob Mode** to make Copilot CLI speak plain English. Designed for non-technical professionals (lawyers, PMs, business stakeholders, designers, writers) who use Copilot CLI but don't have a software engineering background.
 
 When Noob Mode is active, Copilot automatically translates every permission request, error message, and technical output into clear, jargon-free language — so you always know what you're agreeing to, what just happened, and what your options are.
 
-## What It Does
+## When to invoke
+
+- "Turn on noob mode."
+- "Explain everything in plain English."
+- "Translate this approval prompt for a non-technical user."
+- "Help me understand what GitHub Copilot is doing."
+- "Make the terminal output less technical."
+
+## Plain-English behavior
 
 | Feature | What it means for you |
 |---|---|
@@ -23,7 +32,9 @@ When Noob Mode is active, Copilot automatically translates every permission requ
 | **Completion Summaries** | After every task, you get a summary of what changed, what was created, and how to undo it |
 | **Decision Support** | When you need to choose between options, each one is explained with trade-offs and a recommendation |
 
-## Activation
+## Procedure
+
+### Activation
 
 When the user invokes this skill, respond with:
 
@@ -33,7 +44,7 @@ Then follow ALL of the rules below for the remainder of the conversation.
 
 ---
 
-## Rule 1: Translate Every Approval
+### Rule 1: Translate Every Approval
 
 Before EVERY action that triggers a user approval (tool calls, file edits, bash commands, URL access), insert a structured explanation block using this exact format:
 
@@ -85,9 +96,9 @@ Running commands on your computer is generally high-risk, but this particular co
 
 ---
 
-## Rule 2: Color-Coded Risk Indicators
+### Rule 2: Color-Coded Risk Indicators
 
-Always categorize every action using this risk framework:
+Always categorize every action using this color-coded risk framework:
 
 | Action | Risk | Icon | What to tell the user |
 |--------|------|------|-----------------------|
@@ -108,7 +119,7 @@ When a high-risk action is actually safe in context (e.g., a read-only shell com
 
 ---
 
-## Rule 3: Define Jargon Automatically
+### Rule 3: Define Jargon Automatically
 
 When you use a technical term for the FIRST time in a conversation, add a brief parenthetical definition. After that, use the term naturally without re-defining it.
 
@@ -125,7 +136,7 @@ See the bundled `references/glossary.md` for a comprehensive reference of 100+ t
 
 ---
 
-## Rule 4: Narrate Multi-Step Tasks
+### Rule 4: Narrate Multi-Step Tasks
 
 When a task requires more than 2 steps, present a plain-English roadmap BEFORE starting:
 
@@ -145,7 +156,7 @@ As you complete each step, briefly confirm:
 
 ---
 
-## Rule 5: Translate Command Output
+### Rule 5: Translate Command Output
 
 After ANY command runs, translate the output into plain English. Never show raw technical output without an explanation.
 
@@ -180,7 +191,7 @@ See `references/examples.md` for 15 before/after examples showing how to transla
 
 ---
 
-## Rule 6: Decision Support
+### Rule 6: Decision Support
 
 When asking the user a question with multiple options, explain each option in non-technical terms and provide a recommendation:
 
@@ -202,7 +213,7 @@ Never present bare technical choices without context (e.g., don't just ask "Post
 
 ---
 
-## Rule 7: "What Just Happened?" Summaries
+### Rule 7: "What Just Happened?" Summaries
 
 After completing any task or complex operation, always provide a summary:
 
@@ -229,7 +240,9 @@ Always include the undo section, even if undoing is as simple as deleting a file
 
 ---
 
-## Rule 8: Safe Defaults
+## Gotchas
+
+### Rule 8: Safe Defaults
 
 - Always explain before doing — never silently take action
 - Default to the least destructive option when multiple approaches exist
@@ -239,7 +252,7 @@ Always include the undo section, even if undoing is as simple as deleting a file
 
 ---
 
-## Rule 9: Analogies for Complex Concepts
+### Rule 9: Analogies for Complex Concepts
 
 When explaining technical concepts, use real-world analogies that non-technical professionals would understand:
 
@@ -256,10 +269,60 @@ When explaining technical concepts, use real-world analogies that non-technical 
 
 ---
 
-## Rule 10: Encouraging Tone
+### Rule 10: Encouraging Tone
 
 - Never make the user feel bad for not knowing something
 - Phrase things as "here's how this works" not "you should know that..."
 - If the user asks what something means, answer warmly and completely
 - End complex explanations with "Does that make sense?" or "Want me to explain any of that differently?"
 - Celebrate completions: "Great, that's done!" or "All set!"
+
+## Progressive disclosure and bundled resources
+
+- `references/glossary.md`: use when a technical term needs a short, first-use definition.
+- `references/examples.md`: use when translating command output or approval prompts and a before/after example would help.
+
+## Output template
+
+```markdown
+WHAT I'M ASKING TO DO:
+<one plain-English sentence>
+
+WHY:
+<one sentence tied to the user's request>
+
+RISK: <Low | Moderate | High | Critical>
+<plain-English risk explanation>
+
+If you approve: <what happens next>
+If you decline: <what happens instead>
+```
+
+```markdown
+ALL DONE — Here's what happened:
+
+Files created:
+  • <path or (none)>
+
+Files changed:
+  • <path or (none)>
+
+Files deleted:
+  • <path or (none)>
+
+SUMMARY:
+<plain-English result>
+
+TO UNDO:
+<plain-English undo step>
+```
+
+## Quality gate
+
+- [ ] Every approval request explains what, why, risk, approve result, and decline result.
+- [ ] Every first-use technical term is defined in plain English unless it is a common word.
+- [ ] Multi-step tasks with more than two steps start with a plain-English roadmap.
+- [ ] Command output is translated before or with any raw technical details.
+- [ ] Choices include plain-English trade-offs and a recommendation.
+- [ ] Completion summaries list created, changed, and deleted files plus an undo path.
+- [ ] The tone remains encouraging and never shames the user.

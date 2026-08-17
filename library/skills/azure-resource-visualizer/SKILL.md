@@ -1,93 +1,97 @@
 ---
-name: "azure-resource-visualizer"
+name: azure-resource-visualizer
 description: >-
-  Analyze Azure resource groups and generate detailed Mermaid architecture diagrams showing the
-  relationships between individual resources. Use this skill when the user asks for a diagram of their
-  Azure resources or help in understanding how the resources relate to each other.
-license: "Complete terms in LICENSE.txt"
+  Analyze Azure resource groups and generate Mermaid architecture diagrams and markdown documentation for their resources and relationships. Use this skill when the user asks to diagram Azure resources, visualize a resource group, understand Azure architecture, map dependencies, or document resource relationships.
+license: Complete terms in LICENSE.txt
 metadata:
-  author: "Tom Meschter (tom.meschter@microsoft.com)"
+  author: Tom Meschter (tom.meschter@microsoft.com)
 ---
-# Azure Resource Visualizer - Architecture Diagram Generator
 
-A user may ask for help understanding how individual resources fit together, or to create a diagram showing their relationships. Your mission is to examine Azure resource groups, understand their structure and relationships, and generate comprehensive Mermaid diagrams that clearly illustrate the architecture.
+# Azure resource visualizer
 
-## Core Responsibilities
+Inspect an Azure resource group read-only, identify every resource and significant dependency, then create a markdown architecture document with a detailed Mermaid diagram using `assets/template-architecture.md`.
 
-1. **Resource Group Discovery**: List available resource groups when not specified
-2. **Deep Resource Analysis**: Examine all resources, their configurations, and interdependencies
-3. **Relationship Mapping**: Identify and document all connections between resources
-4. **Diagram Generation**: Create detailed, accurate Mermaid diagrams
-5. **Documentation Creation**: Produce clear markdown files with embedded diagrams
+## When to invoke
 
-## Workflow Process
+- "Diagram this Azure resource group."
+- "Show how my Azure resources relate to each other."
+- "Generate a Mermaid architecture diagram for these resources."
+- "Analyze my production resource group."
+- "Document the network, compute, data, and identity relationships."
 
-### Step 1: Resource Group Selection
+## Prerequisites and context
 
-If the user hasn't specified a resource group:
+- Use Azure MCP tools when available; otherwise use Azure CLI `az` for read-only queries.
+- The user must have Azure access to list resource groups and read resources.
+- Create output in the workspace root or `docs/` when that folder exists.
+- Use `assets/template-architecture.md` as the markdown document template.
+- Do not modify, delete, deploy, or reconfigure Azure resources.
 
-1. Use your tools to query available resource groups. If you do not have a tool for this, use `az`.
-2. Present a numbered list of resource groups with their locations
-3. Ask the user to select one by number or name
-4. Wait for user response before proceeding
+## Procedure
 
-If a resource group is specified, validate it exists and proceed.
+1. If no resource group is specified, list available resource groups with locations, present a numbered list, and wait for the user to select by number or name.
+2. Validate the selected resource group exists.
+3. Query all resources in the resource group. With Azure CLI, start with `az resource list --resource-group <name> --output json`.
+4. For each resource, collect name, type, SKU or tier, location, key configuration properties, network settings, identity settings, and dependencies.
+5. Query resource-specific details where needed, for example `az network vnet show --resource-group <name> --name <vnet-name>`.
+6. Map relationships: network connections, data flows, identity access, configuration references, and parent-child dependencies.
+7. Build a Mermaid diagram using `graph TB` or `graph LR`, logical subgraphs, detailed labels, and descriptive connection labels.
+8. Create `[resource-group-name]-architecture.md` from `assets/template-architecture.md` with header, summary, resource inventory, architecture diagram, relationship details, notes, and recommendations.
+9. Report the file path, resource count, relationship count, and any permission gaps.
 
-### Step 2: Resource Discovery & Analysis
+## Resource analysis checklist
 
-Once you have the resource group:
+| Area | Capture |
+| --- | --- |
+| Identity | Managed Identity, RBAC, Key Vault access, role assignments when visible. |
+| Network | VNets, subnets, address ranges, NSGs, VNet peering, private endpoints, public access. |
+| Compute | App Service plan tier such as `B1`, `S1`, `P1v2`; Function runtime such as `.NET`, Python, or Node. |
+| Data | Azure SQL Database tier such as Basic, Standard, Premium; Storage Account redundancy such as `LRS`, `GRS`, `ZRS`. |
+| Configuration | App Settings, connection strings, Key Vault references, API Management backends. |
+| Dependencies | Parent-child resources, required resources, cross-resource-group dependencies, optional or conditional links. |
+| Monitoring | Application Insights, Log Analytics, diagnostic settings, alerting resources. |
 
-1. **Query all resources** in the resource group using Azure MCP tools or `az`.
-2. **Analyze each resource** type and capture:
-   - Resource name and type
-   - SKU/tier information
-   - Location/region
-   - Key configuration properties
-   - Network settings (VNets, subnets, private endpoints)
-   - Identity and access (Managed Identity, RBAC)
-   - Dependencies and connections
+## Relationship mapping
 
-3. **Map relationships** by identifying:
-   - **Network connections**: VNet peering, subnet assignments, NSG rules, private endpoints
-   - **Data flow**: Apps → Databases, Functions → Storage, API Management → Backends
-   - **Identity**: Managed identities connecting to resources
-   - **Configuration**: App Settings pointing to Key Vaults, connection strings
-   - **Dependencies**: Parent-child relationships, required resources
+| Relationship | Examples | Diagram edge |
+| --- | --- | --- |
+| Data flow | Apps → Databases, Functions → Storage, API Management → Backends | `-->` |
+| Identity | App Service uses Managed Identity to access Key Vault | `-->\|"Uses identity"\|` |
+| Network | VNet contains subnet; NSG applies to subnet; private endpoint targets PaaS | `-->` |
+| Optional or inferred conditional path | Optional queue trigger or backup dependency | `-.->` |
+| Critical primary path | Public ingress to API or required production dependency | `==>` |
+| External dependency | Cross-resource-group or external service | Show as external node and note source. |
 
-### Step 3: Diagram Construction
+## Mermaid diagram rules
 
-Create a **detailed Mermaid diagram** using the `graph TB` (top-to-bottom) or `graph LR` (left-to-right) format:
-
-**Diagram Structure Guidelines:**
+Use clear node IDs and line breaks with `<br/>`. Group by layer or purpose: Network Layer, Compute Layer, Data Layer, Security & Identity, Monitoring, and Other Resources. Include configuration details that affect architecture.
 
 ```mermaid
 graph TB
-    %% Use subgraphs to group related resources
     subgraph "Resource Group: [name]"
         subgraph "Network Layer"
-            VNET[Virtual Network<br/>10.0.0.0/16]
-            SUBNET1[Subnet: web<br/>10.0.1.0/24]
-            SUBNET2[Subnet: data<br/>10.0.2.0/24]
-            NSG[Network Security Group]
+            VNET["Virtual Network<br/>10.0.0.0/16"]
+            SUBNET1["Subnet: web<br/>10.0.1.0/24"]
+            SUBNET2["Subnet: data<br/>10.0.2.0/24"]
+            NSG["Network Security Group"]
         end
 
         subgraph "Compute Layer"
-            APP[App Service<br/>Plan: P1v2]
-            FUNC[Function App<br/>Runtime: .NET 8]
+            APP["App Service<br/>Plan: P1v2"]
+            FUNC["Function App<br/>Runtime: .NET 8"]
         end
 
         subgraph "Data Layer"
-            SQL[Azure SQL Database<br/>DTU: S1]
-            STORAGE[Storage Account<br/>Type: Standard LRS]
+            SQL["Azure SQL Database<br/>DTU: S1"]
+            STORAGE["Storage Account<br/>Type: Standard LRS"]
         end
 
         subgraph "Security & Identity"
-            KV[Key Vault]
-            MI[Managed Identity]
+            KV["Key Vault"]
+            MI["Managed Identity"]
         end
     end
 
-    %% Define relationships with descriptive labels
     APP -->|"HTTPS requests"| FUNC
     FUNC -->|"SQL connection"| SQL
     FUNC -->|"Blob/Queue access"| STORAGE
@@ -100,136 +104,54 @@ graph TB
     NSG -->|"Rules applied to"| SUBNET1
 ```
 
-**Key Diagram Requirements:**
+## Edge cases
 
-- **Group by layer or purpose**: Network, Compute, Data, Security, Monitoring
-- **Include details**: SKUs, tiers, important settings in node labels (use `<br/>` for line breaks)
-- **Label all connections**: Describe what flows between resources (data, identity, network)
-- **Use meaningful node IDs**: Abbreviations that make sense (APP, FUNC, SQL, KV)
-- **Visual hierarchy**: Subgraphs for logical grouping
-- **Connection types**:
-  - `-->` for data flow or dependencies
-  - `-.->` for optional/conditional connections
-  - `==>` for critical/primary paths
+| Situation | Response |
+| --- | --- |
+| No resources found | Inform the user and verify the resource group name. |
+| Permission issue | Explain missing read permission and suggest checking RBAC. |
+| 50+ resources | Consider multiple diagrams by layer while keeping one inventory. |
+| Cross-resource-group dependencies | Include an external node and call out the dependency in notes. |
+| No clear relationships | Group in `Other Resources` and explain that no verified dependency was found. |
 
-**Resource Type Examples:**
-- App Service: Include plan tier (B1, S1, P1v2)
-- Functions: Include runtime (.NET, Python, Node)
-- Databases: Include tier (Basic, Standard, Premium)
-- Storage: Include redundancy (LRS, GRS, ZRS)
-- VNets: Include address space
-- Subnets: Include address range
+## Progressive disclosure and bundled resources
 
-### Step 4: File Creation
+- `assets/template-architecture.md`: template for the generated `[resource-group-name]-architecture.md` file.
 
-Use [template-architecture.md](./assets/template-architecture.md) as a template and create a markdown file named `[resource-group-name]-architecture.md` with:
+## Azure query and syntax vocabulary
 
-1. **Header**: Resource group name, subscription, region
-2. **Summary**: Brief overview of the architecture (2-3 paragraphs)
-3. **Resource Inventory**: Table listing all resources with types and key properties
-4. **Architecture Diagram**: The complete Mermaid diagram
-5. **Relationship Details**: Explanation of key connections and data flows
-6. **Notes**: Any important observations, potential issues, or recommendations
+When using Azure MCP search, preserve these intent strings: `intent="list resource groups"`, `intent="list resources in group"`, and `intent="get resource details"`; use the `command` parameter only for specific Azure operations. `mermaid` syntax may include `subgraph "Descriptive Name"`, `ID["Display Name<br/>Details"]`, and `SOURCE -->|"Label"| TARGET` with `SOURCE` and `TARGET` node IDs. Use `top-to-bottom` for `graph TB`, `left-to-right` for `graph LR`, `critical/primary` for `==>`, and `optional/conditional` for `-.->`. Example resource group names and files include `rg-prod-app`, `rg-dev-app`, `rg-shared`, `[rg-name]-architecture.md`, `rg-prod-app-architecture`, and `rg-prod-app-architecture.md`. Capture `SKU/tier` and `Location/region`, and aim for `architect-level` output.
 
-## Operating Guidelines
+## Output template
 
-### Quality Standards
+```markdown
+### Azure resource visualizer result
 
-- **Accuracy**: Verify all resource details before including in diagram
-- **Completeness**: Don't omit resources; include everything in the resource group
-- **Clarity**: Use clear, descriptive labels and logical grouping
-- **Detail Level**: Include configuration details that matter for architecture understanding
-- **Relationships**: Show ALL significant connections, not just obvious ones
+**Status:** complete | needs selection | blocked
+**Resource group:** `<name>`
+**Output file:** `<resource-group-name>-architecture.md`
+**Resources analyzed:** <count>
+**Relationships mapped:** <count>
 
-### Tool Usage Patterns
+| Resource | Type | Location | Key properties | Relationships |
+| --- | --- | --- | --- | --- |
+| `<name>` | `<type>` | `<region>` | `<sku, runtime, network, identity>` | `<connections>` |
 
-1. **Azure MCP Search**:
-   - Use `intent="list resource groups"` to discover resource groups
-   - Use `intent="list resources in group"` with group name to get all resources
-   - Use `intent="get resource details"` for individual resource analysis
-   - Use `command` parameter when you need specific Azure operations
+**Diagram**
+- Mermaid syntax: valid | needs correction
+- Layout: graph TB | graph LR
+- Grouping: Network | Compute | Data | Security & Identity | Monitoring | Other
 
-2. **File Creation**:
-   - Always create in workspace root or a `docs/` folder if it exists
-   - Use clear, descriptive filenames: `[rg-name]-architecture.md`
-   - Ensure Mermaid syntax is valid (test syntax mentally before output)
+**Notes**
+- <permission gaps, external dependencies, or recommendations>
+```
 
-3. **Terminal (when needed)**:
-   - Use Azure CLI for complex queries not available via MCP
-   - Example: `az resource list --resource-group <name> --output json`
-   - Example: `az network vnet show --resource-group <name> --name <vnet-name>`
+## Quality gate
 
-### Constraints & Boundaries
-
-**Always Do:**
-- List resource groups if not specified
-- Wait for user selection before proceeding
-- Analyze ALL resources in the group
-- Create detailed, accurate diagrams
-- Include configuration details in node labels
-- Group resources logically with subgraphs
-- Label all connections descriptively
-- Create a complete markdown file with diagram
-
-**Never Do:**
-- Skip resources because they seem unimportant
-- Make assumptions about resource relationships without verification
-- Create incomplete or placeholder diagrams
-- Omit configuration details that affect architecture
-- Proceed without confirming resource group selection
-- Generate invalid Mermaid syntax
-- Modify or delete Azure resources (read-only analysis)
-
-### Edge Cases & Error Handling
-
-- **No resources found**: Inform user and verify resource group name
-- **Permission issues**: Explain what's missing and suggest checking RBAC
-- **Complex architectures (50+ resources)**: Consider creating multiple diagrams by layer
-- **Cross-resource-group dependencies**: Note external dependencies in diagram notes
-- **Resources without clear relationships**: Group in "Other Resources" section
-
-## Output Format Specifications
-
-### Mermaid Diagram Syntax
-- Use `graph TB` (top-to-bottom) for vertical layouts
-- Use `graph LR` (left-to-right) for horizontal layouts (better for wide architectures)
-- Subgraph syntax: `subgraph "Descriptive Name"`
-- Node syntax: `ID["Display Name<br/>Details"]`
-- Connection syntax: `SOURCE -->|"Label"| TARGET`
-
-### Markdown Structure
-- Use H1 for main title
-- Use H2 for major sections
-- Use H3 for subsections
-- Use tables for resource inventories
-- Use bullet lists for notes and recommendations
-- Use code blocks with `mermaid` language tag for diagrams
-
-## Example Interaction
-
-**User**: "Analyze my production resource group"
-
-**Agent**:
-1. Lists all resource groups in subscription
-2. Asks user to select: "Which resource group? 1) rg-prod-app, 2) rg-dev-app, 3) rg-shared"
-3. User selects: "1"
-4. Queries all resources in rg-prod-app
-5. Analyzes: App Service, Function App, SQL Database, Storage Account, Key Vault, VNet, NSG
-6. Identifies relationships: App → Function, Function → SQL, Function → Storage, All → Key Vault
-7. Creates detailed Mermaid diagram with subgraphs
-8. Generates `rg-prod-app-architecture.md` with complete documentation
-9. Displays: "Created architecture diagram in rg-prod-app-architecture.md. Found 7 resources with 8 key relationships."
-
-## Success Criteria
-
-A successful analysis includes:
-- Valid resource group identified
-- All resources discovered and analyzed
-- All significant relationships mapped
-- Detailed Mermaid diagram with proper grouping
-- Complete markdown file created
-- Clear, actionable documentation
-- Valid Mermaid syntax that renders correctly
-- Professional, architect-level output
-
-Your goal is to provide clarity and insight into Azure architectures, making complex resource relationships easy to understand through excellent visualization.
+- [ ] Resource group was selected or validated before analysis.
+- [ ] All resources returned by the resource group query are included or explicitly explained.
+- [ ] Each resource has name, type, location, and key properties captured.
+- [ ] Network, data, identity, configuration, and dependency relationships were checked.
+- [ ] Mermaid uses valid `graph TB` or `graph LR`, subgraphs, node labels, and descriptive edge labels.
+- [ ] The markdown file was created from `assets/template-architecture.md` in the workspace root or `docs/`.
+- [ ] No Azure resources were modified.

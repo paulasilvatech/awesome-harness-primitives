@@ -6,15 +6,26 @@ description: >-
   diagram. Supports: Converting PlantUML diagrams to ASCII art, Creating sequence diagrams, class
   diagrams, flowcharts in ASCII format, Generating Unicode-enhanced ASCII art with -utxt flag
 license: "MIT"
-allowed-tools: "Bash, Write, Read"
+allowed-tools: ["execute", "create", "read"]
 ---
-# PlantUML ASCII Art Diagram Generator
 
-## Overview
+# PlantUML ASCII art diagram generator
+
+Generate terminal-friendly ASCII or Unicode text diagrams from PlantUML source, choosing `-txt` for pure ASCII and `-utxt` for box-drawing output that reads well in fixed-width environments.
+
+## When to invoke
+
+- "Create an ASCII diagram."
+- "Convert this PlantUML diagram to text output."
+- "Generate a terminal-friendly sequence diagram."
+- "Use `plantuml -utxt` for a README diagram."
+- "Make a text-based class, activity, state, component, use case, or deployment diagram."
+
+## ASCII diagram purpose
 
 Create text-based ASCII art diagrams using PlantUML. Perfect for documentation in terminal environments, README files, emails, or any scenario where graphical diagrams aren't suitable.
 
-## What is PlantUML ASCII Art?
+## What is PlantUML ASCII art?
 
 PlantUML can generate diagrams as plain text (ASCII art) instead of images. This is useful for:
 
@@ -23,17 +34,17 @@ PlantUML can generate diagrams as plain text (ASCII art) instead of images. This
 - Documentation that needs to be version-controlled
 - Environments where graphical tools aren't available
 
-## Installation
+## Prerequisites and context
 
 ```bash
-# macOS
+ # macOS
 brew install plantuml
 
-# Linux (varies by distro)
+ # Linux (varies by distro)
 sudo apt-get install plantuml  # Ubuntu/Debian
 sudo yum install plantuml      # RHEL/CentOS
 
-# Or download JAR directly
+ # Or download JAR directly
 wget https://github.com/plantuml/plantuml/releases/download/v1.2024.0/plantuml-1.2024.0.jar
 ```
 
@@ -44,9 +55,9 @@ wget https://github.com/plantuml/plantuml/releases/download/v1.2024.0/plantuml-1
 | `-txt`  | ASCII         | Pure ASCII characters                |
 | `-utxt` | Unicode ASCII | Enhanced with box-drawing characters |
 
-## Basic Workflow
+## Procedure
 
-### 1. Create PlantUML Diagram File
+1. Create a PlantUML diagram file, for example:
 
 ```plantuml
 @startuml
@@ -58,21 +69,21 @@ Alice -> Bob : Is it ok?
 @enduml
 ```
 
-### 2. Generate ASCII Art
+2. Generate ASCII art:
 
 ```bash
-# Standard ASCII output
+ # Standard ASCII output
 plantuml -txt diagram.puml
 
-# Unicode-enhanced output (better looking)
+ # Unicode-enhanced output (better looking)
 plantuml -utxt diagram.puml
 
-# Using JAR directly
+ # Using JAR directly
 java -jar plantuml.jar -txt diagram.puml
 java -jar plantuml.jar -utxt diagram.puml
 ```
 
-### 3. View Output
+3. View output:
 
 Output is saved as `diagram.atxt` (ASCII) or `diagram.utxt` (Unicode).
 
@@ -204,19 +215,19 @@ db1 --> db2 : replicate
 ## Command-Line Options
 
 ```bash
-# Specify output directory
+ # Specify output directory
 plantuml -txt -o ./output diagram.puml
 
-# Process all files in directory
+ # Process all files in directory
 plantuml -txt ./diagrams/
 
-# Include dot files (hidden files)
+ # Include dot files (hidden files)
 plantuml -txt -includeDot diagrams/
 
-# Verbose output
+ # Verbose output
 plantuml -txt -v diagram.puml
 
-# Specify charset
+ # Specify charset
 plantuml -txt -charset UTF-8 diagram.puml
 ```
 
@@ -232,7 +243,7 @@ plantuml -txt -charset UTF-8 diagram.puml
 </target>
 ```
 
-## Tips for Better ASCII Diagrams
+## Gotchas
 
 1. **Keep it simple**: Complex diagrams don't render well in ASCII
 2. **Short labels**: Long text breaks ASCII alignment
@@ -270,10 +281,10 @@ plantuml -txt -charset UTF-8 diagram.puml
   │              │
 ```
 
-## Quick Reference
+## Quick reference
 
 ```bash
-# Create sequence diagram in ASCII
+ # Create sequence diagram in ASCII
 cat > seq.puml << 'EOF'
 @startuml
 Alice -> Bob: Request
@@ -284,7 +295,7 @@ EOF
 plantuml -txt seq.puml
 cat seq.atxt
 
-# Create with Unicode
+ # Create with Unicode
 plantuml -utxt seq.puml
 cat seq.utxt
 ```
@@ -306,3 +317,40 @@ cat seq.utxt
 **Problem**: Output file not created
 
 - **Solution**: Check file permissions, ensure PlantUML has write access
+
+## Output template
+
+```markdown
+## PlantUML ASCII result
+
+**Status:** generated | blocked
+**Source:** `<diagram.puml>`
+**Format:** `-txt` | `-utxt`
+**Output:** `<diagram.atxt | diagram.utxt>`
+
+### Command
+`plantuml -txt diagram.puml`
+
+### Preview
+```text
+<paste the generated ASCII or Unicode diagram>
+```
+
+### Validation
+- PlantUML command completed: pass | fail
+- Output file exists: pass | fail
+- Fixed-width rendering checked: pass | fail
+```
+
+## Quality gate
+
+- [ ] The source file is valid PlantUML bounded by `@startuml` and `@enduml`.
+- [ ] The chosen output flag matches the request: `-txt` for pure ASCII, `-utxt` for Unicode box-drawing characters.
+- [ ] The output path is reported as `.atxt` for ASCII or `.utxt` for Unicode.
+- [ ] Labels are short enough to preserve alignment in a fixed-width font.
+- [ ] Complex diagrams are simplified or the user is told when Mermaid.js or graphviz is a better fit.
+- [ ] Installation blockers name the missing command and offer `brew install plantuml`, `sudo apt-get install plantuml`, `sudo yum install plantuml`, or `java -jar plantuml.jar`.
+
+## References
+
+- [PlantUML release JAR example](https://github.com/plantuml/plantuml/releases/download/v1.2024.0/plantuml-1.2024.0.jar)

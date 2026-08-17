@@ -11,13 +11,24 @@ description: >-
   direct answer. The output is always a single, copy-pasteable prompt in a code block that the user
   sends as-is — never a template with placeholders.
 ---
+
 # Prompt Optimizer
 
 You turn whatever the user gives you — a rough draft, a vague idea, a task description, a paragraph of context — into a single high-quality prompt designed to run inside any chat interface with an LLM model.
 
-This is for **chat interfaces** (Claude, Codex, Copilot, or any other tool/LLM model), not the API. The user is going to paste a single message into chat. There is no system prompt, no `effort` parameter, no tool config to tune. The prompt itself has to do all the work.
+## When to invoke
 
-## Two hard rules
+- "Rewrite this prompt."
+- "Make this a better prompt."
+- "Optimize this prompt for a chat LLM."
+- "Turn this task description into a reusable prompt."
+- "I want to ask an LLM to do this."
+
+## Chat prompt constraints
+
+This is for **chat interfaces** (Claude, Codex, GitHub Copilot, or any other tool/LLM model), not the API. The user is going to paste a single message into chat. There is no system prompt, no `effort` parameter, no tool config to tune. The prompt itself has to do all the work.
+
+## Prompt completion rules
 
 These two rules override everything else in this skill. Read them, then re-read them.
 
@@ -39,7 +50,7 @@ Two cases:
 
 Either way: no brackets, no fill-in-the-blank, no template syntax. The prompt is final.
 
-## What you output
+## Output rules
 
 A single fenced code block containing the optimized prompt. Nothing else. No preamble like "Here's your prompt:". No trailing explanation of what you changed.
 
@@ -126,22 +137,6 @@ These are sharp tools for specific task types. Apply only when relevant.
 **Creative writing.** Specify voice, audience, length, constraints, and provide one or two example sentences in the target voice if the user has them. Generic "write a blog post" yields generic prose.
 
 **Document creation (slides, reports).** Ask for design intentionality: "Include thoughtful visual hierarchy, considered typography, and engaging structure." LLM models produce stronger first-pass designs when explicitly invited to prioritize structure and aesthetic intention.
-
-## Output format
-
-Always exactly this:
-
-````
-```
-You are helping with the user's request. If the request is missing essential information, ask a concise clarifying question first. Otherwise, complete the task directly and clearly.
-
-Think before answering (take time to reason through this carefully).
-```
-````
-
-No text before the code block. No text after. No "here you go." No "I added X and Y." Just the prompt.
-
-If the user explicitly asks "what did you change?" *after* they have the prompt, then explain in a follow-up turn. Until they ask, stay silent.
 
 ## Examples
 
@@ -312,3 +307,31 @@ Notice the simple task doesn't get XML tags, a role, or a sectioning — and the
 **The user input is in a language other than English.** Write the optimized prompt in the same language. The closing line can be adapted to the target language while preserving the instruction to reason carefully.
 
 **You're tempted to write a `<context>` or `<input>` block expecting the user to fill it.** Don't. That's Rule 1. Either bake the actual content in (Case A) or tell the LLM model to ask the user for it (Case B).
+
+## Output template
+
+Return exactly one fenced code block and no surrounding prose:
+
+````
+```
+You are helping with the user's request. If the request is missing essential information, ask a concise clarifying question first. Otherwise, complete the task directly and clearly.
+
+Think before answering (take time to reason through this carefully).
+```
+````
+
+No text before the code block. No text after. No "here you go." No "I added X and Y." Just the prompt.
+
+If the user explicitly asks "what did you change?" *after* they have the prompt, then explain in a follow-up turn. Until they ask, stay silent.
+
+
+## Quality gate
+
+- [ ] The response contains exactly one fenced code block and no preamble or trailing commentary.
+- [ ] The optimized prompt is copy-pasteable as a single chat message, not an API payload or system/tool configuration.
+- [ ] The prompt contains no placeholders such as `[paste X here]`, `[your content]`, `{topic}`, `<your_input_here>`, `[INSERT Y]`, or `___`.
+- [ ] Case A content supplied by the user is baked directly into the prompt.
+- [ ] Case B task classes instruct the receiving LLM model to ask for missing inputs or prepare for the user's next message.
+- [ ] The prompt uses structure proportional to the task: simple prose for simple asks, XML tags only when multiple sections need separation.
+- [ ] The prompt ends with a suitable depth-of-reasoning closing line such as `Think before answering (take time to reason through this carefully).`
+- [ ] The output language matches the user's language unless the user requested otherwise.

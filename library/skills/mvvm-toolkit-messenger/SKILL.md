@@ -1,13 +1,12 @@
 ---
 name: "mvvm-toolkit-messenger"
 description: >-
-  CommunityToolkit.Mvvm Messenger pub/sub for decoupled communication between ViewModels (or any
-  objects). Covers WeakReferenceMessenger vs StrongReferenceMessenger, IRecipient<TMessage>,
-  RequestMessage<T> / AsyncRequestMessage<T> / CollectionRequestMessage<T>, ValueChangedMessage<T>,
-  channels (tokens), and the ObservableRecipient activation lifecycle. Use across WPF, WinUI 3, .NET
-  MAUI, Uno, and Avalonia. Use this skill when --.
+  Configure CommunityToolkit.Mvvm Messenger pub/sub for decoupled ViewModel communication. Use this skill when users ask to send messages between ViewModels, choose WeakReferenceMessenger vs StrongReferenceMessenger, use IRecipient<TMessage>, RequestMessage<T>, AsyncRequestMessage<T>, CollectionRequestMessage<T>, ValueChangedMessage<T>, channel tokens, or ObservableRecipient activation in WPF, WinUI 3, .NET MAUI, Uno, or Avalonia.
 ---
+
 # CommunityToolkit.Mvvm Messenger
+
+Configure CommunityToolkit.Mvvm messenger communication by choosing weak, strong, or scoped `IMessenger` instances, defining message types, and returning registration, send, token, request/reply, and lifecycle patterns for ViewModels.
 
 Pub/sub messaging for ViewModels (or any objects) without forcing a shared
 reference graph. Part of `CommunityToolkit.Mvvm` 8.x.
@@ -19,14 +18,13 @@ reference graph. Part of `CommunityToolkit.Mvvm` 8.x.
 
 ---
 
-## When to use this skill
+## When to invoke
 
-- Two or more ViewModels need to react to an event (login, theme change,
-  save, navigation) without holding references to each other
-- A ViewModel needs to ask another VM for a value (request/reply)
-- You're scoping events to a sub-system or window with channel tokens
-- Diagnosing "my handler never fires" or weak-reference recipient lifetime
-  problems
+- "Send a message between ViewModels with CommunityToolkit.Mvvm."
+- "Choose WeakReferenceMessenger or StrongReferenceMessenger."
+- "Use RequestMessage<T> or AsyncRequestMessage<T> for request/reply."
+- "Scope MVVM Toolkit messages with channel tokens."
+- "Debug why my messenger handler never fires."
 
 For source generators, base classes, and commands see the **`mvvm-toolkit`**
 skill. For DI wiring (registering an `IMessenger` instance), see
@@ -216,7 +214,9 @@ protected override void OnNavigatedFrom(NavigationEventArgs e)
 
 ---
 
-## Common pitfalls
+## Gotchas
+
+- **Weak-reference lifetime is still observable**: even with weak-reference registration, unregister during teardown to trim stale entries and improve dispatch performance.
 
 1. **Capturing `this` in the lambda.** `(r, m) => OnX(m)` implicitly
    captures `this`; allocates a closure and confuses lifetime. Always use
@@ -259,11 +259,43 @@ desktop apps (WinUI 3, WPF, MAUI desktop, Avalonia).
 
 ---
 
-## References
+## Progressive disclosure and bundled resources
 
 | Topic | File |
 |-------|------|
 | Full deep dive (more channel/lifecycle examples, diagnostics) | [`references/messenger-patterns.md`](references/messenger-patterns.md) |
+
+## Output template
+
+```markdown
+## MVVM Toolkit messenger result
+
+**Status:** implemented | guidance only | blocked
+**Messenger:** `WeakReferenceMessenger.Default` | `StrongReferenceMessenger.Default` | custom `IMessenger`
+**Message types:** `<messages defined or reviewed>`
+
+### Pattern
+- Registration: `<Register<TRecipient,TMessage> or RegisterAll>`
+- Sending: `<Send(...)>`
+- Scope: default channel | token `<token>`
+- Lifecycle: `ObservableRecipient.IsActive` | manual `UnregisterAll(this)`
+
+### Validation
+- Static handler lambda: pass | fail
+- Same messenger instance used for send and receive: pass | fail
+- UI dispatch handled for UI updates: pass | fail
+```
+
+## Quality gate
+
+- [ ] `WeakReferenceMessenger.Default` is used by default unless profiling or scoping justifies another `IMessenger`.
+- [ ] Registration lambdas use `static (recipient, message)` and avoid capturing `this`.
+- [ ] `StrongReferenceMessenger` recipients unregister through `ObservableRecipient.OnDeactivated()` or `UnregisterAll(this)`.
+- [ ] Token-scoped sends and registrations use the same token type and value.
+- [ ] Request messages check `HasReceivedResponse` before reading `Response` when no response is possible.
+- [ ] UI updates from handlers marshal through `DispatcherQueue.TryEnqueue` or `Dispatcher.BeginInvoke`.
+
+## References
 
 External:
 

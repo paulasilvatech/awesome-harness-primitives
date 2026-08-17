@@ -1,24 +1,30 @@
 ---
-name: "mcp-security-audit"
+name: mcp-security-audit
 description: >-
-  Audit MCP (Model Context Protocol) server configurations for security issues. Use this skill when: -
-  Reviewing .mcp.json files for security risks - Checking MCP server args for hardcoded secrets or
-  shell injection patterns - Validating that MCP servers use pinned versions (not @latest) - Detecting
-  unpinned dependencies in MCP server configurations - Auditing which MCP servers a project registers
-  and whether they're on an approved list - Checking for environment variable usage vs. hardcoded
-  credentials in MCP configs - Any request like "is my MCP config secure?", "audit my MCP servers", or
-  "check .mcp.json" keywords: [mcp, security, audit, secrets, shell-injection, supply-chain,
-  governance]
+  Audits MCP server configurations such as .mcp.json for hardcoded secrets, dangerous shell patterns, unpinned dependencies, unsafe npx usage, unapproved servers, and governance risks. Use this skill when asked to check MCP security, audit MCP servers, review .mcp.json, validate server args, detect shell injection, or verify environment-variable based credentials.
 ---
-# MCP Security Audit
 
-Audit MCP server configurations for security issues — secrets exposure, shell injection, unpinned dependencies, and unapproved servers.
+# MCP security audit
 
-## Overview
+Audit Model Context Protocol server configurations for secrets exposure, shell injection, unpinned dependencies, dangerous commands, and unapproved server governance and supply-chain risks. Produce a findings report with severity, evidence, and concrete remediation.
 
-MCP servers give agents direct tool access to external systems. A misconfigured `.mcp.json` can expose credentials, allow shell injection, or connect to untrusted servers. This skill catches those issues before they reach production.
+## When to invoke
 
-```
+- "Audit my MCP servers."
+- "Is this .mcp.json secure?"
+- "Check MCP server args for secrets or shell injection."
+- "Find unpinned MCP dependencies like @latest."
+- "Review which MCP servers this project registers."
+
+## Prerequisites and context
+
+- The primary target is `.mcp.json` or an equivalent MCP server configuration.
+- Use environment variable references such as `${ENV_VAR_NAME}` instead of hardcoded credentials.
+- If an organization has an approved MCP server list, compare registered servers against it.
+
+## Audit model
+
+```text
 .mcp.json → Parse Servers → Check Each Server:
   1. Secrets in args/env?
   2. Shell injection patterns?
@@ -28,25 +34,19 @@ MCP servers give agents direct tool access to external systems. A misconfigured 
 → Generate Report
 ```
 
-## When to Use
+| Check | Severity | Evidence to collect | Fix |
+| --- | --- | --- | --- |
+| Hardcoded secret | `CRITICAL` | Secret-like value in args, env, JSON, bearer token, private key, or provider token. | Replace with `${ENV_VAR_NAME}` and set the secret outside source control. |
+| Shell injection pattern | `HIGH` | Command substitution, pipes, chained commands, `eval`, `bash -c`, `sh -c`, reverse shell redirect, curl-to-shell. | Use direct command execution and static argv arrays. |
+| Unpinned dependency | `MEDIUM` | `@latest` or mutable package references. | Pin to a specific version such as `analytics-mcp@2.1.0`. |
+| `npx` prompt risk | `LOW` | `command` is `npx` without `-y`. | Add `-y` to avoid CI prompts; report this as `npx-interactive` and use examples like `npx -y package-name`. |
+| Unapproved server | Severity by policy | Server name, package, URL, or command absent from approved list. | Request review or remove the server. |
 
-- Reviewing any `.mcp.json` file in a project
-- Onboarding a new MCP server to a project
-- Auditing all MCP servers in a monorepo or plugin marketplace
-- Pre-commit checks for MCP configuration changes
-- Security review of agent tool configurations
+## Detection patterns
 
----
-
-## Audit Check 1: Hardcoded Secrets
-
-Scan MCP server args and env values for hardcoded credentials.
+Use these identifiers and patterns when implementing or reviewing a checker. Function inputs are commonly named `mcp_config`, and serialized args are commonly named `args_text`.
 
 ```python
-import json
-import re
-from pathlib import Path
-
 SECRET_PATTERNS = [
     (r'(?i)(api[_-]?key|token|secret|password|credential)\s*[:=]\s*["\'][^"\']{8,}', "Hardcoded secret"),
     (r'(?i)Bearer\s+[A-Za-z0-9\-._~+/]+=*', "Hardcoded bearer token"),
@@ -56,24 +56,23 @@ SECRET_PATTERNS = [
     (r'-----BEGIN\s+(RSA\s+)?PRIVATE\s+KEY-----', "Private key"),
 ]
 
-def check_secrets(mcp_config: dict) -> list[dict]:
-    """Check for hardcoded secrets in MCP server configurations."""
-    findings = []
-    raw = json.dumps(mcp_config)
-    for pattern, description in SECRET_PATTERNS:
-        matches = re.findall(pattern, raw)
-        if matches:
-            findings.append({
-                "severity": "CRITICAL",
-                "check": "hardcoded-secret",
-                "message": f"{description} found in MCP configuration",
-                "evidence": f"Pattern matched: {pattern}",
-                "fix": "Use environment variable references: ${ENV_VAR_NAME}"
-            })
-    return findings
+DANGEROUS_PATTERNS = [
+    (r'\$\(', "Command substitution $(...)"),
+    (r'`[^`]+`', "Backtick command substitution"),
+    (r';\s*\w', "Command chaining with semicolon"),
+    (r'\|\s*\w', "Pipe to another command"),
+    (r'&&\s*\w', "Command chaining with &&"),
+    (r'\|\|\s*\w', "Command chaining with ||"),
+    (r'(?i)eval\s', "eval usage"),
+    (r'(?i)bash\s+-c\s', "bash -c execution"),
+    (r'(?i)sh\s+-c\s', "sh -c execution"),
+    (r'>\s*/dev/tcp/', "TCP redirect (reverse shell pattern)"),
+    (r'curl\s+.*\|\s*(ba)?sh', "curl pipe to shell"),
+]
 ```
 
-**Good practice — use env var references:**
+Environment variables that must remain references, not literal secrets, include `API_KEY`, `MY_API_KEY`, `DB_URL`, and `DATABASE_URL`.
+
 ```json
 {
   "mcpServers": {
@@ -89,110 +88,18 @@ def check_secrets(mcp_config: dict) -> list[dict]:
 }
 ```
 
-**Bad — hardcoded credentials:**
-```json
-{
-  "mcpServers": {
-    "my-server": {
-      "command": "node",
-      "args": ["server.js", "--api-key", "sk-abc123realkey456"],
-      "env": {
-        "DB_URL": "postgresql://admin:password123@prod-db:5432/main"
-      }
-    }
-  }
-}
-```
+Bad patterns include hardcoded credentials in `args` or `env`, for example `--api-key`, `sk-abc123realkey456`, a literal production `DB_URL`, `prod-db`, or `5432/main`.
 
----
+## Procedure
 
-## Audit Check 2: Shell Injection Patterns
+1. Locate `.mcp.json` or the supplied MCP configuration.
+2. Parse JSON and enumerate `mcpServers` by server name.
+3. Scan the full raw config for `SECRET_PATTERNS` so secrets outside a single server are caught.
+4. For each server, inspect `command`, `args`, `env`, package references, and approval status.
+5. Flag `@latest`, unversioned mutable package references where policy requires pinning, and `npx` without `-y`.
+6. Produce a report with severity counts, per-server findings, evidence, and fixes.
 
-Detect dangerous command patterns in MCP server args.
-
-```python
-import json
-import re
-
-DANGEROUS_PATTERNS = [
-    (r'\$\(', "Command substitution $(...)"),
-    (r'`[^`]+`', "Backtick command substitution"),
-    (r';\s*\w', "Command chaining with semicolon"),
-    (r'\|\s*\w', "Pipe to another command"),
-    (r'&&\s*\w', "Command chaining with &&"),
-    (r'\|\|\s*\w', "Command chaining with ||"),
-    (r'(?i)eval\s', "eval usage"),
-    (r'(?i)bash\s+-c\s', "bash -c execution"),
-    (r'(?i)sh\s+-c\s', "sh -c execution"),
-    (r'>\s*/dev/tcp/', "TCP redirect (reverse shell pattern)"),
-    (r'curl\s+.*\|\s*(ba)?sh', "curl pipe to shell"),
-]
-
-def check_shell_injection(server_config: dict) -> list[dict]:
-    """Check MCP server args for shell injection risks."""
-    findings = []
-    args_text = json.dumps(server_config.get("args", []))
-    for pattern, description in DANGEROUS_PATTERNS:
-        if re.search(pattern, args_text):
-            findings.append({
-                "severity": "HIGH",
-                "check": "shell-injection",
-                "message": f"Dangerous pattern in MCP server args: {description}",
-                "fix": "Use direct command execution, not shell interpolation"
-            })
-    return findings
-```
-
----
-
-## Audit Check 3: Unpinned Dependencies
-
-Flag MCP servers using `@latest` in their package references.
-
-```python
-def check_pinned_versions(server_config: dict) -> list[dict]:
-    """Check that MCP server dependencies use pinned versions, not @latest."""
-    findings = []
-    args = server_config.get("args", [])
-    for arg in args:
-        if isinstance(arg, str):
-            if "@latest" in arg:
-                findings.append({
-                    "severity": "MEDIUM",
-                    "check": "unpinned-dependency",
-                    "message": f"Unpinned dependency: {arg}",
-                    "fix": f"Pin to specific version: {arg.replace('@latest', '@1.2.3')}"
-                })
-            # npx with unversioned package
-            if arg.startswith("-y") or (not "@" in arg and not arg.startswith("-")):
-                pass  # npx flag or plain arg, ok
-    # Check if using npx without -y (interactive prompt in CI)
-    command = server_config.get("command", "")
-    if command == "npx" and "-y" not in args:
-        findings.append({
-            "severity": "LOW",
-            "check": "npx-interactive",
-            "message": "npx without -y flag may prompt interactively in CI",
-            "fix": "Add -y flag: npx -y package-name"
-        })
-    return findings
-```
-
-**Good — pinned version:**
-```json
-{ "args": ["-y", "my-mcp-server@2.1.0"] }
-```
-
-**Bad — unpinned:**
-```json
-{ "args": ["-y", "my-mcp-server@latest"] }
-```
-
----
-
-## Audit Check 4: Full Audit Runner
-
-Combine all checks into a single audit.
+A compact audit runner follows this shape:
 
 ```python
 def audit_mcp_config(mcp_path: str) -> dict:
@@ -206,7 +113,6 @@ def audit_mcp_config(mcp_path: str) -> dict:
     results = {"file": str(path), "servers": {}, "summary": {}}
     total_findings = []
 
-    # Run secrets check once on the whole config (not per-server)
     config_level_findings = check_secrets(config)
     total_findings.extend(config_level_findings)
 
@@ -222,7 +128,6 @@ def audit_mcp_config(mcp_path: str) -> dict:
         }
         total_findings.extend(findings)
 
-    # Summary
     by_severity = {}
     for f in total_findings:
         sev = f["severity"]
@@ -237,40 +142,46 @@ def audit_mcp_config(mcp_path: str) -> dict:
     return results
 ```
 
-**Usage:**
-```python
-results = audit_mcp_config(".mcp.json")
-if not results["summary"]["passed"]:
-    for server, data in results["servers"].items():
-        for finding in data["findings"]:
-            print(f"[{finding['severity']}] {server}: {finding['message']}")
-            print(f"  Fix: {finding['fix']}")
+## Examples
+
+| Good | Bad |
+| --- | --- |
+| `{ "args": ["-y", "my-mcp-server@2.1.0"] }` | `{ "args": ["-y", "my-mcp-server@latest"] }` |
+| `"API_KEY": "${MY_API_KEY}"` | `"API_KEY": "sk-abc123realkey456"` |
+| `"command": "node", "args": ["server.js"]` | `"command": "bash", "args": ["-c", "curl example | sh"]` |
+
+## Output template
+
+```markdown
+## MCP security audit — `.mcp.json`
+
+**Status:** pass | findings | blocked
+**Servers scanned:** <count>
+**Findings:** <total> (<critical> CRITICAL, <high> HIGH, <medium> MEDIUM, <low> LOW)
+
+| Severity | Server | Check | Evidence | Fix |
+| --- | --- | --- | --- | --- |
+| CRITICAL | my-api-server | hardcoded-secret | Hardcoded secret found in MCP configuration | Use environment variable references: `${ENV_VAR_NAME}` |
+| HIGH | data-processor | shell-injection | `bash -c` execution in args | Use direct command execution, not shell interpolation |
+| MEDIUM | analytics | unpinned-dependency | `analytics-mcp@latest` | Pin to specific version: `analytics-mcp@2.1.0` |
+
+### Governance notes
+- Approved-list result: <approved, exception required, unavailable>
+- Secrets moved to environment variables: <yes/no/list>
 ```
 
----
+## Quality gate
 
-## Output Format
+- [ ] `.mcp.json` or the supplied config was parsed successfully, or the parse blocker is reported.
+- [ ] All `mcpServers` entries were enumerated.
+- [ ] The full config was scanned for `SECRET_PATTERNS` including `API_KEY`, `MY_API_KEY`, `DB_URL`, and `DATABASE_URL` values.
+- [ ] Each server’s `command`, `args`, and `env` were checked for `DANGEROUS_PATTERNS`.
+- [ ] `@latest`, unpinned packages, and `npx` without `-y` are reported.
+- [ ] Findings include severity, server, evidence, and fix.
+- [ ] Approved-list checks are performed when policy data is available, or explicitly marked unavailable.
 
-```
-MCP Security Audit — .mcp.json
-═══════════════════════════════
-Servers scanned: 5
-Findings: 3 (1 CRITICAL, 1 HIGH, 1 MEDIUM)
-
-[CRITICAL] my-api-server: Hardcoded secret found in MCP configuration
-  Fix: Use environment variable references: ${ENV_VAR_NAME}
-
-[HIGH] data-processor: Dangerous pattern in MCP server args: bash -c execution
-  Fix: Use direct command execution, not shell interpolation
-
-[MEDIUM] analytics: Unpinned dependency: analytics-mcp@latest
-  Fix: Pin to specific version: analytics-mcp@2.1.0
-```
-
----
-
-## Related Resources
+## References
 
 - [MCP Specification](https://modelcontextprotocol.io/)
-- [Agent Governance Toolkit](https://github.com/microsoft/agent-governance-toolkit) — Full governance framework with MCP trust proxy
+- [Agent Governance Toolkit](https://github.com/microsoft/agent-governance-toolkit)
 - [OWASP ASI-02: Insecure Tool Use](https://genai.owasp.org/)

@@ -1,139 +1,58 @@
 ---
-name: "minecraft-plugin-development"
+name: minecraft-plugin-development
 description: >-
-  Use this skill when building or modifying Minecraft server plugins for Paper, Spigot, or Bukkit,
-  including plugin.yml setup, commands, listeners, schedulers, player state, team or arena systems,
-  persistent progression, economy or profile data, configuration files, Adventure text, and
-  version-safe API usage. Trigger for requests like "build a Minecraft plugin", "add a Paper command",
-  "fix a Bukkit listener", "create plugin.yml", "implement a minigame mechanic", "add a perk or quest
-  system", or "debug server plugin behavior".
+  Guides Paper, Spigot, and Bukkit Minecraft server plugin development for plugin.yml setup, JavaPlugin bootstrap, commands, listeners, schedulers, player state, arenas, minigames, persistent progression, economy, configuration, Adventure text, and version-safe API usage. Use this skill when asked to build a Minecraft plugin, add a Paper command, fix a Bukkit listener, implement minigame mechanics, add perks or quests, or debug server plugin behavior.
 ---
-# Minecraft Plugin Development
 
-Use this skill for Minecraft server plugin work in the Paper, Spigot, and Bukkit ecosystem.
+# Minecraft plugin development
 
-This skill is especially useful for gameplay-heavy plugins such as combat systems, wave or boss encounters, war or team modes, arenas, kit systems, cooldown-based abilities, scoreboards, and config-driven game rules.
+Build and modify Java Minecraft server plugins in the Paper, Spigot, and Bukkit ecosystem, including gameplay-heavy, cooldown-based, config-driven, multi-arena, match-heavy, and persistent-brawl systems. Keep runtime registration, thread safety, gameplay state, configuration, persistence, and validation aligned with the project’s targeted server API.
 
-For grounded implementation patterns drawn from real Paper plugins, load these references as needed:
+## When to invoke
 
-- [`references/project-patterns.md`](references/project-patterns.md) for high-level architecture patterns seen in real gameplay plugins
-- [`references/bootstrap-registration.md`](references/bootstrap-registration.md) for `onEnable`, command wiring, listener registration, and shutdown expectations
-- [`references/state-sessions-and-phases.md`](references/state-sessions-and-phases.md) for player session modeling, game phases, match state, and reconnect-safe logic
-- [`references/config-data-and-async.md`](references/config-data-and-async.md) for config managers, database-backed player data, async flushes, and UI refresh tasks
-- [`references/maps-heroes-and-feature-modules.md`](references/maps-heroes-and-feature-modules.md) for map rotation, hero or class systems, and modular feature growth
-- [`references/minigame-instance-flow.md`](references/minigame-instance-flow.md) for arena instances, countdowns, loot refreshes, wave systems, visibility isolation, and entity-to-game ownership
-- [`references/persistent-progression-and-events.md`](references/persistent-progression-and-events.md) for long-running PvP servers with profiles, perks, buffs, quests, economy, custom domain events, and extension registries
-- [`references/build-test-and-runtime-validation.md`](references/build-test-and-runtime-validation.md) for Maven or Gradle packaging, shaded dependencies, generated resources, soft dependencies, config validation commands, and first-round server test plans
+- "Build a Minecraft plugin."
+- "Add a Paper command and plugin.yml entry."
+- "Fix this Bukkit listener."
+- "Implement a minigame mechanic with arenas and phases."
+- "Add a perk, quest, economy, or persistent profile system."
 
-## Scope
+## Limits
 
-- In scope: Paper, Spigot, Bukkit plugin development
-- In scope: `plugin.yml`, commands, tab completion, listeners, schedulers, configs, permissions, Adventure text, player state, minigame flow, arena instances, map copies, loot, waves, persistent profiles, perks, buffs, quests, economy, and PvP/PvE game loops
-- In scope: Java-based server plugin architecture, debugging, refactoring, and feature implementation
-- Out of scope by default: Fabric mods, Forge mods, client mods, Bedrock add-ons
+- In scope: Paper, Spigot, Bukkit plugin development; `plugin.yml`; commands; tab completion; listeners; schedulers; configs; permissions; Adventure text; player state; minigame flow; arena instances; map copies; loot; waves; persistent profiles; perks; buffs; quests; economy; PvP/PvE game loops; Java-based architecture, debugging, refactoring, and feature implementation.
+- Out of scope by default: Fabric mods, Forge mods, client mods, and Bedrock add-ons.
+- If the user says "Minecraft plugin" but the stack is unclear, determine whether the project is Paper/Spigot/Bukkit or a modding stack before editing.
 
-If the user says "Minecraft plugin" but the stack is unclear, first determine whether the project is Paper/Spigot/Bukkit or a modding stack.
+## Project discovery
 
-## Default Working Style
-
-When this skill triggers:
-
-1. Identify the server API and version target.
-2. Identify the build system and Java version.
-3. Inspect `plugin.yml`, the main plugin class, and command or listener registration.
-4. Map the gameplay flow before editing code:
-   - player lifecycle
-   - game phases
-   - timers and scheduled tasks
-   - team, arena, or match state
-   - config and persistence
-5. Make the smallest coherent change that keeps registration, config, and runtime behavior aligned.
-
-If the plugin is gameplay-heavy or stateful, read [`references/project-patterns.md`](references/project-patterns.md) and [`references/state-sessions-and-phases.md`](references/state-sessions-and-phases.md) before editing.
-
-If the task touches arena isolation, map instances, chest or resource refills, wave spawning, route voting, spectator visibility, or game-specific chat, also read [`references/minigame-instance-flow.md`](references/minigame-instance-flow.md).
-
-If the task touches persistent player progression, profile saves, economy rewards, perks, buffs, quests, custom combat events, or long-running shared PvP servers, also read [`references/persistent-progression-and-events.md`](references/persistent-progression-and-events.md).
-
-If the task touches build files, `plugin.yml` metadata, shaded dependencies, generated resource output, deployment to a test server, optional plugin integrations, or release validation, also read [`references/build-test-and-runtime-validation.md`](references/build-test-and-runtime-validation.md).
-
-## Project Discovery Checklist
-
-Check these first when present:
+Check these files and concepts before changing behavior:
 
 - `plugin.yml`
 - `pom.xml`, `build.gradle`, or `build.gradle.kts`
-- the plugin main class extending `JavaPlugin`
+- main class extending `JavaPlugin`
 - command executors and tab completers
 - listener classes
-- config bootstrap code for `config.yml`, messages, kits, arenas, or custom YAML files
+- config bootstrap for `config.yml`, messages, kits, arenas, or custom YAML files
 - generated resource output such as `target/classes`, `build/resources`, or copied plugin jars
 - scheduler usage through Bukkit scheduler APIs
-- any player data, team state, arena state, or match state containers
+- player data, team state, arena state, or match state containers
 
-## Core Rules
+Identify the server API and version target, build system, Java version, startup registration, gameplay lifecycle, timers, scheduled tasks, teams, arenas, match state, config, and persistence before making a coherent change.
 
-### Prefer the concrete server API in the repo
+## Core implementation rules
 
-- If the project already targets Paper APIs, keep using Paper-first APIs instead of downgrading to generic Bukkit unless compatibility is explicitly required.
-- Do not assume an API exists across all versions. Check the existing dependency and surrounding code style first.
+| Area | Rule |
+| --- | --- |
+| Server API | If the project targets Paper APIs, keep using Paper-first APIs unless Spigot/Bukkit compatibility is explicitly required. Do not assume an API exists across versions; check dependencies and surrounding style. |
+| Registration | When adding commands, permissions, or listeners, update `plugin.yml`, startup registration in `onEnable`, permission checks, and related config/message keys together. |
+| Main thread | Do not touch world state, entities, inventories, scoreboards, or most Bukkit API objects from async tasks unless the API explicitly permits it. Use async for I/O or heavy work, then switch back to the main thread. |
+| State modeling | Prefer explicit match/game phase, player role/class, cooldown, team membership, arena assignment, and alive/eliminated/spectating/queued state over scattered booleans. |
+| Arena isolation | Isolate `per-arena` and per-game visibility, chat recipients, scoreboards, loot, broadcasts, and entity ownership. Do not let one arena observe or mutate another. |
+| Config | Keep damage, cooldowns, rewards, durations, messages, map settings, and toggles config-backed with stable names, defaults, and validation. |
+| Reloads | Avoid promising safe hot reload unless the code already supports it; reload must handle caches, scheduled tasks, and gameplay state consistently. |
 
-### Keep registration in sync
+## Commands, listeners, tasks, and state
 
-When adding commands, permissions, or listeners, update the relevant registration points in the same change:
-
-- `plugin.yml`
-- plugin startup registration in `onEnable`
-- any permission checks in code
-- any related config or message keys
-
-### Respect main-thread boundaries
-
-- Do not touch world state, entities, inventories, scoreboards, or most Bukkit API objects from async tasks unless the API explicitly permits it.
-- Use async tasks for external I/O, heavy computation, or database work, then switch back to the main thread before applying gameplay changes.
-
-### Model gameplay as state, not scattered booleans
-
-For gameplay plugins, prefer explicit state objects over duplicated flags:
-
-- match or game phase
-- player role or class
-- cooldown state
-- team membership
-- arena assignment
-- alive, eliminated, spectating, or queued state
-
-When the feature affects match-heavy minigames or persistent-brawl gameplay, look for hidden state transitions first before patching symptoms.
-
-For multi-arena plugins, isolate per-game visibility, chat recipients, scoreboards, loot, and entity ownership. Do not let one arena observe or mutate another arena by accident.
-
-### Favor config-driven values
-
-When the feature includes damage, cooldowns, rewards, durations, messages, map settings, or toggles:
-
-- prefer config-backed values over hardcoding
-- provide sensible defaults
-- keep key names stable and readable
-- validate or sanitize missing values
-
-### Be careful with reload behavior
-
-- Avoid promising safe hot reload unless the code already supports it well.
-- On config reload, ensure in-memory caches, scheduled tasks, and gameplay state are handled consistently.
-
-## Implementation Patterns
-
-### Commands
-
-For new commands:
-
-- add the command to `plugin.yml`
-- implement executor and tab completion when needed
-- validate sender type before casting to `Player`
-- separate parsing, permission checks, and gameplay logic
-- send clear player-facing feedback for invalid usage
-
-Minimal registration shape:
+For commands, add the `plugin.yml` declaration, implement executor and tab completion when needed, validate `CommandSender` before casting to `Player`, separate parsing from permission and gameplay logic, and send clear feedback.
 
 ```yaml
 commands:
@@ -154,26 +73,9 @@ public void onEnable() {
 }
 ```
 
-### Listeners
+For listeners, guard early, verify player/arena/phase ownership, avoid expensive work in hot events such as move, damage, or interact spam, and centralize repeated checks.
 
-For event listeners:
-
-- guard early and return early
-- check whether the current player, arena, or game phase should handle the event
-- avoid doing expensive work in hot events such as move, damage, or interact spam
-- centralize repeated checks where practical
-
-### Scheduled Tasks
-
-For timers, rounds, countdowns, cooldowns, or periodic checks:
-
-- store task handles when cancellation matters
-- cancel tasks on plugin disable and when a match or arena ends
-- avoid multiple overlapping tasks for the same gameplay concern unless explicitly intended
-- prefer one authoritative game loop over many loosely coordinated repeating tasks
-- ensure countdown or refill tasks self-cancel when the game leaves the expected state
-
-Main-thread handoff shape:
+For scheduled tasks, store task handles when cancellation matters, cancel tasks in `onDisable` and when a match or arena ends, avoid overlapping tasks for the same concern, prefer one authoritative game loop, and make countdown or refill tasks self-cancel when the game leaves the expected state.
 
 ```java
 Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
@@ -187,91 +89,86 @@ Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
 });
 ```
 
-### Player and Match State
+For per-player, per-match, and long-lived player state, define ownership clearly, clean up on quit, kick, death, match end, and plugin disable, avoid stale maps keyed by `Player`, and prefer `UUID` for persistent tracking unless a live player object is strictly needed.
 
-For per-player or per-match state:
+When the project uses Adventure or MiniMessage, follow the existing formatting approach for player-facing and game-specific text, avoid mixing legacy color codes and Adventure styles without a reason, and keep gameplay-facing messages configurable.
 
-- define ownership clearly
-- clean up on quit, kick, death, match end, and plugin disable
-- avoid memory leaks from stale maps keyed by `Player`
-- prefer `UUID` for persistent tracking unless a live player object is strictly needed
+## High-risk areas
 
-### Text and Messages
+Pay extra attention when editing damage handling, custom combat logic, death/respawn/spectator/elimination flow, arena join/leave flow, scoreboards, boss bars, inventory mutation, kit distribution, async database or file access, economy, quest, perk and profile mutation, custom event dispatch, extension registries, version-sensitive API calls, shutdown and cleanup in `onDisable`, cross-arena visibility/chat/broadcast isolation, map copy/unload/folder deletion, mob/NPC/projectile/temporary entity ownership, and chest/container or resource refill systems, and in-memory caches.
 
-When the project uses Adventure or MiniMessage:
+## Procedure
 
-- follow the existing formatting approach
-- avoid mixing legacy color codes and Adventure styles without a reason
-- keep message templates configurable when messages are gameplay-facing
+1. Identify the server API/version, build system, Java version, main plugin class, `plugin.yml`, commands, listeners, and relevant config.
+2. Map player lifecycle, game phases, scheduled tasks, team/arena/match state, persistence, and generated resources before editing.
+3. Read bundled references on demand for the feature area named below.
+4. Implement the smallest coherent code, resource, and registration change.
+5. Validate build output, resource generation, config defaults, and runtime lifecycle paths.
 
-## High-Risk Areas
+## Progressive disclosure and bundled resources
 
-Pay extra attention when editing:
+Load these references only when the task touches the named area:
 
-- damage handling and custom combat logic
-- death, respawn, spectator, and elimination flow
-- arena join and leave flow
-- scoreboard or boss bar updates
-- inventory mutation and kit distribution
-- async database or file access
-- economy, quest, perk, and profile mutation
-- custom event dispatch or extension registries
-- version-sensitive API calls
-- shutdown and cleanup in `onDisable`
-- cross-arena visibility, chat, and broadcast isolation
-- map copy, unload, and folder deletion logic
-- mob, NPC, projectile, or temporary entity ownership
-- chest or resource refill systems
+- `references/project-patterns.md`: high-level architecture patterns seen in real gameplay plugins.
+- `references/bootstrap-registration.md`: `onEnable`, command wiring, listener registration, and shutdown expectations.
+- `references/state-sessions-and-phases.md`: player session modeling, game phases, match state, and reconnect-safe logic.
+- `references/config-data-and-async.md`: config managers, database-backed player data, async flushes, and UI refresh tasks.
+- `references/maps-heroes-and-feature-modules.md`: map rotation, hero/class systems, and modular feature growth.
+- `references/minigame-instance-flow.md`: arena instances, countdowns, loot refreshes, wave systems, visibility isolation, and entity-to-game ownership.
+- `references/persistent-progression-and-events.md`: long-running PvP servers with profiles, perks, buffs, quests, economy, custom domain events, and extension registries.
+- `references/build-test-and-runtime-validation.md`: Maven or Gradle packaging, shaded dependencies, generated resources, soft dependencies, config validation commands, and first-round server test plans.
 
-## Output Expectations
+## Gotchas
 
-When implementing or revising plugin code:
+- **Never cast `CommandSender` to `Player` without checking**: console and command blocks can execute commands.
+- **Never mutate Bukkit world state from async tasks**: use the scheduler to hand off to the main thread.
+- Forgetting listener registration or `plugin.yml` command declarations makes correct Java code unreachable.
+- Long-lived maps keyed by `Player` can leak; use `UUID` for persistent state.
+- Repeating tasks must stop after round, arena, or plugin shutdown.
+- Hardcoded gameplay constants should usually live in config.
+- Paper-only APIs break Spigot targets unless compatibility is explicit.
+- Stateful plugins often break under reload; treat reload as a lifecycle feature, not a free operation.
+- Broadcasting, showing players, or applying scoreboards across unrelated game instances breaks arena isolation.
+- Generated files under `target/classes` or `build/resources` are not source; edit `src/main/resources` instead.
 
-- produce runnable Java code, not pseudo-code, unless the user asks for design only
-- mention any required updates to `plugin.yml`, config files, build files, or resources
-- call out version assumptions explicitly
-- point out thread-safety or API-compatibility risks when they exist
-- preserve the project's existing conventions and folder structure
+## Output expectations
 
-When the requested change touches plugin startup, async data, match flow, class systems, or rotating maps, consult the matching reference file before editing.
+Produce runnable Java code, not pseudo-code, unless the user asks for design only. For substantial requests, report current plugin context and assumptions, gameplay or lifecycle impact, code changes, required registration or config updates, validation, remaining risks, and thread-safety notes.
 
-## Validation Checklist
+## Output template
 
-Before finishing, verify as many of these as the task allows:
+```markdown
+## Minecraft plugin change — <feature or bug>
 
-- the command, listener, or feature is registered correctly
-- `plugin.yml` matches the implemented behavior
-- imports and API types match the targeted server stack
-- scheduler usage is safe
-- config keys referenced in code exist or have defaults
-- state cleanup paths exist for match end, player quit, and plugin disable
-- per-arena chat, visibility, scoreboards, and broadcasts are isolated
-- temporary worlds, mobs, tasks, and generated resources are cleaned up
-- there are no obvious null, cast, or lifecycle hazards
+**Status:** implemented | design only | blocked
+**Server API:** Paper | Spigot | Bukkit | unknown
+**Version assumptions:** <API and Java version>
 
-## Common Gotchas
+### Current plugin context
+- Main class: `<class extending JavaPlugin>`
+- Registration touched: `plugin.yml`, `onEnable`, listeners, commands, permissions
+- Gameplay lifecycle impact: <players, arenas, tasks, persistence>
 
-- Casting `CommandSender` to `Player` without checking
-- Updating Bukkit state from async tasks
-- Forgetting to register listeners or declare commands in `plugin.yml`
-- Using `Player` objects as long-lived map keys when `UUID` is safer
-- Leaving repeating tasks alive after a round, arena, or plugin shutdown
-- Hardcoding gameplay constants that should live in config
-- Assuming Paper-only APIs in a Spigot-targeted plugin
-- Treating reload as free even though stateful plugins often break under reload
-- Broadcasting, showing players, or applying scoreboard changes across unrelated game instances
-- Loading or mutating chest/container blocks before their chunks are available
-- Forgetting to unregister spawned mobs or temporary entities from the owning game
-- Editing generated files under `target/classes` or `build/resources` instead of source files under `src/main/resources`
+### Changes
+| File | Change | Reason |
+| --- | --- | --- |
+| `src/main/java/...` | <code behavior> | <why> |
+| `src/main/resources/plugin.yml` | <command/permission> | <why> |
 
-## Preferred Response Shape
+### Validation
+- Build: pass | fail | not run
+- Runtime registration: verified | not verified
+- Thread-safety and cleanup paths: verified | risks listed
+```
 
-For substantial requests, structure work like this:
+## Quality gate
 
-1. Current plugin context and assumptions
-2. Gameplay or lifecycle impact
-3. Code changes
-4. Required registration or config updates
-5. Validation and remaining risks
-
-For small requests, keep the answer concise but still mention any needed `plugin.yml`, config, or lifecycle updates.
+- [ ] The targeted server API and version assumptions are explicit.
+- [ ] `plugin.yml` matches implemented commands, permissions, and main class behavior.
+- [ ] Command sender types are checked before casting to `Player`.
+- [ ] Listener and command registration is wired through `onEnable`.
+- [ ] Scheduler usage respects Bukkit main-thread boundaries.
+- [ ] Config keys exist or have defaults and validation.
+- [ ] State cleanup covers player quit, kick, death, match end, and `onDisable` where relevant.
+- [ ] Per-arena chat, visibility, scoreboards, broadcasts, temporary worlds, mobs, tasks, and generated resources are isolated or cleaned up.
+- [ ] Build/test/runtime validation from the project’s existing Maven or Gradle setup was run when available.

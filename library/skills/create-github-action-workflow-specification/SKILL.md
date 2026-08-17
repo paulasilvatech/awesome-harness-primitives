@@ -1,29 +1,92 @@
 ---
-name: "create-github-action-workflow-specification"
+name: create-github-action-workflow-specification
 description: >-
-  Create a formal specification for an existing GitHub Actions CI/CD workflow, optimized for AI
-  consumption and workflow maintenance. Use this skill when *Target Environments**: [Environment
-  scope].
+  Creates formal, AI-optimized specifications for existing GitHub Actions CI/CD workflows by extracting triggers, jobs, dependencies, contracts, quality gates, error paths, environments, governance, and change rules. Use this skill when asked to document a workflow, create a CI/CD workflow specification, summarize a GitHub Actions file for maintenance, or produce spec/spec-process-cicd-[workflow-name].md.
 ---
-# Create GitHub Actions Workflow Specification
 
-Create a comprehensive specification for the GitHub Actions workflow: `${input:WorkflowFile}`.
+# Create GitHub Actions workflow specification
 
-This specification serves as a specification for the workflow's behavior, requirements, and constraints. It must be implementation-agnostic, focusing on **what** the workflow accomplishes rather than **how** it's implemented.
+Analyze an existing GitHub Actions workflow and turn it into an implementation-agnostic specification. Preserve what the workflow accomplishes, the contracts it exposes, the constraints it enforces, and the validation criteria maintainers need.
 
-## AI-Optimized Requirements
+## When to invoke
 
-- **Token Efficiency**: Use concise language without sacrificing clarity
-- **Structured Data**: Leverage tables, lists, and diagrams for dense information
-- **Semantic Clarity**: Use precise terminology consistently throughout
-- **Implementation Abstraction**: Avoid specific syntax, commands, or tool versions
-- **Maintainability**: Design for easy updates as workflow evolves
+- "Create a specification for this GitHub Actions workflow."
+- "Document our CI/CD workflow for AI consumption."
+- "Generate spec/spec-process-cicd-[workflow-name].md from this YAML."
+- "Map the jobs, dependencies, inputs, outputs, and quality gates."
+- "Summarize this workflow's behavior without restating every command."
 
-## Specification Template
+## Inputs
 
-Save as: `/spec/spec-process-cicd-[workflow-name].md`
+Use `$ARGUMENTS`, `${input:WorkflowFile}`, or the user's request to identify the workflow file. If no file is supplied, look for likely workflow files under `.github/workflows/` and choose the target from the user's context.
 
-```md
+## Specification principles
+
+| Principle | Rule |
+| --- | --- |
+| Token efficiency | Use concise language without sacrificing clarity. |
+| Structured data | Prefer tables, lists, diagrams, and compact YAML snippets. |
+| Semantic clarity | Use precise terms consistently: trigger, job, gate, artifact, environment, permission, secret, output. |
+| Implementation abstraction | Focus on workflow behavior and constraints, not every shell command or tool version. |
+| Maintainability | Make updates easy when the workflow evolves. |
+
+## Analysis criteria
+
+| Area | Extract from workflow | Specification output |
+| --- | --- | --- |
+| Core purpose | Name, comments, trigger context, job intent | One-sentence purpose and target environments. |
+| Trigger model | `on`, branches, tags, paths, schedules, workflow_dispatch inputs | Trigger events and input contracts. |
+| Job flow | `needs`, matrices, reusable workflows, conditions | Mermaid dependency graph and job table. |
+| Contracts | `env`, `vars`, `secrets`, artifacts, cache keys, job outputs | Input/output contracts and secrets table. |
+| Constraints | `timeout-minutes`, `concurrency`, permissions, runner labels | Runtime, environment, and access constraints. |
+| Quality gates | Tests, scans, approvals, deploy conditions | Gate definitions with bypass rules. |
+| Error paths | Failure conditions, `if: failure()`, notifications, rollback steps | Error handling strategy. |
+| Governance | Environments, required reviewers, audit logs, change process | Compliance and change management sections. |
+
+## Mermaid diagram rules
+
+| Flow type | Syntax |
+| --- | --- |
+| Sequential | `A --> B --> C` |
+| Parallel | `A --> B & A --> C; B --> D & C --> D` |
+| Conditional | `A --> B{Decision}; B -->|Yes| C; B -->|No| D` |
+
+Use these styles when helpful:
+
+```mermaid
+style TriggerNode fill:#e1f5fe
+style SuccessNode fill:#e8f5e8
+style FailureNode fill:#ffebee
+style ProcessNode fill:#f3e5f5
+```
+
+For workflows with five or more jobs, group phases with subgraphs:
+
+```mermaid
+graph TD
+    subgraph "Build Phase"
+        A[Lint] --> B[Test] --> C[Build]
+    end
+    subgraph "Deploy Phase"
+        D[Staging] --> E[Production]
+    end
+    C --> D
+```
+
+## Procedure
+
+1. Read the target workflow YAML from `.github/workflows/` or the path supplied by the user.
+2. Extract the core business objective and target environments.
+3. Map trigger events, path filters, branch filters, schedules, manual inputs, and reusable workflow calls.
+4. Build the job dependency graph from `needs`, conditions, matrix expansion, and reusable jobs.
+5. Identify inputs, outputs, secrets, variables, permissions, artifacts, caches, and external systems.
+6. Capture runtime constraints, environmental constraints, quality gates, monitoring expectations, and error handling.
+7. Write the specification to `/spec/spec-process-cicd-[workflow-name].md` when editing is requested; otherwise return the markdown content.
+8. Keep the specification behavior-focused; do not copy long command bodies unless they define a contract.
+
+## Output template
+
+````markdown
 ---
 title: CI/CD Workflow Specification - [Workflow Name]
 version: 1.0
@@ -47,10 +110,8 @@ graph TD
     B --> C[Job 2]
     C --> D[Job 3]
     D --> E[End]
-    
     B --> F[Parallel Job]
     F --> D
-    
     style A fill:#e1f5fe
     style E fill:#e8f5e8
 ```
@@ -112,13 +173,11 @@ build_artifact: file  # Description: [content type]
 ## Execution Constraints
 
 ### Runtime Constraints
-
 - **Timeout**: [Maximum execution time]
 - **Concurrency**: [Parallel execution limits]
 - **Resource Limits**: [Memory/CPU constraints]
 
 ### Environmental Constraints
-
 - **Runner Requirements**: [OS/hardware needs]
 - **Network Access**: [External connectivity needs]
 - **Permissions**: [Required access levels]
@@ -134,7 +193,6 @@ build_artifact: file  # Description: [content type]
 ## Quality Gates
 
 ### Gate Definitions
-
 | Gate | Criteria | Bypass Conditions |
 |------|----------|-------------------|
 | Code Quality | [Standards] | [When allowed] |
@@ -144,13 +202,11 @@ build_artifact: file  # Description: [content type]
 ## Monitoring & Observability
 
 ### Key Metrics
-
 - **Success Rate**: [Target percentage]
 - **Execution Time**: [Target duration]
 - **Resource Usage**: [Monitoring approach]
 
 ### Alerting
-
 | Condition | Severity | Notification Target |
 |-----------|----------|-------------------|
 | [Condition] | [Level] | [Who/Where] |
@@ -158,13 +214,11 @@ build_artifact: file  # Description: [content type]
 ## Integration Points
 
 ### External Systems
-
 | System | Integration Type | Data Exchange | SLA Requirements |
 |--------|------------------|---------------|------------------|
 | [System] | [Type] | [Data format] | [Requirements] |
 
 ### Dependent Workflows
-
 | Workflow | Relationship | Trigger Mechanism |
 |----------|--------------|-------------------|
 | [Workflow] | [Type] | [How triggered] |
@@ -172,13 +226,11 @@ build_artifact: file  # Description: [content type]
 ## Compliance & Governance
 
 ### Audit Requirements
-
 - **Execution Logs**: [Retention policy]
 - **Approval Gates**: [Required approvals]
 - **Change Control**: [Update process]
 
 ### Security Controls
-
 - **Access Control**: [Permission model]
 - **Secret Management**: [Rotation policy]
 - **Vulnerability Scanning**: [Scan frequency]
@@ -186,7 +238,6 @@ build_artifact: file  # Description: [content type]
 ## Edge Cases & Exceptions
 
 ### Scenario Matrix
-
 | Scenario | Expected Behavior | Validation Method |
 |----------|-------------------|-------------------|
 | [Edge case] | [Behavior] | [How to verify] |
@@ -194,19 +245,16 @@ build_artifact: file  # Description: [content type]
 ## Validation Criteria
 
 ### Workflow Validation
-
 - **VLD-001**: [Validation rule]
 - **VLD-002**: [Validation rule]
 
 ### Performance Benchmarks
-
 - **PERF-001**: [Benchmark criteria]
 - **PERF-002**: [Benchmark criteria]
 
 ## Change Management
 
 ### Update Process
-
 1. **Specification Update**: Modify this document first
 2. **Review & Approval**: [Approval process]
 3. **Implementation**: Apply changes to workflow
@@ -214,65 +262,21 @@ build_artifact: file  # Description: [content type]
 5. **Deployment**: [Release process]
 
 ### Version History
-
 | Version | Date | Changes | Author |
 |---------|------|---------|--------|
 | 1.0 | [Date] | Initial specification | [Author] |
 
 ## Related Specifications
-
 - [Link to related workflow specs]
 - [Link to infrastructure specs]
-- [Link to deployment specs]
+````
 
-```
+## Quality gate
 
-## Analysis Instructions
-
-When analyzing the workflow file:
-
-1. **Extract Core Purpose**: Identify the primary business objective
-2. **Map Job Flow**: Create dependency graph showing execution order
-3. **Identify Contracts**: Document inputs, outputs, and interfaces
-4. **Capture Constraints**: Extract timeouts, permissions, and limits
-5. **Define Quality Gates**: Identify validation and approval points
-6. **Document Error Paths**: Map failure scenarios and recovery
-7. **Abstract Implementation**: Focus on behavior, not syntax
-
-## Mermaid Diagram Guidelines
-
-### Flow Types
-- **Sequential**: `A --> B --> C`
-- **Parallel**: `A --> B & A --> C; B --> D & C --> D`
-- **Conditional**: `A --> B{Decision}; B -->|Yes| C; B -->|No| D`
-
-### Styling
-```mermaid
-style TriggerNode fill:#e1f5fe
-style SuccessNode fill:#e8f5e8
-style FailureNode fill:#ffebee
-style ProcessNode fill:#f3e5f5
-```
-
-### Complex Workflows
-For workflows with 5+ jobs, use subgraphs:
-```mermaid
-graph TD
-    subgraph "Build Phase"
-        A[Lint] --> B[Test] --> C[Build]
-    end
-    subgraph "Deploy Phase"  
-        D[Staging] --> E[Production]
-    end
-    C --> D
-```
-
-## Token Optimization Strategies
-
-1. **Use Tables**: Dense information in structured format
-2. **Abbreviate Consistently**: Define once, use throughout
-3. **Bullet Points**: Avoid prose paragraphs
-4. **Code Blocks**: Structured data over narrative
-5. **Cross-Reference**: Link instead of repeat information
-
-Focus on creating a specification that serves as both documentation and a template for workflow updates.
+- [ ] The target workflow file and generated `/spec/spec-process-cicd-[workflow-name].md` name are identified.
+- [ ] Trigger events, target environments, jobs, dependencies, and execution context are captured.
+- [ ] Inputs, outputs, secrets, variables, permissions, artifacts, and external integrations are documented.
+- [ ] Mermaid diagram syntax represents sequential, parallel, and conditional flow accurately.
+- [ ] Requirements, security controls, performance targets, quality gates, and validation criteria are testable.
+- [ ] The specification is implementation-agnostic except where syntax defines a contract.
+- [ ] Placeholders such as `ENV_VAR_1`, `ENV_VAR_2`, `SECRET_1`, and `VAR_1` are replaced in real deliverables unless intentionally used as template examples.

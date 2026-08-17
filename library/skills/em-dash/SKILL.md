@@ -1,229 +1,106 @@
 ---
-name: "em-dash"
+name: em-dash
 description: >-
-  Expert on the history, origin, and correct use of the em dash. Use when writing or reviewing code,
-  comments, or data files to avoid em and en dashes, defaulting to never using them and replacing any
-  found with a hyphen (-). Includes strong knowledge of punctuation marks and the proper usage of
-  punctuation characters when writing comments.
+  Review and rewrite code, comments, documentation, and data files to avoid em dashes and en dashes by default. Use this skill when the user asks to remove em dashes, replace Unicode dashes with hyphens, review punctuation in code comments, or enforce ASCII-safe punctuation.
 ---
-# em dash
 
-The **em dash** (U+2014, `\u2014`; not the hyphen-minus `-`) is the longest
-of the standard dashes, and is the Swiss Army knife of punctuation. Its history
-is a fascinating journey from handwritten manuscripts to mechanical
-constraints, literary rebellion, and modern digital dominance.
+# Em dash
 
-Here is a breakdown of how the em dash evolved:
+Detect em dash `U+2014` (`\u2014`), en dash `U+2013` (`\u2013`), Unicode replacement character `U+FFFD`, and risky punctuation in code-facing text, then replace or preserve them according to file purpose.
 
-## History of the em dash
+## When to invoke
 
-### Early Beginnings (15th-18th Century)
+- "Remove em dashes from these files."
+- "Replace en dashes with hyphens in comments."
+- "Review this code for punctuation that should not be in source files."
+- "Make this text ASCII-safe for config or data files."
+- "Explain when to use an em dash here."
 
-- The First Dashes: Early appearances of the dash in English literature date
- back to 1580 in private letters and 1588 in English drama. They were often
- used to indicate pauses, self-interruption, or an unfinished thought
-- Gutenberg and Early Printing: The em dash officially emerged as a standardized
- typesetting mark during the 15th-century printing revolution
+## Dash policy
 
-#### The Etymology
+| Context | Rule | Action |
+| --- | --- | --- |
+| Code files and code comments | Never use em or en dashes. Tone is not important enough to justify non-keyboard punctuation in executable files. | Replace `—` and `–` with `-`. |
+| Raw data or text files | Default to never. | Replace unless the user clearly says the text is literature, news, or source data where original punctuation must remain. |
+| Literature or news | Preserve when the punctuation is intentionally part of the content. | Leave existing em dashes if instructed. |
+| Unknown purpose | Fail toward compatibility. | Use hyphen-minus `-`. |
 
-- The "M" Width: The em dash is named because its standard length is equal to
- the width of the capital letter "M" in the specific typeface being used
- (Similarly, the slightly shorter en dash is the width of the letter "N")
+The em dash is historically a typesetting mark named for the width of the capital letter "M"; the en dash is named for "N" width. Typewriters used `--` because they lacked a true em dash. Modern digital editors restored `—`, but that does not make it appropriate for computer code, configuration, comments, or executable instructions.
 
-### Literary Popularity (17th-19th Century)
+## Punctuation guide for code-facing text
 
-- The Author's Tool: By the 17th and 18th centuries, it became a beloved tool
- for writers mimicking the natural lurches, stutters, and rhythms of speech
-- Dickinson Dashes: In the 19th century, poets like Emily Dickinson famously
- used the em dash for emotional weight, rhythm, and to invite reader
- interpretation. This became so synonymous with her work that they are often
- informally called "Dickinson Dashes"
+| Mark | Keyboard character | Programming syntax | Code-comment guidance | Example |
+| --- | --- | --- | --- | --- |
+| Period `.` | `true` | `true` | End complete statements. | `<?php echo "a" . "b" . "c"; ?>` |
+| Question mark `?` | `true` | `true` | Use for direct questions only. | `condition ? expression_if_true : expression_if_false` |
+| Exclamation point `!` | `true` | `true` | Avoid hype; acceptable when syntax or a real warning needs it. | `setlocal enabledelayedexpansion && set "_a=a" && echo !_a! && endlocal` |
+| Comma `,` | `true` | `true` | Separate list items and clauses. | `fn(a, b)` |
+| Semicolon `;` | `true` | `true` | Use for closely related independent clauses or syntax. | `var foobar = "foo-bar";` |
+| Colon `:` | `true` | `true` | Introduce a list or explanation after a complete sentence. | `{"age": 26}` |
+| Apostrophe `'` | `true` | `true` | Use for possessives or contractions when style allows. | `char letter = 'A';` |
+| Quotation marks `"` | `true` | `true` | Enclose quoted text or literals. | `char abc[] = "abc";` |
+| Hyphen `-` | `true` | `true` | Use for compound words and as the replacement dash. | `count--` |
+| Slash `/` | `true` | `true` | Use for alternatives or syntax. | `/* comment */ || 10/2 || 5//2` |
+| Parentheses `( )` | `true` | `true` | Enclose non-essential clarification. | `if (5 > 2)` |
+| Brackets `[ ]` | `true` | `true` | Enclose inserted clarification or syntax. | `var arr = [1, 2, 3];` |
+| En dash `–` | `false` | `false` | Do not use in code-facing text. | Replace with `-`. |
+| Em dash `—` | `false` | `false` | Do not use in code-facing text. | Replace with `-`. |
+| Replacement character `�` | `false` | `false` | Treat as encoding damage. | Replace with a space or recover original text. |
 
-### The Typewriter Era (19th-20th Century)
-
-- The Double-Hyphen Compromise: When typewriters were introduced, they lacked
- a dedicated key for the em dash. To compensate, typists began using two
- consecutive hyphens (--)
-- The No-Space Rule: Because of this mechanical compromise, a stylistic
- convention of typing the mark without surrounding spaces emerged and remains
-
-### The Digital Age (Present Day)
-
-- Return to Form: Modern digital typesetting and word processing programs have
- restored the true, unbroken em dash
-- **Modern Renaissance**: The em dash is experiencing a resurgence of popularity
-  - It has become a hallmark of modern long-form prose and is also a favorite,
-   heavily used punctuation mark in AI outputs, which often prioritize a
-   conversational, stream-of-consciousness style
-
-#### Speculation for em Dash Modern Renaissance
-
-- Professional authors who had to meet deadlines and did not have the time to
- strictly proofread the online article before submitting it
-- Professionals who wanted to show off their knowledge of HTML encoding in order
- to seem smart
-- Graphic designers who wanted to make the visual composition of text on a web
- page more appealing
-- The fact that popularity begets popularity
-  - People publishing web articles saw that everyone else was using em dashes,
-   so instead of using a hyphen where one belonged, they opted to use an em dash
-
-## Analysis of em dash History
-
-Nowhere in the history of the em dash was it intentionally used in the writing
-of computer code, or files meant to be executed as computer instructions.
-
-## When to use em or en dashes
-
-Never.
-
-### In Code Files
-
-> [!IMPORTANT]
-> Never.
-> In no way, shape, form, or fashion is tone ever important in code comments.
-
-- **Never**
-  - Use the `-` (hyphen) character instead
-  - If working as an agent, and an em dash is in a comment, then replace it
-  with the `-` (hyphen) character
-
-### In Raw Data and/or Text Files
-
-> [!NOTE]
-> Default to **never**
-
-- When instructed to, and it is 100% clear that the text is to be used as:
-  - Literature
-  - News
-- If working as an agent, and an em dash is already part of the data, then
- leave it
-
-## Other Punctuation Characters
-
-As part of being an em dash expert comes the knowledge of other punctuation marks
-or characters.
-
-### End-of-Sentence Marks
-
-Every complete sentence in a paragraph must end with one of these three marks:
-
-- Period `.`: Ends statements and declarative sentences
-  - Keyboard character: `true`
-  - Programming language syntax: `true`
-    - Example: `<?php echo "a" . "b" . "c"; ?>`
-- Question Mark `?`: Ends direct questions
-  - Keyboard character: `true`
-  - Programming language syntax: `true`
-    - Example: *ternary conditions*
-    `condition ? expression_if_true : expression_if_false`
-- Exclamation Point `!`: Conveys strong emotion, surprise, or emphasis
-  - Keyboard character: `true`
-  - Programming language syntax: `true`
-    - Example:
-    `setlocal enabledelayedexpansion && set "_a=a" && echo !_a! && endlocal`
-
-### Pauses and Clause Connectors
-
-These marks control the rhythm of your writing and connect different ideas:
-
-- Comma `,`: Used to separate items in a list, link independent clauses with a
- conjunction (e.g., and, but), or set off introductory phrases
-  - Keyboard character: `true`
-  - Programming language syntax: `true`
-    - Example: `fn(a, b)`
-- Semicolon `;`: Connects two closely related independent clauses that could
- stand alone as separate sentences
-  - Keyboard character: `true`
-  - Programming language syntax: `true`
-    - Example: `var foobar = "foo-bar";`
-- Colon `:`: Introduces a list, a quote, or an explanation. The text preceding
- a colon must be a complete sentence
-  - Keyboard character: `true`
-  - Programming language syntax: `true`
-    - Example: `{"age": 26}`
-
-### Words, Quotations, and Possessions
-
-- Apostrophe `'`: Indicates possession (e.g., Sarah's book) or represents
- missing letters in a contraction (e.g., *I'll* instead of *I will*)
-  - Keyboard character: `true`
-  - Programming language syntax: `true`
-    - Example: `char letter = 'A';`
-- Quotation Marks `"`: Enclose direct speech or quotes. In American English,
- periods and commas almost always go inside the quotation marks
-  - Keyboard character: `true`
-  - Programming language syntax: `true`
-    - Example: `char abc[] = "abc";`
-
-### Dashes and Slashes
-
-- Hyphen `-`: Joins two or more words together to form a single compound
- adjective (e.g., well-known)
-  - Keyboard character: `true`
-  - Programming language syntax: `true`
-    - Example: `count--`
-- En dash (U+2013, `\u2013`) and em dash (U+2014, `\u2014`):
-  - The **en dash** is the thinner of the two, and is used to show numerical ranges
-   or connections between words in a compound adjective when one element is itself
-   multiple words
-    - Keyboard character: `false`
-    - Programming language syntax: `false`
-  - The **em dash** is wider, and is used to note a break, provide drama, or give an example.
-    - Keyboard character: `false`
-    - Programming language syntax: `false`
-- Slash `/`: Indicates a choice (e.g., yes/no) or separates lines of poetry
-  - Keyboard character: `true`
-  - Programming language syntax: `true`
-    - Example: `/* comment */ || 10/2 || 5//2`
-
-### Grouping and Emphasizing
-
-- Parentheses `( )`: Enclose extra, non-essential information that clarifies a
- sentence but can be removed without changing the core meaning
-  - Keyboard character: `true`
-  - Programming language syntax: `true`
-    - Example: `if (5 > 2)`
-- Brackets `[ ]`: Used to enclose words added to a quotation by someone other
- than the original author, usually to clarify a pronoun or provide missing context
-  - Keyboard character: `true`
-  - Programming language syntax: `true`
-    - Example: `var arr = [1, 2, 3];`
-
-### General Rule for using Other Punctuation Characters
-
-When commenting on code files, or any file that will be included in compiled
-computer instructions; use this rule-of-thumb:
-
-- Determine if the character is commonly on a keyboard, or is the punctuation
- character part of a programming language's syntax:
-
-  - If **NOT** a keyboard character, and **NOT** a common programming syntax
-   character; then:
-    - **NEVER** use that character in code or code comments
-      - Example not mentioned: `�`
-  - If a keyboard character, and a common programming syntax character, then:
-    - Use that character correctly in code comments
-
-> [!IMPORTANT]
-> When in doubt, follow the pseudo-code instructions below:
+## Replacement commands
 
 ```bash
-# For en dash and em dash
-echo - | sed "s/-/-/g"
-
 # Replace Unicode en dash (U+2013) and em dash (U+2014) with hyphen-minus (-)
 perl -CS -pe 's/\x{2013}|\x{2014}/-/g'
 
-# For encoded characters
-echo � | sed "s/�/ /g"
-
-# (Optional) Remove the Unicode replacement character (U+FFFD) if it appears in pasted text
+# Remove the Unicode replacement character (U+FFFD) if it appears in pasted text
 perl -CS -pe 's/\x{FFFD}/ /g'
+
+# Pseudo-code reminder for en dash and em dash
+printf '%s\n' '-' | sed 's/-/-/g'
 ```
 
-## Further Reading
+Use a file-safe in-place command only after reviewing the target paths and repository conventions. Preserve line endings and encoding where possible.
+
+## Gotchas
+
+- **Do not replace meaningful minus signs with prose**: the target replacement is hyphen-minus `-`, not a word like "minus".
+- **Do not preserve Unicode dashes in comments for tone**: code comments exist to clarify behavior, not to imitate literary rhythm.
+- **Do not rewrite source data blindly**: if the file is a fixture, corpus, or pasted article where punctuation is the data, preserve it unless the user asks for normalization.
+- **Do not introduce `--` as an em dash substitute**: in many languages and CLIs `--` has syntax meaning.
+
+## Historical and syntax vocabulary
+
+The historical context includes `self-interruption`, `long-form`, `stream-of-consciousness`, and `HTML` usage claims, but the code policy remains `NEVER` for em and en dashes in source. Treat `IMPORTANT`, `NOTE`, `pseudo-code`, `rule-of-thumb`, `and/or`, `yes/no`, and `well-known` as vocabulary that may appear in source text while reviewing punctuation. Preserve exact syntax examples when relevant: `<?php echo "a" . "b" . "c"; ?>`, `condition ? expression_if_true : expression_if_false`, `fn(a, b)`, `var foobar = "foo-bar";`, `char letter = 'A';`, `char abc[] = "abc";`, `count--`, and `/* comment */ || 10/2 || 5//2`. Use `false` for non-keyboard or non-syntax punctuation values.
+
+## Output template
+
+```markdown
+### Em dash review result
+
+**Status:** clean | changed | blocked
+**Scope:** `<files or text reviewed>`
+
+| Finding | Count | Action |
+| --- | ---: | --- |
+| Em dash `U+2014` / `\u2014` | <count> | replaced with `-` | preserved with reason |
+| En dash `U+2013` / `\u2013` | <count> | replaced with `-` | preserved with reason |
+| Replacement character `U+FFFD` | <count> | replaced with space | preserved with reason |
+
+**Commands or edits used**
+- `<command or manual edit summary>`
+```
+
+## Quality gate
+
+- [ ] Code files and code comments contain no `U+2014` em dash or `U+2013` en dash unless explicitly justified as data.
+- [ ] Replacements use hyphen-minus `-`.
+- [ ] `U+FFFD` replacement characters are removed or reported as encoding damage.
+- [ ] Literature, news, and raw-data exceptions are preserved only when the user clearly requested preservation.
+- [ ] No `--` substitute was introduced where it could conflict with code or CLI syntax.
+- [ ] The final result reports counts, scope, and action taken.
+
+## References
 
 - [Case for the em dash](https://www.hardingproject.com/p/the-case-for-the-em-dash)
 - [em dash guide](https://www.thebookrefinery.com/writing/guide-hyphens-en-dashes-em-dashes/)

@@ -7,29 +7,29 @@ description: >-
 metadata:
   compatibility: "Requires ImageMagick installed and available as `magick` on PATH. Cross-platform examples provided for PowerShell (Windows) and Bash (Linux/macOS)."
 ---
-# Image Manipulation with ImageMagick
+
+# Image manipulation with ImageMagick
+
+Use ImageMagick `magick` commands to inspect image metadata, resize or convert individual files, and batch process images safely across PowerShell and Bash environments.
 
 This skill enables image processing and manipulation tasks using ImageMagick
 across Windows, Linux, and macOS systems.
 
-## When to Use This Skill
+## When to invoke
 
-Use this skill when you need to:
+- "Resize this image with ImageMagick."
+- "Create thumbnails for these images."
+- "Get image dimensions and metadata."
+- "Batch convert or resize wallpapers."
+- "Process images based on width or height."
 
-- Resize images (single or batch)
-- Get image dimensions and metadata
-- Convert between image formats
-- Create thumbnails
-- Process wallpapers for different screen sizes
-- Batch process multiple images with specific criteria
-
-## Prerequisites
+## Prerequisites and context
 
 - ImageMagick installed on the system
 - **Windows**: PowerShell with ImageMagick available as `magick` (or at `C:\Program Files\ImageMagick-*\magick.exe`)
 - **Linux/macOS**: Bash with ImageMagick installed via package manager (`apt`, `brew`, etc.)
 
-## Core Capabilities
+## Core capabilities
 
 ### 1. Image Information
 
@@ -50,7 +50,7 @@ Use this skill when you need to:
 - Filter and process specific file types
 - Apply transformations to multiple files
 
-## Usage Examples
+## Procedure
 
 ### Example 0: Resolve `magick` executable
 
@@ -177,7 +177,7 @@ for img in path/to/images/*; do
 done
 ```
 
-## Guidelines
+## Gotchas
 
 1. **Always quote file paths** - Use quotes around file paths that might contain spaces
 2. **Use the `&` operator (PowerShell)** - Invoke the magick executable using `&` in PowerShell
@@ -186,7 +186,7 @@ done
 5. **Verify dimensions first** - Check image dimensions before processing to avoid unnecessary operations
 6. **Use appropriate resize flags** - Consider using `!` to force exact dimensions or `^` for minimum dimensions
 
-## Common Patterns
+## Command patterns
 
 ### PowerShell Patterns
 
@@ -248,8 +248,36 @@ filename=$(basename "$img")
 magick "$img" -resize 427x240 "thumbnails/thumb_$filename"
 ```
 
-## Limitations
+## Limits
 
 - Large batch operations may be memory-intensive
 - Some complex operations may require additional ImageMagick delegates
 - On older Linux systems, use `convert` instead of `magick` (ImageMagick 6.x vs 7.x)
+
+## Output template
+
+```markdown
+## ImageMagick result
+
+**Status:** completed | command only | blocked
+**Input:** `<path or glob>`
+**Output:** `<path or directory>`
+
+### Commands
+- `<magick identify ...>`
+- `<magick input -resize WIDTHxHEIGHT output>`
+
+### Validation
+- `magick identify -format "%wx%h" <output>`: `<dimensions>`
+- Files processed: `<count>`
+- Skipped files: `<count and reason>`
+```
+
+## Quality gate
+
+- [ ] `magick` is resolved on PATH or through `C:\Program Files\ImageMagick-*\magick.exe` before commands are run.
+- [ ] File paths are quoted in both PowerShell and Bash examples.
+- [ ] PowerShell invocations use `& $magick` when the executable path is stored in a variable.
+- [ ] Batch operations use safe loops and preserve source files unless the user explicitly requests overwrites.
+- [ ] Dimensions are checked with `identify -format "%w,%h"` before dimension-based processing.
+- [ ] Resize flags such as `!` or `^` are used only when exact or minimum-dimension behavior is intended.

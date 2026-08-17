@@ -5,9 +5,23 @@ description: >-
   workers with user identity capabilities in Microsoft 365 and Azure environments. Use this skill when
   the user asks for skill: creating agent users in microsoft entra agent id.
 ---
-# SKILL: Creating Agent Users in Microsoft Entra Agent ID
 
-## Overview
+# Microsoft Entra agent users
+
+Create a Microsoft Entra agent user from a parent agent identity, configure optional manager and licensing data, and return the Graph or PowerShell commands needed to validate the user-backed digital worker.
+
+## When to invoke
+
+- "Create an agent user for this agent identity."
+- "Set up a Microsoft Entra Agent ID user."
+- "Give my AI agent a user identity for Microsoft 365."
+- "Assign a manager or license to an agent user."
+- "Troubleshoot identityParentId for agentUser creation."
+
+## Agent user model
+
+This SKILL covers Microsoft Entra Agent ID user creation without renaming the installed primitive.
+
 
 An **agent user** is a specialized user identity in Microsoft Entra ID that enables AI agents to act as digital workers. It allows agents to access APIs and services that strictly require user identities (e.g., Exchange mailboxes, Teams, org charts), while maintaining appropriate security boundaries.
 
@@ -15,7 +29,7 @@ Agent users receive tokens with `idtyp=user`, unlike regular agent identities wh
 
 ---
 
-## Prerequisites
+## Prerequisites and context
 
 - A **Microsoft Entra tenant** with Agent ID capabilities
 - An **agent identity** (service principal of type `ServiceIdentity`) created from an **agent identity blueprint**
@@ -48,7 +62,9 @@ Agent Identity Blueprint (application template)
 
 ---
 
-## Step 1: Verify the Agent Identity Exists
+## Procedure
+
+### Step 1: Verify the Agent Identity Exists
 
 Before creating an agent user, confirm the agent identity is a proper `agentIdentity` type:
 
@@ -78,7 +94,7 @@ Invoke-MgGraphRequest -Method GET `
 
 ---
 
-## Step 2: Create the Agent User
+### Step 2: Create the Agent User
 
 ### HTTP Request
 
@@ -132,7 +148,7 @@ Invoke-MgGraphRequest -Method POST `
 
 ---
 
-## Step 3: Assign a Manager (Optional)
+### Step 3: Assign a Manager (Optional)
 
 Assigning a manager allows the agent user to appear in org charts (e.g., Teams).
 
@@ -157,7 +173,7 @@ Invoke-MgGraphRequest -Method PUT `
 
 ---
 
-## Step 4: Set Usage Location and Assign Licenses (Optional)
+### Step 4: Set Usage Location and Assign Licenses (Optional)
 
 A license is needed for the agent user to have a mailbox, Teams presence, etc. Usage location must be set first.
 
@@ -218,7 +234,7 @@ Invoke-MgGraphRequest -Method POST `
 
 ---
 
-## Provisioning Times
+## Provisioning times
 
 | Service | Estimated Time |
 |---|---|
@@ -230,7 +246,7 @@ Invoke-MgGraphRequest -Method POST `
 
 ---
 
-## Agent User Capabilities
+## Agent user capabilities
 
 - Added to Microsoft Entra groups (including dynamic groups)
 - Access user-only APIs (`idtyp=user` tokens)
@@ -240,7 +256,7 @@ Invoke-MgGraphRequest -Method POST `
 - Added to administrative units
 - Assigned licenses
 
-## Agent User Security Constraints
+## Agent user security constraints
 
 - Cannot have passwords, passkeys, or interactive sign-in
 - Cannot be assigned privileged admin roles
@@ -260,6 +276,36 @@ Invoke-MgGraphRequest -Method POST `
 | License assignment fails | Usage location not set | Set `usageLocation` before assigning licenses |
 
 ---
+
+## Output template
+
+```markdown
+## Microsoft Entra agent user result
+
+**Status:** created | ready to create | blocked
+**Agent identity:** `<agent-identity-object-id>`
+**Agent user:** `<agent-user-id or planned userPrincipalName>`
+
+### Commands
+- `<Graph HTTP request or Invoke-MgGraphRequest command>`
+
+### Validation
+- Parent identity type: `#microsoft.graph.agentIdentity` / `ServiceIdentity`
+- User token expectation: `idtyp=user`
+- Optional setup: manager assigned | license assigned | not requested
+
+### Notes
+- `<provisioning delay, permission gap, or next action>`
+```
+
+## Quality gate
+
+- [ ] The parent `identityParentId` was verified as `#microsoft.graph.agentIdentity` with `servicePrincipalType: ServiceIdentity`.
+- [ ] The request uses `https://graph.microsoft.com/beta/users/microsoft.graph.agentUser` and does not include a password.
+- [ ] Required permissions and the Agent ID Administrator role were checked before delegated operations.
+- [ ] The `userPrincipalName` and `mailNickname` are unique and valid for the tenant.
+- [ ] Usage location is set before license assignment when mailbox, Teams, SharePoint, or OneDrive capabilities are requested.
+- [ ] Troubleshooting output distinguishes duplicate parent, missing parent, duplicate UPN, and licensing failures.
 
 ## References
 

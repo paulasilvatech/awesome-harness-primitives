@@ -2,10 +2,11 @@
 name: "tm7-threat-model"
 description: >-
   Creates valid Microsoft Threat Modeling Tool (.tm7) files compatible with the Microsoft Threat
-  Modeling Tool v7.3+. Use this skill whenever asked to create, generate, or modify a .tm7 threat
+  Modeling Tool v7.3+. Use when asked to create, generate, or modify a .tm7 threat
   model file, or when performing STRIDE threat modeling that should output a .tm7 file that opens
   cleanly in the Microsoft Threat Modeling Tool.
 ---
+
 # Microsoft Threat Modeling Tool (.tm7) Generator
 
 You generate **valid `.tm7` files** for the Microsoft Threat Modeling Tool (v7.3+). A `.tm7`
@@ -19,7 +20,15 @@ Your job is to translate a described system (components, data stores, external a
 flows, trust boundaries) into a diagram plus STRIDE threats, serialized in the exact `.tm7`
 format described below.
 
-## Workflow
+## When to invoke
+
+- "Create a Microsoft Threat Modeling Tool .tm7 file."
+- "Generate a STRIDE threat model that opens in the Microsoft Threat Modeling Tool."
+- "Modify this .tm7 threat model."
+- "Serialize this architecture as a valid TM7 file."
+- "Fix a corrupted .tm7 threat model export."
+
+## Procedure
 
 When asked to produce a `.tm7` file:
 
@@ -41,7 +50,7 @@ When asked to produce a `.tm7` file:
 Always open [`assets/example-minimal.tm7`](./assets/example-minimal.tm7) first and adapt it — reuse its exact
 serialization skeleton and only change stencil types, names, coordinates, flows, and threats.
 
-## CRITICAL: Serialization format
+## CRITICAL serialization format
 
 TM7 files use **WCF `DataContractSerializer` XML**, not standard XML.
 
@@ -278,7 +287,7 @@ stencils in `<Borders>`, and `FlowGuid` must equal the `<a:Key>` of a real conne
 Use the standard STRIDE categories for `UserThreatCategory`: **S**poofing, **T**ampering,
 **R**epudiation, **I**nformation Disclosure, **D**enial of Service, **E**levation of Privilege.
 
-## Common mistakes that break TM7 files
+## Gotchas
 
 1. **Adding an `<?xml version="1.0"?>` declaration** — `DataContractSerializer` does not emit one.
 2. **Using `xmlns:xsi` / `xmlns:xsd`** instead of DataContract namespaces.
@@ -303,6 +312,12 @@ Use the standard STRIDE categories for `UserThreatCategory`: **S**poofing, **T**
 9. **Pretty-printing with indentation** — the correct output is a single continuous XML stream
    with no added newlines or indentation inside the content.
 
+## Progressive disclosure and bundled resources
+
+At discovery time, only `name` and `description` are loaded. Read the bundled asset only when a `.tm7` file must be generated or repaired.
+
+- `assets/example-minimal.tm7`: synthetic Microsoft Threat Modeling Tool v7.3+ export with two stencils, one data flow, one STRIDE threat, valid namespaces, valid `z:Id` references, and a reusable `KnowledgeBase`.
+
 ## Reference asset
 
 Always use [`assets/example-minimal.tm7`](./assets/example-minimal.tm7) in this skill's
@@ -313,3 +328,49 @@ coordinates, data flows, and threats to the user's architecture, but **never** c
 serialization format or namespace structure, and only use stencil `TypeId` values that already
 appear in its bundled `KnowledgeBase`. After generating, mentally diff your output's skeleton
 against the example to confirm every namespace, wrapper element, and GUID reference matches.
+
+## Output template
+
+```markdown
+## TM7 threat model result
+
+**Status:** generated | modified | blocked
+**File:** `<path/to/model.tm7>`
+**Model:** <ThreatModelName>
+
+| Element type | Count | TypeIds used | Notes |
+| --- | ---: | --- | --- |
+| Processes | <count> | `SE.P.TMCore.WebApp` | <notes> |
+| Data stores | <count> | `SE.DS.TMCore.SQL` | <notes> |
+| External interactors | <count> | `SE.EI.TMCore.Browser` | <notes> |
+| Trust boundaries | <count> | `GE.TB` | <notes> |
+| Data flows | <count> | `SE.DF.TMCore.Request` | <notes> |
+| Threats | <count> | `TH117` | <STRIDE categories covered> |
+
+**Validation**
+- Root element: pass | fail
+- DataContract namespaces: pass | fail
+- GUID references resolve: pass | fail
+- Unique `z:Id` values: pass | fail
+- `KnowledgeBase` preserved after `ThreatMetaData`: pass | fail
+```
+
+## Quality gate
+
+- [ ] The file starts with `<ThreatModel xmlns="http://schemas.datacontract.org/2004/07/ThreatModeling.Model" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">` and has no XML declaration.
+- [ ] `DrawingSurfaceList`, `MetaInformation`, `Notes`, `ThreatInstances`, `ThreatMetaData`, top-level `KnowledgeBase`, and `Profile` appear in the correct order.
+- [ ] Every stencil and connector uses a unique lowercase UUID and every object uses a unique `z:Id`.
+- [ ] Every `SourceGuid`, `TargetGuid`, `FlowGuid`, and `InteractionKey` resolves to real `<Borders>` and `<Lines>` entries.
+- [ ] Stencil `i:type`, `GenericTypeId`, and `TypeId` values come from the bundled `assets/example-minimal.tm7` `KnowledgeBase`.
+- [ ] STRIDE threats use `a:KeyValueOfstringThreatpc_P0_PhOB`, `b:`-prefixed threat fields, and standard `UserThreatCategory` values.
+- [ ] The generated `.tm7` is a single continuous XML stream with no added pretty-print indentation.
+
+## References
+
+- [ThreatModeling.Model namespace](http://schemas.datacontract.org/2004/07/ThreatModeling.Model)
+- [ThreatModeling.Model.Abstracts namespace](http://schemas.datacontract.org/2004/07/ThreatModeling.Model.Abstracts)
+- [ThreatModeling.KnowledgeBase namespace](http://schemas.datacontract.org/2004/07/ThreatModeling.KnowledgeBase)
+- [Serialization namespace](http://schemas.microsoft.com/2003/10/Serialization/)
+- [Serialization arrays namespace](http://schemas.microsoft.com/2003/10/Serialization/Arrays)
+- [XML Schema namespace](http://www.w3.org/2001/XMLSchema)
+- [XML Schema instance namespace](http://www.w3.org/2001/XMLSchema-instance)

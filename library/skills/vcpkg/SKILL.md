@@ -12,9 +12,19 @@ description: >-
 
 # vcpkg
 
+Set up and troubleshoot vcpkg in C++ projects by choosing manifest or classic mode, wiring CMake or Visual Studio integration, managing features and versions, and configuring triplets for cross-platform builds.
+
 You are a vcpkg expert assistant. When a user asks about vcpkg (Microsoft's C/C++ package manager), use the precise information below to give accurate, complete answers.
 
-## Additional References (load on demand)
+## When to invoke
+
+- "Set up vcpkg for this C++ project."
+- "Migrate from classic vcpkg install to vcpkg.json manifest mode."
+- "Pin a vcpkg dependency version with builtin-baseline or overrides."
+- "Configure VCPKG_TARGET_TRIPLET for cross-compilation."
+- "Fix a vcpkg build or package restore error."
+
+## Progressive disclosure and bundled resources
 
 The information below covers core vcpkg setup, installation, version management, and cross-platform builds. For specialized tasks, consult the following reference files (read them only when the user's request calls for that topic):
 
@@ -22,7 +32,7 @@ The information below covers core vcpkg setup, installation, version management,
 - **`references/ci.md`** — CI/CD integration: binary caching (Azure Blob, GitHub Packages/NuGet, local), SBOM generation, automating dependency updates, and multi-triplet CI matrices. Read this when the user asks about GitHub Actions, Azure DevOps, binary caches, or CI optimization.
 - **`references/troubleshooting.md`** — Reading build logs, resolving package-not-found errors, and the dependency lifecycle (removing, changing features, replacing libraries, cleaning the cache). Read this when the user encounters vcpkg errors, build failures, or configuration problems.
 
-## Important Behavioral Rules
+## Gotchas
 
 ### Classic vs. Manifest Mode
 
@@ -54,7 +64,7 @@ When examples require environment variables, use shell-appropriate syntax:
 
 ---
 
-## Project Setup
+## Project setup
 
 ### Initializing vcpkg in a New Project (Manifest Mode)
 
@@ -115,7 +125,7 @@ cmake -B build -DCMAKE_TOOLCHAIN_FILE=<vcpkg-root>/scripts/buildsystems/vcpkg.cm
 
 ---
 
-## Installing Dependencies
+## Installing dependencies
 
 ### Installing with Features (e.g., curl with SSL + HTTP2)
 
@@ -192,7 +202,7 @@ Activate with: `vcpkg install --x-feature=tests` or in CMake: `-DVCPKG_MANIFEST_
 
 ---
 
-## Version Management
+## Version management
 
 ### Setting Versions for Individual Dependencies
 
@@ -223,7 +233,7 @@ Use a baseline for the registry that resolves the dependency. For the builtin re
 
 ---
 
-## Cross-Platform
+## Cross-platform builds
 
 ### Cross-Compiling for arm64
 
@@ -261,3 +271,34 @@ cmake -B build -DCMAKE_TOOLCHAIN_FILE=<vcpkg-root>/scripts/buildsystems/vcpkg.cm
 ```
 
 For expanded CI and shell-specific examples, see `references/ci.md`.
+
+## Output template
+
+```markdown
+## vcpkg result
+
+**Status:** configured | guidance only | blocked
+**Mode:** manifest | classic | unknown
+**Triplet:** `<VCPKG_TARGET_TRIPLET or VCPKG_DEFAULT_TRIPLET>`
+
+### Files or commands
+- `vcpkg.json`: `<dependencies/features/builtin-baseline>`
+- `vcpkg-configuration.json`: `<registries or baseline when applicable>`
+- CMake: `-DCMAKE_TOOLCHAIN_FILE=<vcpkg-root>/scripts/buildsystems/vcpkg.cmake`
+- Visual Studio: `<VcpkgEnableManifest>true</VcpkgEnableManifest>` or `vcpkg integrate install`
+
+### Validation
+- `vcpkg install`: pass | fail | not run
+- `cmake -B build ...`: pass | fail | not run
+- Version constraints: `version>=` | `overrides` | none
+```
+
+## Quality gate
+
+- [ ] Manifest versus classic mode is identified; if unclear, the answer asks before assuming.
+- [ ] Manifest-mode projects use `vcpkg.json` and a `builtin-baseline` or registry baseline for reproducibility.
+- [ ] CMake examples include `CMAKE_TOOLCHAIN_FILE` or explain an outer toolchain that includes vcpkg.
+- [ ] Visual Studio guidance distinguishes in-box manifest mode from standalone classic mode.
+- [ ] Environment variables use shell-appropriate syntax: `$env:VARIABLE = "value"` or `export VARIABLE=value`.
+- [ ] Cross-compilation distinguishes dependency triplets from compiler or sysroot selection.
+- [ ] Android guidance preserves `ANDROID_NDK_HOME`, `ANDROID_ABI`, and the `VCPKG_CHAINLOAD_TOOLCHAIN_FILE` path.

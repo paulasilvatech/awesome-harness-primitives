@@ -9,20 +9,20 @@ metadata:
   author: "Smit Patel (https://linkedin.com/in/smitkpatel)"
   source: "https://github.com/beingsmit/technical-product-gtm"
 ---
-# Developer Ecosystem
+
+# Developer ecosystem
 
 Build and scale developer-led adoption through ecosystem programs, community, and partnerships. Focus on what actually drives adoption, not vanity metrics.
 
-## When to Use
+## When to invoke
 
-**Triggers:**
 - "How do we build a developer ecosystem?"
 - "Should we curate quality or go open?"
-- "Developer community isn't growing"
-- "Nobody's building on our API"
+- "Developer community isn't growing."
+- "Nobody's building on our API."
 - "How do we compete with larger platforms?"
 
-**Context:**
+## Ecosystem context
 - API platforms and developer tools
 - Products with extensibility (plugins, integrations)
 - Developer-first GTM motion
@@ -30,7 +30,7 @@ Build and scale developer-led adoption through ecosystem programs, community, an
 
 ---
 
-## Core Frameworks
+## Core frameworks
 
 ### 1. Open vs Curated Ecosystem (The Marketplace Decision)
 
@@ -217,7 +217,7 @@ Providing white-glove support to everyone. Doesn't scale. Build community that h
 
 ---
 
-## Decision Trees
+## Decision trees
 
 ### Open or Curated Ecosystem?
 
@@ -245,7 +245,7 @@ Is this a common question?
 
 ---
 
-## Common Mistakes
+## Gotchas
 
 **1. Building ecosystem before product-market fit**
    - Fix core product first, then build ecosystem
@@ -270,7 +270,7 @@ Is this a common question?
 
 ---
 
-## Quick Reference
+## Quick reference
 
 **Open ecosystem checklist:**
 - [ ] Search and discovery (surface quality algorithmically)
@@ -301,12 +301,55 @@ Is this a common question?
 
 ---
 
-## Related Skills
+## Related primitives
 
-- **partnership-architecture**: Partner deal structures and co-marketing
-- **product-led-growth**: Self-serve activation funnels for developer products
-- **0-to-1-launch**: Launching developer products
+| Name | Type | Use it when |
+| --- | --- | --- |
+| `partnership-architecture` | `skill` | Partner deal structures and co-marketing are the primary task. |
+| `product-led-growth` | `skill` | Self-serve activation funnels for developer products are the primary task. |
+| `0-to-1-launch` | `skill` | Launching developer products is the primary task. |
 
 ---
 
 *Based on building developer ecosystems at multiple platform companies, including the open vs curated marketplace decision, student program development (3-year arc building talent pipeline), and partner ecosystem growth. Not theory — patterns from building developer ecosystems that actually drove platform adoption and multi-year brand loyalty.*
+
+## Output template
+
+```markdown
+## Developer ecosystem plan
+
+**Status:** recommended | needs discovery | blocked
+**Ecosystem type:** open | curated | hybrid
+**Primary adoption bottleneck:** awareness | onboarding | integration | production | advocacy
+
+### Decision
+<one-paragraph recommendation with the reason network effects, brand risk, or partner scale wins>
+
+### Program design
+| Workstream | Recommendation | Metric | Anti-pattern to avoid |
+| --- | --- | --- | --- |
+| Marketplace | <open/curated/discovery/trust layer> | <metric> | <mistake> |
+| Documentation | <quick start/guide/reference/conceptual> | <metric> | <mistake> |
+| Community/support | <route and escalation> | <metric> | <mistake> |
+| Partners | <Tier 1/Tier 2> | <metric> | <mistake> |
+| Students | <Year 1/2/3 action> | <metric> | <mistake> |
+
+### Next actions
+1. <action>
+2. <action>
+3. <action>
+```
+
+## Quality gate
+
+- [ ] Recommendation distinguishes open, curated, and hybrid ecosystem tradeoffs.
+- [ ] Metrics emphasize time to first API call, production usage, monthly active developers, Developer NPS, certified students, hires, or partner impact rather than vanity metrics alone.
+- [ ] Documentation plan orders quick starts before guides, API reference, and conceptual material.
+- [ ] Community/support routing includes an escalation path for no answer in 24 hours, paying customers, security/compliance, and complex integrations.
+- [ ] Partner tiering stays simple: Tier 1 self-serve and Tier 2 strategic, unless there is a concrete reason to add complexity.
+- [ ] Student program expectations follow the three-year arc instead of treating students as immediate revenue.
+
+## References
+
+- [Smit Patel](https://linkedin.com/in/smitkpatel)
+- [technical-product-gtm](https://github.com/beingsmit/technical-product-gtm)

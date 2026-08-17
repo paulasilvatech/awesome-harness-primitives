@@ -12,7 +12,10 @@ description: >-
   data, health records, or financial information. Output labels law-sourced figures (exact) vs
   heuristic estimates (planning only). Does not replace legal counsel.
 ---
-# Data Breach Blast Radius Analyzer
+
+# Data breach blast radius analyzer
+
+Audit a codebase for sensitive data assets, trace where they can leak, score breach exposure, and produce a regulatory and financial blast radius report with exact law-sourced figures separated from model-derived estimates.
 
 You are a **Data Breach Impact Expert**. Your mission is to answer the most important security question most teams never ask before a breach: **"If we were breached right now, how bad would it be — and what would it cost us?"**
 
@@ -28,20 +31,20 @@ This skill performs a **proactive blast radius analysis**: a full audit of what 
 
 ---
 
-## When to Activate
+## When to invoke
 
-- Auditing a codebase before a security review or pentest
-- Preparing a data processing impact assessment (DPIA)
-- Building or reviewing a disaster recovery / incident response plan
-- Onboarding a new system that handles customer data
-- Preparing for regulatory compliance (GDPR, CCPA, HIPAA, SOC 2)
-- Responding to "what's our exposure?" from engineering leadership
-- Any request mentioning: blast radius, breach impact, data exposure, sensitive data inventory, data risk, worst-case scenario
-- Direct invocation: `/data-breach-blast-radius`
+- "Assess breach impact for this codebase."
+- "What data could be exposed if this system is breached?"
+- "Calculate the data breach blast radius."
+- "Build a sensitive data inventory and data flow security audit."
+- "/data-breach-blast-radius"
 
 ---
 
-## How This Skill Works
+## Impact model
+
+Direct invocation is `/data-breach-blast-radius`; treat it the same as a request for a full blast radius report.
+
 
 Unlike tools that only find vulnerabilities, this skill **quantifies business and regulatory impact**:
 
@@ -55,7 +58,7 @@ Unlike tools that only find vulnerabilities, this skill **quantifies business an
 
 ---
 
-## Execution Workflow
+## Procedure
 
 Follow these steps **in order** every time:
 
@@ -229,7 +232,7 @@ Sort by: `(Impact × Severity) / Effort` — highest value first.
 
 ---
 
-## Output Rules
+## Output rules
 
 - **Always** start with the Executive Summary — leadership reads this first
 - **Always** include the Sensitive Data Inventory table — this is the foundation
@@ -243,7 +246,7 @@ Sort by: `(Impact × Severity) / Effort` — highest value first.
 
 ---
 
-## Severity Tiers for Blast Radius
+## Severity tiers for blast radius
 
 | Tier | Label | Examples | Multiplier |
 |------|-------|----------|------------|
@@ -255,7 +258,7 @@ Sort by: `(Impact × Severity) / Effort` — highest value first.
 
 ---
 
-## Reference Files
+## Progressive disclosure and bundled resources
 
 Load on-demand as needed:
 
@@ -266,3 +269,53 @@ Load on-demand as needed:
 | `references/regulatory-impact.md` | **Step 5** | GDPR/CCPA/HIPAA/LGPD/PDPA fine formulas, notification timelines, breach cost benchmarks, jurisdiction detection patterns |
 | `references/hardening-playbook.md` | **Step 7** | Prioritized controls: encryption, access control, data minimization, tokenization, audit logging, anonymization patterns by tech stack |
 | `references/report-format.md` | **Step 6** | Full report template with Mermaid data flow diagram syntax, financial summary table, hardening roadmap format |
+
+## Output template
+
+```markdown
+## Data Breach Blast Radius Report
+
+### Executive Summary
+<2-3 plain-English paragraphs, including what is law-sourced exact vs model-derived estimate>
+
+### Sensitive Data Inventory
+| Field | Table/Source | Data Tier | Purpose | Encrypted? | Notes |
+|---|---|---|---|---|---|
+| `<field>` | `<file:line or schema>` | `T1-T5` | `<purpose>` | yes/no/unknown | `<evidence>` |
+
+### Data Flow Map
+<Rendered diagram produced from Mermaid markup through `renderMermaidDiagram`; do not paste raw Mermaid here.>
+
+### Top 5 Exposure Vectors
+| Rank | Vector | Data | Score | Evidence | Confidence |
+|---|---|---|---|---|---|
+| 1 | `<endpoint/log/store>` | `<tier and fields>` | `<score>` | `<file:line>` | definite / conditional |
+
+### Regulatory Blast Radius
+| Regulation | Max Fine | Realistic Fine | Notification Cost | Timeline | Basis |
+|---|---|---|---|---|---|
+| GDPR | `<exact law-sourced max>` | `<estimate>` | `<estimate>` | `<timeline>` | `references/SOURCES.md` |
+
+### Financial Impact Estimate
+<Realistic range with assumptions and IBM benchmark reference.>
+
+### Hardening Roadmap
+| Priority | Fix | Why | Effort | Impact | Quick win |
+|---|---|---|---|---|---|
+| 1 | `<specific control>` | `<risk reduced>` | Low/Medium/High | `<%>` | yes/no |
+```
+
+## Quality gate
+
+- [ ] The full requested scope was scanned, or the skipped paths are listed with reasons.
+- [ ] `references/data-classification.md` informed every tier assignment.
+- [ ] Data flows cover ingestion, processing, storage, transmission, and exposure points.
+- [ ] Blast Radius Score uses Data Sensitivity Tier × Exposure Likelihood × Population Scale × Data Completeness.
+- [ ] Law-sourced exact figures are clearly separated from planning estimates.
+- [ ] Every finding cites a file path, field name, and line number when available.
+- [ ] The Data Flow Map is rendered with `renderMermaidDiagram` and critical/high styles are applied.
+- [ ] No code changes are applied automatically; the deliverable is a report and roadmap.
+
+## References
+
+- [IBM Cost of a Data Breach Report](https://www.ibm.com/reports/data-breach.)

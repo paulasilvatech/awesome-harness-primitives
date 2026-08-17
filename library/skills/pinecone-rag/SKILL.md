@@ -1,47 +1,46 @@
 ---
-name: "pinecone-rag"
+name: pinecone-rag
 description: >-
-  Build production RAG pipelines and persistent agent memory using Pinecone as the vector database
-  backend. ALWAYS USE THIS SKILL when the user mentions Pinecone, wants to index documents for
-  semantic search, build a retrieval-augmented generation system, store agent memory across sessions,
-  implement hybrid search, or connect an LLM to a searchable knowledge base — even if they don't say
-  "Pinecone" explicitly. Also use when the user asks about vector databases for RAG, namespace
-  isolation for multi-tenant agents, embedding pipelines, or scaling a knowledge base beyond what
-  local storage can handle. DO NOT use for local-only vector stores (Chroma, FAISS, pgvector) or pure
-  keyword search with no semantic component.
-license: "Apache-2.0"
+  Build production RAG pipelines and persistent agent memory with Pinecone as the vector database backend. Use this skill when indexing documents for semantic search, building retrieval-augmented generation, storing agent memory across sessions, implementing hybrid search, designing namespace isolation for multi-tenant agents, creating embedding pipelines, or scaling a searchable knowledge base beyond local storage.
+license: Apache-2.0
 metadata:
-  compatibility: "pinecone>=6.0.0, Python 3.10+"
----
-# Pinecone RAG Skill
-
-This skill guides you through building a production RAG pipeline or persistent
-agent memory system using Pinecone. Follow the workflow from start to finish —
-don't skip steps or jump to code before understanding what the user actually
-needs.
-
-## Before you start — ask one question
-
-Before writing any code, identify which of these two use cases applies:
-
-**A — RAG over documents**: User wants to index a corpus (PDFs, docs, code,
-web pages) and retrieve relevant chunks to ground LLM responses.
-
-**B — Agent memory**: User wants an agent to remember facts, decisions, or
-context across sessions or across multiple agents sharing a knowledge base.
-
-The setup is similar but the namespace strategy and retrieval patterns differ.
-If the user hasn't said, ask: *"Is this for document retrieval, agent memory,
-or both?"* Then follow the relevant workflow below.
-
+  compatibility: pinecone>=6.0.0, Python 3.10+
 ---
 
-## Step 1 — Choose your index configuration
+# Pinecone RAG and agent memory
 
-Pick the index type before writing any code. Getting this wrong means
-re-creating the index later.
+Use this skill to choose a Pinecone index, embed and upsert content in batches, select dense or hybrid retrieval, wire a RAG answer or agent memory loop, and validate end-to-end retrieval quality.
 
-**Serverless (recommended for most cases)**
+## When to invoke
+
+- "Build a RAG pipeline with Pinecone."
+- "Index documents for semantic search or a searchable knowledge base."
+- "Store persistent agent memory across sessions."
+- "Implement hybrid search with Pinecone and BM25."
+- "Design namespace isolation for multi-tenant agents or users."
+
+## Prerequisites and context
+
+- Python 3.10+ and `pinecone>=6.0.0`.
+- Pinecone API key available as `PINECONE_API_KEY` or through the user's existing secret mechanism.
+- An embedding provider such as OpenAI, Voyage, or a local model; the embedding dimension must match the Pinecone index exactly.
+- Do not use this skill for local-only vector stores such as FAISS or Chroma, pgvector-only designs, pure keyword search, or another explicit vector DB such as Weaviate or Qdrant.
+
+## Procedure
+
+1. Classify the use case before code: document RAG, agent memory, or both.
+2. Choose the index type and dimension before any upsert; recreating an index is often required after a dimension mistake.
+3. Embed content in batches and upsert vectors with original text stored in metadata.
+4. Choose dense, hybrid, and metadata-filtered retrieval based on corpus needs.
+5. Wire document RAG or agent memory namespace patterns.
+6. Run a smoke test that covers index → upsert → query → LLM response or recall.
+
+If the user has not said whether the task is document retrieval, agent memory, or both, ask: "Is this for document retrieval, agent memory, or both?"
+
+## Index configuration
+
+Use serverless for most workloads and pod-based indexes only when consistent high-throughput production requirements justify them.
+
 ```python
 from pinecone import Pinecone, ServerlessSpec
 
@@ -50,14 +49,13 @@ pc = Pinecone(api_key="PINECONE_API_KEY")
 if "my-index" not in pc.list_indexes().names():
     pc.create_index(
         name="my-index",
-        dimension=1536,        # must match your embedding model exactly
+        dimension=1536,
         metric="cosine",
         spec=ServerlessSpec(cloud="aws", region="us-east-1")
     )
 index = pc.Index("my-index")
 ```
 
-**Pod-based (for consistent high-throughput production)**
 ```python
 from pinecone import PodSpec
 
@@ -69,22 +67,19 @@ pc.create_index(
 )
 ```
 
-**Dimension quick reference — match this exactly to your embedding model:**
 | Model | Dimension |
-|---|---|
+| --- | --- |
 | `text-embedding-3-small` | 1536 |
 | `text-embedding-3-large` | 3072 |
 | `voyage-3` / `voyage-multimodal-3` | 1024 |
 | `BAAI/bge-large-en-v1.5` | 1024 |
-| `intfloat/multilingual-e5-large` (Arabic, Malay, Chinese) | 1024 |
+| `intfloat/multilingual-e5-large` for Arabic, Malay, Chinese | 1024 |
 
-> **Checkpoint**: Index exists, dimension matches embedding model, `index.describe_index_stats()` returns without error.
+Checkpoint: index exists, dimension matches the embedding model, and `index.describe_index_stats()` returns without error.
 
----
+## Embedding and upsert pipeline
 
-## Step 2 — Embed and upsert documents
-
-Always batch upserts — never upsert one vector at a time.
+Always batch upserts; never upsert one vector at a time. Store the original text in metadata so retrieval does not require a second lookup.
 
 ```python
 from openai import OpenAI
@@ -111,17 +106,12 @@ def upsert_docs(index, docs: list[dict], namespace: str = "default"):
         index.upsert(vectors=vecs, namespace=namespace)
 ```
 
-**Always store the original text in metadata** — this avoids a second lookup
-at retrieval time.
+Checkpoint: `index.describe_index_stats()` shows vector count greater than 0 in the target namespace.
 
-> **Checkpoint**: `index.describe_index_stats()` shows vector count > 0 in the
-> target namespace.
+## Retrieval strategies
 
----
+Use dense semantic search for most cases.
 
-## Step 3 — Choose retrieval strategy
-
-### Dense (semantic) search — use for most cases
 ```python
 def search(index, query: str, top_k: int = 5, namespace: str = "default",
            filter: dict = None) -> list[dict]:
@@ -134,15 +124,13 @@ def search(index, query: str, top_k: int = 5, namespace: str = "default",
             for m in results.matches]
 ```
 
-### Hybrid search (semantic + BM25 keyword) — use when corpus has exact terminology
-Use hybrid when the domain has precise terms that semantic search misses:
-legal citations, medical codes, product SKUs, API method names.
+Use hybrid search when exact terminology matters: legal citations, medical codes, product SKUs, and API method names.
 
 ```python
 from pinecone_text.sparse import BM25Encoder
 
 bm25 = BM25Encoder().default()
-bm25.fit([d["text"] for d in docs])  # fit once on your corpus
+bm25.fit([d["text"] for d in docs])
 
 def hybrid_search(index, query: str, top_k: int = 5, alpha: float = 0.7):
     """alpha=1.0 is pure dense; alpha=0.0 is pure sparse."""
@@ -156,12 +144,11 @@ def hybrid_search(index, query: str, top_k: int = 5, alpha: float = 0.7):
                        top_k=top_k, include_metadata=True).matches
 ```
 
-### Metadata filtering — use to scope results before semantic ranking
+Use metadata filtering to scope results before semantic ranking.
+
 ```python
-# Exact match
 results = index.query(vector=emb, filter={"source": {"$eq": "confluence"}})
 
-# Combined filter
 results = index.query(vector=emb, filter={
     "$and": [
         {"category": {"$eq": "engineering"}},
@@ -170,12 +157,11 @@ results = index.query(vector=emb, filter={
 })
 ```
 
-> **Checkpoint**: A test query returns relevant results with scores > 0.7 for
-> clearly matching content.
+Checkpoint: a test query returns relevant results with scores greater than 0.7 for clearly matching content.
 
----
+## RAG and memory patterns
 
-## Step 4A — Full RAG pipeline (document use case)
+Document RAG uses retrieved chunks as grounded context and refuses answers not present in the context.
 
 ```python
 def rag_answer(index, question: str, namespace: str = "default",
@@ -199,12 +185,7 @@ def rag_answer(index, question: str, namespace: str = "default",
     ).choices[0].message.content
 ```
 
----
-
-## Step 4B — Agent memory (memory use case)
-
-Use namespaces to isolate each agent's or user's memories completely.
-Namespace per agent prevents memory bleed across users or sessions.
+Agent memory uses namespaces to isolate each agent's or user's memories. A namespace per agent prevents memory bleed across users or sessions.
 
 ```python
 import time, hashlib
@@ -242,14 +223,9 @@ def forget(index, agent_id: str):
     index.delete(delete_all=True, namespace=f"agent_{agent_id}")
 ```
 
----
-
-## Step 5 — Wire it together and test end to end
-
-Run a quick smoke test before integrating into the larger system:
+Run an end-to-end smoke test before integrating into the larger system.
 
 ```python
-# Smoke test
 upsert_docs(index, [
     {"id": "t1", "text": "Pinecone is a vector database for semantic search."},
     {"id": "t2", "text": "RAG combines retrieval with language model generation."},
@@ -260,27 +236,58 @@ assert hits[0]["score"] > 0.7, f"Expected high similarity, got {hits[0]['score']
 print("Smoke test passed:", hits[0]["text"])
 ```
 
-> **Checkpoint**: Smoke test passes. End-to-end: index → upsert → query →
-> LLM response works without errors.
+## Gotchas
 
----
+- **Dimension mismatch breaks upserts**: verify `len(embed(["test"])[0])` matches the index dimension before the first upsert.
+- **Missing text in metadata causes slow retrieval**: if `"text"` is absent, the app needs a second lookup for actual content.
+- **Single-vector upserts are inefficient**: batch in chunks of 100.
+- **No namespace strategy leaks data**: choose one namespace per user, tenant, or agent before storing production data.
+- **BM25 needs representative data**: fit on at least a few hundred documents when possible.
 
-## Common pitfalls — fix these before they become bugs
+## Limits
 
-- **Dimension mismatch**: always verify `len(embed(["test"])[0])` matches
-  the index dimension before your first upsert.
-- **Missing text in metadata**: if you don't store `"text"` in metadata,
-  you'll need a second lookup to get the actual content at query time.
-- **Single-vector upserts in a loop**: always batch in chunks of 100.
-- **No namespace strategy**: decide upfront — one namespace per user/agent
-  prevents cross-tenant data leaks that are hard to fix later.
-- **Fitting BM25 on a small corpus**: BM25 needs a representative corpus to
-  build good term frequencies. Fit on at least a few hundred documents.
+Use a different approach when the dataset fits in memory and latency does not matter, when the user wants FAISS or Chroma, when PostgreSQL plus pgvector is the preferred architecture, when sub-5ms p99 latency forbids external API calls, when the request is pure keyword search, or when the user explicitly wants Weaviate, Qdrant, or another vector database.
 
-## When NOT to use this skill
 
-Use a different approach when:
-- The dataset fits in memory and latency doesn't matter → use FAISS or Chroma
-- You're already on PostgreSQL and want to avoid a new service → use pgvector
-- You need sub-5ms p99 latency with no external API calls → local vector store
-- The user explicitly wants a different vector DB (Weaviate, Qdrant, etc.)
+## Pinecone vocabulary
+
+Preserve user trigger and architecture terms from existing requests: `ALWAYS`, `USE`, `THIS`, `SKILL`, `re-creating`, `to-end`, `cross-tenant`, and `user/agent`. Treat them as clues for Pinecone RAG, namespace isolation, and end-to-end validation.
+
+## Output template
+
+```markdown
+### Pinecone RAG result
+
+**Status:** complete | needs changes | blocked
+**Use case:** document RAG | agent memory | both
+**Index:** `<index name>`
+**Dimension / metric:** `<dimension>` / `<metric>`
+**Namespace strategy:** `<namespace per tenant/user/agent/default>`
+
+| Component | Decision | Evidence |
+| --- | --- | --- |
+| Embedding model | `<model>` | dimension `<value>` matches index |
+| Upsert batch size | `<size>` | vector count `<count>` |
+| Retrieval | dense | hybrid | metadata-filtered | `<why>` |
+| Text metadata | present | missing | `<field name>` |
+
+**Smoke test**
+- `index.describe_index_stats()`: pass | fail
+- Query: `<test query>`
+- Top score: `<score>`
+- Result snippet: `<text>`
+
+**Implementation notes**
+- <files changed or code to add>
+```
+
+## Quality gate
+
+- [ ] The use case is classified as document RAG, agent memory, or both.
+- [ ] The Pinecone index dimension exactly matches the embedding model.
+- [ ] `index.describe_index_stats()` succeeds before and after upsert.
+- [ ] Upserts are batched and include original `text` in metadata.
+- [ ] Namespace isolation is explicit for multi-tenant users, agents, or sessions.
+- [ ] Dense, hybrid, and metadata-filtered retrieval decisions are justified.
+- [ ] A smoke test verifies index, upsert, query, and RAG answer or memory recall.
+- [ ] Local-only vector store, pgvector-only, pure keyword, and non-Pinecone requests are handed off instead of forced into Pinecone.

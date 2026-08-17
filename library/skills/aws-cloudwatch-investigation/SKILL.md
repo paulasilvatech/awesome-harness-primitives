@@ -1,108 +1,44 @@
 ---
-name: "aws-cloudwatch-investigation"
+name: aws-cloudwatch-investigation
 description: >-
-  Reusable investigation patterns for AWS CloudWatch: Logs Insights query templates,
-  alarm-to-deployment correlation, blast-radius narrowing decision tree, and PromQL-style metric query
-  patterns for structured incident triage. Use this skill when the user asks for aws cloudwatch
-  investigation skill.
----
-# AWS CloudWatch Investigation Skill
-
-Reusable patterns for investigating production incidents using CloudWatch Logs, Metrics, and Alarms. These patterns are designed to be composed together during incident triage.
-
+  Investigate AWS production incidents with CloudWatch Logs Insights, Metrics, Alarms, CloudTrail correlation, blast-radius narrowing, metric math, and incident timelines. Use when the user asks to debug CloudWatch alarms, query Logs Insights, correlate alarms to deployments, find Lambda cold starts, OOMs, timeouts, throttling, or reconstruct an AWS incident timeline.
 ---
 
-## Pattern 1: Logs Insights Query Templates
+# AWS CloudWatch investigation
 
-### Error Spike Detection
+Take an AWS incident signal, transform it into scoped CloudWatch Logs, Metrics, Alarm, and CloudTrail evidence, and return a timeline, blast-radius conclusion, likely root event, and next validation steps.
 
-Find the top errors in a time window, grouped by error type:
+## When to invoke
 
-```
-fields @timestamp, @message, @logStream
-| filter @message like /(?i)(error|exception|fatal|critical)/
-| stats count(*) as errorCount by bin(5m), @logStream
-| sort errorCount desc
-| limit 20
-```
+- "Investigate this CloudWatch alarm."
+- "Write Logs Insights queries for this error spike."
+- "Did a deployment cause this AWS incident?"
+- "Narrow the blast radius for these Lambda failures."
+- "Build an incident timeline from CloudWatch and CloudTrail."
 
-### P99 Latency Breakdown by Operation
+## Prerequisites and context
 
-Identify which operations are driving latency spikes:
+- The user must provide or authorize access to the AWS account, region, log groups, alarm names, service namespace, and incident window.
+- Prefer read-only investigation. Do not change alarms, dashboards, retention, Lambda memory, ECS services, or infrastructure unless separately asked.
+- Use event timestamps, not ingestion timestamps, when comparing CloudWatch Logs, CloudWatch Metrics, CloudWatch Alarms, CloudTrail, and AWS Health.
 
-```
-fields @timestamp, @duration, operation
-| filter ispresent(@duration)
-| stats avg(@duration) as avgMs,
-        pct(@duration, 50) as p50Ms,
-        pct(@duration, 95) as p95Ms,
-        pct(@duration, 99) as p99Ms,
-        count(*) as invocations
-  by operation
-| sort p99Ms desc
-| limit 15
-```
+## Logs Insights query patterns
 
-### Lambda Cold Start Detection
+| Situation | Query |
+| --- | --- |
+| Error spike detection | `fields @timestamp, @message, @logStream\n| filter @message like /(?i)(error|exception|fatal|critical)/\n| stats count(*) as errorCount by bin(5m), @logStream\n| sort errorCount desc\n| limit 20` |
+| P99 latency by operation | `fields @timestamp, @duration, operation\n| filter ispresent(@duration)\n| stats avg(@duration) as avgMs, pct(@duration, 50) as p50Ms, pct(@duration, 95) as p95Ms, pct(@duration, 99) as p99Ms, count(*) as invocations by operation\n| sort p99Ms desc\n| limit 15` |
+| Lambda cold starts | `fields @timestamp, @duration, @initDuration, @memorySize, @maxMemoryUsed\n| filter ispresent(@initDuration)\n| stats count(*) as coldStarts, avg(@initDuration) as avgInitMs, max(@initDuration) as maxInitMs, avg(@duration) as avgDurationMs by bin(5m)\n| sort @timestamp desc` |
+| OOM events | `fields @timestamp, @message, @logStream, @memorySize, @maxMemoryUsed\n| filter @message like /Runtime exited|out of memory|OOMKilled|Cannot allocate memory|MemoryError/\n| stats count(*) as oomEvents by @logStream, bin(10m)\n| sort oomEvents desc\n| limit 10` |
+| Memory trend before OOM | `fields @timestamp, @maxMemoryUsed, @memorySize\n| filter ispresent(@maxMemoryUsed)\n| stats max(@maxMemoryUsed / @memorySize * 100) as peakMemPct, avg(@maxMemoryUsed / @memorySize * 100) as avgMemPct by bin(5m)\n| sort @timestamp desc` |
+| Timeout detection | `fields @timestamp, @duration, @logStream, @requestId\n| filter @message like /Task timed out/ or @duration > 28000\n| stats count(*) as timeouts by @logStream, bin(5m)\n| sort timeouts desc` |
+| First error timeline | `fields @timestamp, @message\n| filter @message like /ERROR|WARN|timeout|refused|denied/\n| stats earliest(@timestamp) as firstSeen, latest(@timestamp) as lastSeen, count(*) as occurrences by @message\n| sort firstSeen asc\n| limit 20` |
 
-Quantify cold start impact during an incident:
+## Deployment correlation
 
-```
-fields @timestamp, @duration, @initDuration, @memorySize, @maxMemoryUsed
-| filter ispresent(@initDuration)
-| stats count(*) as coldStarts,
-        avg(@initDuration) as avgInitMs,
-        max(@initDuration) as maxInitMs,
-        avg(@duration) as avgDurationMs
-  by bin(5m)
-| sort @timestamp desc
-```
+Use the alarm transition timestamp as the anchor. Query CloudTrail for deployment-related events in `[alarm_time - 30min, alarm_time]`:
 
-### Out-of-Memory (OOM) Detection
-
-Find Lambda functions or containers killed by memory pressure:
-
-```
-fields @timestamp, @message, @logStream, @memorySize, @maxMemoryUsed
-| filter @message like /Runtime exited|out of memory|OOMKilled|Cannot allocate memory|MemoryError/
-| stats count(*) as oomEvents by @logStream, bin(10m)
-| sort oomEvents desc
-| limit 10
-```
-
-For memory utilization trending before OOM:
-
-```
-fields @timestamp, @maxMemoryUsed, @memorySize
-| filter ispresent(@maxMemoryUsed)
-| stats max(@maxMemoryUsed / @memorySize * 100) as peakMemPct,
-        avg(@maxMemoryUsed / @memorySize * 100) as avgMemPct
-  by bin(5m)
-| sort @timestamp desc
-```
-
-### Timeout Detection
-
-Find invocations that hit the configured timeout:
-
-```
-fields @timestamp, @duration, @logStream, @requestId
-| filter @message like /Task timed out/ or @duration > 28000
-| stats count(*) as timeouts by @logStream, bin(5m)
-| sort timeouts desc
-```
-
----
-
-## Pattern 2: Alarm History to Deploy-Event Correlation
-
-### Process
-
-1. **Get alarm transition time** — note the exact timestamp when the alarm entered ALARM state.
-2. **Query CloudTrail** for deployment-related events in a window of [alarm_time - 30min, alarm_time]:
-
-```
-# CloudTrail Lake query for deployment events
+```sql
 SELECT eventTime, eventName, userIdentity.arn, requestParameters
 FROM <event-data-store-id>
 WHERE eventTime > '<alarm_time_minus_30m>'
@@ -116,218 +52,116 @@ WHERE eventTime > '<alarm_time_minus_30m>'
 ORDER BY eventTime DESC
 ```
 
-3. **Correlation criteria** — a deploy is "correlated" if:
-   - It targets the same service/resource as the alarm
-   - It completed within 15 minutes before the alarm transition
-   - The deployer identity matches a CI/CD role (not a human applying a hotfix)
+| Correlation strength | Evidence |
+| --- | --- |
+| Strong | Same service/resource, completed within 15 minutes before alarm, CI/CD actor such as an assumed GitHub Actions deploy role, and alarm was `OK` in the previous deployment cycle. |
+| Medium | Same account or service but partial resource match, nearby timing, or ambiguous actor. |
+| Weak | Only temporal proximity, human hotfix, missing prior healthy cycle, or simultaneous environmental changes. |
+| Not correlated | No deploy/config/image/change-set event before the first symptom. |
 
-4. **Strengthening the correlation:**
-   - Check if the same alarm was healthy in the previous deployment cycle
-   - Verify no other environmental changes (scaling events, config changes) in the same window
-   - Look for canary/synthetic monitor failures that started at the same time
+Strengthen the correlation by checking canary or synthetic monitor failures, scaling events, config changes, and whether any other environmental change happened in the same window.
 
-### Output Format
-
-```
-Deploy Correlation:
-  Event: UpdateFunctionCode
-  Time: 2024-03-15T14:23:07Z (12 min before alarm)
-  Actor: arn:aws:sts::123456789012:assumed-role/github-actions-deploy/session
-  Resource: arn:aws:lambda:us-east-1:123456789012:function:payment-processor
-  Correlation: STRONG — same resource, CI/CD actor, alarm was OK prior cycle
-```
-
----
-
-## Pattern 3: Narrow the Blast Radius Decision Tree
-
-Use this tree to systematically scope an incident from broadest to most specific:
+## Blast-radius decision tree
 
 ```
 START
   |
   v
 [1] ACCOUNT — Which account(s) show the alarm?
-  |  - Check: Are alarms firing in multiple accounts?
-  |  - If yes → suspect shared service (SSO, networking, shared deployment pipeline)
-  |  - If no → proceed to Region
+  |  - Multi-account: suspect shared service such as SSO, networking, or deployment pipeline
+  |  - Single account: proceed to Region
   v
 [2] REGION — Which region(s) are affected?
-  |  - Check: Same alarm in other regions?
-  |  - If multi-region → suspect global service (IAM, Route53, S3 global)
-  |  - If single-region → proceed to Service
+  |  - Multi-region: suspect global service such as IAM, Route53, or S3 global behavior
+  |  - Single-region: proceed to Service
   v
 [3] SERVICE — Which service namespace shows degradation?
-  |  - Check CloudWatch namespace: AWS/Lambda, AWS/ECS, AWS/ApiGateway, etc.
-  |  - If multiple services → suspect shared dependency (VPC, NAT, DNS, IAM)
-  |  - If single service → proceed to Operation
+  |  - Multiple services: suspect VPC, NAT, DNS, IAM, shared database, cache, or external API
+  |  - Single service: proceed to Operation
   v
-[4] OPERATION — Which API action or function is failing?
-  |  - For Lambda: which function name?
-  |  - For ECS: which service/task definition?
-  |  - For API GW: which stage/resource/method?
-  |  - If all operations → suspect service-level issue (throttling, quota)
-  |  - If specific operation → proceed to Resource
+[4] OPERATION — Which API action, function, stage, resource, method, ECS service, or task definition is failing?
+  |  - All operations: suspect service-level throttling or quota
+  |  - Specific operation: proceed to Resource
   v
-[5] RESOURCE — Which specific resource instance?
-     - Function ARN, Task ID, DB instance identifier
-     - This is your investigation target
-     - Proceed to log and trace analysis scoped to this resource
+[5] RESOURCE — Which Function ARN, Task ID, DB instance identifier, or other resource instance is the investigation target?
 ```
 
-### Shared Dependency Investigation
+When multiple services are affected, investigate in this order: VPC/Networking (`NAT Gateway ErrorPortAllocation`, packet drops, DNS), IAM/STS (`ThrottlingException` on `AssumeRole`, token vending latency), downstream dependency, shared deployment pipeline, then AWS Health Dashboard and Service Health.
 
-When blast radius spans multiple services, investigate in this order:
+## Metric math patterns
 
-1. **VPC/Networking** — NAT Gateway ErrorPortAllocation, packet drops, DNS resolution failures
-2. **IAM/STS** — ThrottlingException on AssumeRole, token vending latency
-3. **Downstream dependency** — shared database, cache, or external API
-4. **Deployment pipeline** — simultaneous deploys across services from same pipeline run
-5. **AWS service event** — check AWS Health Dashboard and Service Health for the region
+| Signal | MetricDataQueries pattern |
+| --- | --- |
+| Error rate percentage | `errors = AWS/Lambda Errors Sum`, `invocations = AWS/Lambda Invocations Sum`, `error_rate = errors / invocations * 100`, label `Error Rate %`. |
+| Latency anomaly | `current_p99 = AWS/Lambda Duration p99` for current window, `baseline_p99 = AWS/Lambda Duration p99` for same window last week, `anomaly_ratio = current_p99 / baseline_p99`, label `Latency vs Baseline (ratio > 2 = anomaly)`. |
+| Throttling pressure | Sum `lambda_throttles`, `api_gw_429s` from `AWS/ApiGateway 4XXError`, and `dynamo_throttles` from `AWS/DynamoDB ThrottledRequests` into `throttle_pressure`. |
+| Concurrent execution headroom | `concurrent = AWS/Lambda ConcurrentExecutions Maximum`, `headroom = 1000 - concurrent`, label `Remaining Concurrency (account limit 1000)`. |
 
----
+Replace `TARGET`, `FunctionName`, `ApiName`, and `TableName` with the scoped resource. Treat `1000` as a default example account concurrency limit; use the account's actual quota when known.
 
-## Pattern 4: PromQL-Style Metric Query Patterns
+## Incident timeline reconstruction
 
-These patterns use CloudWatch metric math and GetMetricData to build composite signals. Express them as metric queries for dashboards or programmatic retrieval.
+Collect timestamped evidence and sort by event time:
 
-### Error Rate as Percentage
-
-```
-MetricDataQueries:
-  - Id: errors
-    MetricStat:
-      Metric:
-        Namespace: AWS/Lambda
-        MetricName: Errors
-        Dimensions: [{Name: FunctionName, Value: TARGET}]
-      Period: 60
-      Stat: Sum
-  - Id: invocations
-    MetricStat:
-      Metric:
-        Namespace: AWS/Lambda
-        MetricName: Invocations
-        Dimensions: [{Name: FunctionName, Value: TARGET}]
-      Period: 60
-      Stat: Sum
-  - Id: error_rate
-    Expression: "errors / invocations * 100"
-    Label: "Error Rate %"
-```
-
-### Latency Anomaly Detection (Compare to Baseline)
-
-```
-MetricDataQueries:
-  - Id: current_p99
-    MetricStat:
-      Metric:
-        Namespace: AWS/Lambda
-        MetricName: Duration
-        Dimensions: [{Name: FunctionName, Value: TARGET}]
-      Period: 300
-      Stat: p99
-  - Id: baseline_p99
-    MetricStat:
-      Metric:
-        Namespace: AWS/Lambda
-        MetricName: Duration
-        Dimensions: [{Name: FunctionName, Value: TARGET}]
-      Period: 300
-      Stat: p99
-    # Use StartTime/EndTime set to same window last week
-  - Id: anomaly_ratio
-    Expression: "current_p99 / baseline_p99"
-    Label: "Latency vs Baseline (ratio > 2 = anomaly)"
-```
-
-### Throttling Pressure Score
-
-Combine multiple throttling signals into a single pressure metric:
-
-```
-MetricDataQueries:
-  - Id: lambda_throttles
-    MetricStat:
-      Metric: {Namespace: AWS/Lambda, MetricName: Throttles}
-      Period: 60
-      Stat: Sum
-  - Id: api_gw_429s
-    MetricStat:
-      Metric: {Namespace: AWS/ApiGateway, MetricName: 4XXError, Dimensions: [{Name: ApiName, Value: TARGET}]}
-      Period: 60
-      Stat: Sum
-  - Id: dynamo_throttles
-    MetricStat:
-      Metric: {Namespace: AWS/DynamoDB, MetricName: ThrottledRequests, Dimensions: [{Name: TableName, Value: TARGET}]}
-      Period: 60
-      Stat: Sum
-  - Id: throttle_pressure
-    Expression: "lambda_throttles + api_gw_429s + dynamo_throttles"
-    Label: "Combined Throttle Pressure"
-```
-
-### Concurrent Execution Headroom
-
-```
-MetricDataQueries:
-  - Id: concurrent
-    MetricStat:
-      Metric: {Namespace: AWS/Lambda, MetricName: ConcurrentExecutions}
-      Period: 60
-      Stat: Maximum
-  - Id: headroom
-    Expression: "1000 - concurrent"
-    Label: "Remaining Concurrency (account limit 1000)"
-```
-
----
-
-## Pattern 5: Incident Timeline Reconstruction
-
-### Process
-
-Reconstruct a precise timeline by merging data from multiple sources:
-
-1. **Collect timestamps:**
-
-| Source | Query | Yields |
-|--------|-------|--------|
+| Source | Query or API | Yields |
+| --- | --- | --- |
 | CloudWatch Alarms | Alarm history API | State transition times |
-| CloudWatch Metrics | GetMetricData with 1-min period | First anomaly point |
+| CloudWatch Metrics | `GetMetricData` with 1-minute period | First anomaly datapoint |
 | CloudWatch Logs | Logs Insights with `earliest(@timestamp)` | First error occurrence |
-| CloudTrail | LookupEvents filtered by time | Deployment/change events |
-| AWS Health | DescribeEvents | AWS-side incidents |
+| CloudTrail | `LookupEvents` or CloudTrail Lake | Deployment and configuration events |
+| AWS Health | `DescribeEvents` | AWS-side incidents |
 
-2. **Build the timeline:**
+Root event rule: walk backward from the first symptom to the most recent deploy, config change, scaling event, quota pressure, or external dependency shift that can explain all later symptoms.
 
+## Gotchas
+
+- CloudWatch metric timestamps are end-of-period; a 1-minute datapoint at `14:05` covers `14:04-14:05`.
+- CloudTrail can have up to 15-minute delivery delay; use `eventTime`, not ingestion time.
+- Log group timestamps depend on agent or SDK flush interval; allow 30-60 seconds of clock skew.
+- Alarm state changes include evaluation delay: `periods x evaluation periods`; the anomaly often started earlier.
+
+## Source compatibility terms
+
+Retain these CloudWatch incident terms in investigations and reports: `5/min`, `ALARM`, `AWS/ECS`, `Deployment/change`, `IAM/STS**`, `STRONG`, `StartTime/EndTime`, `VPC/Networking**`, `agent/SDK`, `alarm-to-deployment`, `assumed-role`, `assumed-role/github-actions-deploy/session`, `built-in`, `canary/synthetic`, `github-actions-deploy`, `multi-region`, `payment-processor`, `payments-api`, `service/task`, `single-region`, `stage/resource/method`, `us-east-1`, `EndTime`, `MetricName`, `MetricStat`, `PaymentProcessorErrors`, and `StartTime`.
+
+## Output template
+
+```markdown
+## CloudWatch investigation — <alarm, service, or incident>
+
+**Status:** investigating | likely cause found | inconclusive | blocked
+**Window:** <start> to <end> UTC
+**Scope:** account=<id>, region=<region>, service=<namespace>, resource=<resource>
+
+### Findings
+| Time | Source | Evidence | Interpretation |
+| --- | --- | --- | --- |
+| `<timestamp>` | CloudTrail | `<eventName by actor>` | `<deploy/config/change candidate>` |
+| `<timestamp>` | Logs Insights | `<query result>` | `<first symptom or dominant error>` |
+
+### Blast radius
+- Account: <single | multiple>
+- Region: <single | multiple>
+- Service: <single | multiple>
+- Operation/resource: <specific target>
+
+### Correlation
+**Deployment correlation:** strong | medium | weak | none
+**Root event:** <earliest plausible change or unknown>
+**Confidence:** high | medium | low
+
+### Queries used
+- `<Logs Insights or MetricDataQueries summary>`
+
+### Next checks
+- <one concrete validation or mitigation step>
 ```
-fields @timestamp, @message
-| filter @message like /ERROR|WARN|timeout|refused|denied/
-| stats earliest(@timestamp) as firstSeen, latest(@timestamp) as lastSeen, count(*) as occurrences
-  by @message
-| sort firstSeen asc
-| limit 20
-```
 
-3. **Identify the sequence:**
+## Quality gate
 
-```
-Timeline:
-  T-15m: CloudTrail — UpdateFunctionCode by CI/CD role
-  T-12m: Logs — first error "Connection refused to payments-api.internal"
-  T-10m: Metrics — Error count crosses 5/min threshold
-  T-8m:  Alarm — PaymentProcessorErrors enters ALARM
-  T-5m:  Metrics — p99 latency spikes to 28s (timeout)
-  T-0:   Current — error rate at 45%, alarm still firing
-```
-
-4. **Determine root event** — the earliest change that preceded all symptoms. Walk backward from the first symptom to the most recent mutation (deploy, config change, scaling event, or external dependency shift).
-
-### Gotchas
-
-- CloudWatch metric timestamps are end-of-period. A 1-minute datapoint at 14:05 covers 14:04-14:05.
-- CloudTrail events can have up to 15-minute delivery delay. Use `eventTime`, not ingestion time.
-- Log group timestamps depend on the agent/SDK flush interval. Allow for 30-60s of clock skew.
-- Alarm state changes have a built-in evaluation delay (periods x evaluation periods). The actual anomaly started earlier.
+- [ ] Alarm transition time, first symptom time, and investigation window are explicit.
+- [ ] Logs, metrics, alarms, CloudTrail, and AWS Health are considered or explicitly marked unavailable.
+- [ ] Blast radius is narrowed in account → region → service → operation → resource order.
+- [ ] Deployment correlation uses same resource, timing, actor, and prior-health evidence.
+- [ ] Metric math names the namespace, metric, dimensions, period, statistic, and expression.
+- [ ] Timeline entries use event timestamps and account for metric period, CloudTrail delay, log skew, and alarm evaluation delay.

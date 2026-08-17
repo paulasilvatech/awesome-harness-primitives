@@ -1,326 +1,194 @@
 ---
-name: "architecture-blueprint-generator"
+name: architecture-blueprint-generator
 description: >-
-  Comprehensive project architecture blueprint generator that analyzes codebases to create detailed
-  architectural documentation. Automatically detects technology stacks and architectural patterns,
-  generates visual diagrams, documents implementation patterns, and provides extensible blueprints for
-  maintaining architectural consistency and guiding new development. Use this skill when the user asks
-  for comprehensive project architecture blueprint generator.
+  Generate a comprehensive Project_Architecture_Blueprint.md by analyzing a codebase, detecting technology stacks and architectural patterns, documenting components, dependencies, diagrams, implementation patterns, testing, deployment, and governance. Use when asked to create an architecture blueprint, document project architecture, map layers, produce C4/UML/component diagrams, or guide new development consistency.
+argument-hint: "PROJECT_TYPE, ARCHITECTURE_PATTERN, DIAGRAM_TYPE, DETAIL_LEVEL, and optional blueprint focus"
 ---
-# Comprehensive Project Architecture Blueprint Generator
 
-## Configuration Variables
-${PROJECT_TYPE="Auto-detect|.NET|Java|React|Angular|Python|Node.js|Flutter|Other"} <!-- Primary technology -->
-${ARCHITECTURE_PATTERN="Auto-detect|Clean Architecture|Microservices|Layered|MVVM|MVC|Hexagonal|Event-Driven|Serverless|Monolithic|Other"} <!-- Primary architectural pattern -->
-${DIAGRAM_TYPE="C4|UML|Flow|Component|None"} <!-- Architecture diagram type -->
-${DETAIL_LEVEL="High-level|Detailed|Comprehensive|Implementation-Ready"} <!-- Level of detail to include -->
-${INCLUDES_CODE_EXAMPLES=true|false} <!-- Include sample code to illustrate patterns -->
-${INCLUDES_IMPLEMENTATION_PATTERNS=true|false} <!-- Include detailed implementation patterns -->
-${INCLUDES_DECISION_RECORDS=true|false} <!-- Include architectural decision records -->
-${FOCUS_ON_EXTENSIBILITY=true|false} <!-- Emphasize extension points and patterns -->
+# Architecture blueprint generator
 
-## Generated Prompt
+Take a codebase and optional configuration variables, transform observed files, dependencies, imports, and runtime configuration into a grounded architecture blueprint, and output a `Project_Architecture_Blueprint.md` document that guides consistent maintenance and new development.
 
-"Create a comprehensive 'Project_Architecture_Blueprint.md' document that thoroughly analyzes the architectural patterns in the codebase to serve as a definitive reference for maintaining architectural consistency. Use the following approach:
+## When to invoke
 
-### 1. Architecture Detection and Analysis
-- ${PROJECT_TYPE == "Auto-detect" ? "Analyze the project structure to identify all technology stacks and frameworks in use by examining:
-  - Project and configuration files
-  - Package dependencies and import statements
-  - Framework-specific patterns and conventions
-  - Build and deployment configurations" : "Focus on ${PROJECT_TYPE} specific patterns and practices"}
-  
-- ${ARCHITECTURE_PATTERN == "Auto-detect" ? "Determine the architectural pattern(s) by analyzing:
-  - Folder organization and namespacing
-  - Dependency flow and component boundaries
-  - Interface segregation and abstraction patterns
-  - Communication mechanisms between components" : "Document how the ${ARCHITECTURE_PATTERN} architecture is implemented"}
+- "Generate a project architecture blueprint."
+- "Analyze this codebase and document its architecture."
+- "Create C4 diagrams and implementation patterns for this repo."
+- "Map layers, dependencies, and extension points."
+- "Write a blueprint for adding new features consistently."
 
-### 2. Architectural Overview
-- Provide a clear, concise explanation of the overall architectural approach
-- Document the guiding principles evident in the architectural choices
-- Identify architectural boundaries and how they're enforced
-- Note any hybrid architectural patterns or adaptations of standard patterns
+## Inputs
 
-### 3. Architecture Visualization
-${DIAGRAM_TYPE != "None" ? `Create ${DIAGRAM_TYPE} diagrams at multiple levels of abstraction:
-- High-level architectural overview showing major subsystems
-- Component interaction diagrams showing relationships and dependencies
-- Data flow diagrams showing how information moves through the system
-- Ensure diagrams accurately reflect the actual implementation, not theoretical patterns` : "Describe the component relationships based on actual code dependencies, providing clear textual explanations of:
-- Subsystem organization and boundaries
-- Dependency directions and component interactions
-- Data flow and process sequences"}
+Use `$ARGUMENTS` to set or infer these variables. Defaults are auto-detection and implementation-ready detail when the user does not specify values.
 
-### 4. Core Architectural Components
-For each architectural component discovered in the codebase:
+| Variable | Allowed values | Meaning |
+| --- | --- | --- |
+| `PROJECT_TYPE` | `Auto-detect`, `.NET`, `Java`, `React`, `Angular`, `Python`, `Node.js`, `Flutter`, `Other` | Primary technology stack to analyze. |
+| `ARCHITECTURE_PATTERN` | `Auto-detect`, `Clean Architecture`, `Microservices`, `Layered`, `MVVM`, `MVC`, `Hexagonal`, `Event-Driven`, `Serverless`, `Monolithic`, `Other` | Primary architecture pattern to confirm against the code. |
+| `DIAGRAM_TYPE` | `C4`, `UML`, `Flow`, `Component`, `None` | Diagram notation or textual relationship map. |
+| `DETAIL_LEVEL` | `High-level`, `Detailed`, `Comprehensive`, `Implementation-Ready` | Depth of evidence, examples, and guidance. |
+| `INCLUDES_CODE_EXAMPLES` | `true` or `false` | Include representative excerpts that show architectural patterns. |
+| `INCLUDES_IMPLEMENTATION_PATTERNS` | `true` or `false` | Document concrete service, repository, controller/API, interface, and domain model patterns. |
+| `INCLUDES_DECISION_RECORDS` | `true` or `false` | Extract apparent ADR-style decisions from the code and history only when evidence exists. |
+| `FOCUS_ON_EXTENSIBILITY` | `true` or `false` | Emphasize extension points, variation points, plugin mechanisms, and safe modification paths. |
 
-- **Purpose and Responsibility**:
-  - Primary function within the architecture
-  - Business domains or technical concerns addressed
-  - Boundaries and scope limitations
+Do not invent repository-specific decisions, diagrams, or runtime services. If evidence is absent, mark it as `Not observed` rather than filling theory.
 
-- **Internal Structure**:
-  - Organization of classes/modules within the component
-  - Key abstractions and their implementations
-  - Design patterns utilized
+## Procedure
 
-- **Interaction Patterns**:
-  - How the component communicates with others
-  - Interfaces exposed and consumed
-  - Dependency injection patterns
-  - Event publishing/subscription mechanisms
+1. Detect stacks from project files, package manifests, lockfiles, imports, namespaces, framework conventions, build configuration, deployment files, and test setup.
+2. Detect architecture by folder organization, dependency direction, component boundaries, interface or abstraction usage, communication mechanisms, and runtime composition.
+3. Build the blueprint from observed code, not idealized patterns. Every major claim should cite a file path, package, command, class, module, or configuration key.
+4. Create diagrams only when `DIAGRAM_TYPE` is not `None`; keep them consistent with observed dependencies and data flow.
+5. Document components, layers, data architecture, cross-cutting concerns, service communication, testing, deployment, extension guidance, and governance.
+6. When requested, include code examples, implementation patterns, and decision records only if the repository contains enough evidence.
+7. Produce `Project_Architecture_Blueprint.md` or paste-ready markdown when the user does not want a file.
 
-- **Evolution Patterns**:
-  - How the component can be extended
-  - Variation points and plugin mechanisms
-  - Configuration and customization approaches
+## Architecture detection
 
-### 5. Architectural Layers and Dependencies
-- Map the layer structure as implemented in the codebase
-- Document the dependency rules between layers
-- Identify abstraction mechanisms that enable layer separation
-- Note any circular dependencies or layer violations
-- Document dependency injection patterns used to maintain separation
+| Evidence | What to inspect | Blueprint conclusion |
+| --- | --- | --- |
+| Project files | `.csproj`, `pom.xml`, `build.gradle`, `package.json`, `pyproject.toml`, `requirements.txt`, `pubspec.yaml` | `PROJECT_TYPE`, frameworks, build and package boundaries. |
+| Dependencies and imports | DI containers, ORMs, routers, state libraries, messaging SDKs, test frameworks | Technology-specific architectural patterns. |
+| Folder structure | `src/`, `app/`, `domain/`, `application/`, `infrastructure/`, `controllers/`, `features/`, `components/`, `pages/` | Layered, Clean Architecture, MVC, MVVM, Hexagonal, feature-sliced, or monolithic tendencies. |
+| Runtime composition | `Program.cs`, application bootstrap, module registration, route registration, providers, middleware | Entry points, dependency injection, service boundaries. |
+| Communication | HTTP clients, queues, events, pub/sub, RPC, database calls | Synchronous vs asynchronous service communication. |
+| Deployment config | Dockerfiles, compose files, Helm charts, Bicep/Terraform, CI workflows, serverless config | Deployment topology and environment-specific adaptation. |
+| Tests | Unit, integration, system, e2e layouts; fixtures; mocks; test data | Testing architecture and boundary strategy. |
 
-### 6. Data Architecture
-- Document domain model structure and organization
-- Map entity relationships and aggregation patterns
-- Identify data access patterns (repositories, data mappers, etc.)
-- Document data transformation and mapping approaches
-- Note caching strategies and implementations
-- Document data validation patterns
+## Blueprint content
 
-### 7. Cross-Cutting Concerns Implementation
-Document implementation patterns for cross-cutting concerns:
+| Section | Required content |
+| --- | --- |
+| Architectural overview | Overall approach, guiding principles, boundaries, enforcement mechanisms, hybrid adaptations. |
+| Visualization | High-level overview, component interaction, data flow, or textual relationships when `DIAGRAM_TYPE=None`. |
+| Core components | Purpose, responsibility, internal structure, key abstractions, exposed and consumed interfaces, evolution patterns. |
+| Layers and dependencies | Layer map, dependency rules, abstraction mechanisms, circular dependencies, dependency injection patterns. |
+| Data architecture | Domain model, entities or aggregates, repository/data mapper patterns, transformations, caching, validation. |
+| Cross-cutting concerns | Authentication and authorization, error handling and resilience, logging and monitoring, validation, configuration, secrets, feature flags. |
+| Service communication | Boundaries, protocols, formats, API versioning, service discovery, retry, circuit breaker, fallback, graceful degradation. |
+| Technology-specific patterns | `.NET`, `Java`, `React`, `Angular`, `Python`, `Node.js`, `Flutter`, or other observed stack-specific practices. |
+| Testing architecture | Unit/integration/system/e2e boundaries, mocking, test doubles, test data, tools. |
+| Deployment architecture | Runtime topology, environment configuration, containers, orchestration, cloud services. |
+| Extension and evolution | Feature addition sequence, placement rules, adapter or anti-corruption layer patterns, backward compatibility, migration and deprecation. |
+| Architecture governance | Automated checks, review practices, documentation lifecycle, blueprint refresh guidance. |
+| Blueprint for new development | Starting points, component creation sequence, integration steps, implementation templates, common pitfalls. |
 
-- **Authentication & Authorization**:
-  - Security model implementation
-  - Permission enforcement patterns
-  - Identity management approach
-  - Security boundary patterns
+## Technology-specific prompts
 
-- **Error Handling & Resilience**:
-  - Exception handling patterns
-  - Retry and circuit breaker implementations
-  - Fallback and graceful degradation strategies
-  - Error reporting and monitoring approaches
+| Stack | Look for |
+| --- | --- |
+| `.NET` | Host and application model, middleware pipeline, `Program.cs`, dependency injection container, ORM, controllers, minimal APIs. |
+| `Java` | Spring/CDI bootstrap, AOP, transaction boundaries, ORM configuration, service implementation, module packaging. |
+| `React` | Component composition, state management, side effects, routing, data fetching, caching, rendering optimization. |
+| `Angular` | Module organization, component hierarchy, services, DI, RxJS/reactive patterns, route guards. |
+| `Python` | Module organization, dependency management, OOP vs functional style, framework integration, async patterns. |
+| `Node.js` | Package scripts, framework entry points, middleware, controllers/routes, background jobs, dependency injection or composition. |
+| `Flutter` | Widget hierarchy, state management, navigation, platform services, data layer, build flavors. |
 
-- **Logging & Monitoring**:
-  - Instrumentation patterns
-  - Observability implementation
-  - Diagnostic information flow
-  - Performance monitoring approach
+## Implementation pattern catalog
 
-- **Validation**:
-  - Input validation strategies
-  - Business rule validation implementation
-  - Validation responsibility distribution
-  - Error reporting patterns
+Include these only when `INCLUDES_IMPLEMENTATION_PATTERNS=true` or `DETAIL_LEVEL` is `Comprehensive` / `Implementation-Ready`.
 
-- **Configuration Management**:
-  - Configuration source patterns
-  - Environment-specific configuration strategies
-  - Secret management approach
-  - Feature flag implementation
+| Pattern area | Evidence to capture |
+| --- | --- |
+| Interface design | Interface segregation, abstraction level, generic vs specific interfaces, default implementations. |
+| Service implementation | Service lifetime, composition, operation templates, error handling inside services. |
+| Repository implementation | Query patterns, transaction management, concurrency handling, bulk operations. |
+| Controller/API implementation | Request handling, response formatting, parameter validation, API versioning. |
+| Domain model | Entities, value objects, domain events, business rule enforcement. |
+| Code examples | Concise excerpts for layer separation, component communication, dependency injection, event publication, plugin registration, and extension interfaces. |
 
-### 8. Service Communication Patterns
-- Document service boundary definitions
-- Identify communication protocols and formats
-- Map synchronous vs. asynchronous communication patterns
-- Document API versioning strategies
-- Identify service discovery mechanisms
-- Note resilience patterns in service communication
+## Criteria
 
-### 9. Technology-Specific Architectural Patterns
-${PROJECT_TYPE == "Auto-detect" ? "For each detected technology stack, document specific architectural patterns:" : `Document ${PROJECT_TYPE}-specific architectural patterns:`}
+- [ ] The blueprint is descriptive, not aspirational: every architectural claim is backed by observed code or explicitly marked as a recommendation.
+- [ ] Diagrams match actual components, dependencies, and data flow.
+- [ ] Cross-cutting concerns name concrete implementation files, libraries, middleware, interceptors, or configuration keys.
+- [ ] Extension guidance tells a future developer where to place new files and which dependencies are allowed.
+- [ ] Decision records are included only when the codebase or history supports context, factors, consequences, and alternatives.
 
-${(PROJECT_TYPE == ".NET" || PROJECT_TYPE == "Auto-detect") ? 
-"#### .NET Architectural Patterns (if detected)
-- Host and application model implementation
-- Middleware pipeline organization
-- Framework service integration patterns
-- ORM and data access approaches
-- API implementation patterns (controllers, minimal APIs, etc.)
-- Dependency injection container configuration" : ""}
+## Gotchas
 
-${(PROJECT_TYPE == "Java" || PROJECT_TYPE == "Auto-detect") ? 
-"#### Java Architectural Patterns (if detected)
-- Application container and bootstrap process
-- Dependency injection framework usage (Spring, CDI, etc.)
-- AOP implementation patterns
-- Transaction boundary management
-- ORM configuration and usage patterns
-- Service implementation patterns" : ""}
+- **Do not force a pattern label**: if the code is hybrid or inconsistent, say so and map the inconsistency.
+- **Do not confuse package structure with runtime boundaries**: verify imports, dependency injection, and calls.
+- **Do not over-diagram**: if the user selects `None`, produce clear textual component relationships instead.
+- **Do not include secrets**: describe secret management approach without pasting values.
 
-${(PROJECT_TYPE == "React" || PROJECT_TYPE == "Auto-detect") ? 
-"#### React Architectural Patterns (if detected)
-- Component composition and reuse strategies
-- State management architecture
-- Side effect handling patterns
-- Routing and navigation approach
-- Data fetching and caching patterns
-- Rendering optimization strategies" : ""}
+## Source compatibility terms
 
-${(PROJECT_TYPE == "Angular" || PROJECT_TYPE == "Auto-detect") ? 
-"#### Angular Architectural Patterns (if detected)
-- Module organization strategy
-- Component hierarchy design
-- Service and dependency injection patterns
-- State management approach
-- Reactive programming patterns
-- Route guard implementation" : ""}
+Retain these architecture-blueprint source terms when interpreting older generated prompts: `Document ${PROJECT_TYPE}-specific architectural patterns:`, `class/interface`, `classes/modules`, `off-the-shelf`, and `publishing/subscription`.
 
-${(PROJECT_TYPE == "Python" || PROJECT_TYPE == "Auto-detect") ? 
-"#### Python Architectural Patterns (if detected)
-- Module organization approach
-- Dependency management strategy
-- OOP vs. functional implementation patterns
-- Framework integration patterns
-- Asynchronous programming approach" : ""}
+## Output template
 
-### 10. Implementation Patterns
-${INCLUDES_IMPLEMENTATION_PATTERNS ? 
-"Document concrete implementation patterns for key architectural components:
+```markdown
+# Project Architecture Blueprint
 
-- **Interface Design Patterns**:
-  - Interface segregation approaches
-  - Abstraction level decisions
-  - Generic vs. specific interface patterns
-  - Default implementation patterns
+**Generated:** <date>
+**Scope:** <repository or directories>
+**PROJECT_TYPE:** <value>
+**ARCHITECTURE_PATTERN:** <value>
+**DIAGRAM_TYPE:** <value>
+**DETAIL_LEVEL:** <value>
 
-- **Service Implementation Patterns**:
-  - Service lifetime management
-  - Service composition patterns
-  - Operation implementation templates
-  - Error handling within services
+## Executive summary
+<one-paragraph architecture summary grounded in observed evidence>
 
-- **Repository Implementation Patterns**:
-  - Query pattern implementations
-  - Transaction management
-  - Concurrency handling
-  - Bulk operation patterns
+## Architecture detection
+| Evidence | Finding | Source |
+| --- | --- | --- |
+| `<file or dependency>` | `<stack or pattern inference>` | `<path>` |
 
-- **Controller/API Implementation Patterns**:
-  - Request handling patterns
-  - Response formatting approaches
-  - Parameter validation
-  - API versioning implementation
+## Architectural overview
+<principles, boundaries, and hybrid patterns>
 
-- **Domain Model Implementation**:
-  - Entity implementation patterns
-  - Value object patterns
-  - Domain event implementation
-  - Business rule enforcement" : "Mention that detailed implementation patterns vary across the codebase."}
+## Architecture visualization
+```mermaid
+<diagram or "Diagram omitted because DIAGRAM_TYPE=None">
+```
 
-### 11. Testing Architecture
-- Document testing strategies aligned with the architecture
-- Identify test boundary patterns (unit, integration, system)
-- Map test doubles and mocking approaches
-- Document test data strategies
-- Note testing tools and frameworks integration
+## Core architectural components
+| Component | Responsibility | Key files | Interfaces consumed/exposed | Extension points |
+| --- | --- | --- | --- | --- |
 
-### 12. Deployment Architecture
-- Document deployment topology derived from configuration
-- Identify environment-specific architectural adaptations
-- Map runtime dependency resolution patterns
-- Document configuration management across environments
-- Identify containerization and orchestration approaches
-- Note cloud service integration patterns
+## Layers and dependencies
+<dependency rules, violations, and enforcement>
 
-### 13. Extension and Evolution Patterns
-${FOCUS_ON_EXTENSIBILITY ? 
-"Provide detailed guidance for extending the architecture:
+## Data architecture
+<domain model, persistence, validation, caching, transformations>
 
-- **Feature Addition Patterns**:
-  - How to add new features while preserving architectural integrity
-  - Where to place new components by type
-  - Dependency introduction guidelines
-  - Configuration extension patterns
+## Cross-cutting concerns
+<auth, error handling, resilience, logging, monitoring, validation, configuration>
 
-- **Modification Patterns**:
-  - How to safely modify existing components
-  - Strategies for maintaining backward compatibility
-  - Deprecation patterns
-  - Migration approaches
+## Service communication patterns
+<protocols, sync/async flows, API versioning, discovery, resilience>
 
-- **Integration Patterns**:
-  - How to integrate new external systems
-  - Adapter implementation patterns
-  - Anti-corruption layer patterns
-  - Service facade implementation" : "Document key extension points in the architecture."}
+## Technology-specific patterns
+<stack-specific observations>
 
-${INCLUDES_CODE_EXAMPLES ? 
-"### 14. Architectural Pattern Examples
-Extract representative code examples that illustrate key architectural patterns:
+## Testing architecture
+<test boundaries, tools, fixtures, test data>
 
-- **Layer Separation Examples**:
-  - Interface definition and implementation separation
-  - Cross-layer communication patterns
-  - Dependency injection examples
+## Deployment architecture
+<topology and environment-specific behavior>
 
-- **Component Communication Examples**:
-  - Service invocation patterns
-  - Event publication and handling
-  - Message passing implementation
+## Extension and evolution patterns
+<feature addition, modification, integration, migration guidance>
 
-- **Extension Point Examples**:
-  - Plugin registration and discovery
-  - Extension interface implementations
-  - Configuration-driven extension patterns
+## Architecture governance
+<automated checks, review process, documentation maintenance>
 
-Include enough context with each example to show the pattern clearly, but keep examples concise and focused on architectural concepts." : ""}
+## Blueprint for new development
+<workflow, placement rules, templates, pitfalls>
 
-${INCLUDES_DECISION_RECORDS ? 
-"### 15. Architectural Decision Records
-Document key architectural decisions evident in the codebase:
+## Open questions and recommendations
+| Topic | Evidence gap | Recommendation |
+| --- | --- | --- |
+```
 
-- **Architectural Style Decisions**:
-  - Why the current architectural pattern was chosen
-  - Alternatives considered (based on code evolution)
-  - Constraints that influenced the decision
+## Quality gate
 
-- **Technology Selection Decisions**:
-  - Key technology choices and their architectural impact
-  - Framework selection rationales
-  - Custom vs. off-the-shelf component decisions
-
-- **Implementation Approach Decisions**:
-  - Specific implementation patterns chosen
-  - Standard pattern adaptations
-  - Performance vs. maintainability tradeoffs
-
-For each decision, note:
-- Context that made the decision necessary
-- Factors considered in making the decision
-- Resulting consequences (positive and negative)
-- Future flexibility or limitations introduced" : ""}
-
-### ${INCLUDES_DECISION_RECORDS ? "16" : INCLUDES_CODE_EXAMPLES ? "15" : "14"}. Architecture Governance
-- Document how architectural consistency is maintained
-- Identify automated checks for architectural compliance
-- Note architectural review processes evident in the codebase
-- Document architectural documentation practices
-
-### ${INCLUDES_DECISION_RECORDS ? "17" : INCLUDES_CODE_EXAMPLES ? "16" : "15"}. Blueprint for New Development
-Create a clear architectural guide for implementing new features:
-
-- **Development Workflow**:
-  - Starting points for different feature types
-  - Component creation sequence
-  - Integration steps with existing architecture
-  - Testing approach by architectural layer
-
-- **Implementation Templates**:
-  - Base class/interface templates for key architectural components
-  - Standard file organization for new components
-  - Dependency declaration patterns
-  - Documentation requirements
-
-- **Common Pitfalls**:
-  - Architecture violations to avoid
-  - Common architectural mistakes
-  - Performance considerations
-  - Testing blind spots
-
-Include information about when this blueprint was generated and recommendations for keeping it updated as the architecture evolves."
+- [ ] `PROJECT_TYPE`, `ARCHITECTURE_PATTERN`, `DIAGRAM_TYPE`, `DETAIL_LEVEL`, `INCLUDES_CODE_EXAMPLES`, `INCLUDES_IMPLEMENTATION_PATTERNS`, `INCLUDES_DECISION_RECORDS`, and `FOCUS_ON_EXTENSIBILITY` are honored or explicitly defaulted.
+- [ ] The output includes concrete source paths, package names, commands, or configuration keys as evidence.
+- [ ] No repository-specific fact is invented when evidence is missing.
+- [ ] Optional code examples and decision records appear only when requested and supported.
+- [ ] The delivered artifact is `Project_Architecture_Blueprint.md` or paste-ready markdown with the same structure.

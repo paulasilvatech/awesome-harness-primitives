@@ -1,114 +1,52 @@
 ---
-name: "efcore-d2-db-diagram"
+name: efcore-d2-db-diagram
 description: >-
-  Generate D2 database diagrams from Entity Framework Core models. Use this skill when the user wants
-  to generate a database / ERD diagram from an Entity Framework Core codebase; typical requests;
-  generate a D2 database diagram from EF Core entities.
+  Generates D2 entity-relationship diagrams from Entity Framework Core models by extracting DbContext, DbSet<T>, entity configuration, migrations, keys, foreign keys, owned types, many-to-many joins, indexes, schemas, and technical tables. Use this skill when asked to generate a database diagram, ERD, .d2 file, SVG, or PNG from an EF Core or ASP.NET Core codebase.
 ---
-# EF Core D2 Database Diagram Generator
 
-## When to Use
+# EF Core D2 database diagram
 
-Use this skill when the user wants to generate a database / ERD diagram from an Entity Framework Core codebase.
+Create a readable D2 entity-relationship diagram that reflects the actual EF Core persistence model, not only raw C# class shape. Generate `.d2` source and, when possible, validate and render it with the `d2` CLI to `SVG/PNG`. Keep installed package layouts centered on `SKILL.md`; if documenting installation, mention `SKILL.md` plus references. SVG/PNG.
 
-Typical requests:
+## When to invoke
 
-- Generate a D2 database diagram from EF Core entities.
-- Visualize tables, columns, primary keys, foreign keys and relationships.
-- Analyze `DbContext`, `DbSet<T>`, `IEntityTypeConfiguration<T>`, Fluent API and migrations.
-- Produce a `.d2` file renderable to SVG/PNG with the `d2` CLI.
-- Document the database model of an ASP.NET Core / .NET project.
+- "Generate a D2 database diagram from EF Core entities."
+- "Create an ERD from this DbContext."
+- "Visualize tables, columns, primary keys, foreign keys, and relationships."
+- "Analyze DbSet<T>, IEntityTypeConfiguration<T>, Fluent API, and migrations."
+- "Produce a .d2 file renderable to SVG or PNG."
 
-## Goal
+## Prerequisites and context
 
-Create a readable D2 entity-relationship diagram that reflects the actual EF Core persistence model, not only the raw C# class shape.
+- Use the `d2` CLI when available: `d2 input.d2 output.svg`, `d2 --layout=elk input.d2 output.svg`, and `d2 fmt input.d2`.
+- No MCP server is required; the skill generates D2 source code as text.
+- Ask the diagram questionnaire before generation or regeneration unless the user already answered it in the same request.
 
-The diagram must prioritize:
+## Diagram questionnaire
 
-1. Database tables and relationships.
-2. Primary keys, foreign keys, required/optional columns.
-3. Owned types and value objects.
-4. Many-to-many relationships and join tables.
-5. Indexes, unique constraints and table names.
-6. EF Core conventions only when explicit mapping is absent.
+Ask every question for new diagrams and regenerations. For quick generation, use the defaults.
 
-Output is `.d2` source code. It can be rendered to SVG or PNG via the `d2` CLI.
+| Question | Default |
+| --- | --- |
+| `Which DbContext should be diagrammed? (auto-detect/all/specific name)` | `auto-detect` |
+| `Display columns? (all/key-only/none)` | `key-only` |
+| `Display column types? (Yes/No)` | `Yes` |
+| `Display nullable/required markers? (Yes/No)` | `Yes` |
+| `Required/optional relationship notation? (Yes/No)` | `Yes` |
+| `Display indexes and unique constraints? (Yes/No)` | `Yes` |
+| `Display enum values? (Yes/No)` | `No` |
+| `Display owned types? (inline/separate/hide)` | `inline` |
+| `Display many-to-many join tables? (explicit/compact/hide)` | `explicit` |
+| `Display audit/technical tables? (Yes/No)` | `No` |
+| `Audit/technical table summary? (Yes/No)` | `Yes` |
+| `Display migration-only tables not present as entities? (Yes/No)` | `Yes` |
+| `Which grouping mode? (bounded-context/schema/namespace/flat)` | `bounded-context` |
+| `Which layout engine? (elk/dagre/tala)` | `elk` |
+| `Which output format? (d2/svg/png)` | `d2` |
 
-## Tools
+## EF Core extraction rules
 
-- **d2 CLI**: render `.d2` files to SVG/PNG.
-  - `d2 input.d2 output.svg`
-  - `d2 --layout=elk input.d2 output.svg`
-- **d2 fmt**: format D2 files.
-  - `d2 fmt input.d2`
-- No MCP server is required. The skill generates D2 source code as text.
-
-## Recommended Workflow
-
-1. Read the EF Core project structure.
-2. Locate all `DbContext` classes.
-3. Locate all `DbSet<T>` declarations.
-4. Locate entity classes, owned types, enum types and value objects.
-5. Read `OnModelCreating` and all `IEntityTypeConfiguration<T>` classes.
-6. Read migrations when available to confirm table names, join tables, indexes and delete behaviors.
-7. Build a normalized database model before writing D2.
-8. Ask the mandatory diagram questionnaire before generation.
-9. Generate the `.d2` file using the database model, not raw class nesting.
-10. Validate D2 syntax with `d2 fmt` before delivery.
-11. Render with `d2 --layout=elk schema.d2 schema.svg` when possible.
-12. If regenerating, re-read EF Core mappings and migrations first.
-
-## Mandatory Questions Before Diagram Generation
-
-Ask these questions for every new diagram and every regeneration unless the user already answered them in the same request.
-
-1. `Which DbContext should be diagrammed? (auto-detect/all/specific name)`
-2. `Display columns? (all/key-only/none)`
-3. `Display column types? (Yes/No)`
-4. `Display nullable/required markers? (Yes/No)`
-5. `Display indexes and unique constraints? (Yes/No)`
-6. `Display enum values? (Yes/No)`
-7. `Display owned types? (inline/separate/hide)`
-8. `Display many-to-many join tables? (explicit/compact/hide)`
-9. `Display audit/technical tables? (Yes/No)`
-10. `Display migration-only tables not present as entities? (Yes/No)`
-11. `Which grouping mode? (bounded-context/schema/namespace/flat)`
-12. `Which layout engine? (elk/dagre/tala)`
-13. `Which output format? (d2/svg/png)`
-
-Default values, when the user asks for a quick generation:
-
-- DbContext: `auto-detect`
-- Columns: `key-only`
-- Column types: `Yes`
-- Nullable markers: `Yes`
-- Indexes: `Yes`
-- Enums: `No`
-- Owned types: `inline`
-- Join tables: `explicit`
-- Audit/technical tables: `No`
-- Migration-only tables: `Yes`
-- Grouping: `bounded-context`
-- Layout: `elk`
-- Output: `d2`
-
-## Reference Documents
-
-Load these on demand when needed:
-
-| Reference | When to load |
-|---|---|
-| `references/efcore-model-extraction.md` | Rules for reading DbContext, DbSet, Fluent API, configurations and migrations |
-| `references/d2-erd-style.md` | D2 syntax and visual conventions for ERD diagrams |
-| `references/relationship-rules.md` | How to infer one-to-one, one-to-many, many-to-many and owned relationships |
-| `references/grouping-modes.md` | Rules for bounded-context, schema, namespace and flat grouping |
-| `references/quality-gate.md` | Final checklist before delivering the generated diagram |
-
-## EF Core Extraction Rules
-
-### Source Priority
-
-Use this priority order when sources disagree:
+Use this source priority when sources disagree:
 
 1. Latest applied migration / migration snapshot.
 2. Fluent API configuration in `OnModelCreating` or `IEntityTypeConfiguration<T>`.
@@ -116,34 +54,20 @@ Use this priority order when sources disagree:
 4. EF Core conventions.
 5. Raw C# class shape.
 
-### Required EF Core Concepts to Detect
+Detect and represent these EF Core concepts:
 
-Detect and represent:
+| Concept | Required extraction |
+| --- | --- |
+| Context and entities | `DbContext`, `DbSet<T>`, entity class names, actual table names from `ToTable`, schema names from `ToTable("Table", "schema")`. |
+| Keys | Primary keys from `HasKey`, `[Key]`, conventions, migrations, composite keys, and `HasAlternateKey`. |
+| Relationships | Foreign keys from `HasForeignKey`, navigation properties, migration operations, required/optional markers, and delete behavior: `Cascade`, `Restrict`, `NoAction`, `SetNull`, `ClientSetNull`. |
+| Owned/value objects | `OwnsOne`, `OwnsMany`, `[Owned]`, inline/separate/hide rendering choice. |
+| Many-to-many | `UsingEntity` and implicit EF Core join tables; default to explicit join tables. |
+| Constraints and columns | `HasIndex`, `IsUnique`, shadow properties, value conversions, enum properties, ignored properties, and ignored entities. |
 
-- `DbContext` and `DbSet<T>`.
-- Entity class names and actual table names from `ToTable`.
-- Schema names from `ToTable("Table", "schema")`.
-- Primary keys from `HasKey`, `[Key]`, conventions and migrations.
-- Composite keys.
-- Foreign keys from `HasForeignKey`, navigation properties and migration operations.
-- Delete behavior when explicit: `Cascade`, `Restrict`, `NoAction`, `SetNull`, `ClientSetNull`.
-- Required/optional relationship markers.
-- Owned types from `OwnsOne`, `OwnsMany` and `[Owned]`.
-- Many-to-many relationships from `UsingEntity` and implicit EF Core join tables.
-- Indexes from `HasIndex`, `IsUnique` and migrations.
-- Alternate keys from `HasAlternateKey`.
-- Shadow properties configured in Fluent API.
-- Value conversions when they affect persisted type or readability.
-- Enum properties.
-- Ignored properties and ignored entities.
-
-## Diagram Rendering Rules
-
-### Tables
+## D2 rendering rules
 
 Represent each persisted table as a D2 node with `shape: sql_table` when possible.
-
-Use this content convention:
 
 ```d2
 Clients: {
@@ -155,31 +79,15 @@ Clients: {
 }
 ```
 
-If `sql_table` is unavailable or causes validation issues, fallback to a rectangle with structured text.
-
-### Relationships
-
-Use directional edges from dependent table to principal table.
-
-Labels must include relationship cardinality and FK name when known:
+If `sql_table` is unavailable or causes validation issues, use a rectangle with structured text. Draw directional edges from dependent table to principal table, and include cardinality and FK name when known.
 
 ```d2
 Offers.ClientId -> Clients.Id: "N:1 FK_Offers_Clients_ClientId"
 ```
 
-Use these cardinality labels:
+Use cardinality labels `1:1`, `1:N`, `N:1`, `N:N`, and `owned`. Required relationships use solid lines; optional relationships use dashed lines; cascade delete labels end with `cascade`.
 
-- `1:1`
-- `1:N`
-- `N:1`
-- `N:N`
-- `owned`
-
-### Owned Types
-
-Owned types default to inline rendering.
-
-Inline example:
+Owned types default to inline rendering:
 
 ```d2
 Clients: {
@@ -191,85 +99,94 @@ Clients: {
 }
 ```
 
-If the user chooses `separate`, represent owned types as visually subordinate tables and use an `owned` relationship.
+When the user chooses `separate`, represent owned types as visually subordinate tables and use an `owned` relationship. For implicit many-to-many relationships, create a generated join table node and mark it as `implicit join`.
 
-### Many-to-Many
+## Grouping and style
 
-Default to explicit join tables because EF Core creates real tables.
+| Mode | Rule |
+| --- | --- |
+| `bounded-context` | Group by detected domain area or folder/module. |
+| `schema` | Group by database schema such as `public`, `auth`, or `billing`. |
+| `namespace` | Group by C# namespace. |
+| `flat` | Use no containers; all tables at the same level. |
 
-For implicit many-to-many relationships, create a generated join table node and mark it as `implicit join`.
+| Element | Style |
+| --- | --- |
+| Primary entity tables | Solid border. |
+| Join tables | Dashed border. |
+| Owned types | Lighter stroke or nested inline fields. |
+| Technical tables | Muted style. |
+| External or migration-only tables | Dotted border. |
 
-### Technical Tables
+Hide technical tables by default unless requested. Examples include `__EFMigrationsHistory`, Hangfire tables, ASP.NET Identity tables, audit logs, and outbox tables. If hidden, list them in the summary.
 
-Hide technical tables by default unless requested.
+## Procedure
 
-Examples:
+1. Read the EF Core project structure.
+2. Locate all `DbContext` classes.
+3. Locate all `DbSet<T>` declarations.
+4. Locate entity classes, owned types, enum types, and value objects.
+5. Read `OnModelCreating` and all `IEntityTypeConfiguration<T>` classes.
+6. Read migrations when available to confirm table names, join tables, indexes, and delete behaviors.
+7. Build a normalized database model before writing D2.
+8. Ask the mandatory diagram questionnaire before generation.
+9. Generate the `.d2` file from the database model, not raw class nesting.
+10. Validate D2 syntax with `d2 fmt` before delivery.
+11. Render with `d2 --layout=elk schema.d2 schema.svg` when possible.
+12. If regenerating, re-read EF Core mappings and migrations first.
 
-- `__EFMigrationsHistory`
-- Hangfire tables
-- ASP.NET Identity tables
-- Audit logs
-- Outbox tables
+## Progressive disclosure and bundled resources
 
-If technical tables are hidden, mention them in the summary after the diagram.
+Load bundled references on demand:
 
-## Grouping Modes
+- `references/efcore-model-extraction.md`: rules for reading `DbContext`, `DbSet`, Fluent API, configurations, and migrations.
+- `references/d2-erd-style.md`: D2 syntax and visual conventions for ERD diagrams.
+- `references/relationship-rules.md`: how to infer one-to-one, one-to-many, many-to-many, and owned relationships.
+- `references/grouping-modes.md`: rules for `bounded-context`, `schema`, `namespace`, and `flat` grouping.
+- `references/quality-gate.md`: final checklist before delivering the generated diagram.
 
-- `bounded-context`: group by detected domain area or folder/module.
-- `schema`: group by database schema, e.g. `public`, `auth`, `billing`.
-- `namespace`: group by C# namespace.
-- `flat`: no containers, all tables at the same level.
+## Output template
 
-## Style Rules
+````markdown
+## EF Core D2 diagram — <DbContext or scope>
 
-Use consistent styles:
+**Status:** generated | needs answers | blocked
+**Selected DbContext:** <auto-detect/all/name>
+**Output format:** d2 | svg | png
+**Layout:** elk | dagre | tala
 
-- Primary entity tables: solid border.
-- Join tables: dashed border.
-- Owned types: lighter stroke or nested inline fields.
-- Technical tables: muted style.
-- External tables or migration-only tables: dotted border.
-- Required relationships: solid line.
-- Optional relationships: dashed line.
-- Cascade delete: label suffix `cascade`.
-
-## Quality Gate Before Delivery
-
-Before delivering the diagram, verify:
-
-- [ ] The selected DbContext is clear.
-- [ ] All `DbSet<T>` entities are considered.
-- [ ] Fluent API configurations are read.
-- [ ] Migrations are checked when present.
-- [ ] Table names and schema names match EF Core mapping.
-- [ ] Primary keys are present.
-- [ ] Foreign keys and cardinalities are represented.
-- [ ] Owned types are handled according to user choice.
-- [ ] Many-to-many join tables are explicit unless the user asked otherwise.
-- [ ] Hidden technical tables are listed in the final summary.
-- [ ] D2 syntax is valid with `d2 fmt`.
-- [ ] Edge endpoints use full dot-notation when inside containers.
-- [ ] The diagram remains readable and avoids crossing-heavy layouts.
-
-## Output Format
-
-When the user asks for a skill installation, provide this folder structure:
-
-```text
-.github/
-  skills/
-    efcore-d2-db-diagram/
-      SKILL.md
-      references/
-        efcore-model-extraction.md
-        d2-erd-style.md
-        relationship-rules.md
-        grouping-modes.md
-        quality-gate.md
+### D2 source
+```d2
+<schema.d2 content>
 ```
 
-When the user asks to generate a diagram, provide:
+### Render command
+```bash
+d2 --layout=elk schema.d2 schema.svg
+```
 
-1. The `.d2` source file content.
-2. The render command using the selected layout engine.
-3. A concise summary of assumptions and hidden tables.
+### Assumptions and hidden tables
+- Columns: all | key-only | none
+- Owned types: inline | separate | hide
+- Many-to-many join tables: explicit | compact | hide
+- Hidden technical tables: `__EFMigrationsHistory`, <others or none>
+
+### Validation
+- `d2 fmt schema.d2`: pass | fail | not run
+- EF Core mappings read: migrations, Fluent API, annotations, conventions
+````
+
+## Quality gate
+
+- [ ] The selected `DbContext` is clear.
+- [ ] All `DbSet<T>` entities are considered.
+- [ ] Fluent API configurations in `OnModelCreating` and `IEntityTypeConfiguration<T>` are read.
+- [ ] Migrations are checked when present.
+- [ ] Table names and schema names match EF Core mapping.
+- [ ] Primary keys, foreign keys, cardinalities, optional/required markers, and delete behavior are represented.
+- [ ] Owned types follow the user’s `inline`, `separate`, or `hide` choice.
+- [ ] Many-to-many join tables are explicit unless the user asked otherwise.
+- [ ] Hidden technical tables are listed in the final summary.
+- [ ] D2 syntax is valid with `d2 fmt` when the CLI is available.
+- [ ] Edge endpoints use full dot-notation when inside containers.
+- [ ] The diagram remains readable and avoids crossing-heavy layouts.

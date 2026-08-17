@@ -7,21 +7,22 @@ description: >-
   working with .bat/.cmd files in the workspace. Covers cmd.exe syntax, environment variables, control
   flow, string processing, error handling, and integration with system tools.
 ---
-# Batch Files
+
+# Batch files
 
 A comprehensive skill for creating, editing, debugging, and maintaining Windows batch files (.bat/.cmd) using cmd.exe. Applies to CLI tool development, system administration automation, scheduled tasks, file operations scripting, and PATH-based executable scripts.
 
-## When to Use This Skill
+## When to invoke
 
-- Creating or editing `.bat` or `.cmd` files
-- Automating Windows tasks (file operations, deployments, backups)
-- Building CLI tools intended for a `bin/` folder on PATH
-- Writing scheduled task scripts (SCHTASKS, Task Scheduler)
-- Debugging batch script issues (variable expansion, error levels, quoting)
-- Integrating batch scripts with external tools (curl, git, Node.js, Python)
-- Scaffolding new batch-based projects with structured templates
+- "Create or edit a `.bat` or `.cmd` file."
+- "Automate a Windows task with cmd.exe."
+- "Build a batch CLI tool for a `bin/` folder on PATH."
+- "Write a scheduled task script for SCHTASKS or Task Scheduler."
+- "Debug batch variable expansion, error levels, or quoting."
+- "Integrate a batch script with curl, git, Node.js, or Python."
+- "Scaffold a batch-based project from templates."
 
-## Prerequisites
+## Prerequisites and context
 
 - Windows NT-based OS (Windows 7 or later)
 - cmd.exe (built-in)
@@ -284,11 +285,11 @@ exit /b 1        & REM Return failure
 cmd /c "exit /b 42"   & REM Set ERRORLEVEL to 42 inline
 ```
 
-## Bundled Resources
+## Progressive disclosure and bundled resources
 
 - [Batch command reference and production guidance](references/cmd-reference-and-production.md) — For command syntax tables, production hardening, troubleshooting, or cross-platform notes, consult this reference.
 
-## Reference Files
+## Reference files
 
 The `references/` folder contains detailed documentation:
 
@@ -301,7 +302,7 @@ The `references/` folder contains detailed documentation:
 | `msys2.md` | MSYS2 installation, packages, and environments |
 | `windows-subsystem-on-linux.md` | WSL setup, commands, and documentation |
 
-## Asset Templates
+## Asset templates
 
 The `assets/` folder contains starter batch file template data, but as text files:
 
@@ -310,3 +311,38 @@ The `assets/` folder contains starter batch file template data, but as text file
 | `executable.txt` | Standalone CLI tool with argument parsing |
 | `library.txt` | Reusable function library with CALL-able labels |
 | `task.txt` | Scheduled task / automation script |
+
+## Output template
+
+```markdown
+## Batch file result
+
+**Status:** created | updated | reviewed | blocked
+**Files:** `<script.bat or script.cmd>`
+**Target shell:** `cmd.exe`
+
+### Script contract
+| Area | Decision | Evidence |
+| --- | --- | --- |
+| Arguments | `%0`, `%1`-`%9`, `%*`, `SHIFT`, `%~dp0` | <summary> |
+| Variables | `%VAR%` immediate, `!VAR!` delayed, `setlocal`/`endlocal` | <summary> |
+| Control flow | `if`, `for`, `goto :eof`, `call :label` | <summary> |
+| Error handling | `%ERRORLEVEL%`, `&&`, `||`, `exit /b` | <summary> |
+| Redirection | `>`, `>>`, `<`, `2>`, `2>&1`, `>NUL` | <summary> |
+
+### Validation
+- Syntax reviewed for quoting, escaping, and delayed expansion: pass | fail
+- Exit codes propagate correctly: pass | fail
+- Paths with spaces are quoted: pass | fail
+```
+
+## Quality gate
+
+- [ ] The script targets Windows `cmd.exe` and uses `.bat` or `.cmd` conventions.
+- [ ] Variables use `set "NAME=value"` style where quoting matters and avoid spaces around `=`.
+- [ ] Parenthesized blocks use `setlocal EnableDelayedExpansion` and `!VAR!` when runtime values are needed.
+- [ ] Arguments are read with `%~1`, `%~f1`, `%~dp0`, `%~nx0`, `%*`, or `SHIFT` as appropriate.
+- [ ] `for` variables use `%%i` in batch files and escape piped commands with `^|` inside `for /f`.
+- [ ] Paths and user inputs are quoted to survive spaces and special characters.
+- [ ] Failures return non-zero `exit /b` codes and preserve meaningful `%ERRORLEVEL%`.
+- [ ] Bundled `references/` and `assets/` files are consulted only when their deeper detail or template content is needed.

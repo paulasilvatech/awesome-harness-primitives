@@ -1,298 +1,164 @@
 ---
-name: "project-workflow-analysis-blueprint-generator"
+name: project-workflow-analysis-blueprint-generator
 description: >-
-  Comprehensive technology-agnostic prompt generator for documenting end-to-end application workflows.
-  Automatically detects project architecture patterns, technology stacks, and data flow patterns to
-  generate detailed implementation blueprints covering entry points, service layers, data access,
-  error handling, and testing approaches across multiple technologies including .NET, Java/Spring,
-  React, and microservices architectures. Use this skill when list all files/classes involved in the
-  complete workflow.
+  Generate technology-agnostic project workflow analysis blueprints that document end-to-end application flows, files, classes, entry points, service layers, data access, error handling, async processing, sequence diagrams, testing patterns, and implementation templates. Use this skill when the user asks to list all files/classes in a workflow, document representative workflows, map an API-to-database flow, or create an implementation-ready workflow blueprint.
 ---
-# Project Workflow Documentation Generator
 
-## Configuration Variables
+# Project workflow analysis blueprint generator
 
-```
-${PROJECT_TYPE="Auto-detect|.NET|Java|Spring|Node.js|Python|React|Angular|Microservices|Other"}
-<!-- Primary technology stack -->
+Generate a reusable analysis prompt that makes GitHub Copilot inspect a codebase and document representative end-to-end workflows as implementation blueprints grounded in actual files, classes, methods, data paths, error handling, and tests.
 
-${ENTRY_POINT="API|GraphQL|Frontend|CLI|Message Consumer|Scheduled Job|Custom"}
-<!-- Starting point for the flow -->
+## When to invoke
 
-${PERSISTENCE_TYPE="Auto-detect|SQL Database|NoSQL Database|File System|External API|Message Queue|Cache|None"}
-<!-- Data storage type -->
+- "List all files and classes involved in this workflow."
+- "Document the end-to-end API flow for this feature."
+- "Generate a workflow blueprint for this project."
+- "Map the service, repository, data access, and test patterns."
+- "Create implementation templates based on existing workflows."
 
-${ARCHITECTURE_PATTERN="Auto-detect|Layered|Clean|CQRS|Microservices|MVC|MVVM|Serverless|Event-Driven|Other"}
-<!-- Primary architecture pattern -->
+## Configuration variables
 
-${WORKFLOW_COUNT=1-5}
-<!-- Number of workflows to document -->
+Preserve these variables in the generated blueprint when the user supplies them; otherwise use the defaults and tell the downstream agent to auto-detect.
 
-${DETAIL_LEVEL="Standard|Implementation-Ready"}
-<!-- Level of implementation detail to include -->
+| Variable | Values | Purpose |
+| --- | --- | --- |
+| `${PROJECT_TYPE}` | `Auto-detect`, `.NET`, `Java`, `Spring`, `Node.js`, `Python`, `React`, `Angular`, `Microservices`, `Other` | Primary technology stack. |
+| `${ENTRY_POINT}` | `API`, `GraphQL`, `Frontend`, `CLI`, `Message Consumer`, `Scheduled Job`, `Custom` | Starting point for the flow. |
+| `${PERSISTENCE_TYPE}` | `Auto-detect`, `SQL Database`, `NoSQL Database`, `File System`, `External API`, `Message Queue`, `Cache`, `None` | Data storage or external persistence mechanism. |
+| `${ARCHITECTURE_PATTERN}` | `Auto-detect`, `Layered`, `Clean`, `CQRS`, `Microservices`, `MVC`, `MVVM`, `Serverless`, `Event-Driven`, `Other` | Primary architecture pattern. |
+| `${WORKFLOW_COUNT}` | `1-5` | Number of representative workflows to document. |
+| `${DETAIL_LEVEL}` | `Standard`, `Implementation-Ready` | Depth of implementation detail. |
+| `${INCLUDE_SEQUENCE_DIAGRAM}` | `true`, `false` | Whether to generate a sequence diagram. |
+| `${INCLUDE_TEST_PATTERNS}` | `true`, `false` | Whether to include testing approach. |
 
-${INCLUDE_SEQUENCE_DIAGRAM=true|false}
-<!-- Generate sequence diagram -->
+## Detection rules
 
-${INCLUDE_TEST_PATTERNS=true|false}
-<!-- Include testing approach -->
-```
+| Area | Auto-detect evidence |
+| --- | --- |
+| Technology | `.sln`, `*.csproj`, `pom.xml`, `build.gradle`, `package.json`, `requirements.txt`, `pyproject.toml`, React/Angular config, Dockerfiles, and service manifests. |
+| Entry points | API controllers or route definitions, GraphQL resolvers, UI components that initiate requests, CLI commands, message handlers, event subscribers, scheduled jobs. |
+| Persistence | `DbContext`, connection configuration, repository implementations, ORM mappings, SQL files, document-store clients, external API clients, queue producers/consumers, cache clients, file-system paths. |
+| Architecture | Folder structure, dependency direction, naming conventions, interfaces, use cases/interactors, CQRS handlers, MVC/MVVM components, service boundaries, event-driven adapters. |
 
-## Generated Prompt
+## Workflow blueprint content
 
-```
-"Analyze the codebase and document ${WORKFLOW_COUNT} representative end-to-end workflows 
-that can serve as implementation templates for similar features. Use the following approach:
-```
+For each of the `${WORKFLOW_COUNT}` most representative workflows, require these sections.
 
-### Initial Detection Phase
+| Section | Required detail |
+| --- | --- |
+| Workflow overview | Name, business purpose, trigger action/event, and all files/classes involved in the complete workflow. |
+| Entry point implementation | Controller/route/resolver/component/handler/job class and method; complete signature; attributes or annotations; request DTO/model; validation; authentication/authorization. |
+| Service layer implementation | Service classes, dependencies, interfaces, method signatures, return types, key business logic, dependency injection registration. |
+| Data mapping patterns | DTO-to-domain mapping, mapper configuration or manual methods, validation during mapping, domain events. |
+| Data access implementation | Repository interfaces and implementations, query methods, entity/model definitions, transaction handling, ORM or SQL details. |
+| Response construction | Response DTO/model, domain-to-response mapping, status-code selection, error response structure. |
+| Error handling patterns | Exception types, try/catch locations, global exception handlers, logging, retry policies, circuit breakers, compensating actions. |
+| Asynchronous processing | Background jobs, event publication, queue send/receive, callbacks, webhooks, monitoring of async operations. |
+| Naming conventions | Controller, service, repository, DTO, CRUD method, variable, and file organization patterns. |
+| Implementation templates | Starter templates for a new endpoint, service method, repository method, domain model, and error handling path. |
 
-```
-${PROJECT_TYPE == "Auto-detect" ? 
-  "Begin by examining the codebase structure to identify technologies:
-   - Check for .NET solutions/projects, Spring configurations, Node.js/Express files, etc.
-   - Identify the primary programming language(s) and frameworks in use
-   - Determine the architectural patterns based on folder structure and key components" 
-  : "Focus on ${PROJECT_TYPE} patterns and conventions"}
-```
+Conditional sections:
 
-```
-${ENTRY_POINT == "Auto-detect" ? 
-  "Identify typical entry points by looking for:
-   - API controllers or route definitions
-   - GraphQL resolvers
-   - UI components that initiate network requests
-   - Message handlers or event subscribers
-   - Scheduled job definitions" 
-  : "Focus on ${ENTRY_POINT} entry points"}
-```
+| Condition | Add this detail |
+| --- | --- |
+| `${ARCHITECTURE_PATTERN}` is `CQRS` or `Auto-detect` | Complete command/query handler implementations. |
+| `${ARCHITECTURE_PATTERN}` is `Clean` or `Auto-detect` | Use case/interactor implementations. |
+| `${PERSISTENCE_TYPE}` is `SQL Database` or `Auto-detect` | ORM configuration, annotations, Fluent API usage, actual SQL queries or ORM statements. |
+| `${PERSISTENCE_TYPE}` is `NoSQL Database` or `Auto-detect` | Document structures and query/update operations. |
+| `${INCLUDE_TEST_PATTERNS}` is `true` | Unit tests for each layer, mocks, fixtures, integration tests, test data generation, API/controller tests. |
+| `${INCLUDE_SEQUENCE_DIAGRAM}` is `true` | Sequence diagram with components, method calls, parameter types, return values, conditionals, and error paths. |
 
-```
-${PERSISTENCE_TYPE == "Auto-detect" ? 
-  "Determine persistence mechanisms by examining:
-   - Database context/connection configurations
-   - Repository implementations
-   - ORM mappings
-   - External API clients
-   - File system interactions" 
-  : "Focus on ${PERSISTENCE_TYPE} interactions"}
-```
+## Technology-specific patterns
 
-### Workflow Documentation Instructions
+| Technology | Blueprint must extract |
+| --- | --- |
+| `.NET` | Controller attributes, filters, dependency injection, `Startup.cs` or `Program.cs`, Entity Framework `DbContext`, EF Core or Dapper repository, AutoMapper profiles, middleware, extension methods, Options pattern, `ILogger`, authentication/authorization filters or policies. |
+| `Java` / `Spring` | Controller annotations, dependency injection, service transaction boundaries, repository interfaces and implementations, JPA entities and relationships, DTOs, bean configuration, component scanning, exception handlers, custom validators. |
+| `React` | Component props and state, `useState`, `useEffect`, custom hooks, API service implementation, Context or Redux state management, form handling, route configuration. |
+| `Microservices` | Service boundaries, API contracts, messaging, retries, idempotency, compensation, observability, and cross-service data ownership. |
 
-For each of the `${WORKFLOW_COUNT}` most representative workflow(s) in the system:
+## Generated blueprint
 
-#### 1. Workflow Overview
-   - Provide a name and brief description of the workflow
-   - Explain the business purpose it serves
-   - Identify the triggering action or event
-   - List all files/classes involved in the complete workflow
+Use this prompt body as the generated artifact, filling variables with user values or defaults:
 
-#### 2. Entry Point Implementation
+```markdown
+Analyze the codebase and document `${WORKFLOW_COUNT}` representative end-to-end workflows that can serve as implementation templates for similar features.
 
-**API Entry Points:**
-```
-${ENTRY_POINT == "API" || ENTRY_POINT == "Auto-detect" ? 
-  "- Document the API controller class and method that receives the request
-   - Show the complete method signature including attributes/annotations
-   - Include the full request DTO/model class definition
-   - Document validation attributes and custom validators
-   - Show authentication/authorization attributes and checks" : ""}
-```
+## Initial detection
 
-**GraphQL Entry Points:**
-```
-${ENTRY_POINT == "GraphQL" || ENTRY_POINT == "Auto-detect" ? 
-  "- Document the GraphQL resolver class and method
-   - Show the complete schema definition for the query/mutation
-   - Include input type definitions
-   - Show resolver method implementation with parameter handling" : ""}
-```
+- Project type: `${PROJECT_TYPE}`. If `Auto-detect`, inspect project files and configuration to identify languages, frameworks, and primary architecture.
+- Entry point: `${ENTRY_POINT}`. If `Auto-detect`, find API controllers/routes, GraphQL resolvers, frontend event sources, CLI commands, message consumers, or scheduled jobs.
+- Persistence: `${PERSISTENCE_TYPE}`. If `Auto-detect`, inspect database contexts, repositories, ORM mappings, external API clients, queues, caches, and file-system usage.
+- Architecture: `${ARCHITECTURE_PATTERN}`. If `Auto-detect`, infer from folder structure, dependency direction, handlers, services, controllers, ViewModels, and event adapters.
 
-**Frontend Entry Points:**
-```
-${ENTRY_POINT == "Frontend" || ENTRY_POINT == "Auto-detect" ? 
-  "- Document the component that initiates the API call
-   - Show the event handler that triggers the request
-   - Include the API client service method
-   - Show state management code related to the request" : ""}
-```
+## Per-workflow documentation
 
-**Message Consumer Entry Points:**
-```
-${ENTRY_POINT == "Message Consumer" || ENTRY_POINT == "Auto-detect" ? 
-  "- Document the message handler class and method
-   - Show message subscription configuration
-   - Include the complete message model definition
-   - Show deserialization and validation logic" : ""}
+For each workflow:
+1. Name the workflow, business purpose, trigger, and all files/classes involved.
+2. Document the entry point with full signature, attributes/annotations, request DTO/model, validation, and authentication/authorization.
+3. Document service classes, dependencies, interfaces, method signatures, return types, and key business logic.
+4. Document DTO/domain mapping, mapper configuration or manual methods, validation, and domain events.
+5. Document repositories, entities/models, transaction handling, SQL/ORM/document/queue/API operations, and persistence boundaries.
+6. Document response models, status-code selection, and error response generation.
+7. Document exception types, try/catch patterns, global handlers, logging, retries, circuit breakers, and compensating actions.
+8. Document async jobs, events, queues, callbacks, webhooks, and monitoring.
+9. If `${INCLUDE_TEST_PATTERNS}` is `true`, document unit, integration, API/controller, fixture, mocking, and test-data patterns.
+10. If `${INCLUDE_SEQUENCE_DIAGRAM}` is `true`, generate a detailed sequence diagram with method calls, parameter types, return values, conditional flows, and errors.
+11. Document naming conventions for controllers, services, repositories, DTOs, CRUD methods, variables, and file layout.
+12. Provide implementation templates for a new endpoint, service method, repository method, domain model, and error handling path.
+
+## Technology extraction
+
+- For `.NET`, include controllers, filters, DI in `Startup.cs` or `Program.cs`, Entity Framework `DbContext`, EF Core or Dapper, AutoMapper, middleware, extension methods, Options, `ILogger`, and auth policies.
+- For `Spring`, include annotations, transaction boundaries, repositories, JPA entities, DTOs, beans, component scanning, exception handlers, and validators.
+- For `React`, include props/state, hooks, API clients, Context/Redux, forms, and routes.
+
+## Implementation guidance
+
+Conclude with step-by-step guidance for adding similar features, including where to start, the implementation order such as model → repository → service → controller, extension points, configuration-driven behavior, performance considerations, and common pitfalls.
 ```
 
-#### 3. Service Layer Implementation
-   - Document each service class involved with their dependencies
-   - Show the complete method signatures with parameters and return types
-   - Include actual method implementations with key business logic
-   - Document interface definitions where applicable
-   - Show dependency injection registration patterns
+## Gotchas
 
-**CQRS Patterns:**
-```
-${ARCHITECTURE_PATTERN == "CQRS" || ARCHITECTURE_PATTERN == "Auto-detect" ? 
-  "- Include complete command/query handler implementations" : ""}
-```
+- **Do not invent patterns**: the blueprint must instruct GitHub Copilot to use only files and conventions actually found in the codebase.
+- **Do not stop at a class list**: require signatures, dependencies, data movement, errors, and tests.
+- **Representative means reusable**: choose workflows that teach future feature implementation, not one-off wiring.
+- **Sequence diagrams must include errors**: happy-path-only diagrams miss rollback, retries, and compensating actions.
 
-**Clean Architecture Patterns:**
-```
-${ARCHITECTURE_PATTERN == "Clean" || ARCHITECTURE_PATTERN == "Auto-detect" ? 
-  "- Show use case/interactor implementations" : ""}
-```
 
-#### 4. Data Mapping Patterns
-   - Document DTO to domain model mapping code
-   - Show object mapper configurations or manual mapping methods
-   - Include validation logic during mapping
-   - Document any domain events created during mapping
+## Naming and evidence vocabulary
 
-#### 5. Data Access Implementation
-   - Document repository interfaces and their implementations
-   - Show complete method signatures with parameters and return types
-   - Include actual query implementations
-   - Document entity/model class definitions with all properties
-   - Show transaction handling patterns
+Require the downstream workflow document to capture concrete names and examples such as `EntityNameController`, `EntityNameService`, `IEntityNameRepository`, `EntityNameRequest`, and `EntityNameResponse`. For `Java/Spring` and `Node.js/Express`, inspect `solutions/projects`, `context/connection` configuration, `query/mutation` schema entries, `Authentication/authorization` annotations, `domain/entity` mapping, `cross-cutting` concerns, and `error-prone` extension points.
 
-**SQL Database Patterns:**
-```
-${PERSISTENCE_TYPE == "SQL Database" || PERSISTENCE_TYPE == "Auto-detect" ? 
-  "- Include ORM configurations, annotations, or Fluent API usage
-   - Show actual SQL queries or ORM statements" : ""}
+## Output template
+
+```markdown
+## Project workflow blueprint
+
+**Status:** generated | blocked
+**Project type:** `${PROJECT_TYPE}`
+**Entry point:** `${ENTRY_POINT}`
+**Persistence:** `${PERSISTENCE_TYPE}`
+**Architecture:** `${ARCHITECTURE_PATTERN}`
+**Workflow count:** `${WORKFLOW_COUNT}`
+
+### Blueprint prompt
+```markdown
+<complete prompt for GitHub Copilot to analyze and document workflows>
 ```
 
-**NoSQL Database Patterns:**
-```
-${PERSISTENCE_TYPE == "NoSQL Database" || PERSISTENCE_TYPE == "Auto-detect" ? 
-  "- Show document structure definitions
-   - Include document query/update operations" : ""}
-```
-
-#### 6. Response Construction
-   - Document response DTO/model class definitions
-   - Show mapping from domain/entity models to response models
-   - Include status code selection logic
-   - Document error response structure and generation
-
-#### 7. Error Handling Patterns
-   - Document exception types used in the workflow
-   - Show try/catch patterns at each layer
-   - Include global exception handler configurations
-   - Document error logging implementations
-   - Show retry policies or circuit breaker patterns
-   - Include compensating actions for failure scenarios
-
-#### 8. Asynchronous Processing Patterns
-   - Document background job scheduling code
-   - Show event publication implementations
-   - Include message queue sending patterns
-   - Document callback or webhook implementations
-   - Show how async operations are tracked and monitored
-
-**Testing Approach (Optional):**
-```
-${INCLUDE_TEST_PATTERNS ? 
-  "9. **Testing Approach**
-     - Document unit test implementations for each layer
-     - Show mocking patterns and test fixture setup
-     - Include integration test implementations
-     - Document test data generation approaches
-     - Show API/controller test implementations" : ""}
+### Variables used
+| Variable | Value |
+| --- | --- |
+| `${DETAIL_LEVEL}` | `<value>` |
+| `${INCLUDE_SEQUENCE_DIAGRAM}` | `<true|false>` |
+| `${INCLUDE_TEST_PATTERNS}` | `<true|false>` |
 ```
 
-**Sequence Diagram (Optional):**
-```
-${INCLUDE_SEQUENCE_DIAGRAM ? 
-  "10. **Sequence Diagram**
-      - Generate a detailed sequence diagram showing all components
-      - Include method calls with parameter types
-      - Show return values between components
-      - Document conditional flows and error paths" : ""}
-```
+## Quality gate
 
-#### 11. Naming Conventions
-Document consistent patterns for:
-- Controller naming (e.g., `EntityNameController`)
-- Service naming (e.g., `EntityNameService`)
-- Repository naming (e.g., `IEntityNameRepository`)
-- DTO naming (e.g., `EntityNameRequest`, `EntityNameResponse`)
-- Method naming patterns for CRUD operations
-- Variable naming conventions
-- File organization patterns
-
-#### 12. Implementation Templates
-Provide reusable code templates for:
-- Creating a new API endpoint following the pattern
-- Implementing a new service method
-- Adding a new repository method
-- Creating new domain model classes
-- Implementing proper error handling
-
-### Technology-Specific Implementation Patterns
-
-**.NET Implementation Patterns (if detected):**
-```
-${PROJECT_TYPE == ".NET" || PROJECT_TYPE == "Auto-detect" ? 
-  "- Complete controller class with attributes, filters, and dependency injection
-   - Service registration in Startup.cs or Program.cs
-   - Entity Framework DbContext configuration
-   - Repository implementation with EF Core or Dapper
-   - AutoMapper profile configurations
-   - Middleware implementations for cross-cutting concerns
-   - Extension method patterns
-   - Options pattern implementation for configuration
-   - Logging implementation with ILogger
-   - Authentication/authorization filter or policy implementations" : ""}
-```
-
-**Spring Implementation Patterns (if detected):**
-```
-${PROJECT_TYPE == "Java" || PROJECT_TYPE == "Spring" || PROJECT_TYPE == "Auto-detect" ? 
-  "- Complete controller class with annotations and dependency injection
-   - Service implementation with transaction boundaries
-   - Repository interface and implementation
-   - JPA entity definitions with relationships
-   - DTO class implementations
-   - Bean configuration and component scanning
-   - Exception handler implementations
-   - Custom validator implementations" : ""}
-```
-
-**React Implementation Patterns (if detected):**
-```
-${PROJECT_TYPE == "React" || PROJECT_TYPE == "Auto-detect" ? 
-  "- Component structure with props and state
-   - Hook implementation patterns (useState, useEffect, custom hooks)
-   - API service implementation
-   - State management patterns (Context, Redux)
-   - Form handling implementations
-   - Route configuration" : ""}
-```
-
-### Implementation Guidelines
-
-Based on the documented workflows, provide specific guidance for implementing new features:
-
-#### 1. Step-by-Step Implementation Process
-- Where to start when adding a similar feature
-- Order of implementation (e.g., model → repository → service → controller)
-- How to integrate with existing cross-cutting concerns
-
-#### 2. Common Pitfalls to Avoid
-- Identify error-prone areas in the current implementation
-- Note performance considerations
-- List common bugs or issues encountered
-
-#### 3. Extension Mechanisms
-- Document how to plug into existing extension points
-- Show how to add new behavior without modifying existing code
-- Explain configuration-driven feature patterns
-
-**Conclusion:**
-Conclude with a summary of the most important patterns that should be followed when 
-implementing new features to maintain consistency with the codebase."
+- [ ] The generated blueprint preserves all configured `${PROJECT_TYPE}`, `${ENTRY_POINT}`, `${PERSISTENCE_TYPE}`, `${ARCHITECTURE_PATTERN}`, `${WORKFLOW_COUNT}`, `${DETAIL_LEVEL}`, `${INCLUDE_SEQUENCE_DIAGRAM}`, and `${INCLUDE_TEST_PATTERNS}` values.
+- [ ] The blueprint requires actual codebase evidence before documenting patterns.
+- [ ] Each workflow asks for all files/classes, entry point, service layer, mapping, data access, response, error handling, async behavior, naming, and templates.
+- [ ] Optional sequence diagram and testing sections appear only when their variables require them.
+- [ ] Technology-specific guidance is conditional and does not mandate a stack that was not detected.

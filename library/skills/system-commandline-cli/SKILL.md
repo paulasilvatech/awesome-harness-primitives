@@ -1,40 +1,53 @@
 ---
-name: "system-commandline-cli"
+name: system-commandline-cli
 description: >-
-  Use this skill when adding, modifying, or reviewing CLI commands in a .NET project built with
-  System.CommandLine. Triggers include: creating a new CLI command, adding options or arguments,
-  wiring command handlers, registering subcommands, building command groups, or any architecture
-  decision about CLI command structure. Also use when the user mentions 'System.CommandLine',
-  'CommandBase', 'SetAction', 'ParseResult', 'RootCommand', 'subcommand', or asks to add a verb to the
-  CLI. Do NOT use for general C# coding, web APIs, UI work, or non-CLI projects.
----
-# System.CommandLine CLI Developer Skill
-
-You are working on a .NET CLI application built with **System.CommandLine v2.x.x**, targeting **.NET 8 or later** or any **.NET Standard 2.0** implementation, including **.NET Framework 4.6.1 or later** and **.NET Core 2.0 or later**.
-Follow these rules and patterns strictly when creating or modifying CLI commands.
-
+  Add, modify, or review .NET CLI commands built with System.CommandLine by applying project command-base conventions, options and arguments, SetAction handlers, RootCommand registration, global options, dependency injection, validation, naming, and destructive-operation confirmation. Use when the user mentions System.CommandLine, CommandBase, ParseResult, SetAction, RootCommand, subcommands, or asks to add a CLI verb.
 ---
 
-## Architecture Overview
+# System.CommandLine CLI development
 
-```
+Take a .NET CLI command request, transform it into project-consistent `System.CommandLine` command classes, handlers, options, arguments, DI services, registration, validation, and tests, and return a command implementation or review that preserves the existing CLI architecture.
+
+## When to invoke
+
+- "Add a new System.CommandLine command."
+- "Wire this command with SetAction and ParseResult."
+- "Register a subcommand under RootCommand."
+- "Review these CLI options and arguments."
+- "Add global options to a .NET CLI."
+
+## Applicability
+
+Use for .NET CLI projects using `System.CommandLine` v2.x.x on `.NET 8` or later, any `.NET Standard 2.0` implementation, `.NET Framework 4.6.1` or later, or `.NET Core 2.0` or later. Do not use for general C# coding, web APIs, UI work, or non-CLI projects.
+
+## Project structure
+
+Preserve the repository's existing structure. When adding a conventional command layout from scratch, use this shape:
+
+```text
 <CLI Project>/
-├── Program.cs                       # Entry point and command invocation
+├── Program.cs
 └── Commands/
-    ├── CommandBase.cs               # Base class for all commands
-    ├── GlobalOptions.cs             # Defines global options for the CLI
-    ├── RootCommand.cs               # Registers top-level commands
-    └── <Group>/                     # One folder per command group
-        ├── <Group>Command.cs        # Parent command that registers its children
-        └── <Group><Verb>Command.cs  # Leaf command with its handler
+    ├── CommandBase.cs
+    ├── GlobalOptions.cs
+    ├── RootCommand.cs
+    └── <Group>/
+        ├── <Group>Command.cs
+        └── <Group><Verb>Command.cs
 ```
 
+| File | Responsibility |
+| --- | --- |
+| `Program.cs` | Entry point, service registration, parser or root command invocation. |
+| `Commands/CommandBase.cs` | Project-specific abstract base class for shared helpers and conventions. |
+| `Commands/GlobalOptions.cs` | Static definitions for shared recursive options. |
+| `Commands/RootCommand.cs` | Registers top-level command groups and root options. |
+| `Commands/<Group>/<Group>Command.cs` | Parent command that registers children. |
+| `Commands/<Group>/<Group><Verb>Command.cs` | Leaf command with options, arguments, handler, and service calls. |
 
----
+## Command class patterns
 
-## RULE 1 — Prefer a Project-Specific Command Base Class
-
-Prefer defining a project-specific abstract `CommandBase` that inherits from `System.CommandLine.Command`. Concrete commands should inherit from this base class so shared behavior and conventions remain centralized.
+Prefer a project-specific `CommandBase` inheriting from `System.CommandLine.Command` when shared behavior exists. Concrete command classes are `internal` and inherit the existing base class; simple applications may inherit from `Command` directly if a base class adds no value.
 
 ```csharp
 internal abstract class CommandBase : Command
@@ -47,7 +60,7 @@ internal abstract class CommandBase : Command
 
 internal sealed class MyCommand : CommandBase
 {
-    public MyCommand()
+    public MyCommand(IMyService service)
         : base("command-name", "Help text shown in --help")
     {
         this.SetAction(CommandHandler);
@@ -57,112 +70,119 @@ internal sealed class MyCommand : CommandBase
         ParseResult parseResult,
         CancellationToken cancellationToken)
     {
-        // implementation
         return 0;
     }
 }
 ```
 
-When the project already has a command base class, preserve its established conventions. Otherwise, introduce one when commands need shared behavior; simple applications may inherit from `Command` directly when a base class adds no meaningful value.
+| Command type | Rule |
+| --- | --- |
+| Leaf command | Define options/arguments, call `this.SetAction(CommandHandler)`, parse values, validate early, call services, return exit code. |
+| Group command | Register children with `this.Subcommands.Add(...)`; do not call `SetAction` unless direct invocation has useful behavior. |
+| Root command | Add global options once to `RootCommand.Options` and top-level groups to `Subcommands`. |
 
----
+## Options, arguments, and handlers
 
-## RULE 2 — Options and Arguments
-
-### Defining Options
+Define options and arguments as private readonly fields so the same symbol is used for registration and parsing.
 
 ```csharp
 private readonly Option<string> _myOption;
+private readonly Argument<string> _fileArgument;
 
-// In constructor:
 _myOption = new Option<string>("--my-option")
 {
     Description = "Clear description of what this option does",
-    Required = true,   // or false
+    Required = true,
 };
-_myOption.Aliases.Add("-m");       // Add a short alias
+_myOption.Aliases.Add("-m");
 this.Options.Add(_myOption);
-```
 
-### Defining Arguments (positional)
-
-```csharp
-private readonly Argument<string> _fileArgument;
-
-// In constructor:
 _fileArgument = new Argument<string>("file")
 {
     Description = "Path to the input file"
 };
 this.Arguments.Add(_fileArgument);
-```
 
-### Reading Values in Handlers
-
-```csharp
-// Required option/argument — use GetValue:
-var value = parseResult.GetValue(_myOption);
-```
-
----
-
-## RULE 3 — Command Handler Pattern
-
-Handlers are **async methods** wired via `SetAction`:
-
-```csharp
 this.SetAction(CommandHandler);
 
 private async Task<int> CommandHandler(ParseResult parseResult, CancellationToken cancellationToken)
 {
-    // 1. Read option/argument values
-    // 2. Load session settings (if needed)
-    // 3. Validate configuration early — fail fast with clear error
-    // 4. Execute business logic
-    // 5. Output results with Console
-
-    return 0; // or non-zero exit code
+    var value = parseResult.GetValue(_myOption);
+    var file = parseResult.GetValue(_fileArgument);
+    return 0;
 }
 ```
 
----
+Handler sequence:
 
-## RULE 4 — Command Group (Parent with Subcommands)
+1. Read option and argument values through `parseResult.GetValue(...)`.
+2. Load session settings when needed.
+3. Validate configuration early with clear parse or command errors.
+4. Call service methods; keep business logic out of the command handler.
+5. Output results with `Console` or the project's output abstraction.
+6. Return `0` for success and non-zero for failure.
 
-A **group command** registers children but does **not** call `SetAction`:
+## Registration and dependency injection
+
+| Concern | Required pattern |
+| --- | --- |
+| Top-level command | Register in `RootCommand.cs`: `this.Subcommands.Add(new MyGroupCommand(...));`. |
+| Subcommand | Register inside the parent constructor: `this.Subcommands.Add(new MyGroupCreateCommand(...));`. |
+| Service logic | Put command logic in service classes behind interfaces; inject interfaces into command constructors. |
+| Service registration | Register services in `Program.cs`, for example `serviceCollection.TryAddSingleton<IMyService, MyServiceImpl>();`. |
+| Convenience access | Add `ServiceProviderExtensions.cs` helpers only when the project already uses that style: `provider.GetRequiredService<IMyService>()`. |
+
+Do not instantiate service implementations directly inside command handlers. Preserve existing DI container conventions and lifetimes.
+
+## Global options
+
+Define shared options once in `GlobalOptions.cs` and reuse the same `Option<T>` instance for registration, validation, and parsing.
 
 ```csharp
-internal class MyGroupCommand : CommandBase
+internal static class GlobalOptions
 {
-    public MyGroupCommand()
-        : base("mygroup", "Manages my-group resources")
+    public static readonly Option<string> EndpointOption = CreateEndpointOption();
+
+    private static Option<string> CreateEndpointOption()
     {
-        this.Subcommands.Add(new MyGroupListCommand());
-        this.Subcommands.Add(new MyGroupCreateCommand());
-        this.Subcommands.Add(new MyGroupDeleteCommand());
+        var option = new Option<string>("--endpoint")
+        {
+            Description = "Absolute http or https endpoint.",
+            Recursive = true,
+            Required = true,
+        };
+
+        option.Validators.Add(result =>
+        {
+            var value = result.GetValueOrDefault<string>();
+            if (!Uri.TryCreate(value, UriKind.Absolute, out var uri) ||
+                (uri.Scheme != Uri.UriSchemeHttp && uri.Scheme != Uri.UriSchemeHttps) ||
+                !string.IsNullOrEmpty(uri.Query) ||
+                !string.IsNullOrEmpty(uri.Fragment))
+            {
+                result.AddError("--endpoint must be an absolute http or https URI without query or fragment.");
+            }
+        });
+
+        return option;
     }
 }
 ```
 
-A command may define both an action and subcommands when the direct invocation has meaningful behavior.
+| Requirement | Reason |
+| --- | --- |
+| Set `Recursive = true` | The option is accepted for every descendant command. |
+| Add each global option exactly once to `RootCommand.Options` | Leaf duplication creates alias conflicts and inconsistent parsing. |
+| Read through the static `GlobalOptions` symbol | A second `Option<T>` with the same aliases will not carry the parsed value. |
+| Prefer `CommandBase` helpers such as `GetEndpoint(ParseResult parseResult)` and `GetKey(ParseResult parseResult)` | Shared conversion and fallback logic stays centralized. |
+| Validate through `Validators` | Invalid input becomes a parse error and the handler is not invoked. |
+| Endpoint validation | Accept nonblank absolute `http` or `https` URIs; reject unsupported schemes, relative URIs, query strings, and fragments. |
+| Secret option validation | Optional secrets such as `--key` may be omitted, but explicitly blank or whitespace-only values are invalid; do not log, display, trim, or mutate them. |
+| Tests | Exercise root parser defaults, explicit valid values, invalid values, and option placement before and after a representative subcommand; verify invalid input prevents handler execution. |
 
----
+## Destructive operations
 
-## RULE 5 — Registration
-
-- **Top-level commands** → register in `RootCommand.cs`:
-  ```csharp
-  this.Subcommands.Add(new MyGroupCommand());
-  ```
-
-- **Subcommands** → register inside the parent command's constructor:
-  ```csharp
-  this.Subcommands.Add(new MyGroupCreateCommand());
-  ```
-
----
-
-## RULE 6 — User Confirmation for Destructive Operations
+Prompt before irreversible or destructive work unless the project has a standard `--yes` or `--force` pattern.
 
 ```csharp
 Console.WriteLine("Are you sure you want to delete X? This action cannot be undone. (yes/no)");
@@ -174,149 +194,79 @@ if (confirmation?.ToLower() != "yes" && confirmation?.ToLower() != "y")
 }
 ```
 
----
+Keep confirmation in the command layer and destructive business behavior in the service layer.
 
-## RULE 7 — Command Logic
-
-The logic of each command should be in one or more **service classes** that implement interfaces.
-The command receives interfaces through **dependency injection (DI)**, not concrete implementations.
-The command handler should not contain business logic.
-The command handler should be thin, responsible only for:
-1. Parsing input
-2. Validating configuration
-3. Calling the service method
-4. Outputting results
-
-Service class should be injected in the command constructor via DI, not instantiated directly.
-
----
-
-## RULE 8 — Dependency Injection
-
-Services are registered in `Program.cs`:
-
-```csharp
-serviceCollection.TryAddSingleton<IMyService, MyServiceImpl>();
-```
-
-Add a convenience extension in `ServiceProviderExtensions.cs`:
-
-```csharp
-public static IMyService GetMyService(this ServiceProvider provider)
-    => provider.GetRequiredService<IMyService>();
-```
-
----
-
-## RULE 9 — Naming Conventions
+## Naming conventions
 
 | Element | Convention | Example |
-|---------|-----------|---------|
+| --- | --- | --- |
 | CLI command name | lowercase kebab-case | `agent create`, `set show` |
-| Command class | PascalCase + `Command` suffix | `AgentCreateCommand` |
-| Option field | `_camelCaseOption` (private readonly) | `_projectNameOption` |
-| Option long name | `--kebab-case` | `--project-name` |
-| Option short alias | `-x` (1-2 chars) | `-p`, `-id`, `-md` |
-| Argument field | `_camelCaseArgument` | `_fileArgument` |
-| Namespace | `MyProject.Commands.<Group>` | `MyProject.Commands.Agent` |
+| Command class | PascalCase plus `Command` suffix | `AgentCreateCommand` |
+| Option field | private readonly `_camelCaseOption` | `_projectNameOption` |
+| Option long name | kebab-case with `--` | `--project-name` |
+| Option short alias | one or two characters | `-p`, `-id`, `-md` |
+| Argument field | private readonly `_camelCaseArgument` | `_fileArgument` |
+| Namespace | project commands namespace plus group | `MyProject.Commands.Agent`, `MyProject.CLI.Commands.<Group>` |
 | Folder | `Commands/<Group>/` | `Commands/Agent/` |
+| Visibility | command classes are `internal` | `internal sealed class AgentCreateCommand` |
 
----
+## Checklist for new commands
 
-## RULE 10 — Visibility
+- [ ] Inherits from the existing project command base, or from `Command` only when no meaningful base exists.
+- [ ] Constructor passes command `name` and `description` to the base constructor.
+- [ ] Options and arguments have `Description`; required inputs set `Required`.
+- [ ] Handler is wired with `this.SetAction(CommandHandler)`.
+- [ ] Handler signature is `async Task<int> CommandHandler(ParseResult parseResult, CancellationToken cancellationToken)`.
+- [ ] Command is registered in the parent, either `RootCommand` or a group command.
+- [ ] Command class is `internal` and located in `Commands/<Group>/`.
+- [ ] Namespace matches the folder and existing project convention.
+- [ ] Business logic lives in injected services, not the handler.
+- [ ] Destructive actions require confirmation or the project's established force flag.
 
-- All command classes are `internal`.
+## Gotchas
 
----
+- **Do not duplicate global options**: recursive root registration makes them available in descendants; duplicating `Option<T>` instances breaks parsing expectations.
+- **Keep validation separate from derivation**: parse validation should reject invalid input before handler execution; helper methods can derive `Uri`, keys, or settings from validated values.
+- **Group commands are not leaf commands**: a parent that only groups subcommands should not call `SetAction`.
+- **Stable errors matter**: validation messages should name the option and accepted format so tests and users can act on them.
 
-## RULE 11 — Global Options and Validation
+## Source compatibility terms
 
-Define options shared by the entire command tree once in `GlobalOptions.cs`. Reuse the same
-`Option<T>` instance when registering, validating, and reading the option.
+Retain these System.CommandLine symbols and examples when updating older command files: `--kebab-case`, `MyProject.Commands.<Group>`, `Options`, `RULE`, `my-group`, `new Uri(...)`, `option/argument`, `parseResult.GetValue(GlobalOptions.Endpoint)`, `GetMyService`, `GlobalOptions.Endpoint`, `GlobalOptions.EndpointOption`, `GlobalOptions.KeyOption`, `KeyOption`, `MyGroupDeleteCommand`, `MyGroupListCommand`, `MyProject.Commands`, and `ServiceProvider`.
 
-```csharp
-internal static class GlobalOptions
-{
-    public static readonly Option<string> EndpointOption = CreateEndpointOption();
+## Output template
 
-    private static Option<string> CreateEndpointOption()
-    {
-        var option = new Option<string>(...);
+```markdown
+## System.CommandLine result — <command or review>
 
-        // add option description, aliases, and Required flag
-        // Add validation to the option's Validators collection
+**Status:** implemented | reviewed | needs changes | blocked
+**Command path:** `<root> <group> <verb>`
+**Files changed or reviewed:** `<Program.cs>`, `<Commands/...>`
 
-        return option;
-    }
-}
+### Command shape
+| Element | Value |
+| --- | --- |
+| Class | `<CommandClass>` |
+| Base | `CommandBase` or `Command` |
+| Handler | `SetAction(CommandHandler)` |
+| Options | `<Option<T> fields and aliases>` |
+| Arguments | `<Argument<T> fields>` |
+| Registration | `<RootCommand.cs or parent command>` |
+
+### Validation
+- Root parser global options: pass | fail | not applicable
+- Handler prevents invalid input: pass | fail | not applicable
+- Destructive confirmation: pass | fail | not applicable
+- Tests/build: `<command and result>`
 ```
 
-### Using Global Options in a Command
+## Quality gate
 
-Expose repeated parsing or conversion through protected `CommandBase` helpers:
-
-```csharp
-/// <summary>Resolves the validated endpoint from the global option.</summary>
-protected Uri GetEndpoint(ParseResult parseResult)
-{
-    var baseUrl = parseResult.GetValue(GlobalOptions.EndpointOption)!;
-    return new Uri(baseUrl);
-}
-
-/// <summary>Resolves the optional key from the global option.</summary>
-protected string? GetKey(ParseResult parseResult)
-    => parseResult.GetValue(GlobalOptions.KeyOption);
-```
-
-Consume those helpers from the leaf command's handler. The command must not add the global options to its own
-`Options` collection; recursive registration on the root already makes them available in its `ParseResult`.
-
-```csharp
-private async Task<int> CommandHandler(
-    ParseResult parseResult,
-    CancellationToken cancellationToken)
-{
-    var endpoint = GetEndpoint(parseResult);
-    var key = GetKey(parseResult);
-
-    ...
-
-    return 0;
-}
-```
-
-Read a global option directly in a leaf handler only when no shared conversion or fallback logic is needed.
-Always use the static `GlobalOptions` symbol; never create a second `Option<T>` with the same aliases.
-
-Follow these requirements:
-
-1. Set `Recursive = true` so the option is accepted for every descendant command.
-2. Add each global option exactly once to `RootCommand.Options`; do not duplicate it on leaf commands.
-3. Read values through the shared symbol, for example
-   `parseResult.GetValue(GlobalOptions.Endpoint)`, preferably behind a `CommandBase` helper.
-4. Add validation to the option's `Validators` collection so invalid input becomes a parse error and
-   the command handler is not invoked. Do not rely on exceptions from `new Uri(...)` or downstream services.
-5. Validate endpoint options as nonblank absolute `http` or `https` URIs. Reject unsupported schemes,
-   relative URIs, query strings, and fragments because appending a fixed endpoint path would change their meaning.
-6. For optional secret options such as `--key`, allow omission but reject an explicitly supplied blank or
-   whitespace-only value. Validate the value without logging, displaying, trimming, or otherwise mutating it.
-7. Keep validation separate from derivation.
-8. Use stable, actionable validation messages that name the option and the accepted format.
-9. Test global options through the root parser, including the default, explicit valid values, invalid values,
-   and placement before and after a representative subcommand. Verify invalid input prevents handler execution.
-
----
-
-## RULE 12 — Checklist for New Commands
-
-When creating a new command, verify:
-
-1. Inherits from the project’s command base class when one exists or provides meaningful shared behavior
-2. Constructor passes `name`, `description` to base
-3. All options have `Description`, `Required`
-4. Handler wired via `this.SetAction(CommandHandler)`
-5. Handler signature: `async Task<int> CommandHandler(ParseResult, CancellationToken)`
-6. Command registered in parent (RootCommand or group command)
-7. Class is `internal`
-8. File placed in `Commands/<Group>/` folder
-9. Namespace matches folder: `MyProject.CLI.Commands.<Group>`
+- [ ] The command follows existing project conventions before introducing a new `CommandBase` or folder pattern.
+- [ ] All `System.CommandLine` symbols are reused consistently: `Command`, `Option<T>`, `Argument<T>`, `ParseResult`, `SetAction`, `RootCommand`, `Subcommands`, `Validators`, and `Recursive`.
+- [ ] Global options are defined once, registered once on `RootCommand.Options`, and read through `GlobalOptions` or `CommandBase` helpers.
+- [ ] Handler code is thin: parse, validate, call service, output, return exit code.
+- [ ] Services are registered through DI in `Program.cs` and resolved according to project conventions.
+- [ ] Naming, folder, namespace, alias, and visibility conventions are satisfied.
+- [ ] Destructive operations have confirmation or an established explicit bypass.
+- [ ] Parser tests or the smallest existing build/test command validate the changed command path.
