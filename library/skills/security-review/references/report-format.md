@@ -55,9 +55,9 @@ For EACH finding, use this card format:
 Confidence: HIGH / MEDIUM / LOW
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
- Location: src/routes/users.js, Line 47
+Location: src/routes/users.js, Line 47
 
- Vulnerable Code:
+Vulnerable Code:
   const query = `SELECT * FROM users WHERE id = ${req.params.id}`;
   db.execute(query);
 
@@ -68,13 +68,13 @@ Confidence: HIGH / MEDIUM / LOW
 
   Example attack: GET /users/1 OR 1=1--
 
- Recommended Fix:
+Recommended Fix:
   Use parameterized queries:
 
   const query = 'SELECT * FROM users WHERE id = ?';
   db.execute(query, [req.params.id]);
 
- Reference: OWASP A03:2021 – Injection
+Reference: OWASP A03:2021 – Injection
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
@@ -83,18 +83,18 @@ Confidence: HIGH / MEDIUM / LOW
 ### Dependency Audit Section
 
 ```
- DEPENDENCY AUDIT
+DEPENDENCY AUDIT
 ══════════════════
 
- HIGH — lodash@4.17.20 (package.json)
+HIGH — lodash@4.17.20 (package.json)
   CVE-2021-23337: Prototype pollution via zipObjectDeep()
   Fix: npm install lodash@4.17.21
 
- MEDIUM — axios@0.27.2 (package.json)
+MEDIUM — axios@0.27.2 (package.json)
   CVE-2023-45857: CSRF via withCredentials
   Fix: npm install axios@1.6.0
 
- INFO — express@4.18.2
+INFO — express@4.18.2
   No known CVEs. Current version is 4.19.2 — consider updating.
 ```
 
@@ -103,10 +103,10 @@ Confidence: HIGH / MEDIUM / LOW
 ### Secrets Scan Section
 
 ```
- SECRETS & EXPOSURE SCAN
+SECRETS & EXPOSURE SCAN
 ═══════════════════════════
 
- CRITICAL — Hardcoded API Key
+CRITICAL — Hardcoded API Key
   File: src/config/database.js, Line 12
 
   Found: STRIPE_SECRET_KEY = "sk_live_FAKE_KEY_..."
@@ -161,18 +161,18 @@ Apply this patch? (Review first — AI-generated patches may need adjustment)
 ```
 ══════════════════════════════════════════════════════════
 
- SCAN COVERAGE
+SCAN COVERAGE
   Files scanned:     <n>
   Lines analyzed:    <n>
   Scan duration:     <time>
 
- NEXT STEPS
+NEXT STEPS
   1. Address all CRITICAL findings immediately
   2. Schedule HIGH findings for current sprint
   3. Add MEDIUM/LOW to your security backlog
   4. Set up automated re-scanning in CI/CD pipelines
 
- NOTE: This is a static analysis scan. It does not execute your
+NOTE: This is a static analysis scan. It does not execute your
    application and cannot detect all runtime vulnerabilities. Pair
    with dynamic testing (DAST) for comprehensive coverage.
 

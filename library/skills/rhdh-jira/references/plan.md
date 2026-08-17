@@ -171,7 +171,7 @@ Note: "Retro action items to consider for this sprint."
 | # | Issue | Summary | Assignee | Status | SP | Days |
 |---|-------|---------|----------|--------|----|------|
 
- Carryover ({sp} SP) vs avg velocity ({avg} SP): {assessment}
+Carryover ({sp} SP) vs avg velocity ({avg} SP): {assessment}
 
 ### Velocity (last 3 sprints)
 | Sprint | Completed SP | Trend |

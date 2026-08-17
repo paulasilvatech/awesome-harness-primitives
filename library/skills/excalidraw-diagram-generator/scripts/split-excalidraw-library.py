@@ -158,9 +158,9 @@ def split_library(library_dir: str) -> None:
         f.write("Each icon JSON file contains the complete `elements` array needed to render that icon in Excalidraw.\n")
         f.write("You can copy the elements from these files into your Excalidraw diagrams.\n")
 
-    print(f"\n Successfully split library into {len(icon_list)} icons")
-    print(f" Reference file created: {reference_path}")
-    print(f" Icons directory: {icons_dir}")
+    print(f"\nSuccessfully split library into {len(icon_list)} icons")
+    print(f"Reference file created: {reference_path}")
+    print(f"Icons directory: {icons_dir}")
 
 
 def main():

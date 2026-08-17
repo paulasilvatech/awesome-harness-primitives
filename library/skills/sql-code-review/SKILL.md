@@ -4,7 +4,7 @@ description: >-
   Universal SQL code review assistant that performs comprehensive security, maintainability, and code
   quality analysis across all SQL databases (MySQL, PostgreSQL, SQL Server, Oracle). Focuses on SQL
   injection prevention, access control, code standards, and anti-pattern detection. Complements SQL
- optimization prompt for complete development coverage. Use this skill when the user asks for
+  optimization prompt for complete development coverage. Use this skill when the user asks for
   security analysis.
 ---
 # SQL Code Review
@@ -15,11 +15,11 @@ Perform a thorough SQL code review of ${selection} (or entire project if no sele
 
 ### SQL Injection Prevention
 ```sql
---  CRITICAL: SQL Injection vulnerability
+-- CRITICAL: SQL Injection vulnerability
 query = "SELECT * FROM users WHERE id = " + userInput;
 query = f"DELETE FROM orders WHERE user_id = {user_id}";
 
---  SECURE: Parameterized queries
+-- SECURE: Parameterized queries
 -- PostgreSQL/MySQL
 PREPARE stmt FROM 'SELECT * FROM users WHERE id = ?';
 EXECUTE stmt USING @user_id;

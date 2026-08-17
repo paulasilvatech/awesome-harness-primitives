@@ -10,40 +10,40 @@
 
 2. **Try these starter prompts** (pick based on track):
 
-   **For developers :**
+   **For developers:**
    > `"What files are in this directory?"`
    > `"Create a simple Python hello world script"`
    > `"Explain what git rebase does in simple terms"`
 
-   **For non-developers :**
+   **For non-developers:**
    > `"What files are in this folder?"`
    > `"Create a file called notes.txt with a to-do list for today"`
    > `"Summarize what this project does"`
 
-3. **Copilot asks before acting** — It will ALWAYS ask permission before creating files, running commands, or making changes. You're in control!  Nothing happens without you saying yes.
+3. **Copilot asks before acting** — It will ALWAYS ask permission before creating files, running commands, or making changes. You're in control! Nothing happens without you saying yes.
 
 **Exercise:**
 ```
 Use ask_user:
-" Your turn! Try this prompt:
+"Your turn! Try this prompt:
 
-   'Create a file called hello.txt that says Hello from Copilot! '
+   'Create a file called hello.txt that says Hello from Copilot!'
 
 What happened?"
-choices: [" It created the file! So cool!", " It asked me something and I wasn't sure what to do", " Something unexpected happened"]
+choices: ["It created the file! So cool!", "It asked me something and I wasn't sure what to do", "Something unexpected happened"]
 ```
 
 **Fallback Handling:**
 
-If user selects " It asked me something and I wasn't sure what to do":
+If user selects "It asked me something and I wasn't sure what to do":
 "That's totally normal! Copilot asks permission before doing things. You probably saw choices like 'Allow', 'Deny', or 'Allow for session'. Here's what they mean:
 - **Allow** — Do it this time (and ask again next time)
 - **Deny** — Don't do it (nothing bad happens!)
 - **Allow for session** — Do it now and don't ask again this session
 
-When learning, I recommend using 'Allow' so you see each step. Ready to try again? "
+When learning, I recommend using 'Allow' so you see each step. Ready to try again?"
 
-If user selects " Something unexpected happened":
+If user selects "Something unexpected happened":
 ```
 Use ask_user:
 "No problem! Let's figure it out. What did you see?
@@ -55,9 +55,9 @@ Use ask_user:
 
 - **If file/directory error:** "Are you in a directory where you have permission to create files? Try this safe command first to see where you are: `pwd` (shows current directory). If you're somewhere like `/` or `/usr`, navigate to a safe folder like `cd ~/Documents` or `cd ~/Desktop` first. Then try creating the file again! "
 
-- **If @-mention issues:** "If you were trying to mention a file with `@`, make sure you're in a directory that has files! Navigate to a project folder first: `cd ~/my-project`. Then `@` will autocomplete your files. "
+- **If @-mention issues:** "If you were trying to mention a file with `@`, make sure you're in a directory that has files! Navigate to a project folder first: `cd ~/my-project`. Then `@` will autocomplete your files."
 
-- **If nothing happened:** "Hmm! Try typing your prompt again and look for Copilot's response. Sometimes responses can scroll up. If you still don't see anything, try `/clear` to start fresh and let's try a simpler prompt together. "
+- **If nothing happened:** "Hmm! Try typing your prompt again and look for Copilot's response. Sometimes responses can scroll up. If you still don't see anything, try `/clear` to start fresh and let's try a simpler prompt together."
 
 ---
 
@@ -81,21 +81,21 @@ Use ask_user:
 **Exercise:**
 ```
 Use ask_user:
-" Try asking Copilot to do something, then DENY it:
+"Try asking Copilot to do something, then DENY it:
 
    'Delete all files in this directory'
 
 (Don't worry — it will ask permission first, and you'll say no!)
 Did it respect your decision?"
-choices: [" It asked and I denied — nothing happened!", " That was scary but it worked!", " Something else happened"]
+choices: ["It asked and I denied — nothing happened!", "That was scary but it worked!", "Something else happened"]
 ```
 
 **Fallback Handling:**
 
-If user selects " That was scary but it worked!":
-"I hear you! But here's the key: **you** had the power the whole time!  Copilot suggested something potentially destructive, but it asked you first. When you said 'Deny', it listened. That's the beauty of the permission model — you're always in the driver's seat. Nothing happens without your approval. Feel more confident now? "
+If user selects "That was scary but it worked!":
+"I hear you! But here's the key: **you** had the power the whole time! Copilot suggested something potentially destructive, but it asked you first. When you said 'Deny', it listened. That's the beauty of the permission model — you're always in the driver's seat. Nothing happens without your approval. Feel more confident now?"
 
-If user selects " Something else happened":
+If user selects "Something else happened":
 ```
 Use ask_user:
 "No worries! What happened?
@@ -105,13 +105,13 @@ Use ask_user:
 4. Something else"
 ```
 
-- **If didn't ask permission:** "That's unusual! Copilot should always ask before destructive actions. Did you perhaps select 'Allow for session' earlier for file operations? If so, that setting stays active until you exit. You can always press `ctrl+c` to cancel an action in progress. Want to try another safe experiment? "
+- **If didn't ask permission:** "That's unusual! Copilot should always ask before destructive actions. Did you perhaps select 'Allow for session' earlier for file operations? If so, that setting stays active until you exit. You can always press `ctrl+c` to cancel an action in progress. Want to try another safe experiment?"
 
-- **If accidentally allowed:** "Oof! If files are gone, check if you can undo with `ctrl+z` or Git (if you're in a Git repo, try `git status` and `git restore`). The good news: you've learned why 'Deny' is your friend when trying risky commands!  For learning, always deny destructive commands. Ready to move forward?"
+- **If accidentally allowed:** "Oof! If files are gone, check if you can undo with `ctrl+z` or Git (if you're in a Git repo, try `git status` and `git restore`). The good news: you've learned why 'Deny' is your friend when trying risky commands! For learning, always deny destructive commands. Ready to move forward?"
 
-- **If confused about 'Allow for session':** "Great question! 'Allow for session' means Copilot can do **this type of action** for the rest of this CLI session without asking again. It's super handy when you're doing something repetitive (like creating 10 files), but when learning, stick with 'Allow' so you see each step. You can always deny — it's totally safe! "
+- **If confused about 'Allow for session':** "Great question! 'Allow for session' means Copilot can do **this type of action** for the rest of this CLI session without asking again. It's super handy when you're doing something repetitive (like creating 10 files), but when learning, stick with 'Allow' so you see each step. You can always deny — it's totally safe!"
 
-Celebrate: "See? YOU are always in control!  Copilot never does anything without your permission."
+Celebrate: "See? YOU are always in control! Copilot never does anything without your permission."
 
 ---
 
@@ -124,15 +124,15 @@ Celebrate: "See? YOU are always in control!  Copilot never does anything without
 **Teach these concepts:**
 
 1. **Slash commands** — Type `/` and a menu appears! These are your power tools:
-   > | Command | What it does | |
-   > |---------|-------------|---|
-   > | `/help` | Shows all available commands |  |
-   > | `/clear` | Fresh start — clears conversation |  |
-   > | `/model` | Switch between AI models |  |
-   > | `/diff` | See what Copilot changed |  |
-   > | `/plan` | Create an implementation plan |  |
-   > | `/compact` | Shrink conversation to save context |  |
-   > | `/context` | See context window usage |  |
+   > | Command | What it does |
+   > |---------|--------------|
+   > | `/help` | Shows all available commands |
+   > | `/clear` | Fresh start — clears conversation |
+   > | `/model` | Switch between AI models |
+   > | `/diff` | See what Copilot changed |
+   > | `/plan` | Create an implementation plan |
+   > | `/compact` | Shrink conversation to save context |
+   > | `/context` | See context window usage |
 
 2. **Three modes** — Press `Shift+Tab` to cycle:
    > **Interactive** (default) — Copilot asks before every action
@@ -144,13 +144,13 @@ Celebrate: "See? YOU are always in control!  Copilot never does anything without
 **Exercise:**
 ```
 Use ask_user:
-" Try these in Copilot CLI:
+"Try these in Copilot CLI:
 1. Type /help to see all commands
 2. Press Shift+Tab to cycle through modes
 3. Type !ls to run a quick shell command
 
 Which one surprised you the most?"
-choices: [" So many slash commands!", " The modes — plan mode is cool!", " The ! shortcut is genius!", " All of it!"]
+choices: ["So many slash commands!", "The modes — plan mode is cool!", "The ! shortcut is genius!", "All of it!"]
 ```
 
 ---
@@ -176,12 +176,12 @@ choices: [" So many slash commands!", " The modes — plan mode is cool!", " The
 **Exercise:**
 ```
 Use ask_user:
-" Navigate to a project folder and try:
+"Navigate to a project folder and try:
 
    'Explain what @README.md says about this project'
 
 Did Copilot nail it?"
-choices: [" Perfect explanation!", " I don't have a project handy", " Something didn't work"]
+choices: ["Perfect explanation!", "I don't have a project handy", "Something didn't work"]
 ```
 
 If no project folder: suggest `mkdir ~/copilot-playground && cd ~/copilot-playground` and have Copilot create files first!
@@ -211,12 +211,12 @@ If no project folder: suggest `mkdir ~/copilot-playground && cd ~/copilot-playgr
 **Exercise:**
 ```
 Use ask_user:
-" Try:
+"Try:
 
    /plan Create a simple calculator that adds, subtracts, multiplies, and divides
 
 Read the plan. Does it look reasonable?"
-choices: [" The plan looks great!", " I want to edit it — how?", " Not sure what to do with the plan"]
+choices: ["The plan looks great!", "I want to edit it — how?", "Not sure what to do with the plan"]
 ```
 
 ---
@@ -251,12 +251,12 @@ choices: [" The plan looks great!", " I want to edit it — how?", " Not sure wh
 **Exercise:**
 ```
 Use ask_user:
-" Let's personalize! Try:
+"Let's personalize! Try:
 
    /init
 
 Did Copilot help set up instruction files for your project?"
-choices: [" It created instruction files! ", " Not sure what happened", " I need help"]
+choices: ["It created instruction files! ", "Not sure what happened", "I need help"]
 ```
 
 ---
@@ -289,12 +289,12 @@ choices: [" It created instruction files! ", " Not sure what happened", " I need
 **Exercise:**
 ```
 Use ask_user:
-" Try:
+"Try:
 
    /model
 
 What models are available to you?"
-choices: [" I see several models!", " Not sure which to pick", " What's the difference between them?"]
+choices: ["I see several models!", "Not sure which to pick", "What's the difference between them?"]
 ```
 
 ---
@@ -325,12 +325,12 @@ choices: [" I see several models!", " Not sure which to pick", " What's the diff
 **Exercise:**
 ```
 Use ask_user:
-" Try this:
+"Try this:
 
    'Create a file called meeting-notes.md with a template for taking meeting notes. Include sections for date, attendees, agenda items, decisions, and action items.'
 
 How does the template look?"
-choices: [" Great template! I'd actually use this!", " I want to customize it", " I want to try something different"]
+choices: ["Great template! I'd actually use this!", "I want to customize it", "I want to try something different"]
 ```
 
 ---
@@ -359,12 +359,12 @@ choices: [" Great template! I'd actually use this!", " I want to customize it", 
 **Exercise:**
 ```
 Use ask_user:
-" Try this:
+"Try this:
 
    /plan Create a 5-day onboarding checklist for a new team member joining our marketing department
 
 Did Copilot create a useful plan?"
-choices: [" This is actually really useful!", " It's close but I'd change some things", " I want to try a different topic"]
+choices: ["This is actually really useful!", "It's close but I'd change some things", "I want to try a different topic"]
 ```
 
 ---
@@ -394,12 +394,12 @@ choices: [" This is actually really useful!", " It's close but I'd change some t
 **Exercise:**
 ```
 Use ask_user:
-" Navigate to any project folder and try:
+"Navigate to any project folder and try:
 
    'Explain what this project does in simple, non-technical terms'
 
 Was the explanation clear?"
-choices: [" Crystal clear! Now I get it!", " It was still a bit technical", " I don't have a project to look at"]
+choices: ["Crystal clear! Now I get it!", "It was still a bit technical", "I don't have a project to look at"]
 ```
 
 If too technical: "Try adding 'explain it like I'm a product manager' to your prompt!"
@@ -432,12 +432,12 @@ If no project: suggest cloning a simple open source repo to explore.
 **Exercise:**
 ```
 Use ask_user:
-" Create a test document and try it out:
+"Create a test document and try it out:
 
    'Create a file called test-doc.md with a fake project proposal. Then summarize it in 3 bullet points.'
 
 Did Copilot give you a good summary?"
-choices: [" Great summary!", " I want to try with my own files", " Show me more examples"]
+choices: ["Great summary!", "I want to try with my own files", "Show me more examples"]
 ```
 
 ---
@@ -523,20 +523,20 @@ Want to know more? Just ask!
 
 When a non-developer encounters these terms, explain them inline:
 
-| Term | Plain English | Emoji |
-|------|--------------|-------|
-| **Terminal** | The text-based app where you type commands (like Terminal on Mac, Command Prompt on Windows) |  |
-| **CLI** | Command Line Interface — just means "a tool you use by typing" | ⌨ |
-| **Directory / Folder** | Same thing! "Directory" is the terminal word for "folder" |  |
-| **`cd`** | "Change directory" — how you move between folders: `cd Documents` |  |
-| **`ls`** | "List" — shows what files are in the current folder |  |
-| **Repository / Repo** | A project folder tracked by Git (GitHub's version control) |  |
-| **Prompt** | The place where you type — or the text you type to ask Copilot something |  |
-| **Command** | An instruction you type in the terminal |  |
-| **`ctrl+c`** | The universal "cancel" — stops whatever is happening |  |
-| **MCP** | Model Context Protocol — a way to add plugins/extensions to Copilot |  |
+| Term | Plain English |
+|------|---------------|
+| **Terminal** | The text-based app where you type commands (like Terminal on Mac, Command Prompt on Windows) |
+| **CLI** | Command Line Interface — just means "a tool you use by typing" |
+| **Directory / Folder** | Same thing! "Directory" is the terminal word for "folder" |
+| **`cd`** | "Change directory" — how you move between folders: `cd Documents` |
+| **`ls`** | "List" — shows what files are in the current folder |
+| **Repository / Repo** | A project folder tracked by Git (GitHub's version control) |
+| **Prompt** | The place where you type — or the text you type to ask Copilot something |
+| **Command** | An instruction you type in the terminal |
+| **`ctrl+c`** | The universal "cancel" — stops whatever is happening |
+| **MCP** | Model Context Protocol — a way to add plugins/extensions to Copilot |
 
-Always use the **plain English** version first, then mention the technical term: "Navigate to your folder (that's `cd folder-name` in terminal-speak )"
+Always use the **plain English** version first, then mention the technical term: "Navigate to your folder (that's `cd folder-name` in terminal-speak)"
 
 ---
 

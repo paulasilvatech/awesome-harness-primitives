@@ -55,11 +55,11 @@ Your job is the **Measure** step, surfaced as a beautiful static HTML report tha
 
 | Level | Name | What it means |
 |---|---|---|
-| 1 | **Functional**| Builds, tests, basic tooling in place |
-| 2 | **Documented**| README, CONTRIBUTING, custom instructions exist |
-| 3 | **Standardized**| CI/CD, security policies, CODEOWNERS, observability |
-| 4 | **Optimized**| MCP servers, custom agents, AI skills configured |
-| 5 | **Autonomous**| Full AI-native development with minimal human oversight |
+| 1 | **Functional** | Builds, tests, basic tooling in place |
+| 2 | **Documented** | README, CONTRIBUTING, custom instructions exist |
+| 3 | **Standardized** | CI/CD, security policies, CODEOWNERS, observability |
+| 4 | **Optimized** | MCP servers, custom agents, AI skills configured |
+| 5 | **Autonomous** | Full AI-native development with minimal human oversight |
 
 The level is computed by AgentRC from the readiness score. Use `--fail-level n` in CI to enforce a minimum.
 
@@ -77,20 +77,20 @@ Every pillar carries an **AI relevance** rating shown as a badge on its card in 
 
 | Pillar | AI relevance | What it checks | Why it matters for AI (full explanation) |
 |---|---|---|---|
-| **Style**| Medium | Linter config (ESLint/Biome/Prettier), type-checking (TypeScript/Mypy) | Lint and type rules are the most explicit form of "house style" an agent can read. With them in place, Copilot generates code that passes review on the first try; without them, the agent has to guess at conventions and PRs churn on style nits. |
-| **Build**| High | Build script in package.json, CI workflow config | An agent without a build command cannot self-verify. A canonical `npm run build` (and a CI workflow that mirrors it) lets the agent compile, catch type errors, and iterate before opening a PR — the difference between "works on my machine" and a clean check run. |
-| **Testing**| High | Test script, area-scoped test scripts | Tests are the agent's automated quality gate. With a `test` script the agent can run TDD loops and prove behaviour; with area-scoped tests it can run only what's relevant and stay fast. No tests = no objective signal for the agent to know when it's done. |
-| **Docs**| High | README, CONTRIBUTING, area-scoped READMEs | Docs are the agent's primary *context source*. README explains the stack, CONTRIBUTING explains the process, area READMEs explain local conventions. Repos with rich docs see dramatically better Copilot suggestions because the model is grounded in real intent instead of guessing from filenames. |
-| **Dev Environment**| Medium | Lockfile, `.env.example` | A lockfile pins versions so the agent's `npm install` matches CI. `.env.example` tells the agent which env vars exist without leaking secrets. Together they make the agent's local runs reproducible and stop it from inventing config that doesn't apply. |
-| **Code Quality**| Medium | Formatter config (Prettier/Biome) | A formatter config means the agent's output lands pre-formatted — no diff noise, no review comments about whitespace. Without it, AI-generated PRs trigger style discussions that drown out real feedback. |
-| **Observability**| Low | OpenTelemetry / Pino / Winston / Bunyan | When logging/tracing libraries are visible in the dependency graph, the agent instruments new code with the same patterns instead of `console.log`. Lower leverage than docs/tests because the agent only needs it for the subset of work that touches runtime instrumentation. |
-| **Security**| Low | LICENSE, CODEOWNERS, SECURITY.md, Dependabot | CODEOWNERS routes AI-generated PRs to the right reviewers automatically. SECURITY.md and Dependabot tell the agent how to handle vulnerability reports and dependency bumps. Important for governance, but rarely changes what code the agent writes day-to-day. |
+| **Style** | Medium | Linter config (ESLint/Biome/Prettier), type-checking (TypeScript/Mypy) | Lint and type rules are the most explicit form of "house style" an agent can read. With them in place, Copilot generates code that passes review on the first try; without them, the agent has to guess at conventions and PRs churn on style nits. |
+| **Build** | High | Build script in package.json, CI workflow config | An agent without a build command cannot self-verify. A canonical `npm run build` (and a CI workflow that mirrors it) lets the agent compile, catch type errors, and iterate before opening a PR — the difference between "works on my machine" and a clean check run. |
+| **Testing** | High | Test script, area-scoped test scripts | Tests are the agent's automated quality gate. With a `test` script the agent can run TDD loops and prove behaviour; with area-scoped tests it can run only what's relevant and stay fast. No tests = no objective signal for the agent to know when it's done. |
+| **Docs** | High | README, CONTRIBUTING, area-scoped READMEs | Docs are the agent's primary *context source*. README explains the stack, CONTRIBUTING explains the process, area READMEs explain local conventions. Repos with rich docs see dramatically better Copilot suggestions because the model is grounded in real intent instead of guessing from filenames. |
+| **Dev Environment** | Medium | Lockfile, `.env.example` | A lockfile pins versions so the agent's `npm install` matches CI. `.env.example` tells the agent which env vars exist without leaking secrets. Together they make the agent's local runs reproducible and stop it from inventing config that doesn't apply. |
+| **Code Quality** | Medium | Formatter config (Prettier/Biome) | A formatter config means the agent's output lands pre-formatted — no diff noise, no review comments about whitespace. Without it, AI-generated PRs trigger style discussions that drown out real feedback. |
+| **Observability** | Low | OpenTelemetry / Pino / Winston / Bunyan | When logging/tracing libraries are visible in the dependency graph, the agent instruments new code with the same patterns instead of `console.log`. Lower leverage than docs/tests because the agent only needs it for the subset of work that touches runtime instrumentation. |
+| **Security** | Low | LICENSE, CODEOWNERS, SECURITY.md, Dependabot | CODEOWNERS routes AI-generated PRs to the right reviewers automatically. SECURITY.md and Dependabot tell the agent how to handle vulnerability reports and dependency bumps. Important for governance, but rarely changes what code the agent writes day-to-day. |
 
 ### AI Setup (1 pillar)
 
 | Pillar | AI relevance | What it checks | Why it matters |
 |---|---|---|---|
-| **AI Tooling**| High | Custom instructions (`.github/copilot-instructions.md`, `AGENTS.md`, `CLAUDE.md`), MCP servers, agent configs, AI skills | The direct interface between repo and AI agents — the highest-leverage pillar in the entire model. A good `AGENTS.md` is worth more than every other pillar combined: it tells the agent your stack, conventions, build commands, test commands, and review expectations in one place. MCP servers and custom skills extend the agent's reach into your tools. |
+| **AI Tooling** | High | Custom instructions (`.github/copilot-instructions.md`, `AGENTS.md`, `CLAUDE.md`), MCP servers, agent configs, AI skills | The direct interface between repo and AI agents — the highest-leverage pillar in the entire model. A good `AGENTS.md` is worth more than every other pillar combined: it tells the agent your stack, conventions, build commands, test commands, and review expectations in one place. MCP servers and custom skills extend the agent's reach into your tools. |
 
 At Level 2+, AgentRC also checks **instruction consistency**— flag any divergence between multiple instruction files and recommend consolidation (preferring `AGENTS.md`).
 
@@ -128,10 +128,10 @@ If no policy is set, label the section "Default policy (built-in defaults)" and 
 
 | Bucket | Rule of thumb |
 |---|---|
-| **Fix First**| impact ∈ {critical, high} **and** the fix is small (single file or config) |
-| **Fix Next**| impact = medium **and** the fix is small |
-| **Plan**| impact = medium **and** larger refactor required |
-| **Backlog**| impact ∈ {low, info} |
+| **Fix First** | impact ∈ {critical, high} **and** the fix is small (single file or config) |
+| **Fix Next** | impact = medium **and** the fix is small |
+| **Plan** | impact = medium **and** larger refactor required |
+| **Backlog** | impact ∈ {low, info} |
 
 When in doubt, prefer the higher bucket if the pillar is `Docs`, `Testing`, `Build`, or `AI Tooling` — these are the highest-leverage for AI agents.
 

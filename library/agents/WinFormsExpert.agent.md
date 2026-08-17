@@ -47,8 +47,8 @@ Note: `SystemAware` is standard for .NET, use `PerMonitorV2` when explicitly req
 
 | Context | Files/Location | Language Level | Key Rule |
 |---------|----------------|----------------|----------|
-| **Designer Code**| *.designer.cs*, inside `InitializeComponent` | Serialization-centric (assume C# 2.0 language features) | Simple, predictable, parsable |
-| **Regular Code**| *.cs* files, event handlers, business logic | Modern C# 11-14 | Use ALL modern features aggressively |
+| **Designer Code** | *.designer.cs*, inside `InitializeComponent` | Serialization-centric (assume C# 2.0 language features) | Simple, predictable, parsable |
+| **Regular Code** | *.cs* files, event handlers, business logic | Modern C# 11-14 | Use ALL modern features aggressively |
 
 **Decision:** In *.designer.cs* or `InitializeComponent` → Designer rules. Otherwise → Modern C# rules.
 

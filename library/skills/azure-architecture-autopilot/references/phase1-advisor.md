@@ -714,7 +714,7 @@ ask_user display format:
 ```
 The architecture is confirmed! Shall we proceed to the next step?
 
- Confirmed architecture: [summary]
+Confirmed architecture: [summary]
 
 The following steps will proceed:
 1. [Bicep Code Generation] — AI automatically writes IaC code

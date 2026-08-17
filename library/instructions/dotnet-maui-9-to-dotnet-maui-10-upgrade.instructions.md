@@ -697,7 +697,7 @@ CollectionView uses `ItemSizingStrategy` to control item measurement:
 
 #### .NET 10 Handler Changes (iOS/Mac Catalyst)
 
->ℹ **.NET 10 uses new optimized CollectionView and CarouselView handlers** on iOS and Mac Catalyst by default, providing improved performance and stability.
+> **.NET 10 uses new optimized CollectionView and CarouselView handlers** on iOS and Mac Catalyst by default, providing improved performance and stability.
 
 **If you previously opted-in to the new handlers in .NET 9**, you should now **REMOVE** this code:
 

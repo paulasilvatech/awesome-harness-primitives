@@ -124,7 +124,7 @@ az resource list -g "<RG>" --query "[].{name:name,type:type,kind:kind,location:l
 **Immediately after reading resources.json, you MUST display the full resource list table to the user: **
 
 ```
- rg-<RG> Resource List (N resources)
+rg-<RG> Resource List (N resources)
 
 ┌─────────────────────────┬──────────────────────────────────────────────┬─────────────────┐
 │ Name                    │ Type                                         │ Location        │
