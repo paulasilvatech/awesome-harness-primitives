@@ -9,7 +9,7 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | --- | ---: |
 | Agents | 224 |
 | Instructions | 192 |
-| Skills | 407 |
+| Skills | 418 |
 | Plugins | 93 |
 | Hooks | 8 |
 
@@ -459,6 +459,7 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | ai-ready | Make any repo AI-ready — analyzes your codebase and generates AGENTS.md, copilot-instructions.md, CI workflows, issue templates, and more. Mines your PR review patterns and create… |
 | ai-team-orchestration | Bootstrap and run a lightweight multi-agent development team. Use when starting or adopting a project, planning work, coordinating implementation and optional QA, brainstorming wi… |
 | anti-ui-slop | Stop Codex, GitHub Copilot, Claude Code, and Cursor from shipping generic UI. Use UIZZE’s public catalogue of 800,000+ real web and iOS screens to extract product-specific design… |
+| apim-ai-gateway | Front model and tool backends with Azure API Management as an AI gateway: token rate limiting (token-per-minute and quota), multi-backend load balancing and circuit breaker across… |
 | appinsights-instrumentation | Instrument a webapp to send useful telemetry data to Azure App Insights. Use this skill when the user wants to enable telemetry for their webapp. |
 | apple-appstore-reviewer | Serves as a reviewer of the codebase with instructions on looking for Apple App Store optimizations or rejection reasons. Use this skill when prefer short, clear recommendations w… |
 | arch-linux-triage | Triage and resolve Arch Linux issues with pacman, systemd, and rolling-release best practices. Use this skill when the user asks for inputs. |
@@ -485,11 +486,14 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | aws-resource-query | Query AWS resources using natural language. Covers EC2, S3, RDS, Lambda, ECS, EKS, Secrets Manager, IAM, VPC, networking, messaging, and more. Strictly read-only — no writes, dele… |
 | aws-well-architected-review | Perform an AWS Well-Architected Framework review of the current workload IaC and architecture, generating findings and GitHub issues for improvements. Use this skill when the user… |
 | az-cost-optimize | Analyze Azure resources used in the app (IaC files and/or resources in a target rg) and optimize costs - creating GitHub issues for identified optimizations. Use this skill when t… |
+| azure-api-center | Govern APIs and agent tools at enterprise scale with Azure API Center: a central catalog of APIs, versions, definitions (OpenAPI), environments, and deployments, plus registration… |
 | azure-architecture-autopilot | Design Azure infrastructure using natural language, or analyze existing Azure resources to auto-generate architecture diagrams, refine them through conversation, and deploy with B… |
+| azure-architecture-diagrams | Produce complete, professional architecture diagrams that use the official Azure, Microsoft, and GitHub (Octicons) icon sets, output as editable draw.io (.drawio) files and export… |
 | azure-container-registry-cli | Manage Azure Container Registry via the az acr CLI including registries, images, cloud builds, ACR Tasks, authentication, tokens, geo-replication, and networking. Use when working… |
 | azure-deployment-preflight | Performs comprehensive preflight validation of Bicep deployments to Azure, including template syntax validation, what-if analysis, and permission checks. Use this skill before any… |
 | azure-developer-cli | Design, create, review, migrate, or troubleshoot Azure Developer CLI (azd) projects using current Microsoft guidance. Use for azd, azure.yaml, AZD templates, Bicep or Terraform un… |
 | azure-devops-cli | Manage Azure DevOps resources via CLI including projects, repos, pipelines, builds, pull requests, work items, artifacts, and service endpoints. Use when working with Azure DevOps… |
+| azure-managed-redis-cache | Design and provision Azure Managed Redis as the cache, semantic cache, vector store, session store, and agent memory backend for AI-native systems. Covers SKU selection (Balanced,… |
 | azure-pricing | Fetches real-time Azure retail pricing using the Azure Retail Prices API (prices.azure.com) and estimates Copilot Studio agent credit consumption. Use when the user asks about the… |
 | azure-resource-health-diagnose | Analyze Azure resource health, diagnose issues from logs and telemetry, and create a remediation plan for identified problems. Use this skill when the user asks for azure resource… |
 | azure-resource-visualizer | Analyze Azure resource groups and generate detailed Mermaid architecture diagrams showing the relationships between individual resources. Use this skill when the user asks for a d… |
@@ -497,6 +501,7 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | azure-smart-city-iot-solution-builder | Design and plan end-to-end Azure IoT and Smart City solutions: requirements, architecture, security, operations, cost, and a phased delivery plan with concrete implementation arti… |
 | azure-static-web-apps | Helps create, configure, and deploy Azure Static Web Apps using the SWA CLI. Use when deploying static sites to Azure, setting up SWA local development, configuring staticwebapp.c… |
 | azure-well-architected-review | Perform an Azure Well-Architected Framework review of the current workload IaC and architecture, generating findings and GitHub issues for improvements. Use this skill when the us… |
+| backstage-plugin-builder | Use this skill when the user asks to plan, architect, scaffold, validate, or prepare a custom Backstage plugin or module using official Backstage documentation. Trigger for fronte… |
 | batch-files | Expert-level Windows batch file (.bat/.cmd) skill for writing, debugging, and maintaining CMD scripts. Use when asked to "create a batch file", "write a .bat script", "automate a… |
 | bench-read | Read artifacts from the shared bench — the workspace where desks leave findings, verdicts, and work products for each other and the operator. Use this skill when starting a sessio… |
 | bigquery-pipeline-audit | Audits Python + BigQuery pipelines for cost safety, idempotency, and production readiness. Returns a structured report with exact patch locations. Use this skill when `extract_tab… |
@@ -511,11 +516,13 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | bug-receipt | Close bugs and incidents with an auditable BUG RECEIPT and VERIFIED, PARTIAL, or BLOCKED status. Use for defect repair, regression proof, production incidents, and issue closeout.… |
 | bug-reproduction-brief | Turn a vague, intermittent, or environment-specific bug report into a minimal evidence-backed reproduction before proposing a fix. Use this skill when 1. Record the observed failu… |
 | build-evidence-map | Build an auditable evidence map for a contested technical choice, research synthesis, proposal review, or consequential decision. Use when Copilot must preserve supporting, contra… |
+| canvas-design | Create beautiful visual art in .png and .pdf documents using design philosophy. You should use this skill when the user asks to create a poster, piece of art, design, or other sta… |
 | centos-linux-triage | Triage and resolve CentOS issues using RHEL-compatible tooling, SELinux-aware practices, and firewalld. Use this skill when the user asks for inputs. |
 | chrome-devtools | Expert-level browser automation, debugging, and performance analysis using Chrome DevTools MCP. Use this skill when **Browser Automation**: Navigating pages, clicking elements, fi… |
 | cli-mastery | Interactive training for the GitHub Copilot CLI. Guided lessons, quizzes, scenario challenges, and a full reference covering slash commands, shortcuts, modes, agents, skills, MCP,… |
 | cloud-design-patterns | Cloud design patterns for distributed systems architecture covering 42 industry-standard patterns across reliability, performance, messaging, security, and deployment categories.… |
 | code-exemplars-blueprint-generator | Technology-agnostic prompt generator that creates customizable AI prompts for scanning codebases and identifying high-quality code exemplars. Supports multiple programming languag… |
+| code-modernization | Use this skill when the user asks to modernize legacy code with a disciplined GitHub Copilot workflow: brief, assess, map, extract business rules, reimagine architecture, transfor… |
 | code-tour | Use this skill to create CodeTour .tour files — persona-targeted, step-by-step walkthroughs that link to real files and line numbers. Trigger for: "create a tour", "make a code to… |
 | codebase-memory-mcp | Use when a configured codebase-memory-mcp server can assist with graph-backed code discovery, architecture orientation, symbol lookup, callers and callees, dependency or data-flow… |
 | codeql | Comprehensive guide for setting up and configuring CodeQL code scanning via GitHub Actions workflows and the CodeQL CLI. Use this skill when the request involves; creating or cust… |
@@ -778,6 +785,9 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | resemble-detect | Deepfake detection and media safety — detect AI-generated audio, images, video, and text, trace synthesis sources, apply watermarks, verify speaker identity, and analyze media int… |
 | review-and-refactor | Review and refactor code in your project according to defined instructions. Use this skill when the user asks for role. |
 | reviewing-oracle-to-postgres-migration | Identifies Oracle-to-PostgreSQL migration risks by cross-referencing code against known behavioral differences (empty strings, refcursors, type coercion, sorting/collations, UNION… |
+| rhdh | Use this skill when the user works on Red Hat Developer Hub (RHDH) — the primary entry point that routes to specialized RHDH skills for plugin development, overlay management, loc… |
+| rhdh-jira | Use this skill when the user works with RHDH Jira projects RHIDP, RHDHPLAN, RHDHBUGS, or RHDHSUPP using acli, GraphQL, and REST fallback. Trigger for Jira keys, creating features,… |
+| rhdh-local | Use this skill when the user tests Red Hat Developer Hub plugins locally with rhdh-local-setup. Trigger for enabling or disabling plugins, switching customized and pristine modes,… |
 | rhino3d-scripts | Authoring and debugging scripts for Rhinoceros 3D (Rhino 8 and later). Use when asked to write RhinoScript (VBScript / .rvb / .vbs), RhinoPython, or RhinoCommon-based scripts; aut… |
 | roundup | Generate personalized status briefings on demand. Pulls from your configured data sources (GitHub, email, Teams, Slack, and more), synthesizes across them, and drafts updates in y… |
 | roundup-setup | Interactive onboarding that learns your communication style, audiences, and data sources to configure personalized status briefings. Paste in examples of updates you already write… |
@@ -799,6 +809,7 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | shopify-review-triage | Use this skill when someone wants public Shopify App Store reviews, low-star reviews, or merchant feedback triaged, prioritized, clustered, or turned into a product or support bri… |
 | shuffle-json-data | Shuffle repetitive JSON objects safely by validating schema consistency before randomising entries. Use this skill when the user asks for role. |
 | signal-write | Emit structured agent signals — hands-up, blocked, done, checkpoint, partnership. Signals are written as JSON to .signals/ for dashboard consumption and noted in the journal for p… |
+| skill-creator | Create, audit, repair, and improve GitHub Copilot Agent Skills for VS Code, GitHub Copilot CLI, and GitHub Copilot cloud agent. Use when a user asks to create a skill, generate a… |
 | slang-shader-engineer | Use when working with Slang shaders, shader modules, HLSL-compatible GPU code, graphics pipelines, compute shaders, tessellation, ray tracing, parameter blocks, generics, interfac… |
 | snowflake-semanticview | Create, alter, and validate Snowflake semantic views using Snowflake CLI (snow). Use when asked to build or troubleshoot semantic views/semantic layer definitions with CREATE/ALTE… |
 | sponsor-finder | Find which of a GitHub repository's dependencies are sponsorable via GitHub Sponsors. Uses deps.dev API for dependency resolution across npm, PyPI, Cargo, Go, RubyGems, Maven, and… |

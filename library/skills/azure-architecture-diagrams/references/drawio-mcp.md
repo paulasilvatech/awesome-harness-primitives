@@ -68,4 +68,4 @@ For VS Code MCP configuration, place an equivalent entry in your MCP settings an
 
 - [Model Context Protocol](https://modelcontextprotocol.io/)
 - [FastMCP in the MCP Python SDK](https://github.com/modelcontextprotocol/python-sdk)
-- [draw.io file format](https://www.drawio.com/doc/faq/format-of-files)
+- [draw.io file format](https://www.drawio.com/docs/reference/diagram-generation/style-reference/)

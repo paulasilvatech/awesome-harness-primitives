@@ -36,6 +36,6 @@ RedisVL provides a `SemanticCache` abstraction over a Redis vector index. The sh
 
 ## Sources
 
-- [Azure Managed Redis vector search](https://learn.microsoft.com/azure/redis/redis-vector-search)
-- [RedisVL semantic cache](https://redis.io/docs/latest/integrate/redisvl/user_guide/llmcache/)
+- [Azure Managed Redis vector search](https://learn.microsoft.com/en-us/azure/redis/overview-vector-similarity)
+- [RedisVL semantic cache](https://docs.redisvl.com/en/latest/user_guide/03_llmcache.html)
 - [Azure API Management semantic caching policy](https://learn.microsoft.com/azure/api-management/azure-openai-semantic-cache-lookup-policy)

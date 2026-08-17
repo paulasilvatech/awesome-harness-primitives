@@ -1,6 +1,6 @@
 ---
 name: rhdh-jira
-description: "Work with RHDH Jira projects RHIDP, RHDHPLAN, RHDHBUGS, and RHDHSUPP using acli, GraphQL, and REST fallback. Use for Jira keys, creating features, epics, stories, tasks, bugs, assigning owners, refinement, sprint planning, sprint reports, release status, status updates, duplicate checks, sizing, or sprint ceremony prep."
+description: "Use this skill when the user works with RHDH Jira projects RHIDP, RHDHPLAN, RHDHBUGS, or RHDHSUPP using acli, GraphQL, and REST fallback. Trigger for Jira keys, creating features, epics, stories, tasks, bugs, assigning owners, refinement, sprint planning, sprint reports, release status, status updates, duplicate checks, sizing, or sprint ceremony prep."
 ---
 
 # RHDH Jira

@@ -72,6 +72,6 @@ Put child nodes inside by setting their `parent="rg"` and using geometry relativ
 
 ## Sources
 
-- [draw.io XML and mxGraph](https://www.drawio.com/doc/faq/format-of-files)
-- [draw.io Azure shapes](https://www.drawio.com/doc/faq/shapes-azure)
+- [draw.io XML and mxGraph](https://www.drawio.com/docs/reference/diagram-generation/style-reference/)
+- [draw.io Azure shapes](https://www.drawio.com/docs/manual/advanced/custom-shape-libraries/)
 - [mxGraph user object and styles](https://www.drawio.com/doc/faq/custom-shapes)

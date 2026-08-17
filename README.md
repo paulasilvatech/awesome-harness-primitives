@@ -35,6 +35,12 @@ For a generated, alphabetized inventory, see [docs/CATALOG.md](docs/CATALOG.md).
 | Skills | `library/skills/<name>/SKILL.md` | `.github/skills/<name>/SKILL.md`, `~/.copilot/skills/<name>/SKILL.md`, `.claude/skills/`, `.agents/skills/`, or `<plugin-root>/skills/<name>/SKILL.md` | `SKILL.md` with YAML frontmatter |
 | Plugins | `library/plugins/<name>/plugin.json` | Manifest discovery: `.plugin/plugin.json`, `plugin.json`, `.github/plugin/plugin.json`, or `.claude-plugin/plugin.json`; marketplace discovery: `.plugin/marketplace.json`, `.github/plugin/marketplace.json`, or `.claude-plugin/marketplace.json` | JSON manifest |
 | Hooks | `library/hooks/<name>/hooks.json` | `.github/hooks/*.json`, `~/.copilot/hooks/*.json`, policy directories, settings `hooks`, or `<plugin-root>/hooks.json` / `<plugin-root>/hooks/hooks.json` | JSON (`version: 1`) |
+| Prompts *(VS Code only)* | `library/prompts/*.prompt.md` | **Not a CLI primitive** — `.github/prompts/` is read by VS Code chat only | Markdown with YAML frontmatter |
+
+Every type above is loaded by the Copilot CLI harness except **prompts**: agents running on the Agent
+Host do not use prompt files. They are kept here for VS Code users — see
+[library/prompts/README.md](library/prompts/README.md) for how to convert one into a skill, which works
+in both surfaces.
 
 ## Install and usage
 

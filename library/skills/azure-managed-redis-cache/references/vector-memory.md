@@ -29,6 +29,6 @@ Redis vector search stores embeddings and retrieves them by similarity, which ma
 
 ## Sources
 
-- [Azure Managed Redis vector search](https://learn.microsoft.com/azure/redis/redis-vector-search)
+- [Azure Managed Redis vector search](https://learn.microsoft.com/en-us/azure/redis/overview-vector-similarity)
 - [RedisVL vector queries](https://redis.io/docs/latest/integrate/redisvl/)
 - [Azure AI Search vector search](https://learn.microsoft.com/azure/search/vector-search-overview)

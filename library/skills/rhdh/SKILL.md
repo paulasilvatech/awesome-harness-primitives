@@ -1,6 +1,6 @@
 ---
 name: rhdh
-description: "Primary Red Hat Developer Hub (RHDH) skill for plugin development, overlay management, local testing, Jira work, repo navigation, version compatibility, CI debugging, and environment setup. Use for RHDH, Red Hat Developer Hub, Developer Hub, dynamic plugins, overlays, rhdh-local, RHDH Jira, plugin catalog, RHDH repositories, or RHDH CI/CD tasks."
+description: "Use this skill when the user works on Red Hat Developer Hub (RHDH) — the primary entry point that routes to specialized RHDH skills for plugin development, overlay management, local testing, Jira work, repo navigation, version compatibility, CI debugging, and environment setup. Trigger for RHDH, Red Hat Developer Hub, Developer Hub, dynamic plugins, overlays, rhdh-local, RHDH Jira, plugin catalog, RHDH repositories, or RHDH CI/CD tasks."
 ---
 
 # RHDH

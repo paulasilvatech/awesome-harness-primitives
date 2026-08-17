@@ -1,6 +1,6 @@
 ---
 name: backstage-plugin-builder
-description: "Plan, architect, scaffold, validate, and prepare custom Backstage plugins and modules using official Backstage documentation. Use for frontend plugins, backend plugins, backend modules, catalog processors, scaffolder actions, search collators, auth providers, permission policies, TechDocs addons, common packages, node packages, plugin ADRs, architecture, validation hooks, and community publication preparation."
+description: "Use this skill when the user asks to plan, architect, scaffold, validate, or prepare a custom Backstage plugin or module using official Backstage documentation. Trigger for frontend plugins, backend plugins, backend modules, catalog processors, scaffolder actions, search collators, auth providers, permission policies, TechDocs addons, common packages, node packages, plugin ADRs, architecture, validation hooks, and community publication preparation."
 ---
 
 # Backstage Plugin Builder

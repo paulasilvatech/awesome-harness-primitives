@@ -52,6 +52,6 @@ A minimal, idempotent Bicep is in [scripts/redis-managed.bicep](scripts/redis-ma
 ## References
 
 - [Azure Managed Redis](https://learn.microsoft.com/azure/redis/)
-- [Azure Managed Redis vector search](https://learn.microsoft.com/azure/redis/redis-vector-search)
+- [Azure Managed Redis vector search](https://learn.microsoft.com/en-us/azure/redis/overview-vector-similarity)
 - [Authenticate with Microsoft Entra ID](https://learn.microsoft.com/azure/redis/entra-for-authentication)
 - [RedisVL](https://redis.io/docs/latest/integrate/redisvl/)

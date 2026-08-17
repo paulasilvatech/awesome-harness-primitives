@@ -43,6 +43,6 @@ The same diagram can be generated programmatically:
 
 ## Sources
 
-- [draw.io file format](https://www.drawio.com/doc/faq/format-of-files)
+- [draw.io file format](https://www.drawio.com/docs/reference/diagram-generation/style-reference/)
 - [Azure architecture icons](https://learn.microsoft.com/azure/architecture/icons/)
 - [GitHub Octicons](https://primer.style/octicons/)

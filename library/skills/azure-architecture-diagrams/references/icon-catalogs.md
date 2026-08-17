@@ -40,4 +40,4 @@ Use only official icon sets, and use them within their terms. This protects the 
 - [Microsoft brand and trademark guidelines](https://www.microsoft.com/legal/intellectualproperty/trademarks)
 - [GitHub Octicons](https://primer.style/octicons/)
 - [GitHub logos and usage](https://github.com/logos)
-- [diagrams.net Azure shapes](https://www.drawio.com/doc/faq/shapes-azure)
+- [diagrams.net Azure shapes](https://www.drawio.com/docs/manual/advanced/custom-shape-libraries/)

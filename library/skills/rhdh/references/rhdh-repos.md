@@ -109,6 +109,7 @@ Reference of all RHDH-related repositories, what each one is used for, and how t
 ### rhdh-plugin-catalog
 
 - **Upstream:** <https://gitlab.cee.redhat.com/rhidp/rhdh-plugin-catalog>
+- **Note:** Requires Red Hat VPN / internal network access.
 - **Description:** Midstream infrastructure repository that manages building, packaging, and publishing Backstage plugins as OCI artifacts for RHDH. Syncs plugin source from `rhdh-plugin-export-overlays`, builds plugins via Konflux CI/CD, and maintains a catalog index of all available plugins. Publishes to `quay.io/rhdh/` and `registry.redhat.io/rhdh/`.
 - **Tech stack:** Node.js, TypeScript, Yarn 3, Backstage CLI, Python (build scripts), Tekton/Konflux pipelines, Docker/Podman
 - **Key concepts:**

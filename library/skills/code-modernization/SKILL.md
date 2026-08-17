@@ -1,11 +1,12 @@
 ---
 name: code-modernization
-description: "Guide legacy code modernization with a disciplined GitHub Copilot workflow: brief, assess, map, extract business rules, reimagine architecture, transform modules, and harden with tests and security review. Use for COBOL, JCL, legacy Java, .NET, C++, classic ASP, monolith modernization, behavior-preserving rewrite, business-rule extraction, modernization assessment, or legacy-to-modern transformation."
-source: "code-modernization-plugin, adapted for GitHub Copilot"
-source_url: "local:.github/plugins/code-modernization-plugin"
+description: "Use this skill when the user asks to modernize legacy code with a disciplined GitHub Copilot workflow: brief, assess, map, extract business rules, reimagine architecture, transform modules, and harden with tests and security review. Trigger for COBOL, JCL, legacy Java, .NET, C++, classic ASP, monolith modernization, behavior-preserving rewrite, business-rule extraction, modernization assessment, or legacy-to-modern transformation."
 license: "Apache-2.0"
-imported_date: "2026-06-18"
-last_sync: "2026-06-18"
+metadata:
+  source: "code-modernization-plugin, adapted for GitHub Copilot"
+  source_url: "local:.github/plugins/code-modernization-plugin"
+  imported_date: "2026-06-18"
+  last_sync: "2026-06-18"
 ---
 
 # Code Modernization

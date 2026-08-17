@@ -1,6 +1,6 @@
 ---
 name: rhdh-local
-description: "Test Red Hat Developer Hub plugins locally with rhdh-local-setup. Use for enabling or disabling plugins, switching customized and pristine modes, running local plugin tests, starting or stopping RHDH, health checks, backup and restore, environment variables, 504 errors, startup failures, and local troubleshooting."
+description: "Use this skill when the user tests Red Hat Developer Hub plugins locally with rhdh-local-setup. Trigger for enabling or disabling plugins, switching customized and pristine modes, running local plugin tests, starting or stopping RHDH, health checks, backup and restore, environment variables, 504 errors, startup failures, and local troubleshooting."
 ---
 
 # RHDH Local

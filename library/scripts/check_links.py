@@ -92,6 +92,10 @@ def find_repo_root(start: Path) -> Path:
 
 def iter_files(root: Path, subpath: str | None) -> list[Path]:
     base = root / subpath if subpath else root
+    if not base.exists():
+        raise SystemExit(f"--path not found: {base}")
+    if base.is_file():
+        return [base]
     out: list[Path] = []
     for dirpath, dirnames, filenames in os.walk(base):
         dirnames[:] = [d for d in dirnames if d not in SKIP_DIRS]
@@ -179,7 +183,7 @@ def probe(url: str, timeout: float) -> tuple[str, int | None, str]:
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--root", default=str(find_repo_root(Path(__file__).resolve())), help="repository root (default: nearest parent containing .git or README.md)")
-    ap.add_argument("--path", default=None, help="limit scan to this subdirectory")
+    ap.add_argument("--path", default=None, help="limit scan to this subdirectory or single file")
     ap.add_argument("--workers", type=int, default=24)
     ap.add_argument("--timeout", type=float, default=20.0)
     ap.add_argument("--json", dest="json_out", default=None)
