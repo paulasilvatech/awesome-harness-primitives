@@ -1,36 +1,3 @@
-<!-- AUTHORING NOTES — remove this entire block before using the prompt.
-
-Scope and placement
-- Prompt files are a VS Code feature. They are not a primitive discovered or executed by GitHub Copilot CLI.
-- In this repository, author the canonical source at `library/prompts/{{PROMPT_NAME}}.prompt.md`.
-  Repository synchronization publishes it to `.github/prompts/` for VS Code discovery; do not author the
-  synchronized copy directly.
-- For a workflow that must run in GitHub Copilot CLI, or in both CLI and VS Code, create an agent skill instead.
-
-Placeholders and runtime variables
-- Replace every visible `{{UPPER_SNAKE_CASE}}` authoring placeholder.
-- Keep VS Code runtime variables such as `${input:topic}` and `${selection}`. They are resolved when the prompt
-  runs and are not authoring placeholders.
-- Delete optional fields, inputs, branches, sections, and examples that the finished prompt does not need.
-
-Frontmatter
-- Keep `name`, `description`, and `argument-hint` concise and aligned with the prompt body.
-- `agent` is optional. Omit it to use the current agent. Add `agent: 'ask'`, `agent: 'agent'`, `agent: 'plan'`,
-  or a custom-agent name only when the workflow requires that behavior. Do not force a custom agent.
-- `tools` is optional. Omit it when inherited tools are sufficient. If used, copy exact IDs from the VS Code
-  Configure Tools picker. For example, `search/codebase` and `vscode/askQuestions` are VS Code tool IDs.
-  Tool IDs are environment-dependent, and VS Code tool names must not be copied into CLI agent frontmatter.
-- Uncomment the optional frontmatter examples below only after adapting them to the target VS Code environment.
-
-Structure
-- The sections before Prompt Body define the contract: trigger, inputs, scope, output, and acceptance criteria.
-- Prompt Body contains the reusable operational instructions. Do not restate the contract there without an
-  execution reason.
-- Make the destination explicit: a chat response, approved workspace edits, or an exact file path. Never assume
-  that every prompt writes a file.
-- Refer to another component by name and type, such as "the `{{RELATED_NAME}}` skill". Do not use relative links
-  between primitives.
--->
 ---
 name: '{{PROMPT_NAME}}'
 description: '{{ACTIONABLE_ONE_SENTENCE_DESCRIPTION}}'
@@ -40,6 +7,27 @@ argument-hint: '{{ARGUMENT_HINT}}'
 ---
 
 # /{{PROMPT_NAME}}
+
+## Template Setup
+
+Delete this section after configuring the prompt.
+
+1. Treat this as a **VS Code-only** prompt file. GitHub Copilot CLI does not discover or execute
+   `*.prompt.md`; use an agent skill when a workflow must run in CLI or on both surfaces.
+2. In this repository, author the source at `library/prompts/{{PROMPT_NAME}}.prompt.md`. No repository
+   script publishes prompts to `.github/prompts/`; copy or publish the finished prompt there explicitly
+   when VS Code workspace discovery is required.
+3. Replace every `{{UPPER_SNAKE_CASE}}` authoring placeholder. Keep `${input:...}` and `${selection}`
+   only when they are intentional VS Code runtime variables, and remove unused inputs, fields, branches,
+   sections, and examples.
+4. Leave `agent` omitted to use the current VS Code agent. Uncomment it only when the workflow requires
+   `ask`, `agent`, `plan`, or a specific custom agent; do not force a custom agent by default.
+5. Omit `tools` when inherited tools are sufficient. If tools are required, copy their exact IDs from
+   VS Code's **Configure Tools** picker. IDs such as `search/codebase` and `vscode/askQuestions` are
+   VS Code-specific and must not be copied into CLI agent or skill frontmatter.
+6. Choose the intended destination explicitly. A prompt may return a Chat response, make approved
+   workspace edits, or write an exact path, but it must not assume that every invocation writes files.
+7. Refer to another primitive by installed name and type, not by a relative link.
 
 ## Objective
 
