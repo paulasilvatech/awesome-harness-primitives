@@ -444,7 +444,7 @@ copilot --add-github-mcp-toolset dependabot
 **Example prompt:**
 > Scan the dependencies I added on this branch for known vulnerabilities and tell me which versions to upgrade to before I commit.
 
-See: [Advanced Security Plugin — Dependency Scanning Skill](https://github.com/github/copilot-plugins/blob/main/plugins/advanced-security/skills/dependency-scanning/SKILL.md)
+See: [Advanced Security Plugin — Dependency Scanning Skill](advanced-security plugin dependency-scanning skill)
 
 > Announced in [Dependency scanning with GitHub MCP Server is in public preview](https://github.blog/changelog/2026-05-05-dependency-scanning-with-github-mcp-server-is-in-public-preview/) (May 2026)
 

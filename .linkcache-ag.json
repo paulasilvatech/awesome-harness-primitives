@@ -1,0 +1,567 @@
+{
+"https://learn.microsoft.com/es-es/azure/iot-edge/": [
+"OK",
+200,
+""
+],
+"https://azure.github.io/Azure-Verified-Modules/indexes/bicep/bicep-resource-modules/": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/dotnet/csharp/whats-new": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/dotnet/core/whats-new": [
+"OK",
+200,
+""
+],
+"https://duckduckgo.com/?q=your+search+query": [
+"OK",
+200,
+""
+],
+"https://docs.aws.amazon.com": [
+"OK",
+200,
+""
+],
+"https://aws.amazon.com/architecture/": [
+"OK",
+200,
+""
+],
+"https://www.bing.com/search?q=your+search+query": [
+"OK",
+200,
+""
+],
+"https://serverlessland.com/": [
+"OK",
+200,
+""
+],
+"https://docs.aws.amazon.com/lambda/": [
+"OK",
+200,
+""
+],
+"https://www.google.com/search?q=your+search+query": [
+"OK",
+200,
+""
+],
+"https://console.apify.com/account#/integrations": [
+"OK",
+200,
+""
+],
+"https://azure.github.io/Azure-Verified-Modules/indexes/bicep/bicep-resource-modules/#published-modules-----": [
+"OK",
+200,
+""
+],
+"https://mcp.apify.com": [
+"OK",
+200,
+""
+],
+"https://azure.github.io/Azure-Verified-Modules/indexes/bicep/bicep-pattern-modules/#published-modules-----": [
+"OK",
+200,
+""
+],
+"https://azure.github.io/Azure-Verified-Modules/indexes/terraform/tf-pattern-modules/#published-modules-----": [
+"OK",
+200,
+""
+],
+"https://azure.github.io/Azure-Verified-Modules/indexes/terraform/tf-resource-modules/": [
+"OK",
+200,
+""
+],
+"https://azure.github.io/Azure-Verified-Modules/indexes/terraform/tf-resource-modules/#published-modules-----": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/azure/iot-edge/": [
+"REDIRECT",
+200,
+"https://learn.microsoft.com/en-us/azure/iot-edge/"
+],
+"https://learn.microsoft.com/azure/architecture/guide/saas-multitenant-solution-architecture/": [
+"REDIRECT",
+200,
+"https://learn.microsoft.com/en-us/azure/architecture/guide/saas-multitenant-solution-architecture/"
+],
+"https://learn.microsoft.com/azure/architecture/antipatterns/noisy-neighbor/noisy-neighbor": [
+"REDIRECT",
+200,
+"https://learn.microsoft.com/en-us/azure/architecture/antipatterns/noisy-neighbor/noisy-neighbor"
+],
+"https://azure.github.io/Azure-Verified-Modules/contributing/terraform/contribution-flow/": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/azure/architecture/patterns/deployment-stamp": [
+"REDIRECT",
+200,
+"https://learn.microsoft.com/en-us/azure/architecture/patterns/deployment-stamp"
+],
+"https://learn.microsoft.com/azure/well-architected/saas/design-principles": [
+"REDIRECT",
+200,
+"https://learn.microsoft.com/en-us/azure/well-architected/saas/design-principles"
+],
+"https://learn.microsoft.com/azure/well-architected/saas/": [
+"REDIRECT",
+200,
+"https://learn.microsoft.com/en-us/azure/well-architected/saas/"
+],
+"https://github.com/Azure/bicep-registry-modules/tree/main/avm/": [
+"OK",
+200,
+""
+],
+"https://github.com/Azure/Azure-Verified-Modules/tree/main/docs/static/module-indexes": [
+"OK",
+200,
+""
+],
+"https://www.comet.com/site/products/opik/": [
+"OK",
+200,
+""
+],
+"https://www.comet.com/opik/": [
+"OK",
+200,
+""
+],
+"https://www.comet.com/opik/api": [
+"OK",
+200,
+""
+],
+"https://pypi.org/pypi/django/json": [
+"OK",
+200,
+""
+],
+"https://news.ycombinator.com/item?id=37281947": [
+"BLOCKED",
+429,
+"Too Many Requests"
+],
+"https://www.comet.com/docs/opik/python-sdk-reference/cli.html": [
+"OK",
+200,
+""
+],
+"https://rubygems.org/api/v1/gems/rails.json": [
+"OK",
+200,
+""
+],
+"https://www.comet.com/docs/opik/v1/tracing/import_export_commands": [
+"OK",
+200,
+""
+],
+"https://news.ycombinator.com": [
+"OK",
+200,
+""
+],
+"https://outagedeck.com/api/mcp": [
+"OK",
+405,
+"method not allowed (endpoint alive)"
+],
+"https://docs.github.com/en/copilot/reference/custom-agents-configuration": [
+"OK",
+200,
+""
+],
+"https://docs.factory.ai": [
+"OK",
+200,
+""
+],
+"https://repo.packagist.org/p2/laravel/framework.json": [
+"OK",
+200,
+""
+],
+"https://gitmoji.dev": [
+"OK",
+200,
+""
+],
+"https://img.shields.io/badge/status-": [
+"OK",
+200,
+""
+],
+"https://gitmoji.dev/": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/dotnet/maui/user-interface/controls/": [
+"REDIRECT",
+200,
+"https://learn.microsoft.com/en-us/dotnet/maui/user-interface/controls/"
+],
+"https://learn.microsoft.com/dotnet/maui/fundamentals/data-binding/": [
+"REDIRECT",
+200,
+"https://learn.microsoft.com/en-us/dotnet/maui/fundamentals/data-binding/"
+],
+"https://learn.microsoft.com/dotnet/maui/xaml/": [
+"REDIRECT",
+200,
+"https://learn.microsoft.com/en-us/dotnet/maui/xaml/"
+],
+"https://www.comet.com/opik/api/v1/private/traces?workspace_name=": [
+"BLOCKED",
+403,
+"Forbidden"
+],
+"https://learn.microsoft.com/dotnet/maui/user-interface/handlers/": [
+"REDIRECT",
+200,
+"https://learn.microsoft.com/en-us/dotnet/maui/user-interface/handlers/"
+],
+"https://github.com/google-labs-code/design.md": [
+"OK",
+200,
+""
+],
+"https://github.com/mubaidr/gem-team#configuration": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/dotnet/maui/fundamentals/shell/": [
+"REDIRECT",
+200,
+"https://learn.microsoft.com/en-us/dotnet/maui/fundamentals/shell/"
+],
+"https://learn.microsoft.com/dotnet/maui/deployment/performance": [
+"REDIRECT",
+200,
+"https://learn.microsoft.com/en-us/dotnet/maui/deployment/performance"
+],
+"https://crates.io/api/v1/crates/tokio": [
+"OK",
+200,
+""
+],
+"https://github.blog/developer-skills/github/5-tips-for-making-your-github-profile-page-accessible/": [
+"OK",
+200,
+""
+],
+"https://octodex.github.com/images/mona-the-rivetertocat.png": [
+"OK",
+200,
+""
+],
+"https://app.factory.ai/cli": [
+"OK",
+200,
+""
+],
+"https://github.com/AGAH4X": [
+"OK",
+200,
+""
+],
+"https://github.com/fdescamps": [
+"OK",
+200,
+""
+],
+"https://github.com/kubestellar/console/tree/main/deploy/helm/kubestellar-console": [
+"OK",
+200,
+""
+],
+"https://mcp.context7.com/mcp": [
+"OK",
+405,
+"method not allowed (endpoint alive)"
+],
+"https://code.visualstudio.com/mcp": [
+"REDIRECT",
+200,
+"https://github.com/mcp?utm_source=vscode-website&utm_campaign=mcp-registry-server-launch-2025"
+],
+"https://learn.microsoft.com/en-us/sql/relational-databases/security/sql-server-security-best-practices?view=sql-server-ver16": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/sql/database-engine/?view=sql-server-ver16": [
+"OK",
+200,
+""
+],
+"https://castimaging.io/imaging/mcp/": [
+"REDIRECT",
+200,
+"https://auth.castimaging.io/realms/default/protocol/openid-connect/auth?response_type=code&client_id=default-client&scope=openid%20email%20profile%20organization&state=tSR9i2k-VZS9zeR3mZdP2m7kc3Jr4ojUwTArv9Tfe28%3D&redirect_uri=https://castimaging.io/login/oauth2/code/default&nonce=r06mL3X-Sa05c6qXaKQQLNIH7sK5gFfqqI881G8N4IQ&code_challenge=WY0sky1LUhireG6MIeVoNezHEgRplTkHhS-aGgiIGJo&code_challenge_method=S256"
+],
+"https://learn.microsoft.com/en-us/sql/database-engine/discontinued-database-engine-functionality-in-sql-server?view=sql-server-ver16#discontinued-features-in-sql-server-2025-17x-preview": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/sql/relational-databases/performance/performance-center-for-sql-server-database-engine-and-azure-sql-database?view=sql-server-ver16": [
+"OK",
+200,
+""
+],
+"https://github.com/microsoftdocs/mcp": [
+"OK",
+200,
+""
+],
+"https://github.com/github/awesome-copilot": [
+"OK",
+200,
+""
+],
+"https://mcp.lingo.dev/main": [
+"OK",
+405,
+"method not allowed (endpoint alive)"
+],
+"https://github.com/kubestellar/console/releases": [
+"OK",
+200,
+""
+],
+"https://neon.com/docs/manage/branches.md": [
+"OK",
+200,
+""
+],
+"https://mcp.monday.com/mcp": [
+"BLOCKED",
+401,
+"Unauthorized"
+],
+"https://console.kubestellar.io": [
+"OK",
+200,
+""
+],
+"https://app.diagrams.net": [
+"OK",
+200,
+""
+],
+"https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs": [
+"OK",
+200,
+""
+],
+"https://adr.github.io/": [
+"OK",
+200,
+""
+],
+"https://reepl.io": [
+"OK",
+200,
+""
+],
+"https://github.com/microsoft/PowerAppsCodeApps": [
+"OK",
+200,
+""
+],
+"https://github.com/mcp": [
+"OK",
+200,
+""
+],
+"https://github.com/reepl-io/skills": [
+"OK",
+200,
+""
+],
+"https://github.com/andrewstellman/quality-playbook": [
+"OK",
+200,
+""
+],
+"https://bgpt.pro/mcp/sse": [
+"OK",
+200,
+""
+],
+"https://download.pytorch.org/whl/cpu": [
+"OK",
+200,
+""
+],
+"https://www.writethedocs.org/guide/writing/beginners-guide-to-docs/": [
+"OK",
+200,
+""
+],
+"https://download.pytorch.org/whl": [
+"OK",
+200,
+""
+],
+"https://app.powerbi.com/reportEmbed": [
+"OK",
+200,
+""
+],
+"https://docs.stackhawk.com/hawkscan/configuration/": [
+"OK",
+200,
+""
+],
+"https://docs.stackhawk.com/vulnerabilities/": [
+"OK",
+200,
+""
+],
+"https://pia1134d.dev.apps.dynatracelabs.com/platform-reserved/mcp-gateway/v0.1/servers/dynatrace-mcp/mcp": [
+"BLOCKED",
+401,
+"Unauthorized"
+],
+"https://app.stackhawk.com/settings/apikeys": [
+"OK",
+200,
+""
+],
+"https://registry.terraform.io/providers/hashicorp/aws/latest/docs": [
+"OK",
+200,
+""
+],
+"https://mcp.newrelic.com/mcp/": [
+"BLOCKED",
+401,
+"Unauthorized"
+],
+"https://registry.terraform.io/modules/terraform-aws-modules": [
+"OK",
+200,
+""
+],
+"https://raw.githubusercontent.com/Azure/terraform-azurerm-avm-template/refs/heads/main/.gitignore": [
+"OK",
+200,
+""
+],
+"https://developer.hashicorp.com/terraform/language/style": [
+"OK",
+200,
+""
+],
+"https://developer.hashicorp.com/terraform/cloud-docs": [
+"OK",
+200,
+""
+],
+"https://github.com/Azure-Samples/get-started-with-ai-chat": [
+"OK",
+200,
+""
+],
+"https://developer.hashicorp.com/terraform/mcp-server/reference": [
+"OK",
+200,
+""
+],
+"https://registry.terraform.io/": [
+"OK",
+200,
+""
+],
+"https://github.com/terraform-linters/tflint-ruleset-azurerm": [
+"OK",
+200,
+""
+],
+"https://developer.hashicorp.com/terraform/language/modules/develop": [
+"OK",
+200,
+""
+],
+"https://developer.hashicorp.com/terraform/language/tests": [
+"OK",
+200,
+""
+],
+"https://github.com/antonbabenko/pre-commit-terraform": [
+"OK",
+200,
+""
+],
+"https://genai.owasp.org/llm-top-10/": [
+"OK",
+200,
+""
+],
+"https://mcp.pagerduty.com/mcp": [
+"BLOCKED",
+401,
+"Unauthorized"
+],
+"https://github.com/modelcontextprotocol/swift-sdk.git": [
+"REDIRECT",
+200,
+"https://github.com/modelcontextprotocol/swift-sdk"
+],
+"https://github.com/joelparkerhenderson/architecture-decision-record": [
+"REDIRECT",
+200,
+"https://github.com/architecture-decision-record/architecture-decision-record"
+],
+"https://console.neon.tech/app/settings#api-keys": [
+"REDIRECT",
+200,
+"https://console.neon.tech/realms/prod-realm/protocol/openid-connect/auth?client_id=neon-console&redirect_uri=https%3A%2F%2Fconsole.neon.tech%2Fauth%2Fkeycloak%2Fcallback&response_type=code&scope=openid+profile+email&state=I5s0fg6gjmVqAtJ9WAzthg%3D%3D%2C%2C%2C"
+],
+"https://docs.stackhawk.com/continuous-integration/github-actions.html": [
+"REDIRECT",
+200,
+"https://docs.stackhawk.com/integrations/ci-cd/github-actions/"
+],
+"https://yandex.com/search/?text=your+search+query": [
+"TIMEOUT",
+null,
+"_ssl.c:1064: The handshake operation timed out"
+],
+"https://registry.npmjs.org/react/latest": [
+"TIMEOUT",
+null,
+"_ssl.c:1064: The handshake operation timed out"
+],
+"https://azcore.centralus.kusto.windows.net/": [
+"TIMEOUT",
+null,
+"timed out"
+]
+}

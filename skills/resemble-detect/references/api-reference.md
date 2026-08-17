@@ -54,7 +54,7 @@ Detection is asynchronous. Poll until `status` is `"completed"` or `"failed"`. S
   "score": ["0.92", "0.88", "0.95"],
   "consistency": "0.91",
   "aggregated_score": "0.92",
-  "image": "https://..."
+  "image": "https://{example-url}"
 }
 ```
 - `label`: `"fake"` or `"real"` — the verdict
@@ -69,8 +69,8 @@ Detection is asynchronous. Poll until `status` is `"completed"` or `"failed"`. S
   "type": "ImageAnalysis",
   "label": "fake",
   "score": 0.87,
-  "image": "https://...",
-  "ifl": { "score": 0.82, "heatmap": "https://..." },
+  "image": "https://{example-url}",
+  "ifl": { "score": 0.82, "heatmap": "https://{example-url}" },
   "reverse_image_search_sources": [
     { "url": "...", "title": "...", "verdict": "known_fake", "similarity": 0.95 }
   ]

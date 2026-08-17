@@ -161,7 +161,7 @@ For questions with choices, you MUST use the `ask_user` tool. It allows users to
 - Questions with 2 or more choices **MUST** use ask_user (do not list them as text)
 - **`choices` MUST be passed as a string array (`["A", "B"]`)** — passing as a string (`"A, B"`) will cause an error
 - If there is a recommended option, place it first and append `(Recommended)` at the end
-- Include reference information in choices — e.g., `"Standard S1 - Recommended for production. Ref: https://..."`
+- Include reference information in choices — e.g., `"Standard S1 - Recommended for production. Ref: https://{example-url}"`
 - **Only 1 question per call** — if multiple items need to be asked, call ask_user sequentially for each
 - Choices are limited to a maximum of 4. If there are 5 or more, include only the 3-4 most common ones (users can also type a custom input)
 - If multiple selections are needed, split them into separate questions

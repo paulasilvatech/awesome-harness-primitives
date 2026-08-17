@@ -24,7 +24,7 @@ to use your library based on the README.
 
 [![PyPI version](https://badge.fury.io/py/your-package.svg)](https://pypi.org/project/your-package/)
 [![Python Versions](https://img.shields.io/pypi/pyversions/your-package)](https://pypi.org/project/your-package/)
-[![CI](https://github.com/you/your-package/actions/workflows/ci.yml/badge.svg)](https://github.com/you/your-package/actions/workflows/ci.yml)
+[![CI](https://github.com/{owner}/{repo}/actions/workflows/ci.yml/badge.svg)](https://github.com/{owner}/{repo}/actions/workflows/ci.yml)
 [![Coverage](https://codecov.io/gh/you/your-package/branch/master/graph/badge.svg)](https://codecov.io/gh/you/your-package)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
@@ -112,7 +112,7 @@ class YourClient:
 
 ## Development Setup
 
-git clone https://github.com/you/your-package
+git clone https://github.com/{owner}/{repo}
 cd your-package
 pip install -e ".[dev]"
 pre-commit install

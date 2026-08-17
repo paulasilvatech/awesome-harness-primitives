@@ -7,7 +7,7 @@ Detailed reference for the CodeQL CLI — installation, database creation, analy
 ### Download the CodeQL Bundle
 
 Always download the CodeQL bundle (CLI + precompiled queries) from:
-**https://github.com/github/codeql-action/releases**
+[https://github.com/github/codeql-action/releases](https://github.com/github/codeql-action/releases)
 
 The bundle includes:
 - CodeQL CLI product

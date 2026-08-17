@@ -50,7 +50,7 @@ Now available for $995:
 
 ## Build PDFtk Server from Source
 
-PDFtk Server can be compiled from its source code. PDFtk Server is known to compile and run on [Debian](https://packages.debian.org/search?keywords=pdftk), [Ubuntu Linux](https://packages.ubuntu.com/search?keywords=pdftk), [FreeBSD](https://www.freshports.org/print/pdftk/), Slackware Linux, SuSE, Solaris and [HP-UX](http://hpux.connect.org.uk/hppd/hpux/Text/pdftk-1.45/).
+PDFtk Server can be compiled from its source code. PDFtk Server is known to compile and run on [Debian](https://packages.debian.org/search?keywords=pdftk), [Ubuntu Linux](https://packages.ubuntu.com/search?keywords=pdftk), [FreeBSD](https://www.freshports.org/print/pdftk/), Slackware Linux, SuSE, Solaris and HP-UX.
 
 Download and unpack the source:
 

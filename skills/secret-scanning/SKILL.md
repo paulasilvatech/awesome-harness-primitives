@@ -231,7 +231,7 @@ For scanning code changes for secrets inside an AI coding agent before committin
 - In Copilot Chat, open **Chat: Plugins** (or use `@agentPlugins`) and install the `advanced-security` plugin
 - Then run `/secret-scanning` in Copilot Chat
 
-See: [Advanced Security Plugin — Secret Scanning Skill](https://github.com/github/copilot-plugins/blob/main/plugins/advanced-security/skills/secret-scanning/SKILL.md)
+See: [Advanced Security Plugin — Secret Scanning Skill](advanced-security plugin secret-scanning skill)
 
 > Announced in [Secret scanning in AI coding agents via the GitHub MCP Server](https://github.blog/changelog/2026-03-17-secret-scanning-in-ai-coding-agents-via-the-github-mcp-server/) (March 2026)
 

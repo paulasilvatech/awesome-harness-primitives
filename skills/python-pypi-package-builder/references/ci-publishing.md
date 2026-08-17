@@ -57,9 +57,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Initial project scaffold
 
-[Unreleased]: https://github.com/you/your-package/compare/v1.0.0...HEAD
-[1.0.0]: https://github.com/you/your-package/compare/v0.1.0...v1.0.0
-[0.1.0]: https://github.com/you/your-package/releases/tag/v0.1.0
+[Unreleased]: https://github.com/{owner}/{repo}/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/{owner}/{repo}/compare/v0.1.0...v1.0.0
+[0.1.0]: https://github.com/{owner}/{repo}/releases/tag/v0.1.0
 ```
 
 ### Semver — what bumps what

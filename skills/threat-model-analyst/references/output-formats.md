@@ -629,7 +629,7 @@ Include at end of Executive Summary:
 
 **Processing Rules:**
 1. Always include the Security Standards table — populate with actual standards consulted
-2. Every row MUST have a full URL (https://...) — never omit the URL column
+2. Every row MUST have a full URL (https://{example-url}) — never omit the URL column
 3. Populate Component Documentation with technologies actually consulted during analysis
 4. Do not add documentation that was not used
 

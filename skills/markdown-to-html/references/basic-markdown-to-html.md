@@ -345,7 +345,7 @@ git add
 ```
 
 ```html
-<a href="https://github.com/github/support" class="user-mention">@github/support</a>
+<a href="https://docs.github.com/en/support" class="user-mention">@github/support</a>
 ```
 
 ---

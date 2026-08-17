@@ -23,7 +23,7 @@ Each example is sourced from a public GitHub repo with a direct link to the `.to
 {
   "file": "src/player/index.ts",
   "line": 436,
-  "description": "### 🎥 Tour Player\n\nThe CodeTour player ...\n\n![Architecture](https://raw.githubusercontent.com/.../overview.svg)\n\nSee also: [Gutter decorator](./src/player/decorator.ts)"
+  "description": "### 🎥 Tour Player\n\nThe CodeTour player ...\n\n![Architecture](https://raw.githubusercontent.com/{owner}/{repo}/main/overview.svg)\n\nSee also: [Gutter decorator](./src/player/decorator.ts)"
 }
 ```
 
@@ -164,7 +164,7 @@ Each example is sourced from a public GitHub repo with a direct link to the `.to
 | `pattern: "regex"` | Match by line content, not number — use for volatile files | codespaces-codeql |
 | `selection: {start, end}` | Highlight a block (function body, config section, type def) | a11yproject, oci-2021, codespaces-codeql |
 | `directory: "path/"` | Orient to a folder without reading every file | a11yproject, codespaces-codeql |
-| `uri: "https://..."` | Link to PR, issue, RFC, ADR, external doc | Any PR review tour |
+| `uri: "https://{example-url}"` | Link to PR, issue, RFC, ADR, external doc | Any PR review tour |
 | `nextTour: "Title"` | Chain tours in a series | oci-2021 (3-part series) |
 | Checkpoint steps (content-only) | Progress milestones in long interactive tours | copilot-todo-list |
 | `>> command` in description | Terminal inline command link in VS Code | copilot-todo-list |
@@ -190,6 +190,4 @@ Filter by language or keyword to narrow results — e.g. add `language:TypeScrip
 
 - **DEV Community — "Onboard your codebase with CodeTour"**: https://dev.to/tobiastimm/onboard-your-codebase-with-codetour-2jc8
 - **Coder Blog — "Onboard to new projects faster with CodeTour"**: https://coder.com/blog/onboard-to-new-projects-faster-with-codetour
-- **Microsoft Tech Community — Educator Developer Blog**: https://techcommunity.microsoft.com/blog/educatordeveloperblog/codetour-vscode-extension-allows-you-to-produce-interactive-guides-assessments-a/1274297
-- **AMIS Technology Blog — vscode.dev + CodeTour**: https://technology.amis.nl/software-development/visual-studio-code-the-code-tours-extension-for-in-context-and-interactive-readme/
 - **CodeTour GitHub Topics**: https://github.com/topics/codetour

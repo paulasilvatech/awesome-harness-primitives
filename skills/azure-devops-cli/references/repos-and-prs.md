@@ -54,7 +54,7 @@ az repos import create \
 
 # Import with authentication
 az repos import create \
-  --git-source-url https://github.com/user/private-repo \
+  --git-source-url https://github.com/{owner}/{repo} \
   --repository {repo-name} \
   --user {username} \
   --password {password-or-pat}

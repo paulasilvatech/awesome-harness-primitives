@@ -22,7 +22,7 @@
 |-----------|-------|
 | SDL Bugbar Severity | [FILL: Critical / Important / Moderate / Low] |
 | CVSS 4.0 | [FILL: N.N] (CVSS:4.0/[FILL: full vector starting with AV:]) |
-| CWE | [CWE-[FILL: NNN]](https://cwe.mitre.org/data/definitions/[FILL: NNN].html): [FILL: weakness name] |
+| CWE | [CWE-[FILL: NNN]](https://cwe.mitre.org/data/definitions/{CWE-ID}.html: NNN].html): [FILL: weakness name] |
 | OWASP | A[FILL: NN]:2025 – [FILL: category name] |
 | Exploitation Prerequisites | [FILL: text or "None"] |
 | Exploitability Tier | Tier [FILL: 1/2/3] — [FILL: tier description] |
@@ -83,7 +83,7 @@
 |-----------|-------|
 | SDL Bugbar Severity | [FILL] |
 | CVSS 4.0 | [FILL] (CVSS:4.0/[FILL]) |
-| CWE | [CWE-[FILL]](https://cwe.mitre.org/data/definitions/[FILL].html): [FILL] |
+| CWE | [CWE-[FILL]](https://cwe.mitre.org/data/definitions/{CWE-ID}.html].html): [FILL] |
 | OWASP | A[FILL]:2025 – [FILL] |
 | Exploitation Prerequisites | [FILL] |
 | Exploitability Tier | Tier [FILL] — [FILL] |
@@ -127,7 +127,7 @@
 |-----------|-------|
 | SDL Bugbar Severity | [FILL] |
 | CVSS 4.0 | [FILL] (CVSS:4.0/[FILL]) |
-| CWE | [CWE-[FILL]](https://cwe.mitre.org/data/definitions/[FILL].html): [FILL] |
+| CWE | [CWE-[FILL]](https://cwe.mitre.org/data/definitions/{CWE-ID}.html].html): [FILL] |
 | OWASP | A[FILL]:2025 – [FILL] |
 | Exploitation Prerequisites | [FILL] |
 | Exploitability Tier | Tier [FILL] — [FILL] |

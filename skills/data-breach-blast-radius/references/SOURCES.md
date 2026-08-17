@@ -45,13 +45,13 @@ Every number, formula, and classification in this skill is sourced from a public
 
 | Fine | Organization | Year | Source URL |
 |------|-------------|------|------------|
-| €1.2B | Meta (Ireland DPC) | 2023 | https://www.dataprotection.ie/en/news-media/press-releases/data-protection-commission-announces-decision-in-meta-ireland-inquiry |
-| €746M | Amazon (Luxembourg) | 2021 | https://iapp.org/news/a/amazon-hit-with-887m-fine-for-gdpr-violations/ |
-| €225M | WhatsApp (Ireland DPC) | 2021 | https://www.dataprotection.ie/en/news-media/press-releases/data-protection-commission-announces-decision-in-whatsapp-inquiry |
-| €150M | Google (France CNIL) | 2022 | https://www.cnil.fr/en/cookies-cnil-fines-google-150-million-euros-and-facebook-60-million-euros |
+| €1.2B | Meta (Ireland DPC) | 2023 | source page no longer resolves |
+| €746M | Amazon (Luxembourg) | 2021 | source page no longer resolves |
+| €225M | WhatsApp (Ireland DPC) | 2021 | https://www.dataprotection.ie/en/news-media/press-releases/data-protection-commission-announces-decision-whatsapp-inquiry |
+| €150M | Google (France CNIL) | 2022 | source page no longer resolves |
 | €35.3M | H&M (Hamburg DPA) | 2020 | https://www.datenschutz-hamburg.de/news/detail/article/hamburgische-beauftragte-fuer-datenschutz-und-informationsfreiheit-verhaengt-bussgeld-gegen-hm.html |
-| €22M | British Airways (ICO) | 2020 | https://ico.org.uk/about-the-ico/media-centre/news-and-blogs/2020/10/ico-fines-british-airways-20m-for-data-breach-affecting-more-than-400-000-customers/ |
-| €18.4M | Marriott (ICO) | 2020 | https://ico.org.uk/about-the-ico/media-centre/news-and-blogs/2020/10/ico-fines-marriott-international-inc18-4million-for-failing-to-keep-customers-personal-data-secure/ |
+| €22M | British Airways (ICO) | 2020 | source page no longer resolves |
+| €18.4M | Marriott (ICO) | 2020 | source page no longer resolves |
 
 ---
 

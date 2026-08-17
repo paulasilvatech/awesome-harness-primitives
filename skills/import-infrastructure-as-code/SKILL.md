@@ -131,11 +131,11 @@ Use the `web` tool or another suitable MCP method to get module information if n
 Use AVM sources:
 
 - Registry: `https://registry.terraform.io/modules/Azure/<module>/azurerm/latest`
-- GitHub: `https://github.com/Azure/terraform-azurerm-avm-res-<service>-<resource>`
+- GitHub: `https://github.com/Azure/terraform-azurerm-avm-res-{service}-{resource}`
 
 Prefer AVM modules over handwritten `azurerm_*` resources when an AVM module exists.
 
-When fetching module information from GitHub repositories, the README.md file in the root of the repository typically contains all detailed information about the module, for example: https://raw.githubusercontent.com/Azure/terraform-azurerm-avm-res-<service>-<resource>/refs/heads/main/README.md
+When fetching module information from GitHub repositories, the README.md file in the root of the repository typically contains all detailed information about the module, for example: https://raw.githubusercontent.com/Azure/terraform-azurerm-avm-res-{service}-{resource}/refs/heads/main/README.md
 
 ### 5a) Read the Module README Before Writing Any Code (Mandatory)
 
@@ -146,7 +146,7 @@ or prior experience with other AVM modules.
 For each selected AVM module, fetch its README:
 
 ```text
-https://raw.githubusercontent.com/Azure/terraform-azurerm-avm-res-<service>-<resource>/refs/heads/main/README.md
+https://raw.githubusercontent.com/Azure/terraform-azurerm-avm-res-{service}-{resource}/refs/heads/main/README.md
 ```
 
 Or if the module is already downloaded after `terraform init`:

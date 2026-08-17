@@ -19,3 +19,10 @@
   "governance_level": "standard",
   "status": "clean"
 }
+{"timestamp": "2026-08-17T17:42:59Z", "event": "session_end", "total_events": 0, "threats_detected": 0}
+{
+  "timestamp": "2026-08-17T17:44:18Z",
+  "event": "prompt_scanned",
+  "governance_level": "standard",
+  "status": "clean"
+}

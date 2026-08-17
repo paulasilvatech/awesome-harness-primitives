@@ -58,7 +58,7 @@
           },
           "uri": {
             "type": "string",
-            "description": "Absolute URI (https://...) associated with the step. Use for PRs, issues, docs, ADRs."
+            "description": "Absolute URI (https://{example-url}) associated with the step. Use for PRs, issues, docs, ADRs."
           },
           "line": {
             "type": "number",

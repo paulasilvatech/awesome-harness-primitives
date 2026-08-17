@@ -8,7 +8,7 @@
 - [OpenCVE](https://app.opencve.io/cve/?q=vendor%3Amicrosoft+AND+cvss31%3E%3D9)
 - [Old New Thing](https://devblogs.microsoft.com/oldnewthing/tag/tipssupport)
 - [Microsoft Update Catalog](https://www.catalog.update.microsoft.com/Home.aspx)
-- [aka.ms Search](https://akasearch.net/)
+- [aka.ms Search](https://aka.ms/)
 
 ## Tools and Utilities
 
@@ -77,12 +77,12 @@
 - [ConEmu-Maximus5](https://conemu.github.io/) | [review](https://www.hanselman.com/blog/ConEmuTheWindowsTerminalConsolePromptWeveBeenWaitingFor)
 - [CopyTrans Manager](https://www.copytrans.net/copytransmanager/) | [CopyTrans Filey](https://www.copytrans.net/copytransfiley/)
 - [CryptoPrevent](https://www.bleepingcomputer.com/virus-removal/cryptolocker-ransomware-information)
-- [Cygwin](https://cygwin.com/) — [Part 1](https://lifehacker.com/179514/geek-to-live--introduction-to-cygwin-part-i) | [Part 2](https://lifehacker.com/180690/geek-to-live--introduction-to-cygwin-part-ii---more-useful-commands) | [Part 3](https://lifehacker.com/181282/geek-to-live--introduction-to-cygwin-part-iii---scripts-packages-and-more)
+- [Cygwin](https://cygwin.com/)
 - [DOFF](https://ss64.com/links/doff10.zip) | [source](https://ss64.com/links/doff10_source.zip)
 - [FastCopy](https://fastcopy.jp/)
 - [FindRepl.bat](https://www.dostips.com/forum/viewtopic.php?f=3&t=4697) — find and replace in text files
 - [Gow](https://github.com/bmatzelle/gow) — GNU on Windows (lightweight Cygwin alternative)
-- [ImageMagick](https://www.imagemagick.org/) | [scripts](https://web.archive.org/web/20240416181228/http://www.fmwconcepts.com/imagemagick/index.php)
+- [ImageMagick](https://www.imagemagick.org/)
 - [Jdupes](https://codeberg.org/jbruchon/jdupes) — duplicate file finder
 - [Joeware.net](https://www.joeware.net/freetools/) — AD and Windows tools
 - [Karen's directory printer](https://www.karenware.com/powertools/karens-directory-printer)
@@ -99,7 +99,7 @@
 - [Repl.bat](https://www.dostips.com/forum/viewtopic.php?f=3&t=3855) — regex replace in text files
 - [Ritchie Lawrence tools](https://github.com/ritchielawrence/) | [cmdow](https://github.com/ritchielawrence/cmdow)
 - [SetACL](https://helgeklein.com/setacl/) — permission management
-- [SetRes](https://atrandom.iansharpe.com/setres.php) — screen resolution changer
+- SetRes — screen resolution changer
 - [SoX](https://sourceforge.net/projects/sox/files/sox//) — audio processing
 - [Bill Stewart utilities](https://westmesatech.com/?page_id=23)
 - [System Tools (Somarsoft)](https://www.systemtools.com/somarsoft/)

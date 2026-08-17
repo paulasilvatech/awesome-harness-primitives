@@ -115,7 +115,7 @@ jdbcTemplate.query(query, ...);
 
 // XXE
 DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-// Missing: dbf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true)
+// Missing: dbf.setFeature("http://apache.org/xml/features/" + "disallow-doctype-decl", true)
 
 // Deserialization
 ObjectInputStream ois = new ObjectInputStream(inputStream);

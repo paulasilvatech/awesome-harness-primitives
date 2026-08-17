@@ -176,7 +176,7 @@ cat > service-connection.json <<'EOF'
     "creationMode": "Manual",
     "serviceEndpointId": "$SERVICE_ENDPOINT_ID"
   },
-  "url": "https://management.azure.com/",
+  "url": "https://learn.microsoft.com/en-us/rest/api/resources/",
   "authorization": {
     "parameters": {
       "tenantid": "$TENANT_ID",

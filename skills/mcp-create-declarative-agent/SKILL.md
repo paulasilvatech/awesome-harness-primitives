@@ -123,7 +123,7 @@ Generate the following project structure using Microsoft 365 Agents Toolkit:
     {
       "type": "MCP",
       "spec": {
-        "url": "https://api.service.com/mcp/"
+        "url": "https://{api-host}/mcp/"
       },
       "run_for_functions": ["functionName"],
       "auth": {
@@ -138,7 +138,7 @@ Generate the following project structure using Microsoft 365 Agents Toolkit:
 **/.vscode/mcp.json** - MCP server configuration:
 ```json
 {
-  "serverUrl": "https://api.service.com/mcp/",
+  "serverUrl": "https://{api-host}/mcp/",
   "pluginFilePath": "appPackage/ai-plugin.json"
 }
 ```
@@ -164,7 +164,7 @@ When importing from MCP:
 "auth": {
   "type": "OAuthPluginVault",
   "reference_id": "${{OAUTH_REFERENCE_ID}}",
-  "authorization_url": "https://auth.service.com/authorize",
+  "authorization_url": "https://{auth-host}/authorize",
   "client_id": "${{CLIENT_ID}}",
   "client_secret": "${{CLIENT_SECRET}}",
   "scope": "read write"
@@ -269,7 +269,7 @@ Auth: OAuth 2.0
 
 ### Custom Service
 ```
-URL: https://api.your-service.com/mcp/
+URL: https://{api-host}/mcp/
 Tools: Custom tools exposed by your service
 Auth: OAuth 2.0 or SSO
 ```

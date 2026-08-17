@@ -1,0 +1,1887 @@
+{
+"https://docs.github.com/en/copilot/tutorials/customization-library/custom-agents/your-first-custom-agent": [
+"OK",
+200,
+""
+],
+"https://www.apache.org/licenses/LICENSE-2.0.txt": [
+"OK",
+200,
+""
+],
+"https://docs.github.com/en/copilot/reference/custom-agents-configuration": [
+"OK",
+200,
+""
+],
+"https://docs.github.com/en/copilot/tutorials/customization-library/custom-agents": [
+"OK",
+200,
+""
+],
+"https://playwright.dev/": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/azure/foundry/": [
+"OK",
+200,
+""
+],
+"https://safe.ai/": [
+"OK",
+200,
+""
+],
+"https://github.com/anthropics/skills": [
+"OK",
+200,
+""
+],
+"https://www.microsoft.com/en-us/ai/responsible-ai": [
+"OK",
+200,
+""
+],
+"https://github.com/dair-ai/Prompt-Engineering-Guide": [
+"OK",
+200,
+""
+],
+"https://github.com/github/awesome-copilot/tree/main/agents": [
+"OK",
+200,
+""
+],
+"https://docs.github.com/en/copilot/how-tos/use-copilot-agents/coding-agent/create-custom-agents": [
+"REDIRECT",
+200,
+"https://docs.github.com/en/copilot/how-tos/copilot-on-github/customize-copilot/customize-cloud-agent/create-custom-agents"
+],
+"https://docs.github.com/en/copilot/how-tos/use-copilot-agents/coding-agent/extend-coding-agent-with-mcp": [
+"REDIRECT",
+200,
+"https://docs.github.com/en/copilot/how-tos/copilot-on-github/customize-copilot/configure-mcp-servers"
+],
+"https://github.com/promptslab/Awesome-Prompt-Engineering": [
+"OK",
+200,
+""
+],
+"https://github.com/github/awesome-copilot/blob/main/docs/README.skills.md": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/training/browse/?terms=ai": [
+"OK",
+200,
+""
+],
+"https://agentskills.io/": [
+"REDIRECT",
+200,
+"https://agentskills.io/home"
+],
+"https://github.com/openai/openai-cookbook": [
+"OK",
+200,
+""
+],
+"https://github.com/openai/evals": [
+"OK",
+200,
+""
+],
+"https://docs.langchain.com/langsmith/observability": [
+"OK",
+200,
+""
+],
+"https://platform.openai.com/docs/guides/prompt-engineering": [
+"REDIRECT",
+200,
+"https://developers.openai.com/api/docs/guides/prompt-engineering"
+],
+"https://platform.openai.com/docs/guides/safety-best-practices": [
+"REDIRECT",
+200,
+"https://developers.openai.com/api/docs/guides/safety-best-practices"
+],
+"https://cognitiveservices.azure.com/": [
+"BROKEN",
+null,
+"[Errno 8] nodename nor servname provided, or not known"
+],
+"https://cognitiveservices.azure.com": [
+"BROKEN",
+null,
+"[Errno 8] nodename nor servname provided, or not known"
+],
+"https://docs.wandb.ai/weave/guides/core-types/prompts-version": [
+"OK",
+200,
+""
+],
+"https://openai.com/policies/usage-policies": [
+"OK",
+200,
+""
+],
+"https://wandb.ai/": [
+"OK",
+200,
+""
+],
+"https://api.dev.example.com": [
+"BROKEN",
+null,
+"[Errno 8] nodename nor servname provided, or not known"
+],
+"https://ai.google/principles/": [
+"OK",
+200,
+""
+],
+"https://ai.google/principles/#our-ai-principles-in-action": [
+"OK",
+200,
+""
+],
+"https://github.com/promptfoo/promptfoo": [
+"OK",
+200,
+""
+],
+"https://code.visualstudio.com/docs/copilot/customization/custom-agents": [
+"REDIRECT",
+200,
+"https://code.visualstudio.com/docs/agent-customization/custom-agents"
+],
+"https://github.com/whitecloud/ansible-styleguide": [
+"OK",
+200,
+""
+],
+"https://platform.openai.com/docs/guides/moderation": [
+"REDIRECT",
+200,
+"https://developers.openai.com/api/docs/guides/moderation"
+],
+"https://www.microsoft.com/ai/responsible-ai-resources": [
+"REDIRECT",
+200,
+"https://www.microsoft.com/pt-br/ai/tools-practices"
+],
+"https://code.visualstudio.com/docs/copilot/customization/agent-skills": [
+"REDIRECT",
+200,
+"https://code.visualstudio.com/docs/agent-customization/agent-skills"
+],
+"https://learn.microsoft.com/es-es/azure/iot-edge/": [
+"OK",
+200,
+""
+],
+"https://github.com/hwchase17/langchain": [
+"REDIRECT",
+200,
+"https://github.com/langchain-ai/langchain"
+],
+"https://learn.microsoft.com/en-us/azure/logic-apps/": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-automate/": [
+"OK",
+200,
+""
+],
+"https://ai.azure.com/": [
+"OK",
+200,
+""
+],
+"https://ai.azure.com": [
+"OK",
+200,
+""
+],
+"https://docs.ansible.com/ansible/latest/tips_tricks/index.html": [
+"REDIRECT",
+200,
+"https://docs.ansible.com/projects/ansible/latest/tips_tricks/index.html"
+],
+"https://docs.ansible.com/ansible/latest/reference_appendices/glossary.html#term-Fully-Qualified-Collection-Name-FQCN": [
+"REDIRECT",
+200,
+"https://docs.ansible.com/projects/ansible/latest/reference_appendices/glossary.html"
+],
+"https://docs.ansible.com/ansible/latest/collections/ansible/builtin/index.html#plugin-index": [
+"REDIRECT",
+200,
+"https://docs.ansible.com/projects/ansible/latest/collections/ansible/builtin/index.html"
+],
+"https://learn.microsoft.com/en-us/azure/logic-apps/workflow-definition-language-schema": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/azure/azure-functions/functions-compare-logic-apps-ms-flow-webjobs": [
+"OK",
+200,
+""
+],
+"https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#": [
+"REDIRECT",
+200,
+"https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json"
+],
+"https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#": [
+"REDIRECT",
+200,
+"https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json"
+],
+"https://learn.microsoft.com/en-us/azure/logic-apps/logic-apps-enterprise-integration-b2b": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/azure/logic-apps/logic-apps-limits-and-config": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/azure/logic-apps/logic-apps-securing-a-logic-app": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/azure/logic-apps/logic-apps-enterprise-integration-overview": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/azure/iot-edge/": [
+"REDIRECT",
+200,
+"https://learn.microsoft.com/en-us/azure/iot-edge/"
+],
+"http://json-schema.org/draft-04/schema#": [
+"REDIRECT",
+200,
+"https://json-schema.org/draft-04/schema"
+],
+"https://learn.microsoft.com/azure/api-management/genai-gateway-capabilities": [
+"REDIRECT",
+200,
+"https://learn.microsoft.com/en-us/azure/api-management/genai-gateway-capabilities"
+],
+"https://attester.dev/demo/v1/symbol/exists": [
+"OK",
+405,
+"method not allowed (endpoint alive)"
+],
+"https://attester.dev/demo/v1/package/exists": [
+"OK",
+405,
+"method not allowed (endpoint alive)"
+],
+"https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/resource-abbreviations": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules": [
+"OK",
+200,
+""
+],
+"https://www.deeplearning.ai/short-courses/chatgpt-prompt-engineering-for-developers/": [
+"REDIRECT",
+200,
+"https://www.deeplearning.ai/courses/chatgpt-prompt-eng"
+],
+"https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/resource-naming": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/azure/logic-apps/single-tenant-overview-compare": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/azure/api-management/import-logic-app-as-api": [
+"OK",
+200,
+""
+],
+"https://azure.github.io/Azure-Verified-Modules/": [
+"OK",
+200,
+""
+],
+"https://raw.githubusercontent.com/Azure/Azure-Verified-Modules/refs/heads/main/docs/static/module-indexes/BicepPatternModules.csv": [
+"OK",
+200,
+""
+],
+"https://azure.github.io/Azure-Verified-Modules/contributing/terraform/contribution-flow/": [
+"OK",
+200,
+""
+],
+"https://raw.githubusercontent.com/Azure/Azure-Verified-Modules/refs/heads/main/docs/static/module-indexes/BicepResourceModules.csv": [
+"OK",
+200,
+""
+],
+"https://raw.githubusercontent.com/Azure/Azure-Verified-Modules/refs/heads/main/docs/static/module-indexes/TerraformResourceModules.csv": [
+"OK",
+200,
+""
+],
+"https://raw.githubusercontent.com/Azure/Azure-Verified-Modules/refs/heads/main/docs/static/module-indexes/TerraformPatternModules.csv": [
+"OK",
+200,
+""
+],
+"https://raw.githubusercontent.com/Azure/Azure-Verified-Modules/refs/heads/main/docs/static/module-indexes/TerraformUtilityModules.csv": [
+"OK",
+200,
+""
+],
+"https://github.com/Azure/bicep-registry-modules/tree/main/avm/res": [
+"OK",
+200,
+""
+],
+"https://docs.github.com/en/copilot/concepts/prompting/prompt-engineering": [
+"OK",
+200,
+""
+],
+"https://registry.terraform.io/v1/modules/Azure/avm-res-storage-storageaccount/azurerm/versions": [
+"OK",
+200,
+""
+],
+"https://github.com/Azure/bicep-registry-modules": [
+"OK",
+200,
+""
+],
+"https://registry.terraform.io/modules/Azure/avm-res-storage-storageaccount/azurerm/latest": [
+"OK",
+200,
+""
+],
+"https://google.github.io/eng-practices/review/": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/azure/azure-resource-manager/bicep/best-practices": [
+"REDIRECT",
+200,
+"https://learn.microsoft.com/en-us/azure/azure-resource-manager/bicep/best-practices"
+],
+"https://github.com/github/awesome-copilot": [
+"OK",
+200,
+""
+],
+"https://github.com/Azure/terraform-azurerm-avm-res-storage-storageaccount": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/azure/azure-resource-manager/bicep/": [
+"REDIRECT",
+200,
+"https://learn.microsoft.com/en-us/azure/azure-resource-manager/bicep/"
+],
+"https://learn.microsoft.com/en-us/power-apps/developer/data-platform/webapi/query-data-web-api": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-apps/developer/data-platform/sdk-python/overview": [
+"OK",
+200,
+""
+],
+"https://dart.dev/effective-dart": [
+"OK",
+200,
+""
+],
+"https://owasp.org/": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-apps/developer/data-platform/webapi/create-update-entity-definitions-using-web-api": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-apps/developer/data-platform/sdk-python/work-data": [
+"OK",
+200,
+""
+],
+"https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/reviewing-changes-in-pull-requests": [
+"REDIRECT",
+200,
+"https://docs.github.com/en/pull-requests/how-tos/review-pull-requests"
+],
+"https://learn.microsoft.com/en-us/power-platform/release-plan/2025wave2/data-platform/build-agentic-flows-dataverse-sdk-python": [
+"OK",
+200,
+""
+],
+"https://github.com/Azure/terraform-azurerm-avm-ptn-aks-enterprise": [
+"OK",
+200,
+""
+],
+"https://github.com/microsoft/PowerPlatform-DataverseClient-Python/blob/main/examples/advanced/walkthrough.py": [
+"OK",
+200,
+""
+],
+"https://docs.python.org/3/library/asyncio.html": [
+"OK",
+200,
+""
+],
+"https://docs.flutter.dev/app-architecture/recommendations": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/python/api/powerplatform-dataverse-client/powerplatform.dataverse.client.dataverseclient": [
+"OK",
+200,
+""
+],
+"https://cloud.google.com/ai-platform/content-moderation": [
+"REDIRECT",
+200,
+"https://cloud.google.com/products/gemini-enterprise-agent-platform"
+],
+"https://learn.microsoft.com/en-us/azure/key-vault/general/overview": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/python/api/powerplatform-dataverse-client/powerplatform.dataverse.core.config.dataverseconfig": [
+"OK",
+200,
+""
+],
+"https://pypi.org/project/PowerPlatform-Dataverse-Client/": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-platform/admin/security/security-overview": [
+"OK",
+200,
+""
+],
+"https://code.visualstudio.com/docs/copilot/customization/custom-instructions": [
+"REDIRECT",
+200,
+"https://code.visualstudio.com/docs/agent-customization/custom-instructions"
+],
+"https://learn.microsoft.com/en-us/python/api/overview/azure/identity-readme": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/python/api/powerplatform-dataverse-client/powerplatform.dataverse.core.errors": [
+"OK",
+200,
+""
+],
+"https://github.com/microsoft/PowerPlatform-DataverseClient-Python/issues": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/python/api/azure-identity": [
+"OK",
+200,
+""
+],
+"https://github.com/microsoft/PowerPlatform-DataverseClient-Python": [
+"OK",
+200,
+""
+],
+"https://modelcontextprotocol.io/": [
+"REDIRECT",
+200,
+"https://modelcontextprotocol.io/docs/2026-07-28/getting-started/intro"
+],
+"https://learn.microsoft.com/en-us/azure/developer/python/sdk/authentication/overview": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-apps/developer/data-platform/webapi/overview": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/python/api/powerplatform-dataverse-client/powerplatform.dataverse.core.errors.dataverseerror": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-apps/developer/data-platform/optimize-performance-create-update": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/azure/developer/python/sdk/fundamentals/errors": [
+"OK",
+200,
+""
+],
+"https://github.com/microsoft/PowerPlatform-DataverseClient-Python.git": [
+"REDIRECT",
+200,
+"https://github.com/microsoft/PowerPlatform-DataverseClient-Python"
+],
+"https://docs.python.org/3/library/unittest.mock.html": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-apps/developer/data-platform/sdk-python/get-started": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/azure/ai-services/": [
+"REDIRECT",
+200,
+"https://learn.microsoft.com/en-us/azure/foundry/"
+],
+"https://learn.microsoft.com/en-us/python/api/powerplatform-dataverse-client/powerplatform.dataverse.client.dataverseclient?view=dataverse-sdk-python-latest": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/python/api/dataverse-sdk-docs-python/dataverse-overview?view=dataverse-sdk-python-latest": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-platform/architecture/key-concepts/data-migration/workflow-complex-data-migration": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/azure/azure-functions/functions-reference-python#unit-testing": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-apps/developer/data-platform/file-column-data": [
+"OK",
+200,
+""
+],
+"https://developer.microsoft.com/json-schemas/copilot/declarative-agent/v1.5/schema.json": [
+"OK",
+200,
+""
+],
+"https://github.com/microsoft/PowerPlatform-DataverseClient-Python/tree/main/examples": [
+"OK",
+200,
+""
+],
+"https://pandas.pydata.org/docs/": [
+"OK",
+200,
+""
+],
+"https://api.openai.com/v1": [
+"BROKEN",
+404,
+"Not Found"
+],
+"https://github.com/microsoft/PowerPlatform-DataverseClient-Python/blob/main/examples/advanced/file_upload.py": [
+"BLOCKED",
+429,
+"Too Many Requests"
+],
+"https://github.com/microsoft/PowerPlatform-DataverseClient-Python/blob/main/README.md": [
+"OK",
+200,
+""
+],
+"https://docs.pytest.org/": [
+"REDIRECT",
+200,
+"https://docs.pytest.org/en/stable/"
+],
+"https://learn.microsoft.com/azure/dev-box/how-to-write-image-definition-file": [
+"REDIRECT",
+200,
+"https://learn.microsoft.com/en-us/azure/dev-box/how-to-write-image-definition-file"
+],
+"https://learn.microsoft.com/azure/dev-box/how-to-use-copilot-generate-image-definition-file": [
+"REDIRECT",
+200,
+"https://learn.microsoft.com/en-us/azure/dev-box/how-to-use-copilot-generate-image-definition-file"
+],
+"https://learn.microsoft.com/azure/dev-box/concept-what-are-team-customizations?tabs=team-customizations": [
+"REDIRECT",
+200,
+"https://learn.microsoft.com/en-us/azure/dev-box/concept-what-are-team-customizations?tabs=team-customizations"
+],
+"https://learn.microsoft.com/azure/dev-box/how-to-use-secrets-customization-files": [
+"REDIRECT",
+200,
+"https://learn.microsoft.com/en-us/azure/dev-box/how-to-use-secrets-customization-files"
+],
+"https://github.com/dotnet/maui/issues": [
+"OK",
+200,
+""
+],
+"https://github.com/microsoft/winget-cli/releases": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/dotnet/core/porting/upgrade-assistant-overview": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/azure/dev-box/quickstart-team-customizations": [
+"REDIRECT",
+200,
+"https://learn.microsoft.com/en-us/azure/dev-box/quickstart-team-customizations"
+],
+"https://learn.microsoft.com/azure/dev-box/how-to-customizations-connect-resource-repository#example-download-a-file-from-azure-storage": [
+"REDIRECT",
+200,
+"https://learn.microsoft.com/en-us/azure/dev-box/how-to-customizations-connect-resource-repository"
+],
+"https://github.com/dotnet/maui/pull/32186": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/azure/dev-box/how-to-configure-team-customizations#system-tasks-and-user-tasks": [
+"REDIRECT",
+200,
+"https://learn.microsoft.com/en-us/azure/dev-box/how-to-configure-team-customizations"
+],
+"https://learn.microsoft.com/azure/storage/common/storage-use-azcopy-v10?tabs=dnf#transfer-data": [
+"REDIRECT",
+200,
+"https://learn.microsoft.com/en-us/azure/storage/common/storage-use-azcopy-v10?tabs=dnf"
+],
+"https://learn.microsoft.com/azure/dev-box/how-to-configure-customization-tasks#what-are-tasks": [
+"REDIRECT",
+200,
+"https://learn.microsoft.com/en-us/azure/dev-box/how-to-configure-customization-tasks"
+],
+"https://microsoft.github.io/genaiscript/llms.txt": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/dotnet/maui/migration/": [
+"REDIRECT",
+200,
+"https://learn.microsoft.com/en-us/dotnet/maui/migration/"
+],
+"https://learn.microsoft.com/dotnet/maui/": [
+"REDIRECT",
+200,
+"https://learn.microsoft.com/en-us/dotnet/maui/"
+],
+"https://google.github.io/styleguide/go/": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/dotnet/communitytoolkit/mvvm/": [
+"REDIRECT",
+200,
+"https://learn.microsoft.com/en-us/dotnet/communitytoolkit/mvvm/"
+],
+"https://learn.microsoft.com/dotnet/core/whats-new/": [
+"REDIRECT",
+200,
+"https://learn.microsoft.com/en-us/dotnet/core/whats-new/"
+],
+"https://learn.microsoft.com/dotnet/framework/whats-new/": [
+"REDIRECT",
+200,
+"https://learn.microsoft.com/en-us/dotnet/framework/whats-new/"
+],
+"https://org.crm.dynamics.com": [
+"REDIRECT",
+200,
+"https://login.microsoftonline.com/bd847949-e321-47b7-8574-173e7853bab4/oauth2/authorize?client_id=00000007-0000-0000-c000-000000000000&response_type=code%20id_token&scope=openid%20profile&state=OpenIdConnect.AuthenticationProperties%3DMAAAAPCh_MuO2hHxuNAAIkgwUU97CuEppQ_S5QjNQdj0cZslJM4cF1cY3ie8Tqy6YIeS8wEAAAABAAAACS5yZWRpcmVjdB1odHRwczovL29yZy5jcm0uZHluYW1pY3MuY29tLw%26ReplyUrl%3DMAAAAPCh%252fMuO2hHxuNAAIkgwUU8GuCSzlwxC7stYzr%252f7HiQZWXX%252b12qA0RW51rGpuf%252bMdGh0dHBzOi8vYm4xLS1uYW1jcm1saXZlc2c2NDEuY3JtLmR5bmFtaWNzLmNvbS8%253d%26RedirectTo%3DMAAAAPCh%252fMuO2hHxuNAAIkgwUU%252f6oQifufPLGaN33qY1lLrA3coVmU%252beGVYXA14UUXgzSGh0dHBzOi8vb3JnLmNybS5keW5hbWljcy5jb20v%26RedirectToForMcas%3Dhttps%253a%252f%252forg.crm.dynamics.com%252f&response_mode=form_post&nonce=639225853514383853.NDI5NzFmMjYtZWU2YS00Nzg3LWI3YzEtYWQ3Y2FkOTk3YWRhMzgyN2Y1MWUtMTI4NS00MjE3LWI0MTYtZjc2YmVhY2U5MGUw&redirect_uri=https%3A%2F%2Fbn1--namcrmlivesg641.crm.dynamics.com%2F&max_age=86400&claims=%7B%22id_token%22%3A%7B%22xms_cc%22%3A%7B%22values%22%3A%5B%22CP1%22%5D%7D%7D%7D&x-client-SKU=ID_NET472&x-client-ver=8.16.0.0"
+],
+"https://microsoft.github.io/genaiscript": [
+"OK",
+200,
+""
+],
+"https://go.dev/doc/effective_go": [
+"OK",
+200,
+""
+],
+"https://go.dev/wiki/CodeReviewComments": [
+"OK",
+200,
+""
+],
+"https://civicactions.github.io/uswds-color-tool/": [
+"OK",
+200,
+""
+],
+"https://pkg.go.dev/sync#WaitGroup": [
+"OK",
+200,
+""
+],
+"https://raw.githubusercontent.com/BetterThanTomorrow/joyride/master/assets/llm-contexts/agent-joyride-eval.md": [
+"OK",
+200,
+""
+],
+"https://aka.ms/devcenter/preview/imaging/examples": [
+"REDIRECT",
+200,
+"https://github.com/contoso-co/eShop/blob/main/.devcenter/catalog/image-definitions/frontend/imagedefinition.yaml"
+],
+"https://raw.githubusercontent.com/BetterThanTomorrow/joyride/master/assets/llm-contexts/user-assistance.md": [
+"OK",
+200,
+""
+],
+"https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents#the-anatomy-of-effective-context": [
+"OK",
+200,
+""
+],
+"https://github.com/github/awesome-copilot/tree/main/instructions": [
+"OK",
+200,
+""
+],
+"https://github.blog/developer-skills/github/5-tips-for-making-your-github-profile-page-accessible/": [
+"OK",
+200,
+""
+],
+"https://designsystem.digital.gov/design-tokens/color/overview/": [
+"OK",
+200,
+""
+],
+"https://docs.github.com/en/copilot/reference/hooks-configuration": [
+"REDIRECT",
+200,
+"https://docs.github.com/en/copilot/reference/hooks-reference"
+],
+"https://docs.github.com/en/copilot/concepts/agents/cloud-agent/about-hooks": [
+"REDIRECT",
+200,
+"https://docs.github.com/en/copilot/concepts/agents/hooks"
+],
+"https://github.github.com/gfm/": [
+"OK",
+200,
+""
+],
+"https://github.com/BetterThanTomorrow/joyride/blob/master/doc/api.md#joyrideflare": [
+"OK",
+200,
+""
+],
+"https://github.com/BetterThanTomorrow/joyride/blob/master/examples/.joyride/src/flares_examples.cljs": [
+"OK",
+200,
+""
+],
+"https://aka.ms/getwinget": [
+"REDIRECT",
+200,
+"https://release-assets.githubusercontent.com/github-production-release-asset/197275130/92d2f0c1-1d7f-4715-9d79-cce26239e7da?sp=r&sv=2018-11-09&sr=b&spr=https&se=2026-08-17T18%3A35%3A06Z&rscd=attachment%3B+filename%3DMicrosoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle&rsct=application%2Foctet-stream&skoid=96c2d410-5711-43a1-aedd-ab1947aa7ab0&sktid=398a6654-997b-47e9-b12b-9515b896b4de&skt=2026-08-17T17%3A34%3A32Z&ske=2026-08-17T18%3A35%3A06Z&sks=b&skv=2018-11-09&sig=06HBkDzIqIAADIuFywz%2BtL0r1XqeR0bbpQCg7SA7ZT8%3D&jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmVsZWFzZS1hc3NldHMuZ2l0aHVidXNlcmNvbnRlbnQuY29tIiwia2V5Ijoia2V5MSIsImV4cCI6MTc4Njk5MjE1MywibmJmIjoxNzg2OTg4NTUzLCJwYXRoIjoicmVsZWFzZWFzc2V0cHJvZHVjdGlvbi5ibG9iLmNvcmUud2luZG93cy5uZXQifQ.-g_GHjb3KObtcWyVsSrJQrFGxQRFZsNYDRMYL45yxI8&response-content-disposition=attachment%3B%20filename%3DMicrosoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle&response-content-type=application%2Foctet-stream"
+],
+"https://www.smashingmagazine.com/2021/09/improving-accessibility-of-markdown/": [
+"OK",
+200,
+""
+],
+"https://github.com/github/awesome-copilot/issues": [
+"OK",
+200,
+""
+],
+"https://dotnet.microsoft.com/download/dotnet/10.0": [
+"REDIRECT",
+200,
+"https://dotnet.microsoft.com/en-us/download/dotnet/10.0"
+],
+"https://spec.commonmark.org/0.31.2/": [
+"OK",
+200,
+""
+],
+"https://www.figma.com/resource-library/color-combinations/": [
+"OK",
+200,
+""
+],
+"https://docs.github.com/copilot/about-github-copilot/what-is-github-copilot": [
+"REDIRECT",
+200,
+"https://docs.github.com/en/copilot/get-started/what-is-github-copilot"
+],
+"https://login.microsoftonline.com/common/oauth2/v2.0/authorize": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/microsoft-365-copilot/extensibility/build-mcp-plugins": [
+"OK",
+200,
+""
+],
+"https://devblogs.microsoft.com/microsoft365dev/build-declarative-agents-for-microsoft-365-copilot-with-mcp/": [
+"OK",
+200,
+""
+],
+"https://login.microsoftonline.com/common/oauth2/v2.0/token": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/microsoft-365/admin/manage/manage-copilot-agents-integrated-apps": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/microsoft-365-copilot/extensibility/api-plugin-adaptive-cards": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/azure/aks/workload-identity-overview": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/python/api/azure-identity/azure.identity.defaultazurecredential": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/azure/ai-studio/concepts/rbac-ai-studio": [
+"OK",
+200,
+""
+],
+"https://www.interaction-design.org/literature/article/ui-color-palette": [
+"REDIRECT",
+200,
+"https://ixdf.org/literature/article/ui-color-palette"
+],
+"https://moodledev.io/general/development/policies/codingstyle": [
+"OK",
+200,
+""
+],
+"https://github.com/login/oauth/access_token": [
+"BROKEN",
+404,
+"Not Found"
+],
+"https://github.com/login/oauth/authorize": [
+"REDIRECT",
+200,
+"https://github.com/login?return_to=%2Flogin%2Foauth%2Fauthorize"
+],
+"https://learn.microsoft.com/en-us/power-platform/alm/overview-alm": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-apps/developer/component-framework/create-custom-controls-using-pcf": [
+"OK",
+200,
+""
+],
+"https://python.langchain.com/docs/integrations/vectorstores/": [
+"REDIRECT",
+200,
+"https://docs.langchain.com/oss/python/integrations/providers/overview"
+],
+"https://learn.microsoft.com/en-us/power-apps/developer/component-framework/custom-controls-overview#component-implementation": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-apps/developer/component-framework/debugging-custom-controls": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-apps/developer/component-framework/debugging-custom-controls#debugging-after-deploying-into-microsoft-dataverse": [
+"OK",
+200,
+""
+],
+"https://github.com/oqtane/oqtane.framework": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-apps/developer/component-framework/import-custom-controls": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-apps/developer/component-framework/import-custom-controls#package-a-code-component": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-platform/alm/solution-concepts-alm#managed-and-unmanaged-solutions": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-apps/developer/component-framework/media/code-component-projects.png": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-platform/alm/solution-packager-tool#solutionpackager-command-line-arguments": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-apps/developer/component-framework/media/solution-strategies.png": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/powerapps/developer/data-platform/introduction-solutions": [
+"OK",
+200,
+""
+],
+"https://semver.org/": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-platform/alm/devops-github-actions": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-platform/alm/solution-packager-tool": [
+"OK",
+200,
+""
+],
+"https://www.thoughtworks.com/insights/blog/object-calisthenics": [
+"REDIRECT",
+200,
+"https://www.thoughtworks.com/insights/blog"
+],
+"https://learn.microsoft.com/en-us/powerapps/maker/data-platform/update-solutions#understanding-version-numbers-for-updates": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-apps/developer/component-framework/media/upgrade-code-component.png": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-apps/developer/component-framework/reference/": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-apps/developer/component-framework/implementing-controls-using-typescript": [
+"OK",
+200,
+""
+],
+"https://www.oreilly.com/library/view/clean-code-a/9780136083238/": [
+"BLOCKED",
+403,
+"Forbidden"
+],
+"https://learn.microsoft.com/en-us/power-apps/developer/component-framework/reference/control/updateview": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-platform/alm/devops-build-tools": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-apps/developer/component-framework/code-components-alm#building-pcfproj-code-component-projects": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/powerapps/maker/canvas-apps/performance-tips": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-apps/developer/component-framework/debugging-custom-controls#es5-vs-es6": [
+"OK",
+200,
+""
+],
+"https://www.cs.helsinki.fi/u/luontola/tdd-2009/ext/ObjectCalisthenics.pdf": [
+"BLOCKED",
+403,
+"Forbidden"
+],
+"https://learn.microsoft.com/en-us/power-apps/developer/component-framework/reference/react-control/updateview": [
+"OK",
+200,
+""
+],
+"https://github.com/microsoft/PowerApps-Samples/tree/master/component-framework": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/powerapps/maker/canvas-apps/accessible-apps": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/powerapps/maker/canvas-apps/limits-and-config": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/powerapps/developer/model-driven-apps/best-practices/business-logic/interact-http-https-resources-asynchronously": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-platform/admin/supported-web-browsers-and-mobile-devices": [
+"OK",
+200,
+""
+],
+"https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA": [
+"OK",
+200,
+""
+],
+"https://m365.cloud.microsoft/chat": [
+"REDIRECT",
+200,
+"https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=4765445b-32c6-49b0-83e6-1d93765276ca&redirect_uri=https%3A%2F%2Fm365.cloud.microsoft%2Flandingv2&response_type=code%20id_token&scope=openid%20profile%20https%3A%2F%2Fwww.office.com%2Fv2%2FOfficeHome.All&response_mode=form_post&nonce=639225853566309303.OWNiN2Q2NGUtNTQ3Yi00ZWQ5LTgxYmMtZWM4MWVhMzg3ODMwZGE1MzY3NzUtOTUwYi00MzE4LTlkY2UtOWVkYzVjMzFhN2Iy&ui_locales=en-US&mkt=en-US&client-request-id=66722509-2a63-4665-9a36-196aa7cc61fb&siwa=1&siwg=1&state=4GVazO4rKH5zbAquZERcqwt6SbwRxWoqkwBI7I_GhuLNXGQqCIfMnIYf6nmoixhzQ9SjLkNzqt4x7Ub1w5JWDvAK-2V7M_X9xw4bo5f9VkAiPbahZSwK_LRXAKCnBXc2KB5W-3ETEW1ZphTI94tYmOrhBO7CQOmDOOtCnpUKmCBIeNMVO31ZQcZnMuCh6ZkbfE7k6mYUEY_Y3XEvgeFk5RldsH0B-VYQ7BG8PxXGMommyWCgxtmiORO3dfOWajCNPAHp02yK4fKK4HgVmiYouyKSCmhvOczlxEzErFa_LiVnKmyZLE6oOSnD-TMDBDjGMn4wFRW2ADHA7j4jhjnzGMrU9Q5xoOQwkPDqUee6XivokQr0OuJ4dwhHjYiSlHiT2aJWbyGQ02oytbUZvArXX-bXZwdvHR9oewzwfDMbIr-8kh5fq5wsw2mh_G9LzSykRrq_yIrdU7cb9UKNfCz2aA&x-client-SKU=ID_NET8_0&x-client-ver=8.16.0.0"
+],
+"https://aka.ms/azsdk/azure-ai-projects-v2/python/samples/": [
+"REDIRECT",
+200,
+"https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/ai/azure-ai-projects/samples"
+],
+"https://learn.microsoft.com/en-us/power-apps/developer/component-framework/code-components-alm": [
+"OK",
+200,
+""
+],
+"https://github.com/microsoft/fluentui": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/office/dev/add-ins/concepts/browsers-used-by-office-web-add-ins": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/power-apps/developer/component-framework/reference/": [
+"REDIRECT",
+200,
+"https://learn.microsoft.com/en-us/power-apps/developer/component-framework/reference/"
+],
+"https://learn.microsoft.com/en-us/power-apps/developer/component-framework/custom-controls-overview": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/training/paths/use-power-apps-component-framework": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-apps/developer/component-framework/media/canvas-app-safety-warning.png": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-apps/developer/component-framework/overview#licensing": [
+"OK",
+200,
+""
+],
+"https://developer.microsoft.com/fluentui#/get-started/web": [
+"REDIRECT",
+200,
+"https://developer.microsoft.com/en-us/fluentui"
+],
+"https://learn.microsoft.com/en-us/power-apps/developer/component-framework/get-powerapps-cli": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-apps/developer/component-framework/component-framework-for-canvas-apps": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-apps/developer/component-framework/media/settings.png": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-apps/developer/component-framework/media/select-admin-center-from-settings.png": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-apps/developer/component-framework/media/enable-pcf-feature.png": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-apps/developer/component-framework/media/insert-code-components-using-get-more-components.png": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-apps/developer/component-framework/overview": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-apps/developer/component-framework/media/add-sample-component-from-list.png": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-apps/maker/data-platform/import-update-export-solutions": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-apps/developer/component-framework/media/property-pane-with-parameters.png": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-apps/developer/component-framework/limitations": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-apps/developer/component-framework/media/insert-component-add-sample-component.png": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-platform/developer/cli/introduction": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-apps/developer/component-framework/media/delete-code-component.png": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-apps/developer/component-framework/manifest-schema-reference/": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-apps/maker/portals/component-framework": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-platform/alm/solution-concepts-alm": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-apps/developer/component-framework/media/dependent-library-before-example.png": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-apps/developer/component-framework/media/dependent-library-after-example.png": [
+"OK",
+200,
+""
+],
+"https://webpack.js.org/": [
+"OK",
+200,
+""
+],
+"https://webpack.js.org/configuration/externals/": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-apps/developer/component-framework/manifest-schema-reference/resources": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-apps/developer/component-framework/manifest-schema-reference/dependency": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-apps/developer/component-framework/media/dependent-library-on-demand-load.png": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-apps/developer/component-framework/manifest-schema-reference/uses-feature": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-apps/developer/component-framework/media/component-events-onchange-example.png": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-apps/developer/component-framework/manifest-schema-reference/control": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-apps/developer/component-framework/manifest-schema-reference/feature-usage": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-apps/developer/component-framework/manifest-schema-reference/platform-action": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-apps/developer/component-framework/tutorial-use-dependent-libraries": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-apps/developer/component-framework/manifest-schema-reference/event": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-apps/developer/component-framework/media/passing-payload-in-events.png": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-apps/developer/component-framework/media/custom-events-in-canvas-designer.png": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/addeventhandler": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-apps/developer/component-framework/reference/events": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-apps/developer/component-framework/tutorial-define-event": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-apps/maker/canvas-apps/controls/modern-controls/overview-modern-controls": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-apps/user/modern-fluent-design": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-apps/developer/component-framework/react-controls-platform-libraries": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-apps/developer/component-framework/create-custom-controls-using-pcf#prerequisites": [
+"OK",
+200,
+""
+],
+"https://www.npmjs.com/package/@fluentui/react-migration-v8-v9": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-apps/developer/component-framework/sample-controls/modern-theming-api-control": [
+"OK",
+200,
+""
+],
+"https://pcf.gallery": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-apps/developer/component-framework/reference/theming": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-apps/maker/canvas-apps/controls/modern-controls/modern-theming": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-apps/developer/component-framework/sample-controls/angular-flip-control": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-apps/developer/component-framework/add-custom-controls-to-a-field-or-entity": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/training/paths/create-components-power-apps-component-framework/": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/credentials/certifications/power-platform-developer-associate/": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-apps/developer/component-framework/media/add-dataset-component.png": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-pages/getting-started/add-form": [
+"OK",
+200,
+""
+],
+"https://powerapps.microsoft.com/": [
+"REDIRECT",
+200,
+"https://www.microsoft.com/pt-br/power-platform/products/power-apps/"
+],
+"https://powerapps.microsoft.com/blog/considerations-for-optimized-performance-in-power-apps/": [
+"REDIRECT",
+200,
+"https://www.microsoft.com/en-us/power-platform/blog/power-apps/"
+],
+"https://learn.microsoft.com/en-us/power-apps/maker/portals/versions/version-9.3.3.x": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-apps/developer/component-framework/manifest-schema-reference/property#remarks": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-apps/developer/component-framework/reference/device/captureaudio": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-apps/developer/component-framework/manifest-schema-reference/property#value-elements-that-are-not-supported": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-apps/maker/portals/versions/package-version-9.2.2103": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-apps/developer/component-framework/reference/device/capturevideo": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-apps/developer/component-framework/add-custom-controls-to-a-field-or-entity#add-a-code-component-to-a-column": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-apps/developer/component-framework/reference/device/getcurrentposition": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-apps/developer/component-framework/reference/utility": [
+"OK",
+200,
+""
+],
+"https://react.fluentui.dev/": [
+"REDIRECT",
+200,
+"https://storybooks.fluentui.dev/react/"
+],
+"https://learn.microsoft.com/en-us/power-pages/configure/data-workspace-forms": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-apps/developer/component-framework/reference/device/pickfile": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-apps/developer/component-framework/reference/device/captureimage": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-apps/developer/component-framework/reference/device/getbarcodevalue": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-pages/configure/media/component-framework/steps.png": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-pages/configure/media/component-framework/add-component-to-form.png": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-apps/maker/model-driven-apps/media/add-slider.png": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-pages/configure/web-api-overview": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-pages/configure/component-framework-tutorial": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-pages/configure/implement-webapi-component": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-pages/configure/portal-management-app": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-apps/developer/data-platform/powerapps-cli#install-microsoft-power-platform-cli": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-platform/developer/cli/introduction#install-power-platform-cli-for-windows": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-apps/developer/component-framework/manifest-schema-reference/platform-library": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-apps/developer/component-framework/reference/react-control/init": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-apps/developer/data-platform/powerapps-cli": [
+"OK",
+200,
+""
+],
+"https://code.visualstudio.com/Download": [
+"OK",
+200,
+""
+],
+"https://github.com/microsoft/PowerApps-Samples": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/power-pages/configure/media/component-framework/enable-code-component.png": [
+"OK",
+200,
+""
+],
+"https://github.com/microsoft/PowerApps-Samples/blob/master/component-framework/README.md": [
+"OK",
+200,
+""
+],
+"https://docs.github.com/repositories/creating-and-managing-repositories/cloning-a-repository": [
+"REDIRECT",
+200,
+"https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository"
+],
+"https://docs.github.com/repositories/working-with-files/using-files/downloading-source-code-archives#downloading-source-code-archives-from-the-repository-view": [
+"REDIRECT",
+200,
+"https://docs.github.com/en/repositories/working-with-files/using-files/downloading-source-code-archives"
+],
+"https://modelcontextprotocol.io/specification/2026-07-28": [
+"OK",
+200,
+""
+],
+"https://github.com/modelcontextprotocol/php-sdk": [
+"OK",
+200,
+""
+],
+"https://raw.githubusercontent.com/microsoft/PowerApps-Tooling/refs/heads/master/schemas/pa-yaml/v3.0/pa.schema.yaml": [
+"OK",
+200,
+""
+],
+"https://github.com/modelcontextprotocol/php-sdk/blob/main/docs/server-builder.md": [
+"OK",
+200,
+""
+],
+"https://raw.githubusercontent.com/microsoft/Analysis-Services/master/pbidevmode/fabricps-pbip/FabricPS-PBIP.psm1": [
+"OK",
+200,
+""
+],
+"https://github.com/modelcontextprotocol/php-sdk/blob/main/docs/mcp-elements.md": [
+"OK",
+200,
+""
+],
+"https://github.com/modelcontextprotocol/php-sdk/blob/main/docs/examples.md": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/visualstudio/ide/reference/command-prompt-powershell": [
+"REDIRECT",
+200,
+"https://learn.microsoft.com/en-us/visualstudio/ide/reference/command-prompt-powershell"
+],
+"https://learn.microsoft.com/powerapps/developer/component-framework/import-custom-controls#deploying-code-components": [
+"REDIRECT",
+200,
+"https://learn.microsoft.com/en-us/powerapps/developer/component-framework/import-custom-controls"
+],
+"https://learn.microsoft.com/powerapps/maker/data-platform/import-update-export-solutions": [
+"REDIRECT",
+200,
+"https://learn.microsoft.com/en-us/powerapps/maker/data-platform/import-update-export-solutions"
+],
+"https://raw.githubusercontent.com/microsoft/Analysis-Services/master/pbidevmode/fabricps-pbip/FabricPS-PBIP.psd1": [
+"OK",
+200,
+""
+],
+"https://github.com/modelcontextprotocol/php-sdk/blob/main/docs/transports.md": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/powerapps/developer/component-framework/component-framework-for-canvas-apps#add-components-to-a-canvas-app": [
+"REDIRECT",
+200,
+"https://learn.microsoft.com/en-us/powerapps/developer/component-framework/component-framework-for-canvas-apps"
+],
+"https://debs-obrien.github.io/playwright-movies-app": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/powerapps/developer/component-framework/add-custom-controls-to-a-field-or-entity": [
+"REDIRECT",
+200,
+"https://learn.microsoft.com/en-us/powerapps/developer/component-framework/add-custom-controls-to-a-field-or-entity"
+],
+"https://make.powerapps.com/": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/powerapps/developer/component-framework/import-custom-controls#connecting-to-your-environment": [
+"REDIRECT",
+200,
+"https://learn.microsoft.com/en-us/powerapps/developer/component-framework/import-custom-controls"
+],
+"https://rust-lang.github.io/async-book/": [
+"OK",
+200,
+""
+],
+"https://rust-lang.github.io/api-guidelines/": [
+"OK",
+200,
+""
+],
+"https://doc.rust-lang.org/book/": [
+"OK",
+200,
+""
+],
+"https://github.com/modelcontextprotocol/rust-sdk/tree/main/examples": [
+"OK",
+200,
+""
+],
+"https://app.powerbi.com/groups/00000000-0000-0000-0000-000000000000/reports/00000000-0000-0000-0000-000000000001/ReportSection": [
+"OK",
+200,
+""
+],
+"https://schema.org/extensions": [
+"BROKEN",
+404,
+"Not Found"
+],
+"https://docs.spring.io/spring-boot/3.5/appendix/dependency-versions/coordinates.html": [
+"OK",
+200,
+""
+],
+"https://docs.spring.io/spring-boot/4.0/appendix/dependency-versions/coordinates.html": [
+"OK",
+200,
+""
+],
+"https://github.com/databricks/scala-style-guide": [
+"OK",
+200,
+""
+],
+"https://docs.rs/rmcp": [
+"REDIRECT",
+200,
+"https://docs.rs/rmcp/latest/rmcp/"
+],
+"https://docs.rs/rmcp-macros": [
+"REDIRECT",
+200,
+"https://docs.rs/rmcp-macros/latest/rmcp_macros/"
+],
+"https://docs.spring.io/spring-framework/reference/": [
+"OK",
+200,
+""
+],
+"https://github.com/spring-projects/spring-boot/commit/239f384ac0893d151b89f204886874c6adb00001": [
+"OK",
+200,
+""
+],
+"https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-4.0-Migration-Guide": [
+"OK",
+200,
+""
+],
+"https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-4.0-Migration-Guide#starters": [
+"OK",
+200,
+""
+],
+"https://users.rust-lang.org": [
+"OK",
+200,
+""
+],
+"https://code.visualstudio.com/docs/copilot/customization/prompt-files#_prompt-file-format": [
+"REDIRECT",
+200,
+"https://code.visualstudio.com/docs/agent-customization/prompt-files"
+],
+"https://github.com/FasterXML/jackson/blob/main/jackson3/MIGRATING_TO_JACKSON_3.md": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/": [
+"OK",
+200,
+""
+],
+"https://tailwindcss.com/docs/installation/using-vite": [
+"OK",
+200,
+""
+],
+"https://github.com/rust-lang/rfcs/blob/master/text/0430-finalizing-naming-conventions.md": [
+"OK",
+200,
+""
+],
+"https://registry.terraform.io/providers/SAP/btp/latest/docs": [
+"OK",
+200,
+""
+],
+"https://tailwindcss.com/docs/upgrade-guide": [
+"OK",
+200,
+""
+],
+"https://typespec.io/": [
+"OK",
+200,
+""
+],
+"https://github.com/mcp/hashicorp/terraform-mcp-server": [
+"OK",
+200,
+""
+],
+"https://github.com/spring-projects/spring-boot/releases": [
+"OK",
+200,
+""
+],
+"https://kotlinlang.org/docs/whatsnew22.html": [
+"OK",
+200,
+""
+],
+"https://learn.microsoft.com/en-us/visualstudio/extensibility/": [
+"OK",
+200,
+""
+],
+"https://img.shields.io/visual-studio-marketplace/v/Publisher.ExtensionName": [
+"OK",
+200,
+""
+],
+"https://img.shields.io/visual-studio-marketplace/d/Publisher.ExtensionName": [
+"OK",
+200,
+""
+],
+"https://code.visualstudio.com/docs/copilot/chat/chat-agent-mode#_agent-mode-tools": [
+"REDIRECT",
+200,
+"https://code.visualstudio.com/docs/chat/chat-overview"
+],
+"https://github.com/VsixCommunity/Samples": [
+"OK",
+200,
+""
+],
+"https://adaptivecards.io/designer/": [
+"OK",
+200,
+""
+],
+"https://github.com/apple/swift-log.git": [
+"REDIRECT",
+200,
+"https://github.com/apple/swift-log"
+],
+"https://learn.microsoft.com/microsoft-365-copilot/extensibility/": [
+"REDIRECT",
+200,
+"https://learn.microsoft.com/en-us/microsoft-365-copilot/extensibility/"
+],
+"https://github.com/VsixCommunity/Community.VisualStudio.Toolkit": [
+"OK",
+200,
+""
+],
+"https://github.com/modelcontextprotocol/swift-sdk.git": [
+"REDIRECT",
+200,
+"https://github.com/modelcontextprotocol/swift-sdk"
+],
+"http://adaptivecards.io/schemas/adaptive-card.json": [
+"REDIRECT",
+200,
+"https://adaptivecards.io/schemas/adaptive-card.json"
+],
+"https://teams.microsoft.com/l/channel/": [
+"REDIRECT",
+200,
+"https://teams.microsoft.com/dl/launcher/launcher.html?url=%2F_%23%2Fl%2Fchannel%2F&type=channel&deeplinkId=c2c8db0b-a87c-42be-abce-26aebbe13535&directDl=true&msLaunch=true&enableMobilePage=true"
+],
+"https://learn.microsoft.com": [
+"REDIRECT",
+200,
+"https://learn.microsoft.com/en-us/"
+],
+"https://aka.ms/M365AgentsToolkit": [
+"REDIRECT",
+200,
+"https://learn.microsoft.com/en-us/microsoft-365/developer/overview-m365-agents-toolkit?toc=/microsoftteams/platform/toc.json&bc=/microsoftteams/platform/breadcrumb/toc.json"
+],
+"https://azure.microsoft.com/en-us/services/cognitive-services/content-moderator/": [
+"REDIRECT",
+200,
+"https://azure.microsoft.com/en-us/products/ai-services/ai-content-safety/"
+],
+"https://www.gnu.org/software/make/manual/": [
+"TIMEOUT",
+null,
+"timed out"
+]
+}

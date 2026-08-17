@@ -10,7 +10,7 @@ Reference for the `vcpkg` skill. Use this when a user asks about creating or con
   "registries": [
     {
       "kind": "git",
-      "repository": "https://github.com/your-org/vcpkg-registry",
+      "repository": "https://github.com/{owner}/vcpkg-registry",
       "baseline": "<commit-sha>",
       "packages": ["company-utils", "internal-lib"]
     }
@@ -44,7 +44,7 @@ The `"packages"` array in the registry entry controls which packages are resolve
   "registries": [
     {
       "kind": "git",
-      "repository": "https://github.com/your-org/vcpkg-registry.git",
+      "repository": "https://github.com/{owner}/vcpkg-registry.git",
       "baseline": "<registry-commit-sha>",
       "packages": ["your-package-1", "your-package-2"]
     }
