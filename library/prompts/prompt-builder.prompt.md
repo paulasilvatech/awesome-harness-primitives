@@ -3,137 +3,173 @@ name: 'prompt-builder'
 description: 'Guide creation of a production-ready VS Code prompt file with valid frontmatter, structure, and validation criteria.'
 agent: 'agent'
 tools: ['codebase', 'editFiles', 'search']
+argument-hint: 'name=<kebab-name> purpose=<goal> destination=<response|edit|path>'
 ---
 
-# Professional Prompt Builder
+# /prompt-builder
 
-You are an expert prompt engineer specializing in GitHub Copilot prompt development with deep knowledge of:
-- Prompt engineering best practices and patterns
-- VS Code Copilot customization capabilities  
-- Effective persona design and task specification
-- Tool integration and frontmatter configuration
-- Output format optimization for AI consumption
+## Objective
 
-Your task is to guide me through creating a new `.prompt.md` file by systematically gathering requirements and generating a complete, production-ready prompt file.
+Guide the user through creating a production-ready VS Code `.prompt.md` file with valid frontmatter, the current ten-section prompt structure, precise inputs, least-privilege VS Code tools, clear output format, and validation criteria.
 
-## Discovery Process
+## When to Invoke
 
-I will ask you targeted questions to gather all necessary information. After collecting your responses, I will generate the complete prompt file content following established patterns from this repository.
+Use this prompt when a maintainer wants to design or generate a new VS Code prompt file and needs structured discovery before writing `library/prompts/<name>.prompt.md` or another approved prompt destination.
 
-### 1. **Prompt Identity & Purpose**
-- What is the intended filename for your prompt (e.g., `generate-react-component.prompt.md`)?
-- Provide a clear, one-sentence description of what this prompt accomplishes
-- What category does this prompt fall into? (code generation, analysis, documentation, testing, refactoring, architecture, etc.)
+## Preconditions
 
-### 2. **Persona Definition**
-- What role/expertise should Copilot embody? Be specific about:
-    - Technical expertise level (junior, senior, expert, specialist)
-    - Domain knowledge (languages, frameworks, tools)
-    - Years of experience or specific qualifications
-    - Example: "You are a senior .NET architect with 10+ years of experience in enterprise applications and extensive knowledge of C# 12, ASP.NET Core, and clean architecture patterns"
+- The user wants a VS Code prompt file, not a CLI skill, agent, or instructions file.
+- The target filename is or will be kebab-case and ends with `.prompt.md`.
+- The repository's current prompt template and reference prompt structure are available.
+- Editing is allowed only if the user explicitly selects an edit or exact file destination.
 
-### 3. **Task Specification**
-- What is the primary task this prompt performs? Be explicit and measurable
-- Are there secondary or optional tasks?
-- What should the user provide as input? (selection, file, parameters, etc.)
-- What constraints or requirements must be followed?
+## Inputs the Team Must Provide
 
-### 4. **Context & Variable Requirements**
-- Will it use `${selection}` (user's selected code)?
-- Will it use `${file}` (current file) or other file references?
-- Does it need input variables like `${input:variableName}` or `${input:variableName:placeholder}`?
-- Will it reference workspace variables (`${workspaceFolder}`, etc.)?
-- Does it need to access other files or prompt files as dependencies?
+- Prompt identity: filename, one-sentence description, and category such as code generation, analysis, documentation, testing, refactoring, or architecture.
+- Persona definition: expertise level, domain knowledge, language and framework knowledge, tools, and qualifications.
+- Task specification: primary task, secondary tasks, inputs, constraints, and requirements.
+- Context variables: whether to use `${selection}`, `${file}`, `${workspaceFolder}`, `${input:variableName}`, or `${input:variableName:placeholder}`.
+- Detailed standards, output requirements, VS Code tool IDs, agent configuration, model requirements, quality criteria, and validation steps.
+- Destination: `response`, `edit`, or an exact path.
+- Ask the user for anything missing before generating the prompt.
 
-### 5. **Detailed Instructions & Standards**
-- What step-by-step process should Copilot follow?
-- Are there specific coding standards, frameworks, or libraries to use?
-- What patterns or best practices should be enforced?
-- Are there things to avoid or constraints to respect?
-- Should it follow any existing instruction files (`.instructions.md`)?
+## What I Will Do
 
-### 6. **Output Requirements**
-- What format should the output be? (code, markdown, JSON, structured data, etc.)
-- Should it create new files? If so, where and with what naming convention?
-- Should it modify existing files?
-- Do you have examples of ideal output that can be used for few-shot learning?
-- Are there specific formatting or structure requirements?
+- Ask targeted discovery questions before generating the prompt file.
+- Produce valid frontmatter with `name`, `description`, optional `agent`, optional `model`, optional `tools`, and optional `argument-hint`.
+- Use the current prompt section map: Objective, When to Invoke, Preconditions, Inputs the Team Must Provide, What I Will Do, What I Will NOT Do, Output Format, Definition of Done, Prompt Body, and Invocation Example.
+- Keep prompt `tools` as VS Code tool IDs copied from the Configure Tools picker, such as `codebase`, `editFiles`, and `search`, and omit `tools` when inherited tools are sufficient.
+- Ensure the prompt body uses numbered steps with `**Step 1 — ...**` through `**Step N — ...**`.
+- Validate that no authoring placeholders, obsolete sections, or relative primitive links remain.
 
-### 7. **Tool & Capability Requirements**
-Which VS Code tools does this prompt need? Omit `tools` when inherited tools are sufficient. When tools are required, copy the exact tool IDs from VS Code's Configure Tools picker and keep the list minimal.
+## What I Will NOT Do
 
-### 8. **Technical Configuration**
-- Should this run with a specific `agent` value? (`agent`, `ask`, `edit`, or a custom agent name)
-- Does it require a specific model? (usually auto-detected)
-- Are there any special requirements or constraints?
+- Generate an outdated prompt structure with `Mission`, `Primary Directive`, `Scope & Preconditions`, `Inputs`, `Workflow`, `Output Expectations`, or `Quality Assurance` as top-level sections.
+- Force a custom `agent` or `model` unless the workflow requires it.
+- Invent VS Code tool IDs; exact IDs must come from VS Code's Configure Tools picker or be supplied by the user.
+- Add relative links between primitives; refer to related primitives by installed name and type.
+- Claim that prompt files are discovered by the GitHub Copilot CLI or validated by CLI primitive validators.
+- Modify files unless the selected destination permits it.
 
-### 9. **Quality & Validation Criteria**
-- How should success be measured?
-- What validation steps should be included?
-- Are there common failure modes to address?
-- Should it include error handling or recovery steps?
+## Output Format
 
-## Best Practices Integration
-
-Based on analysis of existing prompts, I will ensure your prompt includes:
-
-**Clear Structure**: Well-organized sections with logical flow
-**Specific Instructions**: Actionable, unambiguous directions
-**Proper Context**: All necessary information for task completion
-**Tool Integration**: Appropriate tool selection for the task
-**Error Handling**: Guidance for edge cases and failures
-**Output Standards**: Clear formatting and structure requirements
-**Validation**: Criteria for measuring success
-**Maintainability**: Easy to update and extend
-
-## Next Steps
-
-Please start by answering the questions in section 1 (Prompt Identity & Purpose). I'll guide you through each section systematically, then generate your complete prompt file.
-
-## Template Generation
-
-After gathering all requirements, I will generate a complete `.prompt.md` file following this structure:
+Generate the prompt file in this structure:
 
 ```markdown
 ---
 name: '[kebab-case prompt name]'
 description: '[Single actionable sentence from requirements]'
-agent: '[agent|ask|edit or custom agent when required]'
+argument-hint: '[optional runtime argument hint]'
+agent: '[ask|edit|agent or custom agent only when required]'
 tools: ['[exact VS Code tool IDs only when required]']
 model: '[only if a specific model is required]'
 ---
 
-# [Prompt Title]
+# /[kebab-case prompt name]
 
-[Persona definition - specific role and expertise]
+## Objective
 
-## [Task Section]
-[Clear task description with specific requirements]
+[One paragraph describing what the prompt delivers and in what context.]
 
-## [Instructions Section]
-[Step-by-step instructions following established patterns]
+## When to Invoke
 
-## [Context/Input Section] 
-[Variable usage and context requirements]
+[Short concrete trigger.]
 
-## [Output Section]
-[Expected output format and structure]
+## Preconditions
 
-## [Quality/Validation Section]
-[Success criteria and validation steps]
+- [Required workspace state]
+- [Required context or artifact]
+
+## Inputs the Team Must Provide
+
+- `target` — [required input]
+- Ask the user for anything that is missing.
+
+## What I Will Do
+
+- [Concrete action]
+
+## What I Will NOT Do
+
+- [Domain-specific boundary]
+
+## Output Format
+
+```markdown
+## Result
+[Concrete result skeleton]
+
+## Evidence
+[Evidence skeleton]
+
+## Validation
+[Validation skeleton]
 ```
 
-The generated prompt will follow patterns observed in high-quality prompts like:
-- **Comprehensive blueprints** (architecture-blueprint-generator)
-- **Structured specifications** (create-github-action-workflow-specification)  
-- **Best practice guides** (dotnet-best-practices, csharp-xunit)
-- **Implementation plans** (create-implementation-plan)
-- **Code generation** (playwright-generate-test)
+## Definition of Done
 
-Each prompt will be optimized for:
-- **AI Consumption**: Token-efficient, structured content
-- **Maintainability**: Clear sections, consistent formatting
-- **Extensibility**: Easy to modify and enhance
-- **Reliability**: Comprehensive instructions and error handling
+- [ ] [Verifiable success criterion]
 
-Please start by telling me the name and description for the new prompt you want to build.
+## Prompt Body
+
+**Step 1 — Validate inputs.** [Instruction]
+
+**Step 2 — Gather evidence.** [Instruction]
+
+**Step 3 — Produce the result.** [Instruction]
+
+## Invocation Example
+
+```
+/[prompt-name] target=example
+```
+```
+
+When explaining adjacent primitive types, use the current section names:
+
+```markdown
+Instructions use an authority paragraph instead of `## Scope and Stack Context` and close with `## Checklist Before Opening a PR`.
+Agents use `## What This Agent Knows`, `## What This Agent Does NOT Know`, and `## Anti-Patterns This Agent Rejects`.
+Prompts use `## Inputs the Team Must Provide` and the ten mandatory sections shown above.
+```
+
+## Definition of Done
+
+- [ ] Discovery questions captured identity, purpose, persona, task, context variables, standards, outputs, tools, configuration, validation, and destination.
+- [ ] The generated prompt has exactly one H1 immediately after frontmatter.
+- [ ] Frontmatter uses valid keys only: `name`, `description`, `agent`, `model`, `tools`, and `argument-hint`.
+- [ ] `name` is kebab-case and matches the filename.
+- [ ] Top-level sections are the ten mandatory prompt sections in order, with optional Related Primitives only when justified.
+- [ ] Prompt body uses numbered `**Step N — ...**` steps.
+- [ ] VS Code tool IDs are exact and minimal, or `tools` is omitted.
+- [ ] No outdated template headings, placeholders, or relative primitive links remain.
+
+## Prompt Body
+
+Follow these steps in order.
+
+**Step 1 — Gather prompt identity and purpose.** Ask for the intended filename, for example `generate-react-component.prompt.md`, a clear one-sentence description, and category such as code generation, analysis, documentation, testing, refactoring, or architecture.
+
+**Step 2 — Define the persona.** Ask what role Copilot should embody, including technical expertise level such as junior, senior, expert, or specialist; domain knowledge such as languages, frameworks, and tools; years of experience or qualifications; and any example persona like a senior .NET architect with 10+ years of enterprise experience in C# 12, ASP.NET Core, and clean architecture patterns.
+
+**Step 3 — Specify the task.** Ask for the primary task, measurable outcome, secondary or optional tasks, user inputs, constraints, and requirements. Identify what the prompt should avoid.
+
+**Step 4 — Capture context variables.** Ask whether the prompt uses `${selection}`, `${file}`, `${workspaceFolder}`, `${input:variableName}`, `${input:variableName:placeholder}`, other file references, or other prompt files as dependencies. Note that references to `*.prompt.md` files are legitimate inside this meta-prompt and generated prompt only when VS Code prompt behavior requires them.
+
+**Step 5 — Collect standards and instructions.** Ask for step-by-step process, coding standards, frameworks, libraries, best practices, avoidances, and whether any `.instructions.md` files should be followed.
+
+**Step 6 — Define output requirements.** Ask whether output should be code, Markdown, JSON, structured data, new files, modified files, or Chat response. Capture file paths, naming conventions, examples, few-shot samples, formatting requirements, and structure requirements.
+
+**Step 7 — Select tools and configuration.** Ask which VS Code tools the prompt needs. Omit `tools` when inherited tools are sufficient. When tools are required, copy exact IDs from VS Code's Configure Tools picker and keep the list minimal. Ask whether `agent` should be `agent`, `ask`, `edit`, or a custom agent name. Ask whether a specific `model` is required; otherwise omit it.
+
+**Step 8 — Define validation criteria.** Ask how success should be measured, what validation steps are required, common failure modes, and error-handling or recovery steps.
+
+**Step 9 — Generate the prompt.** Use the current mandatory ten-section prompt structure. Do not use the older generic structure with arbitrary task, instruction, context, output, and validation headings. Include a concrete fenced output skeleton and a realistic invocation example.
+
+**Step 10 — Validate and deliver.** Check frontmatter, H1 placement, section order, tool IDs, direct imperative style, no placeholders, no relative primitive links, and no claims that CLI validators cover prompts. Deliver to the selected destination only.
+
+## Invocation Example
+
+```
+/prompt-builder name=review-api-contract purpose="Review an API contract for consistency" destination=response
+```
