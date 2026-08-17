@@ -247,199 +247,199 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 
 | Instruction | applyTo | Description |
 | --- | --- | --- |
-| .NET Framework Upgrade Specialist | **/*.{csproj,vbproj,fsproj,sln,props,targets} | Conventions for .NET project upgrades covering project sequencing, target framework selection, breaking changes, validation, and CI updates. |
+| .NET Framework Upgrade Specialist | **/*.{csproj,vbproj,fsproj,sln,props,targets} | Enforces .NET upgrade conventions for project type detection, target framework selection, dependency sequencing, package updates, breaking changes, validation, CI updates, and PR… |
 | a11y | **/*.{html,htm,css,scss,sass,js,jsx,ts,tsx,vue,svelte,astro} | Comprehensive web accessibility conventions based on WCAG 2.2 AA, legal enforcement context, WAI-ARIA rules, anti-patterns, and framework-specific fixes for modern web frameworks. |
-| agent-safety | ** | Guidelines for building safe, governed AI agent systems. Apply when writing code that uses agent frameworks, tool-calling LLMs, or multi-agent orchestration to ensure proper safet… |
-| agent-skills | **/skills/**/SKILL.md | Guidelines for creating high-quality Agent Skills for GitHub Copilot |
+| agent-safety | ** | Enforces safety and governance conventions for AI agent systems, tool-calling LLMs, and multi-agent orchestration. Use when code defines agents, tools, policies, guardrails, or au… |
+| agent-skills | **/skills/**/SKILL.md | Enforces portable high-quality Agent Skill conventions for SKILL.md metadata, descriptions, resources, progressive loading, scripts, security, and validation. |
 | agents | **/*.agent.md | Enforces conventions for GitHub Copilot custom agent files, including frontmatter, tools, handoffs, orchestration, MCP configuration, naming, and validation. |
 | ai-prompt-engineering-safety-best-practices | **/*.{md,txt,prompt,yml,yaml,json} | Enforces prompt engineering, safety, bias mitigation, security, privacy, evaluation, and responsible AI conventions for Copilot and LLM prompt assets. |
-| ansible | **/*.yaml, **/*.yml | Ansible conventions and best practices |
+| ansible | **/*.yaml,**/*.yml | Enforces Ansible conventions for playbook naming, inventory, idempotency, privilege, secret management, YAML style, and validation. Use when editing Ansible YAML files. |
 | apex | **/*.cls,**/*.trigger | Enforces Apex conventions for Salesforce Platform classes and triggers, including bulkification, governor limits, security, testing, asynchronous processing, integrations, and dep… |
-| arch-linux | ** | Guidance for Arch Linux administration, pacman workflows, and rolling-release best practices. |
-| aspnet-rest-apis | **/*.cs, **/*.json | Guidelines for building REST APIs with ASP.NET |
-| astro | **/*.astro, **/*.ts, **/*.js, **/*.md, **/*.mdx | Astro 7 development standards and best practices for content-driven websites |
-| attester-verify-packages | **/*.{py,js,jsx,ts,tsx,mjs,cjs,json,toml} | Verify PyPI and npm package and symbol names against the attester.dev existence oracle before installing or importing, so hallucinated dependencies never reach code |
-| aws-appsync | **/*.{graphql,gql,vtl,ts,js,mjs,cjs,json,yml,yaml} | Production-grade guidance for AWS AppSync Event API handlers using APPSYNC_JS runtime restrictions, utilities, modules, and datasource patterns |
-| azure-apim-ai-gateway | **/*.xml, **/policies/**, **/*.bicep | Configure Azure API Management as an AI (GenAI) gateway in front of Microsoft Foundry and other LLM APIs: token-limit and token-metric policies, managed-identity auth, backend loa… |
-| azure-devops-pipelines | **/azure-pipelines.yml, **/azure-pipelines*.yml, **/*.pipeline.yml | Best practices for Azure DevOps Pipeline YAML files |
-| azure-durable-functions-csharp | **/*.cs, **/host.json, **/local.settings.json, **/*.csproj | Guidelines and best practices for building Azure Durable Functions in C# using the isolated worker model |
-| azure-functions-csharp | **/*.cs, **/host.json, **/local.settings.json, **/*.csproj | Guidelines and best practices for building Azure Functions in C# using the isolated worker model |
-| azure-functions-typescript | **/*.ts,**/*.js,**/host.json,**/local.settings.json,**/function.json,**/package.json | Conventions for Azure Functions apps in TypeScript and JavaScript, including async Node.js patterns, dependency choices, and function configuration. |
-| azure-iot-edge-architecture | **/*.bicep,**/*.tf,**/*iot*.md,**/*smart-city*.md,**/*edge*.md | Conventions for Azure IoT Edge architecture guidance, requiring documentation review before proposing edge IoT designs or implementations. |
+| arch-linux | ** | Enforces Arch Linux administration conventions for pacman upgrades, AUR caution, systemd configuration, troubleshooting, security, validation, and rollback guidance. |
+| aspnet-rest-apis | **/*.cs,**/*.json | Enforces ASP.NET Core REST API conventions for resource design, controllers, Minimal APIs, data access, authentication, validation, documentation, logging, testing, performance, a… |
+| astro | **/*.astro,**/*.ts,**/*.js,**/*.md,**/*.mdx | Enforces Astro 7 conventions for content-driven websites, islands architecture, Content Layer API, TypeScript, routing, actions, sessions, performance, styling, SEO, and images. |
+| attester-verify-packages | **/*.{py,js,jsx,ts,tsx,mjs,cjs,json,toml} | Enforces PyPI and npm package and symbol verification with the attester.dev existence oracle before installing, importing, or calling uncertain third-party dependencies. |
+| aws-appsync | **/*.{graphql,gql,vtl,ts,js,mjs,cjs,json,yml,yaml} | Enforces production-grade AWS AppSync Event API handler conventions for APPSYNC_JS runtime restrictions, utilities, modules, data sources, IAM, batching, and observability. |
+| azure-apim-ai-gateway | **/*.xml,**/policies/**,**/*.bicep | Enforces Azure API Management AI gateway conventions for LLM policies, token controls, managed identity, backend pools, semantic caching, content safety, ordering, and Foundry int… |
+| azure-devops-pipelines | **/azure-pipelines.yml,**/azure-pipelines*.yml,**/*.pipeline.yml | Enforces Azure DevOps Pipeline YAML conventions for structure, triggers, variables, security, testing, deployments, templates, caching, and observability. |
+| azure-durable-functions-csharp | **/*.cs,**/host.json,**/local.settings.json,**/*.csproj | Enforces Azure Durable Functions C# isolated-worker conventions for deterministic orchestrators, activities, entities, configuration, storage, observability, reliability, and test… |
+| azure-functions-csharp | **/*.cs,**/host.json,**/local.settings.json,**/*.csproj | Enforces Azure Functions C# isolated worker conventions for host setup, triggers, bindings, dependency injection, configuration, retries, observability, performance, security, and… |
+| azure-functions-typescript | **/*.ts,**/*.js,**/host.json,**/local.settings.json,**/function.json,**/package.json | Conventions for Azure Functions apps in TypeScript and JavaScript, including Node.js async patterns, dependency choices, function layout, and API documentation. |
+| azure-iot-edge-architecture | **/*.bicep,**/*.tf,**/*iot*.md,**/*smart-city*.md,**/*edge*.md | Enforces Azure IoT Edge architecture conventions for documentation-grounded edge applicability, runtime constraints, supported systems, operations, security, and assumptions. |
 | azure-logic-apps-power-automate | **/*.json,**/*.logicapp.json,**/workflow.json,**/*-definition.json,**/*.flow.json | Enforces Azure Logic Apps and Power Automate workflow conventions for WDL structure, triggers, actions, reliability, security, integration patterns, DevOps, monitoring, and cost g… |
-| azure-naming | **/*.bicep,**/*.tf,**/*.tfvars,**/*.bicepparam,**/infra/**,**/infrastructure/** | Azure resource naming conventions based on Microsoft CAF (Cloud Adoption Framework). Use when creating, reviewing, or suggesting names for Azure resources. |
-| azure-verified-modules-bicep | **/*.bicep, **/*.bicepparam | Azure Verified Modules (AVM) and Bicep |
-| azure-verified-modules-terraform | **/*.terraform, **/*.tf, **/*.tfvars, **/*.tfstate, **/*.tflint.hcl, **/*.tf.json, **/*.tfvars.json | Azure Verified Modules (AVM) and Terraform |
-| bicep-code-best-practices | **/*.bicep | Conventions for Azure Bicep infrastructure code covering naming, parameters, resource structure, security, modules, and outputs. |
+| azure-naming | **/*.bicep,**/*.tf,**/*.tfvars,**/*.bicepparam,**/infra/**,**/infrastructure/** | Enforces Azure CAF resource naming conventions, abbreviations, scope, character rules, and per-resource examples for infrastructure files. |
+| azure-verified-modules-bicep | **/*.bicep,**/*.bicepparam | Enforces Azure Verified Modules Bicep discovery, registry references, version pinning, symbolic names, parameters, security, builds, and PR readiness. |
+| azure-verified-modules-terraform | **/*.terraform,**/*.tf,**/*.tfvars,**/*.tfstate,**/*.tflint.hcl,**/*.tf.json,**/*.tfvars.json | Enforces Azure Verified Modules Terraform discovery, source naming, version pinning, telemetry, validation, and PR readiness when authoring Terraform IaC. |
+| Bicep Code Best Practices | **/*.bicep | Enforces Azure Bicep conventions for naming, parameters, variables, resources, child resources, security, modules, outputs, and documentation. |
 | Blazor Conventions | **/*.razor,**/*.razor.cs,**/*.razor.css | Enforces Blazor component conventions for Razor structure, naming, state, validation, performance, caching, API integration, testing, security, and API documentation. |
-| caveman-mode | ** | Terse, low-token responses. Minimal words, no fluff. Full capabilities preserved. Use when: optimize token usage, low-token mode, concise output, caveman mode, reduce verbosity, t… |
-| centos-linux | ** | Guidance for CentOS administration, RHEL-compatible tooling, and SELinux-aware operations. |
-| clojure | **/*.{clj,cljs,cljc,bb,edn.mdx?} | Clojure-specific coding patterns, inline def usage, code block templates, and namespace handling for Clojure development. |
-| cmake-vcpkg | **/*.cmake,**/CMakeLists.txt,**/*.cpp,**/*.c,**/*.h,**/*.hpp | Conventions for CMake C++ projects that use vcpkg manifest mode for dependency management and build configuration. |
-| code-review-generic | ** | Generic code review instructions that can be customized for any project using GitHub Copilot |
-| codexer | **/*.py | Advanced Python research assistant with Context 7 MCP integration, focusing on speed, reliability, and 10+ years of software development expertise |
-| coldfusion-cfc | **/*.cfc | ColdFusion Coding Standards for CFC component and application patterns |
-| coldfusion-cfm | **/*.cfm | ColdFusion cfm files and application patterns |
+| caveman-mode | ** | Enforces terse, low-token response conventions while preserving full capability, code quality, and necessary expansion for explanations or architecture decisions. |
+| CentOS Administration Conventions | ** | Enforces CentOS administration conventions for RHEL-compatible package management, repositories, systemd services, firewalld, SELinux, validation, and rollback guidance. |
+| clojure | **/*.{clj,cljs,cljc,bb,edn.mdx?} | Enforces Clojure and ClojureScript conventions for Calva REPL-first development, structural editing, namespace handling, data shape, rich comment forms, and tests. |
+| cmake-vcpkg | **/*.cmake,**/CMakeLists.txt,**/*.cpp,**/*.c,**/*.h,**/*.hpp | Conventions for cross-platform CMake C and C++ projects that use vcpkg manifest mode, CMakePresets.json, policies, and compiler-portable build configuration. |
+| code-review-generic | ** | Enforces generic GitHub Copilot code-review conventions for severity, comment format, and cross-cutting checks across reviewable files. |
+| codexer | **/*.py | Enforces Codexer Python research and implementation conventions for Python files, dependency hygiene, code quality, testing, security, and research-backed decisions. |
+| coldfusion-cfc | **/*.cfc | Enforces ColdFusion CFC conventions for CFScript, component structure, access modifiers, dependency injection, SQL safety, input validation, error handling, documentation, and for… |
+| coldfusion-cfm | **/*.cfm | Enforces ColdFusion CFM conventions for CFScript, Application.cfc usage, HTMX targets, cfoutput escaping, SQL safety, includes, validation, errors, and formatting. |
+| CommonMark Markdown Conventions | **/*.md | Enforces CommonMark 0.31.2 block, inline, escaping, link, image, and HTML syntax conventions for Markdown files. |
 | containerization-docker-best-practices | **/Dockerfile,**/Dockerfile.*,**/*.dockerfile,**/docker-compose*.yml,**/docker-compose*.yaml,**/compose*.yml,**/compose*.yaml | Enforces Dockerfile and Compose conventions for optimized, secure, reproducible container images and container runtime configuration. |
-| context-engineering | ** | Guidelines for structuring code and projects to maximize GitHub Copilot effectiveness through better context management |
-| context7 | ** | Use Context7 for authoritative external docs and API references when local context is insufficient |
+| Context Engineering Conventions | ** | Enforces repository-wide context engineering conventions that make code, structure, naming, and Copilot interactions easier for AI assistance to understand. |
+| context7 | ** | Enforces Context7 usage conventions for authoritative, current, version-specific, authoritative/current. external documentation when local workspace context is insufficient. |
 | convert-cassandra-to-spring-data-cosmos | **/*.java,**/pom.xml,**/build.gradle,**/application*.properties,**/application*.yml,**/application*.conf | Enforces conventions for converting Spring Boot Cassandra data access to Azure Cosmos DB with Spring Data Cosmos, including dependencies, configuration, repositories, entities, te… |
 | convert-jpa-to-spring-data-cosmos | **/*.java,**/pom.xml,**/build.gradle,**/application*.properties | Enforces conventions for converting Spring Boot JPA applications to Azure Cosmos DB with Spring Data Cosmos, including dependencies, configuration, entity mapping, repositories, s… |
-| copilot-primitive-authoring | library/agents/*.agent.md,library/instructions/*.instructions.md,library/skills/**/SKILL.md,library/prompts/*.prompt.md,.github/agents/*.agent.md,.github/instructions/*.instructions.md,.github/skills/**/SKILL.md,.github/prompts/*.prompt.md | Require routing, canonical paths, frontmatter, mirror, and validation conventions when editing Copilot primitives. |
-| copilot-thought-logging | ** | See process Copilot is following where you can edit this to reshape the interaction or save when follow up may be needed |
-| cpp-language-service-tools | **/*.cpp,**/*.h,**/*.hpp,**/*.cc,**/*.cxx,**/*.c | Conventions for using C++ language service tools for symbol references, symbol information, and call hierarchy instead of manual code inspection. |
-| csharp | **/*.cs | Guidelines for building C# applications |
-| csharp-ja | **/*.cs | C# アプリケーション構築指針 by @tsubakimoto |
-| csharp-ko | **/*.cs | C# 애플리케이션 개발을 위한 코드 작성 규칙 by @jgkim999 |
-| csharp-mcp-server | **/*.cs, **/*.csproj | Instructions for building Model Context Protocol (MCP) servers using the C# SDK |
-| csharp-razorpages | **/*.cshtml,**/*.cshtml.cs | Conventions for ASP.NET Core Razor Pages covering page models, handlers, binding, security, validation, and Entity Framework usage. |
-| dart-n-flutter | **/*.dart | Instructions for writing Dart and Flutter code following the official recommendations. |
-| dataverse-python | **/*.py | Getting-started guidance for installing, authenticating, and performing basic Python Dataverse SDK operations. |
+| copilot-primitive-authoring | library/agents/*.agent.md,library/instructions/*.instructions.md,library/skills/**/SKILL.md,library/prompts/*.prompt.md,.github/agents/*.agent.md,.github/instructions/*.instructions.md,.github/skills/**/SKILL.md,.github/prompts/*.prompt.md | Requires routing, canonical paths, frontmatter, tool-token, mirror, and validation conventions when editing Copilot primitives. Use when authoring or reviewing agents, instruction… |
+| copilot-thought-logging | ** | Conventions for concise Copilot process tracking when a workspace-visible progress file is explicitly required. |
+| cpp-language-service-tools | **/*.cpp,**/*.h,**/*.hpp,**/*.cc,**/*.cxx,**/*.c | Enforces C and C++ language-service tool usage for symbol definitions, references, call hierarchy, parameters, line numbers, fallback search, and recovery. |
+| csharp | **/*.cs | Enforces C# application conventions for language features, formatting, nullable reference types, data access, authentication, API documentation, logging, testing, performance, and… |
+| csharp-ja | **/*.cs | Enforces Japanese C# and ASP.NET Core application conventions for modern C# 14, formatting, nullable references, EF Core, authentication, validation, OpenAPI, logging, testing, pe… |
+| csharp-ko | **/*.cs | C# coding conventions for naming, formatting, language features, performance, exception handling, security, and documentation. |
+| csharp-mcp-server | **/*.cs,**/*.csproj | Enforces C# Model Context Protocol server conventions for SDK packages, transports, tool attributes, prompts, sampling, DI, logging, errors, and testing. Use when building MCP ser… |
+| csharp-razorpages | **/*.cshtml,**/*.cshtml.cs | Conventions for ASP.NET Core Razor Pages covering PageModels, handlers, model binding, overposting prevention, security, validation, dependency injection, Entity Framework Core, s… |
+| dart-n-flutter | **/*.dart | Enforces Dart language style, Effective Dart usage, and Flutter architecture conventions for Dart and Flutter code. |
+| dataverse-python | **/*.py | Enforces Python Dataverse SDK conventions for setup, OAuth configuration, client reuse, CRUD operations, batching, pagination, throttling, retries, and logging. |
 | dataverse-python-advanced-features | **/*.py | Enforces advanced Python Dataverse SDK conventions for option sets, OData filters, SQL analysis, metadata operations, record batches, relationships, error handling, cache hygiene,… |
-| dataverse-python-agentic-workflows | **/*.py | Preview guidance for building agentic Python workflows that use Dataverse as an enterprise data source. |
-| dataverse-python-api-reference | **/*.py | Detailed reference for Python Dataverse SDK client methods, table operations, queries, and SDK models. |
-| dataverse-python-authentication-security | **/*.py | Authentication and security patterns for Python Dataverse SDK apps using Azure Identity and secure credential handling. |
+| dataverse-python-agentic-workflows | **/*.py | Preview conventions for building agentic Python workflows that use Dataverse as an enterprise data source, including SDK usage, data agents, MCP/A2A patterns, governance, and ML i… |
+| dataverse-python-api-reference | **/*.py | Enforces Python Dataverse SDK API usage conventions for DataverseClient methods, DataverseConfig, DataverseError handling, OData options, and metadata operations. |
+| dataverse-python-authentication-security | **/*.py | Enforces authentication and security conventions for Python Dataverse SDK apps that use Azure Identity credentials, DataverseClient configuration, secure secret handling, tenant i… |
 | dataverse-python-best-practices | **/*.py | Enforces production Python conventions for the PowerPlatform Dataverse SDK, including installation, authentication, client reuse, CRUD operations, metadata, paging, files, OData,… |
-| dataverse-python-error-handling | **/*.py | Error handling, troubleshooting, retry, and diagnostics patterns for Python Dataverse SDK integrations. |
+| dataverse-python-error-handling | **/*.py | Enforces Python Dataverse SDK error handling, retry, logging, diagnostics, and troubleshooting conventions. |
 | dataverse-python-file-operations | **/*.py | Enforces Python Dataverse SDK conventions for file uploads, chunking, validation, retries, audit logging, and practical file-operation workflows. |
-| dataverse-python-modules | **/*.py | Complete module reference for the Python Dataverse SDK package hierarchy, configuration, models, and helpers. |
-| dataverse-python-pandas-integration | **/*.py | Guidance for integrating the Python Dataverse SDK with pandas DataFrames for analytics and data science workflows. |
-| dataverse-python-performance-optimization | **/*.py | Performance optimization guidance for Python Dataverse SDK queries, batching, pagination, and large data operations. |
+| dataverse-python-modules | **/*.py | Enforces Python Dataverse SDK package, client, configuration, error, metadata, SQL, and file-operation conventions. |
+| dataverse-python-pandas-integration | **/*.py | Enforces conventions for integrating the Python Dataverse SDK with pandas DataFrames for analytics, reporting, visualization, and machine-learning workflows. |
+| dataverse-python-performance-optimization | **/*.py | Enforces performance conventions for Python Dataverse SDK queries, pagination, batching, client reuse, file uploads, OData and SQL alternatives, memory management, retries, consis… |
 | dataverse-python-real-world-usecases | **/*.py | Conventions for real-world Python Dataverse SDK migration, synchronization, data quality, enrichment, reporting, workflow automation, and scheduled jobs. |
-| dataverse-python-sdk | **/*.py | Quickstart instructions for installing, authenticating, and using the Python Dataverse SDK. |
-| dataverse-python-testing-debugging | **/*.py | Testing and debugging strategies for Python Dataverse SDK code, including mocks, integration tests, and diagnostics. |
-| debian-linux | ** | Guidance for Debian-based Linux administration, apt workflows, and Debian policy conventions. |
-| declarative-agents-microsoft365 | **.json, **.ts, **.tsp, **manifest.json, **agent.json, **declarative-agent.json | Comprehensive development guidelines for Microsoft 365 Copilot declarative agents with schema v1.5, TypeSpec integration, and Microsoft 365 Agents Toolkit workflows |
-| devbox-image-definition | **/*.yaml | Authoring recommendations for creating YAML based image definition files for use with Microsoft Dev Box Team Customizations |
-| devops-core-principles | * | Foundational instructions covering core DevOps principles, culture (CALMS), and key metrics (DORA) to guide GitHub Copilot in understanding and promoting effective software delive… |
-| dotnet-architecture-good-practices | **/*.cs,**/*.csproj,**/Program.cs,**/*.razor | DDD and .NET architecture guidelines |
-| dotnet-framework | **/*.csproj, **/*.cs | Guidance for working with .NET Framework projects. Includes project structure, C# language version, NuGet management, and best practices. |
-| dotnet-maui | **/*.xaml, **/*.cs | .NET MAUI component and application patterns |
+| dataverse-python-sdk | **/*.py | Enforces Python Dataverse SDK preview conventions for installation, authentication, CRUD, bulk operations, file upload, paging, and table metadata. Use when writing Python code th… |
+| dataverse-python-testing-debugging | **/*.py | Enforces testing and debugging conventions for Python Dataverse SDK code, including mocks, integration tests, coverage, performance checks, and diagnostics. |
+| Debian Linux Administration Conventions | ** | Enforces Debian-based Linux administration conventions for apt workflows, package sources, configuration files, services, security, validation, and rollback guidance. |
+| declarative-agents-microsoft365 | **/*.json,**/*.ts,**/*.tsp,**/manifest.json,**/agent.json,**/declarative-agent.json | Enforces Microsoft 365 Copilot declarative agent conventions for schema v1.5 manifests, TypeSpec models, capabilities, toolkit workflows, testing, deployment, monitoring, and secu… |
+| devbox-image-definition | **/*.yaml,**/*.yml | Enforces Microsoft Dev Box Team Customizations image definition conventions for task discovery, intrinsic task syntax, secrets, context placement, validation, and troubleshooting. |
+| devops-core-principles | * | Enforces foundational DevOps conventions for CALMS culture, automation, lean flow, measurement, sharing, and DORA delivery metrics. |
+| dotnet-architecture-good-practices | **/*.cs,**/*.csproj,**/Program.cs,**/*.razor | Enforces DDD, SOLID, .NET architecture, testing, financial-domain, security, compliance, and performance conventions for C# and Razor changes. |
+| dotnet-framework | **/*.csproj,**/*.cs | Enforces .NET Framework conventions for MSBuild, legacy and SDK-style project files, C# 7.3 compatibility, NuGet boundaries, Windows paths, async, configuration, exceptions, dispo… |
+| dotnet-maui | **/*.xaml,**/*.cs | Enforces .NET MAUI conventions for XAML, C# views, ViewModels, lifecycle, navigation, layout, resources, storage, security, performance, and tests. |
 | dotnet-maui-9-to-dotnet-maui-10-upgrade | **/*.csproj,**/*.cs,**/*.xaml | Enforces .NET MAUI 9 to .NET MAUI 10 upgrade conventions for target frameworks, package compatibility, breaking API replacements, obsolete controls, deprecated async APIs, media p… |
-| dotnet-wpf | **/*.xaml,**/*.cs | Conventions for .NET WPF applications covering MVVM structure, XAML and C# patterns, UI behavior, performance, and testing. |
-| draw-io | **/*.drawio,**/*.drawio.svg,**/*.drawio.png | Use when creating, editing, or reviewing draw.io diagrams and mxGraph XML in .drawio, .drawio.svg, or .drawio.png files. |
-| exclude-prompt-data | ** | Write only the resulting content into files. Never echo prompt instructions, rationale, or meta-commentary into documentation, comments, or code being produced from a prompt. |
-| fedora-linux | ** | Guidance for Fedora (Red Hat family) systems, dnf workflows, SELinux, and modern systemd practices. |
-| genaiscript | **/*.genai.* | Conventions for GenAIScript files covering script role, references, AI-assisted generation, structure, and maintainability. |
-| generate-modern-terraform-code-for-azure | **/*.tf | Conventions for modern Terraform code targeting Azure, including provider usage, modules, variables, outputs, state, and idempotency. |
-| gilfoyle-code-review | ** | Gilfoyle-style code review instructions that channel the sardonic technical supremacy of Silicon Valley's most arrogant systems architect. |
-| GitHub Copilot SDK C# Instructions | **/*.cs,**/*.csproj | Conventions for building C# applications with the GitHub Copilot SDK, including client setup, sessions, permissions, and error handling. |
+| dotnet-wpf | **/*.xaml,**/*.cs | Conventions for .NET WPF applications covering MVVM structure, XAML, data binding, commands, responsiveness, performance, and testable ViewModels. |
+| draw-io | **/*.drawio,**/*.drawio.svg,**/*.drawio.png | Enforces draw.io and mxGraph XML conventions for diagram structure, styles, layout, naming, validation, and rendering. |
+| exclude-prompt-data | ** | Prevents prompt instructions, rationale, meta-commentary, scaffold labels, and local personal data from leaking into generated documentation, comments, or code. |
+| fedora-linux | ** | Enforces Fedora administration conventions for dnf package workflows, systemd, firewalld, SELinux, validation, compatibility, and rollback guidance. |
+| genaiscript | **/*.genai.* | Conventions for GenAIScript files covering script role, references, TypeScript ESM generation, global APIs, error handling, and maintainability. |
+| generate-modern-terraform-code-for-azure | **/*.tf | Conventions for modern Terraform code targeting Azure, including provider choice, modules, variables, outputs, state, idempotency, documentation, validation, and testing. |
+| gilfoyle-code-review | ** | Guides sardonic Gilfoyle-style code review comments while preserving technical accuracy, actionable findings, and professional boundaries. |
+| GitHub Copilot SDK C# Instructions | **/*.cs,**/*.csproj | Conventions for building C# applications with the GitHub Copilot SDK, including client setup, sessions, permissions, streaming, custom tools, BYOK providers, and error handling. |
 | GitHub Copilot SDK Go Instructions | **/*.go,**/go.mod | Enforces Go conventions for applications that use the GitHub Copilot SDK, including client setup, sessions, events, tools, permissions, providers, and cleanup. |
 | GitHub Copilot SDK Java Instructions | **/*.java,**/pom.xml,**/build.gradle,**/build.gradle.kts | Enforces Java conventions for applications using the GitHub Copilot SDK, including client setup, virtual threads, sessions, permissions, events, tools, BYOK, MCP servers, and clea… |
 | GitHub Copilot SDK Node.js Instructions | **/*.ts,**/*.js,**/package.json | Conventions for building Node.js and TypeScript applications with the GitHub Copilot SDK, including client setup, sessions, permissions, tools, streaming, lifecycle, and error han… |
 | GitHub Copilot SDK Python Instructions | **/*.py,**/pyproject.toml,**/setup.py | Enforces Python conventions for GitHub Copilot SDK applications, including async client setup, sessions, permissions, custom tools, streaming, BYOK, and cleanup. |
-| github-actions-ci-cd-best-practices | .github/workflows/*.yml,.github/workflows/*.yaml | Comprehensive guide for building robust, secure, and efficient CI/CD pipelines using GitHub Actions. Covers workflow structure, jobs, steps, environment variables, secret manageme… |
-| go | **/*.go,**/go.mod,**/go.sum | Instructions for writing Go code following idiomatic Go practices and community standards |
-| go-mcp-server | **/*.go, **/go.mod, **/go.sum | Best practices and patterns for building Model Context Protocol (MCP) servers in Go using the official github.com/modelcontextprotocol/go-sdk package. |
+| github-actions-ci-cd-best-practices | .github/workflows/*.yml,.github/workflows/*.yaml | Enforces GitHub Actions CI/CD conventions for workflow structure, permissions, secrets, OIDC, action pinning, caching, testing, deployments, rollback, and troubleshooting. |
+| go | **/*.go,**/go.mod,**/go.sum | Enforces idiomatic Go conventions for package declarations, style, errors, modules, concurrency, HTTP, I/O, tests, security, and documentation. |
+| go-mcp-server | **/*.go,**/go.mod,**/go.sum | Enforces Go conventions for building Model Context Protocol servers with github.com/modelcontextprotocol/go-sdk, including tools, resources, prompts, transports, errors, schema ta… |
 | hooks | .github/hooks/**,hooks/** | Enforces portable hook conventions for discovery, trust, configuration, scripts, events, payloads, blocking, examples, security, packaging, and cross-surface behavior. |
-| html-css-style-color-guide | **/*.html, **/*.css, **/*.js | Color usage guidelines and styling rules for HTML elements to ensure accessible, professional designs. |
-| instructions | **/*.instructions.md | Guidelines for creating high-quality custom instruction files for GitHub Copilot |
-| java-11-to-java-17-upgrade | **/*.java,**/*.gradle,**/*.gradle.kts,**/pom.xml | Comprehensive best practices for adopting new Java 17 features since the release of Java 11. |
-| java-17-to-java-21-upgrade | **/*.java,**/*.gradle,**/*.gradle.kts,**/pom.xml | Comprehensive best practices for adopting new Java 21 features since the release of Java 17. |
-| java-21-to-java-25-upgrade | **/*.java,**/*.gradle,**/*.gradle.kts,**/pom.xml | Comprehensive best practices for adopting new Java 25 features since the release of Java 21. |
-| java-junit5-assertions | **/*Test.java, **/*IT.java, **/*Steps.java, **/*StepDefs.java | Standardizes JUnit 5 (Jupiter) assertions with best practices for performance, readability, and modern features (5.8+). Covers Supplier messages, assertAll, assertThrowsExactly, a… |
-| java-mcp-server | **/*.java, **/pom.xml, **/build.gradle, **/build.gradle.kts | Best practices and patterns for building Model Context Protocol (MCP) servers in Java using the official MCP Java SDK with reactive streams and Spring integration. |
-| joyride-user-project | **/*.{cljs,cljc,edn} | Expert assistance for Joyride User Script projects - REPL-driven ClojureScript and user space automation of VS Code |
-| joyride-workspace-automation | **/.joyride/** | Expert assistance for Joyride Workspace automation - REPL-driven and user space ClojureScript automation within specific VS Code workspaces |
-| kotlin-mcp-server | **/*.kt, **/*.kts, **/build.gradle.kts, **/settings.gradle.kts | Best practices and patterns for building Model Context Protocol (MCP) servers in Kotlin using the official io.modelcontextprotocol:kotlin-sdk library. |
-| kubernetes-deployment-best-practices | * | Comprehensive best practices for deploying and managing applications on Kubernetes. Covers Pods, Deployments, Services, Ingress, ConfigMaps, Secrets, health checks, resource limit… |
-| kubernetes-manifests | k8s/**/*.yaml,k8s/**/*.yml,manifests/**/*.yaml,manifests/**/*.yml,deploy/**/*.yaml,deploy/**/*.yml,charts/**/templates/**/*.yaml,charts/**/templates/**/*.yml | Best practices for Kubernetes YAML manifests including labeling conventions, security contexts, pod security, resource management, probes, and validation commands |
-| langchain-python | **/*.py | Instructions for using LangChain with Python |
-| localization | **/*.md | Guidelines for localizing markdown documents |
-| lwc | force-app/main/default/lwc/** | Guidelines and best practices for developing Lightning Web Components (LWC) on Salesforce Platform. |
-| makefile | **/Makefile, **/makefile, **/*.mk, **/GNUmakefile | Best practices for authoring GNU Make Makefiles |
-| markdown | **/*.md | Markdown formatting aligned to the CommonMark specification (0.31.2) |
-| markdown-accessibility | **/*.md | Markdown accessibility guidelines based on GitHub's 5 best practices for inclusive documentation |
-| markdown-content-creation | **/*.md | Markdown guidelines and content creation standards for blog posts |
-| markdown-gfm | **/*.md | Markdown formatting for GitHub-flavored markdown (GFM) files |
-| mcp-m365-copilot | **/{*mcp*,*agent*,*plugin*,declarativeAgent.json,ai-plugin.json,mcp.json,manifest.json} | Best practices for building MCP-based declarative agents and API plugins for Microsoft 365 Copilot with Model Context Protocol integration |
-| memory-bank | memory-bank/** | Conventions for maintaining persistent project documentation under memory-bank/ so AI agents can resume project context across sessions. |
-| microsoft-foundry | **/*.py | Build agents with the Microsoft Foundry SDK (azure-ai-projects v2) in Python: versioned agents, the Responses/Conversations model, tools, and the SDK mistakes Copilot makes by def… |
-| mongo-dba | **/*.{js,ts,json} | Instructions for customizing GitHub Copilot behavior for MONGODB DBA chat mode. |
-| moodle | **/*.php, **/*.js, **/*.mustache, **/*.xml, **/*.css, **/*.scss | Instructions for GitHub Copilot to generate code in a Moodle project context. |
-| ms-sql-dba | **/*.sql | Instructions for customizing GitHub Copilot behavior for MS-SQL DBA chat mode. |
-| mvvm-toolkit | **/*.cs, **/*.xaml, **/*.csproj | CommunityToolkit.Mvvm (MVVM Toolkit) coding conventions for ViewModels, commands, messaging, validation, and DI across WPF, WinUI 3, .NET MAUI, Uno Platform, and Avalonia. |
-| nestjs | **/*.ts, **/*.js, **/*.json, **/*.spec.ts, **/*.e2e-spec.ts | NestJS development standards and best practices for building scalable Node.js server-side applications |
-| nextjs | **/*.tsx, **/*.ts, **/*.jsx, **/*.js, **/*.css | Best practices for building Next.js (App Router) apps with modern caching, tooling, and server/client boundaries (aligned with Next.js 16.1.1). |
-| nextjs-tailwind | **/*.tsx, **/*.ts, **/*.jsx, **/*.js, **/*.css | Next.js + Tailwind development standards and instructions |
-| No Heredoc File Operations | ** | Prevents terminal heredoc file corruption in VS Code Copilot by enforcing use of file editing tools instead of shell redirections |
-| nodejs-javascript-vitest | **/*.js, **/*.mjs, **/*.cjs | Guidelines for writing Node.js and JavaScript code with Vitest testing |
+| html-css-style-color-guide | **/*.html,**/*.css,**/*.js | Enforces accessible, professional HTML/CSS color usage conventions for backgrounds, text, accents, gradients, and contrast-sensitive browser styling. |
+| instructions | **/*.instructions.md | Enforces structure, frontmatter, examples, altitude, maintenance, and validation conventions for GitHub Copilot custom instruction files. |
+| java-11-to-java-17-upgrade | **/*.java,**/*.gradle,**/*.gradle.kts,**/pom.xml | Enforces Java 11 to Java 17 upgrade conventions for language features, API migration, build configuration, removals, JVM tuning, and compatibility testing. |
+| java-17-to-java-21-upgrade | **/*.java,**/*.gradle,**/*.gradle.kts,**/pom.xml | Enforces conventions for upgrading Java projects from JDK 17 to JDK 21, including language features, APIs, build flags, runtime warnings, GC, performance, and testing. |
+| java-21-to-java-25-upgrade | **/*.java,**/*.gradle,**/*.gradle.kts,**/pom.xml | Enforces conventions for adopting Java 25 from Java 21 across language features, JDK APIs, build flags, deprecations, GC behavior, and validation. |
+| java-junit5-assertions | **/*Test.java,**/*IT.java,**/*Steps.java,**/*StepDefs.java | Enforces JUnit Jupiter assertion conventions for imports, expected/actual ordering, lazy messages, grouped assertions, exception checks, timeouts, type safety, and collection comp… |
+| java-mcp-server | **/*.java,**/pom.xml,**/build.gradle,**/build.gradle.kts | Best practices and patterns for building Model Context Protocol (MCP) servers in Java using the official MCP Java SDK with reactive streams, transports, Spring integration, valida… |
+| Joyride Workspace Automation Conventions | **/.joyride/** | Enforces Joyride workspace automation conventions for REPL-driven ClojureScript, VS Code API usage, workspace activation, data-oriented design, and safe file updates. |
+| joyride-user-project | **/*.{cljs,cljc,edn} | Enforces Joyride user script conventions for SCI ClojureScript, REPL-driven VS Code automation, async evaluation, flares, disposables, and file edits. |
+| kotlin-mcp-server | **/*.kt,**/*.kts,**/build.gradle.kts,**/settings.gradle.kts | Enforces conventions for building Kotlin Model Context Protocol servers with the official io.modelcontextprotocol:kotlin-sdk library. |
+| kubernetes-deployment-best-practices | **/*.yaml,**/*.yml | Enforces Kubernetes manifest conventions for Pods, Deployments, Services, Ingress, configuration, health checks, resources, scaling, security, observability, rollout strategy, and… |
+| kubernetes-manifests | k8s/**/*.yaml,k8s/**/*.yml,manifests/**/*.yaml,manifests/**/*.yml,deploy/**/*.yaml,deploy/**/*.yml,charts/**/templates/**/*.yaml,charts/**/templates/**/*.yml | Enforces Kubernetes manifest conventions for labels, annotations, security contexts, pod security, resources, probes, rollout strategy, HA, validation, and secrets. |
+| langchain-python | **/*.py | Enforces LangChain Python conventions for Runnable composition, chat models, vector stores, prompts, tracing, testing, security, and privacy. |
+| localization | **/*.md | Enforces markdown localization conventions for translated document sets, locale folders, link rewriting, completeness checks, and required disclaimers. |
+| lwc | force-app/main/default/lwc/** | Enforces Lightning Web Components conventions for Salesforce component structure, SLDS, reactivity, data access, events, accessibility, performance, and tests. |
+| makefile | **/Makefile,**/makefile,**/*.mk,**/GNUmakefile | Enforces GNU Make conventions for Makefile layout, variables, prerequisites, recipes, phony targets, portability, and diagnostics. |
+| Markdown Content Creation Conventions | **/*.md | Enforces Markdown content creation conventions for blog post structure, YAML front matter, headings, lists, code blocks, links, images, tables, line length, and validation. |
+| markdown-accessibility | **/*.md | Enforces Markdown accessibility conventions for links, image alt text, headings, plain language, lists, emoji, multimedia, and review priority. Use when writing or reviewing Markd… |
+| markdown-gfm | **/*.md | Conventions for GitHub Flavored Markdown files covering CommonMark-compatible blocks, GFM tables, task lists, links, HTML, and validation. |
+| mcp-m365-copilot | **/{*mcp*,*agent*,*plugin*,declarativeAgent.json,ai-plugin.json,mcp.json,manifest.json} | Enforces conventions for MCP-based Microsoft 365 Copilot declarative agents, API plugins, adaptive cards, authentication, testing, deployment, and governance. |
+| memory-bank | memory-bank/** | Enforces conventions for maintaining persistent project documentation under memory-bank/ so AI agents can resume project context across sessions. |
+| microsoft-foundry | **/*.py | Enforces Microsoft Foundry SDK v2 Python conventions for azure-ai-projects agents, authentication, versioning, Responses/Conversations, tools, preview features, and production lif… |
+| mongo-dba | **/*.{js,ts,json} | Enforces MongoDB DBA guidance conventions for cluster administration, replica sets, backup and restore, performance, security, upgrades, tools, and MongoDB 7.x+ compatibility. |
+| Moodle Conventions | **/*.php,**/*.js,**/*.mustache,**/*.xml,**/*.css,**/*.scss | Enforces Moodle project conventions for plugin layout, PHP compatibility, security APIs, renderers, Mustache templates, JavaScript modules, and Moodle API usage. |
+| ms-sql-dba | **/*.sql | Conventions for Microsoft SQL Server DBA guidance in SQL files, including administration, security, performance, backup, restore, upgrades, and SQL Server 2025+ compatibility. |
+| mvvm-toolkit | **/*.cs,**/*.xaml,**/*.csproj | Enforces CommunityToolkit.Mvvm conventions for ViewModels, source-generated properties, commands, messaging, validation, dependency injection, and XAML binding. |
+| nestjs | **/*.ts,**/*.js,**/*.json,**/*.spec.ts,**/*.e2e-spec.ts | Enforces NestJS conventions for TypeScript server-side application modules, dependency injection, APIs, validation, persistence, security, configuration, and tests. |
+| nextjs | **/*.tsx,**/*.ts,**/*.jsx,**/*.js,**/*.css | Enforces Next.js App Router conventions for Next.js 16.1.1, Server and Client Components, async request APIs, Route Handlers, Cache Components, tooling, structure, security, and t… |
+| nextjs-tailwind | **/*.tsx,**/*.ts,**/*.jsx,**/*.js,**/*.css | Conventions for Next.js App Router applications with Tailwind CSS, TypeScript, server/client boundaries, styling, state, data fetching, security, and performance. |
+| No Heredoc File Operations | ** | Conventions that prevent terminal heredoc file corruption by requiring file editing tools instead of shell redirections for file content changes. |
+| nodejs-javascript-vitest | **/*.js,**/*.mjs,**/*.cjs | Enforces Node.js 20+ JavaScript conventions with ES2022, ESM, built-in modules, async/await, Vitest tests, README updates, and concise dependency choices. |
 | Object Calisthenics Conventions | **/*.{cs,ts,java} | Enforces the original 9 Object Calisthenics rules for business domain code, with pragmatic exemptions for DTOs, API contracts, configuration, infrastructure, and tests. |
-| oop-design-patterns | **/*.py, **/*.java, **/*.ts, **/*.js, **/*.cs | Best practices for applying Object-Oriented Programming (OOP) design patterns, including Gang of Four (GoF) patterns and SOLID principles, to ensure clean, maintainable, and scala… |
-| oqtane | **/*.razor,**/*.razor.cs,**/*.razor.css | Conventions for Oqtane and Blazor modules covering component structure, naming, module-specific patterns, validation, performance, and state. |
-| pcf-alm | **/*.{ts,tsx,js,json,xml,pcfproj,csproj,sln} | Application lifecycle management (ALM) for PCF code components |
-| pcf-api-reference | **/*.{ts,tsx,js} | Complete PCF API reference with all interfaces and their availability in model-driven and canvas apps |
-| pcf-best-practices | **/*.{ts,tsx,js,json,xml,pcfproj,csproj,css,html} | Best practices and guidance for developing PCF code components |
-| pcf-canvas-apps | **/*.{ts,tsx,js,json,xml,pcfproj,csproj} | Code components for canvas apps implementation, security, and configuration |
-| pcf-code-components | **/*.{ts,tsx,js,json,xml,pcfproj,csproj} | Understanding code components structure and implementation |
-| pcf-community-resources | **/*.{ts,tsx,js,jsx,json,xml,css,html} | PCF community resources including gallery, videos, blogs, and development tools |
-| pcf-dependent-libraries | **/*.{ts,tsx,js,json,xml,pcfproj,csproj} | Using dependent libraries in PCF components |
-| pcf-events | **/*.{ts,tsx,js,json,xml,pcfproj,csproj} | Define and handle custom events in PCF components |
-| pcf-fluent-modern-theming | **/*.{ts,tsx,js,json,xml,pcfproj,csproj} | Style components with modern theming using Fluent UI |
-| pcf-limitations | **/*.{ts,tsx,js,json,xml,pcfproj,csproj} | Limitations and restrictions of Power Apps Component Framework |
-| pcf-manifest-schema | **/*.xml | Complete manifest schema reference for PCF components with all available XML elements |
-| pcf-model-driven-apps | **/*.{ts,tsx,js,json,xml,pcfproj,csproj} | Code components for model-driven apps implementation and configuration |
-| pcf-overview | **/*.{ts,tsx,js,json,xml,pcfproj,csproj} | Power Apps Component Framework overview and fundamentals |
-| pcf-power-pages | **/*.{ts,tsx,js,json,xml,pcfproj,csproj} | Using code components in Power Pages sites |
-| pcf-react-platform-libraries | **/*.{ts,tsx,js,json,xml,pcfproj,csproj} | React controls and platform libraries for PCF components |
-| pcf-sample-components | **/*.{ts,tsx,js,json,xml,pcfproj,csproj} | How to use and run PCF sample components from the PowerApps-Samples repository |
-| pcf-tooling | **/*.{ts,tsx,js,json,xml,pcfproj,csproj} | Get Microsoft Power Platform CLI tooling for Power Apps Component Framework |
+| oop-design-patterns | **/*.py,**/*.java,**/*.ts,**/*.js,**/*.cs | Enforces object-oriented design pattern and SOLID conventions for clean, maintainable, and scalable code. Use when generating or refactoring OOP code in Python, Java, TypeScript,… |
+| oqtane | **/*.razor,**/*.razor.cs,**/*.razor.css | Conventions for Oqtane and Blazor modules covering component structure, client/server module patterns, services, controllers, repositories, validation, performance, caching, state… |
+| PCF Model-Driven Apps Conventions | **/*.{ts,tsx,js,json,xml,pcfproj,csproj} | Enforces Power Apps component framework conventions for model-driven app code components, manifests, TypeScript implementation, packaging, versioning, and documentation. |
+| pcf-alm | **/*.{ts,tsx,js,json,xml,pcfproj,csproj,sln} | Enforces Power Apps component framework ALM conventions for PCF projects, cdsproj solutions, builds, source control, SolutionPackager, versioning, deployment, pipelines, and canva… |
+| pcf-api-reference | **/*.{ts,tsx,js} | Enforces Power Apps Component Framework API conventions and availability checks for model-driven and canvas apps. |
+| pcf-best-practices | **/*.{ts,tsx,js,json,xml,pcfproj,csproj,css,html} | Enforces Power Apps Component Framework conventions for lifecycle, hosts, WebAPI use, bundling, React, Fluent UI, accessibility, styling, and ALM. |
+| pcf-canvas-apps | **/*.{ts,tsx,js,json,xml,pcfproj,csproj} | Enforces PCF canvas app conventions for security review, environment enablement, maker import, component properties, manifest version updates, and trusted solution use. |
+| pcf-code-components | **/*.{ts,tsx,js,json,xml,pcfproj,csproj} | Enforces Power Apps component framework code component conventions for manifests, TypeScript lifecycle methods, resources, outputs, state, cleanup, packaging, and solution reuse. |
+| pcf-community-resources | **/*.{ts,tsx,js,jsx,json,xml,css,html} | Guides Power Apps Component Framework work toward PCF community resources, gallery discovery, videos, blogs, tools, contribution practices, and support channels. |
+| pcf-dependent-libraries | **/*.{ts,tsx,js,json,xml,pcfproj,csproj} | Enforces Power Apps component framework dependent-library conventions for shared Library Controls, feature flags, Webpack externals, manifest dependencies, and on-demand loading. |
+| pcf-events | **/*.{ts,tsx,js,json,xml,pcfproj,csproj} | Enforces Power Apps component framework event conventions for manifest event declarations, canvas Power Fx handlers, model-driven addEventHandler usage, payloads, callbacks, and e… |
+| pcf-fluent-modern-theming | **/*.{ts,tsx,js,json,xml,pcfproj,csproj} | Enforces Power Apps component framework modern theming conventions with Fluent UI React v9, v8 migration themes, non-Fluent token usage, and custom theme providers. |
+| pcf-limitations | **/*.{ts,tsx,js,json,xml,pcfproj,csproj} | Enforces Power Apps Component Framework limitations for Canvas Apps, Dataverse APIs, bundled libraries, storage, authentication, and platform references. |
+| pcf-manifest-schema | **/*.xml | Enforces Power Apps Component Framework ControlManifest.Input.xml schema conventions for manifest elements, resources, features, platform libraries, validation, and data types. |
+| pcf-overview | **/*.{ts,tsx,js,json,xml,pcfproj,csproj} | Enforces Power Apps Component Framework overview conventions for capabilities, limitations, web-resource differences, APIs, licensing, and packaging. Use when building or document… |
+| pcf-power-pages | **/*.{ts,tsx,js,json,xml,pcfproj,csproj} | Enforces Power Pages conventions for using PCF code components, supported field types, unsupported APIs, model-driven field setup, form metadata, and portal Web API usage. |
+| pcf-react-platform-libraries | **/*.{ts,tsx,js,json,xml,pcfproj,csproj} | Enforces Power Apps component framework React control and platform-library conventions for virtual controls, manifest resources, CLI creation, supported versions, and host limitat… |
+| pcf-sample-components | **/*.{ts,tsx,js,json,xml,pcfproj,csproj} | Enforces conventions for using, building, packaging, and trying PowerApps-Samples PCF sample components in model-driven and canvas apps. |
+| pcf-tooling | **/*.{ts,tsx,js,json,xml,pcfproj,csproj} | Conventions for Microsoft Power Platform CLI tooling for Power Apps Component Framework creation, debugging, packaging, deployment, and ALM. |
 | performance-optimization | **/*.{html,htm,css,scss,sass,js,jsx,ts,tsx,vue,svelte,astro} | Enforces Core Web Vitals performance conventions for web UI files, including LCP, INP, CLS, loading, rendering, media, bundles, and framework-specific fixes. |
 | php-mcp-server | **/*.php | Enforces PHP Model Context Protocol server conventions for the official PHP SDK, capability discovery, transports, sessions, errors, testing, performance, framework integration, d… |
-| php-symfony | **/*.php, **/*.yaml, **/*.yml, **/*.xml, **/*.twig | Symfony development standards aligned with official Symfony Best Practices |
-| playwright-dotnet | **/*.cs | Playwright .NET test generation instructions |
-| playwright-python | **/*.py | Playwright Python AI test generation instructions based on official documentation. |
-| playwright-typescript | **/*.spec.ts,**/*.test.ts,**/*.spec.tsx,**/*.test.tsx,**/playwright.config.ts,tests/**/*.ts,tests/**/*.tsx | Conventions for Playwright tests in TypeScript covering test structure, selectors, assertions, fixtures, execution, and quality checks. |
-| Power Platform Connectors Schema Development Instructions | **/*.{json,md} | Comprehensive development guidelines for Power Platform Custom Connectors using JSON Schema definitions. Covers API definitions (Swagger 2.0), API properties, and settings configu… |
+| php-symfony | **/*.php,**/*.yaml,**/*.yml,**/*.xml,**/*.twig | Enforces Symfony conventions for project structure, configuration, dependency injection, controllers, Doctrine, Twig, forms, validation, security, assets, Messenger, and testing. |
+| Playwright Python Conventions | **/*.py | Enforces Playwright Python test conventions for Pytest structure, resilient locators, web-first assertions, synchronization, and execution. |
+| playwright-dotnet | **/*.cs | Enforces Playwright .NET test conventions for locators, assertions, structure, fixtures, accessibility snapshots, and execution. Use when writing C# end-to-end tests with Playwrig… |
+| playwright-typescript | **/*.spec.ts,**/*.test.ts,**/*.spec.tsx,**/*.test.tsx,**/playwright.config.ts,tests/**/*.ts,tests/**/*.tsx | Conventions for Playwright tests in TypeScript covering structure, locators, assertions, fixtures, execution, and quality checks. |
+| Power Platform Connectors Schema Development Instructions | **/*.{json,md} | Enforces Power Platform custom connector schema conventions for Swagger 2.0 definitions, API properties, settings, Microsoft extensions, validation, and troubleshooting. |
 | power-apps-canvas-yaml | **/*.{yaml,yml,md,pa.yaml} | Enforces Power Apps canvas app YAML schema v3.0, Power Fx formula, control, data source, component, and source-control conventions. |
-| power-apps-code-apps | **/*.{ts,tsx,js,jsx}, **/vite.config.*, **/package.json, **/tsconfig.json, **/power.config.json | Power Apps Code Apps development standards and best practices for TypeScript, React, and Power Platform integration |
+| power-apps-code-apps | **/*.{ts,tsx,js,jsx},**/vite.config.*,**/package.json,**/tsconfig.json,**/power.config.json | Enforces Power Apps Code Apps conventions for TypeScript, React, Vite, Power Platform SDK integration, generated connector services, security, testing, deployment, and current pla… |
 | power-bi-custom-visuals-development | **/*.{ts,tsx,js,jsx,json,less,css} | Enforces Power BI custom visual conventions for pbiviz projects, TypeScript, React, D3, formatting models, interactivity, testing, performance, and packaging. |
 | power-bi-data-modeling-best-practices | **/*.{pbix,md,json,txt} | Enforces Power BI semantic model conventions for star schema design, relationships, storage modes, performance, security, governance, testing, and advanced modeling patterns. |
-| power-bi-dax-best-practices | **/*.{pbix,dax,md,txt} | Comprehensive Power BI DAX best practices and patterns based on Microsoft guidance for creating efficient, maintainable, and performant DAX formulas. |
-| power-bi-devops-alm-best-practices | **/*.{yml,yaml,ps1,json,pbix,pbir} | Comprehensive guide for Power BI DevOps, Application Lifecycle Management (ALM), CI/CD pipelines, deployment automation, and version control best practices. |
+| power-bi-dax-best-practices | **/*.{pbix,dax,md,txt} | Enforces Power BI DAX conventions for efficient, maintainable, testable measures, model-aware formulas, time intelligence, performance tuning, and documentation. |
+| power-bi-devops-alm-best-practices | **/*.{yml,yaml,ps1,json,pbix,pbir} | Enforces Power BI DevOps and ALM conventions for PBIP source control, CI/CD deployment, environment promotion, testing, secrets, rollback, and monitoring. |
 | power-bi-report-design-best-practices | **/*.{pbix,md,json,txt} | Enforces Power BI report design, visualization, accessibility, interaction, performance, mobile, testing, and governance conventions for report artifacts and supporting documentat… |
-| power-bi-security-rls-best-practices | **/*.{pbix,dax,md,txt,json,csharp,powershell} | Comprehensive Power BI Row-Level Security (RLS) and advanced security patterns implementation guide with dynamic security, best practices, and governance strategies. |
-| power-platform-mcp-development | **/*.{json,csx,md} | Instructions for developing Power Platform custom connectors with Model Context Protocol (MCP) integration for Microsoft Copilot Studio |
-| powershell | **/*.ps1,**/*.psm1 | PowerShell cmdlet and scripting best practices based on Microsoft guidelines |
-| powershell-pester-6 | **/*.Tests.ps1 | PowerShell Pester testing best practices based on Pester v6 conventions |
-| prompt | **/*.prompt.md | Guidelines for creating high-quality prompt files for GitHub Copilot |
-| python-mcp-server | **/*.py, **/pyproject.toml, **/requirements.txt | Instructions for building Model Context Protocol (MCP) servers using the Python SDK |
-| qa-engineering-best-practices | ** | Comprehensive QA engineering best practices covering test strategy, test pyramid, naming conventions, assertion patterns, bug reporting, and automation guidelines for modern softw… |
-| quarkus | **/*.java,**/pom.xml,**/build.gradle,**/build.gradle.kts,**/application.properties,**/application.yaml,**/application.yml | Conventions for Quarkus applications using Java 17 or later, covering project structure, REST resources, data access, configuration, and testing. |
-| quarkus-mcp-server-sse | * | Quarkus and MCP Server with HTTP SSE transport development standards and instructions |
-| r | **/*.R, **/*.r, **/*.Rmd, **/*.rmd, **/*.qmd | R language and document formats (R, Rmd, Quarto): coding standards and Copilot guidance for idiomatic, safe, and consistent code generation. |
+| power-bi-security-rls-best-practices | **/*.{pbix,dax,md,txt,json,csharp,powershell} | Enforces Power BI security and Row-Level Security conventions for DAX roles, dynamic security, embedded analytics identities, database RLS integration, governance, monitoring, and… |
+| power-platform-mcp-development | **/*.{json,csx,md} | Enforces Power Platform MCP custom connector conventions for JSON-RPC, Copilot Studio schema constraints, authentication, scripts, Swagger, resources, errors, testing, and certifi… |
+| powershell | **/*.ps1,**/*.psm1 | Enforces PowerShell cmdlet and scripting conventions for naming, parameters, pipeline behavior, output, safety, help, and automation. |
+| powershell-pester-6 | **/*.Tests.ps1 | Enforces Pester v6 conventions for PowerShell test discovery, block structure, assertions, mocks, data-driven cases, tags, skips, and configuration. |
+| prompt | **/*.prompt.md | Enforces VS Code Copilot prompt file conventions for frontmatter, naming, inputs, tools, workflow, output, validation, and maintenance. Use when authoring reusable Copilot Chat pr… |
+| python-mcp-server | **/*.py,**/pyproject.toml,**/requirements.txt | Enforces Model Context Protocol Python SDK conventions for FastMCP tools, resources, prompts, transports, context, structured output, lifespan, and testing. |
+| qa-engineering-best-practices | ** | Enforces QA engineering conventions for test strategy, naming, assertions, data, automation, CI/CD evidence, bug reports, and coverage across any stack. |
+| quarkus | **/*.java,**/pom.xml,**/build.gradle,**/build.gradle.kts,**/application.properties,**/application.yaml,**/application.yml | Enforces Quarkus Java conventions for project structure, REST resources, Panache data access, configuration, security, and testing. Use when editing Quarkus source, build, or appl… |
+| Quarkus MCP Server SSE Conventions | * | Enforces Java 21 Quarkus MCP server conventions for HTTP SSE transport, CDI tools, layered architecture, validation, and error handling. |
+| r | **/*.R,**/*.r,**/*.Rmd,**/*.rmd,**/*.qmd | Enforces idiomatic R, R Markdown, and Quarto conventions for style, reproducibility, data wrangling, plotting, errors, security, Shiny, tooling, and tests. |
 | ruby-mcp-server | **/*.rb,**/Gemfile,**/*.gemspec,**/Rakefile | Enforces Ruby MCP server conventions for SDK setup, tools, resources, prompts, transports, context, configuration, responses, notifications, testing, and clients. |
-| ruby-on-rails | **/*.rb | Ruby on Rails coding conventions and guidelines |
-| rust | **/*.rs | Rust programming language coding conventions and best practices |
+| ruby-on-rails | **/*.rb | Enforces Ruby on Rails conventions for models, controllers, routing, persistence, APIs, frontend integration, jobs, testing, configuration, and maintainability. |
+| rust | **/*.rs | Enforces idiomatic Rust conventions for safety, ownership, API design, errors, async, testing, documentation, and Cargo packaging. |
 | rust-mcp-server | **/*.rs | Enforces Rust Model Context Protocol server conventions for rmcp dependencies, handlers, tools, prompts, resources, transports, errors, tests, authentication, observability, and d… |
-| scala-spark | **/*.scala, **/build.sbt, **/build.sc | Best practices for building Apache Spark applications in Scala, covering DataFrames, Datasets, SparkSQL, performance tuning, testing, and production deployment patterns. |
+| scala-spark | **/*.scala,**/build.sbt,**/build.sc | Enforces Scala Apache Spark conventions for dependencies, SparkSession setup, DataFrame and Dataset design, schemas, joins, partitioning, streaming, Delta Lake, performance, testi… |
 | scala2 | **/*.scala,**/build.sbt,**/build.sc | Enforces Scala 2.12/2.13 conventions for functional style, type safety, formatting, SBT configuration, performance, concurrency, and testing. |
 | security-and-owasp | ** | Enforces OWASP-aligned secure coding conventions for web, backend, frontend, API, dependency, logging, and AI/LLM changes. |
-| self-explanatory-code-commenting | ** | Guidelines for GitHub Copilot to write comments to achieve self-explanatory code with less comments. Examples are in JavaScript but it should work on any language that has comment… |
-| shell | **/*.sh | Shell scripting best practices and conventions for bash, sh, zsh, and other shells |
-| spec-driven-workflow-v1 | ** | Specification-Driven Workflow v1 provides a structured approach to software development, ensuring that requirements are clearly defined, designs are meticulously planned, and impl… |
-| springboot | **/*.java, **/*.kt | Guidelines for building Spring Boot base applications |
+| self-explanatory-code-commenting | ** | Enforces self-explanatory code comments that explain why, constraints, and risks while avoiding obvious, redundant, stale, decorative, or historical comments. |
+| shell | **/*.sh | Enforces safe, readable shell scripting conventions for bash, sh, zsh, automation, parsers, cleanup, and static analysis. |
+| spec-driven-workflow-v1 | ** | Enforces Specification-Driven Workflow v1 conventions for requirements, design, tasks, documentation, validation, reflection, handoff, troubleshooting, debt, quality metrics, and… |
+| springboot | **/*.java,**/*.kt | Conventions for Spring Boot base applications covering dependency injection, configuration, package organization, services, logging, security, validation, builds, and useful Maven… |
 | springboot-4-migration | **/*.java,**/*.kt,**/build.gradle.kts,**/build.gradle,**/settings.gradle.kts,**/gradle/libs.versions.toml,**/*.properties,**/*.yml,**/*.yaml | Enforces Spring Boot 3.x to 4.0 migration conventions for Java, Kotlin, Gradle, version catalogs, configuration, tests, and production readiness. |
-| sql-sp-generation | **/*.sql | Guidelines for generating SQL statements and stored procedures |
-| svelte | **/*.svelte, **/*.ts, **/*.js, **/*.css, **/*.scss, **/*.json | Svelte 5 and SvelteKit 2 development standards and best practices for component-based user interfaces and full-stack applications |
-| swift-mcp-server | **/*.swift, **/Package.swift, **/Package.resolved | Best practices and patterns for building Model Context Protocol (MCP) servers in Swift using the official MCP Swift SDK package. |
-| tailwind-v4-vite | vite.config.ts, vite.config.js, **/*.css, **/*.tsx, **/*.ts, **/*.jsx, **/*.js | Tailwind CSS v4+ installation and configuration for Vite projects using the official @tailwindcss/vite plugin |
-| taming-copilot | ** | General repository-wide conventions for keeping Copilot changes controlled, minimal, standard, surgical, and aligned with project context. |
-| tanstack-start-shadcn-tailwind | **/*.ts, **/*.tsx, **/*.js, **/*.jsx, **/*.css, **/*.scss, **/*.json | Guidelines for building TanStack Start applications |
-| task-implementation | **/.copilot-tracking/changes/*.md | Instructions for implementing task plans with progressive tracking and change record - Brought to you by microsoft/edge-ai |
-| tasksync | ** | TaskSync V5 - Allows you to give the agent new instructions or feedback after completing a task using terminal while agent is running. |
-| terraform | **/*.tf | Terraform Conventions and Guidelines |
-| terraform-azure | **/*.terraform, **/*.tf, **/*.tfvars, **/*.tflint.hcl, **/*.tfstate, **/*.tf.json, **/*.tfvars.json | Create or modify solutions built using Terraform on Azure. |
-| terraform-sap-btp | **/*.tf, **/*.tfvars, **/*.tflint.hcl, **/*.tf.json, **/*.tfvars.json | Terraform conventions and guidelines for SAP Business Technology Platform (SAP BTP). |
-| typescript-mcp-server | **/*.ts, **/*.js, **/package.json | Instructions for building Model Context Protocol (MCP) servers using the TypeScript SDK |
-| typespec-m365-copilot | **/*.tsp | Guidelines and best practices for building TypeSpec-based declarative agents and API plugins for Microsoft 365 Copilot |
-| update-code-from-shorthand | **/${input:file} | Shorthand code will be in the file provided from the prompt or raw data in the prompt, and will be used to update the code file when the prompt has the text `UPDATE CODE FROM SHOR… |
-| update-docs-on-code-change | **/*.{md,js,mjs,cjs,ts,tsx,jsx,py,java,cs,go,rb,php,rs,cpp,c,h,hpp} | Automatically update README.md and documentation files when application code changes require documentation updates |
-| use-cliche-data-in-docs | **/*.{md,js,mjs,cjs,ts,tsx,jsx,py,json} | Ensure documentation and examples use only generic, cliche placeholder data — never real or sensitive data sourced from local scripts, configuration, task files, or prompt context. |
+| sql-sp-generation | **/*.sql | Conventions for SQL schema generation, query style, stored procedure naming, parameter handling, security, and transactions. |
+| svelte | **/*.svelte,**/*.ts,**/*.js,**/*.css,**/*.scss,**/*.json | Enforces Svelte 5 and SvelteKit 2 conventions for runes reactivity, routing, load functions, form actions, remote functions, TypeScript, styling, performance, errors, security, an… |
+| swift-mcp-server | **/*.swift,**/Package.swift,**/Package.resolved | Enforces conventions for building Swift Model Context Protocol servers with the official MCP Swift SDK package. |
+| tailwind-v4-vite | vite.config.ts,vite.config.js,**/*.css,**/*.tsx,**/*.ts,**/*.jsx,**/*.js | Enforces Tailwind CSS v4+ conventions for Vite projects using @tailwindcss/vite, CSS-first configuration, migration, verification, and troubleshooting. |
+| Taming Copilot Conventions | ** | Enforces repository-wide conventions for keeping Copilot interactions factual, concise, minimal, surgical, tool-aware, and aligned with user directives. |
+| tanstack-start-shadcn-tailwind | **/*.ts,**/*.tsx,**/*.js,**/*.jsx,**/*.css,**/*.scss,**/*.json | Enforces TanStack Start, React, Shadcn/ui, Tailwind CSS, Zod, routing, data fetching, accessibility, and import conventions. |
+| task-implementation | **/.copilot-tracking/changes/*.md | Enforces conventions for implementing tracked task plans with complete plan/detail reading, progressive checklist updates, change records, validation, and release summaries. |
+| tasksync | ** | Defines TaskSync V5 terminal task-request conventions for agents that intentionally run a continuous terminal-driven task loop. |
+| terraform | **/*.tf | Enforces Terraform conventions for secure, modular, maintainable, formatted, documented, tested, and version-controlled infrastructure code. |
+| terraform-azure | **/*.terraform,**/*.tf,**/*.tfvars,**/*.tflint.hcl,**/*.tfstate,**/*.tf.json,**/*.tfvars.json | Enforces Azure Terraform conventions for AVM usage, file layout, variables, secrets, state, providers, validation, documentation, cost, and operations. |
+| terraform-sap-btp | **/*.tf,**/*.tfvars,**/*.tflint.hcl,**/*.tf.json,**/*.tfvars.json | Enforces Terraform conventions for SAP Business Technology Platform infrastructure, including SAP BTP provider usage, security, state, validation, testing, and tool integration. |
+| typescript-mcp-server | **/*.ts,**/*.js,**/package.json | Enforces Model Context Protocol TypeScript SDK conventions for tools, resources, prompts, transports, schemas, errors, and testing. |
+| typespec-m365-copilot | **/*.tsp | Enforces TypeSpec conventions for Microsoft 365 Copilot declarative agents, capabilities, API plugins, authentication, cards, validation, and security. |
+| update-code-from-shorthand | **/${input:file} | Interprets UPDATE CODE FROM SHORTHAND prompts and replaces marked shorthand regions with valid code for the required target file. |
+| update-docs-on-code-change | **/*.{md,js,mjs,cjs,ts,tsx,jsx,py,java,cs,go,rb,php,rs,cpp,c,h,hpp} | Enforces documentation synchronization when code changes affect README files, API docs, configuration guides, changelogs, examples, or migration guidance. |
+| use-cliche-data-in-docs | **/*.{md,js,mjs,cjs,ts,tsx,jsx,py,json} | Enforces generic cliche placeholder data in documentation, examples, templates, comments, and sample configuration instead of real or sensitive implementation data. |
 | vsixtoolkit | **/*.cs,**/*.vsct,**/*.xaml,**/source.extension.vsixmanifest | Enforces Community.VisualStudio.Toolkit conventions for Visual Studio extension packages, commands, options, MEF components, threading, theming, VSCT, validation, NuGet dependenci… |
-| vue | **/*.vue, **/*.ts, **/*.js, **/*.css, **/*.scss | Comprehensive Vue 3 development standards and best practices: Composition API, `<script setup>`, the full reactivity system, compiler macros (defineModel/defineSlots/defineOptions… |
-| winui3 | **/*.xaml, **/*.cs, **/*.csproj | WinUI 3 and Windows App SDK coding guidelines. Prevents common UWP API misuse, enforces correct XAML namespaces, threading, windowing, and MVVM patterns for desktop Windows apps. |
-| wordpress | wp-content/plugins/**,wp-content/themes/**,**/*.php,**/*.inc,**/*.js,**/*.jsx,**/*.ts,**/*.tsx,**/*.css,**/*.scss,**/*.json | Coding, security, and testing rules for WordPress plugins and themes |
+| vue | **/*.vue,**/*.ts,**/*.js,**/*.css,**/*.scss | Enforces Vue 3 conventions for Composition API, script setup, reactivity, macros, components, routing, Pinia, styling, testing, SSR, performance, and security. |
+| winui3 | **/*.xaml,**/*.cs,**/*.csproj | Enforces WinUI 3 and Windows App SDK conventions for XAML, namespaces, threading, windowing, dialogs, MVVM, project setup, styling, accessibility, testing, and resources. |
+| wordpress | wp-content/plugins/**,wp-content/themes/**,**/*.php,**/*.inc,**/*.js,**/*.jsx,**/*.ts,**/*.tsx,**/*.css,**/*.scss,**/*.json | Enforces secure WordPress plugin and theme conventions for hooks, coding standards, data handling, i18n, assets, REST, blocks, testing, and documentation. |
 
 ## Skills
 
