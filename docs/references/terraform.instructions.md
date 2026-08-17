@@ -8,7 +8,7 @@ applyTo: "**/*.tf"
 
 # Terraform Conventions — Generic Hygiene
 
-This file adds language-level Terraform hygiene on top of the kit's authoritative infrastructure rules. **the `infrastructure` instruction is authoritative** for this kit: Azure provider `azurerm ~> 3.x` (pinned `required_version`), mandatory `project`/`environment`/`owner` tags, secrets only in `azurerm_key_vault_secret`, one module per Azure service area, Managed Identity, and the `terraform fmt` + `terraform validate` gate. Where anything here appears to differ, infrastructure wins. `infra/` is created by the team in Stage 3/4 — there is no inherited stack to copy.
+This file adds language-level Terraform hygiene on top of the kit's authoritative infrastructure rules. **The `infrastructure` instruction is authoritative** for this kit: Azure provider `azurerm ~> 3.x` (pinned `required_version`), mandatory `project`/`environment`/`owner` tags, secrets only in `azurerm_key_vault_secret`, one module per Azure service area, Managed Identity, and the `terraform fmt` + `terraform validate` gate. Where anything here appears to differ, infrastructure wins. `infra/` is created by the team in Stage 3/4 — there is no inherited stack to copy.
 
 ## File Layout
 

@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "NWgbBHhyc6U=",
+  "dgSpecHash": "kA7iFtuJEdw=",
   "success": true,
-  "projectFilePath": "/Volumes/T9/awesome-copilot/skills/winmd-api-search/scripts/cache-generator/CacheGenerator.csproj",
+  "projectFilePath": "/Volumes/T9/copilot-primitives/library/skills/winmd-api-search/scripts/cache-generator/CacheGenerator.csproj",
   "expectedPackageFiles": [
     "/Users/paulasilva/.nuget/packages/microsoft.web.webview2/1.0.3719.77/microsoft.web.webview2.1.0.3719.77.nupkg.sha512",
     "/Users/paulasilva/.nuget/packages/microsoft.windows.sdk.buildtools/10.0.26100.4654/microsoft.windows.sdk.buildtools.10.0.26100.4654.nupkg.sha512",

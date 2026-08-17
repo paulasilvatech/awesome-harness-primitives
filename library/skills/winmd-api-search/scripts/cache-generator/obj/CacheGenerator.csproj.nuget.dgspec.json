@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/Volumes/T9/awesome-copilot/skills/winmd-api-search/scripts/cache-generator/CacheGenerator.csproj": {}
+    "/Volumes/T9/copilot-primitives/library/skills/winmd-api-search/scripts/cache-generator/CacheGenerator.csproj": {}
   },
   "projects": {
-    "/Volumes/T9/awesome-copilot/skills/winmd-api-search/scripts/cache-generator/CacheGenerator.csproj": {
+    "/Volumes/T9/copilot-primitives/library/skills/winmd-api-search/scripts/cache-generator/CacheGenerator.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Volumes/T9/awesome-copilot/skills/winmd-api-search/scripts/cache-generator/CacheGenerator.csproj",
+        "projectUniqueName": "/Volumes/T9/copilot-primitives/library/skills/winmd-api-search/scripts/cache-generator/CacheGenerator.csproj",
         "projectName": "CacheGenerator",
-        "projectPath": "/Volumes/T9/awesome-copilot/skills/winmd-api-search/scripts/cache-generator/CacheGenerator.csproj",
+        "projectPath": "/Volumes/T9/copilot-primitives/library/skills/winmd-api-search/scripts/cache-generator/CacheGenerator.csproj",
         "packagesPath": "/Users/paulasilva/.nuget/packages/",
-        "outputPath": "/Volumes/T9/awesome-copilot/skills/winmd-api-search/scripts/cache-generator/obj/",
+        "outputPath": "/Volumes/T9/copilot-primitives/library/skills/winmd-api-search/scripts/cache-generator/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/paulasilva/.nuget/NuGet/NuGet.Config"

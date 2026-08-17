@@ -8,7 +8,7 @@ applyTo: "frontend/app/**,frontend/components/**,frontend/src/app/**,frontend/sr
 
 # Frontend Conventions — Component Craft and Interaction
 
-This file activates when you build UI under `frontend/app/**` or `frontend/components/**`. It focuses on component craft, client interaction, component state, accessibility execution, and user-facing flows. It owns how components behave for users; the `frontend-spec` instruction owns the platform contract for Next.js 15 App Router, strict TypeScript, Tailwind/shadcn styling, Server Components, and Server Actions — follow that file for those topics and do not restate them here.
+This file activates when you build UI under `frontend/app/**` or `frontend/components/**`. It focuses on component craft, client interaction, component state, accessibility execution, and user-facing flows. It owns how components behave for users; the `frontend-spec` instruction owns the platform contract for Next.js 15 App Router, strict TypeScript, Tailwind/shadcn styling, Server Components, and Server Actions — follow that instruction for those topics and do not restate them here.
 
 > [!NOTE]
 > `frontend/` does not exist yet; the team scaffolds it in Stage 3. These are the conventions the components must follow as they are written.
