@@ -82,6 +82,14 @@ Memory records, when supported, must include `react-core: 19.x.x confirmed`, `te
 | GO | `react@19.x.x`, `react-dom@19.x.x`, `@testing-library/react@16.x`, and `npm ls` reports 0 peer errors after clean install. |
 | NO-GO | Any required version fails, peer errors remain, a package has no compatible release, install cannot complete, or `--legacy-peer-deps` was needed without documented approval. |
 
+## Preserved Domain Terms
+
+Keep these exact terms available because they carry command, schema, mode, or compatibility meaning from the original primitive:
+
+- `STEP`
+- `STOP`
+- `apollo-upgraded`
+
 ## Output Format
 
 ```markdown

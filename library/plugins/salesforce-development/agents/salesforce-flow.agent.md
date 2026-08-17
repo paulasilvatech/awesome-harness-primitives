@@ -106,6 +106,10 @@ Fault paths must not connect back into the main flow in a self-referencing loop.
 - Activate a Flow with known bulk-safety gaps or missing fault connectors.
 - Skip bulk testing by treating a one-record success as production readiness.
 
+## Flow Clarification and Safety Language
+
+MUST rules are hard gates: if there are ANY questions or uncertainties, STOP and ask before implementation. This applies to mid-build ambiguity, type-selection conflicts, object/event automation overlap, per-record decision branching, and every anti-pattern or anti-patterns review finding.
+
 ## Output Format
 
 ```markdown

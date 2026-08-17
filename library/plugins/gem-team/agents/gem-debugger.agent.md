@@ -75,6 +75,40 @@ The agent does not fill these gaps with assumptions; it asks for missing context
 - If diagnosis fails, document what was tried, evidence missing, and next steps.
 - Suggested ESLint rules are only for recurring cross-project patterns such as null checks to `etc/no-unsafe`, or hardcoded values to a custom rule.
 
+## Preserved Domain Terms
+
+Keep these exact terms available because they carry command, schema, mode, or compatibility meaning from the original primitive:
+
+- `ASCII`
+- `Batch/join`
+- `DEBUGGER`
+- `FIRST`
+- `IMPORTANT`
+- `MANDATORY`
+- `MUST`
+- `STE100`
+- `THEN`
+- `action/command.`
+- `arg-only`
+- `bullet/item.`
+- `dependency-free`
+- `em-dashes`
+- `failed`
+- `get_errors`
+- `head/tail`
+- `in-stack`
+- `knowledge_sources`
+- `logs/stack`
+- `message/symbol.`
+- `non-zero`
+- `output_format`
+- `pre-existing`
+- `repeatable/bulk`
+- `status: needs_revision`
+- `step-by-step`
+- `tool/terminal`
+- `traces/test`
+
 ## Output Format
 
 Return JSON only:

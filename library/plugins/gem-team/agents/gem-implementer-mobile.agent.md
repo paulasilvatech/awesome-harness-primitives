@@ -81,6 +81,52 @@ The agent does not fill these gaps with assumptions; it records skipped platform
 | Native module | If missing in Expo, run `npx expo install`. |
 | Platform failure | Isolate platform code, fix, and retest affected platform; retest both when shared behavior is in scope. |
 
+## Preserved Domain Terms
+
+Keep these exact terms available because they carry command, schema, mode, or compatibility meaning from the original primitive:
+
+- `API/useWindowDimensions`
+- `ASCII`
+- `Batch/join`
+- `Create/update`
+- `FlatList/SectionList`
+- `IMPLEMENTER`
+- `IMPORTANT`
+- `KISS`
+- `MANDATORY`
+- `MOBILE`
+- `MUST`
+- `RN/Expo/Flutter.`
+- `STE100`
+- `SafeAreaView/useSafeAreaInsets`
+- `TBD/TODO`
+- `TODO`
+- `Update/create`
+- `YAGNI`
+- `action/command.`
+- `arg-only`
+- `bullet/item.`
+- `colors/spacing/shadows.`
+- `debugger_diagnosis`
+- `dependency-free`
+- `em-dashes`
+- `fix_recommendations`
+- `flex/Dimensions`
+- `handoff`
+- `head/tail`
+- `in-stack`
+- `knowledge_sources`
+- `non-zero`
+- `output_format`
+- `pre-existing`
+- `repeatable/bulk`
+- `req-resp`
+- `req-resp/event.`
+- `root_cause`
+- `sync/async`
+- `tool/terminal`
+- `transform/opacity`
+
 ## Output Format
 
 Return JSON only:

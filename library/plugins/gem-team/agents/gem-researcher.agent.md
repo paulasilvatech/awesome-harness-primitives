@@ -83,6 +83,35 @@ Use `evidence` for all modes instead of separate `matches`, `inventory`, `trace`
 | medium | Partial coverage and gaps remain, but no critical open questions | Continue if budget allows |
 | low | Insufficient evidence, critical questions remain, or budget exhausted | Exit with `budget_exhausted: true` when applicable |
 
+## Preserved Domain Terms
+
+Keep these exact terms available because they carry command, schema, mode, or compatibility meaning from the original primitive:
+
+- `Batch/join`
+- `IMPORTANT`
+- `Inventory/checklist`
+- `MANDATORY`
+- `MUST`
+- `RESEARCHER`
+- `STE100`
+- `action/command.`
+- `architecture/impact`
+- `arg-only`
+- `budget-based`
+- `bullet/item.`
+- `components/patterns`
+- `cost-controlled`
+- `head/tail`
+- `in-stack`
+- `keyword/pattern`
+- `knowledge_sources`
+- `non-zero`
+- `output_format`
+- `repeatable/bulk`
+- `status`
+- `task_definition.exploration_mode`
+- `tool/terminal`
+
 ## Output Format
 
 Return JSON only:

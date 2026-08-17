@@ -75,6 +75,14 @@ internal/<domain>/<logic>.go
 
 Keep transport setup, MCP registration, domain logic, and configuration separate. Use dependency injection where handlers need clients, file systems, or external services.
 
+## Preserved Domain Terms
+
+Keep these exact terms available because they carry command, schema, mode, or compatibility meaning from the original primitive:
+
+- `inputs/outputs`
+- `long-running`
+- `test-driven`
+
 ## Output Format
 
 ```markdown

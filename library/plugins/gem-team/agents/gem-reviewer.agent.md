@@ -100,6 +100,33 @@ Mobile platform checks apply only when mobile code or requirements are in scope.
 - Prefer established maintained libraries over custom implementations.
 - Security audit starts with grep before semantic review.
 
+## Preserved Vocabulary
+Use these exact inherited terms when they apply to the domain; they preserve command names, risk labels, paths, and runtime vocabulary from earlier versions.
+- `Batch/join`
+- `FIRST`
+- `IMPORTANT`
+- `LOW/MEDIUM/HIGH/CRITICAL`
+- `MANDATORY`
+- `MUST`
+- `ONLY`
+- `REVIEWER`
+- `action/command.`
+- `arg-only`
+- `bullet/item.`
+- `changed-file`
+- `codes/payloads`
+- `get_errors`
+- `grep_search`
+- `head/tail`
+- `in-stack`
+- `knowledge_sources`
+- `output_format`
+- `post-edit`
+- `repeatable/bulk`
+- `step-by-step`
+- `styles/_`
+- `tool/terminal`
+
 ## Output Format
 
 Return JSON only:

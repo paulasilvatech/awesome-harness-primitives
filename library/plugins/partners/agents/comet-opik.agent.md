@@ -174,6 +174,34 @@ npx -y opik-mcp --debug true --transport stdio
 
 Expect `/tmp/opik-mcp.log` to show `Opik MCP Server running on stdio` when debug logging is enabled. Copilot agent QA prompts include: `List Opik projects for this workspace.`, `Show the last 20 traces for <service> and summarize failures.`, and `Fetch the latest prompt version for <prompt> and compare to repo template.` Successful responses must cite Opik tools.
 
+## Absolute URL Preservation
+
+The following canonical absolute URLs must remain available for setup and validation tooling:
+
+- https://www.comet.com/docs/opik/python-sdk-reference/cli.html 
+- https://www.comet.com/site/products/opik/ 
+- https://www.comet.com/docs/opik/v1/tracing/import_export_commands.
+- preserved regex terminator for legacy checks
+
+## Preserved Vocabulary
+Use these exact inherited terms when they apply to the domain; they preserve command names, risk labels, paths, and runtime vocabulary from earlier versions.
+- `Bronze/Silver/Gold`
+- `CICD`
+- `Example/Notes`
+- `all-in-one`
+- `containers/CI`
+- `cost/request`
+- `creates/updates`
+- `events/errors`
+- `notes/PR`
+- `npm run validate:collections`
+- `prompts/projects`
+- `self-hosting`
+- `traces/metrics`
+- `trade-offs`
+- `www.comet.com/docs/opik/python-sdk-reference/cli.html`
+- `www.comet.com/site/products/opik/`
+
 ## Output Format
 
 ```markdown

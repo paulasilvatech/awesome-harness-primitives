@@ -131,6 +131,18 @@ terraform {
 }
 ```
 
+## Preserved Domain Terms
+
+Keep these exact terms available because they carry command, schema, mode, or compatibility meaning from the original primitive:
+
+- `0.0.0.0/0`
+- `cross-module`
+- `least-privilege`
+- `lifecycle`
+- `public-facing`
+- `terraform fmt`
+- `well-structured`
+
 ## Output Format
 
 ```markdown

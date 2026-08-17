@@ -140,14 +140,14 @@ Additional test requirements:
 
 #### Definition of Done
 A task is NOT complete until:
-- [ ] Apex compiles without errors or warnings
-- [ ] No governor limit violations (verified by design, not by luck)
-- [ ] All PNB test paths written and passing
-- [ ] Minimum 75% line coverage on new code (aim for 90%+)
-- [ ] `with sharing` declared on all new classes
-- [ ] CRUD/FLS enforced where user-facing or exposed via API
-- [ ] No hardcoded IDs, empty catches, or SOQL/DML inside loops
-- [ ] Output summary provided (see format below)
+- ☐ Apex compiles without errors or warnings
+- ☐ No governor limit violations (verified by design, not by luck)
+- ☐ All PNB test paths written and passing
+- ☐ Minimum 75% line coverage on new code (aim for 90%+)
+- ☐ `with sharing` declared on all new classes
+- ☐ CRUD/FLS enforced where user-facing or exposed via API
+- ☐ No hardcoded IDs, empty catches, or SOQL/DML inside loops
+- ☐ Output summary provided (see format below)
 
 ### Completion Protocol
 

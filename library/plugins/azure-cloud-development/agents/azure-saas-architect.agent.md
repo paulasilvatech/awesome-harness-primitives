@@ -97,6 +97,10 @@ Ask these only when absent and architecturally material:
 
 Cover tenant isolation patterns, identity and access management, B2B federation, B2C social providers, data architecture, tenant-aware partitioning, compliance boundaries, deployment stamps, noisy-neighbor mitigation, Azure consumption APIs for billing and metering, global deployment, data residency, tenant-safe CI/CD, blue-green deployments, monitoring, tenant-specific dashboards, performance isolation, SOC 2, ISO 27001, GDPR, and CCPA.
 
+## Multitenant Terminology Preservation
+
+Use multi-tenant and multitenant consistently when matching source terminology. B2C SaaS often requires high-density pooling. Preserve the canonical SaaS workload URL exactly: `https://learn.microsoft.com/azure/well-architected/saas/`.
+
 ## Output Format
 
 ```markdown
