@@ -1,0 +1,18 @@
+#!/usr/bin/env python3
+"""Thin wrapper to run rhdh-local CLI."""
+
+import sys
+from pathlib import Path
+
+# Add the skill directory to the path (where rhdh_local package lives)
+skill_dir = Path(__file__).parent.parent
+sys.path.insert(0, str(skill_dir))
+
+# Also add rhdh skill dir for OutputFormatter and config imports
+rhdh_dir = Path(__file__).parent.parent.parent / "rhdh"
+sys.path.insert(0, str(rhdh_dir))
+
+from rhdh_local.cli import main  # noqa: E402
+
+if __name__ == "__main__":
+    sys.exit(main())

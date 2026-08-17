@@ -69,6 +69,11 @@ Cross-primitive references use the **name and type**, never a relative path: a p
 - Add each plugin under `library/plugins/<name>/plugin.json` unless the spec-supported manifest location is needed.
 - `name` is required, max 64 characters, and must be kebab-case/dot-case; `version` should be semver; `description` should be present and at most 1024 characters.
 - Keep component paths valid relative to the manifest directory or repo root.
+- **The shared library is the source of truth.** Files under a plugin that also exist in
+  `library/{agents,instructions,skills}` are *generated copies* — plugins must be self-contained
+  because upward-relative references (`../../agents/...`) do not resolve at install time. Edit the
+  library original, then run `python3 library/scripts/sync_plugin_components.py` to regenerate. Never
+  hand-edit a plugin copy: `--check` runs in CI and fails the build on drift.
 - PR-gating rule IDs: `PL001`, `PL002`, `PL003`, `PL008`.
 
 ## Hooks
@@ -77,4 +82,14 @@ Cross-primitive references use the **name and type**, never a relative path: a p
 - JSON must use `version: 1` and a `hooks` object.
 - Prefer native camelCase events such as `sessionStart`, `preToolUse`, `postToolUse`, and `postResult`.
 - Each hook entry must define `bash`, `powershell`, `command`, or HTTP `url`; referenced scripts must exist and be executable.
+- **Script paths resolve from the workspace root**, never from the config file's directory — for
+  user-level hooks too. Keep library packages self-consistent under `hooks/<name>/…` and use absolute
+  paths for anything installed globally.
+- Set `timeoutSec` to fit the worst case: a hook that scans the working tree is killed silently when it
+  overruns, producing no output and no error.
+- `disableAllHooks: true` inside a hook file is **file-scoped** — use it to ship a hook off by default;
+  sibling hooks keep running. The same key in `config.json`/`settings.json` is the global kill switch.
+- Repository hooks are skipped without warning until the workspace is in `trustedFolders`; see the
+  [README](README.md#hooks) before concluding a hook is broken.
+- Both `library/hooks/*/hooks.json` and this repo's installed `.github/hooks/*.json` are validated.
 - PR-gating rule IDs: `HK001`, `HK002`, `HK003`, `HK004`, `HK006`, `HK008`, `HK009`.
