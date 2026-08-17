@@ -8,7 +8,7 @@ import sys
 from pathlib import Path
 from typing import Any
 
-from validate_primitives import PLUGIN_MANIFESTS, parse_frontmatter
+from library.scripts.validate_primitives import PLUGIN_MANIFESTS, parse_frontmatter
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_OUT = ROOT / "docs" / "CATALOG.md"
@@ -63,12 +63,14 @@ def md_table(headers: list[str], rows: list[list[Any]]) -> str:
         "| " + " | ".join("---" for _ in headers) + " |",
     ]
     for row in rows:
-        lines.append("| " + " | ".join(escape_cell(cell) for cell in row) + " |")
+        lines.append("| " + " | ".join(escape_cell(cell)
+                     for cell in row) + " |")
     return "\n".join(lines)
 
 
 def frontmatter(path: Path, required: bool = True) -> dict[str, Any]:
-    fm, _body, present, err = parse_frontmatter(read_text(path), required=required)
+    fm, _body, present, err = parse_frontmatter(
+        read_text(path), required=required)
     if not present or err or not isinstance(fm, dict):
         return {}
     return fm
@@ -92,7 +94,8 @@ def instruction_rows() -> list[list[str]]:
     for path in sorted((ROOT / "instructions").glob("*.instructions.md"), key=lambda p: p.name.casefold()):
         fm = frontmatter(path, required=False)
         name = fm.get("name") or path.name.removesuffix(".instructions.md")
-        rows.append([one_line(name), one_line(fm.get("applyTo")), truncate(fm.get("description"))])
+        rows.append([one_line(name), one_line(fm.get("applyTo")),
+                    truncate(fm.get("description"))])
     return sort_rows(rows)
 
 
@@ -115,7 +118,8 @@ def plugin_manifest(plugin_dir: Path) -> Path | None:
 
 def plugin_rows() -> list[list[str]]:
     rows = []
-    plugin_dirs = [p for p in (ROOT / "plugins").iterdir() if p.is_dir()] if (ROOT / "plugins").is_dir() else []
+    plugin_dirs = [p for p in (ROOT / "plugins").iterdir()
+                   if p.is_dir()] if (ROOT / "plugins").is_dir() else []
     for plugin_dir in sorted(plugin_dirs, key=lambda p: p.name.casefold()):
         manifest = plugin_manifest(plugin_dir)
         data: dict[str, Any] = {}
@@ -135,7 +139,8 @@ def hook_rows() -> list[list[str]]:
     for path in sorted((ROOT / "hooks").glob("*/hooks.json"), key=lambda p: p.parent.name.casefold()):
         data = json.loads(path.read_text(encoding="utf-8"))
         hooks = data.get("hooks", {})
-        events = sorted(hooks, key=lambda e: (event_order.get(e, len(event_order)), e.casefold())) if isinstance(hooks, dict) else []
+        events = sorted(hooks, key=lambda e: (event_order.get(
+            e, len(event_order)), e.casefold())) if isinstance(hooks, dict) else []
         rows.append([path.parent.name, ", ".join(events) if events else "—"])
     return sort_rows(rows)
 
@@ -185,9 +190,12 @@ Regenerate this file after changing files under `agents/`, `instructions/`, `ski
 
 
 def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(description="Generate the Copilot primitives catalog.")
-    parser.add_argument("--out", type=Path, default=DEFAULT_OUT, help="output path (default: docs/CATALOG.md)")
-    parser.add_argument("--check", action="store_true", help="exit 1 if the output file is stale; do not write")
+    parser = argparse.ArgumentParser(
+        description="Generate the Copilot primitives catalog.")
+    parser.add_argument("--out", type=Path, default=DEFAULT_OUT,
+                        help="output path (default: docs/CATALOG.md)")
+    parser.add_argument("--check", action="store_true",
+                        help="exit 1 if the output file is stale; do not write")
     args = parser.parse_args(argv)
 
     out = args.out if args.out.is_absolute() else ROOT / args.out
@@ -195,7 +203,8 @@ def main(argv: list[str] | None = None) -> int:
     if args.check:
         current = out.read_text(encoding="utf-8") if out.exists() else ""
         if current != content:
-            print(f"{out.relative_to(ROOT)} is stale; run python3 scripts/generate_catalog.py", file=sys.stderr)
+            print(
+                f"{out.relative_to(ROOT)} is stale; run python3 scripts/generate_catalog.py", file=sys.stderr)
             return 1
         return 0
 
