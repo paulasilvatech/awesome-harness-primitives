@@ -1,11 +1,11 @@
 ---
-applyTo: '**/Makefile, **/makefile, **/*.mk, **/GNUmakefile'
-description: 'Best practices for authoring GNU Make Makefiles'
+applyTo: "**/Makefile,**/makefile,**/*.mk,**/GNUmakefile"
+description: "Enforces GNU Make conventions for Makefile layout, variables, prerequisites, recipes, phony targets, portability, and diagnostics."
 ---
 
-# Makefile Development Instructions
+# Makefile Conventions — GNU Make Hygiene
 
-Instructions for writing clean, maintainable, and portable GNU Make Makefiles. These instructions are based on the [GNU Make manual](https://www.gnu.org/software/make/manual/).
+This file applies to `Makefile`, `makefile`, `GNUmakefile`, and `*.mk` files. It is authoritative for GNU Make file structure, variables, rules, recipes, phony targets, includes, conditionals, generated prerequisites, diagnostics, clean targets, portability, performance, comments, and special targets; language-specific build instructions and repository build scripts win when they define stricter target names or validation commands.
 
 ## General Principles
 
@@ -408,3 +408,81 @@ clean:
 - Don't forget to declare phony targets as `.PHONY`
 - Avoid circular dependencies between targets
 - Don't use recursive make (`$(MAKE) -C subdir`) unless absolutely necessary
+
+## Good / Bad Examples
+
+The examples below illustrate default-goal structure, variables, automatic variables, and phony cleanup.
+
+**Good:**
+
+```makefile
+CC ?= gcc
+CFLAGS += -Wall -Wextra
+objects := main.o utils.o
+
+.PHONY: all clean
+all: program
+
+program: $(objects)
+	$(CC) -o $@ $^
+
+clean:
+	-rm -f program $(objects)
+```
+
+Why: The default goal is first, configurable variables are explicit, `$@` and `$^` keep the rule generic, and `clean` is declared `.PHONY`.
+
+**Bad:**
+
+```makefile
+program:
+    gcc -o program main.o utils.o
+clean:
+	rm -rf *
+```
+
+Why: The recipe starts with spaces, hardcodes tool choices and inputs, omits prerequisites, omits `.PHONY`, and uses an unsafe cleanup pattern.
+
+## Conventions
+
+| Rule | Rationale |
+|---|---|
+| Put the default goal first and keep it the most common build operation | `make` without arguments should do the expected thing |
+| Use `Makefile` or `makefile`; reserve `GNUmakefile` for GNU Make-specific features | Contributors can find the build entrypoint and understand portability requirements |
+| Define variables before rules and use `$(VARIABLE)` references, `:=`, `=`, `?=`, and `+=` intentionally | Expansion behavior stays predictable and override-friendly |
+| Declare action targets such as `all`, `clean`, `test`, `install`, and `distclean` with `.PHONY` | File names cannot accidentally suppress recipes |
+| Use normal prerequisites for build inputs and order-only prerequisites after `|` for directories | Directory timestamp changes do not force unnecessary rebuilds |
+| Start recipe lines with tabs unless `.RECIPEPREFIX` is deliberately changed | Make parses recipes correctly |
+| Generate dependencies with `-MMD`, `-MP`, dependency variables such as `deps`, and `-include $(deps)` when compiling C-family code | Header changes trigger correct rebuilds without brittle manual lists |
+| Use diagnostics such as `$(error text)`, `$(warning text)`, `make -n`, `make -p`, and `make -B` during authoring | Build failures become explainable before they reach CI |
+| Use `.DELETE_ON_ERROR`, `.SECONDARY`, `.INTERMEDIATE`, and `.PRECIOUS` only when their lifecycle semantics are intended | Intermediate files and failed targets are preserved or removed for clear reasons |
+| Prefer `$(wildcard ...)` over `$(shell ls ...)` and avoid unnecessary recursive make | Builds stay faster, safer, and easier to parallelize with `make -j` |
+
+## Do / Do Not
+
+| Do | Do not |
+|---|---|
+| Use uppercase built-in variables such as `CC`, `CFLAGS`, `LDFLAGS`, and `EXE_EXT` | Hide tool choices in hardcoded recipe commands |
+| Keep object lists in standard names such as `objects`, `OBJECTS`, `objs`, `OBJS`, `obj`, or `OBJ` | Invent unclear names for common build artifacts |
+| Use automatic variables `$@`, `$<`, `$^`, `$?`, and `$*` in reusable rules | Repeat target and prerequisite names in recipes |
+| Use `include`, `-include`, or `sinclude` for shared or optional makefiles | Duplicate common variables and rules across files |
+| Use make-level `ifeq`, `ifneq`, `ifdef`, and `ifndef` for configuration | Put make conditionals inside shell recipes |
+| Use `install -d`, `install -m 755`, and `PREFIX ?= /usr/local` for install targets | Assume system paths or permissions without exposing overrides |
+| Split long lines with backslash-newline and avoid trailing whitespace after `\` | Create unreadable one-line recipes or broken continuations |
+| Use `-` before cleanup commands only when missing files are acceptable | Blanket-ignore errors that should fail the build |
+
+## Checklist Before Opening a PR
+
+- [ ] The first rule is the intended default goal.
+- [ ] Variables are defined before rules and use the correct expansion operator.
+- [ ] Recipe lines start with tabs or an explicitly documented `.RECIPEPREFIX`.
+- [ ] Phony action targets are declared with `.PHONY`.
+- [ ] Normal and order-only prerequisites are separated correctly.
+- [ ] Automatic dependency generation uses `-MMD`, `-MP`, and `-include` where header dependencies matter.
+- [ ] `clean` and `distclean` remove only generated files and tolerate absent outputs deliberately.
+- [ ] `make -n` or the repository's documented dry-run/build validation has been checked for changed targets.
+- [ ] GNU Make-specific constructs are documented when portability matters.
+
+## References
+
+- GNU Make manual: https://www.gnu.org/software/make/manual/

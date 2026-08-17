@@ -1,9 +1,11 @@
 ---
-applyTo: '**/*.{ts,tsx,js,json,xml,pcfproj,csproj,sln}'
-description: 'Application lifecycle management (ALM) for PCF code components'
+applyTo: "**/*.{ts,tsx,js,json,xml,pcfproj,csproj,sln}"
+description: "Enforces Power Apps component framework ALM conventions for PCF projects, cdsproj solutions, builds, source control, SolutionPackager, versioning, deployment, pipelines, and canvas apps."
 ---
 
-# Code Components Application Lifecycle Management (ALM)
+# PCF ALM Conventions — Code Components and Dataverse Solutions
+
+These instructions apply to TypeScript, JavaScript, XML, `pcfproj`, `csproj`, and solution files that implement Power Apps component framework code components and their Dataverse ALM packaging. They are authoritative for PCF development, debugging, build modes, `cdsproj` solution packaging, source control, SolutionPackager output, deployment strategies, versioning, automated build pipelines, and canvas-app update behavior; current Microsoft Power Platform documentation wins when CLI or Dataverse packaging behavior changes.
 
 ALM is a term used to describe the lifecycle management of software applications, which includes development, maintenance, and governance. More information: [Application lifecycle management (ALM) with Microsoft Power Platform](https://learn.microsoft.com/en-us/power-platform/alm/overview-alm).
 
@@ -238,9 +240,66 @@ Since the app contains a copy of the code component, it's therefore possible to 
 
 > **Note**: Although, at this time, you can import a canvas app without the matching code component being deployed to that environment, it's recommended that you always ensure apps are updated to use the latest version of the code components and that the same version is deployed to that environment first or as part of the same solution.
 
-## Related Articles
+## Source Articles
 
 - [Application lifecycle management (ALM) with Microsoft Power Platform](https://learn.microsoft.com/en-us/power-platform/alm/overview-alm)
 - [Power Apps component framework API reference](https://learn.microsoft.com/en-us/power-apps/developer/component-framework/reference/)
 - [Create your first component](https://learn.microsoft.com/en-us/power-apps/developer/component-framework/implementing-controls-using-typescript)
 - [Debug code components](https://learn.microsoft.com/en-us/power-apps/developer/component-framework/debugging-custom-controls)
+
+## Conventions
+
+| Rule | Rationale |
+| --- | --- |
+| Keep each `pcfproj` focused on one code component and reference it from a `cdsproj` with `pac solution add-reference` | PCF projects are one component; solution projects package one or more components for Dataverse |
+| Use `PcfBuildMode` set to `production` or `npm run build -- --buildMode production` for distributable builds | Development bundles are larger and slower when imported into Dataverse |
+| Set `SolutionPackageType` to `Managed`, `Unmanaged`, or `Both` according to target environment | Managed solutions belong in test, UAT, SIT, and production; unmanaged solutions remain development artifacts |
+| Exclude `/node_modules`, `**/generated`, `/out`, `/bin`, `/obj`, `bundle.js`, built CSS, and solution zip files from source control | Dependencies and build outputs are restored or regenerated and should not pollute reviews |
+| Commit SolutionPackager metadata such as `*.data.xml` while excluding generated control assets | Human-readable metadata belongs in source control; generated bundles come from the build |
+| Increment at least the PATCH version in `ControlManifest.Input.xml` for every deployed component update | Dataverse detects updates through control version changes |
+| Align PCF `MAJOR.MINOR.PATCH` with Dataverse solution `MAJOR.MINOR.BUILD.REVISION` where possible | Component and solution release numbers remain traceable across environments |
+| Update canvas apps in Power Apps Studio after component deployment | Canvas apps embed a copy of the component and continue using old versions until saved and published |
+
+## Do / Do Not
+
+| Do | Do not |
+| --- | --- |
+| Use `pac pcf push --solution-unique-name` for single-component testing in Dataverse | Treat `pac pcf push` as the packaging strategy for multi-component downstream releases |
+| Use `pac solution init`, `pac solution add-reference`, and `msbuild /p:configuration=Release` for solution packaging | Ship development-mode bundles to downstream environments |
+| Choose segmented solutions for shared, separately versioned components | Couple reusable PCF components to unrelated app artifacts when they need an independent lifecycle |
+| Choose a single solution when code components and app artifacts deploy together without inter-solution dependencies | Add unnecessary segmented-solution dependencies to simple releases |
+| Publish build outputs as artifacts in Azure DevOps or GitHub Actions | Commit generated solution zip files as source |
+| Use `pac pcf version --strategy manifest` or `pac pcf version --patchversion <PATCH VERSION>` to update versions | Deploy changed code with the same `ControlManifest.Input.xml` version |
+
+## Checklist Before Opening a PR
+
+- [ ] `pcfproj` and `cdsproj` ownership is clear and references are defined with `pac solution add-reference` where packaging is required.
+- [ ] Distributable PCF builds use `PcfBuildMode` `production` or `npm run build -- --buildMode production`.
+- [ ] `SolutionPackageType` matches the target lifecycle and `msbuild /p:configuration=Release` is used for release packages.
+- [ ] Source control excludes dependencies, generated folders, output folders, build assets, and solution zip files while keeping required metadata.
+- [ ] SolutionPackager output keeps required `*.data.xml` files and excludes generated component assets marked with an asterisk in the structure.
+- [ ] Component versions advance at least PATCH and align with Dataverse solution versioning where appropriate.
+- [ ] Automated build pipelines publish artifacts and keep versioning repeatable.
+- [ ] Canvas app consumers are updated, saved, and published after the deployed component version changes.
+
+## References
+
+- Application lifecycle management (ALM) with Microsoft Power Platform: https://learn.microsoft.com/en-us/power-platform/alm/overview-alm
+- Create and build a code component: https://learn.microsoft.com/en-us/power-apps/developer/component-framework/create-custom-controls-using-pcf
+- Component implementation: https://learn.microsoft.com/en-us/power-apps/developer/component-framework/custom-controls-overview#component-implementation
+- Debug code components: https://learn.microsoft.com/en-us/power-apps/developer/component-framework/debugging-custom-controls
+- Package a code component: https://learn.microsoft.com/en-us/power-apps/developer/component-framework/import-custom-controls
+- Debugging after deploying into Microsoft Dataverse: https://learn.microsoft.com/en-us/power-apps/developer/component-framework/debugging-custom-controls#debugging-after-deploying-into-microsoft-dataverse
+- Code component project relationship image: https://learn.microsoft.com/en-us/power-apps/developer/component-framework/media/code-component-projects.png
+- Managed and unmanaged solutions: https://learn.microsoft.com/en-us/power-platform/alm/solution-concepts-alm#managed-and-unmanaged-solutions
+- SolutionPackager: https://learn.microsoft.com/en-us/power-platform/alm/solution-packager-tool
+- SolutionPackager command-line arguments: https://learn.microsoft.com/en-us/power-platform/alm/solution-packager-tool#solutionpackager-command-line-arguments
+- Package and distribute extensions using solutions: https://learn.microsoft.com/en-us/powerapps/developer/data-platform/introduction-solutions
+- Microsoft Power Platform Build Tool for Azure DevOps: https://learn.microsoft.com/en-us/power-platform/alm/devops-build-tools
+- Power Platform GitHub Actions: https://learn.microsoft.com/en-us/power-platform/alm/devops-github-actions
+- Semantic versioning: https://semver.org/
+- Dataverse solution version numbers: https://learn.microsoft.com/en-us/powerapps/maker/data-platform/update-solutions#understanding-version-numbers-for-updates
+- Update code components image: https://learn.microsoft.com/en-us/power-apps/developer/component-framework/media/upgrade-code-component.png
+- Power Apps component framework API reference: https://learn.microsoft.com/en-us/power-apps/developer/component-framework/reference/
+- Create your first component: https://learn.microsoft.com/en-us/power-apps/developer/component-framework/implementing-controls-using-typescript
+- Solution strategies image: https://learn.microsoft.com/en-us/power-apps/developer/component-framework/media/solution-strategies.png

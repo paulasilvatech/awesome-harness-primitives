@@ -1,504 +1,162 @@
 ---
-applyTo: '**/*.{pbix,dax,md,txt,json,csharp,powershell}'
-description: 'Comprehensive Power BI Row-Level Security (RLS) and advanced security patterns implementation guide with dynamic security, best practices, and governance strategies.'
+applyTo: "**/*.{pbix,dax,md,txt,json,csharp,powershell}"
+description: "Enforces Power BI security and Row-Level Security conventions for DAX roles, dynamic security, embedded analytics identities, database RLS integration, governance, monitoring, and auditability."
 ---
 
-# Power BI Security and Row-Level Security Best Practices
+# Power BI Security Conventions — Row-Level Security and Embedded Analytics
 
-## Overview
-This document provides comprehensive instructions for implementing robust security patterns in Power BI, focusing on Row-Level Security (RLS), dynamic security, and governance best practices based on Microsoft's official guidance.
+These instructions apply to Power BI models, DAX, documentation, JSON embed-token payloads, C# embedding code, and PowerShell governance scripts matched by the `applyTo` globs. They are authoritative for Power BI Row-Level Security (RLS), dynamic security, embedded analytics identities, database-level RLS integration, Power Pages embedding, multi-tenant token shape, security validation, and governance patterns; tenant identity policy, compliance requirements, and platform access-management standards win where they impose stricter controls.
 
 ## Row-Level Security Fundamentals
 
-### 1. Basic RLS Implementation
+Write RLS predicates as explicit allow rules with default-deny behavior. Use `USERNAME()` for user-context filters, `CUSTOMDATA()` for controlled embedded custom data, and `FALSE()` when a user or role is unexpected.
+
+| Pattern | Convention | Rationale |
+| --- | --- | --- |
+| Basic user filter | `[EmailAddress] = USERNAME()` | Directly binds model access to the signed-in user. |
+| Role switch | Use `IF` or `SWITCH` where known roles such as `Worker`, `Manager`, `SalesPersonA`, and `SalesPersonB` map to allowed rows. | Role semantics stay visible and auditable. |
+| Dynamic custom data | Set `VAR UserRole = CUSTOMDATA()` and map it with `SWITCH`. | Embedded scenarios can pass a controlled role value without changing the model. |
+| Hierarchical lookup | Use `LOOKUPVALUE` against `DimUserSecurity`, `UserRoles`, or `UserRegions`. | Territory, region, and manager relationships stay data-driven. |
+| Multi-value access | Use `FILTER`, `SELECTCOLUMNS`, and `IN` against a user-security table. | Users can have several allowed territories without hardcoded predicates. |
+| Default deny | End predicates with `FALSE()`. | Unexpected users and roles receive no data rather than all data. |
+
+Avoid overly permissive defaults such as `TRUE()` in the fallback branch. Keep DAX security logic readable enough that reviewers can reason about every path.
+
+## Dynamic, Hierarchical, and Partial RLS
+
+Use dynamic RLS when access depends on user attributes, tenant, territory, or role stored in data. Common measures and predicates include `VAR CurrentUser = USERNAME()`, `VAR UserRole = LOOKUPVALUE(UserRoles[Role], UserRoles[Email], CurrentUser)`, and `SWITCH(UserRole, "Manager", TRUE(), "Salesperson", [SalespersonEmail] = CurrentUser, "Regional Manager", [Region] IN SELECTCOLUMNS(FILTER(UserRegions, UserRegions[Email] = CurrentUser), "Region", UserRegions[Region]), FALSE())`.
+
+Use partial RLS only when summary data is intentionally shared while detail data is restricted. Create summary tables such as `SalesRevenueSummary = SUMMARIZECOLUMNS(Sales[OrderDate], "RevenueAllRegion", SUM(Sales[Revenue]))` and apply detail filters such as `Salesperson Filter = [EmailAddress] = USERNAME()` only to the restricted detail level.
+
+Use time-based security only when business policy requires it, and keep cutoff logic auditable. A pattern such as `SWITCH(UserRole, "Executive", DATE(1900,1,1), "Manager", TODAY() - 365, "Analyst", TODAY() - 90, TODAY())` must be documented because access changes with time.
+
+## Embedded Analytics Identities
+
+Generate embed tokens with explicit identities. In C#, construct `EffectiveIdentity` with `username`, `roles`, `customData` when needed, and `datasets`. For static RLS, pass roles such as `new List<string>{ "MyRole" }`; for dynamic RLS, pass `customData: "SalesPersonA"` and a role such as `MyRoleWithCustomData`.
+
+Use `GenerateTokenRequestV2` with `GenerateTokenRequestV2Report`, `GenerateTokenRequestV2Dataset`, `GenerateTokenRequestV2TargetWorkspace`, and `identities: new List<EffectiveIdentity> { rlsIdentity }`. Generate tokens through `pbiClient.EmbedToken.GenerateToken(tokenRequest)` and return only the embed token required by the client.
+
+For multi-dataset and multi-tenant payloads, include `accessLevel: "View"`, `identities`, `username`, `roles`, `datasets`, `reports`, `allowEdit: false`, and `datasourceIdentities` when source identity binding is required. Keep `identityBlob`, `datasourceType`, `connectionDetails`, `server`, and `database` scoped to the tenant and report. Do not reuse a single `EffectiveIdentity` across tenants unless the datasets and roles are identical and approved.
+
+## Database-Level and Fabric Security
+
+Use database-level RLS as defense in depth for DirectQuery, Fabric Warehouse, or shared SQL sources. Create a dedicated `Security` schema, define predicate functions such as `Security.tvf_securitypredicate`, and apply a `CREATE SECURITY POLICY` with `ADD FILTER PREDICATE` and `WITH (STATE = ON)`.
+
+| Source | Convention |
+| --- | --- |
+| SQL Server RLS | Use `CREATE FUNCTION Security.tvf_securitypredicate(@SalesRep AS nvarchar(50)) RETURNS TABLE WITH SCHEMABINDING AS RETURN SELECT 1 AS tvf_securitypredicate_result WHERE @SalesRep = USER_NAME() OR USER_NAME() = 'Manager';` then apply it to `sales.Orders`. |
+| Fabric Warehouse RLS | Use `CREATE FUNCTION Security.tvf_securitypredicate(@UserName AS varchar(50)) RETURNS TABLE WITH SCHEMABINDING` and allow only `@UserName = USER_NAME()` or a controlled account such as `BatchProcess@contoso.com`. |
+| Policy application | Use `CREATE SECURITY POLICY SalesFilter` or `YourSecurityPolicy` with `Security.tvf_securitypredicate(UserName_column)`. |
+
+Database RLS does not replace Power BI model RLS. Use both when the storage layer can be queried outside the semantic model.
+
+## Paginated Reports, Power Pages, and Tenant Boundaries
+
+For paginated reports, pass `paginatedReportConfiguration` with `identities` and a specific `username`, for example `{"format": "PDF", "paginatedReportConfiguration": {"identities": [{"username": "john@contoso.com"}]}}`. Do not export paginated reports with a privileged service identity unless the output is already scoped for the target recipient.
+
+For Power Pages, use a `powerbi` tag only with explicit `authentication_type:"powerbiembedded"`, `path`, and `roles`, such as `roles:"pagesuser"`. Preserve report paths like `https://app.powerbi.com/groups/00000000-0000-0000-0000-000000000000/reports/00000000-0000-0000-0000-000000000001/ReportSection` as configuration and do not hardcode production report IDs into reusable templates.
+
+For multi-tenant security, keep dataset IDs, report IDs, workspace IDs, roles, datasource identities, and datasource connection details tenant-scoped. `YourUsername`, `YourRole`, `YourServerName.database.windows.net`, and `YourDataBaseName` are placeholders that must be replaced by validated tenant configuration.
+
+## Validation, Monitoring, and Governance
+
+Add security validation measures and governance scripts where they improve auditability.
+
+| Area | Convention | APIs or identifiers to preserve |
+| --- | --- | --- |
+| Role validation | Create a `Security Test` measure that returns `PASS: Role applied correctly` or `FAIL: Incorrect role or multiple roles` based on `HASONEVALUE`, `VALUES`, and expected role logic. | `SecurityRoles[Role]`, `ExpectedRole`, `TestResult` |
+| Data exposure audit | Compare `COUNTROWS(FactTable)` with `CALCULATE(COUNTROWS(FactTable), ALL(FactTable))` and report `AccessPercentage` with `DIVIDE` and `FORMAT`. | `FactTable`, `AccessibleRows`, `TotalRows` |
+| Compliance measures | Track `Users with Data Access`, `High Privilege Users`, and `Security Violations` over `AuditLog` and `UserRoles`. | `AuditLog[AccessType]`, `AuditLog[EventType]`, `UserRoles[Email]` |
+| Access analysis | Detect unusual activity with `AccessLog[Date]`, `AccessLog[AccessCount]`, `ALL(AccessLog[Username])`, and a threshold such as `AvgUserAccess * 3`. | `Unusual Access Pattern` |
+| Breach detection | Flag repeated denied access with `AccessLog[AccessResult] = "Denied"` and a review threshold such as more than 10 denials per day. | `Potential Data Exposure` |
+| Workspace governance | Use `Login-PowerBI`, `Get-PowerBIWorkspace`, `Get-PowerBIWorkspaceUser`, `Add-PowerBIWorkspaceUser`, `-AccessRight Member`, `-PrincipalType Group`, and `-Identifier $($SGObjectID)`. | `$SGObjectID`, `$pbiWorkspace` |
+
+Security is layered. Combine authentication, authorization, RLS, database predicates, encryption, network controls, governance, and auditing rather than relying on a single model filter.
+
+Keep governance placeholders explicit: `security-group-object-`, `workspace-name`, `UserPrincipalName`, `fff1a505-xxxx-xxxx-xxxx-e69f81e5b974`, and `10ce71df-xxxx-xxxx-xxxx-814a916b700d` are illustrative values that must be replaced by real tenant configuration.
+
+## Preserved DAX, SQL, and Embedded API Vocabulary
+
+The following names carry security semantics in common Power BI RLS examples and should survive refactors.
+
+| Category | Identifiers |
+| --- | --- |
+| DAX functions | `AVERAGE`, `CONTAINS`, `DISTINCTCOUNT`, `HOUR`, `WEEKDAY` |
+| Security tables and columns | `DimSalesTerritory`, `SalesTerritory`, `SalesTerritoryKey`, `UserSecurity`, `UserTerritories`, `AllowedTerritories`, `UserDepartments`, `SpecialUsers` |
+| Validation variables and values | `CurrentUsername`, `TestRole`, `AllowedRoles`, `CutoffDate`, `UserAccessCount`, `UnexpectedAccess`, `DataAccess`, `SecurityViolation` |
+| Embedded C# APIs | `GetEmbedToken`, `Guid.Empty`, `ToString`, `ToList`, `CountryDynamic` |
+| SQL and warnings | `SCHEMA`, `AVOID`, `user-based` |
+
+## Good / Bad Examples
+
+The examples below illustrate secure default-deny RLS.
+
+**Good:**
+
 ```dax
-// Simple user-based filtering
-[EmailAddress] = USERNAME()
-
-// Role-based filtering with improved security
-IF(
-    USERNAME() = "Worker",
-    [Type] = "Internal",
-    IF(
-        USERNAME() = "Manager",
-        TRUE(),
-        FALSE()  // Deny access to unexpected users
-    )
-)
-```
-
-### 2. Dynamic RLS with Custom Data
-```dax
-// Using CUSTOMDATA() for dynamic filtering
-VAR UserRole = CUSTOMDATA()
-RETURN
-    SWITCH(
-        UserRole,
-        "SalesPersonA", [SalesTerritory] = "West",
-        "SalesPersonB", [SalesTerritory] = "East",
-        "Manager", TRUE(),
-        FALSE()  // Default deny
-    )
-```
-
-### 3. Advanced Security Patterns
-```dax
-// Hierarchical security with territory lookups
-=DimSalesTerritory[SalesTerritoryKey]=LOOKUPVALUE(
-    DimUserSecurity[SalesTerritoryID],
-    DimUserSecurity[UserName], USERNAME(),
-    DimUserSecurity[SalesTerritoryID], DimSalesTerritory[SalesTerritoryKey]
-)
-
-// Multiple condition security
-VAR UserTerritories =
-    FILTER(
-        UserSecurity,
-        UserSecurity[UserName] = USERNAME()
-    )
-VAR AllowedTerritories = SELECTCOLUMNS(UserTerritories, "Territory", UserSecurity[Territory])
-RETURN
-    [Territory] IN AllowedTerritories
-```
-
-## Embedded Analytics Security
-
-### 1. Static RLS Implementation
-```csharp
-// Static RLS with fixed roles
-var rlsidentity = new EffectiveIdentity(
-    username: "username@contoso.com",
-    roles: new List<string>{ "MyRole" },
-    datasets: new List<string>{ datasetId.ToString()}
-);
-```
-
-### 2. Dynamic RLS with Custom Data
-```csharp
-// Dynamic RLS with custom data
-var rlsidentity = new EffectiveIdentity(
-    username: "username@contoso.com",
-    roles: new List<string>{ "MyRoleWithCustomData" },
-    customData: "SalesPersonA",
-    datasets: new List<string>{ datasetId.ToString()}
-);
-```
-
-### 3. Multi-Dataset Security
-```json
-{
-    "accessLevel": "View",
-    "identities": [
-        {
-            "username": "France",
-            "roles": [ "CountryDynamic"],
-            "datasets": [ "fe0a1aeb-f6a4-4b27-a2d3-b5df3bb28bdc" ]
-        }
-    ]
-}
-```
-
-## Database-Level Security Integration
-
-### 1. SQL Server RLS Integration
-```sql
--- Creating security schema and predicate function
-CREATE SCHEMA Security;
-GO
-
-CREATE FUNCTION Security.tvf_securitypredicate(@SalesRep AS nvarchar(50))
-    RETURNS TABLE
-WITH SCHEMABINDING
-AS
-    RETURN SELECT 1 AS tvf_securitypredicate_result
-WHERE @SalesRep = USER_NAME() OR USER_NAME() = 'Manager';
-GO
-
--- Applying security policy
-CREATE SECURITY POLICY SalesFilter
-ADD FILTER PREDICATE Security.tvf_securitypredicate(SalesRep)
-ON sales.Orders
-WITH (STATE = ON);
-GO
-```
-
-### 2. Fabric Warehouse Security
-```sql
--- Creating schema for Security
-CREATE SCHEMA Security;
-GO
-
--- Creating a function for the SalesRep evaluation
-CREATE FUNCTION Security.tvf_securitypredicate(@UserName AS varchar(50))
-    RETURNS TABLE
-WITH SCHEMABINDING
-AS
-    RETURN SELECT 1 AS tvf_securitypredicate_result
-WHERE @UserName = USER_NAME()
-OR USER_NAME() = 'BatchProcess@contoso.com';
-GO
-
--- Using the function to create a Security Policy
-CREATE SECURITY POLICY YourSecurityPolicy
-ADD FILTER PREDICATE Security.tvf_securitypredicate(UserName_column)
-ON sampleschema.sampletable
-WITH (STATE = ON);
-GO
-```
-
-## Advanced Security Patterns
-
-### 1. Paginated Reports Security
-```json
-{
-    "format": "PDF",
-    "paginatedReportConfiguration":{
-        "identities": [
-            {"username": "john@contoso.com"}
-        ]
-    }
-}
-```
-
-### 2. Power Pages Integration
-```html
-{% powerbi authentication_type:"powerbiembedded" path:"https://app.powerbi.com/groups/00000000-0000-0000-0000-000000000000/reports/00000000-0000-0000-0000-000000000001/ReportSection" roles:"pagesuser" %}
-```
-
-### 3. Multi-Tenant Security
-```json
-{
-  "datasets": [
-    {
-      "id": "fff1a505-xxxx-xxxx-xxxx-e69f81e5b974",
-    }
-  ],
-  "reports": [
-    {
-      "allowEdit": false,
-      "id": "10ce71df-xxxx-xxxx-xxxx-814a916b700d"
-    }
-  ],
-  "identities": [
-    {
-      "username": "YourUsername",
-      "datasets": [
-        "fff1a505-xxxx-xxxx-xxxx-e69f81e5b974"
-      ],
-      "roles": [
-        "YourRole"
-      ]
-    }
-  ],
-  "datasourceIdentities": [
-    {
-      "identityBlob": "eyJ…",
-      "datasources": [
-        {
-          "datasourceType": "Sql",
-          "connectionDetails": {
-            "server": "YourServerName.database.windows.net",
-            "database": "YourDataBaseName"
-          }
-        }
-      ]
-    }
-  ]
-}
-```
-
-## Security Design Patterns
-
-### 1. Partial RLS Implementation
-```dax
-// Create summary table for partial RLS
-SalesRevenueSummary =
-SUMMARIZECOLUMNS(
-    Sales[OrderDate],
-    "RevenueAllRegion", SUM(Sales[Revenue])
-)
-
-// Apply RLS only to detail level
-Salesperson Filter = [EmailAddress] = USERNAME()
-```
-
-### 2. Hierarchical Security
-```dax
-// Manager can see all, others see their own
-VAR CurrentUser = USERNAME()
-VAR UserRole = LOOKUPVALUE(
-    UserRoles[Role],
-    UserRoles[Email], CurrentUser
-)
-RETURN
-    SWITCH(
-        UserRole,
-        "Manager", TRUE(),
-        "Salesperson", [SalespersonEmail] = CurrentUser,
-        "Regional Manager", [Region] IN (
-            SELECTCOLUMNS(
-                FILTER(UserRegions, UserRegions[Email] = CurrentUser),
-                "Region", UserRegions[Region]
-            )
-        ),
-        FALSE()
-    )
-```
-
-### 3. Time-Based Security
-```dax
-// Restrict access to recent data based on role
-VAR UserRole = LOOKUPVALUE(UserRoles[Role], UserRoles[Email], USERNAME())
-VAR CutoffDate =
-    SWITCH(
-        UserRole,
-        "Executive", DATE(1900,1,1),  // All historical data
-        "Manager", TODAY() - 365,     // Last year
-        "Analyst", TODAY() - 90,      // Last 90 days
-        TODAY()                       // Current day only
-    )
-RETURN
-    [Date] >= CutoffDate
-```
-
-## Security Validation and Testing
-
-### 1. Role Validation Patterns
-```dax
-// Security testing measure
-Security Test =
-VAR CurrentUsername = USERNAME()
-VAR ExpectedRole = "TestRole"
-VAR TestResult =
-    IF(
-        HASONEVALUE(SecurityRoles[Role]) &&
-        VALUES(SecurityRoles[Role]) = ExpectedRole,
-        "PASS: Role applied correctly",
-        "FAIL: Incorrect role or multiple roles"
-    )
-RETURN
-    "User: " & CurrentUsername & " | " & TestResult
-```
-
-### 2. Data Exposure Audit
-```dax
-// Audit measure to track data access
-Data Access Audit =
-VAR AccessibleRows = COUNTROWS(FactTable)
-VAR TotalRows = CALCULATE(COUNTROWS(FactTable), ALL(FactTable))
-VAR AccessPercentage = DIVIDE(AccessibleRows, TotalRows) * 100
-RETURN
-    "User: " & USERNAME() &
-    " | Accessible: " & FORMAT(AccessibleRows, "#,0") &
-    " | Total: " & FORMAT(TotalRows, "#,0") &
-    " | Access: " & FORMAT(AccessPercentage, "0.00") & "%"
-```
-
-## Governance and Administration
-
-### 1. Automated Security Group Management
-```powershell
-# Add security group to Power BI workspace
-# Sign in to Power BI
-Login-PowerBI
-
-# Set up the security group object ID
-$SGObjectID = "<security-group-object-ID>"
-
-# Get the workspace
-$pbiWorkspace = Get-PowerBIWorkspace -Filter "name eq '<workspace-name>'"
-
-# Add the security group to the workspace
-Add-PowerBIWorkspaceUser -Id $($pbiWorkspace.Id) -AccessRight Member -PrincipalType Group -Identifier $($SGObjectID)
-```
-
-### 2. Security Monitoring
-```powershell
-# Monitor Power BI access patterns
-$workspaces = Get-PowerBIWorkspace
-foreach ($workspace in $workspaces) {
-    $users = Get-PowerBIWorkspaceUser -Id $workspace.Id
-    Write-Host "Workspace: $($workspace.Name)"
-    foreach ($user in $users) {
-        Write-Host "  User: $($user.UserPrincipalName) - Access: $($user.AccessRight)"
-    }
-}
-```
-
-### 3. Compliance Reporting
-```dax
-// Compliance dashboard measures
-Users with Data Access =
-CALCULATE(
-    DISTINCTCOUNT(AuditLog[Username]),
-    AuditLog[AccessType] = "DataAccess",
-    AuditLog[Date] >= TODAY() - 30
-)
-
-High Privilege Users =
-CALCULATE(
-    DISTINCTCOUNT(UserRoles[Email]),
-    UserRoles[Role] IN {"Admin", "Manager", "Executive"}
-)
-
-Security Violations =
-CALCULATE(
-    COUNTROWS(AuditLog),
-    AuditLog[EventType] = "SecurityViolation",
-    AuditLog[Date] >= TODAY() - 7
-)
-```
-
-## Best Practices and Anti-Patterns
-
-### Security Best Practices
-
-#### 1. Principle of Least Privilege
-```dax
-// Always default to restrictive access
 Default Security =
 VAR UserPermissions =
-    FILTER(
-        UserAccess,
-        UserAccess[Email] = USERNAME()
-    )
+    FILTER(UserAccess, UserAccess[Email] = USERNAME())
 RETURN
     IF(
         COUNTROWS(UserPermissions) > 0,
         [Territory] IN SELECTCOLUMNS(UserPermissions, "Territory", UserAccess[Territory]),
-        FALSE()  // No access if not explicitly granted
+        FALSE()
     )
 ```
 
-#### 2. Explicit Role Validation
-```dax
-// Validate expected roles explicitly
-Role-Based Filter =
-VAR UserRole = LOOKUPVALUE(UserRoles[Role], UserRoles[Email], USERNAME())
-VAR AllowedRoles = {"Analyst", "Manager", "Executive"}
-RETURN
-    IF(
-        UserRole IN AllowedRoles,
-        SWITCH(
-            UserRole,
-            "Analyst", [Department] = LOOKUPVALUE(UserDepartments[Department], UserDepartments[Email], USERNAME()),
-            "Manager", [Region] = LOOKUPVALUE(UserRegions[Region], UserRegions[Email], USERNAME()),
-            "Executive", TRUE()
-        ),
-        FALSE()  // Deny access for unexpected roles
-    )
-```
+Why: The predicate grants access only when an explicit permission row exists and denies all unexpected users.
 
-### Security Anti-Patterns to Avoid
+**Bad:**
 
-#### 1. Overly Permissive Defaults
 ```dax
-//  AVOID: This grants full access to unexpected users
 Bad Security Filter =
 IF(
     USERNAME() = "SpecificUser",
     [Type] = "Internal",
-    TRUE()  // Dangerous default
+    TRUE()
 )
 ```
 
-#### 2. Complex Security Logic
-```dax
-//  AVOID: Overly complex security that's hard to audit
-Overly Complex Security =
-IF(
-    OR(
-        AND(USERNAME() = "User1", WEEKDAY(TODAY()) <= 5),
-        AND(USERNAME() = "User2", HOUR(NOW()) >= 9, HOUR(NOW()) <= 17),
-        AND(CONTAINS(VALUES(SpecialUsers[Email]), SpecialUsers[Email], USERNAME()), [Priority] = "High")
-    ),
-    [Type] IN {"Internal", "Confidential"},
-    [Type] = "Public"
-)
-```
+Why: The fallback `TRUE()` grants full access to every unexpected user, which reverses least privilege.
 
-## Security Integration Patterns
+## Conventions
 
-### 1. Azure AD Integration
-```csharp
-// Generate token with Azure AD user context
-var tokenRequest = new GenerateTokenRequestV2(
-    reports: new List<GenerateTokenRequestV2Report>() { new GenerateTokenRequestV2Report(reportId) },
-    datasets: datasetIds.Select(datasetId => new GenerateTokenRequestV2Dataset(datasetId.ToString())).ToList(),
-    targetWorkspaces: targetWorkspaceId != Guid.Empty ? new List<GenerateTokenRequestV2TargetWorkspace>() { new GenerateTokenRequestV2TargetWorkspace(targetWorkspaceId) } : null,
-    identities: new List<EffectiveIdentity> { rlsIdentity }
-);
+| Rule | Rationale |
+| --- | --- |
+| End RLS predicates with `FALSE()` for unexpected users, roles, and custom data. | Default deny prevents accidental exposure when identity data is incomplete. |
+| Use `USERNAME()`, `CUSTOMDATA()`, `LOOKUPVALUE`, `FILTER`, `SELECTCOLUMNS`, and `IN` intentionally. | Security logic remains tied to auditable identity and permission tables. |
+| Keep hierarchical and time-based security data-driven and documented. | Reviewers can verify manager, region, and cutoff rules without reverse-engineering DAX. |
+| Pass `EffectiveIdentity` with explicit `username`, `roles`, `datasets`, and `customData` where needed. | Embedded tokens apply the intended RLS role and dataset scope. |
+| Use database RLS through `Security.tvf_securitypredicate` and `CREATE SECURITY POLICY` when the source can enforce it. | Storage-layer controls reduce exposure if Power BI is bypassed. |
+| Keep tenant IDs, dataset IDs, report IDs, datasource identities, and connection details tenant-scoped. | Multi-tenant embed tokens cannot leak access across customers. |
+| Add validation measures and workspace audits for privileged or regulated reports. | Security behavior is observable after publication. |
 
-var embedToken = pbiClient.EmbedToken.GenerateToken(tokenRequest);
-```
+## Do / Do Not
 
-### 2. Service Principal Authentication
-```csharp
-// Service principal with RLS for embedded scenarios
-public EmbedToken GetEmbedToken(Guid reportId, IList<Guid> datasetIds, [Optional] Guid targetWorkspaceId)
-{
-    PowerBIClient pbiClient = this.GetPowerBIClient();
+| Do | Do not |
+| --- | --- |
+| Model RLS as explicit allow rules. | Use permissive fallback `TRUE()` branches. |
+| Use dynamic security tables for user-to-territory, user-to-role, and user-to-region mappings. | Hardcode long lists of users directly in DAX filters. |
+| Use `customData` only for controlled embedded values. | Treat arbitrary client-provided custom data as trusted authorization. |
+| Use `allowEdit: false` for viewer embed scenarios. | Generate broad edit-capable tokens for consumers who only view reports. |
+| Apply SQL Server or Fabric Warehouse RLS where source-level enforcement is available. | Assume semantic-model RLS protects direct database access. |
+| Monitor workspace users and high-privilege roles with PowerShell and audit measures. | Let access drift without review. |
+| Keep Power Pages `powerbi` embeds role-scoped. | Embed reports without explicit roles or authentication type. |
 
-    var rlsidentity = new EffectiveIdentity(
-       username: "username@contoso.com",
-       roles: new List<string>{ "MyRole" },
-       datasets: new List<string>{ datasetId.ToString()}
-    );
+## Checklist Before Opening a PR
 
-    var tokenRequest = new GenerateTokenRequestV2(
-        reports: new List<GenerateTokenRequestV2Report>() { new GenerateTokenRequestV2Report(reportId) },
-        datasets: datasetIds.Select(datasetId => new GenerateTokenRequestV2Dataset(datasetId.ToString())).ToList(),
-        targetWorkspaces: targetWorkspaceId != Guid.Empty ? new List<GenerateTokenRequestV2TargetWorkspace>() { new GenerateTokenRequestV2TargetWorkspace(targetWorkspaceId) } : null,
-        identities: new List<EffectiveIdentity> { rlsIdentity }
-    );
+- [ ] Every RLS predicate has explicit allow conditions and a default-deny `FALSE()` path.
+- [ ] Dynamic RLS uses governed user, role, region, territory, or custom-data tables.
+- [ ] Hierarchical, partial, and time-based security rules are documented and auditable.
+- [ ] Embedded analytics code passes the correct `EffectiveIdentity`, roles, datasets, reports, workspaces, and datasource identities.
+- [ ] Multi-tenant payloads keep tenant-specific datasets, reports, datasource connections, and identity blobs isolated.
+- [ ] SQL Server or Fabric Warehouse RLS is used where storage-layer enforcement is required.
+- [ ] Paginated report and Power Pages embeds include explicit identity, authentication type, path, and roles.
+- [ ] Security validation measures or tests verify expected roles and visible row counts.
+- [ ] Governance scripts review workspace users, groups, high-privilege roles, and access anomalies.
+- [ ] No placeholder such as `YourUsername`, `YourRole`, `YourServerName.database.windows.net`, or `YourDataBaseName` remains in production configuration.
 
-    var embedToken = pbiClient.EmbedToken.GenerateToken(tokenRequest);
+## References
 
-    return embedToken;
-}
-```
-
-## Security Monitoring and Auditing
-
-### 1. Access Pattern Analysis
-```dax
-// Identify unusual access patterns
-Unusual Access Pattern =
-VAR UserAccessCount =
-    CALCULATE(
-        COUNTROWS(AccessLog),
-        AccessLog[Date] >= TODAY() - 7
-    )
-VAR AvgUserAccess =
-    CALCULATE(
-        AVERAGE(AccessLog[AccessCount]),
-        ALL(AccessLog[Username]),
-        AccessLog[Date] >= TODAY() - 30
-    )
-RETURN
-    IF(
-        UserAccessCount > AvgUserAccess * 3,
-        " High Activity",
-        "Normal"
-    )
-```
-
-### 2. Data Breach Detection
-```dax
-// Detect potential data exposure
-Potential Data Exposure =
-VAR UnexpectedAccess =
-    CALCULATE(
-        COUNTROWS(AccessLog),
-        AccessLog[AccessResult] = "Denied",
-        AccessLog[Date] >= TODAY() - 1
-    )
-RETURN
-    IF(
-        UnexpectedAccess > 10,
-        " Multiple Access Denials - Review Required",
-        "Normal"
-    )
-```
-
-Remember: Security is layered - implement defense in depth with proper authentication, authorization, data encryption, network security, and comprehensive auditing. Regularly review and test security implementations to ensure they meet current requirements and compliance standards.
+- Power Pages Power BI embedded path example: https://app.powerbi.com/groups/00000000-0000-0000-0000-000000000000/reports/00000000-0000-0000-0000-000000000001/ReportSection

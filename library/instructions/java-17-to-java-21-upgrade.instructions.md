@@ -1,11 +1,11 @@
 ---
-applyTo: '**/*.java,**/*.gradle,**/*.gradle.kts,**/pom.xml'
-description: 'Comprehensive best practices for adopting new Java 21 features since the release of Java 17.'
+applyTo: "**/*.java,**/*.gradle,**/*.gradle.kts,**/pom.xml"
+description: "Enforces conventions for upgrading Java projects from JDK 17 to JDK 21, including language features, APIs, build flags, runtime warnings, GC, performance, and testing."
 ---
 
-# Java 17 to Java 21 Upgrade Guide
+# Java 17 to Java 21 Upgrade Conventions — Modern JDK Adoption
 
-These instructions help GitHub Copilot assist developers in upgrading Java projects from JDK 17 to JDK 21, focusing on new language features, API changes, and best practices.
+These instructions apply to Java source and Maven/Gradle build files matched by `**/*.java`, `**/*.gradle`, `**/*.gradle.kts`, and `**/pom.xml`. They are authoritative for adopting JDK 18 through JDK 21 language features, APIs, build flags, runtime warnings, GC options, migration choices, performance checks, and testing practices; project-specific architecture, framework, and production-support primitives win where they impose stricter compatibility, release, or deployment rules.
 
 ## Major Language Features in JDK 18-21
 
@@ -386,18 +386,9 @@ When configuring garbage collection:
 
 ## Migration Strategy
 
-### Step-by-Step Upgrade Process
+Treat the upgrade as a compatibility-preserving modernization. Ensure Maven/Gradle supports JDK 21 before changing source, prefer standard Java 21 features before preview features, adopt pattern matching for switch and record patterns where they simplify existing code, consider Virtual Threads only for I/O-heavy concurrency, and benchmark GC or threading changes before claiming performance improvements.
 
-1. **Update Build Tools**: Ensure Maven/Gradle supports JDK 21
-2. **Language Feature Adoption**: 
-   - Start with pattern matching for switch (standard)
-   - Add record patterns where beneficial
-   - Consider Virtual Threads for I/O heavy applications
-3. **Preview Features**: Enable only if needed for specific use cases
-4. **Testing**: Comprehensive testing especially for concurrency changes
-5. **Performance**: Benchmark with new GC options
-
-### Code Review Checklist
+### Upgrade Review Signals
 
 When reviewing code for Java 21 upgrade:
 - [ ] Convert appropriate instanceof chains to switch expressions
@@ -461,4 +452,89 @@ When reviewing code for Java 21 upgrade:
 - Validate UTF-8 default behavior across different platforms
 - Test preview features thoroughly before production use
 
-Remember to enable preview features only when specifically needed and test thoroughly in staging environments before deploying to production.
+
+
+## Good / Bad Examples
+
+The examples below illustrate a safe Java 21 refactor from type checks to pattern matching for switch.
+
+**Good:**
+
+```java
+public String processObject(Object obj) {
+    return switch (obj) {
+        case String s when s.length() > 10 -> "Long string: " + s;
+        case String s -> s.toUpperCase();
+        case Integer i -> i.toString();
+        case null -> "null";
+        default -> "unknown";
+    };
+}
+```
+
+Why: The switch is exhaustive, handles `null`, preserves guarded pattern behavior, and removes unsafe casts.
+
+**Bad:**
+
+```java
+public String processObject(Object obj) {
+    if (obj instanceof String) {
+        String s = (String) obj;
+        return s.toUpperCase();
+    } else if (obj instanceof Integer) {
+        Integer i = (Integer) obj;
+        return i.toString();
+    }
+    return "unknown";
+}
+```
+
+Why: The pre-Java 21 form repeats type checks and casts, hides `null` behavior, and is harder to extend safely.
+
+## Conventions
+
+| Rule | Rationale |
+|---|---|
+| Prefer standard Java 21 features such as pattern matching for switch, record patterns, virtual threads, sequenced collections, UTF-8 defaults, `jwebserver`, and the KEM API before preview features | Standard features do not require preview flags and carry production compatibility guarantees |
+| Use pattern matching for switch with `case null`, `default`, guarded `when` clauses, and record patterns where they simplify existing `instanceof` chains | Exhaustive switch logic removes casts and documents unmatched cases |
+| Use record patterns such as `Point(var x, var y)` and nested patterns such as `ColoredPoint(Point(var x, var y), var color)` only when destructuring clarifies the code | Destructuring should expose data shape without obscuring intent |
+| Use `Executors.newVirtualThreadPerTaskExecutor()` and `Thread.ofVirtual()` for high-throughput blocking I/O, not CPU-bound work | Virtual Threads scale blocking operations but do not make CPU work faster |
+| Treat `StructuredTaskScope.ShutdownOnFailure`, string templates `STR`, `HTML`, `SQL`, unnamed patterns `_`, and `ScopedValue` as preview features in Java 21 | Preview APIs require `--enable-preview` at compile time, test time, and runtime |
+| Use `SequencedCollection`, `SequencedSet`, `SequencedMap`, `getFirst`, `getLast`, `addFirst`, `addLast`, and `reversed` when code needs first/last or reverse-order access | The Java 21 collection interfaces remove collection-specific branching |
+| Remove redundant `StandardCharsets.UTF_8` only when UTF-8 was the intended default | Java 18's default charset is UTF-8, but explicit non-UTF-8 behavior must remain explicit |
+| Use `jwebserver -p 8080 -d /path/to/files` or `com.sun.net.httpserver` only for testing and development servers | The simple web server is not a production application server |
+| Implement `InetAddressResolverProvider` only for custom DNS resolution scenarios such as service discovery or tests | Custom address resolution changes core networking behavior |
+| Replace `finalize()` with `Cleaner` or try-with-resources | Finalization is deprecated and unreliable for resource cleanup |
+| Use `-XX:+EnableDynamicAgentLoading` only when dynamic instrumentation is required and prefer startup agent loading where possible | Java 21 warns on dynamic agent loading and future releases may restrict it further |
+| Configure Maven `maven-compiler-plugin` with `<release>21</release>` and preview `<arg>--enable-preview</arg>` only when preview code exists | Build flags should match source usage and avoid unnecessary preview coupling |
+| Configure Gradle `JavaLanguageVersion.of(21)`, `options.compilerArgs.add("--enable-preview")`, and `jvmArgs("--enable-preview")` only when preview code exists | Compile and test tasks must agree on preview mode |
+| Use `-Djdk.virtualThreadScheduler.parallelism=N` and `-Djdk.virtualThreadScheduler.maxPoolSize=N` only for debugging or tuned deployments | Scheduler settings can mask or create concurrency bottlenecks |
+| Evaluate Generational ZGC with `-XX:+UseZGC -XX:+ZGenerational` through benchmarks and GC monitoring | GC selection depends on allocation patterns and latency goals |
+| Keep `USER_ID` and `ScopedValue.where(USER_ID, "user123")` scoped to request context examples rather than global mutable state | Scoped values are meant for bounded context propagation |
+
+## Do / Do Not
+
+| Do | Do not |
+|---|---|
+| Convert clear `instanceof` chains to pattern matching switch expressions | Rewrite simple conditionals when switch reduces readability |
+| Use record patterns for records that are already part of the domain model | Create records solely to force destructuring syntax |
+| Use virtual threads for blocking HTTP, database, or file I/O workloads | Expect virtual threads to speed up CPU-intensive loops |
+| Enable `--enable-preview` consistently for compile, test, and runtime when preview features are used | Enable preview flags globally when no preview feature is present |
+| Use `SequencedCollection` methods for uniform first/last access | Keep hand-written collection-type branches for first or last element access |
+| Remove `finalize()` in favor of `Cleaner` or try-with-resources | Add new finalizers or rely on finalization for correctness |
+| Load Java agents at startup when possible | Suppress dynamic agent warnings without understanding the tool behavior |
+| Benchmark Generational ZGC and virtual-thread changes under representative load | Claim performance wins from syntax-only migrations |
+| Validate UTF-8 behavior across platforms after removing explicit charsets | Remove charset arguments where a non-UTF-8 encoding was intentional |
+
+## Checklist Before Opening a PR
+
+- [ ] Build files target JDK 21 with Maven or Gradle toolchains and avoid preview flags unless preview features are present.
+- [ ] Pattern matching switch changes handle `null`, defaults, guarded `when` cases, and expected record shapes.
+- [ ] Record patterns, unnamed patterns, string templates, structured concurrency, and scoped values are used only with the required preview configuration.
+- [ ] Virtual Thread changes target blocking I/O and have concurrency tests or benchmarks.
+- [ ] Sequenced collection changes preserve ordering semantics and first/last behavior.
+- [ ] Charset changes preserve intended UTF-8 or explicit non-UTF-8 behavior.
+- [ ] `finalize()` usages are removed or isolated for follow-up replacement with `Cleaner` or try-with-resources.
+- [ ] Dynamic-agent warnings are addressed with startup agents or a justified `-XX:+EnableDynamicAgentLoading` flag.
+- [ ] GC changes such as `-XX:+UseZGC -XX:+ZGenerational` have benchmark or monitoring evidence.
+- [ ] Tests cover concurrency, pattern matching exhaustiveness, platform charset behavior, and any preview feature used before production deployment.

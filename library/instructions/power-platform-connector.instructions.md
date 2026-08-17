@@ -1,10 +1,12 @@
 ---
-applyTo: '**/*.{json,md}'
-description: 'Comprehensive development guidelines for Power Platform Custom Connectors using JSON Schema definitions. Covers API definitions (Swagger 2.0), API properties, and settings configuration with Microsoft extensions.'
-name: 'Power Platform Connectors Schema Development Instructions'
+applyTo: "**/*.{json,md}"
+description: "Enforces Power Platform custom connector schema conventions for Swagger 2.0 definitions, API properties, settings, Microsoft extensions, validation, and troubleshooting."
+name: "Power Platform Connectors Schema Development Instructions"
 ---
 
-# Power Platform Connectors Schema Development Instructions
+# Power Platform Connector Conventions — Custom Connector Schemas
+
+These instructions apply to Power Platform custom connector JSON and Markdown artifacts matched by `**/*.{json,md}`. They are authoritative for Swagger 2.0 API definitions, `apiProperties.json`, `settings.json`, Power Platform `x-ms-*` extensions, authentication definitions, policy templates, validation patterns, and connector troubleshooting; official Power Platform connector requirements and schema validation errors win where they are stricter.
 
 ## Project Overview
 This workspace contains JSON Schema definitions for Power Platform Custom Connectors, specifically for the `paconn` (Power Apps Connector) tool. The schemas validate and provide IntelliSense for:
@@ -428,3 +430,89 @@ This workspace contains JSON Schema definitions for Power Platform Custom Connec
 - Check that operation responses match expected schemas to prevent runtime errors.
 
 Remember: These schemas ensure your Power Platform connectors are properly formatted and will work correctly in the Power Platform ecosystem.
+
+
+## Good / Bad Examples
+
+The examples below illustrate a safe Power Platform operation definition.
+
+**Good:**
+
+```json
+{
+  "operationId": "GetItems",
+  "summary": "Get items",
+  "x-ms-summary": "Get Items",
+  "x-ms-visibility": "important",
+  "parameters": [
+    {
+      "name": "category",
+      "in": "query",
+      "type": "string",
+      "x-ms-dynamic-values": {
+        "operationId": "GetCategories",
+        "value-path": "id",
+        "value-title": "name"
+      }
+    }
+  ]
+}
+```
+
+Why: The operation has stable IDs, user-friendly summaries, allowed visibility values, and dynamic values without secrets.
+
+**Bad:**
+
+```json
+{
+  "operationId": "DoStuff",
+  "x-ms-summary": "do stuff",
+  "x-ms-test-value": "secret-token",
+  "parameters": [
+    { "name": "id", "in": "path", "type": "string" }
+  ]
+}
+```
+
+Why: The summary is not title case, the test value exposes a secret, and the path parameter is missing `required: true`.
+
+## Conventions
+
+| Rule | Rationale |
+|---|---|
+| Keep `apiDefinition.swagger.json`, `apiProperties.json`, and `settings.json` roles distinct | Swagger, connector metadata, and deployment settings validate against different schemas |
+| Use Swagger 2.0 with `swagger: "2.0"`, `info.title`, `info.version`, and `paths` | Power Platform custom connectors require a complete Swagger 2.0 definition |
+| Use `x-ms-*` extensions only where Power Platform supports them and use `^x-(?!ms-)` for non-Microsoft extensions | Incorrect extension names are rejected or ignored |
+| Define `securityDefinitions` with at most two auth methods, exactly one type per definition, and no combination with `None` authentication | Connector authentication must be unambiguous and compatible |
+| Use `x-ms-summary`, descriptions, dynamic lists, dynamic values, dynamic schema, and visibility deliberately | Makers get usable fields without leaking complexity |
+| Keep `iconBrandColor`, `publisher`, `stackOwner`, and `capabilities` meaningful in API properties | Connector catalog metadata and branding stay complete |
+| Validate GUIDs, URIs, host patterns, MIME types, `$ref` locations, path parameters, and enum values before deployment | Schema failures are cheaper to fix before import |
+| Test with JSON Schema validation, VS Code validation, `paconn validate --api-def apiDefinition.swagger.json`, and the Power Platform Connector portal | Tool validation catches different classes of schema and runtime errors |
+
+## Do / Do Not
+
+| Do | Do not |
+|---|---|
+| Use `x-ms-summary` in title case and descriptive `description` fields | Leave users with raw operation names or vague parameters |
+| Use `oauth2` or `apiKey` where appropriate and reserve `basic` for internal or legacy systems | Mix `None` authentication with other security definitions |
+| Mark every path parameter as `required: true` | Define path parameters that can be omitted |
+| Use `date-no-tz`, `html`, and standard formats such as `int32`, `date-time`, `email`, `uri`, and `uuid` correctly | Invent unsupported formats |
+| Use `routerequesttoendpoint`, `setqueryparameter`, `updatenextlink`, and `pollingtrigger` for supported policies | Encode routing, pagination, or trigger behavior in undocumented shapes |
+| Use relative file paths for local connector assets | Reference missing icons or configuration files |
+| Put safe examples in `x-ms-test-value` | Put secrets or PII in test values |
+
+## Checklist Before Opening a PR
+
+- [ ] API definitions contain required Swagger 2.0 properties and valid path, host, scheme, MIME, tag, contact, license, externalDocs, and `$ref` shapes.
+- [ ] Microsoft operation, parameter, schema, root, path, and capability extensions use documented `x-ms-*` names and allowed enum values.
+- [ ] Authentication uses valid `securityDefinitions` limits and does not combine `None` authentication with other methods.
+- [ ] API properties define connection parameters, policy templates, connector metadata, `iconBrandColor`, `publisher`, `stackOwner`, and capabilities as needed.
+- [ ] Settings use valid environment GUIDs, endpoint URLs, API versions, and local file references.
+- [ ] Dynamic schema, trigger metadata, pageable, file picker, test connection, operation context, notification content, media kind, and trigger value configurations include their required properties.
+- [ ] `paconn validate --api-def apiDefinition.swagger.json` and the target connector validation path pass.
+- [ ] No secrets, credentials, or PII appear in examples, test values, settings, or schemas.
+
+## References
+
+- Example OAuth authorization URL: https://api.example.com/oauth/authorize
+- Example OAuth token URL: https://api.example.com/oauth/token

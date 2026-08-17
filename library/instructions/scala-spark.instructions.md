@@ -1,468 +1,28 @@
 ---
-applyTo: '**/*.scala, **/build.sbt, **/build.sc'
-description: 'Best practices for building Apache Spark applications in Scala, covering DataFrames, Datasets, SparkSQL, performance tuning, testing, and production deployment patterns.'
+applyTo: "**/*.scala,**/build.sbt,**/build.sc"
+description: "Enforces Scala Apache Spark conventions for dependencies, SparkSession setup, DataFrame and Dataset design, schemas, joins, partitioning, streaming, Delta Lake, performance, testing, and deployment."
 ---
 
-# Scala + Apache Spark Best Practices
+# Scala Spark Conventions — Data Engineering Applications
 
-Guidelines for writing efficient, maintainable, and production-ready Apache Spark applications in Scala.
+These instructions apply to Scala Spark application code, SBT builds, and build scripts matched by the `applyTo` globs. They are authoritative for Apache Spark dependency scope, `SparkSession` usage, DataFrame/Dataset/RDD choices, schema and column-expression hygiene, joins, partitioning, caching, UDFs, Structured Streaming, Delta Lake, performance tuning, testing, packaging, and `spark-submit` settings; platform runbooks, cluster policies, and project-specific data contracts win where they define stricter runtime limits.
 
-## Dependencies
+## Dependencies and Packaging
 
-### SBT
+Keep Spark dependencies aligned with the cluster runtime and avoid bundling libraries the cluster already provides.
 
-```scala
-val sparkVersion = "3.5.1"
+| Concern | Convention |
+| --- | --- |
+| SBT Spark version | Declare `val sparkVersion = "3.5.1"` when the project targets Spark 3.5.1. |
+| SBT coordinates | Use `"org.apache.spark" %% "spark-core"`, `spark-sql`, `spark-mllib`, and `spark-streaming` as needed. |
+| Dependency scope | Mark Spark artifacts `provided` because YARN, Kubernetes, Databricks, or the Spark cluster supplies them at runtime. |
+| Maven coordinates | Use `<spark.version>3.5.1</spark.version>` and `<scala.binary.version>2.13</scala.binary.version>` with `spark-core_${scala.binary.version}`, `spark-sql_${scala.binary.version}`, `spark-mllib_${scala.binary.version}`, and `spark-streaming_${scala.binary.version}`. |
+| Fat JARs | Bundle only application-specific libraries; do not include cluster-provided Spark libraries. |
+| sbt-assembly | Add `addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "2.1.5")` in `project/plugins.sbt` and configure `assembly / assemblyMergeStrategy` to discard `PathList("META-INF", _*)` before falling back to `MergeStrategy.first`. |
 
-libraryDependencies ++= Seq(
-  "org.apache.spark" %% "spark-core"   % sparkVersion % "provided",
-  "org.apache.spark" %% "spark-sql"    % sparkVersion % "provided",
-  "org.apache.spark" %% "spark-mllib"  % sparkVersion % "provided",
-  "org.apache.spark" %% "spark-streaming" % sparkVersion % "provided"
-)
-```
+Use the literal Spark dependency scope `"provided"` when examples or project style include quotes; it carries the same deployment rule as `provided`.
 
-### Maven
-
-```xml
-<properties>
-    <spark.version>3.5.1</spark.version>
-    <scala.binary.version>2.13</scala.binary.version>
-</properties>
-
-<dependencies>
-    <dependency>
-        <groupId>org.apache.spark</groupId>
-        <artifactId>spark-core_${scala.binary.version}</artifactId>
-        <version>${spark.version}</version>
-        <scope>provided</scope>
-    </dependency>
-    <dependency>
-        <groupId>org.apache.spark</groupId>
-        <artifactId>spark-sql_${scala.binary.version}</artifactId>
-        <version>${spark.version}</version>
-        <scope>provided</scope>
-    </dependency>
-    <dependency>
-        <groupId>org.apache.spark</groupId>
-        <artifactId>spark-mllib_${scala.binary.version}</artifactId>
-        <version>${spark.version}</version>
-        <scope>provided</scope>
-    </dependency>
-    <dependency>
-        <groupId>org.apache.spark</groupId>
-        <artifactId>spark-streaming_${scala.binary.version}</artifactId>
-        <version>${spark.version}</version>
-        <scope>provided</scope>
-    </dependency>
-</dependencies>
-```
-
-Mark Spark dependencies as `"provided"` since the cluster supplies them at runtime. Only bundle application-specific libraries in the fat JAR.
-
-## SparkSession Setup
-
-Always use `SparkSession` as the single entry point:
-
-```scala
-import org.apache.spark.sql.SparkSession
-
-val spark: SparkSession = SparkSession.builder()
-  .appName("MyApplication")
-  .config("spark.sql.shuffle.partitions", "200")
-  .config("spark.serializer", "org.apache.spark.serializer.KryoSerializer")
-  .getOrCreate()
-
-import spark.implicits._
-```
-
-- Do **not** create multiple `SparkSession` instances in the same JVM.
-- Avoid hardcoding `master` in application code; set it at submit time via `--master`.
-
-## DataFrames vs Datasets vs RDDs
-
-Prefer the **DataFrame API** (untyped `Dataset[Row]`) for most workloads. Use **Datasets** (typed) when compile-time type safety justifies the serialization overhead. Avoid raw **RDDs** unless you need low-level control.
-
-```scala
-import org.apache.spark.sql.{DataFrame, Dataset}
-
-// Preferred — DataFrame API
-val df: DataFrame = spark.read.parquet("data/events")
-val result = df
-  .filter($"status" === "active")
-  .groupBy($"region")
-  .agg(count("*").as("total"))
-
-// Typed Dataset — use when schema safety matters
-case class Event(id: Long, status: String, region: String)
-val ds: Dataset[Event] = df.as[Event]
-val active = ds.filter(_.status == "active")
-```
-
-## Schema Management
-
-Always define schemas explicitly when reading semi-structured data instead of relying on schema inference:
-
-```scala
-import org.apache.spark.sql.types._
-
-val schema = StructType(Seq(
-  StructField("id", LongType, nullable = false),
-  StructField("name", StringType, nullable = true),
-  StructField("timestamp", TimestampType, nullable = false),
-  StructField("amount", DecimalType(18, 2), nullable = true),
-  StructField("tags", ArrayType(StringType), nullable = true)
-))
-
-val df = spark.read
-  .schema(schema)
-  .json("data/events/*.json")
-```
-
-- Schema inference (`inferSchema=true`) reads the entire data source and is expensive for large files.
-- For Parquet and Delta, the schema is embedded — explicit definition is unnecessary.
-
-## Column Expressions
-
-Prefer `col()` or `$""` over string column names in transformations for early error detection:
-
-```scala
-import org.apache.spark.sql.functions._
-
-// Good — type-checked column references
-df.select(col("name"), $"amount" * 1.1 as "adjusted_amount")
-
-// Avoid — string-only references delay errors to runtime
-df.select("name", "amount")
-```
-
-## Joins
-
-### Broadcast Joins
-
-Broadcast the smaller side of a join when it fits in executor memory (typically < 100 MB):
-
-```scala
-import org.apache.spark.sql.functions.broadcast
-
-val enriched = largeDF.join(
-  broadcast(smallLookupDF),
-  Seq("key"),
-  "left"
-)
-```
-
-### Avoiding Cartesian Products
-
-Never use cross joins unless intentional. Enable the safeguard:
-
-```scala
-spark.conf.set("spark.sql.crossJoin.enabled", "false")
-```
-
-### Skew Handling
-
-For joins on skewed keys, salt the key to distribute load:
-
-```scala
-import org.apache.spark.sql.functions._
-
-val saltBuckets = 10
-val saltedLeft = leftDF.withColumn("salt", (rand() * saltBuckets).cast("int"))
-val saltedRight = rightDF
-  .crossJoin((0 until saltBuckets).toDF("salt"))
-
-val result = saltedLeft
-  .join(saltedRight, Seq("join_key", "salt"))
-  .drop("salt")
-```
-
-The tradeoff is that the right side grows by 10×, so this only works when the right side is reasonably small or the skew is severe enough to justify it. For Spark 3.x+, AQE's built-in skew join handling (`spark.sql.adaptive.skewJoin.enabled = true`) can do this automatically without manual salting.
-
-## Partitioning and Bucketing
-
-### Write Partitioning
-
-Partition output by high-cardinality filter columns (e.g., date):
-
-```scala
-df.write
-  .partitionBy("year", "month")
-  .mode("overwrite")
-  .parquet("output/events")
-```
-
-- Avoid partitioning on high-cardinality columns (e.g., user ID) which creates millions of small files.
-
-### Shuffle Partitions
-
-Tune `spark.sql.shuffle.partitions` based on data volume:
-
-```scala
-// Default is 200; adjust based on data size
-// Rule of thumb: target 128 MB per partition
-spark.conf.set("spark.sql.shuffle.partitions", "400")
-```
-
-### Repartition vs Coalesce
-
-```scala
-// Repartition — full shuffle, use to increase or evenly distribute partitions
-df.repartition(100, $"key")
-
-// Coalesce — no shuffle, use only to reduce partition count
-df.coalesce(10)
-```
-
-Never use `coalesce(1)` on large datasets — it forces all data through a single task.
-
-## Caching and Persistence
-
-Cache only when a DataFrame is reused multiple times:
-
-```scala
-import org.apache.spark.storage.StorageLevel
-
-val cached = expensiveDF.persist(StorageLevel.MEMORY_AND_DISK)
-cached.count() // materialize the cache
-
-// Use cached DF multiple times
-val summary = cached.groupBy("region").count()
-val filtered = cached.filter($"amount" > 1000)
-
-// Always unpersist when done
-cached.unpersist()
-```
-
-- Prefer `MEMORY_AND_DISK` over `MEMORY_ONLY` to avoid recomputation on eviction.
-- Never cache DataFrames that are only used once.
-
-## UDFs — Use Sparingly
-
-Prefer built-in Spark SQL functions over UDFs. UDFs disable Catalyst optimizations and require serialization:
-
-```scala
-import org.apache.spark.sql.functions._
-
-// Good — use built-in functions
-df.withColumn("upper_name", upper($"name"))
-  .withColumn("name_length", length($"name"))
-
-// Avoid — UDF for something built-in functions handle
-val upperUdf = udf((s: String) => s.toUpperCase)
-df.withColumn("upper_name", upperUdf($"name"))
-```
-
-When a UDF is unavoidable, prefer `spark.udf.register` for SparkSQL compatibility, and handle nulls explicitly:
-
-```scala
-val parseStatus = udf((raw: String) => {
-  Option(raw).map(_.trim.toLowerCase) match {
-    case Some("active") | Some("enabled")  => "ACTIVE"
-    case Some("inactive") | Some("disabled") => "INACTIVE"
-    case _                                   => "UNKNOWN"
-  }
-})
-```
-
-## Window Functions
-
-Use window functions for ranking, running totals, and lag/lead calculations:
-
-```scala
-import org.apache.spark.sql.expressions.Window
-
-val windowSpec = Window
-  .partitionBy("department")
-  .orderBy($"salary".desc)
-
-val ranked = df
-  .withColumn("rank", rank().over(windowSpec))
-  .withColumn("dense_rank", dense_rank().over(windowSpec))
-  .withColumn("row_number", row_number().over(windowSpec))
-  .withColumn("running_total", sum($"salary").over(
-    Window.partitionBy("department").orderBy("hire_date")
-      .rowsBetween(Window.unboundedPreceding, Window.currentRow)
-  ))
-```
-
-## Error Handling
-
-### Corrupt Record Handling
-
-```scala
-val df = spark.read
-  .option("mode", "PERMISSIVE")            // default: keeps corrupt rows
-  .option("columnNameOfCorruptRecord", "_corrupt_record")
-  .schema(schema)
-  .json("data/events")
-
-val clean = df.filter($"_corrupt_record".isNull).drop("_corrupt_record")
-val bad   = df.filter($"_corrupt_record".isNotNull)
-bad.write.json("data/quarantine")
-```
-
-### Accumulator-Based Error Counting
-
-```scala
-val parseErrors = spark.sparkContext.longAccumulator("parseErrors")
-
-val parsed = df.map { row =>
-  try {
-    parseRow(row)
-  } catch {
-    case _: Exception =>
-      parseErrors.add(1)
-      null
-  }
-}.filter(_ != null)
-
-println(s"Parse errors: ${parseErrors.value}")
-```
-
-> **Caveat:** Accumulators are only guaranteed accurate inside actions (`count`, `collect`, `write`). If tasks are retried due to failures, accumulators can over-count. For exact error tracking, prefer the quarantine pattern above; use accumulators for operational monitoring only.
-
-## Streaming (Structured Streaming)
-
-```scala
-val stream = spark.readStream
-  .format("kafka")
-  .option("kafka.bootstrap.servers", "broker:9092")
-  .option("subscribe", "events")
-  .option("startingOffsets", "latest")
-  .load()
-
-val parsed = stream
-  .selectExpr("CAST(value AS STRING) as json")
-  .select(from_json($"json", schema).as("data"))
-  .select("data.*")
-
-val query = parsed.writeStream
-  .format("delta")
-  .option("checkpointLocation", "/checkpoints/events")
-  .outputMode("append")
-  .trigger(Trigger.ProcessingTime("30 seconds"))
-  .start("output/events")
-
-query.awaitTermination()
-```
-
-- Always set a checkpoint location for fault tolerance.
-- Use `Trigger.ProcessingTime` or `Trigger.AvailableNow` — avoid `Trigger.Once` in production (use `AvailableNow` instead).
-
-## Delta Lake Integration
-
-```scala
-import io.delta.tables.DeltaTable
-
-// Upsert / merge
-val target = DeltaTable.forPath(spark, "data/customers")
-
-target.as("t")
-  .merge(updatesDF.as("s"), "t.id = s.id")
-  .whenMatched.updateAll()
-  .whenNotMatched.insertAll()
-  .execute()
-
-// Time travel
-val yesterday = spark.read
-  .format("delta")
-  .option("timestampAsOf", "2025-01-15")
-  .load("data/customers")
-
-// Optimize and vacuum
-target.optimize().executeCompaction()
-target.vacuum(168) // retain 7 days
-```
-
-## Performance Tuning Checklist
-
-1. **Minimize shuffles** — use `broadcast` joins, pre-partition data, avoid unnecessary `groupBy`.
-2. **Avoid `collect()` on large DataFrames** — it pulls all data to the driver.
-3. **Prefer `explain(true)`** to inspect physical plans before running expensive jobs.
-4. **Enable Adaptive Query Execution (AQE)**:
-   ```scala
-   spark.conf.set("spark.sql.adaptive.enabled", "true")
-   spark.conf.set("spark.sql.adaptive.coalescePartitions.enabled", "true")
-   spark.conf.set("spark.sql.adaptive.skewJoin.enabled", "true")
-   ```
-5. **Use columnar formats** (Parquet, Delta, ORC) over CSV/JSON for analytical workloads.
-6. **Predicate pushdown** — filter early in the query plan; place filters before joins.
-7. **Column pruning** — `select` only needed columns instead of `select("*")`.
-8. **Avoid `distinct()` before `groupBy`** — the aggregation already deduplicates.
-
-## Testing
-
-### Unit Testing Transformations
-
-Test pure transformation functions without a SparkSession when possible:
-
-```scala
-import org.scalatest.funsuite.AnyFunSuite
-
-class TransformationsTest extends AnyFunSuite {
-  test("parseStatus maps known values correctly") {
-    assert(parseStatus("active") == "ACTIVE")
-    assert(parseStatus("DISABLED") == "INACTIVE")
-    assert(parseStatus(null) == "UNKNOWN")
-  }
-}
-```
-
-### Integration Testing with SparkSession
-
-Use a shared `SparkSession` for DataFrame-level tests:
-
-```scala
-import org.apache.spark.sql.SparkSession
-import org.scalatest.BeforeAndAfterAll
-import org.scalatest.funsuite.AnyFunSuite
-
-trait SparkTestBase extends AnyFunSuite with BeforeAndAfterAll {
-  lazy val spark: SparkSession = SparkSession.builder()
-    .master("local[2]")
-    .appName("test")
-    .config("spark.sql.shuffle.partitions", "2")
-    .getOrCreate()
-
-  override def afterAll(): Unit = {
-    spark.stop()
-    super.afterAll()
-  }
-}
-
-class EventPipelineTest extends SparkTestBase {
-  import spark.implicits._
-
-  test("pipeline filters inactive events") {
-    val input = Seq(
-      Event(1L, "active", "US"),
-      Event(2L, "inactive", "EU")
-    ).toDS()
-
-    val result = filterActive(input)
-    assert(result.count() == 1)
-    assert(result.collect().head.status == "active")
-  }
-}
-```
-
-## Application Packaging
-
-### Fat JAR with sbt-assembly
-
-```scala
-// project/plugins.sbt
-addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "2.1.5")
-
-// build.sbt
-assembly / assemblyMergeStrategy := {
-  case PathList("META-INF", _*) => MergeStrategy.discard
-  case _                        => MergeStrategy.first
-}
-```
-
-### Spark Submit
+Use `spark-submit` for cluster execution and keep cluster choices outside application code:
 
 ```bash
 spark-submit \
@@ -479,53 +39,176 @@ spark-submit \
   --output s3://bucket/output
 ```
 
-## Common Anti-Patterns
+## SparkSession and Configuration
 
-| Anti-Pattern | Why It's Bad | Fix |
-|---|---|---|
-| `collect()` on large data | OOM on driver | Use `take(n)`, `show()`, or write to storage |
-| `count()` inside loops | Triggers full DAG evaluation each time | Cache and count once |
-| UDF for built-in operations | Disables Catalyst optimizer | Use `org.apache.spark.sql.functions._` |
-| `var` for DataFrames | Mutable references cause confusion | Chain transformations or use `val` |
-| Schema inference on CSV/JSON | Reads entire source, fragile | Define `StructType` explicitly |
-| `coalesce(1)` on large data | Single-task bottleneck | Use `repartition` with reasonable count |
-| Nested `map` on RDDs | Quadratic complexity | Use `join` or `broadcast` |
-| Ignoring data skew | Straggler tasks, OOM | Salt keys or use AQE skew handling |
+Use one `SparkSession` as the single entry point per JVM. Build it with `.appName(...)`, set safe defaults such as `spark.sql.shuffle.partitions` and `spark.serializer`, call `.getOrCreate()`, and then import `spark.implicits._` near the code that needs encoders. Do not hardcode `.master(...)` in production application code; pass `--master` at submit time so the same artifact runs locally, on YARN, and on Kubernetes.
+
+| Setting | Convention | Rationale |
+| --- | --- | --- |
+| `spark.sql.shuffle.partitions` | Tune by data volume; start near Spark's default 200 and target roughly 128 MB per partition. | Oversized partitions spill, while too many tiny partitions waste scheduling overhead. |
+| `spark.serializer` | Use `org.apache.spark.serializer.KryoSerializer` for production jobs when compatible. | Kryo reduces serialization cost for many workloads. |
+| `spark.sql.crossJoin.enabled` | Set `false` unless a Cartesian product is intentional and reviewed. | Accidental cross joins create explosive data growth. |
+| `spark.sql.adaptive.enabled` | Enable Adaptive Query Execution for Spark 3.x+. | AQE can coalesce partitions and mitigate skew at runtime. |
+| `spark.sql.adaptive.coalescePartitions.enabled` | Enable with AQE. | Runtime partition coalescing reduces small-task overhead. |
+| `spark.sql.adaptive.skewJoin.enabled` | Enable with AQE before writing manual salting. | Built-in skew handling is safer than duplicating data by hand. |
+
+## DataFrames, Datasets, RDDs, and Schemas
+
+Prefer the DataFrame API (`DataFrame`, untyped `Dataset[Row]`) for most analytical workloads because Catalyst can optimize it. Use typed `Dataset[Event]` only when compile-time schema safety is worth encoder and serialization overhead. Avoid raw RDDs unless the operation truly needs low-level control not expressible with DataFrames, Datasets, or Spark SQL.
+
+Define schemas explicitly for semi-structured sources. Use `StructType`, `StructField`, `LongType`, `StringType`, `TimestampType`, `DecimalType(18, 2)`, and `ArrayType(StringType)` for JSON/CSV inputs where inference would scan data and infer fragile types. Parquet and Delta already carry schema metadata, so explicit schemas are optional unless a contract must be enforced.
+
+Prefer `col("name")` or `$"amount"` in transformations over string-only projection such as `df.select("name", "amount")`. Column expressions fail earlier, compose with functions, and keep expressions visible to the optimizer. Select only required columns instead of `select("*")` so column pruning can reduce scan work.
+
+## Joins, Skew, Partitioning, and Files
+
+Design joins and partitioning around data size, cardinality, and downstream query patterns.
+
+| Pattern | Use | Avoid |
+| --- | --- | --- |
+| Broadcast join | `largeDF.join(broadcast(smallLookupDF), Seq("key"), "left")` when the lookup fits in executor memory, typically under 100 MB. | Broadcasting large or unbounded tables. |
+| Skew salting | Add a `salt` column with `(rand() * saltBuckets).cast("int")`, duplicate the smaller side with `(0 until saltBuckets).toDF("salt")`, join on `Seq("join_key", "salt")`, then drop `salt`. | Salting when the right side is not small enough to tolerate the `saltBuckets` multiplier. |
+| AQE skew handling | Prefer `spark.sql.adaptive.skewJoin.enabled = true` on Spark 3.x+ before custom salting. | Manual skew logic that duplicates data without measurement. |
+| Write partitioning | Use `partitionBy("year", "month")` for low-cardinality filter columns such as date parts. | Partitioning by high-cardinality values such as `user ID`, which creates millions of small files. |
+| Repartition | Use `repartition(100, $"key")` to increase or evenly distribute partitions through a full shuffle. | Repartitioning repeatedly without checking the plan. |
+| Coalesce | Use `coalesce(10)` only to reduce partition count without a full shuffle. | `coalesce(1)` on large datasets because it funnels all data through one task. |
+
+Use `explain(true)` before expensive jobs. Filter before joins for predicate pushdown, use columnar formats such as Parquet, Delta, or ORC over CSV/JSON for analytical workloads, and avoid `distinct()` before `groupBy` when the aggregation already produces the intended result.
+
+## Caching, UDFs, Windows, and Error Handling
+
+Persist only reused DataFrames. Use `persist(StorageLevel.MEMORY_AND_DISK)`, materialize with an action such as `count()`, reuse the cached DataFrame, then call `unpersist()` when done. Prefer `MEMORY_AND_DISK` over `MEMORY_ONLY` to avoid recomputation after eviction, and never cache data used once.
+
+Prefer built-in functions from `org.apache.spark.sql.functions._`, such as `upper`, `length`, `rank`, `dense_rank`, `row_number`, `sum`, `from_json`, `rand`, and `broadcast`, over UDFs. Built-ins stay inside Catalyst; UDFs require serialization and often block predicate pushdown. When a UDF is unavoidable, define it with `udf`, handle `null` with `Option`, and register it through `spark.udf.register` when Spark SQL compatibility is required.
+
+Use `Window.partitionBy(...).orderBy(...)` for ranking, running totals, `lag`, and `lead`. Use `Window.unboundedPreceding`, `Window.currentRow`, and `rowsBetween` for explicit frame boundaries rather than relying on accidental defaults.
+
+Quarantine corrupt records instead of hiding them. Read with `.option("mode", "PERMISSIVE")`, `.option("columnNameOfCorruptRecord", "_corrupt_record")`, filter clean rows with `$"_corrupt_record".isNull`, and write bad rows to a quarantine location. Use `spark.sparkContext.longAccumulator("parseErrors")` only for operational monitoring; accumulators are accurate only inside actions such as `count`, `collect`, or `write` and can over-count on task retry.
+
+## Structured Streaming and Delta Lake
+
+Structured Streaming jobs must be restartable and explicit about offsets, output mode, trigger, and checkpointing. Read Kafka with `.format("kafka")`, `kafka.bootstrap.servers`, `subscribe`, and `startingOffsets`; parse messages with `selectExpr("CAST(value AS STRING) as json")`, `from_json`, and `select("data.*")`. Write with `.writeStream`, a durable `checkpointLocation`, `outputMode("append")`, and `Trigger.ProcessingTime("30 seconds")` or `Trigger.AvailableNow`. Avoid `Trigger.Once` in production; use `AvailableNow` for bounded catch-up processing.
+
+Use Delta Lake APIs deliberately. Use `DeltaTable.forPath(spark, "data/customers")`, `target.as("t").merge(updatesDF.as("s"), "t.id = s.id")`, `whenMatched.updateAll()`, `whenNotMatched.insertAll()`, and `execute()` for upserts. Use `.format("delta")`, `.option("timestampAsOf", "2025-01-15")`, and `.load(...)` for time travel. Use `target.optimize().executeCompaction()` and `target.vacuum(168)` only when the retention policy allows seven-day cleanup.
 
 ## Dynamic Allocation
 
-Enable dynamic allocation to let Spark scale executors up and down based on workload demand. This is essential for shared clusters where fixed executor counts waste resources during idle stages:
+Enable dynamic allocation for shared clusters where fixed executors waste capacity during idle stages.
+
+| Config or flag | Purpose |
+| --- | --- |
+| `spark.dynamicAllocation.enabled=true` | Allows Spark to scale executors with workload demand. |
+| `spark.dynamicAllocation.minExecutors=2` | Keeps a floor of executors available. |
+| `spark.dynamicAllocation.maxExecutors=50` | Caps cluster usage to prevent monopolizing shared capacity. |
+| `spark.dynamicAllocation.initialExecutors=5` | Sets the starting executor count before auto-scaling reacts. |
+| `spark.dynamicAllocation.executorIdleTimeout=60s` | Removes idle executors after this duration; default is 60s. |
+| `spark.dynamicAllocation.schedulerBacklogTimeout=1s` | Requests new executors when tasks are pending this long. |
+| `spark.shuffle.service.enabled=true` | Required on YARN/Mesos so removed executors do not lose shuffle files. |
+| `spark.dynamicAllocation.shuffleTracking.enabled=true` | Use on Kubernetes instead of an external shuffle service. |
+
+Do not combine `--num-executors` with dynamic allocation because fixed and elastic executor policies conflict.
+
+## Testing and Observability
+
+Test pure transformation functions without Spark when possible. For DataFrame-level tests, share a local `SparkSession` in a base trait such as `SparkTestBase extends AnyFunSuite with BeforeAndAfterAll`, set `.master("local[2]")`, `.appName("test")`, `.config("spark.sql.shuffle.partitions", "2")`, import `spark.implicits._`, and call `spark.stop()` in `afterAll()`.
+
+Use small deterministic inputs such as `Seq(Event(1L, "active", "US"), Event(2L, "inactive", "EU")).toDS()` and assert behavior with `count()`, `collect().head.status`, and named transformation functions such as `filterActive`. Avoid production-scale fixtures in unit tests; validate scale with integration or performance tests on representative data.
+
+Keep example class names such as `TransformationsTest` and `EventPipelineTest` obviously illustrative. Do not copy placeholder application names such as `MyApplication` into production packages unless the project already uses that name.
+
+## Preserved Spark API and Configuration Vocabulary
+
+The following identifiers remain valid Spark vocabulary and should be preserved when refactoring examples or prose.
+
+| Category | Identifiers |
+| --- | --- |
+| Status parsing examples | `ACTIVE`, `INACTIVE`, `UNKNOWN`, `DISABLED` |
+| Column and window aliases | `adjusted_amount`, `name_length`, `hire_date`, `running_total` |
+| Output and checkpoint paths | `checkpoints/events`, `data/quarantine` |
+| Driver-safe inspection | `take(n)`, `show()`, `collect()` only for small or test data |
+| Dynamic allocation keys | `minExecutors`, `maxExecutors`, `initialExecutors`, `executorIdleTimeout`, `schedulerBacklogTimeout` |
+| Optimizer and design vocabulary | `select`, `join`, `lag/lead`, `type-checked`, `pre-partition`, `production-ready` |
+
+## Good / Bad Examples
+
+The examples below illustrate keeping Spark work optimizer-visible, schema-aware, and bounded.
+
+**Good:**
 
 ```scala
-spark.conf.set("spark.dynamicAllocation.enabled", "true")
-spark.conf.set("spark.dynamicAllocation.minExecutors", "2")
-spark.conf.set("spark.dynamicAllocation.maxExecutors", "50")
-spark.conf.set("spark.dynamicAllocation.initialExecutors", "5")
-spark.conf.set("spark.dynamicAllocation.executorIdleTimeout", "60s")
-spark.conf.set("spark.dynamicAllocation.schedulerBacklogTimeout", "1s")
+import org.apache.spark.sql.functions._
+import org.apache.spark.storage.StorageLevel
+
+val schema = StructType(Seq(
+  StructField("id", LongType, nullable = false),
+  StructField("status", StringType, nullable = true),
+  StructField("amount", DecimalType(18, 2), nullable = true)
+))
+
+val events = spark.read.schema(schema).json("data/events/*.json")
+val activeByRegion = events
+  .filter($"status" === "active")
+  .select($"region", $"amount")
+  .persist(StorageLevel.MEMORY_AND_DISK)
+
+activeByRegion.count()
+activeByRegion.groupBy($"region").agg(sum($"amount").as("total")).write.parquet("output/events")
+activeByRegion.unpersist()
 ```
 
-Or via `spark-submit`:
+Why: The job declares its schema, filters and projects early, uses built-in aggregations, persists only reused data, and releases the cache.
 
-```bash
-spark-submit \
-  --conf spark.dynamicAllocation.enabled=true \
-  --conf spark.dynamicAllocation.minExecutors=2 \
-  --conf spark.dynamicAllocation.maxExecutors=50 \
-  --conf spark.shuffle.service.enabled=true \
-  ...
+**Bad:**
+
+```scala
+val df = spark.read.option("inferSchema", "true").json("data/events")
+val upperUdf = udf((s: String) => s.toUpperCase)
+val rows = df.collect()
+val oneFile = df.withColumn("upper_name", upperUdf($"name")).coalesce(1)
+oneFile.write.mode("overwrite").json("output/events")
 ```
 
-Key settings:
+Why: The job infers a fragile schema, uses a UDF for a built-in operation, collects data to the driver, and forces all output through one task.
 
-| Setting | Purpose |
-|---|---|
-| `minExecutors` | Floor — always keep at least this many executors running |
-| `maxExecutors` | Ceiling — cap to prevent monopolizing the cluster |
-| `initialExecutors` | Starting count before auto-scaling kicks in |
-| `executorIdleTimeout` | Remove idle executors after this duration (default 60s) |
-| `schedulerBacklogTimeout` | Request new executors when tasks have been pending this long |
+## Conventions
 
-- **Requires `spark.shuffle.service.enabled=true`** on YARN/Mesos — an external shuffle service preserves shuffle files after executors are removed. Without it, removed executors lose their shuffle data, forcing costly recomputation.
-- On **Kubernetes**, use `spark.dynamicAllocation.shuffleTracking.enabled=true` instead (no external shuffle service needed).
-- **Do not combine** `--num-executors` with dynamic allocation — they conflict. Remove `--num-executors` when enabling dynamic allocation.
+| Rule | Rationale |
+| --- | --- |
+| Keep Spark dependencies `provided` and match `sparkVersion`, `<spark.version>`, and `<scala.binary.version>` to the runtime. | Cluster-supplied Spark libraries should not be duplicated in the application JAR. |
+| Use one `SparkSession` per JVM and set `--master` at submit time. | Runtime topology stays configurable and the application avoids competing Spark contexts. |
+| Prefer DataFrames, use Datasets for meaningful type safety, and avoid raw RDDs. | Catalyst can optimize declarative plans better than opaque low-level transformations. |
+| Define explicit schemas for CSV/JSON and use embedded schemas for Parquet and Delta. | Jobs avoid expensive inference and schema drift. |
+| Use `col()` or `$"..."`, built-in functions, predicate pushdown, and column pruning. | The optimizer sees the work and minimizes scans, shuffles, and serialization. |
+| Broadcast only small lookup tables and use AQE or measured salting for skew. | Join performance improves without creating accidental data explosions. |
+| Partition by low-cardinality filters and never use `coalesce(1)` on large data. | Output remains queryable without single-task bottlenecks or small-file storms. |
+| Cache only reused data with `MEMORY_AND_DISK` and always `unpersist()`. | Cache memory stays available and recomputation is bounded. |
+| Set Structured Streaming checkpoints and use `Trigger.ProcessingTime` or `Trigger.AvailableNow`. | Streams can recover safely and production jobs avoid deprecated one-shot semantics. |
+| Enable dynamic allocation with the correct shuffle service or shuffle tracking for the cluster manager. | Shared clusters scale efficiently without losing shuffle data. |
+
+## Do / Do Not
+
+| Do | Do not |
+| --- | --- |
+| Use `spark-submit` flags such as `--class`, `--deploy-mode`, `--executor-memory`, and `--conf` for deployment settings. | Hardcode cluster `master` or executor sizing in application code. |
+| Use `StructType` and typed columns for semi-structured sources. | Rely on `inferSchema=true` for large CSV/JSON inputs. |
+| Use `broadcast`, AQE, and selective filters to reduce shuffle cost. | Allow accidental cross joins or ignore skewed keys. |
+| Use `repartition` to increase or rebalance partitions and `coalesce` only to reduce them. | Use `coalesce(1)` to make output easier to browse. |
+| Use built-in Spark SQL functions and `Window` expressions. | Write UDFs for `upper`, `length`, ranking, totals, or other built-in operations. |
+| Quarantine corrupt records with `_corrupt_record`. | Count parse errors only with accumulators and drop bad data silently. |
+| Use Delta `merge`, time travel, compaction, and `vacuum(168)` according to retention policy. | Vacuum or optimize without considering retention and reader requirements. |
+| Use shared local Spark sessions for integration tests. | Start and stop a new Spark JVM for every assertion. |
+
+## Checklist Before Opening a PR
+
+- [ ] `build.sbt`, `build.sc`, or Maven coordinates keep Spark artifacts `provided` and aligned with the target runtime.
+- [ ] Application code creates only one `SparkSession` and leaves `--master` to submission configuration.
+- [ ] DataFrame, Dataset, or RDD choices are justified by optimizer visibility and type-safety needs.
+- [ ] Semi-structured reads define schemas; Parquet or Delta reads rely on embedded schemas only when the contract allows it.
+- [ ] Joins avoid accidental Cartesian products, handle skew, and broadcast only measured small inputs.
+- [ ] Partition counts, `repartition`, `coalesce`, and output `partitionBy` settings match data volume and query patterns.
+- [ ] Caches use `MEMORY_AND_DISK`, are materialized, and are released with `unpersist()`.
+- [ ] UDFs are absent unless built-ins cannot express the logic, and unavoidable UDFs handle nulls.
+- [ ] Streaming queries define `checkpointLocation`, `outputMode`, and a production-safe trigger.
+- [ ] Delta operations preserve retention requirements and use merge/time-travel/compaction APIs intentionally.
+- [ ] Tests cover pure transformations and DataFrame behavior with deterministic local Spark inputs.
+- [ ] `spark-submit` or cluster config does not mix `--num-executors` with dynamic allocation.

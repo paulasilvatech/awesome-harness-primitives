@@ -1,123 +1,113 @@
 ---
 applyTo: '**/{*mcp*,*agent*,*plugin*,declarativeAgent.json,ai-plugin.json,mcp.json,manifest.json}'
-description: 'Best practices for building MCP-based declarative agents and API plugins for Microsoft 365 Copilot with Model Context Protocol integration'
+description: 'Enforces conventions for MCP-based Microsoft 365 Copilot declarative agents, API plugins, adaptive cards, authentication, testing, deployment, and governance.'
 ---
 
-# MCP-based M365 Copilot Development Guidelines
+# MCP M365 Copilot Conventions — Declarative Agents and Plugins
 
-## Core Principles
+These instructions apply to Microsoft 365 Copilot declarative agent, API plugin, MCP server configuration, and Teams app manifest files matched by the `applyTo` globs. They are authoritative for MCP-first agent design, `declarativeAgent.json`, `ai-plugin.json`, `mcp.json`, adaptive card response semantics, authentication, local testing, deployment readiness, performance, security, and governance in those files; organization policy, product documentation, and security primitives win when they impose stricter requirements.
 
-### Model Context Protocol First
-- Leverage MCP servers for external system integration
-- Import tools from server endpoints, not manual definitions
-- Let MCP handle schema discovery and function generation
-- Use point-and-click tool selection in Agents Toolkit
+## MCP-First Agent Design
 
-### Declarative Over Imperative
-- Define agent behavior through configuration, not code
-- Use declarativeAgent.json for instructions and capabilities
-- Specify tools and actions in ai-plugin.json
-- Configure MCP servers in mcp.json
+Build Microsoft 365 Copilot agents around Model Context Protocol servers and declarative configuration.
 
-### Security and Governance
-- Always use OAuth 2.0 or SSO for authentication
-- Follow principle of least privilege for tool selection
-- Validate MCP server endpoints are secure
-- Review compliance requirements before deployment
+| Principle | Convention |
+| --- | --- |
+| Model Context Protocol first | Import tools from MCP server endpoints and let MCP handle schema discovery and function generation |
+| Declarative over imperative | Put behavior in `declarativeAgent.json`, tools and response semantics in `ai-plugin.json`, and server connection metadata in `mcp.json` |
+| Least privilege | Import only necessary tools, group related tools from the same server, and test each tool individually before combining them |
+| User-centered output | Provide clear conversation starters and adaptive cards that render well in Chat, Teams, and Outlook |
 
-### User-Centric Design
-- Create adaptive cards for rich visual responses
-- Provide clear conversation starters
-- Design for responsive experience across hubs
-- Test thoroughly before organizational deployment
+Use point-and-click tool selection in Agents Toolkit when it is available. Avoid hand-writing tool definitions that duplicate MCP metadata unless the platform requires generated plugin artifacts.
 
-## MCP Server Design
+## Project Files and Responsibilities
 
-### Server Selection
-Choose MCP servers that:
-- Expose relevant tools for user tasks
-- Support secure authentication (OAuth 2.0, SSO)
-- Provide reliable uptime and performance
-- Follow MCP specification standards
-- Return well-structured response data
+Keep the standard package layout recognizable so Teams Toolkit and Microsoft 365 Agents Toolkit can provision, deploy, and sideload consistently.
 
-### Tool Import Strategy
-- Import only necessary tools (avoid over-scoping)
-- Group related tools from same server
-- Test each tool individually before combining
-- Consider token limits when selecting multiple tools
-
-### Authentication Configuration
-**OAuth 2.0 Static Registration:**
-```json
-{
-  "type": "OAuthPluginVault",
-  "reference_id": "YOUR_AUTH_ID",
-  "client_id": "github_client_id",
-  "client_secret": "github_client_secret",
-  "authorization_url": "https://github.com/login/oauth/authorize",
-  "token_url": "https://github.com/login/oauth/access_token",
-  "scope": "repo read:user"
-}
-```
-
-**SSO (Microsoft Entra ID):**
-```json
-{
-  "type": "OAuthPluginVault",
-  "reference_id": "sso_auth",
-  "authorization_url": "https://login.microsoftonline.com/common/oauth2/v2.0/authorize",
-  "token_url": "https://login.microsoftonline.com/common/oauth2/v2.0/token",
-  "scope": "User.Read"
-}
-```
-
-## File Organization
-
-### Project Structure
-```
+```text
 project-root/
 ├── appPackage/
-│   ├── manifest.json           # Teams app manifest
-│   ├── declarativeAgent.json   # Agent config (instructions, capabilities)
-│   ├── ai-plugin.json          # API plugin definition
-│   ├── color.png               # App icon color
-│   └── outline.png             # App icon outline
+│   ├── manifest.json
+│   ├── declarativeAgent.json
+│   ├── ai-plugin.json
+│   ├── color.png
+│   └── outline.png
 ├── .vscode/
-│   └── mcp.json               # MCP server configuration
-├── .env.local                  # Credentials (NEVER commit)
-└── teamsapp.yml               # Teams Toolkit config
+│   └── mcp.json
+├── .env.local
+└── teamsapp.yml
 ```
 
-### Critical Files
+| File | Owns |
+| --- | --- |
+| `appPackage/manifest.json` | Teams app manifest, app identity, icons, and package metadata |
+| `appPackage/declarativeAgent.json` | Agent name, description, instructions, conversation starters, and capabilities |
+| `appPackage/ai-plugin.json` | Imported MCP tools, function definitions, response semantics, `data_path`, `properties`, static adaptive card templates, and template selection |
+| `.vscode/mcp.json` | MCP server URL, server metadata endpoint, and authentication reference |
+| `.env.local` | OAuth client credentials, API keys, secrets, and environment-specific config; add it to `.gitignore` and never commit it |
+| `teamsapp.yml` | Teams Toolkit provisioning and deployment configuration |
 
-**declarativeAgent.json:**
-- Agent name and description
-- Instructions for behavior
-- Conversation starters
-- Capabilities (actions from plugins)
+## Authentication and Server Configuration
 
-**ai-plugin.json:**
-- MCP server tools import
-- Response semantics (data_path, properties)
-- Static adaptive card templates
-- Function definitions (auto-generated)
+Use OAuth 2.0 or Microsoft Entra ID SSO for authenticated tools. Validate that every MCP server uses HTTPS, reliable uptime, secure endpoints, and well-structured response data.
 
-**mcp.json:**
-- MCP server URL
-- Server metadata endpoint
-- Authentication reference
+| Scenario | Required fields and examples |
+| --- | --- |
+| OAuth 2.0 static registration | `type: OAuthPluginVault`, `reference_id: YOUR_AUTH_ID`, `client_id`, `client_secret`, `authorization_url: https://github.com/login/oauth/authorize`, `token_url: https://github.com/login/oauth/access_token`, `scope: repo read:user` |
+| SSO with Microsoft Entra ID | `type: OAuthPluginVault`, `reference_id: sso_auth`, `authorization_url: https://login.microsoftonline.com/common/oauth2/v2.0/authorize`, `token_url: https://login.microsoftonline.com/common/oauth2/v2.0/token`, `scope: User.Read` |
+| Multi-tool agents | Configure `mcpServers` entries such as `github` at `https://github-mcp.example.com` and `jira` at `https://jira-mcp.example.com`, then import only the tools the agent needs |
 
-**.env.local:**
-- OAuth client credentials
-- API keys and secrets
-- Environment-specific config
-- **CRITICAL**: Add to .gitignore
+Keep OAuth scopes minimal, use separate credentials for development and production, rotate credentials regularly, and test the authentication flow outside Copilot before organizational deployment. Authenticated actions follow this path: the user triggers a tool, OAuth redirects for consent, the access token is stored in the plugin vault, and subsequent requests use the stored token.
 
-## Response Semantics Best Practices
+## Response Semantics and Adaptive Cards
 
-### Data Path Configuration
-Use JSONPath to extract relevant data:
+Use response semantics to extract the smallest useful payload from MCP responses and render it in static, responsive cards.
+
+| Concern | Convention |
+| --- | --- |
+| Data extraction | Use JSONPath such as `data_path: $.items[*]` to select relevant items |
+| Field mapping | Map `properties` such as `title: $.name`, `subtitle: $.description`, and `url: $.html_url` |
+| Template selection | Use `template_selector: $.templateType` only when responses genuinely require dynamic templates |
+| Static templates | Prefer static templates in `ai-plugin.json` when responses share one shape |
+| Card layout | Use a single-column layout, `stretch` or `auto` widths, small images, and simple scannable content |
+| Card elements | Use `TextBlock` for titles and descriptions, `FactSet` for key-value metadata, `Image` for icons or thumbnails, `Container` for grouping, and `ActionSet` for buttons |
+
+Adaptive card template language may use conditionals like `${if(status == 'active', ' Active', ' Inactive')}`, data binding like `${title}`, number formatting like `${formatNumber(score, 0)}`, and conditional rendering with `$when: ${count(items) > 0}`. Test cards across Chat, Teams, and Outlook because host rendering differences affect layout.
+
+## Testing, Deployment, and Governance
+
+Local testing follows the Teams Toolkit loop: Provision, Deploy, sideload to Teams, test at `https://m365.cloud.microsoft/chat`, then iterate and redeploy. Organization deployment requires IT admin approval in the Microsoft 365 admin center and assignment to all users or selected users and groups. Agent Store submission goes through Partner Center validation and requires a rigorous security review before public availability.
+
+Govern deployed agents through admin controls and monitoring. Agents can be blocked, deployed to specific users or groups, or published organization-wide. Track usage and adoption, error rates and performance, user feedback and satisfaction, security incidents, configuration change history, access logs for sensitive operations, deployment approval records, and compliance attestations.
+
+## Error Handling, Performance, and Privacy
+
+Provide clear agent messages for MCP server errors, fall back to alternative tools only when an equivalent safe tool exists, log errors for debugging without sensitive data, and guide the user to retry or choose another path. For authentication failures, check `.env.local`, verify scopes, test consent and token refresh, and ensure credentials match the configured `reference_id`. For response parsing failures, validate JSONPath expressions, handle missing or null data, provide defaults, and test varied API responses.
+
+Optimize performance by importing only necessary tools, avoiding redundant tools from multiple servers, measuring each tool's response time, filtering data through `data_path`, limiting result sets, using pagination for large datasets, and keeping adaptive cards lightweight. MCP servers may cache where appropriate; consider cache invalidation for time-sensitive data and remember that Microsoft 365 may cache agent responses.
+
+Protect privacy by requesting minimum scopes, avoiding sensitive user data in logs, reviewing data residency requirements, following compliance policies such as GDPR, verifying that each MCP server is trusted, checking the server privacy policy, and testing for injection vulnerabilities.
+
+
+## Preserved Plugin Vocabulary
+
+Keep compatibility vocabulary from existing Microsoft 365 Copilot examples when rewriting plugin configuration.
+
+| Vocabulary | Convention |
+| --- | --- |
+| `CRITICAL`, `NEVER`, `over-scoping`, and `auto-generated` | Use all-caps only for genuinely critical constraints such as secret handling; avoid over-scoping tools and preserve auto-generated function definitions from MCP metadata. |
+| `github_client_id` and `github_client_secret` | Treat these as illustrative OAuth placeholder names only; actual secrets belong in `.env.local`, environment variables, or vault references. |
+| `dev/prod` | Keep separate dev/prod credentials and deployments. |
+| `end-to-end`, `follow-up`, and `re-deploy` | Test auth end-to-end, include follow-up card actions only when useful, and re-deploy after configuration changes. |
+| `users/groups` | Organization deployment may target all users/groups or selected users/groups through admin controls. |
+| `DevBlogs` | The Microsoft 365 DevBlogs article remains an authoritative external reference for MCP declarative agent patterns. |
+
+## Good / Bad Examples
+
+The examples below illustrate scoped response extraction and safe authentication metadata.
+
+**Good:**
+
 ```json
 {
   "data_path": "$.items[*]",
@@ -129,229 +119,62 @@ Use JSONPath to extract relevant data:
 }
 ```
 
-### Template Selection
-For dynamic templates:
+Why: The plugin extracts only the list items the card needs and maps stable fields for predictable rendering.
+
+**Bad:**
+
 ```json
 {
   "data_path": "$",
-  "template_selector": "$.templateType",
   "properties": {
-    "title": "$.title",
-    "url": "$.url"
+    "title": "$.*"
   }
 }
 ```
 
-### Static Templates
-Define in ai-plugin.json for consistent formatting:
-- Use when all responses follow same structure
-- Better performance than dynamic templates
-- Easier to maintain and version control
+Why: The plugin exposes an oversized response shape, makes card rendering unpredictable, and increases token and privacy risk.
 
-## Adaptive Card Guidelines
+## Conventions
 
-### Design Principles
-- **Single-column layout**: Stack elements vertically
-- **Flexible widths**: Use "stretch" or "auto", not fixed pixels
-- **Responsive design**: Test in Chat, Teams, Outlook
-- **Minimal complexity**: Keep cards simple and scannable
+| Rule | Rationale |
+|---|---|
+| Import tools from MCP server endpoints instead of manual definitions | MCP discovery keeps schemas and functions aligned with the server |
+| Keep behavior declarative in `declarativeAgent.json`, `ai-plugin.json`, and `mcp.json` | Agents Toolkit and Copilot can validate, package, and govern the agent |
+| Select only necessary tools and scopes | Least privilege reduces token usage, consent friction, and data exposure |
+| Store credentials in `.env.local`, environment variables, or vault-backed references and add `.env.local` to `.gitignore` | Secrets must not be committed |
+| Use OAuth 2.0 or SSO with HTTPS MCP endpoints | Authentication and transport stay compatible with organizational governance |
+| Use `data_path`, `properties`, static adaptive card templates, and lightweight layouts | Responses remain fast, predictable, and readable across hubs |
+| Test each MCP tool, authentication flow, adaptive card, response semantic, and error path before deployment | Agent failures are easier to isolate before organizational rollout |
+| Maintain deployment approvals, access logs, change history, and compliance attestations | Admins can audit and govern business agents |
 
-### Template Language Patterns
-**Conditionals:**
-```json
-{
-  "type": "TextBlock",
-  "text": "${if(status == 'active', ' Active', ' Inactive')}"
-}
-```
+## Do / Do Not
 
-**Data Binding:**
-```json
-{
-  "type": "TextBlock",
-  "text": "${title}",
-  "weight": "bolder"
-}
-```
+| Do | Do not |
+|---|---|
+| Configure MCP servers in `mcp.json` and import tools through Agents Toolkit | Hand-author duplicate tool schemas when MCP discovery can supply them |
+| Use `OAuthPluginVault`, `YOUR_AUTH_ID`, OAuth URLs, token URLs, and least-privilege scopes | Store client secrets in `ai-plugin.json`, `manifest.json`, or source control |
+| Use static adaptive card templates for stable response shapes | Add dynamic templates when one static shape is sufficient |
+| Test in Chat, Teams, Outlook, and https://m365.cloud.microsoft/chat | Assume one host's rendering represents every Microsoft 365 hub |
+| Limit result sets and paginate large responses | Send full upstream payloads to Copilot or cards |
+| Log operational errors without sensitive user data | Log access tokens, secrets, or private business data |
+| Use Microsoft 365 admin center or Partner Center deployment flows as appropriate | Bypass approval and compliance review for organizational agents |
 
-**Number Formatting:**
-```json
-{
-  "type": "TextBlock",
-  "text": "Score: ${formatNumber(score, 0)}"
-}
-```
+## Checklist Before Opening a PR
 
-**Conditional Rendering:**
-```json
-{
-  "type": "Container",
-  "$when": "${count(items) > 0}",
-  "items": [ ... ]
-}
-```
+- [ ] `declarativeAgent.json`, `ai-plugin.json`, `mcp.json`, `manifest.json`, icons, `.env.local`, and `teamsapp.yml` responsibilities remain separated.
+- [ ] MCP tools are imported from secure server endpoints and only necessary tools are selected.
+- [ ] OAuth 2.0 or SSO configuration uses HTTPS authorization and token URLs, minimal scopes, and a stable `reference_id`.
+- [ ] `.env.local` is ignored and no API keys, OAuth client secrets, tokens, or environment-specific secrets are committed.
+- [ ] Response semantics use correct JSONPath `data_path`, `properties`, and template selection only where needed.
+- [ ] Adaptive cards use responsive single-column layouts and render correctly in Chat, Teams, and Outlook.
+- [ ] Each MCP tool, authentication flow, error path, and varied API response has been tested before deployment.
+- [ ] Organization deployment or Agent Store submission has the required approval, security review, and compliance evidence.
+- [ ] Monitoring, audit logs, change history, and deployment records are updated for governed agents.
 
-### Card Elements Usage
-- **TextBlock**: Titles, descriptions, metadata
-- **FactSet**: Key-value pairs (status, dates, IDs)
-- **Image**: Icons, thumbnails (use size: "small")
-- **Container**: Grouping related content
-- **ActionSet**: Buttons for follow-up actions
+## References
 
-## Testing and Deployment
-
-### Local Testing Workflow
-1. **Provision**: Teams Toolkit → Provision
-2. **Deploy**: Teams Toolkit → Deploy
-3. **Sideload**: App uploaded to Teams
-4. **Test**: Visit [m365.cloud.microsoft/chat](https://m365.cloud.microsoft/chat)
-5. **Iterate**: Fix issues and re-deploy
-
-### Pre-Deployment Checklist
-- [ ] All MCP server tools tested individually
-- [ ] Authentication flow works end-to-end
-- [ ] Adaptive cards render correctly across hubs
-- [ ] Response semantics extract expected data
-- [ ] Error handling provides clear messages
-- [ ] Conversation starters are relevant and clear
-- [ ] Agent instructions guide proper behavior
-- [ ] Compliance and security reviewed
-
-### Deployment Options
-**Organization Deployment:**
-- IT admin deploys to all or selected users
-- Requires approval in Microsoft 365 admin center
-- Best for internal business agents
-
-**Agent Store:**
-- Submit to Partner Center for validation
-- Public availability to all Copilot users
-- Requires rigorous security review
-
-## Common Patterns
-
-### Multi-Tool Agent
-Import tools from multiple MCP servers:
-```json
-{
-  "mcpServers": {
-    "github": {
-      "url": "https://github-mcp.example.com"
-    },
-    "jira": {
-      "url": "https://jira-mcp.example.com"
-    }
-  }
-}
-```
-
-### Search and Display
-1. Tool retrieves data from MCP server
-2. Response semantics extract relevant fields
-3. Adaptive card displays formatted results
-4. User can take action from card buttons
-
-### Authenticated Actions
-1. User triggers tool requiring auth
-2. OAuth flow redirects for consent
-3. Access token stored in plugin vault
-4. Subsequent requests use stored token
-
-## Error Handling
-
-### MCP Server Errors
-- Provide clear error messages in agent responses
-- Fall back to alternative tools if available
-- Log errors for debugging
-- Guide user to retry or alternative approach
-
-### Authentication Failures
-- Check OAuth credentials in .env.local
-- Verify scopes match required permissions
-- Test auth flow outside Copilot first
-- Ensure token refresh logic works
-
-### Response Parsing Failures
-- Validate JSONPath expressions in response semantics
-- Handle missing or null data gracefully
-- Provide default values where appropriate
-- Test with varied API responses
-
-## Performance Optimization
-
-### Tool Selection
-- Import only necessary tools (reduces token usage)
-- Avoid redundant tools from multiple servers
-- Test impact of each tool on response time
-
-### Response Size
-- Use data_path to filter unnecessary data
-- Limit result sets where possible
-- Consider pagination for large datasets
-- Keep adaptive cards lightweight
-
-### Caching Strategy
-- MCP servers should cache where appropriate
-- Agent responses may be cached by M365
-- Consider cache invalidation for time-sensitive data
-
-## Security Best Practices
-
-### Credential Management
-- **NEVER** commit .env.local to source control
-- Use environment variables for all secrets
-- Rotate OAuth credentials regularly
-- Use separate credentials for dev/prod
-
-### Data Privacy
-- Only request minimum necessary scopes
-- Avoid logging sensitive user data
-- Review data residency requirements
-- Follow compliance policies (GDPR, etc.)
-
-### Server Validation
-- Verify MCP server is trusted and secure
-- Check HTTPS endpoints only
-- Review server's privacy policy
-- Test for injection vulnerabilities
-
-## Governance and Compliance
-
-### Admin Controls
-Agents can be:
-- **Blocked**: Prevented from use
-- **Deployed**: Assigned to specific users/groups
-- **Published**: Made available organization-wide
-
-### Monitoring
-Track:
-- Agent usage and adoption
-- Error rates and performance
-- User feedback and satisfaction
-- Security incidents
-
-### Audit Requirements
-Maintain:
-- Change history for agent configurations
-- Access logs for sensitive operations
-- Approval records for deployments
-- Compliance attestations
-
-## Resources and References
-
-### Official Documentation
-- [Build Declarative Agents with MCP (DevBlogs)](https://devblogs.microsoft.com/microsoft365dev/build-declarative-agents-for-microsoft-365-copilot-with-mcp/)
-- [Build MCP Plugins (Learn)](https://learn.microsoft.com/en-us/microsoft-365-copilot/extensibility/build-mcp-plugins)
-- [API Plugin Adaptive Cards (Learn)](https://learn.microsoft.com/en-us/microsoft-365-copilot/extensibility/api-plugin-adaptive-cards)
-- [Manage Copilot Agents (Learn)](https://learn.microsoft.com/en-us/microsoft-365/admin/manage/manage-copilot-agents-integrated-apps)
-
-### Tools and SDKs
-- Microsoft 365 Agents Toolkit (VS Code extension v6.3.x+)
-- Teams Toolkit for agent packaging
-- Adaptive Cards Designer
-- MCP specification documentation
-
-### Partner Examples
-- monday.com: Task management integration
-- Canva: Design automation
-- Sitecore: Content management
+- Build Declarative Agents with MCP: https://devblogs.microsoft.com/microsoft365dev/build-declarative-agents-for-microsoft-365-copilot-with-mcp/
+- Build MCP Plugins: https://learn.microsoft.com/en-us/microsoft-365-copilot/extensibility/build-mcp-plugins
+- API Plugin Adaptive Cards: https://learn.microsoft.com/en-us/microsoft-365-copilot/extensibility/api-plugin-adaptive-cards
+- Manage Copilot Agents: https://learn.microsoft.com/en-us/microsoft-365/admin/manage/manage-copilot-agents-integrated-apps
+- Microsoft 365 Copilot Chat test hub: https://m365.cloud.microsoft/chat

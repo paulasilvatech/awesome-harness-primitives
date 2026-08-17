@@ -1,223 +1,80 @@
 ---
-applyTo: 'memory-bank/**'
-description: 'Conventions for maintaining persistent project documentation under memory-bank/ so AI agents can resume project context across sessions.'
+applyTo: "memory-bank/**"
+description: "Enforces conventions for maintaining persistent project documentation under memory-bank/ so AI agents can resume project context across sessions."
 ---
 
-# Memory Bank Conventions
+# Memory Bank Conventions — Persistent Project Context
 
-> **Opt-in pattern.** This instruction creates and maintains a `memory-bank/` folder in the workspace root. Enable it only when you want persistent project documentation across AI sessions; otherwise the auxiliary files will accumulate in repos that don't need them.
+These instructions apply only to repositories that intentionally maintain a `memory-bank/` folder at the workspace root. They are authoritative for the structure, update rules, task files, and project-intelligence notes inside `memory-bank/**`; repository documentation standards, security rules, and user instructions win when they define stricter handling for sensitive information or project records.
 
-Coding standards, domain knowledge, and preferences that AI should follow.
+## Opt-in Use and Core Contract
 
-## Memory Bank
+Use the Memory Bank only when persistent project documentation across AI sessions is desired. Treat the contents as the agent's durable project context after memory resets: the next session relies entirely on the files to understand the project, active work, decisions, and progress.
 
-You are an expert software engineer with a unique characteristic: my memory resets completely between sessions. This isn't a limitation - it's what drives me to maintain perfect documentation. After each reset, I rely ENTIRELY on my Memory Bank to understand the project and continue work effectively. I MUST read ALL memory bank files at the start of EVERY task - this is not optional.
+- Keep documentation precise and current because stale context misleads future work.
+- Read all core Memory Bank files before acting on work that depends on persisted context.
+- Update the Memory Bank after significant changes, when discovering new project patterns, when context needs clarification, and when the user requests **update memory bank**.
+- When **update memory bank** is requested, review every Memory Bank file, especially `activeContext.md`, `progress.md`, `tasks/`, and `tasks/_index.md`.
 
-## Memory Bank Structure
+## Required Structure
 
-The Memory Bank consists of required core files and optional context files, all in Markdown format. Files build upon each other in a clear hierarchy:
+The Memory Bank consists of required Markdown files and optional folders. Preserve this hierarchy:
 
 ```mermaid
 flowchart TD
     PB[projectbrief.md] --> PC[productContext.md]
     PB --> SP[systemPatterns.md]
     PB --> TC[techContext.md]
-    
     PC --> AC[activeContext.md]
     SP --> AC
     TC --> AC
-    
     AC --> P[progress.md]
     AC --> TF[tasks/ folder]
 ```
 
-### Core Files (Required)
-1. `projectbrief.md`
-   - Foundation document that shapes all other files
-   - Created at project start if it doesn't exist
-   - Defines core requirements and goals
-   - Source of truth for project scope
+| File or folder | Required content | Rationale |
+| --- | --- | --- |
+| `projectbrief.md` | Core requirements, goals, and project scope | It is the foundation and source of truth for all other files |
+| `productContext.md` | Why the project exists, problems solved, expected behavior, and user experience goals | Product intent anchors technical decisions |
+| `activeContext.md` | Current work focus, recent changes, next steps, active decisions, and considerations | New sessions need the immediate state first |
+| `systemPatterns.md` | Architecture, key technical decisions, design patterns, and component relationships | Implementation choices need durable explanation |
+| `techContext.md` | Technologies, development setup, technical constraints, and dependencies | Environment assumptions must be discoverable |
+| `progress.md` | What works, what remains, current status, and known issues | Future work needs an accurate completion map |
+| `tasks/` | One task file per task plus `_index.md` | Task history and status survive session resets |
 
-2. `productContext.md`
-   - Why this project exists
-   - Problems it solves
-   - How it should work
-   - User experience goals
+Create additional files or folders only for useful organization, such as complex feature documentation, integration specifications, API documentation, testing strategies, or deployment procedures.
 
-3. `activeContext.md`
-   - Current work focus
-   - Recent changes
-   - Next steps
-   - Active decisions and considerations
+## Context Update Rules
 
-4. `systemPatterns.md`
-   - System architecture
-   - Key technical decisions
-   - Design patterns in use
-   - Component relationships
+Memory Bank updates are conventions, not a chat workflow.
 
-5. `techContext.md`
-   - Technologies used
-   - Development setup
-   - Technical constraints
-   - Dependencies
+- Capture discoveries about critical implementation paths, project-specific patterns, known challenges, evolution of decisions, and tool usage patterns.
+- Record user preferences and workflow only when appropriate and safe to persist.
+- Keep `activeContext.md`, `progress.md`, and `tasks/` synchronized whenever current work changes.
+- Document decisions with enough detail that another agent can continue without asking for the same context.
+- Treat instructions-style project intelligence as a living learning journal; validate important new patterns with the user when practical before recording them as durable guidance.
 
-6. `progress.md`
-   - What works
-   - What's left to build
-   - Current status
-   - Known issues
+## Task Management Files
 
-7. `tasks/` folder
-   - Contains individual markdown files for each task
-   - Each task has its own dedicated file with format `TASKID-taskname.md`
-   - Includes task index file (`_index.md`) listing all tasks with their statuses
-   - Preserves complete thought process and history for each task
-
-### Additional Context
-Create additional files/folders within memory-bank/ when they help organize:
-- Complex feature documentation
-- Integration specifications
-- API documentation
-- Testing strategies
-- Deployment procedures
-
-## Core Workflows
-
-### Plan Mode
-```mermaid
-flowchart TD
-    Start[Start] --> ReadFiles[Read Memory Bank]
-    ReadFiles --> CheckFiles{Files Complete?}
-    
-    CheckFiles -->|No| Plan[Create Plan]
-    Plan --> Document[Document in Chat]
-    
-    CheckFiles -->|Yes| Verify[Verify Context]
-    Verify --> Strategy[Develop Strategy]
-    Strategy --> Present[Present Approach]
-```
-
-### Act Mode
-```mermaid
-flowchart TD
-    Start[Start] --> Context[Check Memory Bank]
-    Context --> Update[Update Documentation]
-    Update --> Rules[Update instructions if needed]
-    Rules --> Execute[Execute Task]
-    Execute --> Document[Document Changes]
-```
-
-### Task Management
-```mermaid
-flowchart TD
-    Start[New Task] --> NewFile[Create Task File in tasks/ folder]
-    NewFile --> Think[Document Thought Process]
-    Think --> Plan[Create Implementation Plan]
-    Plan --> Index[Update _index.md]
-    
-    Execute[Execute Task] --> Update[Add Progress Log Entry]
-    Update --> StatusChange[Update Task Status]
-    StatusChange --> IndexUpdate[Update _index.md]
-    IndexUpdate --> Complete{Completed?}
-    Complete -->|Yes| Archive[Mark as Completed]
-    Complete -->|No| Execute
-```
-
-## Documentation Updates
-
-Memory Bank updates occur when:
-1. Discovering new project patterns
-2. After implementing significant changes
-3. When user requests with **update memory bank** (MUST review ALL files)
-4. When context needs clarification
-
-```mermaid
-flowchart TD
-    Start[Update Process]
-    
-    subgraph Process
-        P1[Review ALL Files]
-        P2[Document Current State]
-        P3[Clarify Next Steps]
-        P4[Update instructions]
-        
-        P1 --> P2 --> P3 --> P4
-    end
-    
-    Start --> Process
-```
-
-Note: When triggered by **update memory bank**, I MUST review every memory bank file, even if some don't require updates. Focus particularly on activeContext.md, progress.md, and the tasks/ folder (including _index.md) as they track current state.
-
-## Project Intelligence (instructions)
-
-The instructions files are my learning journal for each project. It captures important patterns, preferences, and project intelligence that help me work more effectively. As I work with you and the project, I'll discover and document key insights that aren't obvious from the code alone.
-
-```mermaid
-flowchart TD
-    Start{Discover New Pattern}
-    
-    subgraph Learn [Learning Process]
-        D1[Identify Pattern]
-        D2[Validate with User]
-        D3[Document in instructions]
-    end
-    
-    subgraph Apply [Usage]
-        A1[Read instructions]
-        A2[Apply Learned Patterns]
-        A3[Improve Future Work]
-    end
-    
-    Start --> Learn
-    Learn --> Apply
-```
-
-### What to Capture
-- Critical implementation paths
-- User preferences and workflow
-- Project-specific patterns
-- Known challenges
-- Evolution of project decisions
-- Tool usage patterns
-
-The format is flexible - focus on capturing valuable insights that help me work more effectively with you and the project. Think of instructions as a living documents that grows smarter as we work together.
-
-## Tasks Management
-
-The `tasks/` folder contains individual markdown files for each task, along with an index file:
-
-- `tasks/_index.md` - Master list of all tasks with IDs, names, and current statuses
-- `tasks/TASKID-taskname.md` - Individual files for each task (e.g., `TASK001-implement-login.md`)
-
-### Task Index Structure
-
-The `_index.md` file maintains a structured record of all tasks sorted by status:
+Maintain `tasks/_index.md` as the master list of all tasks with IDs, names, statuses, and short notes.
 
 ```markdown
 # Tasks Index
 
 ## In Progress
 - [TASK003] Implement user authentication - Working on OAuth integration
-- [TASK005] Create dashboard UI - Building main components
 
 ## Pending
 - [TASK006] Add export functionality - Planned for next sprint
-- [TASK007] Optimize database queries - Waiting for performance testing
 
 ## Completed
 - [TASK001] Project setup - Completed on 2025-03-15
-- [TASK002] Create database schema - Completed on 2025-03-17
-- [TASK004] Implement login page - Completed on 2025-03-20
 
 ## Abandoned
 - [TASK008] Integrate with legacy system - Abandoned due to API deprecation
 ```
 
-### Individual Task Structure
-
-Each task file follows this format:
+Each task file uses `TASKID-taskname.md`, for example `TASK001-implement-login.md`, and preserves the task narrative:
 
 ```markdown
 # [Task ID] - [Task Name]
@@ -230,7 +87,7 @@ Each task file follows this format:
 [The original task description as provided by the user]
 
 ## Thought Process
-[Documentation of the discussion and reasoning that shaped the approach to this task]
+[Discussion and reasoning that shaped the approach]
 
 ## Implementation Plan
 - [Step 1]
@@ -245,8 +102,6 @@ Each task file follows this format:
 | ID | Description | Status | Updated | Notes |
 |----|-------------|--------|---------|-------|
 | 1.1 | [Subtask description] | [Complete/In Progress/Not Started/Blocked] | [Date] | [Any relevant notes] |
-| 1.2 | [Subtask description] | [Complete/In Progress/Not Started/Blocked] | [Date] | [Any relevant notes] |
-| 1.3 | [Subtask description] | [Complete/In Progress/Not Started/Blocked] | [Date] | [Any relevant notes] |
 
 ## Progress Log
 ### [Date]
@@ -254,52 +109,77 @@ Each task file follows this format:
 - Started work on subtask 1.2
 - Encountered issue with [specific problem]
 - Made decision to [approach/solution]
-
-### [Date]
-- [Additional updates as work progresses]
 ```
 
-**Important**: I must update both the subtask status table AND the progress log when making progress on a task. The subtask table provides a quick visual reference of current status, while the progress log captures the narrative and details of the work process. When providing updates, I should:
+Update both the subtask status table and the progress log when progress occurs. The table provides quick status; the log preserves reasoning, challenges, and decisions.
 
-1. Update the overall task status and completion percentage
-2. Update the status of relevant subtasks with the current date
-3. Add a new entry to the progress log with specific details about what was accomplished, challenges encountered, and decisions made
-4. Update the task status in the _index.md file to reflect current progress
+## Task Commands and Filters
 
-These detailed progress updates ensure that after memory resets, I can quickly understand the exact state of each task and continue work without losing context.
+Honor these command phrases when maintaining task records:
 
-### Task Commands
+| Request | Convention |
+| --- | --- |
+| **add task** or **create task** | Create a unique task file in `tasks/`, document thought process, add an implementation plan, set initial status, and update `_index.md`. |
+| **update task [ID]** | Open the task file, add a progress log entry with today's date, update task status as needed, update `_index.md`, and integrate new decisions into the thought process. |
+| **show tasks [filter]** | Display matching tasks with task ID, name, status, completion percentage, last updated date, and next pending subtask when present. |
 
-When you request **add task** or use the command **create task**, I will:
-1. Create a new task file with a unique Task ID in the tasks/ folder
-2. Document our thought process about the approach
-3. Develop an implementation plan
-4. Set an initial status
-5. Update the _index.md file to include the new task
+Valid filters are **all**, **active**, **pending**, **completed**, **blocked**, **recent**, **tag:[tagname]**, and **priority:[level]**.
 
-For existing tasks, the command **update task [ID]** will prompt me to:
-1. Open the specific task file 
-2. Add a new progress log entry with today's date
-3. Update the task status if needed
-4. Update the _index.md file to reflect any status changes
-5. Integrate any new decisions into the thought process
+## Good / Bad Examples
 
-To view tasks, the command **show tasks [filter]** will:
-1. Display a filtered list of tasks based on the specified criteria
-2. Valid filters include:
-   - **all** - Show all tasks regardless of status
-   - **active** - Show only tasks with "In Progress" status
-   - **pending** - Show only tasks with "Pending" status
-   - **completed** - Show only tasks with "Completed" status
-   - **blocked** - Show only tasks with "Blocked" status
-   - **recent** - Show tasks updated in the last week
-   - **tag:[tagname]** - Show tasks with a specific tag
-   - **priority:[level]** - Show tasks with specified priority level
-3. The output will include:
-   - Task ID and name
-   - Current status and completion percentage
-   - Last updated date
-   - Next pending subtask (if applicable)
-4. Example usage: **show tasks active** or **show tasks tag:frontend**
+The examples below illustrate task progress updates that preserve resumable context.
 
-REMEMBER: After every memory reset, I begin completely fresh. The Memory Bank is my only link to previous work. It must be maintained with precision and clarity, as my effectiveness depends entirely on its accuracy.
+**Good:**
+
+```markdown
+### 2026-08-17
+- Updated subtask 1.2 to Complete after OAuth callback tests passed.
+- Decided to keep token refresh in AuthService because the API client already depends on it.
+- Next: add integration coverage for expired refresh tokens.
+```
+
+Why: The entry records status, evidence, decision rationale, and the next resumable action.
+
+**Bad:**
+
+```markdown
+### 2026-08-17
+- Worked on auth.
+```
+
+Why: The entry does not explain what changed, what remains, or how the next session should continue.
+
+## Workflow Vocabulary
+
+Retain the original Memory Bank command vocabulary: `MUST`, `EVERY`, `ENTIRELY`, and `REMEMBER` mark inherited emphasis in this convention set; `tasks/TASKID-taskname.md`, `files/folders`, `TASK002`, `TASK004`, `TASK005`, and `TASK007` remain valid examples. Mermaid node names such as `ReadFiles`, `CheckFiles`, `NewFile`, `IndexUpdate`, and `StatusChange` are illustrative diagram identifiers, not framework APIs.
+
+## Conventions
+
+| Rule | Rationale |
+|---|---|
+| Keep `projectbrief.md` as the scope source of truth | Downstream context files need one stable foundation |
+| Review every Memory Bank file for **update memory bank** requests | Partial reviews leave stale active context or task state behind |
+| Keep `activeContext.md`, `progress.md`, `tasks/`, and `tasks/_index.md` synchronized | Agents resume from both narrative and status views |
+| Store each task in `TASKID-taskname.md` and index it in `_index.md` | Task records remain discoverable and individually detailed |
+| Update the subtask table and progress log together | Status without narrative loses reasoning; narrative without status slows recovery |
+| Capture project intelligence only when it helps future work | The Memory Bank should stay useful rather than becoming a transcript |
+
+## Do / Do Not
+
+| Do | Do not |
+|---|---|
+| Enable `memory-bank/` only for repositories that need persistent AI context | Add auxiliary files to repos that do not want session carryover |
+| Read the core files before relying on persisted context | Act from memory while ignoring the documented project state |
+| Record decisions, constraints, and known issues in the right core file | Hide important project context in chat-only notes |
+| Use the defined task statuses and filters consistently | Invent status names that make `_index.md` hard to scan |
+| Keep optional context files focused on features, integrations, APIs, testing, or deployment | Create miscellaneous files with overlapping ownership |
+
+## Checklist Before Opening a PR
+
+- [ ] `memory-bank/` is intentionally enabled for this repository.
+- [ ] `projectbrief.md`, `productContext.md`, `activeContext.md`, `systemPatterns.md`, `techContext.md`, and `progress.md` are present and consistent.
+- [ ] `tasks/_index.md` lists every task by status.
+- [ ] Each `TASKID-taskname.md` has status, dates, original request, thought process, implementation plan, progress tracking, subtasks, and progress log where applicable.
+- [ ] Current work updates appear in both `activeContext.md` and `progress.md`.
+- [ ] Task progress changes update both the subtask table and progress log.
+- [ ] No sensitive information is stored unnecessarily in persistent context.

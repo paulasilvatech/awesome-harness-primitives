@@ -1,9 +1,11 @@
 ---
-applyTo: '**/*.dart'
-description: 'Instructions for writing Dart and Flutter code following the official recommendations.'
+applyTo: "**/*.dart"
+description: "Enforces Dart language style, Effective Dart usage, and Flutter architecture conventions for Dart and Flutter code."
 ---
 
-# Dart and Flutter
+# Dart and Flutter Conventions — Effective Dart and App Architecture
+
+These instructions apply to Dart and Flutter files matched by `**/*.dart`. They are authoritative for Dart style, documentation, language usage, API design, Flutter layering, state, navigation, testing, and app-architecture choices in those files; project-specific architecture, package policy, and testing primitives win where they define stricter constraints. Follow Effective Dart and Flutter Architecture Recommendations as the primary sources, and treat these rules as passive conventions rather than a setup or migration workflow.
 
 Best practices recommended by the Dart and Flutter teams. These instructions were taken from [Effective Dart](https://dart.dev/effective-dart) and [Architecture Recommendations](https://docs.flutter.dev/app-architecture/recommendations).
 
@@ -445,3 +447,86 @@ It also makes it straightforward and low risk to add new logic and new UI.
 Fakes aren't concerned with the inner workings of any given method as much
 as they're concerned with inputs and outputs. If you have this in mind while writing application code,
 you're forced to write modular, lightweight functions and classes with well defined inputs and outputs.
+
+
+## Good / Bad Examples
+
+The examples below illustrate concise Effective Dart style and Flutter separation of concerns.
+
+**Good:**
+
+```dart
+class HomeViewModel extends ChangeNotifier {
+  HomeViewModel(this._repository);
+
+  final UserRepository _repository;
+  bool isLoading = false;
+
+  Future<void> loadUser(String userId) async {
+    isLoading = true;
+    notifyListeners();
+    await _repository.fetchUser(userId);
+    isLoading = false;
+    notifyListeners();
+  }
+}
+```
+
+Why: The ViewModel owns UI logic, uses `Future<void>` for an async side effect, keeps the repository behind an abstraction, and leaves widgets dumb.
+
+**Bad:**
+
+```dart
+class HomeScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final data = ApiClient().fetchUser('1');
+    return Text(data.toString());
+  }
+}
+```
+
+Why: The widget performs data access, constructs dependencies directly, uses a vague name, and mixes UI with data-layer responsibility.
+
+## Conventions
+
+| Rule | Rationale |
+|---|---|
+| Apply Effective Dart naming: `UpperCamelCase`, `lowerCamelCase`, and `lowercase_with_underscores` in the places defined above | Consistent identifiers make Dart code predictable across packages, files, and APIs |
+| Run `dart format` and keep code formatter-friendly with lines near 80 characters | Formatting debates disappear and diffs stay readable |
+| Use `///` documentation comments with a first-sentence summary for public APIs | Generated docs and code review can understand the contract without reading implementation details |
+| Keep imports ordered as `dart:`, `package:`, relative imports, then exports | Import order reduces merge churn and clarifies dependencies |
+| Prefer concise Dart constructs such as interpolation, collection literals, tear-offs, initializing formals, and `=>` for simple members | Brevity expresses intent without ceremony |
+| Keep null-safety explicit and avoid redundant `null`, nullable `Future`, nullable `Stream`, and nullable collection returns | Callers avoid unnecessary checks and ambiguous absence semantics |
+| Separate Flutter apps into data and UI layers, with Repository, Service, ViewModel, and View classes where appropriate | Layering keeps business logic out of widgets and supports testing |
+| Use unidirectional data flow and immutable data models | State changes stay traceable and UI code cannot mutate data accidentally |
+| Prefer `provider` for dependency injection and `go_router` for most navigation | Standard app structure avoids globals and ad-hoc routing |
+| Test services, repositories, ViewModels, routing, dependency injection, and views separately and together | Architecture remains safe to change as behavior grows |
+
+## Do / Do Not
+
+| Do | Do not |
+|---|---|
+| Use `dart format` and Effective Dart names | Hand-format code or mix identifier styles |
+| Put `dart:` imports before `package:` imports and relative imports | Reach into another package's `src` directory or across `lib` boundaries |
+| Use `Future<void>` for asynchronous members that do not produce values | Return nullable `Future`, `Stream`, or collection types |
+| Keep widgets dumb and put logic in ViewModels or the data layer | Perform API, database, or business logic directly in widgets |
+| Use repositories and services behind abstract classes | Expose storage, API, or filesystem details to UI code |
+| Use immutable models and recreate objects for changes | Mutate shared model objects from the UI layer |
+| Write unit tests, widget tests, and fakes for architectural components | Depend on real services or global state in tests |
+
+## Checklist Before Opening a PR
+
+- [ ] Dart identifiers, imports, comments, and formatting follow Effective Dart.
+- [ ] Public APIs have useful `///` docs and concise signatures.
+- [ ] Null-safety, collection, constructor, member, async, and equality rules are respected.
+- [ ] Flutter UI and data layers remain separated, with widgets free of business logic.
+- [ ] Repositories, services, ViewModels, and optional domain/use-case classes are named and scoped consistently.
+- [ ] State follows unidirectional data flow and immutable model rules.
+- [ ] Dependency injection, navigation, and fakes support testing without globals.
+- [ ] Relevant unit and widget tests cover services, repositories, ViewModels, views, routing, and dependency injection.
+
+## References
+
+- Effective Dart: https://dart.dev/effective-dart
+- Flutter Architecture Recommendations: https://docs.flutter.dev/app-architecture/recommendations

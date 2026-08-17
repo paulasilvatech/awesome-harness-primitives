@@ -1,9 +1,11 @@
 ---
-applyTo: 'force-app/main/default/lwc/**'
-description: 'Guidelines and best practices for developing Lightning Web Components (LWC) on Salesforce Platform.'
+applyTo: "force-app/main/default/lwc/**"
+description: "Enforces Lightning Web Components conventions for Salesforce component structure, SLDS, reactivity, data access, events, accessibility, performance, and tests."
 ---
 
-# LWC Development
+# LWC Conventions — Salesforce Lightning Components
+
+These instructions apply to Lightning Web Components under `force-app/main/default/lwc/**`. They are authoritative for LWC folder structure, Lightning base component usage, SLDS styling, scoped CSS, reactivity, events, wire services, error handling, conditional rendering, accessibility, performance, and Jest tests; Salesforce platform rules, org metadata requirements, and project-specific Salesforce conventions win where they are stricter.
 
 ## General Instructions
 
@@ -424,3 +426,73 @@ Prefer `lwc:if`, `lwc:elseif` and `lwc:else` for conditional rendering (API v58.
 - **Hardcoded Values**: Use custom labels, custom metadata, or constants
 - **Imperative API Calls**: Prefer `@wire` over imperative `import` calls when possible
 - **Memory Leaks**: Always clean up event listeners in `disconnectedCallback()`
+
+
+## Good / Bad Examples
+
+The examples below illustrate Lightning base components, SLDS utility classes, and modern conditional rendering.
+
+**Good:**
+
+```html
+<template lwc:if={isLoading}>
+    <lightning-spinner alternative-text="Loading..."></lightning-spinner>
+</template>
+<template lwc:else>
+    <lightning-input label="Name" value={name} onchange={handleNameChange}></lightning-input>
+    <lightning-button label="Save" variant="brand" onclick={handleSave}></lightning-button>
+</template>
+```
+
+Why: The template uses Lightning base components, accessible labels, and `lwc:if` / `lwc:else` instead of legacy directives.
+
+**Bad:**
+
+```html
+<input type="text" onchange={handleNameChange} />
+<button style="background:red" onclick={handleSave}>Save</button>
+<template if:true={isLoading}>Loading</template>
+```
+
+Why: The template bypasses Lightning accessibility, uses inline styles instead of SLDS, and relies on legacy conditional rendering.
+
+## Conventions
+
+| Rule | Rationale |
+|---|---|
+| Keep each component in its own folder under `force-app/main/default/lwc/` with matching `.html`, `.js`, `.js-meta.xml`, optional `.css`, and optional `.test.js` files | Salesforce metadata discovery and Jest tests depend on predictable component structure |
+| Prefer Lightning base components such as `lightning-button`, `lightning-input`, `lightning-combobox`, `lightning-radio-group`, `lightning-pill`, and `lightning-icon` | Base components provide Salesforce consistency, accessibility, and future compatibility |
+| Use SLDS utility classes with the `slds-var-` prefix and SLDS component patterns before custom CSS | Design System classes keep spacing, layout, typography, and themes consistent |
+| Scope any necessary custom CSS, prefix custom classes, use design tokens such as `--lwc-borderRadiusMedium`, and never override SLDS base classes | Component styles stay isolated and theme-compatible |
+| Use `@api` for public properties and prefer immutable reassignment over `@track` for nested data and arrays | Reactivity stays explicit and rerenders remain predictable |
+| Use CustomEvent `detail` payloads and read `event.detail.value` or `event.detail.checked` for Lightning inputs | Events remain consistent across parent-child and base component interactions |
+| Prefer `@wire` with UI API adapters such as `getRecord` and `getObjectInfo` for Salesforce data access | Wire services manage lifecycle, caching, and reactive parameters |
+| Show loading, success, and sticky error toasts with `ShowToastEvent` around async work | Users receive feedback and failed operations remain visible |
+| Use `lwc:if`, `lwc:elseif`, and `lwc:else` for API v58.0+ conditional rendering | New templates avoid legacy `if:true` / `if:false` complexity |
+| Use semantic HTML, labels, ARIA helpers, and keyboard-operable Lightning components | LWC output remains accessible on the Salesforce Platform |
+
+## Do / Do Not
+
+| Do | Do not |
+|---|---|
+| Use Lightning base components for buttons, inputs, selects, textareas, toggles, pills, and icons | Replace base components with plain HTML controls without a platform reason |
+| Use `slds-grid`, `slds-wrap`, `slds-card`, `slds-form`, and `slds-var-*` utilities | Use inline styles or global CSS for standard layout and spacing |
+| Reassign objects and arrays immutably to trigger reactivity | Mutate nested properties without `@track` or a new object reference |
+| Use `@wire(getRecord, { recordId: '$recordId', fields: FIELDS })` for record data | Prefer imperative API calls when a wire adapter fits |
+| Dispatch `ShowToastEvent` for success and error feedback | Swallow errors or leave users without visible state |
+| Clean up event listeners in `disconnectedCallback()` | Leave listeners that can leak memory |
+| Use `lwc:if` / `lwc:elseif` / `lwc:else` in new components | Add legacy `if:true` / `if:false` templates to new code |
+| Use custom labels, custom metadata, or constants for configurable values | Hard-code user-facing strings, org-specific values, or magic constants |
+
+## Checklist Before Opening a PR
+
+- [ ] Each LWC folder and file name matches the component name under `force-app/main/default/lwc/`.
+- [ ] Required `.html`, `.js`, and `.js-meta.xml` files exist, with optional `.css` and `.test.js` only when needed.
+- [ ] Lightning base components are used instead of plain controls wherever they fit.
+- [ ] SLDS utilities and component patterns provide layout, spacing, typography, and themes before custom CSS.
+- [ ] Custom CSS is scoped, prefixed, token-based, and does not override SLDS base classes.
+- [ ] Public API, reactive state, `@track`, immutable updates, events, and wire services follow LWC conventions.
+- [ ] Async operations expose loading, success, and error states with `ShowToastEvent` where appropriate.
+- [ ] Conditional rendering uses `lwc:if`, `lwc:elseif`, and `lwc:else` for new API v58.0+ components.
+- [ ] Accessibility labels, semantic regions, ARIA helpers, and keyboard behavior are verified.
+- [ ] Jest tests cover behavior when `.test.js` is present or when component logic changes.

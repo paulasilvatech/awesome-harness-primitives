@@ -1,13 +1,11 @@
 ---
-applyTo: '**/*.ts, **/*.js, **/*.json, **/*.spec.ts, **/*.e2e-spec.ts'
-description: 'NestJS development standards and best practices for building scalable Node.js server-side applications'
+applyTo: "**/*.ts,**/*.js,**/*.json,**/*.spec.ts,**/*.e2e-spec.ts"
+description: "Enforces NestJS conventions for TypeScript server-side application modules, dependency injection, APIs, validation, persistence, security, configuration, and tests."
 ---
 
-# NestJS Development Best Practices
+# NestJS Conventions — TypeScript Server Applications
 
-## Your Mission
-
-As GitHub Copilot, you are an expert in NestJS development with deep knowledge of TypeScript, decorators, dependency injection, and modern Node.js patterns. Your goal is to guide developers in building scalable, maintainable, and well-architected server-side applications using NestJS framework principles and best practices.
+This file applies to NestJS TypeScript, JavaScript, JSON configuration, unit test, and e2e test files for well-architected server-side applications. It is authoritative for NestJS dependency injection, module boundaries, decorators, directory layout, controllers, services, DTO validation, TypeORM integration, authentication, authorization, filters, logging, testing, performance, security, and configuration; repository-specific API, persistence, and deployment conventions win when they are stricter.
 
 ## Core NestJS Principles
 
@@ -378,14 +376,14 @@ export class ConfigService {
 - **Synchronous Operations:** Use async/await for database and external API calls
 - **Memory Leaks:** Properly dispose of subscriptions and event listeners
 
-## Development Workflow
+## Development Workflow Conventions
 
 ### **Development Setup**
-1. Use NestJS CLI for scaffolding: `nest generate module users`
-2. Follow consistent file organization
-3. Use TypeScript strict mode
-4. Implement comprehensive linting with ESLint
-5. Use Prettier for code formatting
+- Use NestJS CLI for scaffolding, for example `nest generate module users`.
+- Follow consistent file organization.
+- Use TypeScript strict mode.
+- Implement comprehensive linting with ESLint.
+- Use Prettier for code formatting.
 
 ### **Code Review Checklist**
 - [ ] Proper use of decorators and dependency injection
@@ -397,10 +395,78 @@ export class ConfigService {
 - [ ] Performance considerations (caching, database optimization)
 - [ ] Comprehensive testing coverage
 
-## Conclusion
+## Good / Bad Examples
 
-NestJS provides a powerful, opinionated framework for building scalable Node.js applications. By following these best practices, you can create maintainable, testable, and efficient server-side applications that leverage the full power of TypeScript and modern development patterns.
+The examples below illustrate thin controllers, DTO validation, and service-owned business logic.
 
----
+**Good:**
 
-<!-- End of NestJS Instructions -->
+```typescript
+@Controller('users')
+@UseGuards(JwtAuthGuard)
+export class UsersController {
+  constructor(private readonly usersService: UsersService) {}
+
+  @Post()
+  async create(@Body() createUserDto: CreateUserDto): Promise<User> {
+    return this.usersService.create(createUserDto);
+  }
+}
+```
+
+Why: The controller declares routing, guards, and DTO input while delegating business behavior to an injected service.
+
+**Bad:**
+
+```typescript
+@Controller('users')
+export class UsersController {
+  @Post()
+  async create(@Body() body: any): Promise<User> {
+    const repo = new Repository<User>();
+    return repo.save(body);
+  }
+}
+```
+
+Why: The controller accepts `any`, skips DTO validation, manually creates dependencies, and embeds persistence behavior in the HTTP layer.
+
+## Conventions
+
+| Rule | Rationale |
+|---|---|
+| Use `@Module()`, `@Controller()`, `@Injectable()`, route decorators, guards, interceptors, pipes, filters, and metadata decorators intentionally | NestJS behavior is metadata-driven and should be visible at the framework boundary |
+| Inject dependencies through constructors and custom providers instead of manual construction | The DI container controls lifecycle and enables focused tests |
+| Organize code into feature modules under `src/modules/` with shared cross-cutting code in `src/common/` or `src/shared/` | Module boundaries keep applications scalable and navigable |
+| Keep controllers thin and services focused on business logic | HTTP concerns do not leak into domain behavior |
+| Validate DTOs with `class-validator`, transform with `class-transformer`, and create separate create, update, and query DTOs | Invalid input is rejected at the boundary with operation-specific contracts |
+| Use TypeORM entities, repositories, query builders, and migrations deliberately | Data access stays explicit and schema changes are repeatable |
+| Implement JWT authentication, Passport guards, RBAC metadata, and custom user-context decorators where protected routes require them | Authorization decisions remain centralized and testable |
+| Use global exception filters, `HttpException`, `HttpStatus.INTERNAL_SERVER_ERROR`, and Nest `Logger` for consistent failures | Clients receive consistent responses and operators get context-rich logs |
+| Test services with Jest and `TestingModule`; use supertest for e2e request flows | Business logic and HTTP behavior are validated at the right level |
+| Configure with `@nestjs/config`, startup validation, `CONFIGURATION_TOKEN`, and environment-specific settings | Sensitive and environment-dependent values stay outside code |
+
+## Do / Do Not
+
+| Do | Do not |
+|---|---|
+| Create `*.controller.ts`, `*.service.ts`, `*.module.ts`, `*.dto.ts`, `*.entity.ts`, `*.guard.ts`, `*.interceptor.ts`, `*.pipe.ts`, and `*.filter.ts` files with consistent names | Mix unrelated framework roles in one file without clear ownership |
+| Use `forRoot()` and `forFeature()` for configurable modules | Create circular module imports or hidden global dependencies |
+| Use `@UseGuards`, `@UseInterceptors`, `@UsePipes`, `ValidationPipe`, and DTO types at the appropriate level | Validate ad hoc inside controllers or skip validation entirely |
+| Store secrets and sensitive settings in environment-backed configuration | Hardcode passwords, JWT secrets, database URLs, or API keys |
+| Optimize hot paths with pagination, caching such as Redis, indexes, and response transformation interceptors | Return large unpaginated result sets or rely on unindexed dynamic queries |
+| Use rate limiting with `ThrottlerGuard` and `@Throttle` on abuse-prone routes | Expose authentication endpoints without abuse protection |
+| Mock repositories, external services, and integrations in unit tests | Mock the domain logic being tested |
+
+## Checklist Before Opening a PR
+
+- [ ] Feature code is organized in the recommended `src/` module structure.
+- [ ] Controllers are thin and delegate business logic to services.
+- [ ] Providers use `@Injectable()` and constructor-based dependency injection.
+- [ ] DTOs use `class-validator` and transformation where request input requires it.
+- [ ] TypeORM entities, repositories, relationships, and migrations are consistent with the data model.
+- [ ] Protected routes use JWT, Passport guards, RBAC, or custom decorators as required.
+- [ ] Exception filters and logging produce consistent error responses with useful context.
+- [ ] Unit, integration, and e2e tests cover business logic, request flows, authentication, and authorization.
+- [ ] Performance and security concerns such as pagination, caching, CORS, rate limiting, and sanitization are addressed.
+- [ ] Configuration is environment-backed, validated at startup, and contains no hardcoded secrets.

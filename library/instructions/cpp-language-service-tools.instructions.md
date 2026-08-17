@@ -1,332 +1,138 @@
 ---
 applyTo: '**/*.cpp,**/*.h,**/*.hpp,**/*.cc,**/*.cxx,**/*.c'
-description: 'Conventions for using C++ language service tools for symbol references, symbol information, and call hierarchy instead of manual code inspection.'
+description: 'Enforces C and C++ language-service tool usage for symbol definitions, references, call hierarchy, parameters, line numbers, fallback search, and recovery.'
 ---
 
-# C++ Language Service Tools Conventions
+# C++ Language Service Conventions — Symbol Tools First
 
-You have access to three specialized C++ tools:
+These instructions apply to C and C++ source and header files matched by the `applyTo` globs. They are authoritative for choosing C++ language service tools, resolving symbols, finding references, analyzing call hierarchy, supplying parameters, recovering from tool errors, and deciding when manual or text search is acceptable; repository-specific build, formatting, and architecture instructions win for compilation and design rules outside symbol analysis.
 
-1. **`GetSymbolInfo_CppTools`** - Find symbol definitions and get type information
-2. **`GetSymbolReferences_CppTools`** - Find ALL references to a symbol
-3. **`GetSymbolCallHierarchy_CppTools`** - Analyze function call relationships
+## Tool Responsibilities
 
----
+Use the specialized C++ tools as the primary interface to C and C++ code understanding.
 
-## Mandatory Tool Usage Rules
+| Tool | Owns | Use when |
+| --- | --- | --- |
+| `GetSymbolInfo_CppTools` | Symbol definitions and type information | You need to find where a symbol is defined or understand an unfamiliar type, function, method, class, variable, or member |
+| `GetSymbolReferences_CppTools` | All references to a symbol | You need all usages, uses, references, usage patterns, refactoring impact, or affected sites |
+| `GetSymbolCallHierarchy_CppTools` | Function call relationships | You change a function signature, analyze callers with `callsFrom=false`, or inspect outgoing calls with `callsFrom=true` |
 
-### Rule 1: Prefer GetSymbolReferences_CppTools as the default for locating C/C++ Symbol Usages
+Prefer language-service results over `vscode_listCodeUsages`, `grep_search`, `read_file`, semantic search, or manual inspection for C++ symbols because IntelliSense understands overloaded functions, template instantiations, qualified and unqualified names, member calls, inherited members, and preprocessor conditionals for the active configuration.
 
-**DO NOT** rely on text-based search tools such as `vscode_listCodeUsages`, `grep_search`, or `read_file`. Only if GetSymbolReferences_CppTools is unavailable, fails, or appears incomplete, resort to these text-based search tools as a fallback.
+## Mandatory Symbol Workflows
 
-**ALWAYS** call `GetSymbolReferences_CppTools` when:
-- Any task involving "find all references/usages/uses"
-- Changing function signatures
-- Refactoring code
-- Understanding symbol impact
-- Identifying usage patterns
+For symbol usage searches, call `GetSymbolReferences_CppTools` by default. Fall back to text search only when the tool is unavailable, fails, or appears incomplete.
 
-**Why**: `GetSymbolReferences_CppTools` uses C++ IntelliSense and understands:
-- Differentiating between overloaded functions
-- Differentiating between template instantiations
-- Qualified vs unqualified names
-- Member function calls
-- Inherited member usage
-- Preprocessor conditionals for the active configuration
+For function signature changes, call `GetSymbolInfo_CppTools` to locate the definition, then call `GetSymbolCallHierarchy_CppTools` with `callsFrom=false` to find all callers, then call `GetSymbolReferences_CppTools` to catch additional references such as function pointers. Only after that update the function definition and all call sites.
 
-Text search tools will miss these or produce false positives.
+For unfamiliar code, call `GetSymbolInfo_CppTools` on key types or functions, call `GetSymbolCallHierarchy_CppTools` with `callsFrom=true` to understand what a function calls, and call it with `callsFrom=false` to understand where the function is used. Read implementation details only after the tools identify the relevant code.
 
-### Rule 2: ALWAYS Use GetSymbolCallHierarchy_CppTools for Function Changes
+## Parameters and Resolution Strategy
 
-Before modifying any function signature, **ALWAYS** call `GetSymbolCallHierarchy_CppTools` with `callsFrom=false` to find all callers.
+Start with minimal information and add context only when needed.
 
-**Examples**:
+| Parameter | Convention |
+| --- | --- |
+| Symbol name | Always provide a non-empty symbol name; it may be unqualified like `MyFunction`, partially qualified like `MyClass::MyMethod`, or fully qualified like `MyNamespace::MyClass::MyMethod` |
+| File path | Strongly prefer absolute file paths when available, such as `C:\Users\Project\src\main.cpp`; avoid relative paths like `src\main.cpp` when the absolute path is known |
+| Line number | Use 1-based line numbers only, never 0-based numbers |
 
-- Adding/removing function parameters
-- Changing parameter types
-- Changing return types
-- Making functions virtual
-- Converting to template functions
-
-**Why**: This ensures you update ALL call sites, not just the ones you can see.
-
-### Rule 3: ALWAYS Use GetSymbolInfo_CppTools to Understand Symbols
-
-Before working with unfamiliar code, **ALWAYS** call `GetSymbolInfo_CppTools` to:
-
-- Find where a symbol is defined
-- Get type information
-
-**NEVER** assume you know what a symbol is without checking.
-
----
-
-## Parameter Usage Guidelines
-
-### Symbol Names
-
-- **ALWAYS REQUIRED**: Provide the symbol name
-- Can be unqualified (`MyFunction`), partially qualified (`MyClass::MyMethod`), or fully qualified (`MyNamespace::MyClass::MyMethod`)
-- If you have a line number, the symbol should match what appears on that line
-
-### File Paths
-
-- **STRONGLY PREFERRED**: Always provide absolute file paths when available
-  - Good: `C:\Users\Project\src\main.cpp`
-  - Avoid: `src\main.cpp` (requires resolution, may fail)
-- If you have access to a file path, include it
-- If working with user-specified files, use their exact path
-
-### Line Numbers
-
-- **CRITICAL**: Line numbers are 1-based, NOT 0-based
-- **MANDATORY WORKFLOW** when you need a line number:
-  1. First call `read_file` to search for the symbol
-  2. Locate the symbol in the output
-  3. Note the EXACT line number from the output
-  4. VERIFY the line contains the symbol
-  5. Only then call the C++ tool with that line number
-- **NEVER** guess or estimate line numbers
-- If you don't have a line number, omit it - the tools will find the symbol
-
-### Minimal Information Strategy
-
-Start with minimal information and add more only if needed:
-
-1. **First attempt**: Symbol name only
-2. **If ambiguous**: Symbol name + file path
-3. **If still ambiguous**: Symbol name + file path + line number (after using `read_file` workflow mentioned above)
-
----
-
-## Common Workflows
-
-### Changing a Function Signature
-
-```
-CORRECT workflow:
-1. Call GetSymbolInfo_CppTools to locate the function definition
-2. Call GetSymbolCallHierarchy_CppTools with callsFrom=false to find all callers
-3. Call GetSymbolReferences_CppTools to catch any additional references (function pointers, etc.)
-4. Update function definition
-5. Update ALL call sites with new signature
-
-INCORRECT workflow:
-Changing the function without finding callers
-Only updating visible call sites
-Using text search to find calls
-```
-
-### Understanding Unfamiliar Code
-
-```
-CORRECT workflow:
-1. Call GetSymbolInfo_CppTools on key types/functions to understand definitions
-2. Call GetSymbolCallHierarchy_CppTools with callsFrom=true to understand what a function does
-3. Call GetSymbolCallHierarchy_CppTools with callsFrom=false to understand where a function is used
-
-INCORRECT workflow:
-Reading code manually without tool assistance
-Making assumptions about symbol meanings
-Skipping hierarchy analysis
-```
-
-### Analyzing Function Dependencies
-
-```
-CORRECT workflow:
-1. Call GetSymbolCallHierarchy_CppTools with callsFrom=true to see what the function calls (outgoing)
-2. Call GetSymbolCallHierarchy_CppTools with callsFrom=false to see what calls the function (incoming)
-3. Use this to understand code flow and dependencies
-
-INCORRECT workflow:
-Manually reading through function body
-Guessing at call patterns
-```
-
----
+Resolution order: try symbol name only; if ambiguous, add file path; if still ambiguous, add file path and exact line number. When a line number is needed, first use file reading to locate the symbol, note the exact line number from the output, verify that the line contains the symbol, and only then call the C++ tool.
 
 ## Error Handling and Recovery
 
-### When You Get an Error Message
+Follow tool error messages exactly.
 
-**All error messages contain specific recovery instructions. ALWAYS follow them exactly.**
+| Message | Meaning | Recovery |
+| --- | --- | --- |
+| `The symbol name is not valid: it is either empty or null. Find a valid symbol name. Then call the [tool] tool again` | The symbol parameter is missing or blank | Provide a non-empty, correctly spelled symbol name and retry |
+| `A file could not be found at the specified path. Compute the absolute path to the file. Then call the [tool] tool again.` | The file path cannot be resolved | Convert the path to an absolute path, verify that the file exists in the workspace, and retry |
+| `No results found for the symbol '[symbol_name]'.` | The symbol was found but has no references, calls, or hierarchy results for that query | Treat the empty result as valid information and report it instead of inventing usages |
 
-#### "Symbol name is not valid" Error
+Do not ignore an error, guess a different line, or proceed with a refactor when the recovery instructions have not been followed.
 
-```
-Error: "The symbol name is not valid: it is either empty or null. Find a valid symbol name. Then call the [tool] tool again"
+## Fallbacks and Integration with Other Tools
 
-Recovery:
-1. Ensure you provided a non-empty symbol name
-2. Check that the symbol name is spelled correctly
-3. Retry with valid symbol name
-```
+Use `read_file` only to find exact line numbers before calling C++ tools or to read implementation details after a symbol is located. Do not use `read_file` to find symbol usages.
 
-#### "File could not be found" Error
+Use `vscode_listCodeUsages` or `grep_search` for string literals, comments, non-C++ files, and configuration patterns. Do not use them for C++ symbol usages unless `GetSymbolReferences_CppTools` is unavailable, fails, or appears incomplete.
 
-```
-Error: "A file could not be found at the specified path. Compute the absolute path to the file. Then call the [tool] tool again."
+Use semantic search for conceptual discovery and project structure, then switch to the C++ tools for precise symbol analysis. Do not batch multiple unrelated symbol operations; analyze independent symbols in parallel only when each operation has a clear target.
 
-Recovery:
-1. Convert relative path to absolute path
-2. Verify file exists in the workspace
-3. Use exact path from user or file system
-4. Retry with absolute path
-```
 
-#### "No results found" Message
+## Preserved Tool Vocabulary
 
-```
-Message: "No results found for the symbol '[symbol_name]'."
+Keep exact tool vocabulary where it maps to mandatory behavior or legacy tool names.
 
-This is NOT an error - it means:
-- The symbol exists and was found
-- But it has no references/calls/hierarchy (depending on tool)
-- This is valid information - report it to the user
-```
+| Vocabulary | Convention |
+| --- | --- |
+| `ALWAYS`, `NEVER`, `MANDATORY`, `CRITICAL`, `REQUIRED`, `STRONGLY`, `PREFERRED`, `ONLY`, `EXACT`, `VERIFY`, `CORRECT`, `INCORRECT`, and `WORKFLOW` | Use these labels only when preserving hard constraints, examples, and recovery wording from tool guidance. |
+| `Adding/removing` | Treat adding/removing function parameters as a signature change that requires incoming call hierarchy. |
+| `references/usages/uses`, `used/called/referenced`, `references/calls`, and `references/calls/hierarchy` | Keep these phrases tied to the decision of references versus call hierarchy. |
+| `text-based` | Use this term for grep-style fallback tools that do not understand C++ symbols. |
+| `types/functions` | Use symbol info before assuming the meaning of unfamiliar types/functions. |
+| `user-specified` | Preserve user-specified file paths exactly, then convert to absolute paths when tools require them. |
+| `semantic_search` and `vscode_listCodeUsages/grep_search` | Name these as fallback or discovery tools, never as the default symbol engine. |
+| `call_hierarchy` | Keep this legacy token when explaining that the call hierarchy tool is mandatory before signature edits. |
 
----
+## Good / Bad Examples
 
-## Tool Selection Decision Tree
+The examples below illustrate the required workflow for a function signature change.
 
-**Question: Do I need to find where a symbol is used/called/referenced?**
+**Good:**
 
-- YES → Use `GetSymbolReferences_CppTools`
-- NO → Continue
-
-**Question: Am I changing a function signature or analyzing function calls?**
-
-- YES → Use `GetSymbolCallHierarchy_CppTools`
-  - Finding callers? → `callsFrom=false`
-  - Finding what it calls? → `callsFrom=true`
-- NO → Continue
-
-**Question: Do I need to find a definition or understand a type?**
-
-- YES → Use `GetSymbolInfo_CppTools`
-- NO → You may not need a C++ tool for this task
-
----
-
-## Critical Reminders
-
-### DO:
-
-- Call `GetSymbolReferences_CppTools` for ANY symbol usage search
-- Call `GetSymbolCallHierarchy_CppTools` before function signature changes
-- Use `read_file` to find line numbers before specifying them### Rule 1: Prefer GetSymbolReferences_CppTools as the default for locating C/C++ Symbol Usages
-- Prefer C++ tools as the default. Rely on text-based search tools only as a fallback if C++ tools are unavailable, fail, or appear incomplete.
-- Provide absolute file paths when available
-- Follow error message instructions exactly
-- Trust tool results over manual inspection
-- Use minimal parameters first, add more if needed
-- Remember line numbers are 1-based
-
-### DO NOT:
-- Rely on text-based search tools such as `vscode_listCodeUsages`, `grep_search`, or `read_file` to find symbol usages
-- Manually inspect code to find references
-- Guess line numbers
-- Assume symbol uniqueness without checking
-- Ignore error messages
-- Skip tool usage to save time
-- Use 0-based line numbers
-- Batch multiple unrelated symbol operations
-- Make changes without finding all affected locations
-
----
-
-## Examples of Correct Usage
-
-### Example 1: User asks to add a parameter to a function
-```
-User: "Add a parameter 'bool verbose' to the LogMessage function"
-
-CORRECT response:
-1. Call GetSymbolInfo_CppTools("LogMessage") to find definition
-2. Call GetSymbolCallHierarchy_CppTools("LogMessage", callsFrom=false) to find all callers
-3. Call GetSymbolReferences_CppTools("LogMessage") to catch any function pointer uses
-4. Update function definition
-5. Update ALL call sites with new parameter
-
-INCORRECT response:
-Only updating the definition
-Updating only obvious call sites
-Not using call_hierarchy tool
+```text
+User asks: Add bool verbose to LogMessage.
+1. Call GetSymbolInfo_CppTools for LogMessage.
+2. Call GetSymbolCallHierarchy_CppTools for LogMessage with callsFrom=false.
+3. Call GetSymbolReferences_CppTools for LogMessage.
+4. Update the definition and every caller or reference.
 ```
 
-### Example 2: User asks to understand a function
-```
-User: "What does the Initialize function do?"
+Why: The workflow locates the definition, callers, and non-call references before code changes, so overloads and function pointer uses are not missed.
 
-CORRECT response:
-1. Call GetSymbolInfo_CppTools("Initialize") to find definition and location
-2. Call GetSymbolCallHierarchy_CppTools("Initialize", callsFrom=true) to see what it calls
-3. Read the function implementation
-4. Explain based on code + call hierarchy
+**Bad:**
 
-INCORRECT response:
-Only reading the function body
-Not checking what it calls
-Guessing at behavior
+```text
+Use grep_search for LogMessage, edit the visible definition, and update only the matches in the current file.
 ```
 
----
+Why: Text search can miss overloads, templates, inherited calls, preprocessor-specific code, and call sites outside the visible file.
 
-## Performance and Best Practices
+## Conventions
 
-### Efficient Tool Usage
+| Rule | Rationale |
+|---|---|
+| Use `GetSymbolReferences_CppTools` for C/C++ symbol usages | IntelliSense distinguishes real symbol references from textual coincidences |
+| Use `GetSymbolCallHierarchy_CppTools` with `callsFrom=false` before function signature changes | Every caller must be updated to preserve build correctness |
+| Use `GetSymbolCallHierarchy_CppTools` with `callsFrom=true` when analyzing outgoing dependencies | Call hierarchy reveals behavior that a local body read can miss |
+| Use `GetSymbolInfo_CppTools` before working with unfamiliar symbols | Definitions and type information prevent incorrect assumptions |
+| Provide absolute file paths when available | Tool resolution is faster and less ambiguous |
+| Use only verified 1-based line numbers | Guessed or 0-based line numbers can bind to the wrong symbol |
+| Follow recovery instructions in tool error messages exactly | The tools provide the safest retry path |
+| Treat `No results found` as valid information | Empty reference or call sets can be the correct answer |
+| Use text search only for non-symbol patterns or as a fallback | Grep-style tools do not understand C++ semantics |
 
-- Call tools in parallel when analyzing multiple independent symbols
-- Use file paths to speed up symbol resolution
-- Provide context to narrow searches
+## Do / Do Not
 
-### Iterative Refinement
+| Do | Do not |
+|---|---|
+| Think `GetSymbolReferences_CppTools` for usages, `GetSymbolCallHierarchy_CppTools` for calls, and `GetSymbolInfo_CppTools` for definitions | Start with manual inspection for symbol-related tasks |
+| Use `callsFrom=false` to find callers and `callsFrom=true` to find callees | Reverse call hierarchy direction or omit it before signature changes |
+| Start with a symbol name, then add file path and line number only when needed | Guess line numbers or over-specify ambiguous context |
+| Use `C:\Users\Project\src\main.cpp`-style absolute paths when available | Rely on `src\main.cpp` when the absolute path is known |
+| Verify a line contains the symbol before passing its 1-based line number | Use 0-based line numbers or estimates |
+| Follow exact recovery instructions for invalid symbol names and missing files | Ignore tool errors and continue editing |
+| Use semantic search for broad concepts, then C++ tools for precise symbols | Use `grep_search` or `vscode_listCodeUsages` as the default symbol engine |
 
-- If first tool call is ambiguous, add file path
-- If still ambiguous, use `read_file` to find exact line
-- Tools are designed for iteration
+## Checklist Before Opening a PR
 
-### Understanding Results
-
-- **Empty results are valid**: "No results found" means the symbol has no references/calls
-- **Multiple results are common**: C++ has overloading, templates, namespaces
-- **Trust the tools**: IntelliSense knows C++ semantics better than text-based search tools
-
----
-
-## Integration with Other Tools
-
-### When to use read_file
-
-- **ONLY** for finding line numbers before calling C++ tools
-- **ONLY** for reading implementation details after locating symbols
-- **NEVER** for finding symbol usages (use `GetSymbolReferences_CppTools` instead)
-
-### When to use vscode_listCodeUsages/grep_search
-
-- Finding string literals or comments
-- Searching non-C++ files
-- Pattern matching in configuration files
-- **NEVER** for finding C++ symbol usages unless GetSymbolReferences_CppTools is unavailable, fails, or appears incomplete
-
-### When to use semantic_search
-
-- Finding code based on conceptual queries
-- Locating relevant files in large codebases
-- Understanding project structure
-- **Then** use C++ tools for precise symbol analysis
-
----
-
-## Summary
-
-**The golden rule**: When working with C++ code, think "tool first, manual inspection later."
-
-1. **Symbol usages?** → `GetSymbolReferences_CppTools`
-2. **Function calls?** → `GetSymbolCallHierarchy_CppTools`
-3. **Symbol definition?** → `GetSymbolInfo_CppTools`
-
-These tools are your primary interface to C++ code understanding. Use them liberally and often. They are fast, accurate, and understand C++ semantics that text-based search tools cannot capture.
-
-**Your success metric**: Did I use the right C++ tool for every symbol-related task?
+- [ ] Every C/C++ symbol usage search used `GetSymbolReferences_CppTools` or has a documented fallback reason.
+- [ ] Every function signature change used `GetSymbolInfo_CppTools`, incoming `GetSymbolCallHierarchy_CppTools` with `callsFrom=false`, and `GetSymbolReferences_CppTools` before edits.
+- [ ] Unfamiliar symbols were checked with `GetSymbolInfo_CppTools` before assumptions were made.
+- [ ] Function dependency analysis used `GetSymbolCallHierarchy_CppTools` with the correct `callsFrom` direction.
+- [ ] Absolute file paths were supplied when available.
+- [ ] Any line numbers passed to tools were verified as exact and 1-based.
+- [ ] Tool errors were recovered according to their messages.
+- [ ] `No results found` outcomes were treated as valid when appropriate.
+- [ ] Text search was limited to string literals, comments, non-C++ files, configuration, or documented fallback cases.

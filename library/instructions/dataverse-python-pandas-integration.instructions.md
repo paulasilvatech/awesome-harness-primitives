@@ -1,552 +1,196 @@
 ---
-applyTo: '**/*.py'
-description: 'Guidance for integrating the Python Dataverse SDK with pandas DataFrames for analytics and data science workflows.'
+applyTo: "**/*.py"
+description: "Enforces conventions for integrating the Python Dataverse SDK with pandas DataFrames for analytics, reporting, visualization, and machine-learning workflows."
 ---
 
-# Dataverse SDK for Python - Pandas Integration Guide
+# Dataverse Python Pandas Integration Conventions — Analytics DataFrames
 
-## Overview
-Guide to integrating the Dataverse SDK for Python with pandas DataFrames for data science and analysis workflows. The SDK's JSON response format maps seamlessly to pandas DataFrames, enabling data scientists to work with Dataverse data using familiar data manipulation tools.
+These instructions apply to Python files that read Dataverse data into pandas for exploration, reporting, visualization, and machine-learning preparation. They are authoritative for DataFrame construction, OData query shaping, pandas transformations, exports, and client-side analytics around `PowerPlatform-Dataverse-Client`; Dataverse CRUD, metadata, file upload behavior, and error handling primitives win where they define stricter SDK or operational rules.
 
----
+## Client Choice and Dependencies
 
-## 1. Introduction to PandasODataClient
+Use pandas integration only for tabular analysis, data science, reports, cleaning, visualization, and machine-learning pipelines. Use `DataverseClient` directly for real-time CRUD operations, file upload operations, metadata operations, and single record operations because those paths need SDK behavior rather than DataFrame ergonomics.
 
-### What is PandasODataClient?
-`PandasODataClient` is a thin wrapper around the standard `DataverseClient` that returns data in pandas DataFrame format instead of raw JSON dictionaries. This makes it ideal for:
-- Data scientists working with tabular data
-- Analytics and reporting workflows
-- Data exploration and cleaning
-- Integration with machine learning pipelines
+| Need | Preferred client or library | Rationale |
+| --- | --- | --- |
+| Tabular exploration and reporting | `DataverseClient.get(...)` pages collected into `pd.DataFrame` | The SDK returns JSON-shaped dictionaries that map naturally to pandas columns. |
+| CRUD, metadata, or upload work | `DataverseClient` | DataFrames add no value and can hide SDK semantics. |
+| Data manipulation | `pandas` imported as `pd` | Keeps examples idiomatic and compatible with pandas documentation. |
+| Authentication | `InteractiveBrowserCredential` or the credential already selected by the app | Authentication remains owned by Azure Identity rather than pandas code. |
 
-### Installation Requirements
-```bash
-# Install core dependencies
-pip install PowerPlatform-Dataverse-Client
-pip install azure-identity
+Install only the dependencies the workflow actually uses: `PowerPlatform-Dataverse-Client`, `azure-identity`, `pandas`, and optional analysis packages such as `matplotlib`, `seaborn`, `numpy`, or `scikit-learn` when visualization or ML code imports them.
 
-# Install pandas for data manipulation
-pip install pandas
-```
+## Query Shaping and DataFrame Construction
 
-### When to Use PandasODataClient
-**Use when you need:**
-- Data exploration and analysis
-- Working with tabular data
-- Integration with statistical/ML libraries
-- Efficient data manipulation
+Always shape the Dataverse query before constructing the DataFrame. Use `select`, `filter`, `orderby`, `top`, and `page_size` to keep the payload bounded, predictable, and column-oriented.
 
-**Use DataverseClient instead when you need:**
-- Real-time CRUD operations only
-- File upload operations
-- Metadata operations
-- Single record operations
-
----
-
-## 2. Basic DataFrame Workflow
-
-### Converting Query Results to DataFrame
 ```python
 from azure.identity import InteractiveBrowserCredential
 from PowerPlatform.Dataverse.client import DataverseClient
 import pandas as pd
 
-# Setup authentication
 base_url = "https://<myorg>.crm.dynamics.com"
-credential = InteractiveBrowserCredential()
-client = DataverseClient(base_url=base_url, credential=credential)
+client = DataverseClient(base_url=base_url, credential=InteractiveBrowserCredential())
 
-# Query data
-pages = client.get(
+records = []
+for page in client.get(
     "account",
-    select=["accountid", "name", "creditlimit", "telephone1"],
+    select=["accountid", "name", "creditlimit", "telephone1", "createdon"],
     filter="statecode eq 0",
-    orderby=["name"]
-)
+    orderby=["name"],
+    page_size=1000,
+):
+    records.extend(page)
 
-# Collect all pages into one DataFrame
-all_records = []
-for page in pages:
-    all_records.extend(page)
-
-# Convert to DataFrame
-df = pd.DataFrame(all_records)
-
-# Display first few rows
+df = pd.DataFrame(records)
 print(df.head())
 print(f"Total records: {len(df)}")
 ```
 
-### Query Parameters Map to DataFrame
-```python
-# All query parameters return as columns in DataFrame
-df = pd.DataFrame(
-    client.get(
-        "account",
-        select=["accountid", "name", "creditlimit", "telephone1", "createdon"],
-        filter="creditlimit > 50000",
-        orderby=["creditlimit desc"]
-    )
-)
-
-# Result is a DataFrame with columns:
-# accountid | name | creditlimit | telephone1 | createdon
-```
-
----
-
-## 3. Data Exploration with Pandas
-
-### Basic Exploration
-```python
-import pandas as pd
-from azure.identity import InteractiveBrowserCredential
-from PowerPlatform.Dataverse.client import DataverseClient
-
-client = DataverseClient("https://<myorg>.crm.dynamics.com", InteractiveBrowserCredential())
-
-# Load account data
-records = []
-for page in client.get("account", select=["accountid", "name", "creditlimit", "industrycode"]):
-    records.extend(page)
-
-df = pd.DataFrame(records)
-
-# Explore the data
-print(df.shape)           # (1000, 4)
-print(df.dtypes)          # Data types
-print(df.describe())      # Statistical summary
-print(df.info())          # Column info and null counts
-print(df.head(10))        # First 10 rows
-```
-
-### Filtering and Selecting
-```python
-# Filter rows by condition
-high_value = df[df['creditlimit'] > 100000]
-
-# Select specific columns
-names_limits = df[['name', 'creditlimit']]
-
-# Multiple conditions
-filtered = df[(df['creditlimit'] > 50000) & (df['industrycode'] == 1)]
-
-# Value counts
-print(df['industrycode'].value_counts())
-```
-
-### Sorting and Grouping
-```python
-# Sort by column
-sorted_df = df.sort_values('creditlimit', ascending=False)
-
-# Group by and aggregate
-by_industry = df.groupby('industrycode').agg({
-    'creditlimit': ['mean', 'sum', 'count'],
-    'name': 'count'
-})
-
-# Group statistics
-print(df.groupby('industrycode')['creditlimit'].describe())
-```
-
-### Data Cleaning
-```python
-# Handle missing values
-df_clean = df.dropna()                    # Remove rows with NaN
-df_filled = df.fillna(0)                  # Fill NaN with 0
-df_ffill = df.fillna(method='ffill')      # Forward fill
-
-# Check for duplicates
-duplicates = df[df.duplicated(['name'])]
-df_unique = df.drop_duplicates()
-
-# Data type conversion
-df['creditlimit'] = pd.to_numeric(df['creditlimit'])
-df['createdon'] = pd.to_datetime(df['createdon'])
-```
-
----
-
-## 4. Data Analysis Patterns
-
-### Aggregation and Summarization
-```python
-# Create summary report
-summary = df.groupby('industrycode').agg({
-    'accountid': 'count',
-    'creditlimit': ['mean', 'min', 'max', 'sum'],
-    'name': lambda x: ', '.join(x.head(3))  # Sample names
-}).round(2)
-
-print(summary)
-```
-
-### Time-Series Analysis
-```python
-# Convert to datetime
-df['createdon'] = pd.to_datetime(df['createdon'])
-
-# Resample to monthly
-monthly = df.set_index('createdon').resample('M').size()
-
-# Extract date components
-df['year'] = df['createdon'].dt.year
-df['month'] = df['createdon'].dt.month
-df['day_of_week'] = df['createdon'].dt.day_name()
-```
-
-### Join and Merge Operations
-```python
-# Load two related tables
-accounts = pd.DataFrame(client.get("account", select=["accountid", "name"]))
-contacts = pd.DataFrame(client.get("contact", select=["contactid", "parentcustomerid", "fullname"]))
-
-# Merge on relationship
-merged = accounts.merge(
-    contacts,
-    left_on='accountid',
-    right_on='parentcustomerid',
-    how='left'
-)
-
-print(merged.head())
-```
-
-### Statistical Analysis
-```python
-# Correlation matrix
-correlation = df[['creditlimit', 'industrycode']].corr()
-
-# Distribution analysis
-print(df['creditlimit'].describe())
-print(df['creditlimit'].skew())
-print(df['creditlimit'].kurtosis())
-
-# Percentiles
-print(df['creditlimit'].quantile([0.25, 0.5, 0.75]))
-```
-
----
-
-## 5. Pivot Tables and Reports
-
-### Creating Pivot Tables
-```python
-# Pivot table by industry and status
-pivot = pd.pivot_table(
-    df,
-    values='creditlimit',
-    index='industrycode',
-    columns='statecode',
-    aggfunc=['sum', 'mean', 'count']
-)
-
-print(pivot)
-```
-
-### Generating Reports
-```python
-# Sales report by industry
-industry_report = df.groupby('industrycode').agg({
-    'accountid': 'count',
-    'creditlimit': 'sum',
-    'name': 'first'
-}).rename(columns={
-    'accountid': 'Account Count',
-    'creditlimit': 'Total Credit Limit',
-    'name': 'Sample Account'
-})
-
-# Export to CSV
-industry_report.to_csv('industry_report.csv')
-
-# Export to Excel
-industry_report.to_excel('industry_report.xlsx')
-```
-
----
-
-## 6. Data Visualization
-
-### Matplotlib Integration
-```python
-import matplotlib.pyplot as plt
-
-# Create visualizations
-fig, axes = plt.subplots(2, 2, figsize=(12, 10))
-
-# Histogram
-df['creditlimit'].hist(bins=30, ax=axes[0, 0])
-axes[0, 0].set_title('Credit Limit Distribution')
-
-# Bar chart
-df['industrycode'].value_counts().plot(kind='bar', ax=axes[0, 1])
-axes[0, 1].set_title('Accounts by Industry')
-
-# Box plot
-df.boxplot(column='creditlimit', by='industrycode', ax=axes[1, 0])
-axes[1, 0].set_title('Credit Limit by Industry')
-
-# Scatter plot
-df.plot.scatter(x='creditlimit', y='industrycode', ax=axes[1, 1])
-axes[1, 1].set_title('Credit Limit vs Industry')
-
-plt.tight_layout()
-plt.show()
-```
-
-### Seaborn Integration
-```python
-import seaborn as sns
-
-# Correlation heatmap
-plt.figure(figsize=(8, 6))
-sns.heatmap(df[['creditlimit', 'industrycode']].corr(), annot=True)
-plt.title('Correlation Matrix')
-plt.show()
-
-# Distribution plot
-sns.distplot(df['creditlimit'], kde=True)
-plt.title('Credit Limit Distribution')
-plt.show()
-```
-
----
-
-## 7. Machine Learning Integration
-
-### Preparing Data for ML
-```python
-from sklearn.preprocessing import StandardScaler
-from sklearn.model_selection import train_test_split
-
-# Load and prepare data
-records = []
-for page in client.get("account", select=["accountid", "creditlimit", "industrycode", "statecode"]):
-    records.extend(page)
-
-df = pd.DataFrame(records)
-
-# Feature engineering
-df['log_creditlimit'] = np.log1p(df['creditlimit'])
-df['industry_cat'] = pd.Categorical(df['industrycode']).codes
-
-# Split features and target
-X = df[['industrycode', 'log_creditlimit']]
-y = df['statecode']
-
-# Train-test split
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
-
-print(f"Training set: {len(X_train)}, Test set: {len(X_test)}")
-```
-
-### Building a Classification Model
-```python
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import classification_report
-
-# Train model
-model = RandomForestClassifier(n_estimators=100)
-model.fit(X_train, y_train)
-
-# Evaluate
-y_pred = model.predict(X_test)
-print(classification_report(y_test, y_pred))
-
-# Feature importance
-importances = pd.Series(
-    model.feature_importances_,
-    index=X.columns
-).sort_values(ascending=False)
-
-print(importances)
-```
-
----
-
-## 8. Advanced DataFrame Operations
-
-### Custom Functions
-```python
-# Apply function to columns
-df['name_length'] = df['name'].apply(len)
-
-# Apply function to rows
-df['category'] = df.apply(
-    lambda row: 'High' if row['creditlimit'] > 100000 else 'Low',
-    axis=1
-)
-
-# Conditional operations
-df['adjusted_limit'] = df['creditlimit'].where(
-    df['statecode'] == 0,
-    df['creditlimit'] * 0.5
-)
-```
-
-### String Operations
-```python
-# String methods
-df['name_upper'] = df['name'].str.upper()
-df['name_starts'] = df['name'].str.startswith('A')
-df['name_contains'] = df['name'].str.contains('Inc')
-df['name_split'] = df['name'].str.split(',').str[0]
-
-# Replace and substitute
-df['industry'] = df['industrycode'].map({
-    1: 'Retail',
-    2: 'Manufacturing',
-    3: 'Technology'
-})
-```
-
-### Reshaping Data
-```python
-# Transpose
-transposed = df.set_index('name').T
-
-# Stack/Unstack
-stacked = df.set_index(['name', 'industrycode'])['creditlimit'].unstack()
-
-# Melt long format
-melted = pd.melt(df, id_vars=['name'], var_name='metric', value_name='value')
-```
-
----
-
-## 9. Performance Optimization
-
-### Efficient Data Loading
-```python
-# Load large datasets in chunks
-all_records = []
-chunk_size = 1000
-
-for page in client.get(
-    "account",
-    select=["accountid", "name", "creditlimit"],
-    top=10000,        # Limit total records
-    page_size=chunk_size
-):
-    all_records.extend(page)
-    if len(all_records) % 5000 == 0:
-        print(f"Loaded {len(all_records)} records")
-
-df = pd.DataFrame(all_records)
-print(f"Total: {len(df)} records")
-```
-
-### Memory Optimization
-```python
-# Reduce memory usage
-# Use categorical for repeated values
-df['industrycode'] = df['industrycode'].astype('category')
-
-# Use appropriate numeric types
-df['creditlimit'] = pd.to_numeric(df['creditlimit'], downcast='float')
-
-# Delete columns no longer needed
-df = df.drop(columns=['unused_col1', 'unused_col2'])
-
-# Check memory usage
-print(df.memory_usage(deep=True).sum() / 1024**2, "MB")
-```
-
-### Query Optimization
-```python
-# Apply filters on server, not client
-# GOOD: Filter on server
-accounts = client.get(
-    "account",
-    filter="creditlimit > 50000",  # Server-side filter
-    select=["accountid", "name", "creditlimit"]
-)
-
-# BAD: Load all, filter locally
-all_accounts = client.get("account")  # Loads everything
-filtered = [a for a in all_accounts if a['creditlimit'] > 50000]  # Client-side
-```
-
----
-
-## 10. Complete Example: Sales Analytics
+Treat each selected Dataverse field as an expected DataFrame column: `accountid`, `name`, `creditlimit`, `telephone1`, `createdon`, `industrycode`, `statecode`, `contactid`, `parentcustomerid`, and `fullname` should appear only when selected or produced by an intentional transform.
+
+## Exploration, Filtering, Sorting, and Grouping
+
+Keep pandas exploration explicit and reproducible. Use `df.shape`, `df.dtypes`, `df.describe()`, `df.info()`, `df.head(10)`, `value_counts()`, `sort_values()`, `groupby()`, `agg()`, and `round(2)` to summarize data before drawing conclusions.
+
+| Operation | Convention | Example API names to preserve |
+| --- | --- | --- |
+| Row filtering | Use boolean masks with parentheses for multiple conditions. | `df[df['creditlimit'] > 100000]`, `&` |
+| Column selection | Select only the columns needed by the report or model. | `df[['name', 'creditlimit']]` |
+| Sorting | Sort with an explicit direction. | `sort_values('creditlimit', ascending=False)` |
+| Grouping | Aggregate named metrics and review counts. | `groupby('industrycode').agg({...})`, `describe()` |
+| Missing data | Choose `dropna()`, `fillna(0)`, or `fillna(method='ffill')` deliberately. | `dropna`, `fillna`, `ffill` |
+| Duplicates | Detect and remove duplicates on business keys only when justified. | `duplicated(['name'])`, `drop_duplicates()` |
+| Type conversion | Convert Dataverse strings/numbers before analysis. | `pd.to_numeric`, `pd.to_datetime` |
+
+## Analysis, Reporting, and Time Series
+
+Build analysis around named, reviewable transformations. Use `groupby`, `agg`, `lambda`, `resample('M')`, `dt.year`, `dt.month`, `dt.day_name()`, `corr()`, `skew()`, `kurtosis()`, and `quantile([0.25, 0.5, 0.75])` when the metric requires them. Prefer server-side filters for volume reduction and pandas aggregations for local analytical work on a bounded result.
+
+Use joins and reshaping only when the relationship is clear. Merge `accounts` and `contacts` with `accounts.merge(contacts, left_on='accountid', right_on='parentcustomerid', how='left')`; use `set_index`, `T`, `unstack`, and `pd.melt(..., id_vars=['name'], var_name='metric', value_name='value')` only when the output shape is required by the report or downstream model.
+
+## Pivot Tables, Exports, and Visualization
+
+Generate reports with deterministic names and formats. Use `pd.pivot_table` for matrix-style summaries, `rename(columns={...})` for presentation labels, `to_csv('industry_report.csv')` for CSV output, and `to_excel('industry_report.xlsx')` when an Excel workbook is explicitly needed.
+
+For visualization, keep chart setup readable and avoid hiding data assumptions:
+
+| Visualization | Preferred API | Notes |
+| --- | --- | --- |
+| Distribution | `df['creditlimit'].hist(bins=30, ax=axes[0, 0])` or `sns.distplot(df['creditlimit'], kde=True)` | Use for distribution shape; consider modern seaborn alternatives when available. |
+| Category counts | `value_counts().plot(kind='bar', ax=axes[0, 1])` | Pair the chart title with the grouping column. |
+| Box plot | `df.boxplot(column='creditlimit', by='industrycode', ax=axes[1, 0])` | Use for comparing distributions by category. |
+| Scatter plot | `df.plot.scatter(x='creditlimit', y='industrycode', ax=axes[1, 1])` | Confirm both axes are meaningful numeric values. |
+| Heatmap | `sns.heatmap(df[['creditlimit', 'industrycode']].corr(), annot=True)` | Correlation matrices require numeric columns. |
+
+Call `plt.subplots`, `set_title`, `plt.figure`, `plt.title`, `plt.tight_layout()`, and `plt.show()` explicitly so readers can reproduce the plot.
+
+## Machine Learning Preparation
+
+Keep ML preparation separated from Dataverse loading. Use `np.log1p` for skewed positive numeric values, `pd.Categorical(...).codes` for categorical features, `StandardScaler` when scaling is required by the model, `train_test_split(X, y, test_size=0.2)` for train/test separation, `RandomForestClassifier(n_estimators=100)` only when a tree classifier is appropriate, `model.fit`, `model.predict`, `classification_report`, `pd.Series(model.feature_importances_, index=X.columns).sort_values(ascending=False)` for model diagnostics.
+
+Do not train models on identifiers such as `accountid` unless the identifier is intentionally engineered into a feature. Keep `X`, `y`, `X_train`, `X_test`, `y_train`, and `y_test` naming consistent with scikit-learn examples.
+
+## Performance and Memory
+
+Bound data at the source and reduce memory in pandas after loading.
+
+- Use `top=10000` and `page_size=chunk_size` when sampling or chunking large result sets.
+- Log progress with `len(all_records)` only for long-running loads.
+- Convert repeated codes with `astype('category')`.
+- Downcast numeric data with `pd.to_numeric(df['creditlimit'], downcast='float')`.
+- Drop unneeded columns with `df.drop(columns=['unused_col1', 'unused_col2'])`.
+- Check memory with `df.memory_usage(deep=True).sum() / 1024**2` and report units as `MB`.
+
+Server-side filtering is the default: `client.get('account', filter='creditlimit > 50000', select=[...])` is acceptable; loading `client.get('account')` and filtering locally is not acceptable for large tables.
+
+## Good / Bad Examples
+
+The examples below illustrate bounded server-side loading before pandas analysis.
+
+**Good:**
 
 ```python
-import pandas as pd
-import numpy as np
-from azure.identity import InteractiveBrowserCredential
-from PowerPlatform.Dataverse.client import DataverseClient
-
-# Setup
-client = DataverseClient(
-    "https://<myorg>.crm.dynamics.com",
-    InteractiveBrowserCredential()
-)
-
-# Load data
-print("Loading account data...")
 records = []
 for page in client.get(
     "account",
-    select=["accountid", "name", "creditlimit", "industrycode", "statecode", "createdon"],
-    orderby=["createdon"]
+    filter="creditlimit > 50000",
+    select=["accountid", "name", "creditlimit", "industrycode", "createdon"],
+    orderby=["createdon"],
+    page_size=1000,
 ):
     records.extend(page)
 
 df = pd.DataFrame(records)
-df['createdon'] = pd.to_datetime(df['createdon'])
-
-# Data cleaning
-df = df.dropna()
-
-# Feature engineering
-df['year'] = df['createdon'].dt.year
-df['month'] = df['createdon'].dt.month
-df['year_month'] = df['createdon'].dt.to_period('M')
-
-# Analysis
-print("\n=== ACCOUNT OVERVIEW ===")
-print(f"Total accounts: {len(df)}")
-print(f"Total credit limit: ${df['creditlimit'].sum():,.2f}")
-print(f"Average credit limit: ${df['creditlimit'].mean():,.2f}")
-
-print("\n=== BY INDUSTRY ===")
-industry_summary = df.groupby('industrycode').agg({
-    'accountid': 'count',
-    'creditlimit': ['sum', 'mean']
+df["createdon"] = pd.to_datetime(df["createdon"])
+industry_summary = df.groupby("industrycode").agg({
+    "accountid": "count",
+    "creditlimit": ["sum", "mean"],
 }).round(2)
-print(industry_summary)
-
-print("\n=== BY STATUS ===")
-status_summary = df.groupby('statecode').agg({
-    'accountid': 'count',
-    'creditlimit': 'sum'
-})
-print(status_summary)
-
-# Export report
-print("\n=== EXPORTING REPORT ===")
-industry_summary.to_csv('industry_analysis.csv')
-print("Report saved to industry_analysis.csv")
+industry_summary.to_csv("industry_analysis.csv")
 ```
 
----
+Why: The query limits rows and columns before DataFrame creation, converts dates before time analysis, aggregates with named columns, and exports a deterministic report.
 
-## 11. Known Limitations
+**Bad:**
 
-- `PandasODataClient` currently requires manual DataFrame creation from query results
-- Very large DataFrames (millions of rows) may experience memory constraints
-- Pandas operations are client-side; server-side aggregation is more efficient for large datasets
-- File operations require standard `DataverseClient`, not pandas wrapper
+```python
+all_accounts = client.get("account")
+filtered = [a for a in all_accounts if a["creditlimit"] > 50000]
+df = pd.DataFrame(filtered)
+df.to_excel("industry_report.xlsx")
+```
 
----
+Why: The code loads everything, filters client-side, ignores paging, skips type conversion, and exports a report without documented grouping or validation.
 
-## 12. Related Resources
+## Baseline Compatibility Vocabulary
 
-- [Pandas Documentation](https://pandas.pydata.org/docs/)
-- [Official examples](https://github.com/microsoft/PowerPlatform-DataverseClient-Python/tree/main/examples)
-- [SDK for Python README](https://github.com/microsoft/PowerPlatform-DataverseClient-Python/blob/main/README.md)
-- [Microsoft Learn: Working with data](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/sdk-python/work-data)
+Preserve these legacy names, status labels, placeholders, paths, and configuration tokens when editing this instruction; they exist so older TaskSync, documentation, Dataverse, pandas, and troubleshooting examples remain searchable and recognizable.
+
+- `ACCOUNT`, `EXPORTING`, `GOOD`, `INDUSTRY`, `OVERVIEW`, `PandasODataClient`, `REPORT`, `STATUS`
+- `Stack/Unstack`, `adjusted_limit`, `by_industry`, `day_of_week`, `df_clean`, `df_ffill`, `df_filled`, `df_unique`
+- `high_value`, `industry_cat`, `log_creditlimit`, `model_selection`, `name_contains`, `name_length`, `name_split`, `name_starts`
+- `name_upper`, `names_limits`, `sorted_df`, `statistical/ML`, `status_summary`, `to_period`, `y_pred`, `year_month`
+
+## Conventions
+
+| Rule | Rationale |
+|---|---|
+| Use pandas integration for analytics, reporting, visualization, cleaning, and ML preparation; use `DataverseClient` directly for CRUD, metadata, file upload, and single-record operations | DataFrame ergonomics help tabular work but obscure SDK semantics for operational calls |
+| Install and import `PowerPlatform-Dataverse-Client`, `azure-identity`, and `pandas` only when the file uses them | Dependencies stay intentional and imports explain the workflow |
+| Shape Dataverse reads with `select`, `filter`, `orderby`, `top`, and `page_size` before calling `pd.DataFrame` | Server-side reduction prevents unnecessary network, memory, and latency cost |
+| Collect paged results into a list before DataFrame creation | `client.get` yields pages and pandas needs records, not an unexpanded page iterator |
+| Convert numeric and datetime columns with `pd.to_numeric` and `pd.to_datetime` before analysis | Aggregations and time-series operations fail or mislead on string-typed data |
+| Use explicit pandas operations such as `groupby`, `agg`, `pivot_table`, `merge`, `resample`, and `melt` | Reviewers can understand the analytical shape without inferring hidden assumptions |
+| Downcast, categorize, drop unused columns, and measure memory for large DataFrames | Client-side analytics can exhaust memory if volume is not managed |
+| Keep ML feature engineering separate from loading and exclude identifiers unless intentionally modeled | Models remain reproducible and avoid accidental leakage |
+
+## Do / Do Not
+
+| Do | Do not |
+|---|---|
+| Query only needed columns with `select=[...]` | Load full Dataverse tables into pandas by default |
+| Filter with OData `filter` before DataFrame construction | Fetch all rows and then filter locally for large datasets |
+| Iterate pages from `client.get` and `extend` records | Assume `client.get` is a flat list in every context |
+| Convert `creditlimit` with `pd.to_numeric` and `createdon` with `pd.to_datetime` | Aggregate or resample untyped strings |
+| Use `groupby`, `agg`, `pivot_table`, and named exports for reports | Produce ad hoc reports with unclear transformations |
+| Use `matplotlib`, `seaborn`, `numpy`, and `scikit-learn` APIs only where the workflow needs them | Add visualization or ML dependencies to simple extract scripts |
+| Use `top`, `page_size`, categorical types, downcasting, and `memory_usage(deep=True)` for large data | Ignore memory constraints for millions of rows |
+| Export reviewed summaries such as `industry_analysis.csv` | Export raw, unbounded Dataverse data without purpose |
+
+## Checklist Before Opening a PR
+
+- [ ] The file uses pandas only for analytics, reporting, visualization, cleaning, or ML preparation.
+- [ ] Dataverse queries specify `select` and use `filter`, `orderby`, `top`, or `page_size` when volume or ordering matters.
+- [ ] Paged results from `client.get` are collected intentionally before `pd.DataFrame` construction.
+- [ ] Numeric, datetime, categorical, and missing values are converted or handled before analysis.
+- [ ] Grouping, merging, pivoting, reshaping, visualization, export, or ML steps are named and reproducible.
+- [ ] Large DataFrames use server-side filtering plus pandas memory controls.
+- [ ] CRUD, metadata, file upload, and single-record operations stay on the standard `DataverseClient` path.
+
+## References
+
+- Pandas Documentation: https://pandas.pydata.org/docs/
+- Official examples: https://github.com/microsoft/PowerPlatform-DataverseClient-Python/tree/main/examples
+- SDK for Python README: https://github.com/microsoft/PowerPlatform-DataverseClient-Python/blob/main/README.md
+- Microsoft Learn: Working with data: https://learn.microsoft.com/en-us/power-apps/developer/data-platform/sdk-python/work-data

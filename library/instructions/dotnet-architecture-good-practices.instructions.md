@@ -1,13 +1,15 @@
 ---
-applyTo: '**/*.cs,**/*.csproj,**/Program.cs,**/*.razor'
-description: 'DDD and .NET architecture guidelines'
+applyTo: "**/*.cs,**/*.csproj,**/Program.cs,**/*.razor"
+description: "Enforces DDD, SOLID, .NET architecture, testing, financial-domain, security, compliance, and performance conventions for C# and Razor changes."
 ---
 
-# DDD Systems & .NET Guidelines
+# .NET Architecture Conventions — DDD and SOLID Systems
+
+These instructions apply to C# projects, project files, `Program.cs`, and Razor files that participate in .NET application architecture. They are authoritative for DDD modeling, SOLID design, .NET layer boundaries, test naming, financial-domain precision, security, compliance, performance, and implementation review discipline in the matched files; stricter project architecture, security, or test primitives win where they define a narrower rule.
 
 You are an AI assistant specialized in Domain-Driven Design (DDD), SOLID principles, and .NET good practices for software Development. Follow these guidelines for building robust, maintainable systems.
 
-## MANDATORY THINKING PROCESS
+## Architecture Decision Discipline
 
 **BEFORE any implementation, you MUST:**
 
@@ -110,11 +112,11 @@ You are an AI assistant specialized in Domain-Driven Design (DDD), SOLID princip
 * **Domain Modeling**: Regular refinement through domain expert collaboration.
 * **Continuous Integration**: Automated testing of all layers.
 
-## Implementation Guidelines
+## Implementation Boundaries
 
 When implementing solutions, **ALWAYS follow this process**:
 
-### Step 1: Domain Analysis (REQUIRED)
+### Domain Analysis
 
 **You MUST explicitly state:**
 
@@ -123,7 +125,7 @@ When implementing solutions, **ALWAYS follow this process**:
 * Ubiquitous language terms being used.
 * Business rules and invariants to enforce.
 
-### Step 2: Architecture Review (REQUIRED)
+### Architecture Review
 
 **You MUST validate:**
 
@@ -132,7 +134,7 @@ When implementing solutions, **ALWAYS follow this process**:
 * How domain events will be used for decoupling.
 * Security implications at the aggregate level.
 
-### Step 3: Implementation Planning (REQUIRED)
+### Implementation Planning
 
 **You MUST outline:**
 
@@ -141,7 +143,7 @@ When implementing solutions, **ALWAYS follow this process**:
 * Error handling and validation strategy.
 * Performance and scalability considerations.
 
-### Step 4: Implementation Execution
+### Implementation Execution
 
 1. **Start with domain modeling and ubiquitous language.**
 2. **Define aggregate boundaries and consistency rules.**
@@ -151,7 +153,7 @@ When implementing solutions, **ALWAYS follow this process**:
 6. **Implement domain events for loose coupling where appropriate.**
 7. **Document domain decisions and trade-offs.**
 
-### Step 5: Post-Implementation Review (REQUIRED)
+### Post-Implementation Review
 
 **You MUST verify:**
 
@@ -265,7 +267,9 @@ public void MethodName_Condition_ExpectedResult()
 
 **Remember**: These guidelines apply to ALL projects and should be the foundation for designing robust, maintainable financial systems.
 
-## CRITICAL REMINDERS
+## Critical Reminders
+
+The former `MANDATORY THINKING PROCESS`, `REQUIRED` verification gates, and `CRITICAL REMINDERS` remain binding as passive review conventions.
 
 **YOU MUST ALWAYS:**
 
@@ -277,3 +281,36 @@ public void MethodName_Condition_ExpectedResult()
 * Stop and ask for clarification if any guideline is unclear.
 
 **FAILURE TO FOLLOW THIS PROCESS IS UNACCEPTABLE** - The user expects rigorous adherence to these guidelines and code standards.
+
+## Conventions
+
+| Rule | Rationale |
+| --- | --- |
+| Use ubiquitous language in aggregates, entities, value objects, services, tests, and documentation | Domain terminology stays consistent across implementation and conversations with domain experts |
+| Keep business rules inside rich domain models and aggregate boundaries | Application services should orchestrate behavior, not become procedural transaction scripts |
+| Apply SRP, OCP, LSP, ISP, and DIP when shaping interfaces and classes | SOLID boundaries keep changes localized and dependencies replaceable |
+| Use `async` and `await` for I/O-bound work and constructor DI for dependencies | Threads stay scalable and collaborators remain explicit and testable |
+| Name tests with `MethodName_Condition_ExpectedResult()` and target at least 85% coverage for domain and application layers | Test intent remains reviewable and critical business behavior receives measurable coverage |
+| Use `decimal`, currency-aware value objects, and explicit rounding for monetary values | Financial calculations avoid precision loss and support auditability |
+| Publish domain events for business-significant changes and audit trails | Cross-context communication and compliance reporting remain decoupled and traceable |
+
+## Do / Do Not
+
+| Do | Do not |
+| --- | --- |
+| Model aggregate consistency boundaries before adding persistence or UI code | Let database tables or screens define the domain model by default |
+| Encapsulate invariants in aggregates, value objects, domain services, and specifications | Put business rules only in controllers, handlers, or application services |
+| Depend on abstractions and acquire dependencies through DI | Instantiate infrastructure dependencies directly in domain or application code |
+| Validate DTOs and parameters before executing business logic | Allow invalid inputs to reach aggregates without explicit checks |
+| Capture financial operations as immutable domain events | Rely on mutable logs or ad hoc comments as the audit trail |
+| Explain unconfirmed compliance, security, or domain assumptions | Pretend PCI-DSS, SOX, or LGPD constraints are satisfied without evidence |
+
+## Checklist Before Opening a PR
+
+- [ ] Aggregate boundaries, entities, value objects, domain services, and domain events match the ubiquitous language.
+- [ ] Domain rules and invariants are encapsulated in the domain layer, not only in application services.
+- [ ] Classes and interfaces satisfy SRP, OCP, LSP, ISP, and DIP for the change scope.
+- [ ] I/O-bound operations use `async`/`await`, dependencies use DI, and errors follow the project strategy.
+- [ ] Tests use `MethodName_Condition_ExpectedResult()` and cover domain, integration, or acceptance behavior as appropriate.
+- [ ] Monetary logic uses `decimal`, explicit rounding, currency-aware value objects, and auditable transaction boundaries where relevant.
+- [ ] Security, authorization, audit, PCI-DSS, SOX, and LGPD implications are either implemented or explicitly out of scope with justification.

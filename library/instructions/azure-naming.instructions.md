@@ -1,9 +1,11 @@
 ---
-applyTo: '**/*.bicep,**/*.tf,**/*.tfvars,**/*.bicepparam,**/infra/**,**/infrastructure/**'
-description: 'Azure resource naming conventions based on Microsoft CAF (Cloud Adoption Framework). Use when creating, reviewing, or suggesting names for Azure resources.'
+applyTo: "**/*.bicep,**/*.tf,**/*.tfvars,**/*.bicepparam,**/infra/**,**/infrastructure/**"
+description: "Enforces Azure CAF resource naming conventions, abbreviations, scope, character rules, and per-resource examples for infrastructure files."
 ---
 
-# Azure Resource Naming Conventions (CAF)
+# Azure Resource Naming Conventions — CAF Abbreviations and Constraints
+
+These instructions apply to Azure infrastructure files that create, review, or suggest Azure resource names. They are authoritative for CAF-style naming patterns, official abbreviations, uniqueness scope, character restrictions, sensitive-data exclusions, and resource-specific examples; Azure platform name rules and the official CAF abbreviation tables win when service constraints differ.
 
 Source: [Define your naming convention](https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/resource-naming) | [Abbreviations](https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/resource-abbreviations) | [Name rules](https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules)
 
@@ -191,7 +193,7 @@ These resources require concatenated lowercase alphanumerics (no separators):
 
 ---
 
-## Examples (CAF)
+## CAF Examples
 
 ```
 # Management
@@ -246,7 +248,7 @@ srch-navigator-prod
 
 ---
 
-## Do NOT Do
+## Naming Anti-Patterns
 
 - Do not use underscores unless the resource type requires it — use hyphens.
 - Do not spell out the full resource type word (e.g., `storageaccount-myapp` → use `stmyapp001`).
@@ -256,3 +258,39 @@ srch-navigator-prod
 - Do not use `#` — it breaks URL parsing in Azure Resource Manager.
 - Do not use reserved words or trademarks in names for resources with public endpoints.
 - Do not use more than two consecutive hyphens (e.g., `app--prod` is invalid).
+
+## Conventions
+
+| Rule | Rationale |
+| --- | --- |
+| Start names with the official resource-type abbreviation such as `rg`, `vnet`, `app`, `func`, `st`, `kv`, `apim`, `oai`, or `srch` | Prefixes make resource type recognizable in portals, logs, and cost views |
+| Use `<resource-type-abbr>-<workload>-<environment>-<region>-<instance>` unless the resource type forbids separators | Consistent segments make names sortable and predictable across environments |
+| Use `prod`, `dev`, `qa`, `stage`, or `test` for environments and zero-padded instances such as `001` | Environment and instance data stay machine-sortable and human-readable |
+| Treat global, resource-group, and parent-resource scopes differently | Unique-name collisions occur at different Azure scopes depending on the service |
+| Use lowercase letters and hyphens by default; use concatenated lowercase alphanumerics for `st`, `cr`, and `dec` | Storage accounts, container registries, and Azure Data Explorer clusters reject hyphenated forms |
+| Exclude subscription IDs, tenant IDs, passwords, reserved words, trademarks, and illegal characters such as `#`, `<`, `>`, `%`, `&`, `\`, `?`, `/` | Names can leak sensitive context or fail Azure Resource Manager validation |
+
+## Do / Do Not
+
+| Do | Do not |
+| --- | --- |
+| Use `stnavigatorprod001`, `crnavigatorprod001`, and `decnavigatorprod` for no-hyphen resource types | Add separators to resource types that require alphanumerics only |
+| Keep region segments explicit for regional resources, for example `eastus2` or `westeurope` | Omit location when it is needed to distinguish deployments |
+| Use official abbreviations such as `vpng`, `evhns`, `appcs`, `mlw`, `aif`, and `ais` | Spell out full service names such as `storageaccount-myapp` |
+| Compare Azure resource names case-insensitively and write them lowercase | Depend on case differences to distinguish resources |
+| Check the per-resource length and valid-character constraints before finalizing names | Assume the general pattern works for every Azure service |
+
+## Checklist Before Opening a PR
+
+- [ ] New or changed Azure names use the official abbreviation and required segment order.
+- [ ] Environment, region, and instance segments are present where the resource type supports them.
+- [ ] Resource-specific scope, length, and valid-character rules are satisfied.
+- [ ] `st`, `cr`, and `dec` names use concatenated lowercase alphanumerics with no hyphens.
+- [ ] Names contain no subscription IDs, tenant IDs, passwords, reserved words, trademarks, `#`, `<`, `>`, `%`, `&`, `\`, `?`, `/`, spaces, or control characters.
+- [ ] Examples and generated names stay lowercase and avoid more than two consecutive hyphens.
+
+## References
+
+- Define your naming convention: https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/resource-naming
+- Azure resource abbreviations: https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/resource-abbreviations
+- Azure resource name rules: https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules

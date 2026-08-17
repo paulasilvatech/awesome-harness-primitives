@@ -1,9 +1,11 @@
 ---
-applyTo: '**/*.tsp'
-description: 'Guidelines and best practices for building TypeSpec-based declarative agents and API plugins for Microsoft 365 Copilot'
+applyTo: "**/*.tsp"
+description: "Enforces TypeSpec conventions for Microsoft 365 Copilot declarative agents, capabilities, API plugins, authentication, cards, validation, and security."
 ---
 
-# TypeSpec for Microsoft 365 Copilot Development Guidelines
+# TypeSpec Microsoft 365 Copilot Conventions — Agents and API Plugins
+
+These instructions apply to TypeSpec files for Microsoft 365 Copilot declarative agents and API plugins matched by `**/*.tsp`. They are authoritative for project layout, imports, decorators, agent instructions, conversation starters, scoped capabilities, action operations, authentication models, Adaptive Card bindings, validation, performance, security, and documentation in those files; official TypeSpec, Microsoft 365 Copilot extensibility, Adaptive Cards, and project deployment requirements win where they are stricter or more current.
 
 ## Core Principles
 
@@ -438,3 +440,90 @@ op getProjectDetails(
 - [Microsoft 365 Copilot Extensibility](https://learn.microsoft.com/microsoft-365-copilot/extensibility/)
 - [Agents Toolkit](https://aka.ms/M365AgentsToolkit)
 - [Adaptive Cards Designer](https://adaptivecards.io/designer/)
+
+
+## Good / Bad Examples
+
+The examples below illustrate scoped capabilities, clear agent identity, and safe API actions.
+
+**Good:**
+
+```typespec
+@agent({ name: "Customer Support Assistant", description: "Helps agents find support knowledge and ticket context." })
+@instructions("""
+  You are a customer support assistant. Use scoped knowledge sources and ask for confirmation before destructive actions.
+""")
+namespace CustomerSupportAgent {
+  op webSearch is AgentCapabilities.WebSearch<Sites = [{ url: "https://learn.microsoft.com" }]>;
+}
+```
+
+Why: The agent has a role-based name, explicit instructions, and a scoped capability instead of unrestricted access.
+
+**Bad:**
+
+```typespec
+@agent({ name: "Helper", description: "Helps with things" })
+@instructions("Do anything the user asks")
+namespace Helper {
+  op webSearch is AgentCapabilities.WebSearch;
+}
+```
+
+Why: The name and instructions are vague, the capability is broad, and the model receives no safety or domain boundaries.
+
+## Conventions
+
+| Rule | Rationale |
+|---|---|
+| Keep `appPackage/`, `src/`, `m365agents.yml`, `package.json`, card templates, and generated manifests in the standard structure | Agents Toolkit and manifest generation depend on predictable paths |
+| Import `@typespec/http`, `@typespec/openapi3`, and `@microsoft/typespec-m365-copilot` before using Microsoft 365 Copilot decorators | TypeSpec compilation fails or emits incomplete OpenAPI without the required libraries |
+| Use role-based agent names, descriptions under 1,000 characters, and instructions under 8,000 characters | Microsoft 365 Copilot users and orchestrators need concise, specific context |
+| Scope `AgentCapabilities.WebSearch`, `OneDriveAndSharePoint`, `TeamsMessages`, `Email`, `GraphConnectors`, `Dataverse`, and `ScenarioModels` whenever inputs allow | Least-privilege capability design reduces irrelevant results and data exposure |
+| Put confirmations on destructive `@action` operations and describe reasoning and response expectations with `@reasoning` and `@responding` | Actions remain safe and model behavior stays predictable |
+| Use `@useAuth`, `ApiKeyAuth`, `OAuth2Auth`, and `@authReferenceId` for non-public APIs | Credentials remain externalized and production deployments can bind secure references |
+| Keep models focused, typed, and formatted with `@format("date-time")`, `utcDateTime`, `int32`, and `@format("uri")` where appropriate | Generated OpenAPI and cards receive accurate schemas |
+| Validate with `npm run build`, Agents Toolkit, Copilot developer mode, and Microsoft 365 Copilot at `https://m365.cloud.microsoft/chat` | Errors appear before provisioning or user testing |
+
+## Do / Do Not
+
+| Do | Do not |
+|---|---|
+| Use `main.tsp`, `actions.tsp`, `[feature].tsp`, and `cards/*.json` consistently | Scatter agent, action, and card definitions across unclear paths |
+| Write `PascalCase` namespaces and models with `camelCase` operations and properties | Mix naming styles across TypeSpec elements |
+| Provide 2-4 action-oriented `@conversationStarter` examples | Use generic starters that do not demonstrate capabilities |
+| Use scoped knowledge sources, productivity tools, and API operations | Grant broad capabilities or expose unused operations |
+| Store API keys and OAuth references outside TypeSpec with `${{ENV_VAR_REFERENCE_ID}}` or `${{OAUTH_REFERENCE_ID}}` | Hard-code credentials in `.tsp` files |
+| Use Adaptive Cards with valid `$schema`, `version`, `$data`, `$when`, and data paths | Ship overly complex cards or missing card files referenced by `@card` |
+| Define `ErrorResponse` and `ErrorDetail` models for failures | Leave plugin consumers without structured errors |
+
+## Checklist Before Opening a PR
+
+- [ ] Required TypeSpec and Microsoft 365 Copilot imports are present.
+- [ ] Agent names, descriptions, instructions, and conversation starters are specific and within documented length limits.
+- [ ] Knowledge sources, productivity tools, and API plugin operations are scoped to the minimum required data.
+- [ ] `@service`, `@actions`, `@server`, `@useAuth`, `@route`, HTTP verb decorators, `@action`, `@card`, `@capabilities`, `@reasoning`, and `@responding` are used consistently where applicable.
+- [ ] Destructive operations require confirmation and structured responses.
+- [ ] Authentication uses `ApiKeyAuth`, `OAuth2Auth`, `@authReferenceId`, `ENV_VAR_REFERENCE_ID`, or `OAUTH_REFERENCE_ID` without hard-coded secrets.
+- [ ] Adaptive Card paths exist and bindings match response models.
+- [ ] `npm run build` or Agents Toolkit validation passes before provisioning.
+- [ ] Microsoft 365 Copilot testing covers conversation starters, capabilities, and plugin actions.
+
+## References
+
+- TypeSpec Official Docs: https://typespec.io/
+- Microsoft 365 Copilot Extensibility: https://learn.microsoft.com/microsoft-365-copilot/extensibility/
+- Agents Toolkit: https://aka.ms/M365AgentsToolkit
+- Adaptive Cards Designer: https://adaptivecards.io/designer/
+- Adaptive Card schema: http://adaptivecards.io/schemas/adaptive-card.json
+- Microsoft 365 Copilot chat: https://m365.cloud.microsoft/chat
+- Example scoped search URL: https://learn.microsoft.com
+- Example scoped search URL with locale path: https://learn.microsoft.com/en-us/
+- Example SharePoint scope: https://contoso.sharepoint.com/sites/Engineering
+- Example Teams channel scope: https://teams.microsoft.com/l/channel/...
+- Example API server URL: https://api.example.com
+- Example OAuth authorization URL: https://auth.example.com/authorize
+- Example OAuth token URL: https://auth.example.com/token
+- Example OAuth refresh URL: https://auth.example.com/refresh
+- Example privacy policy URL: https://example.com
+- Example legal information URL: https://example.org

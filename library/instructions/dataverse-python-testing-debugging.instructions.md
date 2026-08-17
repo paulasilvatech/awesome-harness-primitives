@@ -1,13 +1,13 @@
 ---
-applyTo: '**/*.py'
-description: 'Testing and debugging strategies for Python Dataverse SDK code, including mocks, integration tests, and diagnostics.'
+applyTo: "**/*.py"
+description: "Enforces testing and debugging conventions for Python Dataverse SDK code, including mocks, integration tests, coverage, performance checks, and diagnostics."
 ---
 
-# Dataverse SDK for Python — Testing & Debugging Strategies
+# Dataverse Python Testing Conventions — SDK Diagnostics
 
-Based on official Azure Functions and pytest testing patterns.
+These instructions apply to Python tests, fixtures, and diagnostics for Dataverse SDK code matched by `**/*.py`. They are authoritative for pytest structure, mocked `DataverseClient` tests, integration-test isolation, coverage, logging, performance checks, and debugging practices around `PowerPlatform.Dataverse`; official pytest, `unittest.mock`, Azure Functions testing, and Dataverse SDK documentation win where they define stricter API behavior.
 
-## 1. Testing Overview
+## Testing Overview
 
 ### Testing Pyramid for Dataverse SDK
 
@@ -22,9 +22,9 @@ Based on official Azure Functions and pytest testing patterns.
 
 ---
 
-## 2. Unit Testing with Mocking
+## Unit Testing with Mocking
 
-### Setup Test Environment
+### Test Environment Dependencies
 
 ```bash
 # Install test dependencies
@@ -110,7 +110,7 @@ def test_process_accounts(mock_client, sample_accounts):
 
 ---
 
-## 3. Mocking Common Patterns
+## Mocking Common Patterns
 
 ### Mock Get with Pagination
 
@@ -176,7 +176,7 @@ def test_rate_limiting_retry(mock_client):
 
 ---
 
-## 4. Integration Testing
+## Integration Testing
 
 ### Local Development Testing
 
@@ -247,7 +247,7 @@ def test_update_account(dataverse_client, test_account):
 
 ---
 
-## 5. Pytest Configuration
+## Pytest Configuration
 
 ### pytest.ini
 
@@ -286,7 +286,7 @@ pytest tests/test_operations.py::test_create_account
 
 ---
 
-## 6. Coverage Analysis
+## Coverage Analysis
 
 ### Generate Coverage Report
 
@@ -320,7 +320,7 @@ directory = htmlcov
 
 ---
 
-## 7. Debugging with print/logging
+## Debugging with Print and Logging
 
 ### Enable Debug Logging
 
@@ -364,7 +364,7 @@ pytest --tb=short tests/
 
 ---
 
-## 8. Performance Testing
+## Performance Testing
 
 ### Measure Operation Duration
 
@@ -406,7 +406,7 @@ def test_query_performance(benchmark, dataverse_client):
 
 ---
 
-## 9. Common Testing Patterns
+## Common Testing Patterns
 
 ### Testing Retry Logic
 
@@ -466,7 +466,7 @@ def test_handles_missing_record(mock_client):
 
 ---
 
-## 10. Debugging Checklist
+## Debugging Checklist
 
 | Issue | Debug Steps |
 |-------|-------------|
@@ -479,9 +479,92 @@ def test_handles_missing_record(mock_client):
 
 ---
 
-## 11. See Also
+## Good / Bad Examples
 
-- [Pytest Documentation](https://docs.pytest.org/)
-- [unittest.mock Reference](https://docs.python.org/3/library/unittest.mock.html)
-- [Azure Functions Testing](https://learn.microsoft.com/en-us/azure/azure-functions/functions-reference-python#unit-testing)
-- [Dataverse SDK Examples](https://github.com/microsoft/PowerPlatform-DataverseClient-Python/tree/main/examples)
+The examples below illustrate a Dataverse unit test that isolates SDK behavior while preserving error semantics.
+
+**Good:**
+
+```python
+from unittest.mock import Mock
+import pytest
+from PowerPlatform.Dataverse.client import DataverseClient
+from PowerPlatform.Dataverse.core.errors import DataverseError
+
+def test_create_account_error():
+    mock_client = Mock(spec=DataverseClient)
+    mock_client.create.side_effect = DataverseError(
+        message="Account exists",
+        code="validation_error",
+        status_code=400
+    )
+
+    with pytest.raises(DataverseError):
+        create_account(mock_client, {"name": "Acme"})
+
+    mock_client.create.assert_called_once_with("account", {"name": "Acme"})
+```
+
+Why: The test constrains the mock with `spec=DataverseClient`, preserves the SDK exception type, and verifies the exact entity name and payload.
+
+**Bad:**
+
+```python
+def test_create_account_error():
+    mock_client = Mock()
+    mock_client.create.side_effect = Exception("failed")
+
+    assert create_account(mock_client, {"name": "Acme"}) is None
+```
+
+Why: The unrestricted mock can accept misspelled SDK calls, the generic exception hides `DataverseError` fields such as `code`, `status_code`, and `is_transient`, and the assertion does not verify SDK behavior.
+
+## Conventions
+
+| Rule | Rationale |
+|---|---|
+| Install and use `pytest`, `pytest-cov`, and `unittest-mock` for local test work when the project does not already provide equivalent dependencies | Tests stay consistent with the documented pytest and mock patterns |
+| Mock `DataverseClient` with `Mock(spec=DataverseClient)` and assert exact calls such as `create("account", {"name": "Acme"})` | Spec-bound mocks catch misspelled SDK methods and wrong parameters |
+| Represent SDK failures with `PowerPlatform.Dataverse.core.errors.DataverseError` including `message`, `code`, `status_code`, and `is_transient` | Retry and error-handling tests exercise the same signals as production |
+| Model paginated `get` calls as iterators of page lists | Application code that consumes pages is tested instead of a single happy path |
+| Keep integration tests behind `@pytest.mark.integration` and run them explicitly with `pytest -m integration` | Real Dataverse calls require credentials, permissions, and cleanup |
+| Use `InteractiveBrowserCredential` only for local integration fixtures and configure `DataverseClient(base_url="https://<your-org>.crm.dynamics.com", credential=...)` deliberately | Tests do not accidentally target the wrong tenant or environment |
+| Create integration records in fixtures and clean them with `delete` in `yield` teardown | Test data does not pollute Dataverse environments |
+| Configure `pytest.ini` with `testpaths`, `python_files`, `python_classes`, `python_functions`, and markers for `integration`, `slow`, and `unit` | Test discovery and marker selection are predictable |
+| Use `.coveragerc` with `branch = True`, `source = my_app`, and `htmlcov` output for coverage analysis | Coverage reports focus on application code and keep generated output consistent |
+| Enable `logging.DEBUG` for `PowerPlatform` and `azure` only while diagnosing failures | SDK and Azure logs are verbose and should not become default test noise |
+| Use `pytest -s tests/` for live output and `pytest --tb=short tests/` for concise failure traces | Debug output is available without making normal runs noisy |
+| Treat performance thresholds such as `duration < 10` for 1000 records as environment-sensitive examples, not universal SLAs | Dataverse throughput depends on tenant, network, throttling, and payload shape |
+| Benchmark with `pytest-benchmark` only for repeatable local comparisons | Benchmarks are useful when they compare the same operation under similar conditions |
+| Test OData filters such as `statecode eq 0`, `contains(name, 'Acme')`, and combined `and` clauses as strings | Query builders fail silently if filter syntax drifts |
+
+## Do / Do Not
+
+| Do | Do not |
+|---|---|
+| Keep fast unit tests mocked and deterministic | Call real Dataverse from default `pytest` runs |
+| Mark real-environment tests with `@pytest.mark.integration` | Hide integration tests among normal unit tests |
+| Mock `create`, `get`, `update`, and `delete` responses with SDK-shaped data | Return arbitrary objects that production code never receives |
+| Test `DataverseError` status codes `400`, `408`, `429`, and `404` where behavior depends on them | Collapse all SDK failures into `Exception` |
+| Verify cleanup in integration fixtures even when a test fails | Leave test accounts behind after `create` succeeds |
+| Use `pytest --cov=my_app --cov-report=html tests/` for coverage reports | Treat coverage as a substitute for asserting SDK behavior |
+| Print actual and expected values only while diagnosing an assertion | Commit noisy debugging output to stable tests |
+| Add delays or smaller batches when rate limiting appears | Increase concurrency against Dataverse to force flaky tests through |
+
+## Checklist Before Opening a PR
+
+- [ ] Unit tests mock `DataverseClient` with a spec and assert exact SDK method names and parameters.
+- [ ] SDK error paths use `DataverseError` with relevant `code`, `status_code`, and `is_transient` values.
+- [ ] Pagination, bulk create, retry, missing-record, and OData filter behavior are covered where the application implements them.
+- [ ] Integration tests are marked with `integration`, require explicit selection, and clean up created records.
+- [ ] `pytest.ini` marker and discovery settings match the test suite.
+- [ ] Coverage commands and `.coveragerc` settings target application code, not generated reports.
+- [ ] Debug logging for `PowerPlatform` and `azure` is opt-in and does not leak credentials or tenant data.
+- [ ] Performance assertions are justified for the target environment or written as benchmarks instead of brittle limits.
+
+## References
+
+- Pytest Documentation: https://docs.pytest.org/
+- unittest.mock Reference: https://docs.python.org/3/library/unittest.mock.html
+- Azure Functions Testing: https://learn.microsoft.com/en-us/azure/azure-functions/functions-reference-python#unit-testing
+- Dataverse SDK Examples: https://github.com/microsoft/PowerPlatform-DataverseClient-Python/tree/main/examples

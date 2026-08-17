@@ -1,9 +1,11 @@
 ---
-applyTo: '**/*.terraform, **/*.tf, **/*.tfvars, **/*.tflint.hcl, **/*.tfstate, **/*.tf.json, **/*.tfvars.json'
-description: 'Create or modify solutions built using Terraform on Azure.'
+applyTo: "**/*.terraform,**/*.tf,**/*.tfvars,**/*.tflint.hcl,**/*.tfstate,**/*.tf.json,**/*.tfvars.json"
+description: "Enforces Azure Terraform conventions for AVM usage, file layout, variables, secrets, state, providers, validation, documentation, cost, and operations."
 ---
 
-# Azure Terraform Best Practices
+# Azure Terraform Conventions — AVM and Operational Safety
+
+These instructions apply to Terraform and Terraform-adjacent files for Azure solutions. They are authoritative for Azure-specific Terraform layout, Azure Verified Module preference, variable style, secret handling, providers, state, validation, documentation, cost, and operational safety; general Terraform instructions, Azure Verified Module instructions, direct user constraints, and existing planning files win where they provide a narrower or higher-priority rule.
 
 ## Integration and Self-Containment
 
@@ -261,3 +263,43 @@ Follow AVM specifications TFNFR1, TFNFR2, TFNFR3, and TFNFR4 for consistent file
 ## Fallback Behavior
 
 If general rules are not loaded, default to: minimalist code generation, explicit consent for any terraform commands beyond validate, and adherence to CALMS principles in all suggestions.
+
+## Conventions
+
+| Rule | Rationale |
+| --- | --- |
+| Prefer Azure Verified Modules for significant resources unless the user requires an internal registry or opts out | AVMs align to the Well-Architected Framework and reduce custom maintenance |
+| Split root modules into `main.tf`, `variables.tf`, `outputs.tf`, `terraform.tf`, and `locals.tf`, with `main.networking.tf` / `variables.networking.tf` style splits when needed | Predictable layout keeps large Azure configurations navigable |
+| Use `snake_case`, explicit variable `type`, descriptions, and non-null collection defaults unless a specific need exists | TFNFR-aligned inputs are self-documenting and safer for automation |
+| Use Managed Identities, Key Vault, `sensitive = true`, and Terraform v1.11+ `ephemeral` write-only parameters where supported | Secrets stay out of HCL, local files, outputs, and state whenever possible |
+| Use `azurerm` by default and `azapi` only for unsupported or newest Azure features | Provider choices remain stable and understandable |
+| Keep state remote in Azure Storage with locking and read `**/*.tfstate` / `**/.terraform/**` only as generated artifacts | State corruption, secret leakage, and manual drift are avoided |
+| Ask before running `terraform plan` or `terraform apply`, and source subscription from `ARM_SUBSCRIPTION_ID` | Terraform operations can affect real cloud resources and require explicit context |
+| Update `README.md`, architecture diagrams, and optionally `terraform-docs` output after infrastructure changes | Consumers need accurate variables, outputs, usage, and architecture context |
+
+## Do / Do Not
+
+| Do | Do not |
+| --- | --- |
+| Check `.terraform-planning-files/` and user-specified planning files before proposing changes | Ignore existing migration or implementation context |
+| Use implicit dependencies through references and remove redundant `depends_on` | Depend on module outputs or add `depends_on` where Terraform already infers order |
+| Use `count` for 0-1 resources and `for_each` with maps for multiple resources | Use unstable lists when resource addresses need to survive reordering |
+| Configure private endpoints, firewalls, NSGs, ASGs, and least privilege deliberately | Disable security features or open networks for convenience |
+| Test in non-production and verify idempotency before production | Apply untested Terraform directly to production from a local machine |
+| Keep environments similar through tfvars | Split environments by branch, repository, or divergent root-folder logic without agreement |
+
+## Checklist Before Opening a PR
+
+- [ ] Terraform files use the expected root-module layout and `snake_case` names.
+- [ ] Significant Azure resources use AVMs or document why AVM is unavailable or not desired.
+- [ ] Variables and outputs have explicit types, descriptions, and `sensitive = true` where needed.
+- [ ] Secrets use Managed Identities, Key Vault, or Terraform v1.11+ ephemeral write-only parameters where supported.
+- [ ] Providers are pinned, minimal, and justified; `azapi` usage is documented.
+- [ ] State remains remote and generated `**/*.tfstate` / `**/.terraform/**` content is not edited.
+- [ ] `terraform fmt`, `terraform validate`, and any project `tflint` checks pass.
+- [ ] `terraform plan` / `terraform apply` are not run without user consent and `ARM_SUBSCRIPTION_ID` context.
+- [ ] README, diagrams, cost assumptions, diagnostics, and tagging remain accurate.
+
+## References
+
+- Azure naming conventions: https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/resource-naming

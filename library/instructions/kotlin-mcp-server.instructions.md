@@ -1,13 +1,13 @@
 ---
-applyTo: '**/*.kt, **/*.kts, **/build.gradle.kts, **/settings.gradle.kts'
-description: 'Best practices and patterns for building Model Context Protocol (MCP) servers in Kotlin using the official io.modelcontextprotocol:kotlin-sdk library.'
+applyTo: "**/*.kt,**/*.kts,**/build.gradle.kts,**/settings.gradle.kts"
+description: "Enforces conventions for building Kotlin Model Context Protocol servers with the official io.modelcontextprotocol:kotlin-sdk library."
 ---
 
-# Kotlin MCP Server Development Guidelines
+# Kotlin MCP Server Conventions — Official SDK Servers
 
-When building MCP servers in Kotlin, follow these best practices and patterns using the official Kotlin SDK.
+These instructions apply to Kotlin MCP server source, Gradle Kotlin build files, and settings matched by `**/*.kt`, `**/*.kts`, `**/build.gradle.kts`, and `**/settings.gradle.kts`. They are authoritative for Kotlin SDK server setup, tool/resource/prompt registration, transports, coroutine usage, JSON schemas, Gradle dependencies, multiplatform configuration, resource lifecycle, testing, logging, configuration, and dependency injection; the MCP protocol and official `io.modelcontextprotocol:kotlin-sdk` APIs win where they define stricter behavior.
 
-## Server Setup
+## Server Setup and Capabilities
 
 Create an MCP server using the `Server` class:
 
@@ -37,7 +37,7 @@ val server = Server(
 }
 ```
 
-## Adding Tools
+## Tool Handlers
 
 Use `server.addTool()` to register tools with typed request/response handling:
 
@@ -83,7 +83,7 @@ server.addTool(
 }
 ```
 
-## Adding Resources
+## Resource Handlers
 
 Use `server.addResource()` to provide accessible data:
 
@@ -112,7 +112,7 @@ server.addResource(
 }
 ```
 
-## Adding Prompts
+## Prompt Handlers
 
 Use `server.addPrompt()` for reusable prompt templates:
 
@@ -479,3 +479,89 @@ class MyServer(
     }
 }
 ```
+
+
+## Good / Bad Examples
+
+The examples below illustrate safe argument handling and coroutine-friendly tool execution.
+
+**Good:**
+
+```kotlin
+server.addTool(
+    name = "search",
+    description = "Search for information",
+    inputSchema = createToolSchema()
+) { request: CallToolRequest ->
+    val query = request.params.arguments["query"] as? String
+        ?: throw IllegalArgumentException("query is required")
+
+    coroutineScope {
+        val source1 = async { searchSource1(query) }
+        val source2 = async { searchSource2(query) }
+        CallToolResult(
+            content = listOf(TextContent(text = (source1.await() + source2.await()).joinToString("\n")))
+        )
+    }
+}
+```
+
+Why: The handler declares a schema, validates the required argument, and keeps parallel work inside structured concurrency.
+
+**Bad:**
+
+```kotlin
+server.addTool(name = "search", description = "Search") { request ->
+    val query = request.params.arguments["query"] as String
+    CallToolResult(content = listOf(TextContent(text = searchSource1(query).joinToString("\n"))))
+}
+```
+
+Why: The handler omits an input schema, casts untrusted arguments directly, and leaves no clear validation error path.
+
+## Conventions
+
+| Rule | Rationale |
+|---|---|
+| Create servers with `Server`, `Implementation`, `ServerOptions`, and `ServerCapabilities` for `tools`, `resources`, and `prompts` | MCP clients discover only declared capabilities |
+| Register tools with `server.addTool`, `CallToolRequest`, `CallToolResult`, `TextContent`, and a `buildJsonObject` input schema | Tool handlers remain typed and client-validated |
+| Register resources with `server.addResource`, `ReadResourceRequest`, `ReadResourceResult`, and `TextResourceContents` using stable URI and `mimeType` values | Resource reads stay discoverable and renderable |
+| Register prompts with `server.addPrompt`, `GetPromptRequest`, `GetPromptResult`, `PromptMessage`, `PromptArgument`, and `Role.User` | Prompt templates expose required arguments and return structured messages |
+| Use `StdioServerTransport` for stdin/stdout servers and Ktor `embeddedServer(Netty, port = 8080)` with `mcp` for SSE-based HTTP servers | Transports match local subprocess and HTTP deployment modes |
+| Keep all MCP work suspendable and use `coroutineScope`, `async`, and `await` for parallel operations | Structured concurrency prevents leaked work and preserves cancellation |
+| Return `CallToolResult(isError = true, ...)` for handled validation failures and use `require` or `IllegalArgumentException` for invalid arguments | Clients receive meaningful failures instead of ambiguous crashes |
+| Build schemas with `kotlinx.serialization`, `@Serializable`, `JsonObject`, `buildJsonObject`, `putJsonObject`, and `putJsonArray` | Schemas and configuration stay type-safe and maintainable |
+| Configure Gradle with Kotlin `2.1.0`, `io.modelcontextprotocol:kotlin-sdk:0.7.2`, Ktor `3.0.0`, `kotlinx-serialization-json:1.7.3`, and `kotlinx-coroutines-core:1.9.0` when those versions match the project baseline | Runtime and build dependencies align with the documented SDK examples |
+| Use multiplatform source sets only when the server must target JVM, JS, Wasm, or iOS | Multiplatform configuration adds complexity and should match deployment needs |
+| Notify subscribers with `server.notifyResourceListChanged()` after dynamic resource lists change | Clients with resource subscriptions need change notifications |
+| Test suspend handlers with `kotlinx.coroutines.test.runTest`, `kotlin.test.Test`, and `assertEquals` | Tests execute coroutine code deterministically |
+| Log with a structured logger such as `KotlinLogging` and avoid leaking sensitive `request.params.arguments` values | Logs remain useful without exposing client input |
+| Load `ServerConfig` from environment variables such as `SERVER_NAME` and `VERSION` with safe defaults | Configuration is deployable without hardcoding server identity |
+| Use constructor injection for services and config in classes such as `MyServer` | Handlers are testable without constructing real infrastructure |
+
+## Do / Do Not
+
+| Do | Do not |
+|---|---|
+| Declare `ServerCapabilities.Tools`, `ServerCapabilities.Resources`, and `ServerCapabilities.Prompts` for supported features | Register features that clients cannot discover |
+| Validate `request.params.arguments` with safe casts and defaults | Cast arguments with `as String` without checking presence or type |
+| Use `buildJsonObject` schemas with `type`, `properties`, and `required` | Leave tool inputs undocumented or client-unvalidated |
+| Use `StdioServerTransport()` for local MCP subprocesses | Mix stdio and SSE assumptions in one entry point |
+| Keep parallel operations inside `coroutineScope` | Launch untracked coroutines from a handler |
+| Return `isError = true` with `TextContent` for recoverable validation errors | Throw generic exceptions for user-correctable input mistakes |
+| Keep Gradle dependencies explicit in `build.gradle.kts` | Rely on undeclared transitive Kotlin, Ktor, or serialization artifacts |
+| Cover handlers with `runTest` and direct request objects | Depend only on manual MCP client testing |
+| Inject `DataService` and `ServerConfig` through constructors | Create production services directly inside handlers |
+
+## Checklist Before Opening a PR
+
+- [ ] `Server` metadata and `ServerCapabilities` match the tools, resources, and prompts actually registered.
+- [ ] Tool schemas use `buildJsonObject` and mark required arguments.
+- [ ] Resource and prompt handlers return typed SDK results with correct URI, role, and `mimeType` values.
+- [ ] Transport setup is either stdio or Ktor SSE and matches the deployment target.
+- [ ] Coroutine work is suspendable, structured, cancellable, and free of untracked launches.
+- [ ] Validation failures produce clear `IllegalArgumentException` or `CallToolResult(isError = true)` behavior.
+- [ ] Gradle dependencies and Kotlin plugin versions are explicit and consistent with the project baseline.
+- [ ] Resource change notifications are sent when subscribed resource lists change.
+- [ ] `runTest` coverage exercises successful and failing tool calls.
+- [ ] Logging, configuration, and dependency injection avoid hardcoded secrets and production-only construction.

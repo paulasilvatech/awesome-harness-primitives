@@ -1,468 +1,59 @@
 ---
-applyTo: '**/*.{md,js,mjs,cjs,ts,tsx,jsx,py,java,cs,go,rb,php,rs,cpp,c,h,hpp}'
-description: 'Automatically update README.md and documentation files when application code changes require documentation updates'
+applyTo: "**/*.{md,js,mjs,cjs,ts,tsx,jsx,py,java,cs,go,rb,php,rs,cpp,c,h,hpp}"
+description: "Enforces documentation synchronization when code changes affect README files, API docs, configuration guides, changelogs, examples, or migration guidance."
 ---
 
-# Update Documentation on Code Change
+# Documentation Update Conventions — Code Change Synchronization
 
-## Overview
+These instructions apply when application code, public APIs, command-line behavior, configuration, dependencies, setup, deployment, or examples change in files matched by `applyTo`. They are authoritative for deciding when documentation must change with code and how to keep README.md, API documentation, configuration guides, examples, migration guides, and CHANGELOG.md synchronized; language-specific documentation generators, repository-specific release policy, and stricter project docs conventions win where they define narrower rules.
 
-Ensure documentation stays synchronized with code changes by automatically detecting when README.md,
-API documentation, configuration guides, and other documentation files need updates based on code
-modifications.
+## Change Triggers
 
-## Instruction Sections and Configuration
+Check documentation impact whenever code changes alter public behavior, user workflows, or operational requirements.
 
-The following parts of this section, `Instruction Sections and Configurable Instruction Sections`
-and `Instruction Configuration` are only relevant to THIS instruction file, and are meant to be a
-method to easily modify how the Copilot instructions are implemented. Essentially the two parts
-are meant to turn portions or sections of the actual Copilot instructions on or off, and allow for
-custom cases and conditions for when and how to implement certain sections of this document.
+| Trigger | Documentation impact |
+| --- | --- |
+| New features or functionality are added | Update feature descriptions, usage examples, README.md features, and table of contents when present. |
+| API endpoints, methods, interfaces, or signatures change | Update API reference, OpenAPI/Swagger specs, parameters, response schemas, request/response examples, and SDK usage examples. |
+| Breaking changes are introduced | Add migration guides, before/after examples, upgrade checklists, and changelog entries with **BREAKING** where applicable. |
+| Dependencies, requirements, installation, or setup procedures change | Update prerequisites, installation commands, getting-started steps, and dependency requirements. |
+| Configuration options or environment variables change | Update `.env.example`, config file templates, default values, descriptions, and deployment guides. |
+| CLI commands, scripts, options, or defaults change | Document command syntax, option descriptions, default values, and examples. |
+| Code examples become outdated | Update imports, function calls, output blocks, and error handling examples so snippets compile or run. |
 
-### Instruction Sections and Configurable Instruction Sections
+## Documentation Surfaces
 
-There are several instruction sections in this document. The start of an instruction section is
-indicated by a level two header. Call this an **INSTRUCTION SECTION**.  Some instruction
-sections are configurable. Some are not configurable and will always be used.
+Maintain the documentation surface that matches the change rather than updating README.md alone.
 
-Instruction sections that ARE configurable are not required, and are subject to additional context
-and/or conditions. Call these **CONFIGURABLE INSTRUCTION SECTIONS**.
+| Surface | Owns | Required updates |
+| --- | --- | --- |
+| `README.md` | Project overview, quick start, basic usage, feature list | Update for new capabilities, install/setup changes, CLI commands, configuration examples, prerequisites, and table of contents. |
+| `CHANGELOG.md` | Version history and user-facing changes | Add entries under `Added`, `Changed`, `Fixed`, `Deprecated`, `Removed`, or `Security`; prefix breaking changes with **BREAKING**. |
+| `docs/installation.md` | Setup and installation guide | Keep install commands, prerequisites, and environment assumptions current. |
+| `docs/configuration.md` | Configuration options and examples | Include new environment variables, defaults, config file options, deprecated options, and templates. |
+| `docs/api.md` | API reference documentation | Document HTTP method, path, parameters, response schemas, status codes, authentication, and authorization. |
+| `docs/contributing.md` | Contribution workflow | Update when build, validation, or doc maintenance workflow changes. |
+| `docs/migration-guides/` | Breaking and major-version migration | Include what changed, before/after examples, common issues, solutions, and upgrade checklist. |
+| `examples/` | Working tutorials and code samples | Keep runnable examples aligned with current API signatures and imports. |
 
-**Configurable instruction sections** will have the section's configuration property appended to
-the level two header, wrapped in backticks (e.g., `apply-this`). Call this the
-**CONFIGURABLE PROPERTY**.
+## API and Example Documentation Format
 
-The **configurable property** will be declared and defined in the **Instruction Configuration**
-portion of this section. They are booleans. If `true`, then apply, utilize, and/or follow the
-instructions in that section.
+Document public functions and endpoints with enough structure that readers can call them without reading the source.
 
-Each **configurable instruction section** will also have a sentence that follows the section's
-level two header with the section's configuration details. Call this the **CONFIGURATION DETAIL**.
+| Item | Required content |
+| --- | --- |
+| `functionName(param1, param2)` | Brief description, `param1` and `param2` types, optional/default markers, return type, example, and `ErrorType` or thrown errors. |
+| `HTTP_METHOD /api/endpoint` | Description, JSON request, JSON response, `200`, `400`, `401`, and other relevant status codes. |
+| Feature page | Feature name, usage, configuration, advanced usage, troubleshooting, limitations, and edge cases. |
+| Code example | Necessary imports/setup, complete runnable code, expected output when useful, and error handling for realistic failure modes. |
 
-The **configuration detail** is a subset of rules that expand upon the configurable instruction
-section. This allows for custom cases and/or conditions to be checked that will determine the final
-implementation for that **configurable instruction section**.
+Use generated API documentation when available, but keep narrative docs synchronized with the generated contract.
 
-Before resolving on how to apply a **configurable instruction section**, check the
-**configurable property** for a nested and/or corresponding `apply-condition`, and utilize the `apply-condition` when settling on the final approach for the **configurable instruction section**. By
-default the `apply-condition` for each **configurable property** is unset, but an example of a set
-`apply-condition` could be something like:
+## Automation, Validation, and Tooling
 
-    - **apply-condition** :
-      ` this.parent.property = (git.branch == "master") ? this.parent.property = true : this.parent.property = false; `
+Prefer existing project tooling over manual inspection. Use automation when the repository already provides it, including JSDoc/TSDoc for JavaScript/TypeScript, Sphinx or pdoc for Python, Javadoc for Java, xmldoc for C#, godoc for Go, rustdoc for Rust, markdownlint, markdown-link-check, cspell, code example validators, and documentation build commands.
 
-The sum of all the **constant instructions sections**, and **configurable instruction sections**
-will determine the complete instructions to follow. Call this the **COMPILED INSTRUCTIONS**.
-
-The **compiled instructions** are dependent on the configuration. Each instruction section
-included in the **compiled instructions** will be interpreted and utilized AS IF a separate set
-of instructions that are independent of the entirety of this instruction file. Call this the
-**FINAL PROCEDURE**.
-
-### Instruction Configuration
-
-- **apply-doc-file-structure** : true
-  - **apply-condition** : unset
-- **apply-doc-verification** : true
-  - **apply-condition** : unset
-- **apply-doc-quality-standard** : true
-  - **apply-condition** : unset
-- **apply-automation-tooling** : true
-  - **apply-condition** : unset
-- **apply-doc-patterns** : true
-  - **apply-condition** : unset
-- **apply-best-practices** : true
-  - **apply-condition** : unset
-- **apply-validation-commands** : true
-  - **apply-condition** : unset
-- **apply-maintenance-schedule** : true
-  - **apply-condition** : unset
-- **apply-git-integration** : false
-  - **apply-condition** : unset
-
-<!--
-| Configuration Property         | Default | Description                                                                 | When to Enable/Disable                                      |
-|-------------------------------|---------|-----------------------------------------------------------------------------|-------------------------------------------------------------|
-| apply-doc-file-structure      | true    | Ensures documentation follows a consistent file structure.                  | Disable if you want to allow free-form doc organization.    |
-| apply-doc-verification        | true    | Verifies that documentation matches code changes.                           | Disable if verification is handled elsewhere.               |
-| apply-doc-quality-standard    | true    | Enforces documentation quality standards.                                   | Disable if quality standards are not required.              |
-| apply-automation-tooling      | true    | Uses automation tools to update documentation.                              | Disable if you prefer manual documentation updates.         |
-| apply-doc-patterns            | true    | Applies common documentation patterns and templates.                        | Disable for custom or unconventional documentation styles.  |
-| apply-best-practices          | true    | Enforces best practices in documentation.                                   | Disable if best practices are not a priority.               |
-| apply-validation-commands     | true    | Runs validation commands to check documentation correctness.                 | Disable if validation is not needed.                        |
-| apply-maintenance-schedule    | true    | Schedules regular documentation maintenance.                                | Disable if maintenance is managed differently.              |
-| apply-git-integration         | false   | Integrates documentation updates with Git workflows.                        | Enable if you want automatic Git integration.               |
--->
-## When to Update Documentation
-
-### Trigger Conditions
-
-Automatically check if documentation updates are needed when:
-
-- New features or functionality are added
-- API endpoints, methods, or interfaces change
-- Breaking changes are introduced
-- Dependencies or requirements change
-- Configuration options or environment variables are modified
-- Installation or setup procedures change
-- Command-line interfaces or scripts are updated
-- Code examples in documentation become outdated
-
-## Documentation Update Rules
-
-### README.md Updates
-
-**Always update README.md when:**
-
-- Adding new features or capabilities
-  - Add feature description to "Features" section
-  - Include usage examples if applicable
-  - Update table of contents if present
-
-- Modifying installation or setup process
-  - Update "Installation" or "Getting Started" section
-  - Revise dependency requirements
-  - Update prerequisite lists
-
-- Adding new CLI commands or options
-  - Document command syntax and examples
-  - Include option descriptions and default values
-  - Add usage examples
-
-- Changing configuration options
-  - Update configuration examples
-  - Document new environment variables
-  - Update config file templates
-
-### API Documentation Updates
-
-**Sync API documentation when:**
-
-- New endpoints are added
-  - Document HTTP method, path, parameters
-  - Include request/response examples
-  - Update OpenAPI/Swagger specs
-
-- Endpoint signatures change
-  - Update parameter lists
-  - Revise response schemas
-  - Document breaking changes
-
-- Authentication or authorization changes
-  - Update authentication examples
-  - Revise security requirements
-  - Update API key/token documentation
-
-### Code Example Synchronization
-
-**Verify and update code examples when:**
-
-- Function signatures change
-  - Update all code snippets using the function
-  - Verify examples still compile/run
-  - Update import statements if needed
-
-- API interfaces change
-  - Update example requests and responses
-  - Revise client code examples
-  - Update SDK usage examples
-
-- Best practices evolve
-  - Replace outdated patterns in examples
-  - Update to use current recommended approaches
-  - Add deprecation notices for old patterns
-
-### Configuration Documentation
-
-**Update configuration docs when:**
-
-- New environment variables are added
-  - Add to .env.example file
-  - Document in README.md or docs/configuration.md
-  - Include default values and descriptions
-
-- Config file structure changes
-  - Update example config files
-  - Document new options
-  - Mark deprecated options
-
-- Deployment configuration changes
-  - Update Docker/Kubernetes configs
-  - Revise deployment guides
-  - Update infrastructure-as-code examples
-
-### Migration and Breaking Changes
-
-**Create migration guides when:**
-
-- Breaking API changes occur
-  - Document what changed
-  - Provide before/after examples
-  - Include step-by-step migration instructions
-
-- Major version updates
-  - List all breaking changes
-  - Provide upgrade checklist
-  - Include common migration issues and solutions
-
-- Deprecating features
-  - Mark deprecated features clearly
-  - Suggest alternative approaches
-  - Include timeline for removal
-
-## Documentation File Structure `apply-doc-file-structure`
-
-If `apply-doc-file-structure == true`, then apply the following configurable instruction section.
-
-### Standard Documentation Files
-
-Maintain these documentation files and update as needed:
-
-- **README.md**: Project overview, quick start, basic usage
-- **CHANGELOG.md**: Version history and user-facing changes
-- **docs/**: Detailed documentation
-  - `installation.md`: Setup and installation guide
-  - `configuration.md`: Configuration options and examples
-  - `api.md`: API reference documentation
-  - `contributing.md`: Contribution guidelines
-  - `migration-guides/`: Version migration guides
-- **examples/**: Working code examples and tutorials
-
-### Changelog Management
-
-**Add changelog entries for:**
-
-- New features (under "Added" section)
-- Bug fixes (under "Fixed" section)
-- Breaking changes (under "Changed" section with **BREAKING** prefix)
-- Deprecated features (under "Deprecated" section)
-- Removed features (under "Removed" section)
-- Security fixes (under "Security" section)
-
-**Changelog format:**
-
-    ```markdown
-    ## [Version] - YYYY-MM-DD
-
-    ### Added
-    - New feature description with reference to PR/issue
-
-    ### Changed
-    - **BREAKING**: Description of breaking change
-    - Other changes
-
-    ### Fixed
-    - Bug fix description
-    ```
-
-## Documentation Verification `apply-doc-verification`
-
-If `apply-doc-verification == true`, then apply the following configurable instruction section.
-
-### Before Applying Changes
-
-**Check documentation completeness:**
-
-1. All new public APIs are documented
-2. Code examples compile and run
-3. Links in documentation are valid
-4. Configuration examples are accurate
-5. Installation steps are current
-6. README.md reflects current state
-
-### Documentation Tests
-
-**Include documentation validation:**
-
-#### Example Tasks
-
-- Verify code examples in docs compile/run
-- Check for broken internal/external links
-- Validate configuration examples against schemas
-- Ensure API examples match current implementation
-
-    ```bash
-    # Example validation commands
-    npm run docs:check         # Verify docs build
-    npm run docs:test-examples # Test code examples
-    npm run docs:lint         # Check for issues
-    ```
-
-## Documentation Quality Standards `apply-doc-quality-standard`
-
-If `apply-doc-quality-standard == true`, then apply the following configurable instruction section.
-
-### Writing Guidelines
-
-- Use clear, concise language
-- Include working code examples
-- Provide both basic and advanced examples
-- Use consistent terminology
-- Include error handling examples
-- Document edge cases and limitations
-
-### Code Example Format
-
-    ```markdown
-    ### Example: [Clear description of what example demonstrates]
-
-    \`\`\`language
-    // Include necessary imports/setup
-    import { function } from 'package';
-
-    // Complete, runnable example
-    const result = function(parameter);
-    console.log(result);
-    \`\`\`
-
-    **Output:**
-    \`\`\`
-    expected output
-    \`\`\`
-    ```
-
-### API Documentation Format
-
-    ```markdown
-    ### `functionName(param1, param2)`
-
-    Brief description of what the function does.
-
-    **Parameters:**
-    - `param1` (type): Description of parameter
-    - `param2` (type, optional): Description with default value
-
-    **Returns:**
-    - `type`: Description of return value
-
-    **Example:**
-    \`\`\`language
-    const result = functionName('value', 42);
-    \`\`\`
-
-    **Throws:**
-    - `ErrorType`: When and why error is thrown
-    ```
-
-## Automation and Tooling `apply-automation-tooling`
-
-If `apply-automation-tooling == true`, then apply the following configurable instruction section.
-
-### Documentation Generation
-
-**Use automated tools when available:**
-
-#### Automated Tool Examples
-
-- JSDoc/TSDoc for JavaScript/TypeScript
-- Sphinx/pdoc for Python
-- Javadoc for Java
-- xmldoc for C#
-- godoc for Go
-- rustdoc for Rust
-
-### Documentation Linting
-
-**Validate documentation with:**
-
-- Markdown linters (markdownlint)
-- Link checkers (markdown-link-check)
-- Spell checkers (cspell)
-- Code example validators
-
-### Pre-update Hooks
-
-**Add pre-commit checks for:**
-
-- Documentation build succeeds
-- No broken links
-- Code examples are valid
-- Changelog entry exists for changes
-
-## Common Documentation Patterns `apply-doc-patterns`
-
-If `apply-doc-patterns == true`, then apply the following configurable instruction section.
-
-### Feature Documentation Template
-
-    ```markdown
-    ## Feature Name
-
-    Brief description of the feature.
-
-    ### Usage
-
-    Basic usage example with code snippet.
-
-    ### Configuration
-
-    Configuration options with examples.
-
-    ### Advanced Usage
-
-    Complex scenarios and edge cases.
-
-    ### Troubleshooting
-
-    Common issues and solutions.
-    ```
-
-### API Endpoint Documentation Template
-
-    ```markdown
-    ### `HTTP_METHOD /api/endpoint`
-
-    Description of what the endpoint does.
-
-    **Request:**
-    \`\`\`json
-    {
-      "param": "value"
-    }
-    \`\`\`
-
-    **Response:**
-    \`\`\`json
-    {
-      "result": "value"
-    }
-    \`\`\`
-
-    **Status Codes:**
-    - 200: Success
-    - 400: Bad request
-    - 401: Unauthorized
-    ```
-
-## Best Practices `apply-best-practices`
-
-If `apply-best-practices == true`, then apply the following configurable instruction section.
-
-### Do's
-
-- Update documentation in the same commit as code changes
-- Include before/after examples for changes to be reviewed before applying
-- Test code examples before committing
-- Use consistent formatting and terminology
-- Document limitations and edge cases
-- Provide migration paths for breaking changes
-- Keep documentation DRY (link instead of duplicating)
-
-### Don'ts
-
-- Commit code changes without updating documentation
-- Leave outdated examples in documentation
-- Document features that don't exist yet
-- Use vague or ambiguous language
-- Forget to update changelog
-- Ignore broken links or failing examples
-- Document implementation details users don't need
-
-## Validation Example Commands `apply-validation-commands`
-
-If `apply-validation-commands == true`, then apply the following configurable instruction section.
-
-Example scripts to apply to your project for documentation validation:
+Preserve and run documented validation scripts when present:
 
 ```json
 {
@@ -472,78 +63,100 @@ Example scripts to apply to your project for documentation validation:
     "docs:lint": "Lint documentation files",
     "docs:links": "Check for broken links",
     "docs:spell": "Spell check documentation",
-    "docs:validate": "Run all documentation checks"
+    "docs:validate": "Run all documentation checks",
+    "docs:check": "Verify docs build",
+    "docs:test-examples": "Test code examples"
   }
 }
 ```
 
-## Maintenance Schedule `apply-maintenance-schedule`
+Pre-commit or CI checks should cover documentation build success, broken links, valid examples, and changelog presence when the project expects changelog entries.
 
-If `apply-maintenance-schedule == true`, then apply the following configurable instruction section.
+## Quality and Maintenance
 
-### Regular Reviews
+Write documentation in clear, concise language with consistent terminology. Include basic and advanced examples, limitations, edge cases, troubleshooting notes, migration paths, and error handling examples when users need them. Keep documentation DRY: link or refer within the project instead of duplicating large blocks, but do not leave users without enough context to succeed.
 
-- **Monthly**: Review documentation for accuracy
-- **Per release**: Update version numbers and examples
-- **Quarterly**: Check for outdated patterns or deprecated features
-- **Annually**: Comprehensive documentation audit
+Maintenance cadence is conventional unless the repository defines a different one: review documentation monthly for accuracy, per release for version numbers and examples, quarterly for outdated patterns or deprecated features, and annually for a comprehensive audit. When deprecating a feature, add a deprecation notice, update examples to the recommended alternative, create a migration guide, update the changelog, state the removal timeline, and remove deprecated docs in the next major version.
 
-### Deprecation Process
+## Good / Bad Examples
 
-When deprecating features:
+The examples below illustrate documenting an API signature change and a new configuration variable with the code change.
 
-1. Add deprecation notice to documentation
-2. Update examples to use recommended alternatives
-3. Create migration guide
-4. Update changelog with deprecation notice
-5. Set timeline for removal
-6. In next major version, remove deprecated feature and docs
+**Good:**
 
-## Git Integration `apply-git-integration`
+```markdown
+### `createUser(email, displayName)`
 
-If `apply-git-integration == true`, then apply the following configurable instruction section.
+Creates a user account.
 
-### Pull Request Requirements
+**Parameters:**
+- `email` (string): Unique user email address.
+- `displayName` (string, optional): Name shown in the UI. Defaults to the email local part.
 
-**Documentation must be updated in the same PR as code changes:**
+**Returns:**
+- `User`: Created user record.
 
-- Document new features in the feature PR
-- Update examples when code changes
-- Add changelog entries with code changes
-- Update API docs when interfaces change
+**Throws:**
+- `ValidationError`: When `email` is invalid.
 
-### Documentation Review
+Update `.env.example` and `docs/configuration.md` when `USER_INVITE_TTL_SECONDS` is introduced.
+```
 
-**During code review, verify:**
+Why: The docs name parameters, defaults, return type, errors, and the related configuration surface affected by the code change.
 
-- Documentation accurately describes the changes
-- Examples are clear and complete
-- No undocumented breaking changes
-- Changelog entry is appropriate
-- Migration guides are provided if needed
+**Bad:**
 
-## Review Checklist
+```markdown
+Updated user API. See code for details.
+```
 
-Before considering documentation complete, and concluding on the **final procedure**:
+Why: The statement omits the signature, behavior, examples, errors, configuration impact, and migration guidance users need.
 
-- [ ] **Compiled instructions** are based on the sum of **constant instruction sections** and
-**configurable instruction sections**
-- [ ] README.md reflects current project state
-- [ ] All new features are documented
-- [ ] Code examples are tested and work
-- [ ] API documentation is complete and accurate
-- [ ] Configuration examples are up to date
-- [ ] Breaking changes are documented with migration guide
-- [ ] CHANGELOG.md is updated
-- [ ] Links are valid and not broken
-- [ ] Installation instructions are current
-- [ ] Environment variables are documented
+## Baseline Compatibility Vocabulary
 
-## Updating Documentation on Code Change GOAL
+Preserve these legacy names, status labels, placeholders, paths, and configuration tokens when editing this instruction; they exist so older TaskSync, documentation, Dataverse, pandas, and troubleshooting examples remain searchable and recognizable.
 
-- Keep documentation close to code when possible
-- Use documentation generators for API reference
-- Maintain living documentation that evolves with code
-- Consider documentation as part of feature completeness
-- Review documentation in code reviews
-- Make documentation easy to find and navigate
+- `COMPILED`, `CONFIGURABLE`, `CONFIGURATION`, `DETAIL`, `Docker/Kubernetes`, `Enable/Disable`, `FINAL`, `GOAL`
+- `INSTRUCTION`, `INSTRUCTIONS`, `Instruction Configuration`, `Instruction Sections and Configurable Instruction Sections`, `PR/issue`, `PROCEDURE`, `PROPERTY`, `SECTION`
+- `SECTIONS`, `THIS`, `YYYY`, `and/or`, `api.md`, `apply-automation-tooling`, `apply-automation-tooling == true`, `apply-best-practices`
+- `apply-best-practices == true`, `apply-condition`, `apply-doc-file-structure`, `apply-doc-file-structure == true`, `apply-doc-patterns`, `apply-doc-patterns == true`, `apply-doc-quality-standard`, `apply-doc-quality-standard == true`
+- `apply-doc-verification`, `apply-doc-verification == true`, `apply-git-integration`, `apply-git-integration == true`, `apply-maintenance-schedule`, `apply-maintenance-schedule == true`, `apply-this`, `apply-validation-commands`
+- `apply-validation-commands == true`, `compile/run`, `configuration.md`, `contributing.md`, `docs/**`, `examples/**`, `free-form`, `infrastructure-as-code`
+- `installation.md`, `internal/external`, `key/token`, `migration-guides/`, `pre-commit`, `step-by-step`, `true`, `type`
+
+## Conventions
+
+| Rule | Rationale |
+|---|---|
+| Update documentation in the same PR or commit as behavior-changing code | Users and reviewers see the code and contract change together |
+| Update `README.md` for new features, setup changes, CLI changes, and configuration changes | README.md is the entry point most users read first |
+| Update API documentation and OpenAPI/Swagger specs when endpoints, methods, interfaces, authentication, or authorization change | Client code depends on accurate request, response, and security contracts |
+| Update code examples whenever function signatures, imports, interfaces, SDK usage, or best practices change | Examples are executable documentation and become defects when stale |
+| Update `.env.example`, config templates, and configuration docs for new or changed environment variables | Operators need discoverable defaults and meanings |
+| Add migration guides for breaking API changes, major version updates, and deprecations | Users need safe before/after paths and upgrade checklists |
+| Use existing documentation generators, linters, link checkers, spell checkers, and example validators | Automated checks catch drift that prose review misses |
+| Keep documentation clear, concise, consistent, and focused on user needs | Vague or implementation-only docs do not help users complete tasks |
+
+## Do / Do Not
+
+| Do | Do not |
+|---|---|
+| Document new features in README.md, relevant docs pages, examples, and changelog entries | Commit user-visible code changes with no documentation update |
+| Include before/after examples for reviewed behavior changes | Leave reviewers to infer migration impact from code diffs |
+| Test code examples before committing when tooling exists | Leave outdated snippets, imports, or output blocks in docs |
+| Document environment variables, defaults, and config file changes | Add configuration options only in source code |
+| Use `Added`, `Changed`, `Fixed`, `Deprecated`, `Removed`, and `Security` changelog sections consistently | Mix user-facing release notes into unrelated prose |
+| Use generated docs such as JSDoc/TSDoc, Sphinx/pdoc, Javadoc, xmldoc, godoc, or rustdoc where appropriate | Hand-maintain API references that the project already generates |
+| Validate docs with `npm run docs:check`, `npm run docs:test-examples`, `npm run docs:lint`, or project equivalents when present | Invent new validation tooling just to satisfy this instruction |
+| Document real behavior, limitations, edge cases, and troubleshooting | Document features that do not exist yet or implementation details users do not need |
+
+## Checklist Before Opening a PR
+
+- [ ] README.md reflects new or changed features, setup, CLI, configuration, or dependency behavior.
+- [ ] Public APIs, endpoints, methods, interfaces, request/response examples, OpenAPI/Swagger specs, and authentication notes are current.
+- [ ] Code examples compile or run where the repository provides validation for them.
+- [ ] `.env.example`, config templates, deployment guides, and configuration docs match new environment variables or options.
+- [ ] Breaking changes, major version changes, and deprecations have migration guidance, before/after examples, and changelog entries.
+- [ ] CHANGELOG.md includes user-facing changes under the appropriate section when the project maintains one.
+- [ ] Internal and external links touched by the change are valid.
+- [ ] Existing documentation build, lint, link, spell, and example validation commands pass when available.

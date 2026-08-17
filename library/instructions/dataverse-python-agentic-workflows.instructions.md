@@ -1,501 +1,188 @@
 ---
-applyTo: '**/*.py'
-description: 'Preview guidance for building agentic Python workflows that use Dataverse as an enterprise data source.'
+applyTo: "**/*.py"
+description: "Preview conventions for building agentic Python workflows that use Dataverse as an enterprise data source, including SDK usage, data agents, MCP/A2A patterns, governance, and ML integration."
 ---
 
-# Dataverse SDK for Python - Agentic Workflows Guide
+# Dataverse Python Agentic Workflow Conventions — Preview Data Agents
 
-## PREVIEW FEATURE NOTICE
+These instructions apply to Python code that builds agentic workflows over Microsoft Dataverse with the Dataverse SDK for Python public preview capabilities and planned GA integrations. They are authoritative for Dataverse-backed data agents, data quality checks, form prediction, MCP and A2A design seams, secure impersonation concepts, governance conventions, and AI/ML integration in matched files; official Dataverse SDK documentation, platform security policy, and production compliance requirements win wherever they define stricter behavior or finalized APIs.
 
-**Status**: This feature is in **Public Preview** as of December 2025
-**Availability**: General Availability (GA) date TBD
-**Documentation**: Complete implementation details forthcoming
+## Preview Status and API Stability
 
-This guide covers the conceptual framework and planned capabilities for building agentic workflows with the Dataverse SDK for Python. Specific APIs and implementations may change before general availability.
+Treat the agentic workflow surface as preview. Keep conceptual patterns isolated from stable SDK calls, and label planned integrations so reviewers can distinguish available code from future-facing design.
 
----
+| Item | Convention |
+| --- | --- |
+| `PREVIEW` / `FEATURE` / `NOTICE` | Preserve preview notices for feature stability and review context. |
+| Status | Public Preview as of December 2025. |
+| General Availability | GA date is TBD; do not promise final API compatibility. |
+| Documentation | Complete implementation details are forthcoming; validate code against official docs before production use. |
+| Current SDK posture | Use current SDK capabilities for CRUD, bulk operations, OData, SQL, metadata, pagination, file upload, and structured errors. |
+| Planned posture | Design for native async/await, MCP integration, A2A collaboration primitives, enhanced authentication/impersonation, governance policy enforcement, and advanced caching strategies without hardcoding nonexistent APIs into production paths. |
 
-## 1. Overview: Agentic Workflows with Dataverse
+## Agentic Workflow Model
 
-### What are Agentic Workflows?
+Use Dataverse as the central source of truth and keep agents focused on one data responsibility. An agentic workflow combines decision-making agents, orchestration logic, and Dataverse records, not unbounded autonomous mutation.
 
-Agentic workflows are autonomous, intelligent processes where:
-- **Agents** make decisions and take actions based on data and rules
-- **Workflows** orchestrate complex, multi-step operations
-- **Dataverse** serves as the central source of truth for enterprise data
+| Concept | Convention |
+| --- | --- |
+| Agents | Implement autonomous components that make decisions and take actions based on data and rules. |
+| Workflows | Orchestrate complex, multi-step operations without hiding side effects. |
+| Dataverse | Treat as the enterprise system of record for tables, rows, metadata, documents, audit trails, and governance. |
+| Python audience | Keep workflows approachable for data scientists and developers who do not have .NET expertise. |
+| Autonomous Data Agents | Query, update, and evaluate data quality independently within explicit permission and audit boundaries. |
+| Form Prediction & Autofill | Pre-fill forms from historical patterns and context only with clear confidence and review paths. |
+| Model Context Protocol (MCP) | Use as the standard agent-to-tool communication shape when integration is available. |
+| Agent-to-Agent (A2A) Collaboration | Let multiple agents collaborate through events or messages, not shared mutable state. |
+| Semantic Modeling | Represent natural-language understanding of data relationships separately from raw table access. |
+| Secure Impersonation | Run operations on behalf of specific users only through supported impersonation contexts and audit trails. |
+| Compliance Built-in | Enforce data governance and retention policies instead of leaving them to caller discipline. |
 
-The Dataverse SDK for Python is designed to enable data scientists and developers to build these intelligent systems without .NET expertise.
+## Dataverse SDK Access Patterns
 
-### Key Capabilities (Planned)
+Use current SDK features for working code. Keep data access explicit, paginated, and table-aware.
 
-The SDK is strategically positioned to support:
+| API or package | Convention |
+| --- | --- |
+| `from PowerPlatform.Dataverse.client import DataverseClient` | Use the current SDK client for Dataverse access. |
+| `from azure.identity import InteractiveBrowserCredential` | Use Azure Identity credentials for interactive development samples; production code should use the organization's approved credential flow. |
+| `DataverseClient("https://<org>.crm.dynamics.com", InteractiveBrowserCredential())` | Keep the organization URL configurable; preserve the placeholder `https://<org>.crm.dynamics.com` only in samples. |
+| `client.get(table_name, select=required_fields)` | Select only required fields for completeness and quality checks. |
+| `client.get("account")` | Use logical table names such as `account` consistently. |
+| `client.update("account", account['id'], enrichment)` | Update only fields owned by the agent's responsibility. |
+| `client.create("account", {"name": "New Account"})` | Create records only inside an auditable user or service context. |
+| `client.list_tables()` | Validate table existence before running health checks. |
+| Pagination | Iterate pages returned by `client.get(...)`; do not assume a single list contains every record. |
+| File Upload | Treat document attachment handling as data governance-sensitive. |
+| Metadata Operations | Use table and column definitions instead of hardcoded assumptions when agents adapt to schema. |
+| Error Handling | Preserve structured exception details in logs and return user-safe status objects. |
 
-1. **Autonomous Data Agents** - Query, update, and evaluate data quality independently
-2. **Form Prediction & Autofill** - Pre-fill forms based on data patterns and context
-3. **Model Context Protocol (MCP)** Support - Enable standardized agent-to-tool communication
-4. **Agent-to-Agent (A2A)** Collaboration - Multiple agents working together on complex tasks
-5. **Semantic Modeling** - Natural language understanding of data relationships
-6. **Secure Impersonation** - Run operations on behalf of specific users with audit trails
-7. **Compliance Built-in** - Data governance and retention policies enforced
+## Data Quality and Health Agents
 
----
+Build data agents around measurable checks, bounded record sets, and reproducible reports.
 
-## 2. Architecture Patterns for Agentic Systems
+| Agent or method | Convention |
+| --- | --- |
+| `DataQualityAgent` | Monitor and improve data quality without mixing enrichment, sync, or UI prediction logic into the same class. |
+| `evaluate_data_quality(table_name)` | Return metrics such as `total_records`, `null_values`, and `duplicate_records`. |
+| `auto_remediate(issues)` | Keep remediation decisions explicit, auditable, and reversible. |
+| `analyze_completeness(table_name, required_fields)` | Count missing values per required field and calculate percentages. |
+| `all_records` | Use a local aggregate only after paging deliberately; avoid unbounded memory growth. |
+| `missing_by_field` | Track missing counts per required field before computing completeness. |
+| `missing_counts` | Include missing-count details in quality reports. |
+| `duplicate_count` | Report duplicate totals alongside duplicate details. |
+| `detect_duplicates(table_name, key_fields)` | Use deterministic keys such as `name` and `emailaddress1`; report `original_id`, `duplicate_id`, and `key`. |
+| `generate_quality_report(table_name)` | Return `timestamp`, `table`, `completeness`, and `duplicates`; use `pd.Timestamp.now().isoformat()` when pandas is already a dependency. |
+| `SimpleDataAgent.check_health(table_name)` | Check table existence with `list_tables()`, cap exploratory counts such as `len(records) > 1000`, and return `status`, `message`, `record_count`, and `timestamp`. |
+| `json.dumps(report, indent=2)` | Use for readable local reports; avoid dumping sensitive records. |
+| Required fields | Use examples such as `name`, `telephone1`, and `emailaddress1` only when they match the target table. |
 
-### Multi-Agent Pattern
+## Enrichment, Pipeline, and Agent Collaboration
+
+Keep orchestration separate from individual agent behavior so agents can be tested independently and composed safely.
+
+| Pattern | Convention |
+| --- | --- |
+| `DataEnrichmentAgent.enrich_accounts()` | Enrich account records with external market data only after ownership, source quality, and overwrite rules are explicit. |
+| `multi-agent` | Keep multi-agent collaboration explicit through orchestration or events. |
+| `DataPipeline` | Orchestrate `quality_agent`, `enrichment_agent`, and `sync_agent` instead of embedding all logic in one agent. |
+| `run(table_name)` | Make orchestration state visible through events or logs such as quality check, enrichment, and external sync stages without requiring a numbered runbook in the instruction. |
+| `sync_to_external_db` | Keep external sync as a named operation owned by synchronization agents. |
+| `SyncAgent` | Keep external database synchronization separate from quality and enrichment logic. |
+| `DataValidationAgent.validate_and_notify(data)` | Publish `data_validated` or `validation_failed` events after validation. |
+| `DataProcessingAgent.process_data(data)` | Subscribe to validated events and process only already-validated data. |
+| `publish_event(...)` / `subscribe(...)` | Use event-style collaboration for A2A flows; never couple agents through untracked shared objects. |
+
+## MCP Tool Integration
+
+Design MCP tools with stable names, clear descriptions, constrained parameters, and standard error handling. Keep MCP server code conceptual until the SDK provides the final API.
+
+| MCP element | Convention |
+| --- | --- |
+| `from dataverse_mcp import DataverseMCPServer` | Treat as conceptual until the package and API are released. |
+| `DataverseMCPServer(client, tools=tools)` | Build servers from an existing Dataverse client and a declarative tool list. |
+| `query_accounts` | Define a query tool with `filter`, `select`, and `top` parameters. |
+| `create_account` | Define create tools with required business fields such as `name` and bounded optional fields such as `credit_limit`. |
+| `update_account` | Define update tools with `account_id` and `updates`; validate field ownership before writing. |
+| `handle_tool_call("query_accounts", {...})` | Keep tool invocation explicit and validate OData filters such as `creditlimit gt 100000`. |
+| `tools/capabilities` | Document available tools and capabilities before exposing them to agents. |
+| Tool Definition | Describe available tools and parameters. |
+| Tool Invocation | Allow LLMs to call tools only through validated parameters. |
+| Context Management | Preserve context between agent and tools without leaking unrelated records. |
+| Error Handling | Return standardized errors instead of raw exceptions. |
+| Model Context Protocol docs | Preserve `https://modelcontextprotocol.io/` as the external protocol reference and avoid claiming any SDK is the go-to platform until GA documentation confirms it. |
+
+## Prediction and AI/ML Integration
+
+Separate predictive models from Dataverse write paths. Predictions should carry confidence and never silently overwrite user-entered data.
+
+| API or class | Convention |
+| --- | --- |
+| `FormPredictionAgent` | Train and serve autofill suggestions for one bounded form or table scenario. |
+| `RandomForestRegressor` | Use `sklearn.ensemble.RandomForestRegressor` only when tabular historical data and regression output fit the problem. |
+| `pandas as pd` | Use `pd.DataFrame(records)` for feature preparation and `pd.Timestamp.now().isoformat()` for timestamps when pandas is already part of the workflow. |
+| `train_on_historical_data(table_name, features, target)` | Collect training data with `select=features + [target]`, fill missing feature values deliberately, and return a model score. |
+| `predict_field_values(table_name, record_id, features_data)` | Return `record_id`, `predicted_value`, and `confidence`; raise `ValueError("Model not trained. Call train_on_historical_data first.")` when no model exists. |
+| `analyze_with_llm` | Keep LLM analysis in a named method that bounds samples and returns advisory insight. |
+| `DataInsightAgent` | Use LLMs to summarize data samples without turning the LLM into the system of record. |
+| `from openai import OpenAI` | Keep LLM integration behind a dedicated class and pass `openai_key` through secure configuration. |
+| `OpenAI(api_key=openai_key)` | Never hardcode API keys. |
+| `llm.chat.completions.create(...)` | Keep the model name, for example `gpt-4`, configurable. |
+| `sample_size=100` | Bound data sent to the LLM and summarize records with `json.dumps(records[:5], indent=2, default=str)`. |
+| `response.choices[0].message.content` | Return generated insights as advisory content, not verified facts. |
+
+## Impersonation, Audit, and Governance
+
+Do not simulate security features in production code. Use supported platform capabilities for impersonation, audit trails, retention, and classification.
+
+| Capability | Convention |
+| --- | --- |
+| `GUID` | Treat user and record GUID values as identifiers that require audit and access-control checks. |
+| `from dataverse_security import ImpersonationContext` | Treat as a planned conceptual API until released. |
+| `with ImpersonationContext(client, user_id="user-guid")` | Run operations on behalf of a specific user only with explicit user identity and audit requirements. |
+| `client.get_audit_trail(table="account", record_id="record-guid", action="create")` | Retrieve audit evidence for sensitive mutations. |
+| `from dataverse_governance import DataGovernance` | Treat as a planned conceptual API until released. |
+| `DataGovernance(client)` | Centralize retention and classification logic. |
+| `set_retention_policy(table="account", retention_days=365)` | Keep retention days explicit and policy-driven. |
+| `classify_columns(...)` | Classify fields such as `name` as `Public`, `telephone1` as `Internal`, and `creditlimit` as `Confidential` only when those labels match the organization's data policy. |
+| `enforce_all_policies()` | Apply governance through a central mechanism, not scattered conditionals. |
+
+## Current and Planned Capability Boundaries
+
+Use available capabilities now and leave clean seams for planned features; agent-like systems are acceptable when they use stable CRUD and query APIs rather than unreleased hooks.
+
+| Available now | Coming in GA |
+| --- | --- |
+| CRUD Operations | Full MCP integration |
+| Bulk Operations | A2A collaboration primitives |
+| Query Capabilities with OData and SQL | Enhanced authentication/impersonation |
+| Metadata Operations | Governance policy enforcement |
+| Error Handling with structured exception hierarchy | Native async/await support |
+| Pagination for large result sets | Advanced caching strategies |
+| File Upload for document attachments | More complete agentic workflow APIs |
+
+## Good / Bad Examples
+
+The examples below illustrate bounded, paginated Dataverse access with safe reporting.
+
+**Good:**
+
 ```python
-# Conceptual pattern - specific APIs pending GA
-class DataQualityAgent:
-    """Autonomous agent that monitors and improves data quality."""
-
-    def __init__(self, client):
-        self.client = client
-
-    async def evaluate_data_quality(self, table_name):
-        """Evaluate data quality metrics for a table."""
-        records = await self.client.get(table_name)
-
-        metrics = {
-            'total_records': len(records),
-            'null_values': sum(1 for r in records if None in r.values()),
-            'duplicate_records': await self._find_duplicates(table_name)
-        }
-        return metrics
-
-    async def auto_remediate(self, issues):
-        """Automatically fix identified data quality issues."""
-        # Agent autonomously decides on remediation actions
-        pass
-
-class DataEnrichmentAgent:
-    """Autonomous agent that enriches data from external sources."""
-
-    async def enrich_accounts(self):
-        """Enrich account data with market information."""
-        accounts = await self.client.get("account")
-
-        for account in accounts:
-            enrichment = await self._lookup_market_data(account['name'])
-            await self.client.update("account", account['id'], enrichment)
-```
-
-### Agent Orchestration Pattern
-```python
-# Conceptual pattern - specific APIs pending GA
-class DataPipeline:
-    """Orchestrates multiple agents working together."""
-
-    def __init__(self, client):
-        self.quality_agent = DataQualityAgent(client)
-        self.enrichment_agent = DataEnrichmentAgent(client)
-        self.sync_agent = SyncAgent(client)
-
-    async def run(self, table_name):
-        """Execute multi-agent workflow."""
-        # Step 1: Quality check
-        print("Running quality checks...")
-        issues = await self.quality_agent.evaluate_data_quality(table_name)
-
-        # Step 2: Enrich data
-        print("Enriching data...")
-        await self.enrichment_agent.enrich_accounts()
-
-        # Step 3: Sync to external systems
-        print("Syncing to external systems...")
-        await self.sync_agent.sync_to_external_db(table_name)
-```
-
----
-
-## 3. Model Context Protocol (MCP) Support (Planned)
-
-### What is MCP?
-
-The Model Context Protocol (MCP) is an open standard for:
-- **Tool Definition** - Describe what tools/capabilities are available
-- **Tool Invocation** - Allow LLMs to call tools with parameters
-- **Context Management** - Manage context between agent and tools
-- **Error Handling** - Standardized error responses
-
-### MCP Integration Pattern (Conceptual)
-
-```python
-# Conceptual pattern - specific APIs pending GA
-from dataverse_mcp import DataverseMCPServer
-
-# Define available tools
-tools = [
-    {
-        "name": "query_accounts",
-        "description": "Query accounts with filters",
-        "parameters": {
-            "filter": "OData filter expression",
-            "select": "Columns to retrieve",
-            "top": "Maximum records"
-        }
-    },
-    {
-        "name": "create_account",
-        "description": "Create a new account",
-        "parameters": {
-            "name": "Account name",
-            "credit_limit": "Credit limit amount"
-        }
-    },
-    {
-        "name": "update_account",
-        "description": "Update account fields",
-        "parameters": {
-            "account_id": "Account GUID",
-            "updates": "Dictionary of field updates"
-        }
-    }
-]
-
-# Create MCP server
-server = DataverseMCPServer(client, tools=tools)
-
-# LLMs can now use Dataverse tools
-await server.handle_tool_call("query_accounts", {
-    "filter": "creditlimit gt 100000",
-    "select": ["name", "creditlimit"]
-})
-```
-
----
-
-## 4. Agent-to-Agent (A2A) Collaboration (Planned)
-
-### A2A Communication Pattern
-
-```python
-# Conceptual pattern - specific APIs pending GA
-class DataValidationAgent:
-    """Validates data before downstream agents process it."""
-
-    async def validate_and_notify(self, data):
-        """Validate data and notify other agents."""
-        if await self._is_valid(data):
-            # Publish event that other agents can subscribe to
-            await self.publish_event("data_validated", data)
-        else:
-            await self.publish_event("validation_failed", data)
-
-class DataProcessingAgent:
-    """Waits for valid data from validation agent."""
-
-    async def __init__(self):
-        self.subscribe("data_validated", self.process_data)
-
-    async def process_data(self, data):
-        """Process already-validated data."""
-        # Agent can safely assume data is valid
-        result = await self._transform(data)
-        await self.publish_event("processing_complete", result)
-```
-
----
-
-## 5. Building Autonomous Data Agents
-
-### Data Quality Agent Example
-```python
-# Working example with current SDK features
 from PowerPlatform.Dataverse.client import DataverseClient
 from azure.identity import InteractiveBrowserCredential
 import json
-
-class DataQualityAgent:
-    """Monitor and report on data quality."""
-
-    def __init__(self, org_url, credential):
-        self.client = DataverseClient(org_url, credential)
-
-    def analyze_completeness(self, table_name, required_fields):
-        """Analyze field completeness."""
-        records = self.client.get(
-            table_name,
-            select=required_fields
-        )
-
-        missing_by_field = {field: 0 for field in required_fields}
-        total = 0
-
-        for page in records:
-            for record in page:
-                total += 1
-                for field in required_fields:
-                    if field not in record or record[field] is None:
-                        missing_by_field[field] += 1
-
-        # Calculate completeness percentage
-        completeness = {
-            field: ((total - count) / total * 100)
-            for field, count in missing_by_field.items()
-        }
-
-        return {
-            'table': table_name,
-            'total_records': total,
-            'completeness': completeness,
-            'missing_counts': missing_by_field
-        }
-
-    def detect_duplicates(self, table_name, key_fields):
-        """Detect potential duplicate records."""
-        records = self.client.get(table_name, select=key_fields)
-
-        all_records = []
-        for page in records:
-            all_records.extend(page)
-
-        seen = {}
-        duplicates = []
-
-        for record in all_records:
-            key = tuple(record.get(f) for f in key_fields)
-            if key in seen:
-                duplicates.append({
-                    'original_id': seen[key],
-                    'duplicate_id': record.get('id'),
-                    'key': key
-                })
-            else:
-                seen[key] = record.get('id')
-
-        return {
-            'table': table_name,
-            'duplicate_count': len(duplicates),
-            'duplicates': duplicates
-        }
-
-    def generate_quality_report(self, table_name):
-        """Generate comprehensive quality report."""
-        completeness = self.analyze_completeness(
-            table_name,
-            ['name', 'telephone1', 'emailaddress1']
-        )
-
-        duplicates = self.detect_duplicates(
-            table_name,
-            ['name', 'emailaddress1']
-        )
-
-        return {
-            'timestamp': pd.Timestamp.now().isoformat(),
-            'table': table_name,
-            'completeness': completeness,
-            'duplicates': duplicates
-        }
-
-# Usage
-client = DataverseClient("https://<org>.crm.dynamics.com", InteractiveBrowserCredential())
-agent = DataQualityAgent("https://<org>.crm.dynamics.com", InteractiveBrowserCredential())
-
-report = agent.generate_quality_report("account")
-print(json.dumps(report, indent=2))
-```
-
-### Form Prediction Agent Example
-```python
-# Conceptual pattern using current SDK capabilities
-from sklearn.ensemble import RandomForestRegressor
 import pandas as pd
 
-class FormPredictionAgent:
-    """Predict and autofill form values."""
-
-    def __init__(self, org_url, credential):
-        self.client = DataverseClient(org_url, credential)
-        self.model = None
-
-    def train_on_historical_data(self, table_name, features, target):
-        """Train prediction model on historical data."""
-        # Collect training data
-        records = []
-        for page in self.client.get(table_name, select=features + [target]):
-            records.extend(page)
-
-        df = pd.DataFrame(records)
-
-        # Train model
-        X = df[features].fillna(0)
-        y = df[target]
-
-        self.model = RandomForestRegressor()
-        self.model.fit(X, y)
-
-        return self.model.score(X, y)
-
-    def predict_field_values(self, table_name, record_id, features_data):
-        """Predict missing field values."""
-        if self.model is None:
-            raise ValueError("Model not trained. Call train_on_historical_data first.")
-
-        # Predict
-        prediction = self.model.predict([features_data])[0]
-
-        # Return prediction with confidence
-        return {
-            'record_id': record_id,
-            'predicted_value': prediction,
-            'confidence': self.model.score([features_data], [prediction])
-        }
-```
-
----
-
-## 6. Integration with AI/ML Services
-
-### LLM Integration Pattern
-```python
-# Using LLM to interpret Dataverse data
-from openai import OpenAI
-
-class DataInsightAgent:
-    """Use LLM to generate insights from Dataverse data."""
-
-    def __init__(self, org_url, credential, openai_key):
-        self.client = DataverseClient(org_url, credential)
-        self.llm = OpenAI(api_key=openai_key)
-
-    def analyze_with_llm(self, table_name, sample_size=100):
-        """Analyze data using LLM."""
-        # Get sample data
-        records = []
-        count = 0
-        for page in self.client.get(table_name):
-            records.extend(page)
-            count += len(page)
-            if count >= sample_size:
-                break
-
-        # Create summary for LLM
-        summary = f"""
-        Table: {table_name}
-        Total records sampled: {len(records)}
-
-        Sample data:
-        {json.dumps(records[:5], indent=2, default=str)}
-
-        Provide insights about this data.
-        """
-
-        # Ask LLM
-        response = self.llm.chat.completions.create(
-            model="gpt-4",
-            messages=[{"role": "user", "content": summary}]
-        )
-
-        return response.choices[0].message.content
-```
-
----
-
-## 7. Secure Impersonation & Audit Trails
-
-### Planned Capabilities
-
-The SDK will support running operations on behalf of specific users:
-
-```python
-# Conceptual pattern - specific APIs pending GA
-from dataverse_security import ImpersonationContext
-
-# Run as different user
-with ImpersonationContext(client, user_id="user-guid"):
-    # All operations run as this user
-    client.create("account", {"name": "New Account"})
-    # Audit trail: Created by [user-guid] at [timestamp]
-
-# Retrieve audit trail
-audit_log = client.get_audit_trail(
-    table="account",
-    record_id="record-guid",
-    action="create"
-)
-```
-
----
-
-## 8. Compliance and Data Governance
-
-### Planned Governance Features
-
-```python
-# Conceptual pattern - specific APIs pending GA
-from dataverse_governance import DataGovernance
-
-# Define retention policy
-governance = DataGovernance(client)
-governance.set_retention_policy(
-    table="account",
-    retention_days=365
-)
-
-# Define data classification
-governance.classify_columns(
-    table="account",
-    classifications={
-        "name": "Public",
-        "telephone1": "Internal",
-        "creditlimit": "Confidential"
-    }
-)
-
-# Enforce policies
-governance.enforce_all_policies()
-```
-
----
-
-## 9. Current SDK Capabilities Supporting Agentic Workflows
-
-While full agentic features are in preview, current SDK capabilities already support agent building:
-
-### Available Now
-- **CRUD Operations** - Create, retrieve, update, delete data
-- **Bulk Operations** - Process large datasets efficiently
-- **Query Capabilities** - OData and SQL for flexible data retrieval
-- **Metadata Operations** - Work with table and column definitions
-- **Error Handling** - Structured exception hierarchy
-- **Pagination** - Handle large result sets
-- **File Upload** - Manage document attachments
-
-### Coming in GA
-- Full MCP integration
-- A2A collaboration primitives
-- Enhanced authentication/impersonation
-- Governance policy enforcement
-- Native async/await support
-- Advanced caching strategies
-
----
-
-## 10. Getting Started: Build Your First Agent Today
-
-```python
-from PowerPlatform.Dataverse.client import DataverseClient
-from azure.identity import InteractiveBrowserCredential
-import json
-
 class SimpleDataAgent:
-    """Your first Dataverse agent."""
-
     def __init__(self, org_url):
-        credential = InteractiveBrowserCredential()
-        self.client = DataverseClient(org_url, credential)
+        self.client = DataverseClient(org_url, InteractiveBrowserCredential())
 
     def check_health(self, table_name):
-        """Agent function: Check table health."""
         try:
-            tables = self.client.list_tables()
-            matching = [t for t in tables if t['LogicalName'] == table_name]
-
+            matching = [t for t in self.client.list_tables() if t["LogicalName"] == table_name]
             if not matching:
                 return {"status": "error", "message": f"Table {table_name} not found"}
 
-            # Get record count
             records = []
             for page in self.client.get(table_name):
                 records.extend(page)
@@ -506,63 +193,74 @@ class SimpleDataAgent:
                 "status": "healthy",
                 "table": table_name,
                 "record_count": len(records),
-                "timestamp": pd.Timestamp.now().isoformat()
+                "timestamp": pd.Timestamp.now().isoformat(),
             }
+        except Exception as exc:
+            return {"status": "error", "message": str(exc)}
 
-        except Exception as e:
-            return {"status": "error", "message": str(e)}
-
-# Usage
 agent = SimpleDataAgent("https://<org>.crm.dynamics.com")
-health = agent.check_health("account")
-print(json.dumps(health, indent=2))
+print(json.dumps(agent.check_health("account"), indent=2))
 ```
 
----
+Why: The agent uses the current SDK, validates table existence, paginates, bounds exploratory reads, and returns a structured status.
 
-## 11. Resources & Documentation
+**Bad:**
 
-### Official Documentation
-- [Dataverse SDK for Python Overview](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/sdk-python/overview)
-- [Working with Data](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/sdk-python/work-data)
-- [Release Plan: Agentic Workflows](https://learn.microsoft.com/en-us/power-platform/release-plan/2025wave2/data-platform/build-agentic-flows-dataverse-sdk-python)
+```python
+class Agent:
+    def run(self):
+        records = self.client.get("account")
+        self.llm.chat.completions.create(model="gpt-4", messages=[{"role": "user", "content": str(records)}])
+        self.client.update("account", "record-guid", {"creditlimit": 999999})
+```
 
-### External Resources
-- [Model Context Protocol](https://modelcontextprotocol.io/)
-- [Azure AI Services](https://learn.microsoft.com/en-us/azure/ai-services/)
-- [Python async/await](https://docs.python.org/3/library/asyncio.html)
+Why: The code ignores pagination, sends unbounded data to an LLM, hardcodes a record mutation, and lacks audit, validation, confidence, and governance checks.
 
-### Repository
-- [SDK Source Code](https://github.com/microsoft/PowerPlatform-DataverseClient-Python)
-- [Issues & Feature Requests](https://github.com/microsoft/PowerPlatform-DataverseClient-Python/issues)
+## Conventions
 
----
+| Rule | Rationale |
+|---|---|
+| Mark Public Preview and TBD GA assumptions in code comments or design docs when using planned features | Reviewers can separate stable SDK code from future-facing seams |
+| Use `DataverseClient` with approved credentials and configurable organization URLs | Data agents remain deployable across environments |
+| Iterate paginated `client.get(...)` results and select only needed columns | Large Dataverse tables do not overload memory or expose unnecessary data |
+| Keep `DataQualityAgent`, `DataEnrichmentAgent`, `DataPipeline`, `DataValidationAgent`, and `DataProcessingAgent` responsibilities separate | Agents stay testable and side effects remain visible |
+| Design MCP tools such as `query_accounts`, `create_account`, and `update_account` with validated parameters | LLM tool calls cannot mutate enterprise data through ambiguous inputs |
+| Return confidence and record identity from prediction agents | Users can review autofill suggestions before trusting them |
+| Use `ImpersonationContext`, audit trails, and `DataGovernance` only through supported APIs | Security and compliance are enforced by the platform, not simulated locally |
+| Bound LLM samples and keep generated insights advisory | Sensitive data exposure and hallucinated decisions are reduced |
 
-## 12. FAQ: Agentic Workflows
+## Do / Do Not
 
-**Q: Can I use agents today with the current SDK?**
-A: Yes! Use the current capabilities to build agent-like systems. Full MCP/A2A support coming in GA.
+| Do | Do not |
+|---|---|
+| Use current SDK capabilities for CRUD Operations, Bulk Operations, Query Capabilities, Metadata Operations, Error Handling, Pagination, and File Upload | Depend on planned GA-only APIs as if they were production-ready |
+| Keep examples using `https://<org>.crm.dynamics.com` as placeholders | Commit a real organization URL, token, or credential |
+| Validate tables with `client.list_tables()` before health checks | Assume every configured `table_name` exists |
+| Publish `data_validated` and `validation_failed` events between agents | Share mutable state directly between A2A agents |
+| Define MCP tool schemas with `filter`, `select`, `top`, `account_id`, and `updates` | Let an LLM pass arbitrary write payloads to Dataverse |
+| Use `pd.DataFrame`, `RandomForestRegressor`, and `OpenAI` only where the dependency is justified | Add ML or LLM dependencies to simple CRUD workflows without need |
+| Retrieve `audit_log` with `get_audit_trail` for sensitive writes | Perform impersonated or governed operations without evidence |
+| Cite official documentation and release plans for preview behavior | Treat conceptual snippets as finalized SDK contracts |
 
-**Q: What's the difference between current SDK and agentic features?**
-A: Current: Synchronous CRUD; Agentic: Async, autonomous decision-making, agent collaboration.
+## Checklist Before Opening a PR
 
-**Q: Will there be breaking changes from preview to GA?**
-A: Possibly. This is a preview feature; expect API refinements before general availability.
+- [ ] Preview-only APIs are labeled and isolated from production execution paths.
+- [ ] Dataverse organization URLs, credentials, OpenAI keys, and user IDs are configurable and not committed as real values.
+- [ ] Agents use `DataverseClient`, approved Azure Identity credentials, pagination, and field selection where applicable.
+- [ ] Data quality reports include table, totals, completeness, missing counts, duplicates, and timestamps without dumping sensitive records.
+- [ ] MCP tools have stable names, descriptions, validated parameters, and standardized error behavior.
+- [ ] A2A collaboration uses events or messages such as `data_validated`, `validation_failed`, and `processing_complete`.
+- [ ] Prediction and LLM flows bound sample sizes, preserve confidence, and avoid silent writes.
+- [ ] Impersonation, audit, retention, classification, and governance logic rely on supported platform APIs or remain clearly conceptual.
+- [ ] Current-versus-GA capability boundaries are explicit in code, comments, or documentation.
 
-**Q: How do I prepare for agentic workflows today?**
-A: Build agents using current CRUD operations, design with async patterns in mind, use MCP specs for future compatibility.
+## References
 
-**Q: Is there a cost difference for agentic features?**
-A: Unknown at this time. Check release notes closer to GA.
-
----
-
-## 13. Next Steps
-
-1. **Build a prototype** using current SDK capabilities
-2. **Join preview** when MCP integration becomes available
-3. **Provide feedback** via GitHub issues
-4. **Watch for GA announcement** with full API documentation
-5. **Migrate to full agentic** features when ready
-
-The Dataverse SDK for Python is positioning itself as the go-to platform for building intelligent, autonomous data systems on the Microsoft Power Platform.
+- Dataverse SDK for Python Overview: https://learn.microsoft.com/en-us/power-apps/developer/data-platform/sdk-python/overview
+- Working with Data: https://learn.microsoft.com/en-us/power-apps/developer/data-platform/sdk-python/work-data
+- Release Plan: Agentic Workflows: https://learn.microsoft.com/en-us/power-platform/release-plan/2025wave2/data-platform/build-agentic-flows-dataverse-sdk-python
+- Model Context Protocol: https://modelcontextprotocol.io/
+- Azure AI Services: https://learn.microsoft.com/en-us/azure/ai-services/
+- Python async/await: https://docs.python.org/3/library/asyncio.html
+- SDK Source Code: https://github.com/microsoft/PowerPlatform-DataverseClient-Python
+- Issues & Feature Requests: https://github.com/microsoft/PowerPlatform-DataverseClient-Python/issues

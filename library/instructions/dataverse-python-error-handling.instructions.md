@@ -1,329 +1,103 @@
 ---
-applyTo: '**/*.py'
-description: 'Error handling, troubleshooting, retry, and diagnostics patterns for Python Dataverse SDK integrations.'
+applyTo: "**/*.py"
+description: "Enforces Python Dataverse SDK error handling, retry, logging, diagnostics, and troubleshooting conventions."
 ---
 
-# Dataverse SDK for Python — Error Handling & Troubleshooting Guide
+# Dataverse Python Error Handling Conventions — SDK Diagnostics
 
-Based on official Microsoft documentation for Azure SDK error handling patterns and Dataverse SDK specifics.
+These instructions apply to Python files that call the Dataverse SDK and need robust exception handling, retry decisions, logging, diagnostics, monitoring, or troubleshooting. They are authoritative for `DataverseError` handling, Azure SDK exception boundaries, transient retry policy, HTTP status interpretation, SDK logging, and support diagnostics; authentication setup, CRUD semantics, pandas analytics, and repository-wide observability primitives win where they define stricter rules.
 
-## 1. DataverseError Class Overview
+## DataverseError Shape
 
-The Dataverse SDK for Python provides a structured exception hierarchy for robust error handling.
-
-### DataverseError Constructor
+Catch and inspect `DataverseError` from `PowerPlatform.Dataverse.core.errors` before generic exceptions. Preserve the constructor and key properties because support diagnostics depend on them:
 
 ```python
 from PowerPlatform.Dataverse.core.errors import DataverseError
 
 DataverseError(
-    message: str,                          # Human-readable error message
-    code: str,                             # Error category (e.g., "validation_error", "http_error")
-    subcode: str | None = None,            # Optional specific error identifier
-    status_code: int | None = None,        # HTTP status code (if applicable)
-    details: Dict[str, Any] | None = None, # Additional diagnostic information
-    source: str | None = None,             # Error source: "client" or "server"
-    is_transient: bool = False             # Whether error may succeed on retry
+    message: str,
+    code: str,
+    subcode: str | None = None,
+    status_code: int | None = None,
+    details: dict | None = None,
+    source: str | None = None,
+    is_transient: bool = False,
 )
 ```
 
-### Key Properties
+Use `e.message`, `e.code`, `e.subcode`, `e.status_code`, `e.source`, `e.is_transient`, `e.details`, and `e.to_dict()` in logs or support payloads. Distinguish Dataverse errors from `AzureError` in `azure.core.exceptions`, then use a final `Exception` catch only for unexpected failures.
 
-```python
-try:
-    client.get("account", record_id="invalid-id")
-except DataverseError as e:
-    print(f"Message: {e.message}")           # Human-readable message
-    print(f"Code: {e.code}")                 # Error category
-    print(f"Subcode: {e.subcode}")           # Specific error type
-    print(f"Status Code: {e.status_code}")   # HTTP status (401, 403, 429, etc.)
-    print(f"Source: {e.source}")             # "client" or "server"
-    print(f"Is Transient: {e.is_transient}") # Can retry?
-    print(f"Details: {e.details}")           # Additional context
-    
-    # Convert to dictionary for logging
-    error_dict = e.to_dict()
-```
+## HTTP Status Handling
 
----
+Handle common Dataverse failures by status code and cause.
 
-## 2. Common Error Scenarios
+| Status | Scenario | Convention |
+| --- | --- | --- |
+| `400 Bad Request` | Invalid request format, OData syntax, field names, required fields, business rule violations | Log validation details and fix the request; do not retry unchanged input. |
+| `401 Unauthorized` | Invalid credentials, expired tokens, bad `base_url`, or misconfigured settings | Re-authenticate or fix credentials; do not retry blindly. |
+| `403 Forbidden` | User lacks permissions for `contact`, `account`, metadata, or table operations | Escalate access and include request ID from `e.details.get('request_id')` when present. |
+| `404 Not Found` | Record, table, or resource does not exist | Verify schema name and record ID; use fallback data only when that behavior is intentional. |
+| `408 Request Timeout` | Network or service timeout | Retry only when `e.is_transient` allows it. |
+| `413` | File too large | Use chunked upload mode or reduce file size. |
+| `429 Too Many Requests` | Service protection limits or rate limiting | Retry with exponential backoff when `e.is_transient` is true. |
+| `500`, `502`, `503`, `504` | Temporary service or infrastructure failure | Retry with exponential backoff and check service health. |
+| `InvalidOperationException` | Plugin or workflow error | Check Dataverse plugin logs and workflow diagnostics. |
 
-### Authentication Errors (401)
+## Retry Policy
 
-**Cause**: Invalid credentials, expired tokens, or misconfigured settings.
-
-```python
-from PowerPlatform.Dataverse.client import DataverseClient
-from PowerPlatform.Dataverse.core.errors import DataverseError
-from azure.identity import InteractiveBrowserCredential
-
-try:
-    # Bad credentials or expired token
-    credential = InteractiveBrowserCredential()
-    client = DataverseClient(
-        base_url="https://<invalid-org>.crm.dynamics.com",
-        credential=credential
-    )
-    records = client.get("account")
-except DataverseError as e:
-    if e.status_code == 401:
-        print("Authentication failed. Check credentials and token expiration.")
-        print(f"Details: {e.message}")
-        # Don't retry - fix credentials first
-    else:
-        raise
-```
-
-### Authorization Errors (403)
-
-**Cause**: User lacks permissions for the requested operation.
-
-```python
-try:
-    # User doesn't have permission to read contacts
-    records = client.get("contact")
-except DataverseError as e:
-    if e.status_code == 403:
-        print("Access denied. User lacks required permissions.")
-        print(f"Request ID for support: {e.details.get('request_id')}")
-        # Escalate to administrator
-    else:
-        raise
-```
-
-### Resource Not Found (404)
-
-**Cause**: Record, table, or resource doesn't exist.
-
-```python
-try:
-    # Record doesn't exist
-    record = client.get("account", record_id="00000000-0000-0000-0000-000000000000")
-except DataverseError as e:
-    if e.status_code == 404:
-        print("Resource not found. Using default data.")
-        record = {"name": "Unknown", "id": None}
-    else:
-        raise
-```
-
-### Rate Limiting (429)
-
-**Cause**: Too many requests exceeding service protection limits.
-
-**Note**: The SDK has minimal built-in retry support. Handle transient consistency issues manually.
+Retry only transient failures. Do not retry `401`, `403`, `400`, or ordinary `404` failures because credentials, permissions, bad requests, and missing resources require a state change.
 
 ```python
 import time
-
-def create_with_retry(client, table_name, payload, max_retries=3):
-    """Create record with retry logic for rate limiting."""
-    for attempt in range(max_retries):
-        try:
-            result = client.create(table_name, payload)
-            return result
-        except DataverseError as e:
-            if e.status_code == 429 and e.is_transient:
-                wait_time = 2 ** attempt  # Exponential backoff
-                print(f"Rate limited. Retrying in {wait_time}s...")
-                time.sleep(wait_time)
-            else:
-                raise
-    
-    raise Exception(f"Failed after {max_retries} retries")
-```
-
-### Server Errors (500, 502, 503, 504)
-
-**Cause**: Temporary service issues or infrastructure problems.
-
-```python
-try:
-    result = client.create("account", {"name": "Acme"})
-except DataverseError as e:
-    if 500 <= e.status_code < 600:
-        print(f"Server error ({e.status_code}). Service may be temporarily unavailable.")
-        # Implement retry logic with exponential backoff
-    else:
-        raise
-```
-
-### Validation Errors (400)
-
-**Cause**: Invalid request format, missing required fields, or business rule violations.
-
-```python
-try:
-    # Missing required field or invalid data
-    client.create("account", {"telephone1": "not-a-phone-number"})
-except DataverseError as e:
-    if e.status_code == 400:
-        print(f"Validation error: {e.message}")
-        if e.details:
-            print(f"Details: {e.details}")
-        # Log validation issues for debugging
-    else:
-        raise
-```
-
----
-
-## 3. Error Handling Best Practices
-
-### Use Specific Exception Handling
-
-Always catch specific exceptions before general ones:
-
-```python
 from PowerPlatform.Dataverse.core.errors import DataverseError
-from azure.core.exceptions import AzureError
 
-try:
-    records = client.get("account", filter="statecode eq 0", top=100)
-except DataverseError as e:
-    # Handle Dataverse-specific errors
-    if e.status_code == 401:
-        print("Re-authenticate required")
-    elif e.status_code == 404:
-        print("Resource not found")
-    elif e.is_transient:
-        print("Transient error - may retry")
-    else:
-        print(f"Operation failed: {e.message}")
-except AzureError as e:
-    # Handle Azure SDK errors (network, auth, etc.)
-    print(f"Azure error: {e}")
-except Exception as e:
-    # Catch-all for unexpected errors
-    print(f"Unexpected error: {e}")
-```
 
-### Implement Smart Retry Logic
-
-**Don't retry on**:
-- 401 Unauthorized (authentication failures)
-- 403 Forbidden (authorization failures)
-- 400 Bad Request (client errors)
-- 404 Not Found (unless resource should eventually appear)
-
-**Consider retrying on**:
-- 408 Request Timeout
-- 429 Too Many Requests (with exponential backoff)
-- 500 Internal Server Error
-- 502 Bad Gateway
-- 503 Service Unavailable
-- 504 Gateway Timeout
-
-```python
 def should_retry(error: DataverseError) -> bool:
-    """Determine if operation should be retried."""
     if not error.is_transient:
         return False
-    
     retryable_codes = {408, 429, 500, 502, 503, 504}
     return error.status_code in retryable_codes
 
+
 def call_with_exponential_backoff(func, *args, max_attempts=3, **kwargs):
-    """Call function with exponential backoff retry."""
     for attempt in range(max_attempts):
         try:
             return func(*args, **kwargs)
         except DataverseError as e:
             if should_retry(e) and attempt < max_attempts - 1:
-                wait_time = 2 ** attempt  # 1s, 2s, 4s...
+                wait_time = 2 ** attempt
                 print(f"Attempt {attempt + 1} failed. Retrying in {wait_time}s...")
                 time.sleep(wait_time)
-            else:
-                raise
+                continue
+            raise
 ```
 
-### Extract Meaningful Error Information
+The SDK has minimal built-in retry support for some scenarios; handle transient consistency, service protection limits, and bulk-operation retries explicitly in application code.
 
-```python
-import json
-from datetime import datetime
+## Diagnostics and Logging
 
-def log_error_for_support(error: DataverseError):
-    """Log error with diagnostic information."""
-    error_info = {
-        "timestamp": datetime.utcnow().isoformat(),
-        "error_type": type(error).__name__,
-        "message": error.message,
-        "code": error.code,
-        "subcode": error.subcode,
-        "status_code": error.status_code,
-        "source": error.source,
-        "is_transient": error.is_transient,
-        "details": error.details
-    }
-    
-    print(json.dumps(error_info, indent=2))
-    
-    # Save to log file or send to monitoring service
-    return error_info
-```
+Log structured diagnostics without leaking secrets. Use `datetime.utcnow().isoformat()`, `type(error).__name__`, `message`, `code`, `subcode`, `status_code`, `source`, `is_transient`, and `details`. Convert diagnostic dictionaries with `json.dumps(..., indent=2)` only when the sink accepts multi-line JSON.
 
-### Handle Bulk Operations Gracefully
-
-```python
-def bulk_create_with_error_tracking(client, table_name, payloads):
-    """Create multiple records, tracking which succeed/fail."""
-    results = {
-        "succeeded": [],
-        "failed": []
-    }
-    
-    for idx, payload in enumerate(payloads):
-        try:
-            record_ids = client.create(table_name, payload)
-            results["succeeded"].append({
-                "payload": payload,
-                "ids": record_ids
-            })
-        except DataverseError as e:
-            results["failed"].append({
-                "index": idx,
-                "payload": payload,
-                "error": {
-                    "message": e.message,
-                    "code": e.code,
-                    "status": e.status_code
-                }
-            })
-    
-    return results
-```
-
----
-
-## 4. Enable Diagnostic Logging
-
-### Configure Logging
+Configure logging intentionally:
 
 ```python
 import logging
 import sys
 
-# Set up root logger
 logging.basicConfig(
     level=logging.DEBUG,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     handlers=[
         logging.FileHandler('dataverse_sdk.log'),
-        logging.StreamHandler(sys.stdout)
-    ]
+        logging.StreamHandler(sys.stdout),
+    ],
 )
-
-# Configure specific loggers
 logging.getLogger('azure').setLevel(logging.DEBUG)
 logging.getLogger('PowerPlatform').setLevel(logging.DEBUG)
-
-# HTTP logging (careful with sensitive data)
 logging.getLogger('azure.core.pipeline.policies.http_logging_policy').setLevel(logging.DEBUG)
 ```
 
-### Enable SDK-Level Logging
+Enable SDK logging with `DataverseConfig` only when detailed HTTP diagnostics are safe:
 
 ```python
 from PowerPlatform.Dataverse.client import DataverseClient
@@ -331,207 +105,124 @@ from PowerPlatform.Dataverse.core.config import DataverseConfig
 from azure.identity import InteractiveBrowserCredential
 
 cfg = DataverseConfig()
-cfg.logging_enable = True  # Enable detailed logging
-
+cfg.logging_enable = True
 client = DataverseClient(
     base_url="https://myorg.crm.dynamics.com",
     credential=InteractiveBrowserCredential(),
-    config=cfg
+    config=cfg,
 )
-
-# Now SDK will log detailed HTTP requests/responses
 records = client.get("account", top=10)
 ```
 
-### Parse Error Responses
+Be careful with `azure.core.pipeline.policies.http_logging_policy` because HTTP logs can include sensitive data.
+
+## Dataverse-Specific Scenarios
+
+Keep scenario-specific handling close to the SDK call so the remediation is obvious.
+
+| Scenario | API names | Handling convention |
+| --- | --- | --- |
+| Authentication | `DataverseClient`, `InteractiveBrowserCredential`, `base_url="https://<invalid-org>.crm.dynamics.com"` | Report authentication failure and fix credential or tenant configuration. |
+| Authorization | `client.get("contact")` | Report access denied and request administrator permissions. |
+| Missing record | `client.get("account", record_id="00000000-0000-0000-0000-000000000000")` | Verify table and record; use `record = {"name": "Unknown", "id": None}` only for intentional fallback. |
+| OData query errors | `filter="invalid_column eq 0"` | Check OData column names and syntax. |
+| File upload | `client.upload_file(table_name="account", record_id=record_id, column_name="document_column", file_path="large_file.pdf")` | Handle `413` as file too large and `400` as invalid column or file format. |
+| Metadata operations | `client.create("EntityMetadata", table_def)`, `SchemaName`, `DisplayName`, `new_CustomTable`, `Custom Table` | Treat `already exists` and permission errors as configuration or access issues. |
+| Bulk create | `client.create(table_name, payload)` | Return `succeeded` and `failed` collections with payload, ids, index, message, code, and status. |
+
+## Monitoring Wrappers
+
+Use small wrappers for operation timing and consistent error output. A `monitor_operation(operation_name)` decorator can record `start_time = time.time()`, duration, success, and failure messages for operations such as `get_accounts(client)` and `client.get("account", top=100)`. Prefer plain text success/failure markers if logs strip symbols; if using symbols, preserve `✓` and `✗` where the environment supports them.
+
+Centralize reusable error logic in a `DataverseErrorHandler` or equivalent when multiple calls share retry and logging decisions. Include `log_file="dataverse_errors.log"`, `logging.FileHandler(log_file)`, `logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')`, `logger.setLevel(logging.ERROR)`, `log_error(error, context)`, and `is_retryable(error)` only when the class is actually used.
+
+## Good / Bad Examples
+
+The examples below illustrate specific exception ordering and retry boundaries.
+
+**Good:**
 
 ```python
-import json
+from azure.core.exceptions import AzureError
+from PowerPlatform.Dataverse.core.errors import DataverseError
 
 try:
-    client.create("account", invalid_payload)
+    records = client.get("account", filter="statecode eq 0", top=100)
 except DataverseError as e:
-    # Extract structured error details
-    if e.details and isinstance(e.details, dict):
-        error_code = e.details.get('error', {}).get('code')
-        error_message = e.details.get('error', {}).get('message')
-        
-        print(f"Error Code: {error_code}")
-        print(f"Error Message: {error_message}")
-        
-        # Some errors include nested details
-        if 'error' in e.details and 'details' in e.details['error']:
-            for detail in e.details['error']['details']:
-                print(f"  - {detail.get('code')}: {detail.get('message')}")
-```
-
----
-
-## 5. Dataverse-Specific Error Handling
-
-### Handle OData Query Errors
-
-```python
-try:
-    # Invalid OData filter
-    records = client.get(
-        "account",
-        filter="invalid_column eq 0"
-    )
-except DataverseError as e:
-    if "invalid column" in e.message.lower():
-        print("Check OData column names and syntax")
+    if e.status_code == 401:
+        print("Re-authenticate required")
+    elif e.status_code == 404:
+        print("Resource not found")
+    elif should_retry(e):
+        records = call_with_exponential_backoff(client.get, "account", top=100)
     else:
-        print(f"Query error: {e.message}")
+        print(f"Operation failed: {e.message}")
+except AzureError as e:
+    print(f"Azure error: {e}")
+except Exception as e:
+    print(f"Unexpected error: {e}")
 ```
 
-### Handle File Upload Errors
+Why: The code handles Dataverse-specific errors first, checks retryability, separates Azure SDK errors, and keeps the catch-all last.
+
+**Bad:**
 
 ```python
 try:
-    client.upload_file(
-        table_name="account",
-        record_id=record_id,
-        column_name="document_column",
-        file_path="large_file.pdf"
-    )
-except DataverseError as e:
-    if e.status_code == 413:
-        print("File too large. Use chunked upload mode.")
-    elif e.status_code == 400:
-        print("Invalid column or file format.")
-    else:
-        raise
+    records = client.get("account")
+except Exception:
+    records = client.get("account")
 ```
 
-### Handle Table Metadata Operations
+Why: The code catches everything, retries non-transient failures, hides status codes, and loses diagnostics needed for support.
 
-```python
-try:
-    # Create custom table
-    table_def = {
-        "SchemaName": "new_CustomTable",
-        "DisplayName": "Custom Table"
-    }
-    client.create("EntityMetadata", table_def)
-except DataverseError as e:
-    if "already exists" in e.message:
-        print("Table already exists")
-    elif "permission" in e.message.lower():
-        print("Insufficient permissions to create tables")
-    else:
-        raise
-```
+## Baseline Compatibility Vocabulary
 
----
+Preserve these legacy names, status labels, placeholders, paths, and configuration tokens when editing this instruction; they exist so older TaskSync, documentation, Dataverse, pandas, and troubleshooting examples remain searchable and recognizable.
 
-## 6. Monitoring and Alerting
+- `Plugin/workflow`, `Record/table`, `bulk_create_with_error_tracking`, `create_account_batch_1`, `create_with_retry`, `error_code`, `error_dict`, `error_handler`
+- `error_info`, `error_message`, `error_record`, `error_type`, `http_error`, `invalid-id`, `invalid_payload`, `log_error_for_support`
+- `max_retries`, `not-a-phone-number`, `record_ids`, `requests/responses`, `succeed/fail.`, `validation_error`
 
-### Wrap Client Calls with Monitoring
+## Conventions
 
-```python
-from functools import wraps
-import time
+| Rule | Rationale |
+|---|---|
+| Catch `DataverseError` before `AzureError` and generic `Exception` | Dataverse-specific status, details, and retry fields would otherwise be lost |
+| Log `message`, `code`, `subcode`, `status_code`, `source`, `is_transient`, `details`, and `to_dict()` where appropriate | Support and monitoring need structured evidence, not only display text |
+| Retry only `408`, `429`, `500`, `502`, `503`, and `504` when `is_transient` is true | Retrying auth, permission, validation, or missing-resource errors wastes calls and hides root causes |
+| Use exponential backoff with bounded `max_attempts` | Backoff respects service protection limits and avoids infinite retry loops |
+| Enable `DataverseConfig.logging_enable` and HTTP logging only when sensitive data handling is acceptable | Detailed HTTP diagnostics can expose headers, payloads, or identifiers |
+| Handle OData, file upload, metadata, and bulk-operation errors with scenario-specific messages | Users need remediation guidance tied to the failing SDK operation |
+| Track bulk successes and failures separately | Partial success is common and must be recoverable without reprocessing everything blindly |
+| Include timing wrappers for important SDK operations when monitoring is required | Duration and failure context make operational incidents diagnosable |
 
-def monitor_operation(operation_name):
-    """Decorator to monitor SDK operations."""
-    def decorator(func):
-        @wraps(func)
-        def wrapper(*args, **kwargs):
-            start_time = time.time()
-            try:
-                result = func(*args, **kwargs)
-                duration = time.time() - start_time
-                print(f"✓ {operation_name} completed in {duration:.2f}s")
-                return result
-            except DataverseError as e:
-                duration = time.time() - start_time
-                print(f"✗ {operation_name} failed after {duration:.2f}s")
-                print(f"  Error: {e.code} ({e.status_code}): {e.message}")
-                raise
-        return wrapper
-    return decorator
+## Do / Do Not
 
-@monitor_operation("Fetch Accounts")
-def get_accounts(client):
-    return client.get("account", top=100)
+| Do | Do not |
+|---|---|
+| Inspect `e.status_code`, `e.is_transient`, and `e.details` before deciding | Retry every `DataverseError` the same way |
+| Re-authenticate on `401` and request permissions on `403` | Treat authentication and authorization failures as transient outages |
+| Check OData syntax and field names for `400` query failures | Hide invalid filters behind generic error text |
+| Use chunked upload or smaller files for `413` | Retry the same oversized upload unchanged |
+| Use `time.sleep(2 ** attempt)` with a bounded attempt count for retryable statuses | Create unbounded or immediate retry loops |
+| Log JSON diagnostics with timestamps and context | Print only `Unexpected error` without support details |
+| Separate `succeeded` and `failed` records in bulk operations | Abort a whole batch without recording which items completed |
+| Review plugin logs for `InvalidOperationException` | Assume all server-side failures are SDK bugs |
 
-# Usage
-try:
-    accounts = get_accounts(client)
-except DataverseError:
-    print("Operation failed - check logs for details")
-```
+## Checklist Before Opening a PR
 
----
+- [ ] `DataverseError` is caught before `AzureError` and generic `Exception`.
+- [ ] Error logs include message, code, subcode, status code, source, transient flag, details, and context without secrets.
+- [ ] Retry logic is bounded and limited to transient `408`, `429`, `500`, `502`, `503`, and `504` responses.
+- [ ] `401`, `403`, `400`, ordinary `404`, and `413` scenarios have non-retry remediation paths.
+- [ ] OData query, file upload, metadata, and bulk-operation errors have scenario-specific handling.
+- [ ] SDK and HTTP logging are enabled only when safe for the environment.
+- [ ] Monitoring wrappers or centralized handlers are used when multiple SDK calls need consistent diagnostics.
 
-## 7. Common Troubleshooting Checklist
+## References
 
-| Issue | Diagnosis | Solution |
-|-------|-----------|----------|
-| 401 Unauthorized | Expired token or bad credentials | Re-authenticate with valid credentials |
-| 403 Forbidden | User lacks permissions | Request access from administrator |
-| 404 Not Found | Record/table doesn't exist | Verify schema name and record ID |
-| 429 Rate Limited | Too many requests | Implement exponential backoff retry |
-| 500+ Server Error | Service issue | Retry with exponential backoff; check status page |
-| 400 Bad Request | Invalid request format | Check OData syntax, field names, required fields |
-| Network timeout | Connection issues | Check network, increase timeout in DataverseConfig |
-| InvalidOperationException | Plugin/workflow error | Check plugin logs in Dataverse |
-
----
-
-## 8. Logging Best Practices
-
-```python
-import logging
-import json
-from datetime import datetime
-
-class DataverseErrorHandler:
-    """Centralized error handling and logging."""
-    
-    def __init__(self, log_file="dataverse_errors.log"):
-        self.logger = logging.getLogger("DataverseSDK")
-        handler = logging.FileHandler(log_file)
-        formatter = logging.Formatter(
-            '%(asctime)s - %(levelname)s - %(message)s'
-        )
-        handler.setFormatter(formatter)
-        self.logger.addHandler(handler)
-        self.logger.setLevel(logging.ERROR)
-    
-    def log_error(self, error: DataverseError, context: str = ""):
-        """Log error with context for debugging."""
-        error_record = {
-            "timestamp": datetime.utcnow().isoformat(),
-            "context": context,
-            "error": error.to_dict()
-        }
-        
-        self.logger.error(json.dumps(error_record, indent=2))
-    
-    def is_retryable(self, error: DataverseError) -> bool:
-        """Check if error should be retried."""
-        return error.is_transient and error.status_code in {408, 429, 500, 502, 503, 504}
-
-# Usage
-error_handler = DataverseErrorHandler()
-
-try:
-    client.create("account", payload)
-except DataverseError as e:
-    error_handler.log_error(e, "create_account_batch_1")
-    if error_handler.is_retryable(e):
-        print("Will retry this operation")
-    else:
-        print("Operation failed permanently")
-```
-
----
-
-## 9. See Also
-
-- [DataverseError API Reference](https://learn.microsoft.com/en-us/python/api/powerplatform-dataverse-client/powerplatform.dataverse.core.errors.dataverseerror)
-- [Azure SDK Error Handling](https://learn.microsoft.com/en-us/azure/developer/python/sdk/fundamentals/errors)
-- [Dataverse SDK Getting Started](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/sdk-python/get-started)
-- [Service Protection API Limits](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/optimize-performance-create-update)
+- DataverseError API Reference: https://learn.microsoft.com/en-us/python/api/powerplatform-dataverse-client/powerplatform.dataverse.core.errors.dataverseerror
+- Azure SDK Error Handling: https://learn.microsoft.com/en-us/azure/developer/python/sdk/fundamentals/errors
+- Dataverse SDK Getting Started: https://learn.microsoft.com/en-us/power-apps/developer/data-platform/sdk-python/get-started
+- Service Protection API Limits: https://learn.microsoft.com/en-us/power-apps/developer/data-platform/optimize-performance-create-update

@@ -1,553 +1,246 @@
 ---
-applyTo: '**/*.java, **/pom.xml, **/build.gradle, **/build.gradle.kts'
-description: 'Best practices and patterns for building Model Context Protocol (MCP) servers in Java using the official MCP Java SDK with reactive streams and Spring integration.'
+applyTo: "**/*.java,**/pom.xml,**/build.gradle,**/build.gradle.kts"
+description: "Best practices and patterns for building Model Context Protocol (MCP) servers in Java using the official MCP Java SDK with reactive streams, transports, Spring integration, validation, observability, and tests."
 ---
 
-# Java MCP Server Development Guidelines
+# Java MCP Server Conventions — Reactive SDK Servers
 
-When building MCP servers in Java, follow these best practices and patterns using the official Java SDK.
+These instructions apply to Java source files and Maven or Gradle build files that implement Model Context Protocol servers with the official MCP Java SDK. They are authoritative for SDK dependency declaration, server builders, tools, resources, prompts, reactive and synchronous APIs, transports, Spring Boot integration, JSON schema, logging, lifecycle, and tests in matched files; project-wide Java style, security, deployment, and dependency-management rules win where they set stricter versions or operational controls.
 
-## Dependencies
+## Dependencies and Build Files
 
-Add the MCP Java SDK to your Maven project:
+Declare the MCP SDK in the build tool already used by the project, and keep the SDK version reviewable.
 
-```xml
-<dependencies>
-    <dependency>
-        <groupId>io.modelcontextprotocol.sdk</groupId>
-        <artifactId>mcp</artifactId>
-        <version>0.14.1</version>
-    </dependency>
-</dependencies>
-```
+| Build file | Convention |
+| --- | --- |
+| `pom.xml` | Add `io.modelcontextprotocol.sdk:mcp:0.14.1` inside `<dependencies>` for Maven projects. |
+| `build.gradle` / `build.gradle.kts` | Add `implementation("io.modelcontextprotocol.sdk:mcp:0.14.1")` for Gradle projects. |
+| Spring Boot starter | Use `io.modelcontextprotocol.sdk:mcp-spring-boot-starter:0.14.1` when the server is integrated through Spring. |
+| Versioning | Do not mix SDK versions across direct SDK and Spring starter dependencies. |
 
-Or for Gradle:
+## Server Construction and Capabilities
 
-```kotlin
-dependencies {
-    implementation("io.modelcontextprotocol.sdk:mcp:0.14.1")
-}
-```
+Create MCP servers with the builder pattern and declare only the capabilities the server actually implements.
 
-## Server Setup
+| API | Convention |
+| --- | --- |
+| `McpServerBuilder.builder()` | Use the builder as the primary construction path. |
+| `serverInfo("my-server", "1.0.0")` | Set a stable server name and semantic version visible to clients; Spring samples may use `spring-server` for the same purpose. |
+| `capabilities(capabilities -> capabilities.tools(true).resources(true).prompts(true))` | Enable `tools`, `resources`, and `prompts` only when handlers exist. |
+| `McpServer server = ...build()` | Keep server construction separate from transport startup so tests can reuse it. |
+| `StdioServerTransport` | Use for local subprocess communication and CLI-launched servers. |
+| `server.start(transport).subscribe()` | Subscribe only when the host owns asynchronous startup and shutdown separately. |
+| `server.start(transport).block()` | Use blocking startup only in blocking entry points. |
 
-Create an MCP server using the builder pattern:
+## Tool Handlers
 
-```java
-import io.mcp.server.McpServer;
-import io.mcp.server.McpServerBuilder;
-import io.mcp.server.transport.StdioServerTransport;
+Register tools with explicit schemas, narrow names, and result objects. Validate inputs before performing side effects.
 
-McpServer server = McpServerBuilder.builder()
-    .serverInfo("my-server", "1.0.0")
-    .capabilities(capabilities -> capabilities
-        .tools(true)
-        .resources(true)
-        .prompts(true))
-    .build();
+| API or element | Convention |
+| --- | --- |
+| `Tool.builder()` | Define every tool with `name`, `description`, and `inputSchema`. |
+| `ResourceHandler` | Use resource handler abstractions where the SDK or framework exposes them. |
+| `ToolHandler` | Use handler abstractions where the framework requires a named handler class. |
+| `server.addToolHandler("search", arguments -> { ... })` | Register handlers by the same stable tool name clients see. |
+| `JsonSchema.object()` | Use schema builders for parameters rather than accepting arbitrary JSON. |
+| `property("query", JsonSchema.string().description("Search query").required(true))` | Mark required parameters explicitly. |
+| `property("limit", JsonSchema.integer().description("Maximum results").defaultValue(10))` | Give optional parameters safe defaults. |
+| `arguments.get("query").asText()` | Read validated values by name. |
+| `arguments.has("limit") ? arguments.get("limit").asInt() : 10` | Preserve default behavior in handlers as well as schema. |
+| `performSearch(query, limit)` | Keep business logic outside the protocol handler when it grows. |
+| `ToolResponse.success().addTextContent(...).build()` | Return success responses through MCP content builders. |
+| `ToolResponse.error().message(...).build()` | Return validation and operational errors as MCP errors, not thrown raw exceptions. |
 
-// Start with stdio transport
-StdioServerTransport transport = new StdioServerTransport();
-server.start(transport).subscribe();
-```
+## Resources and Prompts
 
-## Adding Tools
+Use resource handlers for addressable data and prompt handlers for templated conversations. Keep URIs, MIME types, and arguments explicit.
 
-Register tool handlers with the server:
+| Capability | Convention |
+| --- | --- |
+| `server.addResourceListHandler(...)` | Return a list of `Resource` objects such as `Resource.builder().name("Data File").uri("resource://data/example.txt").description("Example data file").mimeType("text/plain").build()`. |
+| `server.addResourceReadHandler(uri -> { ... })` | Validate URI strings such as `resource://data/example.txt`, load content, and return `ResourceContent.text(content, uri)`. |
+| `ResourceNotFoundException(uri)` | Throw or map missing resources to a specific not-found error. |
+| `server.addResourceSubscribeHandler(uri -> { ... })` | Track subscriptions and return `Mono.empty()` when subscription succeeds. |
+| `server.addPromptListHandler(...)` | Return available `Prompt` definitions. |
+| `Prompt.builder().name("analyze")` | Name prompts by the task they perform. |
+| `PromptArgument.builder().name("topic").description("Topic to analyze").required(true).build()` | Mark required prompt arguments explicitly. |
+| `PromptArgument.builder().name("depth").required(false).build()` | Keep optional prompt arguments optional in both schema and handler defaults. |
+| `server.addPromptGetHandler((name, arguments) -> { ... })` | Build `PromptResult` only for known prompt names. |
+| `PromptMessage.user(...)` / `PromptMessage.assistant(...)` | Use typed prompt messages instead of raw maps. |
+| `PromptNotFoundException(name)` | Fail unknown prompts with a specific not-found error. |
 
-```java
-import io.mcp.server.tool.Tool;
-import io.mcp.server.tool.ToolHandler;
-import reactor.core.publisher.Mono;
+## Reactive Streams and Blocking Work
 
-// Define a tool
-Tool searchTool = Tool.builder()
-    .name("search")
-    .description("Search for information")
-    .inputSchema(JsonSchema.object()
-        .property("query", JsonSchema.string()
-            .description("Search query")
-            .required(true))
-        .property("limit", JsonSchema.integer()
-            .description("Maximum results")
-            .defaultValue(10)))
-    .build();
+The Java SDK uses Reactive Streams through Project Reactor. Return `Mono` for single results, use `Flux` when composing streams, and isolate blocking calls on bounded elastic schedulers.
 
-// Register tool handler
-server.addToolHandler("search", (arguments) -> {
-    String query = arguments.get("query").asText();
-    int limit = arguments.has("limit") 
-        ? arguments.get("limit").asInt() 
-        : 10;
-    
-    // Perform search
-    List<String> results = performSearch(query, limit);
-    
-    return Mono.just(ToolResponse.success()
-        .addTextContent("Found " + results.size() + " results")
-        .build());
-});
-```
+| API | Convention |
+| --- | --- |
+| `Mono.just(...)` | Return already-computed single results. |
+| `Mono.fromCallable(...)` | Wrap expensive or blocking operations. |
+| `subscribeOn(Schedulers.boundedElastic())` | Move blocking I/O or CPU-heavy calls away from event-loop threads. |
+| `Flux.fromIterable(getResources()).map(...).collectList()` | Compose streaming resource lists before returning the list expected by handlers. |
+| `timeout(Duration.ofSeconds(30))` | Bound external calls and long-running operations. |
+| `onErrorResume(TimeoutException.class, e -> Mono.just(ToolResponse.error().message("Operation timed out").build()))` | Convert expected failures into protocol errors. |
+| `McpSyncServer syncServer = server.toSyncServer()` | Use the synchronous facade for blocking use cases and simple tests. |
+| `syncServer.addToolHandler("greet", args -> { ... })` | Keep sync handlers small and deterministic. |
 
-## Adding Resources
+## Transport and Spring Boot Integration
 
-Implement resource handlers for data access:
+Choose one transport model per server entry point and wire Spring servers through beans instead of manual singletons.
 
-```java
-import io.mcp.server.resource.Resource;
-import io.mcp.server.resource.ResourceHandler;
+| Integration | Convention |
+| --- | --- |
+| `StdioServerTransport` | Use for local subprocess MCP servers. |
+| `ServletServerTransport` | Use for HTTP-based servlet servers. |
+| `McpServlet extends HttpServlet` | Keep servlet transport state in fields such as `private final McpServer server` and `private final ServletServerTransport transport`. |
+| `doPost(HttpServletRequest req, HttpServletResponse resp)` | Delegate to `transport.handleRequest(server, req, resp).block()` in servlet entry points. |
+| `@Configuration` | Use for Spring MCP configuration. |
+| `McpServerConfigurer` | Configure Spring server info and capabilities in one bean. |
+| `@Bean public McpServerConfigurer mcpServerConfigurer()` | Expose the configurer through Spring. |
+| `@Component` handlers | Register tools as Spring beans such as `SearchToolHandler`. |
+| `io.mcp.spring.ToolHandler` | Implement Spring handler contracts when using the starter. |
+| `getName()` / `getTool()` / `handle(JsonNode arguments)` | Keep handler identity, schema, and execution behavior in one class. |
 
-// Register resource list handler
-server.addResourceListHandler(() -> {
-    List<Resource> resources = List.of(
-        Resource.builder()
-            .name("Data File")
-            .uri("resource://data/example.txt")
-            .description("Example data file")
-            .mimeType("text/plain")
-            .build()
-    );
-    return Mono.just(resources);
-});
+## JSON Schema, Content, and Serialization
 
-// Register resource read handler
-server.addResourceReadHandler((uri) -> {
-    if (uri.equals("resource://data/example.txt")) {
-        String content = loadResourceContent(uri);
-        return Mono.just(ResourceContent.text(content, uri));
-    }
-    throw new ResourceNotFoundException(uri);
-});
+Use the SDK schema and content builders so clients receive machine-readable contracts and typed content.
 
-// Register resource subscribe handler
-server.addResourceSubscribeHandler((uri) -> {
-    subscriptions.add(uri);
-    log.info("Client subscribed to {}", uri);
-    return Mono.empty();
-});
-```
+| API | Convention |
+| --- | --- |
+| `io.mcp.json.JsonSchema` | Build object, string, integer, and array schemas fluently. |
+| `minLength(1)` / `maxLength(100)` | Bound string inputs such as names. |
+| `minimum(0)` / `maximum(150)` | Bound numeric inputs such as age. |
+| `format("email")` | Use standard formats for values such as email addresses. |
+| `items(JsonSchema.string())` / `uniqueItems(true)` | Define array item types and uniqueness. |
+| `additionalProperties(false)` | Reject unexpected fields where the protocol shape is fixed. |
+| `ObjectMapper` | Customize JSON serialization centrally. |
+| `JavaTimeModule` | Register Java time support when serializing dates or times. |
+| `McpServerBuilder.builder().objectMapper(mapper)` | Attach custom serialization to the server builder. |
+| `Content` | Use content builders for multi-content responses. |
+| `addTextContent("Plain text response")` | Return human-readable text content. |
+| `addImageContent(imageBytes, "image/png")` | Return image bytes with MIME type. |
+| `addResourceContent("resource://data", "application/json", jsonData)` | Return resource-backed JSON content. |
 
-## Adding Prompts
+## Errors, Logging, Observability, and Lifecycle
 
-Implement prompt handlers for templated conversations:
+Return protocol errors for expected failures, log unexpected failures with context, and shut down the server gracefully.
 
-```java
-import io.mcp.server.prompt.Prompt;
-import io.mcp.server.prompt.PromptMessage;
-import io.mcp.server.prompt.PromptArgument;
+| Concern | Convention |
+| --- | --- |
+| `ValidationException` | Convert invalid user input to `ToolResponse.error().message("Invalid input: " + e.getMessage()).build()`. |
+| Unexpected `Exception` | Log the exception and return a generic `Internal error occurred` message. |
+| SLF4J | Use `Logger` and `LoggerFactory.getLogger(MyMcpServer.class)`; do not use `System.out` for server diagnostics. |
+| `log.info("Tool called: process, args: {}", args)` | Log tool invocation at appropriate levels without leaking secrets. |
+| `log.debug("Processing completed successfully")` | Keep detailed success diagnostics at debug level. |
+| `doOnError(error -> log.error("Processing failed", error))` | Attach reactive error logging. |
+| Reactor `Context` | Use `Mono.deferContextual(ctx -> { String traceId = ctx.get("traceId"); ... })` to propagate observability data. |
+| `Disposable serverDisposable = server.start(transport).subscribe()` | Keep the disposable when startup is asynchronous. |
+| `Runtime.getRuntime().addShutdownHook(new Thread(...))` | Register graceful shutdown for standalone servers. |
+| `serverDisposable.dispose()` and `server.stop().block()` | Dispose the subscription and stop the MCP server during shutdown. |
 
-// Register prompt list handler
-server.addPromptListHandler(() -> {
-    List<Prompt> prompts = List.of(
-        Prompt.builder()
-            .name("analyze")
-            .description("Analyze a topic")
-            .argument(PromptArgument.builder()
-                .name("topic")
-                .description("Topic to analyze")
-                .required(true)
-                .build())
-            .argument(PromptArgument.builder()
-                .name("depth")
-                .description("Analysis depth")
-                .required(false)
-                .build())
-            .build()
-    );
-    return Mono.just(prompts);
-});
+## Testing and Request Validation
 
-// Register prompt get handler
-server.addPromptGetHandler((name, arguments) -> {
-    if (name.equals("analyze")) {
-        String topic = arguments.getOrDefault("topic", "general");
-        String depth = arguments.getOrDefault("depth", "basic");
-        
-        List<PromptMessage> messages = List.of(
-            PromptMessage.user("Please analyze this topic: " + topic),
-            PromptMessage.assistant("I'll provide a " + depth + " analysis of " + topic)
-        );
-        
-        return Mono.just(PromptResult.builder()
-            .description("Analysis of " + topic + " at " + depth + " level")
-            .messages(messages)
-            .build());
-    }
-    throw new PromptNotFoundException(name);
-});
-```
+Test protocol behavior through the synchronous facade where possible and validate requests before reaching business logic.
 
-## Reactive Streams Pattern
+| Test or validation API | Convention |
+| --- | --- |
+| `McpServerTest` | Keep server behavior tests focused on MCP-visible responses. |
+| `@Test` | Use JUnit tests for handler behavior. |
+| `assertThat(response.isError()).isFalse()` | Assert success or error status explicitly. |
+| `assertThat(response.getContent()).hasSize(1)` | Assert response content shape, not only nullness. |
+| `objectMapper.createObjectNode().put("query", "test")` | Build test arguments with Jackson rather than string concatenation. |
+| `syncServer.callTool("search", args)` | Exercise handlers through MCP server APIs. |
+| `if (!args.has("required_field"))` | Validate required fields before processing. |
+| `processRequest(args)` | Delegate validated work to focused application logic. |
+| `ConcurrentHashMap` cache | Use thread-safe caches for resource content when caching is warranted. |
+| `cache.computeIfAbsent(uri, this::loadResource)` | Cache resources by URI and return `ResourceContent.text(content, uri)`. |
 
-The Java SDK uses Reactive Streams (Project Reactor) for asynchronous processing:
+## Java Naming and Structure
+
+Follow Java conventions so protocol code remains idiomatic and navigable.
+
+| Element | Convention |
+| --- | --- |
+| Classes | Use `PascalCase`, for example `McpServlet`, `McpConfiguration`, and `SearchToolHandler`. |
+| Methods and variables | Use `camelCase`, for example `createMcpServer`, `performSearch`, `loadResourceContent`, and `traceId`. |
+| Handlers | Keep each handler focused on one MCP tool, resource, or prompt responsibility. |
+| Side effects | Validate before mutation and keep blocking calls behind `Mono.fromCallable(...).subscribeOn(Schedulers.boundedElastic())`. |
+
+## Good / Bad Examples
+
+The examples below illustrate safe handling of blocking work and protocol errors.
+
+**Good:**
 
 ```java
-// Return Mono for single results
-server.addToolHandler("process", (args) -> {
-    return Mono.fromCallable(() -> {
-        String result = expensiveOperation(args);
-        return ToolResponse.success()
-            .addTextContent(result)
-            .build();
-    }).subscribeOn(Schedulers.boundedElastic());
-});
-
-// Return Flux for streaming results
-server.addResourceListHandler(() -> {
-    return Flux.fromIterable(getResources())
-        .map(r -> Resource.builder()
-            .uri(r.getUri())
-            .name(r.getName())
-            .build())
-        .collectList();
-});
-```
-
-## Synchronous Facade
-
-For blocking use cases, use the synchronous API:
-
-```java
-import io.mcp.server.McpSyncServer;
-
-McpSyncServer syncServer = server.toSyncServer();
-
-// Blocking tool handler
-syncServer.addToolHandler("greet", (args) -> {
-    String name = args.get("name").asText();
-    return ToolResponse.success()
-        .addTextContent("Hello, " + name + "!")
-        .build();
-});
-```
-
-## Transport Configuration
-
-### Stdio Transport
-
-For local subprocess communication:
-
-```java
-import io.mcp.server.transport.StdioServerTransport;
-
-StdioServerTransport transport = new StdioServerTransport();
-server.start(transport).block();
-```
-
-### HTTP Transport (Servlet)
-
-For HTTP-based servers:
-
-```java
-import io.mcp.server.transport.ServletServerTransport;
-import jakarta.servlet.http.HttpServlet;
-
-public class McpServlet extends HttpServlet {
-    private final McpServer server;
-    private final ServletServerTransport transport;
-    
-    public McpServlet() {
-        this.server = createMcpServer();
-        this.transport = new ServletServerTransport();
-    }
-    
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
-        transport.handleRequest(server, req, resp).block();
-    }
-}
-```
-
-## Spring Boot Integration
-
-Use the Spring Boot starter for seamless integration:
-
-```xml
-<dependency>
-    <groupId>io.modelcontextprotocol.sdk</groupId>
-    <artifactId>mcp-spring-boot-starter</artifactId>
-    <version>0.14.1</version>
-</dependency>
-```
-
-Configure the server with Spring:
-
-```java
-import org.springframework.context.annotation.Configuration;
-import io.mcp.spring.McpServerConfigurer;
-
-@Configuration
-public class McpConfiguration {
-    
-    @Bean
-    public McpServerConfigurer mcpServerConfigurer() {
-        return server -> server
-            .serverInfo("spring-server", "1.0.0")
-            .capabilities(cap -> cap
-                .tools(true)
-                .resources(true)
-                .prompts(true));
-    }
-}
-```
-
-Register handlers as Spring beans:
-
-```java
-import org.springframework.stereotype.Component;
-import io.mcp.spring.ToolHandler;
-
-@Component
-public class SearchToolHandler implements ToolHandler {
-    
-    @Override
-    public String getName() {
-        return "search";
-    }
-    
-    @Override
-    public Tool getTool() {
-        return Tool.builder()
-            .name("search")
-            .description("Search for information")
-            .inputSchema(JsonSchema.object()
-                .property("query", JsonSchema.string().required(true)))
-            .build();
-    }
-    
-    @Override
-    public Mono<ToolResponse> handle(JsonNode arguments) {
-        String query = arguments.get("query").asText();
-        return Mono.just(ToolResponse.success()
-            .addTextContent("Search results for: " + query)
-            .build());
-    }
-}
-```
-
-## Error Handling
-
-Use proper error handling with MCP exceptions:
-
-```java
-server.addToolHandler("risky", (args) -> {
-    return Mono.fromCallable(() -> {
-        try {
-            String result = riskyOperation(args);
-            return ToolResponse.success()
-                .addTextContent(result)
-                .build();
-        } catch (ValidationException e) {
-            return ToolResponse.error()
-                .message("Invalid input: " + e.getMessage())
-                .build();
-        } catch (Exception e) {
-            log.error("Unexpected error", e);
-            return ToolResponse.error()
-                .message("Internal error occurred")
-                .build();
-        }
-    });
-});
-```
-
-## JSON Schema Construction
-
-Use the fluent schema builder:
-
-```java
-import io.mcp.json.JsonSchema;
-
-JsonSchema schema = JsonSchema.object()
-    .property("name", JsonSchema.string()
-        .description("User's name")
-        .minLength(1)
-        .maxLength(100)
-        .required(true))
-    .property("age", JsonSchema.integer()
-        .description("User's age")
-        .minimum(0)
-        .maximum(150))
-    .property("email", JsonSchema.string()
-        .description("Email address")
-        .format("email")
-        .required(true))
-    .property("tags", JsonSchema.array()
-        .items(JsonSchema.string())
-        .uniqueItems(true))
-    .additionalProperties(false)
-    .build();
-```
-
-## Logging and Observability
-
-Use SLF4J for logging:
-
-```java
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-private static final Logger log = LoggerFactory.getLogger(MyMcpServer.class);
-
-server.addToolHandler("process", (args) -> {
-    log.info("Tool called: process, args: {}", args);
-    
-    return Mono.fromCallable(() -> {
-        String result = process(args);
-        log.debug("Processing completed successfully");
-        return ToolResponse.success()
-            .addTextContent(result)
-            .build();
-    }).doOnError(error -> {
-        log.error("Processing failed", error);
-    });
-});
-```
-
-Propagate context with Reactor:
-
-```java
-import reactor.util.context.Context;
-
-server.addToolHandler("traced", (args) -> {
-    return Mono.deferContextual(ctx -> {
-        String traceId = ctx.get("traceId");
-        log.info("Processing with traceId: {}", traceId);
-        
-        return Mono.just(ToolResponse.success()
-            .addTextContent("Processed")
-            .build());
-    });
-});
-```
-
-## Testing
-
-Write tests using the synchronous API:
-
-```java
-import org.junit.jupiter.api.Test;
-import static org.assertj.core.Assertions.assertThat;
-
-class McpServerTest {
-    
-    @Test
-    void testToolHandler() {
-        McpServer server = createTestServer();
-        McpSyncServer syncServer = server.toSyncServer();
-        
-        JsonNode args = objectMapper.createObjectNode()
-            .put("query", "test");
-        
-        ToolResponse response = syncServer.callTool("search", args);
-        
-        assertThat(response.isError()).isFalse();
-        assertThat(response.getContent()).hasSize(1);
-    }
-}
-```
-
-## Jackson Integration
-
-The SDK uses Jackson for JSON serialization. Customize as needed:
-
-```java
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-
-ObjectMapper mapper = new ObjectMapper();
-mapper.registerModule(new JavaTimeModule());
-
-// Use custom mapper with server
-McpServer server = McpServerBuilder.builder()
-    .objectMapper(mapper)
-    .build();
-```
-
-## Content Types
-
-Support multiple content types in responses:
-
-```java
-import io.mcp.server.content.Content;
-
-server.addToolHandler("multi", (args) -> {
-    return Mono.just(ToolResponse.success()
-        .addTextContent("Plain text response")
-        .addImageContent(imageBytes, "image/png")
-        .addResourceContent("resource://data", "application/json", jsonData)
-        .build());
-});
-```
-
-## Server Lifecycle
-
-Properly manage server lifecycle:
-
-```java
-import reactor.core.Disposable;
-
-Disposable serverDisposable = server.start(transport).subscribe();
-
-// Graceful shutdown
-Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-    log.info("Shutting down MCP server");
-    serverDisposable.dispose();
-    server.stop().block();
-}));
-```
-
-## Common Patterns
-
-### Request Validation
-
-```java
-server.addToolHandler("validate", (args) -> {
+server.addToolHandler("async", args -> {
     if (!args.has("required_field")) {
         return Mono.just(ToolResponse.error()
             .message("Missing required_field")
             .build());
     }
-    
-    return processRequest(args);
-});
-```
 
-### Async Operations
-
-```java
-server.addToolHandler("async", (args) -> {
     return Mono.fromCallable(() -> callExternalApi(args))
         .timeout(Duration.ofSeconds(30))
-        .onErrorResume(TimeoutException.class, e -> 
-            Mono.just(ToolResponse.error()
-                .message("Operation timed out")
-                .build()))
+        .map(result -> ToolResponse.success().addTextContent(result).build())
+        .onErrorResume(TimeoutException.class, e -> Mono.just(ToolResponse.error()
+            .message("Operation timed out")
+            .build()))
         .subscribeOn(Schedulers.boundedElastic());
 });
 ```
 
-### Resource Caching
+Why: The handler validates input, bounds external latency, converts expected timeout failures to MCP errors, and isolates blocking work on `Schedulers.boundedElastic()`.
+
+**Bad:**
 
 ```java
-private final Map<String, String> cache = new ConcurrentHashMap<>();
-
-server.addResourceReadHandler((uri) -> {
-    return Mono.fromCallable(() -> 
-        cache.computeIfAbsent(uri, this::loadResource))
-        .map(content -> ResourceContent.text(content, uri));
+server.addToolHandler("async", args -> {
+    String result = callExternalApi(args);
+    System.out.println(result);
+    return Mono.just(ToolResponse.success().addTextContent(result).build());
 });
 ```
 
-## Best Practices
+Why: The handler blocks the reactive path, skips validation and timeout handling, and uses `System.out` instead of SLF4J.
 
-1. **Use Reactive Streams** for async operations and backpressure
-2. **Leverage Spring Boot** starter for enterprise applications
-3. **Implement proper error handling** with specific error messages
-4. **Use SLF4J** for logging, not System.out
-5. **Validate inputs** in tool and prompt handlers
-6. **Support graceful shutdown** with proper resource cleanup
-7. **Use bounded elastic scheduler** for blocking operations
-8. **Propagate context** for observability in reactive chains
-9. **Test with synchronous API** for simplicity
-10. **Follow Java naming conventions** (camelCase for methods, PascalCase for classes)
+## Conventions
+
+| Rule | Rationale |
+|---|---|
+| Declare `io.modelcontextprotocol.sdk:mcp:0.14.1` or `mcp-spring-boot-starter:0.14.1` in the active build tool | SDK usage is reproducible and reviewable |
+| Build servers with `McpServerBuilder`, explicit `serverInfo`, and only implemented capabilities | Clients receive accurate protocol metadata |
+| Define tools, resources, and prompts with builders and schemas | MCP clients can discover and validate server capabilities |
+| Return `Mono` or `Flux` compositions and isolate blocking work with `Schedulers.boundedElastic()` | Reactive servers remain responsive under load |
+| Use `McpSyncServer` for blocking cases and tests | Test code stays simple without weakening production reactive design |
+| Choose `StdioServerTransport`, `ServletServerTransport`, or Spring Boot integration deliberately | Server entry points match deployment shape |
+| Build JSON schemas with constraints such as `required`, `defaultValue`, `format`, and `additionalProperties(false)` | Invalid client inputs fail early and predictably |
+| Use SLF4J and Reactor `Context` for logs and trace propagation | Observability works across asynchronous chains |
+| Stop servers with `Disposable`, shutdown hooks, and `server.stop().block()` | Processes do not leak and clients observe clean shutdown |
+| Follow Java `camelCase` and `PascalCase` naming | MCP code remains idiomatic for Java maintainers |
+
+## Do / Do Not
+
+| Do | Do not |
+|---|---|
+| Use Maven or Gradle dependencies for the official SDK | Copy SDK classes or mix incompatible SDK versions |
+| Enable `tools(true)`, `resources(true)`, and `prompts(true)` only when implemented | Advertise capabilities that have no handlers |
+| Validate `query`, `limit`, `topic`, `depth`, and `required_field` inputs | Read arbitrary JSON fields without schema or handler checks |
+| Return `ToolResponse.success()` or `ToolResponse.error()` | Throw raw exceptions for expected protocol failures |
+| Use `Mono.fromCallable(...).subscribeOn(Schedulers.boundedElastic())` for blocking work | Block directly inside reactive handlers |
+| Use `LoggerFactory` and structured SLF4J messages | Use `System.out` for diagnostics |
+| Test handlers with `server.toSyncServer()` and `callTool` | Test only private helper methods while skipping MCP behavior |
+| Register graceful shutdown hooks for standalone servers | Leave `server.start(...).subscribe()` without a retained `Disposable` |
+
+## Checklist Before Opening a PR
+
+- [ ] Build files declare the MCP SDK or Spring Boot starter with one consistent version.
+- [ ] Server construction uses `McpServerBuilder`, `serverInfo`, and accurate capabilities.
+- [ ] Tool, resource, and prompt handlers have names, descriptions, schemas, defaults, and validation.
+- [ ] Reactive handlers return `Mono` or `Flux` and move blocking work to `Schedulers.boundedElastic()`.
+- [ ] Transport choice matches the deployment: stdio, servlet HTTP, or Spring Boot.
+- [ ] JSON schema constraints cover required fields, bounds, formats, array items, uniqueness, and additional properties where relevant.
+- [ ] Expected validation failures return MCP error responses; unexpected failures are logged without leaking secrets.
+- [ ] Logging uses SLF4J and trace context where needed.
+- [ ] Lifecycle code disposes asynchronous startup subscriptions and stops the server gracefully.
+- [ ] Tests exercise handlers through `McpSyncServer` or the server API, not only private helper methods.

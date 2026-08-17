@@ -1,11 +1,11 @@
 ---
-applyTo: '**'
-description: 'Generic code review instructions that can be customized for any project using GitHub Copilot'
+applyTo: "**"
+description: "Enforces generic GitHub Copilot code-review conventions for severity, comment format, and cross-cutting checks across reviewable files."
 ---
 
-# Generic Code Review Instructions
+# Code Review Conventions — Generic Pull Request Review
 
-Comprehensive code review guidelines for GitHub Copilot that can be adapted to any project. These instructions follow best practices from prompt engineering and provide a structured approach to code quality, security, testing, and architecture review.
+This file applies to all source, test, configuration, documentation, and reviewable change sets matched by `**`. It is authoritative for generic GitHub Copilot code-review behavior: review language, severity, comment shape, and cross-cutting checks for correctness, security, tests, performance, architecture, and documentation; project-specific instructions, security-review primitives, and language-specific conventions win when they define stricter rules.
 
 ## Review Language
 
@@ -319,52 +319,52 @@ if (!user || !user.isActive || !user.hasPermission('write')) {
 ```
 ````
 
-## Review Checklist
+## Review Coverage Areas
 
 When performing a code review, systematically verify:
 
 ### Code Quality
-- [ ] Code follows consistent style and conventions
-- [ ] Names are descriptive and follow naming conventions
-- [ ] Functions/methods are small and focused
-- [ ] No code duplication
-- [ ] Complex logic is broken into simpler parts
-- [ ] Error handling is appropriate
-- [ ] No commented-out code or TODO without tickets
+- Verify Code follows consistent style and conventions
+- Verify Names are descriptive and follow naming conventions
+- Verify Functions/methods are small and focused
+- Verify No code duplication
+- Verify Complex logic is broken into simpler parts
+- Verify Error handling is appropriate
+- Verify No commented-out code or TODO without tickets
 
 ### Security
-- [ ] No sensitive data in code or logs
-- [ ] Input validation on all user inputs
-- [ ] No SQL injection vulnerabilities
-- [ ] Authentication and authorization properly implemented
-- [ ] Dependencies are up-to-date and secure
+- Verify No sensitive data in code or logs
+- Verify Input validation on all user inputs
+- Verify No SQL injection vulnerabilities
+- Verify Authentication and authorization properly implemented
+- Verify Dependencies are up-to-date and secure
 
 ### Testing
-- [ ] New code has appropriate test coverage
-- [ ] Tests are well-named and focused
-- [ ] Tests cover edge cases and error scenarios
-- [ ] Tests are independent and deterministic
-- [ ] No tests that always pass or are commented out
+- Verify New code has appropriate test coverage
+- Verify Tests are well-named and focused
+- Verify Tests cover edge cases and error scenarios
+- Verify Tests are independent and deterministic
+- Verify No tests that always pass or are commented out
 
 ### Performance
-- [ ] No obvious performance issues (N+1, memory leaks)
-- [ ] Appropriate use of caching
-- [ ] Efficient algorithms and data structures
-- [ ] Proper resource cleanup
+- Verify No obvious performance issues (N+1, memory leaks)
+- Verify Appropriate use of caching
+- Verify Efficient algorithms and data structures
+- Verify Proper resource cleanup
 
 ### Architecture
-- [ ] Follows established patterns and conventions
-- [ ] Proper separation of concerns
-- [ ] No architectural violations
-- [ ] Dependencies flow in correct direction
+- Verify Follows established patterns and conventions
+- Verify Proper separation of concerns
+- Verify No architectural violations
+- Verify Dependencies flow in correct direction
 
 ### Documentation
-- [ ] Public APIs are documented
-- [ ] Complex logic has explanatory comments
-- [ ] README is updated if needed
-- [ ] Breaking changes are documented
+- Verify Public APIs are documented
+- Verify Complex logic has explanatory comments
+- Verify README is updated if needed
+- Verify Breaking changes are documented
 
-## Project-Specific Customizations
+## Project-Specific Review Customizations
 
 To customize this template for your project, add sections for:
 
@@ -384,18 +384,8 @@ To customize this template for your project, add sections for:
    - Example: "When performing a code review, verify commit messages follow conventional commits format"
    - Example: "When performing a code review, check branch names follow pattern: type/ticket-description"
 
-## Additional Resources
 
-For more information on effective code reviews and GitHub Copilot customization:
-
-- [GitHub Copilot Prompt Engineering](https://docs.github.com/en/copilot/concepts/prompting/prompt-engineering)
-- [GitHub Copilot Custom Instructions](https://code.visualstudio.com/docs/copilot/customization/custom-instructions)
-- [Awesome GitHub Copilot Repository](https://github.com/github/awesome-copilot)
-- [GitHub Code Review Guidelines](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/reviewing-changes-in-pull-requests)
-- [Google Engineering Practices - Code Review](https://google.github.io/eng-practices/review/)
-- [OWASP Security Guidelines](https://owasp.org/)
-
-## Prompt Engineering Tips
+## Prompt Engineering Review Tips
 
 When performing a code review, apply these prompt engineering principles from the [GitHub Copilot documentation](https://docs.github.com/en/copilot/concepts/prompting/prompt-engineering):
 
@@ -406,7 +396,7 @@ When performing a code review, apply these prompt engineering principles from th
 5. **Indicate Relevant Code**: Reference related code that might be affected by changes
 6. **Experiment and Iterate**: If initial review misses something, review again with focused questions
 
-## Project Context
+## Project Context Placeholders
 
 This is a generic template. Customize this section with your project-specific information:
 
@@ -415,3 +405,48 @@ This is a generic template. Customize this section with your project-specific in
 - **Build Tool**: [e.g., Gradle, Maven, npm, pip]
 - **Testing**: [e.g., JUnit 5, Jest, pytest]
 - **Code Style**: [e.g., follows Google Style Guide]
+
+## Conventions
+
+| Rule | Rationale |
+|---|---|
+| Review in English unless the repository or user explicitly specifies another language such as Portuguese (Brazilian), Spanish, or French | Review comments remain predictable while allowing intentional localization |
+| Classify findings as `CRITICAL`, `IMPORTANT`, or `SUGGESTION` before writing the comment | Severity tells maintainers whether to block merge, discuss before merge, or consider a non-blocking improvement |
+| Treat security vulnerabilities, exposed secrets, authentication or authorization flaws, correctness bugs, breaking API changes, race conditions, and data-loss risks as merge-blocking | These defects can compromise users, corrupt data, or break consumers after release |
+| Explain the issue, impact, and suggested fix for every substantive comment | Review authors can act on the feedback without guessing at intent |
+| Check code quality, error handling, security, testing, performance, architecture, and documentation for each change set | Generic review must cover the failure modes most likely to escape local implementation |
+| Use parameterized queries, environment variables such as `API_KEY`, input validation, and established cryptography libraries | These patterns prevent SQL injection, secret exposure, unsafe input handling, and fragile crypto |
+| Require critical paths, edge cases, and error scenarios to have deterministic tests | Tests protect correctness where regressions are expensive or hard to detect manually |
+| Keep suggestions pragmatic and group related comments | Reviews stay useful rather than noisy |
+
+## Do / Do Not
+
+| Do | Do not |
+|---|---|
+| Reference exact files, lines, symbols, and behavior when reporting an issue | Leave generic comments that the author cannot locate or reproduce |
+| Use the `**[PRIORITY] Category: Brief title**` format for review comments | Mix unrelated severity labels or omit impact and suggested fixes |
+| Block on security, correctness, breaking changes, race conditions, and data-loss risks | Block a PR for style-only preferences that could be handled later |
+| Suggest concrete corrected code when it clarifies the fix | Only state that code is wrong without a path to resolution |
+| Praise well-written code or smart solutions when useful | Make the review purely negative or personal |
+| Verify tests use descriptive names, specific assertions, and independent setup | Accept vague tests such as `test1` with truthy assertions only |
+| Ask for README, API documentation, or breaking-change notes when behavior or setup changes | Require comments that restate obvious code |
+
+## Checklist Before Opening a PR
+
+- [ ] Review language, severity labels, and comment format are consistent with this file.
+- [ ] `CRITICAL` findings cover security, correctness, breaking changes, race conditions, and data-loss risks.
+- [ ] `IMPORTANT` findings cover severe SOLID violations, missing critical tests, obvious performance bottlenecks, and architecture deviations.
+- [ ] `SUGGESTION` findings are non-blocking and pragmatic.
+- [ ] Code quality, error handling, security, testing, performance, architecture, and documentation were reviewed.
+- [ ] Every substantive comment explains why the issue matters and includes a suggested fix when practical.
+- [ ] Project-specific placeholders for tech stack, architecture, build tool, testing, and code style were customized when the repository provides those standards.
+- [ ] No review comment exposes secrets, personal data, or unrelated implementation details.
+
+## References
+
+- GitHub Copilot Prompt Engineering: https://docs.github.com/en/copilot/concepts/prompting/prompt-engineering
+- GitHub Copilot Custom Instructions: https://code.visualstudio.com/docs/copilot/customization/custom-instructions
+- Awesome GitHub Copilot Repository: https://github.com/github/awesome-copilot
+- GitHub Code Review Guidelines: https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/reviewing-changes-in-pull-requests
+- Google Engineering Practices - Code Review: https://google.github.io/eng-practices/review/
+- OWASP Security Guidelines: https://owasp.org/

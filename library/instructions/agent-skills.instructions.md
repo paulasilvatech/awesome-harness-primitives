@@ -1,11 +1,11 @@
 ---
-applyTo: '**/skills/**/SKILL.md'
-description: 'Guidelines for creating high-quality Agent Skills for GitHub Copilot'
+applyTo: "**/skills/**/SKILL.md"
+description: "Enforces portable high-quality Agent Skill conventions for SKILL.md metadata, descriptions, resources, progressive loading, scripts, security, and validation."
 ---
 
-# Agent Skills File Guidelines
+# Agent Skills Conventions — Portable Skill Packages
 
-Instructions for creating effective and portable Agent Skills that enhance GitHub Copilot with specialized capabilities, workflows, and bundled resources.
+This file applies to `SKILL.md` files under skill directories. It is authoritative for skill package structure, required frontmatter, discovery descriptions, bundled resources, progressive loading, scripts, security, content density, and validation checklists; platform packaging rules and repository primitive validators win when they define stricter syntax or runtime constraints.
 
 ## What Are Agent Skills?
 
@@ -209,11 +209,11 @@ Use relative paths to reference files within the skill directory:
 ```markdown
 ## Available Scripts
 
-Run the [helper script](./scripts/helper.py) to automate common tasks.
+Run the `./scripts/helper.py` helper script to automate common tasks.
 
-See [API reference](./references/api_reference.md) for detailed documentation.
+See `./references/api_reference.md` API reference for detailed documentation.
 
-Use the [scaffold](./templates/scaffold.py) as a starting point.
+Use the `./templates/scaffold.py` scaffold as a starting point.
 ```
 
 ## Progressive Loading Architecture
@@ -351,7 +351,7 @@ When executing multi-step workflows, create a TODO list where each step referenc
 
 This ensures traceability and allows resuming workflows if interrupted.
 
-## Validation Checklist
+## Skill Quality Checklist
 
 Before publishing a skill:
 
@@ -368,9 +368,78 @@ Before publishing a skill:
 - [ ] Relative paths used for all resource references
 - [ ] No hardcoded credentials or secrets
 
-## Related Resources
+## Good / Bad Examples
 
-- [Agent Skills Specification](https://agentskills.io/)
-- [VS Code Agent Skills Documentation](https://code.visualstudio.com/docs/copilot/customization/agent-skills)
-- [Reference Skills Repository](https://github.com/anthropics/skills)
-- [Awesome Copilot Skills](https://github.com/github/awesome-copilot/blob/main/docs/README.skills.md)
+The examples below illustrate discovery metadata quality.
+
+**Good:**
+
+```yaml
+---
+name: webapp-testing
+description: 'Toolkit for testing local web applications using Playwright. Use when asked to verify frontend functionality, debug UI behavior, capture browser screenshots, check for visual regressions, or view browser console logs. Supports Chrome, Firefox, and WebKit browsers.'
+license: Complete terms in LICENSE.txt
+---
+```
+
+Why: The metadata states what the skill does, when to use it, and the keywords Copilot needs for automatic discovery.
+
+**Bad:**
+
+```yaml
+---
+name: Web Testing Helpers
+description: 'Web testing helpers'
+---
+```
+
+Why: The name is not kebab-case, the description is vague, and Copilot cannot infer triggers, capabilities, or keywords.
+
+## Conventions
+
+| Rule | Rationale |
+|---|---|
+| Store each skill in its own directory with a required `SKILL.md` | Copilot discovers skills by package boundary |
+| Use supported locations such as `.github/skills/<skill-name>/`, `.claude/skills/<skill-name>/`, `~/.copilot/skills/<skill-name>/`, `~/.agents/skills/<skill-name>/`, and `~/.claude/skills/<skill-name>/` only where their scope is intended | Repository, personal, and legacy skill scopes remain clear |
+| Keep `name` lowercase kebab-case, at most 64 characters, and aligned with the directory name | Skill identity remains portable and deduplicable |
+| Write `description` as 10–1024 characters that state WHAT, WHEN, and KEYWORDS | Discovery loads only `name` and `description` before deciding whether the skill applies |
+| Use `license: Complete terms in LICENSE.txt` or an SPDX identifier when license metadata is needed | Consumers can understand redistribution terms |
+| Split large or detailed material into `references/`, executable automation into `scripts/`, static output resources into `assets/`, and modifiable scaffolds into `templates/` | Progressive loading keeps the core `SKILL.md` compact while preserving resources |
+| Prefer Python, `pwsh`, Node.js, or Bash/Shell for bundled scripts and include `--help` behavior | Automation stays cross-platform and self-documenting |
+| Keep `## Gotchas` proactive and `## Troubleshooting` reactive | Preventable mistakes and post-failure recovery stay distinct |
+| Keep `SKILL.md` under 500 lines and consider resource splitting around 200 lines | The body remains within context budget and loads quickly |
+| Avoid hardcoded credentials, document network operations, and gate destructive operations with explicit flags such as `--force` | Skills must not leak secrets or perform irreversible actions accidentally |
+
+## Do / Do Not
+
+| Do | Do not |
+|---|---|
+| Put task triggers, file types, and user-request keywords in the description | Use vague descriptions such as `Web testing helpers` |
+| Use imperative, specific instructions with exact commands and expected outputs when helpful | Fill the body with generic language syntax Copilot already knows |
+| Use numbered steps only for repeatable procedures where sequence matters | Force debugging, refactoring, or review into rigid line-number workflows |
+| Reference bundled files with relative paths inside the skill package | Reference files outside the package or other primitives by relative link |
+| Use `scripts/` when deterministic, reusable automation is better than regenerated code | Make Copilot rewrite the same fragile helper logic on every task |
+| Use `assets/` for files consumed unchanged and `templates/` for files the agent modifies | Put mutable scaffolds in `assets/` or static deliverables in `templates/` |
+| Add troubleshooting rows as symptom-to-solution pairs | Mix troubleshooting with proactive gotchas or broad advice |
+
+## Checklist Before Opening a PR
+
+- [ ] `SKILL.md` has valid frontmatter with `name` and `description`.
+- [ ] `name` is lowercase kebab-case, no more than 64 characters, and matches the skill directory.
+- [ ] `description` clearly states WHAT the skill does, WHEN to use it, and relevant KEYWORDS within 10–1024 characters.
+- [ ] The body focuses on high-impact instructions Copilot would otherwise miss.
+- [ ] Prerequisites, workflows, gotchas, troubleshooting, and references are included only when they add concrete value.
+- [ ] Large workflows over five steps are split into `references/` files and referenced from `SKILL.md`.
+- [ ] Scripts in `scripts/` include help, error handling, relative paths, and no stored credentials.
+- [ ] Assets and templates are separated according to whether the agent consumes them unchanged or modifies them.
+- [ ] `SKILL.md` stays under 500 lines or uses progressive disclosure resources.
+- [ ] No hardcoded credentials, secrets, or unsafe irreversible operations are present.
+
+## References
+
+- Agent Skills Specification: https://agentskills.io/
+- VS Code Agent Skills Documentation: https://code.visualstudio.com/docs/copilot/customization/agent-skills
+- Reference Skills Repository: https://github.com/anthropics/skills
+- Awesome Copilot Skills: https://github.com/github/awesome-copilot/blob/main/docs/README.skills.md
+- Playwright documentation: https://playwright.dev/
+- Apache 2.0 license text: https://www.apache.org/licenses/LICENSE-2.0.txt

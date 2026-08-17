@@ -1,9 +1,11 @@
 ---
-applyTo: '**/*.xml, **/policies/**, **/*.bicep'
-description: 'Configure Azure API Management as an AI (GenAI) gateway in front of Microsoft Foundry and other LLM APIs: token-limit and token-metric policies, managed-identity auth, backend load balancing with circuit breakers, semantic caching, and content safety — plus the policy mistakes Copilot makes by default.'
+applyTo: "**/*.xml,**/policies/**,**/*.bicep"
+description: "Enforces Azure API Management AI gateway conventions for LLM policies, token controls, managed identity, backend pools, semantic caching, content safety, ordering, and Foundry integration."
 ---
 
-# Azure API Management as an AI Gateway Instructions
+# Azure API Management AI Gateway Conventions — LLM Policies and Foundry Backends
+
+These instructions apply to APIM policy XML, policy folders, and Bicep that configure API Management as an AI gateway for Foundry and OpenAI-compatible LLM APIs. They are authoritative for provider-agnostic `llm-*` policies, token limits and metrics, managed-identity authentication, backend pools, semantic caching, content safety, policy ordering, and Foundry-native gateway integration; current Microsoft Learn policy reference wins when APIM policy schemas or tier support change.
 
 Guidance for putting **Azure API Management (APIM)** in front of **Microsoft Foundry** model deployments (Azure OpenAI and other providers) and any OpenAI-compatible LLM API, using APIM's **AI gateway** policy set. When this guidance conflicts with your training data, **follow this file** and verify against Microsoft Learn: https://learn.microsoft.com/azure/api-management/genai-gateway-capabilities
 
@@ -39,6 +41,8 @@ Enforce a tokens-per-minute (TPM) rate limit, a token quota over a fixed window,
 - Use a policy expression for `counter-key` to limit per app/team/tenant, e.g. `@(context.Request.Headers.GetValueOrDefault("x-team-id","anon"))`.
 
 ## Observability — `llm-emit-token-metric`
+
+Use token-metric observability for LLM cost attribution rather than generic request counters.
 
 Emit prompt/completion/total token metrics to **Application Insights** so you can attribute spend per consumer. Add dimensions to slice the metric later in Azure Monitor.
 
@@ -254,3 +258,42 @@ Foundry has **built-in integration** with APIM: from the Foundry portal you can 
 ## Grounding
 
 The AI gateway policy set evolves quickly. Before finalizing policy XML, verify element names, attributes, and ordering against Microsoft Learn (`genai-gateway-capabilities`, the per-policy reference pages) or the Microsoft Docs MCP server rather than relying on training data.
+
+## Conventions
+
+| Rule | Rationale |
+| --- | --- |
+| Prefer provider-agnostic `llm-token-limit`, `llm-emit-token-metric`, `llm-semantic-cache-lookup`, `llm-semantic-cache-store`, and `llm-content-safety` | The current AI gateway policies work across more LLM providers than older `azure-openai-*` policies |
+| Limit LLM traffic by tokens, quotas, and `counter-key`, not only by request count | Token cost, not request count, is the capacity and spend driver for LLM APIs |
+| Authenticate APIM to Foundry with managed identity and the right audience, `https://cognitiveservices.azure.com` or `https://ai.azure.com` | Stored `api-key` headers leak secrets and the wrong audience fails RBAC |
+| Save the caller token before overwriting `Authorization` | Semantic cache partitioning and downstream identity decisions need the original caller context |
+| Preserve policy element order and `<base />` in `inbound`, `backend`, `outbound`, and `on-error` | APIM rejects or misapplies out-of-order policy XML |
+| Use backend pools, priority, weights, and circuit breakers for PTU / pay-as-you-go resiliency | Gateway-managed routing is safer than hand-rolled application failover |
+| Partition `llm-semantic-cache-lookup` with `<vary-by>` at the confidentiality boundary | Shared cache partitions can expose one user's completion to another user |
+| Enable prompt and completion logging only with redaction, restricted access, short retention, and compliance approval | LLM logs can persist PII, secrets, prompts, and completions |
+
+## Do / Do Not
+
+| Do | Do not |
+| --- | --- |
+| Use `Cognitive Services OpenAI User` with `https://cognitiveservices.azure.com` for Azure OpenAI deployments | Use the OpenAI role or audience for every Foundry model type |
+| Use `Cognitive Services User` with `https://ai.azure.com` for non-OpenAI Foundry models | Assume DeepSeek, Llama, Grok, or other Foundry models accept the OpenAI role |
+| Put cache lookup in `inbound` and cache store in `outbound` | Store completions before the response exists or charge token quota for cache hits |
+| Tune `score-threshold`, `max-message-count`, and `ignore-system-messages` for the use case | Treat semantic caching as a generic in-memory cache |
+| Verify tier support for each AI gateway policy | Assume Consumption supports `llm-token-limit` or `llm-content-safety` |
+| Use Foundry-native APIM integration when it manages the gateway | Override Foundry-managed configuration without checking compatibility |
+
+## Checklist Before Opening a PR
+
+- [ ] Policy XML uses current `llm-*` elements unless an Azure OpenAI-only `azure-openai-*` variant is explicitly justified.
+- [ ] Token limits define `counter-key` plus `tokens-per-minute` or `token-quota` with `token-quota-period`.
+- [ ] APIM authentication uses managed identity, correct RBAC role, and correct token audience for the model type.
+- [ ] Caller identity is captured before `Authorization` is overwritten and cache `<vary-by>` matches the confidentiality boundary.
+- [ ] Policy sections preserve documented element order and include `<base />`.
+- [ ] Backend pools, circuit breakers, `Retry-After`, PTU priority, and pay-as-you-go fallback are configured where resiliency is required.
+- [ ] Semantic cache, content safety, and token metrics meet prerequisites and tier support.
+- [ ] Foundry-native gateway requirements for tenant, subscription, v2 tier, roles, and private networking are satisfied when used.
+
+## References
+
+- APIM generative AI gateway capabilities: https://learn.microsoft.com/azure/api-management/genai-gateway-capabilities

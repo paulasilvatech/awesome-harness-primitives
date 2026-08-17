@@ -1,11 +1,11 @@
 ---
-applyTo: '**/*.go,**/go.mod,**/go.sum'
-description: 'Instructions for writing Go code following idiomatic Go practices and community standards'
+applyTo: "**/*.go,**/go.mod,**/go.sum"
+description: "Enforces idiomatic Go conventions for package declarations, style, errors, modules, concurrency, HTTP, I/O, tests, security, and documentation."
 ---
 
-# Go Development Instructions
+# Go Conventions — Idiomatic Packages and APIs
 
-Follow idiomatic Go practices and community standards when writing Go code. These instructions are based on [Effective Go](https://go.dev/doc/effective_go), [Go Code Review Comments](https://go.dev/wiki/CodeReviewComments), and [Google's Go Style Guide](https://google.github.io/styleguide/go/).
+This file applies to Go source files and module metadata matched by `**/*.go`, `**/go.mod`, and `**/go.sum`. It is authoritative for idiomatic Go style, package declarations, naming, formatting, error handling, modules, type design, concurrency, HTTP APIs and clients, I/O streaming, performance, tests, security, documentation, and workflow; repository-specific architecture and generated-code rules win where they are stricter.
 
 ## General Instructions
 
@@ -371,3 +371,92 @@ Follow idiomatic Go practices and community standards when writing Go code. Thes
 - Overusing unconstrained types (e.g., `any`); prefer specific types or generic type parameters with constraints. If an unconstrained type is required, use `any` rather than `interface{}`
 - Not considering the zero value of types
 - **Creating duplicate `package` declarations** - this is a compile error; always check existing files before adding package declarations
+
+## Good / Bad Examples
+
+The examples below illustrate package declarations, early returns, and contextual error wrapping.
+
+**Good:**
+
+```go
+package users
+
+func LoadUser(ctx context.Context, id UserID) (*User, error) {
+	if id == "" {
+		return nil, fmt.Errorf("user id is required")
+	}
+
+	user, err := repository.Load(ctx, id)
+	if err != nil {
+		return nil, fmt.Errorf("load user %s: %w", id, err)
+	}
+	return user, nil
+}
+```
+
+Why: The file has exactly one package declaration, validates early, keeps the happy path left-aligned, and wraps errors with `%w`.
+
+**Bad:**
+
+```go
+package users
+package users
+
+func LoadUser(id string) *User {
+	user, _ := repository.Load(context.Background(), UserID(id))
+	return user
+}
+```
+
+Why: The file has duplicate `package` declarations, ignores errors, hides context ownership, and can return invalid data silently.
+
+## Conventions
+
+| Rule | Rationale |
+|---|---|
+| Keep each `.go` file to exactly one `package <name>` declaration and preserve existing package names when editing | Duplicate package declarations are compile errors and mismatched packages break directory builds |
+| Run `gofmt` and `goimports` and keep imports automatically managed | Formatting and import order stay idiomatic |
+| Prefer clear names, early returns, useful zero values, and standard library helpers such as `strings.Builder` and `filepath.Join` | Go code remains simple and unsurprising |
+| Check errors immediately, name them `err`, return errors last, and wrap propagated errors with `fmt.Errorf` and `%w` | Callers receive actionable context without losing error identity |
+| Use Go modules, keep dependencies minimal, and run `go mod tidy` | `go.mod` and `go.sum` stay reproducible and secure |
+| Accept interfaces and return concrete types; define small interfaces near use | APIs remain testable without over-abstracting implementations |
+| Know how every goroutine exits and choose channels or `sync.Mutex`/`sync.RWMutex` based on ownership | Concurrency avoids leaks, races, and unclear synchronization |
+| Build HTTP clients with per-call `*http.Request`, `context.Context`, configured `*http.Client`, and closed response bodies | Long-lived clients stay concurrent-safe and request state does not leak between calls |
+| Treat `io.Reader` streams and `req.Body` as consumable once unless buffered or configured with `GetBody` | Retries, redirects, and re-reads do not operate on empty streams |
+| Test with table-driven tests, subtests, `t.Helper()`, `testing.TB`, and `t.Cleanup()` where appropriate | Tests remain expressive, reusable, and isolated |
+| Validate external input, escape context-specific output, use standard crypto, and store passwords with bcrypt, scrypt, or argon2 | Security-sensitive code avoids common injection and cryptography failures |
+
+## Do / Do Not
+
+| Do | Do not |
+|---|---|
+| Use lowercase single-word package names without underscores, hyphens, or mixedCaps | Use generic package names such as `util`, `common`, or `base` |
+| Use mixedCaps or MixedCaps and avoid stuttering such as `http.HTTPServer` | Use underscores or redundant package prefixes in identifiers |
+| Document exported packages, types, functions, and methods with comments starting with the symbol name | Leave exported APIs undocumented or comment obvious implementation details |
+| Use `any` only when an unconstrained type is truly needed | Overuse `interface{}` or unconstrained types instead of specific types or generics |
+| Use `WaitGroup.Go` only when `go >= 1.25` in `go.mod`; otherwise use `Add`/`Done` | Assume new standard library APIs exist for older module versions |
+| Use enhanced `net/http` `ServeMux` routing when `go >= 1.22` | Depend on pattern-based method routing in modules below Go 1.22 |
+| Use `io.LimitReader`, streaming, or controlled buffering for large payloads | Buffer unbounded external input into memory |
+| Write multipart `io.Pipe` streams sequentially and close `multipart.Writer` before closing the pipe writer | Write multipart parts concurrently or out of order |
+| Use `pprof`, `testing.B`, and benchmarks before optimizing | Guess at performance bottlenecks without measurement |
+
+## Checklist Before Opening a PR
+
+- [ ] Every changed `.go` file has exactly one correct package declaration.
+- [ ] `gofmt` and `goimports` have been applied.
+- [ ] Errors are checked, wrapped with context, and not both logged and returned.
+- [ ] Package, variable, function, interface, constant, and exported symbol names follow Go conventions.
+- [ ] `go.mod` and `go.sum` are tidy and dependencies are justified.
+- [ ] Goroutines, channels, mutexes, and cleanup paths cannot leak or race.
+- [ ] HTTP handlers, clients, JSON APIs, and request bodies handle context, validation, headers, status codes, and response closing correctly.
+- [ ] Reader, buffer, `io.Pipe`, multipart, retry, and redirect behavior respects one-pass stream semantics.
+- [ ] Tests are table-driven or scenario-focused, use helpers correctly, and cover success and error cases.
+- [ ] Security-sensitive code validates input, avoids custom cryptography, uses TLS where required, and stores passwords safely.
+- [ ] Documentation and comments are in English by default and contain no emoji.
+
+## References
+
+- Effective Go: https://go.dev/doc/effective_go
+- Go Code Review Comments: https://go.dev/wiki/CodeReviewComments
+- Google's Go Style Guide: https://google.github.io/styleguide/go/
+- `sync.WaitGroup` documentation: https://pkg.go.dev/sync#WaitGroup

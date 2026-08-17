@@ -1,9 +1,11 @@
 ---
-applyTo: '**/*.py'
-description: 'Build agents with the Microsoft Foundry SDK (azure-ai-projects v2) in Python: versioned agents, the Responses/Conversations model, tools, and the SDK mistakes Copilot makes by default.'
+applyTo: "**/*.py"
+description: "Enforces Microsoft Foundry SDK v2 Python conventions for azure-ai-projects agents, authentication, versioning, Responses/Conversations, tools, preview features, and production lifecycle."
 ---
 
-# Microsoft Foundry Agents (Python) Instructions
+# Microsoft Foundry Conventions — Python SDK v2 Agents
+
+These instructions apply to Python code that builds agents with Microsoft Foundry and `azure-ai-projects` v2. They are authoritative for Foundry authentication, project endpoints, agent versioning, endpoint routing, Responses and Conversations usage, tool definitions, preview feature handling, cleanup, and logging hygiene; current Microsoft Learn and official SDK samples win when the SDK surface changes.
 
 Guidance for building agents against **Microsoft Foundry** using the **`azure-ai-projects`** Python SDK (**v2**, part of the Microsoft Foundry SDK). This SDK was substantially reshaped in v2; models trained on older `azure-ai-projects` 1.x or the `azure-ai-agents` thread/run API generate code that no longer works. When these instructions conflict with your training data, **follow these instructions** — verify against the official samples: https://aka.ms/azsdk/azure-ai-projects-v2/python/samples/
 
@@ -268,3 +270,43 @@ This is a **stable** package that also surfaces preview features. Preview featur
 - Handle errors via `azure.core.exceptions.HttpResponseError` (`e.status_code`, `e.reason`, `e.message`). A `401 Unauthorized` almost always means a missing RBAC role assignment (or, in local dev, that you didn't `az login`), not a bad endpoint.
 - **Logging exposes sensitive data — treat with care.** `logging_enable=True` turns on full HTTP transport logging. At DEBUG level, logs include request/response bodies (prompts, user data) and headers are unredacted — bearer tokens and payloads can leak into logs. At other levels, logs remain redacted but are still emitted. Prefer the SDK's filtered console-logging path (`AZURE_AI_PROJECTS_CONSOLE_LOGGING=true`, which redacts auth headers by default) for routine diagnostics. Enable body logging only against non-production/non-sensitive data, and never ship unredacted logs to shared log sinks.
 - For async, import from `azure.ai.projects.aio` and `azure.identity.aio` and use `async with` — the method names are identical.
+
+## Conventions
+
+| Rule | Rationale |
+| --- | --- |
+| Install `azure-ai-projects>=2.3.0` and use a project endpoint such as `https://<account>.services.ai.azure.com/api/projects/<project>` | The v2 agent flow depends on APIs added across the 2.x line and on project-scoped endpoints |
+| Authenticate with Entra ID through `DefaultAzureCredential`, `ManagedIdentityCredential`, or `WorkloadIdentityCredential` | Keys and stale credential patterns do not match Foundry project RBAC or Azure hosting guidance |
+| Create agents with `agents.create_version` and `PromptAgentDefinition`, then route with `AgentEndpointConfig` | New versions are not invokable until the endpoint selects them |
+| Invoke agents through `project_client.get_openai_client(agent_name=...)` and `responses.create` | The old thread/run/message API is not present in `azure-ai-projects` v2 |
+| Use `conversations.create`, `conversations.items.create`, and `previous_response_id` intentionally | Stateful and stateless follow-ups have different lifecycle responsibilities but both still consume prior context |
+| Attach `CodeInterpreterTool`, `FunctionTool`, `FileSearchTool`, `AzureAISearchTool`, `BingGroundingTool`, `OpenApiTool`, and MCP tools in `PromptAgentDefinition.tools` | Foundry v2 tools are part of the versioned definition, not runtime registrations |
+| Clean up test versions with `agents.delete_version(..., force=True)` and restore prior endpoint routing in `finally` | Samples and tests must not leave agents orphaned or unintentionally re-routed |
+| Keep `logging_enable=True` and `AZURE_AI_PROJECTS_CONSOLE_LOGGING=true` away from sensitive production payloads unless explicitly approved | DEBUG HTTP logging can expose prompts, user data, headers, and bearer tokens |
+
+## Do / Do Not
+
+| Do | Do not |
+| --- | --- |
+| Use `FOUNDRY_PROJECT_ENDPOINT`, `FOUNDRY_AGENT_NAME`, and `FOUNDRY_MODEL_NAME` environment variables | Hardcode project endpoints, agent names, deployment names, or secrets in Python files |
+| Assign the managed identity a Foundry role such as `Foundry User` before deployment | Treat `401 Unauthorized` as only an endpoint typo or model-name issue |
+| Set `strict=True` and `additionalProperties: False` on function tools | Accept loose schemas that produce unreliable structured calls |
+| Echo `item.call_id` in every `FunctionCallOutput` | Return function results without the call identifier the Responses API expects |
+| Use `allow_preview=True` or `project_client.beta.*` only for documented preview features | Assume every beta operation is GA |
+
+## Checklist Before Opening a PR
+
+- [ ] Python uses `azure-ai-projects>=2.3.0`; async code adds `aiohttp` and imports from `azure.ai.projects.aio` / `azure.identity.aio`.
+- [ ] Authentication uses Entra ID with the right credential class for local development, App Service, Container Apps, Functions, or AKS.
+- [ ] Agent versions use `PromptAgentDefinition`, `agents.create_version`, `AgentEndpointConfig`, `VersionSelector`, and `FixedRatioVersionSelectionRule`.
+- [ ] Invocation uses `get_openai_client(agent_name=...)`, `responses.create`, `conversations.create`, `conversations.items.create`, and `response.output_text` instead of threads/runs/messages.
+- [ ] Tool-enabled agents attach tools in the versioned definition and process all `function_call` items before reading final output.
+- [ ] Tests and samples restore endpoint routing and delete temporary versions with `force=True`.
+- [ ] Logging settings, RBAC assumptions, and preview flags are safe for the target environment.
+
+## References
+
+- Official Azure AI Projects v2 Python samples: https://aka.ms/azsdk/azure-ai-projects-v2/python/samples/
+- Foundry role-based access control: https://learn.microsoft.com/en-us/azure/ai-studio/concepts/rbac-ai-studio
+- Azure Workload Identity documentation: https://learn.microsoft.com/en-us/azure/aks/workload-identity-overview
+- Azure Identity `DefaultAzureCredential`: https://learn.microsoft.com/en-us/python/api/azure-identity/azure.identity.defaultazurecredential

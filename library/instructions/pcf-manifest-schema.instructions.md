@@ -1,297 +1,147 @@
 ---
-applyTo: '**/*.xml'
-description: 'Complete manifest schema reference for PCF components with all available XML elements'
+applyTo: "**/*.xml"
+description: "Enforces Power Apps Component Framework ControlManifest.Input.xml schema conventions for manifest elements, resources, features, platform libraries, validation, and data types."
 ---
 
-# Manifest Schema Reference
+# PCF Manifest Schema Conventions — Control Metadata
 
-The manifest file (`ControlManifest.Input.xml`) is a metadata document that defines your code component. This reference lists all available manifest elements and their purposes.
+These instructions apply to XML Power Apps Component Framework manifests, especially `ControlManifest.Input.xml`. They are authoritative for manifest element usage, schema attributes, resource declarations, feature declarations, platform availability, and validation in matched XML files; official PCF schema validation and project-specific component requirements win when they impose stricter constraints.
 
-## Root Element
+## Root, Control, and Core Elements
 
-### manifest
+A PCF manifest is the metadata contract for a code component. Keep the root and component identity explicit.
 
-The root element that contains the entire component definition.
+| Element | Purpose | Required or common attributes | Availability |
+| --- | --- | --- | --- |
+| `manifest` | Root element containing the entire component definition | None beyond schema-valid children | Model-driven apps, canvas apps, portals |
+| `control` | Component identity, namespace, version, display, and type | `namespace`, `constructor`, `version`, `display-name-key`, `description-key`, `control-type` (`standard` or `virtual`) | Model-driven apps, canvas apps, portals |
+| `code` | Resource file implementing component logic | `path`, `order` (typically `1`) | Model-driven apps, canvas apps, portals |
 
-## Core Elements
+Use semantic versions such as `1.0.0` for component `version` and resource versions. Use localization resource keys rather than hardcoded display strings.
 
-### code
+## Properties, Type Groups, and Datasets
 
-Refers to the resource file that implements the component logic.
+Model component input, output, and tabular data precisely.
 
-**Attributes:**
-- `path`: Path to the TypeScript/JavaScript implementation file
-- `order`: Loading order (typically "1")
+| Element | Convention | Key attributes |
+| --- | --- | --- |
+| `property` | Define an input or bound property with the most specific data type available. | `name`, `display-name-key`, `description-key`, `of-type`, `usage` (`bound` or `input`), `required`, `of-type-group`, `default-value` |
+| `type-group` | Group accepted types when one property can accept multiple data types. | `name`; child `type` values such as `Whole.None`, `Currency`, `FP`, `Decimal` |
+| `data-set` | Define a dataset property for tabular data. | `name`, `display-name-key`, `description-key` |
 
-**Availability:** Model-driven apps, canvas apps, portals
+Common `of-type` values include `SingleLine.Text`, `Multiple`, `SingleLine.TextArea`, `SingleLine.Email`, `SingleLine.Phone`, `SingleLine.Url`, `SingleLine.Ticker`, `Whole.None`, `Currency`, `FP`, `Decimal`, `DateAndTime.DateAndTime`, `DateAndTime.DateOnly`, `TwoOptions`, `Lookup.Simple`, `OptionSet`, `MultiSelectOptionSet`, and `Enum`.
 
-### control
+## Resources and Localization
 
-Defines the component itself, including namespace, version, and display information.
+Keep all component resources in the `resources` container and organize them by purpose.
 
-**Key Attributes:**
-- `namespace`: Namespace for the component
-- `constructor`: Constructor name
-- `version`: Semantic version (e.g., "1.0.0")
-- `display-name-key`: Resource key for display name
-- `description-key`: Resource key for description
-- `control-type`: Type of control ("standard" or "virtual")
+| Element | Purpose | Attributes |
+| --- | --- | --- |
+| `resources` | Container for code, CSS, images, and localization files | Child elements only |
+| `css` | Stylesheet resource | `path`, `order` |
+| `img` | Image resource | `path` |
+| `resx` | Localization resource file | `path`, `version` |
 
-**Availability:** Model-driven apps, canvas apps, portals
+Organize resources in folders such as `css/`, `img/`, and `strings/`. Scope CSS to avoid conflicts with host applications.
 
-## Property Elements
+## Features, Dependencies, Libraries, Events, and Actions
 
-### property
+Declare platform interaction explicitly so the host can enforce availability and permissions.
 
-Defines an input or output property for the component.
+| Element | Convention | Availability |
+| --- | --- | --- |
+| `feature-usage` | Container for `uses-feature` declarations. | Model-driven apps, canvas apps |
+| `uses-feature` | Declare platform features with `name` and `required`; common feature names include `Device.captureAudio`, `Device.captureImage`, `Device.captureVideo`, `Device.getBarcodeValue`, `Device.getCurrentPosition`, `Device.pickFile`, `Utility.lookupObjects`, and `WebAPI`. | Varies by feature and platform |
+| `dependency` | Declare external dependencies required by the component. | Model-driven apps, canvas apps |
+| `external-service-usage` | Declare external services with `enabled`. | Model-driven apps, canvas apps |
+| `platform-library` | Reference platform-provided libraries using `name` and `version`, such as `React` or `Fluent`. | Model-driven apps, canvas apps |
+| `event` | Define custom events with `name`, `display-name-key`, and `description-key`. | Model-driven apps, canvas apps |
+| `platform-action` | Define platform actions a component can invoke. | Model-driven apps |
 
-**Key Attributes:**
-- `name`: Property name
-- `display-name-key`: Resource key for display name
-- `description-key`: Resource key for description
-- `of-type`: Data type (e.g., "SingleLine.Text", "Whole.None", "TwoOptions", "DateAndTime.DateOnly")
-- `usage`: Property usage ("bound" or "input")
-- `required`: Whether property is required (true/false)
-- `of-type-group`: Reference to a type-group
-- `default-value`: Default value for the property
+Mark features as required only when the component cannot function without them.
 
-**Availability:** Model-driven apps, canvas apps, portals
+## Platform Availability and Validation
 
-### type-group
+Test every manifest in the target host environment.
 
-Defines a group of types that a property can accept.
+- Treat Model-driven apps as fully supported for most manifest elements.
+- Treat canvas apps as supported with limitations, especially for datasets and specific Device APIs.
+- Treat portals and Power Pages support as platform-specific and verify each feature.
+- Validate manifests during build; missing required elements and invalid attribute values should fail.
+- Use `pac pcf` commands to validate manifest structure before shipping.
 
-**Usage:** Allows a property to accept multiple data types
+## Good / Bad Examples
 
-**Availability:** Model-driven apps, canvas apps, portals
+The examples below illustrate a compact manifest with localized metadata, typed properties, resources, feature usage, and platform libraries.
 
-## Data Set Elements
-
-### data-set
-
-Defines a dataset property for working with tabular data.
-
-**Key Attributes:**
-- `name`: Dataset name
-- `display-name-key`: Resource key for display name
-- `description-key`: Resource key for description
-
-**Availability:** Model-driven apps (canvas apps with limitations)
-
-## Resource Elements
-
-### resources
-
-Container for all resource definitions (code, CSS, images, localization).
-
-**Availability:** Model-driven apps, canvas apps, portals
-
-### css
-
-References a CSS stylesheet file.
-
-**Attributes:**
-- `path`: Path to CSS file
-- `order`: Loading order
-
-**Availability:** Model-driven apps, canvas apps, portals
-
-### img
-
-References an image resource.
-
-**Attributes:**
-- `path`: Path to image file
-
-**Availability:** Model-driven apps, canvas apps, portals
-
-### resx
-
-References a resource file for localization.
-
-**Attributes:**
-- `path`: Path to .resx file
-- `version`: Version number
-
-**Availability:** Model-driven apps, canvas apps, portals
-
-## Feature Usage Elements
-
-### uses-feature
-
-Declares that the component uses a specific platform feature.
-
-**Key Attributes:**
-- `name`: Feature name (e.g., "Device.captureImage", "Device.getCurrentPosition", "Utility.lookupObjects", "WebAPI")
-- `required`: Whether feature is required (true/false)
-
-**Common Features:**
-- Device.captureAudio
-- Device.captureImage
-- Device.captureVideo
-- Device.getBarcodeValue
-- Device.getCurrentPosition
-- Device.pickFile
-- Utility.lookupObjects
-- WebAPI
-
-**Availability:** Varies by feature and platform
-
-### feature-usage
-
-Container for feature declarations.
-
-**Availability:** Model-driven apps, canvas apps
-
-## Dependency Elements
-
-### dependency
-
-Declares external dependencies required by the component.
-
-**Availability:** Model-driven apps, canvas apps
-
-### external-service-usage
-
-Declares external services that the component uses.
-
-**Key Attributes:**
-- `enabled`: Whether external service usage is enabled (true/false)
-
-**Availability:** Model-driven apps, canvas apps
-
-## Library Elements
-
-### platform-library
-
-References a platform-provided library (e.g., React, Fluent UI).
-
-**Key Attributes:**
-- `name`: Library name (e.g., "React", "Fluent")
-- `version`: Library version
-
-**Availability:** Model-driven apps, canvas apps
-
-## Event Elements
-
-### event
-
-Defines custom events that the component can raise.
-
-**Key Attributes:**
-- `name`: Event name
-- `display-name-key`: Resource key for display name
-- `description-key`: Resource key for description
-
-**Availability:** Model-driven apps, canvas apps
-
-## Action Elements
-
-### platform-action
-
-Defines platform actions that the component can invoke.
-
-**Availability:** Model-driven apps
-
-## Example Manifest Structure
+**Good:**
 
 ```xml
-<?xml version="1.0" encoding="utf-8" ?>
 <manifest>
-  <control namespace="SampleNamespace"
-           constructor="SampleControl"
-           version="1.0.0"
-           display-name-key="Sample_Display_Key"
-           description-key="Sample_Desc_Key"
-           control-type="standard">
-
-    <!-- Properties -->
-    <property name="sampleProperty"
-              display-name-key="Property_Display_Key"
-              description-key="Property_Desc_Key"
-              of-type="SingleLine.Text"
-              usage="bound"
-              required="true" />
-
-    <!-- Type Group Example -->
-    <type-group name="numbers">
-      <type>Whole.None</type>
-      <type>Currency</type>
-      <type>FP</type>
-      <type>Decimal</type>
-    </type-group>
-
-    <property name="numericProperty"
-              display-name-key="Numeric_Display_Key"
-              of-type-group="numbers"
-              usage="bound" />
-
-    <!-- Data Set Example -->
-    <data-set name="dataSetProperty"
-              display-name-key="Dataset_Display_Key">
-    </data-set>
-
-    <!-- Events -->
-    <event name="onCustomEvent"
-           display-name-key="Event_Display_Key"
-           description-key="Event_Desc_Key" />
-
-    <!-- Resources -->
+  <control namespace="SampleNamespace" constructor="SampleControl" version="1.0.0" display-name-key="Sample_Display_Key" description-key="Sample_Desc_Key" control-type="standard">
+    <property name="sampleProperty" display-name-key="Property_Display_Key" description-key="Property_Desc_Key" of-type="SingleLine.Text" usage="bound" required="true" />
+    <type-group name="numbers"><type>Whole.None</type><type>Currency</type><type>FP</type><type>Decimal</type></type-group>
+    <property name="numericProperty" display-name-key="Numeric_Display_Key" of-type-group="numbers" usage="bound" />
+    <data-set name="dataSetProperty" display-name-key="Dataset_Display_Key" />
+    <event name="onCustomEvent" display-name-key="Event_Display_Key" description-key="Event_Desc_Key" />
     <resources>
       <code path="index.ts" order="1" />
       <css path="css/SampleControl.css" order="1" />
       <img path="img/icon.png" />
       <resx path="strings/SampleControl.1033.resx" version="1.0.0" />
     </resources>
-
-    <!-- Feature Usage -->
-    <feature-usage>
-      <uses-feature name="WebAPI" required="true" />
-      <uses-feature name="Device.captureImage" required="false" />
-    </feature-usage>
-
-    <!-- Platform Library -->
+    <feature-usage><uses-feature name="WebAPI" required="true" /><uses-feature name="Device.captureImage" required="false" /></feature-usage>
     <platform-library name="React" version="16.8.6" />
     <platform-library name="Fluent" version="8.29.0" />
-
   </control>
 </manifest>
 ```
 
-## Manifest Validation
+Why: The manifest uses schema elements deliberately, avoids hardcoded display text, declares resources, and identifies required features.
 
-The manifest schema is validated during the build process:
-- Missing required elements will cause build errors
-- Invalid attribute values will be flagged
-- Use `pac pcf` commands to validate manifest structure
+**Bad:**
 
-## Best Practices
+```xml
+<control namespace="SampleNamespace" constructor="SampleControl" version="1" display-name-key="Sample" control-type="standard">
+  <property name="value" of-type="SingleLine.Text" usage="bound" />
+</control>
+```
 
-1. **Semantic Versioning**: Use semantic versioning (major.minor.patch) for component versions
-2. **Localization Keys**: Always use resource keys instead of hardcoded strings
-3. **Feature Declaration**: Declare all features your component uses
-4. **Required vs Optional**: Mark properties and features as required only when truly necessary
-5. **Type Groups**: Use type-groups for properties that accept multiple numeric types
-6. **Data Types**: Choose the most specific data type that matches your requirements
-7. **CSS Scoping**: Scope CSS to avoid conflicts with host applications
-8. **Resource Organization**: Keep resources organized in separate folders (css/, img/, strings/)
+Why: The fragment lacks the `manifest` root, descriptions, semantic versioning, resource keys, resources, and feature declarations.
 
-## Data Type Reference
+## Schema Vocabulary
 
-Common `of-type` values for properties:
+Retain schema terms reviewers search for: `TypeScript/JavaScript`, `TypeScript`, `JavaScript`, `true/false`, `type-groups`, and `Date/Time**` from the prior data type headings.
 
-- **Text**: SingleLine.Text, Multiple, SingleLine.TextArea, SingleLine.Email, SingleLine.Phone, SingleLine.Url, SingleLine.Ticker
-- **Numbers**: Whole.None, Currency, FP, Decimal
-- **Date/Time**: DateAndTime.DateAndTime, DateAndTime.DateOnly
-- **Boolean**: TwoOptions
-- **Lookup**: Lookup.Simple
-- **OptionSet**: OptionSet, MultiSelectOptionSet
-- **Other**: Enum
+## Conventions
 
-## Platform Availability Legend
+| Rule | Rationale |
+|---|---|
+| Keep `ControlManifest.Input.xml` metadata complete and schema-valid | The host discovers component behavior from the manifest |
+| Use semantic versions and localized resource keys | Component upgrades and UI text remain maintainable |
+| Choose the most specific `of-type` or `of-type-group` | Makers get correct configuration and data binding behavior |
+| Declare every platform feature in `feature-usage` | Runtime permissions and platform availability stay explicit |
+| Keep code, CSS, images, and `.resx` files under `resources` | Packaging and load order remain predictable |
+| Validate with `pac pcf` and target-host testing | Schema validity alone does not prove platform behavior |
 
-- **Model-driven apps**: Fully supported
-- **Canvas apps**: Supported (may have limitations)
-- **Portals**: Supported in Power Pages
+## Do / Do Not
 
-Most manifest elements are available across all platforms, but some features (like certain Device APIs or platform actions) may be platform-specific. Always test in your target environment.
+| Do | Do not |
+|---|---|
+| Use `display-name-key` and `description-key` for user-facing text | Hardcode display names directly in the manifest |
+| Mark `required` only for essential properties and features | Make optional capabilities block component use |
+| Scope CSS and organize resources under `css/`, `img/`, and `strings/` | Let styles or assets conflict with host applications |
+| Use `platform-library` for supported platform React or Fluent versions | Bundle duplicate platform libraries without need |
+| Test in Model-driven apps, canvas apps, portals, or Power Pages as applicable | Assume every manifest element behaves the same on every platform |
+
+## Checklist Before Opening a PR
+
+- [ ] `manifest` and `control` elements are present and schema-valid.
+- [ ] `namespace`, `constructor`, `version`, `display-name-key`, `description-key`, and `control-type` are correct.
+- [ ] Properties use specific `of-type` or `of-type-group` values and correct `usage`.
+- [ ] Dataset properties are only used where the target platform supports them.
+- [ ] `resources` includes required `code`, `css`, `img`, and `resx` entries with valid paths and order.
+- [ ] `feature-usage` declares every Device, Utility, or `WebAPI` feature the component uses.
+- [ ] Dependencies, external services, platform libraries, events, and platform actions are declared when used.
+- [ ] CSS is scoped and resources are organized in `css/`, `img/`, and `strings/` where applicable.
+- [ ] `pac pcf` validation and target-platform testing pass.
