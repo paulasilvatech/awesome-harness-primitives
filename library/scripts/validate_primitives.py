@@ -374,13 +374,18 @@ class Validator:
     # Hooks
     def validate_hooks(self) -> None:
         kind = "hooks"; d = self.root / "hooks"
-        files = sorted(d.glob("*/hooks.json")) if d.is_dir() else []
+        files: list[tuple[Path, Path]] = [(p, self.root) for p in sorted(d.glob("*/hooks.json"))] if d.is_dir() else []
+        repo_root = find_repo_root(self.root)
+        installed = repo_root / ".github" / "hooks"
+        if installed.is_dir() and installed.resolve() != d.resolve():
+            files += [(p, repo_root) for p in sorted(installed.glob("*.json"))]
         self.file_counts[kind] = len(files)
-        for p in files:
-            self.catch_file(kind, p, lambda p=p: self._validate_hook(p))
+        for p, base in files:
+            self.catch_file(kind, p, lambda p=p, base=base: self._validate_hook(p, base))
 
-    def _validate_hook(self, p: Path) -> None:
+    def _validate_hook(self, p: Path, base: Path | None = None) -> None:
         kind = "hooks"
+        base = base or self.root
         try:
             data = json.loads(read_text(p))
             if not isinstance(data, dict):
@@ -422,7 +427,7 @@ class Validator:
                 for k in ("bash", "powershell", "command"):
                     cmd = entry.get(k)
                     for script in referenced_scripts(cmd):
-                        resolved = resolve_script(script, p.parent, self.root)
+                        resolved = resolve_script(script, p.parent, base)
                         if resolved is None:
                             self.add(kind, p, "HK008", "ERROR", f"{loc} {k} script '{script}' does not exist relative to repo root or hook dir")
                         elif not os.access(resolved, os.X_OK):

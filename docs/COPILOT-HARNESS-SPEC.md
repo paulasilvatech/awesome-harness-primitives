@@ -276,6 +276,48 @@ Install with `copilot plugin marketplace add <owner>/<repo>` then `/plugin insta
 All matching sources are **merged** — every hook registered for an event runs. Policy hooks cannot be
 disabled by `disableAllHooks`.
 
+#### 5.1.1 Repository hooks require a trusted folder (MEASURED, CLI 1.0.81-0)
+
+`.github/hooks/*.json` is **silently ignored** unless the workspace path is listed in `trustedFolders`
+(`~/.copilot/config.json`). This is a security boundary: untrusted checkouts cannot execute code on
+session start. User-level hooks (`~/.copilot/hooks/`, `settings.json`) fire regardless of trust.
+
+The entry is written automatically the first time a user accepts the trust prompt in an interactive
+session, so this is invisible in normal use. It only bites in **CI, containers, and `-p` automation**
+using a fresh `COPILOT_HOME` — there, seed it explicitly:
+
+```jsonc
+// $COPILOT_HOME/config.json
+{ "trustedFolders": ["/abs/path/to/repo"], "disableAllHooks": false }
+```
+
+Measured: identical hook file fires from `~/.copilot/hooks/` but not from `.github/hooks/` until the
+folder is trusted; after trusting, it fires. No warning is emitted either way — see
+[HARNESS-VALIDATION.md](HARNESS-VALIDATION.md).
+
+#### 5.1.2 `disableAllHooks` scope (MEASURED)
+
+The key means two different things depending on where it appears:
+
+| Location | Scope |
+| --- | --- |
+| `~/.copilot/config.json`, `settings.json` | **Global** — kills all repo- and user-level hooks |
+| Inside a `.github/hooks/<file>.json` | **File-scoped** — disables only that file's hooks |
+
+The file-scoped form is the supported way to ship a hook **off by default**: a sibling file with
+`disableAllHooks: false` still fires normally in the same session.
+
+#### 5.1.3 Path resolution (MEASURED)
+
+Relative `bash` / `command` / `cwd` paths resolve against the **workspace root** (`-C` / cwd) — for
+user-level hooks as well as repository ones, not against the directory holding the hook config. A
+user-scope hook therefore only works in repositories that happen to contain that relative path; use an
+absolute path for anything installed under `~/.copilot/hooks/`.
+
+Hook commands that scan the working tree must also respect `timeoutSec`: the shipped `secrets-scanner`
+exits 0 standalone but is killed mid-run on a large diff (536 modified files) under its configured
+timeout, silently producing no log.
+
 ### 5.2 Structure
 
 ```jsonc

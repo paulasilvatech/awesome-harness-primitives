@@ -117,11 +117,88 @@ Side effect:
 NONE
 ```
 
-Result: **not verified**. In this non-interactive harness, `.github/hooks/*.json` did not produce an observable side effect. I cannot honestly claim repo-level hook discovery or camelCase acceptance from these runs.
+Result: **not verified** *(superseded — root cause found; see "Hooks — resolved" below)*. In this non-interactive harness, `.github/hooks/*.json` did not produce an observable side effect.
 
 ### `disableAllHooks`
 
-Not verified. Because hooks did not execute at all in the observable non-interactive runs, there was no meaningful baseline against which to prove suppression.
+Superseded — see below.
+
+## Hooks — resolved (CLI 1.0.81-0)
+
+The earlier "hooks never fire" result was **not** a discovery bug. Root cause: **repository hooks require the workspace to be a trusted folder**.
+
+Isolated `COPILOT_HOME`, one identical hook payload placed in three candidate locations at once, each writing a distinct marker:
+
+```
+$ export COPILOT_HOME=$B/ch
+$ copilot -C $B/ws -p "Reply only: ok" --allow-all --no-color --no-remote
+=== HOOK EVENTS FIRED:
+FIRED:USER_HOOKS_DIR at 1786990294
+FIRED:SETTINGS_JSON at 1786990294
+```
+
+`$COPILOT_HOME/hooks/*.json` and the `hooks` key in `$COPILOT_HOME/settings.json` fired; repo `.github/hooks/probe.json` did not. Six further repo-level candidate paths (`.copilot/hooks/`, `.github/copilot/hooks/`, `.copilot/hooks.json`, `hooks.json`, `.github/hooks.json`) also produced nothing — ruling out a wrong path.
+
+`copilot help config` documents the real gate:
+
+```
+`trustedFolders`: list of folders where permission to read or execute files has been granted.
+`disableAllHooks`: whether to disable all hooks (repo-level and user-level); defaults to `false`.
+`hooks`: inline hook definitions, keyed by event name (same schema as .github/hooks/*.json).
+```
+
+Re-run with the workspace trusted, changing nothing else:
+
+```
+$ printf '{"trustedFolders":["/Volumes/T9/hooktest/ws"],"disableAllHooks":false}\n' > $COPILOT_HOME/config.json
+$ copilot -C $B/ws -p "Reply only: ok" --allow-all --no-color --no-remote
+=== FIRED:
+FIRED:REPO_GITHUB_HOOKS at 1786990380
+```
+
+**Repo-level hooks work.** Failure mode is silent — no warning is emitted when hooks are skipped for lack of trust. Interactive users never see this because accepting the trust prompt writes the entry; it only affects CI/container/`-p` runs with a fresh `COPILOT_HOME`.
+
+### `disableAllHooks` is file-scoped inside `.github/hooks/*.json`
+
+Two sibling files in one directory, one self-disabled:
+
+```
+a-enabled.json      -> "disableAllHooks": false
+b-disabled.json     -> "disableAllHooks": true
+=== FIRED:
+FIRED:ENABLED_FILE at 1786990425
+```
+
+Only the self-disabled file's hooks were suppressed. It does **not** act globally from a hook file, so shipping a hook off-by-default via `disableAllHooks: true` is safe and does not disable its siblings. The global kill switch is the same key in `config.json`/`settings.json`.
+
+### End-to-end on this repository
+
+All four enabled hook configs fired against the real repo (`trustedFolders` seeded, isolated `COPILOT_HOME`), proving relative `bash` paths resolve from the workspace root:
+
+```
+=== hook-logs produced:
+.../hook-logs/session-logger/prompts.log
+.../hook-logs/session-logger/session.log
+.../hook-logs/dependency-license-checker/check.log
+.../hook-logs/governance-audit/audit.log
+
+{"timestamp": "...", "event": "sessionStart", "cwd": "/Volumes/T9/copilot-primitives"}
+{"timestamp":"...","event":"sessionEnd"}
+{"timestamp":"...","event":"userPromptSubmitted","level":"INFO"}
+```
+
+`sessionStart`, `userPromptSubmitted` and `sessionEnd` are confirmed live, camelCase as specified. `secrets-scanner` produced no log in that run: invoked directly it works and exits 0, but it scans every modified file (536 here) and exceeds its `timeoutSec` on a large working tree — a hook-authoring lesson, not a discovery failure.
+
+### Relative paths resolve from the workspace root, even for user-level hooks
+
+A hook installed in `$COPILOT_HOME/hooks/probe.json` with `"bash": "hooks/probe/run.sh"`, where that script exists **only inside the workspace**:
+
+```
+=== FIRED:
+FIRED:USER_SCOPE_RELATIVE_RESOLVED_FROM_WORKSPACE at 1786990785
+```
+
+So relative commands are resolved against `-C`/cwd, not against the config file's own directory. Practical consequence: a user-scope hook written with a relative path silently does nothing in every repository that lacks that path. Global installs must use absolute paths.
 
 ## Defects or runtime/spec divergences found
 
@@ -132,7 +209,7 @@ Runtime/spec divergences to investigate:
 1. **Agent filename discovery is broader than the spec**: this CLI discovered `.github/agents/plain-md-agent.md` as an agent, not only `*.agent.md`.
 2. **Skill directory/name mismatch is accepted by runtime**: `different-name` under `mismatch-dir` was listed and enabled, even though the spec/validator require equality.
 3. **Tool vocabulary mapping is not fully reflected by static rules**: `editFiles` produced an `edit` tool schema, while `search` did not expose grep/glob in the initial selected-agent schema.
-4. **Hooks could not be empirically proven in this harness**: `.github/hooks/*.json` did not trigger side effects in `-p` or the tested `-i` invocation.
+4. **Repo hooks are silently skipped in untrusted folders**: `.github/hooks/*.json` never runs until the workspace appears in `trustedFolders`, and no warning says so. Resolved and fully characterised in "Hooks — resolved" above.
 
 Warnings observed from sampled existing agents:
 
@@ -147,7 +224,7 @@ These fields are intentionally VS Code-oriented according to the spec, so they a
 ## Could not verify
 
 - A true non-interactive `/env` dump listing all primitive categories by path/name. `copilot -p "/env"` sometimes produced a useful environment summary, but another run answered that `/env` is interactive-only.
-- Hook discovery/execution and `disableAllHooks`, for reasons above.
+- Hook `type: "http"` and the `matcher` filter; only `type: "command"` hooks were exercised. Discovery, precedence and `disableAllHooks` are now verified — see "Hooks — resolved".
 - Installed plugin activation from the local marketplace. I verified marketplace registration/browse only; installing marketplace plugins was out of scope because sources point to plugin directories not copied into the scratch workspace.
 
 ## How to reproduce

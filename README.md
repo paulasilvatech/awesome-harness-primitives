@@ -91,13 +91,42 @@ Manage loaded skills with `/skills`.
 ### Hooks
 
 ```sh
-mkdir -p .github/hooks
+# Repository scope — applies to everyone working in this repo.
+# Copy the whole package: the config references its scripts by workspace-relative path.
+mkdir -p .github/hooks hooks
+cp -R library/hooks/secrets-scanner hooks/
 cp library/hooks/secrets-scanner/hooks.json .github/hooks/secrets-scanner.json
+
+# User scope — applies to every repo you open.
+# Rewrite the script path to an absolute one first; see the note on path resolution below.
 mkdir -p ~/.copilot/hooks
 cp library/hooks/secrets-scanner/hooks.json ~/.copilot/hooks/secrets-scanner.json
 ```
 
 Copilot CLI merges all hook sources and runs every hook registered for an event.
+
+> **`bash`/`command` paths always resolve from the workspace root** — for repository *and* user-level
+> hooks alike. The shipped configs use `hooks/<name>/<script>`, so a repo-scope install needs the
+> package copied to `hooks/<name>/` as shown. A user-scope hook using that relative path would only
+> work in repos that happen to contain it, so **replace it with an absolute path** (for example
+> `~/.copilot/hooks/secrets-scanner/scan-secrets.sh`) when installing globally. Verified on CLI 1.0.81-0.
+
+> **Repository hooks only run in a trusted folder.** `.github/hooks/*.json` is skipped silently — with
+> no warning — until the workspace is listed in `trustedFolders` in `~/.copilot/config.json`. Accepting
+> the trust prompt in an interactive session writes that entry for you, so this is invisible day to day.
+> In CI, containers, or `-p` automation with a fresh `COPILOT_HOME`, seed it yourself:
+>
+> ```sh
+> printf '{"trustedFolders":["%s"]}\n' "$PWD" > "$COPILOT_HOME/config.json"
+> ```
+>
+> User-level hooks (`~/.copilot/hooks/`) are unaffected by trust. See
+> [docs/HARNESS-VALIDATION.md](docs/HARNESS-VALIDATION.md).
+
+Four packages ship enabled; the four intrusive ones (`attester-import-check`, `fix-broken-links`,
+`session-auto-commit`, `tool-guardian`) ship with `"disableAllHooks": true` in this repo's own
+`.github/hooks/`. That key is **file-scoped** — it disables only its own file, leaving sibling hooks
+running — so removing it is how you switch one on.
 
 ## Validation
 
@@ -113,6 +142,11 @@ Useful options:
 - `--json` — emit a machine-readable JSON report.
 - `--kind <agents|instructions|skills|plugins|hooks>` — validate only one primitive kind; repeat for multiple kinds.
 - `--root <path>` and `--quiet` — validate another root or print only errors plus the summary.
+
+The `hooks` kind covers both the distributable packages under `library/hooks/*/hooks.json` and this
+repository's own installed configs in `.github/hooks/*.json` — the ones the CLI actually executes.
+Script paths are resolved against the root each set is deployed from, so a broken `bash` path in an
+installed config fails CI (`HK008`).
 
 Severity model: **ERROR** fails validation and CI; **WARNING** is valid/loadable but risky or incomplete; **INFO** is compatibility detail. CI runs the default validator as the gate, posts `--strict` output as a non-gating PR summary, and fails if `docs/CATALOG.md` drifts from the generated catalog.
 
