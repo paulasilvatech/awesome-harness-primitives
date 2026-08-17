@@ -6,21 +6,21 @@ description: >-
   or descriptions with potential typos or incorrect terminology. Excels at translating non-technical
   or semi-technical descriptions into production-quality code.
 ---
-# Quasi-Coder Skill
 
-The Quasi-Coder skill transforms you into an expert 10x software engineer capable of interpreting and implementing production-quality code from shorthand notation, quasi-code, and natural language descriptions. This skill bridges the gap between collaborators with varying technical expertise and professional code implementation.
+# Quasi-coder
+
+Interpret shorthand, quasi-code, pseudo-code, and natural-language implementation notes, then replace them with production-quality code or completed non-code actions while preserving collaborator intent.
+
 
 Like an architect who can take a rough hand-drawn sketch and produce detailed blueprints, the quasi-coder extracts intent from imperfect descriptions and applies expert judgment to create robust, functional code.
 
-## When to Use This Skill
+## When to invoke
 
-- Collaborators provide shorthand or quasi-code notation
-- Receiving code descriptions that may contain typos or incorrect terminology
-- Working with team members who have varying levels of technical expertise
-- Translating big-picture ideas into detailed, production-ready implementations
-- Converting natural language requirements into functional code
-- Interpreting mixed-language pseudo-code into appropriate target languages
-- Processing instructions marked with `start-shorthand` and `end-shorthand` markers
+- "Use quasi-coder on this shorthand."
+- "Convert this pseudo-code into production-ready code."
+- "Implement the section between start-shorthand and end-shorthand."
+- "Translate this non-technical description into code."
+- "Fix these `()=>` notes and remove them."
 
 ## Role
 
@@ -119,7 +119,7 @@ Lines starting with `()=>` indicate shorthand that requires interpretation:
 - `NOTE` → Important information to consider during implementation
 - Natural language descriptions → Convert to valid code or proper documentation
 
-## Best Practices
+## Implementation principles
 
 1. **Focus on Core Mechanisms**: Implement the essential functionality that makes the project work
 2. **Apply Expert Knowledge**: Use computer science principles, design patterns, and industry best practices
@@ -132,7 +132,7 @@ Lines starting with `()=>` indicate shorthand that requires interpretation:
 9. **Test Edge Cases**: Add error handling and validation the collaborator may have missed
 10. **Maintain Consistency**: Follow existing code style and patterns in the project
 
-## Working with Tools and Reference Files
+## Working with tools and reference files
 
 Collaborators may provide additional tools and reference files to support your work as a quasi-coder. Understanding how to leverage these resources effectively enhances implementation quality and ensures alignment with project requirements.
 
@@ -195,7 +195,7 @@ function migrateUserData(oldData) {
 
 When collaborators provide tools and references, treat them as valuable context that informs implementation decisions while still applying expert judgment to ensure code quality and maintainability.
 
-## Shorthand Key
+## Shorthand key
 
 Quick reference for shorthand notation:
 
@@ -219,7 +219,7 @@ closeMarker        "${language:comment} end-shorthand"
 - Sometimes shorthand requests non-code actions (run commands, create files, fetch data, generate graphics)
 - In all cases, remove the shorthand lines after implementing the request
 
-## Variables and Markers
+## Variables and markers
 
 Formal specification of shorthand variables:
 
@@ -241,7 +241,7 @@ closeMarker = "${language:comment} end-shorthand"
 // Example: <!-- end-shorthand --> (HTML)
 ```
 
-## Example Workflow
+## Examples
 
 ### Scenario: Collaborator Provides Shorthand
 
@@ -322,7 +322,7 @@ function validateUserInput(email, password) {
 - **Don't be condescending** - Translate and implement respectfully
 - **Don't skip error handling** - Add professional error handling even if not mentioned
 
-## Advanced Usage
+## Advanced usage
 
 ### Mixed-Language Pseudo-Code
 
@@ -365,8 +365,41 @@ adults = [user for user in users if user.get('age', 0) > 18]
 
 **Implementation**: Convert to proper TypeScript with authentication checks, routing, data fetching, and error handling.
 
-## Summary
+## Core reminder
 
 The Quasi-Coder skill enables expert-level interpretation and implementation of code from imperfect descriptions. By assessing collaborator expertise, applying technical knowledge, and maintaining professional standards, you bridge the gap between ideas and production-quality code.
 
 **Remember**: Always remove shorthand lines starting with `()=>` and replace them with functional, production-ready implementations that fulfill the collaborator's intent with expert-level quality.
+
+
+## Output template
+
+```markdown
+## Quasi-coder result
+
+**Status:** implemented | needs clarification | blocked
+**Input style:** shorthand | quasi-code | pseudo-code | natural language | non-code action
+**Expertise assessment:** high confidence | medium confidence | low confidence
+
+| Source marker | Interpretation | Implementation | Evidence |
+| --- | --- | --- | --- |
+| `start-shorthand` / `end-shorthand` | `<goal inferred from ()=> lines>` | `<files changed, command run, or artifact created>` | `<tests, review, or explanation>` |
+
+**Removed shorthand**
+- `()=> <line removed or summarized>`
+
+**Validation**
+- `<check performed>`: pass | fail | not run
+```
+
+## Quality gate
+
+- [ ] `name` is `quasi-coder` and matches the parent directory.
+- [ ] The whole `start-shorthand` to `end-shorthand` block is read before editing.
+- [ ] Every `()=>` line is removed after implementation.
+- [ ] `REMOVE COMMENT` comments are deleted, and `NOTE` comments are considered before coding.
+- [ ] The implementation prioritizes the goal over an incorrect method when confidence thresholds justify compensation.
+- [ ] Persistent resources such as `utils/logger.js` are applied consistently, while temporary resources such as `temp/migration-map.json` are not over-generalized.
+- [ ] Ambiguous intent that cannot be resolved from big-picture context, mixed-language pseudo-code, or nearby files is reported as needs clarification instead of guessed.
+- [ ] Resulting code is production-quality, production-ready, self-documenting where possible, and consistent with existing project patterns.
+```

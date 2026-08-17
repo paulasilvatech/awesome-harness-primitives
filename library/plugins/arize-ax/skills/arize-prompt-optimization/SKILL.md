@@ -11,7 +11,17 @@ metadata:
   compatibility: "Requires the ax CLI and a configured Arize profile."
   version: "1.0"
 ---
-# Arize Prompt Optimization Skill
+# Arize prompt optimization
+
+Optimize an LLM prompt by extracting the current prompt from Arize trace spans, joining it with evaluations, annotations, datasets, or experiment output, and producing a revised prompt plus a validation plan driven by `ax` CLI evidence.
+
+## When to invoke
+- "Optimize this prompt using Arize traces."
+- "Improve prompt output quality from production feedback."
+- "Debug a prompt that is failing evaluations."
+- "Use ax to compare prompt experiments."
+- "Tune a system prompt without losing template variables."
+## Arize workspace context
 
 > **`SPACE`** — All `--space` flags and the `ARIZE_SPACE` env var accept a space **name** (e.g., `my-workspace`) or a base64 space **ID** (e.g., `U3BhY2U6...`). Find yours with `ax spaces list`.
 
@@ -33,11 +43,9 @@ LLM applications emit spans following OpenInference semantic conventions. Prompt
 | `attributes.llm.output_messages` | Structured model output (including tool calls) | Inspect tool-calling responses |
 
 ### Finding Prompts by Span Kind
-
 - **LLM span** (`attributes.openinference.span.kind = 'LLM'`): Check `attributes.llm.input_messages` for structured chat messages, OR `attributes.input.value` for a serialized prompt. Check `attributes.llm.prompt_template.template` for the template.
 - **Chain/Agent span**: `attributes.input.value` contains the user's question. The actual LLM prompt lives on **child LLM spans** -- navigate down the trace tree.
 - **Tool span**: `attributes.input.value` has tool input, `attributes.output.value` has tool result. Not typically where prompts live.
-
 ### Performance Signal Columns
 
 These columns carry the feedback data used for optimization:
@@ -54,7 +62,7 @@ These columns carry the feedback data used for optimization:
 | `attributes.output.value` | Trace data | What the LLM produced |
 | `{experiment_name}.output` | Experiment runs | Output from a specific experiment |
 
-## Prerequisites
+## Prerequisites and context
 
 Proceed directly with the task — run the `ax` command you need. Do NOT check versions, env vars, or profiles upfront.
 
@@ -65,8 +73,7 @@ If an `ax` command fails, troubleshoot based on the error:
 - Project unclear → ask the user, or run `ax projects list -o json --limit 100` and present as selectable options
 - LLM provider call fails (missing OPENAI_API_KEY / ANTHROPIC_API_KEY) → run `ax ai-integrations list --space SPACE` to check for platform-managed credentials. If none exist, ask the user to provide the key or create an integration via the **arize-ai-provider-integration** skill
 - **Security:** Never read `.env` files or search the filesystem for credentials. Use `ax profiles` for Arize credentials and `ax ai-integrations` for LLM provider keys. If credentials are not available through these channels, ask the user.
-
-## Phase 1: Extract the Current Prompt
+## Phase 1: Extract the current prompt
 
 ### Find LLM spans containing prompts
 
@@ -123,7 +130,7 @@ Once you have the span data, reconstruct the prompt as a messages array:
 
 If the span has `attributes.llm.prompt_template.template`, the prompt uses variables. Preserve these placeholders (`{variable}` or `{{variable}}`) -- they are substituted at runtime.
 
-## Phase 2: Gather Performance Data
+## Phase 2: Gather performance data
 
 ### From traces (production feedback)
 
@@ -132,17 +139,14 @@ If the span has `attributes.llm.prompt_template.template`, the prompt uses varia
 ax spans export PROJECT \
   --filter "status_code = 'ERROR' AND attributes.openinference.span.kind = 'LLM'" \
   -l 20 --stdout
-
 # Find spans with low eval scores
 ax spans export PROJECT \
   --filter "annotation.correctness.label = 'incorrect'" \
   -l 20 --stdout
-
 # Find spans with high latency (may indicate overly complex prompts)
 ax spans export PROJECT \
   --filter "attributes.openinference.span.kind = 'LLM' AND latency_ms > 10000" \
   -l 20 --stdout
-
 # Export error traces for detailed inspection
 ax spans export PROJECT --trace-id TRACE_ID
 ```
@@ -187,14 +191,12 @@ jq '[.[] | select(.evaluations.correctness.score < 0.5)]' experiment_*/runs.json
 ### Identify what to optimize
 
 Look for patterns across failures:
-
 1. **Compare outputs to ground truth**: Where does the LLM output differ from expected?
 2. **Read eval explanations**: `eval.*.explanation` tells you WHY something failed
 3. **Check annotation text**: Human feedback describes specific issues
 4. **Look for verbosity mismatches**: If outputs are too long/short vs ground truth
 5. **Check format compliance**: Are outputs in the expected format?
-
-## Phase 3: Optimize the Prompt
+## Phase 3: Optimize the prompt
 
 ### The Optimization Meta-Prompt
 
@@ -223,7 +225,6 @@ includes the input, the LLM output, and evaluation feedback:
 ================
 
 HOW TO USE THIS DATA
-
 1. Compare outputs: Look at what the LLM generated vs what was expected
 2. Review eval scores: Check which examples scored poorly and why
 3. Examine annotations: Human feedback shows what worked and what didn't
@@ -232,7 +233,6 @@ HOW TO USE THIS DATA
    value are the ones that need fixing
 
 ALIGNMENT STRATEGY
-
 - If outputs have extra text or reasoning not present in the ground truth,
   remove instructions that encourage explanation or verbose reasoning
 - If outputs are missing information, add instructions to include it
@@ -246,7 +246,6 @@ Maintain Structure:
 - Use the same template variables as the current prompt ({var} or {{var}})
 - Don't change sections that are already working
 - Preserve the exact return format instructions from the original prompt
-
 Avoid Overfitting:
 - DO NOT copy examples verbatim into the prompt
 - DO NOT quote specific test data outputs exactly
@@ -305,12 +304,10 @@ jq '[.[] | select(.attributes.openinference.span.kind == "LLM") | {
 ### Applying the revised prompt
 
 After the LLM returns the revised messages array:
-
 1. Compare the original and revised prompts side by side
 2. Verify all template variables are preserved
 3. Check that format instructions are intact
 4. Test on a few examples before full deployment
-
 ## Phase 4: Iterate
 
 ### The optimization loop
@@ -345,13 +342,11 @@ jq -s '
 ```
 
 ### A/B compare two prompts
-
 1. Create two experiments against the same dataset, each using a different prompt version
 2. Export both: `ax experiments export EXP_A` and `ax experiments export EXP_B`
 3. Compare average scores, failure rates, and specific example flips
 4. Check for regressions -- examples that passed with prompt A but fail with prompt B
-
-## Prompt Engineering Best Practices
+## Prompt engineering best practices
 
 Apply these when writing or revising prompts:
 
@@ -370,17 +365,14 @@ Apply these when writing or revising prompts:
 ### Variable preservation
 
 When optimizing prompts that use template variables:
-
 - **Single braces** (`{variable}`): Python f-string / Jinja style. Most common in Arize.
 - **Double braces** (`{{variable}}`): Mustache style. Used when the framework requires it.
 - Never add or remove variable placeholders during optimization
 - Never rename variables -- the runtime substitution depends on exact names
 - If adding few-shot examples, use literal values, not variable placeholders
-
 ## Workflows
 
 ### Optimize a prompt from a failing trace
-
 1. Find failing traces:
    ```bash
    ax traces list PROJECT --filter "status_code = 'ERROR'" --limit 5
@@ -401,9 +393,7 @@ When optimizing prompts that use template variables:
 4. Identify what failed from the error message or output
 5. Fill in the optimization meta-prompt (Phase 3) with the prompt and error context
 6. Apply the revised prompt
-
 ### Optimize using a dataset and experiment
-
 1. Find the dataset and experiment:
    ```bash
    ax datasets list --space SPACE
@@ -417,9 +407,7 @@ When optimizing prompts that use template variables:
 3. Prepare the joined data for the meta-prompt
 4. Run the optimization meta-prompt
 5. Create a new experiment with the revised prompt to measure improvement
-
 ### Debug a prompt that produces wrong format
-
 1. Export spans where the output format is wrong:
    ```bash
    ax spans export PROJECT \
@@ -429,9 +417,7 @@ When optimizing prompts that use template variables:
 2. Look at what the LLM is producing vs what was expected
 3. Add explicit format instructions to the prompt (JSON schema, examples, delimiters)
 4. Common fix: add a few-shot example showing the exact desired output format
-
 ### Reduce hallucination in a RAG prompt
-
 1. Find traces where the model hallucinated:
    ```bash
    ax spans export PROJECT \
@@ -445,7 +431,6 @@ When optimizing prompts that use template variables:
    ```
 3. Check if the retrieved context actually contained the answer
 4. Add grounding instructions to the system prompt: "Only use information from the provided context. If the answer is not in the context, say so."
-
 ## Troubleshooting
 
 | Problem | Solution |
@@ -459,3 +444,55 @@ When optimizing prompts that use template variables:
 | No eval/annotation columns | Run evaluations first (via Arize UI or SDK), then re-export |
 | Experiment output column not found | The column name is `{experiment_name}.output` -- check exact experiment name via `ax experiments get` |
 | `jq` errors on span JSON | Ensure you're targeting the correct file path (e.g., `trace_*/spans.json`) |
+
+## Progressive disclosure and bundled resources
+
+Read bundled references only after an `ax` command fails or the current profile/setup is unclear.
+
+| Resource | Use when |
+| --- | --- |
+| `references/ax-setup.md` | `ax: command not found`, version errors, or missing CLI installation guidance |
+| `references/ax-profiles.md` | `401 Unauthorized`, `No profile found`, missing API key, or profile creation/update is required |
+
+## Output template
+
+````markdown
+## Arize prompt optimization result — <project or prompt name>
+
+**Status:** optimized | needs data | blocked
+**Space:** `SPACE` or `ARIZE_SPACE`
+**Project:** `PROJECT`
+**Prompt source:** trace `TRACE_ID` / span `SPAN_ID` / dataset `DATASET_NAME` / experiment `EXPERIMENT_NAME`
+
+### Baseline evidence
+| Signal | Evidence | Impact |
+| --- | --- | --- |
+| `<eval or annotation>` | `<score, label, explanation, or span evidence>` | `<problem found>` |
+
+### Revised prompt
+```json
+[
+  {"role": "system", "content": "..."},
+  {"role": "user", "content": "..."}
+]
+```
+
+### Why it changed
+- <problem found>: <prompt change made>
+### Validation plan
+- `ax experiments export EXPERIMENT_NAME --dataset DATASET_NAME --space SPACE`: pass | fail | not run
+- Compare baseline vs optimized scores: <result>
+- Template variables preserved: <list>
+````
+
+## Quality gate
+- [ ] Prompt extraction used `attributes.llm.input_messages`, `attributes.llm.prompt_template.template`, or `attributes.input.value` from the correct LLM span.
+- [ ] Child LLM spans were inspected when the visible span was a Chain/Agent span.
+- [ ] Performance evidence includes evals, annotations, failed spans, dataset records, or experiment output rather than intuition alone.
+- [ ] All `{variable}` and `{{variable}}` placeholders from the baseline prompt are preserved exactly.
+- [ ] The revised prompt does not copy real examples verbatim and uses synthetic few-shot examples when examples are needed.
+- [ ] Format instructions from the original prompt are preserved or made stricter, not weakened.
+- [ ] Credential handling used `ax profiles` and `ax ai-integrations`; `.env` files were not read or searched.
+- [ ] The output follows the `## Output template` structure and reports commands run or skipped.
+## References
+- [Arize API Keys](https://app.arize.com/admin)

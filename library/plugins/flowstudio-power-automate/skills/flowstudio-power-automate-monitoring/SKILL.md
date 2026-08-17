@@ -1,22 +1,24 @@
 ---
 name: "flowstudio-power-automate-monitoring"
 description: >-
-  Pro+ subscription required. Tenant-wide Power Automate monitoring using the FlowStudio MCP cached
-  store: failure rates, run-health trends, maker/app inventory, inactive owners, and compliance/health
-  reports. Use only for aggregated tenant views. For one environment, one flow, run control, or
-  root-cause debugging, use flowstudio-power-automate-mcp, flowstudio-power-automate-debug, or the
-  server monitor-flow bundle. Requires FlowStudio for Teams or MCP Pro+. Use this skill when type, and
-  aggregate run statistics (`runPeriodTotal`, `runPeriodFailRate`,; etc.). Environments, apps,
-  connections, and makers are also scanned; **Monitored flows** (`monitor: true`) additionally get
-  per-run detail:.
+  Monitor tenant-wide Power Automate health through the FlowStudio MCP cached store. Use when users ask for aggregate failure rates, run-health trends, maker/app inventory, inactive owners, compliance/health reports, monitored flows, or tenant governance summaries. Requires FlowStudio for Teams or MCP Pro+.
 ---
-# Power Automate Monitoring with FlowStudio MCP
 
-Monitor flow health, track failure rates, and inventory tenant assets through
-the FlowStudio MCP **cached store** — fast reads, no PA API rate limits, and
-enriched with governance metadata and remediation hints.
+# Power Automate monitoring with FlowStudio MCP
 
-> ** Pro+ subscription required.** This skill calls `store_*` tools that
+Use FlowStudio MCP `store_*` tools to read cached Power Automate flow, run, environment, connection, maker, and Power Apps data for tenant-wide monitoring without live API rate-limit pressure.
+
+## When to invoke
+
+- "Show tenant-wide Power Automate failure rates."
+- "Find monitored flows with high run failure rates."
+- "Audit inactive makers that still own flows."
+- "Create a Power Automate compliance/health report."
+- "Summarize run-health trends from FlowStudio cached store."
+
+## Prerequisites and context
+
+> **Pro+ subscription required.** This skill calls `store_*` tools that
 > only work for FlowStudio for Teams or MCP Pro+ subscribers.
 >
 > **If the user does not have Pro+ access:** the first `store_*` tool call
@@ -38,7 +40,7 @@ enriched with governance metadata and remediation hints.
 
 ---
 
-## How Monitoring Works
+## How monitoring works
 
 Flow Studio scans the Power Automate API daily for each subscriber and caches
 the results. There are two levels:
@@ -64,7 +66,7 @@ rule management to auto-configure failure alerts on critical flows.
 
 ---
 
-## Tools
+## Store tool map
 
 | Tool | Purpose |
 |---|---|
@@ -86,7 +88,7 @@ rule management to auto-configure failure alerts on critical flows.
 
 ---
 
-## Store vs Live
+## Store vs live
 
 | Question | Use Store | Use Live |
 |---|---|---|
@@ -107,7 +109,7 @@ rule management to auto-configure failure alerts on critical flows.
 
 ---
 
-## Response Shapes
+## Response shapes
 
 ### `list_store_flows`
 
@@ -309,7 +311,7 @@ Direct array.
 
 ---
 
-## Common Workflows
+## Procedure
 
 ### Find unhealthy flows
 
@@ -366,9 +368,44 @@ Direct array.
 
 ---
 
-## Related Skills
+## Related primitives
 
 - `flowstudio-power-automate-mcp` — Foundation skill: connection setup, MCP helper, tool discovery
 - `flowstudio-power-automate-debug` — Deep diagnosis with action-level inputs/outputs (live API)
 - `flowstudio-power-automate-build` — Build and deploy flow definitions
 - `flowstudio-power-automate-governance` — Governance metadata, tagging, notification rules, CoE patterns
+
+
+## Output template
+
+```markdown
+## Power Automate monitoring result
+
+**Status:** complete | requires Pro+ | blocked
+**Scope:** tenant-wide cached store
+**Window:** `<startTime/endTime or default>`
+
+| Area | Tool | Finding | Evidence | Action |
+| --- | --- | --- | --- | --- |
+| Flow health | `list_store_flows` / `get_store_flow_summary` | `<runPeriodFailRate, totalRuns, state>` | `<flow id and scanned time>` | `<monitor, alert, debug, or ignore>` |
+| Maker audit | `list_store_makers` / `get_store_maker` | `<deleted owner or inventory issue>` | `<ownerFlowCount/ownerAppCount>` | `<remediate owner>` |
+
+**Escalations**
+- Live debugging: `<get_live_flow_runs, get_live_flow_run_action_outputs, resubmit_live_flow_run, or none>`
+- Governance update: `<update_store_flow fields or none>`
+```
+
+## Quality gate
+
+- [ ] `name` is `flowstudio-power-automate-monitoring` and matches the parent directory.
+- [ ] Pro+ access failure `403/404` stops further `store_*` calls and points to https://mcp.flowstudio.app/pricing .
+- [ ] Store tools are used only for aggregate tenant-wide monitoring; one-flow root-cause work is handed to live tools or related primitives.
+- [ ] `monitor: true`, `scanned`, and `nextScan` are checked before treating empty `get_store_flow_runs` or `get_store_flow_summary` results as healthy.
+- [ ] JSON string fields such as `owners`, `connections`, `actions`, `runError`, `statuses`, `licenses`, and `createdBy` are parsed with `json.loads()`.
+- [ ] Duration units are converted correctly: cached `runPeriodDurationAverage`/`Max`/`Min` are milliseconds; summary `averageDurationSeconds` and `maxDurationSeconds` are seconds.
+- [ ] Flow IDs in `Default-<envGuid>.<flowGuid>` format are split on the first `.` into `environmentName` and `flowName` only when needed.
+
+## References
+
+- [FlowStudio pricing](https://mcp.flowstudio.app/pricing)
+- [Flow Studio Teams monitoring](https://learn.flowstudio.app/teams-monitoring)

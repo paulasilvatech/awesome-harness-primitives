@@ -449,13 +449,13 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | acreadiness-assess | Run the AgentRC readiness assessment on the current repository and produce a static HTML dashboard at reports/index.html. Wraps `npx github:microsoft/agentrc readiness` and hands… |
 | acreadiness-generate-instructions | Generate tailored AI agent instruction files via AgentRC instructions command. Produces .github/copilot-instructions.md (default, recommended for Copilot in VS Code) plus optional… |
 | acreadiness-policy | Help the user pick, write, or apply an AgentRC policy. Policies customise readiness scoring by disabling irrelevant checks, overriding impact/level, setting pass-rate thresholds,… |
-| ad-campaign-analyzer | Use this skill when the user shares ad campaign performance data and asks what to cut, scale, or test. Trigger for prompts like "analyze my ad campaigns", "where am I wasting ad s… |
+| ad-campaign-analyzer | Analyze ad campaign performance data to diagnose waste, identify winners, validate A/B tests, compare channels, and recommend cuts, scaling, tests, and budget reallocation. Use wh… |
 | add-educational-comments | Add educational comments to the file specified, or prompt asking for file to comment if one is not provided. Use this skill when the user asks for role. |
 | adobe-illustrator-scripting | Write, debug, and optimize Adobe Illustrator automation scripts using ExtendScript (JavaScript/JSX). Use when creating or modifying scripts that manipulate documents, layers, path… |
 | agent-governance | Patterns and techniques for adding governance, safety, and trust controls to AI agent systems. Use this skill when: - Building AI agents that call external tools (APIs, databases,… |
 | agent-owasp-compliance | Check any AI agent codebase against the OWASP Agentic Security Initiative (ASI) Top 10 risks. Use this skill when: - Evaluating an agent system's security posture before productio… |
 | agent-skill-stack | Find, evaluate, and assemble the smallest compatible set of AI Agent Skills for an end-to-end natural-language goal. Use when a user wants Skills for a multi-step workflow, asks w… |
-| agent-supply-chain | Verify supply chain integrity for AI agent plugins, tools, and dependencies. Use this skill when: - Generating SHA-256 integrity manifests for agent plugins or tool packages - Ver… |
+| agent-supply-chain | Verify supply chain integrity for AI agent plugins, MCP servers, tools, and dependencies by generating SHA-256 manifests, verifying installed files, auditing pinned versions, and… |
 | agentic-eval | Patterns and techniques for evaluating and improving AI agent outputs. Use this skill when: - Implementing self-critique and reflection loops - Building evaluator-optimizer pipeli… |
 | ai-prompt-engineering-safety-review | Comprehensive AI prompt engineering safety review and improvement prompt. Analyzes prompts for safety, bias, security vulnerabilities, and effectiveness while providing detailed i… |
 | ai-ready | Make any repo AI-ready — analyzes your codebase and generates AGENTS.md, copilot-instructions.md, CI workflows, issue templates, and more. Mines your PR review patterns and create… |
@@ -471,11 +471,11 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | arize-annotation | Creates and manages annotation configs (categorical, continuous, freeform label schemas) and annotation queues (human review workflows) on Arize. Applies human annotations to proj… |
 | arize-dataset | Creates, manages, and queries Arize datasets and examples. Covers dataset CRUD, appending examples, exporting data, and file-based dataset creation using the ax CLI. Use when the… |
 | arize-evaluator | Handles LLM-as-judge evaluation workflows on Arize including creating/updating evaluators, running evaluations on spans or experiments, managing tasks, trigger-run operations, col… |
-| arize-experiment | Creates, runs, and analyzes Arize experiments for evaluating and comparing model performance. Covers experiment CRUD, exporting runs, comparing results, and evaluation workflows u… |
+| arize-experiment | Create, run, export, compare, delete, and troubleshoot Arize experiments with the ax CLI, including real model inference, run files, evaluations, result analysis, and dataset-link… |
 | arize-instrumentation | Adds Arize AX tracing to an LLM application for the first time. Follows a two-phase agent-assisted flow to analyze the codebase then implement instrumentation after user confirmat… |
 | arize-link | Generates deep links to the Arize UI for traces, spans, sessions, datasets, labeling queues, evaluators, and annotation configs. Produces clickable URLs for sharing Arize resource… |
 | arize-prompt-optimization | Optimizes, improves, and debugs LLM prompts using production trace data, evaluations, and annotations. Extracts prompts from spans, gathers performance signal, and runs a data-dri… |
-| arize-trace | Downloads, exports, and inspects existing Arize traces and spans to understand what an LLM app is doing or debug runtime issues. Covers exporting traces by ID, spans by ID, sessio… |
+| arize-trace | Download, export, inspect, and root-cause existing Arize traces, spans, sessions, errors, prompts, retrieval documents, model calls, and behavior regressions with the ax CLI. Use… |
 | aspire | Aspire skill covering the Aspire CLI, AppHost orchestration, service discovery, integrations, MCP server, VS Code extension, Dev Containers, GitHub Codespaces, templates, dashboar… |
 | aspnet-minimal-api-openapi | Create ASP.NET Minimal API endpoints with proper OpenAPI documentation. Use this skill when the user asks for asp.net minimal api with openapi. |
 | audit-integrity | Shared audit integrity framework for all AppSec agents — enforces output quality, intellectual honesty, and continuous improvement through anti-rationalization guards, self-critiq… |
@@ -513,8 +513,8 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | breakdown-epic-pm | Prompt for creating an Epic Product Requirements Document (PRD) for a new epic. This PRD will be used as input for generating a technical architecture specification. Use this skil… |
 | breakdown-feature-implementation | Prompt for creating detailed feature implementation plans, following Epoch monorepo structure. Use this skill when the user asks for feature implementation plan prompt. |
 | breakdown-feature-prd | Prompt for creating Product Requirements Documents (PRDs) for new features, based on an Epic. Use this skill when the user asks for feature prd prompt. |
-| breakdown-plan | Issue Planning and Automation prompt that generates comprehensive project plans with Epic > Feature > Story/Enabler > Test hierarchy, dependencies, priorities, and automated track… |
-| breakdown-test | Test Planning and Quality Assurance prompt that generates comprehensive test strategies, task breakdowns, and quality validation plans for GitHub projects. Use this skill when the… |
+| breakdown-plan | Generate GitHub issue planning and project automation artifacts from feature planning documents, including Epic > Feature > Story/Enabler > Test hierarchy, priorities, dependencie… |
+| breakdown-test | Create comprehensive test planning, QA strategy, GitHub issue breakdowns, and quality validation plans from feature artifacts. Use when asked to produce a test strategy, break dow… |
 | bug-receipt | Close bugs and incidents with an auditable BUG RECEIPT and VERIFIED, PARTIAL, or BLOCKED status. Use for defect repair, regression proof, production incidents, and issue closeout.… |
 | bug-reproduction-brief | Turn a vague, intermittent, or environment-specific bug report into a minimal evidence-backed reproduction before proposing a fix. Use this skill when 1. Record the observed failu… |
 | build-evidence-map | Build an auditable evidence map for a contested technical choice, research synthesis, proposal review, or consequential decision. Use when Copilot must preserve supporting, contra… |
@@ -525,21 +525,21 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | cloud-design-patterns | Cloud design patterns for distributed systems architecture covering 42 industry-standard patterns across reliability, performance, messaging, security, and deployment categories.… |
 | code-exemplars-blueprint-generator | Technology-agnostic prompt generator that creates customizable AI prompts for scanning codebases and identifying high-quality code exemplars. Supports multiple programming languag… |
 | code-modernization | Use this skill when the user asks to modernize legacy code with a disciplined GitHub Copilot workflow: brief, assess, map, extract business rules, reimagine architecture, transfor… |
-| code-tour | Use this skill to create CodeTour .tour files — persona-targeted, step-by-step walkthroughs that link to real files and line numbers. Trigger for: "create a tour", "make a code to… |
+| code-tour | Create CodeTour .tour JSON files that guide a persona through real repository files, directories, line numbers, selections, patterns, URIs, views, and VS Code commands. Use when a… |
 | codebase-memory-mcp | Use when a configured codebase-memory-mcp server can assist with graph-backed code discovery, architecture orientation, symbol lookup, callers and callees, dependency or data-flow… |
-| codeql | Comprehensive guide for setting up and configuring CodeQL code scanning via GitHub Actions workflows and the CodeQL CLI. Use this skill when the request involves; creating or cust… |
+| codeql | Configure and run CodeQL code scanning with GitHub Actions workflows, default or advanced setup, CodeQL CLI databases, SARIF uploads, custom query packs, monorepo categories, buil… |
 | comment-code-generate-a-tutorial | Transform this Python script into a polished, beginner-friendly project by refactoring the code, adding clear instructional comments, and generating a complete markdown tutorial.… |
 | commit-message-storyteller | Analyzes git diffs or staged changes and generates narrative commit messages that explain WHY a change was made, not just what changed — following Conventional Commits format. Use… |
-| competitor-ad-intelligence | Use this skill when the user asks to analyze, tear down, or reverse-engineer a competitor's paid ads. Trigger for prompts like "what ads is [competitor] running", "tear down their… |
+| competitor-ad-intelligence | Analyze public competitor paid ads from Meta Ad Library and Google Ads Transparency Center, cluster creative hooks, inspect landing pages, infer funnel strategy, identify vulnerab… |
 | containerize-aspnet-framework | Containerize an ASP.NET .NET Framework project by creating Dockerfile and .dockerfile files customized for the project. Use this skill when the user asks for asp.net .net framewor… |
-| containerize-aspnetcore | Containerize an ASP.NET Core project by creating Dockerfile and .dockerfile files customized for the project. Use this skill when the user asks for asp.net core docker containeriz… |
+| containerize-aspnetcore | Containerize an ASP.NET Core project for a Linux Docker container by creating a multi-stage Dockerfile, .dockerignore, optional health check, environment-variable configuration, a… |
 | content-management-systems | Workflow for building and modifying content management systems across WordPress, Shopify, Wix, Squarespace, Drupal, WooCommerce, Joomla, HubSpot CMS Hub, Webflow, Adobe Experience… |
 | context-map | Generate a map of all files relevant to a task before making changes. Use this skill when the user asks for task. |
 | conventional-branch | Create Git branches following the Conventional Branch specification (feature/, bugfix/, hotfix/, release/, chore/). Use when creating a new branch, naming a branch, or checking wh… |
 | conventional-commit | Generate and execute Conventional Commit messages from staged or unstaged Git changes. Use this skill when the user asks to create a commit, write a conventional commit message, c… |
 | convert-excel-to-md | Converts Excel (.xlsx) workbooks into Markdown so their contents can be accurately analyzed, summarized, searched, or extracted from. Use this skill whenever the user shares, refe… |
 | convert-pdf-to-md | Converts PDF (.pdf) documents into Markdown so their contents can be accurately analyzed, summarized, searched, or extracted from. Use this skill whenever the user shares, referen… |
-| convert-plaintext-to-md | Convert a text-based document to markdown following instructions from prompt, or if a documented option is passed, follow the instructions for that option. Use this skill when *Us… |
+| convert-plaintext-to-md | Convert plaintext or generic text documentation into well-structured Markdown while preserving source content and applying explicit instructions, documented options, or a converte… |
 | convert-word-to-md | Converts Word (.docx) documents into Markdown so their contents can be accurately analyzed, summarized, searched, or extracted from. Use this skill whenever the user shares, refer… |
 | copilot-cli-quickstart | Use this skill when someone wants to learn GitHub Copilot CLI from scratch. Offers interactive step-by-step tutorials with separate Developer and Non-Developer tracks, plus on-dem… |
 | copilot-instructions-blueprint-generator | Technology-agnostic blueprint generator for creating comprehensive copilot-instructions.md files that guide GitHub Copilot to produce code consistent with project standards, archi… |
@@ -568,7 +568,7 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | creating-oracle-to-postgres-migration-integration-tests | Creates integration test cases targeting Oracle for .NET data access artifacts. Tests capture Oracle expected behavior as the authoritative baseline; they are written once and lat… |
 | csharp-async | Get best practices for C# async programming. Use this skill when the user asks for c# async programming best practices. |
 | csharp-docs | Ensure that C# types are documented with XML comments and follow best practices for documentation. Use this skill when the user asks for c# documentation best practices. |
-| csharp-mstest | Get best practices for MSTest 3.x/4.x unit testing, including modern assertion APIs and data-driven tests. Use this skill when the user asks for mstest best practices (mstest 3.x/… |
+| csharp-mstest | Apply modern MSTest 3.x/4.x testing practices for C# projects. Use when asked to write or review MSTest unit tests, choose assertion APIs, convert ExpectedException tests, design… |
 | csharp-nunit | Get best practices for NUnit unit testing, including data-driven tests. Use this skill when the user asks for nunit best practices. |
 | csharp-tunit | Get best practices for TUnit unit testing, including data-driven tests. Use this skill when the user asks for tunit best practices. |
 | csharp-xunit | Get best practices for XUnit unit testing, including data-driven tests. Use this skill when the user asks for xunit best practices. |
@@ -605,20 +605,20 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | entra-agent-user | Create Agent Users in Microsoft Entra ID from Agent Identities, enabling AI agents to act as digital workers with user identity capabilities in Microsoft 365 and Azure environment… |
 | eval-driven-dev | Improve AI application with evaluation-driven development. Define eval criteria, instrument the application, build golden datasets, observe and evaluate application runs, analyze… |
 | exam-ready | Activate this skill when a student provides study material (PDF or pasted notes) and a syllabus, and wants to prepare for an exam. Extracts key definitions, points, keywords, diag… |
-| excalidraw-diagram-generator | Generate Excalidraw diagrams from natural language descriptions. Use when asked to "create a diagram", "make a flowchart", "visualize a process", "draw a system architecture", "cr… |
+| excalidraw-diagram-generator | Generate valid .excalidraw JSON diagrams from natural language descriptions, including flowcharts, relationship diagrams, mind maps, architecture diagrams, DFDs, swimlanes, class… |
 | eyeball | Document analysis with inline source screenshots. When you ask Copilot to analyze a document, Eyeball generates a Word doc where every factual claim includes a highlighted screens… |
 | fabric-lakehouse | Use this skill to get context about Fabric Lakehouse and its features for software systems and AI-powered functions. Use this skill when you need to; generate a document or explan… |
 | fedora-linux-triage | Triage and resolve Fedora issues with dnf, systemd, and SELinux-aware guidance. Use this skill when the user asks for inputs. |
 | finalize-agent-prompt | Finalize prompt file using the role of an AI agent to polish the prompt for the end user. Use this skill when the user asks for current role. |
 | finnish-humanizer | Detect and remove AI-generated markers from Finnish text, making it sound like a native Finnish speaker wrote it. Use when asked to "humanize", "naturalize", or "remove AI feel" f… |
 | first-ask | Interactive, input-tool powered, task refinement workflow: interrogates scope, deliverables, constraints before carrying out the task; Requires the Joyride extension. Use this ski… |
-| flowstudio-power-automate-build | Build, scaffold, and deploy Power Automate cloud flows using the FlowStudio MCP server. Your agent constructs flow definitions, wires connections, deploys, and tests — all via MCP… |
-| flowstudio-power-automate-debug | Debug failing Power Automate cloud flows using the FlowStudio MCP server. The Graph API only shows top-level status codes. This skill gives your agent action-level inputs and outp… |
+| flowstudio-power-automate-build | Build, scaffold, update, deploy, verify, and test Power Automate cloud flows through FlowStudio MCP. Use when asked to create a flow, build a flow definition, scaffold a workflow,… |
+| flowstudio-power-automate-debug | Debug failing Power Automate cloud flow runs through FlowStudio MCP with action-level inputs, outputs, and root-cause evidence. Use when asked why a flow failed, to inspect failed… |
 | flowstudio-power-automate-governance | Govern Power Automate flows and Power Apps at scale using the FlowStudio MCP cached store. Classify flows by business impact, detect orphaned resources, audit connector usage, enf… |
 | flowstudio-power-automate-mcp | Foundation skill for Power Automate via FlowStudio MCP — auth setup, the reusable MCP helper (Python + Node.js), tool discovery via `list_skills` / `tool_search`, and oversized-re… |
-| flowstudio-power-automate-monitoring | Pro+ subscription required. Tenant-wide Power Automate monitoring using the FlowStudio MCP cached store: failure rates, run-health trends, maker/app inventory, inactive owners, an… |
+| flowstudio-power-automate-monitoring | Monitor tenant-wide Power Automate health through the FlowStudio MCP cached store. Use when users ask for aggregate failure rates, run-health trends, maker/app inventory, inactive… |
 | fluentui-blazor | Guide for using the Microsoft Fluent UI Blazor component library (Microsoft.FluentUI.AspNetCore.Components NuGet package) in Blazor applications. Use this when the user is buildin… |
-| folder-structure-blueprint-generator | Comprehensive technology-agnostic prompt for analyzing and documenting project folder structures. Auto-detects project types (.NET, Java, React, Angular, Python, Node.js, Flutter)… |
+| folder-structure-blueprint-generator | Analyze a repository and generate Project_Folders_Structure_Blueprint.md with detected technologies, folder purposes, naming conventions, file placement patterns, navigation guida… |
 | foundry-agent-sync | Create and synchronize prompt-based AI agents directly within Azure AI Foundry via REST API, from a local JSON manifest. Unlike scaffolding skills that only generate local code, t… |
 | foundry-hosted-agent-copilotkit | Ongoing development guidance for agentic web apps that pair a CopilotKit frontend with Microsoft Agent Framework agents on Azure AI Foundry hosted agents over the AG-UI protocol -… |
 | freecad-scripts | Expert skill for writing FreeCAD Python scripts, macros, and automation. Use when asked to create FreeCAD models, parametric objects, Part/Mesh/Sketcher scripts, workbench tools,… |
@@ -639,34 +639,34 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | github-actions-hardening | Security hardening reviewer for GitHub Actions workflow files (.github/workflows/*.yml). Reasons about the Actions threat model that pattern matchers and general code linters miss… |
 | github-actions-runtime-upgrade-conventions | Upgrade GitHub Actions to supported runtimes by selecting safe action versions, preserving workflow behavior, and validating post-upgrade execution. Use this skill when workflow l… |
 | github-codespaces-efficiency | Audit and improve GitHub Codespaces efficiency. Use this skill when a user wants faster Codespaces startup, lower Codespaces spend, slim devcontainers, right-size machines, tune i… |
-| github-copilot-starter | Set up a complete GitHub Copilot configuration for a new project, including instructions, skills, agents, and optional coding-agent setup steps. Use this skill when the user asks… |
+| github-copilot-starter | Bootstrap a complete GitHub Copilot customization for a repository, including .github/copilot-instructions.md, scoped instruction files, reusable skills, custom agents, and option… |
 | github-issues | Create, update, and manage GitHub issues using MCP tools. Use this skill when users want to create bug reports, feature requests, or task issues, update existing issues, add label… |
-| github-release | Guides IA through releasing a new version of a GitHub library end-to-end. Use this skill when the user wants to cut a new release, publish a new version,; bump a version, create a… |
+| github-release | Run an end-to-end GitHub library release workflow with git and gh: inspect tags, classify public API changes, choose a SemVer bump, update CHANGELOG.md, create release/vX.Y.Z, pus… |
 | gitmoji | Generates commit messages following the gitmoji convention (https://gitmoji.dev) — picks the right emoji for the intent of the change and writes a well-formed message. Use when as… |
-| go-mcp-server-generator | Generate a complete Go MCP server project with proper structure, dependencies, and implementation using the official github.com/modelcontextprotocol/go-sdk. Use this skill when th… |
+| go-mcp-server-generator | Generate a complete Go Model Context Protocol server project using github.com/modelcontextprotocol/go-sdk with module layout, typed tools, resources, config, graceful shutdown, te… |
 | gsap-framer-scroll-animation | Use this skill whenever the user wants to build scroll animations, scroll effects, parallax, scroll-triggered reveals, pinned sections, horizontal scroll, text animations, or any… |
 | gtm-0-to-1-launch | Launch new products from idea to first customers. Use when launching products, finding early adopters, building launch week playbooks, diagnosing why adoption stalls, or learning… |
 | gtm-ai-gtm | Go-to-market strategy for AI products. Use when positioning AI products, handling "who is responsible when it breaks" objections, pricing variable-cost AI, choosing between copilo… |
 | gtm-board-and-investor-communication | Board meeting preparation, investor updates, and executive communication. Use when preparing board decks, writing investor updates, handling bad news with the board, structuring Q… |
 | gtm-developer-ecosystem | Build and scale developer-led adoption through ecosystem programs. Use when deciding open vs curated ecosystems, building developer programs, scaling platform adoption, or designi… |
-| gtm-enterprise-account-planning | Strategic account planning and execution for enterprise deals. Use when planning complex sales cycles, managing multiple stakeholders, applying MEDDICC qualification, tracking dea… |
+| gtm-enterprise-account-planning | Build enterprise account plans, MEDDICC qualification, stakeholder maps, economic-buyer validation, deal-health checks, and mutual action plans for complex sales cycles. Use when… |
 | gtm-enterprise-onboarding | Four-phase framework for onboarding enterprise customers from contract to value realization. Use when implementing new enterprise customers, preventing churn during onboarding, or… |
-| gtm-operating-cadence | Design meeting rhythms, metric reporting, quarterly planning, and decision-making velocity for scaling companies. Use when decisions are slow, planning is broken, the company is g… |
-| gtm-partnership-architecture | Build and scale partner ecosystems that drive revenue and platform adoption. Use when building partner programs from scratch, tiering partnerships, managing co-marketing, making b… |
-| gtm-positioning-strategy | Find and own a defensible market position. Use when messaging sounds like competitors, conversion is weak despite awareness, repositioning a product, or testing positioning claims… |
-| gtm-product-led-growth | Build self-serve acquisition and expansion motions. Use when deciding PLG vs sales-led, optimizing activation, driving freemium conversion, building growth equations, or recognizi… |
-| gtm-technical-product-pricing | Pricing strategy for technical products. Use when choosing usage-based vs seat-based, designing freemium thresholds, structuring enterprise pricing conversations, deciding when to… |
+| gtm-operating-cadence | Design operating cadence for scaling companies: meeting architecture, weekly metrics, quarterly planning, decision rights, async communication, CEO updates, and role clarity. Use… |
+| gtm-partnership-architecture | Design and scale go-to-market partner ecosystems with tiering, value exchange, build-vs-partner decisions, co-marketing, and crawl-walk-run deployment. Use when asked to structure… |
+| gtm-positioning-strategy | Diagnose and improve go-to-market positioning by auditing competitor messaging, finding defensible differentiation, testing claims, and planning Crawl-Walk-Run rollout. Use when m… |
+| gtm-product-led-growth | Build and evaluate product-led growth motions for self-serve acquisition, activation, freemium conversion, growth equations, channel economics, PQL handoff, forecasting, and PLG v… |
+| gtm-technical-product-pricing | Design pricing strategy for technical products by choosing seat-based, usage-based, outcome-based, hybrid, freemium, enterprise, and price-positioning models. Use when asked to pr… |
 | harness-engineering | Adopt repository-level harness engineering for coding agents. Use when a user wants to prevent repeated AI coding-agent mistakes by turning failures into durable instructions, dri… |
 | image-annotations | Annotate screenshots, diagrams, and images with callout rectangles, arrows, labels, and color-coded highlights using PIL. Use this skill when you need to; highlight a specific are… |
 | image-manipulation-image-magick | Process and manipulate images using ImageMagick. Supports resizing, format conversion, batch processing, and retrieving image metadata. Use when working with images, creating thum… |
 | impediment-prioritization | Ranks any list of impediments and their countermeasures using a value-stream scoring model (ROI, Cost to Implement, Ease of Deployment, Risk Factor) and a fixed prioritization for… |
-| import-infrastructure-as-code | Import existing Azure resources into Terraform using Azure CLI discovery and Azure Verified Modules (AVM). Use when asked to reverse-engineer live Azure infrastructure, generate I… |
+| import-infrastructure-as-code | Import existing Azure resources into Terraform with Azure CLI discovery, dependency mapping, Azure Verified Modules, exact import addresses, and drift-safe plans. Use when asked t… |
 | incident-postmortem | Use when an outage, production incident, or significant service degradation has occurred and the team needs to write a structured blameless post-mortem. Triggers on phrases like "… |
 | integrate-context-matic | Discovers and integrates third-party APIs using the context-matic MCP server. Uses `fetch_api` to find available API SDKs, `ask` for integration guidance, `model_search` and `endp… |
 | issue-fields-migration | Bulk-migrate metadata to GitHub issue fields from two sources: repo labels (e.g. priority labels to a Priority field) and Project V2 fields. Use when users say "migrate my labels… |
 | java-add-graalvm-native-image-support | GraalVM Native Image expert that adds native image support to Java applications, builds the project, analyzes build errors, applies fixes, and iterates until successful compilatio… |
 | java-docs | Ensure that Java types are documented with Javadoc comments and follow best practices for documentation. Use this skill when the user asks for java documentation (javadoc) best pr… |
-| java-helidon | Get best practices for developing applications with Helidon 4 (SE and MP). Use when working with Helidon SE or Helidon MP, HttpService routing, Helidon DB Client, MicroProfile Con… |
+| java-helidon | Apply Helidon 4 SE and MP best practices for Java 21 applications, including routing, DB Client, Jakarta and MicroProfile APIs, configuration, security, observability, and tests.… |
 | java-junit | Get best practices for JUnit 5 unit testing, including data-driven tests. Use this skill when the user asks for junit 5+ best practices. |
 | java-mcp-server-generator | Generate a complete Model Context Protocol server project in Java using the official MCP Java SDK with reactive streams and optional Spring Boot integration. Use this skill when t… |
 | java-refactoring-extract-method | Refactoring using Extract Methods in Java Language. Use this skill when the user asks for refactoring java methods with extract method. |
@@ -674,7 +674,7 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | java-springboot | Get best practices for developing applications with Spring Boot. Use this skill when the user asks for spring boot best practices. |
 | javascript-typescript-jest | Best practices for writing JavaScript/TypeScript tests using Jest, including mocking strategies, test structure, and common patterns. Use this skill when the user asks for test st… |
 | javax-to-jakarta-migration | Migrate Java code from javax.* to jakarta.* namespace. Use when upgrading to Tomcat 11, Jakarta EE 10, or when javax imports are detected in the codebase. |
-| kotlin-mcp-server-generator | Generate a complete Kotlin MCP server project with proper structure, dependencies, and implementation using the official io.modelcontextprotocol:kotlin-sdk library. Use this skill… |
+| kotlin-mcp-server-generator | Generate a complete Kotlin Model Context Protocol server project using io.modelcontextprotocol:kotlin-sdk, Gradle, stdio or Ktor transport, typed tools, configuration, tests, and… |
 | kotlin-springboot | Get best practices for developing applications with Spring Boot and Kotlin. Use this skill when the user asks for spring boot with kotlin best practices. |
 | landing-page-conversion-audit | Audit a landing page, sales page or checkout page for conversion leaks and return a fix list ordered by expected revenue impact. Use when asked to review, critique or improve a la… |
 | latchshot-page-capture | Use this skill when a user needs a screenshot, website thumbnail, full-page capture, or PDF of a public HTTP(S) webpage saved as a local artifact through Latchshot, including repo… |
@@ -688,7 +688,7 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | mcp-copilot-studio-server-generator | Generate a complete MCP server implementation optimized for Copilot Studio integration with proper schema constraints and streamable HTTP support. Use this skill when the user ask… |
 | mcp-create-adaptive-cards | Create Adaptive Card response templates and response_semantics for MCP-based API plugins in Microsoft 365 Copilot. Use this skill when the user asks to present MCP tool or API dat… |
 | mcp-create-declarative-agent | Create a Microsoft 365 Copilot declarative agent backed by an MCP server with authentication, selected tools, and configuration. Use this skill when the user asks to build or conf… |
-| mcp-deploy-manage-agents | Guide deployment, governance, assignment, and lifecycle management for MCP-based declarative agents in Microsoft 365 admin center. Use this skill when the user asks to publish, ma… |
+| mcp-deploy-manage-agents | Guide deployment, governance, assignment, lifecycle, approval, blocking, monitoring, and distribution for MCP-based declarative agents in Microsoft 365 admin center. Use when aske… |
 | mcp-implementation-security-review | Review the implementation source code of MCP (Model Context Protocol) servers, clients, and tool handlers against a security baseline — authentication, sessions, rate limiting, in… |
 | mcp-release-qa | Verify an MCP server before release by exercising a real protocol session, comparing runtime capabilities with source and documentation, testing failure paths, and recording repro… |
 | mcp-security-audit | Audit MCP (Model Context Protocol) server configurations for security issues. Use this skill when: - Reviewing .mcp.json files for security risks - Checking MCP server args for ha… |
@@ -722,7 +722,7 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | openapi-to-application-code | Generate a complete, production-ready application from an OpenAPI specification. Use this skill when the user asks for generate application from openapi spec. |
 | optimize-simplicite-logs | capability to parse Simplicité logs from a raw `.txt` file, filter fields to reduce noise, and output the result as structured JSON. Use this skill when you need to; analyze user-… |
 | pdftk-server | Skill for using the command-line tool pdftk (PDFtk Server) for working with PDF files. Use when asked to merge PDFs, split PDFs, rotate pages, encrypt or decrypt PDFs, fill PDF fo… |
-| penpot-uiux-design | Comprehensive guide for creating professional UI/UX designs in Penpot using MCP tools. Use this skill when: (1) Creating new UI/UX designs for web, mobile, or desktop applications… |
+| penpot-uiux-design | Create, review, and improve professional UI/UX designs in Penpot using penpot/penpot-mcp tools, design systems, component patterns, accessibility checks, and platform guidelines.… |
 | performance-review-writer | Draft performance reviews, self-assessments, peer reviews, and upward feedback in your own voice. Analyzes your contributions, emails, and meeting history via WorkIQ, then produce… |
 | pester-migration | Pester migration skill for upgrading PowerShell Pester test suites across major versions — v3→v4, v4→v5, and v5→v6. Covers the Discovery/Run two-phase model, moving setup into Bef… |
 | pester-should-migration | Experimental (preview) Pester skill for migrating classic Should -Be (v5) assertion syntax to the new Should-* (v6) assertions (note the hyphen, no space), e.g. `Should -Be` -> `S… |
@@ -737,12 +737,12 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | playwright-explore-website | Website exploration for testing using Playwright MCP. Use this skill when the user asks for website exploration for testing. |
 | playwright-generate-test | Generate a Playwright test based on a scenario using Playwright MCP. Use this skill when the user asks for test generation with playwright mcp. |
 | postgresql-code-review | PostgreSQL-specific code review assistant focusing on PostgreSQL best practices, anti-patterns, and unique quality standards. Covers JSONB operations, array usage, custom types, s… |
-| postgresql-optimization | PostgreSQL-specific development assistant focusing on unique PostgreSQL features, advanced data types, and PostgreSQL-exclusive capabilities. Covers JSONB operations, array types,… |
+| postgresql-optimization | Design, tune, and modernize PostgreSQL SQL, schemas, indexes, functions, and maintenance workflows using PostgreSQL-specific capabilities. Use this skill when the user asks for Po… |
 | power-apps-code-app-scaffold | Scaffold a complete Power Apps Code App project with PAC CLI setup, SDK integration, and connector configuration. Use this skill when the user asks for power apps code apps projec… |
 | power-bi-dax-optimization | Comprehensive Power BI DAX formula optimization prompt for improving performance, readability, and maintainability of DAX calculations. Use this skill when the user asks for power… |
-| power-bi-model-design-review | Comprehensive Power BI data model design review prompt for evaluating model architecture, relationships, and optimization opportunities. Use this skill when key Findings:; critica… |
-| power-bi-performance-troubleshooting | Systematic Power BI performance troubleshooting prompt for identifying, diagnosing, and resolving performance issues in Power BI models, reports, and queries. Use this skill when… |
-| power-bi-report-design-consultation | Power BI report visualization design prompt for creating effective, user-friendly, and accessible reports with optimal chart selection and layout design. Use this skill when the u… |
+| power-bi-model-design-review | Review Power BI data model architecture, relationships, storage modes, performance, security, governance, and maintainability. Use this skill when asked for a Power BI model desig… |
+| power-bi-performance-troubleshooting | Diagnose and resolve Power BI performance issues across semantic models, reports, DAX, refresh, DirectQuery, gateways, and Fabric or Premium capacity. Use this skill when asked to… |
+| power-bi-report-design-consultation | Design effective Power BI report layouts, chart selections, interactions, accessibility, mobile views, and implementation guidance. Use when asked for Power BI visualization desig… |
 | power-platform-architect | Use this skill when the user needs to transform business requirements, use case descriptions, or meeting transcripts into a technical Power Platform solution architecture, includi… |
 | power-platform-mcp-connector-suite | Generate complete Power Platform custom connector with MCP integration for Copilot Studio - includes schema generation, troubleshooting, and validation. Use this skill when the us… |
 | powerbi-modeling | Power BI semantic modeling assistant for building optimized data models. Use when working with Power BI semantic models, creating measures, designing star schemas, configuring rel… |
@@ -756,7 +756,7 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | pytest-coverage | Run pytest with coverage, read annotated coverage output, identify uncovered lines, and add tests until Python code reaches 100% line coverage. Use this skill when the user asks t… |
 | python-azure-iot-edge-modules | Build and operate Python Azure IoT Edge modules with robust messaging, deployment manifests, observability, and production readiness checks. Use this skill when the user asks to c… |
 | python-mcp-server-generator | Generate a complete MCP server project in Python with tools, resources, and proper configuration. Use this skill when the user asks for generate python mcp server. |
-| python-pypi-package-builder | End-to-end skill for building, testing, linting, versioning, and publishing a production-grade Python library to PyPI. Covers all four build backends (setuptools+setuptools_scm, h… |
+| python-pypi-package-builder | Build, test, type-check, version, package, and publish production Python libraries to PyPI. Use this skill when creating a pip-installable SDK, CLI, plugin, or utility; choosing `… |
 | qdrant-clients-sdk | Qdrant provides client SDKs for various programming languages, allowing easy integration with Qdrant deployments. Use this skill when the user asks for api reference. |
 | qdrant-deployment-options | Guides Qdrant deployment selection. Use when someone asks 'how to deploy Qdrant', 'Docker vs Cloud', 'local mode', 'embedded Qdrant', 'Qdrant EDGE', 'which deployment option', 'se… |
 | qdrant-model-migration | Guides embedding model migration in Qdrant without downtime. Use when someone asks 'how to switch embedding models', 'how to migrate vectors', 'how to update to a new model', 'zer… |
@@ -839,7 +839,7 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | tm7-threat-model | Creates valid Microsoft Threat Modeling Tool (.tm7) files compatible with the Microsoft Threat Modeling Tool v7.3+. Use this skill whenever asked to create, generate, or modify a… |
 | transloadit-media-processing | Process media files (video, audio, images, documents) using Transloadit. Use when asked to encode video to HLS/MP4, generate thumbnails, resize or watermark images, extract audio,… |
 | typescript-mcp-server-generator | Generate a complete MCP server project in TypeScript using the MCP TypeScript SDK v2 (@modelcontextprotocol/server) with tools, resources, and proper configuration. Use this skill… |
-| typespec-api-operations | Add GET, POST, PATCH, and DELETE operations to a TypeSpec API plugin with proper routing, parameters, and adaptive cards. Use this skill when the user asks for add typespec api op… |
+| typespec-api-operations | Add RESTful GET, POST, PATCH, and DELETE operations to a TypeSpec API plugin for Microsoft 365 plugin for GitHub Copilot with routing, parameters, models, confirmations, adaptive… |
 | typespec-create-agent | Generate a complete TypeSpec declarative agent with instructions, capabilities, and conversation starters for Microsoft 365 Copilot. Use this skill when the user asks for create t… |
 | typespec-create-api-plugin | Generate a TypeSpec API plugin with REST operations, authentication, and Adaptive Cards for Microsoft 365 Copilot. Use this skill when the user asks for create typespec api plugin. |
 | ui-screenshots | Capture screenshots of web apps during development using Playwright and PIL. Use this skill when you need to; capture the current state of a running web app; document a UI before… |
@@ -854,7 +854,7 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | verify-agent-action | Review a proposed AI-agent action or human-approval packet before execution. Use when an agent wants to run a consequential tool, command, deployment, message, purchase, credentia… |
 | vscode-ext-commands | Guidelines for contributing commands in VS Code extensions. Use this skill when you need to; add or update commands to your VS Code extension. |
 | vscode-ext-localization | Guidelines for proper localization of VS Code extensions, following VS Code extension development guidelines, libraries and good practices. Use this skill when you need to; locali… |
-| web-design-reviewer | This skill enables visual inspection of websites running locally or remotely to identify and fix design issues. Triggers on requests like "review website design", "check the UI",… |
+| web-design-reviewer | Inspect local or remote website design, identify layout, responsive, accessibility, and visual consistency defects, and make source-level fixes. Use when users ask to "review webs… |
 | webapp-testing | Toolkit for interacting with and testing local web applications using Playwright. Use this skill when you need to; test frontend functionality in a real browser; verify UI behavio… |
 | webmcpify | Make a web app agent-ready — propose a WebMCP tool manifest, integrate, verify in a real browser, heal; unrelated code stays untouched. Use for "webmcpify", "add WebMCP", or "expo… |
 | what-context-needed | Ask Copilot what files it needs to see before answering a question. Use this skill when the user asks for what context do you need?. |

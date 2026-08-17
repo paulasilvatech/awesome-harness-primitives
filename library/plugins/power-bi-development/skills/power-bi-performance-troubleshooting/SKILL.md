@@ -1,384 +1,155 @@
 ---
-name: "power-bi-performance-troubleshooting"
+name: power-bi-performance-troubleshooting
 description: >-
-  Systematic Power BI performance troubleshooting prompt for identifying, diagnosing, and resolving
-  performance issues in Power BI models, reports, and queries. Use this skill when the user asks for
-  power bi performance troubleshooting guide.
+  Diagnose and resolve Power BI performance issues across semantic models, reports, DAX, refresh, DirectQuery, gateways, and Fabric or Premium capacity. Use this skill when asked to troubleshoot slow Power BI reports, page loading, visual interactions, query execution, model refresh, capacity pressure, or gateway bottlenecks.
 ---
-# Power BI Performance Troubleshooting Guide
 
-You are a Power BI performance expert specializing in diagnosing and resolving performance issues across models, reports, and queries. Your role is to provide systematic troubleshooting guidance and actionable solutions.
+# Power BI performance troubleshooting
 
-## Troubleshooting Methodology
+Turn reported Power BI symptoms and available metrics into a scoped diagnosis, ranked root causes, concrete fixes, and before/after validation evidence.
 
-### Step 1: **Problem Definition and Scope**
-Begin by clearly defining the performance issue:
+## When to invoke
 
-```
-Issue Classification:
-□ Model loading/refresh performance
-□ Report page loading performance  
-□ Visual interaction responsiveness
-□ Query execution speed
-□ Capacity resource constraints
-□ Data source connectivity issues
+- "Troubleshoot this slow Power BI report."
+- "Why is this Power BI page taking more than 10 seconds to load?"
+- "Diagnose DAX and model performance bottlenecks."
+- "Find why our refresh or DirectQuery queries are timing out."
+- "Analyze Fabric capacity, gateway, or Premium performance pressure."
 
-Scope Assessment:
-□ Affects all users vs. specific users
-□ Occurs at specific times vs. consistently
-□ Impacts specific reports vs. all reports
-□ Happens with certain data filters vs. all scenarios
-```
+## Source evidence
 
-### Step 2: **Performance Baseline Collection**
-Gather current performance metrics:
+Use the symptoms, affected reports/models, current performance metrics, environment and configuration details, previous troubleshooting attempts, business requirements, and constraints. If the user has no metrics, collect a baseline first rather than guessing.
 
-```
-Required Metrics:
-- Page load times (target: <10 seconds)
-- Visual interaction response (target: <3 seconds)
-- Query execution times (target: <30 seconds)
-- Model refresh duration (varies by model size)
-- Memory and CPU utilization
-- Concurrent user load
-```
+## Targets and symptoms
 
-### Step 3: **Systematic Diagnosis**
-Use this diagnostic framework:
+| Metric or symptom | Target or threshold | Investigate first |
+| --- | --- | --- |
+| Page load times | Target `<10 seconds`; alert when `>15 seconds` | Performance Analyzer, visual count, default filters, slow DAX |
+| Visual interaction response | Target `<3 seconds` | Cross-filtering, slicers, custom visuals, high-cardinality filters |
+| Query execution times | Target `<30 seconds`; alert when `>45 seconds` | DAX Studio, Storage engine vs. formula engine, DirectQuery source plans |
+| Capacity CPU | Investigate when `>70% sustained`; alert when `>80% for >10 minutes` | Fabric Capacity Metrics App, query volume, concurrency, workload mix |
+| Memory utilization | Alert when `>90%` or memory pressure warnings appear | Model size, high-cardinality columns, refresh overlap, capacity scale |
+| Model refresh duration | Varies by model size; compare against baseline | Incremental refresh, source performance, gateway, transformations |
+| User impact | All users vs. specific users; specific times vs. consistently | Capacity, geography, network, permissions, report-specific design |
 
-#### A. **Model Performance Issues**
-```
-Data Model Analysis:
-✓ Model size and complexity
-✓ Relationship design and cardinality
-✓ Storage mode configuration (Import/DirectQuery/Composite)
-✓ Data types and compression efficiency
-✓ Calculated columns vs. measures usage
-✓ Date table implementation
+Use `Report/model` as the shorthand label when the evidence spans both artifacts, and call out slow-loading pages separately from slow interactions.
 
-Common Model Issues:
-- Large model size due to unnecessary columns/rows
-- Inefficient relationships (many-to-many, bidirectional)
-- High-cardinality text columns
-- Excessive calculated columns
-- Missing or improper date tables
-- Poor data type selections
-```
+## Procedure
 
-#### B. **DAX Performance Issues**
-```
-DAX Formula Analysis:
-✓ Complex calculations without variables
-✓ Inefficient aggregation functions
-✓ Context transition overhead
-✓ Iterator function optimization
-✓ Filter context complexity
-✓ Error handling patterns
+1. Classify the issue: model loading/refresh performance, report page loading performance, visual interaction responsiveness, query execution speed, capacity resource constraints, or data source connectivity issues.
+2. Scope the blast radius: all users vs. specific users, specific times vs. consistently, specific reports vs. all reports, certain data filters vs. all scenarios.
+3. Collect the baseline: page load times, visual interaction response, query execution times, model refresh duration, memory and CPU utilization, and concurrent user load.
+4. Diagnose from the closest layer to the symptom: report visuals, DAX, model architecture, storage mode, data source, gateway, network, then capacity.
+5. Apply the lowest-risk fixes first, measure again, and escalate to advanced model redesign, aggregation, or infrastructure scaling only when evidence supports it.
+6. Document root cause, changes, before/after metrics, validation, monitoring, and follow-up recommendations.
 
-Performance Anti-Patterns:
-- Repeated calculations (missing variables)
-- FILTER() used as filter argument
-- Complex calculated columns in large tables
-- Nested CALCULATE functions
-- Inefficient time intelligence patterns
-```
+For by-step reproduction notes, list the exact interactions that cause the slowdown before proposing fixes.
 
-#### C. **Report Design Issues**
-```
-Report Performance Analysis:
-✓ Number of visuals per page (max 6-8 recommended)
-✓ Visual types and complexity
-✓ Cross-filtering configuration
-✓ Slicer query efficiency
-✓ Custom visual performance impact
-✓ Mobile layout optimization
+## Diagnostic criteria
 
-Common Report Issues:
-- Too many visuals causing resource competition
-- Inefficient cross-filtering patterns
-- High-cardinality slicers
-- Complex custom visuals
-- Poorly optimized visual interactions
-```
+### Model performance
 
-#### D. **Infrastructure and Capacity Issues**
-```
-Infrastructure Assessment:
-✓ Capacity utilization (CPU, memory, query volume)
-✓ Network connectivity and bandwidth
-✓ Data source performance
-✓ Gateway configuration and performance
-✓ Concurrent user load patterns
-✓ Geographic distribution considerations
+- [ ] Model size and complexity, relationship design and cardinality, and storage mode configuration (`Import`, `DirectQuery`, `Composite`) are reviewed.
+- [ ] Legacy shorthand `Import/DirectQuery/Composite` is expanded into specific storage-mode evidence.
+- [ ] Data types, compression efficiency, calculated columns vs. measures, and Date table implementation are checked.
+- [ ] Common issues are flagged: unnecessary columns/rows, many-to-many relationships, bidirectional filters, high-cardinality text columns, excessive calculated columns, missing or improper Date tables, and poor data type selections.
 
-Capacity Indicators:
-- High CPU utilization (>70% sustained)
-- Memory pressure warnings
-- Query queuing and timeouts
-- Gateway performance bottlenecks
-- Network latency issues
-```
+### DAX performance
 
-## Diagnostic Tools and Techniques
+- [ ] Measures avoid repeated calculations by using `VAR` and `RETURN` where values are reused.
+- [ ] `DIVIDE` is used for safe division and error handling instead of manual fragile division.
+- [ ] Context transition overhead, iterator function optimization, filter context complexity, nested `CALCULATE`, inefficient time intelligence, and `FILTER()` used as a filter argument are reviewed.
 
-### **Power BI Desktop Tools**
-```
-Performance Analyzer:
-- Enable and record visual refresh times
-- Identify slowest visuals and operations
-- Compare DAX query vs. visual rendering time
-- Export results for detailed analysis
-
-Usage:
-1. Open Performance Analyzer pane
-2. Start recording
-3. Refresh visuals or interact with report
-4. Analyze results by duration
-5. Focus on highest duration items first
-```
-
-### **DAX Studio Analysis**
-```
-Advanced DAX Analysis:
-- Query execution plans
-- Storage engine vs. formula engine usage
-- Memory consumption patterns
-- Query performance metrics
-- Server timings analysis
-
-Key Metrics to Monitor:
-- Total duration
-- Formula engine duration
-- Storage engine duration
-- Scan count and efficiency
-- Memory usage patterns
-```
-
-### **Capacity Monitoring**
-```
-Fabric Capacity Metrics App:
-- CPU and memory utilization trends
-- Query volume and patterns  
-- Refresh performance tracking
-- User activity analysis
-- Resource bottleneck identification
-
-Premium Capacity Monitoring:
-- Capacity utilization dashboards
-- Performance threshold alerts
-- Historical trend analysis
-- Workload distribution assessment
-```
-
-## Solution Framework
-
-### **Immediate Performance Fixes**
-
-#### Model Optimization:
 ```dax
--- Replace inefficient patterns:
-
- Poor Performance:
-Sales Growth = 
-([Total Sales] - CALCULATE([Total Sales], PREVIOUSMONTH('Date'[Date]))) / 
-CALCULATE([Total Sales], PREVIOUSMONTH('Date'[Date]))
-
- Optimized Version:
-Sales Growth = 
+Sales Growth =
 VAR CurrentMonth = [Total Sales]
 VAR PreviousMonth = CALCULATE([Total Sales], PREVIOUSMONTH('Date'[Date]))
 RETURN
     DIVIDE(CurrentMonth - PreviousMonth, PreviousMonth)
 ```
 
-#### Report Optimization:
-- Reduce visuals per page to 6-8 maximum
-- Implement drill-through instead of showing all details
-- Use bookmarks for different views instead of multiple visuals
-- Apply filters early to reduce data volume
-- Optimize slicer selections and cross-filtering
+### Report design
 
-#### Data Model Optimization:
-- Remove unused columns and tables
-- Optimize data types (integers vs. text, dates vs. datetime)
-- Replace calculated columns with measures where possible
-- Implement proper star schema relationships
-- Use incremental refresh for large datasets
+- [ ] Pages target 6-8 visuals maximum unless evidence shows acceptable performance.
+- [ ] Drill-through, bookmarks, default filters, slicer design, cross-filtering configuration, visual interactions, custom visuals, and mobile layout are reviewed.
+- [ ] High-cardinality slicers and resource competition from too many visuals are treated as likely bottlenecks.
 
-### **Advanced Performance Solutions**
+### Infrastructure and capacity
 
-#### Storage Mode Optimization:
-```
-Import Mode Optimization:
-- Data reduction techniques
-- Pre-aggregation strategies
-- Incremental refresh implementation
-- Compression optimization
+- [ ] Capacity utilization, query volume, workload distribution, network bandwidth, data source performance, gateway configuration, concurrent user patterns, and geographic distribution are reviewed.
+- [ ] Fabric Capacity Metrics App or Premium Capacity Monitoring evidence is used for CPU, memory, refresh, user activity, and query queuing trends.
+- [ ] Gateway optimization considers dedicated gateway clusters, load balancing configuration, connection optimization, and performance monitoring.
 
-DirectQuery Optimization:
-- Database index optimization
-- Query folding maximization
-- Aggregation table implementation
-- Connection pooling configuration
+## Tools and techniques
 
-Composite Model Strategy:
-- Strategic storage mode selection
-- Cross-source relationship optimization
-- Dual mode dimension implementation
-- Performance monitoring setup
-```
+| Tool | Use it to | Evidence to capture |
+| --- | --- | --- |
+| Performance Analyzer | Record visual refresh times and identify slowest visuals or operations | Duration by visual, DAX query vs. visual rendering time, exported results |
+| DAX Studio | Analyze advanced DAX behavior | Total duration, formula engine duration, storage engine duration, scan count, memory usage patterns, query execution plans, server timings |
+| Fabric Capacity Metrics App | Diagnose shared resource pressure | CPU and memory utilization trends, query volume and patterns, refresh performance, user activity, resource bottlenecks |
+| Premium Capacity Monitoring | Assess capacity history | Threshold alerts, historical trend analysis, workload distribution |
 
-#### Infrastructure Scaling:
-```
-Capacity Scaling Considerations:
-- Vertical scaling (more powerful capacity)
-- Horizontal scaling (distributed workload)
-- Geographic distribution optimization
-- Load balancing implementation
+## Fix patterns
 
-Gateway Optimization:
-- Dedicated gateway clusters
-- Load balancing configuration
-- Connection optimization
-- Performance monitoring setup
-```
+| Area | Immediate fixes | Advanced solutions |
+| --- | --- | --- |
+| Model | Remove unused columns and tables; optimize data types; replace calculated columns with measures; implement star schema relationships; use incremental refresh | Pre-aggregation, aggregation tables, compression optimization, complete redesign |
+| Report | Reduce visuals to 6-8 per page; apply filters early; disable unnecessary cross-filtering; use drill-through and bookmarks | Restructure pages, optimize custom visuals, load test realistic concurrent users |
+| DirectQuery | Maximize query folding, add database indexes, reduce cross-source relationships | Aggregation table implementation, connection pooling configuration, strategic Composite models |
+| Capacity | Reschedule refreshes, reduce query concurrency, monitor thresholds | Vertical scaling, horizontal workload distribution, geographic optimization, load balancing |
 
-## Troubleshooting Workflows
+## Troubleshooting workflows
 
-### **Quick Win Checklist** (30 minutes)
-```
-□ Check Performance Analyzer for obvious bottlenecks
-□ Reduce number of visuals on slow-loading pages
-□ Apply default filters to reduce data volume
-□ Disable unnecessary cross-filtering
-□ Check for missing relationships causing cross-joins
-□ Verify appropriate storage modes
-□ Review and optimize top 3 slowest DAX measures
-```
+| Workflow | Timebox | Checklist |
+| --- | --- | --- |
+| Quick Win Checklist | 30 minutes | Check Performance Analyzer; reduce visuals; apply default filters; disable unnecessary cross-filtering; check missing relationships causing cross-joins; verify storage modes; optimize top 3 slowest DAX measures |
+| Comprehensive Analysis | 2-4 hours | Review model architecture; optimize DAX with variables and efficient patterns; restructure report design; analyze data source performance; assess capacity; review user access patterns; test mobile; load test concurrent users |
+| Strategic Optimization | 1-2 weeks | Redesign data model if necessary; implement aggregations; plan infrastructure scaling; set monitoring and alerting; train users on efficient usage; establish performance governance and continuous optimization |
 
-### **Comprehensive Analysis** (2-4 hours)
-```
-□ Complete model architecture review
-□ DAX optimization using variables and efficient patterns
-□ Report design optimization and restructuring
-□ Data source performance analysis
-□ Capacity utilization assessment
-□ User access pattern analysis
-□ Mobile performance testing
-□ Load testing with realistic concurrent users
-```
+## Monitoring cadence
 
-### **Strategic Optimization** (1-2 weeks)
-```
-□ Complete data model redesign if necessary
-□ Implementation of aggregation strategies
-□ Infrastructure scaling planning
-□ Monitoring and alerting setup
-□ User training on efficient usage patterns
-□ Performance governance implementation
-□ Continuous monitoring and optimization process
+| Frequency | Actions |
+| --- | --- |
+| Weekly | Review performance dashboards, capacity utilization trends, slow-running queries, user feedback, and issues |
+| Monthly | Run comprehensive performance analysis, model optimization review, capacity planning, and user training needs assessment |
+| Quarterly | Perform strategic performance review, technology update assessment, scaling requirements review, and governance updates |
+
+## Output template
+
+```markdown
+## Power BI performance troubleshooting report — <report/model>
+
+**Status:** diagnosed | partially diagnosed | blocked
+**Symptom:** <page load, visual interaction, query, refresh, capacity, gateway, or source issue>
+**Scope:** <users/reports/times/filters affected>
+
+### Baseline
+| Metric | Current | Target | Evidence |
+| --- | --- | --- | --- |
+| Page load time | <value> | <10 seconds | <Performance Analyzer/export/user timing> |
+| Visual response | <value> | <3 seconds | <evidence> |
+| Query execution | <value> | <30 seconds | <DAX Studio/source evidence> |
+| Capacity CPU/memory | <value> | <threshold> | <Fabric/Premium evidence> |
+
+### Findings
+| # | Layer | Root cause | Evidence | Fix | Expected impact |
+| --- | --- | --- | --- | --- | --- |
+| 1 | DAX | <issue> | <measure/timing> | <change> | <impact> |
+| 2 | Model | <issue> | <metadata/timing> | <change> | <impact> |
+
+### Resolution documentation
+- **Changes implemented:** <optimization changes>
+- **Before/after metrics:** <measured improvement>
+- **Validation and testing completed:** <checks>
+- **Monitoring setup:** <ongoing health checks>
+- **Follow-up recommendations:** <next steps>
 ```
 
-## Performance Monitoring Setup
+## Quality gate
 
-### **Proactive Monitoring**
-```
-Key Performance Indicators:
-- Average page load time by report
-- Query execution time percentiles
-- Model refresh duration trends
-- Capacity utilization patterns
-- User adoption and usage metrics
-- Error rates and timeout occurrences
-
-Alerting Thresholds:
-- Page load time >15 seconds
-- Query execution time >45 seconds
-- Capacity CPU >80% for >10 minutes
-- Memory utilization >90%
-- Refresh failures
-- High error rates
-```
-
-### **Regular Health Checks**
-```
-Weekly:
-□ Review performance dashboards
-□ Check capacity utilization trends
-□ Monitor slow-running queries
-□ Review user feedback and issues
-
-Monthly:
-□ Comprehensive performance analysis
-□ Model optimization opportunities
-□ Capacity planning review
-□ User training needs assessment
-
-Quarterly:
-□ Strategic performance review
-□ Technology updates and optimizations
-□ Scaling requirements assessment
-□ Performance governance updates
-```
-
-## Communication and Documentation
-
-### **Issue Reporting Template**
-```
-Performance Issue Report:
-
-Issue Description:
-- What specific performance problem is occurring?
-- When does it happen (always, specific times, certain conditions)?
-- Who is affected (all users, specific groups, particular reports)?
-
-Performance Metrics:
-- Current performance measurements
-- Expected performance targets
-- Comparison with previous performance
-
-Environment Details:
-- Report/model names affected
-- User locations and network conditions
-- Browser and device information
-- Capacity and infrastructure details
-
-Impact Assessment:
-- Business impact and urgency
-- Number of users affected
-- Critical business processes impacted
-- Workarounds currently in use
-```
-
-### **Resolution Documentation**
-```
-Solution Summary:
-- Root cause analysis results
-- Optimization changes implemented
-- Performance improvement achieved
-- Validation and testing completed
-
-Implementation Details:
-- Step-by-step changes made
-- Configuration modifications
-- Code changes (DAX, model design)
-- Infrastructure adjustments
-
-Results and Follow-up:
-- Before/after performance metrics
-- User feedback and validation
-- Monitoring setup for ongoing health
-- Recommendations for similar issues
-```
-
----
-
-**Usage Instructions:**
-Provide details about your specific Power BI performance issue, including:
-- Symptoms and impact description
-- Current performance metrics
-- Environment and configuration details
-- Previous troubleshooting attempts
-- Business requirements and constraints
-
-I'll guide you through systematic diagnosis and provide specific, actionable solutions tailored to your situation.
+- [ ] Issue classification, scope assessment, and baseline metrics are stated before root cause claims.
+- [ ] Performance Analyzer, DAX Studio, Fabric Capacity Metrics App, Premium Capacity Monitoring, or equivalent evidence is cited when available.
+- [ ] Findings distinguish model, DAX, report, data source, gateway, network, and capacity causes.
+- [ ] Recommendations include immediate fixes and escalation criteria for advanced solutions.
+- [ ] Before/after performance metrics and monitoring follow-up are documented.
+- [ ] The output follows `## Output template` exactly.

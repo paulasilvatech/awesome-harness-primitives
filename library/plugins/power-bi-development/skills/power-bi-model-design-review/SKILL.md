@@ -1,405 +1,141 @@
 ---
-name: "power-bi-model-design-review"
+name: power-bi-model-design-review
 description: >-
-  Comprehensive Power BI data model design review prompt for evaluating model architecture,
-  relationships, and optimization opportunities. Use this skill when key Findings:; critical issues
-  requiring immediate attention; performance optimization opportunities.
----
-# Power BI Data Model Design Review
-
-You are a Power BI data modeling expert conducting comprehensive design reviews. Your role is to evaluate model architecture, identify optimization opportunities, and ensure adherence to best practices for scalable, maintainable, and performant data models.
-
-## Review Framework
-
-### **Comprehensive Model Assessment**
-
-When reviewing a Power BI data model, conduct analysis across these key dimensions:
-
-#### 1. **Schema Architecture Review**
-```
-Star Schema Compliance:
-□ Clear separation of fact and dimension tables
-□ Proper grain consistency within fact tables  
-□ Dimension tables contain descriptive attributes
-□ Minimal snowflaking (justified when present)
-□ Appropriate use of bridge tables for many-to-many
-
-Table Design Quality:
-□ Meaningful table and column names
-□ Appropriate data types for all columns
-□ Proper primary and foreign key relationships
-□ Consistent naming conventions
-□ Adequate documentation and descriptions
-```
-
-#### 2. **Relationship Design Evaluation**
-```
-Relationship Quality Assessment:
-□ Correct cardinality settings (1:*, *:*, 1:1)
-□ Appropriate filter directions (single vs. bidirectional)
-□ Referential integrity settings optimized
-□ Hidden foreign key columns from report view
-□ Minimal circular relationship paths
-
-Performance Considerations:
-□ Integer keys preferred over text keys
-□ Low-cardinality relationship columns
-□ Proper handling of missing/orphaned records
-□ Efficient cross-filtering design
-□ Minimal many-to-many relationships
-```
-
-#### 3. **Storage Mode Strategy Review**
-```
-Storage Mode Optimization:
-□ Import mode used appropriately for small-medium datasets
-□ DirectQuery implemented properly for large/real-time data
-□ Composite models designed with clear strategy
-□ Dual storage mode used effectively for dimensions
-□ Hybrid mode applied appropriately for fact tables
-
-Performance Alignment:
-□ Storage modes match performance requirements
-□ Data freshness needs properly addressed
-□ Cross-source relationships optimized
-□ Aggregation strategies implemented where beneficial
-```
-
-## Detailed Review Process
-
-### **Phase 1: Model Architecture Analysis**
-
-#### A. **Schema Design Assessment**
-```
-Evaluate Model Structure:
-
-Fact Table Analysis:
-- Grain definition and consistency
-- Appropriate measure columns
-- Foreign key completeness
-- Size and growth projections
-- Historical data management
-
-Dimension Table Analysis:  
-- Attribute completeness and quality
-- Hierarchy design and implementation
-- Slowly changing dimension handling
-- Surrogate vs. natural key usage
-- Reference data management
-
-Relationship Network Analysis:
-- Star vs. snowflake patterns
-- Relationship complexity assessment
-- Filter propagation paths
-- Cross-filtering impact evaluation
-```
-
-#### B. **Data Quality and Integrity Review**
-```
-Data Quality Assessment:
-
-Completeness:
-□ All required business entities represented
-□ No missing critical relationships
-□ Comprehensive attribute coverage
-□ Proper handling of NULL values
-
-Consistency:
-□ Consistent data types across related columns
-□ Standardized naming conventions
-□ Uniform formatting and encoding
-□ Consistent grain across fact tables
-
-Accuracy:
-□ Business rule implementation validation
-□ Referential integrity verification
-□ Data transformation accuracy
-□ Calculated field correctness
-```
-
-### **Phase 2: Performance and Scalability Review**
-
-#### A. **Model Size and Efficiency Analysis**
-```
-Size Optimization Assessment:
-
-Data Reduction Opportunities:
-- Unnecessary columns identification
-- Redundant data elimination
-- Historical data archiving needs
-- Pre-aggregation possibilities
-
-Compression Efficiency:
-- Data type optimization opportunities
-- High-cardinality column assessment
-- Calculated column vs. measure usage
-- Storage mode selection validation
-
-Scalability Considerations:
-- Growth projection accommodation
-- Refresh performance requirements
-- Query performance expectations
-- Concurrent user capacity planning
-```
-
-#### B. **Query Performance Analysis**
-```
-Performance Pattern Review:
-
-DAX Optimization:
-- Measure efficiency and complexity
-- Variable usage in calculations
-- Context transition optimization
-- Iterator function performance
-- Error handling implementation
-
-Relationship Performance:
-- Join efficiency assessment
-- Cross-filtering impact analysis
-- Many-to-many performance implications
-- Bidirectional relationship necessity
-
-Indexing and Aggregation:
-- DirectQuery indexing requirements
-- Aggregation table opportunities
-- Composite model optimization
-- Cache utilization strategies
-```
-
-### **Phase 3: Maintainability and Governance Review**
-
-#### A. **Model Maintainability Assessment**
-```
-Maintainability Factors:
-
-Documentation Quality:
-□ Table and column descriptions
-□ Business rule documentation
-□ Data source documentation
-□ Relationship justification
-□ Measure calculation explanations
-
-Code Organization:
-□ Logical grouping of related measures
-□ Consistent naming conventions
-□ Modular design principles
-□ Clear separation of concerns
-□ Version control considerations
-
-Change Management:
-□ Impact assessment procedures
-□ Testing and validation processes
-□ Deployment and rollback strategies
-□ User communication plans
-```
-
-#### B. **Security and Compliance Review**
-```
-Security Implementation:
-
-Row-Level Security:
-□ RLS design and implementation
-□ Performance impact assessment
-□ Testing and validation completeness
-□ Role-based access control
-□ Dynamic security patterns
-
-Data Protection:
-□ Sensitive data handling
-□ Compliance requirements adherence
-□ Audit trail implementation
-□ Data retention policies
-□ Privacy protection measures
-```
-
-## Review Output Structure
-
-### **Executive Summary Template**
-```
-Data Model Review Summary
-
-Model Overview:
-- Model name and purpose
-- Business domain and scope
-- Current size and complexity metrics
-- Primary use cases and user groups
-
-Key Findings:
-- Critical issues requiring immediate attention
-- Performance optimization opportunities  
-- Best practice compliance assessment
-- Security and governance status
-
-Priority Recommendations:
-1. High Priority: [Critical issues impacting functionality/performance]
-2. Medium Priority: [Optimization opportunities with significant benefit]
-3. Low Priority: [Best practice improvements and future considerations]
-
-Implementation Roadmap:
-- Quick wins (1-2 weeks)
-- Short-term improvements (1-3 months)  
-- Long-term strategic enhancements (3-12 months)
-```
-
-### **Detailed Review Report**
-
-#### **Schema Architecture Section**
-```
-1. Table Design Analysis
-   □ Fact table evaluation and recommendations
-   □ Dimension table optimization opportunities
-   □ Relationship design assessment
-   □ Naming convention compliance
-   □ Data type optimization suggestions
-
-2. Performance Architecture  
-   □ Storage mode strategy evaluation
-   □ Size optimization recommendations
-   □ Query performance enhancement opportunities
-   □ Scalability assessment and planning
-   □ Aggregation and caching strategies
-
-3. Best Practices Compliance
-   □ Star schema implementation quality
-   □ Industry standard adherence
-   □ Microsoft guidance alignment
-   □ Documentation completeness
-   □ Maintenance readiness
-```
-
-#### **Specific Recommendations**
-```
-For Each Issue Identified:
-
-Issue Description:
-- Clear explanation of the problem
-- Impact assessment (performance, maintenance, accuracy)
-- Risk level and urgency classification
-
-Recommended Solution:
-- Specific steps for resolution
-- Alternative approaches when applicable
-- Expected benefits and improvements
-- Implementation complexity assessment
-- Required resources and timeline
-
-Implementation Guidance:
-- Step-by-step instructions
-- Code examples where appropriate
-- Testing and validation procedures
-- Rollback considerations
-- Success criteria definition
-```
-
-## Review Checklist Templates
-
-### **Quick Assessment Checklist** (30-minute review)
-```
-□ Model follows star schema principles
-□ Appropriate storage modes selected
-□ Relationships have correct cardinality
-□ Foreign keys are hidden from report view
-□ Date table is properly implemented
-□ No circular relationships exist
-□ Measure calculations use variables appropriately
-□ No unnecessary calculated columns in large tables
-□ Table and column names follow conventions
-□ Basic documentation is present
-```
-
-### **Comprehensive Review Checklist** (4-8 hour review)
-```
-Architecture & Design:
-□ Complete schema architecture analysis
-□ Detailed relationship design review  
-□ Storage mode strategy evaluation
-□ Performance optimization assessment
-□ Scalability planning review
-
-Data Quality & Integrity:
-□ Comprehensive data quality assessment
-□ Referential integrity validation
-□ Business rule implementation review
-□ Error handling evaluation
-□ Data transformation accuracy check
-
-Performance & Optimization:
-□ Query performance analysis
-□ DAX optimization opportunities
-□ Model size optimization review
-□ Refresh performance assessment
-□ Concurrent usage capacity planning
-
-Governance & Security:
-□ Security implementation review
-□ Documentation quality assessment
-□ Maintainability evaluation
-□ Compliance requirements check
-□ Change management readiness
-```
-
-## Specialized Review Types
-
-### **Pre-Production Review**
-```
-Focus Areas:
-- Functionality completeness
-- Performance validation
-- Security implementation  
-- User acceptance criteria
-- Go-live readiness assessment
-
-Deliverables:
-- Go/No-go recommendation
-- Critical issue resolution plan
-- Performance benchmark validation
-- User training requirements
-- Post-launch monitoring plan
-```
-
-### **Performance Optimization Review**
-```
-Focus Areas:
-- Performance bottleneck identification
-- Optimization opportunity assessment
-- Capacity planning validation
-- Scalability improvement recommendations
-- Monitoring and alerting setup
-
-Deliverables:
-- Performance improvement roadmap
-- Specific optimization recommendations
-- Expected performance gains quantification
-- Implementation priority matrix
-- Success measurement criteria
-```
-
-### **Modernization Assessment**
-```
-Focus Areas:
-- Current state vs. best practices gap analysis
-- Technology upgrade opportunities
-- Architecture improvement possibilities
-- Process optimization recommendations
-- Skills and training requirements
-
-Deliverables:
-- Modernization strategy and roadmap
-- Cost-benefit analysis of improvements
-- Risk assessment and mitigation strategies
-- Implementation timeline and resource requirements
-- Change management recommendations
-```
-
+  Review Power BI data model architecture, relationships, storage modes, performance, security, governance, and maintainability. Use this skill when asked for a Power BI model design review, star schema assessment, relationship design evaluation, pre-production model review, modernization assessment, or optimization roadmap.
 ---
 
-**Usage Instructions:**
-To request a data model review, provide:
-- Model description and business purpose
-- Current architecture overview (tables, relationships)
-- Performance requirements and constraints
-- Known issues or concerns
-- Specific review focus areas or objectives
-- Available time/resource constraints for implementation
+# Power BI model design review
 
-I'll conduct a thorough review following this framework and provide specific, actionable recommendations tailored to your model and requirements.
+Evaluate a Power BI semantic model from business purpose, table structure, relationship network, storage strategy, DAX and governance evidence, then return prioritized findings and an implementation roadmap.
+
+## When to invoke
+
+- "Review this Power BI data model design."
+- "Check whether our Power BI model follows star schema best practices."
+- "Evaluate the relationships, storage modes, and performance risks in this model."
+- "Run a pre-production Power BI semantic model review."
+- "Create a modernization roadmap for this Power BI model."
+
+## Source evidence
+
+Use the model description, business purpose, architecture overview, table and relationship metadata, performance requirements, known issues, specific review focus areas, and available time/resource constraints. If the user omits metadata, review what is available and mark missing evidence explicitly.
+
+## Review scope
+
+| Area | Inspect | Good evidence |
+| --- | --- | --- |
+| Schema architecture | Fact tables, dimension tables, bridge tables, star vs. snowflake patterns, grain definition and consistency | Clear separation of fact and dimension tables; dimension tables contain descriptive attributes; bridge tables are justified for many-to-many |
+| Table design quality | Names, data types, primary key and foreign key columns, descriptions | Meaningful table and column names; appropriate data types; consistent naming conventions; adequate documentation and descriptions |
+| Relationships | Cardinality, filter directions, referential integrity settings, circular paths | Correct `1:*`, `*:*`, or `1:1`; single-direction filters by default; hidden foreign key columns from report view; minimal circular relationship paths; cross-filtering behavior documented |
+| Storage mode strategy | Import, DirectQuery, Composite, Dual, Hybrid | Import for small-medium datasets; DirectQuery for large/real-time data; Dual for dimensions; Hybrid for fact tables when freshness and history differ |
+| Performance architecture | Model size, compression efficiency, calculated columns vs. measures, DAX complexity, aggregations | Integer keys over text keys; low-cardinality relationship columns; unnecessary columns removed; aggregation and caching strategies documented |
+| Maintainability | Measure organization, business rules, source documentation, version control | Logical grouping of related measures; modular design; clear separation of concerns; impact assessment and rollback procedures |
+| Security and compliance | RLS, role-based access, sensitive data, audit and retention policies | Tested Row-Level Security; performance impact assessed; privacy and compliance requirements handled |
+
+## Criteria
+
+### Schema architecture
+
+- [ ] Fact table grain is stated, consistent, and compatible with all measures.
+- [ ] Dimension tables carry descriptive attributes and hierarchies instead of repeating dimension data in facts.
+- [ ] Snowflaking is minimal and justified by maintenance, reuse, or size constraints.
+- [ ] Many-to-many relationships use bridge tables or another explicit design instead of accidental ambiguity.
+- [ ] Date table implementation supports the model's time intelligence needs.
+
+### Relationship design
+
+- [ ] Cardinality settings match data reality, including missing/orphaned records and referential integrity assumptions.
+- [ ] Bidirectional relationships are present only when required and do not create ambiguous filter propagation paths.
+- [ ] Relationship columns use efficient data types, preferably integer keys over high-cardinality text.
+- [ ] Cross-filtering impact is understood for report interactions, RLS, and composite models.
+
+### Data quality and integrity
+
+- [ ] All required business entities and critical relationships are represented.
+- [ ] Related columns use consistent data types, formatting, and encoding.
+- [ ] NULL values, orphaned records, slowly changing dimensions, surrogate keys, natural keys, and reference data are handled deliberately.
+- [ ] Business rules, transformations, and calculated fields are traceable and validated.
+
+### Performance and scalability
+
+- [ ] Data reduction opportunities are identified: unnecessary columns, redundant data, historical archiving, and pre-aggregation.
+- [ ] High-cardinality columns, calculated columns in large tables, and measure complexity are flagged.
+- [ ] Refresh requirements, query performance expectations, growth projections, and concurrent user capacity are considered.
+- [ ] DirectQuery indexing requirements, aggregation tables, composite model optimization, and cache utilization are reviewed when applicable.
+
+### Governance and readiness
+
+- [ ] Table and column descriptions, relationship justification, data source documentation, and measure calculation explanations are present.
+- [ ] Testing, validation, deployment, rollback, and user communication procedures are defined.
+- [ ] RLS design, role-based access control, dynamic security patterns, audit trails, data retention, and sensitive data handling are validated.
+
+## Review depth
+
+| Review type | Timebox | Focus areas | Deliverables |
+| --- | --- | --- | --- |
+| Quick assessment | 30 minutes | Star schema principles, storage modes, relationships, hidden foreign keys, Date table, circular relationships, DAX variable use, calculated columns, naming, basic documentation | Top risks and quick wins |
+| Comprehensive review | 4-8 hours | Architecture and design, data quality and integrity, performance and optimization, governance and security | Detailed review report with issue-level recommendations |
+| Pre-production review | As needed before launch | Functionality completeness, performance validation, security implementation, user acceptance criteria, go-live readiness | Go/No-go recommendation, critical issue plan, benchmark validation, training needs, post-launch monitoring plan |
+| Performance optimization review | As needed for slow models | Bottleneck identification, optimization opportunities, capacity planning, scalability, monitoring and alerting | Performance improvement roadmap, expected gains, priority matrix, success criteria |
+| Modernization assessment | As needed for legacy models | Current state vs. best practices, technology upgrades, architecture improvement, process optimization, skills and training | Modernization strategy, cost-benefit analysis, risk mitigation, timeline, resource requirements, change management plan |
+
+Treat defects that affect functionality/performance as high priority even when the remediation work is small.
+
+## Recommendation format
+
+For each issue, include:
+
+| Field | Required content |
+| --- | --- |
+| Issue Description | Clear problem statement, impact on performance/maintenance/accuracy, risk level, urgency |
+| Recommended Solution | Specific resolution steps, alternatives, expected benefits, implementation complexity, required resources, timeline |
+| Implementation Guidance | Step-by-step instructions, code examples where appropriate, testing and validation, rollback considerations, success criteria |
+
+## Gotchas
+
+- **Do not reward complexity**: snowflake schemas, bidirectional filters, and many-to-many relationships require evidence because they increase ambiguity and performance cost.
+- **Do not review storage mode in isolation**: Import, DirectQuery, Composite, Dual, and Hybrid choices affect relationships, aggregations, refresh, and user experience together.
+- **Do not treat documentation as cosmetic**: missing descriptions, business rules, and relationship justifications are maintainability defects.
+
+## Output template
+
+```markdown
+## Data model review summary — <model name>
+
+**Verdict:** approve | approve with risks | fix required | not enough evidence
+**Business domain and scope:** <domain>
+**Primary use cases and user groups:** <summary>
+**Current size and complexity metrics:** <tables, relationships, rows, storage modes, if known>
+
+### Key findings
+- **Critical issues requiring immediate attention:** <count and summary>
+- **Performance optimization opportunities:** <count and summary>
+- **Best practice compliance assessment:** <summary>
+- **Security and governance status:** <summary>
+
+### Priority recommendations
+1. **High Priority:** <critical issues impacting functionality or performance>
+2. **Medium Priority:** <optimization opportunities with significant benefit>
+3. **Low Priority:** <best practice improvements and future considerations>
+
+### Detailed findings
+| Area | Finding | Impact | Risk | Recommendation | Validation |
+| --- | --- | --- | --- | --- | --- |
+| Schema Architecture | <fact/dimension/relationship issue> | <performance/maintenance/accuracy> | High | <specific fix> | <test or evidence> |
+| Performance Architecture | <storage/DAX/size issue> | <impact> | Medium | <specific fix> | <benchmark or review> |
+| Governance and Security | <RLS/documentation/compliance issue> | <impact> | Medium | <specific fix> | <evidence> |
+
+### Implementation roadmap
+- **Quick wins (1-2 weeks):** <actions>
+- **Short-term improvements (1-3 months):** <actions>
+- **Long-term strategic enhancements (3-12 months):** <actions>
+```
+
+## Quality gate
+
+- [ ] The review states the model purpose, scope, known constraints, and evidence used.
+- [ ] Fact table grain, dimension quality, relationship cardinality, filter direction, and storage modes were checked.
+- [ ] Performance findings consider model size, DAX complexity, refresh, query performance, scalability, and concurrent usage.
+- [ ] Security findings cover Row-Level Security, role-based access control, sensitive data, compliance, audit trail, and retention where applicable.
+- [ ] Each issue includes impact, risk level, recommendation, implementation guidance, testing and validation, rollback consideration, and success criteria.
+- [ ] The output follows `## Output template` exactly and separates high, medium, and low priorities.

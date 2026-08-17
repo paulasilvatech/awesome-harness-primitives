@@ -1,213 +1,39 @@
 ---
 name: "typespec-api-operations"
 description: >-
-  Add GET, POST, PATCH, and DELETE operations to a TypeSpec API plugin with proper routing,
-  parameters, and adaptive cards. Use this skill when the user asks for add typespec api operations.
+  Add RESTful GET, POST, PATCH, and DELETE operations to a TypeSpec API plugin for Microsoft 365 plugin for GitHub Copilot with routing, parameters, models, confirmations, adaptive cards, and testing prompts. Use when asked to add TypeSpec API operations, CRUD endpoints, @route/@get/@post/@patch/@delete handlers, or GitHub Copilot plugin actions.
 ---
-# Add TypeSpec API Operations
 
-Add RESTful operations to an existing TypeSpec API plugin for Microsoft 365 Copilot.
+# TypeSpec API operations
 
-## Adding GET Operations
+Add RESTful operations to an existing TypeSpec API plugin by selecting the correct verb, route, parameter decorators, request/response models, confirmation capability, and optional adaptive card output.
 
-### Simple GET - List All Items
-```typescript
-/**
- * List all items.
- */
-@route("/items")
-@get op listItems(): Item[];
-```
+## When to invoke
 
-### GET with Query Parameter - Filter Results
-```typescript
-/**
- * List items filtered by criteria.
- * @param userId Optional user ID to filter items
- */
-@route("/items")
-@get op listItems(@query userId?: integer): Item[];
-```
+- "Add TypeSpec API operations for this plugin."
+- "Create GET, POST, PATCH, and DELETE operations in TypeSpec."
+- "Add a GitHub Copilot plugin CRUD endpoint with @route and @card."
+- "Why is my TypeSpec parameter not showing in GitHub Copilot?"
+- "Add confirmations and adaptive cards to these operations."
 
-### GET with Path Parameter - Get Single Item
-```typescript
-/**
- * Get a specific item by ID.
- * @param id The ID of the item to retrieve
- */
-@route("/items/{id}")
-@get op getItem(@path id: integer): Item;
-```
+## Operation patterns
 
-### GET with Adaptive Card
-```typescript
-/**
- * List items with adaptive card visualization.
- */
-@route("/items")
-@card(#{
-  dataPath: "$",
-  title: "$.title",
-  file: "item-card.json"
-})
-@get op listItems(): Item[];
-```
+| Operation | TypeSpec pattern | Use when | Required decorators |
+| --- | --- | --- | --- |
+| List | `@route("/items") @get op listItems(): Item[];` | Return all items. | `@route`, `@get` |
+| Filtered list | `@get op listItems(@query userId?: integer): Item[];` | Filter with optional query parameters. | `@query` on each filter |
+| Get one | `@route("/items/{id}") @get op getItem(@path id: integer): Item;` | Retrieve one resource by route ID. | `@path` matching `{id}` |
+| Create | `@route("/items") @post op createItem(@body item: CreateItemRequest): Item;` | Create a resource from a body model. | `@body` |
+| Update | `@route("/items/{id}") @patch op updateItem(@path id: integer, @body item: UpdateItemRequest): Item;` | Partially update an existing resource. | `@path`, `@body` |
+| Delete | `@route("/items/{id}") @delete op deleteItem(@path id: integer): void;` | Delete a resource. | `@path`, `@delete` |
 
-**Create the Adaptive Card** (`appPackage/item-card.json`):
-```json
-{
-  "type": "AdaptiveCard",
-  "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
-  "version": "1.5",
-  "body": [
-    {
-      "type": "Container",
-      "$data": "${$root}",
-      "items": [
-        {
-          "type": "TextBlock",
-          "text": "**${if(title, title, 'N/A')}**",
-          "wrap": true
-        },
-        {
-          "type": "TextBlock",
-          "text": "${if(description, description, 'N/A')}",
-          "wrap": true
-        }
-      ]
-    }
-  ],
-  "actions": [
-    {
-      "type": "Action.OpenUrl",
-      "title": "View Details",
-      "url": "https://example.com/items/${id}"
-    }
-  ]
-}
-```
+Use parameter names such as `userId` consistently, and preserve status unions like `"active" | "completed"`. Use adaptive-card conditional syntax `${if(..., ..., 'N/A')}` when documenting generic data binding.
 
-## Adding POST Operations
+Use RESTful conventions: `GET /items`, `GET /items/{id}`, `POST /items`, `PATCH /items/{id}`, and `DELETE /items/{id}`. Group related operations in the same namespace and use nested routes only for hierarchical resources.
 
-### Simple POST - Create Item
-```typescript
-/**
- * Create a new item.
- * @param item The item to create
- */
-@route("/items")
-@post op createItem(@body item: CreateItemRequest): Item;
+## Models, parameters, and responses
 
-model CreateItemRequest {
-  title: string;
-  description?: string;
-  userId: integer;
-}
-```
-
-### POST with Confirmation
-```typescript
-/**
- * Create a new item with confirmation.
- */
-@route("/items")
-@post
-@capabilities(#{
-  confirmation: #{
-    type: "AdaptiveCard",
-    title: "Create Item",
-    body: """
-    Are you sure you want to create this item?
-      * **Title**: {{ function.parameters.item.title }}
-      * **User ID**: {{ function.parameters.item.userId }}
-    """
-  }
-})
-op createItem(@body item: CreateItemRequest): Item;
-```
-
-## Adding PATCH Operations
-
-### Simple PATCH - Update Item
-```typescript
-/**
- * Update an existing item.
- * @param id The ID of the item to update
- * @param item The updated item data
- */
-@route("/items/{id}")
-@patch op updateItem(
-  @path id: integer,
-  @body item: UpdateItemRequest
-): Item;
-
-model UpdateItemRequest {
-  title?: string;
-  description?: string;
-  status?: "active" | "completed" | "archived";
-}
-```
-
-### PATCH with Confirmation
-```typescript
-/**
- * Update an item with confirmation.
- */
-@route("/items/{id}")
-@patch
-@capabilities(#{
-  confirmation: #{
-    type: "AdaptiveCard",
-    title: "Update Item",
-    body: """
-    Updating item #{{ function.parameters.id }}:
-      * **Title**: {{ function.parameters.item.title }}
-      * **Status**: {{ function.parameters.item.status }}
-    """
-  }
-})
-op updateItem(
-  @path id: integer,
-  @body item: UpdateItemRequest
-): Item;
-```
-
-## Adding DELETE Operations
-
-### Simple DELETE
-```typescript
-/**
- * Delete an item.
- * @param id The ID of the item to delete
- */
-@route("/items/{id}")
-@delete op deleteItem(@path id: integer): void;
-```
-
-### DELETE with Confirmation
-```typescript
-/**
- * Delete an item with confirmation.
- */
-@route("/items/{id}")
-@delete
-@capabilities(#{
-  confirmation: #{
-    type: "AdaptiveCard",
-    title: "Delete Item",
-    body: """
-     Are you sure you want to delete item #{{ function.parameters.id }}?
-    This action cannot be undone.
-    """
-  }
-})
-op deleteItem(@path id: integer): void;
-```
-
-## Complete CRUD Example
-
-### Define the Service and Models
-```typescript
+```typespec
 @service
 @server("https://api.example.com")
 @actions(#{
@@ -216,20 +42,15 @@ op deleteItem(@path id: integer): void;
   descriptionForModel: "Read, create, update, and delete items"
 })
 namespace ItemsAPI {
-  
-  // Models
   model Item {
     @visibility(Lifecycle.Read)
     id: integer;
-    
     userId: integer;
     title: string;
     description?: string;
     status: "active" | "completed" | "archived";
-    
     @format("date-time")
     createdAt: utcDateTime;
-    
     @format("date-time")
     updatedAt?: utcDateTime;
   }
@@ -246,174 +67,200 @@ namespace ItemsAPI {
     status?: "active" | "completed" | "archived";
   }
 
-  // Operations
+  model ItemList {
+    items: Item[];
+    total: integer;
+    hasMore: boolean;
+  }
+
+  model DeleteResponse {
+    success: boolean;
+    message: string;
+    deletedId: integer;
+  }
+
+  model ErrorResponse {
+    error: {
+      code: string;
+      message: string;
+      details?: string[];
+    };
+  }
+}
+```
+
+| Need | Pattern | Notes |
+| --- | --- | --- |
+| Read-only response field | `@visibility(Lifecycle.Read)` | Use for `id` and server-generated fields that should not be writable. |
+| Date field | `@format("date-time")` with `utcDateTime` | Use for `createdAt` and `updatedAt`. |
+| Enum-like status | `"active" | "completed" | "archived"` | Prefer union types for fixed values. |
+| Optional field | `description?: string` | Make optional fields explicit with `?`. |
+| Header parameter | `@header("X-API-Version") apiVersion?: string` | Use for version or tenant headers. |
+| Error response | `Item | ErrorResponse` | Document expected error shape. |
+
+## Adaptive cards and confirmations
+
+Attach cards to read operations when GitHub Copilot should render structured results. Keep cards focused, test data binding with actual API responses, use conditional rendering such as `${if(description, description, 'N/A')}`, and include action buttons only for common next steps.
+
+```typespec
+@route("/items")
+@card(#{
+  dataPath: "$",
+  title: "$.title",
+  file: "item-card.json"
+})
+@get op listItems(@query userId?: integer): Item[];
+```
+
+Create `appPackage/item-card.json`:
+
+```json
+{
+  "type": "AdaptiveCard",
+  "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+  "version": "1.5",
+  "body": [
+    {
+      "type": "Container",
+      "$data": "${$root}",
+      "items": [
+        { "type": "TextBlock", "text": "**${if(title, title, 'N/A')}**", "wrap": true },
+        { "type": "TextBlock", "text": "${if(description, description, 'N/A')}", "wrap": true }
+      ]
+    }
+  ],
+  "actions": [
+    { "type": "Action.OpenUrl", "title": "View Details", "url": "https://example.com/items/${id}" }
+  ]
+}
+```
+
+Add confirmations to destructive operations and any operation that changes important data. Show key details in the confirmation body and state irreversible consequences in text instead of relying on an emoji.
+
+```typespec
+@route("/items/{id}")
+@patch
+@capabilities(#{
+  confirmation: #{
+    type: "AdaptiveCard",
+    title: "Update Item",
+    body: """
+    Updating item #{{ function.parameters.id }}:
+      * **Title**: {{ function.parameters.item.title }}
+      * **Status**: {{ function.parameters.item.status }}
+    """
+  }
+})
+op updateItem(@path id: integer, @body item: UpdateItemRequest): Item;
+
+@route("/items/{id}")
+@delete
+@capabilities(#{
+  confirmation: #{
+    type: "AdaptiveCard",
+    title: "Delete Item",
+    body: """
+    Are you sure you want to delete item #{{ function.parameters.id }}?
+    This action cannot be undone.
+    """
+  }
+})
+op deleteItem(@path id: integer): void;
+```
+
+## Complete CRUD skeleton
+
+```typespec
+namespace ItemsAPI {
   @route("/items")
   @card(#{ dataPath: "$", title: "$.title", file: "item-card.json" })
-  @get op listItems(@query userId?: integer): Item[];
+  @get op listItems(
+    @query userId?: integer,
+    @query status?: "active" | "completed" | "archived",
+    @query limit?: integer,
+    @query offset?: integer
+  ): ItemList;
 
   @route("/items/{id}")
   @card(#{ dataPath: "$", title: "$.title", file: "item-card.json" })
-  @get op getItem(@path id: integer): Item;
+  @get op getItem(@path id: integer): Item | ErrorResponse;
 
   @route("/items")
   @post
-  @capabilities(#{
-    confirmation: #{
-      type: "AdaptiveCard",
-      title: "Create Item",
-      body: "Creating: **{{ function.parameters.item.title }}**"
-    }
-  })
+  @capabilities(#{ confirmation: #{ type: "AdaptiveCard", title: "Create Item", body: "Creating: **{{ function.parameters.item.title }}**" } })
   op createItem(@body item: CreateItemRequest): Item;
 
   @route("/items/{id}")
   @patch
-  @capabilities(#{
-    confirmation: #{
-      type: "AdaptiveCard",
-      title: "Update Item",
-      body: "Updating item #{{ function.parameters.id }}"
-    }
-  })
+  @capabilities(#{ confirmation: #{ type: "AdaptiveCard", title: "Update Item", body: "Updating item #{{ function.parameters.id }}" } })
   op updateItem(@path id: integer, @body item: UpdateItemRequest): Item;
 
   @route("/items/{id}")
   @delete
-  @capabilities(#{
-    confirmation: #{
-      type: "AdaptiveCard",
-      title: "Delete Item",
-      body: " Delete item #{{ function.parameters.id }}?"
-    }
-  })
-  op deleteItem(@path id: integer): void;
+  @capabilities(#{ confirmation: #{ type: "AdaptiveCard", title: "Delete Item", body: "Delete item #{{ function.parameters.id }}?" } })
+  op deleteItem(@path id: integer): DeleteResponse;
 }
 ```
 
-## Advanced Features
+## Testing prompts
 
-### Multiple Query Parameters
-```typescript
-@route("/items")
-@get op listItems(
-  @query userId?: integer,
-  @query status?: "active" | "completed" | "archived",
-  @query limit?: integer,
-  @query offset?: integer
-): ItemList;
+| Operation | Prompts |
+| --- | --- |
+| GET | "List all items and show them in a table"; "Show me items for user ID 1"; "Get the details of item 42" |
+| POST | "Create a new item with title 'My Task' for user 1"; "Add an item: title 'New Feature', description 'Add login'" |
+| PATCH | "Update item 10 with title 'Updated Title'"; "Change the status of item 5 to completed" |
+| DELETE | "Delete item 99"; "Remove the item with ID 15" |
 
-model ItemList {
-  items: Item[];
-  total: integer;
-  hasMore: boolean;
-}
+## Troubleshooting
+
+| Symptom | Likely cause | Resolution |
+| --- | --- | --- |
+| Parameter not showing in GitHub Copilot | Parameter lacks `@query`, `@path`, or `@body` | Add the correct decorator and make path parameter names match the route. |
+| Adaptive card not rendering | Wrong `@card` file path or invalid JSON | Verify `file: "item-card.json"`, check `appPackage/item-card.json`, and validate JSON syntax. |
+| Confirmation not appearing | `@capabilities` confirmation object malformed | Use `confirmation: #{ type: "AdaptiveCard", title: "...", body: "..." }`. |
+| Model property not appearing in response | Field visibility is wrong | Add `@visibility(Lifecycle.Read)` for read-only response fields or remove it if writable. |
+
+## Output template
+
+```markdown
+## TypeSpec API operations - <resource>
+
+**Status:** complete | needs validation | blocked
+**Resource:** <resource name>
+
+### Operations added
+| Verb | Route | Operation | Request model | Response model | Card/confirmation |
+| --- | --- | --- | --- | --- | --- |
+| GET | `/items` | `listItems` | none | `ItemList` | `@card` |
+| POST | `/items` | `createItem` | `CreateItemRequest` | `Item` | confirmation |
+
+### Files to update
+- `<typespec file>`: <operations/models added>
+- `appPackage/item-card.json`: <card added or not needed>
+
+### Test prompts
+- `<prompt>`
+
+### Validation
+- Parameter decorators: pass | fail
+- REST routes: pass | fail
+- Confirmations for PATCH/DELETE: pass | fail
+- Adaptive card JSON: pass | fail | not used
 ```
 
-### Header Parameters
-```typescript
-@route("/items")
-@get op listItems(
-  @header("X-API-Version") apiVersion?: string,
-  @query userId?: integer
-): Item[];
-```
+## Quality gate
 
-### Custom Response Models
-```typescript
-@route("/items/{id}")
-@delete op deleteItem(@path id: integer): DeleteResponse;
+- [ ] Each operation uses the correct HTTP decorator: `@get`, `@post`, `@patch`, or `@delete`.
+- [ ] Every path token in `@route` has a matching `@path` parameter.
+- [ ] Filters use `@query`; request payloads use `@body`; headers use `@header`.
+- [ ] Models use `?`, union types, `@format("date-time")`, and `@visibility(Lifecycle.Read)` where appropriate.
+- [ ] PATCH and DELETE include confirmations with meaningful details.
+- [ ] Any `@card` file exists under `appPackage/` and uses valid Adaptive Card JSON.
+- [ ] Testing prompts cover GET, POST, PATCH, and DELETE when those operations are added.
+- [ ] Output follows the `## Output template` exactly.
 
-model DeleteResponse {
-  success: boolean;
-  message: string;
-  deletedId: integer;
-}
-```
+## References
 
-### Error Responses
-```typescript
-model ErrorResponse {
-  error: {
-    code: string;
-    message: string;
-    details?: string[];
-  };
-}
-
-@route("/items/{id}")
-@get op getItem(@path id: integer): Item | ErrorResponse;
-```
-
-## Testing Prompts
-
-After adding operations, test with these prompts:
-
-**GET Operations:**
-- "List all items and show them in a table"
-- "Show me items for user ID 1"
-- "Get the details of item 42"
-
-**POST Operations:**
-- "Create a new item with title 'My Task' for user 1"
-- "Add an item: title 'New Feature', description 'Add login'"
-
-**PATCH Operations:**
-- "Update item 10 with title 'Updated Title'"
-- "Change the status of item 5 to completed"
-
-**DELETE Operations:**
-- "Delete item 99"
-- "Remove the item with ID 15"
-
-## Best Practices
-
-### Parameter Naming
-- Use descriptive parameter names: `userId` not `uid`
-- Be consistent across operations
-- Use optional parameters (`?`) for filters
-
-### Documentation
-- Add JSDoc comments to all operations
-- Describe what each parameter does
-- Document expected responses
-
-### Models
-- Use `@visibility(Lifecycle.Read)` for read-only fields like `id`
-- Use `@format("date-time")` for date fields
-- Use union types for enums: `"active" | "completed"`
-- Make optional fields explicit with `?`
-
-### Confirmations
-- Always add confirmations to destructive operations (DELETE, PATCH)
-- Show key details in confirmation body
-- Use warning emoji () for irreversible actions
-
-### Adaptive Cards
-- Keep cards simple and focused
-- Use conditional rendering with `${if(..., ..., 'N/A')}`
-- Include action buttons for common next steps
-- Test data binding with actual API responses
-
-### Routing
-- Use RESTful conventions:
-  - `GET /items` - List
-  - `GET /items/{id}` - Get one
-  - `POST /items` - Create
-  - `PATCH /items/{id}` - Update
-  - `DELETE /items/{id}` - Delete
-- Group related operations in the same namespace
-- Use nested routes for hierarchical resources
-
-## Common Issues
-
-### Issue: Parameter not showing in Copilot
-**Solution**: Check parameter is properly decorated with `@query`, `@path`, or `@body`
-
-### Issue: Adaptive card not rendering
-**Solution**: Verify file path in `@card` decorator and check JSON syntax
-
-### Issue: Confirmation not appearing
-**Solution**: Ensure `@capabilities` decorator is properly formatted with confirmation object
-
-### Issue: Model property not appearing in response
-**Solution**: Check if property needs `@visibility(Lifecycle.Read)` or remove it if it should be writable
+- [Adaptive Card schema](http://adaptivecards.io/schemas/adaptive-card.json)
+- [Example API endpoint](https://api.example.com)
+- [Example item URL](https://example.com/items/${id})
