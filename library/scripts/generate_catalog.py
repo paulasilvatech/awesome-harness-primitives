@@ -8,10 +8,15 @@ import sys
 from pathlib import Path
 from typing import Any
 
-from library.scripts.validate_primitives import PLUGIN_MANIFESTS, parse_frontmatter
+try:
+    from validate_primitives import PLUGIN_MANIFESTS, find_repo_root, parse_frontmatter
+except ModuleNotFoundError:  # pragma: no cover - supports python3 -m invocation
+    from .validate_primitives import PLUGIN_MANIFESTS, find_repo_root, parse_frontmatter
 
-ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_OUT = ROOT / "docs" / "CATALOG.md"
+REPO_ROOT = find_repo_root(Path(__file__).resolve())
+DEFAULT_LIBRARY_ROOT = REPO_ROOT / "library"
+DEFAULT_OUT = REPO_ROOT / "docs" / "CATALOG.md"
+LIBRARY_ROOT = DEFAULT_LIBRARY_ROOT
 DESCRIPTION_WIDTH = 180
 HOOK_EVENT_ORDER = [
     "sessionStart",
@@ -82,7 +87,7 @@ def sort_rows(rows: list[list[str]]) -> list[list[str]]:
 
 def agent_rows() -> list[list[str]]:
     rows = []
-    for path in sorted((ROOT / "agents").glob("*.agent.md"), key=lambda p: p.name.casefold()):
+    for path in sorted((LIBRARY_ROOT / "agents").glob("*.agent.md"), key=lambda p: p.name.casefold()):
         fm = frontmatter(path)
         name = fm.get("name") or path.name.removesuffix(".agent.md")
         rows.append([one_line(name), truncate(fm.get("description"))])
@@ -91,7 +96,7 @@ def agent_rows() -> list[list[str]]:
 
 def instruction_rows() -> list[list[str]]:
     rows = []
-    for path in sorted((ROOT / "instructions").glob("*.instructions.md"), key=lambda p: p.name.casefold()):
+    for path in sorted((LIBRARY_ROOT / "instructions").glob("*.instructions.md"), key=lambda p: p.name.casefold()):
         fm = frontmatter(path, required=False)
         name = fm.get("name") or path.name.removesuffix(".instructions.md")
         rows.append([one_line(name), one_line(fm.get("applyTo")),
@@ -101,7 +106,7 @@ def instruction_rows() -> list[list[str]]:
 
 def skill_rows() -> list[list[str]]:
     rows = []
-    for path in sorted((ROOT / "skills").glob("*/SKILL.md"), key=lambda p: p.parent.name.casefold()):
+    for path in sorted((LIBRARY_ROOT / "skills").glob("*/SKILL.md"), key=lambda p: p.parent.name.casefold()):
         fm = frontmatter(path)
         name = fm.get("name") or path.parent.name
         rows.append([one_line(name), truncate(fm.get("description"))])
@@ -118,8 +123,8 @@ def plugin_manifest(plugin_dir: Path) -> Path | None:
 
 def plugin_rows() -> list[list[str]]:
     rows = []
-    plugin_dirs = [p for p in (ROOT / "plugins").iterdir()
-                   if p.is_dir()] if (ROOT / "plugins").is_dir() else []
+    plugin_dirs = [p for p in (LIBRARY_ROOT / "plugins").iterdir()
+                   if p.is_dir()] if (LIBRARY_ROOT / "plugins").is_dir() else []
     for plugin_dir in sorted(plugin_dirs, key=lambda p: p.name.casefold()):
         manifest = plugin_manifest(plugin_dir)
         data: dict[str, Any] = {}
@@ -136,7 +141,7 @@ def plugin_rows() -> list[list[str]]:
 def hook_rows() -> list[list[str]]:
     rows = []
     event_order = {event: idx for idx, event in enumerate(HOOK_EVENT_ORDER)}
-    for path in sorted((ROOT / "hooks").glob("*/hooks.json"), key=lambda p: p.parent.name.casefold()):
+    for path in sorted((LIBRARY_ROOT / "hooks").glob("*/hooks.json"), key=lambda p: p.parent.name.casefold()):
         data = json.loads(path.read_text(encoding="utf-8"))
         hooks = data.get("hooks", {})
         events = sorted(hooks, key=lambda e: (event_order.get(
@@ -154,8 +159,8 @@ def build_catalog() -> str:
 
     return f"""# Copilot Primitives Catalog
 
-Generated from the current repository contents by `python3 scripts/generate_catalog.py`.
-Regenerate this file after changing files under `agents/`, `instructions/`, `skills/`, `plugins/`, or `hooks/`.
+Generated from the current repository contents by `python3 library/scripts/generate_catalog.py`.
+Regenerate this file after changing files under `library/agents/`, `library/instructions/`, `library/skills/`, `library/plugins/`, or `library/hooks/`.
 
 ## Summary
 
@@ -192,19 +197,23 @@ Regenerate this file after changing files under `agents/`, `instructions/`, `ski
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
         description="Generate the Copilot primitives catalog.")
+    parser.add_argument("--root", type=Path, default=DEFAULT_LIBRARY_ROOT,
+                        help="primitive library root (default: <repo>/library)")
     parser.add_argument("--out", type=Path, default=DEFAULT_OUT,
                         help="output path (default: docs/CATALOG.md)")
     parser.add_argument("--check", action="store_true",
                         help="exit 1 if the output file is stale; do not write")
     args = parser.parse_args(argv)
 
-    out = args.out if args.out.is_absolute() else ROOT / args.out
+    global LIBRARY_ROOT
+    LIBRARY_ROOT = args.root.resolve()
+    out = args.out if args.out.is_absolute() else REPO_ROOT / args.out
     content = build_catalog()
     if args.check:
         current = out.read_text(encoding="utf-8") if out.exists() else ""
         if current != content:
             print(
-                f"{out.relative_to(ROOT)} is stale; run python3 scripts/generate_catalog.py", file=sys.stderr)
+                f"{out.relative_to(REPO_ROOT)} is stale; run python3 library/scripts/generate_catalog.py", file=sys.stderr)
             return 1
         return 0
 

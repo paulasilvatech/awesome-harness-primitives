@@ -177,7 +177,7 @@ BUNDLE ships this requirement text verbatim inside `runtime.node`:
 
 ```yaml
 ---
-name: my-skill-name              # REQUIRED — 1-64 chars, ^[a-z0-9]([a-z0-9-]*[a-z0-9])?$, == directory name
+name: my-skill-name              # REQUIRED — 1-64 chars, ^(?:[a-z0-9]|[a-z0-9][a-z0-9-]*[a-z0-9])$, == directory name
 description: >-                  # REQUIRED — 1-1024 chars, must state WHAT and WHEN
   What this skill does. Use this skill when <trigger conditions>.
 user-invocable: true             # OPTIONAL — BUNDLE-confirmed
@@ -250,9 +250,9 @@ Discovery (BUNDLE): `.plugin/marketplace.json`, `.github/plugin/marketplace.json
     "name": "…", "email": "…"
   },
   "plugins": [                // REQUIRED — BUNDLE errors "Marketplace has no plugins defined" when empty
-    { "name": "my-plugin", "source": "./plugins/my-plugin", "description": "…", "version": "1.0.0" }
+    { "name": "my-plugin", "source": "./library/plugins/my-plugin", "description": "…", "version": "1.0.0" }
   ],
-  "metadata": { "pluginRoot": "./plugins" }
+  "metadata": { "pluginRoot": "./library/plugins" }
 }
 ```
 
@@ -329,5 +329,5 @@ Hook scripts must be executable (`chmod +x`).
 
 ## 6. Validation
 
-Run `python3 scripts/validate_primitives.py` to check every rule above.
+Run `python3 library/scripts/validate_primitives.py` to check every rule above.
 Use `--strict` to fail on warnings and `--json` for machine-readable output.

@@ -37,6 +37,7 @@ MCP_TOOL_RE = re.compile(r"^([a-zA-Z0-9_.-]+/(?:\*|[a-zA-Z0-9_.-]+))(?::(.+))?$"
 LEGACY_MODEL_RE = re.compile(r"^(GPT|Claude|Gemini|o[0-9])")
 SK_WHEN_RE = re.compile(r"use when|use this skill when|when you|when the user|for when|invoke when|trigger", re.I)
 LINK_RE = re.compile(r"(?<!\!)\[[^\]]+\]\(([^)]+)\)")
+PROMPT_FILE_RE = re.compile(r"[\w./-]*\.prompt\.md\b")
 
 PORTABLE_TOOLS = {
     "execute", "shell", "bash", "powershell",
@@ -78,6 +79,19 @@ HK_VALID_KEYS = {"type", "bash", "powershell", "command", "cwd", "env", "timeout
 HK_EVENTS = {"sessionStart", "sessionEnd", "userPromptSubmitted", "userPromptTransformed", "preToolUse", "postToolUse", "postToolUseFailure", "preMcpToolCall", "permissionRequest", "preCompact", "errorOccurred", "agentStop", "subagentStart", "subagentStop", "notification", "postResult"}
 HK_PASCAL_ALIASES = {"SessionStart", "SessionEnd", "UserPromptSubmit", "UserPromptSubmitted", "UserPromptTransformed", "PreToolUse", "PostToolUse", "PostToolUseFailure", "PreMcpToolCall", "PermissionRequest", "PreCompact", "ErrorOccurred", "Stop", "AgentStop", "SubagentStart", "SubagentStop", "Notification", "PostResult"}
 PLUGIN_MANIFESTS = (".plugin/plugin.json", "plugin.json", ".github/plugin/plugin.json", ".claude-plugin/plugin.json")
+
+
+def find_repo_root(start: Path) -> Path:
+    for candidate in (start.resolve(), *start.resolve().parents):
+        if (candidate / ".git").exists() or (candidate / "README.md").exists():
+            return candidate
+    return start.resolve()
+
+
+def default_library_root() -> Path:
+    repo_root = find_repo_root(Path(__file__).resolve())
+    library_root = repo_root / "library"
+    return library_root if library_root.is_dir() else Path(__file__).resolve().parents[1]
 
 @dataclass
 class Finding:
@@ -188,6 +202,7 @@ class Validator:
             self.add(kind, p, "AG015", "WARNING", "name, if present, should be a non-empty string")
         for k in sorted(AG_VSCODE_KEYS & set(fm)):
             self.add(kind, p, "AG016", "INFO", f"{k} is VS Code-only and ignored by CLI")
+        self._check_body_conventions(kind, p, body, "AG018", "AG019", "AG020")
 
     # Instructions
     def validate_instructions(self) -> None:
@@ -223,6 +238,7 @@ class Validator:
             self.add(kind, p, "IN008", "WARNING", "description missing")
         if not body.strip():
             self.add(kind, p, "IN009", "ERROR", "Body must be non-empty")
+        self._check_body_conventions(kind, p, body, "IN010", "IN011", "IN012")
 
     # Skills
     def validate_skills(self) -> None:
@@ -276,6 +292,31 @@ class Validator:
                 continue
             if not target.exists():
                 self.add(kind, p, "SK012", "WARNING", f"Relative link points at missing bundled resource: {link}")
+        self._check_body_conventions(kind, p, body, "SK013", "SK014", "SK015", bundle_root=p.parent.resolve())
+
+    # Shared body conventions (docs/templates/) — advisory only.
+    def _check_body_conventions(self, kind: str, p: Path, body: str, link_rule: str,
+                                prompt_rule: str, h1_rule: str, bundle_root: Path | None = None) -> None:
+        """Report body-structure and cross-reference drift from docs/templates/.
+
+        The CLI never validates a primitive body, so every finding here is INFO.
+        """
+        if PROMPT_FILE_RE.search(strip_code_fences(body)):
+            self.add(kind, p, prompt_rule, "INFO",
+                     "References a *.prompt.md file; prompt files are VS Code-only and are not "
+                     "discovered by the Copilot CLI. Reference a skill by name instead")
+        for link in relative_links(body):
+            if bundle_root is not None:
+                try:
+                    (p.parent / link).resolve().relative_to(bundle_root)
+                    continue
+                except ValueError:
+                    pass
+            self.add(kind, p, link_rule, "INFO",
+                     f"Relative link '{link}' does not survive installation into .github/ or "
+                     "~/.copilot/; reference the primitive by name and type instead")
+        if body.strip() and not body_starts_with_h1(body):
+            self.add(kind, p, h1_rule, "INFO", "Body should open with a single H1 naming the primitive")
 
     # Plugins
     def validate_plugins(self) -> None:
@@ -587,6 +628,15 @@ def is_placeholder_link(target: str) -> bool:
     return target.lower() in {"relative-url", "relative-path", "url", "link", "page", "target"}
 
 
+def body_starts_with_h1(body: str) -> bool:
+    for line in body.splitlines():
+        stripped = line.strip()
+        if not stripped:
+            continue
+        return stripped.startswith("# ")
+    return False
+
+
 def relative_links(body: str) -> Iterable[str]:
     for m in LINK_RE.finditer(strip_code_fences(body)):
         target = m.group(1).split("#", 1)[0].strip()
@@ -706,7 +756,7 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--strict", action="store_true", help="exit 1 on warnings as well as errors")
     ap.add_argument("--json", action="store_true", dest="json_out", help="emit machine-readable JSON report to stdout")
     ap.add_argument("--kind", action="append", choices=ALL_KINDS, help="validate only this kind; repeatable")
-    ap.add_argument("--root", type=Path, default=Path(__file__).resolve().parents[1], help="repository root (default: parent of script directory)")
+    ap.add_argument("--root", type=Path, default=default_library_root(), help="primitive library root (default: <repo>/library)")
     ap.add_argument("--quiet", action="store_true", help="human output: only summary and errors")
     args = ap.parse_args(argv)
 

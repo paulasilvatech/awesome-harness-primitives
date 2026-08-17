@@ -1,5 +1,5 @@
 <!-- AUTHORING — delete this block after copying.
-Target path: instructions/<name>.instructions.md   Filename must match ^[A-Za-z0-9._-]+\.instructions\.md$
+Target path: library/instructions/<name>.instructions.md   Filename must match ^[A-Za-z0-9._-]+\.instructions\.md$
 Spec: docs/COPILOT-HARNESS-SPEC.md §2
 
 Frontmatter — ONLY these four keys are recognized; anything else is ignored:

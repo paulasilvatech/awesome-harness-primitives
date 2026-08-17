@@ -1,5 +1,5 @@
 ---
-applyTo: '.github/hooks/**, hooks/**'
+applyTo: '.github/hooks/**, library/hooks/**'
 description: 'Portable guidance for authoring safe, fast, and clear hooks and reusable hook examples'
 ---
 

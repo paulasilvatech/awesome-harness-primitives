@@ -27,7 +27,7 @@ jobs:
 
       # Gates the build only on ERROR findings.
       - name: Validate primitives
-        run: python3 scripts/validate_primitives.py
+        run: python3 library/scripts/validate_primitives.py
 
       # Advisory strict mode makes WARNING findings visible without failing PRs.
       - name: Strict validation advisory
@@ -37,15 +37,19 @@ jobs:
             echo "## Strict validation advisory"
             echo
             echo '```'
-            python3 scripts/validate_primitives.py --strict || true
+            python3 library/scripts/validate_primitives.py --strict || true
             echo '```'
           } >> "$GITHUB_STEP_SUMMARY"
 
       # Prevent committed docs/CATALOG.md from drifting from repository contents.
       - name: Check catalog drift
         run: |
-          python3 scripts/generate_catalog.py --out "$RUNNER_TEMP/CATALOG.md"
+          python3 library/scripts/generate_catalog.py --out "$RUNNER_TEMP/CATALOG.md"
           diff -u docs/CATALOG.md "$RUNNER_TEMP/CATALOG.md"
+
+      # Prevent plugin-local generated components from drifting from shared primitives.
+      - name: Check plugin component drift
+        run: python3 library/scripts/sync_plugin_components.py --check
 
   links:
     name: External link audit (advisory)
@@ -68,6 +72,6 @@ jobs:
             echo "## External link audit"
             echo
             echo '```'
-            python3 scripts/check_links.py --only-problems || true
+            python3 library/scripts/check_links.py --only-problems || true
             echo '```'
           } >> "$GITHUB_STEP_SUMMARY"

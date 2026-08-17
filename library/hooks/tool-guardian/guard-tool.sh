@@ -7,7 +7,7 @@
 # Environment variables:
 #   GUARD_MODE           - "warn" (log only) or "block" (exit non-zero on threats) (default: block)
 #   SKIP_TOOL_GUARD      - "true" to disable entirely (default: unset)
-#   TOOL_GUARD_LOG_DIR   - Directory for guard logs (default: logs/copilot/tool-guardian)
+#   TOOL_GUARD_LOG_DIR   - Directory for guard logs (default: Copilot/XDG user state)
 #   TOOL_GUARD_ALLOWLIST - Comma-separated patterns to skip (default: unset)
 
 set -euo pipefail
@@ -25,7 +25,20 @@ fi
 INPUT=$(cat)
 
 MODE="${GUARD_MODE:-block}"
-LOG_DIR="${TOOL_GUARD_LOG_DIR:-.github/logs/copilot/tool-guardian}"
+default_log_dir() {
+  if [[ -n "${COPILOT_HOME:-}" ]]; then
+    printf '%s/hook-logs/tool-guardian' "$COPILOT_HOME"
+  elif [[ -n "${XDG_STATE_HOME:-}" ]]; then
+    printf '%s/github-copilot/hook-logs/tool-guardian' "$XDG_STATE_HOME"
+  elif [[ -n "${HOME:-}" ]]; then
+    printf '%s/.local/state/github-copilot/hook-logs/tool-guardian' "$HOME"
+  else
+    echo "No COPILOT_HOME, XDG_STATE_HOME, or HOME set; cannot choose a log directory" >&2
+    exit 1
+  fi
+}
+
+LOG_DIR="${TOOL_GUARD_LOG_DIR:-$(default_log_dir)}"
 TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 
 mkdir -p "$LOG_DIR"

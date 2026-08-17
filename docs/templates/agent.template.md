@@ -1,5 +1,5 @@
 <!-- AUTHORING — delete this block after copying.
-Target path: agents/<name>.agent.md   Filename must match ^[A-Za-z0-9._-]+\.agent\.md$
+Target path: library/agents/<name>.agent.md   Filename must match ^[A-Za-z0-9._-]+\.agent\.md$
 Spec: docs/COPILOT-HARNESS-SPEC.md §1
 
 Frontmatter

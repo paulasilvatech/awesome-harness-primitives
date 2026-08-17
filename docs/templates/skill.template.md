@@ -1,9 +1,9 @@
 <!-- AUTHORING — delete this block after copying.
-Target path: skills/<skill-name>/SKILL.md   The directory name IS the skill name.
+Target path: library/skills/<skill-name>/SKILL.md   The directory name IS the skill name.
 Spec: docs/COPILOT-HARNESS-SPEC.md §3
 
 Frontmatter
-  name         REQUIRED. 1-64 chars, kebab-case ^[a-z0-9]([a-z0-9-]*[a-z0-9])?$, no "--",
+  name         REQUIRED. 1-64 chars, kebab-case ^(?:[a-z0-9]|[a-z0-9][a-z0-9-]*[a-z0-9])$, no "--",
                and it MUST equal the parent directory name.
   description  REQUIRED. 1-1024 chars. Must state BOTH what the skill does AND when to use it —
                this string is the only thing loaded at session start, so it is what triggers activation.

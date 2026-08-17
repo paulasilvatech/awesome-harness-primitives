@@ -6,9 +6,9 @@ reference each other.
 
 | Template | Produces | Discovered by |
 | --- | --- | --- |
-| [agent.template.md](agent.template.md) | `agents/<name>.agent.md` | Copilot CLI + VS Code |
-| [instructions.template.md](instructions.template.md) | `instructions/<name>.instructions.md` | Copilot CLI + VS Code |
-| [skill.template.md](skill.template.md) | `skills/<name>/SKILL.md` | Copilot CLI + VS Code |
+| [agent.template.md](agent.template.md) | `library/agents/<name>.agent.md` | Copilot CLI + VS Code |
+| [instructions.template.md](instructions.template.md) | `library/instructions/<name>.instructions.md` | Copilot CLI + VS Code |
+| [skill.template.md](skill.template.md) | `library/skills/<name>/SKILL.md` | Copilot CLI + VS Code |
 | [prompt.template.md](prompt.template.md) | `.github/prompts/<name>.prompt.md` | **VS Code only** — not a CLI primitive |
 
 ## The six-block contract
@@ -38,7 +38,7 @@ Everything else is **semantic**: a skill activates because its `description` mat
 another file links to it. Therefore:
 
 - **Reference by name and type, never by relative path.** Write ``the `iac-review` skill``, not
-  `[iac-review](../skills/iac-review/SKILL.md)`. Primitives are installed standalone into `.github/…` or
+  ``[roundup](../../library/skills/roundup/SKILL.md)``. Primitives are installed standalone into `.github/…` or
   `~/.copilot/…`, so `../` targets do not survive installation and nothing resolves them at runtime.
 - **The only allowed relative paths are inside a skill's own directory** (`scripts/`, `references/`,
   `assets/`), which the runtime loads on demand.
@@ -56,6 +56,6 @@ another file links to it. Therefore:
 - Validate before opening a PR:
 
   ```sh
-  python3 scripts/validate_primitives.py
-  python3 scripts/generate_catalog.py --check
+  python3 library/scripts/validate_primitives.py
+  python3 library/scripts/generate_catalog.py --check
   ```

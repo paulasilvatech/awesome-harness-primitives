@@ -8,7 +8,7 @@
 #   SCAN_MODE          - "warn" (log only) or "block" (exit non-zero on findings) (default: warn)
 #   SCAN_SCOPE         - "diff" (changed files only) or "staged" (staged files) (default: diff)
 #   SKIP_SECRETS_SCAN  - "true" to disable scanning entirely (default: unset)
-#   SECRETS_LOG_DIR    - Directory for scan logs (default: logs/copilot/secrets)
+#   SECRETS_LOG_DIR    - Directory for scan logs (default: Copilot/XDG user state)
 #   SECRETS_ALLOWLIST  - Comma-separated list of patterns to ignore (default: unset)
 
 set -euo pipefail
@@ -79,7 +79,20 @@ fi
 
 MODE="${SCAN_MODE:-warn}"
 SCOPE="${SCAN_SCOPE:-diff}"
-LOG_DIR="${SECRETS_LOG_DIR:-logs/copilot/secrets}"
+default_log_dir() {
+  if [[ -n "${COPILOT_HOME:-}" ]]; then
+    printf '%s/hook-logs/secrets-scanner' "$COPILOT_HOME"
+  elif [[ -n "${XDG_STATE_HOME:-}" ]]; then
+    printf '%s/github-copilot/hook-logs/secrets-scanner' "$XDG_STATE_HOME"
+  elif [[ -n "${HOME:-}" ]]; then
+    printf '%s/.local/state/github-copilot/hook-logs/secrets-scanner' "$HOME"
+  else
+    echo "No COPILOT_HOME, XDG_STATE_HOME, or HOME set; cannot choose a log directory" >&2
+    exit 1
+  fi
+}
+
+LOG_DIR="${SECRETS_LOG_DIR:-$(default_log_dir)}"
 TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 FINDING_COUNT=0
 

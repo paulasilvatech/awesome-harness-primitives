@@ -7,11 +7,11 @@ localhost, templating tokens, tenant-specific hosts) are excluded by design so
 the report only contains links that are supposed to resolve.
 
 Usage:
-  python3 scripts/check_links.py                    # check everything
-  python3 scripts/check_links.py --path skills      # limit to a subtree
-  python3 scripts/check_links.py --json report.json # machine-readable output
-  python3 scripts/check_links.py --cache .linkcache.json
-  python3 scripts/check_links.py --only-problems    # hide OK rows
+  python3 library/scripts/check_links.py                    # check everything
+  python3 library/scripts/check_links.py --path library/skills  # limit to a subtree
+  python3 library/scripts/check_links.py --json report.json # machine-readable output
+  python3 library/scripts/check_links.py --cache .linkcache.json
+  python3 library/scripts/check_links.py --only-problems    # hide OK rows
 
 Exit codes: 0 = no broken links, 1 = at least one BROKEN url.
 """
@@ -81,6 +81,13 @@ DEPRECATED_HOSTS = {
 
 UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
       "(KHTML, like Gecko) Chrome/124.0 Safari/537.36")
+
+
+def find_repo_root(start: Path) -> Path:
+    for candidate in (start.resolve(), *start.resolve().parents):
+        if (candidate / ".git").exists() or (candidate / "README.md").exists():
+            return candidate
+    return start.resolve()
 
 
 def iter_files(root: Path, subpath: str | None) -> list[Path]:
@@ -171,7 +178,7 @@ def probe(url: str, timeout: float) -> tuple[str, int | None, str]:
 
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--root", default=str(Path(__file__).resolve().parent.parent))
+    ap.add_argument("--root", default=str(find_repo_root(Path(__file__).resolve())), help="repository root (default: nearest parent containing .git or README.md)")
     ap.add_argument("--path", default=None, help="limit scan to this subdirectory")
     ap.add_argument("--workers", type=int, default=24)
     ap.add_argument("--timeout", type=float, default=20.0)

@@ -7,7 +7,7 @@
 # Environment variables:
 #   LICENSE_MODE        - "warn" (log only) or "block" (exit non-zero on violations) (default: warn)
 #   SKIP_LICENSE_CHECK  - "true" to disable entirely (default: unset)
-#   LICENSE_LOG_DIR     - Directory for check logs (default: logs/copilot/license-checker)
+#   LICENSE_LOG_DIR     - Directory for check logs (default: Copilot/XDG user state)
 #   BLOCKED_LICENSES    - Comma-separated SPDX IDs to flag (default: copyleft set)
 #   LICENSE_ALLOWLIST   - Comma-separated package names to skip (default: unset)
 
@@ -35,7 +35,20 @@ fi
 # Configuration
 # ---------------------------------------------------------------------------
 MODE="${LICENSE_MODE:-warn}"
-LOG_DIR="${LICENSE_LOG_DIR:-logs/copilot/license-checker}"
+default_log_dir() {
+  if [[ -n "${COPILOT_HOME:-}" ]]; then
+    printf '%s/hook-logs/dependency-license-checker' "$COPILOT_HOME"
+  elif [[ -n "${XDG_STATE_HOME:-}" ]]; then
+    printf '%s/github-copilot/hook-logs/dependency-license-checker' "$XDG_STATE_HOME"
+  elif [[ -n "${HOME:-}" ]]; then
+    printf '%s/.local/state/github-copilot/hook-logs/dependency-license-checker' "$HOME"
+  else
+    echo "No COPILOT_HOME, XDG_STATE_HOME, or HOME set; cannot choose a log directory" >&2
+    exit 1
+  fi
+}
+
+LOG_DIR="${LICENSE_LOG_DIR:-$(default_log_dir)}"
 TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 FINDING_COUNT=0
 

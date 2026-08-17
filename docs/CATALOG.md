@@ -1,7 +1,7 @@
 # Copilot Primitives Catalog
 
-Generated from the current repository contents by `python3 scripts/generate_catalog.py`.
-Regenerate this file after changing files under `agents/`, `instructions/`, `skills/`, `plugins/`, or `hooks/`.
+Generated from the current repository contents by `python3 library/scripts/generate_catalog.py`.
+Regenerate this file after changing files under `library/agents/`, `library/instructions/`, `library/skills/`, `library/plugins/`, or `library/hooks/`.
 
 ## Summary
 

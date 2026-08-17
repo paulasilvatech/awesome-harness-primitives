@@ -1,0 +1,6 @@
+__pycache__/
+*.py[cod]
+
+# Hook runtime logs should live in Copilot/XDG state, not the repo.
+logs/
+.github/logs/

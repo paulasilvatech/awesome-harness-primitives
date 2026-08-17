@@ -4,8 +4,8 @@
     "postToolUse": [
       {
         "type": "command",
-        "bash": "hooks/fix-broken-links/link-fix.sh",
-        "powershell": "hooks/fix-broken-links/link-fix.ps1",
+        "bash": "library/hooks/fix-broken-links/link-fix.sh",
+        "powershell": "library/hooks/fix-broken-links/link-fix.ps1",
         "cwd": ".",
         "timeoutSec": 120
       }

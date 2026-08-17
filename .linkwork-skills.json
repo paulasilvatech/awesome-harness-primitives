@@ -1,0 +1,1821 @@
+[
+ {
+  "url": "http://+:8080",
+  "status": "BROKEN",
+  "code": null,
+  "detail": "[Errno 8] nodename nor servname provided, or not known",
+  "files": [
+   "library/skills/containerize-aspnetcore/SKILL.md"
+  ]
+ },
+ {
+  "url": "http://0.0.0.0:18889",
+  "status": "BROKEN",
+  "code": null,
+  "detail": "[Errno 61] Connection refused",
+  "files": [
+   "library/skills/aspire/references/dashboard.md"
+  ]
+ },
+ {
+  "url": "http://0.0.0.0:18890",
+  "status": "BROKEN",
+  "code": null,
+  "detail": "[Errno 61] Connection refused",
+  "files": [
+   "library/skills/aspire/references/dashboard.md"
+  ]
+ },
+ {
+  "url": "http://169.254.169.254/latest/meta-data/",
+  "status": "BROKEN",
+  "code": null,
+  "detail": "[Errno 51] Network is unreachable",
+  "files": [
+   "library/skills/mcp-implementation-security-review/SKILL.md"
+  ]
+ },
+ {
+  "url": "http://apache.org/xml/features/disallow-doctype-decl",
+  "status": "BROKEN",
+  "code": 404,
+  "detail": "Not Found",
+  "files": [
+   "library/skills/security-review/references/language-patterns.md"
+  ]
+ },
+ {
+  "url": "http://dashboard:18889",
+  "status": "BROKEN",
+  "code": null,
+  "detail": "[Errno 8] nodename nor servname provided, or not known",
+  "files": [
+   "library/skills/aspire/references/dashboard.md"
+  ]
+ },
+ {
+  "url": "http://hpux.connect.org.uk/hppd/hpux/Text/pdftk-1.45/",
+  "status": "BROKEN",
+  "code": 404,
+  "detail": "Not Found",
+  "files": [
+   "library/skills/pdftk-server/references/download.md"
+  ]
+ },
+ {
+  "url": "http://maven.apache.org/POM/4.0.0",
+  "status": "BROKEN",
+  "code": 404,
+  "detail": "Not Found",
+  "files": [
+   "library/skills/java-mcp-server-generator/SKILL.md"
+  ]
+ },
+ {
+  "url": "http://other:6006",
+  "status": "BROKEN",
+  "code": null,
+  "detail": "[Errno 8] nodename nor servname provided, or not known",
+  "files": [
+   "library/skills/phoenix-cli/SKILL.md"
+  ]
+ },
+ {
+  "url": "http://www.gnu.org/software/libiconv/",
+  "status": "TIMEOUT",
+  "code": null,
+  "detail": "timed out",
+  "files": [
+   "library/skills/pdftk-server/references/third-party-materials.md"
+  ]
+ },
+ {
+  "url": "https://",
+  "status": "BROKEN",
+  "code": null,
+  "detail": "no host given",
+  "files": [
+   "library/skills/azure-architecture-autopilot/references/phase1-advisor.md",
+   "library/skills/code-tour/SKILL.md",
+   "library/skills/code-tour/references/codetour-schema.json",
+   "library/skills/code-tour/references/examples.md",
+   "library/skills/code-tour/scripts/validate_tour.py",
+   "library/skills/flowstudio-power-automate-monitoring/SKILL.md",
+   "library/skills/resemble-detect/references/api-reference.md",
+   "library/skills/threat-model-analyst/references/output-formats.md"
+  ]
+ },
+ {
+  "url": "https://agents.md/",
+  "status": "TIMEOUT",
+  "code": null,
+  "detail": "timed out",
+  "files": [
+   "library/skills/create-agentsmd/SKILL.md"
+  ]
+ },
+ {
+  "url": "https://akasearch.net/",
+  "status": "BROKEN",
+  "code": null,
+  "detail": "[Errno 8] nodename nor servname provided, or not known",
+  "files": [
+   "library/skills/batch-files/references/tools-and-resources.md"
+  ]
+ },
+ {
+  "url": "https://api.githubcopilot.com/mcp/",
+  "status": "TIMEOUT",
+  "code": null,
+  "detail": "timed out",
+  "files": [
+   "library/skills/copilot-sdk/references/extended-guide.md",
+   "library/skills/mcp-create-declarative-agent/SKILL.md"
+  ]
+ },
+ {
+  "url": "https://api.ipify.org",
+  "status": "BROKEN",
+  "code": 520,
+  "detail": "<none>",
+  "files": [
+   "library/skills/namecheap/namecheap.py"
+  ]
+ },
+ {
+  "url": "https://api.service.com/mcp/",
+  "status": "BROKEN",
+  "code": null,
+  "detail": "[Errno 8] nodename nor servname provided, or not known",
+  "files": [
+   "library/skills/mcp-create-declarative-agent/SKILL.md"
+  ]
+ },
+ {
+  "url": "https://api.your-service.com/mcp/",
+  "status": "BROKEN",
+  "code": null,
+  "detail": "[SSL: TLSV1_UNRECOGNIZED_NAME] tlsv1 unrecognized name (_ssl.c:1082)",
+  "files": [
+   "library/skills/mcp-create-declarative-agent/SKILL.md"
+  ]
+ },
+ {
+  "url": "https://app.arize.com**",
+  "status": "BROKEN",
+  "code": null,
+  "detail": "[Errno 8] nodename nor servname provided, or not known",
+  "files": [
+   "library/skills/arize-instrumentation/SKILL.md"
+  ]
+ },
+ {
+  "url": "https://app.phoenix.arize.com",
+  "status": "TIMEOUT",
+  "code": null,
+  "detail": "timed out",
+  "files": [
+   "library/skills/phoenix-cli/SKILL.md",
+   "library/skills/phoenix-evals/references/common-mistakes-python.md",
+   "library/skills/phoenix-evals/references/error-analysis.md",
+   "library/skills/phoenix-evals/references/observe-tracing-setup.md"
+  ]
+ },
+ {
+  "url": "https://app.resemble.ai/api/v2",
+  "status": "BROKEN",
+  "code": 404,
+  "detail": "Not Found",
+  "files": [
+   "library/skills/resemble-detect/SKILL.md",
+   "library/skills/resemble-detect/references/api-reference.md"
+  ]
+ },
+ {
+  "url": "https://arize-phoenix.readthedocs.io/projects/client/en/latest/",
+  "status": "BROKEN",
+  "code": 404,
+  "detail": "Not Found",
+  "files": [
+   "library/skills/phoenix-tracing/README.md",
+   "library/skills/phoenix-tracing/SKILL.md",
+   "library/skills/phoenix-tracing/references/annotations-python.md",
+   "library/skills/phoenix-tracing/references/setup-python.md"
+  ]
+ },
+ {
+  "url": "https://arize-phoenix.readthedocs.io/projects/otel/en/latest/",
+  "status": "BROKEN",
+  "code": 404,
+  "detail": "Not Found",
+  "files": [
+   "library/skills/phoenix-tracing/README.md",
+   "library/skills/phoenix-tracing/SKILL.md",
+   "library/skills/phoenix-tracing/references/setup-python.md"
+  ]
+ },
+ {
+  "url": "https://atrandom.iansharpe.com/setres.php",
+  "status": "BROKEN",
+  "code": 404,
+  "detail": "Not Found",
+  "files": [
+   "library/skills/batch-files/references/tools-and-resources.md"
+  ]
+ },
+ {
+  "url": "https://auth.service.com/authorize",
+  "status": "BROKEN",
+  "code": null,
+  "detail": "[Errno 8] nodename nor servname provided, or not known",
+  "files": [
+   "library/skills/mcp-create-declarative-agent/SKILL.md"
+  ]
+ },
+ {
+  "url": "https://azure.microsoft.com/pricing/",
+  "status": "BROKEN",
+  "code": 404,
+  "detail": "Not Found",
+  "files": [
+   "library/skills/az-cost-optimize/SKILL.md"
+  ]
+ },
+ {
+  "url": "https://code.visualstudio.com/docs/copilot/",
+  "status": "BROKEN",
+  "code": 404,
+  "detail": "Not Found",
+  "files": [
+   "library/skills/tldr-prompt/SKILL.md"
+  ]
+ },
+ {
+  "url": "https://code.visualstudio.com/docs/copilot/chat/",
+  "status": "BROKEN",
+  "code": 404,
+  "detail": "Not Found",
+  "files": [
+   "library/skills/tldr-prompt/SKILL.md"
+  ]
+ },
+ {
+  "url": "https://code.visualstudio.com/docs/copilot/inline-chat",
+  "status": "BROKEN",
+  "code": 404,
+  "detail": "Not Found",
+  "files": [
+   "library/skills/tldr-prompt/SKILL.md"
+  ]
+ },
+ {
+  "url": "https://code.visualstudio.com/docs/languages/identifiers#_known-language-identifiers",
+  "status": "TIMEOUT",
+  "code": null,
+  "detail": "timed out",
+  "files": [
+   "library/skills/lsp-setup/SKILL.md"
+  ]
+ },
+ {
+  "url": "https://csrc.nist.gov/pubs/sp/800-53/r5/upd1/final",
+  "status": "BROKEN",
+  "code": 404,
+  "detail": "Not Found",
+  "files": [
+   "library/skills/threat-model-analyst/references/output-formats.md"
+  ]
+ },
+ {
+  "url": "https://cwe.mitre.org/data/definitions/[FILL",
+  "status": "BROKEN",
+  "code": 404,
+  "detail": "Not Found",
+  "files": [
+   "library/skills/threat-model-analyst/references/skeletons/skeleton-findings.md"
+  ]
+ },
+ {
+  "url": "https://docs.arduino.cc/learn/communication/",
+  "status": "BROKEN",
+  "code": 404,
+  "detail": "Not Found",
+  "files": [
+   "library/skills/arduino-azure-iot-edge-integration/references/arduino-official-best-practices.md"
+  ]
+ },
+ {
+  "url": "https://docs.arize.com/phoenix",
+  "status": "TIMEOUT",
+  "code": null,
+  "detail": "timed out",
+  "files": [
+   "library/skills/phoenix-tracing/README.md",
+   "library/skills/phoenix-tracing/SKILL.md"
+  ]
+ },
+ {
+  "url": "https://docs.arize.com/phoenix/tracing/manual-instrumentation",
+  "status": "TIMEOUT",
+  "code": null,
+  "detail": "timed out",
+  "files": [
+   "library/skills/phoenix-tracing/references/instrumentation-manual-python.md"
+  ]
+ },
+ {
+  "url": "https://docs.arize.com/phoenix/tracing/manual-instrumentation-typescript#attribute-helpers",
+  "status": "TIMEOUT",
+  "code": null,
+  "detail": "timed out",
+  "files": [
+   "library/skills/phoenix-tracing/references/instrumentation-manual-typescript.md"
+  ]
+ },
+ {
+  "url": "https://docs.arize.com/phoenix/tracing/sessions",
+  "status": "TIMEOUT",
+  "code": null,
+  "detail": "timed out",
+  "files": [
+   "library/skills/phoenix-tracing/references/sessions-python.md"
+  ]
+ },
+ {
+  "url": "https://docs.github.com/en/organizations/keeping-your-organization-secure/setting-up-two-factor-authentication/requiring-two-factor-authentication-in-your-organization",
+  "status": "BROKEN",
+  "code": 404,
+  "detail": "Not Found",
+  "files": [
+   "library/skills/impediment-prioritization/SKILL.md"
+  ]
+ },
+ {
+  "url": "https://docs.microsoft.com/previous-versions/windows/it-pro/windows-server-2012-R2-and-2012/cc771131(v=ws.11",
+  "status": "BROKEN",
+  "code": 404,
+  "detail": "Not Found",
+  "files": [
+   "library/skills/batch-files/references/tools-and-resources.md"
+  ]
+ },
+ {
+  "url": "https://docs.python.org/3/",
+  "status": "TIMEOUT",
+  "code": null,
+  "detail": "timed out",
+  "files": [
+   "library/skills/python-azure-iot-edge-modules/SKILL.md",
+   "library/skills/python-azure-iot-edge-modules/references/python-edge-module-template.md",
+   "library/skills/python-azure-iot-edge-modules/references/python-official-best-practices.md"
+  ]
+ },
+ {
+  "url": "https://docs.python.org/3/reference/",
+  "status": "TIMEOUT",
+  "code": null,
+  "detail": "timed out",
+  "files": [
+   "library/skills/python-azure-iot-edge-modules/SKILL.md",
+   "library/skills/python-azure-iot-edge-modules/references/python-edge-module-template.md",
+   "library/skills/python-azure-iot-edge-modules/references/python-official-best-practices.md"
+  ]
+ },
+ {
+  "url": "https://download-page",
+  "status": "BROKEN",
+  "code": null,
+  "detail": "[Errno 8] nodename nor servname provided, or not known",
+  "files": [
+   "library/skills/batch-files/references/batch-files-and-functions.md"
+  ]
+ },
+ {
+  "url": "https://download.eclipse.org/jdtls/milestones/",
+  "status": "TIMEOUT",
+  "code": null,
+  "detail": "timed out",
+  "files": [
+   "library/skills/lsp-setup/references/lsp-servers.md"
+  ]
+ },
+ {
+  "url": "https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400",
+  "status": "BROKEN",
+  "code": 400,
+  "detail": "Bad Request",
+  "files": [
+   "library/skills/azure-architecture-autopilot/scripts/generator.py"
+  ]
+ },
+ {
+  "url": "https://gdpr-info.eu/recital-75-gdpr/",
+  "status": "BROKEN",
+  "code": 404,
+  "detail": "Not Found",
+  "files": [
+   "library/skills/data-breach-blast-radius/references/SOURCES.md"
+  ]
+ },
+ {
+  "url": "https://generativelanguage.googleapis.com/v1beta/models/",
+  "status": "BROKEN",
+  "code": 404,
+  "detail": "Not Found",
+  "files": [
+   "library/skills/generate-image/SKILL.md"
+  ]
+ },
+ {
+  "url": "https://github.com/Arize-ai/openinference/blob/main/spec/semantic_conventions.md",
+  "status": "TIMEOUT",
+  "code": null,
+  "detail": "timed out",
+  "files": [
+   "library/skills/phoenix-tracing/references/span-llm.md"
+  ]
+ },
+ {
+  "url": "https://github.com/Arize-ai/openinference/tree/main/spec",
+  "status": "TIMEOUT",
+  "code": null,
+  "detail": "timed out",
+  "files": [
+   "library/skills/phoenix-tracing/README.md",
+   "library/skills/phoenix-tracing/SKILL.md"
+  ]
+ },
+ {
+  "url": "https://github.com/Azure/terraform-azurerm-avm-res-",
+  "status": "BROKEN",
+  "code": 404,
+  "detail": "Not Found",
+  "files": [
+   "library/skills/import-infrastructure-as-code/SKILL.md"
+  ]
+ },
+ {
+  "url": "https://github.com/dotnet/dotnet-docker/blob/main/README.aspnet.md",
+  "status": "TIMEOUT",
+  "code": null,
+  "detail": "timed out",
+  "files": [
+   "library/skills/containerize-aspnetcore/SKILL.md"
+  ]
+ },
+ {
+  "url": "https://github.com/dotnet/dotnet-docker/blob/main/README.sdk.md",
+  "status": "TIMEOUT",
+  "code": null,
+  "detail": "timed out",
+  "files": [
+   "library/skills/containerize-aspnetcore/SKILL.md"
+  ]
+ },
+ {
+  "url": "https://github.com/eclipse-jdtls/eclipse.jdt.ls",
+  "status": "TIMEOUT",
+  "code": null,
+  "detail": "timed out",
+  "files": [
+   "library/skills/lsp-setup/references/lsp-servers.md"
+  ]
+ },
+ {
+  "url": "https://github.com/eclipse-jdtls/eclipse.jdt.ls#running-from-command-line-with-wrapper-script",
+  "status": "TIMEOUT",
+  "code": null,
+  "detail": "timed out",
+  "files": [
+   "library/skills/lsp-setup/references/lsp-servers.md"
+  ]
+ },
+ {
+  "url": "https://github.com/github/awesome-copilot/blob/main/agents/[filename",
+  "status": "BROKEN",
+  "code": 404,
+  "detail": "Not Found",
+  "files": [
+   "library/skills/github-copilot-starter/SKILL.md"
+  ]
+ },
+ {
+  "url": "https://github.com/github/awesome-copilot/blob/main/instructions/[filename",
+  "status": "BROKEN",
+  "code": 404,
+  "detail": "Not Found",
+  "files": [
+   "library/skills/github-copilot-starter/SKILL.md"
+  ]
+ },
+ {
+  "url": "https://github.com/github/awesome-copilot/blob/main/instructions/java.instructions.md",
+  "status": "BROKEN",
+  "code": 404,
+  "detail": "Not Found",
+  "files": [
+   "library/skills/github-copilot-starter/SKILL.md",
+   "library/skills/suggest-awesome-github-copilot-instructions/SKILL.md"
+  ]
+ },
+ {
+  "url": "https://github.com/github/awesome-copilot/blob/main/instructions/react.instructions.md",
+  "status": "BROKEN",
+  "code": 404,
+  "detail": "Not Found",
+  "files": [
+   "library/skills/github-copilot-starter/SKILL.md"
+  ]
+ },
+ {
+  "url": "https://github.com/github/awesome-copilot/blob/main/instructions/reactjs.instructions.md",
+  "status": "BROKEN",
+  "code": 404,
+  "detail": "Not Found",
+  "files": [
+   "library/skills/suggest-awesome-github-copilot-instructions/SKILL.md"
+  ]
+ },
+ {
+  "url": "https://github.com/github/awesome-copilot/blob/main/prompts/java-docs.prompt.md",
+  "status": "BROKEN",
+  "code": 404,
+  "detail": "Not Found",
+  "files": [
+   "library/skills/tldr-prompt/SKILL.md"
+  ]
+ },
+ {
+  "url": "https://github.com/github/awesome-copilot/tree/main/skills/gh-cli",
+  "status": "BROKEN",
+  "code": 404,
+  "detail": "Not Found",
+  "files": [
+   "library/skills/suggest-awesome-github-copilot-skills/SKILL.md"
+  ]
+ },
+ {
+  "url": "https://github.com/github/codeql-action/releases**",
+  "status": "BROKEN",
+  "code": 404,
+  "detail": "Not Found",
+  "files": [
+   "library/skills/codeql/references/cli-commands.md"
+  ]
+ },
+ {
+  "url": "https://github.com/github/copilot-plugins/blob/main/plugins/advanced-security/skills/dependency-scanning/SKILL.md",
+  "status": "BROKEN",
+  "code": 404,
+  "detail": "Not Found",
+  "files": [
+   "library/skills/dependabot/SKILL.md"
+  ]
+ },
+ {
+  "url": "https://github.com/github/copilot-plugins/blob/main/plugins/advanced-security/skills/secret-scanning/SKILL.md",
+  "status": "BROKEN",
+  "code": 404,
+  "detail": "Not Found",
+  "files": [
+   "library/skills/secret-scanning/SKILL.md"
+  ]
+ },
+ {
+  "url": "https://github.com/github/copilot-sdk",
+  "status": "TIMEOUT",
+  "code": null,
+  "detail": "timed out",
+  "files": [
+   "library/skills/copilot-sdk/references/extended-guide.md"
+  ]
+ },
+ {
+  "url": "https://github.com/github/copilot-sdk/blob/main/docs/tutorials/first-app.md",
+  "status": "TIMEOUT",
+  "code": null,
+  "detail": "timed out",
+  "files": [
+   "library/skills/copilot-sdk/references/extended-guide.md"
+  ]
+ },
+ {
+  "url": "https://github.com/github/copilot-sdk/tree/main/cookbook",
+  "status": "TIMEOUT",
+  "code": null,
+  "detail": "timed out",
+  "files": [
+   "library/skills/copilot-sdk/references/extended-guide.md"
+  ]
+ },
+ {
+  "url": "https://github.com/github/copilot-sdk/tree/main/samples",
+  "status": "TIMEOUT",
+  "code": null,
+  "detail": "timed out",
+  "files": [
+   "library/skills/copilot-sdk/references/extended-guide.md"
+  ]
+ },
+ {
+  "url": "https://github.com/github/github-mcp-server",
+  "status": "TIMEOUT",
+  "code": null,
+  "detail": "timed out",
+  "files": [
+   "library/skills/copilot-sdk/references/extended-guide.md"
+  ]
+ },
+ {
+  "url": "https://github.com/github/support",
+  "status": "BROKEN",
+  "code": 404,
+  "detail": "Not Found",
+  "files": [
+   "library/skills/markdown-to-html/references/basic-markdown-to-html.md"
+  ]
+ },
+ {
+  "url": "https://github.com/golang/tools/tree/master/gopls",
+  "status": "TIMEOUT",
+  "code": null,
+  "detail": "timed out",
+  "files": [
+   "library/skills/lsp-setup/references/lsp-servers.md"
+  ]
+ },
+ {
+  "url": "https://github.com/lucasjellema/cloudnative-on-oci-2021/blob/main/.tours/introduction.tour",
+  "status": "BROKEN",
+  "code": 404,
+  "detail": "Not Found",
+  "files": [
+   "library/skills/code-tour/SKILL.md"
+  ]
+ },
+ {
+  "url": "https://github.com/microsoft/agent-governance-toolkit/tree/main/packages/agentmesh-integrations",
+  "status": "BROKEN",
+  "code": 404,
+  "detail": "Not Found",
+  "files": [
+   "library/skills/agent-governance/SKILL.md"
+  ]
+ },
+ {
+  "url": "https://github.com/microsoft/pyright",
+  "status": "TIMEOUT",
+  "code": null,
+  "detail": "timed out",
+  "files": [
+   "library/skills/lsp-setup/references/lsp-servers.md"
+  ]
+ },
+ {
+  "url": "https://github.com/mikeroyal/Firmware-Guide",
+  "status": "TIMEOUT",
+  "code": null,
+  "detail": "timed out",
+  "files": [
+   "library/skills/legacy-circuit-mockups/references/minipro.md"
+  ]
+ },
+ {
+  "url": "https://github.com/modelcontextprotocol/servers",
+  "status": "TIMEOUT",
+  "code": null,
+  "detail": "timed out",
+  "files": [
+   "library/skills/copilot-sdk/references/extended-guide.md"
+  ]
+ },
+ {
+  "url": "https://github.com/nickvdyck/webbundlr/blob/main/.tours/architecture.tour",
+  "status": "BROKEN",
+  "code": 404,
+  "detail": "Not Found",
+  "files": [
+   "library/skills/code-tour/SKILL.md"
+  ]
+ },
+ {
+  "url": "https://github.com/nickvdyck/webbundlr/blob/main/.tours/getting-started.tour",
+  "status": "BROKEN",
+  "code": 404,
+  "detail": "Not Found",
+  "files": [
+   "library/skills/code-tour/SKILL.md"
+  ]
+ },
+ {
+  "url": "https://github.com/octo-org/octo-repo/issues/740",
+  "status": "BROKEN",
+  "code": 404,
+  "detail": "Not Found",
+  "files": [
+   "library/skills/markdown-to-html/references/basic-markdown.md"
+  ]
+ },
+ {
+  "url": "https://github.com/plantuml/plantuml/releases/download/v1.2024.0/plantuml-1.2024.0.jar",
+  "status": "TIMEOUT",
+  "code": null,
+  "detail": "timed out",
+  "files": [
+   "library/skills/plantuml-ascii/SKILL.md"
+  ]
+ },
+ {
+  "url": "https://github.com/rust-lang/rust-analyzer",
+  "status": "TIMEOUT",
+  "code": null,
+  "detail": "timed out",
+  "files": [
+   "library/skills/lsp-setup/references/lsp-servers.md"
+  ]
+ },
+ {
+  "url": "https://github.com/settings/copilot",
+  "status": "TIMEOUT",
+  "code": null,
+  "detail": "timed out",
+  "files": [
+   "library/skills/copilot-cli-quickstart/SKILL.md"
+  ]
+ },
+ {
+  "url": "https://github.com/typescript-language-server/typescript-language-server",
+  "status": "TIMEOUT",
+  "code": null,
+  "detail": "timed out",
+  "files": [
+   "library/skills/lsp-setup/references/lsp-servers.md"
+  ]
+ },
+ {
+  "url": "https://github.com/user/private-repo",
+  "status": "BROKEN",
+  "code": 404,
+  "detail": "Not Found",
+  "files": [
+   "library/skills/azure-devops-cli/references/repos-and-prs.md"
+  ]
+ },
+ {
+  "url": "https://github.com/vdudouyt/minipro.git",
+  "status": "TIMEOUT",
+  "code": null,
+  "detail": "timed out",
+  "files": [
+   "library/skills/legacy-circuit-mockups/references/minipro.md"
+  ]
+ },
+ {
+  "url": "https://github.com/you/your-package",
+  "status": "BROKEN",
+  "code": 404,
+  "detail": "Not Found",
+  "files": [
+   "library/skills/python-pypi-package-builder/references/community-docs.md"
+  ]
+ },
+ {
+  "url": "https://github.com/you/your-package/actions/workflows/ci.yml",
+  "status": "BROKEN",
+  "code": 404,
+  "detail": "Not Found",
+  "files": [
+   "library/skills/python-pypi-package-builder/references/community-docs.md"
+  ]
+ },
+ {
+  "url": "https://github.com/you/your-package/actions/workflows/ci.yml/badge.svg",
+  "status": "BROKEN",
+  "code": 404,
+  "detail": "Not Found",
+  "files": [
+   "library/skills/python-pypi-package-builder/references/community-docs.md"
+  ]
+ },
+ {
+  "url": "https://github.com/you/your-package/releases/tag/v0.1.0",
+  "status": "BROKEN",
+  "code": 404,
+  "detail": "Not Found",
+  "files": [
+   "library/skills/python-pypi-package-builder/references/ci-publishing.md"
+  ]
+ },
+ {
+  "url": "https://github.com/your-org/vcpkg-registry",
+  "status": "BROKEN",
+  "code": 404,
+  "detail": "Not Found",
+  "files": [
+   "library/skills/vcpkg/references/registries.md"
+  ]
+ },
+ {
+  "url": "https://github.com/your-org/vcpkg-registry.git",
+  "status": "BROKEN",
+  "code": 404,
+  "detail": "Not Found",
+  "files": [
+   "library/skills/vcpkg/references/registries.md"
+  ]
+ },
+ {
+  "url": "https://gitlab.com/DavidGriffith/minipro",
+  "status": "TIMEOUT",
+  "code": null,
+  "detail": "timed out",
+  "files": [
+   "library/skills/legacy-circuit-mockups/references/minipro.md",
+   "library/skills/legacy-circuit-mockups/references/t48eeprom-programmer.md"
+  ]
+ },
+ {
+  "url": "https://graph.microsoft.com/.default",
+  "status": "BROKEN",
+  "code": 400,
+  "detail": "Bad Request",
+  "files": [
+   "library/skills/msgraph-sdk/references/python.md",
+   "library/skills/msgraph-sdk/references/typescript.md"
+  ]
+ },
+ {
+  "url": "https://iapp.org/news/a/amazon-hit-with-887m-fine-for-gdpr-violations/",
+  "status": "BROKEN",
+  "code": 404,
+  "detail": "Not Found",
+  "files": [
+   "library/skills/data-breach-blast-radius/references/SOURCES.md"
+  ]
+ },
+ {
+  "url": "https://ico.org.uk/about-the-ico/media-centre/news-and-blogs/2020/10/ico-fines-british-airways-20m-for-data-breach-affecting-more-than-400-000-customers/",
+  "status": "BROKEN",
+  "code": 404,
+  "detail": "Not Found",
+  "files": [
+   "library/skills/data-breach-blast-radius/references/SOURCES.md"
+  ]
+ },
+ {
+  "url": "https://ico.org.uk/about-the-ico/media-centre/news-and-blogs/2020/10/ico-fines-marriott-international-inc18-4million-for-failing-to-keep-customers-personal-data-secure/",
+  "status": "BROKEN",
+  "code": 404,
+  "detail": "Not Found",
+  "files": [
+   "library/skills/data-breach-blast-radius/references/SOURCES.md"
+  ]
+ },
+ {
+  "url": "https://integrate.api.nvidia.com/v1",
+  "status": "BROKEN",
+  "code": 404,
+  "detail": "Not Found",
+  "files": [
+   "library/skills/arize-ai-provider-integration/SKILL.md"
+  ]
+ },
+ {
+  "url": "https://js.leapmotion.com/leap-0.6.4.min.js",
+  "status": "BROKEN",
+  "code": null,
+  "detail": "[Errno 8] nodename nor servname provided, or not known",
+  "files": [
+   "library/skills/game-engine/references/game-control-mechanisms.md"
+  ]
+ },
+ {
+  "url": "https://learn.microsoft.com/api/mcp",
+  "status": "BROKEN",
+  "code": 405,
+  "detail": "Method Not Allowed",
+  "files": [
+   "library/skills/microsoft-code-reference/SKILL.md",
+   "library/skills/microsoft-skill-creator/SKILL.md"
+  ]
+ },
+ {
+  "url": "https://learn.microsoft.com/en-us/azure/azure-resource-manager/bicep/diagnostics/bcp064",
+  "status": "BROKEN",
+  "code": 404,
+  "detail": "Not Found",
+  "files": [
+   "library/skills/azure-deployment-preflight/references/ERROR-HANDLING.md"
+  ]
+ },
+ {
+  "url": "https://learn.microsoft.com/en-us/azure/devops/project/wiki/markdown-guidance?view=azure-devops",
+  "status": "TIMEOUT",
+  "code": null,
+  "detail": "timed out",
+  "files": [
+   "library/skills/convert-plaintext-to-md/SKILL.md"
+  ]
+ },
+ {
+  "url": "https://learn.microsoft.com/en-us/connectors/connector-reference/connector-reference-powerautomate-connectors",
+  "status": "TIMEOUT",
+  "code": null,
+  "detail": "timed out",
+  "files": [
+   "library/skills/power-platform-architect/SKILL.md"
+  ]
+ },
+ {
+  "url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2012-r2-and-2012/cc731935(v=ws.11",
+  "status": "BROKEN",
+  "code": 404,
+  "detail": "Not Found",
+  "files": [
+   "library/skills/batch-files/references/windows-commands.md"
+  ]
+ },
+ {
+  "url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2012-r2-and-2012/cc770963(v=ws.11",
+  "status": "BROKEN",
+  "code": 404,
+  "detail": "Not Found",
+  "files": [
+   "library/skills/batch-files/references/windows-commands.md"
+  ]
+ },
+ {
+  "url": "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/bitsadmin-cache-and-getexpirationtime",
+  "status": "TIMEOUT",
+  "code": null,
+  "detail": "timed out",
+  "files": [
+   "library/skills/batch-files/references/windows-commands.md"
+  ]
+ },
+ {
+  "url": "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/bitsadmin-cache-and-getlimit",
+  "status": "TIMEOUT",
+  "code": null,
+  "detail": "timed out",
+  "files": [
+   "library/skills/batch-files/references/windows-commands.md"
+  ]
+ },
+ {
+  "url": "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/bitsadmin-cache-and-help",
+  "status": "TIMEOUT",
+  "code": null,
+  "detail": "timed out",
+  "files": [
+   "library/skills/batch-files/references/windows-commands.md"
+  ]
+ },
+ {
+  "url": "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/bitsadmin-cache-and-info",
+  "status": "TIMEOUT",
+  "code": null,
+  "detail": "timed out",
+  "files": [
+   "library/skills/batch-files/references/windows-commands.md"
+  ]
+ },
+ {
+  "url": "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/bitsadmin-cache-and-list",
+  "status": "TIMEOUT",
+  "code": null,
+  "detail": "timed out",
+  "files": [
+   "library/skills/batch-files/references/windows-commands.md"
+  ]
+ },
+ {
+  "url": "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/bitsadmin-sethttpmethod",
+  "status": "TIMEOUT",
+  "code": null,
+  "detail": "timed out",
+  "files": [
+   "library/skills/batch-files/references/windows-commands.md"
+  ]
+ },
+ {
+  "url": "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/bitsadmin-setmaxdownloadtime",
+  "status": "TIMEOUT",
+  "code": null,
+  "detail": "timed out",
+  "files": [
+   "library/skills/batch-files/references/windows-commands.md"
+  ]
+ },
+ {
+  "url": "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/bitsadmin-setminretrydelay",
+  "status": "TIMEOUT",
+  "code": null,
+  "detail": "timed out",
+  "files": [
+   "library/skills/batch-files/references/windows-commands.md"
+  ]
+ },
+ {
+  "url": "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/bitsadmin-setnoprogresstimeout",
+  "status": "TIMEOUT",
+  "code": null,
+  "detail": "timed out",
+  "files": [
+   "library/skills/batch-files/references/windows-commands.md"
+  ]
+ },
+ {
+  "url": "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/bitsadmin-setnotifycmdline",
+  "status": "TIMEOUT",
+  "code": null,
+  "detail": "timed out",
+  "files": [
+   "library/skills/batch-files/references/windows-commands.md"
+  ]
+ },
+ {
+  "url": "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/bitsadmin-setnotifyflags",
+  "status": "TIMEOUT",
+  "code": null,
+  "detail": "timed out",
+  "files": [
+   "library/skills/batch-files/references/windows-commands.md"
+  ]
+ },
+ {
+  "url": "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/bitsadmin-setpeercachingflags",
+  "status": "TIMEOUT",
+  "code": null,
+  "detail": "timed out",
+  "files": [
+   "library/skills/batch-files/references/windows-commands.md"
+  ]
+ },
+ {
+  "url": "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/bitsadmin-setpriority",
+  "status": "TIMEOUT",
+  "code": null,
+  "detail": "timed out",
+  "files": [
+   "library/skills/batch-files/references/windows-commands.md"
+  ]
+ },
+ {
+  "url": "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/bitsadmin-setproxysettings",
+  "status": "TIMEOUT",
+  "code": null,
+  "detail": "timed out",
+  "files": [
+   "library/skills/batch-files/references/windows-commands.md"
+  ]
+ },
+ {
+  "url": "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/bitsadmin-setreplyfilename",
+  "status": "TIMEOUT",
+  "code": null,
+  "detail": "timed out",
+  "files": [
+   "library/skills/batch-files/references/windows-commands.md"
+  ]
+ },
+ {
+  "url": "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/bitsadmin-setsecurityflags",
+  "status": "TIMEOUT",
+  "code": null,
+  "detail": "timed out",
+  "files": [
+   "library/skills/batch-files/references/windows-commands.md"
+  ]
+ },
+ {
+  "url": "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/bitsadmin-setvalidationstate",
+  "status": "TIMEOUT",
+  "code": null,
+  "detail": "timed out",
+  "files": [
+   "library/skills/batch-files/references/windows-commands.md"
+  ]
+ },
+ {
+  "url": "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/bitsadmin-suspend",
+  "status": "TIMEOUT",
+  "code": null,
+  "detail": "timed out",
+  "files": [
+   "library/skills/batch-files/references/windows-commands.md"
+  ]
+ },
+ {
+  "url": "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/bitsadmin-takeownership",
+  "status": "TIMEOUT",
+  "code": null,
+  "detail": "timed out",
+  "files": [
+   "library/skills/batch-files/references/windows-commands.md"
+  ]
+ },
+ {
+  "url": "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/bitsadmin-transfer",
+  "status": "TIMEOUT",
+  "code": null,
+  "detail": "timed out",
+  "files": [
+   "library/skills/batch-files/references/windows-commands.md"
+  ]
+ },
+ {
+  "url": "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/net-print",
+  "status": "TIMEOUT",
+  "code": null,
+  "detail": "timed out",
+  "files": [
+   "library/skills/batch-files/references/windows-commands.md"
+  ]
+ },
+ {
+  "url": "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/net-user",
+  "status": "TIMEOUT",
+  "code": null,
+  "detail": "timed out",
+  "files": [
+   "library/skills/batch-files/references/windows-commands.md"
+  ]
+ },
+ {
+  "url": "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/netdom-verify",
+  "status": "TIMEOUT",
+  "code": null,
+  "detail": "timed out",
+  "files": [
+   "library/skills/batch-files/references/windows-commands.md"
+  ]
+ },
+ {
+  "url": "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/netsh",
+  "status": "TIMEOUT",
+  "code": null,
+  "detail": "timed out",
+  "files": [
+   "library/skills/batch-files/references/windows-commands.md"
+  ]
+ },
+ {
+  "url": "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/netsh-add",
+  "status": "TIMEOUT",
+  "code": null,
+  "detail": "timed out",
+  "files": [
+   "library/skills/batch-files/references/windows-commands.md"
+  ]
+ },
+ {
+  "url": "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/netsh-advfirewall",
+  "status": "TIMEOUT",
+  "code": null,
+  "detail": "timed out",
+  "files": [
+   "library/skills/batch-files/references/windows-commands.md"
+  ]
+ },
+ {
+  "url": "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/netsh-branchcache",
+  "status": "TIMEOUT",
+  "code": null,
+  "detail": "timed out",
+  "files": [
+   "library/skills/batch-files/references/windows-commands.md"
+  ]
+ },
+ {
+  "url": "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/netsh-bridge",
+  "status": "TIMEOUT",
+  "code": null,
+  "detail": "timed out",
+  "files": [
+   "library/skills/batch-files/references/windows-commands.md"
+  ]
+ },
+ {
+  "url": "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/netsh-delete",
+  "status": "TIMEOUT",
+  "code": null,
+  "detail": "timed out",
+  "files": [
+   "library/skills/batch-files/references/windows-commands.md"
+  ]
+ },
+ {
+  "url": "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/netsh-dhcpclient",
+  "status": "TIMEOUT",
+  "code": null,
+  "detail": "timed out",
+  "files": [
+   "library/skills/batch-files/references/windows-commands.md"
+  ]
+ },
+ {
+  "url": "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/netsh-dnsclient",
+  "status": "TIMEOUT",
+  "code": null,
+  "detail": "timed out",
+  "files": [
+   "library/skills/batch-files/references/windows-commands.md"
+  ]
+ },
+ {
+  "url": "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/netsh-dump",
+  "status": "TIMEOUT",
+  "code": null,
+  "detail": "timed out",
+  "files": [
+   "library/skills/batch-files/references/windows-commands.md"
+  ]
+ },
+ {
+  "url": "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/netsh-exec",
+  "status": "TIMEOUT",
+  "code": null,
+  "detail": "timed out",
+  "files": [
+   "library/skills/batch-files/references/windows-commands.md"
+  ]
+ },
+ {
+  "url": "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/netsh-http",
+  "status": "TIMEOUT",
+  "code": null,
+  "detail": "timed out",
+  "files": [
+   "library/skills/batch-files/references/windows-commands.md"
+  ]
+ },
+ {
+  "url": "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/netsh-interface",
+  "status": "TIMEOUT",
+  "code": null,
+  "detail": "timed out",
+  "files": [
+   "library/skills/batch-files/references/windows-commands.md"
+  ]
+ },
+ {
+  "url": "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/netsh-ipsec",
+  "status": "TIMEOUT",
+  "code": null,
+  "detail": "timed out",
+  "files": [
+   "library/skills/batch-files/references/windows-commands.md"
+  ]
+ },
+ {
+  "url": "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/netsh-lan",
+  "status": "TIMEOUT",
+  "code": null,
+  "detail": "timed out",
+  "files": [
+   "library/skills/batch-files/references/windows-commands.md"
+  ]
+ },
+ {
+  "url": "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/netsh-mbn",
+  "status": "TIMEOUT",
+  "code": null,
+  "detail": "timed out",
+  "files": [
+   "library/skills/batch-files/references/windows-commands.md"
+  ]
+ },
+ {
+  "url": "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/netsh-namespace",
+  "status": "TIMEOUT",
+  "code": null,
+  "detail": "timed out",
+  "files": [
+   "library/skills/batch-files/references/windows-commands.md"
+  ]
+ },
+ {
+  "url": "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/netsh-netio",
+  "status": "TIMEOUT",
+  "code": null,
+  "detail": "timed out",
+  "files": [
+   "library/skills/batch-files/references/windows-commands.md"
+  ]
+ },
+ {
+  "url": "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/netsh-nlm",
+  "status": "TIMEOUT",
+  "code": null,
+  "detail": "timed out",
+  "files": [
+   "library/skills/batch-files/references/windows-commands.md"
+  ]
+ },
+ {
+  "url": "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/netsh-ras",
+  "status": "TIMEOUT",
+  "code": null,
+  "detail": "timed out",
+  "files": [
+   "library/skills/batch-files/references/windows-commands.md"
+  ]
+ },
+ {
+  "url": "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/netsh-rpc",
+  "status": "TIMEOUT",
+  "code": null,
+  "detail": "timed out",
+  "files": [
+   "library/skills/batch-files/references/windows-commands.md"
+  ]
+ },
+ {
+  "url": "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/netsh-set",
+  "status": "TIMEOUT",
+  "code": null,
+  "detail": "timed out",
+  "files": [
+   "library/skills/batch-files/references/windows-commands.md"
+  ]
+ },
+ {
+  "url": "https://lifehacker.com/179514/geek-to-live--introduction-to-cygwin-part-i",
+  "status": "BROKEN",
+  "code": 410,
+  "detail": "Gone",
+  "files": [
+   "library/skills/batch-files/references/tools-and-resources.md"
+  ]
+ },
+ {
+  "url": "https://lifehacker.com/180690/geek-to-live--introduction-to-cygwin-part-ii---more-useful-commands",
+  "status": "BROKEN",
+  "code": 410,
+  "detail": "Gone",
+  "files": [
+   "library/skills/batch-files/references/tools-and-resources.md"
+  ]
+ },
+ {
+  "url": "https://lifehacker.com/181282/geek-to-live--introduction-to-cygwin-part-iii---scripts-packages-and-more",
+  "status": "BROKEN",
+  "code": 410,
+  "detail": "Gone",
+  "files": [
+   "library/skills/batch-files/references/tools-and-resources.md"
+  ]
+ },
+ {
+  "url": "https://management.azure.com/",
+  "status": "BROKEN",
+  "code": 400,
+  "detail": "Bad Request",
+  "files": [
+   "library/skills/azure-devops-cli/references/workflows-and-patterns.md"
+  ]
+ },
+ {
+  "url": "https://marketplace.visualstudio.com/items?itemName=hediet.vscode-drawio",
+  "status": "BROKEN",
+  "code": 404,
+  "detail": "Not Found",
+  "files": [
+   "library/skills/draw-io-diagram-generator/SKILL.md"
+  ]
+ },
+ {
+  "url": "https://mcp.fastah.ai/mcp",
+  "status": "BROKEN",
+  "code": null,
+  "detail": "[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: Hostname mismatch, certificate is not valid for 'mcp.fastah.ai'. (_ssl.c:1082)",
+  "files": [
+   "library/skills/geofeed-tuner/references/extended-guide.md"
+  ]
+ },
+ {
+  "url": "https://mcp.flowstudio.app/mcp",
+  "status": "BROKEN",
+  "code": 404,
+  "detail": "Not Found",
+  "files": [
+   "library/skills/flowstudio-power-automate-build/SKILL.md",
+   "library/skills/flowstudio-power-automate-debug/SKILL.md",
+   "library/skills/flowstudio-power-automate-mcp/SKILL.md",
+   "library/skills/flowstudio-power-automate-mcp/references/MCP-BOOTSTRAP.md"
+  ]
+ },
+ {
+  "url": "https://mike42.me/blog/2021-08-a-first-look-at-programmable-logic",
+  "status": "TIMEOUT",
+  "code": null,
+  "detail": "timed out",
+  "files": [
+   "library/skills/legacy-circuit-mockups/references/minipro.md"
+  ]
+ },
+ {
+  "url": "https://my-resource.openai.azure.com/",
+  "status": "BROKEN",
+  "code": null,
+  "detail": "[Errno 8] nodename nor servname provided, or not known",
+  "files": [
+   "library/skills/arize-ai-provider-integration/SKILL.md"
+  ]
+ },
+ {
+  "url": "https://myaccount.blob.core.windows.net/vcpkg-cache",
+  "status": "BROKEN",
+  "code": null,
+  "detail": "[Errno 8] nodename nor servname provided, or not known",
+  "files": [
+   "library/skills/vcpkg/references/ci.md"
+  ]
+ },
+ {
+  "url": "https://owasp.org/www-project-agentic-ai-threats/",
+  "status": "BROKEN",
+  "code": 404,
+  "detail": "Not Found",
+  "files": [
+   "library/skills/agent-owasp-compliance/SKILL.md",
+   "library/skills/agent-supply-chain/SKILL.md",
+   "library/skills/mcp-security-audit/SKILL.md"
+  ]
+ },
+ {
+  "url": "https://partner.microsoft.com/",
+  "status": "BROKEN",
+  "code": null,
+  "detail": "[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1082)",
+  "files": [
+   "library/skills/mcp-deploy-manage-agents/SKILL.md"
+  ]
+ },
+ {
+  "url": "https://partner.microsoft.com/dashboard",
+  "status": "BROKEN",
+  "code": null,
+  "detail": "[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1082)",
+  "files": [
+   "library/skills/msstore-cli/SKILL.md"
+  ]
+ },
+ {
+  "url": "https://pester.dev/docs/commands/",
+  "status": "BROKEN",
+  "code": 404,
+  "detail": "Not Found",
+  "files": [
+   "library/skills/pester-should-migration/references/assertion-map.md"
+  ]
+ },
+ {
+  "url": "https://pester.dev/docs/migrations/",
+  "status": "BROKEN",
+  "code": 404,
+  "detail": "Not Found",
+  "files": [
+   "library/skills/pester-migration/SKILL.md"
+  ]
+ },
+ {
+  "url": "https://pipx.pypa.io/stable/installation/",
+  "status": "BROKEN",
+  "code": 404,
+  "detail": "Not Found",
+  "files": [
+   "library/skills/vardoger-analyze/SKILL.md"
+  ]
+ },
+ {
+  "url": "https://pkg.go.dev/github.com/gomarkdown/markdown@v0.0.0-20250810172220-2e2c11897d1a/html",
+  "status": "BROKEN",
+  "code": 404,
+  "detail": "Not Found",
+  "files": [
+   "library/skills/markdown-to-html/references/extended-guide.md"
+  ]
+ },
+ {
+  "url": "https://predictabledesigns.com/introduction-embedded-electronic-displays/",
+  "status": "TIMEOUT",
+  "code": null,
+  "detail": "timed out",
+  "files": [
+   "library/skills/legacy-circuit-mockups/references/lcd.md"
+  ]
+ },
+ {
+  "url": "https://prod-XX.australiasoutheast.logic.azure.com:443/workflows/",
+  "status": "BROKEN",
+  "code": null,
+  "detail": "[Errno 8] nodename nor servname provided, or not known",
+  "files": [
+   "library/skills/flowstudio-power-automate-build/references/action-patterns-data.md"
+  ]
+ },
+ {
+  "url": "https://raw.githubusercontent.com/Azure/terraform-azurerm-avm-res-",
+  "status": "BROKEN",
+  "code": 404,
+  "detail": "Not Found",
+  "files": [
+   "library/skills/import-infrastructure-as-code/SKILL.md"
+  ]
+ },
+ {
+  "url": "https://raw.githubusercontent.com/github/awesome-copilot/main/agents/",
+  "status": "BROKEN",
+  "code": 404,
+  "detail": "Not Found",
+  "files": [
+   "library/skills/suggest-awesome-github-copilot-agents/SKILL.md"
+  ]
+ },
+ {
+  "url": "https://raw.githubusercontent.com/github/awesome-copilot/main/instructions/",
+  "status": "BROKEN",
+  "code": 404,
+  "detail": "Not Found",
+  "files": [
+   "library/skills/suggest-awesome-github-copilot-instructions/SKILL.md"
+  ]
+ },
+ {
+  "url": "https://raw.githubusercontent.com/github/awesome-copilot/main/skills/",
+  "status": "BROKEN",
+  "code": 404,
+  "detail": "Not Found",
+  "files": [
+   "library/skills/suggest-awesome-github-copilot-skills/SKILL.md"
+  ]
+ },
+ {
+  "url": "https://raw.githubusercontent.com/github/awesome-copilot/refs/heads/main/",
+  "status": "BROKEN",
+  "code": 404,
+  "detail": "Not Found",
+  "files": [
+   "library/skills/tldr-prompt/SKILL.md"
+  ]
+ },
+ {
+  "url": "https://raw.githubusercontent.com/github/awesome-copilot/refs/heads/main/prompts/java-docs.prompt.md",
+  "status": "BROKEN",
+  "code": 404,
+  "detail": "Not Found",
+  "files": [
+   "library/skills/tldr-prompt/SKILL.md"
+  ]
+ },
+ {
+  "url": "https://raw.githubusercontent.com/github/awesome-copilot/refs/heads/main/prompts/java-junit.prompt.md",
+  "status": "BROKEN",
+  "code": 404,
+  "detail": "Not Found",
+  "files": [
+   "library/skills/tldr-prompt/SKILL.md"
+  ]
+ },
+ {
+  "url": "https://registry.npmjs.org/@xquik%2Ftweetclaw",
+  "status": "TIMEOUT",
+  "code": null,
+  "detail": "_ssl.c:1064: The handshake operation timed out",
+  "files": [
+   "library/skills/x-twitter-scraper/SKILL.md"
+  ]
+ },
+ {
+  "url": "https://retrocomputingforum.com/",
+  "status": "TIMEOUT",
+  "code": null,
+  "detail": "timed out",
+  "files": [
+   "library/skills/legacy-circuit-mockups/references/minipro.md"
+  ]
+ },
+ {
+  "url": "https://static6.arrow.com/aropdfconversion/1f68489996f057bb6611f71d5fdb5f60f44faa72/pgurl_58439499065092.pdf",
+  "status": "TIMEOUT",
+  "code": null,
+  "detail": "timed out",
+  "files": [
+   "library/skills/legacy-circuit-mockups/references/lcd.md"
+  ]
+ },
+ {
+  "url": "https://techcommunity.microsoft.com/blog/educatordeveloperblog/codetour-vscode-extension-allows-you-to-produce-interactive-guides-assessments-a/1274297",
+  "status": "BROKEN",
+  "code": 400,
+  "detail": "Bad Request",
+  "files": [
+   "library/skills/code-tour/references/examples.md"
+  ]
+ },
+ {
+  "url": "https://techcommunity.microsoft.com/t5/microsoft-security-baselines/new-amp-updated-security-tools/ba-p/1631613",
+  "status": "BROKEN",
+  "code": 400,
+  "detail": "Bad Request",
+  "files": [
+   "library/skills/batch-files/references/tools-and-resources.md"
+  ]
+ },
+ {
+  "url": "https://techcommunity.microsoft.com/t5/microsoft-security-baselines/new-tool-policy-analyzer/ba-p/701049",
+  "status": "BROKEN",
+  "code": 400,
+  "detail": "Bad Request",
+  "files": [
+   "library/skills/batch-files/references/tools-and-resources.md"
+  ]
+ },
+ {
+  "url": "https://technology.amis.nl/software-development/visual-studio-code-the-code-tours-extension-for-in-context-and-interactive-readme/",
+  "status": "BROKEN",
+  "code": null,
+  "detail": "[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1082)",
+  "files": [
+   "library/skills/code-tour/references/examples.md"
+  ]
+ },
+ {
+  "url": "https://url-to-upstream.tld",
+  "status": "BROKEN",
+  "code": null,
+  "detail": "[Errno 8] nodename nor servname provided, or not known",
+  "files": [
+   "library/skills/create-tldr-page/SKILL.md"
+  ]
+ },
+ {
+  "url": "https://web.archive.org/web/20061114024257/http://www.westerndesigncenter.com/wdc/documentation/Programmanual.pdf",
+  "status": "BROKEN",
+  "code": 503,
+  "detail": "Service Unavailable",
+  "files": [
+   "library/skills/legacy-circuit-mockups/references/6502.md"
+  ]
+ },
+ {
+  "url": "https://web.archive.org/web/20150302180951/https://support.microsoft.com/kb/841290",
+  "status": "BROKEN",
+  "code": 503,
+  "detail": "Service Unavailable",
+  "files": [
+   "library/skills/batch-files/references/tools-and-resources.md"
+  ]
+ },
+ {
+  "url": "https://web.archive.org/web/20200318052717/https://gallery.technet.microsoft.com/scriptcenter/File-Folder-and-Share-f788312b",
+  "status": "BROKEN",
+  "code": 503,
+  "detail": "Service Unavailable",
+  "files": [
+   "library/skills/batch-files/references/tools-and-resources.md"
+  ]
+ },
+ {
+  "url": "https://web.archive.org/web/20240416181228/http://www.fmwconcepts.com/imagemagick/index.php",
+  "status": "BROKEN",
+  "code": 503,
+  "detail": "Service Unavailable",
+  "files": [
+   "library/skills/batch-files/references/tools-and-resources.md"
+  ]
+ },
+ {
+  "url": "https://www.allaboutcircuits.com/technical-articles/using-a-breadboard/",
+  "status": "BROKEN",
+  "code": 404,
+  "detail": "Not Found",
+  "files": [
+   "library/skills/legacy-circuit-mockups/references/breadboard.md"
+  ]
+ },
+ {
+  "url": "https://www.arduino.cc/en/Guide",
+  "status": "BROKEN",
+  "code": 404,
+  "detail": "Not Found",
+  "files": [
+   "library/skills/arduino-azure-iot-edge-integration/SKILL.md",
+   "library/skills/arduino-azure-iot-edge-integration/references/arduino-iot-checklist.md",
+   "library/skills/arduino-azure-iot-edge-integration/references/arduino-official-best-practices.md"
+  ]
+ },
+ {
+  "url": "https://www.bulcomp-eng.com/datasheet/XGecu%20T48%20-%20Introduction.pdf",
+  "status": "TIMEOUT",
+  "code": null,
+  "detail": "timed out",
+  "files": [
+   "library/skills/legacy-circuit-mockups/references/t48eeprom-programmer.md"
+  ]
+ },
+ {
+  "url": "https://www.cnil.fr/en/cookies-cnil-fines-google-150-million-euros-and-facebook-60-million-euros",
+  "status": "BROKEN",
+  "code": 404,
+  "detail": "Not Found",
+  "files": [
+   "library/skills/data-breach-blast-radius/references/SOURCES.md"
+  ]
+ },
+ {
+  "url": "https://www.dataprotection.ie/en/news-media/press-releases/data-protection-commission-announces-decision-in-meta-ireland-inquiry",
+  "status": "BROKEN",
+  "code": 404,
+  "detail": "Not Found",
+  "files": [
+   "library/skills/data-breach-blast-radius/references/SOURCES.md"
+  ]
+ },
+ {
+  "url": "https://www.dataprotection.ie/en/news-media/press-releases/data-protection-commission-announces-decision-in-whatsapp-inquiry",
+  "status": "BROKEN",
+  "code": 404,
+  "detail": "Not Found",
+  "files": [
+   "library/skills/data-breach-blast-radius/references/SOURCES.md"
+  ]
+ },
+ {
+  "url": "https://www.electronics-tutorials.ws",
+  "status": "ERROR",
+  "code": null,
+  "detail": "TimeoutError: The read operation timed out",
+  "files": [
+   "library/skills/legacy-circuit-mockups/references/common-breadboard-components.md"
+  ]
+ },
+ {
+  "url": "https://www.hadex.cz/spec/m545b.pdf",
+  "status": "TIMEOUT",
+  "code": null,
+  "detail": "timed out",
+  "files": [
+   "library/skills/legacy-circuit-mockups/references/minipro.md"
+  ]
+ },
+ {
+  "url": "https://www.markdownguide.org/extended-syntax/",
+  "status": "TIMEOUT",
+  "code": null,
+  "detail": "timed out",
+  "files": [
+   "library/skills/convert-plaintext-to-md/SKILL.md"
+  ]
+ },
+ {
+  "url": "https://www.microsoft.com/p/windows-10-pro-for-workstations/dg7gmgf0dw9s",
+  "status": "BROKEN",
+  "code": 404,
+  "detail": "Not Found",
+  "files": [
+   "library/skills/batch-files/references/tools-and-resources.md"
+  ]
+ },
+ {
+  "url": "https://www.npgsql.org/doc/api/NpgsqlException.html",
+  "status": "BROKEN",
+  "code": 404,
+  "detail": "Not Found",
+  "files": [
+   "library/skills/reviewing-oracle-to-postgres-migration/references/oracle-to-postgres-type-coercion.md"
+  ]
+ },
+ {
+  "url": "https://www.nuget.org/packages/ModelContextProtocol.Extensions.Apps",
+  "status": "BROKEN",
+  "code": 404,
+  "detail": "Not Found",
+  "files": [
+   "library/skills/dotnet-mcp-builder/references/mcp-apps.md"
+  ]
+ },
+ {
+  "url": "https://www.nuget.org/profiles/ModelContextProtocol",
+  "status": "BROKEN",
+  "code": 404,
+  "detail": "Not Found",
+  "files": [
+   "library/skills/dotnet-mcp-builder/SKILL.md",
+   "library/skills/dotnet-mcp-builder/references/packages.md"
+  ]
+ },
+ {
+  "url": "https://www.python.org/",
+  "status": "TIMEOUT",
+  "code": null,
+  "detail": "timed out",
+  "files": [
+   "library/skills/python-azure-iot-edge-modules/SKILL.md",
+   "library/skills/python-azure-iot-edge-modules/references/python-edge-module-template.md",
+   "library/skills/python-azure-iot-edge-modules/references/python-official-best-practices.md"
+  ]
+ }
+]

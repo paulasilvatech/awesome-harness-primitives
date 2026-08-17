@@ -4,7 +4,7 @@
     "preToolUse": [
       {
         "type": "command",
-        "bash": "hooks/tool-guardian/guard-tool.sh",
+        "bash": "library/hooks/tool-guardian/guard-tool.sh",
         "cwd": ".",
         "env": {
           "GUARD_MODE": "block"
