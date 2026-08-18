@@ -1,115 +1,77 @@
 ---
-name: "powerbi-modeling"
+name: powerbi-modeling
 description: >-
-  Power BI semantic modeling assistant for building optimized data models. Use when working with Power
-  BI semantic models, creating measures, designing star schemas, configuring relationships,
-  implementing RLS, or optimizing model performance. Triggers on queries about DAX calculations, table
-  relationships, dimension/fact table design, naming conventions, model documentation, cardinality,
-  cross-filter direction, calculation groups, and data model best practices. Always connects to the
-  active model first using power-bi-modeling MCP tools to understand the data structure before
-  providing guidance.
+  Guide Power BI semantic model design and optimization for well-documented models with star schema checks, DAX measures, relationships, RLS, naming, descriptions, calculation groups, performance tuning, and model validation. Use when working with Power BI semantic models, creating measures, adding relationships, configuring cardinality or cross-filter direction, documenting models, or optimizing DAX and model performance.
 ---
-# Power BI Semantic Modeling
 
-Guide users in building optimized, well-documented Power BI semantic models following Microsoft best practices.
+# Power BI semantic modeling
 
-## When to Use This Skill
+Connect to the active Power BI semantic model first, inspect its structure, and then provide model-specific guidance or changes for measures, relationships, documentation, RLS, calculation groups, and performance.
 
-Use this skill when users ask about:
-- Creating or optimizing Power BI semantic models
-- Designing star schemas (dimension/fact tables)
-- Writing DAX measures or calculated columns
-- Configuring table relationships (cardinality, cross-filter)
-- Implementing row-level security (RLS)
-- Naming conventions for tables, columns, measures
-- Adding descriptions and documentation to models
-- Performance tuning and optimization
-- Calculation groups and field parameters
-- Model validation and best practice checks
+## When to invoke
 
-**Trigger phrases:** "create a measure", "add relationship", "star schema", "optimize model", "DAX formula", "RLS", "naming convention", "model documentation", "cardinality", "cross-filter"
+- "Create a measure in my Power BI model."
+- "Add or fix a relationship and cardinality."
+- "Design this as a star schema."
+- "Optimize this DAX formula or model performance."
+- "Configure RLS or document this semantic model."
 
-## Prerequisites
+## Prerequisites and context
 
-### Required Tools
-- **Power BI Modeling MCP Server**: Required for connecting to and modifying semantic models
-  - Enables: connection_operations, table_operations, measure_operations, relationship_operations, etc.
-  - Must be configured and running to interact with models
+- Power BI Modeling MCP Server, often exposed as `power-bi-modeling`, is required for semantic model inspection and modification. It exposes `connection_operations`, `model_operations`, `table_operations`, `column_operations`, `measure_operations`, `relationship_operations`, `dax_query_operations`, `calculation_group_operations`, and `security_role_operations`.
+- Microsoft Learn MCP Server is optional for current documentation research through `microsoft_docs_search` and `microsoft_docs_fetch`.
 
-### Optional Dependencies
-- **Microsoft Learn MCP Server**: Recommended for researching latest best practices
-  - Enables: microsoft_docs_search, microsoft_docs_fetch
-  - Use for complex scenarios, new features, and official documentation
+## Procedure
 
-## Workflow
+1. Connect and analyze before offering guidance:
 
-### 1. Connect and Analyze First
-
-Before providing any modeling guidance, always examine the current model state:
-
-```
-1. List connections: connection_operations(operation: "ListConnections")
-2. If no connection, check for local instances: connection_operations(operation: "ListLocalInstances")
-3. Connect to the model (Desktop or Fabric)
-4. Get model overview: model_operations(operation: "Get")
-5. List tables: table_operations(operation: "List")
-6. List relationships: relationship_operations(operation: "List")
-7. List measures: measure_operations(operation: "List")
+```text
+connection_operations(operation: "ListConnections")
+connection_operations(operation: "ListLocalInstances")
+model_operations(operation: "Get")
+table_operations(operation: "List")
+relationship_operations(operation: "List")
+measure_operations(operation: "List")
 ```
 
-### 2. Evaluate Model Health
+2. If no connection exists, connect to the Desktop or Fabric model before reading or changing metadata.
+3. Evaluate model health against star schema, relationships, naming, documentation, measures, hidden fields, date table, RLS, and performance rules.
+4. Use bundled references for deeper decisions: `references/STAR-SCHEMA.md`, `references/RELATIONSHIPS.md`, `references/MEASURES-DAX.md`, `references/PERFORMANCE.md`, and `references/RLS.md`.
+5. Make targeted changes only after model state is known, then validate with metadata reads or DAX validation as appropriate.
 
-After connecting, assess the model against best practices:
+## Model quality checklist
 
-- **Star Schema**: Are tables properly classified as dimension or fact?
-- **Relationships**: Correct cardinality? Minimal bidirectional filters?
-- **Naming**: Human-readable, consistent naming conventions?
-- **Documentation**: Do tables, columns, measures have descriptions?
-- **Measures**: Explicit measures for key calculations?
-- **Hidden Fields**: Are technical columns hidden from report view?
+| Area | Best practice |
+| --- | --- |
+| Tables | Clear dimension versus fact classification. |
+| Naming | Human-readable names such as `Customer Name`, not `CUST_NM`. |
+| Descriptions | All tables, columns, and measures are documented. |
+| Measures | Business metrics use explicit DAX measures. |
+| Relationships | One-to-many relationships flow from dimension to fact. |
+| Cross-filter | Use single direction unless bidirectional filtering is specifically justified. |
+| Hidden fields | Hide technical keys and IDs from report view. |
+| Date table | Use a dedicated marked date table. |
+| RLS | Define security roles with testable filters and effective-permission checks. |
 
-### 3. Provide Targeted Guidance
+## MCP operation reference
 
-Based on analysis, guide improvements using references:
-- Star schema design: See [STAR-SCHEMA.md](references/STAR-SCHEMA.md)
-- Relationship configuration: See [RELATIONSHIPS.md](references/RELATIONSHIPS.md)
-- DAX measures and naming: See [MEASURES-DAX.md](references/MEASURES-DAX.md)
-- Performance optimization: See [PERFORMANCE.md](references/PERFORMANCE.md)
-- Row-level security: See [RLS.md](references/RLS.md)
+| Category | Key operations |
+| --- | --- |
+| `connection_operations` | Connect, ListConnections, ListLocalInstances, ConnectFabric. |
+| `model_operations` | Get, GetStats, ExportTMDL. |
+| `table_operations` | List, Get, Create, Update, GetSchema. |
+| `column_operations` | List, Get, Create, Update descriptions, hidden state, and format. |
+| `measure_operations` | List, Get, Create, Update, Move. |
+| `relationship_operations` | List, Get, Create, Update, Activate, Deactivate. |
+| `dax_query_operations` | Execute, Validate. |
+| `calculation_group_operations` | List, Create, Update. |
+| `security_role_operations` | List, Create, Update, GetEffectivePermissions. |
 
-## Quick Reference: Model Quality Checklist
+## Common modeling tasks
 
-| Area | Best Practice |
-|------|--------------|
-| Tables | Clear dimension vs fact classification |
-| Naming | Human-readable: `Customer Name` not `CUST_NM` |
-| Descriptions | All tables, columns, measures documented |
-| Measures | Explicit DAX measures for business metrics |
-| Relationships | One-to-many from dimension to fact |
-| Cross-filter | Single direction unless specifically needed |
-| Hidden fields | Hide technical keys, IDs from report view |
-| Date table | Dedicated marked date table |
+Create a measure with description:
 
-## MCP Tools Reference
-
-Use these Power BI Modeling MCP operations:
-
-| Operation Category | Key Operations |
-|-------------------|----------------|
-| `connection_operations` | Connect, ListConnections, ListLocalInstances, ConnectFabric |
-| `model_operations` | Get, GetStats, ExportTMDL |
-| `table_operations` | List, Get, Create, Update, GetSchema |
-| `column_operations` | List, Get, Create, Update (descriptions, hidden, format) |
-| `measure_operations` | List, Get, Create, Update, Move |
-| `relationship_operations` | List, Get, Create, Update, Activate, Deactivate |
-| `dax_query_operations` | Execute, Validate |
-| `calculation_group_operations` | List, Create, Update |
-| `security_role_operations` | List, Create, Update, GetEffectivePermissions |
-
-## Common Tasks
-
-### Add Measure with Description
-```
+```text
 measure_operations(
   operation: "Create",
   definitions: [{
@@ -122,8 +84,9 @@ measure_operations(
 )
 ```
 
-### Update Column Description
-```
+Update a column description and hide a technical key:
+
+```text
 column_operations(
   operation: "Update",
   definitions: [{
@@ -135,8 +98,9 @@ column_operations(
 )
 ```
 
-### Create Relationship
-```
+Create a relationship:
+
+```text
 relationship_operations(
   operation: "Create",
   definitions: [{
@@ -149,11 +113,54 @@ relationship_operations(
 )
 ```
 
-## When to Use Microsoft Learn MCP
+## Microsoft Learn usage
 
-Research current best practices using `microsoft_docs_search` for:
-- Latest DAX function documentation
-- New Power BI features and capabilities
-- Complex modeling scenarios (SCD Type 2, many-to-many)
-- Performance optimization techniques
-- Security implementation patterns
+Use `microsoft_docs_search` and `microsoft_docs_fetch` for latest DAX functions, new Power BI features, SCD Type 2 or many-to-many modeling patterns, performance optimization, and security implementation guidance.
+
+## Gotchas
+
+- **Do not provide generic advice before connecting**; always inspect the active model first.
+- **Do not create bidirectional relationships by default**; they can hide ambiguity and performance issues.
+- **Do not expose technical keys**; hide IDs and surrogate keys from report view.
+- **Do not use calculated columns for business metrics when an explicit measure is appropriate**.
+
+## Progressive disclosure and bundled resources
+
+- `references/STAR-SCHEMA.md`: dimension/fact table design and model shape rules.
+- `references/RELATIONSHIPS.md`: relationship cardinality and cross-filter guidance.
+- `references/MEASURES-DAX.md`: DAX measures, naming, and descriptions.
+- `references/PERFORMANCE.md`: optimization and model performance checks.
+- `references/RLS.md`: row-level security implementation patterns.
+
+## Output template
+
+```markdown
+## Power BI modeling result
+
+**Status:** complete | needs connection | blocked
+**Model:** `<model name or connection>`
+
+### Model observations
+| Area | Finding | Recommendation |
+| --- | --- | --- |
+| Relationships | <finding> | <fix> |
+
+### Changes or proposed changes
+| Object | Operation | Definition |
+| --- | --- | --- |
+| `<measure/table/relationship>` | `<create|update|validate>` | `<details>` |
+
+### Validation
+- Connection inspected: <pass|fail>
+- DAX validation: <pass|fail|not applicable>
+- Metadata re-read: <pass|fail>
+```
+
+## Quality gate
+
+- [ ] Existing connections or local instances were checked before guidance.
+- [ ] Model, tables, relationships, and measures were inspected before changes.
+- [ ] Star schema, naming, descriptions, measures, hidden fields, date table, RLS, and performance were considered as relevant.
+- [ ] Relationship changes specify cardinality and `crossFilteringBehavior`.
+- [ ] Measure changes include expression, table, format string, and description.
+- [ ] Microsoft Learn research was used for current or complex scenarios when available.

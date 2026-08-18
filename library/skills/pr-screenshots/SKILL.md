@@ -1,78 +1,88 @@
 ---
 name: "pr-screenshots"
 description: >-
-  Embed before/after screenshots and annotated images in pull request descriptions. Use this skill
-  when a PR changes something visible; layout, styling, CSS; charts, dashboards, data visualizations.
+  Embed before/after screenshots and annotated images in pull request descriptions so reviewers can inspect visible changes quickly. Use this skill when a PR changes layout, styling, CSS, charts, dashboards, data visualizations, UI components, forms, modals, error messages, CLI output, or log formatting.
 ---
-# PR Screenshots
 
-Embed before/after screenshots in pull request descriptions so reviewers can see the visual change without checking out the branch.
+# PR screenshots
 
-## When to Use This Skill
+Prepare pull request screenshot evidence by choosing the right visual pairs, preserving comparison fidelity, uploading images through the host platform, and returning markdown ready for the PR description.
 
-Use this skill when a PR changes something visible:
+## When to invoke
 
-- Layout, styling, CSS
-- Charts, dashboards, data visualizations
-- UI components, forms, modals
-- Error messages, CLI output, log formatting
+- "Add before and after screenshots to this PR."
+- "This CSS change needs visual evidence in the pull request."
+- "Embed dashboard screenshots in the PR description."
+- "Show reviewers the CLI output formatting change."
+- "Add annotated images for this subtle UI change."
 
-## PR Description Pattern
+## Visual evidence rules
 
-Place screenshots directly in the PR description body. Avoid wrapping them in `<details>` collapse — reviewers are more likely to look at images they can see without clicking.
+| Situation | Screenshot evidence | Notes |
+| --- | --- | --- |
+| Layout, styling, or CSS | Before and after from the same viewport and crop | Capture before state before changing code whenever possible. |
+| Charts, dashboards, or data visualizations | Before and after with the same data fixture or date range | State the data condition briefly. |
+| UI components, forms, or modals | Component state screenshots for each changed state | Include hover, validation, and error states when relevant. |
+| Error messages, CLI output, or log formatting | Terminal or log screenshots only when text formatting matters | Prefer text snippets when screenshots add no value. |
+| Subtle visual differences | Annotated screenshots with callouts | Use an image annotation workflow when the difference is not obvious. |
+
+Place screenshots directly in the PR description body. Avoid hiding evidence in `<details>` blocks because reviewers are less likely to open collapsed content. Keep captions to one or two sentences and let the image carry most of the communication.
+
+## PR description patterns
+
+Use a simple pair for one visual change:
 
 ```markdown
-**Before** — brief description of the problem:
+**Before** - brief description of the problem:
 
 ![before](url-to-before-image)
 
-**After** — brief description of the fix:
+**After** - brief description of the fix:
 
 ![after](url-to-after-image)
 ```
 
-Keep the text brief. A sentence or two per image describing what the reader should notice. Let the image carry most of the communication.
-
-### Multiple changes
-
-For PRs with several visual changes, use separate before/after pairs with headings:
+Use headings for multiple visual changes:
 
 ```markdown
 ## Filter bar alignment
 
-**Before** — 1px border clash between adjacent buttons:
+**Before** - 1px border clash between adjacent buttons:
 
 ![before-filters](url)
 
-**After** — borders overlap cleanly, hover tint added:
+**After** - borders overlap cleanly, hover tint added:
 
 ![after-filters](url)
 
 ## Chart tooltip
 
-**Before** — tooltip clipped at container edge:
+**Before** - tooltip clipped at container edge:
 
 ![before-tooltip](url)
 
-**After** — tooltip repositions to stay visible:
+**After** - tooltip repositions to stay visible:
 
 ![after-tooltip](url)
 ```
 
-## Image Sizing
+## Image sizing and fidelity
 
-- **Take screenshots at native 1x resolution ** — don't resize with PIL (creates artifacts)
-- **Control display size in HTML ** when images are too large:
-  ```html
-  <img src="url" width="600" alt="description">
-  ```
-- **Before/after pairs must use the same viewport width and crop ** — otherwise the comparison is meaningless
+- Take screenshots at native 1x resolution; do not resize with PIL because resampling creates artifacts.
+- Control display size in markdown with HTML only when images are too large:
 
-## Uploading Images
+```html
+<img src="url" width="600" alt="description">
+```
+
+- Before and after pairs must use the same viewport width and crop. A different viewport or crop makes the comparison unreliable.
+- Very large images over 10MB may not render inline on some platforms; crop to the relevant region before upload instead of compressing until text becomes blurry.
+
+## Uploading images
 
 ### Azure DevOps
 
-Upload images as PR attachments via the REST API:
+Upload images as PR attachments through the REST API:
 
 ```powershell
 $token = az account get-access-token `
@@ -82,7 +92,7 @@ $token = az account get-access-token `
 $base = "https://{org}.visualstudio.com/{projectId}/_apis/git/repositories/{repoId}"
 $url = "$base/pullRequests/{prId}/attachments/screenshot.png?api-version=7.1-preview.1"
 
-# Use HttpClient — Invoke-RestMethod can corrupt binary data
+# Use HttpClient; Invoke-RestMethod can corrupt binary data.
 $client = New-Object System.Net.Http.HttpClient
 $client.DefaultRequestHeaders.Authorization = `
     New-Object System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", $token)
@@ -94,38 +104,61 @@ $content.Headers.ContentType = `
 $resp = $client.PostAsync($url, $content).Result
 ```
 
-Reference in the PR description:
+Reference the attachment in the PR description:
 
 ```markdown
 ![description](https://{org}.visualstudio.com/{projectId}/_apis/git/repositories/{repoId}/pullRequests/{prId}/attachments/screenshot.png)
 ```
 
-**Azure DevOps gotchas: **
+Azure DevOps gotchas:
 
-- **Use `{org}.visualstudio.com` NOT `dev.azure.com/{org}`** — AzDO's markdown renderer uses `.visualstudio.com`. The `dev.azure.com` format loads noticeably slower
-- Use `POST` not `PUT` (PUT returns 405)
-- API version must be `7.1-preview.1`
-- Can't re-upload with the same filename — use a new name (e.g. `screenshot-v2.png`)
-- Use `HttpClient` not `Invoke-RestMethod` — IRM can corrupt binary data
-- Repo-relative paths don't work in PR descriptions — must use full URLs
-- Don't commit images to the branch just for PR screenshots
+| Gotcha | Correct action |
+| --- | --- |
+| Markdown renderer is faster with `{org}.visualstudio.com` | Use `.visualstudio.com`, not `dev.azure.com/{org}`. |
+| Attachment upload method | Use `POST`; `PUT` returns 405. |
+| API version | Use `7.1-preview.1`. |
+| Filename reuse | Use a new filename such as `screenshot-v2.png`; re-uploading the same name fails. |
+| Binary upload | Use `HttpClient`; `Invoke-RestMethod` can corrupt binary data. |
+| PR description paths | Use full URLs; repo-relative paths do not render as PR attachments. |
+| Branch clutter | Do not commit images to the feature branch just for PR screenshots. |
 
 ### GitHub
 
-> **Work in progress. ** GitHub's drag-and-drop image upload uses internal endpoints that require browser cookies. There's no clean public API for uploading images to PR descriptions yet.
+GitHub does not provide a clean public API for uploading images directly into pull request descriptions. Prefer the active GitHub attachment workflow available in the host environment when present. If no uploader exists, use a documented workaround such as a `pr-assets` orphan branch and reference `github.com/{owner}/{repo}/blob/pr-assets/{file}?raw=true`, but call out that it is clunky and should not be the default when a first-class uploader is available.
 
-**Current workaround: ** Commit images to a `pr-assets` orphan branch and reference via blob URLs (`github.com/{owner}/{repo}/blob/pr-assets/{file}?raw=true`). It works but is clunky — contributions for a better approach are welcome.
+## Platform wording
 
-## Guidelines
+Use `Before/after` language when summarizing comparisons and preserve `BEFORE` state capture as a named risk because missing the initial image is error-prone. For Azure DevOps, mention the slower `dev.azure.com` rendering form only to reject it in favor of `.visualstudio.com`. For GitHub, mention the former drag-and-drop limitation when explaining why an attachment uploader or `pr-assets` workaround may be needed. Use `image-annotations` as the related skill name for subtle callouts, and call out when a same-name re-upload would fail.
 
-1. **Capture before state BEFORE making changes ** — it's easy to forget, and reconstructing the original state later is slow and error-prone
-2. **Keep descriptions brief ** — a sentence or two per image pointing out what changed is enough
-3. **Prefer visible images over collapsed sections ** — screenshots behind `<details>` tags are easy to skip
-4. **Annotate when the change is subtle ** — use the `image-annotations` skill to add callouts when the difference isn't immediately obvious
-5. **Match viewport and crop ** between before/after pairs so the comparison is meaningful
+## Output template
 
-## Limitations
+```markdown
+## PR screenshot block
 
-- GitHub image upload requires workarounds (no public API for PR description images)
-- Azure DevOps attachment filenames can't be reused — plan naming ahead
-- Very large images (>10MB) may not render inline on some platforms
+**Status:** ready | blocked
+**PR:** <PR number or URL>
+**Visual changes covered:** <count>
+
+### Markdown to paste
+<before/after markdown block with image URLs>
+
+### Evidence notes
+| Change | Before image | After image | Viewport/crop match | Notes |
+| --- | --- | --- | --- | --- |
+| `<area>` | `<url>` | `<url>` | `yes/no` | `<what reviewers should notice>` |
+
+### Upload details
+- Platform: GitHub | Azure DevOps | other
+- Upload method: <attachment API, host uploader, or documented workaround>
+- Files: <image filenames>
+```
+
+## Quality gate
+
+- [ ] Every visible change that needs review has a before/after pair or a justified single screenshot.
+- [ ] Before and after images use the same viewport width, crop, and relevant data state.
+- [ ] Images are visible in the PR body, not hidden behind `<details>` by default.
+- [ ] Captions are brief and point reviewers to the important difference.
+- [ ] Azure DevOps uploads use `.visualstudio.com`, `POST`, `7.1-preview.1`, unique filenames, and `HttpClient`.
+- [ ] GitHub images use an available attachment workflow or a clearly documented workaround.
+- [ ] No screenshots are committed to the feature branch solely for PR display.

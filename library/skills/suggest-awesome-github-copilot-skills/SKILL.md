@@ -1,97 +1,81 @@
 ---
 name: "suggest-awesome-github-copilot-skills"
 description: >-
-  Suggest relevant GitHub Copilot skills from the awesome-copilot repository based on current
-  repository context and chat history, avoiding duplicates with existing skills in this repository,
-  and identifying outdated skills that need updates. Use this skill when --; ```.
+  Suggest relevant GitHub Copilot Agent Skills from the awesome-copilot repository by comparing remote skills with local repository skills, detecting missing or outdated skills, bundled assets, duplicates, and repository-fit gaps. Use when the user asks which awesome-copilot skills to install, update, compare, or recommend for the current repository.
 ---
-# Suggest Awesome GitHub Copilot Skills
 
-Analyze current repository context and suggest relevant Agent Skills from the [GitHub awesome-copilot repository](https://github.com/github/awesome-copilot/blob/main/docs/README.skills.md) that are not already available in this repository. Agent Skills are self-contained folders located in the [skills](https://github.com/github/awesome-copilot/tree/main/skills) folder of the awesome-copilot repository, each containing a `SKILL.md` file with instructions and optional bundled assets.
+# Suggest awesome GitHub Copilot skills
 
-## Process
+Analyze repository context and the GitHub awesome-copilot skill catalog, then recommend missing or outdated self-contained Agent Skills without installing or updating anything unless the user explicitly asks.
 
-1. **Fetch Available Skills**: Extract skills list and descriptions from [awesome-copilot README.skills.md](https://github.com/github/awesome-copilot/blob/main/docs/README.skills.md). Must use `#fetch` tool.
-2. **Scan Local Skills**: Discover existing skill folders in `.github/skills/` folder
-3. **Extract Descriptions**: Read front matter from local `SKILL.md` files to get `name` and `description`
-4. **Fetch Remote Versions**: For each local skill, fetch the corresponding `SKILL.md` from awesome-copilot repository using raw GitHub URLs (e.g., `https://raw.githubusercontent.com/github/awesome-copilot/main/skills/{skill-name}/SKILL.md`)
-5. **Compare Versions**: Compare local skill content with remote versions to identify:
-   - Skills that are up-to-date (exact match)
-   - Skills that are outdated (content differs)
-   - Key differences in outdated skills (description, instructions, bundled assets)
-6. **Analyze Context**: Review chat history, repository files, and current project needs
-7. **Compare Existing**: Check against skills already available in this repository
-8. **Match Relevance**: Compare available skills against identified patterns and requirements
-9. **Present Options**: Display relevant skills with descriptions, rationale, and availability status including outdated skills
-10. **Validate**: Ensure suggested skills would add value not already covered by existing skills
-11. **Output**: Provide structured table with suggestions, descriptions, and links to both awesome-copilot skills and similar local skills
-    **AWAIT** user request to proceed with installation or updates of specific skills. DO NOT INSTALL OR UPDATE UNLESS DIRECTED TO DO SO.
-12. **Download/Update Assets**: For requested skills, automatically:
-    - Download new skills to `.github/skills/` folder, preserving the folder structure
-    - Update outdated skills by replacing with latest version from awesome-copilot
-    - Download both `SKILL.md` and any bundled assets (scripts, templates, data files)
-    - Do NOT adjust content of the files
-    - Use `#fetch` tool to download assets, but may use `curl` using `#runInTerminal` tool to ensure all content is retrieved
-    - Use `#todos` tool to track progress
+## When to invoke
 
-## Context Analysis Criteria
+- "Suggest awesome-copilot skills for this repo."
+- "Which GitHub Copilot skills should we install?"
+- "Compare our skills with awesome-copilot."
+- "Find outdated local skills from awesome-copilot."
+- "Recommend Agent Skills for this project."
 
-**Repository Patterns**:
-- Programming languages used (.cs, .js, .py, .ts, etc.)
-- Framework indicators (ASP.NET, React, Azure, Next.js, etc.)
-- Project types (web apps, APIs, libraries, tools, infrastructure)
-- Development workflow requirements (testing, CI/CD, deployment)
-- Infrastructure and cloud providers (Azure, AWS, GCP)
+## Prerequisites and context
 
-**Chat History Context**:
-- Recent discussions and pain points
-- Feature requests or implementation needs
-- Code review patterns
-- Development workflow requirements
-- Specialized task needs (diagramming, evaluation, deployment)
+- Remote catalog: https://github.com/github/awesome-copilot/blob/main/docs/README.skills.md.
+- Remote skill folders live under https://github.com/github/awesome-copilot/tree/main/skills.
+- Use `web_fetch` for README and raw `SKILL.md` files. Use `execute/bash` with `curl` only when a bundled asset cannot be retrieved completely through `web_fetch`.
+- Scan local skills from `.github/skills/` first; if that folder does not exist, report that no local project skills were found.
+- Do not install, update, replace, or delete skills until the user asks for a specific install or update.
+- Legacy references to `#fetch`, `#runInTerminal`, `#todos`, `fetch`, and `githubRepo` mean the current CLI equivalents are `web_fetch`, `execute/bash`, session tracking, and raw GitHub URLs.
 
-## Output Format
+## Procedure
 
-Display analysis results in structured table comparing awesome-copilot skills with existing repository skills:
+1. Fetch the available skill list and descriptions from https://github.com/github/awesome-copilot/blob/main/docs/README.skills.md.
+2. List all folders in `.github/skills/`.
+3. For each local folder, read `SKILL.md` front matter and extract `name` and `description`.
+4. List bundled assets in each local skill folder.
+5. For each local skill that appears in awesome-copilot, fetch the remote raw file at `https://raw.githubusercontent.com/github/awesome-copilot/main/skills/{skill-name}/SKILL.md`.
+6. Compare entire local and remote `SKILL.md` content, including front matter and body.
+7. Identify exact matches, outdated skills, front matter changes, instruction changes, and bundled asset changes.
+8. Review chat history, repository files, languages, frameworks, cloud providers, infrastructure, testing, CI/CD, deployment, and specialized workflow needs.
+9. Compare available remote skills with local skills to avoid duplicates and find coverage gaps.
+10. Present a structured table with suggestions, descriptions, bundled assets, install status, similar local skills, rationale, and links.
+11. AWAIT user request before installation or update: DO NOT INSTALL OR UPDATE UNLESS DIRECTED to proceed.
+12. Download/Update assets only after direction: download the full remote skill folder into `.github/skills/`, preserve folder structure, include `SKILL.md` and bundled assets, and do not adjust content.
 
-| Awesome-Copilot Skill | Description | Bundled Assets | Already Installed | Similar Local Skill | Suggestion Rationale |
-|-----------------------|-------------|----------------|-------------------|---------------------|---------------------|
-| [gh-attach](https://github.com/github/awesome-copilot/tree/main/skills/gh-attach) | GitHub CLI skill for managing repositories and workflows | None | Do Not | None | Would enhance GitHub workflow automation capabilities |
-| [aspire](https://github.com/github/awesome-copilot/tree/main/skills/aspire) | Aspire skill for distributed application development | 9 reference files | Do | aspire | Already covered by existing Aspire skill |
-| [terraform-azurerm-set-diff-analyzer](https://github.com/github/awesome-copilot/tree/main/skills/terraform-azurerm-set-diff-analyzer) | Analyze Terraform AzureRM provider changes | Reference files |  Outdated | terraform-azurerm-set-diff-analyzer | Instructions updated with new validation patterns - Update recommended |
+## Context analysis criteria
 
-## Local Skills Discovery Process
+| Area | Inspect for |
+| --- | --- |
+| Repository patterns | Programming languages such as `.cs`, `.js`, `.py`, `.ts`; frameworks such as ASP.NET, React, Azure, and Next.js; project types such as web apps, APIs, libraries, tools, and infrastructure. |
+| Development workflow | Testing, CI/CD, deployment, package managers, and validation commands. |
+| Infrastructure and cloud | Azure, AWS, GCP, Terraform, Bicep, Kubernetes, and workflow automation. |
+| Chat history context | Recent discussions, pain points, feature requests, code review patterns, and specialized task needs. |
+| Local skills | Existing capabilities, duplicate coverage, similar names, descriptions, and bundled assets. |
 
-1. List all folders in `.github/skills/` directory
-2. For each folder, read `SKILL.md` front matter to extract `name` and `description`
-3. List any bundled assets within each skill folder
-4. Build comprehensive inventory of existing skills with their capabilities
-5. Use this inventory to avoid suggesting duplicates
+## Version comparison rules
 
-## Version Comparison Process
+| Status | Definition |
+| --- | --- |
+| Already installed and up-to-date | Local `SKILL.md` exactly matches the remote awesome-copilot `SKILL.md`. |
+| Installed but outdated | Local skill exists and remote content differs. |
+| Not installed in repo | Remote skill is relevant and no matching local skill exists. |
 
-1. For each local skill folder, construct the raw GitHub URL to fetch the remote `SKILL.md`:
-   - Pattern: `https://raw.githubusercontent.com/github/awesome-copilot/main/skills/{skill-name}/SKILL.md`
-2. Fetch the remote version using the `#fetch` tool
-3. Compare entire file content (including front matter and body)
-4. Identify specific differences:
-   - **Front matter changes** (name, description)
-   - **Instruction updates** (guidelines, examples, best practices)
-   - **Bundled asset changes** (new, removed, or modified assets)
-5. Document key differences for outdated skills
-6. Calculate similarity to determine if update is needed
+For outdated skills, document front matter changes, instruction updates, and bundled asset changes. Calculate similarity qualitatively enough to explain whether an update is recommended.
 
-## Skill Structure Requirements
+Example remote raw URL pattern:
 
-Based on the Agent Skills specification, each skill is a folder containing:
-- **`SKILL.md`**: Main instruction file with front matter (`name`, `description`) and detailed instructions
-- **Optional bundled assets**: Scripts, templates, reference data, and other files referenced from `SKILL.md`
-- **Folder naming**: Lowercase with hyphens (e.g., `azure-deployment-preflight`)
-- **Name matching**: The `name` field in `SKILL.md` front matter must match the folder name
+```text
+https://raw.githubusercontent.com/github/awesome-copilot/main/skills/{skill-name}/SKILL.md
+```
 
-## Front Matter Structure
+Example skill links to preserve in output:
 
-Skills in awesome-copilot use this front matter format in `SKILL.md`:
+- https://github.com/github/awesome-copilot/tree/main/skills/gh-attach
+- https://github.com/github/awesome-copilot/tree/main/skills/aspire
+- https://github.com/github/awesome-copilot/tree/main/skills/terraform-azurerm-set-diff-analyzer
+
+## Skill structure checks
+
+Each Agent Skill is a folder containing `SKILL.md` with YAML front matter and optional bundled assets. Folder names are lowercase with hyphens, for example `azure-deployment-preflight`. The `name` field must match the folder name. awesome-copilot front matter commonly uses:
+
 ```markdown
 ---
 name: 'skill-name'
@@ -99,34 +83,46 @@ description: 'Brief description of what this skill provides and when to use it'
 ---
 ```
 
-## Requirements
+## Limits
 
-- Use `fetch` tool to get content from awesome-copilot repository skills documentation
-- Use `githubRepo` tool to get individual skill content for download
-- Scan local file system for existing skills in `.github/skills/` directory
-- Read YAML front matter from local `SKILL.md` files to extract names and descriptions
-- Compare local skills with remote versions to detect outdated skills
-- Compare against existing skills in this repository to avoid duplicates
-- Focus on gaps in current skill library coverage
-- Validate that suggested skills align with repository's purpose and technology stack
-- Provide clear rationale for each suggestion
-- Include links to both awesome-copilot skills and similar local skills
-- Clearly identify outdated skills with specific differences noted
-- Consider bundled asset requirements and compatibility
-- Don't provide any additional information or context beyond the table and the analysis
+- Do not provide commentary beyond the table and analysis requested.
+- Do not install or update unless directed.
+- Do not adjust remote skill contents during install or update.
+- Do not suggest duplicates already covered by equal or stronger local skills.
+- Do not rely on relative links between primitives; use remote GitHub URLs for awesome-copilot links.
 
-## Icons Reference
+## Output template
 
-- Already installed and up-to-date
-- Installed but outdated (update available)
-- Not installed in repo
+```markdown
+## Awesome Copilot skill suggestions
 
-## Update Handling
+| Awesome-Copilot Skill | Description | Bundled Assets | Already Installed | Similar Local Skill | Suggestion Rationale |
+| --- | --- | --- | --- | --- | --- |
+| [gh-attach](https://github.com/github/awesome-copilot/tree/main/skills/gh-attach) | GitHub CLI skill for managing repositories and workflows | None | No | None | Would enhance GitHub workflow automation capabilities |
+| [aspire](https://github.com/github/awesome-copilot/tree/main/skills/aspire) | Aspire skill for distributed application development | 9 reference files | Yes | aspire | Already covered by existing Aspire skill |
+| [terraform-azurerm-set-diff-analyzer](https://github.com/github/awesome-copilot/tree/main/skills/terraform-azurerm-set-diff-analyzer) | Analyze Terraform AzureRM provider changes | Reference files | Outdated | terraform-azurerm-set-diff-analyzer | Instructions updated with new validation patterns; update recommended |
 
-When outdated skills are identified:
-1. Include them in the output table with  status
-2. Document specific differences in the "Suggestion Rationale" column
-3. Provide recommendation to update with key changes noted
-4. When user requests update, replace entire local skill folder with remote version
-5. Preserve folder location in `.github/skills/` directory
-6. Ensure all bundled assets are downloaded alongside the updated `SKILL.md`
+### Analysis
+- Local skills scanned: <count or folder missing>
+- Remote skills considered: <count>
+- Recommended installs: <count>
+- Recommended updates: <count>
+```
+
+## Quality gate
+
+- [ ] The awesome-copilot README skills catalog was fetched from https://github.com/github/awesome-copilot/blob/main/docs/README.skills.md.
+- [ ] Local `.github/skills/` folders and front matter were scanned or reported absent.
+- [ ] Remote raw `SKILL.md` files were fetched for local skills that appear in the catalog.
+- [ ] Each recommendation explains relevance to repository context and avoids duplicates.
+- [ ] Outdated skills include specific differences or update rationale.
+- [ ] No install, update, delete, or content adjustment occurred without a user request.
+- [ ] The output uses the table format exactly and includes remote skill links.
+
+## References
+
+- [awesome-copilot skills README](https://github.com/github/awesome-copilot/blob/main/docs/README.skills.md)
+- [awesome-copilot skills folder](https://github.com/github/awesome-copilot/tree/main/skills)
+- [gh-attach skill](https://github.com/github/awesome-copilot/tree/main/skills/gh-attach)
+- [aspire skill](https://github.com/github/awesome-copilot/tree/main/skills/aspire)
+- [terraform-azurerm-set-diff-analyzer skill](https://github.com/github/awesome-copilot/tree/main/skills/terraform-azurerm-set-diff-analyzer)

@@ -1,139 +1,120 @@
 ---
 name: "convert-pdf-to-md"
 description: >-
-  Converts PDF (.pdf) documents into Markdown so their contents can be accurately analyzed,
-  summarized, searched, or extracted from. Use this skill whenever the user shares, references, or
-  asks about a .pdf file — even if they don't say "convert" or "markdown" explicitly. This includes
-  requests to "read", "summarize", "review", "extract data from", "compare", or "analyze" a PDF
-  report, paper, invoice, form, contract, or scanned document. Always run the bundled conversion
-  script to produce Markdown first; do not attempt to parse PDF content directly or write ad-hoc
-  extraction code. Also use this skill for batch requests involving a whole folder of PDF documents.
-  IMPORTANT: When the user references a folder or set of documents containing multiple file types
-  (.pdf, .docx, .xlsx), invoke ALL three sibling skills — convert-pdf-to-md, convert-word-to-md, and
-  convert-excel-to-md — so no file type is silently skipped.
+  Convert PDF .pdf documents to Markdown with the bundled script so reports, papers, invoices, forms, contracts, scanned documents, and folders of PDFs can be read, summarized, searched, extracted, compared, or analyzed. Use whenever a user references a PDF; invoke sibling converters for mixed .pdf, .docx, and .xlsx sets.
 ---
+
 # Convert PDF to Markdown
 
-## When to use this skill
+Converts `.pdf` documents into Markdown folders with extracted embedded images, then reads the Markdown output to perform the requested analysis instead of attempting unreliable direct PDF parsing.
 
-Trigger this skill any time there is a `.pdf` file that needs to be
-understood or processed — for example, a user attaches a PDF and asks
-questions about it, wants a summary, wants specific data or tables pulled
-out, or wants multiple PDFs in a folder processed together. PDF is a
-layout/print format, not reliably readable as plain text, so always convert
-it to Markdown first using the script in this skill rather than trying to
-open or parse the file directly.
+## When to invoke
 
-This skill only supports `.pdf` — that's MarkItDown's only PDF-family
-format, so there's no legacy format to worry about here (unlike Word's
-`.doc` or Excel's `.xls`).
+- "Read this PDF."
+- "Summarize or analyze this report, paper, invoice, form, or contract."
+- "Extract data or tables from this .pdf file."
+- "Convert a folder of PDFs to Markdown."
+- "Process this folder with .pdf, .docx, and .xlsx files."
 
-**Mixed file types:** When the user references a folder or set of documents
-containing multiple supported file types (`.pdf`, `.docx`, `.xlsx`), this
-skill handles only `.pdf` files. The agent MUST also invoke the sibling
-skills in parallel:
-- `convert-word-to-md` for any `.docx` files
-- `convert-excel-to-md` for any `.xlsx` files
+## Prerequisites and context
 
-Never process a folder and silently skip a supported file type. All three
-skills must be invoked together when mixed types are present.
+- The script supports `.pdf` only; MarkItDown has no legacy PDF-family format equivalent to `.doc` or `.xls`.
+- Before first use in an environment, follow `references/setup.md` to ensure Python, pip, `markitdown`, and `pymupdf` are installed.
+- The conversion script is `scripts/convert_pdf_to_md.py`.
+- Always run the bundled script first; do not parse PDF content directly or write ad-hoc extraction code.
+- After conversion, read the generated `.md` files to perform the requested analysis.
 
-## Setup (once per environment)
+## Procedure
 
-Before the first conversion in a given environment, follow
-[`references/setup.md`](references/setup.md) step by step to ensure Python,
-pip, `markitdown`, and `pymupdf` (for image extraction) are installed. Do
-this proactively rather than guessing whether the environment is ready — the
-script itself will also fail with a clear pointer back to that file if a
-dependency turns out to be missing, so it's safe to just try the conversion
-first if you're reasonably confident setup was already done.
+1. Resolve the source path. If the file path cannot be fully resolved, use `ask_user` or the host's confirmation mechanism to obtain the full absolute path before conversion.
+2. If the source is a folder with mixed `.pdf`, `.docx`, and `.xlsx` files, invoke `convert-pdf-to-md`, `convert-word-to-md`, and `convert-excel-to-md` so no supported type is skipped.
+3. Run `scripts/convert_pdf_to_md.py` on the file or folder.
+4. Use default output next to the source unless the user explicitly provides an output path.
+5. Use `--recursive` only when subfolders should be included.
+6. Read the resulting Markdown and `## Extracted Images` appendix before answering.
 
-## Usage
-
-The conversion script lives at `scripts/convert_pdf_to_md.py`.
-
-**Output structure:** MarkItDown's PDF converter extracts text and tables
-only — it has no concept of embedded images at all. This script separately
-extracts real embedded images via PyMuPDF and writes a self-contained folder
-per document:
-
-```
-<name>/
-    img/
-        page001_img001.<ext>
-        page002_img001.<ext>
-        ...
-    <name>.md
-```
-
-Because MarkItDown's PDF text does not preserve reliable per-page markers,
-there's no safe way to know exactly where inline an image belongs. Rather
-than risk misplacing images next to the wrong paragraph, the script appends
-a `## Extracted Images` section at the end of the Markdown, with a
-`### Page N` subheading per page that has images — read this section
-separately from the main body text. If the document has no embedded images,
-no `img/` folder or `Extracted Images` section is created.
-
-**Single file:**
+## Conversion commands
 
 ```powershell
 python scripts\convert_pdf_to_md.py "C:\path\to\document.pdf"
-```
-
-This creates a `document\` folder next to the source file (containing
-`document.md` and, if present, `document\img\`). To control the destination
-folder explicitly:
-
-```powershell
 python scripts\convert_pdf_to_md.py "C:\path\to\document.pdf" -o "C:\path\to\output_folder"
-```
-
-**A folder of PDFs (batch mode):**
-
-```powershell
 python scripts\convert_pdf_to_md.py "C:\path\to\folder"
-```
-
-Add `--recursive` to also include subfolders:
-
-```powershell
 python scripts\convert_pdf_to_md.py "C:\path\to\folder" --recursive
+python scripts\convert_pdf_to_md.py "C:\path\to\folder" --recursive -o "C:\path\to\output_parent"
 ```
 
-Each `.pdf` found gets its own `<name>\` output folder next to it by
-default. Pass `-o "C:\path\to\output_parent"` to collect all the generated
-`<name>\` folders under a separate parent directory instead (subfolder
-structure is preserved when combined with `--recursive`).
+Use `-o` only when the user explicitly says where to save output, such as `C:\output` or `D:\work`. Do not choose `-o` based on the agent current working directory, session state folder, or implied location.
 
-After conversion, read the resulting `.md` file(s) to perform the actual
-analysis the user asked for — the script's job is only to produce accurate
-Markdown (and images), not to interpret the content.
+## Output structure and limitations
 
-## Deciding where output goes
-
-**Default — always output next to the source file.** The `<name>/` folder
-is created in the same directory as the source `.pdf`. This is the required
-default for every case. Do NOT override it unless the user explicitly asks
-for a different location.
-
-**Only use `-o` when** the user explicitly provides an output path (e.g.,
-"save the output to `C:\output`", "put the results in `D:\work`"). Do NOT
-pass `-o` based on the agent's current working directory, the session state
-folder, or any implied location.
-
-**If the source file path cannot be fully resolved** — for example, the
-user provides only a filename with no directory, or the path is ambiguous —
-use `ask_user` to confirm the full absolute path before running the
-conversion. Never guess or assume the directory.
+| Feature | Behavior |
+| --- | --- |
+| Document output | A `<name>/` folder is created next to the source `.pdf` by default. |
+| Markdown file | `<name>/<name>.md` contains text and tables extracted by MarkItDown. |
+| Images | Real embedded images are extracted via PyMuPDF into `<name>/img/`. |
+| Image filenames | `page001_img001.<ext>`, `page002_img001.<ext>`, and so on. |
+| Image placement | Because MarkItDown PDF text has no reliable per-page markers, images are appended under `## Extracted Images` with `### Page N` headings. |
+| No images | No `img/` folder or `Extracted Images` section is created. |
+| Scanned PDFs | MarkItDown does not perform OCR; scanned/image-only PDFs may produce empty or near-empty Markdown. |
+| Batch mode | Each `.pdf` gets its own `<name>/` output folder; with `-o`, generated folders are collected under the output parent and subfolder structure is preserved with `--recursive`. |
+| Non-PDF files | Folder conversion intentionally skips non-.pdf files and reports `NOTE: skipped N non-.pdf file(s)`. |
 
 ## Troubleshooting
 
-| Symptom | Likely cause | Fix |
-|---|---|---|
-| `ModuleNotFoundError: No module named 'markitdown'` or `'fitz'` / exit code 2 | MarkItDown or PyMuPDF not installed | Follow `references/setup.md` |
-| `ERROR: Unsupported file type '...'` / exit code 3 | Not a `.pdf` file | Ask the user for the correct file, or if it's `.doc`/`.docx`/`.xlsx`, use the matching sibling skill instead |
-| `ERROR: Input path not found` / exit code 3 | Wrong path, or file moved | Confirm the correct path with the user |
-| `FAILED <file> -> ...` in batch output | That specific file is corrupt, password-protected, or otherwise unreadable | Report which file(s) failed; other files in the batch still succeed |
-| `NOTE: skipped N non-.pdf file(s)` | Folder contains non-PDF files | Expected — those files are intentionally ignored |
-| Markdown body is empty or near-empty despite images being extracted | The PDF is scanned/image-only with no embedded text layer; MarkItDown does not perform OCR | Tell the user OCR isn't supported — the extracted page images are still available for them to view |
-| Images appear in an appendix instead of inline with the text | Deliberate limitation — MarkItDown's PDF text has no reliable per-page markers to place images inline | Expected behavior; cross-reference the `### Page N` heading with the surrounding text context if needed |
+| Symptom | Likely cause | Resolution |
+| --- | --- | --- |
+| `ModuleNotFoundError: No module named 'markitdown'` or `'fitz'` / exit code 2 | MarkItDown or PyMuPDF is not installed. | Follow `references/setup.md`. |
+| `ERROR: Unsupported file type '...'` / exit code 3 | Input is not a `.pdf` file. | Ask for the correct file or use the `.doc`, `.docx`, or `.xlsx` sibling skill as appropriate. |
+| `ERROR: Input path not found` / exit code 3 | Wrong path or moved file. | Confirm the correct absolute path with the user. |
+| `FAILED <file> -> ...` in batch output | That PDF is corrupt, password-protected, or unreadable. | Report failed files; other batch files may still succeed. |
+| `NOTE: skipped N non-.pdf file(s)` | Folder contains non-PDF files. | Expected for this skill; invoke sibling skills for `.docx` and `.xlsx`. |
+| Markdown body is empty or near-empty despite images being extracted | The PDF is scanned/image-only with no embedded text layer. | Tell the user OCR is not supported; extracted page images are still available to view. |
+| Images appear in an appendix instead of inline with text | PDF text lacks reliable placement anchors. | Expected; cross-reference `### Page N` with surrounding context when needed. |
+
+## Progressive disclosure and bundled resources
+
+- `references/setup.md`: Python, pip, MarkItDown, and PyMuPDF setup.
+- `scripts/convert_pdf_to_md.py`: deterministic PDF-to-Markdown conversion with embedded image extraction.
+- `scripts/requirements.txt`: Python package requirements for the script.
+
+## Related primitives
+
+| Name | Type | Use it when |
+| --- | --- | --- |
+| `convert-word-to-md` | skill | The input set contains `.docx` files. |
+| `convert-excel-to-md` | skill | The input set contains `.xlsx` files. |
+
+## PDF conversion invariants
+
+`IMPORTANT`: the agent `MUST` convert before analysis because PDF is a `layout/print` format. Output is `self-contained` in `<name>\`, such as `document\`, `document.md`, and `document\img\`. Batch output can use `-o "C:\path\to\output_parent"` only when the user explicitly requests it.
+
+## Output template
+
+```markdown
+### PDF to Markdown conversion result
+
+**Status:** converted | partially converted | blocked
+**Input:** `<file or folder>`
+**Output:** `<name>/` or `<output_parent>/<name>/`
+**Recursive:** yes | no
+
+| PDF | Markdown output | Images extracted | Notes |
+| --- | --- | --- | --- |
+| `<document.pdf>` | `<name>/<name>.md` | `<count or none>` | `<success, skipped, or failure reason>` |
+
+**Next analysis performed**
+- <summary, extraction, comparison, or user-requested analysis>
+
+**Validation**
+- `python scripts\convert_pdf_to_md.py ...`: pass | fail
+```
+
+## Quality gate
+
+- [ ] The bundled script `scripts/convert_pdf_to_md.py` was used before analysis.
+- [ ] The input path was fully resolved; ambiguous paths were confirmed with `ask_user` or equivalent.
+- [ ] Default output stayed next to the source unless the user explicitly requested `-o`.
+- [ ] Mixed `.pdf`, `.docx`, and `.xlsx` sets invoked the sibling converters.
+- [ ] Generated `.md` files and the `## Extracted Images` appendix were considered before answering.
+- [ ] Scanned PDFs without OCR text were reported honestly.
+- [ ] Failures in batch mode were reported without hiding successful conversions.

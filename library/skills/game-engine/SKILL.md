@@ -1,143 +1,142 @@
 ---
 name: "game-engine"
 description: >-
-  Expert skill for building web-based game engines and games using HTML5, Canvas, WebGL, and
-  JavaScript. Use when asked to create games, build game engines, implement game physics, handle
-  collision detection, set up game loops, manage sprites, add game controls, or work with 2D/3D
-  rendering. Covers techniques for platformers, breakout-style games, maze games, tilemaps, audio,
-  multiplayer via WebRTC, and publishing games.
+  Build web-based game engines and games with HTML5 Canvas, WebGL, SVG, CSS, and JavaScript. Use when creating 2D or 3D games, implementing game loops, physics, collision detection, sprites, tilemaps, controls, audio, multiplayer with WebRTC or WebSockets, optimization, or publishing workflows.
 ---
-# Game Engine Skill
 
-Build web-based games and game engines using HTML5 Canvas, WebGL, and JavaScript. This skill includes starter templates, reference documentation, and step-by-step workflows for 2D and 3D game development with frameworks such as Phaser, Three.js, Babylon.js, and A-Frame.
+# Game engine
 
-## When to Use This Skill
+Builds browser-based games and reusable game-engine foundations using Canvas, WebGL, JavaScript, starter templates, and focused reference material for 2D, 3D, controls, audio, algorithms, performance, and publishing.
 
-- Building a game engine or game from scratch using web technologies
-- Implementing game loops, physics, collision detection, or rendering
-- Working with HTML5 Canvas, WebGL, or SVG for game graphics
-- Adding game controls (keyboard, mouse, touch, gamepad)
-- Creating 2D platformers, breakout-style games, maze games, or 3D experiences
-- Working with tilemaps, sprites, or animations
-- Adding audio to web games
-- Implementing multiplayer features with WebRTC or WebSockets
-- Optimizing game performance
-- Publishing and distributing web games
+## When to invoke
 
-## Prerequisites
+- "Build a web game with Canvas or WebGL."
+- "Implement a game loop, physics, or collision detection."
+- "Create a 2D platformer, breakout game, maze game, or 3D experience."
+- "Add keyboard, mouse, touch, or gamepad controls."
+- "Optimize or publish this browser game."
 
-- Basic knowledge of HTML, CSS, and JavaScript
-- A modern web browser with Canvas/WebGL support
-- A text editor or IDE
-- Optional: Node.js for build tooling and local development servers
+## Prerequisites and context
 
-## Core Concepts
+- Use a modern browser with Canvas/WebGL support.
+- Basic HTML, CSS, and JavaScript are assumed.
+- Node.js is optional for build tooling and local development servers.
+- Choose framework support only when it fits the requested game: Phaser, Three.js, Babylon.js, A-Frame, or PlayCanvas.
 
-The following concepts form the foundation of every web-based game engine.
+## Core engine model
 
-### Game Loop
+| Concept | Rule |
+| --- | --- |
+| Game loop | Use `requestAnimationFrame`; process input, update state, then render. |
+| Delta time | Scale movement and timers by elapsed time so games do not run at different speeds. |
+| Rendering | Use Canvas 2D for sprites and tilemaps, WebGL for hardware-accelerated 3D or advanced 2D, SVG for vector UI, and CSS for DOM-based transitions. |
+| Physics | Model position, velocity, acceleration, and gravity explicitly. |
+| Collision | Use AABB, circle, SAT-based collision, bounding box, bounding sphere, or raycasting depending on dimension and shape. |
+| Controls | Support keyboard, WASD, arrow keys, mouse, pointer lock, touch, virtual joysticks, and Gamepad API as appropriate. |
+| Audio | Use Web Audio API for programmatic sound and spatial audio; use HTML5 Audio for simple music and effects. |
 
-Every game engine revolves around the game loop -- a continuous cycle of:
+## Workflow patterns
 
-1. **Process Input** - Read keyboard, mouse, touch, or gamepad input
-2. **Update State** - Update game object positions, physics, AI, and logic
-3. **Render** - Draw the current game state to the screen
+### Creating a basic 2D game
 
-Use `requestAnimationFrame` for smooth, browser-optimized rendering.
+1. Set up an HTML file with a `<canvas>` element.
+2. Get the 2D rendering context.
+3. Implement a `requestAnimationFrame` game loop.
+4. Create game objects with position, velocity, and size.
+5. Handle keyboard or mouse input for player control.
+6. Implement collision detection between game objects.
+7. Add scoring, lives, and win/lose conditions.
+8. Add sound effects and music.
 
-### Rendering
+### Building a 3D game
 
-- **Canvas 2D** - Best for 2D games, sprite-based rendering, and tilemaps
-- **WebGL** - Hardware-accelerated 3D and advanced 2D rendering
-- **SVG** - Vector-based graphics, good for UI elements
-- **CSS** - Useful for DOM-based game elements and transitions
+1. Choose Three.js, Babylon.js, A-Frame, or PlayCanvas.
+2. Set up scene, camera, and renderer.
+3. Load or create 3D models and textures.
+4. Implement lighting and shaders.
+5. Add physics and collision detection.
+6. Implement player controls and camera movement.
+7. Add audio and visual effects.
 
-### Physics and Collision Detection
+### Publishing a game
 
-- **2D Collision Detection** - AABB, circle, and SAT-based collision
-- **3D Collision Detection** - Bounding box, bounding sphere, and raycasting
-- **Velocity and Acceleration** - Basic Newtonian physics for movement
-- **Gravity** - Constant downward acceleration for platformers
+1. Optimize assets: compress images and audio, minify code, and reduce draw calls.
+2. Test across browsers, devices, input methods, and viewport sizes.
+3. Choose distribution: web, app stores, or game portals.
+4. Implement monetization only when requested.
+5. Prepare promotion through game communities and social media.
 
-### Controls
+## Template and reference inventory
 
-- **Keyboard** - Arrow keys, WASD, and custom key bindings
-- **Mouse** - Click, move, and pointer lock for FPS-style controls
-- **Touch** - Mobile touch events and virtual joysticks
-- **Gamepad** - Gamepad API for controller support
-
-### Audio
-
-- **Web Audio API** - Programmatic sound generation and spatial audio
-- **HTML5 Audio** - Simple audio playback for music and sound effects
-
-## Step-by-Step Workflows
-
-### Creating a Basic 2D Game
-
-1. Set up an HTML file with a `<canvas>` element
-2. Get the 2D rendering context
-3. Implement the game loop using `requestAnimationFrame`
-4. Create game objects with position, velocity, and size properties
-5. Handle keyboard/mouse input for player control
-6. Implement collision detection between game objects
-7. Add scoring, lives, and win/lose conditions
-8. Add sound effects and music
-
-### Building a 3D Game
-
-1. Choose a framework (Three.js, Babylon.js, A-Frame, or PlayCanvas)
-2. Set up the scene, camera, and renderer
-3. Load or create 3D models and textures
-4. Implement lighting and shaders
-5. Add physics and collision detection
-6. Implement player controls and camera movement
-7. Add audio and visual effects
-
-### Publishing a Game
-
-1. Optimize assets (compress images, minify code)
-2. Test across browsers and devices
-3. Choose distribution platform (web, app stores, game portals)
-4. Implement monetization if needed
-5. Promote through game communities and social media
-
-## Game Templates
-
-Starter templates are available in the `assets/` folder. Each template provides a complete, working example that can be used as a starting point for a new project.
-
-| Template | Description |
-|----------|-------------|
-| `paddle-game-template.md` | 2D Breakout-style game with pure JavaScript |
-| `2d-maze-game.md` | Maze game with device orientation controls |
-| `2d-platform-game.md` | Platformer game using Phaser framework |
-| `gameBase-template-repo.md` | Game base template repository structure |
-| `simple-2d-engine.md` | Simple 2D platformer engine with collisions |
-
-## Reference Documentation
-
-Detailed reference material is available in the `references/` folder. Consult these files for in-depth coverage of specific topics.
-
-| Reference | Topics Covered |
-|-----------|---------------|
-| `basics.md` | Game development introduction and anatomy |
-| `web-apis.md` | Canvas, WebGL, Web Audio, Gamepad, and other web APIs |
-| `techniques.md` | Collision detection, tilemaps, async scripts, audio |
-| `3d-web-games.md` | 3D theory, frameworks, shaders, WebXR |
-| `game-control-mechanisms.md` | Touch, keyboard, mouse, and gamepad controls |
-| `game-publishing.md` | Distribution, promotion, and monetization |
-| `algorithms.md` | Raycasting, collision, physics, vector math |
-| `terminology.md` | Game development glossary |
-| `game-engine-core-principles.md` | Core design principles for game engines |
+| Resource | Use it for |
+| --- | --- |
+| `assets/paddle-game-template.md` | 2D Breakout-style game with pure JavaScript. |
+| `assets/2d-maze-game.md` | Maze game with device orientation controls. |
+| `assets/2d-platform-game.md` | Platformer using Phaser. |
+| `assets/gameBase-template-repo.md` | Game base template repository structure. |
+| `assets/simple-2d-engine.md` | Simple 2D platformer engine with collisions. |
+| `references/basics.md` | Game development introduction and anatomy. |
+| `references/web-apis.md` | Canvas, WebGL, Web Audio, Gamepad, and related web APIs. |
+| `references/techniques.md` | Collision detection, tilemaps, async scripts, and audio. |
+| `references/3d-web-games.md` | 3D theory, frameworks, shaders, and WebXR. |
+| `references/game-control-mechanisms.md` | Touch, keyboard, mouse, and gamepad controls. |
+| `references/game-publishing.md` | Distribution, promotion, and monetization. |
+| `references/algorithms.md` | Raycasting, collision, physics, and vector math. |
+| `references/terminology.md` | Game development glossary. |
+| `references/game-engine-core-principles.md` | Core design principles for game engines. |
 
 ## Troubleshooting
 
-| Issue | Solution |
-|-------|----------|
-| Canvas is blank | Check that you are calling drawing methods after getting the context and inside the game loop |
-| Game runs at different speeds | Use delta time in update calculations instead of fixed values |
-| Collision detection is inconsistent | Use continuous collision detection or reduce time steps for fast-moving objects |
-| Audio does not play | Browsers require user interaction before playing audio; trigger playback from a click handler |
-| Performance is poor | Profile with browser dev tools, reduce draw calls, use object pooling, and optimize asset sizes |
-| Touch controls are unresponsive | Prevent default touch behavior and handle touch events separately from mouse events |
-| WebGL context lost | Handle the `webglcontextlost` event and restore state on `webglcontextrestored` |
+| Symptom | Likely cause | Resolution |
+| --- | --- | --- |
+| Canvas is blank | Drawing before context setup or outside the game loop. | Get the context first and draw inside `requestAnimationFrame`. |
+| Game runs at different speeds | Fixed per-frame movement. | Use delta time in update calculations. |
+| Collision detection is inconsistent | Fast objects tunnel through colliders. | Use continuous collision detection or smaller time steps. |
+| Audio does not play | Browser autoplay restrictions. | Start playback from a click, key, or touch handler. |
+| Performance is poor | Too many draw calls, allocations, or large assets. | Profile with browser dev tools, reduce draw calls, use object pooling, and optimize assets. |
+| Touch controls are unresponsive | Default browser gestures consume events. | Prevent default touch behavior and handle touch separately from mouse. |
+| WebGL context lost | GPU or browser reset. | Handle `webglcontextlost` and restore state on `webglcontextrestored`. |
+
+## Progressive disclosure and bundled resources
+
+Use the bundled assets as starter templates and read references only when the current task needs that topic. Do not load every reference for a small fix.
+
+- `assets/`: complete template documents consumed as starting points.
+- `references/`: topic-specific game development guidance.
+
+## Game development vocabulary
+
+Preserve `2D/3D`, `breakout-style`, `browser-optimized`, `sprite-based`, `keyboard/mouse`, `fast-moving`, `step-by-step`, and `in-depth` guidance. Bundled files include `2d-maze-game.md`, `2d-platform-game.md`, `3d-web-games.md`, `algorithms.md`, `basics.md`, `game-control-mechanisms.md`, `game-engine-core-principles.md`, `game-publishing.md`, `gameBase-template-repo.md`, `paddle-game-template.md`, `simple-2d-engine.md`, `techniques.md`, `terminology.md`, and `web-apis.md`.
+
+## Output template
+
+```markdown
+### Game engine result
+
+**Status:** created | plan only | review findings | blocked
+**Game type:** <2D | 3D | engine | template | publishing>
+**Rendering:** <Canvas 2D | WebGL | SVG | CSS | framework>
+
+**Architecture**
+- Loop: <input/update/render and delta-time strategy>
+- Objects: <entities/components/state>
+- Physics/collision: <approach>
+- Controls: <keyboard/mouse/touch/gamepad>
+- Audio: <Web Audio API | HTML5 Audio | none>
+
+**Resources used**
+- `<asset or reference>`: <why>
+
+**Validation**
+- <browser/test/build check>: pass | fail
+```
+
+## Quality gate
+
+- [ ] The game loop uses `requestAnimationFrame` and delta time.
+- [ ] Rendering technology matches the requested game type.
+- [ ] Input, update, render, physics/collision, controls, and audio decisions are explicit.
+- [ ] Fast-moving collision cases are handled or documented.
+- [ ] Touch, audio, and WebGL browser constraints are considered when relevant.
+- [ ] Bundled assets or references used are named and actually relevant.
+- [ ] Validation includes a browser run, build, or targeted check when implementation changes are made.

@@ -7,6 +7,7 @@ description: >-
   values).
 license: "Complete terms in LICENSE.txt"
 ---
+
 # WinMD API Search
 
 This skill helps you find the right Windows API for any capability and get its full details. It searches a local cache of all WinMD metadata from:
@@ -18,14 +19,14 @@ This skill helps you find the right Windows API for any capability and get its f
 
 Even on a fresh clone with no restore or build, you still get full Platform SDK + WinAppSDK coverage.
 
-## When to Use This Skill
+## When to invoke
 
 - User wants to build a feature and you need to find which API provides that capability
 - User asks "how do I do X?" where X involves a platform feature (camera, files, notifications, sensors, AI, etc.)
 - You need the exact methods, properties, events, or enumeration values of a type before writing code
 - You're unsure which control, class, or interface to use for a UI or system task
 
-## Prerequisites
+## Prerequisites and context
 
 - **.NET SDK 8.0 or later** — required to build the cache generator. Install from [dotnet.microsoft.com](https://dotnet.microsoft.com/download) if not available.
 
@@ -188,6 +189,40 @@ Results are grouped by namespace. Higher-scored namespaces appear first.
 | "Type not found" | Use fully qualified name (e.g., `Microsoft.UI.Xaml.Controls.Button`) |
 | Stale after NuGet update | Re-run `Update-WinMdCache.ps1` |
 | Cache in git history | Add `Generated Files/` to `.gitignore` |
+
+## Progressive disclosure and bundled resources
+
+At discovery time, only `name` and `description` are loaded. Read or execute bundled resources only when the current task needs them.
+
+- `scripts/Update-WinMdCache.ps1`: generate `Generated Files\winmd-cache\`.
+- `scripts/Invoke-WinMdQuery.ps1`: search, list, and inspect cached metadata.
+- `scripts/cache-generator/` and `LICENSE.txt`: cache generator source and license terms.
+
+## Output template
+
+```markdown
+## WinMD API search result
+
+**Status:** found | not found | cache generated | blocked
+**Query:** `<user capability, type, or namespace>`
+**Project:** `<cached project or auto-selected>`
+
+| Candidate | Namespace | Score | Why it fits | Next API detail |
+| --- | --- | --- | --- | --- |
+| `Microsoft.UI.Xaml.Controls.NavigationView` | `Microsoft.UI.Xaml.Controls` | `80` | Navigation UI control | `-Action members` |
+
+### Selected API
+- Type: `<fully qualified type>`
+- Members/events/properties/enums: `<relevant signatures>`
+- Documentation: `<Microsoft Learn URL>`
+```
+
+## Quality gate
+
+- [ ] Cache existence was verified or `Update-WinMdCache.ps1` was run.
+- [ ] Discovery used multiple everyday and technical keywords when the API was unknown.
+- [ ] Exact member, property, event, method, or enum details came from local cache JSON or query actions.
+- [ ] Generated `Generated Files/` cache is not treated as source.
 
 ## References
 

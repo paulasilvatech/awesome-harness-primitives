@@ -1,130 +1,113 @@
 ---
 name: "structured-autonomy-generate"
 description: >-
-  Generate complete implementation documentation from a structured autonomy plan, including
-  concrete steps, code blocks, file paths, and verification points. Use this skill when the user
-  has a plans/{feature-name}/plan.md file and asks to produce implementation.md.
+  Generate implementation.md from a structured autonomy plan.md, including concrete steps, complete code blocks, file paths, verification checklists, and STOP & COMMIT boundaries. Use this skill when the user has plans/{feature-name}/plan.md and asks to produce implementation documentation for a PR plan.
 ---
 
-# Structured Autonomy Generate
+# Structured autonomy generate
 
-You are a PR implementation plan generator that creates complete, copy-paste ready implementation documentation.
+Transform a complete `plans/{feature-name}/plan.md` into a copy-paste-ready `plans/{feature-name}/implementation.md` that gives GitHub Copilot concrete implementation steps, code blocks, and verification points.
 
-Your SOLE responsibility is to:
-1. Accept a complete PR plan (plan.md in plans/{feature-name}/)
-2. Extract all implementation steps from the plan
-3. Generate comprehensive step documentation with complete code
-4. Save plan to: `plans/{feature-name}/implementation.md`
+## When to invoke
 
-Follow the <workflow> below to generate and save implementation files for each step in the plan.
+- "Generate implementation.md from this structured autonomy plan."
+- "Turn plans/my-feature/plan.md into implementation steps."
+- "Create copy-paste implementation documentation for this PR plan."
+- "Expand this plan into code blocks and verification checklists."
+- "Write plans/{feature-name}/implementation.md."
 
-<workflow>
+## Inputs
 
-## Step 1: Parse Plan & Research Codebase
+Use `$ARGUMENTS` as the feature name, plan path, or plan content. If absent, search only for the intended `plans/{feature-name}/plan.md` named by the user or the current context; do not invent a feature plan.
 
-1. Read the plan.md file to extract:
-   - Feature name and branch (determines root folder: `plans/{feature-name}/`)
-   - Implementation steps (numbered 1, 2, 3, etc.)
-   - Files affected by each step
-2. Run comprehensive research ONE TIME using <research_task>. Use `runSubagent` to execute. Do NOT pause.
-3. Once research returns, proceed to Step 2 (file generation).
+## Prerequisites and context
 
-## Step 2: Generate Implementation File
+- The source plan must be complete enough to identify feature name, branch, implementation steps, and affected files.
+- The output path is always `plans/{feature-name}/implementation.md`.
+- The generated implementation must contain concrete actions; no "decide later", placeholders, or `TODO` comments in code blocks.
 
-Output the plan as a COMPLETE markdown document using the <plan_template>, ready to be saved as a `.md` file.
+## Procedure
 
-The plan MUST include:
-- Complete, copy-paste ready code blocks with ZERO modifications needed
-- Exact file paths appropriate to the project structure
-- Markdown checkboxes for EVERY action item
-- Specific, observable, testable verification points
-- NO ambiguity - every instruction is concrete
-- NO "decide for yourself" moments - all decisions made based on research
-- Technology stack and dependencies explicitly stated
-- Build/test commands specific to the project type
+1. Read `plans/{feature-name}/plan.md` and extract the feature name, expected branch, numbered implementation steps, and files affected by each step.
+2. Research the codebase once for the entire plan. Gather project type, stack, versions, folder organization, naming conventions, build/test/run commands, dependency management, error handling, logging, configuration, data flow, API conventions, state management, testing strategy, and relevant official documentation for major libraries.
+3. Convert the plan into a complete markdown implementation document using the template in this skill.
+4. For every implementation step, include exact file paths, checkboxes for each action, complete code blocks that require zero modification, and specific observable verification points.
+5. Add a `STOP & COMMIT` boundary after each major step so the user can test, stage, and commit incrementally.
+6. Save the document to `plans/{feature-name}/implementation.md`.
 
-</workflow>
+## Research package
 
-<research_task>
-For the entire project described in the master plan, research and gather:
+Collect this once, then reuse it for every step:
 
-1. **Project-Wide Analysis:**
-   - Project type, technology stack, versions
-   - Project structure and folder organization
-   - Coding conventions and naming patterns
-   - Build/test/run commands
-   - Dependency management approach
+| Area | Required facts |
+| --- | --- |
+| Project-wide analysis | Project type, technology stack, versions, structure, coding conventions, build/test/run commands, dependency management. |
+| Code patterns library | Existing code patterns, error handling, logging/debugging, utility/helper patterns, configuration approaches. |
+| Architecture documentation | Component interactions, data flow, API conventions, state management, testing strategies. |
+| Official documentation | APIs, syntax, parameters, version-specific details, limitations, gotchas, permission or capability requirements. |
 
-2. **Code Patterns Library:**
-   - Collect all existing code patterns
-   - Document error handling patterns
-   - Record logging/debugging approaches
-   - Identify utility/helper patterns
-   - Note configuration approaches
+## Implementation document rules
 
-3. **Architecture Documentation:**
-   - How components interact
-   - Data flow patterns
-   - API conventions
-   - State management (if applicable)
-   - Testing strategies
+- Use `FEATURE_NAME` only as a template label in the output format; replace it with the actual feature name in the saved file.
+- Include branch guidance: confirm the user is on `{feature-name}`; if not, switch or create it from main.
+- Code blocks must be complete and paste-ready with no placeholders and no `TODO` comments.
+- Verification must be testable: build output, test command, UI behavior, API response, file content, or observable state.
+- Every step must have a checkbox list and a `Step N Verification Checklist`.
+- Use the project's actual build and test commands, not generic commands.
 
-4. **Official Documentation:**
-   - Fetch official docs for all major libraries/frameworks
-   - Document APIs, syntax, parameters
-   - Note version-specific details
-   - Record known limitations and gotchas
-   - Identify permission/capability requirements
+## Source workflow labels
 
-Return a comprehensive research package covering the entire project context.
-</research_task>
+Preserve the source labels `research_task` and `plan_template` when explaining how the generated document was derived. The skill's SOLE responsibility is to create `implementation.md`; research runs ONE TIME, using `runSubagent` only when the host supports that mechanism. Generated steps MUST include COMPLETE, TESTED CODE with ZERO PLACEHOLDERS and ZERO `TODO` COMMENTS for EVERY changed `{file}`. Mention `Build/test`, `Build/test/run`, `libraries/frameworks`, `permission/capability`, and the root `plans/{feature-name}/` when summarizing extracted context.
 
-<plan_template>
-## {FEATURE_NAME}
+## Output template
+
+```markdown
+## Structured autonomy implementation
+
+**Status:** generated | blocked
+**Source plan:** `plans/<feature-name>/plan.md`
+**Output file:** `plans/<feature-name>/implementation.md`
+**Branch:** `<feature-name>`
+
+### Document written
+```markdown
+## <FEATURE_NAME>
 
 ## Goal
-{One sentence describing exactly what this implementation accomplishes}
+<one sentence describing exactly what this implementation accomplishes>
 
 ## Prerequisites
-Make sure that the use is currently on the `{feature-name}` branch before beginning implementation.
-If not, move them to the correct branch. If the branch does not exist, create it from main.
+Make sure that the user is currently on the `<feature-name>` branch before beginning implementation. If not, move them to the correct branch. If the branch does not exist, create it from main.
 
 ### Step-by-Step Instructions
 
-#### Step 1: {Action}
-- [ ] {Specific instruction 1}
-- [ ] Copy and paste code below into `{file}`:
+#### Step 1: <Action>
+- [ ] <specific instruction>
+- [ ] Copy and paste code below into `<file>`:
 
-```{language}
-{COMPLETE, TESTED CODE - NO PLACEHOLDERS - NO "TODO" COMMENTS}
-```
-
-- [ ] {Specific instruction 2}
-- [ ] Copy and paste code below into `{file}`:
-
-```{language}
-{COMPLETE, TESTED CODE - NO PLACEHOLDERS - NO "TODO" COMMENTS}
+```<language>
+<complete tested code with no placeholders>
 ```
 
 ##### Step 1 Verification Checklist
-- [ ] No build errors
-- [ ] Specific instructions for UI verification (if applicable)
+- [ ] <observable validation>
 
 #### Step 1 STOP & COMMIT
 **STOP & COMMIT:** Agent must stop here and wait for the user to test, stage, and commit the change.
-
-#### Step 2: {Action}
-- [ ] {Specific Instruction 1}
-- [ ] Copy and paste code below into `{file}`:
-
-```{language}
-{COMPLETE, TESTED CODE - NO PLACEHOLDERS - NO "TODO" COMMENTS}
 ```
 
-##### Step 2 Verification Checklist
-- [ ] No build errors
-- [ ] Specific instructions for UI verification (if applicable)
+### Validation
+- Source plan parsed: pass | fail
+- Codebase research completed once: pass | fail
+- Implementation file saved: pass | fail
+```
 
-#### Step 2 STOP & COMMIT
-**STOP & COMMIT:** Agent must stop here and wait for the user to test, stage, and commit the change.
-</plan_template>
+## Quality gate
+
+- [ ] `plans/{feature-name}/plan.md` was read before generation.
+- [ ] `plans/{feature-name}/implementation.md` was written at the required path.
+- [ ] The generated document contains exact file paths and complete code blocks with no placeholders or `TODO` comments.
+- [ ] Every action item uses a markdown checkbox.
+- [ ] Every step has specific, observable verification points.
+- [ ] Every major step ends with `STOP & COMMIT` instructions.
+- [ ] Build and test commands are specific to the researched project.

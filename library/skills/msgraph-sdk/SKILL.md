@@ -1,118 +1,80 @@
 ---
 name: "msgraph-sdk"
 description: >-
-  Integrate Microsoft Graph SDK into any project — .NET, TypeScript/JavaScript, or Python. Covers auth
-  patterns (client credentials, OBO, managed identity), SDK setup, calling Graph APIs, batching, delta
-  queries, change notifications, throttling, and permission scopes. Use when accessing Microsoft 365
-  data (users, mail, calendar, Teams, files, SharePoint) from any application type.
+  Integrate Microsoft Graph SDK in .NET, TypeScript/JavaScript, or Python applications using correct authentication, permissions, SDK clients, pagination, batching, delta queries, change notifications, throttling, and Microsoft 365 resource paths. Use when accessing users, mail, calendar, Teams, OneDrive, SharePoint, groups, search, or other Microsoft 365 data through Graph.
 ---
+
 # Microsoft Graph SDK
 
-Use this skill when integrating Microsoft Graph into an application to access Microsoft 365 data and services.
+Implement Microsoft Graph access with the current language SDK, the right authentication flow, least-privilege permissions, pagination, retry handling, and resource-specific patterns.
 
-Always ground implementation in the current Microsoft Graph SDK documentation and SDK version for the target language rather than relying on memory alone.
+## When to invoke
 
-## Determine the target language first
+- "Add Microsoft Graph SDK to this app."
+- "Call Graph to read users, mail, calendar, Teams, files, or SharePoint data."
+- "Choose the right Graph authentication flow for this service."
+- "Handle Graph paging, throttling, batching, or delta sync."
+- "Fix Microsoft Graph 403, 429, subscription, or permission issues."
 
-1. Use the **.NET** workflow when the project contains `.cs`, `.csproj`, or `.sln` files, or when the user asks for C# guidance. Follow [references/dotnet.md](references/dotnet.md).
-2. Use the **TypeScript / JavaScript** workflow when the project contains `package.json`, `.ts`, or `.js` files, or when the user asks for Node.js / browser guidance. Follow [references/typescript.md](references/typescript.md).
-3. Use the **Python** workflow when the project contains `.py`, `pyproject.toml`, or `requirements.txt`, or when the user asks for Python guidance. Follow [references/python.md](references/python.md).
-4. If multiple languages are present, match the language of the files being edited or ask the user.
+## Progressive disclosure and bundled resources
 
-## Always consult live documentation
+| Reference | Use when |
+| --- | --- |
+| `references/dotnet.md` | Project contains `.cs`, `.csproj`, `.sln`, or user asks for C#/.NET. |
+| `references/typescript.md` | Project contains `package.json`, `.ts`, `.js`, or user asks for Node.js/browser. |
+| `references/python.md` | Project contains `.py`, `pyproject.toml`, `requirements.txt`, or user asks for Python. |
 
-- Microsoft Graph overview: <https://learn.microsoft.com/graph/overview>
-- Graph Explorer (try calls live): <https://developer.microsoft.com/graph/graph-explorer>
-- Graph permissions reference: <https://learn.microsoft.com/graph/permissions-reference>
-- Use Microsoft Docs MCP tooling when available to fetch current API shapes and SDK samples.
+Read the language reference before writing SDK-specific code.
 
-## Authentication — choose the right pattern
+## Language and documentation selection
 
-Selecting the wrong auth flow is the most common Graph integration mistake. Apply this decision tree before writing any auth code:
+1. Determine the target language from files or user request.
+2. If multiple languages are present, match the files being edited or ask the user.
+3. Ground implementation in current Microsoft Graph SDK docs and version-specific samples rather than memory.
+4. Use Graph Explorer to test paths and permissions before coding when feasible.
 
-| Scenario | Flow to use |
-|---|---|
-| Background service / daemon with no user | **Client credentials** (app-only) |
-| Agent or API acting on behalf of a signed-in user | **On-Behalf-Of (OBO)** |
-| App running in Azure (Function, Container App, VM) | **Managed Identity** (preferred over secrets) |
-| CLI tool or local dev script | **Device code** or **interactive browser** |
-| Single-page app (browser only) | **Authorization code + PKCE** |
+## Authentication decision table
 
-- Never use client credentials when a user context is required — Graph enforces this at the permission level (application vs. delegated).
-- Prefer `DefaultAzureCredential` in Azure-hosted apps; it tries managed identity first and falls back gracefully for local dev.
-- Never hardcode secrets. Use environment variables, Azure Key Vault, or the Secret Manager.
+| Scenario | Flow |
+| --- | --- |
+| Background service or daemon with no user | Client credentials, app-only permissions. |
+| Agent or API acting for a signed-in user | On-Behalf-Of (OBO), delegated permissions. |
+| Azure Function, Container App, VM, or Azure-hosted service | Managed Identity, usually through `DefaultAzureCredential`. |
+| CLI tool or local dev script | Device code or interactive browser. |
+| Browser-only single-page app | Authorization code + PKCE. |
 
-## Core SDK usage patterns
+Never use client credentials when a user context is required. Prefer `DefaultAzureCredential` in Azure-hosted apps. Never hardcode secrets; use environment variables, Azure Key Vault, Secret Manager, or managed identity.
 
-### Building the client
+## Core SDK patterns
 
-Always construct `GraphServiceClient` once and reuse it (it manages token caching internally).
+| Concern | Rule |
+| --- | --- |
+| Client lifetime | Construct `GraphServiceClient` once and reuse it. |
+| Credentials | Pass an Azure Identity credential or language-specific auth provider; do not hand-roll raw HTTP auth. |
+| Async calls | Always `await` SDK calls. |
+| Projection | Use `$select` to limit returned fields. |
+| Filtering | Use `$filter` server-side instead of in-memory filtering. |
+| Expansion | Use `$expand` for small related resources. |
+| Pagination | Check `@odata.nextLink` and use the SDK `PageIterator`; set `$top` when useful. |
+| Batching | Use `$batch` for up to 20 independent Graph calls; match responses by request `id`. |
+| Delta sync | Store `@odata.deltaLink` durably and reuse it for incremental changes. |
+| Webhooks | Create `POST /subscriptions`, echo `validationToken` as plain text with HTTP 200, and renew before `expirationDateTime`. |
+| Throttling | Handle HTTP 429 by honoring `Retry-After`; avoid uncontrolled fan-out. |
 
-Pass a credential from the Azure Identity library — never build raw HTTP clients manually.
+## Advanced Graph patterns
 
-### Making calls
+| Pattern | Use when | Critical detail |
+| --- | --- | --- |
+| Delta queries | Sync users, groups, messages, calendar events, Teams channels, and supported resources incrementally. | First call such as `GET /users/delta` returns all items plus `@odata.deltaLink`; subsequent calls use the link. |
+| Change notifications | Need near-real-time updates. | Notification URL must be HTTPS; handle lifecycle notifications with `notificationUrl` and `lifecycleNotificationUrl`. |
+| Resource data notifications | High-volume scenarios need changed resource payloads. | Requires additional encryption setup. |
+| Retry middleware | Production workloads may hit 429. | Enable SDK retry middleware or implement exact `Retry-After` waits. |
+| Least privilege | Avoid broad permissions. | Use https://learn.microsoft.com/graph/permissions-reference and admin consent only when required. |
 
-- Use the fluent builder API: `client.Users[userId].Messages.GetAsync(...)`.
-- Always `await` async calls.
-- Specify `$select` to limit returned fields — Graph returns large default payloads.
-- Use `$filter` server-side rather than filtering returned collections in memory.
-- Use `$expand` to fetch related resources in a single call when relationships are small.
-
-### Pagination
-
-Graph paginates collections. Never assume all items arrive in one response:
-- Check for an `@odata.nextLink` on the response.
-- Use the SDK's `PageIterator` helper (available in all three SDKs) to walk pages automatically.
-- Set `$top` to control page size (max varies by resource, typically 999).
-
-## Advanced patterns
-
-### Batch requests
-
-Combine up to 20 independent Graph calls into a single HTTP request using the `$batch` endpoint. Use batching when:
-- Initializing data for a dashboard or agent that needs multiple resources upfront.
-- Reducing latency in high-call-count operations.
-
-Batch responses arrive out of order — match them by the `id` field you assigned each request.
-
-### Delta queries
-
-Use delta queries to sync changes incrementally instead of polling full collections:
-- First call: `GET /users/delta` returns all items + a `@odata.deltaLink`.
-- Subsequent calls: use the `deltaLink` to receive only what changed since the last sync.
-- Supported on: users, groups, messages, calendar events, Teams channels, and more.
-- Store the `deltaLink` durably (database, blob) between sync runs.
-
-### Change notifications (webhooks)
-
-Subscribe to resource changes with `POST /subscriptions`:
-- Graph delivers change events to your HTTPS notification URL.
-- Subscriptions expire — renew them before `expirationDateTime` (max varies by resource; typically 1–3 days for mail/calendar, up to 4230 minutes for users/groups).
-- Validate the subscription handshake: Graph sends a `validationToken` query parameter on creation — echo it back as plain text with HTTP 200.
-- Use lifecycle notifications (`notificationUrl` + `lifecycleNotificationUrl`) to handle missed events and reauthorization.
-- For high-volume scenarios prefer **change notifications with resource data** (requires additional encryption setup).
-
-### Throttling
-
-Graph throttles aggressively. Always handle HTTP 429:
-- Read the `Retry-After` header — it specifies exact seconds to wait, not a fixed backoff.
-- The SDK's built-in retry middleware handles 429 automatically when configured; enable it explicitly.
-- Avoid fan-out patterns that hit Graph with hundreds of parallel requests; use batching or queuing instead.
-
-## Permissions
-
-Get permissions right before writing auth code — wrong scopes result in 403 errors that are hard to debug later.
-
-- Application permissions run without a user (daemon / service). Require admin consent.
-- Delegated permissions run in the context of a signed-in user. Some require admin consent.
-- Request the **minimum permissions** needed. Graph's permission reference lists least-privilege options for every operation.
-- Use the Graph Explorer to test which permissions a call actually requires before coding.
-- In Azure app registrations: grant API permissions → Microsoft Graph → select type (Application or Delegated) → grant admin consent where required.
-
-## Common Graph resources — quick reference
+## Common resource paths
 
 | Goal | Resource path |
-|---|---|
+| --- | --- |
 | Get signed-in user's profile | `GET /me` |
 | List user's mailbox messages | `GET /me/messages` |
 | Send an email | `POST /me/sendMail` |
@@ -122,28 +84,66 @@ Get permissions right before writing auth code — wrong scopes result in 403 er
 | Post a Teams channel message | `POST /teams/{id}/channels/{id}/messages` |
 | List SharePoint site lists | `GET /sites/{siteId}/lists` |
 | Search across M365 | `POST /search/query` |
-| List all users in tenant (app-only) | `GET /users` |
+| List all users in tenant | `GET /users` |
 | Get group members | `GET /groups/{id}/members` |
 
-In similar fashion, use the SDK's fluent API to navigate to these resources in code.
+Use the SDK fluent API equivalent, for example `client.Users[userId].Messages.GetAsync(...)` in .NET where appropriate.
 
-## Workflow
+## Procedure
 
-1. Determine the target language and read the matching reference file.
-2. Identify the auth scenario and choose the correct flow from the table above.
-3. Fetch current SDK docs and Graph Explorer examples before making implementation choices.
-4. Apply least-privilege permissions — confirm in the Graph permissions reference.
-5. Implement pagination from the start — don't assume single-page responses.
-6. Enable retry middleware for throttling from day one.
-7. For syncing scenarios, prefer delta queries over polling.
-8. Use the language-specific package names, auth provider setup, and code patterns from the chosen reference file.
+1. Identify target language and read the matching `references/` file.
+2. Select auth flow from the scenario table and confirm application versus delegated permissions.
+3. Check Microsoft Graph overview, Graph Explorer, and permissions reference for current endpoint and scope requirements.
+4. Implement a reused `GraphServiceClient` with the language-specific SDK package.
+5. Add `$select`, `$filter`, pagination, and retry handling from the start.
+6. For dashboards, consider batching; for synchronization, prefer delta queries; for event-driven workloads, use change notifications.
+7. Validate 403, 429, subscription, and paging behavior with concrete evidence.
 
-## Completion criteria
+## Compatibility terminology
 
-- Auth flow matches the scenario (not defaulting to client credentials for user-context calls).
-- `GraphServiceClient` is constructed once and reused.
-- All collection reads handle pagination.
-- Throttling (429) is handled via retry middleware or explicit `Retry-After` logic.
-- Permissions are scoped to the minimum required.
-- No secrets or credentials are hardcoded.
-- Code matches current SDK version patterns for the selected language.
+Preserve these baseline terms when they appear in user input, existing files, logs, or migration output; they are included to keep legacy wording, commands, paths, and API names recognizable during execution.
+
+- `built-in`
+- `deltaLink`
+- `high-call-count`
+- `high-volume`
+- `mail/calendar`
+- `users/groups`
+
+## Output template
+
+```markdown
+## Microsoft Graph SDK result
+
+**Status:** implemented | planned | blocked
+**Language:** .NET | TypeScript/JavaScript | Python
+**Auth flow:** client credentials | OBO | managed identity | device code | interactive browser | auth code + PKCE
+
+### Permissions
+| Operation | Permission | Type | Consent |
+| --- | --- | --- | --- |
+| `<Graph path>` | `<scope>` | Application/Delegated | <admin/user> |
+
+### Implementation notes
+- Client: `GraphServiceClient` reused: <yes/no>
+- Pagination: <PageIterator/nextLink handling>
+- Throttling: <Retry-After or middleware>
+- Validation: <Graph Explorer/test result>
+```
+
+## Quality gate
+
+- [ ] Target language and matching bundled reference were used.
+- [ ] Auth flow matches user-context versus app-only requirements.
+- [ ] Permissions are least-privilege and checked against the Microsoft permissions reference.
+- [ ] `GraphServiceClient` is constructed once and reused.
+- [ ] Collection reads handle `@odata.nextLink` or `PageIterator`.
+- [ ] HTTP 429 handling honors `Retry-After`.
+- [ ] No secret is hardcoded.
+- [ ] Graph paths, SDK calls, and current docs were verified.
+
+## References
+
+- [Microsoft Graph overview](https://learn.microsoft.com/graph/overview)
+- [Graph Explorer](https://developer.microsoft.com/graph/graph-explorer)
+- [Graph permissions reference](https://learn.microsoft.com/graph/permissions-reference)

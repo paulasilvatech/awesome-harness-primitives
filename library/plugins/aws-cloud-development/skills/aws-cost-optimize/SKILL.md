@@ -5,17 +5,25 @@ description: >-
   optimize costs - creating GitHub issues for identified optimizations. Use this skill when the user
   asks for prerequisites.
 ---
+
 # AWS Cost Optimize
 
 This workflow analyzes Infrastructure-as-Code (IaC) files and AWS resources to generate cost optimization recommendations. It creates individual GitHub issues for each optimization opportunity plus one EPIC issue to coordinate implementation, enabling efficient tracking and execution of cost savings initiatives.
 
-## Prerequisites
+## When to invoke
+
+- "Optimize AWS costs for this app."
+- "Find AWS cost savings in our Terraform or CloudFormation."
+- "Right-size EC2, RDS, Lambda, ECS, S3, and NAT Gateways."
+- "Create GitHub issues for AWS cost optimization opportunities."
+
+## Prerequisites and context
 - AWS CLI configured and authenticated (`aws sts get-caller-identity` succeeds)
 - GitHub MCP server configured and authenticated
 - Target GitHub repository identified
 - AWS resources deployed (IaC files optional but helpful)
 
-## Workflow Steps
+## Procedure
 
 ### Step 1: Get AWS Cost Optimization Best Practices
 **Action**: Retrieve cost optimization best practices before analysis
@@ -188,7 +196,22 @@ Wait for user confirmation before proceeding.
 - **GitHub Creation Failure**: Output formatted recommendations to console
 - **Cost Explorer Not Enabled**: Guide user to enable in AWS Console
 
-## Success Criteria
+## Output template
+
+```markdown
+## AWS cost optimization result
+
+**Status:** issues created | recommendations only | blocked
+**Account/region:** `<account>/<region>`
+**Current monthly cost:** `$<amount>`
+**Potential monthly savings:** `$<amount>`
+
+| Priority | Resource | Current | Target | Monthly savings | Risk | Effort | Evidence |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| High | `<resource>` | `<current>` | `<target>` | `$<amount>` | `<Low/Medium/High>` | `<days>` | `<CloudWatch/Cost Explorer/IaC>` |
+```
+
+## Quality gate
 - All cost estimates verified against actual configurations and AWS pricing
 - Individual GitHub issues created for each optimization
 - EPIC issue provides comprehensive coordination and tracking

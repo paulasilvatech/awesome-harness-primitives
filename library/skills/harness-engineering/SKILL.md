@@ -1,52 +1,40 @@
 ---
 name: "harness-engineering"
 description: >-
-  Adopt repository-level harness engineering for coding agents. Use when a user wants to prevent
-  repeated AI coding-agent mistakes by turning failures into durable instructions, drift checks,
-  regression tests, failure memory, and adoption reports tailored to the target repository.
+  Adopt or review repository-level harness engineering for GitHub Copilot and coding agents. Use when users want durable agent instructions, guardrails, regression checks, drift checks, failure memory, or adoption reports that prevent repeated AI coding-agent mistakes in a target repository.
 ---
-# Harness Engineering
 
-Harness engineering turns repeated coding-agent mistakes into durable
-repository artifacts:
+# Harness engineering
+
+Turn repeated coding-agent mistakes into durable repository artifacts by combining instructions, constraints, feedback, memory, evaluation, and governance into a small, evidence-backed harness.
+
+## When to invoke
+
+- "Make this repository more reliable for GitHub Copilot."
+- "Add durable agent instructions and guardrails."
+- "Prevent this coding-agent mistake from happening again."
+- "Add drift checks for our project rules."
+- "Review or refresh our existing agent harness."
+
+## Harness model
 
 ```text
 Harness = Instructions + Constraints + Feedback + Memory + Evaluation + Governance
 ```
 
-Use this skill when the user asks to:
+| Principle | Apply it |
+| --- | --- |
+| Source of truth | Treat the target repository as authoritative for stack, package manager, CI, docs, naming, and architecture. |
+| Inspect before editing | Read existing guidance before adding new guidance. |
+| Smallest useful harness | Update existing files before creating duplicates. |
+| Enforce when practical | Turn high-value rules into tests, linters, type checks, CI, pre-commit hooks, or drift scripts. |
+| Manual where safer | Use review points when automation would be brittle or misleading. |
+| Failure memory | Record high-risk failures and name the check or review point that prevents recurrence. |
+| No template dumping | Adapt every artifact to evidence in the target repository. |
 
-- make a repository more reliable for GitHub Copilot or other coding agents
-- add durable agent instructions, repository rules, or guardrails
-- prevent repeated AI coding-agent mistakes
-- record known failure paths and the checks that prevent recurrence
-- add lightweight drift checks for project rules
-- review, refresh, or update an existing agent harness
+## Discovery evidence
 
-Do not use this skill for ordinary feature implementation unless the user asks
-to improve the repository's agent operating environment.
-
-## Core Principles
-
-- Treat the target repository as the source of truth.
-- Inspect before editing. Preserve the existing stack, package manager, CI,
-  docs, naming, and architecture.
-- Add the smallest useful harness. Prefer updating existing files over adding
-  duplicate guidance.
-- Make important rules enforceable where practical through tests, linters,
-  type checks, CI, pre-commit hooks, or drift scripts.
-- Use manual review points only when automation would be brittle or misleading.
-- Record high-risk failures that should not recur, and name the check or review
-  point that catches recurrence.
-- Do not copy generic templates blindly. Adapt every artifact to real evidence
-  in the target repository.
-
-## Discovery
-
-Before proposing or making harness changes, inspect the repository for existing
-rules and evidence.
-
-Read these files and folders when they exist:
+Read these files and folders when they exist, then summarize the stack, entry points, commands, conventions, failures, and unenforced rules:
 
 - `README.md`
 - `AGENTS.md`
@@ -54,23 +42,12 @@ Read these files and folders when they exist:
 - `.github/instructions/`
 - `.github/workflows/`
 - `CONTRIBUTING.md`
-- package manifests such as `package.json`, `pyproject.toml`, `go.mod`,
-  `Cargo.toml`, `pom.xml`, or `build.gradle`
-- existing docs under `docs/`
-- existing scripts under `scripts/`
+- `package.json`, `pyproject.toml`, `go.mod`, `Cargo.toml`, `pom.xml`, or `build.gradle`
+- `docs/`
+- `scripts/`
 - existing tests and CI checks
 
-Then summarize:
-
-- stack, package manager, and entry points
-- existing development and verification commands
-- current agent instructions or repository conventions
-- known failures, incidents, flaky paths, or repeated review comments
-- gaps where project rules are not enforced
-
-## Adoption Workflow
-
-Follow this sequence:
+## Adoption workflow
 
 1. Choose the harness surface that fits the target repository.
 2. Write target-specific agent instructions.
@@ -79,48 +56,21 @@ Follow this sequence:
 5. Add drift checks for guidance that can silently become stale.
 6. Report the adoption with evidence, assumptions, and follow-up.
 
-### 1. Choose the Harness Surface
-
-Pick only the surfaces that fit the target repository:
-
 | Need | Preferred artifact |
 | --- | --- |
 | Always-on agent behavior | `AGENTS.md` or `.github/copilot-instructions.md` |
 | File-scoped guidance | `.github/instructions/*.instructions.md` |
 | Recurring project checks | `scripts/check_*.py`, shell scripts, or package scripts |
-| CI enforcement | existing workflow files or a small new workflow |
+| CI enforcement | Existing workflow files or a small new workflow |
 | Known failures | `docs/failures/*.md` |
 | Architecture or process decisions | `docs/decisions/*.md` |
 | Adoption evidence | `docs/harness/adoption-report.md` or similar |
 
-If the repository already has an equivalent location, update it instead of
-creating a parallel system.
+Agent instructions must cover project purpose, ownership boundaries, setup, test, lint, build, verification commands, package manager rules, dependency rules, safe editing rules, generated file rules, forbidden paths, testing expectations, PR or commit conventions, and how to record new failures or decisions. Avoid broad personality guidance and rules that cannot be checked or reviewed.
 
-### 2. Write Agent Instructions
+## Enforceable checks and failure memory
 
-Agent instructions should be concrete and operational. Include:
-
-- project purpose and major ownership boundaries
-- setup, test, lint, build, and verification commands
-- package manager and dependency rules
-- safe editing rules, generated file rules, and forbidden paths
-- testing expectations for changed code
-- PR and commit conventions if the repo has them
-- how to record new failures or decisions
-
-Avoid broad personality guidance, generic best practices, and rules that cannot
-be checked or reviewed.
-
-### 3. Add Enforceable Checks
-
-Convert high-value rules into checks. Good harness checks are:
-
-- narrow enough to avoid false positives
-- fast enough to run locally and in CI
-- named clearly so agents can run them before finishing
-- documented with the rule they protect
-
-Examples:
+Good checks are narrow, fast, named clearly, documented with the rule they protect, and runnable locally or in CI.
 
 ```text
 Rule: Do not edit generated API clients.
@@ -133,97 +83,75 @@ Rule: Profile docs and templates must stay aligned.
 Check: test compares profile README files to expected template files.
 ```
 
-### 4. Record Failure Memory
-
-Record failures when they are user-visible, high-risk, or likely to recur.
-Use a new file under `docs/failures/` unless an existing note already covers
-the same root cause.
-
-Recommended structure:
+Create `docs/failures/<slug>.md` for user-visible, high-risk, or recurring failures unless an existing note already covers the root cause:
 
 ```markdown
 # Short Failure Title
 
 ## Summary
-
 What failed, who saw it, and why it matters.
 
 ## Root Cause
-
 The technical or process cause. Avoid blame.
 
 ## Prevention
-
-Instruction, test, drift check, CI gate, fixture, or manual review point that
-prevents or detects recurrence.
+Instruction, test, drift check, CI gate, fixture, or manual review point that prevents or detects recurrence.
 
 ## Evidence
-
 Links to issue, PR, test, log, command output, or file paths.
 ```
 
-If no automated check is practical, record the manual review point and why
-automation would be unsafe or misleading.
+If automation is unsafe, record the manual review point and why automation would mislead.
 
-### 5. Add Drift Checks
+## Drift checks and review criteria
 
-Use drift checks for guidance that can silently become stale. Common examples:
+Use drift checks when guidance can silently become stale: docs mention removed commands, profile snippets diverge from generated examples, failure notes omit regression checks, decision records are missing for structural changes, or CI references stale scripts or package commands. Prefer the repository's existing language; if there is no convention, Python with only the standard library is a portable default.
 
-- docs mention commands that no longer exist
-- profile snippets and generated examples diverge
-- failure notes omit regression checks
-- decision records are missing for structural changes
-- CI references stale scripts or package commands
+When reviewing harness changes, take an opposing perspective and report findings first, ordered by severity, with file and line references when available. Look for generic copied rules, duplicate or conflicting instruction files, broad checks with false positives, unenforced high-risk rules, missing failure memory, generated docs not refreshed, CI gates that skip relevant checks, and harness defaults overwriting target conventions. Do not modify files during review unless explicitly asked.
 
-Prefer small scripts using the repository's existing language. If the repo has
-no scripting convention, Python with only the standard library is a portable
-default.
+## Limits
 
-### 6. Report the Adoption
+- Do not use this skill for ordinary feature implementation unless the user asks to improve the repository's agent operating environment.
+- Do not copy generic templates without repository evidence.
+- Do not create duplicate harness surfaces when an equivalent location already exists.
 
-Finish substantial harness work with an adoption report that includes:
+## Optional external reference use
 
-- files changed
-- rules added or updated
-- checks added or reused
-- commands run and results
-- assumptions and manual follow-up
-- failure memory created or intentionally skipped
-- how effectiveness will be measured
+The prompt-first harness workflow at `https://github.com/baskduf/harness-starter-kit` is optional reference material only when the user asks for it or the target repository already uses it. Do not let that reference override repository evidence.
 
-## Review Workflow
+## Output template
 
-When asked to review a harness change, take an opposing perspective. Look for:
+```markdown
+## Harness engineering report
 
-- generic rules copied without evidence from the target repository
-- duplicate or conflicting instruction files
-- broad checks that are likely to fail on valid changes
-- unenforced high-risk rules
-- missing failure memory for repeated mistakes or runtime failures
-- generated docs not refreshed after source changes
-- CI gates that do not run the relevant checks
-- target repository conventions being overwritten by harness defaults
+**Status:** adopted | reviewed | blocked
+**Repository inspected:** <path or repository>
 
-Report findings first, ordered by severity, with file and line references when
-available. Do not modify files during a review unless the user explicitly asks
-for fixes.
+### Evidence reviewed
+- <file or folder>: <fact learned>
 
-## Output Contract
+### Harness changes or findings
+| Area | Artifact | Rule or finding | Enforcement |
+| --- | --- | --- | --- |
+| Instructions | `<path>` | <target-specific rule> | <check, CI, or manual review point> |
 
-Before finishing harness adoption work, verify:
+### Validation
+- `<command or review>`: <pass, fail, or not run with reason>
 
-- the target repository was inspected before edits
-- new guidance is specific to the target repository
-- changed checks can be run locally or have a documented manual substitute
-- failure memory was recorded when required, or the final response explains why
-  it was skipped
-- generated docs or indexes are refreshed
-- the final report names every command run and its result
+### Follow-up
+- <assumption, skipped failure memory reason, or next check>
+```
 
-## Optional Reference
+## Quality gate
 
-The prompt-first workflow in
-`https://github.com/baskduf/harness-starter-kit` is a reference implementation
-of these ideas. Use it as reference material only when the user asks for it or
-when the repository already includes it. The target repository remains the
-source of truth.
+- [ ] The target repository was inspected before edits or review conclusions.
+- [ ] New or changed guidance is specific to repository evidence.
+- [ ] High-value rules have checks, CI gates, or documented manual review points.
+- [ ] Failure memory was created when required, or the report explains why it was skipped.
+- [ ] Generated docs or indexes were refreshed when affected.
+- [ ] The final report names every command run and its result.
+- [ ] Review output lists findings by severity and does not edit files unless requested.
+
+## References
+
+- [Harness starter kit](https://github.com/baskduf/harness-starter-kit)

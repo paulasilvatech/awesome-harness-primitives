@@ -1,38 +1,26 @@
 ---
 name: "setup-my-iq"
 description: >-
-  Create, set up, or update the personal context portfolio: structured markdown files describing who
-  you are, how you work, your teams, and your tool/ADO configuration. Runs the interview workflow for
-  first-time setup and targeted edits for updates. Trigger this skill when the user asks to: set up
-  their context, create or update their context portfolio, "create my IQ", "set up my IQ", edit their
-  profile, add/remove a stakeholder, update ADO config, change team info, update pillars, or set up
-  any plugin configuration. Trigger when another skill fails to find context (missing files or TODO
-  markers) and needs context populated. Also trigger when the user mentions a context change in
-  passing (e.g., "my manager changed", "we added someone to the team") to offer a context file update.
-  Do NOT trigger for read-only questions like "who's on my team?" or "what's my ADO config?". Those
-  are answered directly from the context files referenced in the loaded custom instructions; no skill
-  is needed.
+  Create, resume, repair, or update a personal context portfolio of markdown files for identity, role, team, tools and ADO config, communication style, preferences, and constraints. Use when users ask to set up my IQ, create my IQ, update context files, edit profile/team/stakeholder/ADO/pillar information, or when another skill finds missing context files or TODO placeholders.
 ---
-# Setup My IQ: Create and Update Context Portfolio
 
-Create and maintain the personal context portfolio: a set of structured markdown
-files that represent who you are, how you work, and what matters to you. The files
-can live anywhere on disk (OneDrive folder, a git repo, a local directory, etc.).
-What ties them into the agent is a pointer in one of the user's custom instructions
-files (`AGENTS.md`, `copilot-instructions.md`, `CLAUDE.md`, or any `*.instructions.md`
-that the host loads into the session).
+# Setup My IQ
 
-## How This Skill Works
+Create and maintain a personal context portfolio by discovering existing file pointers, interviewing only for missing or stale information, pre-filling facts from authorized sources, and writing structured markdown files.
 
-When invoked, determine the current state and take the right action.
+## When to invoke
 
-### Discovering existing context
+- "Set up my IQ or create my context portfolio."
+- "Update my profile, team, stakeholders, pillars, or ADO config."
+- "My manager changed; update my context."
+- "Another skill says my context files are missing or have TODO markers."
+- "Resume my context setup."
 
-Scan the session for references to the files this skill creates. The host has
-already merged all relevant custom instructions files into the session:
-`AGENTS.md` (workspace or user-scope), `copilot-instructions.md`,
-`CLAUDE.md`, any `*.instructions.md` file, and similar host-specific equivalents.
-It doesn't matter which file the pointer came from, just look for the filenames:
+## Prerequisites and context
+
+The portfolio can live in any persistent directory, including OneDrive, Dropbox, iCloud, a local directory, or a git repo. It is connected to agents by an absolute path pointer in a loaded custom instruction file such as `AGENTS.md`, `copilot-instructions.md`, `CLAUDE.md`, or any `*.instructions.md` file loaded by the host.
+
+Expected filenames:
 
 - `identity.md`
 - `role-and-responsibilities.md`
@@ -41,178 +29,110 @@ It doesn't matter which file the pointer came from, just look for the filenames:
 - `communication-style.md`
 - `preferences-and-constraints.md`
 
-For each, find an `@<absolute-path>` (or equivalent path reference) anywhere in
-the loaded instruction text. That's the file's location. Don't rely on the label
-or variable name next to the path: users may name pointers differently
-(`identityProfile`, `me`, `who-i-am`, etc.). Match on the filename at the end
-of the path.
+Use bundled templates from `assets/templates/` for first-time setup. If a template is unreadable, use the structure in `references/extended-guide.md`.
 
-For each filename, classify as:
+## Discovery and state classification
 
-- **NOT REFERENCED** — no path to this filename is loaded in the session.
-- **REFERENCED, FILE MISSING** — a path is loaded but the file doesn't exist on disk.
-- **PRESENT** — path is loaded and the file exists. Read it to check for placeholders.
+Scan the loaded instruction text for paths ending in the six expected filenames. Match the filename at the end of an `@<absolute-path>` or equivalent path reference; do not depend on pointer labels such as `identityProfile`, `me`, or `who-i-am`.
 
-If the six filenames are in mixed states, handle them in this priority order:
-first create any NOT REFERENCED files via the interview, then fill REFERENCED,
-FILE MISSING entries, then fix incomplete fields in PRESENT files. Summarize
-the combined state to the user before starting so they know what to expect.
+| State | Meaning | Action |
+| --- | --- | --- |
+| `NOT REFERENCED` | No loaded path points to the filename. | Create it through first-time setup. |
+| `REFERENCED, FILE MISSING` | A path is loaded but no file exists on disk. | Resume setup for that file at the referenced path. |
+| `PRESENT` | Path exists and file exists. | Read it and inspect for placeholders or requested updates. |
 
-Concrete example. Suppose `identity.md` and `team.md` are PRESENT and
-complete, `tools-systems-and-config.md` is PRESENT but has TODO placeholders
-in the ADO section, `role-and-responsibilities.md` and `communication-style.md`
-are REFERENCED but the files don't exist on disk, and
-`preferences-and-constraints.md` is NOT REFERENCED. The skill should tell the
-user: "You have identity and team done. Tools-config has gaps. Role and
-communication-style are referenced but missing. Preferences isn't set up at
-all. I'll interview you for preferences first, then create role and
-communication-style, then fill the gaps in tools-config. OK?"
+If states are mixed, process in this priority order: create `NOT REFERENCED`, fill `REFERENCED, FILE MISSING`, then repair incomplete `PRESENT` files. Within a tie, use `identity.md`, `role-and-responsibilities.md`, `team.md`, `tools-systems-and-config.md`, `communication-style.md`, then `preferences-and-constraints.md`.
 
-### 1. No context files referenced
-None of the expected filenames appear anywhere in the loaded instructions.
-Treat this as first-time setup. Run **First-Time Setup** below.
+Example status summary: "You have identity and team done. Tools-config has gaps. Role and communication-style are referenced but missing. Preferences isn't set up at all. I'll interview you for preferences first, then create role and communication-style, then fill the gaps in tools-config."
 
-### 2. Some files referenced but missing on disk
-The user started setup previously and didn't finish, or paths exist without
-files behind them. **Resume where they left off:**
-- List which files exist and which are missing.
-- Tell the user: "You have {existing files}. Still need: {missing files}. Want to
-  pick up where you left off?"
-- When choosing the next file to interview for, the priority order from
-  *Discovering existing context* still applies. Within a tie, use this
-  default sequence: identity -> role -> team -> tools -> communication-style
-  -> preferences-and-constraints.
+## Procedure
 
-### 3. Files exist but have incomplete fields
+1. Discover all six filenames from loaded instruction pointers and classify each state.
+2. If no files are referenced, ask where the context files should live; suggest `~/my-iq-context` or `~/OneDrive/my-iq-context` on macOS or Linux and substitute `$HOME` for `%USERPROFILE%` in generated paths.
+3. Create the directory if needed.
+4. Before asking interview questions for a file, attempt factual pre-fill from authorized data sources such as work profile, directory, calendar, ADO, mail, or docs.
+5. Present pre-fill findings as auto-filled proposals and ask the user to confirm or correct them. If no sources are available, say so explicitly and continue.
+6. Ask only the questions needed for the current missing, incomplete, or updated fields.
+7. Draft the file from the bundled template, show it for a reaction pass, revise, and write it.
+8. Move to the next file or targeted update until the requested setup or repair is complete.
 
-Files exist but some contain unfilled placeholder values. **Fill gaps:**
+## Pre-fill targets and interview rules
 
-- Scan all referenced files for any of these incomplete-field patterns:
-  - `<!-- TODO -->` — explicit placeholder
-  - HTML comments of the form `<!-- ... -->` used as stand-in values
-    (e.g., `<!-- your name -->`, `<!-- org name -->`, `<!-- manager name -->`)
-  - Any table cell or field whose only content is an HTML comment
-- List the gaps: "I found incomplete fields in {files}. Want to fill them in?"
-- For each gap, ask the specific question for that field (not the full interview).
-- Update the file in place with the user's answer.
+| File | Factual pre-fill | Open questions |
+| --- | --- | --- |
+| `identity.md` | Name, role/title, organization, team, manager. | What do you actually do? What do people come to you for? |
+| `role-and-responsibilities.md` | Teams supported, cadences from calendar, reporting line. | What does a typical week look like? What decisions or deliverables are yours? |
+| `team.md` | Direct reports, frequent collaborators, org chart data. | How should collaborators be grouped? Who are key stakeholders? |
+| `tools-systems-and-config.md` | ADO org/project/team/area path, repos, tools in use. | Which systems matter most? What configuration should agents know? |
+| `communication-style.md` | Writing samples from mail or docs, only after permission. | What tone should agents use for you? What should they avoid? |
+| `preferences-and-constraints.md` | No pre-fill because boundaries are subjective. | What constraints, defaults, or preferences should agents respect? |
 
-### 4. Files are complete, user wants to update
-The user asked to change something, or mentioned a context change in passing
-(e.g., "my manager changed", "we hired someone new", "I moved to a different
-team"). **Targeted update:**
-- If the user mentioned the change in passing during another task, offer: "It
-  sounds like your {file} may need updating. Want me to fix that now?"
-- If the user explicitly asked, proceed directly.
-- Read the file from the path resolved in *Discovering existing context*.
-- Make the edit and confirm with the user.
+Incomplete-field patterns are `<!-- TODO -->`, any HTML comment used as a stand-in value such as `<!-- your name -->`, and any table cell or field whose only content is an HTML comment.
 
-### 5. Files are complete, user wants a full refresh
-The user wants to redo a file from scratch. Re-run the interview for that
-specific file following the same steps as first-time setup.
+## Update modes
 
----
+| Situation | Behavior |
+| --- | --- |
+| Some files are referenced but missing | List existing and missing files; offer to pick up where the user left off. |
+| Files exist with placeholders | List the exact gaps and ask targeted questions for those fields only. |
+| Files are complete and user mentions a change in passing | Offer to update the relevant file, for example team or manager information. |
+| Files are complete and user explicitly asks for a change | Read the resolved file, edit it in place, and confirm. |
+| User asks for a full refresh | Re-run the interview for that specific file. |
+| Read-only question such as "who's on my team?" | Answer from context files directly; do not use this skill. |
 
-## First-Time Setup
+## Progressive disclosure and bundled resources
 
-All `assets/...` paths in this skill are relative to this SKILL.md's
-directory. Use your file-read tool to load the bundled templates from those
-paths. If for some reason a template isn't readable, fall back to the field
-structure shown in the example walkthrough at the bottom of this file.
+- `assets/templates/identity.md`: identity portfolio template.
+- `assets/templates/role-and-responsibilities.md`: role and cadence template.
+- `assets/templates/team.md`: team and stakeholder template.
+- `assets/templates/tools-systems-and-config.md`: tools, systems, ADO, and repository configuration template.
+- `assets/templates/communication-style.md`: communication style template.
+- `assets/templates/preferences-and-constraints.md`: preferences and constraints template.
+- `references/extended-guide.md`: full interview details, reaction pass guidance, and fallback structures.
 
-### 1. Choose context directory
+## Gotchas
 
-Ask: "Where should your context files live? Anywhere persistent works: a synced
-cloud folder (OneDrive, Dropbox, iCloud), a local directory, or a git repo. Just
-pick a path you can find again later."
+- **Pre-fill is mandatory**: attempt authorized factual data lookup before asking any interview questions, even if the result is empty.
+- **Filename matching beats variable names**: users may name pointers arbitrarily; match on `identity.md` and the other filenames.
+- **Do not silently skip missing sources**: state when work profile, directory, calendar, ADO, or mail access is unavailable.
+- **Do not ask the full interview for a placeholder repair**: ask only for the missing field.
 
-- Create the directory if it doesn't exist.
-- Store the path for later steps.
-- On macOS or Linux, suggest `~/my-iq-context` or `~/OneDrive/my-iq-context` as
-  defaults. Substitute `$HOME` for `%USERPROFILE%` in any path the skill
-  produces later.
+## Setup vocabulary
 
-### 2. Begin the interview
+The SKILL package uses `assets/...` paths loaded with the agent's file-read capability. Host instructions may be workspace, user-scope, or host-specific; still match filenames. Treat pre-fill as MANDATORY, including `mail/docs` checks where authorized. Preserve tool/ADO configuration and add/remove stakeholder requests. Do not invoke for read-only questions. Incomplete-field patterns include `<!-- ... -->`, `<!-- org name -->`, and `<!-- manager name -->`. Keep progressive-disclosure by reading bundled references only when needed.
 
-Introduce the process:
+- Preserve exact setup term `incomplete-field` for placeholder repairs.
 
-"I'm going to interview you and produce your personal context portfolio: a set
-of markdown files that represent who you are, how you work, and what matters
-to you. Any AI skill, agent, or plugin can read these files and immediately
-understand what it's working with.
+## Output template
 
-We'll go one file at a time. I'll ask you questions, draft the file, and then
-ask you to tell me what I got wrong. You can skip any file you don't want
-right now. Ready to start?"
+```markdown
+## Setup My IQ result
 
-### 3. Pre-fill factual fields from available data sources
+**Status:** created | updated | resumed | needs input | blocked
+**Context directory:** `<absolute path or unresolved>`
 
-**This step is MANDATORY before asking any interview questions.** Do not skip
-it, even if you expect it to return nothing.
+### Portfolio state
+| File | State | Action taken |
+| --- | --- | --- |
+| `identity.md` | <NOT REFERENCED / REFERENCED, FILE MISSING / PRESENT> | <created, updated, skipped, or needs input> |
 
-Before asking the user anything, attempt to gather factual data from whatever
-connected sources your environment provides. The user should never have to
-type information a connected system already knows.
+### Questions asked
+- <targeted question or "none">
 
-**What to look for (per file):**
+### Files written
+- `<absolute path>`
 
-| File | Factual fields to pre-fill |
-|------|---------------------------|
-| `identity.md` | Name, role/title, organization, team, manager |
-| `role-and-responsibilities.md` | Teams supported, cadences (from calendar), reporting line |
-| `team.md` | Direct reports, frequent collaborators, org chart data |
-| `tools-systems-and-config.md` | ADO org/project/team/area path, repos, tools in use |
-| `communication-style.md` | Writing samples from mail/docs (ask permission first) |
-| `preferences-and-constraints.md` | No pre-fill (these are subjective boundaries) |
+### Validation
+- Pre-fill attempted: <yes/no and source type>
+- Placeholders remaining: <count or unknown>
+```
 
-**How to execute:**
+## Quality gate
 
-1. Check what data sources are available in your environment (work profile,
-   directory, calendar, ADO, mail, etc.). Use only sources already authorized.
-2. Query them for the relevant factual fields for the file you're about to
-   interview for.
-3. Present findings as a proposal: "I pulled some information from your work
-   profile. Here's what I found -- confirm or correct before we continue."
-4. Mark each value as auto-filled so the user knows what came from a system
-   vs. what you're asking them to provide.
-5. Only after the pre-fill proposal is confirmed (or if no sources are
-   available), proceed to ask the remaining questions.
-
-**If no data sources are available:** State that explicitly ("I don't have
-access to a work profile or directory in this environment, so I'll ask you
-directly") and proceed to the interview questions. Do not silently skip this
-step.
-
-See the full rules and constraints in the *Pre-fill from available data
-sources before asking* section under Interview Rules.
-
-### 4. Interview for identity.md
-
-Load the template from `assets/templates/identity.md` in this skill bundle for
-the file structure.
-
-**First: apply step 3 (pre-fill).** Query available sources for name, role,
-org, team, and manager. Present any findings for confirmation. Then proceed
-to the questions below for fields not covered by pre-fill.
-
-Open-ended questions to ask (these always need the user):
-
-- If you had to explain what you actually do to someone at a dinner party, what would you say?
-- What do people come to you for?
-
-Factual questions to ask only if pre-fill didn't cover them:
-
-- What's your name and current role?
-- What organization or company are you with?
-- What team are you on?
-- Who's your manager?
-
-Once you have enough to draft (don't keep asking past that point), draft the
-file. Present it with the reaction pass (see Interview Rules below). Revise,
-then write to the context directory.
-
-Transition: "That's identity done. Next is role-and-responsibilities, which
-captures what your weeks actually look like. Ready?"
-## Extended reference
-
-Additional detailed guidance was moved to [references/extended-guide.md](references/extended-guide.md) to keep this skill within the progressive-disclosure budget.
-
+- [ ] All six expected filenames were searched in loaded instruction pointers.
+- [ ] Each file was classified as `NOT REFERENCED`, `REFERENCED, FILE MISSING`, or `PRESENT`.
+- [ ] Authorized pre-fill was attempted before interview questions, or unavailable sources were explicitly reported.
+- [ ] Templates from `assets/templates/` or fallback structures from `references/extended-guide.md` were used.
+- [ ] Existing files were updated in place instead of duplicating context.
+- [ ] Placeholder-only fields were detected and repaired with targeted questions.
+- [ ] The final report lists files written and any remaining blockers.

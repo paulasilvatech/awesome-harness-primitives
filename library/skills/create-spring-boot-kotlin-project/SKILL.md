@@ -1,30 +1,39 @@
 ---
 name: "create-spring-boot-kotlin-project"
-description: "Create Spring Boot Kotlin Project Skeleton. Use this skill when the user asks for create spring boot kotlin project prompt."
+description: >-
+  Create a Spring Boot Kotlin project skeleton from Spring Initializr with Gradle Kotlin DSL, Java 21, WebFlux, reactive data dependencies, SpringDoc, ArchUnit, and local Redis/PostgreSQL/MongoDB Docker services. Use when asked to create or scaffold a Spring Boot Kotlin project.
 ---
-# Create Spring Boot Kotlin project prompt
 
-- Please make sure you have the following software installed on your system:
+# Create Spring Boot Kotlin project
 
-  - Java 21
-  - Docker
-  - Docker Compose
+Scaffolds a Kotlin Spring Boot application from Spring Initializr, customizes dependencies and local service configuration, and validates the generated project with Gradle tests.
 
-- If you need to custom the project name, please change the `artifactId` and the `packageName` in [download-spring-boot-project-template](#download-spring-boot-project-template)
+## When to invoke
 
-- If you need to update the Spring Boot version, please change the `bootVersion` in [download-spring-boot-project-template](#download-spring-boot-project-template)
+- "Create a Spring Boot Kotlin project."
+- "Scaffold a reactive Kotlin Spring Boot service."
+- "Generate a Spring Boot Kotlin starter with Redis, PostgreSQL, and MongoDB."
+- "Set up a Gradle Kotlin Spring Boot skeleton."
 
-## Check Java version
+## Prerequisites and context
 
-- Run following command in terminal and check the version of Java
+- Java 21 is installed; verify with `java -version`.
+- Docker and Docker Compose are installed if local services are required.
+- Customize `${input:projectName:demo-kotlin}` before running commands when the user supplies a project name.
+- Customize `artifactId`, `packageName`, and `bootVersion` in the Spring Initializr request when the project name, package, or Spring Boot version should differ.
 
-```shell
-java -version
-```
+## Procedure
 
-## Download Spring Boot project template
+1. Check Java with `java -version`.
+2. Download the Spring Initializr archive from https://start.spring.io/starter.zip .
+3. Unzip `starter.zip` into `./${input:projectName:demo-kotlin}`.
+4. Remove `starter.zip` after extraction with `rm -f starter.zip`.
+5. Add the extra dependencies and application properties below.
+6. Create `docker-compose.yaml` with Redis, PostgreSQL, and MongoDB services when local backing services are needed.
+7. Add generated data directories to `.gitignore`.
+8. Run `./gradlew clean test` from the generated project root.
 
-- Run following command in terminal to download a Spring Boot project template
+## Spring Initializr request
 
 ```shell
 curl https://start.spring.io/starter.zip \
@@ -37,35 +46,13 @@ curl https://start.spring.io/starter.zip \
   -d packaging=jar \
   -d type=gradle-project-kotlin \
   -o starter.zip
-```
-
-## Unzip the downloaded file
-
-- Run following command in terminal to unzip the downloaded file
-
-```shell
 unzip starter.zip -d ./${input:projectName:demo-kotlin}
-```
-
-## Remove the downloaded zip file
-
-- Run following command in terminal to delete the downloaded zip file
-
-```shell
 rm -f starter.zip
 ```
 
-## Unzip the downloaded file
+## Dependency additions
 
-- Run following command in terminal to unzip the downloaded file
-
-```shell
-unzip starter.zip -d ./${input:projectName:demo-kotlin}
-```
-
-## Add additional dependencies
-
-- Insert `springdoc-openapi-starter-webmvc-ui` and `archunit-junit5` dependency into `build.gradle.kts` file
+Insert these into `build.gradle.kts` without duplicating existing entries:
 
 ```gradle.kts
 dependencies {
@@ -74,40 +61,31 @@ dependencies {
 }
 ```
 
-- Insert SpringDoc configurations into `application.properties` file
+Use `springdoc-openapi-starter-webflux-ui`, not `springdoc-openapi-starter-webmvc-ui`, because the generated project includes `webflux`.
+
+## Application configuration
+
+Add the following `application.properties` sections and fill secret values through the project's normal secret mechanism rather than committing real passwords:
 
 ```properties
 # SpringDoc configurations
 springdoc.swagger-ui.doc-expansion=none
 springdoc.swagger-ui.operations-sorter=alpha
 springdoc.swagger-ui.tags-sorter=alpha
-```
 
-- Insert Redis configurations into `application.properties` file
-
-```properties
 # Redis configurations
 spring.data.redis.host=localhost
 spring.data.redis.port=6379
 spring.data.redis.password=rootroot
-```
 
-- Insert R2DBC configurations into `application.properties` file
-
-```properties
 # R2DBC configurations
 spring.r2dbc.url=r2dbc:postgresql://localhost:5432/postgres
 spring.r2dbc.username=postgres
 spring.r2dbc.password=rootroot
-
 spring.sql.init.mode=always
 spring.sql.init.platform=postgres
 spring.sql.init.continue-on-error=true
-```
 
-- Insert MongoDB configurations into `application.properties` file
-
-```properties
 # MongoDB configurations
 spring.data.mongodb.host=localhost
 spring.data.mongodb.port=27017
@@ -117,30 +95,71 @@ spring.data.mongodb.password=rootroot
 spring.data.mongodb.database=test
 ```
 
-- Create `docker-compose.yaml` at project root and add following services: `redis:6`, `postgresql:17` and `mongo:8`.
+## Local service profile
 
-  - redis service should have
-    - password `rootroot`
-    - mapping port 6379 to 6379
-    - mounting volume `./redis_data` to `/data`
-  - postgresql service should have
-    - password `rootroot`
-    - mapping port 5432 to 5432
-    - mounting volume `./postgres_data` to `/var/lib/postgresql/data`
-  - mongo service should have
-    - initdb root username `root`
-    - initdb root password `rootroot`
-    - mapping port 27017 to 27017
-    - mounting volume `./mongo_data` to `/data/db`
+Create `docker-compose.yaml` at the project root when local dependencies are needed.
 
-- Insert `redis_data`, `postgres_data` and `mongo_data` directories in `.gitignore` file
+| Service | Image | Port | Volume | Required credentials |
+| --- | --- | --- | --- | --- |
+| Redis | `redis:6` | `6379:6379` | `./redis_data:/data` | password `rootroot` |
+| PostgreSQL | `postgres:17` or `postgresql:17` only if that image exists in the target environment | `5432:5432` | `./postgres_data:/var/lib/postgresql/data` | password `rootroot` |
+| MongoDB | `mongo:8` | `27017:27017` | `./mongo_data:/data/db` | initdb root username `root`, password `rootroot` |
 
-- Run gradle clean test command to check if the project is working
+Add `redis_data`, `postgres_data`, and `mongo_data` directories to `.gitignore`.
+
+## Validation commands
 
 ```shell
 ./gradlew clean test
+docker-compose up -d
+./gradlew spring-boot:run
+docker-compose rm -sf
 ```
 
-- (Optional) `docker-compose up -d` to start the services, `./gradlew spring-boot:run` to run the Spring Boot project, `docker-compose rm -sf` to stop the services.
+Run the optional Docker and application commands only when the user wants services started locally.
 
-Let's do this step by step.
+## Gotchas
+
+- **Do not unzip twice**: the original instructions repeated the unzip step; extract `starter.zip` once, then delete it.
+- **Do not commit real secrets**: use local defaults only for disposable development and replace them for shared environments.
+- **Do not mix MVC and WebFlux starters**: match SpringDoc to WebFlux because `webflux` is in the generated dependency list.
+
+## Spring Initializr anchors
+
+The original `download-spring-boot-project-template` anchor maps to the Spring Initializr request in this skill. Preserve local service paths exactly: `./redis_data` maps to `/data`, `./postgres_data` maps to `/var/lib/postgresql/data`, and `./mongo_data` maps to `/data/db`. Optional commands are `docker-compose up -d`, `./gradlew spring-boot:run`, and `docker-compose rm -sf`.
+
+## Output template
+
+```markdown
+### Spring Boot Kotlin project result
+
+**Status:** created | instructions only | blocked
+**Project:** `${input:projectName:demo-kotlin}`
+**Package:** `com.example`
+
+**Generated with**
+- Java: `21`
+- Spring Boot: `3.4.5`
+- Build: `gradle-project-kotlin`
+- Dependencies: `configuration-processor,webflux,data-r2dbc,postgresql,data-redis-reactive,data-mongodb-reactive,validation,cache,testcontainers`
+
+**Files changed**
+- `build.gradle.kts`: <dependency summary>
+- `application.properties`: <configuration summary>
+- `docker-compose.yaml`: <services added>
+- `.gitignore`: <data directories added>
+
+**Validation**
+- `java -version`: pass | fail
+- `./gradlew clean test`: pass | fail
+```
+
+## Quality gate
+
+- [ ] `artifactId`, `packageName`, and `bootVersion` match the user's request or documented defaults.
+- [ ] `starter.zip` is removed after extraction.
+- [ ] `build.gradle.kts` contains SpringDoc WebFlux UI and ArchUnit dependencies without duplicates.
+- [ ] Redis, R2DBC, MongoDB, and SpringDoc properties are present.
+- [ ] `docker-compose.yaml` defines Redis, PostgreSQL, and MongoDB only when local services are needed.
+- [ ] `redis_data`, `postgres_data`, and `mongo_data` are ignored by Git.
+- [ ] `./gradlew clean test` was run or the blocker is reported.

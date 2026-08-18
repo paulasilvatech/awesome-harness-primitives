@@ -1,71 +1,69 @@
 ---
-name: "update-implementation-plan"
+name: update-implementation-plan
 description: >-
-  Update an existing implementation plan file with new or update requirements to provide new features,
-  refactoring existing code or upgrading packages, design, architecture or infrastructure. Use this
-  skill when the user asks for primary directive.
+  Update an existing implementation plan or create a deterministic machine-readable plan for new requirements, features, refactoring, package upgrades, design, architecture, infrastructure, data, or process changes. Use when asked to update an implementation plan, revise a plan file, add requirements, or produce an AI-executable plan under /plan/.
 ---
-# Update Implementation Plan
 
-## Primary Directive
+# Update implementation plan
 
-You are an AI agent tasked with updating the implementation plan file `${file}` based on new or updated requirements. Your output must be machine-readable, deterministic, and structured for autonomous execution by other AI systems or humans.
+Update or create an implementation plan so it is deterministic, self-contained, machine-readable and machine-parseable, and executable by AI agents or humans without hidden interpretation, decision-making, or loss of self-containment.
 
-## Execution Context
+## When to invoke
 
-This prompt is designed for AI-to-AI communication and automated processing. All instructions must be interpreted literally and executed systematically without human interpretation or clarification.
+- "Update this implementation plan with the new requirements."
+- "Revise the plan file for this refactor."
+- "Create an AI-executable implementation plan."
+- "Add package upgrade tasks to the plan."
+- "Generate a phased architecture or infrastructure plan under /plan/."
 
-## Core Requirements
+## Inputs
 
-- Generate implementation plans that are fully executable by AI agents or humans
-- Use deterministic language with zero ambiguity
-- Structure all content for automated parsing and execution
-- Ensure complete self-containment with no external dependencies for understanding
+Use the user's target file, selected file, or `${file}` as the implementation plan to update. If no file exists, create a new plan under `/plan/` using the naming convention `[purpose]-[component]-[version].md`.
 
-## Plan Structure Requirements
+Purpose prefixes are `upgrade`, `refactor`, `feature`, `data`, `infrastructure`, `process`, `architecture`, and `design`. Examples: `upgrade-system-command-4.md` and `feature-auth-module-1.md`.
 
-Plans must consist of discrete, atomic phases containing executable tasks. Each phase must be independently processable by AI agents or humans without cross-phase dependencies unless explicitly declared.
+## Plan standards
 
-## Phase Architecture
+| Requirement | Rule |
+| --- | --- |
+| Executability | Every phase and task must be executable by AI agents or humans. |
+| Determinism | Use explicit language with zero ambiguity or hidden interpretation. |
+| Atomicity | Plans consist of discrete phases and atomic tasks. |
+| Dependencies | Cross-phase or task dependencies must be explicitly declared. |
+| Specificity | Include file paths, function names, constants, configuration values, and exact implementation details where applicable. |
+| Identifiers | Use standardized prefixes such as `REQ-`, `SEC-`, `CON-`, `GUD-`, `PAT-`, `TASK-`, `ALT-`, `DEP-`, `FILE-`, `TEST-`, `RISK-`, and `ASSUMPTION-`. |
+| Validation | Include criteria that can be automatically verified. |
+| Self-containment | Do not require external context to understand the plan. |
 
-- Each phase must have measurable completion criteria
-- Tasks within phases must be executable in parallel unless dependencies are specified
-- All task descriptions must include specific file paths, function names, and exact implementation details
-- No task should require human interpretation or decision-making
+## Procedure
 
-## AI-Optimized Implementation Standards
+1. Read the existing implementation plan, new or updated requirements, and relevant code references.
+2. Preserve valid existing plan content unless it conflicts with new requirements.
+3. Normalize phases so each has measurable completion criteria and clear cross-phase dependency boundaries.
+4. Convert vague work into atomic tasks with paths, functions, implementation details, completion state, and date fields.
+5. Update front matter and status badge consistently.
+6. Validate every required section, table column, identifier prefix, and placeholder before saving.
 
-- Use explicit, unambiguous language with zero interpretation required
-- Structure all content as machine-parseable formats (tables, lists, structured data)
-- Include specific file paths, line numbers, and exact code references where applicable
-- Define all variables, constants, and configuration values explicitly
-- Provide complete context within each task description
-- Use standardized prefixes for all identifiers (REQ-, TASK-, etc.)
-- Include validation criteria that can be automatically verified
+## Template requirements
 
-## Output File Specifications
+All implementation plans must use this exact top-level structure and fully populate each section:
 
-- Save implementation plan files in `/plan/` directory
-- Use naming convention: `[purpose]-[component]-[version].md`
-- Purpose prefixes: `upgrade|refactor|feature|data|infrastructure|process|architecture|design`
-- Example: `upgrade-system-command-4.md`, `feature-auth-module-1.md`
-- File must be valid Markdown with proper front matter structure
+| Section | Required content |
+| --- | --- |
+| Front matter | `goal`, `version`, `date_created`, `last_updated`, `owner`, `status`, and `tags`. |
+| `# Introduction` | Status badge and concise goal-oriented introduction. |
+| `## 1. Requirements & Constraints` | Requirements, security requirements, constraints, guidelines, and patterns. |
+| `## 2. Implementation Steps` | Phases with `GOAL-NNN` and task tables. |
+| `## 3. Alternatives` | `ALT-NNN` options and rationale for rejection. |
+| `## 4. Dependencies` | `DEP-NNN` dependencies. |
+| `## 5. Files` | `FILE-NNN` affected files. |
+| `## 6. Testing` | `TEST-NNN` verification tasks. |
+| `## 7. Risks & Assumptions` | `RISK-NNN` and `ASSUMPTION-NNN`. |
+| `## 8. Related Specifications / Further Reading` | Related specifications or external documentation. |
 
-## Mandatory Template Structure
+Allowed statuses are `Completed`, `In progress`, `Planned`, `Deprecated`, and `On Hold`. Use badge colors bright green, yellow, blue, red, and orange respectively.
 
-All implementation plans must strictly adhere to the following template. Each section is required and must be populated with specific, actionable content. AI agents must validate template compliance before execution.
-
-## Template Validation Rules
-
-- All front matter fields must be present and properly formatted
-- All section headers must match exactly (case-sensitive)
-- All identifier prefixes must follow the specified format
-- Tables must include all required columns
-- No placeholder text may remain in the final output
-
-## Status
-
-The status of the implementation plan must be clearly defined in the front matter and must reflect the current state of the plan. The status can be one of the following (status_color in brackets): `Completed` (bright green badge), `In progress` (yellow badge), `Planned` (blue badge), `Deprecated` (red badge), or `On Hold` (orange badge). It should also be displayed as a badge in the introduction section.
+## Mandatory plan template
 
 ```md
 ---
@@ -85,8 +83,6 @@ tags: [Optional: List of relevant tags or categories, e.g., `feature`, `upgrade`
 [A short concise introduction to the plan and the goal it is intended to achieve.]
 
 ## 1. Requirements & Constraints
-
-[Explicitly list all requirements & constraints that affect the plan and constrain how it is implemented. Use bullet points or tables for clarity.]
 
 - **REQ-001**: Requirement 1
 - **SEC-001**: Security Requirement 1
@@ -119,35 +115,25 @@ tags: [Optional: List of relevant tags or categories, e.g., `feature`, `upgrade`
 
 ## 3. Alternatives
 
-[A bullet point list of any alternative approaches that were considered and why they were not chosen. This helps to provide context and rationale for the chosen approach.]
-
 - **ALT-001**: Alternative approach 1
 - **ALT-002**: Alternative approach 2
 
 ## 4. Dependencies
-
-[List any dependencies that need to be addressed, such as libraries, frameworks, or other components that the plan relies on.]
 
 - **DEP-001**: Dependency 1
 - **DEP-002**: Dependency 2
 
 ## 5. Files
 
-[List the files that will be affected by the feature or refactoring task.]
-
 - **FILE-001**: Description of file 1
 - **FILE-002**: Description of file 2
 
 ## 6. Testing
 
-[List the tests that need to be implemented to verify the feature or refactoring task.]
-
 - **TEST-001**: Description of test 1
 - **TEST-002**: Description of test 2
 
 ## 7. Risks & Assumptions
-
-[List any risks or assumptions related to the implementation of the plan.]
 
 - **RISK-001**: Risk 1
 - **ASSUMPTION-001**: Assumption 1
@@ -157,3 +143,55 @@ tags: [Optional: List of relevant tags or categories, e.g., `feature`, `upgrade`
 [Link to related spec 1]
 [Link to relevant external documentation]
 ```
+
+## Template validation rules
+
+- All front matter fields are present and properly formatted.
+- Section headers match exactly and are case-sensitive.
+- Identifier prefixes follow the specified format.
+- Task tables include `Task`, `Description`, `Completed`, and `Date` columns.
+- No placeholder text remains in the final output.
+- Status in front matter and badge agree.
+
+## Gotchas
+
+- **Do not leave human interpretation tasks**; replace them with explicit decisions, dependencies, or assumptions.
+- **Do not omit file paths or function names when code changes are known**; specificity is required for autonomous execution.
+- **Do not create plans outside `/plan/`** unless updating an explicitly supplied existing file.
+- **Do not mismatch status color and status text**; the badge must reflect the front matter.
+
+## Output template
+
+```markdown
+## Implementation plan update
+
+**Status:** updated | created | blocked
+**Plan file:** `/plan/<purpose>-<component>-<version>.md`
+**Plan status:** `<Completed|In progress|Planned|Deprecated|On Hold>`
+
+### Changes made
+| Section | Update |
+| --- | --- |
+| Requirements & Constraints | <summary> |
+| Implementation Steps | <summary> |
+| Testing | <summary> |
+
+### Validation
+- Required sections: <pass|fail>
+- Identifier prefixes: <pass|fail>
+- Placeholders removed: <pass|fail>
+- Status badge: <pass|fail>
+```
+
+## Quality gate
+
+- [ ] The target `${file}` or a new `/plan/[purpose]-[component]-[version].md` path is identified.
+- [ ] All required front matter fields and plan sections are present.
+- [ ] Status is one of `Completed`, `In progress`, `Planned`, `Deprecated`, or `On Hold` and the badge uses the matching color.
+- [ ] Requirements, phases, tasks, dependencies, files, tests, risks, and assumptions use standardized identifiers.
+- [ ] Tasks are atomic, deterministic, and include specific paths, functions, or configuration details when known.
+- [ ] No placeholder text remains in the final plan.
+
+## References
+
+- [Shields.io status badge](https://img.shields.io/badge/status-<status>-<status_color>)

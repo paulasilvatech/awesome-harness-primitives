@@ -13,7 +13,18 @@ metadata:
   github: "https://github.com/andrewstellman/quality-playbook"
   version: "1.5.6"
 ---
-# Quality Playbook Generator
+
+# Quality Playbook generator
+
+Run the Quality Playbook workflow for a codebase by exploring the domain, generating requirements and quality artifacts, reviewing code, auditing specs, reconciling defects with TDD evidence, and verifying the final quality system.
+
+## When to invoke
+
+- "Run the Quality Playbook."
+- "Do a Council of Three spec audit."
+- "Generate a quality system for this repo."
+- "Find coverage theater and fitness-to-purpose gaps."
+- "Run a bootstrap self-audit."
 
 ## Plan Overview — read this first, then explain it to the user
 
@@ -204,3 +215,41 @@ All reference file mentions in this skill use the short form `references/filenam
 
 Additional detailed guidance was moved to [references/extended-guide.md](references/extended-guide.md) to keep this skill within the progressive-disclosure budget.
 
+## Progressive disclosure and bundled resources
+
+- `phase_prompts/phaseN.md`: single source of truth for Mode A phase walkthroughs and runner-driven phase prompts.
+- `references/`: supporting protocols, iteration guidance, and review material resolved through the documented fallback list.
+- `agents/`: bundled role definitions used by the playbook where applicable.
+
+## Output template
+
+```markdown
+## Quality Playbook result
+
+**Status:** pass | partial | fail | blocked
+**Target:** `{{target}}`
+**Mode:** Skill-direct | Runner-driven
+
+| Artifact | Status |
+| --- | --- |
+| `quality/EXPLORATION.md` | {{status}} |
+| `quality/REQUIREMENTS.md` | {{status}} |
+| `quality/BUGS.md` | {{status}} |
+| `quality/INDEX.md` | {{gate_verdict}} |
+| `AGENTS.md` | {{generated_or_mode_b_only}} |
+
+### Verdict
+{{gate_summary_and_next_step}}
+```
+
+## Quality gate
+
+- [ ] The selected execution mode matches the runtime and operator request.
+- [ ] Mode A does not modify files outside the target `quality/` directory.
+- [ ] Mode B invokes the runner as `python3 -m bin.run_playbook <target>`, never script-style.
+- [ ] Phase outputs are not skipped; each downstream phase reads the artifacts produced earlier.
+- [ ] The final response surfaces the gate verdict from `quality/INDEX.md`.
+
+## References
+
+- https://github.com/andrewstellman/quality-playbook

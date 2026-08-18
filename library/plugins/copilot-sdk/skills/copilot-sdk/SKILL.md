@@ -6,7 +6,18 @@ description: >-
   creating custom agents. Triggers on Copilot SDK, GitHub SDK, agentic app, embed Copilot,
   programmable agent, MCP server, custom agent.
 ---
+
 # GitHub Copilot SDK
+
+Build agentic applications with the GitHub Copilot SDK by installing the appropriate language package, creating sessions, handling permissions, streaming events, registering tools, and connecting MCP servers.
+
+## When to invoke
+
+- "Build an app with the GitHub Copilot SDK."
+- "Embed GitHub Copilot in this TypeScript service."
+- "Create a custom Copilot agent with tools."
+- "Stream Copilot SDK responses in Python."
+- "Connect a Copilot SDK session to an MCP server."
 
 Embed Copilot's agentic workflows in any application using Python, TypeScript, Go, or .NET.
 
@@ -207,3 +218,37 @@ asyncio.run(main())
 
 Additional detailed guidance was moved to [references/extended-guide.md](references/extended-guide.md) to keep this skill within the progressive-disclosure budget.
 
+## Progressive disclosure and bundled resources
+
+- `references/extended-guide.md`: detailed SDK patterns that were moved out of SKILL.md to keep the main skill concise.
+
+## Output template
+
+````markdown
+## GitHub Copilot SDK result
+
+**Status:** implemented | guidance only | blocked
+**Language:** TypeScript | Python | Go | .NET
+
+### Key code
+```{{language}}
+{{minimal_sdk_example}}
+```
+
+### Validation
+- Install command: `{{package_install_command}}`
+- Run command: `{{run_command}}`
+- Session behavior: `{{sendAndWait_or_streaming_result}}`
+````
+
+## Quality gate
+
+- [ ] GitHub Copilot CLI is installed and authenticated before SDK code is expected to run.
+- [ ] The language runtime and package manager match the selected SDK package.
+- [ ] Permission handling is explicit, such as `approveAll`, `PermissionHandler.approve_all`, or the language equivalent.
+- [ ] Streaming code handles both message delta events and session idle completion.
+- [ ] The client or session is stopped or disposed so processes do not linger.
+
+## References
+
+- https://docs.github.com/en/copilot/how-tos/set-up/install-copilot-cli

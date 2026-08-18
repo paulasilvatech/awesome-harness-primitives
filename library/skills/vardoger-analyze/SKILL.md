@@ -1,54 +1,45 @@
 ---
 name: "vardoger-analyze"
 description: >-
-  Use when the user asks to personalize the GitHub Copilot CLI assistant, adapt Copilot to their
-  style, use vardoger, or analyze their Copilot CLI conversation history. Reads the local session
-  directory at `~/.copilot/session-state/`, extracts recurring preferences and conventions, and writes
-  a fenced personalization block into `~/.copilot/copilot-instructions.md`. Runs entirely on the
-  user's machine via the local `vardoger` CLI (`pipx install vardoger`); no network calls and no
-  uploads. Triggers: 'personalize my copilot', 'analyze my copilot history', 'tailor copilot to me',
-  'run vardoger', 'update my copilot instructions from history', 'make copilot learn my style'.
+  Run the local vardoger CLI to analyze GitHub Copilot CLI conversation history and write personalized instructions into ~/.copilot/copilot-instructions.md. Use this skill when the user asks to personalize my copilot, analyze my copilot history, tailor Copilot to me, run vardoger, update my Copilot instructions from history, or make Copilot learn my style.
 license: "Apache-2.0"
 ---
-# Analyze Copilot CLI history and generate personalized instructions
 
-Drive the local `vardoger` CLI to read the user's GitHub Copilot CLI conversation history, extract behavioral patterns, and write a personalization block into `~/.copilot/copilot-instructions.md`.
+# Vardoger Copilot history analysis
 
-## How it works
+Drive the local `vardoger` CLI to summarize GitHub Copilot CLI conversation history in batches, synthesize durable behavioral instructions, and write an idempotent fenced block into the user's Copilot instructions file.
 
-`vardoger` prepares the history in batches. You (the assistant) summarize each batch for behavioral signals, then synthesize all summaries into a final personalization. `vardoger` writes the result, fenced by `<!-- vardoger:start -->` / `<!-- vardoger:end -->` markers so any hand-authored rules in the same file are preserved.
+## When to invoke
 
-## Sandbox note (read before running any command)
+- "Personalize my Copilot from my CLI history."
+- "Analyze my Copilot history with vardoger."
+- "Tailor GitHub Copilot to my style."
+- "Run vardoger and update my Copilot instructions."
+- "Make Copilot learn my style from previous sessions."
 
-`vardoger` reads and writes files **outside** the current workspace:
+## Prerequisites and context
 
-- Reads Copilot CLI history from `~/.copilot/session-state/`.
-- Writes a checkpoint state file to `~/.vardoger/state.json` (created on first run).
-- Writes the final personalization to `~/.copilot/copilot-instructions.md`.
+- `vardoger` must be installed locally. Recommended install: `pipx install vardoger`; non-install execution can use `uvx vardoger --help`.
+- The workflow runs entirely on the user's machine with no network calls and no uploads.
+- `vardoger` reads GitHub Copilot CLI history from `~/.copilot/session-state/`.
+- It writes checkpoint state to `~/.vardoger/state.json`, creating it on first run.
+- It writes global personalization to `~/.copilot/copilot-instructions.md` between `<!-- vardoger:start -->` and `<!-- vardoger:end -->`, preserving hand-authored rules outside that block.
+- For project scope, write with `--scope project --project <path>` instead of `--scope global`.
 
-When the host asks to approve a `vardoger` command, grant it write access beyond the workspace. Otherwise the first `vardoger prepare` call will fail with `PermissionError: ... ~/.vardoger/state.tmp` because the sandbox blocks writes outside the current working directory.
+## Sandbox and permission rule
 
-## Workflow
+`vardoger` reads and writes outside the current workspace. When the host asks to approve a `vardoger` command, grant write access beyond the workspace. Without that approval, the first `vardoger prepare` call can fail with `PermissionError: ... ~/.vardoger/state.tmp` because the sandbox blocks writes outside the project.
 
-1. Verify the `vardoger` CLI is installed and fail fast with install guidance if not.
-2. Check staleness with `vardoger status --platform copilot --json` and stop early if the personalization is still fresh.
-3. Get batch metadata with `vardoger prepare --platform copilot` to learn the number of batches.
-4. For each batch, run `vardoger prepare --platform copilot --batch <N>` and write a concise bullet summary of the behavioral signals.
-5. Get the synthesis prompt with `vardoger prepare --platform copilot --synthesize`.
-6. Synthesize all batch summaries into a single personalization following the synthesis prompt.
-7. Write the result by piping the personalization into `vardoger write --platform copilot --scope global` (or `--scope project --project <path>`).
-8. Report back to the user what was written, where, and that the write is idempotent.
+## Procedure
 
-## Steps
-
-### 1. Verify vardoger is installed
+1. Verify `vardoger` is on `PATH`:
 
 ```bash
 if ! command -v vardoger >/dev/null 2>&1; then
   cat <<'INSTALL_EOF'
 vardoger CLI is not installed.
 
-This skill calls the `vardoger` CLI to read your Copilot CLI history and
+This skill calls the vardoger CLI to read your Copilot CLI history and
 write a personalization file, so the CLI must be on PATH.
 
 Install options:
@@ -69,62 +60,105 @@ INSTALL_EOF
 fi
 ```
 
-### 2. Check if a refresh is needed
+2. Check staleness:
 
 ```bash
 vardoger status --platform copilot --json
 ```
 
-If the output shows `"is_stale": false`, tell the user their personalization is up to date and ask if they want to re-run anyway. If stale or never generated, continue with the analysis.
+If the output shows `"is_stale": false`, report that personalization is fresh and stop unless the user explicitly asked to force a rerun.
 
-### 3. Get batch metadata
+3. Get batch metadata:
 
 ```bash
 vardoger prepare --platform copilot
 ```
 
-This prints JSON like `{"batches": 3, "total_conversations": 29}`. Note the number of batches. Tell the user: "Found N conversations in M batches. Analyzing..."
+This returns JSON such as `{"batches": 3, "total_conversations": 29}`. Record the batch count and total conversations.
 
-### 4. Summarize each batch
-
-For each batch number from 1 to N, run:
+4. For each batch number from 1 to N, run:
 
 ```bash
 vardoger prepare --platform copilot --batch 1
 ```
 
-The output contains a summarization prompt followed by conversation data. Read the output carefully and produce a concise bullet-point summary of the behavioral signals you observe in that batch. Keep your summary for later.
+Read the summarization prompt and conversation data, then write a concise bullet summary of behavioral signals. Repeat with `--batch 2`, `--batch 3`, and so on.
 
-Tell the user which batch you are processing: "Analyzing batch 1 of N..."
-
-Repeat for all batches (`--batch 2`, `--batch 3`, etc.).
-
-### 5. Get the synthesis prompt
+5. Get the synthesis prompt:
 
 ```bash
 vardoger prepare --platform copilot --synthesize
 ```
 
-### 6. Synthesize the personalization
+6. Combine all batch summaries into one clean markdown personalization that follows the synthesis prompt.
 
-Following the synthesis prompt, combine all your batch summaries into a single personalization. The output should be clean markdown with actionable instructions for an AI assistant.
-
-### 7. Write the result
-
-Pipe your personalization to `vardoger`:
+7. Write the result:
 
 ```bash
 echo "YOUR_PERSONALIZATION_HERE" | vardoger write --platform copilot --scope global
 ```
 
-Replace `YOUR_PERSONALIZATION_HERE` with the actual personalization markdown you generated. `--scope global` writes to `~/.copilot/copilot-instructions.md`; use `--scope project --project <path>` to scope the write to a specific repository instead.
+Replace `YOUR_PERSONALIZATION_HERE` with the actual markdown. Use `--scope project --project <path>` only when the user requested project-scoped personalization.
 
-### 8. Report to the user
+8. Report what was written, where it was written, and that reruns are idempotent because the fenced vardoger block is replaced.
 
-Tell the user what was written and where. Mention they can ask you to re-run vardoger any time to update the personalization, and that writes are idempotent (the fenced block is replaced; anything outside it is preserved).
+## Personalization content rules
 
-## When to use
+| Signal type | Include | Exclude |
+| --- | --- | --- |
+| Workflow preferences | Repeated command, validation, planning, and review habits | One-off task choices. |
+| Communication style | Durable preferences for brevity, evidence, structure, or autonomy | Sensitive personal data or private content. |
+| Code conventions | Cross-session patterns the user repeatedly applies | Repository secrets or credentials. |
+| Tool usage | Reliable shortcuts and effective local workflows | Network upload claims; vardoger is local. |
 
-- When the user asks to personalize their Copilot CLI assistant.
-- When the user asks to analyze their Copilot CLI conversation history.
-- When the user mentions "vardoger".
+## Troubleshooting
+
+| Symptom | Likely cause | Resolution |
+| --- | --- | --- |
+| `vardoger CLI is not installed` | `vardoger` is missing from `PATH` | Install with `pipx install vardoger` or use `uvx vardoger --help`. |
+| `PermissionError: ... ~/.vardoger/state.tmp` | Sandbox denied writes outside workspace | Approve the command with write access beyond the workspace. |
+| `"is_stale": false` | Existing personalization is fresh | Stop and report freshness unless the user requested a forced rerun. |
+| No batches returned | No readable Copilot CLI history | Report that `~/.copilot/session-state/` has no analyzable conversations. |
+
+
+## Command forms
+
+Use the exact batch command form `vardoger prepare --platform copilot --batch <N>` in generalized instructions, then substitute the concrete number when executing. Use the exact synthesis command `vardoger prepare --platform copilot --synthesize`. Each batch summary should be a bullet-point summary so synthesis can compare behavioral signals consistently.
+
+## Output template
+
+```markdown
+## Vardoger personalization result
+
+**Status:** written | fresh | blocked
+**Scope:** global | project
+**History source:** `~/.copilot/session-state/`
+**Destination:** `~/.copilot/copilot-instructions.md` or `<project path>`
+
+### Batch summary
+| Batch | Conversations | Behavioral signals |
+| --- | --- | --- |
+| `<n>` | `<count>` | `<concise summary>` |
+
+### Written personalization
+<summary of durable instructions written; do not paste sensitive conversation content>
+
+### Validation
+- `vardoger status --platform copilot --json`: <result>
+- `vardoger prepare --platform copilot`: <result>
+- `vardoger write --platform copilot --scope <scope>`: <result>
+```
+
+## Quality gate
+
+- [ ] `vardoger` installation was verified before running prepare or write commands.
+- [ ] Staleness was checked with `vardoger status --platform copilot --json`.
+- [ ] Every batch from `vardoger prepare --platform copilot` was summarized before synthesis.
+- [ ] The synthesis prompt was fetched with `--synthesize` before writing.
+- [ ] The write used `vardoger write --platform copilot --scope global` or an explicitly requested project scope.
+- [ ] The report states the destination file and idempotent fenced block behavior.
+- [ ] No sensitive data, credentials, or raw private conversation content is pasted into the final report.
+## References
+
+- [pipx documentation](https://pipx.pypa.io/stable/)
+- [vardoger project](https://github.com/dstrupl/vardoger)

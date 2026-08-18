@@ -1,140 +1,119 @@
 ---
 name: "convert-excel-to-md"
 description: >-
-  Converts Excel (.xlsx) workbooks into Markdown so their contents can be accurately analyzed,
-  summarized, searched, or extracted from. Use this skill whenever the user shares, references, or
-  asks about a .xlsx file — even if they don't say "convert" or "markdown" explicitly. This includes
-  requests to "read", "summarize", "review", "extract data from", "compare", "chart", or "analyze" a
-  spreadsheet, workbook, budget, data export, or tracker. Always run the bundled conversion script to
-  produce Markdown first; do not attempt to parse .xlsx content directly or write ad-hoc extraction
-  code. Also use this skill for batch requests involving a whole folder of Excel workbooks. IMPORTANT:
-  When the user references a folder or set of documents containing multiple file types (.pdf, .docx,
-  .xlsx), invoke ALL three sibling skills — convert-pdf-to-md, convert-word-to-md, and
-  convert-excel-to-md — so no file type is silently skipped.
+  Convert Excel .xlsx workbooks to Markdown with the bundled script so spreadsheet contents can be read, summarized, searched, extracted, compared, charted, or analyzed. Use whenever the user references a spreadsheet, workbook, budget, export, tracker, .xlsx file, or a folder of workbooks; invoke sibling converters for mixed .pdf, .docx, and .xlsx sets.
 ---
+
 # Convert Excel to Markdown
 
-## When to use this skill
+Converts `.xlsx` workbooks into Markdown folders with sheet tables and extracted embedded images, then reads the Markdown output to perform the user's requested analysis instead of parsing zipped Excel XML directly.
 
-Trigger this skill any time there is a `.xlsx` file that needs to be
-understood or processed — for example, a user attaches a spreadsheet and
-asks questions about it, wants a summary of the data, wants specific rows or
-values pulled out, or wants multiple workbooks in a folder processed
-together. Excel's native `.xlsx` format is a zipped XML bundle that is not
-reliably readable as plain text, so always convert it to Markdown first
-using the script in this skill rather than trying to open or parse the file
-directly.
+## When to invoke
 
-This skill only supports `.xlsx`. If asked to convert a legacy `.xls` file,
-tell the user it isn't supported and ask them to re-save it as `.xlsx`
-(Excel: File > Save As > Excel Workbook (.xlsx)) first.
+- "Read this spreadsheet."
+- "Summarize or analyze this .xlsx workbook."
+- "Extract data from this budget, tracker, or export."
+- "Convert a folder of Excel workbooks to Markdown."
+- "Process this folder with .pdf, .docx, and .xlsx files."
 
-**Mixed file types:** When the user references a folder or set of documents
-containing multiple supported file types (`.pdf`, `.docx`, `.xlsx`), this
-skill handles only `.xlsx` files. The agent MUST also invoke the sibling
-skills in parallel:
-- `convert-pdf-to-md` for any `.pdf` files
-- `convert-word-to-md` for any `.docx` files
+## Prerequisites and context
 
-Never process a folder and silently skip a supported file type. All three
-skills must be invoked together when mixed types are present.
+- The script supports `.xlsx` only. For legacy `.xls`, ask the user to re-save as `.xlsx` using Excel: File > Save As > Excel Workbook (.xlsx).
+- Before first use in an environment, follow `references/setup.md` to ensure Python, pip, and `markitdown` are installed.
+- The conversion script is `scripts/convert_excel_to_md.py`.
+- Always run the bundled script first; do not parse `.xlsx` directly or write ad-hoc extraction code.
+- After conversion, read the generated `.md` files to perform the requested analysis.
 
-## Setup (once per environment)
+## Procedure
 
-Before the first conversion in a given environment, follow
-[`references/setup.md`](references/setup.md) step by step to ensure Python,
-pip, and the `markitdown` package are installed. Do this proactively rather
-than guessing whether the environment is ready — the script itself will
-also fail with a clear pointer back to that file if `markitdown` turns out
-to be missing, so it's safe to just try the conversion first if you're
-reasonably confident setup was already done.
+1. Resolve the source path. If the file path cannot be fully resolved, use `ask_user` or the host's confirmation mechanism to obtain the full absolute path before conversion.
+2. If the source is a folder with mixed `.pdf`, `.docx`, and `.xlsx` files, invoke `convert-pdf-to-md`, `convert-word-to-md`, and `convert-excel-to-md` so no supported type is skipped.
+3. Run `scripts/convert_excel_to_md.py` on the file or folder.
+4. Use default output next to the source unless the user explicitly provides an output path.
+5. Use `--recursive` only when subfolders should be included.
+6. Read the resulting Markdown and image links before answering the user's data question.
 
-## Usage
-
-The conversion script lives at `scripts/convert_excel_to_md.py`.
-
-**Output structure:** MarkItDown's XLSX converter renders each sheet as its
-own `## <SheetName>` Markdown table — it has no support for embedded images
-at all. This script separately extracts real embedded images (raster
-pictures, not charts) and maps them to the sheet they belong to, writing a
-self-contained folder per document:
-
-```
-<name>/
-    img/
-        sheet001_<sheetname>_img001.<ext>
-        sheet002_<sheetname>_img001.<ext>
-        ...
-    <name>.md          (each sheet's images appear right after its table,
-                         under a "#### Images in this sheet" heading)
-```
-
-This is per-sheet placement, not exact cell position — the finest
-granularity MarkItDown's stable output anchors (the `## <SheetName>`
-headings) allow. If a workbook has no embedded images, no `img/` folder or
-image sections are created. Native Excel **charts** are not extracted as
-images (only actual embedded pictures are — charts would need to be
-rendered by Excel/LibreOffice, which this lightweight skill does not do).
-
-**Single file:**
+## Conversion commands
 
 ```powershell
 python scripts\convert_excel_to_md.py "C:\path\to\workbook.xlsx"
-```
-
-This creates a `workbook\` folder next to the source file (containing
-`workbook.md` and, if present, `workbook\img\`). To control the destination
-folder explicitly:
-
-```powershell
 python scripts\convert_excel_to_md.py "C:\path\to\workbook.xlsx" -o "C:\path\to\output_folder"
-```
-
-**A folder of workbooks (batch mode):**
-
-```powershell
 python scripts\convert_excel_to_md.py "C:\path\to\folder"
-```
-
-Add `--recursive` to also include subfolders:
-
-```powershell
 python scripts\convert_excel_to_md.py "C:\path\to\folder" --recursive
+python scripts\convert_excel_to_md.py "C:\path\to\folder" --recursive -o "C:\path\to\output_parent"
 ```
 
-Each `.xlsx` found gets its own `<name>\` output folder next to it by
-default. Pass `-o "C:\path\to\output_parent"` to collect all the generated
-`<name>\` folders under a separate parent directory instead (subfolder
-structure is preserved when combined with `--recursive`).
+Use `-o` only when the user explicitly says where to save output, such as `C:\output` or `D:\work`. Do not choose `-o` based on the agent current working directory, session state folder, or implied location.
 
-After conversion, read the resulting `.md` file(s) to perform the actual
-analysis the user asked for — the script's job is only to produce accurate
-Markdown (and images), not to interpret the content.
+## Output structure and limitations
 
-## Deciding where output goes
-
-**Default — always output next to the source file.** The `<name>/` folder
-is created in the same directory as the source `.xlsx`. This is the required
-default for every case. Do NOT override it unless the user explicitly asks
-for a different location.
-
-**Only use `-o` when** the user explicitly provides an output path (e.g.,
-"save the output to `C:\output`", "put the results in `D:\work`"). Do NOT
-pass `-o` based on the agent's current working directory, the session state
-folder, or any implied location.
-
-**If the source file path cannot be fully resolved** — for example, the
-user provides only a filename with no directory, or the path is ambiguous —
-use `ask_user` to confirm the full absolute path before running the
-conversion. Never guess or assume the directory.
+| Feature | Behavior |
+| --- | --- |
+| Workbook output | A `<name>/` folder is created next to the source `.xlsx` by default. |
+| Markdown file | `<name>/<name>.md` contains each sheet as its own `## <SheetName>` Markdown table. |
+| Images | Real embedded raster pictures are extracted into `<name>/img/` and inserted after each sheet table under `#### Images in this sheet`. |
+| Image filenames | `sheet001_<sheetname>_img001.<ext>`, `sheet002_<sheetname>_img001.<ext>`, and so on. |
+| Placement accuracy | Images are placed per sheet, not exact cell position, because MarkItDown anchors stable output at `## <SheetName>`. |
+| No images | No `img/` folder or image sections are created. |
+| Charts | Native Excel charts are not extracted; only real embedded pictures are extracted. |
+| Batch mode | Each `.xlsx` gets its own `<name>/` output folder; with `-o`, generated folders are collected under the output parent and subfolder structure is preserved with `--recursive`. |
+| Non-Excel files | Folder conversion intentionally skips non-.xlsx files and reports `NOTE: skipped N non-.xlsx file(s)`. |
 
 ## Troubleshooting
 
-| Symptom | Likely cause | Fix |
-|---|---|---|
-| `ModuleNotFoundError: No module named 'markitdown'` / exit code 2 | MarkItDown not installed | Follow `references/setup.md` |
-| `ERROR: Unsupported file type '.xls'` / exit code 3 | Legacy `.xls`, not `.xlsx` | Ask the user to re-save as `.xlsx` |
-| `ERROR: Input path not found` / exit code 3 | Wrong path, or file moved | Confirm the correct path with the user |
-| `FAILED <file> -> ...` in batch output | That specific file is corrupt, password-protected, or otherwise unreadable | Report which file(s) failed; other files in the batch still succeed |
-| `NOTE: skipped N non-.xlsx file(s)` | Folder contains non-Excel files | Expected — those files are intentionally ignored |
-| A sheet's charts don't appear as images | Charts are chart objects, not embedded pictures — this skill only extracts real embedded raster images | Expected; mention this limitation if the user specifically needs chart images |
+| Symptom | Likely cause | Resolution |
+| --- | --- | --- |
+| `ModuleNotFoundError: No module named 'markitdown'` / exit code 2 | MarkItDown is not installed. | Follow `references/setup.md`. |
+| `ERROR: Unsupported file type '.xls'` / exit code 3 | Legacy `.xls`, not `.xlsx`. | Ask the user to re-save as `.xlsx`. |
+| `ERROR: Input path not found` / exit code 3 | Wrong path or moved file. | Confirm the correct absolute path with the user. |
+| `FAILED <file> -> ...` in batch output | That workbook is corrupt, password-protected, or unreadable. | Report failed files; other batch files may still succeed. |
+| `NOTE: skipped N non-.xlsx file(s)` | Folder contains non-Excel files. | Expected for this skill; invoke sibling skills for `.pdf` and `.docx`. |
+| A sheet's charts do not appear as images | Charts are chart objects, not embedded raster images. | Expected limitation; explain if the user needs chart images. |
+
+## Progressive disclosure and bundled resources
+
+- `references/setup.md`: Python, pip, and MarkItDown setup.
+- `scripts/convert_excel_to_md.py`: deterministic Excel-to-Markdown conversion with embedded picture extraction.
+- `scripts/requirements.txt`: Python package requirements for the script.
+
+## Related primitives
+
+| Name | Type | Use it when |
+| --- | --- | --- |
+| `convert-pdf-to-md` | skill | The input set contains `.pdf` files. |
+| `convert-word-to-md` | skill | The input set contains `.docx` files. |
+
+## Excel conversion invariants
+
+`IMPORTANT`: the agent `MUST` convert before analysis. MarkItDown's `XLSX` output is `self-contained` in `<name>\`, such as `workbook\`, `workbook.md`, and `workbook\img\`. Image placement is `per-sheet`; native charts require `Excel/LibreOffice` rendering and are out of scope. Batch output can use `-o "C:\path\to\output_parent"` only when the user explicitly requests it.
+
+## Output template
+
+```markdown
+### Excel to Markdown conversion result
+
+**Status:** converted | partially converted | blocked
+**Input:** `<file or folder>`
+**Output:** `<name>/` or `<output_parent>/<name>/`
+**Recursive:** yes | no
+
+| Workbook | Markdown output | Images extracted | Notes |
+| --- | --- | --- | --- |
+| `<workbook.xlsx>` | `<name>/<name>.md` | `<count or none>` | `<success, skipped, or failure reason>` |
+
+**Next analysis performed**
+- <summary, extraction, comparison, chart review, or user-requested analysis>
+
+**Validation**
+- `python scripts\convert_excel_to_md.py ...`: pass | fail
+```
+
+## Quality gate
+
+- [ ] The bundled script `scripts/convert_excel_to_md.py` was used before analysis.
+- [ ] The input path was fully resolved; ambiguous paths were confirmed with `ask_user` or equivalent.
+- [ ] `.xls` files were rejected with re-save guidance.
+- [ ] Default output stayed next to the source unless the user explicitly requested `-o`.
+- [ ] Mixed `.pdf`, `.docx`, and `.xlsx` sets invoked the sibling converters.
+- [ ] Generated `.md` files were read before answering the user's content question.
+- [ ] Failures in batch mode were reported without hiding successful conversions.

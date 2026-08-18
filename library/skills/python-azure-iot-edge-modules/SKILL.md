@@ -1,41 +1,27 @@
 ---
 name: "python-azure-iot-edge-modules"
 description: >-
-  Build and operate Python Azure IoT Edge modules with robust messaging, deployment manifests,
-  observability, and production readiness checks. Use this skill when the user asks to create Python
-  IoT Edge modules, deploy edge modules with manifests, process telemetry at the edge, or validate IoT
-  Edge production readiness.
+  Build and operate Python Azure IoT Edge modules with reliable messaging, deployment manifests, observability, security, and production readiness checks. Use when creating Python IoT Edge modules, deploying edge manifests, processing telemetry at the edge, handling disconnected operation, or validating IoT Edge readiness.
 ---
-# Python Azure IoT Edge Modules
 
-Use this skill to design, implement, and validate Python-based IoT Edge modules for telemetry processing, local inference, protocol translation, and edge-to-cloud integration.
+# Python Azure IoT Edge modules
 
-## When To Use
+Designs, implements, and validates Python-based Azure IoT Edge modules for telemetry processing, local inference, protocol translation, command orchestration, and edge-to-cloud integration.
 
-Use this skill for requests like:
+## When to invoke
 
 - "quiero crear un modulo Python para IoT Edge"
 - "como despliego modulos edge con manifest"
 - "necesito filtrar/agregar telemetria antes de subirla"
 - "como manejo desconexiones y reintentos en edge"
+- "Validate this Python IoT Edge module for production readiness."
 
-## Mandatory Docs Review
+## Prerequisites and context
 
-Before recommending runtime behavior or deployment decisions, review:
+Before recommending runtime behavior or deployment decisions, review current Azure IoT Edge documentation:
 
 - https://learn.microsoft.com/azure/iot-edge/
 - https://learn.microsoft.com/es-es/azure/iot-edge/
-
-Minimum checks:
-
-- Runtime architecture and module lifecycle.
-- Supported host OS and versions.
-- Deployment model and configuration flow.
-- Current release/version guidance.
-
-If documentation cannot be fetched, proceed with explicit assumptions and flag them clearly.
-
-## Python Official References and Best Practices (Required)
 
 Before proposing Python implementation details, consult official Python sources:
 
@@ -43,102 +29,111 @@ Before proposing Python implementation details, consult official Python sources:
 - https://docs.python.org/3/
 - https://docs.python.org/3/reference/
 - https://docs.python.org/3/library/
-- references/python-official-best-practices.md
+- `references/python-official-best-practices.md`
 
-Prefer official docs over community snippets unless there is a specific compatibility reason to deviate.
+If documentation cannot be fetched, proceed with explicit assumptions and flag them clearly.
 
-## Goals
+## Procedure
 
-- Deliver module architecture and implementation plan that is production-focused.
-- Ensure reliable edge messaging under network variability.
-- Provide deployment, observability, and validation artifacts.
+1. Define the contract: module inputs, outputs, message schema, schema versioning, routes, priorities, and desired properties.
+2. Specify runtime and packaging: Python version target, base image, container footprint, CVE hygiene, CPU and memory bounds, startup checks, and health checks.
+3. Design reliability: retries with exponential backoff and jitter, graceful degradation, bounded local queueing, and idempotent replay handling.
+4. Define security controls: no plaintext secrets, least-privilege behavior, secure transport, trusted certificate chain handling, and command traceability.
+5. Describe deployment and operations: environment-specific manifests, pilot/staged/broad rollout, rollback criteria, SLOs, alerts, and observability.
+6. Validate with a test matrix covering functional, chaos, performance, and rollback scenarios.
 
-## Module Use Cases
+## Module design areas
 
-- Protocol adapter (serial/Modbus/OPC-UA to IoT message format).
-- Telemetry enrichment and normalization.
-- Local anomaly detection or inference.
-- Command orchestration and local actuator control.
+| Area | Required decisions |
+| --- | --- |
+| Use case | Protocol adapter for serial/Modbus/OPC-UA, telemetry enrichment, local anomaly detection or inference, command orchestration, or local actuator control. |
+| Inputs and outputs | Named inputs, output routes, schema version, critical telemetry priority, and normal telemetry route. |
+| Configuration | Desired properties for dynamic config; reported properties for status and current config. |
+| Packaging | Python runtime, image base, dependency pinning, startup command, health probe, and restart behavior. |
+| Resources | CPU and memory bounds that match the edge device. |
+| Operations | SLOs, alert conditions, logs, metrics, and rollout/rollback stages. |
 
-## Delivery Workflow
+## Reliability and security rules
 
-### 1) Contract and Interfaces
+| Concern | Rule |
+| --- | --- |
+| Network variability | Use exponential backoff with jitter; avoid tight retry loops. |
+| Offline mode | Buffer locally only with a bounded queue and clear drop policy. |
+| Replay | Make processing idempotent for repeated messages. |
+| Upstream failure | Degrade gracefully and preserve local control paths when required. |
+| Secrets | Never embed secrets in Dockerfiles, source, or deployment manifests. |
+| Transport | Use secure transport and validate the trusted cert chain. |
+| Commands | Authorize and trace command handling and state changes. |
+| Rollout | Never recommend direct production rollout without a pilot stage. |
 
-Define:
+## Progressive disclosure and bundled resources
 
-- Module inputs and outputs.
-- Message schema and versioning policy.
-- Routes and priorities for normal vs critical telemetry.
-- Desired properties used for dynamic configuration.
+- `references/python-edge-module-template.md`: output structure for implementation proposals and reviews.
+- `references/python-official-best-practices.md`: baseline Python quality criteria.
 
-### 2) Runtime and Packaging
+## Related primitives
 
-Specify:
+| Name | Type | Use it when |
+| --- | --- | --- |
+| `azure-smart-city-iot-solution-builder` | skill | The request is platform-level smart city IoT architecture and phased rollout. |
+| `appinsights-instrumentation` | skill | The request focuses on telemetry instrumentation patterns. |
+| `azure-resource-visualizer` | skill | The request needs architecture diagrams or dependency mapping. |
 
-- Python runtime version target.
-- Container image strategy (base image, slim footprint, CVE hygiene).
-- Resource profile (CPU/memory bounds).
-- Startup and health checks.
+## Edge module quality vocabulary
 
-### 3) Reliability Design
+Keep designs `production-focused`, include `error-handling`, and check current `release/version` guidance before making runtime recommendations.
 
-Implement and validate:
+## Output template
 
-- Retries with exponential backoff and jitter.
-- Graceful degradation on upstream failures.
-- Local queueing strategy where needed.
-- Idempotent processing for replayed messages.
+```markdown
+### Python Azure IoT Edge module result
 
-### 4) Security Controls
+**Status:** design ready | implementation plan | review findings | blocked
+**Context and assumptions:** <runtime, device, connectivity, documentation assumptions>
 
-Require:
+## 1. Module design brief
+- Purpose: <module purpose>
+- Inputs: <module inputs>
+- Outputs: <module outputs>
+- Message schema/version: <schema and versioning policy>
 
-- No plaintext secrets in code or manifest.
-- Least-privilege module behavior.
-- Secure transport and trusted cert chain handling.
-- Traceability for command handling and state changes.
+## 2. Deployment model
+- Image: <base image and tag policy>
+- Manifest settings: <routes, env, desired properties>
+- Resource limits: <CPU/memory>
 
-### 5) Deployment and Operations
+## 3. Reliability and error handling
+- Retries: <backoff and jitter>
+- Offline behavior: <queue, bounds, drop policy>
+- Idempotency: <replay handling>
 
-Define:
+## 4. Security and operations checklist
+- <identity, secrets, cert chain, command audit, health, SLOs>
 
-- Environment-specific deployment manifests.
-- Rollout strategy (pilot, staged, broad).
-- Rollback criteria.
-- SLOs and alerting conditions.
+## 5. Test matrix
+| Test | Method | Expected result |
+| --- | --- | --- |
+| Functional | <case> | <result> |
+| Chaos | <disconnect/restart> | <result> |
+| Performance | <load> | <result> |
+| Rollback | <rollback condition> | <result> |
+```
 
-## Reuse Other Skills
+## Quality gate
 
-When relevant, combine with:
+- [ ] Azure IoT Edge and Python official documentation were reviewed or assumptions were stated.
+- [ ] Module inputs, outputs, message schema, routes, and desired properties are defined.
+- [ ] Deployment model covers image, manifest, env settings, health probes, and restart behavior.
+- [ ] Reliability strategy includes backoff with jitter, bounded buffering, and idempotency.
+- [ ] No plaintext secrets are placed in Dockerfiles, source, or manifests.
+- [ ] Rollout includes pilot, staged, broad, and rollback criteria.
+- [ ] Test matrix covers functional, chaos, performance, and rollback tests.
 
-- `azure-smart-city-iot-solution-builder` for platform-level architecture.
-- `appinsights-instrumentation` for telemetry instrumentation approaches.
-- `azure-resource-visualizer` for architecture diagrams and dependency mapping.
+## References
 
-Also use `references/python-official-best-practices.md` as baseline quality criteria for module design and implementation guidance.
-
-## Required Output
-
-Always provide:
-
-1. Module design brief (purpose, inputs, outputs).
-2. Deployment model (image, manifest, env settings).
-3. Reliability and error-handling strategy.
-4. Security and operations checklist.
-5. Test matrix (functional, chaos, performance, rollback).
-
-## Output Template
-
-Use `references/python-edge-module-template.md` to structure implementation proposals and reviews.
-
-1. Context and assumptions
-2. Module architecture
-3. Deployment and configuration
-4. Reliability, security, observability
-5. Validation and rollout plan
-
-## Guardrails
-
-- Do not recommend direct production rollout without pilot stage.
-- Do not embed secrets in Dockerfiles, source, or manifests.
-- Do not omit health probes, restart behavior, and rollback criteria.
+- [Azure IoT Edge](https://learn.microsoft.com/azure/iot-edge/)
+- [Azure IoT Edge Spanish documentation](https://learn.microsoft.com/es-es/azure/iot-edge/)
+- [Python](https://www.python.org/)
+- [Python 3 documentation](https://docs.python.org/3/)
+- [Python language reference](https://docs.python.org/3/reference/)
+- [Python standard library](https://docs.python.org/3/library/)

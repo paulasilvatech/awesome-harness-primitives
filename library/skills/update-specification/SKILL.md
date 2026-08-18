@@ -1,129 +1,106 @@
 ---
 name: "update-specification"
 description: >-
-  Update an existing specification file for the solution, optimized for Generative AI consumption
-  based on new requirements or updates to any existing code. Use this skill when the user asks for
-  best practices for ai-ready specifications.
----
-# Update Specification
-
-Your goal is to update the existing specification file `${file}` based on new requirements or updates to any existing code.
-
-The specification file must define the requirements, constraints, and interfaces for the solution components in a manner that is clear, unambiguous, and structured for effective use by Generative AIs. Follow established documentation standards and ensure the content is machine-readable and self-contained.
-
-## Best Practices for AI-Ready Specifications
-
-- Use precise, explicit, and unambiguous language.
-- Clearly distinguish between requirements, constraints, and recommendations.
-- Use structured formatting (headings, lists, tables) for easy parsing.
-- Avoid idioms, metaphors, or context-dependent references.
-- Define all acronyms and domain-specific terms.
-- Include examples and edge cases where applicable.
-- Ensure the document is self-contained and does not rely on external context.
-
-The specification should be saved in the `/spec/` directory and named according to the following convention: `[a-z0-9-]+.md`, where the name should be descriptive of the specification's content and starting with the highlevel purpose, which is one of [schema, tool, data, infrastructure, process, architecture, or design].
-
-The specification file must be formatted in well formed Markdown.
-
-Specification files must follow the template below, ensuring that all sections are filled out appropriately. The front matter for the markdown should be structured correctly as per the example following:
-
-```md
----
-title: [Concise Title Describing the Specification's Focus]
-version: [Optional: e.g., 1.0, Date]
-date_created: [YYYY-MM-DD]
-last_updated: [Optional: YYYY-MM-DD]
-owner: [Optional: Team/Individual responsible for this spec]
-tags: [Optional: List of relevant tags or categories, e.g., `infrastructure`, `process`, `design`, `app` etc]
+  Update an existing AI-ready specification file in /spec/ from new requirements or code changes, preserving precise requirements, constraints, interfaces, acceptance criteria, and validation structure. Use this skill when the user asks to update a specification, revise requirements, sync a spec with code, or apply best practices for AI-ready specifications.
 ---
 
-# Introduction
+# Update specification
 
-[A short concise introduction to the specification and the goal it is intended to achieve.]
+Revise an existing solution specification so it remains clear, unambiguous, machine-readable, self-contained, and aligned with new requirements or implemented code.
 
-## 1. Purpose & Scope
+## When to invoke
 
-[Provide a clear, concise description of the specification's purpose and the scope of its application. State the intended audience and any assumptions.]
+- "Update this specification with the new requirements."
+- "Sync the spec with the code changes."
+- "Revise /spec/schema-user-profile.md for this interface change."
+- "Apply AI-ready specification best practices to this existing spec."
+- "Add acceptance criteria and validation to this spec."
 
-## 2. Definitions
+## Inputs
 
-[List and define all acronyms, abbreviations, and domain-specific terms used in this specification.]
+Use `$ARGUMENTS` as the target specification path, change request, or code-change summary. If a concrete file is not provided, identify the likely existing `/spec/` file from user context and ask for clarification only when multiple candidates remain.
 
-## 3. Requirements, Constraints & Guidelines
+## AI-ready specification rules
 
-[Explicitly list all requirements, constraints, rules, and guidelines. Use bullet points or tables for clarity.]
+| Rule | Apply it by |
+| --- | --- |
+| Precise language | Use explicit, testable statements; avoid idioms, metaphors, and context-dependent references. |
+| Clear classification | Distinguish requirements, constraints, guidelines, patterns, recommendations, interfaces, and dependencies. |
+| Structured formatting | Use headings, lists, tables, and code blocks so Generative AIs can parse the file reliably. |
+| Defined terms | Define all acronyms, abbreviations, and domain-specific terms. |
+| Self-contained context | Include examples, edge cases, rationale, and dependencies needed to use the spec without hidden context. |
+| Well formed Markdown | Keep frontmatter, headings, tables, and fences syntactically valid. |
 
-- **REQ-001**: Requirement 1
-- **SEC-001**: Security Requirement 1
-- **[3 LETTERS]-001**: Other Requirement 1
-- **CON-001**: Constraint 1
-- **GUD-001**: Guideline 1
-- **PAT-001**: Pattern to follow 1
+## File naming
 
-## 4. Interfaces & Data Contracts
+The specification must stay in `/spec/` and use `[a-z0-9-]+.md`. The name should describe the content and start with one high-level purpose: `schema`, `tool`, `data`, `infrastructure`, `process`, `architecture`, or `design`.
 
-[Describe the interfaces, APIs, data contracts, or integration points. Use tables or code blocks for schemas and examples.]
+## Specification structure
 
-## 5. Acceptance Criteria
+Update the file so these sections are present and filled appropriately:
 
-[Define clear, testable acceptance criteria for each requirement using Given-When-Then format where appropriate.]
+| Section | Required content |
+| --- | --- |
+| Frontmatter | `title`, optional `version`, `date_created`, optional `last_updated`, optional `owner`, optional `tags`. |
+| `# Introduction` | Short introduction and goal. |
+| `## 1. Purpose & Scope` | Purpose, scope, audience, and assumptions. |
+| `## 2. Definitions` | Acronyms, abbreviations, and domain terms. |
+| `## 3. Requirements, Constraints & Guidelines` | `REQ-001`, `SEC-001`, `[3 LETTERS]-001`, `CON-001`, `GUD-001`, and `PAT-001` style entries as applicable. |
+| `## 4. Interfaces & Data Contracts` | Interfaces, APIs, schemas, examples, or integration points. |
+| `## 5. Acceptance Criteria` | `AC-001` entries in Given-When-Then format where appropriate. |
+| `## 6. Test Automation Strategy` | Test Levels, Frameworks such as MSTest, FluentAssertions, and Moq when applicable, Test Data Management, CI/CD Integration, Coverage Requirements, and Performance Testing. |
+| `## 7. Rationale & Context` | Reasoning behind requirements, constraints, and guidelines. |
+| `## 8. Dependencies & External Integrations` | External Systems, Third-Party Services, Infrastructure Dependencies, Data Dependencies, Technology Platform Dependencies, and Compliance Dependencies. |
+| `## 9. Examples & Edge Cases` | Code or data examples, including edge cases. |
+| `## 10. Validation Criteria` | Criteria or tests required for compliance. |
+| `## 11. Related Specifications / Further Reading` | Related specs and relevant external documentation. |
 
-- **AC-001**: Given [context], When [action], Then [expected outcome]
-- **AC-002**: The system shall [specific behavior] when [condition]
-- **AC-003**: [Additional acceptance criteria as needed]
+Dependencies should focus on architectural and business needs, not package implementation details. For example, specify `OAuth 2.0 authentication library` rather than `Microsoft.AspNetCore.Authentication.JwtBearer v6.0.1` unless a version is an architectural constraint.
 
-## 6. Test Automation Strategy
+## Procedure
 
-[Define the testing approach, frameworks, and automation requirements.]
+1. Read the existing specification file and the new requirement or code-change evidence.
+2. Preserve stable identifiers unless the meaning changes. Add new IDs sequentially.
+3. Update frontmatter, including `last_updated` when appropriate.
+4. Revise affected requirements, constraints, interfaces, acceptance criteria, dependencies, examples, and validation criteria.
+5. Ensure every new or changed requirement has acceptance criteria and validation coverage.
+6. Save the updated spec in `/spec/` with the required filename convention.
+7. Report changed sections and any unresolved assumptions.
 
-- **Test Levels**: Unit, Integration, End-to-End
-- **Frameworks**: MSTest, FluentAssertions, Moq (for .NET applications)
-- **Test Data Management**: [approach for test data creation and cleanup]
-- **CI/CD Integration**: [automated testing in GitHub Actions pipelines]
-- **Coverage Requirements**: [minimum code coverage thresholds]
-- **Performance Testing**: [approach for load and performance testing]
+## Legacy placeholders
 
-## 7. Rationale & Context
+Older invocations may name the target as `${file}` and ask for `ai-ready` specifications. Preserve frontmatter placeholder meanings such as `Team/Individual`, `YYYY-MM-DD`, and `Platform/runtime` while replacing them with concrete values in the updated file.
 
-[Explain the reasoning behind the requirements, constraints, and guidelines. Provide context for design decisions.]
+## Output template
 
-## 8. Dependencies & External Integrations
+```markdown
+## Specification update result
 
-[Define the external systems, services, and architectural dependencies required for this specification. Focus on **what** is needed rather than **how** it's implemented. Avoid specific package or library versions unless they represent architectural constraints.]
+**Status:** updated | needs clarification | blocked
+**Specification:** `/spec/<purpose-name>.md`
+**Change source:** <requirements, code files, or user request>
 
-### External Systems
-- **EXT-001**: [External system name] - [Purpose and integration type]
+### Sections changed
+| Section | Change summary | Requirement IDs affected |
+| --- | --- | --- |
+| `<section>` | `<summary>` | `<REQ/SEC/CON/GUD/PAT/AC IDs>` |
 
-### Third-Party Services
-- **SVC-001**: [Service name] - [Required capabilities and SLA requirements]
+### Validation
+- Filename convention `[a-z0-9-]+.md`: pass | fail
+- Required sections present: pass | fail
+- New or changed requirements have acceptance criteria: pass | fail
+- Markdown and frontmatter well formed: pass | fail
 
-### Infrastructure Dependencies
-- **INF-001**: [Infrastructure component] - [Requirements and constraints]
-
-### Data Dependencies
-- **DAT-001**: [External data source] - [Format, frequency, and access requirements]
-
-### Technology Platform Dependencies
-- **PLT-001**: [Platform/runtime requirement] - [Version constraints and rationale]
-
-### Compliance Dependencies
-- **COM-001**: [Regulatory or compliance requirement] - [Impact on implementation]
-
-**Note**: This section should focus on architectural and business dependencies, not specific package implementations. For example, specify "OAuth 2.0 authentication library" rather than "Microsoft.AspNetCore.Authentication.JwtBearer v6.0.1".
-
-## 9. Examples & Edge Cases
-
-```code
-// Code snippet or data example demonstrating the correct application of the guidelines, including edge cases
+### Follow-up
+<unresolved assumptions or `None`>
 ```
 
-## 10. Validation Criteria
+## Quality gate
 
-[List the criteria or tests that must be satisfied for compliance with this specification.]
-
-## 11. Related Specifications / Further Reading
-
-[Link to related spec 1]
-[Link to relevant external documentation]
-
-```
+- [ ] The existing specification file was read before editing.
+- [ ] The file remains under `/spec/` and follows `[a-z0-9-]+.md` with an approved purpose prefix.
+- [ ] All required sections are present and populated.
+- [ ] Requirements, constraints, guidelines, patterns, and acceptance criteria use stable IDs.
+- [ ] New or changed requirements have testable acceptance criteria and validation criteria.
+- [ ] Dependencies describe architectural or business needs rather than unnecessary package versions.
+- [ ] The document is self-contained, unambiguous, and well formed Markdown.

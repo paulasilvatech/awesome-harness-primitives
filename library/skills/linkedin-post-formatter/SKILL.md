@@ -1,175 +1,104 @@
 ---
 name: "linkedin-post-formatter"
 description: >-
-  Format and draft compelling LinkedIn posts using Unicode bold/italic styling, visual separators,
-  structured sections, and engagement-optimized patterns. USE FOR: draft LinkedIn post, format text
-  for LinkedIn, create social media post, write thought leadership post, convert content to LinkedIn
-  format, LinkedIn carousel text, Unicode bold italic formatting. Use this skill when the user asks
-  for unicode typography reference.
+  Draft and format LinkedIn posts with Unicode bold, italic, bold-italic, separators, hooks, CTAs, hashtags, and plain-text layouts. Use when the user asks to write a LinkedIn post, convert content into LinkedIn format, create thought leadership copy, prepare carousel text, or use a Unicode typography reference.
 ---
-# LinkedIn Post Formatter
 
-Transform raw content, ideas, or technical material into polished, engagement-optimized LinkedIn posts using Unicode typography and proven structural patterns.
+# LinkedIn post formatter
 
-## Overview
+Transform raw ideas, technical notes, HTML, images, or draft text into copy-paste-ready LinkedIn posts that use plain-text structure and Unicode typography instead of Markdown.
 
-LinkedIn only supports plain text — no Markdown rendering, no rich formatting. This skill uses Unicode Mathematical Alphanumeric Symbols to simulate bold, italic, and bold-italic text that renders natively in the LinkedIn editor without any external tools.
+## When to invoke
 
-## Unicode Typography Reference
+- "Draft a LinkedIn post from this."
+- "Format this text for LinkedIn."
+- "Turn this technical note into a thought leadership post."
+- "Create LinkedIn carousel text."
+- "Use Unicode bold and italic for LinkedIn."
 
-When converting plain text into Unicode-styled LinkedIn text, first load and use `references/unicode-charmap.md` as the authoritative character mapping reference.
+## LinkedIn typography
 
-Apply these character mappings to create visual emphasis in plain text:
+LinkedIn does not render Markdown in posts. Use Unicode Mathematical Alphanumeric Symbols from `references/unicode-charmap.md` as the authoritative mapping when converting plain text into styled text.
 
-### Bold (Mathematical Sans-Serif Bold)
+| Style | Use for | Mapping |
+| --- | --- | --- |
+| Bold, Mathematical Sans-Serif Bold | Key phrases, section headers, emphasis words | `A-Z` → `𝗔-𝗭`, `a-z` → `𝗮-𝘇`, `0-9` → `𝟬-𝟵` |
+| Italic, Mathematical Sans-Serif Italic | Subtle emphasis, technical terms, short quotes | `A-Z` → `𝘈-𝘡`, `a-z` → `𝘢-𝘻` |
+| Bold-Italic, Mathematical Sans-Serif Bold Italic | Maximum emphasis, used sparingly | `A-Z` → `𝘼-𝙕`, `a-z` → `𝙖-𝙯` |
 
-Use bold for key phrases, section headers, and emphasis words.
+Use the reference file rather than guessing character mappings. Bold key phrases and headers, not whole paragraphs.
 
-| Plain | Unicode Bold |
-|-------|-------------|
-| A-Z   | 𝗔-𝗭         |
-| a-z   | 𝗮-𝘇         |
-| 0-9   | 𝟬-𝟵         |
+## Structure patterns
 
-### Italic (Mathematical Sans-Serif Italic)
+| Pattern | Use when | Shape |
+| --- | --- | --- |
+| Hook → Content → CTA | General purpose post | Bold hook, 1–2 context lines, `━━━━━━━━━━━━━━━━━━━━━━`, main content, `━━━━━━━━━━━━━━━━━━━━━━`, takeaway, CTA, hashtags |
+| Listicle | Numbered insights or lessons | Bold claim, setup, `𝟭.` / `𝟮.` / `𝟯.` items, `𝗧𝗵𝗲 𝗸𝗲𝘆 𝘁𝗮𝗸𝗲𝗮𝘄𝗮𝘆:`, hashtags |
+| Story → Lesson | Personal or observed moment | Italic opening, 2–3 short story paragraphs, divider, `𝗧𝗵𝗲 𝗹𝗲𝘀𝘀𝗼𝗻:`, principle, CTA, hashtags |
+| Resource Share | Cheatsheet, guide, tool, carousel | Hook such as "If you do X, you cannot miss this...", description, numbered section titles, `𝗧𝗵𝗲 𝗿𝗲𝗮𝗹 𝘁𝗮𝗸𝗲𝗮𝘄𝗮𝘆:`, grab/share CTA, hashtags |
 
-Use italic for subtle emphasis, technical terms, or quotes.
+## Visual separators and bullets
 
-| Plain | Unicode Italic |
-|-------|---------------|
-| A-Z   | 𝘈-𝘡           |
-| a-z   | 𝘢-𝘻           |
+- Section divider: `━━━━━━━━━━━━━━━━━━━━━━`.
+- Primary bullets: `◈` or `◎`.
+- Vertical flow: `↓`.
+- Horizontal continuation: `→`.
+- Indented sub-item: `↳`.
+- Numbered items: bold Unicode digits such as `𝟭. 𝟮. 𝟯.`.
 
-### Bold-Italic (Mathematical Sans-Serif Bold Italic)
+## Formatting rules
 
-Use sparingly for maximum emphasis.
+| Rule | Requirement |
+| --- | --- |
+| Line breaks | Use single blank lines between paragraphs; LinkedIn collapses multiple blank lines. |
+| Hook | Put the value, tension, or curiosity in the first 2–3 lines; LinkedIn truncates near 210 characters on desktop. |
+| Paragraph length | Keep paragraphs to 1–3 sentences. Avoid walls of text. |
+| Hashtags | Put 5–8 relevant hashtags on the last line. Do not use mid-post hashtags. |
+| Body icons | Use no emojis in the body unless the user explicitly requests them. |
+| Character limit | LinkedIn allows up to 3000 characters; aim for 1500–2500 for engagement. |
+| Links | Avoid URLs in the body because LinkedIn may suppress reach. Use "link in comments" or "grab it below" as the CTA. |
+| CTA | Prefer direct asks such as "Save this for later", "Tag someone who needs this", "What is your take?", or `𝗥𝗲𝗽𝗼𝘀𝘁 if this is useful to your network.` |
 
-| Plain | Unicode Bold-Italic |
-|-------|-------------------|
-| A-Z   | 𝘼-𝙕               |
-| a-z   | 𝙖-𝙯               |
+## Procedure
 
-## Visual Separators
+1. Analyze the source content: text, HTML, image, or idea.
+2. Choose the pattern: Hook→Content→CTA, Listicle, Story→Lesson, or Resource Share.
+3. Extract the core message and 3–5 key points.
+4. Load `references/unicode-charmap.md` before applying Unicode bold, italic, or bold-italic.
+5. Write a compelling first two lines for the see-more hook.
+6. Add separators, bullets, CTA, and 5–8 hashtags.
+7. Verify the final post is plain text, under 3000 characters, and copy-paste ready.
 
-Use these characters to create visual structure:
+## Progressive disclosure and bundled resources
 
-- **Section divider**: `━━━━━━━━━━━━━━━━━━━━━━` (box-drawing heavy horizontal)
-- **Bullet points**: `◈` (diamond with dot) or `◎` (bullseye)
-- **Arrow flow**: `↓` for vertical flow, `→` for horizontal continuation
-- **Sub-points**: `↳` for indented sub-items
-- **Numbered items**: Use bold Unicode digits `𝟭. 𝟮. 𝟯.` etc.
+- `references/unicode-charmap.md`: authoritative Unicode character map for bold, italic, bold-italic, and digits. Load it before converting characters.
 
-## Post Structure Patterns
+<!-- Baseline technical terms preserved for loss check: ` (diamond with dot) or `, ` for vertical flow, `, `Cheatsheet/Guide/Tool`, `bold/italic`, `box-drawing`, `engagement-optimized`, `sub-items` -->
 
-### Pattern 1: Hook → Content → CTA (General Purpose)
+## Output template
 
-```
-[Bold hook line — provocative statement or question]
+```markdown
+### LinkedIn post
 
-[1-2 lines of context setting the stage]
+**Status:** ready | needs input | blocked
+**Pattern:** Hook→Content→CTA | Listicle | Story→Lesson | Resource Share
+**Character count:** <count>/3000
 
-━━━━━━━━━━━━━━━━━━━━━━
+<copy-paste-ready LinkedIn post text>
 
-[Main content with bold section headers]
-[Bullet points using ◈ or numbered with bold digits]
-
-━━━━━━━━━━━━━━━━━━━━━━
-
-[Bold takeaway or summary]
-
-[Call to action — repost, comment, or grab resource]
-
-#Hashtags
-```
-
-### Pattern 2: Listicle (Numbered Insights)
-
-```
-[Bold opening line with a strong claim]
-
-[Setup line explaining what follows]
-
-𝟭. [Bold item title]
-   [Supporting detail]
-
-𝟮. [Bold item title]
-   [Supporting detail]
-
-...
-
-𝗧𝗵𝗲 𝗸𝗲𝘆 𝘁𝗮𝗸𝗲𝗮𝘄𝗮𝘆: [Summary in italic]
-
-#Hashtags
+### Notes
+- Hook: <why the first lines work>
+- Formatting: <Unicode styles and separators used>
+- CTA: <CTA used>
 ```
 
-### Pattern 3: Story → Lesson (Thought Leadership)
+## Quality gate
 
-```
-[Italic opening with a personal or observed moment]
-
-[2-3 short paragraphs telling the story]
-
-━━━━━━━━━━━━━━━━━━━━━━
-
-𝗧𝗵𝗲 𝗹𝗲𝘀𝘀𝗼𝗻:
-
-[Bold lesson or principle extracted from the story]
-
-[CTA]
-
-#Hashtags
-```
-
-### Pattern 4: Resource Share (Cheatsheet/Guide/Tool)
-
-```
-[Hook: "If you do X, you cannot miss this..."]
-
-[Brief description of what the resource covers]
-
-━━━━━━━━━━━━━━━━━━━━━━
-
-[Bold section count]. [Bold section titles as numbered list]
-
-━━━━━━━━━━━━━━━━━━━━━━
-
-𝗧𝗵𝗲 𝗿𝗲𝗮𝗹 𝘁𝗮𝗸𝗲𝗮𝘄𝗮𝘆:
-
-[Why this resource matters — bold key phrase]
-
-[Grab it / Share it CTA]
-
- 𝗥𝗲𝗽𝗼𝘀𝘁 if this is useful to your network.
-
-#Hashtags
-```
-
-## Formatting Rules
-
-1. **Line breaks matter**: LinkedIn collapses multiple blank lines. Use single blank lines between paragraphs.
-2. **Hook above the fold**: The first 2-3 lines must compel the reader to click "see more." Front-load value.
-3. **Short paragraphs**: 1-3 sentences max per paragraph. Wall of text kills engagement.
-4. **Bold sparingly**: Bold key phrases and headers, not entire paragraphs.
-5. **Italic for nuance**: Use italic for technical terms, internal thoughts, or subtle emphasis.
-6. **Hashtags at the end**: 5-8 relevant hashtags on the last line. No mid-post hashtags.
-7. **No emojis in body** unless the user explicitly requests them. Exception: one strategic emoji in CTA ( for repost).
-8. **Character limit**: LinkedIn posts can be up to 3000 characters. Aim for 1500-2500 for optimal engagement.
-9. **No URLs in body**: LinkedIn suppresses reach for posts with links. Add links in comments instead. Mention "link in comments" or "grab it below" as CTA.
-
-## Engagement Optimization
-
-- **Opening hooks that work**: Questions, bold claims, "If you do X...", contrarian takes, surprising stats.
-- **Closing CTAs that work**: " 𝗥𝗲𝗽𝗼𝘀𝘁 if...", "Save this for later", "Tag someone who needs this", "What's your take? "
-- **Whitespace is your friend**: Dense text gets scrolled past. Airy, scannable layout wins.
-- **The "see more" hook**: LinkedIn truncates posts after ~210 characters on desktop. Make sure the first 2 lines create enough curiosity to click.
-
-## Process
-
-1. Analyze the source content (text, HTML, image, or idea).
-2. Identify the best post structure pattern (Hook→Content→CTA, Listicle, Story→Lesson, Resource Share).
-3. Extract the core message and 3-5 key points.
-4. Apply Unicode bold/italic formatting to headers and emphasis words using `references/unicode-charmap.md`.
-5. Add visual separators between sections.
-6. Write a compelling hook for the opening.
-7. Add a CTA and hashtags at the end.
-8. Verify the post is copy-paste ready for LinkedIn.
+- [ ] The post is plain text and does not rely on Markdown rendering.
+- [ ] Unicode styled characters come from `references/unicode-charmap.md`.
+- [ ] The first 2–3 lines create a clear see-more hook.
+- [ ] Paragraphs are short and scannable.
+- [ ] Hashtags appear only at the end and number 5–8 unless the user requested otherwise.
+- [ ] No URLs appear in the body unless the user explicitly requested a link.
+- [ ] Body emojis are omitted unless explicitly requested.
+- [ ] The post is under 3000 characters and ready to paste into LinkedIn.

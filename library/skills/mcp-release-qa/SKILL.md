@@ -6,6 +6,7 @@ description: >-
   evidence. Use when shipping or reviewing an MCP server, tool, resource, prompt, catalog, or install
   path.
 ---
+
 # MCP Release QA
 
 Test the server that users will run. A schema review or a passing unit test is
@@ -14,6 +15,13 @@ not runtime evidence.
 This skill complements security review. It focuses on protocol behavior,
 published-contract drift, transport correctness, and reproducible release
 evidence.
+
+## When to invoke
+
+- "Run release QA for this MCP server."
+- "Verify this MCP tool catalog before shipping."
+- "Check MCP runtime capabilities against the README."
+- "Smoke-test the MCP install path and protocol session."
 
 ## Rules
 
@@ -163,7 +171,7 @@ When the project publishes an install command:
 
 An install string that was only inspected is unverified.
 
-## 8. Report the evidence
+## Output template
 
 Use this format:
 
@@ -199,3 +207,11 @@ Use `FAIL` for a server that cannot start, complete a valid session, keep the
 transport parseable, or safely reject invalid input. Use `PASS WITH CAVEATS`
 only for bounded documentation or metadata drift that does not misrepresent a
 dangerous capability. Otherwise use `PASS`.
+
+## Quality gate
+
+- [ ] A fresh candidate server was built and started from documented instructions.
+- [ ] Initialization, discovery, and invocation ran in one valid MCP session.
+- [ ] Source, runtime, metadata, and documentation inventories were compared by stable identifier.
+- [ ] Negative paths returned useful protocol errors without side effects or leaked secrets.
+- [ ] Published install commands were smoke-tested or missing evidence was reported.

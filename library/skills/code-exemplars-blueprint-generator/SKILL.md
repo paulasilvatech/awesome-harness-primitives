@@ -1,130 +1,121 @@
 ---
 name: "code-exemplars-blueprint-generator"
 description: >-
-  Technology-agnostic prompt generator that creates customizable AI prompts for scanning codebases and
-  identifying high-quality code exemplars. Supports multiple programming languages (.NET, Java,
-  JavaScript, TypeScript, React, Angular, Python) with configurable analysis depth, categorization
-  methods, and documentation formats to establish coding standards and maintain consistency across
-  development teams. Use this skill when the user asks for configuration variables.
+  Generate a configurable prompt blueprint for scanning a codebase and producing an exemplars.md catalog of high-quality, real code examples. Use this skill when the user asks for code exemplars, exemplar blueprint prompts, coding standard examples, repository pattern catalogs, or configuration variables for exemplar generation.
 ---
-# Code Exemplars Blueprint Generator
 
-## Configuration Variables
-${PROJECT_TYPE="Auto-detect|.NET|Java|JavaScript|TypeScript|React|Angular|Python|Other"} <!-- Primary technology -->
-${SCAN_DEPTH="Basic|Standard|Comprehensive"} <!-- How deeply to analyze the codebase -->
-${INCLUDE_CODE_SNIPPETS=true|false} <!-- Include actual code snippets in addition to file references -->
-${CATEGORIZATION="Pattern Type|Architecture Layer|File Type"} <!-- How to organize exemplars -->
-${MAX_EXAMPLES_PER_CATEGORY=3} <!-- Maximum number of examples per category -->
-${INCLUDE_COMMENTS=true|false} <!-- Include explanatory comments for each exemplar -->
+# Code exemplars blueprint generator
 
-## Generated Prompt
+Turn the user's exemplar-generation settings into a complete prompt that instructs GitHub Copilot to scan real repository files, choose representative code patterns, and create an actionable `exemplars.md` document.
 
-"Scan this codebase and generate an exemplars.md file that identifies high-quality, representative code examples. The exemplars should demonstrate our coding standards and patterns to help maintain consistency. Use the following approach:
+## When to invoke
 
-### 1. Codebase Analysis Phase
-- ${PROJECT_TYPE == "Auto-detect" ? "Automatically detect primary programming languages and frameworks by scanning file extensions and configuration files" : `Focus on ${PROJECT_TYPE} code files`}
-- Identify files with high-quality implementation, good documentation, and clear structure
-- Look for commonly used patterns, architecture components, and well-structured implementations
-- Prioritize files that demonstrate best practices for our technology stack
-- Only reference actual files that exist in the codebase - no hypothetical examples
+- "Generate a prompt to find code exemplars in this repo."
+- "Create an exemplars.md blueprint for our coding standards."
+- "Give me configuration variables for scanning examples."
+- "Find representative .NET, Java, React, Angular, Python, or TypeScript patterns."
+- "Build a prompt that catalogs high-quality code examples."
 
-### 2. Exemplar Identification Criteria
-- Well-structured, readable code with clear naming conventions
-- Comprehensive comments and documentation
-- Proper error handling and validation
-- Adherence to design patterns and architectural principles
-- Separation of concerns and single responsibility principle
-- Efficient implementation without code smells
-- Representative of our standard approaches
+## Inputs
 
-### 3. Core Pattern Categories
+Use `$ARGUMENTS` as optional configuration text. Accept explicit values for `PROJECT_TYPE`, `SCAN_DEPTH`, `INCLUDE_CODE_SNIPPETS`, `CATEGORIZATION`, `MAX_EXAMPLES_PER_CATEGORY`, and `INCLUDE_COMMENTS`; otherwise use the defaults in the configuration table.
 
-${PROJECT_TYPE == ".NET" || PROJECT_TYPE == "Auto-detect" ? `#### .NET Exemplars (if detected)
-- **Domain Models**: Find entities that properly implement encapsulation and domain logic
-- **Repository Implementations**: Examples of our data access approach
-- **Service Layer Components**: Well-structured business logic implementations
-- **Controller Patterns**: Clean API controllers with proper validation and responses
-- **Dependency Injection Usage**: Good examples of DI configuration and usage
-- **Middleware Components**: Custom middleware implementations
-- **Unit Test Patterns**: Well-structured tests with proper arrangement and assertions` : ""}
+## Configuration variables
 
-${(PROJECT_TYPE == "JavaScript" || PROJECT_TYPE == "TypeScript" || PROJECT_TYPE == "React" || PROJECT_TYPE == "Angular" || PROJECT_TYPE == "Auto-detect") ? `#### Frontend Exemplars (if detected)
-- **Component Structure**: Clean, well-structured components
-- **State Management**: Good examples of state handling
-- **API Integration**: Well-implemented service calls and data handling
-- **Form Handling**: Validation and submission patterns
-- **Routing Implementation**: Navigation and route configuration
-- **UI Components**: Reusable, well-structured UI elements
-- **Unit Test Examples**: Component and service tests` : ""}
+| Variable | Allowed values | Default | Controls |
+| --- | --- | --- | --- |
+| `PROJECT_TYPE` | `Auto-detect`, `.NET`, `Java`, `JavaScript`, `TypeScript`, `React`, `Angular`, `Python`, `Other` | `Auto-detect` | Which languages and frameworks the generated prompt emphasizes. |
+| `SCAN_DEPTH` | `Basic`, `Standard`, `Comprehensive` | `Standard` | How much project-wide convention and architecture analysis to request. |
+| `INCLUDE_CODE_SNIPPETS` | `true`, `false` | `true` | Whether `exemplars.md` includes short snippets as well as file paths. |
+| `CATEGORIZATION` | `Pattern Type`, `Architecture Layer`, `File Type` | `Pattern Type` | How examples are grouped. |
+| `MAX_EXAMPLES_PER_CATEGORY` | Positive integer | `3` | Maximum exemplars in each category. |
+| `INCLUDE_COMMENTS` | `true`, `false` | `true` | Whether each exemplar explains key implementation details and principles. |
 
-${PROJECT_TYPE == "Java" || PROJECT_TYPE == "Auto-detect" ? `#### Java Exemplars (if detected)
-- **Entity Classes**: Well-designed JPA entities or domain models
-- **Service Implementations**: Clean service layer components
-- **Repository Patterns**: Data access implementations
-- **Controller/Resource Classes**: API endpoint implementations
-- **Configuration Classes**: Application configuration
-- **Unit Tests**: Well-structured JUnit tests` : ""}
+Render these settings in the generated prompt as literal configuration assignments when useful:
 
-${PROJECT_TYPE == "Python" || PROJECT_TYPE == "Auto-detect" ? `#### Python Exemplars (if detected)
-- **Class Definitions**: Well-structured classes with proper documentation
-- **API Routes/Views**: Clean API implementations
-- **Data Models**: ORM model definitions
-- **Service Functions**: Business logic implementations
-- **Utility Modules**: Helper and utility functions
-- **Test Cases**: Well-structured unit tests` : ""}
+```text
+${PROJECT_TYPE="Auto-detect|.NET|Java|JavaScript|TypeScript|React|Angular|Python|Other"}
+${SCAN_DEPTH="Basic|Standard|Comprehensive"}
+${INCLUDE_CODE_SNIPPETS=true|false}
+${CATEGORIZATION="Pattern Type|Architecture Layer|File Type"}
+${MAX_EXAMPLES_PER_CATEGORY=3}
+${INCLUDE_COMMENTS=true|false}
+```
 
-### 4. Architecture Layer Exemplars
+## Exemplar selection criteria
 
-- **Presentation Layer**:
-  - User interface components
-  - Controllers/API endpoints
-  - View models/DTOs
-  
-- **Business Logic Layer**:
-  - Service implementations
-  - Business logic components
-  - Workflow orchestration
-  
-- **Data Access Layer**:
-  - Repository implementations
-  - Data models
-  - Query patterns
-  
-- **Cross-Cutting Concerns**:
-  - Logging implementations
-  - Error handling
-  - Authentication/authorization
-  - Validation
+Only include actual files that exist in the codebase. Never invent hypothetical examples.
 
-### 5. Exemplar Documentation Format
+| Criterion | What to look for | Reject when |
+| --- | --- | --- |
+| Readability | Clear naming, small units, visible intent | Clever but opaque implementation. |
+| Documentation | Helpful comments, docstrings, or README-backed usage | Comments repeat syntax without explaining why. |
+| Error handling | Explicit validation, typed errors, recoverable failure paths | Exceptions swallowed or converted to vague messages. |
+| Architecture fit | Separation of concerns, dependency direction, conventional boundaries | Feature code bypasses layers or central conventions. |
+| Tests | Representative unit, integration, or component tests | Tests only assert imports or snapshots with no behavior. |
+| Maintainability | Low duplication, simple control flow, standard patterns | Code smell is present even if the file is common. |
 
-For each identified exemplar, document:
-- File path (relative to repository root)
-- Brief description of what makes it exemplary
-- Pattern or component type it represents
-${INCLUDE_COMMENTS ? "- Key implementation details and coding principles demonstrated" : ""}
-${INCLUDE_CODE_SNIPPETS ? "- Small, representative code snippet (if applicable)" : ""}
+## Category catalog
 
-${SCAN_DEPTH == "Comprehensive" ? `### 6. Additional Documentation
+Include only categories relevant to the detected or requested stack.
 
-- **Consistency Patterns**: Note consistent patterns observed across the codebase
-- **Architecture Observations**: Document architectural patterns evident in the code
-- **Implementation Conventions**: Identify naming and structural conventions
-- **Anti-patterns to Avoid**: Note any areas where the codebase deviates from best practices` : ""}
+| Stack | Candidate categories |
+| --- | --- |
+| `.NET` | Domain Models, Repository Implementations, Service Layer Components, Controller Patterns, Dependency Injection Usage, Middleware Components, Unit Test Patterns. |
+| Frontend (`JavaScript`, `TypeScript`, `React`, `Angular`) | Component Structure, State Management, API Integration, Form Handling, Routing Implementation, UI Components, Unit Test Examples. |
+| `Java` | Entity Classes, Service Implementations, Repository Patterns, Controller/Resource Classes, Configuration Classes, Unit Tests. |
+| `Python` | Class Definitions, API Routes/Views, Data Models, Service Functions, Utility Modules, Test Cases. |
+| Architecture layer grouping | Presentation Layer, Business Logic Layer, Data Access Layer, Cross-Cutting Concerns such as logging, error handling, authentication/authorization, and validation. |
 
-### ${SCAN_DEPTH == "Comprehensive" ? "7" : "6"}. Output Format
+When `SCAN_DEPTH` is `Comprehensive`, ask the downstream scan to add Consistency Patterns, Architecture Observations, Implementation Conventions, and Anti-patterns to Avoid.
 
-Create exemplars.md with:
-1. Introduction explaining the purpose of the document
-2. Table of contents with links to categories
-3. Organized sections based on ${CATEGORIZATION}
-4. Up to ${MAX_EXAMPLES_PER_CATEGORY} exemplars per category
-5. Conclusion with recommendations for maintaining code quality
+## Generated prompt requirements
 
-The document should be actionable for developers needing guidance on implementing new features consistent with existing patterns.
+The generated prompt must instruct GitHub Copilot to:
 
-Important: Only include actual files from the codebase. Verify all file paths exist. Do not include placeholder or hypothetical examples.
-"
+1. Detect primary languages and frameworks from file extensions and configuration files when `PROJECT_TYPE` is `Auto-detect`; otherwise focus on the requested stack.
+2. Identify high-quality implementation, documentation, test, and structure examples.
+3. Prioritize files that demonstrate standards the team should copy.
+4. Verify every referenced path exists.
+5. Document file path, description, pattern/component type, optional key implementation comments, and optional short snippets.
+6. Create `exemplars.md` with an introduction, table of contents, organized sections based on `CATEGORIZATION`, no more than `MAX_EXAMPLES_PER_CATEGORY` examples per category, and maintenance recommendations.
 
-## Expected Output
-Upon running this prompt, GitHub Copilot will scan your codebase and generate an exemplars.md file containing real references to high-quality code examples in your repository, organized according to your selected parameters.
+## Prompt fragments to preserve
+
+The generated prompt may include exact conditional language such as `Focus on ${PROJECT_TYPE} code files` when `PROJECT_TYPE` is not `Auto-detect`. Preserve stack category labels including `Controllers/API`, `Routes/Views**`, `models/DTOs`, and `Authentication/authorization` when the target repository uses those layers. Prefer the phrase `well-structured` for exemplar quality because the downstream artifact should distinguish representative files from merely functional files.
+
+## Output template
+
+```markdown
+## Code exemplars blueprint
+
+**Status:** ready
+**Configuration:** `PROJECT_TYPE=<value>`, `SCAN_DEPTH=<value>`, `INCLUDE_CODE_SNIPPETS=<true/false>`, `CATEGORIZATION=<value>`, `MAX_EXAMPLES_PER_CATEGORY=<n>`, `INCLUDE_COMMENTS=<true/false>`
+
+### Generated prompt
+```text
+Scan this codebase and generate an exemplars.md file that identifies high-quality, representative code examples. The exemplars should demonstrate our coding standards and patterns to help maintain consistency.
+
+Configuration:
+- PROJECT_TYPE: <value>
+- SCAN_DEPTH: <value>
+- INCLUDE_CODE_SNIPPETS: <true/false>
+- CATEGORIZATION: <value>
+- MAX_EXAMPLES_PER_CATEGORY: <n>
+- INCLUDE_COMMENTS: <true/false>
+
+<complete scan instructions, stack categories, documentation format, and verification rules>
+```
+
+### Expected artifact
+`exemplars.md` containing real repository file references, organized categories, and actionable guidance for developers implementing new features consistently.
+```
+
+## Quality gate
+
+- [ ] All six configuration variables are present and resolved to allowed values.
+- [ ] The generated prompt requires real existing file paths and bans hypothetical examples.
+- [ ] Stack-specific categories match `PROJECT_TYPE` or auto-detection.
+- [ ] `SCAN_DEPTH=Comprehensive` includes consistency patterns, architecture observations, implementation conventions, and anti-patterns.
+- [ ] The output artifact is literally named `exemplars.md`.
+- [ ] The prompt caps each category at `MAX_EXAMPLES_PER_CATEGORY`.

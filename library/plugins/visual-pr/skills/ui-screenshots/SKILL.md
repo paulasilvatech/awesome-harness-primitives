@@ -5,11 +5,22 @@ description: >-
   need to; capture the current state of a running web app; document a UI before and after a code
   change.
 ---
-# UI Screenshots
+
+# UI screenshots
+
+Capture web, Electron, and desktop UI screenshots for development evidence by taking raw screenshots, preserving before/after comparability, cropping with PIL, and selecting the correct capture tool for each UI surface.
+
+## When to invoke
+
+- "Capture the current state of this web app."
+- "Take before and after screenshots for this UI change."
+- "Screenshot this hover or selected state."
+- "Crop a specific page section from a full-page capture."
+- "Capture a desktop or Electron app window."
 
 Capture screenshots of web apps and graphical UIs during development to document visual changes.
 
-## When to Use This Skill
+## Invocation details
 
 Use this skill when you need to:
 
@@ -202,3 +213,34 @@ await app.close();
 - Desktop capture (mss) requires the window to be visible and unobstructed
 - Electron capture requires Node.js Playwright (not Python)
 - Some SPAs with heavy client-side rendering may need custom wait logic beyond networkidle
+
+## Output template
+
+```markdown
+## UI screenshot result
+
+**Status:** captured | blocked
+**Target:** `{{url_or_window_title}}`
+**Viewport:** `{{width}}x{{height}}`, device scale factor `1`
+
+| Image | Path | Notes |
+| --- | --- | --- |
+| Raw | `{{screenshot-raw.png}}` | full-page or full-window capture |
+| Final | `{{screenshot-final.png}}` | crop box `({{left}}, {{top}}, {{right}}, {{bottom}})` |
+
+### Validation
+- Before/after parity: same viewport and crop | not applicable
+- Async wait: `networkidle` plus render wait | desktop capture not applicable
+```
+
+## Quality gate
+
+- [ ] A before screenshot is captured before code changes when visual comparison is requested.
+- [ ] Before and after screenshots use the same viewport width, height, device scale factor, and crop.
+- [ ] Web screenshots use `full_page=True` for raw capture and PIL for final crops.
+- [ ] Interactive states wait for hover, tooltip, selected, or animation effects before capture.
+- [ ] The chosen capture method matches the decision tree: Playwright for web, Node Playwright for Electron, `mss` plus `ctypes` for visible desktop windows.
+
+## References
+
+- http://localhost:3000

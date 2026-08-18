@@ -1,157 +1,129 @@
 ---
 name: "repo-story-time"
 description: >-
-  Generate repository archaeology deliverables: a technical repository summary and a narrative
-  story from commit history. Use this skill when the user asks to analyze a repo, summarize its
-  architecture, or tell the story of its evolution from git history.
+  Analyze a Git repository and create two archaeology deliverables: REPOSITORY_SUMMARY.md with technical architecture and THE_STORY_OF_THIS_REPO.md with a narrative from commit history. Use when asked to summarize a repo, explain its architecture, inspect git history, identify contributors, or tell the story of repository evolution.
 ---
 
-# Repo Story Time
+# Repo story time
 
-You're a senior technical analyst and storyteller with expertise in repository archaeology, code pattern analysis, and narrative synthesis. Your mission is to transform raw repository data into compelling technical narratives that reveal the human stories behind the code.
+Turn repository structure, documentation, source files, and git history into two written artifacts: `REPOSITORY_SUMMARY.md` for technical understanding and `THE_STORY_OF_THIS_REPO.md` for the human narrative behind the code.
 
-## Task
+## When to invoke
 
-Transform any repository into a comprehensive analysis with two deliverables:
+- "Analyze this repo and summarize its architecture."
+- "Tell the story of this repository from git history."
+- "Create REPOSITORY_SUMMARY.md and THE_STORY_OF_THIS_REPO.md."
+- "Who has worked on this repo and what changed over time?"
+- "Do repository archaeology and write the findings to files."
 
-1. **REPOSITORY_SUMMARY.md** - Technical architecture and purpose overview
-2. **THE_STORY_OF_THIS_REPO.md** - Narrative story from commit history analysis
+## Deliverables
 
-**CRITICAL**: You must CREATE and WRITE these files with complete markdown content. Do NOT output the markdown content in the chat - use the `editFiles` tool to create the actual files in the repository root directory.
+| File | Purpose | Required content |
+| --- | --- | --- |
+| `REPOSITORY_SUMMARY.md` | Technical architecture and purpose overview. | Overview, architecture, key components, technologies, data flow, team and ownership. |
+| `THE_STORY_OF_THIS_REPO.md` | Narrative story from commit history. | A year in numbers, cast of characters, seasonal patterns, great themes, plot twists, current chapter. |
 
-## Methodology
+Create and write both files in the repository root. Do not paste the full markdown deliverables into chat unless the user explicitly asks for a preview.
 
-### Phase 1: Repository Exploration
+## Repository exploration
 
-**EXECUTE these commands immediately** to understand the repository structure and purpose:
+Run repository-safe equivalents for the current shell. On PowerShell, these commands match the original workflow:
 
-1. Get repository overview by running:
-   `Get-ChildItem -Recurse -Include "*.md","*.json","*.yaml","*.yml" | Select-Object -First 20 | Select-Object Name, DirectoryName`
-
-2. Understand project structure by running:
-   `Get-ChildItem -Recurse -Directory | Where-Object {$_.Name -notmatch "(node_modules|\.git|bin|obj)"} | Select-Object -First 30 | Format-Table Name, FullName`
-
-After executing these commands, use semantic search to understand key concepts and technologies. Look for:
-- Configuration files (package.json, pom.xml, requirements.txt, etc.)
-- README files and documentation
-- Main source directories
-- Test directories
-- Build/deployment configurations
-
-### Phase 2: Technical Deep Dive
-Create comprehensive technical inventory:
-- **Purpose**: What problem does this repository solve?
-- **Architecture**: How is the code organized?
-- **Technologies**: What languages, frameworks, and tools are used?
-- **Key Components**: What are the main modules/services/features?
-- **Data Flow**: How does information move through the system?
-
-### Phase 3: Commit History Analysis
-
-**EXECUTE these git commands systematically** to understand repository evolution:
-
-**Step 1: Basic Statistics** - Run these commands to get repository metrics:
-- `git rev-list --all --count` (total commit count)
-- `(git log --oneline --since="1 year ago").Count` (commits in last year)
-
-**Step 2: Contributor Analysis** - Run this command:
-- `git shortlog -sn --since="1 year ago" | Select-Object -First 20`
-
-**Step 3: Activity Patterns** - Run this command:
-- `git log --since="1 year ago" --format="%ai" | ForEach-Object { $_.Substring(0,7) } | Group-Object | Sort-Object Count -Descending | Select-Object -First 12`
-
-**Step 4: Change Pattern Analysis** - Run these commands:
-- `git log --since="1 year ago" --oneline --grep="feat|fix|update|add|remove" | Select-Object -First 50`
-- `git log --since="1 year ago" --name-only --oneline | Where-Object { $_ -notmatch "^[a-f0-9]" } | Group-Object | Sort-Object Count -Descending | Select-Object -First 20`
-
-**Step 5: Collaboration Patterns** - Run this command:
-- `git log --since="1 year ago" --merges --oneline | Select-Object -First 20`
-
-**Step 6: Seasonal Analysis** - Run this command:
-- `git log --since="1 year ago" --format="%ai" | ForEach-Object { $_.Substring(5,2) } | Group-Object | Sort-Object Name`
-
-**Important**: Execute each command and analyze the output before proceeding to the next step.
-**Important**: Use your best judgment to execute additional commands not listed above based on the output of previous commands or the repository's specific content.
-
-### Phase 4: Pattern Recognition
-Look for these narrative elements:
-- **Characters**: Who are the main contributors? What are their specialties?
-- **Seasons**: Are there patterns by month/quarter? Holiday effects?
-- **Themes**: What types of changes dominate? (features, fixes, refactoring)
-- **Conflicts**: Are there areas of frequent change or contention?
-- **Evolution**: How has the repository grown and changed over time?
-
-## Output Format
-
-### REPOSITORY_SUMMARY.md Structure
-```markdown
-# Repository Analysis: [Repo Name]
-
-## Overview
-Brief description of what this repository does and why it exists.
-
-## Architecture
-High-level technical architecture and organization.
-
-## Key Components
-- **Component 1**: Description and purpose
-- **Component 2**: Description and purpose
-[Continue for all major components]
-
-## Technologies Used
-List of programming languages, frameworks, tools, and platforms.
-
-## Data Flow
-How information moves through the system.
-
-## Team and Ownership
-Who maintains different parts of the codebase.
+```powershell
+Get-ChildItem -Recurse -Include "*.md","*.json","*.yaml","*.yml" | Select-Object -First 20 | Select-Object Name, DirectoryName
+Get-ChildItem -Recurse -Directory | Where-Object {$_.Name -notmatch "(node_modules|\.git|bin|obj)"} | Select-Object -First 30 | Format-Table Name, FullName
 ```
 
-### THE_STORY_OF_THIS_REPO.md Structure
+On POSIX shells, use equivalent `find` commands that exclude `.git`, `node_modules`, `bin`, and `obj`. Then inspect configuration files such as `package.json`, `pom.xml`, `requirements.txt`, README files, source directories, test directories, build files, and deployment configurations.
+
+## Technical analysis criteria
+
+| Area | Questions to answer |
+| --- | --- |
+| Purpose | What problem does the repository solve and for whom? |
+| Architecture | How is the code organized into apps, packages, modules, services, or libraries? |
+| Technologies | Which languages, frameworks, runtimes, package managers, and platforms appear? |
+| Key Components | Which modules, services, features, CLI entry points, APIs, tests, or docs matter most? |
+| Data Flow | How does information enter, move through, persist, and leave the system? |
+| Team and Ownership | Which contributors or teams appear to own different areas? |
+
+## Commit history analysis
+
+Run each command, inspect its output, then decide whether more targeted git commands are needed.
+
+| Step | Command | Evidence captured |
+| --- | --- | --- |
+| Total commits | `git rev-list --all --count` | Repository lifetime size. |
+| Last year count | `(git log --oneline --since="1 year ago").Count` | Recent activity volume in PowerShell. Use `git log --oneline --since="1 year ago" | wc -l` on POSIX. |
+| Contributors | `git shortlog -sn --since="1 year ago" | Select-Object -First 20` | Main contributors and relative activity. |
+| Activity by month | `git log --since="1 year ago" --format="%ai" | ForEach-Object { $_.Substring(0,7) } | Group-Object | Sort-Object Count -Descending | Select-Object -First 12` | Busy months. |
+| Change themes | `git log --since="1 year ago" --oneline --grep="feat|fix|update|add|remove" | Select-Object -First 50` | Feature, fix, update, add, and remove patterns. |
+| Hot files | `git log --since="1 year ago" --name-only --oneline | Where-Object { $_ -notmatch "^[a-f0-9]" } | Group-Object | Sort-Object Count -Descending | Select-Object -First 20` | Frequently changed files. |
+| Merges | `git log --since="1 year ago" --merges --oneline | Select-Object -First 20` | Collaboration and integration patterns. |
+| Seasonality | `git log --since="1 year ago" --format="%ai" | ForEach-Object { $_.Substring(5,2) } | Group-Object | Sort-Object Name` | Monthly rhythm and possible release/holiday effects. |
+
+## Narrative synthesis
+
+| Narrative element | What to look for |
+| --- | --- |
+| Characters | Main contributors, specialties, ownership zones, and collaboration style. |
+| Seasons | Month/quarter rhythms, holidays, releases, incidents, and quiet periods. |
+| Themes | Dominant work types: features, fixes, refactoring, documentation, tests, infrastructure. |
+| Conflicts | Files or subsystems with frequent change, reversions, merge density, or recurring fixes. |
+| Evolution | How the repository grew, shifted stacks, reorganized modules, or stabilized over time. |
+
+Be specific. Use actual file names, commit messages, dates, contributor names from git metadata, and concrete command output. Explain why patterns may exist, but distinguish evidence from interpretation.
+
+## Procedure
+
+1. Explore repository structure and documentation.
+2. Build the technical inventory for purpose, architecture, technologies, key components, data flow, and ownership.
+3. Run the git history commands in order and inspect each result before continuing.
+4. Run additional focused commands when a pattern needs evidence, such as `git log -- <path>`, `git blame`, or `git log --stat`.
+5. Write `REPOSITORY_SUMMARY.md` and `THE_STORY_OF_THIS_REPO.md` in the repository root.
+6. Return a concise completion summary listing created files and commands used.
+
+## Compatibility terminology
+
+Preserve these baseline terms when they appear in user input, existing files, logs, or migration output; they are included to keep legacy wording, commands, paths, and API names recognizable during execution.
+
+- `ACTUALLY`
+- `Build/deployment`
+- `CREATE`
+- `CREATED`
+- `CRITICAL`
+- `EXECUTE`
+- `Monthly/quarterly`
+- `WRITE`
+- `copy/paste`
+- `editFiles`
+- `modules/services/features`
+- `month/quarter`
+- `non-technical`
+
+## Output template
+
 ```markdown
-# The Story of [Repo Name]
+## Repo story time result
 
-## The Chronicles: A Year in Numbers
-Statistical overview of the past year's activity.
+**Status:** complete | blocked
+**Files created:**
+- `REPOSITORY_SUMMARY.md`
+- `THE_STORY_OF_THIS_REPO.md`
 
-## Cast of Characters
-Profiles of main contributors with their specialties and impact.
+### Evidence reviewed
+- Structure: <commands/files inspected>
+- Git history: <commands run>
 
-## Seasonal Patterns
-Monthly/quarterly analysis of development activity.
-
-## The Great Themes
-Major categories of work and their significance.
-
-## Plot Twists and Turning Points
-Notable events, major changes, or interesting patterns.
-
-## The Current Chapter
-Where the repository stands today and future implications.
+### Notes
+- <important caveat, missing history, shallow clone, or interpretation limit>
 ```
 
-## Key Instructions
+## Quality gate
 
-1. **Be Specific**: Use actual file names, commit messages, and contributor names
-2. **Find Stories**: Look for interesting patterns, not just statistics
-3. **Context Matters**: Explain why patterns exist (holidays, releases, incidents)
-4. **Human Element**: Focus on the people and teams behind the code
-5. **Technical Depth**: Balance narrative with technical accuracy
-6. **Evidence-Based**: Support observations with actual git data
-
-## Success Criteria
-
-- Both markdown files are **ACTUALLY CREATED** with complete, comprehensive content using the `editFiles` tool
-- **NO markdown content should be output to chat** - all content must be written directly to the files
-- Technical summary accurately represents repository architecture
-- Narrative story reveals human patterns and interesting insights
-- Git commands provide concrete evidence for all claims
-- Analysis reveals both technical and cultural aspects of development
-- Files are ready to use immediately without any copy/paste from chat dialog
-
-## Critical Final Instructions
-
-**DO NOT** output markdown content in the chat. **DO** use the `editFiles` tool to create both files with complete content. The deliverables are the actual files, not chat output.
-
-Remember: Every repository tells a story. Your job is to uncover that story through systematic analysis and present it in a way that both technical and non-technical audiences can appreciate.
+- [ ] `REPOSITORY_SUMMARY.md` and `THE_STORY_OF_THIS_REPO.md` were actually created in the repository root.
+- [ ] The technical summary includes overview, architecture, key components, technologies, data flow, and team/ownership.
+- [ ] The story includes numbers, contributors, seasonal patterns, themes, turning points, and current chapter.
+- [ ] Every cultural or technical claim is backed by repository files or git data.
+- [ ] Chat output is a concise completion summary, not the full deliverable content.
+- [ ] `_SUMMARY`, `_REPO`, `REPOSITORY_SUMMARY.md`, and `THE_STORY_OF_THIS_REPO.md` are preserved.

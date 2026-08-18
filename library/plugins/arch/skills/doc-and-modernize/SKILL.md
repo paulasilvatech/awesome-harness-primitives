@@ -6,6 +6,7 @@ description: >-
   blocks merges, versus one that merely; runs — since that distinction is a manual, human-configured
   setting that.
 ---
+
 # Documentation & Modernization
 
 Two complementary workflows for a repository the user already has checked out
@@ -16,6 +17,13 @@ locally, bundled as one skill:
   evidence base for a modernization effort.
 - **Modernization mode** — turn that architecture into a phased, safety-laddered
   plan to upgrade, migrate, or rewrite a legacy system.
+
+## When to invoke
+
+- "Document this codebase architecture."
+- "Map this repository for onboarding."
+- "Modernize or migrate this legacy system."
+- "Create a phased upgrade plan from the current code."
 
 ## Mode selection
 
@@ -53,7 +61,7 @@ flag the result clearly (e.g. `[UNVERIFIED]` / sourced-remotely) so the reader
 knows it didn't come from the checkout, and never let it become the easy path
 that displaces reading the code on disk.
 
-### Workflow
+### Procedure
 
 1. **Establish identity first.** Run `git remote -v`, `git branch --show-current`,
    and `git log -1` so the document is anchored to a specific remote, branch, and
@@ -194,3 +202,37 @@ faithfully.
 
 Additional detailed guidance was moved to [references/extended-guide.md](references/extended-guide.md) to keep this skill within the progressive-disclosure budget.
 
+
+## Progressive disclosure and bundled resources
+
+At discovery time, only `name` and `description` are loaded. Read or execute bundled resources only when the current task needs them.
+
+- `references/extended-guide.md`: expanded documentation and modernization guidance.
+- `references/migration-hazards.md`: runtime, framework, data, and compatibility hazards.
+- `references/copilot-instructions.template.md`: optional instructions template when requested.
+
+## Output template
+
+```markdown
+## Documentation and modernization result
+
+**Status:** documented | modernization plan created | blocked
+**Mode:** <Documentation | Modernization>
+**Snapshot:** `<remote redacted>`, `<branch>`, `<HEAD commit>`
+
+### Deliverables
+- Architecture document: `<path or inline>`
+- Modernization plan: `<path, inline, or n/a>`
+
+### Key evidence
+| Claim area | Confidence | Evidence |
+| --- | --- | --- |
+| Tech stack | High | `<file#line>` |
+```
+
+## Quality gate
+
+- [ ] The document is grounded in the local checkout, not remote assumptions.
+- [ ] Repository identity includes redacted remote, branch, and HEAD commit.
+- [ ] Stack, commands, CI triggers, runtime pins, and deployment surface are cited to files.
+- [ ] CI enforcement is confirmed by an authoritative source or marked `[UNVERIFIED]`.

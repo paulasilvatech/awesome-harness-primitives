@@ -1,181 +1,168 @@
 ---
-name: "aws-resource-health-diagnose"
+name: aws-resource-health-diagnose
 description: >-
-  Analyze AWS resource health, diagnose issues from CloudWatch logs and metrics, and create a
-  remediation plan for identified problems. Use this skill when the user asks for aws resource health
-  & issue diagnosis.
+  Diagnose AWS resource health with AWS CLI, CloudWatch metrics, CloudWatch Logs Insights, Performance Insights, CloudTrail correlation, severity classification, root cause analysis, and remediation plans. Use when the user asks for AWS resource health, issue diagnosis, CloudWatch troubleshooting, or remediation for EC2, Lambda, RDS, ECS, ALB, DynamoDB, SQS, or API Gateway.
 ---
-# AWS Resource Health & Issue Diagnosis
 
-This workflow analyzes a specific AWS resource to assess its health status, diagnose potential issues using CloudWatch logs and metrics, and develop a comprehensive remediation plan for any problems discovered.
+# AWS resource health diagnosis
 
-## Prerequisites
-- AWS CLI configured and authenticated
-- Target AWS resource identified (name, type, and optionally region/account)
-- CloudWatch logging and metrics enabled on the target resource
+Identify a target AWS resource, collect service-specific status, CloudWatch metrics, logs, and related events, classify issues by severity and root cause, then produce immediate, short-term, and long-term remediation steps with validation.
 
-## Workflow Steps
+## When to invoke
 
-### Step 1: Get AWS Diagnostic Best Practices
-Fetch `https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/` for monitoring and troubleshooting guidance to inform the diagnostic approach.
+- "Diagnose this AWS Lambda health issue."
+- "Check why this RDS instance is slow."
+- "Analyze CloudWatch logs and metrics for this resource."
+- "Create a remediation plan for an unhealthy ECS service."
+- "Troubleshoot AWS resource health for EC2, ALB, SQS, or DynamoDB."
 
-### Step 2: Resource Discovery & Identification
-Locate the target resource using the appropriate AWS CLI command for its type:
+## Prerequisites and context
+
+- AWS CLI must be configured and authenticated.
+- The target resource must be identified by name, type, and optionally region/account.
+- CloudWatch logs and metrics should be enabled; if not, report the limitation and recommend enablement.
+- Fetch `https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/` when current monitoring guidance is needed.
+
+## Resource discovery
+
+Use the appropriate AWS CLI command for the resource type:
 
 ```bash
-# EC2
 aws ec2 describe-instances --filters "Name=tag:Name,Values=<name>"
-# Lambda
 aws lambda get-function --function-name <name>
-# RDS
 aws rds describe-db-instances --db-instance-identifier <name>
-# ECS
 aws ecs describe-services --cluster <cluster> --services <name>
-# ALB
 aws elbv2 describe-load-balancers --names <name>
-# DynamoDB
 aws dynamodb describe-table --table-name <name>
-# SQS
 aws sqs get-queue-attributes --queue-url <url> --attribute-names All
-# API Gateway
 aws apigatewayv2 get-apis
 ```
 
-If multiple matches are found, prompt the user to specify region/account.
+If multiple matches exist, ask for the specific region, account, cluster, queue URL, or resource identifier.
 
-### Step 3: Health Status Assessment
-Run service-specific health checks:
+## Health indicators
+
+| Service | Key indicators |
+| --- | --- |
+| Lambda | Error rate, throttle rate, duration P99, concurrent executions, cold starts. |
+| RDS | CPU utilization, FreeStorageSpace, DatabaseConnections, ReadLatency, WriteLatency, Performance Insights DB load. |
+| ECS | Running vs desired count, pending count, task stop reason, service status. |
+| ALB | TargetResponseTime, HTTPCode_ELB_5XX_Count, UnHealthyHostCount. |
+| SQS | ApproximateNumberOfMessagesNotVisible, ApproximateAgeOfOldestMessage. |
+| DynamoDB | ConsumedReadCapacityUnits, ThrottledRequests, SuccessfulRequestLatency. |
+| EC2 | Instance status checks, CPU, memory if agent-enabled, disk, network, system events. |
+
+Service checks:
 
 ```bash
-# EC2
 aws ec2 describe-instance-status --instance-ids <id>
-
-# RDS
-aws rds describe-db-instances --db-instance-identifier <name> \
-  --query 'DBInstances[0].DBInstanceStatus'
-
-# Lambda - error rate over 24h
-aws cloudwatch get-metric-statistics --namespace AWS/Lambda \
-  --metric-name Errors --dimensions Name=FunctionName,Value=<name> \
-  --start-time $(date -u -d '24 hours ago' +%Y-%m-%dT%H:%M:%SZ) \
-  --end-time $(date -u +%Y-%m-%dT%H:%M:%SZ) \
-  --period 3600 --statistics Sum
-
-# ECS
-aws ecs describe-services --cluster <cluster> --services <name> \
-  --query 'services[0].[status,runningCount,desiredCount,pendingCount]'
+aws rds describe-db-instances --db-instance-identifier <name> --query 'DBInstances[0].DBInstanceStatus'
+aws cloudwatch get-metric-statistics --namespace AWS/Lambda --metric-name Errors --dimensions Name=FunctionName,Value=<name> --start-time $(date -u -d '24 hours ago' +%Y-%m-%dT%H:%M:%SZ) --end-time $(date -u +%Y-%m-%dT%H:%M:%SZ) --period 3600 --statistics Sum
+aws ecs describe-services --cluster <cluster> --services <name> --query 'services[0].[status,runningCount,desiredCount,pendingCount]'
 ```
 
-Key health indicators by service type:
-- **Lambda**: Error rate, throttle rate, duration P99, concurrent executions
-- **RDS**: CPU utilization, FreeStorageSpace, DatabaseConnections, ReadLatency/WriteLatency
-- **ECS**: Running vs desired task count, task stop reason
-- **ALB**: TargetResponseTime, HTTPCode_ELB_5XX_Count, UnHealthyHostCount
-- **SQS**: ApproximateNumberOfMessagesNotVisible, ApproximateAgeOfOldestMessage
-- **DynamoDB**: ConsumedReadCapacityUnits, ThrottledRequests, SuccessfulRequestLatency
+## Logs and metrics analysis
 
-### Step 4: Log & Metrics Analysis
-Find log groups and run CloudWatch Logs Insights queries:
+Find log groups, run CloudWatch Logs Insights, and retrieve results:
 
 ```bash
-# Find log groups
 aws logs describe-log-groups --log-group-name-prefix /aws/<service>/<name>
-
-# Start a query (last 24h errors)
-aws logs start-query \
-  --log-group-name /aws/lambda/<name> \
-  --start-time $(date -u -d '24 hours ago' +%s) \
-  --end-time $(date -u +%s) \
-  --query-string 'filter @message like /ERROR/ | stats count(*) as errorCount by bin(1h)'
-
-# Get results
+aws logs start-query --log-group-name /aws/lambda/<name> --start-time $(date -u -d '24 hours ago' +%s) --end-time $(date -u +%s) --query-string 'filter @message like /ERROR/ | stats count(*) as errorCount by bin(1h)'
 aws logs get-query-results --query-id <id>
-
-# Lambda cold starts
-aws logs start-query \
-  --log-group-name /aws/lambda/<name> \
-  --start-time $(date -u -d '24 hours ago' +%s) \
-  --end-time $(date -u +%s) \
-  --query-string 'filter @type = "REPORT" | filter @initDuration > 0 | stats count() as coldStarts by bin(1h)'
-
-# RDS Performance Insights (if enabled)
-aws pi get-resource-metrics \
-  --service-type RDS --identifier db:<identifier> \
-  --metric-queries '[{"Metric":"db.load.avg"}]' \
-  --start-time $(date -u -d '24 hours ago' +%Y-%m-%dT%H:%M:%SZ) \
-  --end-time $(date -u +%Y-%m-%dT%H:%M:%SZ) \
-  --period-in-seconds 3600
+aws logs start-query --log-group-name /aws/lambda/<name> --start-time $(date -u -d '24 hours ago' +%s) --end-time $(date -u +%s) --query-string 'filter @type = "REPORT" | filter @initDuration > 0 | stats count() as coldStarts by bin(1h)'
+aws pi get-resource-metrics --service-type RDS --identifier db:<identifier> --metric-queries '[{"Metric":"db.load.avg"}]' --start-time $(date -u -d '24 hours ago' +%Y-%m-%dT%H:%M:%SZ) --end-time $(date -u +%Y-%m-%dT%H:%M:%SZ) --period-in-seconds 3600
 ```
 
-Identify: recurring error patterns, correlation with deployments (CloudTrail), performance trends, dependency failures.
+Look for recurring error patterns, correlation with deployments or CloudTrail events, performance trends, dependency failures, and saturation signals.
 
-### Step 5: Issue Classification & Root Cause Analysis
-**Severity**:
-- **Critical**: Service unavailable, data loss, security incidents
-- **High**: Performance degradation, error rates >5%, intermittent failures
-- **Medium**: Warnings, suboptimal configuration, minor performance issues
-- **Low**: Informational alerts, optimization opportunities
+## Severity and root cause
 
-**Root Cause Categories**:
-- Configuration Issues: wrong settings, missing env vars, IAM permission denials
-- Resource Constraints: CPU/memory/disk limits, Lambda throttling, RDS connection exhaustion
-- Network Issues: security group rules, VPC routing, DNS, NACLs
-- Application Issues: code bugs, memory leaks, unhandled exceptions, slow queries
-- Dependency Issues: downstream timeouts, SQS/SNS failures, external API limits
-- Security Issues: KMS key issues, certificate expiration
+| Severity | Definition |
+| --- | --- |
+| Critical | Service unavailable, data loss, or security incident. |
+| High | Performance degradation, intermittent failures, or error rates `>5%`. |
+| Medium | Warnings, suboptimal configuration, or minor performance issue. |
+| Low | Informational alert or optimization opportunity. |
 
-### Step 6: Generate Remediation Plan
+| Root cause category | Examples |
+| --- | --- |
+| Configuration Issues | Wrong settings, missing env vars, IAM permission denials. |
+| Resource Constraints | CPU, memory, disk, Lambda throttling, RDS connection exhaustion. |
+| Network Issues | Security group rules, VPC routing, DNS, NACLs. |
+| Application Issues | Code bugs, memory leaks, unhandled exceptions, slow queries. |
+| Dependency Issues | Downstream timeouts, SQS/SNS failures, external API limits. |
+| Security Issues | KMS key issues, certificate expiration. |
 
-**Immediate Actions** (Critical):
+## Remediation planning
+
+Immediate actions apply only to Critical issues and should include rollback/validation. Examples:
+
 ```bash
-# Lambda throttling — increase reserved concurrency
-aws lambda put-reserved-concurrency \
-  --function-name <name> --reserved-concurrent-executions 100
-
-# RDS connection exhaustion — reboot to reset connections
+aws lambda put-reserved-concurrency --function-name <name> --reserved-concurrent-executions 100
 aws rds reboot-db-instance --db-instance-identifier <name>
 ```
 
-**Short-term Fixes** (High/Medium): Configuration adjustments, right-sizing, CloudWatch alarm improvements, IAM corrections.
+Short-term fixes include configuration adjustments, right-sizing, CloudWatch alarms, and IAM corrections. Long-term improvements include resilience architecture, preventive monitoring, and AWS Health Dashboard notifications via EventBridge.
 
-**Long-term Improvements**: Architectural changes for resilience, preventive monitoring, enable AWS Health Dashboard notifications via EventBridge.
+## Troubleshooting
 
-### Step 7: Report & User Confirmation
+| Issue | Resolution |
+| --- | --- |
+| Resource Not Found | Ask for resource name, type, region, account, cluster, or queue URL. |
+| Authentication Issues | Guide through `aws configure`. |
+| Insufficient Permissions | List required IAM actions such as `logs:*`, `cloudwatch:*`, and `pi:*`. |
+| No Logs Available | Recommend enabling CloudWatch logging for the resource type. |
+| Query Timeouts | Use shorter time windows. |
 
-Present findings:
+## Compatibility vocabulary
+
+Preserve these legacy terms, API names, command placeholders, and literal phrases when applying or migrating this skill:
+
+- `CPU/memory/disk`
+- `Healthy/Warning/Critical`
+- `High/Medium`
+- `High/Medium/Low`
+- `ReadLatency/WriteLatency`
+- `name/region`
+- `region/account`
+
+## Output template
+
+```markdown
+## AWS resource health assessment
+
+**Status:** Healthy | Warning | Critical | blocked
+**Resource:** <name> (<type>)
+**Region/account:** <region> | <account id>
+
+| Issue | Severity | Evidence | Root cause category | Remediation phase |
+| --- | --- | --- | --- | --- |
+| <issue> | Critical/High/Medium/Low | <metric/log/status evidence> | <category> | Immediate/Short-term/Long-term |
+
+### Remediation plan
+#### Immediate actions
+- <command, rollback, validation>
+
+#### Short-term fixes
+- <configuration, alarm, IAM, or sizing change>
+
+#### Long-term improvements
+- <architecture, monitoring, EventBridge, or resilience change>
+
+### Validation
+- <metric, log query, CLI check, or alarm state to confirm recovery>
 ```
- AWS Resource Health Assessment
 
- Resource Overview:
-• Resource: [Name] ([Type])
-• Status: [Healthy/Warning/Critical]
-• Region: [Region] | Account: [Account ID]
+## Quality gate
 
- Issues Identified:
-• Critical: X | High: Y | Medium: Z | Low: N
+- [ ] Target resource identity, type, region, and account were resolved or reported as blocked.
+- [ ] Service-specific health metrics and status checks were collected.
+- [ ] CloudWatch logs were queried or missing logs were documented.
+- [ ] Major issues have severity, evidence, and root cause category.
+- [ ] Remediation is split into immediate, short-term, and long-term actions when applicable.
+- [ ] AWS CLI commands include validation and rollback considerations for risky changes.
+- [ ] Monitoring recommendations include CloudWatch alarms or AWS Health Dashboard/EventBridge where relevant.
 
- Top Issues:
-1. [Issue]: [Description] — Impact: [High/Medium/Low]
-2. [Issue]: [Description] — Impact: [High/Medium/Low]
+## References
 
- Remediation: X immediate, Y short-term, Z long-term actions
-
- Proceed with detailed remediation plan? (y/n)
-```
-
-Then generate a full markdown report covering: health metrics, issues with root cause analysis, phased remediation steps with AWS CLI commands, CloudWatch alarm recommendations, and validation checklist.
-
-## Error Handling
-- **Resource Not Found**: Ask user to clarify name/region
-- **Authentication Issues**: Guide through `aws configure`
-- **Insufficient Permissions**: List required IAM actions (`logs:*`, `cloudwatch:*`, `pi:*`)
-- **No Logs Available**: Suggest enabling CloudWatch logging for the resource type
-- **Query Timeouts**: Use shorter time windows
-
-## Success Criteria
-- Resource health accurately assessed across all key metrics
-- All significant issues identified and classified by severity
-- Root cause analysis completed for major problems
-- Actionable remediation plan with AWS CLI commands
-- CloudWatch monitoring recommendations included
-- Implementation steps include validation and rollback procedures
+- [Amazon CloudWatch monitoring](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/)

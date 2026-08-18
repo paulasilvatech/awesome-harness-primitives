@@ -1,159 +1,114 @@
 ---
-name: "napkin"
+name: napkin
 description: >-
-  Visual whiteboard collaboration for Copilot CLI. Creates an interactive whiteboard that opens in
-  your browser — draw, sketch, add sticky notes, then share everything back with Copilot. Copilot sees
-  your drawings and text, and responds with analysis, suggestions, and ideas. Use this skill when when
-  the user invokes this skill — saying things like "let's napkin," "open a napkin," "start a
-  whiteboard," or using the slash command —.
----
-# Napkin — Visual Whiteboard for Copilot CLI
-
-Napkin gives users a browser-based whiteboard where they can draw, sketch, and add sticky notes to think through ideas visually. The agent reads back the whiteboard contents (via a PNG snapshot and optional JSON data) and responds conversationally with analysis, suggestions, and next steps.
-
-The target audience is lawyers, PMs, and business stakeholders — not software developers. Keep everything approachable and jargon-free.
-
+  Open and read a browser-based visual whiteboard for GitHub Copilot CLI collaboration. Use when the user says "let's napkin", "open a napkin", "start a whiteboard", "check the napkin", "look at the napkin", or asks GitHub Copilot to interpret sketches, sticky notes, diagrams, and shared napkin snapshots.
 ---
 
-## Activation
+# Napkin visual whiteboard
 
-When the user invokes this skill — saying things like "let's napkin," "open a napkin," "start a whiteboard," or using the slash command — do the following:
+Open an HTML browser whiteboard, guide the user to sketch or add sticky notes, then read the exported PNG snapshot and optional clipboard JSON so GitHub Copilot can respond as a plain-language collaborator.
 
-1. **Copy the bundled HTML template** from the skill assets to the user's Desktop.
-   - The template lives at `assets/napkin.html` relative to this SKILL.md file.
-   - Copy it to `~/Desktop/napkin.html`.
-   - If `~/Desktop/napkin.html` already exists, ask the user whether they want to open the existing one or start fresh before overwriting.
+## When to invoke
 
-2. **Open it in the default browser:**
-   - macOS: `open ~/Desktop/napkin.html`
-   - Linux: `xdg-open ~/Desktop/napkin.html`
-   - Windows: `start ~/Desktop/napkin.html`
+- "Let's napkin."
+- "Open a napkin."
+- "Start a whiteboard."
+- "Check the napkin."
+- "Look at my napkin and tell me what you think."
 
-3. **Tell the user what to do next.** Say something warm and simple:
+## Prerequisites and context
 
-   ```
-   Your napkin is open in your browser!
+- The bundled HTML template is `assets/napkin.html` relative to this `SKILL.md` file.
+- Runtime documentation images are `assets/step1-activate.svg`, `assets/step2-whiteboard.svg`, `assets/step3-draw.svg`, `assets/step4-share.svg`, and `assets/step5-response.svg`; they are illustrations, not inputs.
+- The intended audience is lawyers, PMs, and business stakeholders. Keep language approachable, jargon-free, and non-technical.
 
-   Draw, sketch, or add sticky notes — whatever helps you think through your idea.
+## Procedure
 
-   When you're ready for my input, click the green "Share with Copilot" button on the whiteboard, then come back here and say "check the napkin."
-   ```
+1. For activation requests, copy `assets/napkin.html` to `~/Desktop/napkin.html`. If it already exists, ask whether to open the existing napkin or start fresh before overwriting.
+2. Open the file in the default browser: macOS `open ~/Desktop/napkin.html`, Linux `xdg-open ~/Desktop/napkin.html`, Windows `start ~/Desktop/napkin.html`.
+3. Tell the user:
 
----
+```text
+Your napkin is open in your browser!
 
-## Reading the Napkin
+Draw, sketch, or add sticky notes — whatever helps you think through your idea.
 
-When the user says "check the napkin," "look at the napkin," "what do you think," "read my napkin," or anything similar, follow these steps:
-
-### Step 1 — Read the PNG snapshot (primary)
-
-Look for a PNG file called `napkin-snapshot.png`. Check these locations in order (the browser saves it to the user's default download folder, which varies):
-
-1. `~/Downloads/napkin-snapshot.png`
-2. `~/Desktop/napkin-snapshot.png`
-
-Use the `view` tool to read the PNG. This sends the image as base64-encoded data to the model, which can visually interpret it. The PNG is the **primary** way the agent understands what the user drew — it captures freehand sketches, arrows, spatial layout, annotations, circled or crossed-out items, and anything else on the canvas.
-
-If the PNG is not found in either location, do NOT silently skip it. Instead, tell the user:
-
-```
-I don't see a snapshot from your napkin yet. Here's what to do:
-
-1. Go to your whiteboard in the browser
-2. Click the green "Share with Copilot" button
-3. Come back here and say "check the napkin" again
-
-The button saves a screenshot that I can look at.
+When you're ready for my input, click the green "Share with Copilot" button on the whiteboard, then come back here and say "check the napkin."
 ```
 
-### Step 2 — Read the clipboard for structured JSON (supplementary)
+4. For reading requests, look for `napkin-snapshot.png` in order: `~/Downloads/napkin-snapshot.png`, then `~/Desktop/napkin-snapshot.png`.
+5. Use the `view` tool on the PNG. The PNG is the primary channel because it captures freehand sketches, arrows, layout, annotations, circled items, crossed-out items, and canvas emphasis.
+6. Try to read supplementary clipboard JSON: macOS `pbpaste`, Linux `xclip -selection clipboard -o`, Windows `powershell -command "Get-Clipboard"`. Missing JSON is not an error.
+7. Synthesize visual content and JSON text into a conversational interpretation. End by offering a next step.
 
-Also try to grab structured JSON data from the system clipboard. The whiteboard copies this automatically alongside the PNG.
+## Interpretation rules
 
-- macOS: `pbpaste`
-- Linux: `xclip -selection clipboard -o`
-- Windows: `powershell -command "Get-Clipboard"`
+| Source | Use it for | Rule |
+| --- | --- | --- |
+| PNG snapshot | Sketches, diagrams, flowcharts, groupings, arrows, layout, annotations, circled/crossed-out items. | Treat as primary. Do not skip it silently. |
+| Clipboard JSON | Exact sticky note text, labels, positions, and colors. | Treat as supplementary. Continue without it if absent. |
+| User prompt | Desired next step or question. | Answer the user's intent, not just the canvas contents. |
 
-The JSON contains the exact text content of sticky notes and text labels, their positions, and their colors. This supplements the PNG by giving you precise text that might be hard to read from a screenshot.
+Response style examples:
 
-If the clipboard doesn't contain JSON data, that's fine — the PNG alone gives the model plenty to work with. Do not treat a missing clipboard as an error.
+- "I can see you've sketched out a three-stage process — it looks like you're thinking about X flowing into Y and then Z."
+- "It looks like you've grouped these four ideas on the left and separated them from two items on the right. Are those different categories?"
+- "I see arrows connecting A to B to C. Is this the workflow you're envisioning?"
 
-### Step 3 — Interpret both sources together
+## Responding back to the napkin
 
-Synthesize the visual snapshot and the structured text into a coherent understanding of what the user is thinking or planning:
+The agent cannot directly modify the browser canvas state because JavaScript owns it. Offer practical alternatives:
 
-- **From the PNG:** Describe what you see — sketches, diagrams, flowcharts, groupings, arrows, spatial layout, annotations, circled items, crossed-out items, emphasis marks.
-- **From the JSON:** Read the exact text content of sticky notes and labels, noting their positions and colors.
-- **Combine both** into a single, conversational interpretation.
+- Provide the response in the CLI and suggest the user add it manually.
+- Create a separate markdown memo, checklist, or structured document from the napkin.
+- When useful, create an updated copy of `napkin.html` with pre-loaded content.
 
-### Step 4 — Respond conversationally
+## Tone and style
 
-Do not dump raw data or a technical summary. Respond as a collaborator who looked at someone's whiteboard sketch. Examples:
+- Use an approachable, non-technical tone.
+- Never use developer jargon without explaining it plainly.
+- Treat the napkin as a creative collaborative space, not a formal input mechanism.
+- Be encouraging about sketches regardless of artistic quality.
+- Frame responses as building on the user's thinking, not grading or analyzing it.
+- If the noob-mode skill is active, use its green/yellow/red risk indicator format when requesting file or bash permissions.
 
-- "I can see you've sketched out a three-stage process — it looks like you're thinking about [X] flowing into [Y] and then [Z]. The sticky note in the corner says '[text]' — is that a concern you want me to address?"
-- "It looks like you've grouped these four ideas together on the left side and separated them from the two items on the right. Are you thinking of these as two different categories?"
-- "I see you drew arrows connecting [A] to [B] to [C] — is this the workflow you're envisioning?"
+## Troubleshooting
 
-### Step 5 — Ask what's next
+| Symptom | Likely cause | Resolution |
+| --- | --- | --- |
+| `napkin-snapshot.png` is missing | User has not clicked Share with Copilot or browser saved elsewhere. | Tell the user to open the whiteboard, click the green Share with Copilot button, return, and say "check the napkin" again. |
+| `~/Desktop/napkin.html` is missing | No napkin has been started. | Say "It looks like we haven't started a napkin yet. Want me to open one for you?" |
+| Clipboard lacks JSON | Browser or OS did not copy structured data. | Continue with PNG-only interpretation. |
 
-Always end by offering a next step:
+## Progressive disclosure and bundled resources
 
-- "Want me to build on this?"
-- "Should I turn this into a structured document?"
-- "Want me to add my suggestions to the napkin?"
+- `assets/napkin.html`: browser HTML whiteboard template copied to the user's Desktop.
+- `assets/step1-activate.svg`, `assets/step2-whiteboard.svg`, `assets/step3-draw.svg`, `assets/step4-share.svg`, `assets/step5-response.svg`: documentation illustrations only.
 
----
+## Output template
 
-## Responding on the Napkin
+```markdown
+## Napkin result
 
-When the user wants the agent to add content back to the whiteboard:
+**Status:** opened | interpreted | needs snapshot | blocked
+**Napkin file:** `~/Desktop/napkin.html`
+**Snapshot checked:** `<path or not found>`
 
-- The agent **cannot** directly modify the HTML file's canvas state — that's managed by JavaScript running in the browser.
-- Instead, offer practical alternatives:
-  - Provide the response right here in the CLI, and suggest the user add it to the napkin manually.
-  - Offer to create a separate document (markdown, memo, checklist, etc.) based on what was interpreted from the napkin.
-  - If it makes sense, create an updated copy of `napkin.html` with pre-loaded content.
+### What I see
+<plain-language interpretation of drawings, sticky notes, arrows, layout, and emphasis>
 
----
+### Exact text captured
+<clipboard JSON text summarized, or "No structured JSON found">
 
-## Tone and Style
-
-- Use the same approachable, non-technical tone as the noob-mode skill.
-- Never use developer jargon without explaining it in plain English.
-- Treat the napkin as a creative, collaborative space — not a formal input mechanism.
-- Be encouraging about the user's sketches regardless of artistic quality.
-- Frame responses as "building on your thinking," not "analyzing your input."
-
----
-
-## Error Handling
-
-**PNG snapshot not found:**
-
-```
-I don't see a snapshot from your napkin yet. Here's what to do:
-
-1. Go to your whiteboard in the browser
-2. Click the green "Share with Copilot" button
-3. Come back here and say "check the napkin" again
-
-The button saves a screenshot that I can look at.
+### Suggested next step
+<offer to build on it, turn it into a document, or add suggestions>
 ```
 
-**Whiteboard file doesn't exist on Desktop:**
+## Quality gate
 
-```
-It looks like we haven't started a napkin yet. Want me to open one for you?
-```
-
----
-
-## Important Notes
-
-- The PNG interpretation is the **primary** channel. Multimodal models can read and interpret the base64 image data returned by the `view` tool.
-- The JSON clipboard data is **supplementary** — it provides precise text but does not capture freehand drawings.
-- Always check for the PNG first. If it isn't found, prompt the user to click "Share with Copilot."
-- If the clipboard doesn't have JSON data, proceed with the PNG alone.
-- The HTML template is located at `assets/napkin.html` relative to this SKILL.md file.
-- The walkthrough images `assets/step1-activate.svg`, `assets/step2-whiteboard.svg`, `assets/step3-draw.svg`, `assets/step4-share.svg`, and `assets/step5-response.svg` are documentation illustrations, not runtime inputs.
-- If the noob-mode skill is also active, use its risk indicator format (green/yellow/red) when requesting file or bash permissions.
+- [ ] Activation copies `assets/napkin.html` without overwriting an existing Desktop file without user choice.
+- [ ] Browser open command matches the operating system.
+- [ ] Reading checks `~/Downloads/napkin-snapshot.png` before `~/Desktop/napkin-snapshot.png`.
+- [ ] Missing PNG produces clear instructions instead of silent failure.
+- [ ] Clipboard JSON is attempted but never required.
+- [ ] Response combines visual and structured sources in plain language and ends with a next step.

@@ -1,138 +1,152 @@
 ---
 name: "gtm-ai-gtm"
 description: >-
-  Go-to-market strategy for AI products. Use when positioning AI products, handling "who is
-  responsible when it breaks" objections, pricing variable-cost AI, choosing between
-  copilot/agent/teammate framing, or selling autonomous tools into enterprises.
+  Create go-to-market strategy for AI products, including enterprise positioning, buyer readiness, trust sequencing, variable-cost pricing, and copilot/agent/teammate framing. Use this skill when positioning AI products, handling production-responsibility objections, pricing variable-cost AI, or selling autonomous tools into enterprises.
 license: "MIT"
 metadata:
   author: "Smit Patel (https://linkedin.com/in/smitkpatel)"
   source: "https://github.com/beingsmit/technical-product-gtm"
 ---
-# AI Product GTM
 
-Go-to-market strategy for AI products. These aren't generic AI principles — they're patterns from selling autonomous AI agents into enterprises where "autonomous" scared buyers and "teammate" converted them.
+# AI product GTM
 
-## When to Use
+Turn an AI product, buyer concern, pricing problem, or enterprise sales blocker into positioning, qualification, demo, trust, and pricing recommendations for AI go-to-market and to-market execution.
 
-**Triggers:**
+## When to invoke
+
 - "How do we position this AI product?"
-- "Buyers say they're worried about AI breaking production"
-- "Should we call it autonomous or copilot?"
+- "Buyers say they're worried about AI breaking production."
+- "Should we call it autonomous, agent, copilot, or teammate?"
 - "How do we price AI when usage varies 10x by customer?"
-- "Enterprise security passed but ops rejected us — why?"
+- "Enterprise security passed but ops rejected us; why?"
 
-**Context:**
-- AI agent platforms (coding, support, ops)
-- LLM-based applications
-- Autonomous tools that *do* things (not just suggest)
-- AI infrastructure
-- Anything where the AI makes decisions
+## Positioning decisions
 
----
+Use wording that matches buyer risk tolerance rather than internal architecture pride.
 
-## Bundled Resources
-
-- [AI go-to-market core frameworks](references/core-frameworks.md) — When developing full GTM strategy content, open this reference for the detailed frameworks and examples.
-
-## Decision Trees
-
-### Which Positioning Should I Use?
-
-```
-Does your AI act autonomously (no approval per action)?
+```text
+Does your AI act autonomously with no approval per action?
 ├─ Yes → Who are you selling to?
 │   ├─ Developers → "Agent" framing
 │   └─ Enterprises → "Teammate" framing
-└─ No → "Copilot" framing
+└─ No → "copilot" framing
 ```
 
-### Which Pricing Model Should I Use?
+| Framing | Use when | Avoid when |
+| --- | --- | --- |
+| copilot | The AI suggests and a human approves each action. | The product actually takes unsupervised action. |
+| Agent | Technical developer buyers expect automation and can inspect failure modes. | Enterprise buyers hear "autonomous" as unmanaged risk. |
+| Teammate | Enterprise buyers need accountability, escalation, and control language. | The product is only a passive recommendation widget. |
 
+Prefer words like teammate, augments, accelerates, and you stay in control. Avoid leading with autonomous, replaces, fully automated, or AI-first when the buyer has not accepted the operating model.
+
+## Buyer readiness and trust ladder
+
+Qualify AI-agent buyers by operational maturity, not by enthusiasm.
+
+```text
+Do they have incident response processes for tool failures?
+├─ Yes → Continue
+│   └─ Do they have on-call rotations for production systems?
+│       ├─ Yes → Qualified buyer
+│       └─ No → Help them build it first
+└─ No → Not ready; come back in 6 months
 ```
+
+The real objection behind "will it break production?" is "who is responsible when it does?" Map the answer to the buyer's operating model.
+
+| Enterprise objection | Map it to |
+| --- | --- |
+| "Who gets paged when AI breaks production?" | Their on-call rotation. |
+| "Who debugs AI failures?" | Their incident response process. |
+| "Who owns customer communication?" | Their escalation path. |
+
+Trust sequence matters: Transparency → Control → Performance → Scale. Provide model cards, security notes, and explainability before the demo; then show approval workflows, kill switches, and confidence scores; then benchmarks, case studies, and live demo; then enterprise deployments, compliance, and SLAs.
+
+## Pricing and demo patterns
+
+```text
 Can you measure customer outcomes reliably?
-├─ Yes → Outcome-based (or hybrid with outcome component)
-└─ No → Continue...
-    │
-    Does usage vary 5x+ by customer?
-    ├─ Yes → Hybrid (base + usage)
+├─ Yes → Outcome-based, or hybrid with outcome component
+└─ No → Does usage vary 5x+ by customer?
+    ├─ Yes → Hybrid: base + usage
     └─ No → Seat-based
 ```
 
-### Is This Buyer Ready for AI Agents?
+Pricing hybrid formula:
 
-```
-Do they have incident response processes for tool failures?
-├─ Yes → Continue...
-│   │
-│   Do they have on-call rotations for production systems?
-│   ├─ Yes → Qualified buyer
-│   └─ No → Help them build it first
-└─ No → Not ready (come back in 6 months)
+```text
+Base: $X/month (covers fixed costs)
+Variable: $Y per unit (20-30% of customer's alternative cost)
 ```
 
----
+Demo structure:
 
-## Common Mistakes
+1. Problem with quantified cost (30s).
+2. AI attempt including failure or uncertainty (60s).
+3. Human review and override (30s).
+4. Outcome with ROI (30s).
 
-**1. Using "autonomous" because it sounds impressive**
-   - I've watched this slow deals. "Autonomous" scares enterprises. "Teammate" progresses faster.
+Show mistakes plus recovery. That builds more trust than a perfect AI demo that looks staged because buyers know real-world data is messy. Name failure/uncertainty explicitly.
 
-**2. Hiding AI failure modes**
-   - Buyers know real-world data is messy. If you don't show failures, they assume you're hiding them.
+## Common mistakes
 
-**3. Treating "will it break production?" as the objection**
-   - Real objection: "who's responsible when it does?" Organizational readiness, not accuracy.
+| Mistake | Why it loses deals | Correction |
+| --- | --- | --- |
+| Using "autonomous" because it sounds impressive | It scares enterprises and slows deals. | Use "teammate" once the product takes action. |
+| Hiding AI failure modes | Buyers assume missing failure examples are being concealed. | Show failures, recovery, and ownership. |
+| Treating "will it break production?" as the objection | The buyer is asking about responsibility. | Map failure ownership to incident response and on-call. |
+| Pricing usage-based AI like OpenAI | Your cost structure and customer value are different. | Price for 20-30% of the customer's alternative cost. |
+| Skipping transparency docs before demo | Buyers need proof before performance claims. | Sequence Transparency → Control → Performance → Scale. |
+| Demoing perfect AI | Fake perfection reduces trust. | Include uncertainty, review, and override. |
+| Selling to buyers demanding 100% accuracy | They are not ready for agentic AI. | Filter for mature buyers with incident response. |
 
-**4. Pricing usage-based AI like OpenAI**
-   - Your cost structure isn't theirs. Price for 20-30% of customer's alternative cost.
+Also preserve the ceiling-moment qualification insight: when a buyer cannot define responsibility for failures, the deal has hit an operating-model ceiling rather than a feature objection.
 
-**5. Skipping transparency docs before demo**
-   - Order matters. Transparency → Control → Performance → Scale. Don't skip steps.
+## Progressive disclosure and bundled resources
 
-**6. Demoing perfect AI**
-   - Show mistakes + recovery. Builds more trust than fake perfection.
+- `references/core-frameworks.md`: detailed AI go-to-market frameworks and examples for full GTM strategy work.
 
-**7. Selling to buyers who demand 100% accuracy**
-   - They're not ready. Filter for mature buyers with incident response processes.
+## Related primitives
 
----
+| Name | Type | Use it when |
+| --- | --- | --- |
+| `positioning-strategy` | skill | You need general positioning frameworks outside AI-agent GTM. |
+| `technical-product-pricing` | skill | You need broader pricing model work beyond AI variable-cost patterns. |
+| `enterprise-account-planning` | skill | You need account strategy for enterprise AI deal management. |
 
-## Quick Reference
+## Output template
 
-**Enterprise objection checklist:**
-- [ ] "Who gets paged when AI breaks production?" → Map to their on-call rotation
-- [ ] "Who debugs AI failures?" → Map to their incident response
-- [ ] "Who owns customer communication?" → Map to their escalation path
+```markdown
+## AI GTM recommendation — <product or deal>
 
-**Positioning word choices:**
-- Teammate, augments, accelerates, you stay in control
-- Autonomous, replaces, fully automated, AI-first
+**Positioning:** copilot | agent | teammate
+**Buyer readiness:** qualified | needs operating model | not ready
+**Pricing model:** seat-based | hybrid base + usage | outcome-based
 
-**Demo structure:**
-1. Problem with quantified cost (30s)
-2. AI attempt including failure/uncertainty (60s)
-3. Human review and override (30s)
-4. Outcome with ROI (30s)
+| Decision | Recommendation | Rationale | Evidence needed |
+| --- | --- | --- | --- |
+| Framing | <copilot/agent/teammate wording> | <why it fits buyer risk> | <proof to gather> |
+| Trust sequence | <next trust asset> | <why now> | <doc, demo, benchmark, SLA> |
+| Pricing | <model and unit> | <cost/value logic> | <usage, alternative cost, outcome metric> |
 
-**Trust ladder:**
-1. Transparency (model card, security, explainability)
-2. Control (approval workflows, kill switches, confidence scores)
-3. Performance (benchmarks, case studies, live demo)
-4. Scale (enterprise deployments, compliance, SLAs)
+### Demo plan
+1. <30s problem and quantified cost>
+2. <60s AI attempt with failure or uncertainty>
+3. <30s human review or override>
+4. <30s ROI outcome>
+```
 
-**Pricing hybrid formula:**
-- Base: $X/month (covers fixed costs)
-- Variable: $Y per unit (20-30% of customer's alternative cost)
+## Quality gate
 
----
+- [ ] The recommendation chooses copilot, agent, or teammate framing with buyer-specific rationale.
+- [ ] Production-responsibility objections are mapped to on-call, incident response, and escalation ownership.
+- [ ] Trust assets follow Transparency → Control → Performance → Scale.
+- [ ] Pricing accounts for 5x+ or 10x usage variance and uses 20-30% of alternative cost when relevant.
+- [ ] The demo plan includes failure or uncertainty plus recovery.
+- [ ] Buyer readiness is qualified before recommending autonomous or teammate messaging.
 
-## Related Skills
+## References
 
-- **positioning-strategy**: General positioning frameworks and testing
-- **technical-product-pricing**: Pricing models including AI-specific patterns
-- **enterprise-account-planning**: Enterprise AI deal management
-
----
-
-*Based on enterprise AI agent GTM across developer tools and infrastructure. Patterns drawn from working enterprise deal cycles selling autonomous AI products — some carried directly, others supported alongside sales leadership — including the positioning trap diagnosis that shifted from feature competition to structural differentiation, the ceiling-moment qualification that improved outbound conversion significantly, and frameworks tested across security, operations, and engineering buyer personas. Not theory — lessons from deals where "autonomous" killed conversations and "teammate" converted.*
+- [technical-product-gtm source](https://github.com/beingsmit/technical-product-gtm)
+- [Smit Patel](https://linkedin.com/in/smitkpatel)

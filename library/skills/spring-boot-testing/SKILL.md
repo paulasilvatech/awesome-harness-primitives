@@ -1,130 +1,79 @@
 ---
-name: "spring-boot-testing"
+name: spring-boot-testing
 description: >-
-  Expert Spring Boot 4 testing specialist that selects the best Spring Boot testing techniques for
-  your situation with Junit 6 and AssertJ. Use this skill when the user asks for core principles.
+  Select and write effective Spring Boot 4 tests with JUnit 6, AssertJ, MockMvcTester, RestTestClient, Testcontainers, and focused test slices. Use when the user asks for Spring Boot testing guidance, unit tests, slice tests, integration tests, coverage priorities, migration from @MockBean, or testing best practices.
 ---
-# Spring Boot Testing
 
-This skill provides expert guide for testing Spring Boot 4 applications with modern patterns and best practices.
+# Spring Boot testing
 
-## Core Principles
+Choose the narrowest Spring Boot testing technique that provides confidence, then write maintainable tests with JUnit 6, AssertJ-style assertions, modern Spring Boot 4 test APIs, and meaningful coverage.
 
-1. **Test Pyramid**: Unit (fast) > Slice (focused) > Integration (complete)
-2. **Right Tool**: Use the narrowest slice that gives you confidence
-3. **AssertJ Style**: Fluent, readable assertions over verbose matchers
-4. **Modern APIs**: Prefer MockMvcTester and RestTestClient over legacy alternatives
+## When to invoke
 
-## Which Test Slice?
+- "Write tests for this Spring Boot controller."
+- "Should this use @WebMvcTest or @SpringBootTest?"
+- "Migrate these tests from @MockBean to @MockitoBean."
+- "Add repository tests with Testcontainers."
+- "Improve Spring Boot test coverage without brittle tests."
 
-| Scenario | Annotation | Reference |
-|----------|------------|-----------|
-| Controller + HTTP semantics | `@WebMvcTest` | [references/webmvctest.md](references/webmvctest.md) |
-| Repository + JPA queries | `@DataJpaTest` | [references/datajpatest.md](references/datajpatest.md) |
-| REST client + external APIs | `@RestClientTest` | [references/restclienttest.md](references/restclienttest.md) |
-| JSON (de)serialization | `@JsonTest` | [references/test-slices-overview.md](references/test-slices-overview.md) |
-| Full application | `@SpringBootTest` | [references/test-slices-overview.md](references/test-slices-overview.md) |
+## Prerequisites and context
 
-## Test Slices Reference
+- Use the project's existing test runner and build tool.
+- Add dependencies only when the project lacks the required Spring Boot test starter.
+- Read bundled references for detailed API examples rather than expanding the main skill.
 
-- [references/test-slices-overview.md](references/test-slices-overview.md) - Decision matrix and comparison
-- [references/webmvctest.md](references/webmvctest.md) - Web layer with MockMvc
-- [references/datajpatest.md](references/datajpatest.md) - Data layer with Testcontainers
-- [references/restclienttest.md](references/restclienttest.md) - REST client testing
+## Test slice selection
 
-## Testing Tools Reference
+| Scenario | Use | Reference |
+| --- | --- | --- |
+| Controller and HTTP semantics | `@WebMvcTest` with `MockMvcTester` | `references/webmvctest.md`, `references/mockmvc-tester.md` |
+| Repository and JPA queries | `@DataJpaTest` with Testcontainers and a real database | `references/datajpatest.md`, `references/testcontainers-jdbc.md` |
+| REST client and external APIs | `@RestClientTest` with `MockRestServiceServer` | `references/restclienttest.md` |
+| JSON serialization and deserialization | `@JsonTest` | `references/test-slices-overview.md` |
+| Business service logic | Plain JUnit plus Mockito, no Spring context | project tests |
+| Full application wiring | `@SpringBootTest` with minimal context config | `references/test-slices-overview.md` |
+| Spring Boot 4 HTTP integration | `RestTestClient` | `references/resttestclient.md` |
 
-- [references/mockmvc-tester.md](references/mockmvc-tester.md) - AssertJ-style MockMvc (3.2+)
-- [references/mockmvc-classic.md](references/mockmvc-classic.md) - Traditional MockMvc (pre-3.2)
-- [references/resttestclient.md](references/resttestclient.md) - Spring Boot 4+ REST client
-- [references/mockitobean.md](references/mockitobean.md) - Mocking dependencies
+Decision tree:
 
-## Assertion Libraries
-
-- [references/assertj-basics.md](references/assertj-basics.md) - Scalars, strings, booleans, dates
-- [references/assertj-collections.md](references/assertj-collections.md) - Lists, Sets, Maps, arrays
-
-## Testcontainers
-
-- [references/testcontainers-jdbc.md](references/testcontainers-jdbc.md) - PostgreSQL, MySQL, etc.
-
-## Test Data Generation
-
-- [references/instancio.md](references/instancio.md) - Generate complex test objects (3+ properties)
-
-## Performance & Migration
-
-- [references/context-caching.md](references/context-caching.md) - Speed up test suites
-- [references/sb4-migration.md](references/sb4-migration.md) - Spring Boot 4.0 changes
-
-## Quick Decision Tree
-
-```
-Testing a controller endpoint?
-  Yes → @WebMvcTest with MockMvcTester
-
-Testing repository queries?
-  Yes → @DataJpaTest with Testcontainers (real DB)
-
-Testing business logic in service?
-  Yes → Plain JUnit + Mockito (no Spring context)
-
-Testing external API client?
-  Yes → @RestClientTest with MockRestServiceServer
-
-Testing JSON mapping?
-  Yes → @JsonTest
-
-Need full integration test?
-  Yes → @SpringBootTest with minimal context config
+```text
+Testing a controller endpoint? -> @WebMvcTest with MockMvcTester
+Testing repository queries? -> @DataJpaTest with Testcontainers (real DB)
+Testing business logic in service? -> Plain JUnit + Mockito (no Spring context)
+Testing external API client? -> @RestClientTest with MockRestServiceServer
+Testing JSON mapping? -> @JsonTest
+Need full integration test? -> @SpringBootTest with minimal context config
 ```
 
-## Spring Boot 4 Highlights
+## Core principles
 
-- **RestTestClient**: Modern alternative to TestRestTemplate
-- **@MockitoBean**: Replaces @MockBean (deprecated)
-- **MockMvcTester**: AssertJ-style assertions for web tests
-- **Modular starters**: Technology-specific test starters
-- **Context pausing**: Automatic pausing of cached contexts (Spring Framework 7)
+| Principle | Rule |
+| --- | --- |
+| Test Pyramid | Prefer Unit (fast) > Slice (focused) > Integration (complete). |
+| Right Tool | Use the narrowest slice that proves the behavior. |
+| AssertJ Style | Prefer fluent, readable assertions over verbose matchers. |
+| Modern APIs | Prefer `MockMvcTester` and `RestTestClient` over legacy alternatives when available. |
+| Coverage Order | Test main scenario, other valid paths, then exceptions/errors. |
+| Refactor signal | If one method needs more than 5-7 test cases, recommend extracting smaller focused functions before adding brittle tests. |
 
-## Testing Best Practices
+## Spring Boot 4 highlights
 
-### Code Complexity Assessment
+- `RestTestClient`: modern alternative to `TestRestTemplate`.
+- `@MockitoBean`: replaces deprecated `@MockBean`.
+- `MockMvcTester`: AssertJ-style web test assertions.
+- Modular starters: technology-specific test starters such as `spring-boot-starter-webmvc-test`.
+- Context pausing: Spring Framework 7 can pause cached contexts.
 
-When a method or class is too complex to test effectively:
+## Test quality rules
 
-1. **Analyze complexity** - If you need more than 5-7 test cases to cover a single method, it's likely too complex
-2. **Recommend refactoring** - Suggest breaking the code into smaller, focused functions
-3. **User decision** - If the user agrees to refactor, help identify extraction points
-4. **Proceed if needed** - If the user decides to continue with the complex code, implement tests despite the difficulty
+- Create helper methods for common objects and mock setup to reduce redundancy.
+- Use production-realistic scenarios: payment processing, order validation, discount calculations, error handling, external APIs, and databases.
+- Use `@DisplayName` to state behavior: `@DisplayName("Should calculate discount for VIP customer")`.
+- Avoid tests that only import classes or execute code without assertions.
+- Aim for `80+%` coverage as a practical minimum, but prioritize meaningful assertions over numeric coverage.
+- Use the Jacoco Maven plugin for coverage reporting when the project already uses Maven or JaCoCo.
 
-**Example of refactoring recommendation:**
-```java
-// Before: Complex method hard to test
-public Order processOrder(OrderRequest request) {
-  // Validation, discount calculation, payment, inventory, notification...
-  // 50+ lines of mixed concerns
-}
-
-// After: Refactored into testable units
-public Order processOrder(OrderRequest request) {
-  validateOrder(request);
-  var order = createOrder(request);
-  applyDiscount(order);
-  processPayment(order);
-  updateInventory(order);
-  sendNotification(order);
-  return order;
-}
-```
-
-### Avoid Code Redundancy
-
-Create helper methods for commonly used objects and mock setup to enhance readability and maintainability.
-
-### Test Organization with @DisplayName
-
-Use descriptive display names to clarify test intent:
+Example display names:
 
 ```java
 @Test
@@ -136,36 +85,9 @@ void shouldCalculateDiscountForVip() { }
 void shouldRejectOrderForInsufficientCredit() { }
 ```
 
-### Test Coverage Order
+## Dependencies
 
-Always structure tests in this order:
-
-1. **Main scenario** - The happy path, most common use case
-2. **Other paths** - Alternative valid scenarios, edge cases
-3. **Exceptions/Errors** - Invalid inputs, error conditions, failure modes
-
-### Test Production Scenarios
-
-Write tests with real production scenarios in mind. This makes tests more relatable and helps understand code behavior in actual production cases.
-
-### Test Coverage Goals
-
-Aim for 80% code coverage as a practical balance between quality and effort. Higher coverage is beneficial but not the only goal.
-
-Use Jacoco maven plugin for coverage reporting and tracking.
-
-
-**Coverage Rules:**
-- 80+% coverage minimum
-- Focus on meaningful assertions, not just execution
-
-**What to Prioritize:**
-1. Business-critical paths (payment processing, order validation)
-2. Complex algorithms (pricing, discount calculations)
-3. Error handling (exceptions, edge cases)
-4. Integration points (external APIs, databases)
-
-## Dependencies (Spring Boot 4)
+Use only what the project needs:
 
 ```xml
 <dependency>
@@ -174,17 +96,66 @@ Use Jacoco maven plugin for coverage reporting and tracking.
   <scope>test</scope>
 </dependency>
 
-<!-- For WebMvc tests -->
 <dependency>
   <groupId>org.springframework.boot</groupId>
   <artifactId>spring-boot-starter-webmvc-test</artifactId>
   <scope>test</scope>
 </dependency>
 
-<!-- For Testcontainers -->
 <dependency>
   <groupId>org.springframework.boot</groupId>
   <artifactId>spring-boot-testcontainers</artifactId>
   <scope>test</scope>
 </dependency>
 ```
+
+## Progressive disclosure and bundled resources
+
+- `references/test-slices-overview.md`: slice decision matrix and comparisons.
+- `references/webmvctest.md`: web layer testing with MockMvc.
+- `references/datajpatest.md`: data layer tests with Testcontainers.
+- `references/restclienttest.md`: REST client testing.
+- `references/mockmvc-tester.md`: AssertJ-style MockMvc usage.
+- `references/mockmvc-classic.md`: traditional MockMvc for older projects.
+- `references/resttestclient.md`: Spring Boot 4 REST client testing.
+- `references/mockitobean.md`: dependency mocking with `@MockitoBean`.
+- `references/assertj-basics.md`: scalar, string, boolean, and date assertions.
+- `references/assertj-collections.md`: list, set, map, and array assertions.
+- `references/testcontainers-jdbc.md`: PostgreSQL, MySQL, and JDBC containers.
+- `references/instancio.md`: generating complex test objects with 3+ properties.
+- `references/context-caching.md`: speeding up test suites.
+- `references/sb4-migration.md`: Spring Boot 4 migration notes.
+
+## Compatibility vocabulary
+
+Preserve these legacy terms, API names, command placeholders, and literal phrases when applying or migrating this skill:
+
+- `Exceptions/Errors**`
+- `OrderRequest`
+- WebMvc
+
+## Output template
+
+```markdown
+## Spring Boot testing result
+
+**Status:** tests-added | guidance-only | blocked
+**Test strategy:** <unit/slice/integration and why>
+
+| Target | Test type | Files changed | Main scenarios | Validation |
+| --- | --- | --- | --- | --- |
+| <class or endpoint> | <@WebMvcTest/@DataJpaTest/plain JUnit/etc.> | <test file> | <happy path, edge, error> | <command and result> |
+
+### Notes
+- <coverage, dependency, migration, or refactoring recommendation>
+```
+
+## Quality gate
+
+- [ ] The narrowest useful test slice was selected and justified.
+- [ ] Tests cover happy path, alternate valid paths, and error conditions where relevant.
+- [ ] Assertions verify behavior, not just execution.
+- [ ] Existing project conventions, fixtures, and build tools were preserved.
+- [ ] `@MockBean` was not introduced for Spring Boot 4 code; use `@MockitoBean` where needed.
+- [ ] Coverage goals focus on business-critical paths, complex algorithms, error handling, and integration points.
+- [ ] Bundled references were consulted for detailed API usage when necessary.

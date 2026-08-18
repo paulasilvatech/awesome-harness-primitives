@@ -1,50 +1,61 @@
 ---
 name: "markstream-install"
 description: >-
-  Install and configure Markstream streaming Markdown renderers for Vue, React, Svelte, Angular, Nuxt,
-  and Vue 2 applications. Use this skill when the user asks to add streaming Markdown rendering to an
-  AI chat or document interface, or to install Markstream in a supported frontend framework.
+  Install and configure Markstream streaming Markdown renderers for Vue, React, Svelte, Angular, Nuxt, Next.js, and Vue 2 applications. Use when adding streaming Markdown to AI chat or document interfaces, repairing Markstream styles or SSR, or choosing static, smooth-streaming, or externally parsed AST input.
 license: "MIT"
 metadata:
   compatibility: "JavaScript or TypeScript frontend project using Vue 3, Nuxt 3/4, Vue 2.6/2.7, React 18+, Next.js, Angular 20+, or Svelte 5."
   documentation: "https://markstream.simonhe.me/"
   source: "https://github.com/Simon-He95/markstream-vue"
 ---
-# Markstream Install
 
-Integrate the appropriate [Markstream](https://github.com/Simon-He95/markstream-vue) package into an existing application without installing unnecessary optional dependencies or weakening its security defaults.
+# Markstream install
 
-Read [references/scenarios.md](references/scenarios.md) before choosing packages or peers.
+Integrates the smallest correct Markstream package into an existing frontend, wires package CSS in the right order, preserves safe rendering defaults, and validates static and streaming Markdown output.
 
-## When to Use
+## When to invoke
 
-Use this skill when the user asks to:
+- "Add streaming Markdown rendering to this AI chat."
+- "Install Markstream in my Vue, React, Svelte, Angular, Nuxt, or Next.js app."
+- "Fix missing Markstream styles or SSR errors."
+- "Replace our Markdown renderer with Markstream."
+- "Should this use content, smooth streaming, or nodes?"
 
-- add streaming Markdown rendering to an AI chat or document interface;
-- install Markstream in Vue, Nuxt, React, Next.js, Svelte, Angular, or Vue 2;
-- repair a broken Markstream installation, missing styles, or SSR failure;
-- replace another Markdown renderer with Markstream;
-- choose between static, smooth-streaming, and externally parsed AST input.
+## Prerequisites and context
 
-## Workflow
+Inspect the host application before changing dependencies:
 
-### 1. Inspect the host application
+- Framework and version in `package.json`.
+- Package manager lockfile.
+- SSR mode: Nuxt, Next.js, server components, or static SPA.
+- Reset, Tailwind, UnoCSS, or design-system style order.
+- Requested optional peers: code highlighting, enhanced File/Diff surfaces, Monaco, Mermaid, D2, infographic blocks, or KaTeX.
 
-Before changing dependencies, inspect:
+Read `references/scenarios.md` before choosing packages or peers. Official sources are https://markstream.simonhe.me/ and https://github.com/Simon-He95/markstream-vue .
 
-- the framework and version in `package.json`;
-- the package manager lockfile;
-- whether the application uses SSR;
-- reset, Tailwind, UnoCSS, or design-system styles;
-- required optional features: code highlighting, enhanced File/Diff surfaces, Monaco, Mermaid, D2, infographic blocks, or KaTeX.
+## Procedure
 
-Do not assume the Vue package is correct merely because the source repository is named `markstream-vue`. Select the framework-specific package from the scenario table.
+1. Inspect the host application and identify the exact framework boundary.
+2. Install exactly one framework package and only the optional peers required by the requested UI.
+3. Import Markstream CSS explicitly after resets; use a component layer for Tailwind or UnoCSS.
+4. Add the smallest renderer that matches the input model: `content`, smooth streaming, or `nodes` plus `final`.
+5. Apply framework-specific SSR and client boundaries.
+6. Preserve safe HTML and strict Mermaid defaults unless the user explicitly requires a trusted exception.
+7. Run the smallest relevant build, typecheck, or test command.
 
-### 2. Install the smallest dependency set
+## Package selection
 
-Install exactly one framework package. Add optional peers only when the requested UI uses their feature.
+| Host | Package | Notes |
+| --- | --- | --- |
+| Vue 3 | `markstream-vue` | Use `mode="chat"`, `mode="docs"`, or `mode="minimal"`. |
+| Nuxt 3/4 | `markstream-vue` | Keep browser-only optional peers behind client boundaries. |
+| React 18+ | `markstream-react` | Use the root entry inside a `'use client'` component for live SSE or WebSocket streams. |
+| Next.js | `markstream-react`, `markstream-react/next`, or `markstream-react/server` | Use `/next` for SSR-first HTML with hydration and `/server` for server-only rendering. |
+| Svelte 5 | `markstream-svelte` | Do not use for older Svelte apps. |
+| Angular 20+ | `markstream-angular` | Confirm the app meets the current package requirement. |
+| Vue 2.6/2.7 | `markstream-vue2` | Vue CLI 4 and Webpack 4 may need direct CSS import from `dist`. |
 
-Examples:
+Install examples:
 
 ```bash
 npm install markstream-vue
@@ -54,35 +65,22 @@ npm install markstream-angular
 npm install markstream-vue2
 ```
 
-Preserve the repository's existing package manager. Do not install every optional peer preemptively.
+## Styling and renderer rules
 
-### 3. Wire styles in the correct order
-
-Import application resets before Markstream styles. Import package CSS explicitly; do not rely on component imports to inject it.
-
-For Tailwind or UnoCSS, use the relevant package subpath in a component layer:
+Import application resets before Markstream styles. Do not rely on component imports to inject CSS.
 
 ```css
 @import 'markstream-vue/index.css' layer(components);
-```
-
-Use the matching package name for React, Svelte, Angular, or Vue 2. If math rendering is enabled, also import:
-
-```css
 @import 'katex/dist/katex.min.css';
 ```
 
-Vue CLI 4 and other Webpack 4-based Vue 2 applications cannot resolve package export maps. In those projects, import the published file directly:
+Use the matching package subpath for React, Svelte, Angular, or Vue 2. For Webpack 4-based Vue 2 applications, use:
 
 ```ts
 import 'markstream-vue2/dist/index.css'
 ```
 
-### 4. Add the smallest working renderer
-
-Prefer `content` for static documents and most streaming chat interfaces. Markstream's built-in smooth streaming can pace irregular token delivery without requiring the host to maintain an AST.
-
-For Vue 3 chat surfaces, start with:
+For Vue 3 streaming chat, start with:
 
 ```vue
 <MarkdownRender
@@ -95,7 +93,7 @@ For Vue 3 chat surfaces, start with:
 />
 ```
 
-For completed chat history, keep the same renderer mode and switch pacing off:
+For completed history, keep the mode and switch pacing off:
 
 ```vue
 <MarkdownRender
@@ -108,36 +106,65 @@ For completed chat history, keep the same renderer mode and switch pacing off:
 />
 ```
 
-In React, Svelte, and Angular, use the equivalent camelCase or framework binding syntax. Keep `smoothStreaming="auto"`, `fade=false`, and `typewriter=true` while streaming; use `smoothStreaming=false` and `typewriter=false` for completed history.
+In React, Svelte, and Angular, use equivalent camelCase or framework binding syntax: `smoothStreaming="auto"`, `fade=false`, `typewriter=true` while streaming; `smoothStreaming=false` and `typewriter=false` for completed history.
 
-Use `nodes` plus `final` only when a worker, shared AST store, custom transform, or another application layer already owns parsing.
+## Input and security choices
 
-### 5. Handle framework-specific boundaries
+| Choice | Use when | Avoid when |
+| --- | --- | --- |
+| `content` | Static documents and most streaming chat. | Another layer already owns parsing. |
+| Smooth streaming | Token delivery is irregular and the UI should pace output. | Completed chat history. |
+| `nodes` plus `final` | A worker, shared AST store, custom transform, or application layer already owns parsing. | The app only has Markdown text. |
+| HTML policy `safe` | Default for all untrusted content. | Only broaden for an explicit trusted legacy surface. |
+| Mermaid strict mode | Default for diagrams from users or models. | Only relax for a scoped trusted surface. |
 
-- In Nuxt, keep browser-only optional peers behind client boundaries.
-- In Next.js, use the root `markstream-react` entry inside a `'use client'` component for live SSE or WebSocket streams. Use `markstream-react/next` for SSR-first HTML with hydration, or `markstream-react/server` for server-only rendering.
-- Use `markstream-svelte` only with Svelte 5.
-- Confirm the Angular application meets the current `markstream-angular` version requirement.
-- In Vue 3, use `mode="chat"` for AI chat, `mode="docs"` for rich documents, and `mode="minimal"` for lightweight non-chat surfaces.
-- For long Vue 3 conversations or an existing message virtualizer, consult the Markstream performance guide before adding a second virtualizer.
+## Gotchas
 
-### 6. Preserve safe defaults
+- **Do not install every optional peer**: install Monaco, Mermaid, D2, KaTeX, or infographic support only when requested.
+- **Do not assume Vue because the source repo is named `markstream-vue`**: select the framework-specific package.
+- **Do not run browser-only peers during SSR**: isolate them behind Nuxt client boundaries or Next.js client components.
+- **Do not add a second virtualizer blindly**: for long Vue 3 conversations or an existing message virtualizer, consult the performance guide first.
 
-HTML policy defaults to `safe`, and Mermaid uses strict mode. Do not broaden either setting unless the user explicitly identifies a trusted legacy surface that requires it. Scope any exception to that surface.
+## Progressive disclosure and bundled resources
 
-### 7. Validate
+- `references/scenarios.md`: package choice, optional peer, and scenario matrix.
 
-Run the smallest relevant build, typecheck, or test command. Confirm:
+## Markstream mode vocabulary
 
-1. the selected package matches the framework;
-2. only requested optional peers were added;
-3. styles load after resets;
-4. SSR pages do not evaluate browser-only peers on the server;
-5. static content and at least one incremental update render correctly.
+Markstream has `built-in` smooth streaming for chat and `non-chat` surfaces such as docs or minimal renderers. Keep those distinctions when choosing modes.
 
-Report the selected package, added peers, CSS location, streaming input choice, and validation command.
+## Output template
 
-## Official References
+```markdown
+### Markstream install result
+
+**Status:** installed | plan only | blocked
+**Framework:** <Vue 3 | Nuxt | React | Next.js | Svelte 5 | Angular | Vue 2>
+**Package:** `<markstream package>`
+**Optional peers:** <none | list>
+**CSS location:** `<file and import order>`
+**Streaming input:** `content` | `nodes` plus `final` | static
+
+**Changes**
+- <dependency change>
+- <renderer/component change>
+- <style import change>
+
+**Validation**
+- `<build/typecheck/test command>`: pass | fail
+```
+
+## Quality gate
+
+- [ ] The selected package matches the detected framework.
+- [ ] Only requested optional peers were added.
+- [ ] CSS imports are explicit and load after resets.
+- [ ] Tailwind or UnoCSS imports use a component layer when needed.
+- [ ] SSR pages do not evaluate browser-only peers on the server.
+- [ ] Static content and at least one incremental update render correctly.
+- [ ] HTML policy remains `safe` and Mermaid remains strict unless a scoped trusted exception is documented.
+
+## References
 
 - [Installation](https://markstream.simonhe.me/guide/installation)
 - [AI chat and streaming](https://markstream.simonhe.me/guide/ai-chat-streaming)

@@ -1,85 +1,43 @@
 ---
 name: "fluentui-blazor"
 description: >-
-  Guide for using the Microsoft Fluent UI Blazor component library
-  (Microsoft.FluentUI.AspNetCore.Components NuGet package) in Blazor applications. Use this when the
-  user is building a Blazor app with Fluent UI components, setting up the library, using FluentUI
-  components like FluentButton, FluentDataGrid, FluentDialog, FluentToast, FluentNavMenu,
-  FluentTextField, FluentSelect, FluentAutocomplete, FluentDesignTheme, or any component prefixed with
-  "Fluent". Also use when troubleshooting missing providers, JS interop issues, or theming.
+  Guide for using Microsoft.FluentUI.AspNetCore.Components in Blazor applications. Use when building Blazor UI with Fluent components, setting up providers and AddFluentUIComponents, binding FluentSelect or FluentAutocomplete, using dialogs, toasts, icons, themes, DataGrid, NavMenu, or troubleshooting missing Fluent UI behavior.
 ---
-# Fluent UI Blazor — Consumer Usage Guide
 
-This skill teaches how to correctly use the **Microsoft.FluentUI.AspNetCore.Components** (version 4) NuGet package in Blazor applications.
+# Fluent UI Blazor
 
-## Critical Rules
+Use Microsoft.FluentUI.AspNetCore.Components in Blazor applications by selecting the correct setup, provider, binding, service, icon, and theming pattern, then produce paste-ready Razor or C# that follows the library's v4 conventions.
 
-### 1. No manual `<script>` or `<link>` tags needed
+## When to invoke
 
-The library auto-loads all CSS and JS via Blazor's static web assets and JS initializers. **Never tell users to add `<script>` or `<link>` tags for the core library.**
+- "Set up Fluent UI Blazor in this app."
+- "Why are my FluentDialog or FluentToast calls not showing UI?"
+- "Bind FluentSelect, FluentCombobox, FluentListbox, or FluentAutocomplete to objects."
+- "Use FluentIcon, FluentDesignTheme, FluentDataGrid, or FluentNavMenu correctly."
+- "Migrate this Blazor form to Fluent UI components."
 
-### 2. Providers are mandatory for service-based components
+## Setup and providers
 
-These provider components **MUST** be added to the root layout (e.g. `MainLayout.razor`) for their corresponding services to work. Without them, service calls **fail silently** (no error, no UI).
+| Concern | Required pattern | Failure to avoid |
+| --- | --- | --- |
+| Core package | Install and use `Microsoft.FluentUI.AspNetCore.Components`; register `builder.Services.AddFluentUIComponents();` in `Program.cs`. | Do not add manual `<script>` or `<link>` tags for the core library; static web assets and JS initializers load CSS and JS. |
+| Service lifetime | Use `ServiceLifetime.Scoped` for Blazor Server or interactive apps; use `ServiceLifetime.Singleton` for standalone Blazor WebAssembly. | `ServiceLifetime.Transient` throws `NotSupportedException`. |
+| Providers | Put `<FluentToastProvider />`, `<FluentDialogProvider />`, `<FluentMessageBarProvider />`, `<FluentTooltipProvider />`, and `<FluentKeyCodeProvider />` in the root layout such as `MainLayout.razor`. | Service calls can fail silently with no error and no UI when the provider is missing. |
+| Configuration | Use `AddFluentUIComponents(options => { options.UseTooltipServiceProvider = true; options.ServiceLifetime = ServiceLifetime.Scoped; });` when defaults must be explicit. | Do not scatter service setup across components. |
 
-```razor
-<FluentToastProvider />
-<FluentDialogProvider />
-<FluentMessageBarProvider />
-<FluentTooltipProvider />
-<FluentKeyCodeProvider />
-```
+## Component binding patterns
 
-### 3. Service registration in Program.cs
+`FluentSelect<TOption>`, `FluentCombobox<TOption>`, `FluentListbox<TOption>`, and `FluentAutocomplete<TOption>` do not use the `<InputSelect>` child-`<option>` model.
 
-```csharp
-builder.Services.AddFluentUIComponents();
-
-// Or with configuration:
-builder.Services.AddFluentUIComponents(options =>
-{
-    options.UseTooltipServiceProvider = true;  // default: true
-    options.ServiceLifetime = ServiceLifetime.Scoped; // default
-});
-```
-
-**ServiceLifetime rules:**
-- `ServiceLifetime.Scoped` — for Blazor Server / Interactive (default)
-- `ServiceLifetime.Singleton` — for Blazor WebAssembly standalone
-- `ServiceLifetime.Transient` — **throws `NotSupportedException`**
-
-### 4. Icons require a separate NuGet package
-
-```
-dotnet add package Microsoft.FluentUI.AspNetCore.Components.Icons
-```
-
-Usage with a `@using` alias:
-
-```razor
-@using Icons = Microsoft.FluentUI.AspNetCore.Components.Icons
-
-<FluentIcon Value="@(Icons.Regular.Size24.Save)" />
-<FluentIcon Value="@(Icons.Filled.Size20.Delete)" Color="@Color.Error" />
-```
-
-Pattern: `Icons.[Variant].[Size].[Name]`
-- Variants: `Regular`, `Filled`
-- Sizes: `Size12`, `Size16`, `Size20`, `Size24`, `Size28`, `Size32`, `Size48`
-
-Custom image: `Icon.FromImageUrl("/path/to/image.png")`
-
-**Never use string-based icon names** — icons are strongly-typed classes.
-
-### 5. List component binding model
-
-`FluentSelect<TOption>`, `FluentCombobox<TOption>`, `FluentListbox<TOption>`, and `FluentAutocomplete<TOption>` do NOT work like `<InputSelect>`. They use:
-
-- `Items` — the data source (`IEnumerable<TOption>`)
-- `OptionText` — `Func<TOption, string?>` to extract display text
-- `OptionValue` — `Func<TOption, string?>` to extract the value string
-- `SelectedOption` / `SelectedOptionChanged` — for single selection binding
-- `SelectedOptions` / `SelectedOptionsChanged` — for multi-selection binding
+| API | Use | Notes |
+| --- | --- | --- |
+| `Items` | `IEnumerable<TOption>` data source | Provide objects, not manual option markup. |
+| `OptionText` | `Func<TOption, string?>` display text | Example: `@(c => c.Name)`. |
+| `OptionValue` | `Func<TOption, string?>` value text | Example: `@(c => c.Code)`. |
+| `SelectedOption` / `SelectedOptionChanged` | Single selection binding | Use `@bind-SelectedOption`. |
+| `SelectedOptions` / `SelectedOptionsChanged` | Multi-selection binding | Use `@bind-SelectedOptions`. |
+| `ValueText` | Autocomplete input text | Use instead of obsolete `Value`. |
+| `OnOptionsSearch` | Autocomplete filtering callback | Set `args.Items`; `Multiple="true"` is the default. |
 
 ```razor
 <FluentSelect Items="@countries"
@@ -89,19 +47,15 @@ Custom image: `Icon.FromImageUrl("/path/to/image.png")`
               Label="Country" />
 ```
 
-**NOT** like this (wrong pattern):
+Do not write this `InputSelect` pattern:
+
 ```razor
-@* WRONG — do not use InputSelect pattern *@
 <FluentSelect @bind-Value="@selectedValue">
     <option value="1">One</option>
 </FluentSelect>
 ```
 
-### 6. FluentAutocomplete specifics
-
-- Use `ValueText` (NOT `Value` — it's obsolete) for the search input text
-- `OnOptionsSearch` is the required callback to filter options
-- Default is `Multiple="true"`
+For autocomplete:
 
 ```razor
 <FluentAutocomplete TOption="Person"
@@ -119,111 +73,74 @@ Custom image: `Icon.FromImageUrl("/path/to/image.png")`
 }
 ```
 
-### 7. Dialog service pattern
+## Dialogs, toasts, forms, icons, and themes
 
-**Do NOT toggle visibility of `<FluentDialog>` tags.** The service pattern is:
+| Feature | Correct API | Rule |
+| --- | --- | --- |
+| Dialog content | Implement `IDialogContentComponent<TData>` with `[Parameter] public Person Content { get; set; } = default!;` and `[CascadingParameter] public FluentDialog Dialog { get; set; } = default!;`. | Do not toggle visibility of `<FluentDialog>` tags for service dialogs. |
+| Dialog service | Inject `IDialogService`; call `ShowDialogAsync<EditPersonDialog, Person>(person, new DialogParameters { Title = "Edit Person", PrimaryAction = "Save", SecondaryAction = "Cancel", Width = "500px", PreventDismissOnOverlayClick = true })`; await `dialog.Result`; test `result.Cancelled`; cast `result.Data as Person`. | Use `Dialog.CloseAsync(Content)` and `Dialog.CancelAsync()` inside content. |
+| Convenience dialogs | `ShowConfirmationAsync("Are you sure?", "Yes", "No")`, `ShowSuccessAsync("Done!")`, `ShowErrorAsync("Something went wrong.")`. | Keep provider present. |
+| Toasts | Inject `IToastService`; call `ShowSuccess`, `ShowError`, `ShowWarning`, or `ShowInfo`. | `FluentToastProvider` supports `Position` default `TopRight`, `Timeout` default `7000ms`, and `MaxToastCount` default `4`. |
+| Icons | Add `Microsoft.FluentUI.AspNetCore.Components.Icons`; use `@using Icons = Microsoft.FluentUI.AspNetCore.Components.Icons`; render `Icons.Regular.Size24.Save`, `Icons.Filled.Size20.Delete`, or `Icon.FromImageUrl("/path/to/image.png")`. | Do not use string icon names; icons are strongly typed. Variants: `Regular`, `Filled`; sizes: `Size12`, `Size16`, `Size20`, `Size24`, `Size28`, `Size32`, `Size48`. |
+| Theme tokens | Render `<FluentDesignTheme Mode="DesignThemeModes.System" OfficeColor="OfficeColor.Teams" StorageName="mytheme" />`; change design tokens in `OnAfterRenderAsync`. | Do not set JS-backed design tokens in `OnInitialized`. |
+| Forms | Use standard `EditForm`, `DataAnnotationsValidator`, `FluentTextField`, `FluentSelect`, `FluentValidationMessage`, `FluentValidationSummary`, and `FluentButton Type="ButtonType.Submit" Appearance="Appearance.Accent"`. | Use `FluentEditForm` only inside `FluentWizard` steps for per-step validation. |
 
-1. Create a content component implementing `IDialogContentComponent<TData>`:
+## Progressive disclosure and bundled resources
 
-```csharp
-public partial class EditPersonDialog : IDialogContentComponent<Person>
-{
-    [Parameter] public Person Content { get; set; } = default!;
+Read bundled references only when the task needs the extra detail:
 
-    [CascadingParameter] public FluentDialog Dialog { get; set; } = default!;
+- `references/SETUP.md`: setup, service registration, providers, render modes, and static assets.
+- `references/LAYOUT-AND-NAVIGATION.md`: layout, navigation, `FluentNavMenu`, and shell patterns.
+- `references/DATAGRID.md`: `FluentDataGrid` data, columns, paging, and virtualization.
+- `references/THEMING.md`: design tokens, `FluentDesignTheme`, and theme persistence.
 
-    private async Task SaveAsync()
-    {
-        await Dialog.CloseAsync(Content);
-    }
+## Gotchas
 
-    private async Task CancelAsync()
-    {
-        await Dialog.CancelAsync();
-    }
-}
-```
+- **Provider absence is silent**: `IDialogService`, `IToastService`, tooltip, message bar, and key code services can appear to do nothing when their provider is missing.
+- **Autocomplete defaults to multiple selection**: set `Multiple="false"` only when a single result is required.
+- **Design tokens need JS interop**: wait for `OnAfterRenderAsync` before setting them programmatically.
+- **Icon names are types**: `Icons.[Variant].[Size].[Name]` is the supported pattern.
 
-2. Show the dialog via `IDialogService`:
+## API vocabulary to preserve
 
-```csharp
-[Inject] private IDialogService DialogService { get; set; } = default!;
+- The package is a `NuGet` package and auto-loads static assets; no manual tags are needed.
+- Provider-backed features are service-based and their providers MUST be in the layout.
+- Do not use the WRONG string-based or `InputSelect` pattern; use strongly-typed icons and object binding.
+- Multi-selection uses `SelectedOptions`; single selection uses `SelectedOption`.
+- `@using Icons = Microsoft.FluentUI.AspNetCore.Components.Icons` enables icons such as `Icons.Filled.Size20.Delete` with `Color.Error`.
+- Exact image API: `Icon.FromImageUrl("/path/to/image.png")`.
+- `FluentEditForm` belongs inside `FluentWizard`; normal forms use `EditForm OnValidSubmit="HandleSubmit"`.
+- Dialog examples may include `DialogService`, `DialogService.ShowDialogAsync`, `ShowEditDialog`, `SaveAsync`, `DialogService.ShowConfirmationAsync`, `DialogService.ShowSuccessAsync`, and `DialogService.ShowErrorAsync`.
+- Toast examples may include `ToastService`, `ToastService.ShowSuccess`, `ToastService.ShowError`, `ToastService.ShowWarning`, and `ToastService.ShowInfo`.
+- Avoid toggling `<FluentDialog>` visibility for service dialogs.
 
-private async Task ShowEditDialog()
-{
-    var dialog = await DialogService.ShowDialogAsync<EditPersonDialog, Person>(
-        person,
-        new DialogParameters
-        {
-            Title = "Edit Person",
-            PrimaryAction = "Save",
-            SecondaryAction = "Cancel",
-            Width = "500px",
-            PreventDismissOnOverlayClick = true,
-        });
+- Preserve exact tokens `@using` and `multi-selection` when explaining icon imports and multi-select binding.
 
-    var result = await dialog.Result;
-    if (!result.Cancelled)
-    {
-        var updatedPerson = result.Data as Person;
-    }
-}
-```
+## Output template
 
-For convenience dialogs:
-```csharp
-await DialogService.ShowConfirmationAsync("Are you sure?", "Yes", "No");
-await DialogService.ShowSuccessAsync("Done!");
-await DialogService.ShowErrorAsync("Something went wrong.");
-```
+```markdown
+## Fluent UI Blazor result
 
-### 8. Toast notifications
+**Status:** ready | needs provider | blocked
+**Target:** <component, file, or feature>
 
-```csharp
-[Inject] private IToastService ToastService { get; set; } = default!;
-
-ToastService.ShowSuccess("Item saved successfully");
-ToastService.ShowError("Failed to save");
-ToastService.ShowWarning("Check your input");
-ToastService.ShowInfo("New update available");
-```
-
-`FluentToastProvider` parameters: `Position` (default `TopRight`), `Timeout` (default 7000ms), `MaxToastCount` (default 4).
-
-### 9. Design tokens and themes work only after render
-
-Design tokens rely on JS interop. **Never set them in `OnInitialized`** — use `OnAfterRenderAsync`.
-
+### Implementation
 ```razor
-<FluentDesignTheme Mode="DesignThemeModes.System"
-                   OfficeColor="OfficeColor.Teams"
-                   StorageName="mytheme" />
+<paste-ready Razor or C# snippet>
 ```
 
-### 10. FluentEditForm vs EditForm
-
-`FluentEditForm` is only needed inside `FluentWizard` steps (per-step validation). For regular forms, use standard `EditForm` with Fluent form components:
-
-```razor
-<EditForm Model="@model" OnValidSubmit="HandleSubmit">
-    <DataAnnotationsValidator />
-    <FluentTextField @bind-Value="@model.Name" Label="Name" Required />
-    <FluentSelect Items="@options"
-                  OptionText="@(o => o.Label)"
-                  @bind-SelectedOption="@model.Category"
-                  Label="Category" />
-    <FluentValidationSummary />
-    <FluentButton Type="ButtonType.Submit" Appearance="Appearance.Accent">Save</FluentButton>
-</EditForm>
+### Checks
+- Package registration: <AddFluentUIComponents status>
+- Providers: <provider list and location>
+- Binding/API pattern: <SelectedOption, SelectedOptions, OnOptionsSearch, IDialogService, IToastService, or theme rule used>
 ```
 
-Use `FluentValidationMessage` and `FluentValidationSummary` instead of standard Blazor validation components for Fluent styling.
+## Quality gate
 
-## Reference files
-
-For detailed guidance on specific topics, see:
-
-- [Setup and configuration](references/SETUP.md)
-- [Layout and navigation](references/LAYOUT-AND-NAVIGATION.md)
-- [Data grid](references/DATAGRID.md)
-- [Theming](references/THEMING.md)
+- [ ] No manual core Fluent UI `<script>` or `<link>` tags were added.
+- [ ] `AddFluentUIComponents` and the required providers are present when service-backed components are used.
+- [ ] Object list components use `Items`, `OptionText`, `OptionValue`, and selected option bindings instead of child `<option>` markup.
+- [ ] Dialogs use `IDialogService` and `IDialogContentComponent<TData>` when service-backed.
+- [ ] Icons use the typed `Microsoft.FluentUI.AspNetCore.Components.Icons` package or `Icon.FromImageUrl`.
+- [ ] Theme token changes run after render, not in `OnInitialized`.
+- [ ] Any referenced bundled file exists and was read only when needed.

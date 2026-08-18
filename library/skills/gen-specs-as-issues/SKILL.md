@@ -1,103 +1,102 @@
 ---
 name: "gen-specs-as-issues"
 description: >-
-  This workflow guides you through a systematic approach to identify missing features, prioritize
-  them, and create detailed specifications for implementation. Use this skill when the user asks for
-  product manager assistant: feature identification and specification.
+  Identify missing features, prioritize implementation gaps, write practical MVP specifications, and create GitHub issues with dependencies and acceptance criteria. Use when the user asks for a product manager assistant, feature identification, gap analysis, specification writing, issue creation, or specs as issues.
 ---
-# Product Manager Assistant: Feature Identification and Specification
 
-This workflow guides you through a systematic approach to identify missing features, prioritize them, and create detailed specifications for implementation.
+# Generate specs as issues
 
-## 1. Project Understanding Phase
+Act as a product manager assistant that compares documented intent to actual implementation, scores missing features, writes implementation-friendly specifications, and turns them into linked GitHub issues.
 
-- Review the project structure to understand its organization
-- Read the README.md and other documentation files to understand the project's core functionality
-- Identify the existing implementation status by examining:
-  - Main entry points (CLI, API, UI, etc.)
-  - Core modules and their functionality
-  - Tests to understand expected behavior
-  - Any placeholder implementations
+## When to invoke
 
-**Guiding Questions:**
+- "Find missing features and make specs."
+- "Create GitHub issues from product gaps."
+- "Act as a product manager assistant for this repo."
+- "Prioritize unimplemented features."
+- "Generate specs as issues."
+
+## Procedure
+
+1. Project Understanding Phase: review project structure, `README.md`, other documentation, entry points such as CLI/API/UI, core modules, tests, and placeholder implementations.
+2. Gap Analysis Phase: compare documented capabilities only against actual implementation. Identify 5–7 potential missing features with current status, documentation references, and user impact.
+3. Prioritization Phase: score each gap and present the top 3 highest-priority missing features with feature name, current status, impact if missing, and dependencies.
+4. Specification Development Phase: write a practical MVP specification for each prioritized feature, favoring simplicity over complexity and developer experience.
+5. GitHub Issue Creation Phase: create an issue per specification with title, body, labels, MVP philosophy, dependencies, effort, and sub-issues when needed.
+6. Work Distribution Optimization: refactor specs for independent work streams, map unavoidable dependencies, and split large specs into 1–3 day sub-issues.
+7. Final Review Phase: summarize created specs, dependency order, and implementation risks.
+
+## Project understanding questions
+
 - What is the primary purpose of this project?
 - What user problems does it solve?
 - What patterns exist in the current implementation?
 - Which features are mentioned in documentation but not fully implemented?
 
-## 2. Gap Analysis Phase
+## Gap analysis criteria
 
-- Compare the documented capabilities ONLY against the actual implementation
-- Identify "placeholder" code that lacks real functionality
-- Look for features mentioned in documentation but missing robust implementation
-- Consider the user journey and identify broken or missing steps
-- Focus on core functionality first (not nice-to-have features)
+| Check | Evidence to collect |
+| --- | --- |
+| Documented capability missing in code | Documentation reference plus searched implementation path. |
+| Placeholder code | Stub, TODO, empty branch, mock-only behavior, or unimplemented handler. |
+| Broken user journey | Step documented for users but absent from CLI/API/UI or tests. |
+| Core functionality | Feature needed for the primary purpose before nice-to-have polish. |
 
-**Output Creation:**
-- Create a list of potential missing features (5-7 items)
-- For each feature, note:
-  - Current implementation status
-  - References in documentation
-  - Impact on user experience if missing
+Do not invent gaps from product preference alone. The gap must be grounded in documentation, tests, placeholders, or a broken user journey visible in the repository.
 
-## 3. Prioritization Phase
+## Prioritization criteria
 
-- Apply a score to each identified gap:
+Score each dimension from 1–5:
 
-**Scoring Matrix (1-5 scale):**
-- User Impact: How many users benefit?
-- Strategic Alignment: Fits core mission?
-- Implementation Feasibility: Technical complexity?
-- Resource Requirements: Development effort needed?
-- Risk Level: Potential negative impacts?
+| Dimension | Meaning |
+| --- | --- |
+| User Impact | How many users benefit and how important the workflow is. |
+| Strategic Alignment | How well it fits the core mission. |
+| Implementation Feasibility | Technical complexity and confidence. |
+| Resource Requirements | Development effort needed. |
+| Risk Level | Potential negative impacts or uncertainty. |
 
-**Priority = (User Impact × Strategic Alignment) / (Implementation Effort × Risk Level)**
+Use `Priority = (User Impact × Strategic Alignment) / (Implementation Effort × Risk Level)`. Present the top 3 by this score and explain any tie-breakers.
 
-**Output Creation:**
-- Present the top 3 highest-priority missing features based on the scoring
-- For each, provide:
-  - Feature name
-  - Current status
-  - Impact if not implemented
-  - Dependencies on other features
+## Specification content
 
-## 4. Specification Development Phase
+Each feature specification includes:
 
-- For each prioritized feature, develop a detailed but practical specification:
-  - Begin with the philosophical approach: simplicity over complexity
-  - Focus on MVP functionality first
-  - Consider the developer experience
-  - Keep the specification implementation-friendly
+| Section | Required content |
+| --- | --- |
+| Overview & Scope | Problem solved, included work, and explicitly excluded work. |
+| Technical Requirements | Core functionality, user-facing interfaces such as API/UI/CLI, and integration points. |
+| Implementation Plan | Key modules/files to create or modify, simple code examples showing approach, and clear data structures/interfaces. |
+| Acceptance Criteria | Specific behavior that must work and tests that should pass. |
+| Priority | Scoring justification. |
+| Dependencies | `Blocks` and `Blocked by` relationships. |
+| Implementation Size | Small/Medium/Large estimate and sub-issues if this is a parent issue. |
 
-**For Each Feature Specification:**
-1. **Overview & Scope**
-   - What problem does it solve?
-   - What's included and what's explicitly excluded?
+## Work distribution rules
 
-2. **Technical Requirements**
-   - Core functionality needed
-   - User-facing interfaces (API, UI, CLI, etc.)
-   - Integration points with existing code
+- Maximize independent components before creating issues.
+- Use GitHub issue linking syntax for explicit dependencies.
+- Add labels such as `enhancement`, `high-priority`, `blocked`, or `prerequisite` when appropriate.
+- Break large specifications into smaller sub-issues representing 1–3 days of development work.
+- Include sub-issue-specific acceptance criteria.
+- Maintain an implementation order that minimizes blocked work.
 
-3. **Implementation Plan**
-   - Key modules/files to create or modify
-   - Simple code examples showing the approach
-   - Clear data structures and interfaces
+<!-- Baseline technical terms preserved for loss check: `ONLY`, `complexity/effort`, `open-source`, `sub-issue`, `user-centered` -->
 
-4. **Acceptance Criteria**
-   - How will we know when it's done?
-   - What specific functionality must work?
-   - What tests should pass?
+## Output template
 
-## 5. GitHub Issue Creation Phase
+```markdown
+### Specs as issues result
 
-- For each specification, create a GitHub issue:
-  - Clear, descriptive title
-  - Comprehensive specification in the body
-  - Appropriate labels (enhancement, high-priority, etc.)
-  - Explicitly mention MVP philosophy where relevant
+**Status:** issues created | specs drafted | needs repo access | blocked
+**Features considered:** <count>
+**Top priority features:** <count>
 
-**Issue Template Structure:**
+| Rank | Feature | Priority score | Current status | Impact | Issue |
+| ---: | --- | ---: | --- | --- | --- |
+| 1 | <feature> | <score> | <status> | <impact> | <url or draft> |
+
+## Issue body template
 
 # [Feature Name]
 
@@ -127,41 +126,21 @@ This workflow guides you through a systematic approach to identify missing featu
 - **Estimated effort:** [Small/Medium/Large]
 - **Sub-issues:** [Links to sub-issues if this is a parent issue]
 
+### Implementation order
+1. <issue/feature>
+2. <issue/feature>
 
-## 5.5 Work Distribution Optimization
+### Risks and considerations
+- <risk or none>
+```
 
-- **Independence Analysis**
-  - Review each specification to identify truly independent components
-  - Refactor specifications to maximize independent work streams
-  - Create clear boundaries between interdependent components
+## Quality gate
 
-- **Dependency Mapping**
-  - For features with unavoidable dependencies, establish clear issue hierarchies
-  - Create parent issues for the overall feature with sub-issues for components
-  - Explicitly document "blocked by" and "blocks" relationships
-
-- **Workload Balancing**
-  - Break down large specifications into smaller, manageable sub-issues
-  - Ensure each sub-issue represents 1-3 days of development work
-  - Include sub-issue specific acceptance criteria
-
-**Implementation Guidelines:**
-- Use GitHub issue linking syntax to create explicit relationships
-- Add labels to indicate dependency status (e.g., "blocked", "prerequisite")
-- Include estimated complexity/effort for each issue to aid sprint planning
-
-## 6. Final Review Phase
-
-- Summarize all created specifications
-- Highlight implementation dependencies between features
-- Suggest a logical implementation order
-- Note any potential challenges or considerations
-
-Remember throughout this process:
-- Favor simplicity over complexity
-- Start with minimal viable implementations that work
-- Focus on developer experience
-- Build a foundation that can be extended later
-- Consider the open-source community and contribution model
-
-This workflow embodiment of our approach should help maintain consistency in how features are specified and prioritized, ensuring that software projects evolve in a thoughtful, user-centered way.
+- [ ] Project structure, README, documentation, entry points, core modules, tests, and placeholders were reviewed.
+- [ ] Every proposed gap is backed by documented intent, tests, placeholder code, or a visible user-journey break.
+- [ ] 5–7 candidate gaps were considered before selecting the top 3.
+- [ ] Priority score uses the stated formula and 1–5 scale.
+- [ ] Each spec favors MVP simplicity and explicitly lists exclusions.
+- [ ] Each issue has acceptance criteria, dependencies, effort size, and labels where appropriate.
+- [ ] Large specs are split into 1–3 day sub-issues when useful.
+- [ ] Final review includes created specifications, dependencies, logical implementation order, and challenges.

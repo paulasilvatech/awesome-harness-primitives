@@ -5,7 +5,18 @@ description: >-
   review each change, and resolve remaining findings with targeted edits or user decisions. Use this
   skill when the user asks for inputs.
 ---
-# Ruff Recursive Fix
+
+# Ruff recursive fix
+
+Run Ruff linting and formatting in a scoped iterative loop that applies safe fixes first, optionally applies unsafe fixes, reviews diffs, manually remediates remaining findings, and reports any justified suppressions or unresolved decisions.
+
+## When to invoke
+
+- "Run ruff-recursive-fix on the whole repo with default config."
+- "Fix Ruff findings in src/models."
+- "Run Ruff with select F,E9,I and no unsafe fixes."
+- "Apply Ruff safe fixes and review the diff."
+- "Resolve remaining Ruff findings with targeted edits."
 
 ## Overview
 
@@ -21,7 +32,7 @@ It supports:
 - Recursive repetition until findings are resolved or require a decision.
 - Judicious use of inline `# noqa` only when suppression is justified.
 
-## Inputs
+## Input collection
 
 Collect these inputs before running:
 
@@ -173,7 +184,7 @@ When no progress is detected:
 2. Present valid options and trade-offs.
 3. Ask the user to choose.
 
-## Quality Gates
+## Original quality gates
 
 Before declaring completion:
 
@@ -183,7 +194,7 @@ Before declaring completion:
 - Any unsafe fix with possible behavioral impact is highlighted to the user.
 - Ruff formatting is executed in every iteration.
 
-## Output Contract
+## Original output contract
 
 At the end of execution, report:
 
@@ -200,3 +211,34 @@ At the end of execution, report:
 - "Run ruff-recursive-fix only on src/models, ignore DOC rules."
 - "Run ruff-recursive-fix on tests with select F,E9,I and no unsafe fixes."
 - "Run ruff-recursive-fix on src/data and ask me before adding any noqa."
+
+## Output template
+
+```markdown
+## Ruff recursive fix result
+
+**Status:** clean | fixed | blocked | needs decision
+**Scope:** `{{target_path_or_repository}}`
+**Ruff command:** `{{ruff_cmd}} check {{options}}`
+**Iterations:** {{count}}
+
+| Category | Result |
+| --- | --- |
+| Safe autofixes | {{count_or_none}} |
+| Unsafe autofixes | {{count_or_skipped}} |
+| Manual fixes | {{files_or_none}} |
+| Suppressions | {{rule_and_rationale_or_none}} |
+| Remaining findings | {{findings_or_none}} |
+
+### Validation
+- `{{ruff_cmd}} format {{target_path}}`: pass | fail
+- `{{ruff_cmd}} check {{target_path}} {{options}}`: pass | fail
+```
+
+## Quality gate
+
+- [ ] The same resolved `ruff_cmd` prefix is used for every `check` and `format` command.
+- [ ] Safe autofixes run before unsafe autofixes.
+- [ ] Every fix pass is followed by diff review, Ruff format, and a fresh Ruff check.
+- [ ] Unsafe fixes are skipped when `allow_unsafe_fixes=false` and highlighted when applied.
+- [ ] Every `# noqa` suppression is narrow, rule-specific where possible, and justified.

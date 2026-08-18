@@ -1,85 +1,65 @@
 ---
-name: "freecad-scripts"
+name: freecad-scripts
 description: >-
-  Expert skill for writing FreeCAD Python scripts, macros, and automation. Use when asked to create
-  FreeCAD models, parametric objects, Part/Mesh/Sketcher scripts, workbench tools, GUI dialogs with
-  PySide, Coin3D scenegraph manipulation, or any FreeCAD Python API task. Covers FreeCAD scripting
-  basics, geometry creation, FeaturePython objects, interface tools, and macro development.
+  Write FreeCAD Python scripts, macros, parametric FeaturePython objects, Part/Mesh/Sketcher geometry, PySide GUI tools, Coin3D/Pivy scenegraph code, workbench commands, and CAD automation. Use when asked to create FreeCAD models, automate geometry, convert mesh and solid data, script FEM/Path/TechDraw, or debug FreeCAD Python API tasks.
 ---
-# FreeCAD Scripts
 
-Expert skill for generating production-quality Python scripts for the FreeCAD CAD application. Interprets shorthand, quasi-code, and natural language descriptions of 3D modeling tasks and translates them into correct FreeCAD Python API calls.
+# FreeCAD scripts
 
-## When to Use This Skill
+Translate natural language CAD tasks into production-quality FreeCAD Python code that handles documents, geometry, GUI availability, recompute, selection, and macro execution safely.
 
-- Writing Python scripts for FreeCAD's built-in console or macro system
-- Creating or manipulating 3D geometry (Part, Mesh, Sketcher, Path, FEM)
-- Building parametric FeaturePython objects with custom properties
-- Developing GUI tools using PySide/Qt within FreeCAD
-- Manipulating the Coin3D scenegraph via Pivy
-- Creating custom workbenches or Gui Commands
-- Automating repetitive CAD operations with macros
-- Converting between mesh and solid representations
-- Scripting FEM analyses, raytracing, or drawing exports
+## When to invoke
 
-## Prerequisites
+- "Write a FreeCAD macro to create this model."
+- "Build a parametric FeaturePython object."
+- "Script Part, Mesh, or Sketcher geometry in FreeCAD."
+- "Create a PySide dialog or workbench command for FreeCAD."
+- "Automate FEM, Path, TechDraw, or Coin3D scenegraph work."
 
-- FreeCAD installed (0.19+ recommended; 0.21+/1.0+ for latest API)
-- Python 3.x (bundled with FreeCAD)
-- For GUI work: PySide2 (bundled with FreeCAD)
-- For scenegraph: Pivy (bundled with FreeCAD)
+## Prerequisites and context
 
-## FreeCAD Python Environment
+- FreeCAD installed; 0.19+ is workable, 0.21+/1.0+ is preferred for newer APIs.
+- Python 3.x is bundled with FreeCAD.
+- PySide2 and Pivy are bundled for GUI and Coin3D work in typical FreeCAD installs.
+- Guard GUI-only code with `if FreeCAD.GuiUp:` so macros can fail gracefully in headless execution.
 
-FreeCAD embeds a Python interpreter. Scripts run in an environment where these key modules are available:
+## FreeCAD Python environment
+
+Key modules and aliases:
 
 ```python
-import FreeCAD          # Core module (also aliased as 'App')
-import FreeCADGui       # GUI module (also aliased as 'Gui') — only in GUI mode
-import Part             # Part workbench — BRep/OpenCASCADE shapes
-import Mesh             # Mesh workbench — triangulated meshes
-import Sketcher         # Sketcher workbench — 2D constrained sketches
-import Draft            # Draft workbench — 2D drawing tools
+import FreeCAD          # core module, often aliased as App
+import FreeCADGui       # GUI module, often aliased as Gui; GUI mode only
+import Part             # BRep/OpenCASCADE shapes
+import Mesh             # triangulated meshes
+import Sketcher         # 2D constrained sketches
+import Draft            # 2D drawing tools
 import Arch             # Arch/BIM workbench
 import Path             # Path/CAM workbench
 import FEM              # FEM workbench
-import TechDraw         # TechDraw workbench (replaces Drawing)
-import BOPTools         # Boolean operations
-import CompoundTools    # Compound shape utilities
+import TechDraw         # replaces Drawing
+import BOPTools         # boolean operations
+import CompoundTools    # compound shape utilities
 ```
 
-### The FreeCAD Document Model
+Document model essentials:
 
 ```python
-# Create or access a document
 doc = FreeCAD.newDocument("MyDoc")
 doc = FreeCAD.ActiveDocument
-
-# Add objects
 box = doc.addObject("Part::Box", "MyBox")
 box.Length = 10.0
 box.Width = 10.0
 box.Height = 10.0
-
-# Recompute
 doc.recompute()
-
-# Access objects
 obj = doc.getObject("MyBox")
-obj = doc.MyBox  # Attribute access also works
-
-# Remove objects
+obj = doc.MyBox
 doc.removeObject("MyBox")
 ```
 
-## Bundled Resources
-
-- [FreeCAD implementation patterns](references/freecad-implementation-patterns.md) — For detailed FreeCAD API concepts, FeaturePython, GUI, Coin3D, workbench, or reusable code patterns, read this reference.
-
-## Macro Best Practices
+## Macro pattern
 
 ```python
-# Standard macro header
 # -*- coding: utf-8 -*-
 # FreeCAD Macro: MyMacro
 # Description: Brief description of what the macro does
@@ -91,7 +71,6 @@ import FreeCAD
 import Part
 from FreeCAD import Base
 
-# Guard for GUI availability
 if FreeCAD.GuiUp:
     import FreeCADGui
     from PySide2 import QtWidgets, QtCore
@@ -99,65 +78,120 @@ if FreeCAD.GuiUp:
 def main():
     doc = FreeCAD.ActiveDocument
     if doc is None:
-        FreeCAD.Console.PrintError("No active document\n")
+        FreeCAD.Console.PrintError("No active document
+")
         return
-
     if FreeCAD.GuiUp:
         sel = FreeCADGui.Selection.getSelection()
         if not sel:
-            FreeCAD.Console.PrintWarning("No objects selected\n")
-
-    # ... macro logic ...
-
+            FreeCAD.Console.PrintWarning("No objects selected
+")
     doc.recompute()
-    FreeCAD.Console.PrintMessage("Macro completed\n")
+    FreeCAD.Console.PrintMessage("Macro completed
+")
 
 if __name__ == "__main__":
     main()
 ```
 
-### Selection Handling
+Selection and console APIs to preserve:
 
 ```python
-# Get selected objects
-sel = FreeCADGui.Selection.getSelection()           # List of objects
-sel_ex = FreeCADGui.Selection.getSelectionEx()       # Extended (sub-elements)
-
+sel = FreeCADGui.Selection.getSelection()
+sel_ex = FreeCADGui.Selection.getSelectionEx()
 for selobj in sel_ex:
     obj = selobj.Object
     for sub in selobj.SubElementNames:
-        print(f"{obj.Name}.{sub}")
-        shape = obj.getSubObject(sub)  # Get sub-shape
-
-# Select programmatically
+        shape = obj.getSubObject(sub)
 FreeCADGui.Selection.addSelection(doc.MyBox)
 FreeCADGui.Selection.addSelection(doc.MyBox, "Face1")
 FreeCADGui.Selection.clearSelection()
+FreeCAD.Console.PrintMessage("Info message
+")
+FreeCAD.Console.PrintWarning("Warning message
+")
+FreeCAD.Console.PrintError("Error message
+")
+FreeCAD.Console.PrintLog("Debug/log message
+")
 ```
 
-### Console Output
+## Compensation rules
 
-```python
-FreeCAD.Console.PrintMessage("Info message\n")
-FreeCAD.Console.PrintWarning("Warning message\n")
-FreeCAD.Console.PrintError("Error message\n")
-FreeCAD.Console.PrintLog("Debug/log message\n")
+| User shorthand | FreeCAD API action |
+| --- | --- |
+| box | `Part.makeBox()` |
+| cylinder | `Part.makeCylinder()` |
+| sphere | `Part.makeSphere()` |
+| merge, combine, join | `.fuse()` |
+| subtract, cut, remove | `.cut()` |
+| intersect | `.common()` |
+| round edges, fillet | `.makeFillet()` |
+| bevel, chamfer | `.makeChamfer()` |
+| no document specified | `doc = FreeCAD.ActiveDocument or FreeCAD.newDocument()` |
+| no units specified | assume millimeters |
+| quick display | `Part.show(shape, "Name")` |
+| persistent named object | `doc.addObject("Part::Feature", "Name")` |
+
+Always call `doc.recompute()` after modifications.
+
+## Progressive disclosure and bundled resources
+
+- `references/freecad-implementation-patterns.md`: detailed FreeCAD API concepts, FeaturePython, GUI, Coin3D, workbench, and reusable patterns.
+- `references/scripting-fundamentals.md`: document model, console, and core scripting.
+- `references/geometry-and-shapes.md`: Part, Mesh, Sketcher, and topology.
+- `references/parametric-objects.md`: FeaturePython, properties, and scripted objects.
+- `references/gui-and-interface.md`: PySide, dialogs, task panels, and Coin3D.
+- `references/workbenches-and-advanced.md`: workbenches, macros, FEM, Path, and recipes.
+
+## Compatibility vocabulary
+
+Preserve these legacy terms, API names, command placeholders, and literal phrases when applying or migrating this skill:
+
+- `PySide/Qt`
+- `bevel/chamfer`
+- `built-in`
+- `edges/fillet`
+- `merge/combine/join`
+- `quasi-code`
+- `sub-elements`
+- `sub-shape`
+- `subtract/cut/remove`
+- `topic-organized`
+
+## Output template
+
+```markdown
+## FreeCAD script result
+
+**Status:** script-created | guidance-only | blocked
+**Runtime:** FreeCAD Python macro | console snippet | workbench command
+
+### Files or code
+- `<path or snippet>`: <purpose>
+
+### API coverage
+| Area | APIs used | Notes |
+| --- | --- | --- |
+| Document | `FreeCAD.ActiveDocument`, `doc.recompute()` | <notes> |
+| Geometry | `Part.makeBox()` / other APIs | <notes> |
+| GUI | `FreeCAD.GuiUp` / PySide / selection | <notes> |
+
+### Validation
+- <how to run in FreeCAD and expected result>
 ```
 
-## Compensation Rules (Quasi-Coder Integration)
+## Quality gate
 
-When interpreting shorthand or quasi-code for FreeCAD scripts:
-
-1. **Terminology mapping**: "box" → `Part.makeBox()`, "cylinder" → `Part.makeCylinder()`, "sphere" → `Part.makeSphere()`, "merge/combine/join" → `.fuse()`, "subtract/cut/remove" → `.cut()`, "intersect" → `.common()`, "round edges/fillet" → `.makeFillet()`, "bevel/chamfer" → `.makeChamfer()`
-2. **Implicit document**: If no document handling is mentioned, wrap in standard `doc = FreeCAD.ActiveDocument or FreeCAD.newDocument()`
-3. **Units assumption**: Default to millimeters unless stated otherwise
-4. **Recompute**: Always call `doc.recompute()` after modifications
-5. **GUI guard**: Wrap GUI-dependent code in `if FreeCAD.GuiUp:` when the script may run headless
-6. **Part.show()**: Use `Part.show(shape, "Name")` for quick display, or `doc.addObject("Part::Feature", "Name")` for named persistent objects
+- [ ] The script imports only FreeCAD modules needed for the task.
+- [ ] GUI-dependent code is guarded with `if FreeCAD.GuiUp:`.
+- [ ] Document creation, object naming, and `doc.recompute()` are handled.
+- [ ] Units default to millimeters unless the user specified otherwise.
+- [ ] Geometry operations use the correct Part, Mesh, Sketcher, Draft, Arch, Path, FEM, TechDraw, BOPTools, or CompoundTools APIs.
+- [ ] Console messages use `FreeCAD.Console.PrintMessage`, `PrintWarning`, `PrintError`, or `PrintLog`.
+- [ ] Bundled references are used for FeaturePython, GUI, Coin3D, workbench, or advanced patterns when needed.
 
 ## References
-
-### Primary Links
 
 - [Writing Python code](https://wiki.freecad.org/Manual:A_gentle_introduction#Writing_Python_code)
 - [Manipulating FreeCAD objects](https://wiki.freecad.org/Manual:A_gentle_introduction#Manipulating_FreeCAD_objects)
@@ -170,13 +204,3 @@ When interpreting shorthand or quasi-code for FreeCAD scripts:
 - [Python scripting tutorial](https://wiki.freecad.org/Python_scripting_tutorial)
 - [FreeCAD scripting basics](https://wiki.freecad.org/FreeCAD_Scripting_Basics)
 - [Gui Command](https://wiki.freecad.org/Gui_Command)
-
-### Bundled Reference Documents
-
-See the [references/](references/) directory for topic-organized guides:
-
-1. [scripting-fundamentals.md](references/scripting-fundamentals.md) — Core scripting, document model, console
-2. [geometry-and-shapes.md](references/geometry-and-shapes.md) — Part, Mesh, Sketcher, topology
-3. [parametric-objects.md](references/parametric-objects.md) — FeaturePython, properties, scripted objects
-4. [gui-and-interface.md](references/gui-and-interface.md) — PySide, dialogs, task panels, Coin3D
-5. [workbenches-and-advanced.md](references/workbenches-and-advanced.md) — Workbenches, macros, FEM, Path, recipes

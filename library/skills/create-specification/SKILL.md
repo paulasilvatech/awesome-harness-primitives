@@ -1,30 +1,44 @@
 ---
 name: "create-specification"
 description: >-
-  Create a new specification file for the solution, optimized for Generative AI consumption. Use this
-  skill when the user asks for best practices for ai-ready specifications.
+  Create a new AI-ready specification file in /spec/ that defines solution requirements, constraints, interfaces, dependencies, acceptance criteria, test strategy, and validation criteria. Use this skill when the user asks to create a specification, draft an AI-ready spec, define requirements, or apply best practices for AI-ready specifications.
 ---
-# Create Specification
 
-Your goal is to create a new specification file for `${input:SpecPurpose}`.
+# Create specification
 
-The specification file must define the requirements, constraints, and interfaces for the solution components in a manner that is clear, unambiguous, and structured for effective use by Generative AIs. Follow established documentation standards and ensure the content is machine-readable and self-contained.
+Create a new self-contained specification that gives humans and Generative AIs precise requirements, constraints, interfaces, examples, and validation criteria for a solution component.
 
-## Best Practices for AI-Ready Specifications
+## When to invoke
 
-- Use precise, explicit, and unambiguous language.
-- Clearly distinguish between requirements, constraints, and recommendations.
-- Use structured formatting (headings, lists, tables) for easy parsing.
-- Avoid idioms, metaphors, or context-dependent references.
-- Define all acronyms and domain-specific terms.
-- Include examples and edge cases where applicable.
-- Ensure the document is self-contained and does not rely on external context.
+- "Create a specification for this feature."
+- "Draft an AI-ready spec for the data contract."
+- "Write /spec/spec-tool-exporter.md."
+- "Define requirements and acceptance criteria for this design."
+- "Apply best practices for AI-ready specifications."
 
-The specification should be saved in the `/spec/` directory and named according to the following convention: `spec-[a-z0-9-]+.md`, where the name should be descriptive of the specification's content and starting with the highlevel purpose, which is one of [schema, tool, data, infrastructure, process, architecture, or design].
+## Inputs
 
-The specification file must be formatted in well formed Markdown.
+Use `$ARGUMENTS` as the specification purpose, target filename, and known requirements. If the purpose is missing, infer it from the user's feature description; if the filename is missing, derive one from the approved naming convention.
 
-Specification files must follow the template below, ensuring that all sections are filled out appropriately. The front matter for the markdown should be structured correctly as per the example following:
+## AI-ready specification rules
+
+| Rule | Apply it by |
+| --- | --- |
+| Precise language | Use explicit, testable statements; avoid idioms, metaphors, and context-dependent references. |
+| Clear classification | Separate requirements, security requirements, constraints, guidelines, patterns, interfaces, and recommendations. |
+| Structured formatting | Use headings, lists, tables, and code blocks for reliable parsing. |
+| Defined terms | Define all acronyms, abbreviations, and domain-specific terms. |
+| Examples and edge cases | Include representative success, failure, boundary, and unusual cases. |
+| Self-contained context | Do not rely on external context that is not referenced or summarized in the spec. |
+| Well formed Markdown | Keep frontmatter, headings, tables, and code fences valid. |
+
+## File naming
+
+Create the specification under `/spec/` and name it `spec-[a-z0-9-]+.md`. The descriptive part should start with one high-level purpose: `schema`, `tool`, `data`, `infrastructure`, `process`, `architecture`, or `design`.
+
+## Specification template
+
+Use this exact section order and fill every section appropriately:
 
 ```md
 ---
@@ -88,7 +102,7 @@ tags: [Optional: List of relevant tags or categories, e.g., `infrastructure`, `p
 
 ## 8. Dependencies & External Integrations
 
-[Define the external systems, services, and architectural dependencies required for this specification. Focus on **what** is needed rather than **how** it's implemented. Avoid specific package or library versions unless they represent architectural constraints.]
+[Define the external systems, services, and architectural dependencies required for this specification. Focus on what is needed rather than how it is implemented. Avoid specific package or library versions unless they represent architectural constraints.]
 
 ### External Systems
 - **EXT-001**: [External system name] - [Purpose and integration type]
@@ -112,9 +126,9 @@ tags: [Optional: List of relevant tags or categories, e.g., `infrastructure`, `p
 
 ## 9. Examples & Edge Cases
 
-    ```code
-    // Code snippet or data example demonstrating the correct application of the guidelines, including edge cases
-    ```
+```code
+// Code snippet or data example demonstrating the correct application of the guidelines, including edge cases
+```
 
 ## 10. Validation Criteria
 
@@ -124,5 +138,51 @@ tags: [Optional: List of relevant tags or categories, e.g., `infrastructure`, `p
 
 [Link to related spec 1]
 [Link to relevant external documentation]
-
 ```
+
+## Procedure
+
+1. Determine the high-level purpose: `schema`, `tool`, `data`, `infrastructure`, `process`, `architecture`, or `design`.
+2. Create a filename under `/spec/` using `spec-[a-z0-9-]+.md`.
+3. Fill the frontmatter with a concise title and `date_created` using the current date.
+4. Define scope, assumptions, terms, requirements, security requirements, constraints, guidelines, patterns, interfaces, acceptance criteria, test strategy, rationale, dependencies, examples, validation, and related reading.
+5. Ensure each requirement has at least one acceptance criterion and validation criterion.
+6. Save the file and report the path plus unresolved assumptions.
+
+## Legacy placeholders
+
+Older invocations may supply `${input:SpecPurpose}` as the purpose placeholder and ask for an `ai-ready`, machine-readable specification. Replace placeholders with concrete values before saving the new spec.
+
+## Output template
+
+```markdown
+## Specification creation result
+
+**Status:** created | needs clarification | blocked
+**Specification:** `/spec/spec-<purpose-name>.md`
+**Purpose:** schema | tool | data | infrastructure | process | architecture | design
+
+### Summary
+<one or two sentences describing the specification created>
+
+### Requirement coverage
+| Requirement ID | Acceptance criteria | Validation criteria |
+| --- | --- | --- |
+| `REQ-001` | `<AC IDs>` | `<validation summary>` |
+
+### Validation
+- Filename convention `spec-[a-z0-9-]+.md`: pass | fail
+- Required sections present: pass | fail
+- Requirements have acceptance criteria: pass | fail
+- Markdown and frontmatter well formed: pass | fail
+```
+
+## Quality gate
+
+- [ ] The spec was created under `/spec/` with `spec-[a-z0-9-]+.md`.
+- [ ] The descriptive name starts with `schema`, `tool`, `data`, `infrastructure`, `process`, `architecture`, or `design`.
+- [ ] Frontmatter includes a concise title and `date_created`.
+- [ ] All 11 required body sections are present and populated.
+- [ ] Requirements, security requirements, constraints, guidelines, patterns, acceptance criteria, and dependencies use clear IDs.
+- [ ] Every requirement has testable acceptance and validation coverage.
+- [ ] The document is self-contained, unambiguous, and well formed Markdown.

@@ -9,7 +9,18 @@ description: >-
   "set the priority", "set the start date", "link issues", "add dependency", "blocked by", "blocking",
   or any GitHub issue management task.
 ---
-# GitHub Issues
+
+# GitHub issues
+
+Create, update, query, and organize GitHub issues with MCP read tools and `gh api` write operations, including issue types, labels, milestones, sub-issues, dependencies, project fields, and image embeds.
+
+## When to invoke
+
+- "Create an issue for this bug."
+- "File a feature request in GitHub."
+- "Update issue 123 and set the priority."
+- "Add a blocked-by relationship between these issues."
+- "Link this task to a milestone and project field."
 
 Manage GitHub issues using the `@modelcontextprotocol/server-github` MCP server.
 
@@ -206,3 +217,45 @@ The following features require REST or GraphQL APIs beyond the basic MCP tools. 
 | Projects V2 | Project boards, progress reports, field management | [references/projects.md](references/projects.md) |
 | Issue fields | Custom metadata: dates, priority, text, numbers (private preview) | [references/issue-fields.md](references/issue-fields.md) |
 | Images in issues | Embedding images in issue bodies and comments via CLI | [references/images.md](references/images.md) |
+
+## Progressive disclosure and bundled resources
+
+- `references/templates.md`: issue body templates for Bug Report, Feature Request, and Task.
+- `references/search.md`: advanced search syntax and issue field filters.
+- `references/sub-issues.md`: parent and sub-issue workflows.
+- `references/milestones.md`: milestone CRUD and issue assignment.
+- `references/dependencies.md`: blocked-by and blocking relationships.
+- `references/issue-types.md`: advanced issue type operations.
+- `references/projects.md`: Projects V2 field and board workflows.
+- `references/issue-fields.md`: custom metadata fields.
+- `references/images.md`: embedding images in issue bodies and comments.
+
+## Output template
+
+```markdown
+## GitHub issue result
+
+**Status:** created | updated | queried | blocked
+**Repository:** `{{owner}}/{{repo}}`
+**Issue:** `#{{number}}` {{html_url}}
+
+### Changes
+| Field | Value |
+| --- | --- |
+| Title | {{title}} |
+| Type | {{type_or_none}} |
+| Labels | {{labels_or_none}} |
+| Assignees | {{assignees_or_none}} |
+| Milestone | {{milestone_or_none}} |
+
+### Commands or tools
+- `{{mcp_read_tool_or_gh_api_command}}`
+```
+
+## Quality gate
+
+- [ ] Repository context is confirmed before creating or updating an issue.
+- [ ] Issue content uses the matching template from `references/templates.md`.
+- [ ] Issue types are preferred over redundant categorization labels when available.
+- [ ] `gh api` is used for writes that require unsupported `gh issue create` fields such as `type`.
+- [ ] The final response includes the issue number and URL or a clear blocker.

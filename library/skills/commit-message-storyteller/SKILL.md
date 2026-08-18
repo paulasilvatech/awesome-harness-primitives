@@ -1,67 +1,60 @@
 ---
 name: "commit-message-storyteller"
 description: >-
-  Analyzes git diffs or staged changes and generates narrative commit messages that explain WHY a
-  change was made, not just what changed — following Conventional Commits format. Use when asked to
-  "write a commit message", "generate a commit", "describe my changes", "what should I commit this
-  as", "commit this", "summarize my diff", or "help me commit". Works with git diff output, staged
-  files, or plain descriptions of changes.
+  Analyze git diffs, staged changes, or plain change descriptions and generate narrative Conventional Commits messages that explain why the change matters. Use when asked to "write a commit message", "generate a commit", "describe my changes", "what should I commit this as", "commit this", "summarize my diff", or "help me commit".
 ---
-# Commit Message Storyteller
 
-Transforms raw git diffs and change descriptions into clear, story-driven commit messages that follow the [Conventional Commits](https://www.conventionalcommits.org/) specification. Instead of "update file.js", you get messages that communicate intent, context, and impact.
+# Commit message storyteller
 
-## When to Use This Skill
+Transforms git diffs, staged files, modified file lists, or plain descriptions into copyable Conventional Commits messages with a clear subject, an optional story-driven body, and issue or breaking-change footers.
 
-- User says "write a commit message", "help me commit", or "generate a commit"
-- User pastes a git diff or describes code changes
-- User says "what should I commit this as?" or "summarize my diff"
-- User wants better commit history for their team or open-source project
-- User is preparing a pull request and wants meaningful commit messages
+## When to invoke
 
-## Prerequisites
+- "Write a commit message for this diff."
+- "What should I commit this as?"
+- "Summarize my staged changes as a Conventional Commit."
+- "Help me commit with a message that explains why."
+- "Generate multiple commit messages if this diff should be split."
 
-Have at least one of the following ready:
-- Output from `git diff` or `git diff --staged`
-- A description of what you changed and why
-- A list of modified files
+## Prerequisites and context
 
-## How It Works
+Have at least one source of change context:
 
-### Step 1: Gather the Change Context
+- `git diff` for unstaged working tree changes.
+- `git diff --staged` or `git diff --cached` for staged files.
+- A plain-language description of what changed and why.
+- A list of modified files, functions, symbols, or issue numbers.
 
-Ask the user (or infer from the diff) for:
+Use https://www.conventionalcommits.org/ as the specification source. Read `references/conventional-commits-guide.md` when examples or scope guidance are needed.
 
-1. **What changed** — files, functions, logic affected
-2. **Why it changed** — bug fix, new feature, refactor, performance, etc.
-3. **Who/what triggered it** — issue number, user request, tech debt, etc.
+## Procedure
 
-If the user provides a raw `git diff`, extract this context automatically from the diff.
+1. Gather the change context: what changed, why it changed, and who or what triggered it.
+2. Infer or confirm whether the diff is one logical change or several unrelated changes.
+3. Select the Conventional Commits type from the table below.
+4. Write the subject in imperative mood, with an optional scope only when it clarifies the affected area.
+5. Add a body only when it tells the story: the previous problem, the reason for the change, or the impact.
+6. Add footers for issues and breaking changes.
+7. Return copyable messages and a one-line explanation of the story told.
 
-### Step 2: Identify the Commit Type
+## Commit type selection
 
-Map the change to a Conventional Commits type using this guide:
+| Type | Use when the change primarily |
+| --- | --- |
+| `feat` | Adds a new feature or capability. |
+| `fix` | Corrects a bug or incorrect behavior. |
+| `refactor` | Restructures code without changing behavior. |
+| `perf` | Improves performance. |
+| `docs` | Changes documentation only. |
+| `style` | Changes formatting, whitespace, or semicolons with no logic change. |
+| `test` | Adds or updates tests. |
+| `chore` | Changes build process, dependencies, generated files, or routine config. |
+| `ci` | Changes CI/CD pipelines or automation. |
+| `revert` | Reverts a previous commit. |
 
-| Type | Use When |
-|------|----------|
-| `feat` | A new feature or capability is added |
-| `fix` | A bug or incorrect behavior is corrected |
-| `refactor` | Code restructured without changing behavior |
-| `perf` | A change that improves performance |
-| `docs` | Documentation only changes |
-| `style` | Formatting, whitespace, missing semicolons (no logic change) |
-| `test` | Adding or updating tests |
-| `chore` | Build process, dependency updates, config changes |
-| `ci` | CI/CD pipeline changes |
-| `revert` | Reverting a previous commit |
+## Message construction
 
-See `references/conventional-commits-guide.md` for detailed examples.
-
-### Step 3: Write the Commit Message
-
-Follow this structure:
-
-```
+```text
 <type>(<optional scope>): <short imperative summary>
 
 <body — the story: why this change was made, what problem it solves>
@@ -69,78 +62,66 @@ Follow this structure:
 <footer — issue refs, breaking change notices>
 ```
 
-#### Rules for Each Part
+| Part | Rule |
+| --- | --- |
+| Subject | Keep it under 72 characters, lowercase after the colon, no final period. |
+| Verb | Use imperative mood: `add`, `fix`, `remove`; not `added`, `fixes`, or `removed`. |
+| Body | Explain the why, because the diff already shows the what. Keep lines under 100 characters. |
+| Footer | Use `Closes #123`, `Fixes #456`, `Refs #789`, and `BREAKING CHANGE: <description>` when applicable. |
 
-**Subject line (first line):**
-- Use imperative mood: "add", "fix", "remove" — not "added" or "fixes"
-- Max 72 characters
-- No period at the end
-- Lowercase after the colon
+## Split heuristics
 
-**Body (the story):**
-- Explain the *why*, not the *what* (the diff already shows the what)
-- Describe the problem that existed before this change
-- Mention any alternatives considered if relevant
-- Keep lines under 100 characters
-- Separate from subject with a blank line
+| Situation | Action |
+| --- | --- |
+| Different files with unrelated purposes | Suggest multiple commits. |
+| Same file but distinct concerns, such as bug fix plus refactor | Suggest splitting unless the refactor enables the fix. |
+| Everything is tightly coupled | Produce one message. |
+| User says `keep it short` | Omit the body and produce a strong subject line. |
+| No issue number exists | Omit the footer entirely. |
 
-**Footer:**
-- Reference issues: `Closes #123`, `Fixes #456`, `Refs #789`
-- Mark breaking changes: `BREAKING CHANGE: <description>`
+## Gotchas
 
-### Step 4: Generate Output
+- **Do not write update-only subjects**: replace `update file.js` with the specific intent and impact.
+- **Do not invent why**: infer from the diff when possible; otherwise mark the reason as missing or keep the body neutral.
+- **Do not bury breaking changes**: add `BREAKING CHANGE:` even when the subject already uses `!`.
+- **Do not ask when context is enough**: only ask whether one diff is one logical change or multiple when the split is genuinely ambiguous.
 
-Produce the commit message in a copyable code block, followed by a one-line plain-English explanation of the story you told.
+## Progressive disclosure and bundled resources
 
-**Example output:**
+- `references/conventional-commits-guide.md`: detailed examples, type choices, and scope guidelines.
 
-```
-fix(auth): prevent token refresh loop on expired sessions
+## Commit context vocabulary
 
-When a user's session expired mid-request, the auth middleware was
-triggering a token refresh, which itself failed validation and triggered
-another refresh — causing an infinite retry loop that crashed the app.
+Preserve issue and audience context when present: `Who/what` triggered the change, whether it affects `open-source` maintainers, and runtime details such as `mid-request` failures.
 
-This adds a recursion guard flag that aborts the refresh cycle if a
-refresh is already in progress, returning a clean 401 instead.
+## Output template
 
-Closes #312
-```
+````markdown
+### Commit message storyteller result
 
-> **Story told:** A silent infinite loop on session expiry was crashing the app; this stops the cycle early and returns a clean error.
+**Status:** message ready | split recommended | blocked
+**Source reviewed:** `git diff` | `git diff --staged` | `git diff --cached` | description | file list
 
----
+**Commit message**
+```text
+<type>(<scope>): <imperative summary>
 
-## Multiple Commits from One Diff
+<body explaining why, omitted when not needed>
 
-If the diff contains **logically separate changes**, split them into multiple commit messages and tell the user. Use this heuristic:
-
-- Different files with unrelated purposes → likely separate commits
-- Same file but distinct concerns (e.g., bug fix + refactor) → suggest splitting
-- Everything tightly coupled → one commit is fine
-
----
-
-## Edge Cases
-
-| Situation | How to Handle |
-|-----------|---------------|
-| User provides no context beyond a diff | Infer type and scope from file names and changed symbols |
-| Changes span many files with no clear theme | Ask: "Is this one logical change, or multiple?" |
-| Breaking change detected | Add `BREAKING CHANGE:` footer automatically |
-| User says "keep it short" | Omit body, just write a strong subject line |
-| No issue number available | Omit the footer entirely |
-
----
-
-## Quick Reference
-
-```bash
-# Get your staged diff to paste into Copilot
-git diff --staged
-
-# Or get the last uncommitted working tree changes
-git diff
+<footer such as Closes #123 or BREAKING CHANGE: details>
 ```
 
-See `references/conventional-commits-guide.md` for type examples and scope guidelines.
+**Story told:** <one sentence explaining the problem, decision, and impact>
+
+**Split guidance:** <one commit is fine | suggested commit boundaries>
+````
+
+## Quality gate
+
+- [ ] The message follows Conventional Commits type and subject rules.
+- [ ] The subject is imperative, non-empty, lowercased after the colon, and under 72 characters.
+- [ ] The body explains why, not just what files changed.
+- [ ] Breaking changes use a `BREAKING CHANGE:` footer.
+- [ ] Issue references use `Closes #123`, `Fixes #456`, or `Refs #789` only when known.
+- [ ] Logically unrelated changes are split or explicitly called out.
+- [ ] `references/conventional-commits-guide.md` is used when detailed examples are needed.

@@ -1,55 +1,48 @@
 ---
 name: "shuffle-json-data"
 description: >-
-  Shuffle repetitive JSON objects safely by validating schema consistency before randomising entries.
-  Use this skill when the user asks for role.
+  Shuffle repetitive JSON arrays safely by validating syntax, schema consistency, requiredProperties, ignoreProperties, and nesting rules before randomizing entries. Use when asked to shuffle, randomize, reorder, anonymize order, or vary repetitive JSON objects while keeping valid JSON and preserving data integrity.
 ---
-# Shuffle JSON Data
 
-## Overview
+# Shuffle JSON data
 
-Shuffle repetitive JSON objects without corrupting the data or breaking JSON
-syntax. Always validate the input file first. If a request arrives without a
-data file, pause and ask for one. Only proceed after confirming the JSON can be
-shuffled safely.
+Validate a JSON file or JSON-like structure, confirm the objects can be shuffled without corrupting schema or syntax, then return a randomized version that preserves the configured structure.
 
-## Role
+## When to invoke
 
-You are a data engineer who understands how to randomise or reorder JSON data
-without sacrificing integrity. Combine data-engineering best practices with
-mathematical knowledge of randomizing data to protect data quality.
+- "Shuffle this JSON data."
+- "Randomize the order of these repetitive JSON objects."
+- "Reorder this fixture without breaking its schema."
+- "Shuffle only these JSON collections and ignore the year field."
+- "Validate whether this JSON can be safely randomized."
 
-- Confirm that every object shares the same property names when the default
-  behavior targets each object.
-- Reject or escalate when the structure prevents a safe shuffle (for example,
-  nested objects while operating in the default state).
-- Shuffle data only after validation succeeds or after reading explicit
-  variable overrides.
+## Inputs
 
-## Objectives
+A request must include a JSON file, attached JSON, or pasted JSON-like structure. If no data is provided, ask for a file or JSON content before proceeding. Interpret variables under a `Variables` header or prompt-level overrides:
 
-1. Validate that the provided JSON is structurally consistent and can be
-   shuffled without producing invalid output.
-2. Apply the default behavior—shuffle at the object level—when no variables
-   appear under the `Variables` header.
-3. Honour variable overrides that adjust which collections are shuffled, which
-   properties are required, or which properties must be ignored.
+| Variable | Default | Meaning |
+| --- | --- | --- |
+| `fileName` | **REQUIRED** | JSON file or attached data source. Preserve `_NAME` compatibility by treating file-name variants as `fileName`. |
+| `ignoreProperties` | none | Properties excluded from schema consistency comparison. |
+| `requiredProperties` | first object's property set | Properties every shuffled object must contain. |
+| `nesting` | `false` | Whether nested objects are allowed and how nested collections may be shuffled. |
 
-## Data Validation Checklist
+## Validation rules
 
-Before shuffling:
+| Check | Default behavior |
+| --- | --- |
+| JSON syntax | Parse successfully before any shuffle. |
+| Top-level shape | Expect an array of objects unless variables specify a different collection. |
+| Property names | Every object must share an identical property set after `ignoreProperties` is applied. |
+| Required fields | Every object must contain all `requiredProperties`. |
+| Nested objects | Reject when `nesting = false`. |
+| Output validity | The result must serialize as valid JSON. |
 
-- Ensure every object shares an identical set of property names when the
-  default state is in effect.
-- Confirm there are no nested objects in the default state.
-- Verify that the JSON file itself is syntactically valid and well formed.
-- If any check fails, stop and report the inconsistency instead of modifying
-  the data.
+Stop and report the inconsistency instead of modifying data when any required check fails.
 
-## Acceptable JSON
+## Acceptable and unacceptable shapes
 
-When the default behavior is active, acceptable JSON resembles the following
-pattern:
+Acceptable default shape:
 
 ```json
 [
@@ -64,10 +57,7 @@ pattern:
 ]
 ```
 
-## Unacceptable JSON (Default State)
-
-If the default behavior is active, reject files that contain nested objects or
-inconsistent property names. For example:
+Unacceptable default shape because it has nesting and inconsistent properties:
 
 ```json
 [
@@ -86,66 +76,58 @@ inconsistent property names. For example:
 ]
 ```
 
-If variable overrides clearly explain how to handle nesting or differing
-properties, follow those instructions; otherwise do not attempt to shuffle the
-data.
+## Procedure
 
-## Workflow
+1. Gather the JSON file or JSON-like structure. If missing, ask for it and stop.
+2. Merge defaults with `Variables` overrides: `ignoreProperties`, `requiredProperties`, and `nesting`.
+3. Parse the JSON and record the original formatting and encoding conventions when editing a file.
+4. Validate structural consistency using the selected mode.
+5. Shuffle only the configured collection(s), not keys inside objects unless explicitly requested.
+6. Serialize valid JSON and preserve formatting as closely as possible.
+7. Return the shuffled data or write it to the requested destination.
 
-1. **Gather Input** – Confirm that a JSON file or JSON-like structure is
-   attached. If not, pause and request the data file.
-2. **Review Configuration** – Merge defaults with any supplied variables under
-   the `Variables` header or prompt-level overrides.
-3. **Validate Structure** – Apply the Data Validation Checklist to confirm that
-   shuffling is safe in the selected mode.
-4. **Shuffle Data** – Randomize the collection(s) described by the variables or
-   the default behavior while maintaining JSON validity.
-5. **Return Results** – Output the shuffled data, preserving the original
-   encoding and formatting conventions.
+## Gotchas
 
-## Requirements for Shuffling Data
+- **Do not shuffle invalid JSON**: repair is a separate task unless the user asks for it.
+- **Do not assume nested data is safe**: nested objects can encode relationships that object-level shuffling breaks.
+- **Do not ignore schema drift silently**: inconsistent property names usually mean different record types.
+- **Do not shuffle property order as data randomization**: property order changes are cosmetic and can make diffs noisy.
 
-- Each request must provide a JSON file or a compatible JSON structure.
-- If the data cannot remain valid after a shuffle, stop and report the
-  inconsistency.
-- Observe the default state when no overrides are supplied.
+## Compatibility terminology
 
-## Examples
+Preserve these baseline terms when they appear in user input, existing files, logs, or migration output; they are included to keep legacy wording, commands, paths, and API names recognizable during execution.
 
-Below are two sample interactions demonstrating an error case and a successful
-configuration.
+- `data-engineering`
 
-### Missing File
+## Output template
 
-```text
-[user]
-> /shuffle-json-data
-[agent]
-> Please provide a JSON file to shuffle. Preferably as chat variable or attached context.
+```markdown
+## Shuffle JSON result
+
+**Status:** shuffled | blocked
+**Input:** `<fileName or pasted JSON>`
+
+### Validation
+| Check | Result | Evidence |
+| --- | --- | --- |
+| JSON syntax | pass/fail | <parser result> |
+| Property consistency | pass/fail | <property set or mismatch> |
+| Nesting | pass/fail | <nesting setting and finding> |
+
+### Output
+```json
+<shuffled valid JSON or omitted when written to file>
 ```
 
-### Custom Configuration
-
-```text
-[user]
-> /shuffle-json-data #file:funFacts.json ignoreProperties = "year", "category"; requiredProperties = "fact"
+### Notes
+- <variables used or blocker>
 ```
 
-## Default State
+## Quality gate
 
-Unless variables in this prompt or in a request override the defaults, treat the
-input as follows:
-
-- fileName = **REQUIRED**
-- ignoreProperties = none
-- requiredProperties = first set of properties from the first object
-- nesting = false
-
-## Variables
-
-When provided, the following variables override the default state. Interpret
-closely related names sensibly so that the task can still succeed.
-
-- ignoreProperties
-- requiredProperties
-- nesting
+- [ ] A JSON file or JSON structure was provided before shuffling.
+- [ ] JSON parsed successfully before modification.
+- [ ] Property consistency, `requiredProperties`, `ignoreProperties`, and `nesting` were applied.
+- [ ] Nested objects were rejected unless an override explicitly allowed them.
+- [ ] The final output is valid JSON.
+- [ ] Any failure reports the exact inconsistency instead of returning partial shuffled data.

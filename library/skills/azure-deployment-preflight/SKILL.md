@@ -1,222 +1,124 @@
 ---
 name: "azure-deployment-preflight"
 description: >-
-  Performs comprehensive preflight validation of Bicep deployments to Azure, including template syntax
-  validation, what-if analysis, and permission checks. Use this skill before any deployment to Azure
-  to preview changes, identify potential issues, and ensure the deployment will succeed. Activate when
-  users mention deploying to Azure, validating Bicep files, checking deployment permissions,
-  previewing infrastructure changes, running what-if, or preparing for azd provision. Use this skill
-  when before deploying infrastructure to Azure; when preparing or reviewing Bicep files; to preview
-  what changes a deployment will make.
+  Validate Azure Bicep deployments before execution with syntax checks, azd preview, Azure CLI what-if, validation-level fallback, permission checks, and a preflight report. Use this skill when the user asks before azd up, azd provision, az deployment, Bicep deployment, infrastructure review, permission verification, or what-if change preview.
 ---
-# Azure Deployment Preflight Validation
 
-This skill validates Bicep deployments before execution, supporting both Azure CLI (`az`) and Azure Developer CLI (`azd`) workflows.
+# Azure deployment preflight
 
-## When to Use This Skill
+Validate Bicep infrastructure before deployment by detecting the workflow, running syntax and preview commands, categorizing what-if changes, and writing a `preflight-report.md` with actionable issues.
 
-- Before deploying infrastructure to Azure
-- When preparing or reviewing Bicep files
-- To preview what changes a deployment will make
-- To verify permissions are sufficient for deployment
-- Before running `azd up`, `azd provision`, or `az deployment` commands
+## When to invoke
 
-## Validation Process
+- "Validate my Bicep deployment before I run it."
+- "Preview what azd provision will change."
+- "Run Azure what-if for this template."
+- "Check whether I have permission to deploy this infrastructure."
+- "Prepare for azd up or az deployment."
 
-Follow these steps in order. Continue to the next step even if a previous step fails—capture all issues in the final report.
+## Prerequisites and context
 
-### Step 1: Detect Project Type
+| Tool or value | Required for | How to check or obtain |
+| --- | --- | --- |
+| `az` | Standalone Azure CLI what-if | `az --version`; `az account show` for subscription. |
+| `azd` | Projects with `azure.yaml` | `azd version`; `azd env list` for environments. |
+| `bicep` | Local syntax validation | `bicep --version`; fallback to Azure validation if absent. |
+| Resource group | `az deployment group what-if` | Ask user or check existing `.azure/` config. |
+| Subscription | All deployments | `az account show` or ask user. |
+| Location | `sub`, `mg`, or `tenant` scope | Ask user or use default from config. |
+| Environment | `azd` projects | `azd env list` or user input. |
 
-Determine the deployment workflow by checking for project indicators:
+## Procedure
 
-1. **Check for azd project**: Look for `azure.yaml` in the project root
-   - If found → Use **azd workflow**
-   - If not found → Use **az CLI workflow**
+1. Detect project type: if `azure.yaml` exists, use the `azd` workflow; otherwise use the Azure CLI workflow.
+2. Locate `.bicep` files. For `azd`, check `infra/` before the project root. For standalone deployments, use the user's file or search `infra/`, `deploy/`, and the root.
+3. Match parameter files in this order: `<filename>.bicepparam`, `<filename>.parameters.json`, `parameters.json`, then `parameters/<env>.json` in the same area.
+4. Run syntax validation for each Bicep file: `bicep build <bicep-file> --stdout`. Capture line and column errors, warnings, and build status. If `bicep` is not installed, note it and continue.
+5. Run the deployment preview. Continue after failures and capture every issue.
+6. Parse what-if change symbols and property changes.
+7. Write `preflight-report.md` in the project root using `references/REPORT-TEMPLATE.md`.
 
-2. **Locate Bicep files**: Find all `.bicep` files to validate
-   - For azd projects: Check `infra/` directory first, then project root
-   - For standalone: Use the file specified by the user or search common locations (`infra/`, `deploy/`, project root)
+## Preview commands
 
-3. **Auto-detect parameter files**: For each Bicep file, look for matching parameter files:
-   - `<filename>.bicepparam` (Bicep parameters - preferred)
-   - `<filename>.parameters.json` (JSON parameters)
-   - `parameters.json` or `parameters/<env>.json` in same directory
+| Workflow or scope | Command |
+| --- | --- |
+| `azd` default environment | `azd provision --preview` |
+| `azd` named environment | `azd provision --preview --environment <env-name>` |
+| `resourceGroup` target scope | `az deployment group what-if --resource-group <rg-name> --template-file <bicep-file> --parameters <param-file> --validation-level Provider` |
+| `subscription` target scope | `az deployment sub what-if --location <location> --template-file <bicep-file> --parameters <param-file> --validation-level Provider` |
+| `managementGroup` target scope | `az deployment mg what-if --location <location> --management-group-id <mg-id> --template-file <bicep-file> --parameters <param-file> --validation-level Provider` |
+| `tenant` target scope | `az deployment tenant what-if --location <location> --template-file <bicep-file> --parameters <param-file> --validation-level Provider` |
+| RBAC fallback | Retry with `--validation-level ProviderNoRbac` and state that full permission validation did not run. |
 
-### Step 2: Validate Bicep Syntax
+## What-if interpretation
 
-Run Bicep CLI to check template syntax before attempting deployment validation:
+| Change type | Symbol | Meaning | Report detail |
+| --- | --- | --- | --- |
+| Create | `+` | New resource will be created | Resource type, name, location. |
+| Delete | `-` | Existing resource will be deleted | Mark as high risk unless intentional. |
+| Modify | `~` | Properties will change | Include property names and before/after values when available. |
+| NoChange | `=` | Resource unchanged | Count only unless the user asked for full inventory. |
+| Ignore | `*` | Resource not analyzed because limits were reached | Warn that the preview is incomplete. |
+| Deploy | `!` | Resource will be deployed but changes are unknown | Require manual inspection. |
 
-```bash
-bicep build <bicep-file> --stdout
+## Error handling
+
+Continue validation even when errors occur; the report should contain all failures and warnings.
+
+| Error type | Action |
+| --- | --- |
+| Not logged in | Note in report; suggest `az login` or `azd auth login`. |
+| Permission denied | Retry what-if with `ProviderNoRbac`; note missing RBAC validation. |
+| Bicep syntax error | Include every error; continue to other files. |
+| Tool not installed | Note in report and skip only that validation step. |
+| Resource group not found | Note in report; suggest creating it or selecting the correct group. |
+
+## Progressive disclosure and bundled resources
+
+- `references/VALIDATION-COMMANDS.md`: detailed command variants and flags.
+- `references/REPORT-TEMPLATE.md`: required `preflight-report.md` structure.
+- `references/ERROR-HANDLING.md`: detailed remediation guidance.
+
+## Command and scope vocabulary
+
+Preserve Azure deployment terminology exactly when reporting: `azd up`, `azd provision`, `az deployment`, `az deployment group`, `az deployment sub what-if`, `az deployment mg what-if`, `az deployment tenant what-if`, `--validation-level`, `--validation-level Provider`, `targetScope`, `Sub/MG/Tenant`, `JSON`, `line/column`, `success/failure`, and `create/modify/delete/unchanged`.
+
+Use concrete examples when they match the repository: `infra/main.bicep`, `infra/main.bicepparam`, and `bicep build infra/main.bicep --stdout`.
+
+## Output template
+
+```markdown
+## Azure deployment preflight
+
+**Status:** pass | issues found | blocked
+**Report:** `preflight-report.md`
+**Workflow:** azd | az cli
+**Target scope:** resourceGroup | subscription | managementGroup | tenant | unknown
+
+### Tools executed
+| Tool | Command | Result |
+| --- | --- | --- |
+| Bicep | `bicep build <bicep-file> --stdout` | <pass/fail/skipped> |
+| Preview | `<azd provision --preview or az deployment ... what-if>` | <pass/fail> |
+
+### What-if summary
+| Symbol | Count | Notes |
+| --- | --- | --- |
+| `+` | <count> | <created resources> |
+| `~` | <count> | <modified resources> |
+| `-` | <count> | <deleted resources> |
+
+### Issues
+- <severity>: <error, warning, permission gap, or missing input>
 ```
 
-**What to capture:**
-- Syntax errors with line/column numbers
-- Warning messages
-- Build success/failure status
+## Quality gate
 
-**If Bicep CLI is not installed:**
-- Note the issue in the report
-- Continue to Step 3 (Azure will validate syntax during what-if)
-
-### Step 3: Run Preflight Validation
-
-Choose the appropriate validation based on project type detected in Step 1.
-
-#### For azd Projects (azure.yaml exists)
-
-Use `azd provision --preview` to validate the deployment:
-
-```bash
-azd provision --preview
-```
-
-If an environment is specified or multiple environments exist:
-```bash
-azd provision --preview --environment <env-name>
-```
-
-#### For Standalone Bicep (no azure.yaml)
-
-Determine the deployment scope from the Bicep file's `targetScope` declaration:
-
-| Target Scope | Command |
-|--------------|---------|
-| `resourceGroup` (default) | `az deployment group what-if` |
-| `subscription` | `az deployment sub what-if` |
-| `managementGroup` | `az deployment mg what-if` |
-| `tenant` | `az deployment tenant what-if` |
-
-**Run with Provider validation level first:**
-
-```bash
-# Resource Group scope (most common)
-az deployment group what-if \
-  --resource-group <rg-name> \
-  --template-file <bicep-file> \
-  --parameters <param-file> \
-  --validation-level Provider
-
-# Subscription scope
-az deployment sub what-if \
-  --location <location> \
-  --template-file <bicep-file> \
-  --parameters <param-file> \
-  --validation-level Provider
-
-# Management Group scope
-az deployment mg what-if \
-  --location <location> \
-  --management-group-id <mg-id> \
-  --template-file <bicep-file> \
-  --parameters <param-file> \
-  --validation-level Provider
-
-# Tenant scope
-az deployment tenant what-if \
-  --location <location> \
-  --template-file <bicep-file> \
-  --parameters <param-file> \
-  --validation-level Provider
-```
-
-**Fallback Strategy:**
-
-If `--validation-level Provider` fails with permission errors (RBAC), retry with `ProviderNoRbac`:
-
-```bash
-az deployment group what-if \
-  --resource-group <rg-name> \
-  --template-file <bicep-file> \
-  --validation-level ProviderNoRbac
-```
-
-Note the fallback in the report—the user may lack full deployment permissions.
-
-### Step 4: Capture What-If Results
-
-Parse the what-if output to categorize resource changes:
-
-| Change Type | Symbol | Meaning |
-|-------------|--------|---------|
-| Create | `+` | New resource will be created |
-| Delete | `-` | Resource will be deleted |
-| Modify | `~` | Resource properties will change |
-| NoChange | `=` | Resource unchanged |
-| Ignore | `*` | Resource not analyzed (limits reached) |
-| Deploy | `!` | Resource will be deployed (changes unknown) |
-
-For modified resources, capture the specific property changes.
-
-### Step 5: Generate Report
-
-Create a Markdown report file in the **project root** named:
-- `preflight-report.md`
-
-Use the template structure from [references/REPORT-TEMPLATE.md](references/REPORT-TEMPLATE.md).
-
-**Report sections:**
-1. **Summary** - Overall status, timestamp, files validated, target scope
-2. **Tools Executed** - Commands run, versions, validation levels used
-3. **Issues** - All errors and warnings with severity and remediation
-4. **What-If Results** - Resources to create/modify/delete/unchanged
-5. **Recommendations** - Actionable next steps
-
-## Required Information
-
-Before running validation, gather:
-
-| Information | Required For | How to Obtain |
-|-------------|--------------|---------------|
-| Resource Group | `az deployment group` | Ask user or check existing `.azure/` config |
-| Subscription | All deployments | `az account show` or ask user |
-| Location | Sub/MG/Tenant scope | Ask user or use default from config |
-| Environment | azd projects | `azd env list` or ask user |
-
-If required information is missing, prompt the user before proceeding.
-
-## Error Handling
-
-See [references/ERROR-HANDLING.md](references/ERROR-HANDLING.md) for detailed error handling guidance.
-
-**Key principle:** Continue validation even when errors occur. Capture all issues in the final report.
-
-| Error Type | Action |
-|------------|--------|
-| Not logged in | Note in report, suggest `az login` or `azd auth login` |
-| Permission denied | Fall back to `ProviderNoRbac`, note in report |
-| Bicep syntax error | Include all errors, continue to other files |
-| Tool not installed | Note in report, skip that validation step |
-| Resource group not found | Note in report, suggest creating it |
-
-## Tool Requirements
-
-This skill uses the following tools:
-
-- **Azure CLI** (`az`) - Version 2.76.0+ recommended for `--validation-level`
-- **Azure Developer CLI** (`azd`) - For projects with `azure.yaml`
-- **Bicep CLI** (`bicep`) - For syntax validation
-- **Azure MCP Tools** - For documentation lookups and best practices
-
-Check tool availability before starting:
-```bash
-az --version
-azd version
-bicep --version
-```
-
-## Example Workflow
-
-1. User: "Validate my Bicep deployment before I run it"
-2. Agent detects `azure.yaml` → azd project
-3. Agent finds `infra/main.bicep` and `infra/main.bicepparam`
-4. Agent runs `bicep build infra/main.bicep --stdout`
-5. Agent runs `azd provision --preview`
-6. Agent generates `preflight-report.md` in project root
-7. Agent summarizes findings to user
-
-## Reference Documentation
-
-- [Validation Commands Reference](references/VALIDATION-COMMANDS.md)
-- [Report Template](references/REPORT-TEMPLATE.md)
-- [Error Handling Guide](references/ERROR-HANDLING.md)
+- [ ] Project type was detected from `azure.yaml` or absence of it.
+- [ ] Bicep files and matching parameter files were located and reported.
+- [ ] `bicep build <bicep-file> --stdout` was run or its absence was documented.
+- [ ] The correct `azd provision --preview` or `az deployment ... what-if` scope was selected.
+- [ ] `--validation-level ProviderNoRbac` fallback was used only after permission failure and was reported.
+- [ ] What-if symbols `+`, `-`, `~`, `=`, `*`, and `!` were interpreted correctly.
+- [ ] `preflight-report.md` was created in the project root or the blocker is explicit.
+- [ ] Referenced bundled resources exist and were used on demand.

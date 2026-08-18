@@ -1,139 +1,128 @@
 ---
-name: "aws-well-architected-review"
+name: aws-well-architected-review
 description: >-
-  Perform an AWS Well-Architected Framework review of the current workload IaC and architecture,
-  generating findings and GitHub issues for improvements. Use this skill when the user asks for aws
-  well-architected review.
+  Review AWS workloads against the AWS Well-Architected Framework across Operational Excellence, Security, Reliability, Performance Efficiency, Cost Optimization, and Sustainability. Use when the user asks for an AWS well-architected review, IaC architecture assessment, WAF findings, risk classification, or GitHub issue remediation plan.
 ---
-# AWS Well-Architected Review
 
-This workflow performs a structured AWS Well-Architected Framework (WAF) review against your workload's IaC files and deployed infrastructure. It identifies risks across all 6 WAF pillars and creates GitHub issues to track remediation.
+# AWS Well-Architected review
 
-## Prerequisites
-- AWS CLI configured and authenticated
-- IaC files present in the repository (Terraform, CloudFormation, CDK, or SAM)
-- GitHub MCP server configured and authenticated
+Review repository IaC and available AWS infrastructure evidence against the six AWS Well-Architected Framework pillars, classify risks, summarize remediation, and prepare GitHub issue-ready findings.
 
-## Workflow Steps
+## When to invoke
 
-### Step 1: Load Well-Architected Framework Reference
-Fetch current AWS WAF best practices:
-- `https://docs.aws.amazon.com/wellarchitected/latest/framework/welcome.html`
-- Pillar-specific lenses relevant to the workload type (Serverless, SaaS, etc.)
+- "Run an AWS Well-Architected review."
+- "Review this Terraform stack against WAF pillars."
+- "Find AWS architecture risks and create remediation issues."
+- "Assess our CDK app for security, reliability, and cost."
+- "Generate Well-Architected findings for this workload."
 
-### Step 2: Discover IaC & Architecture
-Scan the repository for IaC files:
-- Terraform: `**/*.tf`
-- CloudFormation/SAM: `**/*.yaml`, `**/*.json` (CFn templates)
-- CDK: `lib/**/*.ts`, `bin/**/*.ts`, `cdk.json`
+## Prerequisites and context
 
-Identify key AWS services in use (compute, data, networking, security, observability) and generate a Mermaid architecture diagram.
+- AWS CLI must be configured and authenticated for live infrastructure checks.
+- IaC should be present as Terraform, CloudFormation, CDK, or SAM. If none exists, review live resources only and report the gap.
+- GitHub issue creation requires an authenticated GitHub tool or `gh`; otherwise output issue-ready Markdown.
+- Fetch `https://docs.aws.amazon.com/wellarchitected/latest/framework/welcome.html` and relevant lenses when current best practices are needed.
 
-### Step 3: Pillar-by-Pillar Review
+## Discovery
 
-#### Pillar 1: Operational Excellence
-- [ ] All infrastructure defined as IaC (no manual console changes)
-- [ ] Consistent tagging strategy applied across all resources
-- [ ] CloudWatch alarms defined for key metrics
-- [ ] Automated deployment pipeline present (no manual deployments)
-- [ ] CloudTrail enabled for audit logging
-- [ ] Runbooks or operational documentation present
+Scan for IaC and architecture evidence:
 
-#### Pillar 2: Security
-- [ ] IAM roles use least-privilege policies (no `*` actions without justification)
-- [ ] No hardcoded credentials in IaC or code
-- [ ] Secrets managed via Secrets Manager or SSM Parameter Store
-- [ ] S3 buckets have public access blocked and server-side encryption enabled
-- [ ] Sensitive resources placed in private subnets
-- [ ] Security groups restrict inbound to minimum required ports/CIDRs
-- [ ] KMS encryption enabled for sensitive data stores (RDS, EBS, S3, SQS, DynamoDB)
-- [ ] SSL/TLS enforced on all endpoints (`enforceSSL: true`)
-- [ ] GuardDuty enabled (`aws guardduty list-detectors`)
-- [ ] AWS WAF configured on public-facing APIs and CloudFront distributions
-- [ ] MFA delete enabled on critical S3 buckets
+| IaC type | File patterns |
+| --- | --- |
+| Terraform | `**/*.tf` |
+| CloudFormation/SAM | `**/*.yaml`, `**/*.json` templates |
+| CDK | `lib/**/*.ts`, `bin/**/*.ts`, `cdk.json` |
 
-#### Pillar 3: Reliability
-- [ ] Multi-AZ deployments for production databases (RDS Multi-AZ, DynamoDB Global Tables)
-- [ ] Auto Scaling configured with appropriate policies for EC2/ECS
-- [ ] S3 versioning and lifecycle policies configured
-- [ ] RDS automated backups enabled with appropriate retention period
-- [ ] DynamoDB Point-in-Time Recovery (PITR) enabled
-- [ ] Dead Letter Queues (DLQ) configured for Lambda, SQS, SNS
-- [ ] Route 53 health checks configured for DNS failover
-- [ ] Lambda reserved concurrency set to prevent noisy-neighbor throttling
+Identify compute, data, networking, security, and observability services. Generate a Mermaid architecture diagram for the EPIC issue when enough relationships are known.
 
-#### Pillar 4: Performance Efficiency
-- [ ] Right-sized instance types (Lambda memory, EC2 type, RDS class)
-- [ ] Graviton/ARM instances used where available (Lambda `arm64`, EC2 Graviton)
-- [ ] Caching implemented (ElastiCache, DAX, CloudFront, API Gateway caching)
-- [ ] CloudFront used for global static content delivery
-- [ ] Aurora Serverless or DynamoDB On-Demand for variable load patterns
-- [ ] Lambda Provisioned Concurrency for latency-critical synchronous paths
+## Pillar criteria
 
-#### Pillar 5: Cost Optimization
-- [ ] EC2 Reserved Instances or Savings Plans for steady-state workloads
-- [ ] S3 lifecycle policies moving data to cheaper storage tiers
-- [ ] Lambda `arm64` architecture adopted (20% cost reduction)
-- [ ] VPC Endpoints for S3/DynamoDB to avoid NAT Gateway charges
-- [ ] gp2 EBS volumes migrated to gp3 (same performance, 20% cheaper)
-- [ ] Development/test environments have auto-shutdown schedules
-- [ ] AWS Budgets and Cost Anomaly Detection configured
-- [ ] Unattached EBS volumes and idle EC2 instances identified
+### Operational Excellence
 
-#### Pillar 6: Sustainability
-- [ ] Graviton/ARM instances selected where available
-- [ ] Serverless/managed services preferred over always-on EC2
-- [ ] S3 lifecycle policies reduce unnecessary long-term data storage
-- [ ] Auto Scaling configured to avoid over-provisioning
-- [ ] Region selection considers AWS renewable energy commitments
+- [ ] All infrastructure is defined as IaC; no unmanaged manual console changes.
+- [ ] Consistent tagging strategy exists across resources.
+- [ ] CloudWatch alarms cover key metrics.
+- [ ] Automated deployment pipeline exists; no manual deployments.
+- [ ] CloudTrail is enabled for audit logging.
+- [ ] Runbooks or operational documentation are present.
 
-### Step 4: Risk Classification
-For each finding, classify:
-- **High Risk**: Security vulnerability, single point of failure, no backup/recovery
-- **Medium Risk**: Suboptimal reliability, cost inefficiency, performance concern
-- **Low Risk**: Best practice deviation, minor optimization opportunity
+### Security
 
-### Step 5: User Confirmation
+- [ ] IAM roles use least privilege; no `*` actions without justification.
+- [ ] No hardcoded credentials appear in IaC or code.
+- [ ] Secrets are managed in Secrets Manager or SSM Parameter Store.
+- [ ] S3 buckets block public access and enable server-side encryption.
+- [ ] Sensitive resources are in private subnets.
+- [ ] Security groups restrict inbound access to required ports and CIDRs.
+- [ ] KMS encryption is enabled for RDS, EBS, S3, SQS, DynamoDB, and other sensitive stores.
+- [ ] SSL/TLS is enforced on endpoints, including `enforceSSL: true` where applicable.
+- [ ] GuardDuty is enabled; validate with `aws guardduty list-detectors`.
+- [ ] AWS WAF protects public APIs and CloudFront distributions.
+- [ ] MFA delete is enabled for critical S3 buckets when operationally feasible.
 
-```
- AWS Well-Architected Review Summary
+### Reliability
 
- Review Results:
-• IaC Files Analyzed: X
-• AWS Services Identified: Y
-• Total Findings: Z
-  • High Risk: A (immediate action required)
-  • Medium Risk: B (should address soon)
-  • Low Risk: C (nice to have)
+- [ ] Production databases use Multi-AZ or equivalent regional resilience.
+- [ ] DynamoDB Global Tables are used when global active-active data is required.
+- [ ] Auto Scaling policies exist for EC2 and ECS where load varies.
+- [ ] S3 versioning and lifecycle policies are configured.
+- [ ] RDS automated backups have an appropriate retention period.
+- [ ] DynamoDB Point-in-Time Recovery (PITR) is enabled for critical tables.
+- [ ] Dead Letter Queues (DLQ) exist for Lambda, SQS, and SNS failure paths.
+- [ ] Route 53 health checks support DNS failover where needed.
+- [ ] Lambda reserved concurrency prevents noisy-neighbor throttling.
 
- Top High Risk Findings:
-1. [Pillar]: [Finding] — [Why it matters]
-2. [Pillar]: [Finding] — [Why it matters]
+### Performance Efficiency
 
- This will create Z individual GitHub issues + 1 EPIC issue.
+- [ ] Lambda memory, EC2 instance type, and RDS class are right-sized.
+- [ ] Graviton or ARM is used where compatible, including Lambda `arm64` and EC2 Graviton.
+- [ ] Caching exists where repeated reads justify it: ElastiCache, DAX, CloudFront, or API Gateway caching.
+- [ ] CloudFront serves global static content.
+- [ ] Aurora Serverless or DynamoDB On-Demand is considered for variable load.
+- [ ] Lambda Provisioned Concurrency is used for latency-critical synchronous paths.
 
- Proceed with creating GitHub issues? (y/n)
-```
+### Cost Optimization
 
-### Step 6: Create Individual Finding Issues
-Label with "well-architected" and the pillar name (e.g., "security", "reliability").
+- [ ] EC2 Reserved Instances or Savings Plans cover steady-state workloads.
+- [ ] S3 lifecycle policies move data to cheaper tiers.
+- [ ] Lambda `arm64` is used when compatible for cost reduction.
+- [ ] VPC Endpoints for S3 and DynamoDB avoid unnecessary NAT Gateway charges.
+- [ ] `gp2` EBS volumes are migrated to `gp3` when compatible.
+- [ ] Development and test environments have auto-shutdown schedules.
+- [ ] AWS Budgets and Cost Anomaly Detection are configured.
+- [ ] Unattached EBS volumes and idle EC2 instances are identified.
 
-**Title**: `[WAF-<PILLAR>] [Brief Finding] — [Risk Level]`
+### Sustainability
 
-**Body**:
-````markdown
-## Well-Architected Finding: [Brief Title]
+- [ ] Graviton or ARM instances are selected where available.
+- [ ] Serverless or managed services are preferred over always-on EC2 when suitable.
+- [ ] S3 lifecycle policies reduce unnecessary long-term storage.
+- [ ] Auto Scaling avoids over-provisioning.
+- [ ] Region selection considers AWS renewable energy commitments.
 
-**Pillar**: [Name] | **Risk Level**: [High/Medium/Low] | **Effort**: [Low/Medium/High]
+## Risk classification
+
+| Risk | Use when |
+| --- | --- |
+| High Risk | Security vulnerability, single point of failure, no backup/recovery, or likely production outage. |
+| Medium Risk | Reliability weakness, cost inefficiency, or performance concern that should be addressed soon. |
+| Low Risk | Best-practice deviation or minor optimization opportunity. |
+
+## Issue templates
+
+Individual issue title: `[WAF-<PILLAR>] [Brief Finding] — [Risk Level]`. Label with `well-architected` and the pillar name such as `security` or `reliability`.
+
+```markdown
+## Well-Architected Finding: <Brief Title>
+
+**Pillar**: <Name> | **Risk Level**: <High/Medium/Low> | **Effort**: <Low/Medium/High>
 
 ### Description
-[Clear explanation of the finding and why it matters]
+<finding and why it matters>
 
 ### Remediation
-
 **IaC Fix** (preferred):
 ```hcl
-# Terraform example
 resource "aws_s3_bucket_server_side_encryption_configuration" "example" {
   bucket = aws_s3_bucket.example.id
   rule {
@@ -146,41 +135,77 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "example" {
 
 **AWS CLI fallback**:
 ```bash
-aws s3api put-bucket-encryption --bucket <name> \
-  --server-side-encryption-configuration '{"Rules":[{"ApplyServerSideEncryptionByDefault":{"SSEAlgorithm":"aws:kms"}}]}'
+aws s3api put-bucket-encryption --bucket <name> --server-side-encryption-configuration '{"Rules":[{"ApplyServerSideEncryptionByDefault":{"SSEAlgorithm":"aws:kms"}}]}'
 ```
 
 ### AWS Reference
-- [WAF Best Practice Link]
-- [AWS Documentation Link]
+- <WAF best practice link>
+- <AWS documentation link>
 
 ### Validation
 - [ ] Change implemented in IaC and deployed
-- [ ] AWS Config rule passes (if applicable)
-- [ ] Security Hub finding resolved (if applicable)
+- [ ] AWS Config rule passes when applicable
+- [ ] Security Hub finding resolved when applicable
 
-**Well-Architected Question**: [WAF question this maps to]
-````
+**Well-Architected Question**: <question>
+```
 
-### Step 7: Create EPIC Tracking Issue
-Label with "well-architected" and "epic".
+EPIC issue title: `[EPIC] AWS Well-Architected Review — X findings across 6 pillars`. Label with `well-architected` and `epic`. Include executive summary, pillar/risk table, Mermaid diagram, prioritized High -> Medium -> Low checklist, and success criteria.
 
-**Title**: `[EPIC] AWS Well-Architected Review — X findings across 6 pillars`
+## Troubleshooting
 
-**Body**: Executive summary with pillar breakdown table (finding counts by pillar and risk level), Mermaid architecture diagram, prioritized checklist linking all individual issues (High → Medium → Low), and success criteria:
-- All High-risk findings resolved
-- Medium findings have accepted mitigation plans
-- No regression in existing CloudWatch alarms or Config rules
+| Issue | Resolution |
+| --- | --- |
+| No IaC Files Found | Limit review to live AWS CLI discovery and note the IaC gap. |
+| Insufficient AWS Permissions | List required read-only permissions for the services being reviewed. |
+| GitHub Creation Failure | Output every finding as formatted Markdown for manual issue creation. |
 
-## Error Handling
-- **No IaC Files Found**: Limit review to live resource discovery via AWS CLI and note the gap
-- **Insufficient AWS Permissions**: List required read-only permissions for the review
-- **GitHub Creation Failure**: Output all findings as formatted markdown to console
+## Compatibility vocabulary
 
-## Success Criteria
-- All 6 WAF pillars reviewed against IaC and live infrastructure
-- All findings classified by risk level and pillar
-- Actionable remediation steps with IaC examples for each finding
-- GitHub issues created for team tracking
-- Architecture diagram generated for EPIC context
-- AWS documentation references included
+Preserve these legacy terms, API names, command placeholders, and literal phrases when applying or migrating this skill:
+
+- `Development/test`
+- `EC2/ECS`
+- `Graviton/ARM`
+- `S3/DynamoDB`
+- `Serverless/managed`
+- `least-privilege`
+- `ports/CIDRs`
+- `public-facing`
+
+## Output template
+
+```markdown
+## AWS Well-Architected review summary
+
+**Status:** reviewed | issue-ready | blocked
+**Scope:** <IaC files and/or live resources>
+
+| Pillar | High | Medium | Low | Top finding |
+| --- | --- | --- | --- | --- |
+| Operational Excellence | <n> | <n> | <n> | <finding> |
+| Security | <n> | <n> | <n> | <finding> |
+| Reliability | <n> | <n> | <n> | <finding> |
+| Performance Efficiency | <n> | <n> | <n> | <finding> |
+| Cost Optimization | <n> | <n> | <n> | <finding> |
+| Sustainability | <n> | <n> | <n> | <finding> |
+
+### Issues
+- <issue title or issue URL>
+
+### Validation
+- <commands, files, and evidence reviewed>
+```
+
+## Quality gate
+
+- [ ] All six WAF pillars were reviewed.
+- [ ] IaC files and live infrastructure evidence are named, or the absence of either is reported.
+- [ ] Every finding has a pillar, risk level, evidence, remediation, and validation step.
+- [ ] High Risk findings identify immediate impact and owner-ready next action.
+- [ ] Issue-ready Markdown is produced when GitHub issue creation is not available.
+- [ ] AWS documentation references are included for findings.
+
+## References
+
+- [AWS Well-Architected Framework](https://docs.aws.amazon.com/wellarchitected/latest/framework/welcome.html)

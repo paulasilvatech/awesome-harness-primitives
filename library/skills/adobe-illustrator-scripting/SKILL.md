@@ -6,7 +6,18 @@ description: >-
   colors, symbols, artboards, or any Illustrator DOM objects. Covers the complete JavaScript object
   model, coordinate system, measurement units, export workflows, and scripting best practices.
 ---
-# Adobe Illustrator Scripting
+
+# Adobe Illustrator scripting
+
+Write, debug, and optimize Adobe Illustrator ExtendScript automation by applying the Illustrator DOM, coordinate system, document and page item APIs, export options, and bundled JSX patterns.
+
+## When to invoke
+
+- "Write an Illustrator JSX script."
+- "Debug this Adobe Illustrator ExtendScript."
+- "Automate Illustrator layers, paths, text, colors, symbols, or artboards."
+- "Export Illustrator documents to PDF, SVG, PNG, or EPS with a script."
+- "Batch process .ai files with JavaScript."
 
 Expert guidance for automating Adobe Illustrator through ExtendScript (JavaScript/JSX). This skill covers the Illustrator scripting object model, all major API objects, code patterns, and best practices for writing production-quality `.jsx` scripts.
 
@@ -14,7 +25,7 @@ Expert guidance for automating Adobe Illustrator through ExtendScript (JavaScrip
 
 - [`references/object-model-quick-reference.md`](references/object-model-quick-reference.md): Use this as a quick lookup for the Illustrator scripting object model, common document and page item types, and related DOM concepts while writing or debugging scripts.
 - `scripts/`: Contains example Illustrator automation scripts you can use as starting points or implementation patterns for common tasks such as document manipulation, exports, batch processing, and DOM usage. Review and adapt these examples when you need working JSX patterns or want to compare behavior while debugging.
-## When to Use This Skill
+## Invocation details
 
 - Writing new Illustrator automation scripts (`.jsx` or `.js` files)
 - Debugging or fixing existing Illustrator ExtendScript code
@@ -207,3 +218,36 @@ var star = layer.pathItems.star(300, 300, 50, 25, 5);
 
 Additional detailed guidance was moved to [references/extended-guide.md](references/extended-guide.md) to keep this skill within the progressive-disclosure budget.
 
+## Progressive disclosure and bundled resources
+
+- `references/object-model-quick-reference.md`: quick lookup for the Illustrator object model and common DOM types.
+- `references/extended-guide.md`: extended guidance that was moved out of SKILL.md for progressive disclosure.
+- `scripts/`: example Illustrator automation scripts for document manipulation, exports, batch processing, and DOM usage.
+
+## Output template
+
+````markdown
+## Illustrator scripting result
+
+**Status:** implemented | reviewed | blocked
+**Target:** `{{script_or_document}}`
+
+### Script or patch
+```javascript
+#target illustrator
+{{jsx_code}}
+```
+
+### Validation
+- `{{execution_path}}`: pass | fail
+- DOM objects used: `{{Application}}`, `{{Document}}`, `{{Layer}}`, `{{PathItem}}`, `{{TextFrame}}` as applicable
+- Export or save output: `{{file_path_or_none}}`
+````
+
+## Quality gate
+
+- [ ] The solution uses ExtendScript/JavaScript APIs that Illustrator supports, not browser-only JavaScript.
+- [ ] All measurement values are converted to points where the Illustrator DOM expects points.
+- [ ] Coordinates account for Illustrator's scripted-document origin and page item `position` semantics.
+- [ ] Exports use the correct options object and `doc.saveAs()` or `doc.exportFile()` method.
+- [ ] Bundled references or scripts are consulted when detailed API lookup or working JSX examples are needed.

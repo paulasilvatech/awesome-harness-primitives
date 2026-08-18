@@ -9,7 +9,15 @@ description: >-
   entities, relations)` | Full RAG ingest: raw docs + graph + provenance |; | `skill.add_node(name,
   node_type)` | Add single entity (no provenance) | Quick additions without a source doc |.
 ---
+
 # Mini Context Graph Skill
+
+## When to invoke
+
+- "Ingest these documents into a persistent knowledge graph."
+- "Query the mini context graph with evidence."
+- "Write wiki pages from extracted entities and relations."
+- "Lint the local wiki for broken wikilinks."
 
 ## The Core Idea
 
@@ -195,3 +203,35 @@ Ask the LLM to review and fix: broken links, orphan pages, stale claims, missing
 
 The human curates sources and asks questions. The LLM writes the wiki, extracts the graph, and answers with citations. Python handles all bookkeeping.
 
+
+## Progressive disclosure and bundled resources
+
+At discovery time, only `name` and `description` are loaded. Read or execute bundled resources only when the current task needs them.
+
+- `references/ingestion.md`, `references/ontology.md`, `references/retrieval.md`, and `references/lint.md`: extraction, normalization, retrieval, and lint guidance.
+- `scripts/template_agent_workflow.py`, `scripts/contextgraph.py`, `scripts/config.py`, and `scripts/tools/`: runnable workflow and storage APIs.
+
+## Output template
+
+```markdown
+## Mini context graph result
+
+**Status:** ingested | answered | linted | blocked
+**Operation:** <ingest | query | lint>
+**Source/query:** `<doc_id, source path, or user question>`
+
+### Evidence
+- Documents: <supporting_documents or ingested sources>
+- Entities: <entity names and types>
+- Relations: <source -> relation -> target with confidence>
+
+### Wiki updates
+- `<wiki page>`: <created | updated | read | unchanged>
+```
+
+## Quality gate
+
+- [ ] Every entity and relation includes explicit `supporting_text`.
+- [ ] No relation below `MIN_CONFIDENCE` or confidence 0.6 was added.
+- [ ] Every new document called `skill.ingest_with_content(...)` and wrote a summary page.
+- [ ] Query answers searched the wiki before graph traversal and cite evidence.

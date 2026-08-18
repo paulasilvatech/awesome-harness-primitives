@@ -1,159 +1,176 @@
 ---
 name: "power-platform-architect"
 description: >-
-  Use this skill when the user needs to transform business requirements, use case descriptions, or
-  meeting transcripts into a technical Power Platform solution architecture, including component
-  selection and Mermaid.js diagrams.
+  Transform business requirements, use case descriptions, and meeting transcripts into Power Platform solution architecture with component selection, process narrative, follow-up questions, and optional Mermaid.js diagrams. Use when asked to design a Power Apps, Power Automate, Dataverse, Power BI, Power Pages, Microsoft Copilot Studio, connector, gateway, or AI Builder architecture from discovery material.
 license: "MIT"
 metadata:
   author: "Tim Hanewich"
 ---
-# Power Platform Architect Skill
 
-## Context
-This skill acts as a Senior Solution Architect specialized in the Microsoft Power Platform ecosystem (Power Apps, Power Automate, Power BI, Power Pages, Copilot Studio, and others). It excels at extracting technical requirements from unstructured data like meeting transcripts or high-level use case descriptions.
+# Power Platform architect
 
-## Example Trigger Phrases
-- "Review this transcript from our discovery session and tell me how to build it."
+Transform unstructured discovery material into a practical Power Platform architecture: extract requirements, choose only the components with a real role, describe the business process, and optionally create a simple Mermaid.js diagram file.
+
+## When to invoke
+
+- "Review this discovery transcript and tell me how to build it in Power Platform."
 - "What Power Platform components should I use for this HR onboarding use case?"
 - "Generate an architecture diagram for a Power Apps solution that connects to SQL and uses an approval flow."
+- "Design a Dataverse and Power Automate architecture for this business process."
+- "Which Power Platform services fit this portal, reporting, and approval workflow?"
 
-### Power Platform Component Catalog
-The Power Platform provides a vast suite of tools that can be used in any digital solution. Below is a list of the various components (at least the main ones) that may be involved in your output architecture.
-- **Power Apps:**- Custom business apps (Canvas or Model-Driven) for task-specific or data-centric interfaces for *internal* users:
-  - **Canvas Apps:** Best for quickly standing up business apps using interactive drag-and-drop tools while retaining full control over the interface layout and behavior. Use this when you want rapid development with a visual designer, need to connect to multiple diverse data sources, or want a pixel-perfect mobile or tablet experience without writing code (e.g., a frontline worker mobile app or a field inspection form).
-  - **Model-Driven Apps:** Best for data-dense, process-heavy "back-office" applications. These are automatically generated from your Dataverse schema. Use this when you need a standardized responsive design and complex security/relationship management (e.g., a CRM or Asset Management system).
-    - **Code Apps:** Best for full control using code-first frameworks (React) in an IDE like VS Code, while still leveraging Power Platform's managed hosting, Entra ID authentication, 1,500+ connectors callable from JavaScript, and governance (DLP, Conditional Access, sharing limits). Use this when the app demands a custom front-end beyond what Canvas or Model-Driven can offer but still needs to run on the managed platform.
-- **Power Pages:**- Secure, low-code websites for external partners, customers, or internal portals.
-- **Copilot Studio:**- AI-powered conversational agents for natural language interaction with users and data. Build agents that can leverage knowledge sources to provide grounded answers, use tools to take action against systems, and work autonomously (background).
-- **Power Automate:**- Automation platform spanning cloud and desktop:
-  - **Digital Process Automation (Cloud Flows):** Cloud-based workflows triggered in three ways — *Scheduled* (run on a recurring timer, e.g., nightly data sync), *Instant* (manually triggered by a user button press or app action), or *Automated* (fired by an event such as a new record created, an email received, or a form submitted). Use for cross-system integration, approval workflows, and business process orchestration.
-  - **Robotic Process Automation (Desktop Flows):** UI-based automation that mimics human interaction with desktop applications and legacy systems. Use when there is no API available and you need to automate clicks, keystrokes, and screen scraping on older or on-premises software (e.g., mainframe terminals, legacy ERP clients).
-- **AI Builder:**- Pre-built AI models (OCR, sentiment analysis, prediction) to add intelligence to processes. AI Builder has the following AI models available:
-  - **Prompts:**- Custom generative AI instructions for standardized LLM-based interactions.
-  - **Document processing (Custom):** Extracts specific, user-defined information from complex or unstructured documents.
-  - **Invoice processing (Prebuilt):** Pulls key data points like vendor, date, and totals from standard invoices.
-  - **Text recognition (Prebuilt):** Standard OCR to extract all text from images and PDF documents.
-  - **Receipt processing (Prebuilt):** Extracts merchant data, dates, and line items from receipts for expense tracking.
-  - **Identity document reader (Prebuilt):** Scans and extracts data from government-issued passports and ID cards.
-  - **Business card reader (Prebuilt):** Parses contact information from business cards directly into data tables.
-  - **Sentiment analysis (Prebuilt):** Scores text as positive, negative, or neutral (ideal for customer feedback).
-  - **Category classification:**
-      - *Prebuilt:* Automatically buckets customer feedback into general categories.
-      - *Custom:* Sorts text into your organization's specific proprietary categories.
-  - **Entity extraction:**
-      - *Prebuilt:* Identifies standard data like names, dates, and locations in text.
-      - *Custom:* Trains the agent to find industry-specific terms or unique identifiers.
-  - **Key phrase extraction (Prebuilt):** Identifies the core topics or "talking points" within a large block of text.
-  - **Language detection (Prebuilt):** Automatically determines the language used in a document.
-  - **Text translation (Prebuilt):** Translates text across 90+ supported languages.
-  - **Object detection (Custom):** Identifies, locates, and counts specific items within an image (e.g., inventory tracking).
-  - **Image description (Prebuilt - Preview):** Provides a natural language summary describing the contents of an image.
-  - **Prediction (Custom):** Analyzes historical Dataverse records to predict binary (yes/no) or numerical outcomes (e.g., credit risk or project delays).
-- **Dataverse:**- The primary data platform for the Power Platform ecosystem. Supports structured relational data (tables, columns, relationships), unstructured data (rich text, JSON), and file/image storage directly on records. Provides enterprise-grade role-based access control (RBAC) with security roles, business units, row-level security, column-level security, and team-based sharing. Built for performance at scale with indexing, elastic tables for high-volume workloads, and built-in auditing, versioning, and business rules enforcement.
-- **Connectors & Custom Connectors:**- Pre-built integrations that allow Power Platform apps and flows to call external systems and services (e.g., SharePoint, SQL Server, Salesforce, SAP, ServiceNow). Over 1,500 standard connectors are available out of the box. Custom Connectors let you wrap any REST API as a reusable connector when a pre-built one doesn't exist. For a full list of connectors, see the [List of all Power Automate Connectors](https://learn.microsoft.com/en-us/connectors/connector-reference/connector-reference-powerautomate-connectors). If the system that needs to be called to via API is *not* on that list, a *Custom Connector* can be used to communicate with the API.
-- **Power BI:**- The analytics and reporting engine of the Power Platform. Build interactive dashboards, paginated reports, and real-time data visualizations from virtually any data source. Key capabilities include:
-- **Gateways:**- Secure tunnels for connecting cloud services to on-premises data sources.
+## Component catalog
 
-### "Cheat Sheet" Decision Logic for Architecting
-For the "major needs" of a solution (e.g. user touch points), the following is a basic cheat sheet that guides you on what solution to recommend in various user scenarios. Note that this is simply of rule of thumb, not gospel.
-1. **Public/External Access?**- -> Power Pages (portal website)
-2. **Data Storage?**- -> Dataverse
-3. **Internal Data Entry / Review / Process?**- -> Power Apps
-4. **Legacy On-Prem Data?**- -> Data Gateways
-5. **Multi-System Orchestration?**- -> Power Automate
-6. **Conversational Interface? Agentic Automation?**- -> Copilot Studio
-7. **Reporting / Dashboards / Analytics?**- -> Power BI
+| Need | Prefer | Use when |
+| --- | --- | --- |
+| Internal task UI | **Canvas Apps** | Rapid visual app, pixel-perfect mobile/tablet layout, diverse connectors, frontline or field inspection forms. |
+| Internal data/process UI | **Model-Driven Apps** | Data-dense back-office app generated from Dataverse with relationships, responsive UI, role security, and process-heavy workflows such as CRM or asset management. |
+| Code-first app | **Code Apps** | React in VS Code with managed hosting, Entra ID authentication, 1,500+ connectors callable from JavaScript, DLP, Conditional Access, and sharing limits. |
+| External portal | **Power Pages** | Secure low-code websites for customers, partners, residents, vendors, or internal portals. |
+| Conversational or autonomous interaction | **Microsoft Copilot Studio** | Agents grounded in knowledge sources that can call tools, act against systems, and run background tasks. |
+| Cloud process automation | **Power Automate cloud flows** | Scheduled, Instant, or Automated workflows for integration, approvals, event handling, and process orchestration. |
+| Desktop or legacy automation | **Power Automate Desktop flows** | Robotic Process Automation for clicks, keystrokes, screen scraping, mainframe terminals, legacy ERP clients, or systems with no API. |
+| AI extraction or prediction | **AI Builder** | OCR, sentiment analysis, prediction, document extraction, invoice/receipt/ID/business card processing, classification, entity extraction, key phrase extraction, language detection, text translation, object detection, image description, and custom prompts. |
+| Enterprise data | **Dataverse** | Tables, columns, relationships, rich text, JSON, file/image storage, RBAC, security roles, business units, row-level security, column-level security, team sharing, elastic tables, auditing, versioning, and business rules. |
+| Integrations | **Connectors and Custom Connectors** | Use standard connectors when available; wrap a REST API as a Custom Connector when the target system is absent from https://learn.microsoft.com/en-us/connectors/connector-reference/connector-reference-powerautomate-connectors. |
+| Analytics | **Power BI** | Interactive dashboards, paginated reports, and real-time data visualizations. |
+| On-premises access | **Gateways** | Secure tunnels from cloud services to on-premises data sources. |
 
-## Instructions
-You will go about drafting a custom Power Platform architecture for a given use case using the following instructions below
+## Decision logic
 
-### PHASE 1: Requirements Analysis
-- Scan transcripts or descriptions for stakeholders, data sources, security requirements, and functional "asks".
-- Identify pain points in the current process that can be solved via automation or low-code interfaces.
-- The "As-Is" vs. "To-Be": Document the current manual or legacy process. Identify where the friction lies (e.g., "It takes 4 days to get an approval signature").
+| Signal in the use case | Recommendation |
+| --- | --- |
+| Public or external users need access | Power Pages. |
+| Durable business data or security model is needed | Dataverse. |
+| Internal data entry, review, or process UI | Power Apps; choose Canvas Apps for tailored UX and Model-Driven Apps for structured Dataverse processes. |
+| Legacy on-premises data source | Data Gateways; add Desktop Flows only when no API exists. |
+| Multi-system orchestration, approvals, scheduled jobs, instant triggers, or event triggers | Power Automate. |
+| Natural language interface or agentic automation | Microsoft Copilot Studio. |
+| Dashboards, reporting, analytics, or executive views | Power BI. |
+| Pre-built AI extraction, classification, translation, OCR, or prediction | AI Builder. |
 
-### PHASE 2: Requirements Follow Up
-After reviewing the provided use case description thoroughly and getting a rough idea of what architecture may be needed here, you will likely have the opportunity to ask follow up questions about the use case and its needs. Examples of questions you may ask are:
-- "What is the 'Exception Path' if an approver is on vacation or denies a request?"
-- "Is this app meant for a 'Deskless Worker' (Mobile/Tablet) or a 'Back-office Power User' (Desktop/Many columns)?"
-- "What starts this process?" (to determine how data is ingested or how a Power Automate flow should trigger, for example)
-- "Is the data being 'captured' for the first time, or is it being 'pulled' from somewhere else?"
+Use the cheat sheet as a rule of thumb, not gospel. Do not include every component; select components with a unique purpose in the solution.
 
-Note, those questions above are only *examples*. You are free to ask whatever question you feel is necessary to prescribe a functional architecture that meets the needs of the use case.
+## Procedure
 
-If the user is *not* available (or refuses to answer), give it your best guess based on the information you already know.
+1. Scan the transcript or use case for stakeholders, user audiences, data sources, functional asks, security requirements, approvals, reports, integrations, and current pain points.
+2. Describe the As-Is process and To-Be process. Name the friction, such as "approval takes 4 days" or "data is rekeyed into three systems".
+3. Ask concise follow-up questions when the answer changes the architecture: exception path, approver delegation, deskless worker versus back-office user, process trigger, data capture versus data pull, API availability, external access, and reporting audience.
+4. If the user is unavailable or refuses to answer, state reasonable assumptions and continue.
+5. Recommend the Power Platform components and the role of each selected component. Mention excluded components only when the source material requested them for a later phase.
+6. Write the architecture as a business process story that includes human users and audience labels such as "vendors", "property owners", "audit team", or named business teams.
+7. If the user asks for a diagram, generate a simple Mermaid.js flow and save a `.md` file in the current directory containing only the raw diagram definition, without a fenced `mermaid` block.
+8. Tell the user the file was saved and instruct them to open https://mermaid.ai/live/edit, copy the file contents into the Code pane, and report any syntax issue for correction.
 
-### PHASE 3: Component Recommendation
-Next, you will review what information you have about the use case, both what was originally provided and what information you now have after asking your follow up questions.
+## Diagram rules
 
-In this phase you will then provide recommendations for which *Power Platform Components* will be involved in this architecture, as well as the role they will play. 
+- Keep the Mermaid.js diagram simple: data stores, apps, flows, reports, agents, integrations, and human audiences.
+- Show information flow and the interfaces humans touch.
+- Use `graph LR` for process-oriented diagrams unless another direction is clearly better.
+- Include users as nodes; the human side is part of the architecture.
+- Save only the raw Mermaid definition in the `.md` file so Mermaid Live Editor can parse it directly.
 
-Note: the goal is *not* to just include as many as possible. The goal is to provide a functional architecture. Each component you select must play a true role with a unique purpose.
-
-For each component you select and feel has a role to play in this architecture, also describe what role it will have to the user. You do NOT need to explain what components you did *not* include and why, unless they are noted in the material you collected as being needed, but only for a future phase (not for immediate architecture).
-
-### PHASE 4: Architecture Recommendation
-After making a decision on what Power Platform Components are going to be used in this architecture, you will make an **architecture recommendation**. *This* is what you are used for and are relied upon for, so this step is very important.
-
-Your architecture recommendation will be business process oriented. Meaning, you will provide it in the context of a "story" as data propagates through the process, is referenced or used by various components, or reviewed/modified/etc by a user (human).
-
-NOTE: In your architecture recommendation you *should* include *users*! Because the human users of this system is going to be a very important piece of how this works, be sure to include that in your recommendation. Try to be specific as to what group of users (i.e. audience) is involved at every step of the way: for example, label user audiences as "Jane Doe's Team" or "Dan's Audit Team" or "State of Texas Residents" or "Property Owners" or "Vendors".
-
-### PHASE 5: Architecture Visualization (OPTIONAL)
-This next phase is optional. After providing your written architecture recommendation from the previous step, you will now ask the user if they also would like for you to create a visualization of this architecture via a mermaid.js diagram. It is a simple yes/no question. If they **DO** want one, this is how you will do it:
-
-You will produce the architectural recommendation by producing a **Mermaid.js diagram.** Your mermaid.js diagram will not be overly complicated. It will only depict the flow of information/business process as it goes through your architecture, also depicting what interfaces/components the human users of this system will interact with.
-
-The following is an example of the type of mermaid.js diagram you should create (not how simple it is!)
-
-```
+```mermaid
 graph LR
-    %% Entities
     Vendor((Vendor))
-    ChrissyTeam[Chrissy's Team]
-    HiringManagers[Hiring Managers]
+    BusinessTeam[Business Team]
+    PowerPage[Power Pages Portal]
+    Dataverse[(Dataverse)]
+    PowerApp[Power App Review Hub]
+    Approval[Power Automate Approval Flow]
+    PowerBI[Power BI Dashboard]
 
-    %% Main Components
-    AzurePortal[Azure Container Apps<br/>Portal]
-    Dataverse[(Dataverse<br/>Database)]
-    PowerApp[Power App<br/>Candidate Hub]
-    
-    %% Automation & AI
-    PA_Val[Power Automate<br/>Validation]
-    PA_Eval[Power Automate<br/>Candidate Evaluation]
-    Foundry[Foundry<br/>AI Models]
-    
-    %% Communication
-    Outlook[Outlook<br/>Follow Up Request]
-
-    %% Connections
-    Vendor --> AzurePortal
-    AzurePortal <--> Dataverse
+    Vendor --> PowerPage
+    PowerPage <--> Dataverse
     Dataverse <--> PowerApp
-    Dataverse <--> PA_Val
-    Dataverse <--> PA_Eval
-    
-    PA_Val --> Outlook
-    Outlook -.->|After quiet period| Vendor
-    
-    PA_Eval <--> Foundry
-    
-    PowerApp <--> ChrissyTeam
-    PowerApp <--> HiringManagers
-
-    %% Styling
-    style Dataverse fill:#f9f9f9,stroke:#333,stroke-width:2px
-    style Outlook stroke-dasharray: 5 5
+    PowerApp <--> BusinessTeam
+    Dataverse --> Approval
+    Approval --> BusinessTeam
+    Dataverse --> PowerBI
 ```
 
-After producing the mermaid diagram, you will save it to the user's computer (current directory is fine) as a `.md` file. In the `.md` file, *ONLY* include the raw mermaid diagram definition... no need to wrap it in a "```mermaid" block. Otherwise it won't parse correctly if the user copies + pastes it!
+## Gotchas
 
-After saving it to the `.md` file, instruct the user that you just saved it, and that they can find the content in it.
+- **Do not expose phases to the user**: phases are your internal workflow, not the output structure.
+- **Do not force components**: Power BI, Microsoft Copilot Studio, AI Builder, or Desktop Flows belong only when the use case has a concrete need.
+- **Do not omit users**: a Power Platform architecture without audiences, approvers, or operators is incomplete.
+- **Custom Connector is not first choice**: check the official connector list before recommending it.
+- **RPA is the last resort**: prefer APIs and connectors before UI automation.
 
-Instruct them to visit `https://mermaid.ai/live/edit` and copy-and-paste the contents of that resulting `.md` file you made (open it in a text editor) and paste it in the "Code" pane on the left to get their architecture diagram.
+## Compatibility terminology
 
-And then say if there are any issues with this process, let you know and you will try to fix them (i.e. modification to the `.md` file if there is a syntax issue).
+Preserve these baseline terms when they appear in user input, existing files, logs, or migration output; they are included to keep legacy wording, commands, paths, and API names recognizable during execution.
 
-## Other Things to Note
-- When you provide your work to the user, do NOT provide it in terms of "Phases". The user doesn't need to know which output you give corresponds to what phase of instructions it originated from; the phases are only something for you.
+- `Desktop/Many`
+- `Mobile/Tablet`
+- `NOTE`
+- `ONLY`
+- `OPTIONAL`
+- `PHASE`
+- `Public/External`
+- `built-in`
+- `code-first`
+- `copy-and-paste`
+- `cross-system`
+- `data-centric`
+- `data-dense`
+- `drag-and-drop`
+- `enterprise-grade`
+- `front-end`
+- `government-issued`
+- `high-level`
+- `high-volume`
+- `https://mermaid.ai/live/edit`
+- `industry-specific`
+- `information/business`
+- `interfaces/components`
+- `pre-built`
+- `reviewed/modified/etc`
+- `role-based`
+- `security/relationship`
+- `stroke-dasharray`
+- `stroke-width`
+- `task-specific`
+- `team-based`
+- `user-defined`
+- `yes/no`
+
+Additional connector and diagram vocabulary: include SharePoint, ServiceNow, AzurePortal, ChrissyTeam, and HiringManagers when they appear in examples, connector lists, or Mermaid node names.
+
+## Output template
+
+```markdown
+## Power Platform architecture — <solution name>
+
+**Status:** recommended | assumptions required | blocked
+**Source:** <transcript, use case, or meeting notes>
+
+### Assumptions and open questions
+- <assumption or question>
+
+### Component recommendations
+| Component | Role in this solution | Why it fits |
+| --- | --- | --- |
+| <Power Platform component> | <specific responsibility> | <triggering requirement> |
+
+### Architecture story
+<business-process narrative from user action through data, automation, review, reporting, and exception paths>
+
+### Optional diagram
+**Diagram file:** `<file.md>` | not requested
+**Mermaid editor:** https://mermaid.ai/live/edit
+```
+
+## Quality gate
+
+- [ ] Stakeholders, data sources, security requirements, current pain points, and functional asks were extracted or marked unknown.
+- [ ] Every selected component has a unique role tied to a requirement.
+- [ ] The architecture story includes human audiences and process flow, not only product names.
+- [ ] Follow-up questions or assumptions cover architecture-changing unknowns.
+- [ ] Any Mermaid.js file contains only raw diagram definition and no fenced code block.
+- [ ] The connector-list URL and Mermaid Live Editor URL are preserved when relevant.
+
+## References
+
+- [Power Automate connector reference](https://learn.microsoft.com/en-us/connectors/connector-reference/connector-reference-powerautomate-connectors)
+- [Mermaid Live Editor](https://mermaid.ai/live/edit)

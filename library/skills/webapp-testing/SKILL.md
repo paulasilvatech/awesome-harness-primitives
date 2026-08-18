@@ -1,62 +1,50 @@
 ---
 name: "webapp-testing"
 description: >-
-  Toolkit for interacting with and testing local web applications using Playwright. Use this skill
-  when you need to; test frontend functionality in a real browser; verify UI behavior and
-  interactions.
+  Test and debug local or accessible web applications in a real browser using Playwright automation. Use when asked to verify frontend functionality, UI behavior, forms, navigation, console logs, screenshots, network activity, responsive viewports, or user flows.
 ---
-# Web Application Testing
 
-This skill enables comprehensive testing and debugging of local web applications using Playwright automation.
+# Web application testing
 
-You should use the Playwright MCP Server to undertake the work if possible. If the MCP Server is unavailable, you can run the code in a local Node.js environment with Playwright installed.
+Drive a local or accessible web application through Playwright, verify user-visible behavior, capture diagnostics, and report the browser evidence behind each finding.
 
-## When to Use This Skill
+## When to invoke
 
-Use this skill when you need to:
+- "Test this web app in a browser."
+- "Verify this form submission flow."
+- "Capture screenshots for this UI bug."
+- "Inspect browser console logs and network requests."
+- "Check the responsive layout across viewports."
 
-- Test frontend functionality in a real browser
-- Verify UI behavior and interactions
-- Debug web application issues
-- Capture screenshots for documentation or debugging
-- Inspect browser console logs
-- Validate form submissions and user flows
-- Check responsive design across viewports
+## Prerequisites and context
 
-## Prerequisites
+- A locally running web application or accessible URL is required.
+- Node.js is required when falling back to local Playwright code.
+- Prefer the Playwright MCP server when available; otherwise run local Node.js with Playwright installed.
+- Playwright can be installed automatically if not present.
+- This skill does not test native mobile apps; use React Native Testing Library for those.
 
-- Node.js installed on the system
-- A locally running web application (or accessible URL)
-- Playwright will be installed automatically if not present
+## Browser testing capabilities
 
-## Core Capabilities
+| Capability | Examples |
+| --- | --- |
+| Browser automation | Navigate to URLs, click buttons and links, fill fields, select dropdowns, handle dialogs and alerts. |
+| Verification | Assert element presence, verify text content, check visibility, validate URLs, and test responsive behavior. |
+| Debugging | Capture screenshots, view console logs, inspect network requests, and debug failed tests. |
 
-### 1. Browser Automation
+Prefer user-facing selectors: roles, labels, text, and `data-testid`. Use role-based selectors before CSS classes when no stable semantic selector exists.
 
-- Navigate to URLs
-- Click buttons and links
-- Fill form fields
-- Select dropdowns
-- Handle dialogs and alerts
+## Procedure
 
-### 2. Verification
+1. Confirm the application is running and the target URL is reachable.
+2. Start with a small navigation or smoke test before complex flows.
+3. Use explicit waits for elements or navigation before interacting.
+4. Exercise the requested user flow with realistic input.
+5. Capture screenshots on failure and collect console or network evidence when debugging.
+6. Close browsers and clean up resources when using local Playwright code.
+7. Report actions, observations, evidence, and remaining gaps.
 
-- Assert element presence
-- Verify text content
-- Check element visibility
-- Validate URLs
-- Test responsive behavior
-
-### 3. Debugging
-
-- Capture screenshots
-- View console logs
-- Inspect network requests
-- Debug failed tests
-
-## Usage Examples
-
-### Example 1: Basic Navigation Test
+## Playwright patterns
 
 ```javascript
 // Navigate to a page and verify title
@@ -64,8 +52,6 @@ await page.goto("http://localhost:3000");
 const title = await page.title();
 console.log("Page title:", title);
 ```
-
-### Example 2: Form Interaction
 
 ```javascript
 // Fill out and submit a form
@@ -75,44 +61,16 @@ await page.click('button[type="submit"]');
 await page.waitForURL("**/dashboard");
 ```
 
-### Example 3: Screenshot Capture
-
 ```javascript
 // Capture a screenshot for debugging
 await page.screenshot({ path: "debug.png", fullPage: true });
 ```
 
-## Guidelines
-
-1. **Always verify the app is running** - Check that the local server is accessible before running tests
-2. **Use explicit waits** - Wait for elements or navigation to complete before interacting
-3. **Capture screenshots on failure** - Take screenshots to help debug issues
-4. **Clean up resources** - Always close the browser when done
-5. **Handle timeouts gracefully** - Set reasonable timeouts for slow operations
-6. **Test incrementally** - Start with simple interactions before complex flows
-7. **Use selectors wisely** - Prefer data-testid or role-based selectors over CSS classes
-
-## Common Patterns
-
-### Pattern: Wait for Element
-
 ```javascript
 await page.waitForSelector("#element-id", { state: "visible" });
-```
-
-### Pattern: Check if Element Exists
-
-```javascript
 const exists = (await page.locator("#element-id").count()) > 0;
-```
-
-### Pattern: Get Console Logs
-
-```javascript
 page.on("console", (msg) => console.log("Browser log:", msg.text()));
 ```
-
-### Pattern: Handle Errors
 
 ```javascript
 try {
@@ -123,13 +81,43 @@ try {
 }
 ```
 
-## Limitations
+## Gotchas
 
-- Requires Node.js environment
-- Cannot test native mobile apps (use React Native Testing Library instead)
-- May have issues with complex authentication flows
-- Some modern frameworks may require specific configuration
+- **Always verify the app is running first**: failing browser actions against a dead server hides the actual setup problem.
+- **Use explicit waits**: interact only after the element or navigation target is ready.
+- **Capture screenshots on failure**: visual evidence usually shortens UI debugging.
+- **Set reasonable timeouts**: slow local builds and API calls need bounded waiting, not infinite hangs.
+- **Test incrementally**: one small verified step is easier to debug than a long failing script.
+- **Complex authentication may need setup**: use existing test accounts, storage state, or documented login helpers rather than bypassing auth.
 
-## Helper Functions
+## Progressive disclosure and bundled resources
 
-Some helper functions are available in [`test-helper.js`](./assets/test-helper.js) to simplify common tasks like waiting for elements, capturing screenshots, and handling errors. You can import and use these functions in your tests to improve readability and maintainability.
+- `assets/test-helper.js` / `test-helper.js`: helper functions for waiting for elements, capturing screenshots, and handling errors. Import it when writing reusable local Playwright tests.
+
+## Output template
+
+```markdown
+## Web application test result
+
+**Status:** pass | fail | blocked
+**URL:** `<tested URL>`
+**Browser path:** Playwright MCP | local Playwright
+
+| Flow | Action | Expected | Observed | Evidence |
+| --- | --- | --- | --- | --- |
+| <flow name> | <click/fill/navigate/assert> | <expected behavior> | <actual behavior> | <screenshot, console log, network request, or selector> |
+
+### Diagnostics
+- Console: <errors, warnings, or none>
+- Network: <failed requests or none>
+- Screenshots: <paths or not captured>
+```
+
+## Quality gate
+
+- [ ] The target app or URL was verified reachable before testing.
+- [ ] Browser interactions used explicit waits or locator assertions.
+- [ ] Selectors prefer roles, labels, text, or `data-testid` over fragile CSS classes.
+- [ ] Failures include screenshot, console, network, or DOM evidence.
+- [ ] Browser resources were closed when local Playwright was used.
+- [ ] The final result states pass, fail, or blocked for each requested flow.

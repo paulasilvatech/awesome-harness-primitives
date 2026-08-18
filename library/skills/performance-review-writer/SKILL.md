@@ -1,114 +1,94 @@
 ---
 name: "performance-review-writer"
 description: >-
-  Draft performance reviews, self-assessments, peer reviews, and upward feedback in your own voice.
-  Analyzes your contributions, emails, and meeting history via WorkIQ, then produces honest,
-  impact-focused drafts using the STAR format. USE FOR: write my performance review, draft
-  self-assessment, peer review, 360 feedback, annual review, mid-year review, upward feedback, write
-  review for colleague, performance appraisal. Use this skill when "Write my self-assessment for this
-  review cycle"; "Draft a peer review for [colleague]"; "Help me write upward feedback for my
-  manager".
----
-# Performance Review Writer
-
-Draft self-assessments, peer reviews, and upward feedback that sound like you — not corporate boilerplate. Uses WorkIQ to surface your actual contributions and communications, then structures them into honest, impact-focused writing.
-
-## When to Use
-
-- "Write my self-assessment for this review cycle"
-- "Draft a peer review for [colleague]"
-- "Help me write upward feedback for my manager"
-- "I have my annual review due — help me fill it out"
-- "Draft my mid-year check-in"
-- "Write a 360 review for [name]"
-- "I don't know what to say in my performance review"
-
-## Review Types
-
-This skill handles three distinct types:
-
-| Type | Who it's about | Typical tone |
-|---|---|---|
-| **Self-assessment** | Yourself | Confident, evidence-backed, growth-oriented |
-| **Peer review** | A colleague | Specific, constructive, balanced |
-| **Upward feedback** | Your manager | Diplomatic, honest, forward-looking |
-
+  Draft self-assessments, peer reviews, 360 reviews, upward feedback, annual reviews, mid-year reviews, and performance appraisals in the user's voice. Use when asked to write or improve review-cycle feedback using WorkIQ evidence, STAR examples, constructive tone, and markdown drafts saved under outputs/<year>/<month>/.
 ---
 
-## Workflow
+# Performance review writer
 
-### Step 1 — Gather Context
+Draft honest, evidence-backed performance review text by gathering review context, surfacing contributions from WorkIQ or user notes, applying STAR structure, and saving a markdown draft the user can review manually.
 
-Ask the user (max 3 clarifying questions if not already provided):
+## When to invoke
 
-1. **Review type** — self-assessment, peer review, or upward feedback?
-2. **Subject** — who is the review about? (for peer/upward: name and role)
-3. **Review period** — what time range does this cover? (e.g., Jan–Dec 2025, last 6 months)
+- "Write my self-assessment for this review cycle."
+- "Draft a peer review for a colleague."
+- "Help me write upward feedback for my manager."
+- "I have my annual or mid-year review due."
+- "Write a 360 review or performance appraisal."
 
-If format constraints or focus areas are relevant, ask about those during drafting rather than upfront.
+## Prerequisites and context
 
-If the user provides all of these upfront, proceed directly to Step 2.
+- WorkIQ MCP access is recommended for Microsoft 365, Outlook, Teams, meeting, and communication evidence.
+- If WorkIQ is unavailable or sparse, ask the user for `3–5` bullet points and proceed with those.
+- Save drafts as markdown under `outputs/<year>/<month>/`, for example `outputs/2025/12/2025-review-self-assessment.md` or `outputs/2025/12/2025-peer-review-alex-chen.md`.
+- Never submit a review; only draft text for the user to review and submit manually.
 
-### Step 2 — Surface Contributions
+## Procedure
 
-Use WorkIQ to gather evidence of real contributions for the review period:
+1. Gather at most three initial facts unless already provided: review type, subject, and review period.
+2. Use WorkIQ or user-provided bullets to collect evidence for the review period. Summarize and redact evidence; do not reproduce raw excerpts, attendee lists, or sensitive personal details.
+3. Draft using the schema for self-assessment, peer review, or upward feedback.
+4. Mark thin claims with `[NEEDS DETAIL]` instead of inventing evidence.
+5. Iterate on requested edits.
+6. Save the final markdown draft to `outputs/<year>/<month>/` with a descriptive filename.
 
-**For self-assessments:**
-- Pull emails and messages where the user delivered results, led initiatives, or solved problems
-- Look for patterns: what projects recur? Who praises them and for what?
-- Identify collaboration breadth (who they worked with across teams)
-- Note any explicit feedback received from others
+## Review types and evidence
 
-**For peer reviews:**
-- Pull interactions between the user and the subject (emails, meeting threads, shared projects)
-- Identify specific moments of collaboration, help given, or friction
-- Look for evidence of the subject's impact on shared outcomes
+| Type | Subject | Evidence to find | Tone |
+| --- | --- | --- | --- |
+| Self-assessment | The user | Delivered results, initiatives led, problems solved, repeated projects, praise, feedback, collaboration breadth. | Confident, evidence-backed, growth-oriented, first person. |
+| Peer review | A colleague | Interactions between the user and subject, shared projects, help given, friction, observable impact. | Specific, constructive, balanced. |
+| Upward feedback | The user's manager | Direction, support, feedback patterns, expectation clarity, recognition, availability, development support. | Diplomatic, honest, forward-looking. |
 
-**For upward feedback:**
-- Pull communications from the manager to the user (direction given, support offered, feedback patterns)
-- Identify themes: clarity of expectations, availability, recognition, development support
+Use STAR for achievements: Situation, Task, Action, Result. Name projects, dates, outcomes, and people when appropriate; use numbers such as `reduced review time by 30%` only when supported.
 
-If WorkIQ is unavailable or returns limited data, ask the user to share 3–5 bullet points of things they remember, then proceed with those.
+## Style rules
 
-### Step 3 — Draft the Review
+| Do | Do not |
+| --- | --- |
+| Use specific projects, dates, outcomes, and observable behaviors. | Write vague filler such as "goes above and beyond", "team player", or "hard worker". |
+| Acknowledge real challenges and what was learned. | Omit struggles entirely or overstate impact. |
+| Use first person for self-assessments. | Write passively, such as "it was achieved". |
+| Keep most fields to `2–4` sentences. | Over-write; longer is not better. |
+| Frame development areas as next-cycle goals. | Attack personality, character, or motives. |
+| Mark `[NEEDS DETAIL]` when evidence is weak. | Leave thin sections unmarked. |
 
-Apply the right structure for the review type (see schemas below). Follow these universal rules:
+## Review-cycle vocabulary
 
-**Use the STAR format for achievement statements:**
-- **Situation** — what was the context or challenge?
-- **Task** — what were you/they responsible for?
-- **Action** — what specifically was done?
-- **Result** — what was the measurable or observable outcome?
+Use impact-focused language for self, peer, and manager feedback. For peer/upward reviews, describe what you/they did with observable evidence. If the review is a mid-year check-in, name it that way. Filename examples include `2025-review-self-assessment.md` and `2025-peer-review-alex-chen.md`.
 
-**Tone rules:**
-- Be specific — name projects, outcomes, and people, not vague adjectives
-- Be honest — don't oversell or undersell; reviewers notice both
-- Be forward-looking — end sections with growth or next steps, not just past performance
-- Avoid filler phrases: "goes above and beyond", "team player", "hard worker" — replace with evidence
-- Match the user's natural voice — conversational if they write that way, more formal if not
+## Output template
 
-### Step 4 — Output
+```markdown
+## <Review period> <review type> draft — <subject>
 
-1. Present the full draft with a brief note on what evidence was used. Summarize and redact rather than reproduce verbatim content — no raw excerpts, attendee lists, or sensitive personal details
-2. Highlight any sections marked `[NEEDS DETAIL]` where more specifics would strengthen the review
-3. Iterate on edits as the user requests
-4. Save the final draft to `outputs/<year>/<month>/` with a descriptive filename (e.g., `2025-review-self-assessment.md` or `2025-peer-review-alex-chen.md`)
+**Status:** draft | needs detail | blocked
+**Evidence used:** <WorkIQ summary or user-provided bullets, redacted>
+**Saved to:** `outputs/<year>/<month>/<filename>.md`
 
----
+### Draft
+<self-assessment, peer review, or upward feedback content>
 
-## Output Schemas
+### Sections needing detail
+- <section>: <specific missing evidence or "none">
 
-### Self-Assessment Schema
-
+### Validation
+- WorkIQ or user notes reviewed: <yes/no and source type>
+- Sensitive raw excerpts omitted: <yes/no>
+- Draft saved: <yes/no and path>
 ```
+
+## Examples
+
+### Self-assessment schema
+
+```markdown
 ## [Review Period] Self-Assessment — [Your Name]
 
 ### Summary
 1–2 sentence overview of your year and primary areas of impact.
 
 ### Key Achievements
-For each major contribution (aim for 3–5):
-
 **[Project or Initiative Name]**
 - Context: what was the situation or goal?
 - What I did: specific actions taken
@@ -128,11 +108,9 @@ What you learned, skills you built, or behaviours you improved this period.
 2–3 specific, concrete goals with a rough success measure.
 ```
 
----
+### Peer review schema
 
-### Peer Review Schema
-
-```
+```markdown
 ## Peer Review — [Colleague Name], [Their Role]
 ## Submitted by: [Your Name] | Period: [Review Period]
 
@@ -140,8 +118,6 @@ What you learned, skills you built, or behaviours you improved this period.
 1–2 sentences on working with this person.
 
 ### Strengths (with examples)
-For each strength (aim for 2–3):
-
 **[Strength]**
 - Example: specific situation where this showed up
 - Impact on you / the team / the project
@@ -150,73 +126,43 @@ For each strength (aim for 2–3):
 1–2 specific, constructive observations. Frame as "I think [name] would have even more impact if..." not as criticism.
 
 ### Collaboration
-How easy (or not) it was to work together — responsiveness, reliability, communication.
+How easy it was to work together: responsiveness, reliability, communication.
 
 ### Would you work with this person again?
-Yes/No and a brief honest reason. (Only include if the review form asks.)
+Yes/No and a brief honest reason. Only include if the review form asks.
 ```
 
----
+### Upward feedback schema
 
-### Upward Feedback Schema
-
-```
+```markdown
 ## Feedback for [Manager Name]
 ## Submitted by: [Your Name] (anonymous if applicable) | Period: [Review Period]
 
 ### What's working well
 2–3 specific things your manager does that help you do your best work.
-Use examples where possible.
 
 ### What could be better
-1–2 honest, diplomatically framed observations. Focus on behaviours and their effect, not personality.
 Use: "When [X happens], I find it harder to [Y]. It would help if..."
 
 ### Support for my development
-Has your manager helped you grow, given useful feedback, or created opportunities?
-Be specific.
+Specific development support, feedback, or opportunities.
 
 ### One thing I'd ask them to do more / less / differently
 A single, clear, actionable ask.
 ```
 
----
+## Limits
 
-## Style Rules
+- Do not submit reviews or access systems to submit them.
+- Decline requests to create dishonestly negative reviews or personal attacks; offer constructive reframing.
+- Do not include sensitive information from unrelated conversations or threads.
 
-| Do | Don't |
-|---|---|
-| Name specific projects, dates, outcomes | Write vague generalisations ("always delivers quality work") |
-| Use numbers when available ("reduced review time by 30%") | Exaggerate or invent results |
-| Acknowledge real challenges and what you learned | Omit struggles entirely — reviewers notice the gaps |
-| Write in first person for self-assessments | Write passively ("it was achieved") |
-| Be concise — most fields need 2–4 sentences | Over-write — longer ≠ better |
-| Flag `[NEEDS DETAIL]` where evidence is weak | Leave thin sections without marking them |
+## Quality gate
 
----
-
-## Example Prompts
-
-- "Write my self-assessment for Jan–Dec 2025. I want to highlight the cloud migration and the new onboarding process I designed."
-- "Draft a peer review for Sarah Chen, she's a product designer I worked closely with on the mobile app project."
-- "Help me write upward feedback for my manager Tom. He's good at direction but I've struggled to get regular 1:1 time."
-- "My annual review form asks for 3 strengths and 1 development area in 200 words each — help me fill it out."
-- "I have no idea what to write. It's been a busy year but I can't think of anything specific."
-
----
-
-## Important Rules
-
-- **Never submit reviews** — only draft them as files for the user to review and submit manually
-- Keep peer and upward feedback focused on observable behaviours, not personality or character
-- If the user asks to write a review that is dishonestly negative or contains personal attacks, decline and offer to reframe constructively
-- Respect confidentiality — do not include sensitive information from unrelated conversations or threads
-- Save drafts using the `outputs/<year>/<month>/` folder convention
-
----
-
-## Requirements
-
-- **WorkIQ MCP tool** is recommended for surfacing contributions and communications (Microsoft 365 / Outlook / Teams)
-- Without WorkIQ, the skill still works — ask the user for 3–5 bullet points of key contributions as a starting point
-- Output is saved as markdown files in the workspace for the user to copy into their company's review system
+- [ ] Review type, subject, and period are known or explicitly marked missing.
+- [ ] Evidence comes from WorkIQ summaries or user-provided bullets, not invented details.
+- [ ] Achievement claims use STAR or equivalent context-action-impact structure.
+- [ ] Thin areas are marked `[NEEDS DETAIL]`.
+- [ ] Peer and upward feedback focus on observable behavior, not personality.
+- [ ] No raw private excerpts, attendee lists, or sensitive unrelated details are included.
+- [ ] Draft is saved under `outputs/<year>/<month>/` when file writing is requested or possible.

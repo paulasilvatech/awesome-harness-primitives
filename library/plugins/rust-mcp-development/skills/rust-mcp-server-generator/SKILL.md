@@ -1,27 +1,49 @@
 ---
 name: "rust-mcp-server-generator"
 description: >-
-  Generate a complete Rust Model Context Protocol server project with tools, prompts, resources, and
-  tests using the official rmcp SDK. Use this skill when the user asks for project requirements.
+  Generate a complete Rust Model Context Protocol server project using the official rmcp SDK, including transports, tools, prompts, resources, state, tests, and client configuration. Use this skill when the user asks to create a Rust MCP server, rmcp project, MCP tool server, stdio/SSE/HTTP transport server, or project requirements for a Rust MCP implementation.
 ---
-# Rust MCP Server Generator
 
-You are a Rust MCP server generator. Create a complete, production-ready Rust MCP server project using the official `rmcp` SDK.
+# Rust MCP server generator
 
-## Project Requirements
+Collect the server requirements, read the bundled Rust MCP reference when implementing files, and generate a complete Rust project that builds, tests, and runs as an MCP server.
 
-Ask the user for:
-1. **Project name** (e.g., "my-mcp-server")
-2. **Server description** (e.g., "A weather data MCP server")
-3. **Transport type** (stdio, sse, http, or all)
-4. **Tools to include** (e.g., "weather lookup", "forecast", "alerts")
-5. **Whether to include prompts and resources**
+## When to invoke
 
-## Project Structure
+- "Generate a Rust MCP server project."
+- "Create an rmcp server with tools and prompts."
+- "Build a stdio MCP tool server in Rust."
+- "Add SSE and HTTP transports to a Rust MCP server."
+- "Give me project requirements for a Rust MCP implementation."
 
-Generate this structure:
+## Inputs
 
-```
+Use `$ARGUMENTS` as the initial project brief. Extract project name, server description, transport type, tools, prompts, and resources from it. If any required detail is missing and interactive follow-up is unavailable, choose safe defaults and mark assumptions in the output.
+
+## Prerequisites and context
+
+- Generate Rust code against the official `rmcp` SDK patterns described in the bundled reference.
+- `cargo` must be available to build and test the generated project.
+- Supported transports are `stdio`, `sse`, `http`, or `all`.
+- Stdio is the safest default when the user does not specify a transport.
+
+## Project requirements
+
+Ask or infer these fields before generating files:
+
+| Requirement | Examples | Default when absent |
+| --- | --- | --- |
+| Project name | `my-mcp-server` | Kebab-case name derived from the request. |
+| Server description | `A weather data MCP server` | One sentence based on the requested domain. |
+| Transport type | `stdio`, `sse`, `http`, `all` | `stdio`. |
+| Tools to include | `weather lookup`, `forecast`, `alerts` | One simple health or echo tool. |
+| Prompts and resources | Include or omit prompt/resource modules | Include only when requested. |
+
+## Project structure
+
+Generate this directory tree, adding prompt and resource modules only when enabled:
+
+```text
 {project-name}/
 ├── Cargo.toml
 ├── .gitignore
@@ -43,79 +65,66 @@ Generate this structure:
     └── integration_test.rs
 ```
 
-## Bundled Resources
+## Implementation rules
 
-- [Rust MCP server templates, development, and patterns](references/templates-development-patterns.md) — When generating Rust files or implementing tool patterns, open this template and development reference.
+| Area | Rule |
+| --- | --- |
+| rmcp macros | Use `#[tool]`, `#[tool_router]`, and `#[tool_handler]` where the reference shows they simplify routing. |
+| Type safety | Use `schemars::JsonSchema` for every tool parameter type. |
+| Errors | Return `Result` values with clear messages instead of panics. |
+| Async | Make all handlers async. |
+| Shared state | Use `Arc<RwLock<T>>` for mutable shared state. |
+| Logging | Use `tracing` macros: `info!`, `debug!`, `warn!`, and `error!`. |
+| Documentation | Add doc comments to public items. |
+| Tests | Include unit tests for tools and integration tests for handlers. |
 
-## Installation
+## Procedure
 
-```bash
-cargo build --release
+1. Resolve the project requirements and transport choice.
+2. Read `references/templates-development-patterns.md` before writing Rust files or implementing tool patterns.
+3. Create the project structure, `Cargo.toml`, `.gitignore`, `README.md`, source modules, and tests.
+4. Add usage commands for the selected transports:
+   - Stdio: `cargo run`
+   - SSE: `cargo run --features http -- --transport sse`
+   - HTTP: `cargo run --features http -- --transport http`
+5. Add MCP client configuration examples for release binaries and local builds.
+6. Run `cargo build` and `cargo test` when dependencies are available; report failures with exact output summaries.
+
+## Progressive disclosure and bundled resources
+
+- `references/templates-development-patterns.md`: Rust MCP server templates, development guidance, and tool implementation patterns. Read it before generating source files or deciding macro usage.
+
+## Rust MCP terminology
+
+Describe the result as `production-ready` only when build, test, error handling, tracing, and README instructions are present. Name `rmcp-macros` when explaining macro usage, and preserve the `Async/Await**` implementation concern as async handlers with awaited operations. Include the release path form `path/to/target/release/{project-name}` for clients that reference a built binary directly.
+
+## Output template
+
+```markdown
+## Rust MCP server generation
+
+**Status:** generated | blocked
+**Project:** `{project-name}`
+**Transport:** stdio | sse | http | all
+**Assumptions:** <none or list>
+
+### Files created
+```text
+{project-name}/
+<generated tree>
 ```
 
-## Usage
-
-### Stdio Transport
-
-```bash
-cargo run
-```
-
-### SSE Transport
-
-```bash
-cargo run --features http -- --transport sse
-```
-
-### HTTP Transport
-
-```bash
-cargo run --features http -- --transport http
-```
-
-## Configuration
-
-Configure in your MCP client (e.g., Claude Desktop):
-
-```json
-{
-  "mcpServers": {
-    "{project-name}": {
-      "command": "path/to/target/release/{project-name}",
-      "args": []
-    }
-  }
-}
-```
-
-## Tools
-
-- **{tool_name}**: {Tool description}
-
-## Implementation Guidelines
-
-1. **Use rmcp-macros**: Leverage `#[tool]`, `#[tool_router]`, and `#[tool_handler]` macros for cleaner code
-2. **Type Safety**: Use `schemars::JsonSchema` for all parameter types
-3. **Error Handling**: Return `Result` types with proper error messages
-4. **Async/Await**: All handlers must be async
-5. **State Management**: Use `Arc<RwLock<T>>` for shared state
-6. **Testing**: Include unit tests for tools and integration tests for handlers
-7. **Logging**: Use `tracing` macros (`info!`, `debug!`, `warn!`, `error!`)
-8. **Documentation**: Add doc comments to all public items
-
-## Running the Generated Server
-
-After generation:
-
+### Usage
 ```bash
 cd {project-name}
 cargo build
 cargo test
 cargo run
+cargo run --features http -- --transport sse
+cargo run --features http -- --transport http
 ```
 
-For Claude Desktop integration:
-
+### MCP client configuration
 ```json
 {
   "mcpServers": {
@@ -127,4 +136,17 @@ For Claude Desktop integration:
 }
 ```
 
-Now generate the complete project based on the user's requirements!
+### Validation
+- `cargo build`: pass | fail | not run
+- `cargo test`: pass | fail | not run
+```
+
+## Quality gate
+
+- [ ] Project name is valid kebab-case and used consistently in paths, package metadata, README, and MCP client configuration.
+- [ ] Transport handling covers `stdio`, `sse`, `http`, or `all` as requested.
+- [ ] Every tool has typed parameters with `schemars::JsonSchema` and async handlers returning `Result`.
+- [ ] Shared mutable state uses `Arc<RwLock<T>>` when needed.
+- [ ] Logging uses `tracing` macros rather than `println!` for server diagnostics.
+- [ ] Unit and integration tests are generated and validation commands are reported.
+- [ ] The bundled reference file was read before source generation.

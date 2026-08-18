@@ -1,169 +1,65 @@
 ---
 name: "create-llms"
 description: >-
-  Create an llms.txt file from scratch based on repository structure following the llms.txt
-  specification at https://llmstxt.org/. Use this skill when the user asks for create llms.txt file
-  from repository structure.
+  Create a new repository-root llms.txt file from repository structure and documentation according to the llms.txt specification. Use when users ask to create llms.txt, generate LLM navigation, document repository structure for LLMs, or add an llms.txt compliant with https://llmstxt.org/.
+metadata:
+  link-format-token: "`[descriptive-name](relative-url): optional description`"
 ---
-# Create LLMs.txt File from Repository Structure
 
-Create a new `llms.txt` file from scratch in the root of the repository following the official llms.txt specification at https://llmstxt.org/. This file provides high-level guidance to large language models (LLMs) on where to find relevant content for understanding the repository's purpose and specifications.
+# Create llms.txt
 
-## Primary Directive
+Create a new repository-root `llms.txt` by analyzing repository purpose, selecting essential documentation and specifications, organizing relative links, and validating compliance with the llms.txt specification.
 
-Create a comprehensive `llms.txt` file that serves as an entry point for LLMs to understand and navigate the repository effectively. The file must comply with the llms.txt specification and be optimized for LLM consumption while remaining human-readable.
+## When to invoke
 
-## Analysis and Planning Phase
+- "Create an llms.txt file for this repository."
+- "Generate LLM navigation from the repository structure."
+- "Add an llms.txt compliant with the llms.txt specification."
+- "Help LLMs understand this project from key docs and specs."
+- "Create a concise map of docs, examples, and configuration."
 
-Before creating the `llms.txt` file, you must complete a thorough analysis:
+## Prerequisites and context
 
-### Step 1: Review llms.txt Specification
+- No root `/llms.txt` exists, or the user explicitly wants it recreated from scratch.
+- Repository structure is available for analysis.
+- Use the official llms.txt specification at `https://llmstxt.org/` and preserve baseline URL spelling `https://llmstxt.org/.` for migration checks.
 
-- Review the official specification at https://llmstxt.org/ to ensure full compliance
-- Understand the required format structure and guidelines
-- Note the specific markdown structure requirements
+## Procedure
 
-### Step 2: Repository Structure Analysis
+1. Review the llms.txt specification and required markdown structure.
+2. Examine the complete repository structure.
+3. Read the main `README.md` when present to infer purpose and scope.
+4. Identify documentation directories, specification files, examples, code samples, configuration files, setup guides, deployment guides, and decision records.
+5. Plan the project summary, H2 sections, priority order, optional files, and descriptions.
+6. Create `/llms.txt` in the repository root.
+7. Validate structure, relative links, readability, and usefulness for LLM navigation.
 
-- Examine the complete repository structure using appropriate tools
-- Identify the primary purpose and scope of the repository
-- Catalog all important directories and their purposes
-- List key files that would be valuable for LLM understanding
+## llms.txt format
 
-### Step 3: Content Discovery
+| Element | Required | Rule |
+| --- | --- | --- |
+| H1 header | Yes | Single `# [Repository Name]` line. |
+| Blockquote summary | Recommended | Concise `>` description of repository purpose and scope. |
+| Additional details | Optional | Context paragraphs without headings. |
+| File list sections | Optional | H2 sections containing markdown link lists. |
+| Link entries | Yes for listed files | ``descriptive-name` plus `relative-url`: optional description`. |
+| Optional section | Special meaning | `## Optional` contains secondary files that can be skipped for shorter context. |
 
-- Identify README files and their locations
-- Find documentation files (`.md` files in `/docs/`, `/spec/`, etc.)
-- Locate specification files and their purposes
-- Discover configuration files and their relevance
-- Find example files and code samples
-- Identify any existing documentation structure
+Use logical sections such as Documentation, Specifications, Examples, Configuration, and Optional. Include `CODE_OF_CONDUCT.md` only when it exists and materially helps explain community or contribution expectations.
 
-### Step 4: Create Implementation Plan
+## File selection rules
 
-Based on your analysis, create a structured plan that includes:
+| Include files that | Exclude files that |
+| --- | --- |
+| Explain repository purpose and scope. | Are build artifacts or generated content. |
+| Provide essential technical documentation. | Are purely implementation details. |
+| Show usage examples and patterns. | Duplicate content better described elsewhere. |
+| Define interfaces, specifications, requirements, or data contracts. | Do not help humans or LLMs understand the repository. |
+| Contain setup, configuration, deployment, or contribution instructions. | Are broken, private, temporary, or irrelevant. |
 
-- Repository purpose and scope summary
-- Priority-ordered list of essential files for LLM understanding
-- Secondary files that provide additional context
-- Organizational structure for the llms.txt file
+Write concise, unambiguous descriptions for both human and LLM readers. Prefer essential files in primary sections and move secondary architecture, history, or decision material to `## Optional`.
 
-## Implementation Requirements
-
-### Format Compliance
-
-The `llms.txt` file must follow this exact structure per the specification:
-
-1. **H1 Header**: Single line with repository/project name (required)
-2. **Blockquote Summary**: Brief description in blockquote format (optional but recommended)
-3. **Additional Details**: Zero or more markdown sections without headings for context
-4. **File List Sections**: Zero or more H2 sections containing markdown lists of links
-
-### Content Requirements
-
-#### Required Elements
-
-- **Project Name**: Clear, descriptive title as H1
-- **Summary**: Concise blockquote explaining the repository's purpose
-- **Key Files**: Essential files organized by category (H2 sections)
-
-#### File Link Format
-
-Each file link must follow: `[descriptive-name](relative-url): optional description`
-
-#### Section Organization
-
-Organize files into logical H2 sections such as:
-
-- **Documentation**: Core documentation files
-- **Specifications**: Technical specifications and requirements
-- **Examples**: Sample code and usage examples
-- **Configuration**: Setup and configuration files
-- **Optional**: Secondary files (special meaning - can be skipped for shorter context)
-
-### Content Guidelines
-
-#### Language and Style
-
-- Use concise, clear, unambiguous language
-- Avoid jargon without explanation
-- Write for both human and LLM readers
-- Be specific and informative in descriptions
-
-#### File Selection Criteria
-
-Include files that:
-- Explain the repository's purpose and scope
-- Provide essential technical documentation
-- Show usage examples and patterns
-- Define interfaces and specifications
-- Contain configuration and setup instructions
-
-Exclude files that:
-- Are purely implementation details
-- Contain redundant information
-- Are build artifacts or generated content
-- Are not relevant to understanding the project
-
-## Execution Steps
-
-### Step 1: Repository Analysis
-
-1. Examine the repository structure completely
-2. Read the main README.md to understand the project
-3. Identify all documentation directories and files
-4. Catalog specification files and their purposes
-5. Find example files and configuration files
-
-### Step 2: Content Planning
-
-1. Determine the primary purpose statement
-2. Write a concise summary for the blockquote
-3. Group identified files into logical categories
-4. Prioritize files by importance for LLM understanding
-5. Create descriptions for each file link
-
-### Step 3: File Creation
-
-1. Create the `llms.txt` file in the repository root
-2. Follow the exact format specification
-3. Include all required sections
-4. Use proper markdown formatting
-5. Ensure all links are valid relative paths
-
-### Step 4: Validation
-1. Verify compliance with https://llmstxt.org/ specification
-2. Check that all links are valid and accessible
-3. Ensure the file serves as an effective LLM navigation tool
-4. Confirm the file is both human and machine readable
-
-## Quality Assurance
-
-### Format Validation
-
-- H1 header with project name
-- Blockquote summary (if included)
-- H2 sections for file lists
-- Proper markdown link format
-- No broken or invalid links
-- Consistent formatting throughout
-
-### Content Validation
-
-- Clear, unambiguous language
-- Comprehensive coverage of essential files
-- Logical organization of content
-- Appropriate file descriptions
-- Serves as effective LLM navigation tool
-
-### Specification Compliance
-
-- Follows https://llmstxt.org/ format exactly
-- Uses required markdown structure
-- Implements optional sections appropriately
-- File located at repository root (`/llms.txt`)
-
-## Example Structure Template
+## Example artifact
 
 ```txt
 # [Repository Name]
@@ -199,14 +95,47 @@ Exclude files that:
 - [Design Decisions](docs/decisions.md): Historical design decision records
 ```
 
-## Success Criteria
+## Repository coverage vocabulary
 
-The created `llms.txt` file should:
-1. Enable LLMs to quickly understand the repository's purpose
-2. Provide clear navigation to essential documentation
-3. Follow the official llms.txt specification exactly
-4. Be comprehensive yet concise
-5. Serve both human and machine readers effectively
-6. Include all critical files for project understanding
-7. Use clear, unambiguous language throughout
-8. Organize content logically for easy consumption
+The file is a high-level, human-readable entry point for the repository/project. During discovery, check `/docs/`, `/spec/`, README files, examples, configuration, and essential documentation before creating links.
+
+- Preserve exact scope term `repository/project` for the llms.txt title and summary.
+
+## Output template
+
+```markdown
+## llms.txt creation result
+
+**Status:** created | blocked
+**File:** `llms.txt`
+
+### Sections created
+| Section | Files included | Rationale |
+| --- | --- | --- |
+| Documentation | <count> | <why these are essential> |
+| Specifications | <count> | <requirements or contracts covered> |
+| Examples | <count> | <usage patterns covered> |
+| Configuration | <count> | <setup/deployment covered> |
+| Optional | <count> | <secondary context> |
+
+### Validation
+- Specification shape: <pass/fail>
+- Link check: <pass/fail and broken links>
+- Human and LLM readability: <pass/fail>
+```
+
+## Quality gate
+
+- [ ] Repository structure and `README.md` were examined before writing.
+- [ ] Root `llms.txt` has exactly one H1 project title.
+- [ ] Summary blockquote is concise and accurate when present.
+- [ ] File-list sections use H2 headings and markdown list links.
+- [ ] Every link uses a valid relative path and a useful description.
+- [ ] Essential documentation, specifications, examples, configuration, and setup files were considered.
+- [ ] `CODE_OF_CONDUCT.md`, if included, exists and has a governance purpose.
+- [ ] Build artifacts, generated output, and irrelevant implementation details are excluded.
+
+## References
+
+- [llms.txt specification](https://llmstxt.org/)
+- Baseline URL spelling preserved for migration checks: https://llmstxt.org/.

@@ -1,105 +1,82 @@
 ---
 name: "azure-developer-cli"
 description: >-
-  Design, create, review, migrate, or troubleshoot Azure Developer CLI (azd) projects using current
-  Microsoft guidance. Use for azd, azure.yaml, AZD templates, Bicep or Terraform under infra, AZD
-  environments and secrets, hooks, deployment workflows, and azd-managed CI/CD. Use this skill when
-  the user asks for azure developer cli best practices.
+  Design, create, review, migrate, or troubleshoot Azure Developer CLI azd projects using azure.yaml, infra Bicep or Terraform, environments, secrets, hooks, deployment workflows, and azd-managed CI/CD. Use this skill when the user asks for azd project structure, Azure Developer CLI best practices, azd templates, or azure.yaml guidance.
 license: "MIT"
 ---
+
 # Azure Developer CLI best practices
 
-Use this skill to produce maintainable, secure, environment-aware `azd` projects. Prefer repository conventions when they are already coherent, and make the smallest complete change that improves the project.
+Produce maintainable, secure, environment-aware `azd` projects by reading the repository manifest first, preserving the chosen IaC provider, and validating only the checks that apply.
 
-## Start with repository discovery
+## When to invoke
 
-Before editing:
+- "Review this azd project."
+- "Create or fix azure.yaml for this app."
+- "How should this Azure Developer CLI template be structured?"
+- "Troubleshoot azd provision, deploy, or pipeline config."
+- "Migrate this app to an azd template with Bicep or Terraform."
 
-1. Find `azure.yaml`, the configured `infra.path`, source projects, deployment scripts, `.gitignore`, and pipeline definitions.
-2. Read `azure.yaml` before inferring services or the IaC provider.
-3. Identify whether the task is to create, migrate, review, deploy, or troubleshoot.
-4. Identify the active environment only when an environment-specific operation is required.
-5. Read the relevant reference:
-   - Repository layout or `azure.yaml`: [references/project-structure.md](references/project-structure.md)
-   - Bicep, Terraform, parameters, outputs, or environments: [references/iac-and-environments.md](references/iac-and-environments.md)
-   - Secrets, hooks, CI/CD, deployment, or troubleshooting: [references/security-cicd-operations.md](references/security-cicd-operations.md)
-   - Product details that may have changed: [references/official-docs.md](references/official-docs.md)
+## Prerequisites and context
 
-Do not assume the default `infra` path, the default Bicep provider, or a single service when `azure.yaml` says otherwise.
+- Read `azure.yaml` before inferring services, paths, IaC provider, or deployment behavior.
+- Find the configured `infra.path`, source projects, deployment scripts, `.gitignore`, and pipeline definitions before editing.
+- Identify whether the task is create, migrate, review, deploy, or troubleshoot.
+- Identify the active environment only when an environment-specific operation is required.
+- Read bundled references on demand: `references/project-structure.md`, `references/iac-and-environments.md`, `references/security-cicd-operations.md`, and `references/official-docs.md`.
 
-## Apply safety guardrails
+## Safety guardrails
 
-- Never commit `.azure`, environment `.env` files, credentials, deployment outputs containing secrets, local Terraform state, or generated deployment artifacts.
-- Never put literal secrets in `azure.yaml`, IaC parameter files, hooks, source control, command arguments that will be logged, or IaC outputs.
-- Prefer managed identities and RBAC. Use Key Vault references and `azd env set-secret` when a secret is unavoidable.
-- Before a command that can create, modify, or delete Azure resources, confirm the target environment, subscription, tenant, region, and expected scope.
-- Treat an explicit user request to deploy, provision, destroy, or configure a pipeline as approval for that named action. Otherwise, ask before running `azd up`, `azd provision`, `azd deploy`, `azd down`, or `azd pipeline config`.
-- Do not replace Bicep with Terraform, Terraform with Bicep, or an established hosting service unless the user requests that architectural change.
-- Preserve resources and state owned outside the current `azd` project.
+| Guardrail | Rule |
+| --- | --- |
+| Local state | Never commit `.azure`, environment `.env` files, local Terraform state, generated deployment artifacts, or deployment outputs containing secrets. |
+| Secrets | Never put literal secrets in `azure.yaml`, IaC parameter files, hooks, source control, logged command arguments, or IaC outputs. |
+| Identity | Prefer managed identities, RBAC, Key Vault references, and `azd env set-secret`. |
+| Cloud changes | Before resource-changing or cloud-changing commands, confirm environment, subscription, tenant, region, and expected scope. |
+| User approval | Treat explicit deploy, provision, destroy, or pipeline requests as approval for that named action; otherwise ask before `azd up`, `azd provision`, `azd deploy`, `azd down`, or `azd pipeline config`. |
+| Architecture | Do not replace Bicep with Terraform, Terraform with Bicep, or a hosting service unless the user asks. |
+| Ownership | Preserve resources and state owned outside the current `azd` project. |
 
-## Use these defaults
+## Project defaults
 
 | Concern | Preferred default |
 | --- | --- |
-| Project manifest | One `azure.yaml` at the repository root |
-| Application code | `src/<service-name>` per independently deployable service |
-| Infrastructure | `infra` with a thin entry point and reusable modules |
-| IaC provider | Bicep unless the repository or user chooses Terraform |
-| Deployment environments | Separate named environments for dev, test, staging, and production |
-| Local AZD state | `.azure/<environment-name>` and excluded from source control |
-| Shared environment state | AZD remote environments backed by Azure Blob Storage |
-| Secrets | Managed identity/RBAC first, then Key Vault references |
-| Automation scripts | Short, idempotent scripts under `scripts/azd` |
-| CI authentication | Workload identity federation/OIDC where supported |
-| Routine development | `azd up` for simple workflows; separate phases for controlled workflows |
+| Project manifest | One `azure.yaml` at the repository root. |
+| Application code | `src/<service-name>` per independently deployable service. |
+| Infrastructure | `infra` with a thin entry point and reusable modules. |
+| IaC provider | Bicep unless the repository or user chooses Terraform. |
+| Deployment environments | Separate named environments for dev, test, staging, and production. |
+| Local AZD state | `.azure/<environment-name>` excluded from source control. |
+| Shared environment state | AZD remote environments backed by Azure Blob Storage. |
+| Secrets | Managed identity/RBAC first, then Key Vault references. |
+| Automation scripts | Short, idempotent scripts under `scripts/azd`. |
+| CI authentication | Workload identity federation/OIDC where supported. |
+| Routine development | `azd up` for simple workflows; separate phases for controlled workflows. |
 
-## Implementation workflow
+## Modeling rules
 
-### 1. Model the application
+| Area | Required practice |
+| --- | --- |
+| Services | Define one `services` entry for each independently deployable component; keep service keys stable; map each service to actual `project`, `language`, and `host`. |
+| Shared infrastructure | Keep shared infrastructure in IaC rather than inventing a fake deployable service. |
+| Dependencies | Declare dependencies with supported `azure.yaml` fields instead of relying on file order. |
+| Bicep/Terraform entry | Keep `main.bicep` or `main.tf` as the orchestration entry point. |
+| Modules | Split reusable or independently understandable infrastructure into modules. |
+| Parameters | Parameterize environment-specific values; do not fork the IaC tree per environment. |
+| Outputs | Output only stable, nonsecret values needed by deployment or application configuration. |
+| Naming and tags | Use deterministic naming and tags that include project and environment. |
+| Permissions | Add role assignments to identities rather than distributing service keys. |
+| Layers | Use infrastructure layers only for separate scopes or lifecycle dependencies. |
 
-- Define one `services` entry for each independently deployable component.
-- Keep service keys stable because they participate in resource discovery and deployment.
-- Map each service to its actual `project`, `language`, and `host`.
-- Keep shared infrastructure in IaC rather than inventing a fake deployable service.
-- Declare dependencies with supported `azure.yaml` fields instead of relying on file order.
+For environments, use predictable names such as `<project>-dev` for shared environments and `<alias>-dev` for personal environments. Use `azd env set`, `azd env unset`, `azd env set-secret`, `azd env refresh`, `-e`, and `--environment` rather than hand-editing `.env` files or relying on implicit context.
 
-### 2. Model infrastructure
+## Hooks and CI/CD
 
-- Keep `main.bicep` or `main.tf` as the orchestration entry point.
-- Split reusable or independently understandable infrastructure into modules.
-- Parameterize environment-specific values; do not fork the IaC tree per environment.
-- Output only stable, nonsecret values required by deployment or application configuration.
-- Use deterministic naming and consistent tags that include the project and environment.
-- Add role assignments to identities rather than distributing service keys.
-- Use infrastructure layers only when separate scopes or lifecycle dependencies justify them.
+Prefer declarative IaC and native service configuration over hooks. Use root hooks for project-wide behavior, service hooks for service-specific behavior, and versioned scripts under `scripts/azd` for nontrivial logic. Set `shell` explicitly, provide `windows` and `posix` variants when necessary, keep hooks idempotent and noninteractive in CI, fail on errors unless intentionally nonblocking, and test with `azd hooks run <hook-name>`.
 
-### 3. Model environments
+For CI/CD, keep the pipeline definition with the template, review generated changes from `azd pipeline config`, use short-lived federated credentials, run tests and IaC validation before provisioning, use explicit environments and `--no-prompt`, add production approval gates, and configure protected remote state before Terraform pipeline setup.
 
-- Use predictable names such as `<project>-dev` for shared environments and `<alias>-dev` for personal environments.
-- Use `azd env set`, `azd env unset`, and `azd env set-secret` rather than editing `.env` directly.
-- Use `-e` or `--environment` in scripts and automation so the target is explicit.
-- Use `azd env refresh` to synchronize deployment outputs after another actor changes an environment.
-- Configure AZD remote state when a team shares environment state.
-
-### 4. Add hooks only for lifecycle gaps
-
-- Prefer declarative IaC and native service configuration over hooks.
-- Use root hooks for project-wide behavior and service hooks for service-specific behavior.
-- Keep nontrivial hook logic in versioned scripts under `scripts/azd`.
-- Set `shell` explicitly. Provide `windows` and `posix` variants when necessary.
-- Make hooks idempotent, noninteractive in CI, and fail on errors unless failure is intentionally nonblocking.
-- Test a hook independently with `azd hooks run <hook-name>`.
-
-### 5. Build CI/CD deliberately
-
-- Keep the pipeline definition with the template and review generated changes from `azd pipeline config`.
-- Use short-lived federated credentials where the provider supports them.
-- Run tests and IaC validation before provisioning.
-- Use explicit environments and `--no-prompt` in automation.
-- Add protected production environments and approval gates.
-- For Terraform, configure protected remote state before pipeline setup and account for current AZD authentication limitations.
-
-## Validate before finishing
+## Validation commands
 
 Run only checks applicable to the repository:
 
@@ -113,25 +90,43 @@ AZD hooks:  azd hooks run <hook-name>
 Packaging:  azd package
 ```
 
-For a Bicep what-if or Terraform plan, choose the correct deployment scope and environment. These checks can authenticate to Azure or read remote state, so follow the safety guardrails.
+For a Bicep what-if or Terraform plan, choose the correct deployment scope and environment because the command can authenticate to Azure or read remote state.
 
-Verify that:
+## Progressive disclosure and bundled resources
 
-- `azure.yaml` paths exist and service settings match the source projects.
-- The IaC entry point and provider agree with `azure.yaml`.
-- Required deployment outputs match the variables consumed by services, hooks, and pipelines.
-- `.gitignore` excludes `.azure`, secrets, local state, and generated artifacts.
-- No secret appears in tracked content or command output.
-- Documentation explains prerequisites, environment creation, deployment, verification, and cleanup.
+- `references/project-structure.md`: repository layout and `azure.yaml` guidance.
+- `references/iac-and-environments.md`: Bicep, Terraform, parameters, outputs, layers, and environments.
+- `references/security-cicd-operations.md`: secrets, hooks, CI/CD, deployment, and troubleshooting.
+- `references/official-docs.md`: current Microsoft product documentation links.
+- `examples/azure.yaml`: example manifest shape.
 
-## Report the result
+## Output template
 
-State:
+```markdown
+## Azure Developer CLI result — <project or task>
 
-- The files and behavior changed.
-- The IaC provider and environment assumptions.
-- The checks performed.
-- Any cloud-changing command deliberately not run.
-- Any beta or preview feature the solution relies on.
+**Status:** changed | reviewed | blocked
+**IaC provider:** Bicep | Terraform | unknown
+**Environment assumptions:** <environment, subscription, tenant, region, or none>
 
-Do not claim deployment success unless the target environment was actually deployed and verified.
+| Area | Finding or change | Evidence | Follow-up |
+| --- | --- | --- | --- |
+| azure.yaml | <service/path/provider result> | `<file/path>` | <next action> |
+| infra | <Bicep/Terraform result> | `<file/path>` | <next action> |
+| security | <secret/state/identity result> | `<evidence>` | <next action> |
+| validation | <command> | pass | fail | not run | <why> |
+
+**Cloud-changing commands not run:** <azd up/provision/deploy/down/pipeline config or none>
+**Preview or beta features:** <feature or none>
+```
+
+## Quality gate
+
+- [ ] `azure.yaml` was read before service, provider, or path conclusions were made.
+- [ ] `azure.yaml` paths exist and service settings match source projects.
+- [ ] The IaC entry point and provider agree with `azure.yaml`.
+- [ ] Required deployment outputs match variables consumed by services, hooks, and pipelines.
+- [ ] `.gitignore` excludes `.azure`, secrets, local state, and generated artifacts.
+- [ ] No secret appears in tracked content or command output.
+- [ ] Applicable Bicep, Terraform, hook, package, application, or pipeline checks were run or explicitly deferred.
+- [ ] Documentation explains prerequisites, environment creation, deployment, verification, and cleanup when this skill changes template behavior.

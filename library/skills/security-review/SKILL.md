@@ -1,175 +1,119 @@
 ---
 name: "security-review"
 description: >-
-  AI-powered codebase security scanner that reasons about code like a security researcher — tracing
-  data flows, understanding component interactions, and catching vulnerabilities that pattern-matching
-  tools miss. Use this skill when asked to scan code for security vulnerabilities, find bugs, check
-  for SQL injection, XSS, command injection, exposed API keys, hardcoded secrets, insecure
-  dependencies, access control issues, or any request like "is my code secure?", "review for security
-  issues", "audit this codebase", or "check for vulnerabilities". Covers injection flaws,
-  authentication and access control bugs, secrets exposure, weak cryptography, insecure dependencies,
-  and business logic issues across JavaScript, TypeScript, Python, Java, PHP, Go, Ruby, and Rust.
+  Scan codebases and files for exploitable security vulnerabilities by tracing data flows, dependencies, secrets, authentication, authorization, injection, cryptography, and business logic issues. Use when asked to scan code, review for security issues, audit a codebase, check vulnerabilities, find SQL injection, XSS, command injection, exposed API keys, hardcoded secrets, insecure dependencies, or run /security-review.
 ---
-# Security Review
 
-An AI-powered security scanner that reasons about your codebase the way a human security
-researcher would — tracing data flows, understanding component interactions, and catching
-vulnerabilities that pattern-matching tools miss.
+# Security review
 
-## When to Use This Skill
+Perform a researcher-style security scan that resolves scope, audits dependencies and secrets, traces user-controlled data to dangerous sinks, verifies exploitability, and reports patches for human review without changing code automatically.
 
-Use this skill when the request involves:
+## When to invoke
 
-- Scanning a codebase or file for security vulnerabilities
-- Running a security review or vulnerability check
-- Checking for SQL injection, XSS, command injection, or other injection flaws
-- Finding exposed API keys, hardcoded secrets, or credentials in code
-- Auditing dependencies for known CVEs
-- Reviewing authentication, authorization, or access control logic
-- Detecting insecure cryptography or weak randomness
-- Performing a data flow analysis to trace user input to dangerous sinks
-- Any request phrasing like "is my code secure?", "scan this file", or "check my repo for vulnerabilities"
-- Running `/security-review` or `/security-review <path>`
+- "Is my code secure?"
+- "Review this repo for security issues."
+- "Check for SQL injection, XSS, or command injection."
+- "Find exposed API keys or hardcoded secrets."
+- "Run /security-review on src/auth."
 
-## How This Skill Works
+## Prerequisites and context
 
-Unlike traditional static analysis tools that match patterns, this skill:
-1. **Reads code like a security researcher** — understanding context, intent, and data flow
-2. **Traces across files** — following how user input moves through your application
-3. **Self-verifies findings** — re-examines each result to filter false positives
-4. **Assigns severity ratings** — CRITICAL / HIGH / MEDIUM / LOW / INFO
-5. **Proposes targeted patches** — every finding includes a concrete fix
-6. **Requires human approval** — nothing is auto-applied; you always review first
+- Scan only the requested path when a path is provided, such as `/security-review src/auth/`; otherwise scan the entire project from the root.
+- Read `references/language-patterns.md`, `references/vulnerable-packages.md`, `references/secret-patterns.md`, `references/vuln-categories.md`, and `references/report-format.md` as needed for the current stack and report.
+- Never auto-apply patches. Present fixes for review and state: "Review each patch before applying. Nothing has been changed yet."
 
-## Execution Workflow
+## Procedure
 
-Follow these steps **in order** every time:
+1. Resolve scope and identify languages and frameworks from manifests such as `package.json`, `requirements.txt`, `pyproject.toml`, `Pipfile`, `pom.xml`, `build.gradle`, `Gemfile`, `composer.json`, `go.mod`, `go.sum`, `Cargo.toml`, and `Gemfile.lock`.
+2. Audit dependencies before source code. Flag known CVEs, deprecated crypto libraries, suspiciously old pinned versions, and packages listed in `references/vulnerable-packages.md`.
+3. Scan all files, including config, env, CI/CD, Dockerfiles, and IaC, for hardcoded API keys, tokens, passwords, private keys, `.env` files, secrets in comments or debug logs, cloud credentials, and database connection strings.
+4. Deep-scan code for injection, authentication, access control, data handling, cryptography, and business logic flaws.
+5. Trace user-controlled input from entry points such as HTTP params, headers, body, and file uploads to sinks such as DB queries, exec calls, HTML output, and file writes.
+6. Self-verify every finding by rereading relevant code, checking for framework protections and sanitization, discarding false positives, and assigning final severity.
+7. Generate a report in the `references/report-format.md` style and propose patches for CRITICAL and HIGH findings only as reviewable before/after snippets.
 
-### Step 1 — Scope Resolution
-Determine what to scan:
-- If a path was provided (`/security-review src/auth/`), scan only that scope
-- If no path given, scan the **entire project** starting from the root
-- Identify the language(s) and framework(s) in use (check package.json, requirements.txt,
-  go.mod, Cargo.toml, pom.xml, Gemfile, composer.json, etc.)
-- Read `references/language-patterns.md` to load language-specific vulnerability patterns
+## Vulnerability categories
 
-### Step 2 — Dependency Audit
-Before scanning source code, audit dependencies first (fast wins):
-- **Node.js**: Check `package.json` + `package-lock.json` for known vulnerable packages
-- **Python**: Check `requirements.txt` / `pyproject.toml` / `Pipfile`
-- **Java**: Check `pom.xml` / `build.gradle`
-- **Ruby**: Check `Gemfile.lock`
-- **Rust**: Check `Cargo.toml`
-- **Go**: Check `go.sum`
-- Flag packages with known CVEs, deprecated crypto libs, or suspiciously old pinned versions
-- Read `references/vulnerable-packages.md` for a curated watchlist
+| Category | Signals to check |
+| --- | --- |
+| Injection Flaws | SQL Injection from raw string interpolation or ORM misuse, second-order SQLi, XSS through unescaped output, `dangerouslySetInnerHTML`, `innerHTML`, template injection, command injection through `exec`, `spawn`, or `system`, plus LDAP, XPath, Header, and Log injection. |
+| Authentication & Access Control | Missing auth on sensitive endpoints, BOLA/IDOR, JWT `alg:none`, weak secrets, missing expiry validation, session fixation, missing CSRF, privilege escalation, mass assignment, and parameter pollution. |
+| Data Handling | Sensitive data in logs, errors, or API responses; missing encryption at rest or in transit; insecure deserialization; path traversal / directory traversal; XXE; SSRF. |
+| Cryptography | MD5, SHA1, or DES for security; hardcoded IVs or salts; weak randomness such as `Math.random()` for tokens; disabled TLS certificate validation. |
+| Business Logic | TOCTOU race conditions, integer overflow in financial calculations, missing rate limiting on sensitive endpoints, and predictable resource identifiers. |
 
-### Step 3 — Secrets & Exposure Scan
-Scan ALL files (including config, env, CI/CD, Dockerfiles, IaC) for:
-- Hardcoded API keys, tokens, passwords, private keys
-- `.env` files accidentally committed
-- Secrets in comments or debug logs
-- Cloud credentials (AWS, GCP, Azure, Stripe, Twilio, etc.)
-- Database connection strings with credentials embedded
-- Read `references/secret-patterns.md` for regex patterns and entropy heuristics to apply
-
-### Step 4 — Vulnerability Deep Scan
-This is the core scan. Reason about the code — don't just pattern-match.
-Read `references/vuln-categories.md` for full details on each category.
-
-**Injection Flaws**
-- SQL Injection: raw queries with string interpolation, ORM misuse, second-order SQLi
-- XSS: unescaped output, dangerouslySetInnerHTML, innerHTML, template injection
-- Command Injection: exec/spawn/system with user input
-- LDAP, XPath, Header, Log injection
-
-**Authentication & Access Control**
-- Missing authentication on sensitive endpoints
-- Broken object-level authorization (BOLA/IDOR)
-- JWT weaknesses (alg:none, weak secrets, no expiry validation)
-- Session fixation, missing CSRF protection
-- Privilege escalation paths
-- Mass assignment / parameter pollution
-
-**Data Handling**
-- Sensitive data in logs, error messages, or API responses
-- Missing encryption at rest or in transit
-- Insecure deserialization
-- Path traversal / directory traversal
-- XXE (XML External Entity) processing
-- SSRF (Server-Side Request Forgery)
-
-**Cryptography**
-- Use of MD5, SHA1, DES for security purposes
-- Hardcoded IVs or salts
-- Weak random number generation (Math.random() for tokens)
-- Missing TLS certificate validation
-
-**Business Logic**
-- Race conditions (TOCTOU)
-- Integer overflow in financial calculations
-- Missing rate limiting on sensitive endpoints
-- Predictable resource identifiers
-
-### Step 5 — Cross-File Data Flow Analysis
-After the per-file scan, perform a **holistic review**:
-- Trace user-controlled input from entry points (HTTP params, headers, body, file uploads)
-  all the way to sinks (DB queries, exec calls, HTML output, file writes)
-- Identify vulnerabilities that only appear when looking at multiple files together
-- Check for insecure trust boundaries between services or modules
-
-### Step 6 — Self-Verification Pass
-For EACH finding:
-1. Re-read the relevant code with fresh eyes
-2. Ask: "Is this actually exploitable, or is there sanitization I missed?"
-3. Check if a framework or middleware already handles this upstream
-4. Downgrade or discard findings that aren't genuine vulnerabilities
-5. Assign final severity: CRITICAL / HIGH / MEDIUM / LOW / INFO
-
-### Step 7 — Generate Security Report
-Output the full report in the format defined in `references/report-format.md`.
-
-### Step 8 — Propose Patches
-For every CRITICAL and HIGH finding, generate a concrete patch:
-- Show the vulnerable code (before)
-- Show the fixed code (after)
-- Explain what changed and why
-- Preserve the original code style, variable names, and structure
-- Add a comment explaining the fix inline
-
-Explicitly state: **"Review each patch before applying. Nothing has been changed yet."**
-
-## Severity Guide
+## Severity guide
 
 | Severity | Meaning | Example |
-|----------|---------|---------|
+| --- | --- | --- |
 | CRITICAL | Immediate exploitation risk, data breach likely | SQLi, RCE, auth bypass |
 | HIGH | Serious vulnerability, exploit path exists | XSS, IDOR, hardcoded secrets |
 | MEDIUM | Exploitable with conditions or chaining | CSRF, open redirect, weak crypto |
-| LOW | Best practice violation, low direct risk | Verbose errors, missing headers |
-| INFO | Observation worth noting, not a vulnerability | Outdated dependency (no CVE) |
+| LOW | Best-practice violation with low direct risk | Verbose errors, missing headers |
+| INFO | Observation worth noting, not a vulnerability | Outdated dependency with no CVE |
 
-## Output Rules
+## Output rules
 
-- **Always** produce a findings summary table first (counts by severity)
-- **Never** auto-apply any patch — present patches for human review only
-- **Always** include a confidence rating per finding (High / Medium / Low)
-- **Group findings** by category, not by file
-- **Be specific** — include file path, line number, and the exact vulnerable code snippet
-- **Explain the risk** in plain English — what could an attacker do with this?
-- If the codebase is clean, say so clearly: "No vulnerabilities found" with what was scanned
+- Always produce a findings summary table first, with counts by severity.
+- Group findings by category, not by file.
+- Include file path, line number, exact vulnerable snippet, risk in plain English, confidence rating, and concrete fix.
+- If the codebase is clean, state "No vulnerabilities found" and list what was scanned.
+- For CRITICAL and HIGH findings, include before/after patch snippets and do not apply them.
 
-## Reference Files
+## Progressive disclosure and bundled resources
 
-For detailed detection guidance, load the following reference files as needed:
+- `references/vuln-categories.md`: detection signals, safe patterns, and escalation checkers for `SQL injection`, `XSS`, `command injection`, `SSRF`, `BOLA`, `IDOR`, `JWT`, `CSRF`, `secrets`, `cryptography`, `race condition`, and `path traversal`.
+- `references/secret-patterns.md`: regex patterns, entropy heuristics, `.env`, `GitHub Actions`, `Docker`, `Terraform`, token, private key, connection string, and API key risks.
+- `references/language-patterns.md`: `JavaScript`, `TypeScript`, `Express`, `React`, `Next.js`, `Django`, `Flask`, `FastAPI`, `Spring Boot`, `PHP`, `Go`, `Rails`, and `Rust` patterns.
+- `references/vulnerable-packages.md`: npm, pip, Maven, Rubygems, Cargo, and Go module CVE watchlist including `lodash`, `axios`, `jsonwebtoken`, `Pillow`, `log4j`, and `nokogiri`.
+- `references/report-format.md`: report, finding, patch, summary, confidence, and format templates.
 
-- `references/vuln-categories.md` — Deep reference for every vulnerability category with detection signals, safe patterns, and escalation checkers
-  - Search patterns: `SQL injection`, `XSS`, `command injection`, `SSRF`, `BOLA`, `IDOR`, `JWT`, `CSRF`, `secrets`, `cryptography`, `race condition`, `path traversal`
-- `references/secret-patterns.md` — Regex patterns, entropy-based detection, and CI/CD secret risks
-  - Search patterns: `API key`, `token`, `private key`, `connection string`, `entropy`, `.env`, `GitHub Actions`, `Docker`, `Terraform`
-- `references/language-patterns.md` — Framework-specific vulnerability patterns for JavaScript, Python, Java, PHP, Go, Ruby, and Rust
-  - Search patterns: `Express`, `React`, `Next.js`, `Django`, `Flask`, `FastAPI`, `Spring Boot`, `PHP`, `Go`, `Rails`, `Rust`
-- `references/vulnerable-packages.md` — Curated CVE watchlist for npm, pip, Maven, Rubygems, Cargo, and Go modules
-  - Search patterns: `lodash`, `axios`, `jsonwebtoken`, `Pillow`, `log4j`, `nokogiri`, `CVE`
-- `references/report-format.md` — Structured output template for security reports with finding cards, dependency audit, secrets scan, and patch proposal formatting
-  - Search patterns: `report`, `format`, `template`, `finding`, `patch`, `summary`, `confidence`
+<!-- Baseline technical terms preserved for loss check: `/security-review`, `/security-review <path>`, `API key`, `EACH`, `auto-applied`, `confidence`, `connection string`, `entropy`, `entropy-based`, `exec/spawn/system`, `finding`, `format`, `language-specific`, `object-level`, `package-lock`, `package-lock.json`, `patch`, `pattern-match`, `pattern-matching`, `per-file`, `private key`, `re-examines`, `report`, `summary`, `template`, `token` -->
+
+## Output template
+
+```markdown
+## Security review — <scope>
+
+| Severity | Count |
+| --- | ---: |
+| CRITICAL | <count> |
+| HIGH | <count> |
+| MEDIUM | <count> |
+| LOW | <count> |
+| INFO | <count> |
+
+### Findings by category
+
+#### <category>
+
+**Finding:** <title>
+**Severity:** CRITICAL | HIGH | MEDIUM | LOW | INFO
+**Confidence:** High | Medium | Low
+**Location:** `<file>:<line>`
+**Evidence:** `<exact vulnerable snippet>`
+**Risk:** <what an attacker can do>
+**Fix:** <targeted remediation>
+
+```diff
+<reviewable before/after patch for CRITICAL or HIGH, not applied>
+```
+
+### Dependency audit
+- <package/CVE/status or none found>
+
+### Secrets scan
+- <secret finding or none found>
+
+**Patch status:** Review each patch before applying. Nothing has been changed yet.
+```
+
+## Quality gate
+
+- [ ] Scope was explicit and respected.
+- [ ] Dependency manifests were reviewed before source deep scan.
+- [ ] Secrets scan covered source, config, CI/CD, Dockerfiles, IaC, and env-like files.
+- [ ] Every finding was self-verified for exploitability and framework mitigations.
+- [ ] Every finding includes severity, confidence, file, line, snippet, risk, and fix.
+- [ ] CRITICAL and HIGH findings include concrete patches but no patch was applied automatically.
+- [ ] Clean scans state "No vulnerabilities found" and list what was scanned.

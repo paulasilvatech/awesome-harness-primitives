@@ -1,13 +1,24 @@
 ---
 name: "copilot-spaces"
 description: >-
-  Use Copilot Spaces to provide project-specific context to conversations. Use this skill when users
-  mention a "Copilot space", want to load context from a shared knowledge base, discover available
+  Use GitHub Copilot Spaces to provide project-specific context to conversations. Use this skill when users
+  mention a "GitHub Copilot space", want to load context from a shared knowledge base, discover available
   spaces, or ask questions grounded in curated project documentation, code, and instructions.
 ---
-# Copilot Spaces
 
-Use Copilot Spaces to bring curated, project-specific context into conversations. A Space is a shared collection of repositories, files, documentation, and instructions that grounds Copilot responses in your team's actual code and knowledge.
+# GitHub Copilot Spaces
+
+Use GitHub Copilot Spaces as curated project context by discovering accessible spaces, loading exact owner/name content, following space-defined workflows, and using `gh api` for space management operations.
+
+## When to invoke
+
+- "Load the Accessibility GitHub Copilot space."
+- "What GitHub Copilot spaces are available?"
+- "Answer this using our security space."
+- "Create a new GitHub Copilot space for this project."
+- "Update my PM Weekly Updates space instructions."
+
+Use GitHub Copilot Spaces to bring curated, project-specific context into conversations. A Space is a shared collection of repositories, files, documentation, and instructions that grounds GitHub Copilot responses in your team's actual code and knowledge.
 
 ## Available Tools
 
@@ -40,9 +51,9 @@ The Spaces REST API supports creating, updating, deleting spaces, and managing c
 
 **Note:** This API is functional but not yet in the public REST API docs. It may require the `copilot_spaces_api` feature flag.
 
-## When to Use Spaces
+## Invocation details
 
-- User mentions "Copilot space" or asks to "load a space"
+- User mentions "GitHub Copilot space" or asks to "load a space"
 - User wants answers grounded in specific project docs, code, or standards
 - User asks "what spaces are available?" or "find a space for X"
 - User needs onboarding context, architecture docs, or team-specific guidance
@@ -205,3 +216,27 @@ gh api users/labudis/copilot-spaces/19 -X PUT -f general_instructions="updated i
 - Some spaces contain custom instructions that should guide your behavior (coding standards, preferred patterns, workflows). Treat these as directives, not suggestions.
 - **Write operations** (`gh api` for create/update/delete) require the `user` PAT scope. If you get a 404 on write operations, run `gh auth refresh -h github.com -s user`.
 - Resource updates **replace the entire array**. To add a resource, include all existing resources plus the new one. To remove one, include `{ "id": 123, "_destroy": true }` in the array.
+
+## Output template
+
+```markdown
+## GitHub Copilot Spaces result
+
+**Status:** loaded | listed | updated | created | deleted | blocked
+**Space:** `{{owner}}/{{name_or_number}}`
+
+### Context or change
+{{space_context_summary_or_update}}
+
+### Evidence
+- Tool or command: `{{list_copilot_spaces|get_copilot_space|gh api ...}}`
+- Follow-up resources fetched: {{resources_or_none}}
+```
+
+## Quality gate
+
+- [ ] Space lookup uses the exact case-sensitive `owner` and `name` from the list result when available.
+- [ ] Answers grounded in a space cite the loaded space content rather than general assumptions.
+- [ ] External resources mentioned by the space are fetched when needed for a complete answer.
+- [ ] Write operations use `gh api` and preserve or intentionally replace `resources_attributes`.
+- [ ] Missing write scope errors mention `gh auth refresh -h github.com -s user`.

@@ -5,16 +5,24 @@ description: >-
   generating findings and GitHub issues for improvements. Use this skill when the user asks for azure
   well-architected review.
 ---
+
 # Azure Well-Architected Review
 
 This workflow performs a structured Azure Well-Architected Framework (WAF) review against your workload's IaC files and deployed infrastructure. It identifies risks across all 5 WAF pillars and creates GitHub issues to track remediation.
 
-## Prerequisites
+## When to invoke
+
+- "Run an Azure well-architected review."
+- "Assess this Azure workload against WAF pillars."
+- "Review our Bicep or Terraform for Azure architecture risks."
+- "Create GitHub issues for Azure Well-Architected findings."
+
+## Prerequisites and context
 - Azure CLI (`az`) configured and authenticated
 - IaC files present in the repository (Bicep, Terraform, or ARM templates)
 - GitHub MCP server configured and authenticated
 
-## Workflow Steps
+## Procedure
 
 ### Step 1: Load Well-Architected Framework Reference
 Fetch current Azure WAF best practices:
@@ -187,7 +195,26 @@ Label with "well-architected" and "epic".
 - **Insufficient Azure Permissions**: List required read-only roles for the review (Reader, Security Reader)
 - **GitHub Creation Failure**: Output all findings as formatted markdown to console
 
-## Success Criteria
+## Output template
+
+```markdown
+## Azure Well-Architected review result
+
+**Status:** issues created | findings only | blocked
+**Scope:** `<subscription/resource group>`
+
+| Pillar | Risk | Finding | Evidence | Remediation | Issue |
+| --- | --- | --- | --- | --- | --- |
+| Security | High Risk | `<finding>` | `<IaC/live evidence>` | `<IaC or az command>` | `<url or not created>` |
+
+### Architecture
+```mermaid
+graph TD
+  A[User] --> B[Azure workload]
+```
+```
+
+## Quality gate
 - All 5 WAF pillars reviewed against IaC and live infrastructure
 - All findings classified by risk level and pillar
 - Actionable remediation steps with IaC examples for each finding

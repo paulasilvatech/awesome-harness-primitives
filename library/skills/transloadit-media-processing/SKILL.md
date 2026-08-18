@@ -9,12 +9,13 @@ license: "MIT"
 metadata:
   compatibility: "Requires a free Transloadit account (https://transloadit.com/signup). Uses the @transloadit/mcp-server MCP server or the @transloadit/node CLI."
 ---
+
 # Transloadit Media Processing
 
 Process, transform, and encode media files using Transloadit's cloud infrastructure.
 Supports video, audio, images, and documents with 86+ specialized processing robots.
 
-## When to Use This Skill
+## When to invoke
 
 Use this skill when you need to:
 
@@ -30,7 +31,7 @@ Use this skill when you need to:
 - Apply AI-based content moderation or object detection
 - Build multi-step media pipelines that chain operations together
 
-## Setup
+## Prerequisites and context
 
 ### Option A: MCP Server (recommended for Copilot)
 
@@ -196,3 +197,29 @@ Steps can be chained using the `"use"` field. Each step references a previous st
 - Chain `"use": "step_name"` to build multi-step pipelines without intermediate downloads.
 - For batch processing, use `/http/import` to pull files from URLs, S3, GCS, Azure, FTP, or Dropbox.
 - Templates can include `${variables}` for dynamic values passed at assembly creation time.
+
+## Output template
+
+```markdown
+## Transloadit media processing result
+
+**Status:** template created | assembly created | payload only | blocked
+**Input:** `<local file, URL, bucket object, or batch source>`
+**Mode:** `<MCP create_assembly/create_template | CLI assemblies create/templates create>`
+
+### Steps JSON
+```json
+{ "steps": { "<step_name>": { "robot": "</robot/name>", "use": ":original" } } }
+```
+
+### Result
+- Assembly/template ID: `<id or n/a>`
+- Output locations: `<URLs or storage paths>`
+```
+
+## Quality gate
+
+- [ ] Credentials are referenced only by environment variable names and never printed.
+- [ ] The selected robots match the requested media operation.
+- [ ] Every chained step uses `use` to reference `:original` or a prior step.
+- [ ] CLI runs include `--wait` when processing completion must be verified.

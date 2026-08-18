@@ -1,145 +1,138 @@
 ---
 name: "prd"
 description: >-
-  Generate high-quality Product Requirements Documents (PRDs) for software systems and AI-powered
-  features. Use this skill when starting a new product or feature development cycle; translating a
-  vague idea into a concrete technical specification; defining requirements for AI-powered features.
+  Generate production-ready Product Requirements Documents for software systems and AI-powered features. Use when starting a product or feature cycle, translating a vague idea into requirements, defining AI system requirements, planning a feature, or creating a stakeholder source of truth.
 license: "MIT"
 ---
-# Product Requirements Document (PRD)
 
-## Overview
+# Product requirements document
 
-Design comprehensive, production-grade Product Requirements Documents (PRDs) that bridge the gap between business vision and technical execution. This skill works for modern software systems, ensuring that requirements are clearly defined.
+Turns an idea, feature request, or stakeholder brief into a measurable PRD with user stories, acceptance criteria, AI evaluation requirements when applicable, technical specifications, risks, and rollout plan.
 
-## When to Use
+## When to invoke
 
-Use this skill when:
+- "Write a PRD for this feature."
+- "Turn this idea into product requirements."
+- "Plan an AI-powered feature with evaluation criteria."
+- "Create a source of truth for scope and acceptance criteria."
+- "Document requirements before development starts."
 
-- Starting a new product or feature development cycle
-- Translating a vague idea into a concrete technical specification
-- Defining requirements for AI-powered features
-- Stakeholders need a unified "source of truth" for project scope
-- User asks to "write a PRD", "document requirements", or "plan a feature"
+## Procedure
 
----
+1. Run discovery before drafting: identify the core problem, success metrics, constraints, and stakeholders.
+2. Ask at least two clarifying questions when the request lacks problem, user, metric, or constraint details.
+3. Synthesize scope: map the user flow, dependencies, non-goals, and hidden complexity.
+4. Draft the PRD using the schema in `## PRD structure`.
+5. Label unknowns as `TBD` instead of inventing constraints.
+6. Present the draft and ask for feedback on specific sections.
 
-## Operational Workflow
+## Discovery prompts
 
-### Phase 1: Discovery (The Interview)
+| Area | Ask |
+| --- | --- |
+| Core problem | Why are we building this now, and what pain point exists today? |
+| Users | Who uses it, who buys or approves it, and who supports it? |
+| Success metrics | How do we know it worked? Name measurable KPIs. |
+| Constraints | What budget, deadline, stack, compliance, data, or operational constraints apply? |
+| AI behavior | What tools, APIs, guardrails, evaluation set, and human review path are required? |
 
-Before writing a single line of the PRD, you **MUST** interrogate the user to fill knowledge gaps. Do not assume context.
+## PRD quality standards
 
-**Ask about:**
+| Weak requirement | Strong replacement |
+| --- | --- |
+| "The search should be fast and return relevant results." | "The search must return results within 200ms for a 10k record dataset." |
+| "The UI must look modern and be easy to use." | "The UI must follow the Vercel/Next.js design system and achieve 100% Lighthouse Accessibility score." |
+| "AI answers should be accurate." | "The answer evaluator must reach >= 85% Precision@10 and citation accuracy >= 95% on the benchmark set." |
 
-- **The Core Problem**: Why are we building this now?
-- **Success Metrics**: How do we know it worked?
-- **Constraints**: Budget, tech stack, or deadline?
+Use concrete, measurable criteria. Avoid `fast`, `easy`, `intuitive`, and unsupported claims unless each is backed by a metric.
 
-### Phase 2: Analysis & Scoping
+## PRD structure
 
-Synthesize the user's input. Identify dependencies and hidden complexities.
+| Section | Required content |
+| --- | --- |
+| Executive Summary | Problem Statement, Proposed Solution, and 3-5 measurable Success Criteria. |
+| User Experience & Functionality | User Personas, User Stories in `As a [user], I want to [action] so that [benefit].` form, Acceptance Criteria, and Non-Goals. |
+| AI System Requirements | Include only when applicable: Tool Requirements, APIs, Evaluation Strategy, output quality, accuracy, and safety criteria. |
+| Technical Specifications | Architecture Overview, data flow, component interaction, Integration Points, APIs, DBs, Auth, Security & Privacy. |
+| Risks & Roadmap | Phased Rollout from MVP -> v1.1 -> v2.0, technical risks, latency, cost, dependency failures, and mitigations. |
 
-- Map out the **User Flow**.
-- Define **Non-Goals** to protect the timeline.
+## Examples
 
-### Phase 3: Technical Drafting
+### Good
 
-Generate the document using the **Strict PRD Schema** below.
+**Input:** "Build intelligent documentation search for developers."
 
----
+**Expected behavior:** Produce measurable success criteria such as reducing search time by 50%, citation accuracy >= 95%, and a benchmark with 50 common developer questions.
 
-## PRD Quality Standards
+### Bad
 
-### Requirements Quality
+**Input:** "Write the PRD; assume the tech stack."
 
-Use concrete, measurable criteria. Avoid "fast", "easy", or "intuitive".
+**Incorrect behavior:** Inventing stack choices. Use `TBD` or ask a clarifying question if the stack is a real constraint.
 
-```diff
-# Vague (BAD)
-- The search should be fast and return relevant results.
-- The UI must look modern and be easy to use.
+## Gotchas
 
-# Concrete (GOOD)
-+ The search must return results within 200ms for a 10k record dataset.
-+ The search algorithm must achieve >= 85% Precision@10 in benchmark evals.
-+ The UI must follow the 'Vercel/Next.js' design system and achieve 100% Lighthouse Accessibility score.
+- **Do not skip discovery**: never write a PRD from a vague idea without asking at least two clarifying questions or explicitly marking assumptions.
+- **Do not hallucinate constraints**: if the user did not specify a tech stack, budget, or deadline, ask or label it `TBD`.
+- **Do not omit testing for AI systems**: specify benchmark data, expected pass rate, evaluation criteria, and human review path.
+- **Do not treat non-goals as optional**: they protect timeline and stakeholder alignment.
+
+## PRD drafting vocabulary
+
+A `production-grade`, `high-quality` PRD may include a `GOOD` example, `MUST` constraints, `multi-turn` user flows, and tool placeholders such as `codesearch`, `grep`, and `webfetch` when the product genuinely needs them.
+
+## Output template
+
+```markdown
+# Product Requirements Document: <product or feature>
+
+## 1. Executive Summary
+
+**Problem Statement:** <1-2 sentences>
+**Proposed Solution:** <1-2 sentences>
+**Success Criteria:**
+- <measurable KPI 1>
+- <measurable KPI 2>
+- <measurable KPI 3>
+
+## 2. User Experience & Functionality
+
+**User Personas**
+- <persona>: <need>
+
+**User Stories**
+- As a <user>, I want to <action> so that <benefit>.
+
+**Acceptance Criteria**
+- <testable done definition>
+
+**Non-Goals**
+- <explicitly out of scope>
+
+## 3. AI System Requirements
+
+**Tool Requirements:** <tools and APIs or "Not applicable">
+**Evaluation Strategy:** <benchmark, pass rate, and review process or "Not applicable">
+
+## 4. Technical Specifications
+
+**Architecture Overview:** <data flow and components>
+**Integration Points:** <APIs, DBs, Auth>
+**Security & Privacy:** <data handling and compliance>
+
+## 5. Risks & Roadmap
+
+**Phased Rollout:** MVP -> v1.1 -> v2.0
+**Technical Risks:** <latency, cost, dependency, or operational risks>
 ```
 
----
+## Quality gate
 
-## Strict PRD Schema
-
-You **MUST** follow this exact structure for the output:
-
-### 1. Executive Summary
-
-- **Problem Statement**: 1-2 sentences on the pain point.
-- **Proposed Solution**: 1-2 sentences on the fix.
-- **Success Criteria**: 3-5 measurable KPIs.
-
-### 2. User Experience & Functionality
-
-- **User Personas**: Who is this for?
-- **User Stories**: `As a [user], I want to [action] so that [benefit].`
-- **Acceptance Criteria**: Bulleted list of "Done" definitions for each story.
-- **Non-Goals**: What are we NOT building?
-
-### 3. AI System Requirements (If Applicable)
-
-- **Tool Requirements**: What tools and APIs are needed?
-- **Evaluation Strategy**: How to measure output quality and accuracy.
-
-### 4. Technical Specifications
-
-- **Architecture Overview**: Data flow and component interaction.
-- **Integration Points**: APIs, DBs, and Auth.
-- **Security & Privacy**: Data handling and compliance.
-
-### 5. Risks & Roadmap
-
-- **Phased Rollout**: MVP -> v1.1 -> v2.0.
-- **Technical Risks**: Latency, cost, or dependency failures.
-
----
-
-## Implementation Guidelines
-
-### DO (Always)
-
-- **Define Testing**: For AI systems, specify how to test and validate output quality.
-- **Iterate**: Present a draft and ask for feedback on specific sections.
-
-### DON'T (Avoid)
-
-- **Skip Discovery**: Never write a PRD without asking at least 2 clarifying questions first.
-- **Hallucinate Constraints**: If the user didn't specify a tech stack, ask or label it as `TBD`.
-
----
-
-## Example: Intelligent Search System
-
-### 1. Executive Summary
-
-**Problem**: Users struggle to find specific documentation snippets in massive repositories.
-**Solution**: An intelligent search system that provides direct answers with source citations.
-**Success**:
-
-- Reduce search time by 50%.
-- Citation accuracy >= 95%.
-
-### 2. User Stories
-
-- **Story**: As a developer, I want to ask natural language questions so I don't have to guess keywords.
-- **AC**:
-  - Supports multi-turn clarification.
-  - Returns code blocks with "Copy" button.
-
-### 3. AI System Architecture
-
-- **Tools Required**: `codesearch`, `grep`, `webfetch`.
-
-### 4. Evaluation
-
-- **Benchmark**: Test with 50 common developer questions.
-- **Pass Rate**: 90% must match expected citations.
+- [ ] At least two clarifying questions were asked or assumptions are explicitly labeled.
+- [ ] Success criteria are measurable and include 3-5 KPIs.
+- [ ] User stories follow `As a [user], I want to [action] so that [benefit].`.
+- [ ] Acceptance criteria are testable done definitions.
+- [ ] Non-goals are present.
+- [ ] AI features include Tool Requirements and Evaluation Strategy.
+- [ ] Unknown constraints are marked `TBD`, not invented.
+- [ ] The final PRD follows the output template.

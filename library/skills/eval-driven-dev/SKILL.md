@@ -13,7 +13,18 @@ metadata:
   pixie-qa-version: ">=0.8.4,<0.9.0"
   version: "0.8.4"
 ---
-# Eval-Driven Development for Python LLM Applications
+
+# Eval-driven development for Python LLM applications
+
+Build a working `pixie test` evaluation pipeline for a Python LLM application by analyzing the app, adding instrumentation, implementing a Runnable, building datasets and evaluators, running real LLM evals, and producing an action plan.
+
+## When to invoke
+
+- "Set up evals for this Python LLM app."
+- "Add QA for our model-backed application."
+- "Benchmark this agent and fix wrong behaviors."
+- "Create a pixie test pipeline for this project."
+- "Improve quality with evaluation-driven development."
 
 You're building an **automated evaluation pipeline** that tests a Python-based AI application end-to-end — running it the same way a real user would, with real inputs — then scoring the outputs using evaluators and producing pass/fail results via `pixie test`.
 
@@ -209,3 +220,44 @@ pixie stop
 IMPORTANT: after the web server is stopped, the web UI becomes inaccessible. So only stop the server if the user confirms they're done with all web UI features. If they want to keep using the web UI, do NOT stop the server.
 
 And whenever you restart the workflow, always run the setup.sh script in resources again to ensure the web server is running:
+
+## Progressive disclosure and bundled resources
+
+- `references/1-a-project-analysis.md through references/6-analyze-outcomes.md`: read each step reference only when the workflow reaches that step.
+- `references/runnable-examples/`: inspect only when implementing a matching Runnable pattern.
+- `resources/setup.sh`: run after activating the project virtual environment to update the skill resources, install or update `pixie-qa`, initialize `pixie_qa`, and start the web server.
+
+## Output template
+
+```markdown
+## Eval-driven development result
+
+**Status:** complete | blocked
+**Project:** {{project_path}}
+**Pixie test:** pass | fail
+**Results directory:** `pixie_qa/results/{{test_id}}`
+
+| Artifact | Status | Evidence |
+| --- | --- | --- |
+| `pixie_qa/00-project-analysis.md` | created | {{summary}} |
+| `pixie_qa/01-entry-point.md` | created | {{entry_point}} |
+| `pixie_qa/02-eval-criteria.md` | created | {{criteria_count}} criteria |
+| `pixie_qa/run_app.py` | created | real app entry point, real LLM calls |
+| `pixie_qa/datasets/{{name}}.json` | created | {{entry_count}} entries |
+| `pixie_qa/results/{{test_id}}` | analyzed | no pending evaluations |
+
+### Action plan
+1. {{highest_priority_improvement}}
+```
+
+## Quality gate
+
+- [ ] The app's LLM calls go to a real LLM; no mock, stub, fake, or intercepted model is used.
+- [ ] `pixie test` runs to completion and produces real `EvaluationResult` or `PendingEvaluation` scores for every dataset entry.
+- [ ] Every pending evaluation is replaced with a scored result before finishing Step 6.
+- [ ] Each checkpoint artifact named in Steps 1-6 exists at the required path.
+- [ ] The web server state is reported, including the `pixie stop` cleanup command.
+
+## References
+
+- https://github.com/yiouli/pixie-qa/

@@ -1,216 +1,101 @@
 ---
 name: "postgresql-code-review"
 description: >-
-  PostgreSQL-specific code review assistant focusing on PostgreSQL best practices, anti-patterns, and
-  unique quality standards. Covers JSONB operations, array usage, custom types, schema design,
-  function optimization, and PostgreSQL-exclusive security features like Row Level Security (RLS). Use
-  this skill when ```sql; - BAD: Inefficient trigger function; cREATE OR REPLACE FUNCTION
-  update_modified_time().
+  Review existing PostgreSQL SQL, schema, migrations, functions, triggers, indexes, JSONB, arrays, custom types, domains, extensions, privileges, and Row Level Security for PostgreSQL-specific anti-patterns. Use when asked to audit or critique PostgreSQL code, database migrations, PL/pgSQL, RLS policies, or schema design.
 ---
-# PostgreSQL Code Review Assistant
 
-Expert PostgreSQL code review for ${selection} (or entire project if no selection). Focus on PostgreSQL-specific best practices, anti-patterns, and quality standards that are unique to PostgreSQL.
+# PostgreSQL code review
 
-## PostgreSQL-Specific Review Areas
+Review PostgreSQL-specific code for correctness, performance, type quality, security, and maintainability, then return a verdict, evidence-backed findings, and paste-ready corrected SQL.
 
-### JSONB Best Practices
+## When to invoke
+
+- "Review this PostgreSQL migration for anti-patterns."
+- "Audit our JSONB and array usage."
+- "Is this schema using the right PostgreSQL types?"
+- "Check this PL/pgSQL function and trigger before it merges."
+- "Review this Row Level Security policy."
+
+## Criteria
+
+### JSONB and arrays
+
+| Area | Bad pattern | Better pattern |
+| --- | --- | --- |
+| JSONB filters | `data->>'status' = 'shipped'` without index support. | Use containment: `data @> '{"status": "shipped"}'` and `CREATE INDEX idx_orders_status ON orders USING gin((data->'status'));`. |
+| JSONB structure | Deep, unconstrained blobs such as `data || '{"shipping":{"tracking":{"number":"123"}}}'`. | Add validation such as `CONSTRAINT valid_status CHECK (data->>'status' IN ('pending', 'shipped', 'delivered'))`. |
+| Array filters | `'electronics' = ANY(categories)` without a supporting index. | Use `CREATE INDEX idx_products_categories ON products USING gin(categories);` and `categories @> ARRAY['electronics']`. |
+| Array mutation | Array concatenation in row-by-row loops. | Use bulk updates such as `categories = categories || ARRAY['new_category'] WHERE id IN (...)`. |
+
+### Schema design and data types
+
+| Concern | Review rule |
+| --- | --- |
+| Primary keys | Prefer PostgreSQL-appropriate generated identifiers such as `BIGSERIAL PRIMARY KEY` or the project standard. |
+| Email and text | Use `CITEXT` for case-insensitive email, `TEXT` instead of arbitrary `VARCHAR` when there is no true length rule, and `CHECK` constraints for real validation. |
+| Time | Use `TIMESTAMPTZ` instead of `TIMESTAMP` for instants. |
+| JSONB | Default structured JSONB with `metadata JSONB DEFAULT '{}'` when optional document data is intentional. |
+| Constrained values | Use `ENUM`, custom domains, or lookup tables rather than free `VARCHAR(20)` values. |
+| Money-like values | Use a domain such as `positive_amount AS DECIMAL(10,2) CHECK (VALUE > 0)` when the constraint is reused. |
+
+Example type objects to preserve: `CREATE TYPE currency_code AS ENUM ('USD', 'EUR', 'GBP', 'JPY');`, `CREATE TYPE transaction_status AS ENUM ('pending', 'completed', 'failed', 'cancelled');`, and `CREATE DOMAIN positive_amount AS DECIMAL(10,2) CHECK (VALUE > 0);`.
+
+### Functions, triggers, extensions, and security
+
+| Area | Review rule |
+| --- | --- |
+| Trigger timestamps | Use `CURRENT_TIMESTAMP` and fire triggers only when needed with `WHEN (OLD.* IS DISTINCT FROM NEW.*)`. |
+| Trigger API | Check `CREATE OR REPLACE FUNCTION update_modified_time() RETURNS TRIGGER`, `NEW.updated_at`, `RETURN NEW`, `LANGUAGE plpgsql`, `CREATE TRIGGER update_modified_time_trigger`, and `EXECUTE FUNCTION update_modified_time()`. |
+| Extensions | Use `CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`, `"pgcrypto"`, and `"pg_trgm"` only when needed; know `uuid_generate_v4()`, `crypt('password', gen_salt('bf'))`, and `word_similarity('postgres', 'postgre')`. |
+| Row Level Security | Require `ALTER TABLE sensitive_data ENABLE ROW LEVEL SECURITY;` and policies such as `CREATE POLICY user_data_policy ... USING (user_id = current_setting('app.current_user_id')::INTEGER);` when tenant or user isolation is needed. |
+| Privileges | Avoid `GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO app_user`; prefer `GRANT SELECT, INSERT, UPDATE ON specific_table TO app_user` and `GRANT USAGE ON SEQUENCE specific_table_id_seq TO app_user`. |
+| Indexes | Check use of `GIN` for JSONB and arrays, `GiST` for ranges/geospatial, partial indexes for selective predicates, and evidence from plans where available. |
+| SQL injection | No user input concatenated into SQL; require JPQL, derived queries, or bound native parameters when reviewing application access. |
+
+## PostgreSQL anti-patterns
+
+- Avoiding PostgreSQL-specific indexes such as `GIN` and `GiST` for appropriate data types.
+- Treating `JSONB` like a string field instead of using operators such as `@>` and `?`.
+- Ignoring array operators and indexes.
+- Choosing poor partition keys or not leveraging partitioning where scale requires it.
+- Using `VARCHAR` for limited value sets instead of `ENUM`, domain, lookup table, or `CHECK`.
+- Missing validation constraints on data that application code assumes.
+- Using `TIMESTAMP` for real-world instants where time zone correctness matters.
+- Leaving unstructured `JSONB` without validation for fields the application depends on.
+
+## SQL vocabulary to preserve
+
+Use exact PostgreSQL examples when relevant: `UNIQUE`, `NULL`, `created_at`, `idx_users_metadata`, `valid_email`, `table_name`, `application_role`, `UUID`, `BEGIN`, `BEFORE`, `EACH`, `GOOD`, `JSONB/arrays`, `GIN/GiST`, `function/procedure`, and built-in security or extension capabilities.
+
+Example schema facts include `email CITEXT UNIQUE NOT NULL`, `created_at TIMESTAMPTZ DEFAULT NOW()`, `metadata JSONB DEFAULT '{}'`, `CONSTRAINT valid_email CHECK (...)`, and `CREATE INDEX idx_users_metadata ON users USING gin(metadata);`.
+
+## Output template
+
+```markdown
+## PostgreSQL review — <file or selection>
+
+**Verdict:** Pass | Fix required | Reject
+
+| # | Severity | Finding | Evidence | Fix |
+| --- | --- | --- | --- | --- |
+| 1 | High | User input concatenated into SQL | `<file:line or snippet>` | Bind through JPQL, a derived query, or a parameterized native query. |
+| 2 | Medium | JSONB containment query has no GIN index | `Seq Scan on orders` | `CREATE INDEX idx_orders_data ON orders USING gin(data);` |
+| 3 | Low | VARCHAR used for case-insensitive email | `email VARCHAR(255)` | Use `CITEXT` plus an appropriate `CHECK` constraint. |
+
+### Corrected SQL
 ```sql
---  BAD: Inefficient JSONB usage
-SELECT * FROM orders WHERE data->>'status' = 'shipped';  -- No index support
-
---  GOOD: Indexable JSONB queries
-CREATE INDEX idx_orders_status ON orders USING gin((data->'status'));
-SELECT * FROM orders WHERE data @> '{"status": "shipped"}';
-
---  BAD: Deep nesting without consideration
-UPDATE orders SET data = data || '{"shipping":{"tracking":{"number":"123"}}}';
-
---  GOOD: Structured JSONB with validation
-ALTER TABLE orders ADD CONSTRAINT valid_status 
-CHECK (data->>'status' IN ('pending', 'shipped', 'delivered'));
+CREATE INDEX idx_orders_data ON orders USING gin(data);
+-- Repository query stays parameterized: WHERE data @> :filter
+```
 ```
 
-### Array Operations Review
-```sql
---  BAD: Inefficient array operations
-SELECT * FROM products WHERE 'electronics' = ANY(categories);  -- No index
+## Quality gate
 
---  GOOD: GIN indexed array queries
-CREATE INDEX idx_products_categories ON products USING gin(categories);
-SELECT * FROM products WHERE categories @> ARRAY['electronics'];
-
---  BAD: Array concatenation in loops
--- This would be inefficient in a function/procedure
-
---  GOOD: Bulk array operations
-UPDATE products SET categories = categories || ARRAY['new_category']
-WHERE id IN (SELECT id FROM products WHERE condition);
-```
-
-### PostgreSQL Schema Design Review
-```sql
---  BAD: Not using PostgreSQL features
-CREATE TABLE users (
-    id INTEGER,
-    email VARCHAR(255),
-    created_at TIMESTAMP
-);
-
---  GOOD: PostgreSQL-optimized schema
-CREATE TABLE users (
-    id BIGSERIAL PRIMARY KEY,
-    email CITEXT UNIQUE NOT NULL,  -- Case-insensitive email
-    created_at TIMESTAMPTZ DEFAULT NOW(),
-    metadata JSONB DEFAULT '{}',
-    CONSTRAINT valid_email CHECK (email ~* '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$')
-);
-
--- Add JSONB GIN index for metadata queries
-CREATE INDEX idx_users_metadata ON users USING gin(metadata);
-```
-
-### Custom Types and Domains
-```sql
---  BAD: Using generic types for specific data
-CREATE TABLE transactions (
-    amount DECIMAL(10,2),
-    currency VARCHAR(3),
-    status VARCHAR(20)
-);
-
---  GOOD: PostgreSQL custom types
-CREATE TYPE currency_code AS ENUM ('USD', 'EUR', 'GBP', 'JPY');
-CREATE TYPE transaction_status AS ENUM ('pending', 'completed', 'failed', 'cancelled');
-CREATE DOMAIN positive_amount AS DECIMAL(10,2) CHECK (VALUE > 0);
-
-CREATE TABLE transactions (
-    amount positive_amount NOT NULL,
-    currency currency_code NOT NULL,
-    status transaction_status DEFAULT 'pending'
-);
-```
-
-## PostgreSQL-Specific Anti-Patterns
-
-### Performance Anti-Patterns
-- **Avoiding PostgreSQL-specific indexes**: Not using GIN/GiST for appropriate data types
-- **Misusing JSONB**: Treating JSONB like a simple string field
-- **Ignoring array operators**: Using inefficient array operations
-- **Poor partition key selection**: Not leveraging PostgreSQL partitioning effectively
-
-### Schema Design Issues
-- **Not using ENUM types**: Using VARCHAR for limited value sets
-- **Ignoring constraints**: Missing CHECK constraints for data validation
-- **Wrong data types**: Using VARCHAR instead of TEXT or CITEXT
-- **Missing JSONB structure**: Unstructured JSONB without validation
-
-### Function and Trigger Issues
-```sql
---  BAD: Inefficient trigger function
-CREATE OR REPLACE FUNCTION update_modified_time()
-RETURNS TRIGGER AS $$
-BEGIN
-    NEW.updated_at = NOW();  -- Should use TIMESTAMPTZ
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
---  GOOD: Optimized trigger function
-CREATE OR REPLACE FUNCTION update_modified_time()
-RETURNS TRIGGER AS $$
-BEGIN
-    NEW.updated_at = CURRENT_TIMESTAMP;
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
--- Set trigger to fire only when needed
-CREATE TRIGGER update_modified_time_trigger
-    BEFORE UPDATE ON table_name
-    FOR EACH ROW
-    WHEN (OLD.* IS DISTINCT FROM NEW.*)
-    EXECUTE FUNCTION update_modified_time();
-```
-
-## PostgreSQL Extension Usage Review
-
-### Extension Best Practices
-```sql
---  Check if extension exists before creating
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-CREATE EXTENSION IF NOT EXISTS "pgcrypto";
-CREATE EXTENSION IF NOT EXISTS "pg_trgm";
-
---  Use extensions appropriately
--- UUID generation
-SELECT uuid_generate_v4();
-
--- Password hashing
-SELECT crypt('password', gen_salt('bf'));
-
--- Fuzzy text matching
-SELECT word_similarity('postgres', 'postgre');
-```
-
-## PostgreSQL Security Review
-
-### Row Level Security (RLS)
-```sql
---  GOOD: Implementing RLS
-ALTER TABLE sensitive_data ENABLE ROW LEVEL SECURITY;
-
-CREATE POLICY user_data_policy ON sensitive_data
-    FOR ALL TO application_role
-    USING (user_id = current_setting('app.current_user_id')::INTEGER);
-```
-
-### Privilege Management
-```sql
---  BAD: Overly broad permissions
-GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO app_user;
-
---  GOOD: Granular permissions
-GRANT SELECT, INSERT, UPDATE ON specific_table TO app_user;
-GRANT USAGE ON SEQUENCE specific_table_id_seq TO app_user;
-```
-
-## PostgreSQL Code Quality Checklist
-
-### Schema Design
-- [ ] Using appropriate PostgreSQL data types (CITEXT, JSONB, arrays)
-- [ ] Leveraging ENUM types for constrained values
-- [ ] Implementing proper CHECK constraints
-- [ ] Using TIMESTAMPTZ instead of TIMESTAMP
-- [ ] Defining custom domains for reusable constraints
-
-### Performance Considerations
-- [ ] Appropriate index types (GIN for JSONB/arrays, GiST for ranges)
-- [ ] JSONB queries using containment operators (@>, ?)
-- [ ] Array operations using PostgreSQL-specific operators
-- [ ] Proper use of window functions and CTEs
-- [ ] Efficient use of PostgreSQL-specific functions
-
-### PostgreSQL Features Utilization
-- [ ] Using extensions where appropriate
-- [ ] Implementing stored procedures in PL/pgSQL when beneficial
-- [ ] Leveraging PostgreSQL's advanced SQL features
-- [ ] Using PostgreSQL-specific optimization techniques
-- [ ] Implementing proper error handling in functions
-
-### Security and Compliance
-- [ ] Row Level Security (RLS) implementation where needed
-- [ ] Proper role and privilege management
-- [ ] Using PostgreSQL's built-in encryption functions
-- [ ] Implementing audit trails with PostgreSQL features
-
-## PostgreSQL-Specific Review Guidelines
-
-1. **Data Type Optimization**: Ensure PostgreSQL-specific types are used appropriately
-2. **Index Strategy**: Review index types and ensure PostgreSQL-specific indexes are utilized
-3. **JSONB Structure**: Validate JSONB schema design and query patterns
-4. **Function Quality**: Review PL/pgSQL functions for efficiency and best practices
-5. **Extension Usage**: Verify appropriate use of PostgreSQL extensions
-6. **Performance Features**: Check utilization of PostgreSQL's advanced features
-7. **Security Implementation**: Review PostgreSQL-specific security features
-
-Focus on PostgreSQL's unique capabilities and ensure the code leverages what makes PostgreSQL special rather than treating it as a generic SQL database.
+- [ ] A verdict is stated: Pass, Fix required, or Reject.
+- [ ] Every finding carries severity and concrete evidence such as file/line, snippet, or plan output.
+- [ ] No user input is concatenated into SQL; every parameter is bound.
+- [ ] PostgreSQL-specific types including `CITEXT`, `JSONB`, arrays, `ENUM`, and domains were considered.
+- [ ] Index types including `GIN`, `GiST`, and partial indexes were evaluated where relevant.
+- [ ] `CHECK`, `ENUM`, and domain constraints were validated for constrained values.
+- [ ] `RLS`, privileges, extension usage, functions, and triggers were checked when present.
+- [ ] Corrected SQL is paste-ready and rollback-safe for schema changes.

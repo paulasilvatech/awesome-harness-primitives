@@ -9,13 +9,14 @@ description: >-
   templating system that converts markdown to HTML output. Supports CLI and Node.js workflows with
   GFM, CommonMark, and standard Markdown flavors.
 ---
+
 # Markdown to HTML Conversion
 
 Expert skill for converting Markdown documents to HTML using the marked.js library, or writing data conversion scripts; in this case scripts similar to [markedJS/marked](https://github.com/markedjs/marked) repository. For custom scripts knowledge is not confined to `marked.js`, but data conversion methods are utilized from tools like [pandoc](https://github.com/jgm/pandoc) and [gomarkdown/markdown](https://github.com/gomarkdown/markdown) for data conversion; [jekyll/jekyll](https://github.com/jekyll/jekyll) and [gohugoio/hugo](https://github.com/gohugoio/hugo) for templating systems.
 
 The conversion script or tool should handle single files, batch conversions, and advanced configurations.
 
-## When to Use This Skill
+## When to invoke
 
 - User asks to "convert markdown to html" or "transform md files"
 - User wants to "render markdown" as HTML output
@@ -198,3 +199,35 @@ For more see [collapsed-sections-to-html.md](references/collapsed-sections-to-ht
 
 Additional detailed guidance was moved to [references/extended-guide.md](references/extended-guide.md) to keep this skill within the progressive-disclosure budget.
 
+
+## Progressive disclosure and bundled resources
+
+At discovery time, only `name` and `description` are loaded. Read or execute bundled resources only when the current task needs them.
+
+- `references/basic-markdown-to-html.md`, `references/code-blocks-to-html.md`, `references/collapsed-sections-to-html.md`, `references/tables-to-html.md`, and `references/writing-mathematical-expressions-to-html.md`: concrete conversion examples.
+- `references/marked.md`, `references/pandoc.md`, `references/gomarkdown.md`, `references/jekyll.md`, `references/hugo.md`, and `references/extended-guide.md`: tool-specific guidance.
+
+## Output template
+
+```markdown
+## Markdown to HTML result
+
+**Status:** converted | script provided | blocked
+**Input:** `<file, directory, or snippet>`
+**Renderer/flavor:** `<marked.js | pandoc | gomarkdown/markdown | GFM | CommonMark | other>`
+
+### Output artifact
+```html
+<converted HTML or template excerpt>
+```
+
+### Notes
+- <escaping, sanitization, front matter, or flavor decision>
+```
+
+## Quality gate
+
+- [ ] The Markdown flavor and renderer assumptions are stated.
+- [ ] Headings, links, lists, tables, code blocks, raw HTML, and collapsed sections are handled when present.
+- [ ] Inline and fenced code escape HTML correctly.
+- [ ] The output artifact is concrete HTML or a runnable conversion script.

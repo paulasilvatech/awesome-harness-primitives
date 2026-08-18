@@ -7,11 +7,19 @@ description: >-
 metadata:
   category: "testing"
 ---
+
 # unit-test-vue-pinia
 
 Use this skill to create or review unit tests for Vue components, composables, and Pinia stores. Keep tests small, deterministic, and behavior-first.
 
-## Workflow
+## When to invoke
+
+- "Write unit tests for this Vue component with Pinia."
+- "Review these Vitest tests for Vue Test Utils anti-patterns."
+- "Mock this Pinia store with createTestingPinia."
+- "Test this composable or store without touching implementation details."
+
+## Procedure
 
 1. Identify the behavior boundary first: component UI behavior, composable behavior, or store behavior.
 2. Choose the narrowest test style that can prove that behavior.
@@ -20,7 +28,7 @@ Use this skill to create or review unit tests for Vue components, composables, a
 5. Assert observable outputs and side effects before considering any instance-level assertion.
 6. Return or review tests with clear behavior-oriented names and note any remaining coverage gaps.
 
-## Core Rules
+## Core rules
 
 - Test one behavior per test.
 - Assert observable input/output behavior first (rendered text, emitted events, callback calls, store state changes).
@@ -29,7 +37,7 @@ Use this skill to create or review unit tests for Vue components, composables, a
 - Prefer explicit setup in `beforeEach()` and reset mocks every test.
 - Use checked-in reference material in `references/pinia-patterns.md` as the local source of truth for standard Pinia test setups.
 
-## Pinia Testing Approach
+## Pinia testing approach
 
 Use `references/pinia-patterns.md` first, then fall back to Pinia's testing cookbook when the checked-in examples do not cover the case.
 
@@ -140,7 +148,7 @@ it("increments", () => {
 });
 ```
 
-## Vue Test Utils Approach
+## Vue Test Utils approach
 
 Follow Vue Test Utils guidance: <https://test-utils.vuejs.org/guide/>
 
@@ -152,7 +160,7 @@ Follow Vue Test Utils guidance: <https://test-utils.vuejs.org/guide/>
 - Assert emitted events and payloads with `wrapper.emitted(...)`.
 - Access `wrapper.vm` only when no DOM assertion, emitted event assertion, prop assertion, or store-level assertion can express the behavior. Treat it as an exception and keep the assertion narrowly scoped.
 
-## Key Testing Snippets
+## Key testing snippets
 
 Emit and assert payload:
 
@@ -169,7 +177,7 @@ await wrapper.find("form").trigger("submit");
 expect(wrapper.emitted("save")?.[0]?.[0]).toBe("Agent Violet");
 ```
 
-## Test Writing Workflow
+## Procedure
 
 1. Identify the behavior boundary to test.
 2. Build minimal fixture data (only fields needed by that behavior).
@@ -178,7 +186,7 @@ expect(wrapper.emitted("save")?.[0]?.[0]).toBe("Agent Violet");
 5. Assert public outputs and side effects.
 6. Refactor test names to describe behavior, not implementation.
 
-## Constraints and Safety
+## Constraints and safety
 
 - Do not test private/internal implementation details.
 - Do not overuse snapshots for dynamic UI behavior.
@@ -188,11 +196,24 @@ expect(wrapper.emitted("save")?.[0]?.[0]).toBe("Agent Violet");
 - Do not rewrite working tests toward deeper mounting or real actions unless the behavior under test requires that extra surface area.
 - Flag missing test coverage, brittle selectors, and implementation-coupled assertions explicitly during review.
 
-## Output Contract
+## Progressive disclosure and bundled resources
+
+At discovery time, only `name` and `description` are loaded. Read or execute bundled resources only when the current task needs them.
+
+- `references/pinia-patterns.md`: local source of truth for standard Pinia test setups and accepted variants.
+
+## Output template
 
 - For `create` or `update`, return the finished test code plus a short note describing the selected Pinia strategy.
 - For `review`, return concrete findings first, then missing coverage or brittleness risks.
 - When the safest choice is ambiguous, state the assumption that drove the chosen test setup.
+
+## Quality gate
+
+- [ ] The behavior boundary is explicit: component, composable, or store.
+- [ ] The Pinia setup is the least powerful valid option for the behavior.
+- [ ] Assertions prefer observable behavior over `wrapper.vm`.
+- [ ] Review output flags missing coverage, brittle selectors, and implementation coupling.
 
 ## References
 

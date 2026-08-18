@@ -1,131 +1,160 @@
 ---
 name: "bigquery-pipeline-audit"
 description: >-
-  Audits Python + BigQuery pipelines for cost safety, idempotency, and production readiness. Returns a
-  structured report with exact patch locations. Use this skill when `extract_table`, `copy_table`,
-  DDL/DML via query) and every external call; (APIs, LLM calls, storage writes).
----
-# BigQuery Pipeline Audit: Cost, Safety and Production Readiness
-
-You are a senior data engineer reviewing a Python + BigQuery pipeline script.
-Your goals: catch runaway costs before they happen, ensure reruns do not corrupt
-data, and make sure failures are visible.
-
-Analyze the codebase and respond in the structure below (A to F + Final).
-Reference exact function names and line locations. Suggest minimal fixes, not
-rewrites.
-
+  Audit Python and BigQuery pipeline scripts for cost exposure, dry-run safety, bounded backfills, query pruning, idempotent writes, and observability. Use this skill when reviewing client.query, load_table_from_*, extract_table, copy_table, DDL/DML query jobs, external API calls, LLM calls, or storage writes before production use.
 ---
 
-## A) COST EXPOSURE: What will actually get billed?
+# BigQuery pipeline audit
 
-Locate every BigQuery job trigger (`client.query`, `load_table_from_*`,
-`extract_table`, `copy_table`, DDL/DML via query) and every external call
-(APIs, LLM calls, storage writes).
+Review a Python + BigQuery pipeline, inventory every billable or external side effect, and return a risk-ranked production-readiness report with exact functions, line locations, and minimal fixes.
 
-For each, answer:
-- Is this inside a loop, retry block, or async gather?
-- What is the realistic worst-case call count?
-- For each `client.query`, is `QueryJobConfig.maximum_bytes_billed` set?
-  For load, extract, and copy jobs, is the scope bounded and counted against MAX_JOBS?
-- Is the same SQL and params being executed more than once in a single run?
-  Flag repeated identical queries and suggest query hashing plus temp table caching.
+## When to invoke
 
-**Flag immediately if:**
-- Any BQ query runs once per date or once per entity in a loop
-- Worst-case BQ job count exceeds 20
-- `maximum_bytes_billed` is missing on any `client.query` call
+- "Audit this BigQuery pipeline before it runs in production."
+- "Check this Python script for BigQuery cost and rerun safety."
+- "Review these client.query and load_table_from_* calls."
+- "Find runaway backfill, DDL/DML, extract_table, or copy_table risks."
+- "Is this BigQuery job loop safe and observable?"
 
----
+## Cost exposure
 
-## B) DRY RUN AND EXECUTION MODES
+Locate every BigQuery job trigger and every external side effect. Treat `client.query`, `load_table_from_*`, `extract_table`, `copy_table`, DDL/DML via query, external APIs, LLM calls, and storage writes as billable or mutating operations.
+
+| Check | Required evidence | Fail condition | Minimal fix |
+| --- | --- | --- | --- |
+| Job inventory | Function name, line, job type, SQL or table scope | Any BigQuery job trigger is missing from the report | Add a complete trigger table before judging risk. |
+| Loop and retry context | Whether the call is inside a loop, retry block, async gather, or callback | Worst-case count cannot be bounded | Compute `dates x entities x retries x concurrent tasks`. |
+| Query scan cap | `QueryJobConfig.maximum_bytes_billed` on every `client.query` | Missing `maximum_bytes_billed` | Add a conservative cap and surface cap failures. |
+| Non-query job cap | Load, extract, and copy job scope is bounded and counted against `MAX_JOBS` | Unlimited table list, date list, or file list | Enforce `MAX_JOBS` before submitting jobs. |
+| Duplicate work | Same SQL and params run more than once in one run | Repeated identical queries | Hash SQL plus params and cache into a temp table. |
+
+Flag immediately when any BigQuery query runs once per date or once per entity in a loop, worst-case BigQuery job count exceeds 20, or `maximum_bytes_billed` is missing on any `client.query` call.
+
+## Execution modes
 
 Verify a `--mode` flag exists with at least `dry_run` and `execute` options.
 
-- `dry_run` must print the plan and estimated scope with zero billed BQ execution
-  (BigQuery dry-run estimation via job config is allowed) and zero external API or LLM calls
-- `execute` requires explicit confirmation for prod (`--env=prod --confirm`)
-- Prod must not be the default environment
+| Mode rule | Required behavior |
+| --- | --- |
+| `dry_run` | Print the plan and estimated scope with zero billed BigQuery execution, zero external API calls, zero LLM calls, and zero storage writes. BigQuery dry-run estimation through job config is allowed. |
+| `execute` | Perform side effects only after mode is explicit. |
+| Production confirmation | Require `--env=prod --confirm` for production execution. |
+| Safe default | Production must not be the default environment. |
 
-If missing, propose a minimal `argparse` patch with safe defaults.
+If the flags are missing, propose a minimal `argparse` patch with safe defaults instead of redesigning the CLI.
 
----
+## Backfill and loop design
 
-## C) BACKFILL AND LOOP DESIGN
+Hard fail when the script runs one BigQuery query per date or per entity in a loop. Date-range backfills must use one of these patterns:
 
-**Hard fail if:** the script runs one BQ query per date or per entity in a loop.
+| Pattern | Use when | Required guard |
+| --- | --- | --- |
+| Set-based query | The date range can be represented in SQL | Use `GENERATE_DATE_ARRAY` and one partition-pruned join. |
+| Staging table | The date/entity list comes from Python or an API | Load all keys once, then run one join query. |
+| Explicit chunks | The source enforces batch limits | Set a hard `MAX_CHUNKS` cap and stop when exceeded. |
 
-Check that date-range backfills use one of:
-1. A single set-based query with `GENERATE_DATE_ARRAY`
-2. A staging table loaded with all dates then one join query
-3. Explicit chunks with a hard `MAX_CHUNKS` cap
+Default date ranges should be bounded, usually no more than 14 days without an `--override`. A crash in the middle of a run must be safe to rerun without double-writing. Backdated simulations must read time-consistent data using `FOR SYSTEM_TIME AS OF`, partitioned as-of tables, or dated snapshot tables; flag any read from a `latest` or unversioned table in backdated mode.
 
-Also check:
-- Is the date range bounded by default (suggest 14 days max without `--override`)?
-- If the script crashes mid-run, is it safe to re-run without double-writing?
-- For backdated simulations, verify data is read from time-consistent snapshots
-  (`FOR SYSTEM_TIME AS OF`, partitioned as-of tables, or dated snapshot tables).
-  Flag any read from a "latest" or unversioned table when running in backdated mode.
+## Query safety and scan size
 
-Suggest a concrete rewrite if the current approach is row-by-row.
+For each query, check the SQL shape before reviewing style.
 
----
+| Risk | Bad pattern | Required correction |
+| --- | --- | --- |
+| Partition pruning disabled | `DATE(ts)`, `CAST(partition_col AS ...)`, or a function around the partition column | Filter the raw partition column directly. |
+| Unbounded projection | `SELECT *` | Select only columns used downstream. |
+| Join explosion | Many-to-many keys or unscoped joins | Prove uniqueness, pre-aggregate, or add join predicates. |
+| Full-scan expensive functions | `REGEXP`, `JSON_EXTRACT`, or UDFs before partition filtering | Filter partitions first, then apply expensive expressions. |
 
-## D) QUERY SAFETY AND SCAN SIZE
+Provide a concrete SQL fix for every failing query.
 
-For each query, check:
-- **Partition filter** is on the raw column, not `DATE(ts)`, `CAST(...)`, or
-  any function that prevents pruning
-- **No `SELECT *`**: only columns actually used downstream
-- **Joins will not explode**: verify join keys are unique or appropriately scoped
-  and flag any potential many-to-many
-- **Expensive operations** (`REGEXP`, `JSON_EXTRACT`, UDFs) only run after
-  partition filtering, not on full table scans
+## Safe writes and idempotency
 
-Provide a specific SQL fix for any query that fails these checks.
+Identify every write operation and flag plain `INSERT` or append with no deduplication logic.
 
----
+| Write pattern | Acceptable when | Required key rule |
+| --- | --- | --- |
+| `MERGE` | A deterministic business key exists | Key examples: `entity_id + date + model_version`. |
+| Staging table then swap or merge | The run needs isolation or validation before publish | Stage table is scoped to the run and cleaned up. |
+| Append-only plus dedupe view | Historical writes are intentional | Use `QUALIFY ROW_NUMBER() OVER (PARTITION BY <key>) = 1`. |
 
-## E) SAFE WRITES AND IDEMPOTENCY
+Check whether reruns create duplicate rows, whether `WRITE_TRUNCATE` or `WRITE_APPEND` is intentional and documented, and whether `run_id` is incorrectly part of the uniqueness key. Store `run_id` as metadata unless multi-run history is explicitly required.
 
-Identify every write operation. Flag plain `INSERT`/append with no dedup logic.
+## Observability
 
-Each write should use one of:
-1. `MERGE` on a deterministic key (e.g., `entity_id + date + model_version`)
-2. Write to a staging table scoped to the run, then swap or merge into final
-3. Append-only with a dedupe view:
-   `QUALIFY ROW_NUMBER() OVER (PARTITION BY <key>) = 1`
+Failures must raise and abort; no silent `except: pass` and no warn-only failure path for a mutating operation. Each BigQuery job log should include job ID, bytes processed or billed when available, slot milliseconds, and duration. The run summary must include `run_id, env, mode, date_range, tables written, total BQ jobs, total bytes`, and `run_id` must be present on every log line.
 
-Also check:
-- Will a re-run create duplicate rows?
-- Is the write disposition (`WRITE_TRUNCATE` vs `WRITE_APPEND`) intentional
-  and documented?
-- Is `run_id` being used as part of the merge or dedupe key? If so, flag it.
-  `run_id` should be stored as a metadata column, not as part of the uniqueness
-  key, unless you explicitly want multi-run history.
+If `run_id` is missing, propose this one-line fix:
 
-State the recommended approach and the exact dedup key for this codebase.
+```python
+run_id = run_id or datetime.utcnow().strftime('%Y%m%dT%H%M%S')
+```
 
----
+## Criteria
 
-## F) OBSERVABILITY: Can you debug a failure?
+### Blocking failures
 
-Verify:
-- Failures raise exceptions and abort with no silent `except: pass` or warn-only
-- Each BQ job logs: job ID, bytes processed or billed when available,
-  slot milliseconds, and duration
-- A run summary is logged or written at the end containing:
-  `run_id, env, mode, date_range, tables written, total BQ jobs, total bytes`
-- `run_id` is present and consistent across all log lines
+- [ ] Any `client.query` call lacks `QueryJobConfig.maximum_bytes_billed`.
+- [ ] Worst-case BigQuery job count is greater than 20 or cannot be calculated.
+- [ ] A backfill runs one query per date or one query per entity.
+- [ ] Production can execute without `--env=prod --confirm`.
+- [ ] A rerun can double-write records or corrupt final tables.
 
-If `run_id` is missing, propose a one-line fix:
-`run_id = run_id or datetime.utcnow().strftime('%Y%m%dT%H%M%S')`
+### Review completeness
 
----
+- [ ] Every BigQuery job trigger and external call is listed with function and line evidence.
+- [ ] Every query has partition, projection, join, and expensive-operation checks.
+- [ ] Every write operation has an idempotency strategy and dedup key.
+- [ ] Every failure path and end-of-run summary is observable through logs or metrics.
 
-## Final
+## Audit vocabulary
 
-**1. PASS / FAIL** with specific reasons per section (A to F).
-**2. Patch list** ordered by risk, referencing exact functions to change.
-**3. If FAIL: Top 3 cost risks** with a rough worst-case estimate
-(e.g., "loop over 90 dates x 3 retries = 270 BQ jobs").
+Preserve these review labels from the source checklist when reporting: `COST EXPOSURE`, `DRY RUN AND EXECUTION MODES`, `BACKFILL AND LOOP DESIGN`, `QUERY SAFETY AND SCAN SIZE`, `SAFE WRITES AND IDEMPOTENCY`, and `OBSERVABILITY`. Use the terms `date-range`, `set-based`, `mid-run`, `re-run`, and `many-to-many` exactly when they describe the risk. Include SQL evidence such as `CAST(...)` when a partition filter blocks pruning.
+
+## Output template
+
+```markdown
+## BigQuery pipeline audit - <file or module>
+
+**Verdict:** PASS | FAIL
+**Scope reviewed:** <files, functions, and entry points>
+
+### A. Cost exposure
+| Trigger | Location | Loop/retry context | Worst-case count | Cap present | Finding |
+| --- | --- | --- | --- | --- | --- |
+| `<client.query or job>` | `<function:line>` | `<context>` | `<count>` | `<yes/no>` | `<risk>` |
+
+### B. Dry run and execution modes
+<pass/fail with evidence and minimal argparse patch if needed>
+
+### C. Backfill and loop design
+<pass/fail with backfill pattern, MAX_CHUNKS/MAX_JOBS evidence, and rerun safety>
+
+### D. Query safety and scan size
+| Query | Evidence | Risk | SQL fix |
+| --- | --- | --- | --- |
+
+### E. Safe writes and idempotency
+| Write | Disposition | Dedup key | Rerun outcome | Recommendation |
+| --- | --- | --- | --- | --- |
+
+### F. Observability
+<job ID, bytes, slot milliseconds, duration, run_id, and run summary findings>
+
+### Patch list
+1. `<highest-risk minimal patch with exact function>`
+2. `<next patch>`
+
+### Top 3 cost risks
+1. `<rough estimate, for example 90 dates x 3 retries = 270 BigQuery jobs>`
+```
+
+## Quality gate
+
+- [ ] The report states `PASS` or `FAIL` with section-specific reasons for A through F.
+- [ ] Every billable BigQuery operation and external call has exact location evidence.
+- [ ] The worst-case job count calculation is explicit and compares against 20, `MAX_JOBS`, and `MAX_CHUNKS` where present.
+- [ ] Missing `maximum_bytes_billed`, unsafe production defaults, and row-by-row backfills are treated as blocking failures.
+- [ ] Every SQL recommendation preserves partition pruning and avoids `SELECT *`.
+- [ ] Every write recommendation names a deterministic deduplication key and explains `run_id` usage.
+- [ ] The patch list is ordered by production risk and avoids broad rewrites.

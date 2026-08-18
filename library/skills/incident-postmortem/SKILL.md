@@ -7,7 +7,18 @@ description: >-
   "RCA". Covers timeline reconstruction, contributing factor analysis, impact quantification, and
   action item generation with owners.
 ---
-# Incident Post-Mortem
+
+# Incident post-mortem
+
+Write a structured blameless post-mortem after a production incident by reconstructing timeline evidence, quantifying impact, identifying systemic root causes, and producing owner-assigned action items.
+
+## When to invoke
+
+- "Write a post-mortem for this outage."
+- "Create an incident review from this timeline."
+- "Help with root cause analysis after a production incident."
+- "Draft an RCA with action items."
+- "Summarize what went wrong during the service degradation."
 
 Guide a team through writing a structured, blameless post-mortem after a production incident. The output is a document that builds shared understanding, identifies root causes without blame, and produces concrete action items to prevent recurrence.
 
@@ -15,7 +26,7 @@ Guide a team through writing a structured, blameless post-mortem after a product
 
 Systems fail, not people. The goal is to understand HOW the incident happened — not WHO caused it. Avoid language like "X forgot to", "Y should have known". Use "the system did not", "the process lacked", "the alert did not fire".
 
-## When to Use
+## Invocation details
 
 - Production outage or service degradation has been resolved
 - A significant near-miss occurred (would have been an incident if caught later)
@@ -122,7 +133,7 @@ Action items must have an owner (a person, not a team) and a due date. Vague act
 ### Step 6 — Write the Document
 Produce the full post-mortem using the template below. Save to `docs/postmortems/YYYY-MM-DD-<slug>.md`.
 
-## Output Template
+## Original output template
 
 ```markdown
 # Post-Mortem: [Incident Title]
@@ -206,3 +217,58 @@ All times UTC.
 | Timeline reconstructed from memory | Check logs, alerts, Slack, PagerDuty before writing |
 | "Improve monitoring" as an action | Specify: which service, which metric, what threshold, by when |
 | Post-mortem written weeks later | Write within 48–72 hours while context is fresh |
+
+## Output template
+
+```markdown
+# Post-Mortem: [Incident Title]
+
+**Date:** YYYY-MM-DD  
+**Severity:** P[1-4]  
+**Duration:** X hours Y minutes (HH:MM UTC - HH:MM UTC)  
+**Incident Commander:** @name  
+**Status:** Resolved
+
+---
+
+## Summary
+
+[2-3 sentences.]
+
+## Impact
+
+| Dimension | Value |
+| --- | --- |
+| Affected services | [list] |
+| User-facing impact | [errors / degraded / full outage] |
+| Users affected | [estimated number or %] |
+| Peak error rate | [X% vs Y% baseline] |
+| Data loss | [none / describe scope] |
+| SLA breach | [yes/no - by how much] |
+
+## Timeline
+
+All times UTC.
+
+| Time | Event |
+| --- | --- |
+| HH:MM | [First symptom / alert fired] |
+
+## Root Cause
+
+[Blameless systemic cause.]
+
+## Action Items
+
+| # | Action | Owner | Due Date | Priority |
+| --- | --- | --- | --- | --- |
+| 1 | [Specific deliverable] | @person | YYYY-MM-DD | High/Medium/Low |
+```
+
+## Quality gate
+
+- [ ] The post-mortem uses blameless language and avoids naming people as causes.
+- [ ] The document includes title, times, severity, affected services, impact, and a chronological timeline.
+- [ ] Root cause analysis reaches a systemic or process gap, not “human error.”
+- [ ] Every action item has a specific deliverable, a named owner, a due date, and priority.
+- [ ] The document is saved to `docs/postmortems/YYYY-MM-DD-<slug>.md` when writing files is in scope.

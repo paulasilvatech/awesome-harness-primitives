@@ -9,9 +9,17 @@ description: >-
   verified fit, safety, and overlap. Do not use for locating one known or common Skill; use the
   generic find-skills workflow.
 ---
+
 # Build an Agent Skill Stack
 
 Build the smallest useful stack for the user's actual outcome. Never force a domain example or a fixed lifecycle onto a different request.
+
+## When to invoke
+
+- "Which skills do I need for this multi-step workflow?"
+- "Audit my installed Skills and find conflicts."
+- "Build a project-specific Skill Stack."
+- "Why is skill recall low for this task?"
 
 ## 1. Choose the user-facing depth
 
@@ -192,3 +200,39 @@ After installation or profile changes, run a **recall check**, not a performance
 Confirm that the correct primary and supporting Skills are selected and unrelated Skills stay out. Report a simple result such as `3/3 种说法都能正确识别`; keep raw prompts and routing details in the technical view.
 
 Do not collect or store user prompt history, hit/miss logs, or routing feedback.
+
+## Progressive disclosure and bundled resources
+
+At discovery time, only `name` and `description` are loaded. Read or execute bundled resources only when the current task needs them.
+
+- `references/workflow-model.md`, `references/local-index-and-profiles.md`, `references/discovery-ranking.md`, and `references/security-installation.md`: workflow, index/profile, ranking, and safety rules.
+- `scripts/skill_index.py`, `scripts/inventory_skills.py`, `scripts/stage_install.py`, `scripts/project_profile.py`, and `scripts/render_stack_card.py`: deterministic stack tooling.
+- `agents/openai.yaml`: bundled agent configuration used only when explicitly needed.
+
+## Output template
+
+```markdown
+## Agent Skill Stack recommendation
+
+**Status:** recommended | installed | profile created | blocked
+**Goal:** <plain-language outcome>
+**Mode:** <plain-language | technical details>
+
+### How the work breaks down
+1. <everyday step and success condition>
+
+### Recommended combination
+| Role | Skill | Status | Why chosen | Safety |
+| --- | --- | --- | --- | --- |
+| Required | `<skill>` | 推荐 | <fit/adoption/conflict summary> | 安全检查通过 |
+
+### Recall check
+- `<direct/paraphrase/helper result>`: <pass/fail/not run>
+```
+
+## Quality gate
+
+- [ ] The workflow was derived from the user's final outcome, not copied from a prior lifecycle.
+- [ ] Local index and project profile were checked before external search when available.
+- [ ] Every recommended candidate has verified source, exact Skill path, full `SKILL.md` review, and executable-file review where applicable.
+- [ ] Installation or profile changes happened only after explicit consent and dry-run preview.

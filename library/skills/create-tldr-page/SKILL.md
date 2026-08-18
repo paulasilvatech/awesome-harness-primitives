@@ -5,7 +5,17 @@ description: >-
   name. Use this skill when the user asks to generate a concise tldr-pages style command reference
   from official docs and examples.
 ---
-# Create TLDR Page
+
+# Create TLDR page
+
+Create a concise tldr-pages style command reference from an authoritative documentation URL, a command name, and any supplied help text or examples; return a markdown page with validated placeholders and common use cases.
+
+## When to invoke
+
+- "Create a tldr page for this command from the docs URL."
+- "Generate a concise command reference from this manual page."
+- "Turn this --help output and upstream URL into a tldr page."
+- "Write a tldr-pages style page for git from https://git-scm.com/docs/git."
 
 ## Overview
 
@@ -210,3 +220,36 @@ You MUST follow these placeholder conventions:
 - **Command structure**: Options should appear BEFORE their arguments in the placeholder syntax
   - Correct: `command {{[-o|--option]}} {{value}}`
   - Incorrect: `command -o {{value}}`
+
+## Output template
+
+```markdown
+# {{command}}
+
+> {{short_snappy_description}}
+> {{optional_subcommands_note}}
+> More information: <{{authoritative_url}}>.
+
+- {{common task description}}:
+
+`{{command}} {{[-o|--option]}} {{value}}`
+
+- {{another common task description}}:
+
+`{{command}} {{subcommand}} {{argument}}`
+```
+
+## Quality gate
+
+- [ ] Both command name and authoritative URL are present or the response asks for the missing item.
+- [ ] The page uses exact tldr markdown style: H1, quote description, More information URL, and example bullets.
+- [ ] The examples are the 5-8 most common user tasks and are ordered by practical frequency.
+- [ ] Every user-supplied operand uses `{{placeholder}}` syntax.
+- [ ] Option placeholders follow the separate option/value rules in this skill.
+
+## References
+
+- https://git-scm.com/docs/git
+- https://raw.githubusercontent.com/jhauga/tldr/refs/heads/main/pages/common/git.md
+- https://raw.githubusercontent.com/jhauga/tldr/refs/heads/main/pages/linux/distrobox-create.md
+- https://raw.githubusercontent.com/jhauga/tldr/refs/heads/main/pages/linux/nmcli.md

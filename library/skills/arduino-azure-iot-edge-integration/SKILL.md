@@ -1,143 +1,133 @@
 ---
 name: "arduino-azure-iot-edge-integration"
 description: >-
-  Design and implement Arduino integration with Azure IoT Hub and IoT Edge, including secure
-  provisioning, resilient telemetry, command handling, and production guardrails. Use this skill when
-  when to use it.
+  Design and implement Arduino integration with Azure IoT Hub and IoT Edge, including secure provisioning, MQTT telemetry, gateway topologies, offline buffering, command handling, OTA configuration, and production guardrails. Use when connecting Arduino sensors or actuators to Azure IoT or edge gateways.
 ---
-# Arduino Azure IoT Edge Integration
 
-Use this skill when the user needs to connect Arduino-class devices to Azure IoT, especially in edge-heavy scenarios (gateways, intermittent networks, offline buffering, and local actuation).
+# Arduino Azure IoT Edge integration
 
-## When to use it
+Connects Arduino-class devices to Azure IoT Hub or an IoT Edge gateway with secure identity, resilient telemetry, command authorization, local buffering, and a practical firmware, gateway, and cloud backlog.
 
-Use this skill for requests such as:
+## When to invoke
 
-- "I want to connect Arduino sensors to Azure"
+- "I want to connect Arduino sensors to Azure."
 - "How do I send MQTT telemetry to IoT Hub?"
-- "I need an edge gateway for field devices"
-- "I want cloud-to-device commands and OTA configuration updates"
+- "I need an edge gateway for field devices."
+- "I want cloud-to-device commands and OTA configuration updates."
+- "Design Arduino telemetry with offline buffering and local actuation."
 
-## Mandatory documentation review
+## Prerequisites and context
 
-Before recommending an IoT Edge topology or runtime behavior, review:
+Before recommending IoT Edge topology or runtime behavior, review:
 
 - https://learn.microsoft.com/azure/iot-edge/
-
-If documentation cannot be consulted, proceed with explicit assumptions and highlight them in a dedicated section.
-
-## Official Arduino references and best practices (required)
 
 Before proposing firmware, wiring, or communication implementation details, consult official Arduino sources first:
 
 - https://docs.arduino.cc/learn/starting-guide/getting-started-arduino/
 - https://docs.arduino.cc/
 - https://docs.arduino.cc/language-reference/
-- references/arduino-official-best-practices.md
+- `references/arduino-official-best-practices.md`
 
-When choosing between implementation alternatives, prioritize official Arduino guidance over community snippets unless there is a clear technical reason to deviate.
+If documentation cannot be consulted, proceed with explicit assumptions and highlight them in the output.
 
-## Objectives
+## Connectivity patterns
 
-- Produce a secure end-to-end reference path from the Arduino device to cloud insights.
-- Handle unstable links (store-and-forward, retries, idempotency).
-- Define an actionable device and cloud backlog.
-
-## Integration patterns
-
-### Pattern A: Arduino direct to IoT Hub
-
-Use when connectivity is stable and cloud latency is acceptable.
-
-- Protocol: MQTT over TLS.
-- Identity: per-device credentials (SAS or X.509).
-- Telemetry payload: compact JSON with timestamp, device ID, metrics, and optional quality flags.
-
-### Pattern B: Arduino to local gateway, then IoT Edge
-
-Use when links are constrained, local control is required, or batching improves cost/reliability.
-
-- Arduino communicates with a local gateway (serial, BLE, local MQTT, RS-485, Modbus bridge).
-- The gateway publishes upstream through the IoT Edge runtime and routes data to IoT Hub.
-- Local modules can filter, aggregate, and trigger actions even during cloud outages.
+| Pattern | Use when | Design notes |
+| --- | --- | --- |
+| Arduino direct to IoT Hub | Connectivity is stable and cloud latency is acceptable. | Use MQTT over TLS, per-device SAS or X.509 credentials, and compact JSON with timestamp, device ID, metrics, and optional quality flags. |
+| Arduino to local gateway, then IoT Edge | Links are constrained, local control is required, batching improves reliability or cost, or offline behavior matters. | Arduino communicates with a local gateway through serial, BLE, local MQTT, RS-485, or Modbus bridge; the gateway publishes through IoT Edge routes. |
 
 ## Design flow
 
-### 1) Device contract
+1. Define the device contract: sensor catalog, units, sampling frequency, expected throughput, message schema versioning, desired properties, and reported properties.
+2. Establish the security baseline: unique identity per device, no hardcoded secrets, credential rotation, signed firmware, and controlled update process where possible.
+3. Plan reliability and offline behavior: backoff with jitter, bounded local queue, duplicate suppression, idempotent downstream processing, and fallback to last-known-good configuration.
+4. Define cloud and edge routes: raw telemetry to cold storage, curated telemetry to hot analytics, alerts to operations channels, and commands/configuration back to edge or device.
+5. Specify observability: heartbeat, firmware version, connectivity state transitions, message send success/error counters, gateway module health, and restart reasons.
 
-Define:
+## Message and command contract
 
-- Sensor catalog and units.
-- Sampling frequency and expected throughput.
-- Message schema versioning strategy.
-- Desired/reported device twin properties to control runtime behavior.
+| Field | Rule |
+| --- | --- |
+| `deviceId` | Stable per-device identity; do not share across devices. |
+| `timestamp` | Use device time only when synchronized; otherwise include gateway receipt time. |
+| `schemaVersion` | Increment on incompatible payload changes. |
+| `metrics` | Include units, quality flags, and sampling frequency assumptions. |
+| Commands | Authorize, audit, validate parameters, and define safe fallback for actuator scenarios. |
+| OTA configuration | Use desired/reported properties for configuration state; do not use ad hoc unaudited command payloads. |
 
-### 2) Security baseline
+## Gotchas
 
-Require:
+- **Do not use shared credentials across devices**: shared SAS keys break revocation, auditing, and production operations.
+- **Do not assume always-on connectivity**: field deployments need buffering, retries, dedupe, and last-known-good config.
+- **Do not omit command authorization**: actuator scenarios require audit trails and safe failure behavior.
+- **Do not choose direct-to-cloud by default**: use a gateway when local control, constrained links, or batching are load-bearing.
 
-- Unique identity per device.
-- No hardcoded secrets in source code or firmware artifacts.
-- Credential rotation strategy.
-- Signed firmware and a controlled update process when possible.
+## Progressive disclosure and bundled resources
 
-### 3) Reliability and offline behavior
+- `references/arduino-official-best-practices.md`: official Arduino quality baseline for firmware and hardware recommendations.
+- `references/arduino-iot-checklist.md`: architecture and implementation checklist before finalizing guidance.
 
-Plan and document:
+## Related primitives
 
-- Backoff with jitter.
-- Local queue/buffer strategy with bounded size.
-- Duplicate suppression or downstream idempotent processing.
-- Fallback to last-known-good configuration.
+| Name | Type | Use it when |
+| --- | --- | --- |
+| `azure-smart-city-iot-solution-builder` | skill | The request is city-wide architecture and phased rollout. |
+| `azure-resource-visualizer` | skill | The request needs relationship diagrams. |
+| `appinsights-instrumentation` | skill | The request focuses on telemetry instrumentation patterns. |
 
-### 4) Cloud and edge routing
+## Arduino edge vocabulary
 
-Define routes for:
-
-- Raw telemetry to cold storage.
-- Curated telemetry to hot analytics.
-- Alerts to operations channels.
-- Commands and configuration back to edge/device.
-
-### 5) Observability
-
-Specify minimum operations telemetry:
-
-- Device heartbeat and firmware version.
-- Connectivity state transitions.
-- Message send success/error counters.
-- Gateway module health and restart reasons.
-
-## Reuse other skills
-
-When relevant, combine with:
-
-- `azure-smart-city-iot-solution-builder` for city-wide architecture and phased rollout.
-- `azure-resource-visualizer` for relationship diagrams.
-- `appinsights-instrumentation` for app and service telemetry patterns.
-
-Also use `references/arduino-official-best-practices.md` as a quality baseline for firmware and hardware recommendations, and `references/arduino-iot-checklist.md` before finalizing architecture or implementation guidance.
-
-## Required output
-
-Always provide:
-
-1. Chosen connectivity pattern and rationale.
-2. Message contract (fields, units, sample payload).
-3. Security checklist for identity/credentials/updates.
-4. Reliability plan (retry, buffering, dedupe).
-5. Implementation backlog (firmware, gateway, cloud).
+This skill covers `edge-heavy`, `end-to-end` designs with `store-and-forward`, `queue/buffer`, `Desired/reported` twin properties, `identity/credentials/updates.`, `cost/reliability.`, and `edge/device.` routing decisions.
 
 ## Output template
 
-1. Scenario and assumptions
-2. Recommended architecture
-3. Device and gateway contract
-4. Security and reliability controls
-5. Deployment plan and validation tests
+````markdown
+### Arduino Azure IoT integration result
 
-## Guidelines
+**Status:** architecture ready | implementation backlog | blocked
+**Scenario and assumptions:** <connectivity, board class, gateway, docs assumptions>
 
-- Do not propose production deployments with shared credentials across devices.
-- Do not assume always-on connectivity in field deployments.
-- Do not omit command authorization and auditing in actuator scenarios.
+## 1. Recommended architecture
+**Pattern:** Arduino direct to IoT Hub | Arduino to local gateway, then IoT Edge
+**Rationale:** <why this pattern fits>
+
+## 2. Device and gateway contract
+**Telemetry payload:**
+```json
+{
+  "deviceId": "<device-id>",
+  "timestamp": "<ISO-8601>",
+  "schemaVersion": "1.0",
+  "metrics": { "<name>": { "value": 0, "unit": "<unit>", "quality": "good" } }
+}
+```
+**Commands/configuration:** <desired/reported properties and authorization>
+
+## 3. Security and reliability controls
+- Identity and credentials: <plan>
+- Retry, buffering, dedupe: <plan>
+- Firmware/update controls: <plan>
+
+## 4. Deployment plan and validation tests
+| Backlog item | Owner area | Validation |
+| --- | --- | --- |
+| <firmware/gateway/cloud item> | <area> | <test> |
+````
+
+## Quality gate
+
+- [ ] Azure IoT Edge and official Arduino documentation were reviewed or assumptions were stated.
+- [ ] Connectivity pattern and rationale are explicit.
+- [ ] Message contract includes fields, units, schema version, and sample payload.
+- [ ] Security checklist covers identity, credentials, command authorization, auditing, and updates.
+- [ ] Reliability plan covers retry, buffering, dedupe, and last-known-good config.
+- [ ] Implementation backlog covers firmware, gateway, and cloud work.
+
+## References
+
+- [Azure IoT Edge](https://learn.microsoft.com/azure/iot-edge/)
+- [Arduino getting started](https://docs.arduino.cc/learn/starting-guide/getting-started-arduino/)
+- [Arduino documentation](https://docs.arduino.cc/)
+- [Arduino language reference](https://docs.arduino.cc/language-reference/)
