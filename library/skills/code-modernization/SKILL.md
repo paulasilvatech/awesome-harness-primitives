@@ -9,21 +9,39 @@ metadata:
   last_sync: "2026-06-18"
 ---
 
-# Code Modernization
+# Code modernization
 
-Use this skill to guide behavior-preserving modernization of legacy systems. The workflow is intentionally staged so the team understands the system before transforming it.
+Guide behavior-preserving modernization by moving from evidence gathering to rule extraction, target design, incremental transformation, and hardening instead of rewriting legacy systems from assumptions.
 
-## Workflow
+## When to invoke
 
-1. **Brief**: define what is being modernized, why now, constraints, non-goals, and success criteria.
-2. **Assess**: inventory languages, modules, integrations, build, test coverage, complexity, and risk.
-3. **Extract rules**: turn hidden procedural logic into business rule cards with source evidence.
-4. **Map**: map legacy modules to target domains, packages, services, and migration sequence.
-5. **Reimagine**: design the target API, data model, runtime, and operational model.
-6. **Transform**: rewrite module by module under `modernized/**`, with tests that pin legacy behavior.
-7. **Harden**: review security, tests, error handling, observability, and deployment readiness.
+- "Modernize this COBOL or JCL application."
+- "Assess this legacy Java/.NET/C++ monolith for modernization."
+- "Extract business rules before rewriting the module."
+- "Create a behavior-preserving migration plan."
+- "Transform this classic ASP component under modernized/**."
 
-## GitHub Copilot Primitives
+## Modernization stages
+
+| Stage | Output | Required evidence |
+| --- | --- | --- |
+| Brief | Scope, why now, constraints, non-goals, and success criteria. | User goals and repository facts; assumptions clearly marked. |
+| Assess | Inventory of languages, modules, integrations, build, tests, complexity, and risk. | Measured values from available tools such as `scc`, `cloc`, or language-specific analyzers when present. |
+| Extract rules | Business rule cards that separate observed behavior from inferred intent. | Legacy source citations with line numbers when available. |
+| Map | Legacy-to-target module map, target domains, packages, services, and migration sequence. | Dependency and risk relationships from assessment. |
+| Reimagine | Target API, data model, runtime, operational model, and deployment shape. | Constraints, quality attributes, and integration boundaries. |
+| Transform | Module-by-module rewrite under `modernized/**`. | Characterization tests pinning legacy behavior before intentional changes. |
+| Harden | Security, tests, error handling, observability, and deployment readiness report. | Test results and severity-ranked remediation. |
+
+## Repository zones
+
+| Folder | Contract |
+| --- | --- |
+| `legacy/**` | Source evidence and legacy behavior; read-only by default. Do not edit unless the user explicitly asks to patch legacy code. |
+| `analysis/**` | Briefs, assessments, maps, rule catalogs, designs, risk registers, and reports. |
+| `modernized/**` | Transformed or replacement implementation and tests. |
+
+## GitHub Copilot primitives
 
 | Need | Primitive |
 | --- | --- |
@@ -35,24 +53,67 @@ Use this skill to guide behavior-preserving modernization of legacy systems. The
 | Repeatable workflow entry points | `/modernize-*` prompts |
 | Folder safety rules | `code-modernization.instructions.md` |
 
-## Folder Contract
+## Procedure
 
-- `legacy/**`: source evidence and legacy behavior. Read-only by default.
-- `analysis/**`: briefs, assessments, maps, rule catalogs, designs, and reports.
-- `modernized/**`: transformed or replacement implementation and tests.
+1. Brief the modernization target before changing files: scope, goals, constraints, non-goals, and success criteria.
+2. Assess the legacy system with repository inspection and available inventory tools; document measured facts and unknowns.
+3. Extract business rules with citations from `legacy/**`; label inferred intent separately from observed behavior.
+4. Map legacy modules to target domains and decide the migration sequence by risk and dependency order.
+5. Reimagine the target architecture, API, data model, runtime, and operations model before code transformation.
+6. Transform only the selected module under `modernized/**`, adding characterization tests that preserve legacy behavior.
+7. Harden the result with tests, security review, error handling, observability, and deployment readiness checks.
 
-## Rules
+## Criteria
 
-- Do not transform code before assessment and business-rule extraction.
-- Cite source files for findings. If line numbers are unavailable, cite the file and explain why.
-- Distinguish observed behavior from inferred intent.
-- Prefer multiple focused artifacts over one oversized report.
-- Use characterization tests to preserve legacy behavior before intentional behavior changes.
-- Do not invent complexity, cost, runtime, or risk metrics. Use measured values or state assumptions.
+### Evidence discipline
 
-## Validation
+- [ ] Every finding cites source files; when line numbers are unavailable, cite the file and explain why.
+- [ ] Observed behavior and inferred intent are labeled separately.
+- [ ] Complexity, cost, runtime, and risk metrics are measured or explicitly stated as assumptions.
 
-- Run available inventory tools such as `scc`, `cloc`, or language-specific analyzers when present.
-- Run available test suites before and after transformation.
-- For transformed modules, provide evidence that tests compare or pin legacy behavior.
-- For hardening, report findings by severity with concrete remediation.
+### Transformation safety
+
+- [ ] No transformation starts before assessment and business-rule extraction.
+- [ ] Characterization tests exist before intentional behavior changes.
+- [ ] Multiple focused artifacts are preferred over one oversized report.
+- [ ] Tests run before and after transformation when a test suite exists.
+
+## Gotchas
+
+- **Do not jump straight to a rewrite**: unvalidated transformations erase business rules embedded in legacy control flow.
+- **Do not treat generated line counts as risk scores**: tool output informs assessment, but risk also depends on integrations, data, and operational criticality.
+- **Do not edit `legacy/**` as cleanup**: the legacy tree is evidence unless the user explicitly requests a legacy patch.
+
+## Output template
+
+```markdown
+### Modernization result
+
+**Status:** assessed | planned | transformed | blocked
+**Scope:** `<legacy area or module>`
+**Target area:** `modernized/<path>` | not selected
+
+| Stage | Artifact | Evidence |
+| --- | --- | --- |
+| Brief | `<path or summary>` | `<source>` |
+| Assess | `<path or summary>` | `<tools/files>` |
+| Extract rules | `<path or summary>` | `<legacy citations>` |
+| Map | `<path or summary>` | `<dependency/risk evidence>` |
+| Reimagine | `<path or summary>` | `<constraints>` |
+| Transform | `<path or summary>` | `<tests>` |
+| Harden | `<path or summary>` | `<validation>` |
+
+**Validation**
+- `<inventory/test/security command>`: pass | fail | not available
+```
+
+## Quality gate
+
+- [ ] Brief, assessment, business-rule extraction, map, reimagined design, transform, and hardening were addressed in the correct order or explicitly scoped.
+- [ ] `legacy/**`, `analysis/**`, and `modernized/**` folder contracts were respected.
+- [ ] Findings cite source evidence and distinguish observed behavior from inferred intent.
+- [ ] No unsupported metrics or capabilities were invented.
+- [ ] Available inventory tools such as `scc`, `cloc`, or language-specific analyzers were used when present.
+- [ ] Available tests ran before and after transformation.
+- [ ] Transformed modules include evidence that tests compare or pin legacy behavior.
+- [ ] Hardening findings are reported by severity with concrete remediation.

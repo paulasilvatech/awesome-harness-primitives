@@ -1,58 +1,97 @@
 ---
 name: "semantic-kernel"
 description: >-
-  Create, update, refactor, explain, or review Semantic Kernel solutions using shared guidance plus
-  language-specific references for .NET and Python. Use this skill when always ground implementation
-  advice in the latest Semantic Kernel documentation and samples rather than memory alone.
+  Create, update, refactor, explain, or review Semantic Kernel applications, plugins, function-calling flows, and AI integrations in .NET or Python. Use when the user asks for Semantic Kernel implementation help, current SDK guidance, Azure OpenAI or Azure AI Foundry connector patterns, plugin design, or language-specific SK samples.
 ---
+
 # Semantic Kernel
 
-Use this skill when working with applications, plugins, function-calling flows, or AI integrations built on Semantic Kernel.
+Ground Semantic Kernel work in the repository language, the current official documentation, and the bundled .NET or Python reference before recommending APIs, writing code, or reviewing plugin and function-calling flows.
 
-Always ground implementation advice in the latest Semantic Kernel documentation and samples rather than memory alone.
+## When to invoke
 
-## Determine the target language first
+- "Build this feature with Semantic Kernel."
+- "Update our SK plugin or function-calling code."
+- "Review this Semantic Kernel .NET implementation."
+- "Show the Python pattern for a Semantic Kernel agent."
+- "Use current Semantic Kernel docs, not memory."
 
-Choose the language workflow before making recommendations or code changes:
+## Prerequisites and context
 
-1. Use the **.NET** workflow when the repository contains `.cs`, `.csproj`, `.sln`, or other .NET project files, or when the user explicitly asks for C# or .NET guidance. Follow [references/dotnet.md](references/dotnet.md).
-2. Use the **Python** workflow when the repository contains `.py`, `pyproject.toml`, `requirements.txt`, or the user explicitly asks for Python guidance. Follow [references/python.md](references/python.md).
-3. If the repository contains both ecosystems, match the language used by the files being edited or the user's stated target.
-4. If the language is ambiguous, inspect the current workspace first and then choose the closest language-specific reference.
+- Internet or documentation access is required to consult the Semantic Kernel overview: <https://learn.microsoft.com/semantic-kernel/overview/>.
+- Use Microsoft Docs MCP tooling when available to fetch current framework guidance and samples.
+- Read the matching bundled reference before code changes: `references/dotnet.md` for .NET, `references/python.md` for Python.
 
-## Always consult live documentation
+## Language routing
 
-- Read the Semantic Kernel overview first: <https://learn.microsoft.com/semantic-kernel/overview/>
-- Prefer official docs and samples for the current API surface.
-- Use the Microsoft Docs MCP tooling when available to fetch up-to-date framework guidance and examples.
+| Repository signal or user request | Workflow | Reference |
+| --- | --- | --- |
+| `.cs`, `.csproj`, `.sln`, C#, or .NET request | Use the .NET workflow. | `references/dotnet.md` |
+| `.py`, `pyproject.toml`, `requirements.txt`, or Python request | Use the Python workflow. | `references/python.md` |
+| Both ecosystems present | Match the files being edited or the user's explicit target. | Read only the relevant reference first. |
+| Ambiguous language | Inspect the workspace, then choose the closest ecosystem. | State the routing reason in the result. |
 
-## Shared guidance
+## Shared implementation rules
 
-When working with Semantic Kernel in any language:
+| Area | Rule |
+| --- | --- |
+| Documentation | Fetch latest up-to-date official docs and samples before selecting packages, constructors, decorators, or service registration APIs. |
+| Async | Use async patterns for kernel operations; do not wrap async SDK calls in blocking sync helpers. |
+| Plugins | Follow official plugin and function-calling patterns; keep function names, descriptions, and parameters explicit. |
+| Connectors | Prefer built-in connectors for Azure AI Foundry, Azure OpenAI, OpenAI, and other AI services; prefer Azure AI Foundry services for new Azure designs when appropriate. |
+| Authentication | Use `DefaultAzureCredential` when Azure authentication is appropriate; do not hardcode keys in examples. |
+| Composition | Prefer strong typing, clear abstractions, explicit error handling, and maintainable kernel/service composition. |
+| Memory and context | Use the kernel's memory and context-management capabilities only when they simplify the solution and have a clear lifecycle. |
 
-- Use async patterns for kernel operations.
-- Follow official plugin and function-calling patterns.
-- Implement explicit error handling and logging.
-- Prefer strong typing, clear abstractions, and maintainable composition patterns.
-- Use built-in connectors for Azure AI Foundry, Azure OpenAI, OpenAI, and other AI services, while preferring Azure AI Foundry services for new projects when that fits the task.
-- Use the kernel's memory and context-management capabilities when they simplify the solution.
-- Use `DefaultAzureCredential` when Azure authentication is appropriate.
+## Procedure
 
-## Workflow
+1. Determine the target language from the user request and repository files.
+2. Read `references/dotnet.md` or `references/python.md` for package names, repository paths, sample locations, and coding practices.
+3. Open the latest Semantic Kernel overview at <https://learn.microsoft.com/semantic-kernel/overview/> and any linked official sample needed for the task.
+4. Compare current documentation with repository examples. If they differ, explain the difference and follow the supported current pattern unless the repository is intentionally pinned.
+5. Apply the shared guidance and make recommendations or code changes in the selected ecosystem only.
 
-1. Determine the target language and read the matching reference file.
-2. Fetch the latest official docs and samples before making implementation choices.
-3. Apply the shared Semantic Kernel guidance from this skill.
-4. Use the language-specific package, repository, sample paths, and coding practices from the chosen reference.
-5. When examples in the repo differ from current docs, explain the difference and follow the current supported pattern.
+## Progressive disclosure and bundled resources
+
+- `references/dotnet.md`: .NET package, sample, and project-structure guidance.
+- `references/python.md`: Python package, sample, and project-structure guidance.
+
+Read the language-specific file on demand after activation; do not load both unless the task genuinely spans both ecosystems.
+
+## Gotchas
+
+- **Semantic Kernel APIs move quickly**: confirm package names and API shapes from current docs before writing code.
+- **Do not mix .NET and Python idioms**: decorators, service registration, and plugin shapes are language-specific.
+- **Do not invent connector support**: if a connector is not documented for the selected SDK, describe the integration boundary instead of generating unsupported code.
+
+## Output template
+
+```markdown
+### Semantic Kernel result
+
+**Status:** complete | guidance only | blocked
+**Target language:** .NET | Python | mixed
+**Documentation checked:** <official URL or sample path>
+**Bundled reference used:** `references/dotnet.md` | `references/python.md`
+
+| Decision | Evidence | Applied pattern |
+| --- | --- | --- |
+| <package/API/design choice> | <doc/sample/repo evidence> | <current supported pattern> |
+
+**Validation**
+- <build/test/doc check>: pass | fail | not run
+```
+
+## Quality gate
+
+- [ ] The target language was identified before recommendations or edits.
+- [ ] The matching bundled reference was read and applied.
+- [ ] The official Semantic Kernel overview or sample documentation was consulted.
+- [ ] Package names, repository paths, and sample locations match the selected ecosystem.
+- [ ] Guidance reflects current documentation rather than stale assumptions.
+- [ ] Azure examples use `DefaultAzureCredential` when managed identity is appropriate.
+- [ ] The result explains any difference between repository examples and current docs.
 
 ## References
 
-- [.NET reference](references/dotnet.md)
-- [Python reference](references/python.md)
-
-## Completion criteria
-
-- Recommendations match the target language.
-- Package names, repository paths, and sample locations match the selected ecosystem.
-- Guidance reflects current Semantic Kernel documentation rather than stale assumptions.
+- [Semantic Kernel overview](https://learn.microsoft.com/semantic-kernel/overview/)

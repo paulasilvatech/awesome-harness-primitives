@@ -48,7 +48,7 @@ Keep the original settings vocabulary when translating user input: `[square brac
 ## Procedure
 
 1. Review the containerization settings and discover the target `.csproj`.
-2. Create `progress.md` in the project directory and update every task from `[ ]` to `[✓]` as it completes.
+2. Create `progress.md` in the project directory and update every task from `[ ]` to `[x]` as it completes.
 3. Determine the .NET version by checking `TargetFramework`; map `net8.0` to `8.0` and `net9.0` to `9.0` unless the user overrides it.
 4. Select valid Microsoft base images unless custom images are specified. Preserve these documentation sources when choosing tags:
    - SDK image tags: https://github.com/dotnet/dotnet-docker/blob/main/README.sdk.md
@@ -221,7 +221,7 @@ Create and maintain this `progress.md` structure:
 - [ ] `.dockerignore` includes all mandatory patterns and requested additional patterns.
 - [ ] Health check, system packages, native libraries, .NET tools, volumes, and extra file copies are implemented only when required.
 - [ ] No secrets or private feed credentials are baked into the image.
-- [ ] `progress.md` exists and all checkboxes are marked `[✓]` or a blocker is documented.
+- [ ] `progress.md` exists and all checkboxes are marked `[x]` or a blocker is documented.
 - [ ] `docker build -t aspnetcore-app:latest .` was run and passed, or the exact environmental blocker is reported.
 
 ## References

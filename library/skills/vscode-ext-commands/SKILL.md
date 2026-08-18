@@ -1,22 +1,125 @@
 ---
 name: "vscode-ext-commands"
 description: >-
-  Guidelines for contributing commands in VS Code extensions. Use this skill when you need to; add or
-  update commands to your VS Code extension.
+  Guide command contributions in VS Code extensions, including package.json command titles, categories, Command Palette visibility, Side Bar command naming, icons, enablement, when clauses, and view/title or view/item/context placement. Use when adding or updating commands in a VS Code extension.
 ---
+
 # VS Code extension command contribution
 
-This skill helps you to contribute commands in VS Code extensions
+Add or update VS Code extension commands so `package.json` contributions expose clear Command Palette actions and correctly hidden Side Bar commands with titles, categories, icons, enablement, and menu placement.
 
-## When to use this skill
+## When to invoke
 
-Use this skill when you need to:
-- Add or update commands to your VS Code extension
+- "Add a command to my VS Code extension."
+- "Update command contributions in `package.json`."
+- "Make this command appear in the Command Palette."
+- "Add a Side Bar button command with an icon and when clause."
 
-# Instructions
+## Command contribution rules
 
-VS Code commands must always define a `title`, independent of its category, visibility or location. We use a few patterns for each "kind" of command, with some characteristics, described below:
+VS Code commands must always define a `title`, independent of category, visibility, or location.
 
-* Regular commands: By default, all commands should be accessible in the Command Palette, must define a `category`, and don't need an `icon`, unless the command will be used in the Side Bar.
+| Command kind | Command ID pattern | Required fields | Visibility rule |
+| --- | --- | --- | --- |
+| Regular command | `<extensionId>.<commandName>` | `command`, `title`, `category` | Accessible in the Command Palette by default. |
+| Side Bar command | `_extensionId.someCommand#sideBar` | `command`, `title`, `icon` | Side Bar exclusive commands should not be visible in the Command Palette. |
+| View title command | Usually Side Bar pattern | `command`, `title`, `icon`; menu `group` | Contribute under `view/title` with a `when` clause and an order/position group. |
+| View item context command | Usually Side Bar pattern | `command`, `title`; menu `group` | Contribute under `view/item/context` with a `when` clause matching item context. |
 
-* Side Bar commands: Its name follows a special pattern, starting with underscore (`_`) and suffixed with `#sideBar`, like `_extensionId.someCommand#sideBar` for instance. Must define an `icon`, and may or may not have some rule for `enablement`. Side Bar exclusive commands should not be visible in the Command Palette. Contributing it to the `view/title` or `view/item/context`, we must inform _order/position_ that it will be displayed, and we can use terms "relative to other command/button" in order to you identify the correct `group` to be used. Also, it's a good practice to define the condition (`when`) for the new command is visible.
+## Regular command pattern
+
+- Define a user-facing `title` that starts with a verb.
+- Define a `category` so Command Palette entries group under the extension name or feature area.
+- Omit `icon` unless the command will be used in the Side Bar or another UI surface that displays icons.
+- Keep command IDs stable; changing them breaks keybindings, menus, and user muscle memory.
+
+## Side Bar command pattern
+
+- Name Side Bar commands with a leading underscore and `#sideBar` suffix, for example `_extensionId.someCommand#sideBar`.
+- Its name follows a special pattern, starting with underscore (`_`) and suffixed with `#sideBar`, like `_extensionId.someCommand#sideBar` for instance. Must define an `icon`, and may or may not have some rule for `enablement`.
+- Define an `icon` because Side Bar buttons often render as icon-only actions.
+- Add `enablement` when the command should be disabled instead of hidden.
+- Add a menu `when` condition so the command is visible only in the intended view or item state.
+- When contributing to `view/title` or `view/item/context`, specify an order or position through `group`, using terms relative to other command/button placement when needed; this is the original _order/position_ rule.
+- Hide Side Bar exclusive commands from the Command Palette through an appropriate `menus.commandPalette` `when` condition.
+
+## Examples
+
+### Regular Command Palette command
+
+```json
+{
+  "contributes": {
+    "commands": [
+      {
+        "command": "extensionId.refreshData",
+        "title": "Refresh Data",
+        "category": "Extension Name"
+      }
+    ]
+  }
+}
+```
+
+### Side Bar exclusive command
+
+```json
+{
+  "contributes": {
+    "commands": [
+      {
+        "command": "_extensionId.refreshView#sideBar",
+        "title": "Refresh View",
+        "icon": "$(refresh)"
+      }
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "_extensionId.refreshView#sideBar",
+          "when": "view == extensionId.views.main",
+          "group": "navigation@10"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "_extensionId.refreshView#sideBar",
+          "when": "false"
+        }
+      ]
+    }
+  }
+}
+```
+
+## Gotchas
+
+- **Do not omit `title`**: every command contribution needs one even when the command is hidden or icon-only.
+- **Do not show Side Bar exclusive commands in the Command Palette**: hide them explicitly when they only make sense in a view.
+- **Do not rely on menu position by accident**: use `group` order such as `navigation@10` when relative placement matters.
+- **Do not use Side Bar naming for regular commands**: `_...#sideBar` communicates private UI placement.
+
+## Output template
+
+```markdown
+## VS Code command contribution result
+
+**Status:** ready | needs manifest context | blocked
+**Command kind:** regular | Side Bar | view/title | view/item/context
+
+| Command | Title | Category | Icon | Menu | Visibility |
+| --- | --- | --- | --- | --- | --- |
+| `<command id>` | `<title>` | `<category or n/a>` | `<icon or n/a>` | `<menu>` | `<Command Palette / Side Bar / hidden>` |
+
+**Manifest changes:** `<package.json contribution summary>`
+```
+
+## Quality gate
+
+- [ ] Every command defines a `title`.
+- [ ] Regular commands define a `category` and remain accessible in the Command Palette.
+- [ ] Side Bar command IDs start with `_` and end with `#sideBar`, for example `_extensionId.someCommand#sideBar`.
+- [ ] Side Bar commands define an `icon`.
+- [ ] Side Bar exclusive commands are hidden from the Command Palette.
+- [ ] `view/title` and `view/item/context` menu contributions include an appropriate `when` condition.
+- [ ] Menu placement uses `group` when order or relative position matters.

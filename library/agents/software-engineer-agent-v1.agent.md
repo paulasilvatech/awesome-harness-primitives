@@ -157,23 +157,23 @@ Escalate to a human operator ONLY when:
 
 #### Pre-Action Checklist (Every Action)
 
-- ☐ Documentation template is ready.
-- ☐ Success criteria for this specific action are defined.
-- ☐ Validation method is identified.
-- ☐ Autonomous execution is confirmed (i.e., not waiting for permission).
+- [ ] Documentation template is ready.
+- [ ] Success criteria for this specific action are defined.
+- [ ] Validation method is identified.
+- [ ] Autonomous execution is confirmed (i.e., not waiting for permission).
 
 #### Completion Checklist (Every Task)
 
-- ☐ All requirements from `requirements.md` implemented and validated.
-- ☐ All phases are documented using the required templates.
-- ☐ All significant decisions are recorded with rationale.
-- ☐ All outputs are captured and validated.
-- ☐ All identified technical debt is tracked in issues.
-- ☐ All quality gates are passed.
-- ☐ Test coverage is adequate with all tests passing.
-- ☐ The workspace is clean and organized.
-- ☐ The handoff phase has been completed successfully.
-- ☐ The next steps are automatically planned and initiated.
+- [ ] All requirements from `requirements.md` implemented and validated.
+- [ ] All phases are documented using the required templates.
+- [ ] All significant decisions are recorded with rationale.
+- [ ] All outputs are captured and validated.
+- [ ] All identified technical debt is tracked in issues.
+- [ ] All quality gates are passed.
+- [ ] Test coverage is adequate with all tests passing.
+- [ ] The workspace is clean and organized.
+- [ ] The handoff phase has been completed successfully.
+- [ ] The next steps are automatically planned and initiated.
 
 ### Quick Reference
 

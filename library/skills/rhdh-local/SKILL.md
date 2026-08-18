@@ -3,55 +3,115 @@ name: rhdh-local
 description: "Use this skill when the user tests Red Hat Developer Hub plugins locally with rhdh-local-setup. Trigger for enabling or disabling plugins, switching customized and pristine modes, running local plugin tests, starting or stopping RHDH, health checks, backup and restore, environment variables, 504 errors, startup failures, and local troubleshooting."
 ---
 
-# RHDH Local
+# RHDH local
 
-Use this skill for local Red Hat Developer Hub testing through the `rhdh-local-setup` customization system.
+Operate local Red Hat Developer Hub through the `rhdh-local-setup` customization system, preserving generated-file boundaries while routing plugin enablement, mode switching, health checks, backup/restore, and troubleshooting to the correct bundled workflow or command.
 
-## First Step
+## When to invoke
 
-Identify the requested local action. Ask only if the plugin name, package reference, or target mode is missing. If the user clearly asks to start, stop, check health, or inspect status, run the matching command.
+- "Enable this RHDH plugin locally."
+- "Switch RHDH local to pristine mode."
+- "Run a local plugin smoke test."
+- "Start RHDH with Lightspeed and Orchestrator."
+- "Debug a 504 or startup failure in rhdh-local."
 
-## Operating Principles
+## Prerequisites and context
 
-- Edit configuration only under `rhdh-customizations/`, never directly in `rhdh-local/`.
-- After every configuration edit, run `rhdh local apply` to sync generated copies.
-- Use `rhdh local up` and `rhdh local down`. Do not bypass the tool with direct `podman compose` commands when Lightspeed or Orchestrator shared-network services are enabled.
-- Fetch plugin package definitions from `rhdh-plugin-export-overlays` metadata. Use `spec.dynamicArtifact`; do not construct OCI URLs manually.
-- Auth errors from plugin APIs can be expected in local tests without real credentials. Treat successful plugin load plus attempted API calls as a useful smoke-test signal.
+- The repository must contain the `rhdh-local-setup` customization layout with `rhdh-customizations/` and generated `rhdh-local/` output.
+- The `rhdh` local CLI must be available, including `rhdh local up`, `rhdh local down`, `rhdh local apply`, `rhdh local health`, `rhdh local backup`, and `rhdh local restore <archive>`.
+- Plugin package definitions come from `rhdh-plugin-export-overlays` metadata; use `spec.dynamicArtifact` and do not construct OCI URLs manually.
+
+## Operating principles
+
+| Rule | Reason |
+| --- | --- |
+| Edit only under `rhdh-customizations/`. | `rhdh-local/` contains generated copies that are overwritten by apply/sync. |
+| Run `rhdh local apply` after every configuration edit. | Generated runtime files must match customization sources. |
+| Use `rhdh local up` and `rhdh local down`. | Direct `podman compose` bypasses shared-network handling for Lightspeed or Orchestrator. |
+| Treat auth errors from plugin APIs as possible smoke-test success. | Local tests may lack real credentials; successful load plus attempted API calls still proves integration wiring. |
+| Ask only for missing plugin name, package reference, or target mode. | Start, stop, health, and status requests are directly actionable. |
 
 ## Routing
 
 | User intent | Action |
 | --- | --- |
-| Enable, add, install plugin | Read [workflows/enable-plugin.md](workflows/enable-plugin.md). |
-| Disable, remove, turn off plugin | Read [workflows/disable-plugin.md](workflows/disable-plugin.md). |
-| Switch mode, pristine, customized | Read [workflows/switch-mode.md](workflows/switch-mode.md). |
-| Test, verify, check plugin | Read [workflows/test-plugin.md](workflows/test-plugin.md). |
+| Enable, add, install plugin | Read `workflows/enable-plugin.md`. |
+| Disable, remove, turn off plugin | Read `workflows/disable-plugin.md`. |
+| Switch mode, pristine, customized | Read `workflows/switch-mode.md`. |
+| Test, verify, check plugin | Read `workflows/test-plugin.md`. |
 | Status, list plugins, show enabled plugins | Inspect `rhdh-customizations/configs/dynamic-plugins/dynamic-plugins.override.yaml`. |
 | Start, up, start RHDH | Run `rhdh local up`, adding `--lightspeed`, `--orchestrator`, or `--both` when requested. |
 | Stop, down, stop RHDH | Run `rhdh local down`. |
 | Health, check health, is RHDH running | Run `rhdh local health`. |
 | Backup, save config, archive | Run `rhdh local backup`. |
 | Restore backup | Run `rhdh local restore <archive>` and start with dry-run behavior. |
-| Environment variables, `.env` | Read [references/env-reference.md](references/env-reference.md). |
-| Troubleshoot, debug, 504, startup error | Read [references/troubleshooting.md](references/troubleshooting.md). |
+| Environment variables, `.env` | Read `references/env-reference.md`. |
+| Troubleshoot, debug, 504, startup error | Read `references/troubleshooting.md`. |
 
-## References
+## Validation rules
 
-| File | Use when |
+| Task | Required validation |
 | --- | --- |
-| [references/customization-system.md](references/customization-system.md) | Understanding copy-sync, file mapping, and safe edit rules. |
-| [references/env-reference.md](references/env-reference.md) | Configuring environment variables. |
-| [references/troubleshooting.md](references/troubleshooting.md) | Debugging local startup, 504s, shared network namespace, and comparative tests. |
-| `overlay` skill | Dynamic plugin YAML and OCI package metadata patterns. |
+| Enable or disable plugin | Run `rhdh local apply`, then `rhdh local health`. |
+| Plugin test | Capture plugin load status, visible UI route or card, and expected auth/API behavior. |
+| Startup failure | Collect command output, then read `references/troubleshooting.md`. |
+| Mode switch | Verify generated configuration reflects pristine or customized mode after apply. |
+| Backup/restore | Report archive path and whether restore was dry-run or applied. |
 
-## Companion Skills
+## Progressive disclosure and bundled resources
 
-- Use `overlay` for export-overlay metadata, PR artifacts, and package source lookup.
-- Use `rhdh` for global environment setup and repo path configuration.
+| Resource | Use when |
+| --- | --- |
+| `workflows/enable-plugin.md` | Enabling or adding a local dynamic plugin. |
+| `workflows/disable-plugin.md` | Disabling or removing a plugin. |
+| `workflows/switch-mode.md` | Switching pristine/customized modes. |
+| `workflows/test-plugin.md` | Testing plugin load and UI/API behavior. |
+| `references/customization-system.md` | Understanding copy-sync, file mapping, and safe edit rules. |
+| `references/env-reference.md` | Configuring environment variables and `.env`. |
+| `references/troubleshooting.md` | Debugging local startup, 504s, shared network namespace, and comparative tests. |
+| `scripts/fetch-plugin-metadata.py` | Fetching plugin metadata when package source lookup is needed. |
+| `scripts/rhdh-local` and `rhdh_local/` | Bundled local helper implementation. |
 
-## Validation
+## Related primitives
 
-- After enabling or disabling a plugin, run `rhdh local apply` and then `rhdh local health`.
-- For plugin tests, capture the plugin load status, visible UI route or card, and expected auth or API behavior.
-- If local RHDH fails to start, collect the command output and then read [references/troubleshooting.md](references/troubleshooting.md).
+| Name | Type | Use it when |
+| --- | --- | --- |
+| `overlay` | skill | Dynamic plugin YAML, export-overlay metadata, PR artifacts, or package source lookup is the primary task. |
+| `rhdh` | skill | Global environment setup or repo path configuration is the primary task. |
+
+## Gotchas
+
+- **Do not edit generated `rhdh-local/` files**: changes disappear on the next apply.
+- **Do not bypass the CLI with direct `podman compose`**: shared network services may be skipped or miswired.
+- **Do not manually build OCI URLs**: `spec.dynamicArtifact` from overlay metadata is the authority.
+
+## Output template
+
+```markdown
+### RHDH local result
+
+**Status:** complete | needs input | blocked
+**Action:** enable | disable | switch mode | test | status | start | stop | health | backup | restore | troubleshoot
+**Mode:** pristine | customized | not applicable
+
+| Step | Evidence |
+| --- | --- |
+| Resource or workflow used | `<workflow/reference/command>` |
+| Configuration path | `<rhdh-customizations path>` |
+| Apply result | `rhdh local apply`: pass | fail | not needed |
+| Health result | `rhdh local health`: pass | fail | not run |
+| Plugin signal | `<load status, route/card, auth/API behavior>` |
+
+**Next action**
+- `<follow-up or none>`
+```
+
+## Quality gate
+
+- [ ] The requested local action was routed to the correct command, workflow, or reference.
+- [ ] Configuration edits, if any, were made under `rhdh-customizations/` only.
+- [ ] `rhdh local apply` was run after configuration edits.
+- [ ] `rhdh local health` was run after enable/disable operations or start operations.
+- [ ] Plugin package metadata uses `spec.dynamicArtifact` instead of handcrafted OCI URLs.
+- [ ] Troubleshooting captures command output before applying fixes.
+- [ ] Related primitive handoff is named without relative links between primitives.

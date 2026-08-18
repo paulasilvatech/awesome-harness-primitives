@@ -1,39 +1,33 @@
 ---
 name: "react18-legacy-context"
 description: >-
-  Provides the complete migration pattern for React legacy context API (contextTypes,
-  childContextTypes, getChildContext) to the modern createContext API. Use this skill whenever
-  migrating legacy context in class components - this is always a cross-file migration requiring the
-  provider AND all consumers to be updated together. Use it before touching any contextTypes or
-  childContextTypes code, because migrating only the provider without the consumers (or vice versa)
-  will cause a runtime failure. Always read this skill before writing any context migration - the
-  cross-file coordination steps here prevent the most common context migration bugs.
+  Migrate React legacy context API usage from contextTypes, childContextTypes, and getChildContext to modern createContext. Use this skill when touching legacy context in class or function components because provider and every consumer must be updated together to avoid React 18 warnings and React 19 runtime failures.
 ---
-# React 18 Legacy Context Migration
 
-Legacy context (`contextTypes`, `childContextTypes`, `getChildContext`) was deprecated in React 16.3 and warns in React 18.3.1. It is **removed in React 19**.
+# React 18 legacy context migration
 
-## This Is Always a Cross-File Migration
+Coordinate the cross-file migration from React legacy context to modern `createContext` by finding the provider, every consumer, the new context module, and verification steps before editing any single file.
 
-Unlike most other migrations that touch one file at a time, context migration requires coordinating:
-1. Create the context object (usually a new file)
-2. Update the **provider** component
-3. Update **every consumer** component
+## When to invoke
 
-Missing any consumer leaves the app broken - it will read from the wrong context or get `undefined`.
+- "Migrate this React legacy context to createContext."
+- "Remove contextTypes and childContextTypes from these components."
+- "Update getChildContext before React 19."
+- "Fix React 18 legacy context warnings."
+- "Convert class context consumers to contextType or useContext."
 
-## Migration Steps (Always Follow This Order)
+## Migration facts
 
-```
-Step 1: Find the provider (childContextTypes + getChildContext)
-Step 2: Find ALL consumers (contextTypes)
-Step 3: Create the context file
-Step 4: Update the provider
-Step 5: Update each consumer (class components → contextType, function components → useContext)
-Step 6: Verify - run the app, check no legacy context warnings remain
-```
+| Legacy API | Modern replacement | Rule |
+| --- | --- | --- |
+| `childContextTypes` plus `getChildContext` | A `createContext` object and provider `value`. | Update the provider and exported context together. |
+| `contextTypes` on class consumers | `static contextType = SomeContext` for one context, or `<SomeContext.Consumer>` for multiple contexts. | Every consumer must move to the same context object. |
+| Function component legacy access | `useContext(SomeContext)`. | Use hooks only in function components. |
+| `this.context` usage | Modern `this.context` through `contextType`, or render-prop consumer for multiple contexts. | Audit each usage because it may be legacy or already modern. |
 
-## Scan Commands
+Legacy context was deprecated in React 16.3, warns in React 18.3.1, and is removed in React 19.
+
+## Scan commands
 
 ```bash
 # Find all providers
@@ -46,8 +40,67 @@ grep -rn "contextTypes\s*=" src/ --include="*.js" --include="*.jsx" | grep -v "\
 grep -rn "this\.context\." src/ --include="*.js" --include="*.jsx" | grep -v "\.test\."
 ```
 
-## Reference Files
+## Procedure
 
-- **`references/single-context.md`** - complete migration for one context (theme, auth, etc.) with provider + class consumer + function consumer
-- **`references/multi-context.md`** - apps with multiple legacy contexts (nested providers, multiple consumers of different contexts)
-- **`references/context-file-template.md`** - the standard file structure for a new context module
+1. Find the provider by scanning for `childContextTypes` and `getChildContext`.
+2. Find all consumers by scanning for `contextTypes` and related `this.context` usage.
+3. Create the context file using the standard shape from `references/context-file-template.md`.
+4. Update the provider to render the modern context provider with the correct `value`.
+5. Update each class consumer to `contextType` or a context consumer, and each function component to `useContext`.
+6. Verify the app and confirm no legacy context warnings remain.
+
+## Cross-file coordination rules
+
+| Situation | Required handling |
+| --- | --- |
+| One legacy context | Use `references/single-context.md` and migrate provider plus all consumers in one change set. |
+| Multiple legacy contexts | Use `references/multi-context.md`; avoid assigning multiple `contextType` values to one class. |
+| Provider only found | Do not stop after provider migration; consumers will read from the wrong context or `undefined`. |
+| Consumer only found | Locate the matching provider before replacing context access. |
+| Tests excluded from scan | Exclude `.test.` files in discovery, then update tests only if they instantiate changed components. |
+
+## Progressive disclosure and bundled resources
+
+- `references/single-context.md`: complete migration for one context such as theme or auth, including provider, class consumer, and function consumer.
+- `references/multi-context.md`: nested providers and consumers of different contexts.
+- `references/context-file-template.md`: standard file structure for a new context module.
+
+## Gotchas
+
+- **This is always a cross-file migration**: migrating only the provider or only consumers causes runtime failure.
+- **Class components support only one `contextType`**: use consumers or wrapper components for multiple contexts.
+- **`this.context` is ambiguous**: inspect whether it comes from legacy `contextTypes` or modern `contextType` before editing.
+- **React 18 warnings are future failures**: React 19 removes the legacy API.
+
+## Output template
+
+```markdown
+### React legacy context migration
+
+**Status:** complete | needs consumers | blocked
+**Context:** `<context name>`
+**Provider:** `<file path>`
+**Consumers updated:** `<count>`
+
+| File | Role | Change |
+| --- | --- | --- |
+| `<path>` | provider | `getChildContext` to provider `value` |
+| `<path>` | class consumer | `contextTypes` to `contextType` |
+| `<path>` | function consumer | legacy access to `useContext` |
+
+**Validation**
+- Provider scan: `<command/result>`
+- Consumer scan: `<command/result>`
+- React warnings: none | remaining
+```
+
+## Quality gate
+
+- [ ] Provider scan for `childContextTypes` and `getChildContext` was run.
+- [ ] Consumer scan for `contextTypes` was run.
+- [ ] `this.context` usage was audited for legacy versus modern context.
+- [ ] A context file was created or reused with `createContext`.
+- [ ] Provider and every consumer were updated in the same migration.
+- [ ] Class components use `contextType` or consumers; function components use `useContext`.
+- [ ] Multiple-context consumers follow `references/multi-context.md` rather than invalid multiple `contextType` assignments.
+- [ ] Verification confirms no legacy context warnings remain.

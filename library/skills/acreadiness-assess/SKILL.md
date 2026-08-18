@@ -1,49 +1,100 @@
 ---
 name: "acreadiness-assess"
 description: >-
-  Run the AgentRC readiness assessment on the current repository and produce a static HTML dashboard
-  at reports/index.html. Wraps `npx github:microsoft/agentrc readiness` and hands off rendering to the
-  @ai-readiness-reporter custom agent. Supports policies (--policy) for org-specific scoring. Use when
-  asked to assess, audit, or score the AI readiness of a repo.
+  Run the AgentRC AI-readiness assessment for the current repository, optionally apply a policy, and produce a self-contained HTML dashboard at reports/index.html. Use when asked to assess, audit, score, or report how AI-ready a repo is.
 argument-hint: "[--policy <path-or-pkg>] [--per-area] — e.g. /acreadiness-assess, /acreadiness-assess --policy ./policies/strict.json"
 ---
-# /acreadiness-assess — AI-readiness assessment
 
-Use this skill whenever the user asks for an **AI-readiness assessment**, a **readiness check**, an **audit**, or wants to **see how AI-ready** their repository is.
+# AgentRC AI-readiness assessment
 
-This skill is the *Measure* step in AgentRC's **Measure → Generate → Maintain** loop. The result is a self-contained HTML dashboard the user can open with `file://` or commit to the repo.
+Run AgentRC readiness, transform the `CommandResult<T>` JSON into a tailored static HTML report, and summarize maturity, score, weak pillars, and remediation.
 
-## Steps
+## When to invoke
 
-1. **Confirm prerequisites.** Node 20+ must be on PATH. If unsure, run `node --version`.
+- "Assess this repository's AI readiness."
+- "Run an AgentRC readiness audit."
+- "Score how AI-ready this repo is."
+- "Generate the AI readiness dashboard with a policy."
 
-2. **Decide on a policy** (optional but encouraged):
-   - If the user provided `--policy <source>`, capture it.
-   - Otherwise check `agentrc.config.json` for a `policies` array.
-   - If neither, run with no policy (built-in defaults).
-   - For a primer on policies, suggest the `acreadiness-policy` skill.
+## Inputs
 
-3. **Run the readiness scan** in the repo root with structured output:
-   ```bash
-   npx -y github:microsoft/agentrc readiness --json [--policy <source>] [--per-area]
-   ```
-   The `CommandResult<T>` JSON envelope is your input for the next step.
+Use `$ARGUMENTS` for optional scan flags. Accept `--policy <path-or-pkg>` to apply an org-specific policy and `--per-area` to request per-area output. If `$ARGUMENTS` is empty, run built-in AgentRC defaults unless `agentrc.config.json` declares a `policies` array.
 
-4. **Hand off to the `ai-readiness-reporter` custom agent** to interpret the JSON and produce `reports/index.html`. The agent renders via the bundled template `report-template.html` (shipped alongside this skill) so every report has an identical look & feel. The agent:
-   - Reads the bundled `report-template.html` and substitutes placeholders with real data.
-   - Inlines all CSS, ships a single static file (works under `file://`).
-   - Renders maturity level, overall score, grade, pass-rate vs threshold.
-   - Breaks down all 9 pillars across **Repo Health** (8) and **AI Setup** (1) with *what it measures*, *why it matters for AI*, *current state*, and *a specific recommendation*.
-   - Tags every pillar with an **AI relevance** badge (High / Medium / Low).
-   - Surfaces **Extras** separately (they never affect the score).
-   - Shows the **Active Policy** including any disabled/overridden criteria and thresholds.
-   - Produces a **Prioritised Remediation Plan** ( Fix First /  Fix Next /  Plan).
-   - Embeds the raw AgentRC JSON for reuse.
+## Prerequisites and context
 
-5. **Tell the user where the report lives** (`reports/index.html`) and how to open it. Summarise in chat: maturity level, overall score, top three lowest pillars, and the single highest-leverage next action (almost always: run the `acreadiness-generate-instructions` skill).
+- Node 20+ must be on `PATH`; check with `node --version` when uncertain.
+- AgentRC is invoked with `npx -y github:microsoft/agentrc readiness`.
+- The skill may create or overwrite only `reports/index.html`.
+- The report must be self-contained and openable with `file://`.
+- For a primer on policies, suggest the `acreadiness-policy` skill.
 
-## Notes
+## Procedure
 
-- AgentRC also has a built-in HTML renderer (`--visual` / `--output report.html`) but its output is intentionally generic. This skill produces a tailored, opinionated dashboard via the custom agent — closer to a code review than a metrics dump.
-- For CI gating, recommend `agentrc readiness --fail-level <n>` (1–5).
-- The skill never modifies repository files other than creating `reports/index.html`.
+1. Confirm Node 20+ is available with `node --version` when the environment is unknown.
+2. Choose policy input in precedence order: user-provided `--policy <source>`, `agentrc.config.json` `policies` array, then built-in defaults.
+3. Run the readiness scan from the repository root with structured output:
+
+```bash
+npx -y github:microsoft/agentrc readiness --json [--policy <source>] [--per-area]
+```
+
+4. Treat the `CommandResult<T>` JSON envelope from `npx github:microsoft/agentrc readiness` as the source data for rendering.
+5. Hand off interpretation and rendering to the `ai-readiness-reporter` custom agent, using the bundled `report-template.html` to produce `reports/index.html`.
+6. Tell the user how to open `reports/index.html` and summarize maturity level, overall score, top three lowest pillars, and the highest-leverage next action.
+
+## Dashboard content requirements
+
+| Area | Required content |
+| --- | --- |
+| Summary | Maturity level, overall score, grade, and pass-rate versus threshold. |
+| Pillars | All 9 pillars across Repo Health (8) and AI Setup (1). |
+| Per-pillar explanation | What it measures, why it matters for AI, current state, and one specific recommendation. |
+| Relevance | AI relevance badge: High, Medium, or Low. |
+| Extras | Show separately; extras never affect the score. |
+| Active Policy | Include disabled criteria, overridden criteria, disabled/overridden policy markers, and thresholds. |
+| Remediation | Prioritised Remediation Plan grouped as Fix First, Fix Next, and Plan. |
+| Raw data | Embed the raw AgentRC JSON for reuse. |
+
+## Gotchas
+
+- AgentRC has a built-in renderer with `--visual` / `--output report.html`, but this skill intentionally uses the custom dashboard for an opinionated report closer to a code review than a metrics dump.
+- For CI gating, recommend `agentrc readiness --fail-level <n>` with a level from 1 to 5.
+- The almost-always highest-leverage next action is to run the `acreadiness-generate-instructions` skill after reviewing the assessment.
+
+## Progressive disclosure and bundled resources
+
+- `report-template.html`: static dashboard template used by the `ai-readiness-reporter` custom agent. Inline all CSS so the report works under `file://`.
+
+## Output template
+
+```markdown
+## AI-readiness assessment result
+
+**Status:** report created | blocked
+**Report:** `reports/index.html`
+**Command:** `npx -y github:microsoft/agentrc readiness --json <policy/per-area flags>`
+
+| Metric | Value |
+| --- | --- |
+| Maturity level | `<level>` |
+| Overall score | `<score>` |
+| Grade | `<grade>` |
+| Pass-rate vs threshold | `<value>` |
+
+### Lowest pillars
+1. `<pillar>` - <reason>
+2. `<pillar>` - <reason>
+3. `<pillar>` - <reason>
+
+### Highest-leverage next action
+<next action, usually run the acreadiness-generate-instructions skill>
+```
+
+## Quality gate
+
+- [ ] Node 20+ was verified or the environment already proved it.
+- [ ] Policy precedence was applied: `$ARGUMENTS`, `agentrc.config.json`, then built-in defaults.
+- [ ] Readiness ran with `--json` and preserved the `CommandResult<T>` envelope.
+- [ ] `reports/index.html` was produced from `report-template.html` and is self-contained.
+- [ ] The report includes all 9 pillars, extras, Active Policy details, remediation priorities, and raw JSON.
+- [ ] No repository file other than `reports/index.html` was modified.
