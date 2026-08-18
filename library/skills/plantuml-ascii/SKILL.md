@@ -6,7 +6,7 @@ description: >-
   diagram. Supports: Converting PlantUML diagrams to ASCII art, Creating sequence diagrams, class
   diagrams, flowcharts in ASCII format, Generating Unicode-enhanced ASCII art with -utxt flag
 license: "MIT"
-allowed-tools: ["execute", "create", "read"]
+allowed-tools: "Bash, Write, Read"
 ---
 
 # PlantUML ASCII art diagram generator

@@ -1,232 +1,207 @@
 ---
-name: "create-technical-spike"
+name: create-technical-spike
+argument-hint: "spike title, category, owner, timebox, priority, and optional output folder"
 description: >-
-  Create time-boxed technical spike documents for researching and resolving critical development
-  decisions before implementation. Use this skill when the user asks for create technical spike
-  document.
----
-# Create Technical Spike Document
-
-Create time-boxed technical spike documents for researching critical questions that must be answered before development can proceed. Each spike focuses on a specific technical decision with clear deliverables and timelines.
-
-## Document Structure
-
-Create individual files in `${input:FolderPath|docs/spikes}` directory. Name each file using the pattern: `[category]-[short-description]-spike.md` (e.g., `api-copilot-integration-spike.md`, `performance-realtime-audio-spike.md`).
-
-```md
----
-title: "${input:SpikeTitle}"
-category: "${input:Category|Technical}"
-status: " Not Started"
-priority: "${input:Priority|High}"
-timebox: "${input:Timebox|1 week}"
-created: [YYYY-MM-DD]
-updated: [YYYY-MM-DD]
-owner: "${input:Owner}"
-tags: ["technical-spike", "${input:Category|technical}", "research"]
+  Create time-boxed technical spike documents that answer critical implementation questions before development proceeds. Use this skill when the user asks to create a technical spike, research an API or architecture decision, document a proof of concept, evaluate performance or security options, or unblock development with an evidence-based recommendation.
 ---
 
-# ${input:SpikeTitle}
+# Create technical spike
+
+Create a focused technical spike markdown file that frames one unresolved decision, defines time-boxed research, captures evidence, and ends with an actionable recommendation.
+
+## When to invoke
+
+- "Create a technical spike document."
+- "Write a spike for this API integration decision."
+- "Plan research before we implement this architecture."
+- "Document a proof of concept for this risky feature."
+- "Create a time-boxed investigation for performance or security options."
+
+## Inputs
+
+Use `$ARGUMENTS` for spike title, category, owner, timebox, priority, output folder, and any known context. If the folder is not supplied, default to `docs/spikes`. If values are missing, use placeholders in the document and call them out in the result.
+
+## File and frontmatter rules
+
+Create one file per spike in `docs/spikes` or the user-supplied folder. Name it with kebab-case: `[category]-[short-description]-spike.md`, for example `api-copilot-integration-spike.md`, `performance-realtime-audio-spike.md`, or `architecture-state-management-spike.md`.
+
+Use this frontmatter shape, preserving user-provided values when available:
+
+```yaml
+---
+title: "<SpikeTitle>"
+category: "<Category|Technical>"
+status: "Not Started"
+priority: "<Priority|High>"
+timebox: "<Timebox|1 week>"
+created: <YYYY-MM-DD>
+updated: <YYYY-MM-DD>
+owner: "<Owner>"
+tags: ["technical-spike", "<category|technical>", "research"]
+---
+```
+
+## Spike categories
+
+| Category | Use for |
+| --- | --- |
+| API Integration | Third-party API capabilities, limitations, authentication, rate limits, and integration patterns. |
+| Architecture & Design | System architecture decisions, design pattern applicability, and component interaction models. |
+| Performance & Scalability | Latency, throughput, bottlenecks, resource utilization, and scalability options. |
+| Platform & Infrastructure | Platform capabilities, infrastructure requirements, deployment, and hosting constraints. |
+| Security & Compliance | Authentication, authorization, compliance constraints, security requirements, and implementations. |
+| User Experience | Interaction patterns, accessibility requirements, and interface design decisions. |
+
+## Research strategy
+
+1. Gather information from existing documentation, external resources, APIs, libraries, examples, and the codebase's existing patterns and constraints.
+2. Validate assumptions with focused prototypes, proof of concept work, or targeted experiments when evidence is needed.
+3. Synthesize findings into a recommendation, rationale, implementation notes, and follow-up tasks.
+
+## Spike quality rules
+
+| Rule | Requirement |
+| --- | --- |
+| One Question Per Spike | Each document focuses on a single technical decision or research question. |
+| Time-Boxed Research | Define specific time limits, deliverables, and decision deadline. |
+| Evidence-Based Decisions | Require concrete evidence from tests, prototypes, documentation, or analysis. |
+| Clear Recommendations | Document a specific recommendation and rationale. |
+| Dependency Tracking | Identify related components, dependencies, other spikes, and blocked decisions. |
+| Outcome-Focused | End with an actionable decision or recommendation. |
+
+## File naming examples
+
+| Category | Examples |
+| --- | --- |
+| API/Integration | `api-copilot-chat-integration-spike.md`, `api-azure-speech-realtime-spike.md`, `api-vscode-extension-capabilities-spike.md` |
+| Performance | `performance-audio-processing-latency-spike.md`, `performance-extension-host-limitations-spike.md`, `performance-webrtc-reliability-spike.md` |
+| Architecture | `architecture-voice-pipeline-design-spike.md`, `architecture-state-management-spike.md`, `architecture-error-handling-strategy-spike.md` |
+
+## Legacy input and tool vocabulary
+
+If migrating an older template, map `${input:FolderPath|docs/spikes}` and `FolderPath` to `$ARGUMENTS` plus the `docs/spikes` default. Do not expose legacy VS Code tool labels as active CLI tools: `search/searchResults`, `search/fetch`, and `fetch/githubRepo` describe research intent only. Use `development/architecture` when describing why the spike matters to implementation decisions.
+
+## Output template
+
+```markdown
+---
+title: "<SpikeTitle>"
+category: "<Category|Technical>"
+status: "Not Started"
+priority: "<Priority|High>"
+timebox: "<Timebox|1 week>"
+created: <YYYY-MM-DD>
+updated: <YYYY-MM-DD>
+owner: "<Owner>"
+tags: ["technical-spike", "<category|technical>", "research"]
+---
+
+# <SpikeTitle>
 
 ## Summary
 
-**Spike Objective:** [Clear, specific question or decision that needs resolution]
+**Spike Objective:** <clear, specific question or decision that needs resolution>
 
-**Why This Matters:** [Impact on development/architecture decisions]
+**Why This Matters:** <impact on development or architecture decisions>
 
-**Timebox:** [How much time allocated to this spike]
+**Timebox:** <allocated time>
 
-**Decision Deadline:** [When this must be resolved to avoid blocking development]
+**Decision Deadline:** <deadline to avoid blocking development>
 
 ## Research Question(s)
 
-**Primary Question:** [Main technical question that needs answering]
+**Primary Question:** <main technical question>
 
 **Secondary Questions:**
 
-- [Related question 1]
-- [Related question 2]
-- [Related question 3]
+- <related question 1>
+- <related question 2>
+- <related question 3>
 
 ## Investigation Plan
 
 ### Research Tasks
 
-- [ ] [Specific research task 1]
-- [ ] [Specific research task 2]
-- [ ] [Specific research task 3]
-- [ ] [Create proof of concept/prototype]
-- [ ] [Document findings and recommendations]
+- [ ] <specific research task 1>
+- [ ] <specific research task 2>
+- [ ] <specific research task 3>
+- [ ] Create proof of concept/prototype
+- [ ] Document findings and recommendations
 
 ### Success Criteria
 
 **This spike is complete when:**
 
-- [ ] [Specific criteria 1]
-- [ ] [Specific criteria 2]
-- [ ] [Clear recommendation documented]
-- [ ] [Proof of concept completed (if applicable)]
+- [ ] <specific criteria 1>
+- [ ] <specific criteria 2>
+- [ ] Clear recommendation documented
+- [ ] Proof of concept completed (if applicable)
 
 ## Technical Context
 
-**Related Components:** [List system components affected by this decision]
+**Related Components:** <components affected>
 
-**Dependencies:** [What other spikes or decisions depend on resolving this]
+**Dependencies:** <other spikes or decisions that depend on this>
 
-**Constraints:** [Known limitations or requirements that affect the solution]
+**Constraints:** <known limitations or requirements>
 
 ## Research Findings
 
 ### Investigation Results
 
-[Document research findings, test results, and evidence gathered]
+<research findings, test results, and evidence gathered>
 
 ### Prototype/Testing Notes
 
-[Results from any prototypes, spikes, or technical experiments]
+<prototype, spike, or technical experiment results>
 
 ### External Resources
 
-- [Link to relevant documentation]
-- [Link to API references]
-- [Link to community discussions]
-- [Link to examples/tutorials]
+- <relevant documentation>
+- <API references>
+- <community discussions>
+- <examples/tutorials>
 
 ## Decision
 
 ### Recommendation
 
-[Clear recommendation based on research findings]
+<clear recommendation based on findings>
 
 ### Rationale
 
-[Why this approach was chosen over alternatives]
+<why this approach was chosen over alternatives>
 
 ### Implementation Notes
 
-[Key considerations for implementation]
+<key implementation considerations>
 
 ### Follow-up Actions
 
-- [ ] [Action item 1]
-- [ ] [Action item 2]
-- [ ] [Update architecture documents]
-- [ ] [Create implementation tasks]
+- [ ] <action item 1>
+- [ ] <action item 2>
+- [ ] Update architecture documents
+- [ ] Create implementation tasks
 
 ## Status History
 
-| Date   | Status         | Notes                      |
-| ------ | -------------- | -------------------------- |
-| [Date] | Not Started | Spike created and scoped |
-| [Date] | In Progress | Research commenced |
-| [Date] | Complete | [Resolution summary] |
+| Date | Status | Notes |
+| --- | --- | --- |
+| <Date> | Not Started | Spike created and scoped |
+| <Date> | In Progress | Research commenced |
+| <Date> | Complete | <Resolution summary> |
 
 ---
 
-_Last updated: [Date] by [Name]_
+_Last updated: <Date> by <Name>_
 ```
 
-## Categories for Technical Spikes
+## Quality gate
 
-### API Integration
-
-- Third-party API capabilities and limitations
-- Integration patterns and authentication
-- Rate limits and performance characteristics
-
-### Architecture & Design
-
-- System architecture decisions
-- Design pattern applicability
-- Component interaction models
-
-### Performance & Scalability
-
-- Performance requirements and constraints
-- Scalability bottlenecks and solutions
-- Resource utilization patterns
-
-### Platform & Infrastructure
-
-- Platform capabilities and limitations
-- Infrastructure requirements
-- Deployment and hosting considerations
-
-### Security & Compliance
-
-- Security requirements and implementations
-- Compliance constraints
-- Authentication and authorization approaches
-
-### User Experience
-
-- User interaction patterns
-- Accessibility requirements
-- Interface design decisions
-
-## File Naming Conventions
-
-Use descriptive, kebab-case names that indicate the category and specific unknown:
-
-**API/Integration Examples: **
-
-- `api-copilot-chat-integration-spike.md`
-- `api-azure-speech-realtime-spike.md`
-- `api-vscode-extension-capabilities-spike.md`
-
-**Performance Examples: **
-
-- `performance-audio-processing-latency-spike.md`
-- `performance-extension-host-limitations-spike.md`
-- `performance-webrtc-reliability-spike.md`
-
-**Architecture Examples: **
-
-- `architecture-voice-pipeline-design-spike.md`
-- `architecture-state-management-spike.md`
-- `architecture-error-handling-strategy-spike.md`
-
-## Best Practices for AI Agents
-
-1. **One Question Per Spike: ** Each document focuses on a single technical decision or research question
-
-2. **Time-Boxed Research: ** Define specific time limits and deliverables for each spike
-
-3. **Evidence-Based Decisions: ** Require concrete evidence (tests, prototypes, documentation) before marking as complete
-
-4. **Clear Recommendations: ** Document specific recommendations and rationale for implementation
-
-5. **Dependency Tracking: ** Identify how spikes relate to each other and impact project decisions
-
-6. **Outcome-Focused: ** Every spike must result in an actionable decision or recommendation
-
-## Research Strategy
-
-### Phase 1: Information Gathering
-
-1. **Search existing documentation ** using search/fetch tools
-2. **Analyze codebase ** for existing patterns and constraints
-3. **Research external resources ** (APIs, libraries, examples)
-
-### Phase 2: Validation & Testing
-
-1. **Create focused prototypes ** to test specific hypotheses
-2. **Run targeted experiments ** to validate assumptions
-3. **Document test results ** with supporting evidence
-
-### Phase 3: Decision & Documentation
-
-1. **Synthesize findings ** into clear recommendations
-2. **Document implementation guidance ** for development team
-3. **Create follow-up tasks ** for implementation
-
-## Tools Usage
-
-- **search/searchResults: ** Research existing solutions and documentation
-- **fetch/githubRepo: ** Analyze external APIs, libraries, and examples
-- **codebase: ** Understand existing system constraints and patterns
-- **runTasks: ** Execute prototypes and validation tests
-- **editFiles: ** Update research progress and findings
-- **vscodeAPI: ** Test VS Code extension capabilities and limitations
-
-Focus on time-boxed research that resolves critical technical decisions and unblocks development progress.
+- [ ] `$ARGUMENTS` was consumed for title, category, owner, timebox, priority, and folder when provided.
+- [ ] The file path uses `docs/spikes` or the requested folder and the name matches `[category]-[short-description]-spike.md`.
+- [ ] The spike has exactly one primary question.
+- [ ] The frontmatter includes title, category, status, priority, timebox, created, updated, owner, and tags.
+- [ ] Investigation tasks include research, prototype or validation when applicable, findings, and recommendation.
+- [ ] Success criteria make the time-boxed outcome objectively checkable.
+- [ ] The document includes Technical Context, Research Findings, Decision, Follow-up Actions, and Status History.

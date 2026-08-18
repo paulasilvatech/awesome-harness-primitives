@@ -3,7 +3,7 @@ name: "phoenix-cli"
 description: >-
   Debug LLM applications using the Phoenix CLI. Fetch traces, analyze errors, structure trace review
   with open coding and axial coding, inspect datasets, review experiments, query annotation configs,
-  and use the GraphQL API. Use whenever the user is analyzing traces or spans, investigating LLM/agent
+  and use the GraphQL API. Use when the user is analyzing traces or spans, investigating LLM/agent
   failures, deciding what to do after instrumenting an app, building failure taxonomies, choosing what
   evals to write, or asking "what's going wrong", "what kinds of mistakes", or "where do I focus" —
   even without naming a technique.
@@ -13,7 +13,25 @@ metadata:
   compatibility: "Requires Node.js (for npx) or global install of @arizeai/phoenix-cli. Optionally requires jq for JSON processing."
   version: "3.3.0"
 ---
+
 # Phoenix CLI
+
+Use the Phoenix CLI (`px` or `npx @arizeai/phoenix-cli`) to inspect traces, spans, sessions, datasets, experiments, prompts, annotation configs, profiles, and GraphQL data, then turn LLM application traffic into notes, taxonomies, eval targets, and concrete debugging evidence.
+
+## When to invoke
+
+- "What is going wrong in these Phoenix traces?"
+- "Fetch recent LLM spans and analyze the errors."
+- "Use open coding and axial coding on this agent traffic."
+- "Inspect Phoenix datasets, experiments, or prompts."
+- "Query Phoenix annotation configs or GraphQL."
+
+## Prerequisites and context
+
+- Use `px <resource> <action>` when installed globally, or `npx @arizeai/phoenix-cli <resource> <action>` when no install is available.
+- Set `PHOENIX_HOST`, `PHOENIX_PROJECT`, and `PHOENIX_API_KEY` when the Phoenix instance requires them.
+- Use `--format raw --no-progress` whenever output is piped to `jq`.
+- Use singular resource commands with `list`, `get`, `annotate`, and `add-note` subcommands.
 
 ## Invocation
 
@@ -63,7 +81,14 @@ export PHOENIX_API_KEY=your-api-key  # if auth is enabled
 
 Always use `--format raw --no-progress` when piping to `jq`.
 
-## Quick Reference
+## Progressive disclosure and bundled resources
+
+Read bundled references only when the workflow needs them.
+
+- `references/open-coding.md`: free-form notes against sampled traces, spans, or sessions; includes the unit-of-analysis diagnostic and `.px/coding/<sanitized-identifier>.jsonl` sidecar rules.
+- `references/axial-coding.md`: MECE taxonomy grouping, counts, eval-target selection, and `.px/coding/<sanitized-identifier>-axial.jsonl` handoff rules.
+
+## Quick reference
 
 | Task | Files |
 | ---- | ----- |
@@ -73,6 +98,14 @@ Always use `--format raw --no-progress` when piping to `jq`.
 Both stages tag every artifact with one shared **coding annotation identifier** (descriptive shape, e.g. `coding-run:chatbot-context-loss-2026-05-06`) so the run is queryable, reversible, and viewable as a unit. Pass `--identifier <value>` explicitly on every `px` call — shell inheritance is unreliable across agent harnesses. Open coding writes notes via `px ... add-note` and records a small local JSONL sidecar at `.px/coding/<sanitized-identifier>.jsonl`; axial coding reads that sidecar as the deterministic handoff and records labels in `.px/coding/<sanitized-identifier>-axial.jsonl`. Pick the identifier once per run (see [references/open-coding.md](references/open-coding.md#coding-annotation-identifier-pick-this-first)), then share the Phoenix UI link from the wrap-up section. Revert is opt-in and runs three identifier-bound DELETEs only after explicit user confirmation.
 
 > **Workflow term vs. server annotation name.** The skill prose calls this value the **coding annotation identifier** (shell-variable hint: `CODING_ANNOTATION_IDENTIFIER`). The server-side annotation NAME used for the UI filter is unchanged — `coding_session_id` — for data compatibility with rows already written by previous runs. Don't try to rename the server-side annotation; treat the asymmetry as load-bearing.
+
+## Procedure
+
+1. Confirm the Phoenix target through CLI flags, environment variables, or the active profile; remember priority is CLI flags > env vars > active profile > built-in defaults.
+2. Use `px auth status` before deep analysis when connection or authentication is uncertain.
+3. Fetch the smallest entity set that answers the question: traces for whole interactions, sessions for multi-turn agent behavior, spans for mechanical failures, datasets/experiments/prompts for eval assets.
+4. For qualitative analysis, pick one `CODING_ANNOTATION_IDENTIFIER`, pass `--identifier <value>` on every annotation or note command, then run open coding before axial coding.
+5. Use `--format raw --no-progress` with `jq` for deterministic filtering and report the Phoenix UI link or exact blocker.
 
 ## Workflows
 
@@ -292,7 +325,7 @@ px api graphql '{ projects { edges { node { name traceCount tokenCountTotal } } 
 px api graphql '{ datasets { edges { node { name exampleCount experimentCount } } } }' | jq '.data.datasets.edges[].node'
 px api graphql '{ evaluators { edges { node { name kind } } } }' | jq '.data.evaluators.edges[].node'
 
-# Introspect any type
+ # Introspect any type
 px api graphql '{ __type(name: "Project") { fields { name type { name } } } }' | jq '.data.__type.fields[]'
 ```
 
@@ -312,3 +345,46 @@ px docs fetch --output-dir ./my-docs         # custom output directory
 ```
 
 Key options: `--workflow` (repeatable, values: `tracing`, `evaluation`, `datasets`, `prompts`, `integrations`, `sdk`, `self-hosting`, `all`), `--dry-run`, `--refresh`, `--output-dir` (default `.px/docs`), `--workers` (default 10).
+
+## Output template
+
+```markdown
+## Phoenix CLI analysis
+
+**Status:** complete | blocked
+**Target:** `<profile | PHOENIX_HOST | endpoint>`
+**Project:** `<PHOENIX_PROJECT or selected project>`
+**Commands run:**
+- `px auth status`
+- `<px command with --format raw --no-progress>`
+
+| Artifact | Filter | Count | Evidence |
+| --- | --- | ---: | --- |
+| Traces | `<filter>` | <count> | `<trace-id>` |
+| Spans | `<filter>` | <count> | `<span-id>` |
+| Sessions | `<filter>` | <count> | `<session-id>` |
+| Datasets/experiments/prompts | `<filter>` | <count> | `<name or id>` |
+
+### Findings
+- <finding with trace/span/session evidence>
+
+### Coding run
+**Identifier:** `<coding-run:...>`
+**Sidecars:** `.px/coding/<sanitized-identifier>.jsonl`, `.px/coding/<sanitized-identifier>-axial.jsonl`
+**Next eval targets:** <top categories or none>
+```
+
+## Quality gate
+
+- [ ] Connection and authentication were checked or the blocker is explicit.
+- [ ] Commands use singular resources such as `trace`, `span`, `session`, `dataset`, `project`, `annotation-config`, `profile`, and `auth`.
+- [ ] Piped JSON commands include `--format raw --no-progress`.
+- [ ] Trace, span, and session findings cite IDs and relevant fields such as `status_code`, `exception.message`, `input.value`, `output.value`, token counts, or notes.
+- [ ] Open coding precedes axial coding when the user has no taxonomy yet.
+- [ ] Every annotation or note in a coding run uses the same `--identifier <coding-annotation-id>` and preserves `coding_session_id` as the server-side annotation name.
+- [ ] Revert commands using `px <entity>-annotations delete --identifier <coding-annotation-id> --all -y` run only after explicit user confirmation.
+- [ ] Sidecar files under `.px/coding/` are reported when created or consumed.
+
+## References
+
+- [Phoenix application](https://app.phoenix.arize.com)

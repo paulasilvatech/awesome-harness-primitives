@@ -1,21 +1,33 @@
 ---
 name: "arize-instrumentation"
 description: >-
-  Adds Arize AX tracing to an LLM application for the first time. Follows a two-phase agent-assisted
-  flow to analyze the codebase then implement instrumentation after user confirmation. Use when the
-  user wants to instrument their app, add tracing from scratch, set up LLM observability, integrate
-  OpenTelemetry or openinference, or get started with Arize tracing.
+  Adds Arize AX tracing to an LLM application for the first time. Use when the
+  user wants to instrument their app, add tracing from scratch, set up LLM
+  observability, integrate OpenTelemetry or OpenInference, or get started with
+  Arize tracing.
 metadata:
   author: "arize"
-  compatibility: "Python and TypeScript/JavaScript apps use openinference-instrumentation packages for auto-instrumentation. Java and Go apps use the OpenTelemetry SDK with manual OpenInference"
-  spans. See https: "//arize.com/docs/PROMPT.md for setup details."
-  version: "'1.0'"
+  compatibility: "Python and TypeScript/JavaScript apps use openinference-instrumentation packages for auto-instrumentation. Java and Go apps use the OpenTelemetry SDK with manual OpenInference spans. See https://arize.com/docs/PROMPT.md for setup details."
+  version: "1.0"
 ---
-# Arize Instrumentation Skill
+
+# Arize instrumentation
+
+Add Arize AX tracing to an LLM application by first analyzing the repository, then implementing additive OpenTelemetry/OpenInference instrumentation after scope is clear, preserving business logic and verifying real spans.
+
+## When to invoke
+
+- "Instrument this app with Arize AX."
+- "Set up LLM observability from scratch."
+- "Add OpenTelemetry or OpenInference tracing to this agent."
+- "Get started with Arize tracing for Python, TypeScript, Java, or Go."
+- "Why are my Arize traces sparse or missing tool spans?"
+
+## Invocation context
 
 Use this skill when the user wants to **add Arize AX tracing** to their application. Follow the **two-phase, agent-assisted flow** from the [Agent-Assisted Tracing Setup](https://arize.com/docs/ax/alyx/tracing-assistant) and the [Arize AX Tracing — Agent Setup Prompt](https://arize.com/docs/PROMPT.md).
 
-## Quick start (for the user)
+## Quick start
 
 If the user asks you to "set up tracing" or "instrument my app with Arize", you can start with:
 
@@ -23,7 +35,7 @@ If the user asks you to "set up tracing" or "instrument my app with Arize", you 
 
 Then execute the two phases below.
 
-## Core principles
+## Criteria
 
 - **Prefer inspection over mutation** — understand the codebase before changing it.
 - **Do not change business logic** — tracing is purely additive.
@@ -31,6 +43,13 @@ Then execute the two phases below.
 - **Follow existing code style** and project conventions.
 - **Keep output concise and production-focused** — do not generate extra documentation or summary files.
 - **NEVER embed literal credential values in generated code** — always reference environment variables (e.g., `os.environ["ARIZE_API_KEY"]`, `process.env.ARIZE_API_KEY`). This includes API keys, space IDs, and any other secrets. The user sets these in their own environment; the agent must never output raw secret values.
+
+## Procedure
+
+1. Run Phase 0 environment preflight before changing code.
+2. Run Phase 1 analysis as read-only inspection.
+3. Continue to Phase 2 implementation only when the user already requested direct instrumentation and scope is clear, or after user confirmation.
+4. Verify build/typecheck, startup, at least one real LLM call, and Arize-side trace arrival or a precise blocker.
 
 ## Phase 0: Environment preflight
 
@@ -192,7 +211,7 @@ from opentelemetry.trace import get_tracer
 
 tracer = get_tracer("my-app", "1.0.0")
 
-# In your agent entrypoint:
+ # In your agent entrypoint:
 with tracer.start_as_current_span("run_agent") as chain_span:
     chain_span.set_attribute("openinference.span.kind", "CHAIN")
     chain_span.set_attribute("input.value", user_message)
@@ -298,7 +317,7 @@ Then the user can ask things like: *"Instrument this app using Arize AX"*, *"Can
 
 See the full setup at [Agent-Assisted Tracing Setup](https://arize.com/docs/ax/alyx/tracing-assistant).
 
-## Reference links
+## Reference link catalog
 
 | Resource | URL |
 |----------|-----|
@@ -311,3 +330,103 @@ See the full setup at [Agent-Assisted Tracing Setup](https://arize.com/docs/ax/a
 ## Save Credentials for Future Use
 
 See references/ax-profiles.md § Save Credentials for Future Use.
+
+## Progressive disclosure and bundled resources
+
+Read bundled references only when the corresponding issue appears.
+
+- `references/ax-profiles.md`: `ax profiles show`, `ax profiles create`, credential storage, profile mismatch, and CLI troubleshooting for `ARIZE_API_KEY` and `ARIZE_SPACE`.
+
+## Output template
+
+```markdown
+## Arize instrumentation result
+
+**Status:** analyzed | instrumented | blocked
+**Scope:** `<service/package/path>`
+**Language/runtime:** `<Python | TypeScript/JavaScript | Java | Go>`
+**Package manager:** `<pip | poetry | uv | npm | pnpm | yarn | maven | gradle | go modules>`
+
+### Detected signals
+| Area | Evidence | Decision |
+| --- | --- | --- |
+| LLM providers | `<imports/files>` | `<OpenAI/Anthropic/etc.>` |
+| Frameworks | `<imports/files>` | `<LangChain/LangGraph/etc.>` |
+| Existing tracing | `<TracerProvider/register/opentelemetry/ARIZE_/OTEL_/OTLP_>` | `<reuse/add exporter>` |
+| Tools/function calling | `<agent loop evidence>` | `<manual CHAIN + TOOL spans>` |
+
+### Changes
+- `<dependency or file changed>`: <why>
+
+### Verification
+- Build/typecheck: pass | fail | not run because <reason>
+- App start: pass | fail | not run because <reason>
+- LLM request triggered: pass | fail | not run because <reason>
+- Arize trace check: pass | blocked by credential | blocked by project/space mismatch | blocked by network | blocked by collector rejection
+- Latest local trace/run ID: `<id or none>`
+```
+
+## Quality gate
+
+- [ ] Phase 1 inspected manifests, imports, existing tracing, environment variable names, and monorepo scope before code changes.
+- [ ] Instrumentation is additive and does not alter business logic.
+- [ ] Integration docs were fetched for the detected provider/framework path before implementation.
+- [ ] Dependencies were installed with the detected package manager before code was written.
+- [ ] Generated code references environment variables such as `ARIZE_API_KEY`, `ARIZE_SPACE`, `os.environ["ARIZE_API_KEY"]`, `process.env.ARIZE_API_KEY`, or `os.Getenv("ARIZE_API_KEY")`; it never embeds raw secret values.
+- [ ] TracerProvider setup includes project routing through `project_name`, `openinference.project.name`, `model_id`, `SEMRESATTRS_PROJECT_NAME`, or `set_routing_context(...)` as appropriate.
+- [ ] Short-lived CLI/script apps flush and shut down providers before exit.
+- [ ] Tool/function execution emits manual CHAIN and TOOL spans with `input.value` and `output.value` when framework instrumentation does not cover them.
+- [ ] Verification distinguishes app-side success from credential, `ARIZE_SPACE`/project mismatch, network, or collector rejection failures.
+
+## References
+
+- [Agent-Assisted Tracing Setup](https://arize.com/docs/ax/alyx/tracing-assistant)
+- [Agent Setup Prompt](https://arize.com/docs/PROMPT.md)
+- [Arize AX Docs](https://arize.com/docs/ax)
+- [Full integration list](https://arize.com/docs/ax/integrations)
+- [Manual instrumentation](https://arize.com/docs/ax/instrument/manual-instrumentation)
+- [OpenInference](https://github.com/Arize-ai/openinference)
+- [CLI profiles docs](https://arize.com/docs/api-clients/cli/profiles)
+- [Arize app](https://app.arize.com)
+- [Doc index](https://arize.com/docs/llms.txt)
+- [Arize Docs MCP](https://arize.com/docs/mcp)
+- [OpenAI integration](https://arize.com/docs/ax/integrations/llm-providers/openai)
+- [Anthropic integration](https://arize.com/docs/ax/integrations/llm-providers/anthropic)
+- [LiteLLM integration](https://arize.com/docs/ax/integrations/llm-providers/litellm)
+- [Google Gen AI integration](https://arize.com/docs/ax/integrations/llm-providers/google-gen-ai)
+- [Amazon Bedrock integration](https://arize.com/docs/ax/integrations/llm-providers/amazon-bedrock)
+- [Ollama integration](https://arize.com/docs/ax/integrations/llm-providers/llama)
+- [Groq integration](https://arize.com/docs/ax/integrations/llm-providers/groq)
+- [MistralAI integration](https://arize.com/docs/ax/integrations/llm-providers/mistralai)
+- [OpenRouter integration](https://arize.com/docs/ax/integrations/llm-providers/openrouter)
+- [VertexAI integration](https://arize.com/docs/ax/integrations/llm-providers/vertexai)
+- [LangChain](https://arize.com/docs/ax/integrations/python-agent-frameworks/langchain)
+- [LangGraph](https://arize.com/docs/ax/integrations/python-agent-frameworks/langgraph)
+- [LlamaIndex](https://arize.com/docs/ax/integrations/python-agent-frameworks/llamaindex)
+- [CrewAI](https://arize.com/docs/ax/integrations/python-agent-frameworks/crewai)
+- [DSPy](https://arize.com/docs/ax/integrations/python-agent-frameworks/dspy)
+- [AutoGen](https://arize.com/docs/ax/integrations/python-agent-frameworks/autogen)
+- [Semantic Kernel](https://arize.com/docs/ax/integrations/python-agent-frameworks/semantic-kernel)
+- [Pydantic AI](https://arize.com/docs/ax/integrations/python-agent-frameworks/pydantic)
+- [Haystack](https://arize.com/docs/ax/integrations/python-agent-frameworks/haystack)
+- [Guardrails AI](https://arize.com/docs/ax/integrations/python-agent-frameworks/guardrails-ai)
+- [Hugging Face Smolagents](https://arize.com/docs/ax/integrations/python-agent-frameworks/hugging-face-smolagents)
+- [Instructor](https://arize.com/docs/ax/integrations/python-agent-frameworks/instructor)
+- [Agno](https://arize.com/docs/ax/integrations/python-agent-frameworks/agno)
+- [Google ADK](https://arize.com/docs/ax/integrations/python-agent-frameworks/google-adk)
+- [MCP](https://arize.com/docs/ax/integrations/python-agent-frameworks/model-context-protocol)
+- [Portkey](https://arize.com/docs/ax/integrations/python-agent-frameworks/portkey)
+- [Together AI](https://arize.com/docs/ax/integrations/python-agent-frameworks/together-ai)
+- [BeeAI](https://arize.com/docs/ax/integrations/python-agent-frameworks/beeai)
+- [AWS Bedrock Agents](https://arize.com/docs/ax/integrations/python-agent-frameworks/aws)
+- [LangChain JS](https://arize.com/docs/ax/integrations/ts-js-agent-frameworks/langchain)
+- [Mastra](https://arize.com/docs/ax/integrations/ts-js-agent-frameworks/mastra)
+- [Vercel AI SDK](https://arize.com/docs/ax/integrations/ts-js-agent-frameworks/vercel)
+- [BeeAI JS](https://arize.com/docs/ax/integrations/ts-js-agent-frameworks/beeai)
+- [LangChain4j](https://arize.com/docs/ax/integrations/java/langchain4j)
+- [Spring AI](https://arize.com/docs/ax/integrations/java/spring-ai)
+- [Arconia](https://arize.com/docs/ax/integrations/java/arconia)
+- [LangFlow](https://arize.com/docs/ax/integrations/platforms/langflow)
+- [Flowise](https://arize.com/docs/ax/integrations/platforms/flowise)
+- [Dify](https://arize.com/docs/ax/integrations/platforms/dify)
+- [Prompt flow](https://arize.com/docs/ax/integrations/platforms/prompt-flow)

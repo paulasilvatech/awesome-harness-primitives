@@ -1,292 +1,197 @@
 ---
-name: "azure-resource-health-diagnose"
+name: azure-resource-health-diagnose
 description: >-
-  Analyze Azure resource health, diagnose issues from logs and telemetry, and create a remediation
-  plan for identified problems. Use this skill when the user asks for azure resource health & issue
-  diagnosis.
+  Analyze Azure resource health, logs, metrics, and telemetry to diagnose operational issues and produce a prioritized remediation plan. Use this skill when the user asks to troubleshoot an Azure resource, inspect Azure Resource Health, analyze Log Analytics or Application Insights data, classify root causes, or create Azure CLI remediation and rollback steps.
 ---
-# Azure Resource Health & Issue Diagnosis
 
-This workflow analyzes a specific Azure resource to assess its health status, diagnose potential issues using logs and telemetry data, and develop a comprehensive remediation plan for any problems discovered.
+# Azure resource health diagnosis
 
-## Prerequisites
-- Azure MCP server configured and authenticated
-- Target Azure resource identified (name and optionally resource group/subscription)
-- Resource must be deployed and running to generate logs/telemetry
-- Prefer Azure MCP tools (`azmcp-*`) over direct Azure CLI when available
+Use this workflow to identify an Azure resource, assess its current health, query logs and telemetry, classify root causes, and return a remediation plan with validation and rollback steps.
 
-## Workflow Steps
+## When to invoke
 
-### Step 1: Get Azure Best Practices
-**Action**: Retrieve diagnostic and troubleshooting best practices
-**Tools**: Azure MCP best practices tool
-**Process**:
-1. **Load Best Practices**:
-   - Execute Azure best practices tool to get diagnostic guidelines
-   - Focus on health monitoring, log analysis, and issue resolution patterns
-   - Use these practices to inform diagnostic approach and remediation recommendations
+- "Diagnose why this Azure resource is unhealthy."
+- "Check Azure Resource Health and logs for my app."
+- "Analyze Application Insights failures and create a remediation plan."
+- "Find the root cause of recent Azure errors or performance degradation."
+- "Troubleshoot a VM, Web App, Function App, Cosmos DB, Storage Account, SQL Database, Key Vault, or Service Bus resource."
 
-### Step 2: Resource Discovery & Identification
-**Action**: Locate and identify the target Azure resource
-**Tools**: Azure MCP tools + Azure CLI fallback
-**Process**:
-1. **Resource Lookup**:
-   - If only resource name provided: Search across subscriptions using `azmcp-subscription-list`
-   - Use `az resource list --name <resource-name>` to find matching resources
-   - If multiple matches found, prompt user to specify subscription/resource group
-   - Gather detailed resource information:
-     - Resource type and current status
-     - Location, tags, and configuration
-     - Associated services and dependencies
+## Prerequisites and context
 
-2. **Resource Type Detection**:
-   - Identify resource type to determine appropriate diagnostic approach:
-     - **Web Apps/Function Apps**: Application logs, performance metrics, dependency tracking
-     - **Virtual Machines**: System logs, performance counters, boot diagnostics
-     - **Cosmos DB**: Request metrics, throttling, partition statistics
-     - **Storage Accounts**: Access logs, performance metrics, availability
-     - **SQL Database**: Query performance, connection logs, resource utilization
-     - **Application Insights**: Application telemetry, exceptions, dependencies
-     - **Key Vault**: Access logs, certificate status, secret usage
-     - **Service Bus**: Message metrics, dead letter queues, throughput
+- Azure MCP server configured and authenticated, or Azure CLI access as a fallback.
+- Target Azure resource identified by name and, when available, resource group and subscription.
+- The resource must be deployed and running long enough to generate logs or telemetry.
+- Prefer Azure MCP tools such as `azmcp-subscription-list`, `azmcp-monitor-workspace-list`, `azmcp-monitor-table-list`, and `azmcp-monitor-log-query` over direct Azure CLI when they are available.
+- Use `az resource list --name <resource-name>` only as a fallback for discovery.
 
-### Step 3: Health Status Assessment
-**Action**: Evaluate current resource health and availability
-**Tools**: Azure MCP monitoring tools + Azure CLI
-**Process**:
-1. **Basic Health Check**:
-   - Check resource provisioning state and operational status
-   - Verify service availability and responsiveness
-   - Review recent deployment or configuration changes
-   - Assess current resource utilization (CPU, memory, storage, etc.)
+## Procedure
 
-2. **Service-Specific Health Indicators**:
-   - **Web Apps**: HTTP response codes, response times, uptime
-   - **Databases**: Connection success rate, query performance, deadlocks
-   - **Storage**: Availability percentage, request success rate, latency
-   - **VMs**: Boot diagnostics, guest OS metrics, network connectivity
-   - **Functions**: Execution success rate, duration, error frequency
+1. Retrieve Azure diagnostic and troubleshooting best practices before choosing queries or remediation.
+2. Locate the resource. If only a name is provided, search subscriptions; if multiple matches exist, ask for subscription or resource group before continuing.
+3. Gather the resource type, provisioning state, operational status, location, tags, configuration, associated services, and dependencies.
+4. Select the service-specific health indicators and relevant monitoring sources.
+5. Identify Log Analytics workspaces, Application Insights instances, and log tables.
+6. Run targeted KQL over a bounded time window, starting with 24 hours for incidents and widening to 7 days for trends.
+7. Classify issues by severity and root-cause category.
+8. Generate immediate, short-term, and long-term remediation with Azure CLI commands, validation, rollback, and monitoring recommendations.
+9. Present findings and get approval before applying remediation actions.
 
-### Step 4: Log & Telemetry Analysis
-**Action**: Analyze logs and telemetry to identify issues and patterns
-**Tools**: Azure MCP monitoring tools for Log Analytics queries
-**Process**:
-1. **Find Monitoring Sources**:
-   - Use `azmcp-monitor-workspace-list` to identify Log Analytics workspaces
-   - Locate Application Insights instances associated with the resource
-   - Identify relevant log tables using `azmcp-monitor-table-list`
+## Resource-specific health indicators
 
-2. **Execute Diagnostic Queries**:
-   Use `azmcp-monitor-log-query` with targeted KQL queries based on resource type:
+| Resource type | Primary checks | Useful signals |
+| --- | --- | --- |
+| Web Apps / Function Apps | Availability, HTTP response codes, response times, recent deployments | Application logs, AppServiceHTTPLogs, AppServiceAppLogs, dependency tracking, execution success rate, duration, error frequency |
+| Virtual Machines | Provisioning state, boot diagnostics, guest OS metrics, network connectivity | CPU, memory, disk, system logs, performance counters |
+| Cosmos DB | Request metrics, throttling, partition statistics | RU consumption, 429s, latency, hot partitions |
+| Storage Accounts | Availability, request success rate, latency | Access logs, performance metrics, capacity, authorization failures |
+| SQL Database | Connection success, query performance, deadlocks | SQLSecurityAuditEvents, DTU/vCore pressure, blocking, action_name_s `CONNECTION_FAILED` |
+| Application Insights | Application telemetry, exceptions, dependencies | Failed requests, exception trends, dependency failures |
+| Key Vault | Access logs, certificate status, secret usage | Authentication failures, throttling, certificate expiration |
+| Service Bus | Message metrics, throughput, dead letters | Dead letter queues, lock loss, send/receive failures |
 
-   **General Error Analysis**:
-   ```kql
-   // Recent errors and exceptions
-   union isfuzzy=true
-       AzureDiagnostics,
-       AppServiceHTTPLogs,
-       AppServiceAppLogs,
-       AzureActivity
-   | where TimeGenerated > ago(24h)
-   | where Level == "Error" or ResultType != "Success"
-   | summarize ErrorCount=count() by Resource, ResultType, bin(TimeGenerated, 1h)
-   | order by TimeGenerated desc
-   ```
+## Diagnostic queries
 
-   **Performance Analysis**:
-   ```kql
-   // Performance degradation patterns
-   Perf
-   | where TimeGenerated > ago(7d)
-   | where ObjectName == "Processor" and CounterName == "% Processor Time"
-   | summarize avg(CounterValue) by Computer, bin(TimeGenerated, 1h)
-   | where avg_CounterValue > 80
-   ```
+Run `azmcp-monitor-log-query` with queries adapted to the detected tables and resource type.
 
-   **Application-Specific Queries**:
-   ```kql
-   // Application Insights - Failed requests
-   requests
-   | where timestamp > ago(24h)
-   | where success == false
-   | summarize FailureCount=count() by resultCode, bin(timestamp, 1h)
-   | order by timestamp desc
+```kql
+// Recent errors and exceptions
+union isfuzzy=true
+    AzureDiagnostics,
+    AppServiceHTTPLogs,
+    AppServiceAppLogs,
+    AzureActivity
+| where TimeGenerated > ago(24h)
+| where Level == "Error" or ResultType != "Success"
+| summarize ErrorCount=count() by Resource, ResultType, bin(TimeGenerated, 1h)
+| order by TimeGenerated desc
+```
 
-   // Database - Connection failures
-   AzureDiagnostics
-   | where ResourceProvider == "MICROSOFT.SQL"
-   | where Category == "SQLSecurityAuditEvents"
-   | where action_name_s == "CONNECTION_FAILED"
-   | summarize ConnectionFailures=count() by bin(TimeGenerated, 1h)
-   ```
+```kql
+// Performance degradation patterns
+Perf
+| where TimeGenerated > ago(7d)
+| where ObjectName == "Processor" and CounterName == "% Processor Time"
+| summarize avg(CounterValue) by Computer, bin(TimeGenerated, 1h)
+| where avg_CounterValue > 80
+```
 
-3. **Pattern Recognition**:
-   - Identify recurring error patterns or anomalies
-   - Correlate errors with deployment times or configuration changes
-   - Analyze performance trends and degradation patterns
-   - Look for dependency failures or external service issues
+```kql
+// Application Insights - Failed requests
+requests
+| where timestamp > ago(24h)
+| where success == false
+| summarize FailureCount=count() by resultCode, bin(timestamp, 1h)
+| order by timestamp desc
+```
 
-### Step 5: Issue Classification & Root Cause Analysis
-**Action**: Categorize identified issues and determine root causes
-**Process**:
-1. **Issue Classification**:
-   - **Critical**: Service unavailable, data loss, security breaches
-   - **High**: Performance degradation, intermittent failures, high error rates
-   - **Medium**: Warnings, suboptimal configuration, minor performance issues
-   - **Low**: Informational alerts, optimization opportunities
+```kql
+// Database - Connection failures
+AzureDiagnostics
+| where ResourceProvider == "MICROSOFT.SQL"
+| where Category == "SQLSecurityAuditEvents"
+| where action_name_s == "CONNECTION_FAILED"
+| summarize ConnectionFailures=count() by bin(TimeGenerated, 1h)
+```
 
-2. **Root Cause Analysis**:
-   - **Configuration Issues**: Incorrect settings, missing dependencies
-   - **Resource Constraints**: CPU/memory/disk limitations, throttling
-   - **Network Issues**: Connectivity problems, DNS resolution, firewall rules
-   - **Application Issues**: Code bugs, memory leaks, inefficient queries
-   - **External Dependencies**: Third-party service failures, API limits
-   - **Security Issues**: Authentication failures, certificate expiration
+Correlate recurring errors with deployment times, configuration changes, dependency failures, external service incidents, and performance trends.
 
-3. **Impact Assessment**:
-   - Determine business impact and affected users/systems
-   - Evaluate data integrity and security implications
-   - Assess recovery time objectives and priorities
+## Classification and remediation
 
-### Step 6: Generate Remediation Plan
-**Action**: Create a comprehensive plan to address identified issues
-**Process**:
-1. **Immediate Actions** (Critical issues):
-   - Emergency fixes to restore service availability
-   - Temporary workarounds to mitigate impact
-   - Escalation procedures for complex issues
+| Severity | Definition | Response |
+| --- | --- | --- |
+| Critical | Service unavailable, data loss, or security breach | Immediate restoration, workaround, escalation, and rollback plan. |
+| High | Performance degradation, intermittent failures, or high error rates | Short-term fix, scaling, configuration correction, or application patch. |
+| Medium | Warnings, suboptimal configuration, or minor performance issues | Planned remediation and monitoring improvement. |
+| Low | Informational alerts or optimization opportunities | Backlog item or preventive recommendation. |
 
-2. **Short-term Fixes** (High/Medium issues):
-   - Configuration adjustments and resource scaling
-   - Application updates and patches
-   - Monitoring and alerting improvements
+| Root cause category | Examples to test |
+| --- | --- |
+| Configuration Issues | Incorrect settings, missing dependencies, invalid connection strings, disabled diagnostic settings. |
+| Resource Constraints | CPU, memory, disk, RU, connection, or throughput limits and throttling. |
+| Network Issues | DNS resolution, firewall rules, private endpoint, NSG, route, or connectivity problems. |
+| Application Issues | Code bugs, memory leaks, inefficient queries, dependency exceptions. |
+| External Dependencies | Third-party service failures, API limits, regional outages. |
+| Security Issues | Authentication failures, expired certificates, missing roles, denied access. |
 
-3. **Long-term Improvements** (All issues):
-   - Architectural changes for better resilience
-   - Preventive measures and monitoring enhancements
-   - Documentation and process improvements
+A complete remediation plan includes Immediate Actions for Critical issues, Short-term Fixes for High and Medium issues, Long-term Improvements for all recurring risks, implementation steps with specific Azure CLI commands, validation procedures, rollback plans, and monitoring to verify resolution.
 
-4. **Implementation Steps**:
-   - Prioritized action items with specific Azure CLI commands
-   - Testing and validation procedures
-   - Rollback plans for each change
-   - Monitoring to verify issue resolution
+## Troubleshooting
 
-### Step 7: User Confirmation & Report Generation
-**Action**: Present findings and get approval for remediation actions
-**Process**:
-1. **Display Health Assessment Summary**:
-   ```
-    Azure Resource Health Assessment
+| Symptom | Likely cause | Resolution |
+| --- | --- | --- |
+| Resource Not Found | Wrong name, subscription, or resource group | Ask for scope or search with `azmcp-subscription-list` and `az resource list --name <resource-name>`. |
+| Authentication Issues | Azure session missing or expired | Guide the user through Azure authentication setup. |
+| Insufficient Permissions | RBAC role lacks read, metrics, or log access | List required RBAC roles for resource and monitoring access. |
+| No Logs Available | Diagnostic settings are disabled or data has not arrived | Suggest enabling diagnostic settings and waiting for ingestion. |
+| Query Timeouts | Time window or table union is too large | Break analysis into smaller time windows and resource-specific tables. |
+| Service-Specific Issues | Logs unavailable for the service | Provide a generic health assessment and state limitations. |
 
-    Resource Overview:
-   • Resource: [Name] ([Type])
-   • Status: [Healthy/Warning/Critical]
-   • Location: [Region]
-   • Last Analyzed: [Timestamp]
 
-    Issues Identified:
-   • Critical: X issues requiring immediate attention
-   • High: Y issues affecting performance/reliability
-   • Medium: Z issues for optimization
-   • Low: N informational items
+## Diagnostic vocabulary
 
-    Top Issues:
-   1. [Issue Type]: [Description] - Impact: [High/Medium/Low]
-   2. [Issue Type]: [Description] - Impact: [High/Medium/Low]
-   3. [Issue Type]: [Description] - Impact: [High/Medium/Low]
+Keep these Azure triage phrases intact when matching incidents and reports: Web `Apps/Function` Apps, `azmcp-*`, `logs/telemetry`, `group/subscription`, `subscription/resource`, `name/location`, `Healthy/Warning/Critical`, `High/Medium`, `High/Medium/Low`, `Performance/reliability`, `performance/reliability`, `CPU/Memory/Storage`, `CPU/memory/disk`, and affected `users/systems`.
 
-    Remediation Plan:
-   • Immediate Actions: X items
-   • Short-term Fixes: Y items
-   • Long-term Improvements: Z items
-   • Estimated Resolution Time: [Timeline]
+## Output template
 
-    Proceed with detailed remediation plan? (y/n)
-   ```
+```markdown
+# Azure Resource Health Report: <Resource Name>
 
-2. **Generate Detailed Report**:
-   ```markdown
-   # Azure Resource Health Report: [Resource Name]
+**Generated**: <timestamp>
+**Resource**: <full resource ID>
+**Type**: <resource provider/type>
+**Location**: <region>
+**Overall Health**: Healthy | Warning | Critical | Unknown
 
-   **Generated**: [Timestamp]
-   **Resource**: [Full Resource ID]
-   **Overall Health**: [Status with color indicator]
+## Executive Summary
+<brief health status and key findings>
 
-   ## Executive Summary
-   [Brief overview of health status and key findings]
+## Health Metrics
+- **Availability**: <percent over time window>
+- **Performance**: <average response time/throughput>
+- **Error Rate**: <percent over time window>
+- **Resource Utilization**: <CPU/memory/storage/RU values>
 
-   ## Health Metrics
-   - **Availability**: X% over last 24h
-   - **Performance**: [Average response time/throughput]
-   - **Error Rate**: X% over last 24h
-   - **Resource Utilization**: [CPU/Memory/Storage percentages]
+## Issues Identified
 
-   ## Issues Identified
+| Severity | Issue | Evidence | Root Cause | Impact |
+| --- | --- | --- | --- | --- |
+| Critical | <issue> | <KQL/metric/resource evidence> | <analysis> | <business impact> |
 
-   ### Critical Issues
-   - **[Issue 1]**: [Description]
-     - **Root Cause**: [Analysis]
-     - **Impact**: [Business impact]
-     - **Immediate Action**: [Required steps]
+## Remediation Plan
 
-   ### High Priority Issues
-   - **[Issue 2]**: [Description]
-     - **Root Cause**: [Analysis]
-     - **Impact**: [Performance/reliability impact]
-     - **Recommended Fix**: [Solution steps]
+### Phase 1: Immediate Actions (0-2 hours)
+- `<Azure CLI command>` — <purpose>
+- Rollback: `<rollback command or procedure>`
 
-   ## Remediation Plan
+### Phase 2: Short-term Fixes (2-24 hours)
+- `<Azure CLI command>` — <purpose>
+- Validation: <logs, metrics, or functional test>
 
-   ### Phase 1: Immediate Actions (0-2 hours)
-   ```bash
-   # Critical fixes to restore service
-   [Azure CLI commands with explanations]
-   ```
+### Phase 3: Long-term Improvements (1-4 weeks)
+- <architectural or preventive measure>
 
-   ### Phase 2: Short-term Fixes (2-24 hours)
-   ```bash
-   # Performance and reliability improvements
-   [Azure CLI commands with explanations]
-   ```
+## Monitoring Recommendations
+- **Alerts to Configure**: <recommended alerts>
+- **Dashboards to Create**: <dashboard suggestions>
+- **Regular Health Checks**: <frequency and scope>
 
-   ### Phase 3: Long-term Improvements (1-4 weeks)
-   ```bash
-   # Architectural and preventive measures
-   [Azure CLI commands and configuration changes]
-   ```
+## Validation Steps
+- [ ] Verify issue resolution through logs.
+- [ ] Confirm performance improvements.
+- [ ] Test application functionality.
+- [ ] Update monitoring and alerting.
+- [ ] Document lessons learned.
 
-   ## Monitoring Recommendations
-   - **Alerts to Configure**: [List of recommended alerts]
-   - **Dashboards to Create**: [Monitoring dashboard suggestions]
-   - **Regular Health Checks**: [Recommended frequency and scope]
+## Prevention Measures
+- <recommendation>
+```
 
-   ## Validation Steps
-   - [ ] Verify issue resolution through logs
-   - [ ] Confirm performance improvements
-   - [ ] Test application functionality
-   - [ ] Update monitoring and alerting
-   - [ ] Document lessons learned
+## Quality gate
 
-   ## Prevention Measures
-   - [Recommendations to prevent similar issues]
-   - [Process improvements]
-   - [Monitoring enhancements]
-   ```
-
-## Error Handling
-- **Resource Not Found**: Provide guidance on resource name/location specification
-- **Authentication Issues**: Guide user through Azure authentication setup
-- **Insufficient Permissions**: List required RBAC roles for resource access
-- **No Logs Available**: Suggest enabling diagnostic settings and waiting for data
-- **Query Timeouts**: Break down analysis into smaller time windows
-- **Service-Specific Issues**: Provide generic health assessment with limitations noted
-
-## Success Criteria
-- Resource health status accurately assessed
-- All significant issues identified and categorized
-- Root cause analysis completed for major problems
-- Actionable remediation plan with specific steps provided
-- Monitoring and prevention recommendations included
-- Clear prioritization of issues by business impact
-- Implementation steps include validation and rollback procedures
+- [ ] Resource health status is accurately assessed from resource state, metrics, and logs.
+- [ ] All significant issues are identified, categorized, and prioritized by business impact.
+- [ ] Root cause analysis is completed for major problems.
+- [ ] KQL queries and time windows are shown for every log-based conclusion.
+- [ ] The remediation plan has specific steps, validation, rollback, and monitoring.
+- [ ] No remediation action is applied without user approval.
+- [ ] Limitations are stated when logs, permissions, or service-specific telemetry are missing.

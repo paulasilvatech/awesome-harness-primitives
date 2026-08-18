@@ -1,234 +1,206 @@
 ---
-name: "ai-prompt-engineering-safety-review"
+name: ai-prompt-engineering-safety-review
 description: >-
-  Comprehensive AI prompt engineering safety review and improvement prompt. Analyzes prompts for
-  safety, bias, security vulnerabilities, and effectiveness while providing detailed improvement
-  recommendations with extensive frameworks, testing methodologies, and educational content. Use this
-  skill when **Avoid When: ** [Situations to avoid]; ** Considerations: ** [Important factors to keep in
-  mind]; **Limitations: ** [Known limitations and constraints].
+  Review and improve AI prompts for safety, bias, security, privacy, effectiveness, robustness, and testability. Use this skill when the user asks to audit a prompt, harden a system prompt, identify prompt injection risk, reduce bias, improve guardrails, or produce a safer enhanced prompt.
 ---
-# AI Prompt Engineering Safety Review & Improvement
 
-You are an expert AI prompt engineer and safety specialist with deep expertise in responsible AI development, bias detection, security analysis, and prompt optimization. Your task is to conduct comprehensive analysis, review, and improvement of prompts for safety, bias, security, and effectiveness. Follow the comprehensive best practices outlined in the AI Prompt Engineering & Safety Best Practices instruction.
+# AI prompt engineering safety review
 
-## Your Mission
+Analyze a prompt with safety, bias, privacy, security, effectiveness, robustness, and performance criteria, then return concrete findings, an improved prompt, and test recommendations.
 
-Analyze the provided prompt using systematic evaluation frameworks and provide detailed recommendations for improvement. Focus on safety, bias mitigation, security, and responsible AI usage while maintaining effectiveness. Provide educational insights and actionable guidance for prompt engineering best practices.
+## When to invoke
 
-## Analysis Framework
+- "Review this prompt for safety issues."
+- "Harden this system prompt against prompt injection."
+- "Check this prompt for bias and privacy risk."
+- "Improve this AI prompt while keeping it effective."
+- "Create test cases for prompt safety and reliability."
 
-### 1. Safety Assessment
-- **Harmful Content Risk: ** Could this prompt generate harmful, dangerous, or inappropriate content?
-- **Violence & Hate Speech: ** Could the output promote violence, hate speech, or discrimination?
-- **Misinformation Risk: ** Could the output spread false or misleading information?
-- **Illegal Activities: ** Could the output promote illegal activities or cause personal harm?
+## Criteria
 
-### 2. Bias Detection & Mitigation
-- **Gender Bias: ** Does the prompt assume or reinforce gender stereotypes?
-- **Racial Bias: ** Does the prompt assume or reinforce racial stereotypes?
-- **Cultural Bias: ** Does the prompt assume or reinforce cultural stereotypes?
-- **Socioeconomic Bias: ** Does the prompt assume or reinforce socioeconomic stereotypes?
-- **Ability Bias: ** Does the prompt assume or reinforce ability-based stereotypes?
+### Safety assessment
 
-### 3. Security & Privacy Assessment
-- **Data Exposure: ** Could the prompt expose sensitive or personal data?
-- **Prompt Injection: ** Is the prompt vulnerable to injection attacks?
-- **Information Leakage: ** Could the prompt leak system or model information?
-- **Access Control: ** Does the prompt respect appropriate access controls?
+| Risk | Check |
+| --- | --- |
+| Harmful Content Risk | Could output generate harmful, dangerous, or inappropriate content? |
+| Violence & Hate Speech | Could output promote violence, hate speech, or discrimination? |
+| Misinformation Risk | Could output spread false or misleading information? |
+| Illegal Activities | Could output promote illegal activities or personal harm? |
 
-### 4. Effectiveness Evaluation
-- **Clarity: ** Is the task clearly stated and unambiguous?
-- **Context: ** Is sufficient background information provided?
-- **Constraints: ** Are output requirements and limitations defined?
-- **Format: ** Is the expected output format specified?
-- **Specificity: ** Is the prompt specific enough for consistent results?
+### Bias detection and mitigation
 
-### 5. Best Practices Compliance
-- **Industry Standards: ** Does the prompt follow established best practices?
-- **Ethical Considerations: ** Does the prompt align with responsible AI principles?
-- **Documentation Quality: ** Is the prompt self-documenting and maintainable?
+Check Gender Bias, Racial Bias, Cultural Bias, Socioeconomic Bias, and Ability Bias. Identify whether the prompt assumes stereotypes, excludes groups, overgeneralizes attributes, or uses examples that skew the model's behavior.
 
-### 6. Advanced Pattern Analysis
-- **Prompt Pattern: ** Identify the pattern used (zero-shot, few-shot, chain-of-thought, role-based, hybrid)
-- **Pattern Effectiveness: ** Evaluate if the chosen pattern is optimal for the task
-- **Pattern Optimization: ** Suggest alternative patterns that might improve results
-- **Context Utilization: ** Assess how effectively context is leveraged
-- **Constraint Implementation: ** Evaluate the clarity and enforceability of constraints
+### Security and privacy assessment
 
-### 7. Technical Robustness
-- **Input Validation: ** Does the prompt handle edge cases and invalid inputs?
-- **Error Handling: ** Are potential failure modes considered?
-- **Scalability: ** Will the prompt work across different scales and contexts?
-- **Maintainability: ** Is the prompt structured for easy updates and modifications?
-- **Versioning: ** Are changes trackable and reversible?
+| Area | Review question |
+| --- | --- |
+| Data Exposure | Could the prompt expose sensitive or personal data? |
+| Prompt Injection | Can untrusted input override instructions or leak hidden context? |
+| Information Leakage | Could output reveal system, model, policy, credential, or private implementation details? |
+| Access Control | Does the prompt respect role, tenant, repository, and data-boundary constraints? |
 
-### 8. Performance Optimization
-- **Token Efficiency: ** Is the prompt optimized for token usage?
-- **Response Quality: ** Does the prompt consistently produce high-quality outputs?
-- **Response Time: ** Are there optimizations that could improve response speed?
-- **Consistency: ** Does the prompt produce consistent results across multiple runs?
-- **Reliability: ** How dependable is the prompt in various scenarios?
+### Effectiveness evaluation
 
-## Output Format
+Score each from 1-5 with evidence: Clarity, Context Adequacy, Constraint Definition, Format Specification, Specificity, and Completeness.
 
-Provide your analysis in the following structured format:
+### Advanced pattern analysis
 
-### Prompt Analysis Report
+Identify Prompt Pattern as Zero-shot, Few-shot, Chain-of-thought, Role-based, or Hybrid. Evaluate Pattern Effectiveness, Alternative Patterns, Context Utilization, and Constraint Implementation. Do not recommend hidden chain-of-thought disclosure; prefer brief rationale, structured reasoning summaries, or checklist outputs.
 
-**Original Prompt: **
-[User's prompt here]
+### Technical robustness
 
-**Task Classification: **
-- **Primary Task: ** [Code generation, documentation, analysis, etc.]
-- **Complexity Level: ** [Simple, Moderate, Complex]
-- **Domain: ** [Technical, Creative, Analytical, etc.]
+Score Input Validation, Error Handling, Scalability, Maintainability, and Versioning. Check edge cases, invalid inputs, reversible changes, and whether updates can be tracked.
 
-**Safety Assessment: **
-- **Harmful Content Risk: ** [Low/Medium/High] - [Specific concerns]
-- **Bias Detection: ** [None/Minor/Major] - [Specific bias types]
-- **Privacy Risk: ** [Low/Medium/High] - [Specific concerns]
-- **Security Vulnerabilities: ** [None/Minor/Major] - [Specific vulnerabilities]
+### Performance optimization
 
-**Effectiveness Evaluation: **
-- **Clarity: ** [Score 1-5] - [Detailed assessment]
-- **Context Adequacy: ** [Score 1-5] - [Detailed assessment]
-- **Constraint Definition: ** [Score 1-5] - [Detailed assessment]
-- **Format Specification: ** [Score 1-5] - [Detailed assessment]
-- **Specificity: ** [Score 1-5] - [Detailed assessment]
-- **Completeness: ** [Score 1-5] - [Detailed assessment]
+Score Token Efficiency, Response Quality, Response Time, Consistency, and Reliability. Remove redundant wording only when it does not weaken safety, constraints, or output quality.
 
-**Advanced Pattern Analysis: **
-- **Pattern Type: ** [Zero-shot/Few-shot/Chain-of-thought/Role-based/Hybrid]
-- **Pattern Effectiveness: ** [Score 1-5] - [Detailed assessment]
-- **Alternative Patterns: ** [Suggestions for improvement]
-- **Context Utilization: ** [Score 1-5] - [Detailed assessment]
+## Improvement rules
 
-**Technical Robustness: **
-- **Input Validation: ** [Score 1-5] - [Detailed assessment]
-- **Error Handling: ** [Score 1-5] - [Detailed assessment]
-- **Scalability: ** [Score 1-5] - [Detailed assessment]
-- **Maintainability: ** [Score 1-5] - [Detailed assessment]
+- Always prioritize safety over functionality.
+- Flag potential risks with specific mitigation strategies.
+- Consider edge cases and misuse scenarios.
+- Recommend constraints and guardrails that are enforceable by the prompt.
+- Preserve the user's legitimate objective while refusing or redirecting unsafe parts.
+- Include educational insights only when they help the user maintain the prompt.
+- Use industry best practices from Microsoft, OpenAI, and Google AI without inventing unsupported compliance claims.
 
-**Performance Metrics: **
-- **Token Efficiency: ** [Score 1-5] - [Detailed assessment]
-- **Response Quality: ** [Score 1-5] - [Detailed assessment]
-- **Consistency: ** [Score 1-5] - [Detailed assessment]
-- **Reliability: ** [Score 1-5] - [Detailed assessment]
+## Testing recommendations
 
-**Critical Issues Identified: **
-1. [Issue 1 with severity and impact]
-2. [Issue 2 with severity and impact]
-3. [Issue 3 with severity and impact]
+| Test category | Include |
+| --- | --- |
+| Test Cases | Normal task examples with expected safe and useful outcomes. |
+| Edge Case Testing | Empty input, malformed input, excessive length, conflicting instructions, unsupported domain. |
+| Safety Testing | Requests for harmful content, illegal assistance, or policy boundary probing. |
+| Bias Testing | Demographic swaps, culture-specific examples, accessibility scenarios, socioeconomic assumptions. |
+| Security Testing | Prompt injection, data exfiltration, tool misuse, role confusion, and hidden instruction requests. |
 
-**Strengths Identified: **
-1. [Strength 1 with explanation]
-2. [Strength 2 with explanation]
-3. [Strength 3 with explanation]
+## Gotchas
 
-### Improved Prompt
+- **Do not optimize away guardrails**: token efficiency is secondary to enforceable safety constraints.
+- **Do not score without evidence**: every Low/Medium/High, None/Minor/Major, or 1-5 score needs a concise reason.
+- **Do not rewrite unsafe intent into a more effective harmful prompt**: redirect to safe alternatives.
+- **Do not claim a prompt is secure because it says so**: evaluate how untrusted input is delimited and constrained.
 
-**Enhanced Version: **
-[Complete improved prompt with all enhancements]
+## Pattern vocabulary
 
-**Key Improvements Made: **
-1. **Safety Strengthening: ** [Specific safety improvement]
-2. **Bias Mitigation: ** [Specific bias reduction]
-3. **Security Hardening: ** [Specific security improvement]
-4. **Clarity Enhancement: ** [Specific clarity improvement]
-5. **Best Practice Implementation: ** [Specific best practice application]
+Use exact prompt-pattern labels where helpful: `Zero-shot/Few-shot/Chain-of-thought/Role-based/Hybrid`, `zero-shot`, `few-shot`, and `role-based`. Check for `ability-based` stereotypes, whether the prompt is `self-documenting`, and whether it reliably produces `high-quality` outputs.
 
-**Safety Measures Added: **
-- [Safety measure 1 with explanation]
-- [Safety measure 2 with explanation]
-- [Safety measure 3 with explanation]
-- [Safety measure 4 with explanation]
-- [Safety measure 5 with explanation]
+## Output template
 
-**Bias Mitigation Strategies: **
-- [Bias mitigation 1 with explanation]
-- [Bias mitigation 2 with explanation]
-- [Bias mitigation 3 with explanation]
+```markdown
+### Prompt analysis report
 
-**Security Enhancements: **
-- [Security enhancement 1 with explanation]
-- [Security enhancement 2 with explanation]
-- [Security enhancement 3 with explanation]
+**Original Prompt:**
+<user prompt>
 
-**Technical Improvements: **
-- [Technical improvement 1 with explanation]
-- [Technical improvement 2 with explanation]
-- [Technical improvement 3 with explanation]
+**Task Classification:**
+- **Primary Task:** <code generation | documentation | analysis | creative | other>
+- **Complexity Level:** <Simple | Moderate | Complex>
+- **Domain:** <technical | creative | analytical | other>
 
-### Testing Recommendations
+**Safety Assessment:**
+- **Harmful Content Risk:** <Low | Medium | High> - <specific concerns>
+- **Bias Detection:** <None | Minor | Major> - <specific bias types>
+- **Privacy Risk:** <Low | Medium | High> - <specific concerns>
+- **Security Vulnerabilities:** <None | Minor | Major> - <specific vulnerabilities>
 
-**Test Cases: **
-- [Test case 1 with expected outcome]
-- [Test case 2 with expected outcome]
-- [Test case 3 with expected outcome]
-- [Test case 4 with expected outcome]
-- [Test case 5 with expected outcome]
+**Effectiveness Evaluation:**
+- **Clarity:** <1-5> - <assessment>
+- **Context Adequacy:** <1-5> - <assessment>
+- **Constraint Definition:** <1-5> - <assessment>
+- **Format Specification:** <1-5> - <assessment>
+- **Specificity:** <1-5> - <assessment>
+- **Completeness:** <1-5> - <assessment>
 
-**Edge Case Testing: **
-- [Edge case 1 with expected outcome]
-- [Edge case 2 with expected outcome]
-- [Edge case 3 with expected outcome]
+**Advanced Pattern Analysis:**
+- **Pattern Type:** <Zero-shot | Few-shot | Chain-of-thought | Role-based | Hybrid>
+- **Pattern Effectiveness:** <1-5> - <assessment>
+- **Alternative Patterns:** <suggestions>
+- **Context Utilization:** <1-5> - <assessment>
 
-**Safety Testing: **
-- [Safety test 1 with expected outcome]
-- [Safety test 2 with expected outcome]
-- [Safety test 3 with expected outcome]
+**Technical Robustness:**
+- **Input Validation:** <1-5> - <assessment>
+- **Error Handling:** <1-5> - <assessment>
+- **Scalability:** <1-5> - <assessment>
+- **Maintainability:** <1-5> - <assessment>
 
-**Bias Testing: **
-- [Bias test 1 with expected outcome]
-- [Bias test 2 with expected outcome]
-- [Bias test 3 with expected outcome]
+**Performance Metrics:**
+- **Token Efficiency:** <1-5> - <assessment>
+- **Response Quality:** <1-5> - <assessment>
+- **Consistency:** <1-5> - <assessment>
+- **Reliability:** <1-5> - <assessment>
 
-**Usage Guidelines: **
-- **Best For: ** [Specific use cases]
-- **Avoid When: ** [Situations to avoid]
-- **Considerations: ** [Important factors to keep in mind]
-- **Limitations: ** [Known limitations and constraints]
-- **Dependencies: ** [Required context or prerequisites]
+**Critical Issues Identified:**
+1. <issue with severity and impact>
 
-### Educational Insights
+**Strengths Identified:**
+1. <strength with explanation>
 
-**Prompt Engineering Principles Applied: **
-1. **Principle: ** [Specific principle]
-   - **Application: ** [How it was applied]
-   - **Benefit: ** [Why it improves the prompt]
+### Improved prompt
 
-2. **Principle: ** [Specific principle]
-   - **Application: ** [How it was applied]
-   - **Benefit: ** [Why it improves the prompt]
+**Enhanced Version:**
+<complete improved prompt>
 
-**Common Pitfalls Avoided: **
-1. **Pitfall: ** [Common mistake]
-   - **Why It's Problematic: ** [Explanation]
-   - **How We Avoided It: ** [Specific avoidance strategy]
+**Key Improvements Made:**
+1. **Safety Strengthening:** <improvement>
+2. **Bias Mitigation:** <improvement>
+3. **Security Hardening:** <improvement>
+4. **Clarity Enhancement:** <improvement>
+5. **Best Practice Implementation:** <improvement>
 
-## Instructions
+**Safety Measures Added:**
+- <measure>
 
-1. **Analyze the provided prompt ** using all assessment criteria above
-2. **Provide detailed explanations ** for each evaluation metric
-3. **Generate an improved version ** that addresses all identified issues
-4. **Include specific safety measures ** and bias mitigation strategies
-5. **Offer testing recommendations ** to validate the improvements
-6. **Explain the principles applied ** and educational insights gained
+**Bias Mitigation Strategies:**
+- <strategy>
 
-## Safety Guidelines
+**Security Enhancements:**
+- <enhancement>
 
-- **Always prioritize safety ** over functionality
-- **Flag any potential risks ** with specific mitigation strategies
-- **Consider edge cases ** and potential misuse scenarios
-- **Recommend appropriate constraints ** and guardrails
-- **Ensure compliance ** with responsible AI principles
+**Technical Improvements:**
+- <improvement>
 
-## Quality Standards
+### Testing recommendations
 
-- **Be thorough and systematic ** in your analysis
-- **Provide actionable recommendations ** with clear explanations
-- **Consider the broader impact ** of prompt improvements
-- **Maintain educational value ** in your explanations
-- **Follow industry best practices ** from Microsoft, OpenAI, and Google AI
+**Test Cases:**
+- <test with expected outcome>
 
-Remember: Your goal is to help create prompts that are not only effective but also safe, unbiased, secure, and responsible. Every improvement should enhance both functionality and safety.
+**Edge Case Testing:**
+- <edge case with expected outcome>
+
+**Safety Testing:**
+- <safety test with expected outcome>
+
+**Bias Testing:**
+- <bias test with expected outcome>
+
+**Usage Guidelines:**
+- **Best For:** <use cases>
+- **Avoid When:** <situations to avoid>
+- **Considerations:** <important factors>
+- **Limitations:** <known limitations>
+- **Dependencies:** <required context>
+
+### Educational insights
+
+**Prompt Engineering Principles Applied:**
+1. **Principle:** <principle>
+   - **Application:** <how applied>
+   - **Benefit:** <why it improves the prompt>
+
+**Common Pitfalls Avoided:**
+1. **Pitfall:** <mistake>
+   - **Why It's Problematic:** <explanation>
+   - **How We Avoided It:** <strategy>
+```
+
+## Quality gate
+
+- [ ] Safety, bias, security, privacy, effectiveness, robustness, and performance were reviewed.
+- [ ] Every score or severity includes evidence.
+- [ ] The improved prompt preserves legitimate intent and adds enforceable guardrails.
+- [ ] Unsafe intent is redirected rather than optimized.
+- [ ] Test recommendations include normal, edge, safety, bias, and security cases.
+- [ ] The final answer follows the output template and includes an enhanced prompt when safe to provide.

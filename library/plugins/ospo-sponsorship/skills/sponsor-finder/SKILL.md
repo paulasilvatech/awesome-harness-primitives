@@ -1,17 +1,24 @@
 ---
 name: "sponsor-finder"
 description: >-
-  Find which of a GitHub repository's dependencies are sponsorable via GitHub Sponsors. Uses deps.dev
-  API for dependency resolution across npm, PyPI, Cargo, Go, RubyGems, Maven, and NuGet. Checks npm
-  funding metadata, FUNDING.yml files, and web search. Verifies every link. Shows direct and
-  transitive dependencies with OSSF Scorecard health data. Invoke with /sponsor followed by a GitHub
-  owner/repo (e.g. "/sponsor expressjs/express"). Use this skill when the user asks for your workflow.
+  Find sponsorable direct and transitive dependencies for a GitHub repository using deps.dev, GitHub funding files, npm funding metadata, verified funding links, and OSSF Scorecard health data. Use this skill when the user invokes /sponsor owner/repo, asks which dependencies can be sponsored, or wants GitHub Sponsors, Open Collective, Ko-fi, Patreon, or Tidelift funding coverage.
 ---
+
 # Sponsor Finder
+
+Resolve a GitHub repository dependency graph, map packages to source repositories and verified funding destinations, and produce a concise sponsorship report grouped by maintainer impact.
 
 Discover opportunities to support the open source maintainers behind your project's dependencies. Accepts a GitHub `owner/repo` (e.g. `/sponsor expressjs/express`), uses the deps.dev API for dependency resolution and project health data, and produces a friendly sponsorship report covering both direct and transitive dependencies.
 
-## Your Workflow
+## When to invoke
+
+- "/sponsor expressjs/express"
+- "Find sponsorable dependencies for this GitHub repo."
+- "Which maintainers can we support through GitHub Sponsors?"
+- "Show funding links for direct and transitive dependencies."
+- "Audit dependency funding coverage with deps.dev."
+
+## Procedure
 
 When the user types `/sponsor {owner/repo}` or provides a repository in `owner/repo` format:
 
@@ -26,7 +33,7 @@ When the user types `/sponsor {owner/repo}` or provides a repository in `owner/r
 
 ---
 
-## Step 1: Detect Ecosystem and Package
+### Step 1: Detect Ecosystem and Package
 
 Use `get_file_contents` to fetch the manifest from the target repo. Determine the ecosystem and extract the package name + latest version:
 
@@ -42,7 +49,7 @@ Use `get_file_contents` to fetch the manifest from the target repo. Determine th
 
 ---
 
-## Step 2: Get Full Dependency Tree (deps.dev)
+### Step 2: Get Full Dependency Tree (deps.dev)
 
 **This is the key step. ** Use `web_fetch` to call the deps.dev API:
 
@@ -72,7 +79,7 @@ If the repo doesn't publish a package (e.g., it's an app not a library), fall ba
 
 ---
 
-## Step 3: Resolve Each Dependency to a GitHub Repo (deps.dev)
+### Step 3: Resolve Each Dependency to a GitHub Repo (deps.dev)
 
 For each dependency from the tree, call deps.dev `GetVersion`:
 
@@ -93,7 +100,7 @@ This works across **all ecosystems ** — npm, PyPI, Cargo, Go, RubyGems, Maven,
 
 ---
 
-## Step 4: Get Project Health Data (deps.dev)
+### Step 4: Get Project Health Data (deps.dev)
 
 For each unique GitHub repo, call deps.dev `GetProject`:
 
@@ -119,7 +126,7 @@ Use the Maintained score to label project health:
 
 ---
 
-## Step 5: Find Funding Links
+### Step 5: Find Funding Links
 
 For each unique GitHub repo, check for funding information using three sources in order:
 
@@ -166,7 +173,7 @@ Skip packages known to be corporate-maintained (React/Meta, TypeScript/Microsoft
 
 ---
 
-## Step 6: Verify Every Link (CRITICAL)
+### Step 6: Verify Every Link (CRITICAL)
 
 **Before including ANY funding link, verify it exists. **
 
@@ -179,7 +186,7 @@ Verify in batches of **5 at a time **. Never present unverified links.
 
 ---
 
-## Step 7: Output the Report
+### Step 7: Output the Report
 
 ### Output discipline
 
@@ -188,9 +195,46 @@ Verify in batches of **5 at a time **. Never present unverified links.
 - **Collect ALL data before producing the report. ** Never drip-feed partial tables.
 - Output the final report as a **single cohesive block ** at the end.
 
-### Report template
+### Report format rules
 
-```
+- **Lead with " Ways to Give Back"**— this is the primary output. Numbered list, sorted by total deps covered (descending).
+- **Bare URLs on their own line ** — not wrapped in markdown link syntax. This ensures they're clickable in any terminal emulator.
+- **Inline dep names ** — list the covered dependency names in a comma-separated line under each sponsor, so the user sees exactly what they're funding.
+- **Health indicator inline **— show // next to each destination, not in a separate table column.
+- **One " Coverage" section **— compact stats. No separate "Verified Funding Links" table, no "No Funding Found" table.
+- **Unfunded deps as a brief note ** — just the count + top names. Frame as "don't have funding set up yet" rather than highlighting a gap. Never shame projects for not having funding — many maintainers prefer other forms of contribution.
+- GitHub Sponsors, Open Collective, Ko-fi, Other
+- Prioritize GitHub Sponsors links when multiple funding sources exist for the same maintainer.
+
+---
+
+## Troubleshooting
+
+- If deps.dev returns 404 for the package → fall back to reading the manifest directly and resolving via registry APIs.
+- If deps.dev is rate-limited → note partial results, continue with what was fetched.
+- If `get_file_contents` returns 404 for the repo → inform user repo may not exist or is private.
+- If link verification fails → exclude the link silently.
+- Always produce a report even if partial — never fail silently.
+
+---
+
+## Gotchas
+
+1. **NEVER present unverified links. ** Fetch every URL before showing it. 5 verified links > 20 guessed links.
+2. **NEVER guess from training knowledge. ** Always check — funding pages change over time.
+3. **Always be encouraging, never shaming. ** Frame results positively — celebrate what IS funded, and treat unfunded deps as an opportunity, not a failing. Not every project needs or wants financial sponsorship.
+4. **Lead with action. ** The " Ways to Give Back" section is the primary output — bare clickable URLs, grouped by destination.
+5. **Use deps.dev as primary resolver. ** Fall back to registry APIs only if deps.dev is unavailable.
+6. **Always use GitHub MCP tools ** (`get_file_contents`), `web_fetch`, and `web_search` — never clone or shell out.
+7. **Be efficient. ** Batch API calls, deduplicate repos, check each owner's `.github` repo only once.
+8. **Focus on GitHub Sponsors. ** Most actionable platform — show others but prioritize GitHub.
+9. **Deduplicate by maintainer. ** Group to show real impact of sponsoring one person.
+10. **Show the actionable minimum. ** Tell users the fewest sponsorships to support the most deps.
+11. **Minimize intermediate output. ** Don't announce each batch. Collect all data, then output one cohesive report.
+
+## Output template
+
+```markdown
 ## Sponsor Finder Report
 
 **Repository:** {owner}/{repo} · {ecosystem} · {package}@{version}
@@ -224,39 +268,12 @@ Sponsoring just {N} people/orgs supports {sponsorable} of your {total} dependenc
 - All links verified
 ```
 
-### Report format rules
+## Quality gate
 
-- **Lead with " Ways to Give Back"**— this is the primary output. Numbered list, sorted by total deps covered (descending).
-- **Bare URLs on their own line ** — not wrapped in markdown link syntax. This ensures they're clickable in any terminal emulator.
-- **Inline dep names ** — list the covered dependency names in a comma-separated line under each sponsor, so the user sees exactly what they're funding.
-- **Health indicator inline **— show // next to each destination, not in a separate table column.
-- **One " Coverage" section **— compact stats. No separate "Verified Funding Links" table, no "No Funding Found" table.
-- **Unfunded deps as a brief note ** — just the count + top names. Frame as "don't have funding set up yet" rather than highlighting a gap. Never shame projects for not having funding — many maintainers prefer other forms of contribution.
-- GitHub Sponsors, Open Collective, Ko-fi, Other
-- Prioritize GitHub Sponsors links when multiple funding sources exist for the same maintainer.
-
----
-
-## Error Handling
-
-- If deps.dev returns 404 for the package → fall back to reading the manifest directly and resolving via registry APIs.
-- If deps.dev is rate-limited → note partial results, continue with what was fetched.
-- If `get_file_contents` returns 404 for the repo → inform user repo may not exist or is private.
-- If link verification fails → exclude the link silently.
-- Always produce a report even if partial — never fail silently.
-
----
-
-## Critical Rules
-
-1. **NEVER present unverified links. ** Fetch every URL before showing it. 5 verified links > 20 guessed links.
-2. **NEVER guess from training knowledge. ** Always check — funding pages change over time.
-3. **Always be encouraging, never shaming. ** Frame results positively — celebrate what IS funded, and treat unfunded deps as an opportunity, not a failing. Not every project needs or wants financial sponsorship.
-4. **Lead with action. ** The " Ways to Give Back" section is the primary output — bare clickable URLs, grouped by destination.
-5. **Use deps.dev as primary resolver. ** Fall back to registry APIs only if deps.dev is unavailable.
-6. **Always use GitHub MCP tools ** (`get_file_contents`), `web_fetch`, and `web_search` — never clone or shell out.
-7. **Be efficient. ** Batch API calls, deduplicate repos, check each owner's `.github` repo only once.
-8. **Focus on GitHub Sponsors. ** Most actionable platform — show others but prioritize GitHub.
-9. **Deduplicate by maintainer. ** Group to show real impact of sponsoring one person.
-10. **Show the actionable minimum. ** Tell users the fewest sponsorships to support the most deps.
-11. **Minimize intermediate output. ** Don't announce each batch. Collect all data, then output one cohesive report.
+- [ ] The input repository is parsed as `{owner}/{repo}` and the detected manifest identifies ecosystem, package, and version when available.
+- [ ] deps.dev `GetDependencies`, `GetVersion`, and `GetProject` are used as the primary data sources, with fallback paths noted.
+- [ ] Package URLs are percent-encoded, including `@` as `%40` and `/` as `%2F`.
+- [ ] Dependency, repository, owner `.github`, and funding destination lookups are deduplicated and batched at the documented sizes.
+- [ ] Every funding link included in the report was verified with `web_fetch`; failed links are excluded.
+- [ ] The final report leads with Ways to Give Back, uses bare URLs, groups by funding destination, and avoids shaming unfunded projects.
+- [ ] Partial results explicitly say what was rate-limited, private, missing, or unavailable.

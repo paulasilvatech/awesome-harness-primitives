@@ -5,11 +5,22 @@ description: >-
   with reactive streams and optional Spring Boot integration. Use this skill when the user asks for
   project generation.
 ---
-# Java MCP Server Generator
+
+# Java MCP server generator
+
+Generate a Java Model Context Protocol server project with Maven or Gradle build files, SDK dependencies, stdio transport wiring, handlers for tools, resources, and prompts, tests, and optional Spring Boot configuration.
 
 Generate a complete, production-ready MCP server in Java using the official Java SDK with Maven or Gradle.
 
-## Project Generation
+## When to invoke
+
+- "Generate a Java MCP server project."
+- "Create a Maven MCP server using the Java SDK."
+- "Scaffold MCP tools, resources, and prompts in Java."
+- "Add stdio transport to a Java MCP server."
+- "Make a Gradle Java MCP server template."
+
+## Project generation
 
 When asked to create a Java MCP server, generate a complete project with this structure:
 
@@ -41,7 +52,7 @@ my-mcp-server/
 └── README.md
 ```
 
-## Maven pom.xml Template
+## Maven pom.xml template
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -142,7 +153,7 @@ my-mcp-server/
 </project>
 ```
 
-## Gradle build.gradle.kts Template
+## Gradle build.gradle.kts template
 
 ```kotlin
 plugins {
@@ -184,7 +195,7 @@ tasks.test {
 }
 ```
 
-## McpServerApplication.java Template
+## McpServerApplication.java template
 
 ```java
 package com.example.mcp;
@@ -249,7 +260,41 @@ public class McpServerApplication {
     }
 }
 ```
-## Extended reference
+## Progressive disclosure and bundled resources
 
 Additional detailed guidance was moved to [references/extended-guide.md](references/extended-guide.md) to keep this skill within the progressive-disclosure budget.
 
+## Output template
+
+```markdown
+## Java MCP server generation result
+
+**Status:** generated | plan only | blocked
+**Build tool:** Maven | Gradle
+**Package:** `com.example.mcp`
+
+### Files
+- `pom.xml` or `build.gradle.kts`
+- `src/main/java/com/example/mcp/McpServerApplication.java`
+- `src/main/java/com/example/mcp/tools/ToolDefinitions.java`
+- `src/main/java/com/example/mcp/tools/ToolHandlers.java`
+- `src/main/java/com/example/mcp/resources/ResourceDefinitions.java`
+- `src/main/java/com/example/mcp/resources/ResourceHandlers.java`
+- `src/main/java/com/example/mcp/prompts/PromptDefinitions.java`
+- `src/main/java/com/example/mcp/prompts/PromptHandlers.java`
+- `src/test/java/com/example/mcp/McpServerTest.java`
+
+### Validation
+- `mvn test` or `gradle test`: pass | fail | not run
+- Main class: `com.example.mcp.McpServerApplication`
+- Transport: `StdioServerTransport`
+```
+
+## Quality gate
+
+- [ ] The generated structure includes build file, `src/main/java`, `src/main/resources`, `src/test/java`, and `README.md`.
+- [ ] Maven output keeps `io.modelcontextprotocol.sdk:mcp`, `slf4j-api`, `logback-classic`, JUnit Jupiter, `reactor-test`, compiler, surefire, and shade plugins.
+- [ ] Gradle output keeps `java`, `application`, Maven Central, `JavaVersion.VERSION_17`, SDK, logging, and test dependencies.
+- [ ] `McpServerApplication` registers `ToolHandlers`, `ResourceHandlers`, and `PromptHandlers`.
+- [ ] Server startup uses `StdioServerTransport`, subscribes to start, and disposes the `Disposable` on shutdown.
+- [ ] The extended guidance is read from `references/extended-guide.md` when the requested server needs deeper implementation detail.
