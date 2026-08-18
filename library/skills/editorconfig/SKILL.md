@@ -1,37 +1,76 @@
 ---
 name: "editorconfig"
 description: >-
-  Generate a comprehensive .editorconfig from project file types and user formatting preferences,
-  with rule-by-rule explanations. Use this skill when the user asks to create, update, or
-  standardize EditorConfig settings for a repository.
+  Generate or update a comprehensive .editorconfig from repository file types and formatting
+  preferences, including indentation, line endings, charset, whitespace, final newline, language
+  globs, and rule-by-rule explanations. Use when asked to create, standardize, or explain EditorConfig.
 ---
 
 # EditorConfig
 
-You are an **EditorConfig Expert**. Your mission is to create a robust, comprehensive, and best-practice-oriented `.editorconfig` file. You will analyze the user's project structure and explicit requirements to generate a configuration that ensures consistent coding styles across different editors and IDEs. You must operate with absolute precision and provide clear, rule-by-rule explanations for your configuration choices.
+Analyze project file types and user formatting preferences, then produce a complete `.editorconfig` plus a rule-by-rule explanation that makes editor behavior consistent across contributors.
 
-## DIRECTIVES
+## When to invoke
 
-1.  **Analyze Context**: Before generating the configuration, you MUST analyze the provided project structure and file types to infer the languages and technologies being used.
-2.  **Incorporate User Preferences**: You MUST adhere to all explicit user requirements. If any requirement conflicts with a common best practice, you will still follow the user's preference but make a note of the conflict in your explanation.
-3.  **Apply Universal Best Practices**: You WILL go beyond the user's basic requirements and incorporate universal best practices for `.editorconfig` files. This includes settings for character sets, line endings, trailing whitespace, and final newlines.
-4.  **Generate Comprehensive Configuration**: The generated `.editorconfig` file MUST be well-structured and cover all relevant file types found in the project. Use glob patterns (`*`, `**.js`, `**.py`, etc.) to apply settings appropriately.
-5.  **Provide Rule-by-Rule Explanation**: You MUST provide a detailed, clear, and easy-to-understand explanation for every single rule in the generated `.editorconfig` file. Explain what the rule does and why it's a best practice.
-6.  **Output Format**: The final output MUST be presented in two parts:
-    - A single, complete code block containing the `.editorconfig` file content.
-    - A "Rule-by-Rule Explanation" section using Markdown for clarity.
+- "Create a .editorconfig for this repository."
+- "Standardize indentation and line endings with EditorConfig."
+- "Update our EditorConfig for JavaScript, Python, and Markdown."
+- "Explain every rule in this .editorconfig."
 
-## USER PREFERENCES
+## Inputs
 
-- **Indentation Style**: Use spaces, not tabs.
-- **Indentation Size**: 2 spaces.
+Use the repository tree, existing `.editorconfig` content, and explicit user preferences. Default to spaces with `indent_size = 2` when the user gives no contrary preference because the original directive set requested spaces, not tabs, and 2 spaces.
 
-## EXECUTION
+## Rule selection
 
-Begin by acknowledging the user's preferences. Then, proceed directly to generating the `.editorconfig` file and the detailed explanation as per the specified output format.
+| Rule | Default | Why |
+| --- | --- | --- |
+| `root = true` | At file top | Stops EditorConfig search from walking into parent directories. |
+| `[*]` | Always include | Defines universal defaults for all files. |
+| `indent_style = space` | Universal unless project proves tabs are required | Aligns with the stated user preference. |
+| `indent_size = 2` | Universal unless language conventions require another size | Aligns with the stated user preference. |
+| `end_of_line = lf` | Universal | Prevents cross-platform version-control churn. |
+| `charset = utf-8` | Universal | Keeps text portable across editors and build tools. |
+| `trim_trailing_whitespace = true` | Universal | Avoids noisy diffs. |
+| `insert_final_newline = true` | Universal | Preserves POSIX-friendly file endings and safer concatenation. |
+| `[*.md]` with `trim_trailing_whitespace = false` | Include when Markdown exists | Markdown uses trailing spaces for hard line breaks. |
 
-### Example Output Structure:
+## File-type coverage
 
+Add sections only for file types present in the project or explicitly requested.
+
+| Glob | Typical settings | Notes |
+| --- | --- | --- |
+| `[*.{js,jsx,ts,tsx,json,yml,yaml,css,scss,html,md}]` | `indent_size = 2` | Common web and configuration files. |
+| `[*.py]` | `indent_size = 4` when the project follows PEP 8 | Do not override an existing Python style without evidence. |
+| `[*.{cs,csx}]` | `indent_size = 4` | Typical C# convention unless repository uses 2 spaces. |
+| `[*.{java,kt,kts}]` | `indent_size = 4` | Typical JVM convention. |
+| `[Makefile]` | `indent_style = tab` | Make recipes require tabs. |
+| `[*.{bat,cmd,ps1,sh}]` | `end_of_line = crlf` only if the repository standard requires it | Prefer `lf` unless scripts or tooling prove otherwise. |
+| `[*.md]` | `trim_trailing_whitespace = false` | Preserve intentional hard breaks. |
+
+## Directive vocabulary
+
+Older EditorConfig prompts used headings such as DIRECTIVES, USER PREFERENCES, and EXECUTION. Preserve their intent: project analysis and explicit preferences MUST be honored, generated configuration WILL go beyond basics with universal defaults, and explanations should be well-structured, best-practice-oriented, and easy-to-understand.
+
+## Procedure
+
+1. Inspect the project structure and identify relevant file extensions, generated folders, and existing style files.
+2. Preserve explicit user preferences even when they conflict with a common best practice; call out the conflict in the explanation.
+3. Build a top-level universal section first, then add narrower glob sections that override only necessary rules.
+4. Avoid adding rules for languages absent from the repository unless the user explicitly asks for them.
+5. Return the `.editorconfig` code block first, followed by the rule-by-rule explanation.
+
+## Gotchas
+
+- **Glob syntax matters**: use `*` for one path segment and brace groups such as `[*.{js,ts}]` for related extensions.
+- **Markdown whitespace is special**: do not globally trim meaningful Markdown hard breaks without a `[*.md]` override.
+- **Makefiles need tabs**: `indent_style = space` can break recipe lines unless `[Makefile]` overrides it.
+- **User preference wins**: if a user asks for tabs or 4 spaces, apply it and explain the trade-off.
+
+## Output template
+
+````markdown
 Here is the `.editorconfig` file tailored to your project:
 
 ```editorconfig
@@ -54,13 +93,23 @@ trim_trailing_whitespace = false
 
 ### Rule-by-Rule Explanation
 
-- `root = true`: This is a best practice that stops the EditorConfig search in the current directory. Without it, EditorConfig would continue searching parent directories, which could lead to unexpected behavior.
-- `[*]`: This is a universal glob pattern that applies the following rules to ALL files in the project.
-- `indent_style = space`: As requested, this sets the indentation to use spaces instead of tabs.
-- `indent_size = 2`: As requested, this sets the indentation size to 2 spaces.
-- `end_of_line = lf`: This standardizes line endings to Line Feed (LF), which is the standard for macOS, Linux, and modern Windows (WSL), preventing issues with version control systems.
-- `charset = utf-8`: This sets the character encoding to UTF-8, the universal standard, ensuring files can be read and written correctly across all systems.
-- `trim_trailing_whitespace = true`: This automatically removes any whitespace characters at the end of lines, which keeps the code clean and avoids unnecessary diffs in version control.
-- `insert_final_newline = true`: This ensures that every file ends with a single newline character, a POSIX standard that prevents certain scripting and concatenation issues.
-- `[*.md]`: This glob pattern applies specific rules only to Markdown files.
-- `trim_trailing_whitespace = false`: This overrides the universal setting for Markdown files. It's disabled because trailing whitespace can be significant in Markdown (e.g., for creating hard line breaks).
+- `root = true`: <what it does and why it is included>
+- `[*]`: <scope of universal rules>
+- `indent_style = space`: <preference or project evidence>
+- `indent_size = 2`: <preference or project evidence>
+- `end_of_line = lf`: <cross-platform reason>
+- `charset = utf-8`: <encoding reason>
+- `trim_trailing_whitespace = true`: <diff cleanliness reason>
+- `insert_final_newline = true`: <POSIX/tooling reason>
+- `[*.md]`: <Markdown-specific scope>
+- `trim_trailing_whitespace = false`: <hard line-break reason>
+````
+
+## Quality gate
+
+- [ ] The repository file types were considered before choosing glob sections.
+- [ ] Explicit user preferences, including spaces and `indent_size = 2` when requested, are honored.
+- [ ] The output contains one complete `.editorconfig` code block before the explanation.
+- [ ] Every emitted rule has a rule-by-rule explanation.
+- [ ] Markdown, Makefile, and language-specific overrides are included only when relevant.
+- [ ] The configuration avoids contradictory rules at the same specificity.

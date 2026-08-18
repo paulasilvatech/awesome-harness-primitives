@@ -1,77 +1,53 @@
 ---
 name: "desk-open"
 description: >-
-  Create and open a new desk in the workshop. Sets up the folder structure, initial journal, and desk
-  identity so the next session that sits down finds the trail. Use this skill when the operator wants
-  to start a new workstream; work arrives that doesn't belong to any existing desk; a topic needs its
-  own frame (its own history, its own priors).
+  Create and open a new workshop desk with a journal and .signals directory. Use when the operator wants to start a new workstream, work does not belong to an existing desk, or a topic needs its own durable frame, history, priors, and signal trail.
 ---
-# Open a Desk
 
-Create a new desk in the workshop with the standard structure.
+# Open a desk
 
-## When to use
+Create a workshop desk by making its folder, persistent journal, and structured signal directory so a future independent GitHub Copilot session can sit down, read the trail, and continue the workstream.
 
-- The operator wants to start a new workstream
-- Work arrives that doesn't belong to any existing desk
-- A topic needs its own frame (its own history, its own priors)
+## When to invoke
 
-## What it creates
+- "Open a new desk for this workstream."
+- "This topic needs its own desk and journal."
+- "Create a desk for the security scan."
+- "Start a separate frame for ops work."
 
-Given a workshop directory and a desk name, create:
+## Desk model
 
-```
-desks/<desk-name>/
-  journal.md       # persistent memory — read at start, written at end
-  .signals/        # structured signal output (JSON) — dashboard reads this
-```
+| Element | Path | Purpose |
+| --- | --- | --- |
+| Desk root | `desks/<desk-name>/` | Stable home for one focused workstream. |
+| Journal | `desks/<desk-name>/journal.md` | Persistent memory; read at session start and written at session end. |
+| Signals | `desks/<desk-name>/.signals/` | Structured JSON signal output consumed by a dashboard. |
 
-## How to use
+A desk is long-running in state, not runtime. The journal carries history forward; each GitHub Copilot session is independent and becomes associated with a desk only by reading and writing that desk's files.
 
-1. **Choose a name.** Short, descriptive, kebab-case. The name is
-   how the operator and other desks refer to this desk.
-   Examples: `security-scan`, `api-review`, `ops`, `cloud-workshop`
+## Procedure
 
-2. **Check if it already exists.** If `desks/<desk-name>/` already
-   has a `journal.md`, the desk is live — **do not overwrite it.**
-   Instead, resume it: read the journal and continue from where it
-   left off. If the operator explicitly wants a fresh start, they
-   must rename or archive the existing desk first.
+1. Choose a short, descriptive kebab-case name such as `security-scan`, `api-review`, `ops`, or `cloud-workshop`.
+2. Check whether `desks/<desk-name>/journal.md` already exists.
+3. If the journal exists, do not overwrite it. Resume the desk by reading the journal, unless the operator explicitly renames or archives the existing desk first.
+4. If the desk is new, create `desks/<desk-name>/journal.md` and `desks/<desk-name>/.signals/`.
+5. Write the first journal entry with purpose, scope, initial context, and next step.
+6. Announce the created paths and the desk focus.
 
-3. **Create the structure.** Make the directory, initial journal,
-   and signals folder:
+## Journal requirements
 
-   ```
-   desks/<desk-name>/journal.md
-   desks/<desk-name>/.signals/
-   ```
+The first entry must be useful to a session starting from zero.
 
-4. **Write the first journal entry.** The journal starts with:
-   - What this desk is for (its focus/purpose)
-   - What repos or work it covers (if applicable)
-   - Any initial context the first session needs
+| Field | What to record |
+| --- | --- |
+| Purpose | The desk's specific focus and why it exists. |
+| Scope | Repositories, domains, systems, or workstreams covered by this desk. |
+| Initial context | Known constraints, assumptions, relevant links inside the repository, or starting state. |
+| Next step | The first concrete action the next session should take. |
 
-5. **Announce it.** Tell the operator what was created and what
-   the desk's focus is.
+When migrating older notes, map any `focus/purpose` wording into the Purpose field.
 
-## Session orientation
-
-This skill initializes storage — it does not launch a session.
-A desk becomes active when a Copilot session references its
-directory. The session workflow:
-
-1. The operator (or TA) starts a session and says "sit at the
-   `<desk-name>` desk"
-2. The session reads `desks/<desk-name>/journal.md` to load priors
-3. Work happens — the session uses `signal-write` to emit signals
-   and `desk-journal` to persist state at the end
-4. The next session repeats from step 2
-
-The desk identity comes from which journal is read, not from a
-persistent process. Desks are long-running in *state* (the journal
-carries forward), not in *runtime* (each session is independent).
-
-## Journal format
+Use this exact starting shape:
 
 ```markdown
 # <Desk Name> — Journal
@@ -82,12 +58,50 @@ carries forward), not in *runtime* (each session is independent).
 - **Next step:** <what the first session should do>
 ```
 
+## Session orientation
+
+1. The operator or TA starts a session and says "sit at the `<desk-name>` desk".
+2. The session reads `desks/<desk-name>/journal.md` to load priors.
+3. Work happens; the session uses `signal-write` to emit signals and `desk-journal` to persist state at the end.
+4. The next session repeats from step 2.
+
 ## Principles
 
-- A desk is a peer, not a sub-agent. It has equal standing to
-  disagree with other desks.
-- The journal is the memory. Without it, the next session starts
-  blind. Write enough that someone starting from zero finds the way.
+- A desk is a peer, not a sub-agent. It has equal standing to disagree with other desks.
+- The journal is the memory. Without it, the next session starts blind.
 - One desk, one focus. If the scope is too broad, open two desks.
-  Each desk's value comes from its specific frame — dilute the
-  frame and you lose the value.
+- The desk identity comes from the journal that was read, not from a persistent process.
+
+## Gotchas
+
+- **Never overwrite a live desk**: an existing `journal.md` means the desk already has state.
+- **Do not use vague names**: `misc` and `work` make future routing worse; use a topic or system name.
+- **Do not create runtime expectations**: opening a desk initializes storage only; it does not launch or keep a process alive.
+
+## Output template
+
+```markdown
+## Desk opened
+
+**Status:** created | resumed | blocked
+**Desk:** `desks/<desk-name>/`
+**Journal:** `desks/<desk-name>/journal.md`
+**Signals:** `desks/<desk-name>/.signals/`
+
+### Focus
+- Purpose: <desk purpose>
+- Scope: <repos, systems, or topics>
+- Next step: <first action>
+
+### Notes
+- <existing desk handling, archive requirement, or other important detail>
+```
+
+## Quality gate
+
+- [ ] The desk name is short, descriptive, and kebab-case.
+- [ ] Existing `desks/<desk-name>/journal.md` was checked before writing.
+- [ ] A live desk was not overwritten.
+- [ ] New desks include both `journal.md` and `.signals/`.
+- [ ] The first journal entry records purpose, scope, and next step.
+- [ ] The final response states whether the desk was created, resumed, or blocked.

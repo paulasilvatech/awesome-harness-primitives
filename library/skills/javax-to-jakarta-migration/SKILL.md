@@ -1,70 +1,125 @@
 ---
-name: "javax-to-jakarta-migration"
+name: javax-to-jakarta-migration
 description: >-
-  Migrate Java code from javax.* to jakarta.* namespace. Use when upgrading to Tomcat 11, Jakarta EE
-  10, or when javax imports are detected in the codebase.
+  Migrate Java applications from `javax.*` APIs to `jakarta.*` APIs for Tomcat 11, Jakarta EE 10+, and framework upgrades. Use this skill when `javax` imports are detected, dependencies need Jakarta coordinates, `web.xml` namespaces must change, or compile errors follow a Jakarta migration.
 argument-hint: "File, package, or module to migrate"
 ---
-# javax → jakarta Migration Skill
 
-## When to Use
-- Upgrading to Tomcat 11 / Jakarta EE 10+
-- Code review detects `javax.*` imports
-- Migrating an existing project to the jakarta namespace
+# javax to jakarta migration
+
+Convert application-owned Java EE imports, dependency coordinates, and deployment descriptors from `javax.*` to `jakarta.*` and raw `jakarta.` references while preserving JDK-owned `javax` packages that must not move.
+
+## When to invoke
+
+- "Migrate this module from javax to jakarta."
+- "Upgrade this app for Tomcat 11 or Jakarta EE 10."
+- "Find remaining `javax.*` imports."
+- "Fix compile errors after Jakarta migration."
+- "Update `web.xml` to the Jakarta namespace."
+
+## Inputs
+
+Use `$ARGUMENTS` as the file, package, module, or repository scope to migrate. If `$ARGUMENTS` is empty, scan the current workspace and report the discovered scope before changing files.
 
 ## Procedure
 
-### Step 1 — Scan for javax Usage
-Search the codebase for all `javax.*` imports that need migration:
+1. Scan Java source, descriptors, and build files for `javax.*` usage in the requested scope.
+2. Classify each package as migratable Jakarta API or JDK-owned `javax` API that must remain unchanged.
+3. Update dependency coordinates before or alongside source imports so compilation resolves the new packages.
+4. Update deployment descriptors such as `web.xml` when present.
+5. Replace source imports and fully qualified references in `.java` files.
+6. Verify with the existing build and test commands, then search for remaining `javax.*` imports excluding JDK packages.
+
+## Package migration map
+
+| Old package | New package |
+| --- | --- |
+| `javax.servlet.*` | `jakarta.servlet.*` |
+| `javax.persistence.*` | `jakarta.persistence.*` |
+| `javax.validation.*` | `jakarta.validation.*` |
+| `javax.annotation.*` | `jakarta.annotation.*` |
+| `javax.inject.*` | `jakarta.inject.*` |
+| `javax.enterprise.*` | `jakarta.enterprise.*` |
+| `javax.faces.*` | `jakarta.faces.*` |
+| `javax.ws.rs.*` | `jakarta.ws.rs.*` |
+| `javax.el.*` | `jakarta.el.*` |
+| `javax.json.*` | `jakarta.json.*` |
+| `javax.mail.*` | `jakarta.mail.*` |
+| `javax.websocket.*` | `jakarta.websocket.*` |
+
+## Packages that stay in javax
+
+Do not migrate JDK-owned packages:
+
+| Keep package | Reason |
+| --- | --- |
+| `javax.sql.*` | JDBC/JDK API. |
+| `javax.naming.*` | JNDI/JDK API. |
+| `javax.crypto.*` | JDK cryptography API. |
+| `javax.net.*` | JDK networking API. |
+| `javax.security.auth.*` | JDK security API. |
+| `javax.swing.*` | JDK desktop UI API. |
+| `javax.xml.parsers.*` | JDK XML parser API. |
+
+## Build and descriptor changes
+
+| File | Old | New |
+| --- | --- | --- |
+| `pom.xml` | `javax.servlet:javax.servlet-api` | `jakarta.servlet:jakarta.servlet-api:6.0.0` |
+| `pom.xml` | `javax.persistence:javax.persistence-api` | `jakarta.persistence:jakarta.persistence-api:3.1.0` |
+| `pom.xml` | `javax.validation:validation-api` | `jakarta.validation:jakarta.validation-api:3.0.2` |
+| `pom.xml` | `javax.annotation:javax.annotation-api` | `jakarta.annotation:jakarta.annotation-api:2.1.1` |
+| `web.xml` | `http://xmlns.jcp.org/xml/ns/javaee` with `version="4.0"` on the `web-app` descriptor | `https://jakarta.ee/xml/ns/jakartaee` with `version="6.0"` on the `web-app` descriptor |
+
+For Gradle builds, apply equivalent Jakarta coordinates in the dependency block rather than editing Maven-only syntax.
+
+## Verification commands
+
+| Build system | Compile | Test | Residual scan |
+| --- | --- | --- | --- |
+| Maven | `mvn clean compile` | `mvn test` | search for `javax.` and exclude keep-list packages. |
+| Gradle wrapper | `./gradlew build` | `./gradlew test` | search for `javax.` and exclude keep-list packages. |
+| Gradle command | `gradlew build` | `gradlew test` | use when the wrapper command is not available on the platform. |
+
+## Gotchas
+
+- **Do not migrate all `javax` text blindly**: `javax.sql`, `javax.naming`, `javax.crypto`, `javax.net`, `javax.security.auth`, `javax.swing`, and `javax.xml.parsers` remain valid.
+- **Do not update imports without dependencies**: source edits fail until Jakarta artifacts are present.
+- **Do not leave descriptors behind**: `web.xml` can still point to the Java EE namespace after Java compiles.
+
+## Output template
+
+```markdown
+## javax to jakarta migration summary
+
+**Status:** complete | needs changes | blocked
+**Scope:** <file, package, module, or repository>
+
+| File | Change | Details |
+| --- | --- | --- |
+| `<path>` | import | `javax.servlet.*` -> `jakarta.servlet.*` |
+| `<path>` | dependency | `<old coordinate>` -> `<new coordinate>` |
+| `<path>` | descriptor | `<old namespace>` -> `<new namespace>` |
+
+### Manual steps
+- <remaining dependency, server, or framework action>
+
+### Validation
+- `<compile command>`: pass | fail | not run
+- `<test command>`: pass | fail | not run
+- Remaining `javax.*`: <none or justified keep-list entries>
 ```
-javax.servlet.*      → jakarta.servlet.*
-javax.persistence.*  → jakarta.persistence.*
-javax.validation.*   → jakarta.validation.*
-javax.annotation.*   → jakarta.annotation.*
-javax.inject.*       → jakarta.inject.*
-javax.enterprise.*   → jakarta.enterprise.*
-javax.faces.*        → jakarta.faces.*
-javax.ws.rs.*        → jakarta.ws.rs.*
-javax.el.*           → jakarta.el.*
-javax.json.*         → jakarta.json.*
-javax.mail.*         → jakarta.mail.*
-javax.websocket.*    → jakarta.websocket.*
-```
 
-**Do NOT migrate** these (they remain in `javax.*`):
-- `javax.sql.*` — part of JDK
-- `javax.naming.*` — part of JDK (JNDI)
-- `javax.crypto.*` — part of JDK
-- `javax.net.*` — part of JDK
-- `javax.security.auth.*` — part of JDK
-- `javax.swing.*`, `javax.xml.parsers.*` — JDK packages
+## Quality gate
 
-### Step 2 — Update pom.xml
-Replace dependency coordinates:
+- [ ] `$ARGUMENTS` scope was honored or an empty scope triggered a repository scan.
+- [ ] Every migrated package appears in the migration map and no keep-list package was changed.
+- [ ] Maven or Gradle dependencies match the Jakarta APIs used by source code.
+- [ ] `web.xml` uses `https://jakarta.ee/xml/ns/jakartaee` and `version="6.0"` when present and required.
+- [ ] `mvn clean compile`, `./gradlew build`, or the repository's equivalent compile command was run or explicitly blocked.
+- [ ] Remaining `javax.*` matches only the keep list or is reported as work remaining.
 
-| Old | New |
-|-----|-----|
-| `javax.servlet:javax.servlet-api` | `jakarta.servlet:jakarta.servlet-api:6.0.0` |
-| `javax.persistence:javax.persistence-api` | `jakarta.persistence:jakarta.persistence-api:3.1.0` |
-| `javax.validation:validation-api` | `jakarta.validation:jakarta.validation-api:3.0.2` |
-| `javax.annotation:javax.annotation-api` | `jakarta.annotation:jakarta.annotation-api:2.1.1` |
+## References
 
-### Step 3 — Update web.xml (if present)
-```xml
-<!-- Old namespace -->
-<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee" version="4.0">
-
-<!-- New namespace -->
-<web-app xmlns="https://jakarta.ee/xml/ns/jakartaee" version="6.0">
-```
-
-### Step 4 — Update Java Source Files
-Replace all `javax.` imports with `jakarta.` equivalents in `.java` files.
-
-### Step 5 — Verify
-1. Run `mvn clean compile` or `gradlew build` — fix any compilation errors
-2. Run `mvn test` or `gradlew test` — ensure all tests pass
-3. Search for any remaining `javax.*` imports (excluding JDK packages)
-
-### Output
-Provide a migration summary listing all files changed, imports replaced, and any manual steps required.
+- [Legacy Java EE web.xml namespace](http://xmlns.jcp.org/xml/ns/javaee)
+- [Jakarta EE XML namespace](https://jakarta.ee/xml/ns/jakartaee)

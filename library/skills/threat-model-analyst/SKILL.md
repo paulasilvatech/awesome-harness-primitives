@@ -1,82 +1,126 @@
 ---
-name: "threat-model-analyst"
+name: threat-model-analyst
 description: >-
-  Full STRIDE-A threat model analysis and incremental update skill for repositories and systems.
-  Supports two modes: (1) Single analysis — full STRIDE-A threat model of a repository, producing
-  architecture overviews, DFD diagrams, STRIDE-A analysis, prioritized findings, and executive
-  assessments. (2) Incremental analysis — takes a previous threat model report as baseline, compares
-  the codebase at the latest (or a given commit), and produces an updated report with change tracking
-  (new, resolved, still-present threats), STRIDE heatmap, findings diff, and an embedded HTML
-  comparison. Only activate when the user explicitly requests a threat model analysis, incremental
-  update, or invokes /threat-model-analyst directly.
+  Produce full or incremental STRIDE-A threat models for repositories and systems, including architecture overviews, DFD diagrams, findings, STRIDE heatmaps, and executive assessment. Use when the user asks to threat model a repo, refresh an existing threat-model-* report, compare commits or reports, identify trust boundary risks, or map findings to CVSS 4.0, CWE, and OWASP.
 ---
-# Threat Model Analyst
 
-You are an expert **Threat Model Analyst**. You perform security audits using STRIDE-A
-(STRIDE + Abuse) threat modeling, Zero Trust principles, and defense-in-depth analysis.
-You flag secrets, insecure boundaries, and architectural risks.
+# Threat model analyst
 
-## Getting Started
+Analyze a repository, system, commit range, or previous report; transform code and architecture evidence into a STRIDE-A security model; output a standalone threat-model folder with diagrams, inventory, findings, and verification artifacts.
 
-**FIRST — Determine which mode to use based on the user's request:**
+## When to invoke
 
-### Incremental Mode (Preferred for Follow-Up Analyses)
-If the user's request mentions **updating**, **refreshing**, or **re-running** a threat model AND a prior report folder exists:
-- Action words: "update", "refresh", "re-run", "incremental", "what changed", "since last analysis"
-- **AND** a baseline report folder is identified (either explicitly named or auto-detected as the most recent `threat-model-*` folder with a `threat-inventory.json`)
-- **OR** the user explicitly provides a baseline report folder + a target commit/HEAD
-
-Examples that trigger incremental mode:
-- "Update the threat model using threat-model-20260309-174425 as the baseline"
-- "Run an incremental threat model analysis"
-- "Refresh the threat model for the latest commit"
+- "Run a threat model for this repository."
+- "Refresh the threat model using the latest commit."
 - "What changed security-wise since the last threat model?"
+- "Compare these two threat-model reports."
+- "Generate STRIDE-A findings with CVSS 4.0 and CWE mappings."
 
-→ Read [incremental-orchestrator.md](./references/incremental-orchestrator.md) and follow the **incremental workflow**.
-  The incremental orchestrator inherits the old report's structure, verifies each item against
-  current code, discovers new items, and produces a standalone report with embedded comparison.
+## Prerequisites and context
 
-### Comparing Commits or Reports
-If the user asks to compare two commits or two reports, use **incremental mode** with the older report as the baseline.
-→ Read [incremental-orchestrator.md](./references/incremental-orchestrator.md) and follow the **incremental workflow**.
+- Use this skill only when the user explicitly requests threat modeling, incremental threat model updates, report comparison, or `/threat-model-analyst` behavior.
+- A full analysis can start from repository source alone; an incremental analysis needs a prior `threat-model-*` folder with `threat-inventory.json` or an explicitly supplied baseline report plus target commit or HEAD.
+- Read the matching bundled orchestrator before doing substantive analysis; the orchestrators carry the mandatory workflow, sub-agent governance, verification rules, and output skeleton requirements.
 
-### Single Analysis Mode
-For all other requests (analyze a repo, generate a threat model, perform STRIDE analysis):
+## Mode selection
 
-→ Read [orchestrator.md](./references/orchestrator.md) — it contains the complete 10-step workflow,
-  34 mandatory rules, tool usage instructions, sub-agent governance rules, and the
-  verification process. Do not skip this step.
+| User request or evidence | Mode | Required resource | Result |
+| --- | --- | --- | --- |
+| "update", "refresh", "re-run", "incremental", "what changed", "since last analysis" plus a `threat-model-*` baseline | Incremental mode | `references/incremental-orchestrator.md` | Reuse the old report skeleton, verify every old item against current code, discover new items, and emit status annotations for new, resolved, and still-present threats. |
+| Explicit baseline folder plus target commit or HEAD | Incremental mode | `references/incremental-orchestrator.md` | Compare baseline evidence with the target revision and produce an updated report with embedded HTML comparison. |
+| Compare two commits or two reports | Incremental mode | `references/incremental-orchestrator.md` | Treat the older report or commit as baseline and the newer state as target. |
+| Analyze a repo, generate a DFD, perform STRIDE-A, validate controls, identify trust boundaries | Single analysis mode | `references/orchestrator.md` | Execute the complete 10-step workflow and create architecture, DFD, STRIDE-A, prioritized findings, and executive assessment outputs. |
 
-## Reference Files
+## STRIDE-A analysis map
 
-Load the relevant file when performing each task:
+| Area | Inspect | Evidence standard |
+| --- | --- | --- |
+| Spoofing | Authentication entry points, session creation, identity propagation, service-to-service credentials | Show the live owner path and the exact boundary where identity is asserted or trusted. |
+| Tampering | Request validation, persistence writes, queues, deserialization, infrastructure mutation | Prove whether integrity controls exist before flagging a write path. |
+| Repudiation | Audit logs, actor attribution, request IDs, immutable event trails | Distinguish absent evidence from weak evidence; do not infer auditability from generic logging. |
+| Information disclosure | Secrets, tokens, PII, debug output, storage policies, cross-tenant data flows | Verify the data class, exposure route, and trust boundary. |
+| Denial of service | Rate limits, pagination, expensive queries, fan-out, retries, queue backpressure | Tie the risk to an externally triggerable path or operational limit. |
+| Elevation of privilege | Authorization checks, admin paths, object-level access, role transitions | Require code or configuration evidence for both the caller role and protected action. |
+| Abuse | Business-logic misuse, workflow bypass, fraud paths, unsafe automation | Model the malicious but protocol-valid user, not only broken inputs. |
 
-| File | Use When | Content |
-|------|----------|---------|
-| [Orchestrator](./references/orchestrator.md) | **Always — read first** | Complete 10-step workflow, 34 mandatory rules, sub-agent governance, tool usage, verification process |
-| [Incremental Orchestrator](./references/incremental-orchestrator.md) | **Incremental/update analyses** | Complete incremental workflow: load old skeleton, change detection, generate report with status annotations, HTML comparison |
-| [Analysis Principles](./references/analysis-principles.md) | Analyzing code for security issues | Verify-before-flagging rules, security infrastructure inventory, OWASP Top 10:2025, platform defaults, exploitability tiers, severity standards |
-| [Diagram Conventions](./references/diagram-conventions.md) | Creating ANY Mermaid diagram | Color palette, shapes, sidecar co-location rules, pre-render checklist, DFD vs architecture styles, sequence diagram styles |
-| [Output Formats](./references/output-formats.md) | Writing ANY output file | Templates for 0.1-architecture.md, 1-threatmodel.md, 2-stride-analysis.md, 3-findings.md, 0-assessment.md, common mistakes checklist |
-| [Skeletons](./references/skeletons/) | **Before writing EACH output file** | 8 verbatim fill-in skeletons (`skeleton-*.md`) — read the relevant skeleton, copy VERBATIM, fill `[FILL]` placeholders. One skeleton per output file. Loaded on-demand to minimize context usage. |
-| [Verification Checklist](./references/verification-checklist.md) | Final verification pass + inline quick-checks | All quality gates: inline quick-checks (run after each file write), per-file structural, diagram rendering, cross-file consistency, evidence quality, JSON schema — designed for sub-agent delegation |
-| [TMT Element Taxonomy](./references/tmt-element-taxonomy.md) | Identifying DFD elements from code | Complete TMT-compatible element type taxonomy, trust boundary detection, data flow patterns, code analysis checklist |
+## Report artifacts
 
-## When to Activate
+| Artifact | Use | Required content |
+| --- | --- | --- |
+| `0.1-architecture.md` | Architecture overview | Components, trust boundaries, entry points, data stores, assumptions, and Mermaid architecture diagrams. |
+| `1-threatmodel.md` | Threat inventory | DFD elements, data flows, STRIDE-A threats, mitigations, and open questions. |
+| `2-stride-analysis.md` | STRIDE heatmap | Component-by-component and flow-by-flow STRIDE-A coverage with severity rationale. |
+| `3-findings.md` | Prioritized findings | Exploit path, affected assets, evidence, likelihood, impact, CVSS 4.0, CWE, OWASP, and remediation. |
+| `0-assessment.md` | Executive assessment | Security posture, critical decisions, residual risk, and recommended next steps. |
+| `threat-inventory.json` | Incremental baseline | Stable identifiers, current status, evidence anchors, and comparison-ready metadata. |
 
-**Incremental Mode** (read [incremental-orchestrator.md](./references/incremental-orchestrator.md) for workflow):
-- Update or refresh an existing threat model analysis
-- Generate a new analysis that builds on a prior report's structure
-- Track what threats/findings were fixed, introduced, or remain since a baseline
-- When a prior `threat-model-*` folder exists and the user wants a follow-up analysis
+## Progressive disclosure and bundled resources
 
-**Single Analysis Mode:**
-- Perform full threat model analysis of a repository or system
-- Generate threat model diagrams (DFD) from code
-- Perform STRIDE-A analysis on components and data flows
-- Validate security control implementations
-- Identify trust boundary violations and architectural risks
-- Write prioritized security findings with CVSS 4.0 / CWE / OWASP mappings
+Read only the resource needed for the current phase, then follow it exactly.
 
-**Comparing commits or reports:**
-- To compare security posture between commits, use incremental mode with the older report as baseline
+| Resource | Read when | Contains |
+| --- | --- | --- |
+| `references/orchestrator.md` | Starting any single analysis | Complete 10-step workflow, 34 mandatory rules, tool usage, sub-agent governance, and verification process. |
+| `references/incremental-orchestrator.md` | Updating, refreshing, re-running, or comparing reports or commits | Baseline loading, old skeleton inheritance, change detection, status annotations, HTML comparison, STRIDE heatmap diff, and findings diff. |
+| `references/analysis-principles.md` | Judging security issues | Verify-before-flagging rules, security infrastructure inventory, OWASP Top 10:2025, platform defaults, exploitability tiers, and severity standards. |
+| `references/diagram-conventions.md` | Creating any Mermaid diagram | Color palette, shapes, sidecar co-location rules, DFD style, architecture style, sequence diagram style, and pre-render checklist. |
+| `references/output-formats.md` | Writing report files | Templates and common mistakes checklist for `0.1-architecture.md`, `1-threatmodel.md`, `2-stride-analysis.md`, `3-findings.md`, and `0-assessment.md`. |
+| `references/skeletons/` | Before writing each output file | Verbatim `skeleton-*.md` fill-in structures; copy the relevant skeleton and replace `[FILL]` placeholders. |
+| `references/verification-checklist.md` | Inline checks and final pass | Per-file structure, diagram rendering, cross-file consistency, evidence quality, JSON schema, and delegated verification checklist. |
+| `references/tmt-element-taxonomy.md` | Identifying DFD elements from code | TMT-compatible element type taxonomy, trust boundary detection, data flow patterns, and code analysis checklist. |
+
+## Gotchas
+
+- **Do not skip the orchestrator**: the body of this skill is only the router; `orchestrator.md` and `incremental-orchestrator.md` are the executable source of truth.
+- **Do not flag without verification**: every finding needs code, configuration, runtime, or report evidence tied to an exploitable path.
+- **Do not break incremental continuity**: preserve stable threat identifiers where the issue is still-present, and mark resolved items only after checking current code.
+- **Do not invent diagrams**: Mermaid DFD and architecture diagrams must reflect discovered components, flows, and trust boundaries.
+
+## Baseline terminology and continuity
+
+Preserve trigger examples and report mechanics from previous versions: `FIRST` choose mode, read the relevant orchestrator before writing `EACH` output file, copy skeletons `VERBATIM`, use `threat-model-20260309-174425` as a representative baseline folder name, allow a baseline to be `auto-detected`, accept `commit/HEAD` targets, support `Incremental/update` and `follow-up` requests, track `threats/findings`, use `on-demand` resource loading, and run `per-file` `quick-checks`. Apply Zero Trust, STRIDE-A, and `defense-in-depth` analysis throughout.
+## Output template
+
+```markdown
+## Threat model result — <system or repository>
+
+**Mode:** single analysis | incremental analysis | comparison
+**Baseline:** <none | threat-model-* folder | commit/report>
+**Target:** <HEAD | commit | report>
+**Status:** complete | partial | blocked
+
+### Artifacts
+| File | Purpose | Status |
+| --- | --- | --- |
+| `0.1-architecture.md` | Architecture overview and diagrams | created | updated | blocked |
+| `1-threatmodel.md` | Threat inventory and DFD | created | updated | blocked |
+| `2-stride-analysis.md` | STRIDE-A heatmap and analysis | created | updated | blocked |
+| `3-findings.md` | Prioritized findings | created | updated | blocked |
+| `0-assessment.md` | Executive assessment | created | updated | blocked |
+| `threat-inventory.json` | Machine-readable inventory | created | updated | blocked |
+
+### Findings summary
+| Severity | New | Still present | Resolved | Notes |
+| --- | ---: | ---: | ---: | --- |
+| Critical | <n> | <n> | <n> | <summary> |
+| High | <n> | <n> | <n> | <summary> |
+| Medium | <n> | <n> | <n> | <summary> |
+| Low | <n> | <n> | <n> | <summary> |
+
+### Verification
+- Orchestrator followed: pass | fail
+- Skeletons used verbatim before fill-in: pass | fail
+- Diagrams pre-render checked: pass | fail
+- Evidence anchors present for every finding: pass | fail
+```
+
+## Quality gate
+
+- [ ] The request matched an explicit threat model, incremental update, comparison, or `/threat-model-analyst` trigger.
+- [ ] Single analysis read `references/orchestrator.md`; incremental analysis read `references/incremental-orchestrator.md`.
+- [ ] Every output file started from the relevant `references/skeletons/skeleton-*.md` file before `[FILL]` replacement.
+- [ ] STRIDE-A covers spoofing, tampering, repudiation, information disclosure, denial of service, elevation of privilege, and abuse.
+- [ ] Every finding has evidence, affected boundary or asset, severity rationale, and CVSS 4.0 / CWE / OWASP mapping where applicable.
+- [ ] Incremental output distinguishes new, resolved, and still-present threats and preserves baseline continuity.
+- [ ] Mermaid diagrams follow `references/diagram-conventions.md` and passed the pre-render checklist.
+- [ ] `threat-inventory.json` exists for report folders that can serve as future baselines.

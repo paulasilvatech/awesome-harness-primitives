@@ -1,61 +1,90 @@
 ---
 name: "update-avm-modules-in-bicep"
 description: >-
-  Update Azure Verified Modules (AVM) to latest versions in Bicep files. Use this skill when the user
-  asks for update azure verified modules in bicep files.
+  Update Azure Verified Modules (AVM) references in Bicep files by discovering avm/res modules,
+  comparing MCR tag versions, reviewing breaking changes, editing versions and parameters, and
+  validating with bicep lint and bicep build. Use when asked to update AVM modules in Bicep.
 ---
-# Update Azure Verified Modules in Bicep Files
 
-Update Bicep file `${file}` to use latest Azure Verified Module (AVM) versions. Limit progress updates to non-breaking changes. Don't output information other than the final output table and summary.
+# Update AVM modules in Bicep
 
-## Process
+Update a Bicep file to the latest compatible Azure Verified Modules (AVM) versions by scanning `avm/res/{service}/{resource}` references, checking MCR tags, reviewing breaking changes, editing safely, and validating the result.
 
-1. **Scan**: Extract AVM modules and current versions from `${file}`
-1. **Identify**: List all unique AVM modules used by matching `avm/res/{service}/{resource}` using `#search` tool
-1. **Check**: Use `#fetch` tool to get latest version of each AVM module from MCR: `https://mcr.microsoft.com/v2/bicep/avm/res/{service}/{resource}/tags/list`
-1. **Compare**: Parse semantic versions to identify AVM modules needing update
-1. **Review**: For breaking changes, use `#fetch` tool to get docs from: `https://github.com/Azure/bicep-registry-modules/tree/main/avm/res/{service}/{resource}`
-1. **Update**: Apply version updates and parameter changes using `#editFiles` tool
-1. **Validate**: Run `bicep lint` and `bicep build` using `#runCommands` tool to ensure compliance.
-1. **Output**: Summarize changes in a table format with summary of updates below.
+## When to invoke
 
-## Tool Usage
+- "Update Azure Verified Modules in this Bicep file."
+- "Check AVM module versions and bump them safely."
+- "Use MCR tags to update `avm/res` references."
+- "Run `bicep lint` and `bicep build` after updating AVM modules."
 
-Always use tools `#search`, `#searchResults`,`#fetch`, `#editFiles`, `#runCommands`, `#todos` if available. Avoid writing code to perform tasks.
+## Prerequisites and context
 
-## Breaking Change Policy
+- A target Bicep file such as `${file}` must be available.
+- `bicep` must be installed to run `bicep lint` and `bicep build`.
+- Network access must allow tag discovery from `https://mcr.microsoft.com/v2/bicep/avm/res/{service}/{resource}/tags/list` and documentation review at `https://github.com/Azure/bicep-registry-modules/tree/main/avm/res/{service}/{resource}`.
 
- **PAUSE for approval** if updates involve:
+## AVM discovery rules
 
-- Incompatible parameter changes
-- Security/compliance modifications
-- Behavioral changes
+| Item | Rule |
+| --- | --- |
+| Module pattern | Match Azure Verified Modules in Bicep references using `avm/res/{service}/{resource}`. |
+| Version source | Use the MCR tags API only for version discovery. |
+| Tags endpoint | `https://mcr.microsoft.com/v2/bicep/avm/res/{service}/{resource}/tags/list`. |
+| Docs endpoint | `https://github.com/Azure/bicep-registry-modules/tree/main/avm/res/{service}/{resource}`. |
+| Version comparison | Parse the JSON `tags` array and sort by semantic versioning. |
+| Uniqueness | Check each unique AVM module once, then apply all occurrences. |
 
-## Output Format
+## Procedure
 
-Only display results in table with icons:
+1. Scan `${file}` and extract every AVM module reference, current version, and source line.
+2. Identify all unique `avm/res/{service}/{resource}` modules.
+3. Fetch the MCR tags list for each module from `https://mcr.microsoft.com/v2/bicep/avm/res/{service}/{resource}/tags/list`.
+4. Parse the JSON `tags` array, keep semantic versions, and compare the latest stable version with the current reference.
+5. For each candidate update, review docs and release notes from `https://github.com/Azure/bicep-registry-modules/tree/main/avm/res/{service}/{resource}` for breaking changes.
+6. Apply non-breaking version updates and required parameter changes while preserving Bicep formatting and module intent.
+7. Pause or report manual review required before applying updates that involve incompatible parameter changes, security/compliance modifications, or behavioral changes.
+8. Run `bicep lint ${file}` and `bicep build ${file}`. Fix validation issues caused by the update.
+9. Output only the final table and summary; limit progress updates to non-breaking changes.
+
+## Breaking change policy
+
+| Change type | Action |
+| --- | --- |
+| Compatible version bump | Update in place and validate. |
+| Required parameter renamed, removed, or type-changed | Mark `Manual review required`; do not force the update without approval. |
+| Security/compliance modification | Mark `Manual review required` with the docs link and risk. |
+| Behavioral default change | Mark `Manual review required` and describe the behavior. |
+| Validation failure after update | Mark `Failed`, revert or leave the file valid, and summarize the issue. |
+
+## Tooling notes
+
+Use portable CLI capabilities: read or grep for module references, web fetch for MCR tags and docs, edit the Bicep file, and execute `bicep lint` / `bicep build`. Ignore legacy VS Code-only tool tokens from the older prompt form: `#search`, `#searchResults`, `#fetch`, `#editFiles`, `#runCommands`, and `#todos`.
+
+## Output template
 
 ```markdown
 | Module | Current | Latest | Status | Action | Docs |
 |--------|---------|--------|--------|--------|------|
-| avm/res/compute/vm | 0.1.0 | 0.2.0 | Updated | Updated | [Docs](link) |
-| avm/res/storage/account | 0.3.0 | 0.3.0 | Current | Current | [Docs](link) |
+| avm/res/compute/vm | 0.1.0 | 0.2.0 | Updated | Updated version and compatible parameters | [Docs](https://github.com/Azure/bicep-registry-modules/tree/main/avm/res/{service}/{resource}) |
+| avm/res/storage/account | 0.3.0 | 0.3.0 | Current | Current | [Docs](https://github.com/Azure/bicep-registry-modules/tree/main/avm/res/{service}/{resource}) |
+| avm/res/network/virtual-network | 0.4.0 | 0.5.0 | Manual review required | PAUSE for approval before breaking parameter changes | [Docs](https://github.com/Azure/bicep-registry-modules/tree/main/avm/res/{service}/{resource}) |
 
 ### Summary of Updates
 
-Describe updates made, any manual reviews needed or issues encountered.
+Describe updates made, validation results from `bicep lint` and `bicep build`, manual reviews needed, and issues encountered.
 ```
 
-## Icons
+## Quality gate
 
-- Updated
-- Current
-- Manual review required
-- Failed
-- Documentation
+- [ ] Every `avm/res/{service}/{resource}` reference in `${file}` was inventoried.
+- [ ] Version discovery used only the MCR tags API and parsed the JSON `tags` array with semantic version sorting.
+- [ ] Absolute URLs for MCR tags and AVM docs are preserved for every checked module.
+- [ ] Breaking changes are not applied without approval; they are marked `Manual review required`.
+- [ ] Updated Bicep remains valid and formatted for the changed references.
+- [ ] `bicep lint ${file}` and `bicep build ${file}` pass, or failures are reported as `Failed` with evidence.
+- [ ] The final answer contains only the results table and `### Summary of Updates`.
 
-## Requirements
+## References
 
-- Use MCR tags API only for version discovery
-- Parse JSON tags array and sort by semantic versioning
-- Maintain Bicep file validity and linting compliance
+- [Azure Verified Modules registry source](https://github.com/Azure/bicep-registry-modules/tree/main/avm/res/{service}/{resource})
+- [MCR AVM tags endpoint](https://mcr.microsoft.com/v2/bicep/avm/res/{service}/{resource}/tags/list)

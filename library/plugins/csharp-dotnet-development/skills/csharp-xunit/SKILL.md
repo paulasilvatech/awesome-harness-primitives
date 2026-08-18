@@ -1,67 +1,109 @@
 ---
 name: "csharp-xunit"
-description: "Get best practices for XUnit unit testing, including data-driven tests. Use this skill when the user asks for xunit best practices."
+description: >-
+  Apply xUnit best practices for C# unit tests, including test project setup, Fact and Theory
+  structure, data-driven tests, assertions, fixtures, mocking, categorization, diagnostics, and
+  dotnet test execution. Use when asked for xUnit guidance or to write .NET unit tests.
 ---
-# XUnit Best Practices
 
-Your goal is to help me write effective unit tests with XUnit, covering both standard and data-driven testing approaches.
+# C# xUnit testing
 
-## Project Setup
+Guide C# test design by turning a class, behavior, or test request into focused xUnit tests that use idiomatic setup, data sources, assertions, isolation, and `dotnet test` validation.
 
-- Use a separate test project with naming convention `[ProjectName].Tests`
-- Reference Microsoft.NET.Test.Sdk, xunit, and xunit.runner.visualstudio packages
-- Create test classes that match the classes being tested (e.g., `CalculatorTests` for `Calculator`)
-- Use .NET SDK test commands: `dotnet test` for running tests
+## When to invoke
 
-## Test Structure
+- "Write xUnit tests for this C# class."
+- "Show xunit best practices for data-driven tests."
+- "Convert these cases into `[Theory]` and `[InlineData]`."
+- "How should I organize fixtures in xUnit?"
 
-- No test class attributes required (unlike MSTest/NUnit)
-- Use fact-based tests with `[Fact]` attribute for simple tests
-- Follow the Arrange-Act-Assert (AAA) pattern
-- Name tests using the pattern `MethodName_Scenario_ExpectedBehavior`
-- Use constructor for setup and `IDisposable.Dispose()` for teardown
-- Use `IClassFixture<T>` for shared context between tests in a class
-- Use `ICollectionFixture<T>` for shared context between multiple test classes
+## Project setup
 
-## Standard Tests
+| Concern | Rule |
+| --- | --- |
+| Test project | Use a separate `[ProjectName].Tests` project. |
+| Packages | Reference `Microsoft.NET.Test.Sdk`, `xunit`, and `xunit.runner.visualstudio`. |
+| Test class names | Match the class under test, for example `CalculatorTests` for `Calculator`. |
+| Command | Run tests with `dotnet test`; narrow with `--filter` for targeted validation. |
+| Visibility | Prefer testing public behavior; use `InternalsVisibleTo` only when the project already exposes internals for tests. |
 
-- Keep tests focused on a single behavior
-- Avoid testing multiple behaviors in one test method
-- Use clear assertions that express intent
-- Include only the assertions needed to verify the test case
-- Make tests independent and idempotent (can run in any order)
-- Avoid test interdependencies
+## Test structure
 
-## Data-Driven Tests
+| Pattern | Use it for | Notes |
+| --- | --- | --- |
+| `[Fact]` | One fact-based scenario with no external data rows. | No class-level test attribute is required in xUnit, unlike `MSTest/NUnit`. |
+| `[Theory]` | Same behavior over multiple inputs. | Pair with one data source attribute. |
+| Arrange-Act-Assert | Every test body. | Keep setup, action, and assertions visually separable. |
+| `MethodName_Scenario_ExpectedBehavior` | Test method naming. | Example: `Divide_ByZero_ThrowsDivideByZeroException`. |
+| Constructor | Per-test setup. | xUnit creates a new test class instance for each test. |
+| `IDisposable.Dispose()` | Per-test teardown. | Release files, handles, or mocks that require cleanup. |
+| `IAsyncLifetime` | Async setup or teardown. | Use `InitializeAsync` and `DisposeAsync` instead of blocking on tasks. |
 
-- Use `[Theory]` combined with data source attributes
-- Use `[InlineData]` for inline test data
-- Use `[MemberData]` for method-based test data
-- Use `[ClassData]` for class-based test data
-- Create custom data attributes by implementing `DataAttribute`
-- Use meaningful parameter names in data-driven tests
+## Data-driven tests
 
-## Assertions
+| Source | Best use | Example shape |
+| --- | --- | --- |
+| `[InlineData]` | Small scalar cases that fit on one line. | `[InlineData(2, 3, 5)]` |
+| `[MemberData]` | Generated, named, reusable, or method-based test data. | Static property or method returning `IEnumerable<object[]>`. |
+| `[ClassData]` | Larger reusable or class-based datasets. | Class implements `IEnumerable<object[]>`. |
+| Custom `DataAttribute` | Dynamic or domain-specific data creation. | Keep deterministic; avoid network calls and current time. |
 
-- Use `Assert.Equal` for value equality
-- Use `Assert.Same` for reference equality
-- Use `Assert.True`/`Assert.False` for boolean conditions
-- Use `Assert.Contains`/`Assert.DoesNotContain` for collections
-- Use `Assert.Matches`/`Assert.DoesNotMatch` for regex pattern matching
-- Use `Assert.Throws<T>` or `await Assert.ThrowsAsync<T>` to test exceptions
-- Use fluent assertions library for more readable assertions
+Use meaningful parameter names. Keep the assertion intent identical across all rows; split into separate theories when rows prove different behaviors.
 
-## Mocking and Isolation
+## Assertions and exceptions
 
-- Consider using Moq or NSubstitute alongside XUnit
-- Mock dependencies to isolate units under test
-- Use interfaces to facilitate mocking
-- Consider using a DI container for complex test setups
+| Need | Assertion |
+| --- | --- |
+| Value equality | `Assert.Equal(expected, actual)`; baseline form `Assert.Equal`. |
+| Reference identity | `Assert.Same(expected, actual)`; baseline form `Assert.Same`. |
+| Boolean | `Assert.True(condition)` or `Assert.False(condition)` with a clear message when helpful; baseline forms `Assert.True` and `Assert.False`. |
+| Collections | `Assert.Contains`, `Assert.DoesNotContain`, `Assert.Collection`, or `Assert.All`. |
+| Regex | `Assert.Matches` or `Assert.DoesNotMatch`. |
+| Exceptions | `Assert.Throws<T>` or `await Assert.ThrowsAsync<T>`. |
+| Readability | Use a fluent assertions library only if the project already uses one or accepts the dependency. |
 
-## Test Organization
+## Fixtures, mocking, and organization
 
-- Group tests by feature or component
-- Use `[Trait("Category", "CategoryName")]` for categorization
-- Use collection fixtures to group tests with shared dependencies
-- Consider output helpers (`ITestOutputHelper`) for test diagnostics
-- Skip tests conditionally with `Skip = "reason"` in fact/theory attributes
+| Technique | Use when | Avoid |
+| --- | --- | --- |
+| `IClassFixture<T>` | Expensive context shared by tests in one class. | Storing mutable state that leaks between tests. |
+| `ICollectionFixture<T>` | Shared context across multiple test classes. | Using it as a global singleton for unrelated tests. |
+| Moq or NSubstitute | Isolate dependencies behind interfaces. | Mocking the class under test or framework primitives unnecessarily. |
+| DI container | Complex object graphs already use dependency injection. | Rebuilding the production container when a direct constructor call is clearer. |
+| `[Trait("Category", "CategoryName")]` | Filtering smoke, integration, or slow tests. | Encoding ordering dependencies as categories. |
+| `ITestOutputHelper` | Diagnostics that should appear only on failure or in test output. | Replacing assertions with log inspection. |
+| `Skip = "reason"` | Temporarily disabled tests with a specific reason in fact/theory attributes. | Silent or permanent skips. |
+
+## Gotchas
+
+- **xUnit creates a new test class instance per test**: constructor state is not shared; use fixtures for intentional sharing.
+- **Do not depend on test order**: tests must be independent and idempotent even when run in parallel.
+- **Avoid broad assertions**: one focused behavior with the minimum useful assertions is easier to diagnose than a scenario that checks everything.
+- **Keep data rows readable**: complex object graphs in `[InlineData]` usually belong in `[MemberData]` or builders.
+
+## Output template
+
+```markdown
+## xUnit test plan
+
+**Target:** `<class or behavior>`
+**Command:** `dotnet test <project-or-solution> --filter <optional-filter>`
+
+| Test | Attribute | Data source | Behavior verified |
+| --- | --- | --- | --- |
+| `<MethodName_Scenario_ExpectedBehavior>` | `[Fact]` or `[Theory]` | `<none / InlineData / MemberData / ClassData>` | `<single behavior>` |
+
+### Notes
+- Fixtures: `<IClassFixture<T> / ICollectionFixture<T> / none>`
+- Assertions: `<key Assert.* calls>`
+- Isolation: `<mocks, fakes, or real collaborators>`
+```
+
+## Quality gate
+
+- [ ] Tests use `[Fact]` for single cases and `[Theory]` with data attributes for data-driven cases.
+- [ ] Each test follows Arrange-Act-Assert and verifies one behavior.
+- [ ] Names follow `MethodName_Scenario_ExpectedBehavior` or the project's established equivalent.
+- [ ] Shared setup uses constructor, `IDisposable.Dispose()`, `IClassFixture<T>`, or `ICollectionFixture<T>` appropriately.
+- [ ] Assertions use the most specific `Assert.*` API and cover exception paths with `Assert.Throws<T>` or `Assert.ThrowsAsync<T>`.
+- [ ] Tests are independent, idempotent, and runnable with `dotnet test`.

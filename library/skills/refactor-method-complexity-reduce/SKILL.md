@@ -1,100 +1,102 @@
 ---
-name: "refactor-method-complexity-reduce"
+name: refactor-method-complexity-reduce
 description: >-
-  Refactor given method `${input:methodName}` to reduce its cognitive complexity to
-  `${input:complexityThreshold}` or below, by extracting helper methods. Use this skill when the user
-  asks for refactor method to reduce cognitive complexity.
+  Refactor a specified method to reduce cognitive complexity to a requested threshold or below by extracting focused helper methods while preserving behavior. Use when the user asks to reduce method complexity, simplify nested conditionals, split large if-else or switch chains, extract validation or type-specific handlers, and verify tests show failed=0.
+argument-hint: "methodName and complexityThreshold, for example: CalculatePrice 15"
 ---
-# Refactor Method to Reduce Cognitive Complexity
 
-## Objective
-Refactor the method `${input:methodName}`, to reduce its cognitive complexity to `${input:complexityThreshold}` or below, by extracting logic into focused helper methods.
+# Refactor method complexity reduce
 
-## Instructions
+Reduce a named method's cognitive complexity to the requested threshold by extracting cohesive helper methods, simplifying control flow, preserving all behavior and error handling, then compiling and verifying related tests explicitly report `failed=0`.
 
-1. **Analyze the current method** to identify sources of cognitive complexity:
-   - Nested conditional statements
-   - Multiple if-else or switch chains
-   - Repeated code blocks
-   - Multiple loops with conditions
-   - Complex boolean expressions
+## When to invoke
 
-2. **Identify extraction opportunities**:
-   - Validation logic that can be extracted into a separate method
-   - Type-specific or case-specific processing that repeats
-   - Complex transformations or calculations
-   - Common patterns that appear multiple times
+- "Refactor this method to reduce cognitive complexity below 15."
+- "Extract helpers from `${input:methodName}` until complexity is under `${input:complexityThreshold}`."
+- "Simplify this nested if-else chain without changing behavior."
+- "Reduce method complexity and verify tests show failed=0."
 
-3. **Extract focused helper methods**:
-   - Each helper should have a single, clear responsibility
-   - Extract validation into separate `Validate*` methods
-   - Extract type-specific logic into handler methods
-   - Create utility methods for common operations
-   - Use appropriate access levels (static, private, async)
+## Inputs
 
-4. **Simplify the main method**:
-   - Reduce nesting depth
-   - Replace massive if-else chains with smaller orchestrated calls
-   - Use switch statements where appropriate for cleaner dispatch
-   - Ensure the main method reads as a high-level flow
+Use `$ARGUMENTS` as the method name and target complexity threshold. Accept the legacy placeholders `${input:methodName}` and `${input:complexityThreshold}` when they appear in user-provided text, but resolve them to concrete values before editing. If either value is missing, infer from the selected code or ask for only the missing value.
 
-5. **Preserve functionality**:
-   - Maintain the same input/output behavior
-   - Keep all validation and error handling
-   - Preserve exception types and error messages
-   - Ensure all parameters are properly passed to helpers
+## Complexity reduction criteria
 
-6. **Best practices**:
-   - Make helper methods static when they don't need instance state
-   - Use null checks and guard clauses early
-   - Avoid creating unnecessary local variables
-   - Consider using tuples for multiple return values
-   - Group related helper methods together
+Inspect the target method for these complexity sources before editing:
 
-## Implementation Approach
+| Source | Refactoring move |
+| --- | --- |
+| Deeply nested `if`/`else` blocks | Replace with guard clauses or extract branch handlers. |
+| Long `switch` or type dispatch | Extract case-specific methods or strategy-like handlers. |
+| Repeated validation | Extract `Validate*` helpers that preserve exception types and messages. |
+| Complex boolean expressions | Extract predicate methods with names that explain the condition. |
+| Loops with inner conditions | Extract loop body or filtering predicates. |
+| Repeated transformations | Extract reusable conversion or mapping helpers. |
 
-- Extract helper methods before refactoring the main flow
-- Test incrementally to ensure no regressions
-- Use meaningful names that describe the extracted responsibility
-- Keep extracted methods close to where they're used
-- Consider making repeated code patterns into generic methods
+The main method should read as a high-level flow after refactoring. Helpers should have a single responsibility and use appropriate access levels such as `private`, `private static`, or `async` when matching the original language and project style.
 
-## Result
+## Procedure
 
-The refactored method should:
-- Have cognitive complexity reduced to the target threshold of `${input:complexityThreshold}` or below
-- Be more readable and maintainable
-- Have clear separation of concerns
-- Be easier to test and debug
-- Retain all original functionality
+Validation is `CRITICAL`: tests are `FAILED` unless the summary proves zero failures. It is `MANDATORY` that related tests `MUST` be checked; `NEVER` assume pass/fail status without reading the output.
 
-## Testing and Validation
 
-**CRITICAL: After completing the refactoring, you MUST:**
+1. Locate `${input:methodName}` and establish the baseline cognitive complexity if tooling is available.
+2. Identify extraction opportunities: validation, type-specific processing, transformations, calculations, repeated code, and complex predicates.
+3. Extract helper methods before rewriting the main flow, keeping helpers close to where they are used.
+4. Simplify the main method with guard clauses, smaller orchestration calls, or switch expressions/statements where appropriate for the language and project.
+5. Preserve input/output behavior, validation, exception types, exception messages, null handling, empty collection behavior, ordering, and side effects.
+6. Compile with the project's existing build command or smallest available compile check.
+7. Run related existing tests.
+8. Read the test output summary and explicitly verify it contains `failed=0`, `pass/fail` counts, or the framework's exact zero-failure equivalent.
+9. If failures appear, analyze each failure, fix the refactor, rerun tests, and repeat until zero failures.
+10. Re-check cognitive complexity and confirm it is at or below `${input:complexityThreshold}`.
 
-1. **Run all existing tests** related to the refactored method and its surrounding functionality
-2. **MANDATORY: Explicitly verify test results show "failed=0"**
-   - **NEVER assume tests passed** - always examine the actual test output
-   - Search for the summary line containing pass/fail counts (e.g., "passed=X failed=Y")
-   - **If the summary shows any number other than "failed=0", tests have FAILED**
-   - If test output is in a file, read the entire file to locate and verify the failure count
-   - Running tests is NOT the same as verifying tests passed
-   - **Do not proceed** until you have explicitly confirmed zero failures
-3. **If any tests fail (failed > 0):**
-   - State clearly how many tests failed
-   - Analyze each failure to understand what functionality was broken
-   - Common causes: null handling, empty collection checks, condition logic errors
-   - Identify the root cause in the refactored code
-   - Correct the refactored code to restore the original behavior
-   - Re-run tests and verify "failed=0" in the output
-   - Repeat until all tests pass (failed=0)
-4. **Verify compilation** - Ensure there are no compilation errors
-5. **Check cognitive complexity** - Confirm the metric is at or below the target threshold of `${input:complexityThreshold}`
+## Implementation rules
 
-## Confirmation Checklist
-- [ ] Code compiles without errors
-- [ ] **Test results explicitly state "failed=0"** (verified by reading the output)
-- [ ] All test failures analyzed and corrected (if any occurred)
-- [ ] Cognitive complexity is at or below the target threshold of `${input:complexityThreshold}`
-- [ ] All original functionality is preserved
-- [ ] Code follows project conventions and standards
+| Rule | Required behavior |
+| --- | --- |
+| Helper scope | Make helpers `static` only when they do not need instance state. |
+| Parameter passing | Pass required values explicitly; do not add shared mutable state to avoid parameters. |
+| Return values | Use tuples or small result objects only when they clarify multiple outputs and fit project conventions. |
+| Local variables | Avoid unnecessary locals introduced only by extraction. |
+| Error handling | Preserve original exception types and messages unless tests or user request demand a change. |
+| Test repair | If tests fail, assume the refactor changed behavior until proven otherwise. |
+
+## Gotchas
+
+- **Running tests is not verification**: inspect the actual summary and confirm `failed=0`; do not infer success from command exit alone.
+- **Null and empty collections break easily**: compare original guard behavior before extracting predicates.
+- **Exception messages are behavior**: preserving type but changing message can still break callers or tests.
+- **Complexity tools differ**: if no analyzer is available, report the structural changes and the closest available evidence.
+
+## Output template
+
+```markdown
+## Complexity refactor result
+
+**Status:** complete | tests failing | blocked
+**Method:** <methodName>
+**Target complexity:** <complexityThreshold>
+**Final complexity:** <value or "not measured">
+
+### Refactoring summary
+- <helper extracted and responsibility>
+- <control-flow simplification>
+
+### Validation
+- Compile: pass | fail | not available — <evidence>
+- Tests: pass | fail | not run — <command and summary containing failed=0>
+- Behavior notes: <preserved validation/error/null behavior>
+```
+
+## Quality gate
+
+- [ ] The method name and complexity threshold were resolved from `$ARGUMENTS`, placeholders, selection, or user input.
+- [ ] Complexity sources were identified before extraction.
+- [ ] Extracted helpers are focused, named by responsibility, and use appropriate access levels.
+- [ ] Original functionality, validation, error handling, exception types, and exception messages are preserved.
+- [ ] Code compiles without errors.
+- [ ] Existing related tests were run and the output was read to verify `failed=0`.
+- [ ] Any failed tests were analyzed, fixed, and rerun until zero failures.
+- [ ] Cognitive complexity is at or below the target threshold, or the inability to measure is explicitly reported.
+- [ ] The output follows `## Output template` exactly.

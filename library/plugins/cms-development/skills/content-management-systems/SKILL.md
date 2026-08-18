@@ -1,109 +1,121 @@
 ---
-name: "content-management-systems"
+name: content-management-systems
 description: >-
-  Workflow for building and modifying content management systems across WordPress, Shopify, Wix,
-  Squarespace, Drupal, WooCommerce, Joomla, HubSpot CMS Hub, Webflow, Adobe Experience Manager, and
-  similar platforms. Use when working on CMS themes, plugins, apps, modules, admin panels, media
-  uploads, content models, editors, markdown pipelines, or static export workflows.
+  Build and modify content management systems by locating the correct theme, plugin, module, editor, content model, media, render, or export seam before changing code. Use this skill when working on WordPress, Shopify, Wix, Squarespace, Drupal, WooCommerce, Joomla, HubSpot CMS Hub, Webflow, Adobe Experience Manager, headless CMS work, CMS themes, plugins, apps, modules, admin panels, uploads, markdown pipelines, and static export workflows.
 ---
-# Content Management Systems
 
-Use this skill when the user is working on a content management system or on software that behaves like one.
+# Content management systems
 
-This skill focuses on the seams that matter in CMS work:
+Apply CMS-specific change discipline: identify the platform and owning seam, preserve authored content boundaries, make the smallest code change in the correct extension point, and validate both editor and rendered output.
 
-- themes and templates
-- plugins, apps, modules, and extensions
-- admin and editor interfaces
-- media and upload handling
-- content models, taxonomy, and metadata
-- render pipelines and static export flows
+## When to invoke
 
-## When to Use This Skill
+- "Update this WordPress theme template."
+- "Add a Shopify section for this product page."
+- "Fix media uploads in the CMS admin."
+- "Change the Drupal content type and render output."
+- "Review this static export pipeline for CMS pages."
 
-- The user mentions a CMS platform such as WordPress, Shopify, Drupal, Joomla, Webflow, Squarespace, Wix, WooCommerce, HubSpot CMS Hub, or Adobe Experience Manager.
-- The task is about theme development, template changes, or design system work inside a CMS.
-- The task is about plugins, modules, apps, or extension points.
-- The task touches editor UX, previews, taxonomy, slugs, SEO fields, or publishing behavior.
-- The task involves uploads, media libraries, authored assets, markdown rendering, or static export.
+## Platform and seam map
 
-## First Pass
+| Platform category | Examples | Owning seams to inspect first |
+| --- | --- | --- |
+| Self-hosted CMS | WordPress, Drupal, Joomla, WooCommerce | Theme hierarchy, plugins/modules, hooks/events, migrations, upload settings. |
+| SaaS site builder | Wix, Squarespace, Webflow | Designer-exported code, embedded custom code, CMS collections, asset hosting, publish settings. |
+| Commerce CMS | Shopify, WooCommerce | Product models, theme sections/templates, checkout constraints, app extension points, media libraries. |
+| Hybrid/headless | HubSpot CMS Hub, Adobe Experience Manager, headless CMS stacks | Content schemas, delivery APIs, preview routes, render pipeline, static export or SSR layer. |
 
-1. Identify the platform category: self-hosted CMS, SaaS site builder, commerce platform, or hybrid/headless system.
-2. Find the owning implementation seam before editing:
-   - theme or template layer
-   - plugin, app, module, or extension layer
-   - admin or editor surface
-   - content model or storage layer
-   - media pipeline
-   - export, deploy, or rendering pipeline
-3. Check platform constraints before choosing an approach:
-   - what is editable locally
-   - what is authored content versus code
-   - where media belongs
-   - whether the final site is server-rendered, static-exported, or hosted remotely
+## First-pass procedure
 
-## CMS Rules
+1. Identify the platform category and concrete platform.
+2. Find the owning seam before editing: theme/template, plugin/app/module, admin/editor surface, content model/storage, media pipeline, or export/render pipeline.
+3. Separate authored content from code-owned assets.
+4. Check whether final output is server-rendered, statically exported, or hosted remotely.
+5. Change the smallest file at the owning seam, then validate the authoring path and final render path together.
 
-- Follow the platform's naming and folder conventions for themes, modules, template parts, or sections.
-- Keep theme assets separate from user-uploaded media unless the platform explicitly combines them.
-- Prefer structured content fields over storing important metadata inside presentation markup.
-- Treat previews, slugs, taxonomy, excerpts, meta fields, and publish states as first-class CMS concerns.
-- Prefer safe defaults and graceful fallback behavior when config, theme selection, or content input is invalid.
-- When changing editor or admin behavior, trace the stored field, validation rules, preview path, and final render path together.
+## CMS rules
 
-## Common Workflows
+| Area | Rule | Why it matters |
+| --- | --- | --- |
+| Themes and templates | Follow platform naming, folder, template hierarchy, partial, section, and helper conventions. | CMS runtimes often select templates by name and location. |
+| Extension logic | Put behavior in plugins, apps, modules, hooks, or extension points instead of scattering logic in templates. | Keeps upgrades and theme swaps survivable. |
+| Content modeling | Prefer structured fields for metadata, SEO fields, taxonomy, slugs, excerpts, publish state, and canonical data. | Presentation markup is brittle storage. |
+| Editor UX | Trace stored field, validation rule, preview path, permission check, and final render path together. | Editor success does not guarantee frontend correctness. |
+| Media | Keep authored uploads separate from decorative theme assets. | Avoids deleting user media during theme deploys. |
+| Static export | Validate rewritten permalinks, asset paths, and generated routes after build changes. | Static hosts expose broken relative links immediately. |
 
-### Themes and Templates
+## Common workflows
 
-- Start at the template loader or theme runtime, not at a downstream include.
-- Preserve the platform's template hierarchy and partial naming conventions.
-- Keep presentation changes close to templates and shared theme helpers.
+### Themes and templates
 
-### Plugins, Apps, and Modules
+Start at the template loader or theme runtime, not at a downstream include. Preserve hierarchy and partial naming. Keep presentation changes close to templates and shared theme helpers.
 
-- Add behavior at the platform's extension seam instead of scattering logic into templates.
-- Keep migrations, seed data, and configuration updates explicit and versioned.
-- Document the extension's setup assumptions when the platform requires activation or registration.
+### Plugins, apps, and modules
 
-### Admin and Editor UX
+Add behavior at the platform extension seam. Keep migrations, seed data, activation steps, registration, and configuration explicit and versioned.
 
-- Keep forms aligned with the stored content model.
-- Prefer author-facing previews when content transformations are non-trivial.
-- Keep validation, CSRF or equivalent safeguards, and permissions consistent with the surrounding admin code.
+### Admin and editor UX
 
-### Media and Uploads
+Align forms with the stored content model. Preserve validation, CSRF or equivalent safeguards, permissions, previews, and publish-state behavior.
 
-- Use a dedicated upload path for authored media.
-- Keep decorative or theme-owned imagery in the active theme folder.
-- Default to conventional locations like `uploads/` for authored media and `img/` for theme assets unless the platform dictates a stronger convention.
-- When a CMS supports configurable media directories, expose the setting with a safe fallback.
+### Media and uploads
 
-### Content Models and Migrations
+Use a dedicated upload path for authored media. Keep decorative imagery in the active theme folder. Default to conventional locations such as `uploads/` for authored media and `img/` for theme assets unless the platform dictates another convention. Expose configurable media directories with safe fallbacks.
 
-- Distinguish content entities clearly: pages, posts, products, entries, collections, taxonomies, and settings.
-- Prefer migration files or exportable schema definitions over ad hoc runtime mutations.
-- Keep slugs, publish dates, excerpts, canonical metadata, and taxonomy relations structured.
+### Content models and migrations
 
-### Markdown, HTML, and Static Export
+Distinguish pages, posts, products, entries, collections, taxonomies, and settings. Prefer migration files or exportable schema definitions over ad hoc runtime mutations.
 
-- Decide whether markdown is authored input, intermediate content, or build output before changing the renderer.
-- Pair renderer changes with preview or validation when feasible.
-- For static-exported CMS systems, validate rewritten permalinks and asset paths after build changes.
+### Markdown, HTML, and static export
 
-## Identifying the Owning Seam
+Decide whether markdown is authored input, intermediate content, or build output before changing renderers. Pair renderer changes with preview or validation when feasible.
 
-Regardless of platform, locate the owning seam before editing by mapping the codebase to these CMS roles:
+## Owning seam checklist
 
-- Runtime bootstrap and request routing
-- Admin or editor controllers and their view templates
-- Theme loading, template hierarchy, and shared template helpers
-- Repositories, models, or schema/migration files for content, taxonomy, and settings
-- Markdown or content transformation utilities
-- Static export, deploy, or render pipeline entry points
+- Runtime bootstrap and request routing.
+- Admin or editor controllers and view templates.
+- Theme loading, template hierarchy, shared template helpers, sections, and partials.
+- Repositories, models, schemas, migrations, or export definitions for content, taxonomy, and settings.
+- Markdown or content transformation utilities.
+- Static export, deploy, or render pipeline entry points.
 
-Step to the owning seam first, then make the smallest change that preserves the CMS structure.
+## Gotchas
 
-## Platform Notes
+- **Do not store important metadata only in HTML**: slugs, SEO, taxonomy, and canonical data need structured fields.
+- **Do not mix upload and theme asset folders**: authored media must survive theme replacement.
+- **Do not patch generated output first**: find the source template, schema, or export step that owns it.
 
-See `references/cms-platform-workflows.md` for a compact mapping of common CMS platforms, extension surfaces, and media conventions.
+## Progressive disclosure and bundled resources
+
+- `references/cms-platform-workflows.md`: compact mapping of common CMS platforms, extension surfaces, and media conventions.
+
+CMS vocabulary to preserve in analysis: `self-hosted`, `hybrid/headless`, `static-exported`, `schema/migration`, `user-uploaded`, `theme-owned`, `author-facing`, `first-class`, and `non-trivial`.
+
+## Output template
+
+```markdown
+## CMS change result
+
+**Status:** complete | needs platform access | blocked
+**Platform:** `<CMS or category>`
+**Owning seam:** `<theme/plugin/module/editor/content model/media/export>`
+
+### Changes
+| Area | File or setting | Action | Validation |
+| --- | --- | --- | --- |
+| `<area>` | `<path or admin setting>` | `<change made>` | `<editor/render/build check>` |
+
+### Notes
+- Authored content boundary: `<preserved or changed intentionally>`
+- Media handling: `<uploads/theme assets/configurable path>`
+```
+
+## Quality gate
+
+- [ ] The concrete CMS platform or platform category was identified.
+- [ ] The owning seam was located before editing.
+- [ ] Authored content, generated output, and code-owned assets were kept distinct.
+- [ ] Theme, plugin, module, app, section, or template conventions were preserved.
+- [ ] Editor/admin behavior and final rendered output were both considered.
+- [ ] Media paths used safe defaults such as `uploads/` and `img/` only when compatible with the platform.
+- [ ] Static export changes validated permalinks and asset paths when applicable.

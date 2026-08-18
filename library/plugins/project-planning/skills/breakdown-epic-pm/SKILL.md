@@ -1,60 +1,103 @@
 ---
 name: "breakdown-epic-pm"
 description: >-
-  Prompt for creating an Epic Product Requirements Document (PRD) for a new epic. This PRD will be
-  used as input for generating a technical architecture specification. Use this skill when the user
-  asks for epic product requirements document (prd) prompt.
+  Create an Epic Product Requirements Document (PRD) from a high-level epic idea, including goal,
+  personas, journeys, business requirements, success metrics, scope boundaries, and business value.
+  Use when asked to write an epic PRD or docs/ways-of-work epic.md.
 ---
-# Epic Product Requirements Document (PRD) Prompt
 
-## Goal
+# Epic PRD
 
-Act as an expert Product Manager for a large-scale SaaS platform. Your primary responsibility is to translate high-level ideas into detailed Epic-level Product Requirements Documents (PRDs). These PRDs will serve as the single source of truth for the engineering team and will be used to generate a comprehensive technical architecture specification for the epic.
+Transform a high-level product idea into a well-defined Epic-level Product Requirements Document for a large-scale SaaS platform that becomes the source of truth for engineering and the input for the technical architecture specification.
 
-Review the user's request for a new epic and generate a thorough PRD. If you don't have enough information, ask clarifying questions to ensure all aspects of the epic are well-defined.
+## When to invoke
 
-## Output Format
+- "Create an Epic PRD for this idea."
+- "Write `/docs/ways-of-work/plan/{epic-name}/epic.md`."
+- "Turn this concept into an epic product requirements document."
+- "Define personas, journeys, requirements, metrics, and scope for this epic."
 
-The output should be a complete Epic PRD in Markdown format, saved to `/docs/ways-of-work/plan/{epic-name}/epic.md`.
+## Product context
 
-### PRD Structure
+| Input | How to use it |
+| --- | --- |
+| Epic Idea | Convert the high-level description into a named epic, problem, solution, and impact. |
+| Target Users | Use provided users; if absent, infer likely personas and label them as assumptions. |
+| Large-scale SaaS platform | Consider multi-tenant behavior, self-service journeys, operations, security, and scale. |
+| Architecture handoff | Write enough product detail for a technical architecture specification to be generated next. |
 
-#### 1. Epic Name
+If information is missing and no interaction is possible, include assumptions and open questions in the PRD rather than inventing certainty.
 
-- A clear, concise, and descriptive name for the epic.
+## PRD structure
 
-#### 2. Goal
+| Section | Required content | Quality bar |
+| --- | --- | --- |
+| Epic Name | Clear, concise, descriptive epic name. | Names the business capability, not an implementation detail. |
+| Goal | Problem, Solution, and Impact. | Problem is 3-5 sentences; Impact names expected outcomes such as user engagement, conversion rate, or revenue. |
+| User Personas | Target users. | Includes goals, jobs-to-be-done, pain points, and permissions when known. |
+| High-Level User Journeys | Key workflows enabled by the epic. | Covers primary happy paths and important alternate paths. |
+| Business Requirements | Functional Requirements and Non-Functional Requirements. | Functional requirements describe what the epic must deliver from a business perspective. |
+| Success Metrics | KPIs that measure success. | Metrics have directionality and, when known, target thresholds. |
+| Out of Scope | Explicit exclusions. | Prevents scope creep and names deferred work. |
+| Business Value | High, Medium, or Low with justification. | Ties value to users, revenue, risk reduction, efficiency, or strategic need. |
 
-- **Problem:** Describe the user problem or business need this epic addresses (3-5 sentences).
-- **Solution:** Explain how this epic solves the problem at a high level.
-- **Impact:** What are the expected outcomes or metrics to be improved (e.g., user engagement, conversion rate, revenue)?
+## Requirement and metric rules
 
-#### 3. User Personas
+| Artifact | Include | Avoid |
+| --- | --- | --- |
+| Functional Requirements | User capabilities, workflow outcomes, policy rules, reporting needs, integrations. | Implementation tasks such as table names or framework choices unless product-facing. |
+| Non-Functional Requirements | Performance, security, accessibility, data privacy, reliability, compliance, supportability. | Generic statements such as "fast" or "secure" with no observable signal. |
+| Success Metrics | Activation, adoption, conversion, retention, time saved, error reduction, revenue, support ticket reduction. | Metrics with no owner or no way to observe them. |
+| Out of Scope | Features, platforms, personas, migrations, or integrations intentionally excluded. | Ambiguous "later" items that engineering may accidentally include. |
 
-- Describe the target user(s) for this epic.
+## Output template
 
-#### 4. High-Level User Journeys
+```markdown
+# <Epic Name> PRD
 
-- Describe the key user journeys and workflows enabled by this epic.
+## 1. Epic Name
+<clear epic name>
 
-#### 5. Business Requirements
+## 2. Goal
+**Problem:** <3-5 sentences describing the user problem or business need>
+**Solution:** <high-level solution>
+**Impact:** <expected outcomes or metrics such as user engagement, conversion rate, or revenue>
 
-- **Functional Requirements:** A detailed, bulleted list of what the epic must deliver from a business perspective.
-- **Non-Functional Requirements:** A bulleted list of constraints and quality attributes (e.g., performance, security, accessibility, data privacy).
+## 3. User Personas
+- <persona>: <goal, context, and pain point>
 
-#### 6. Success Metrics
+## 4. High-Level User Journeys
+- <journey name>: <steps and outcome>
 
-- Key Performance Indicators (KPIs) to measure the success of the epic.
+## 5. Business Requirements
+### Functional Requirements
+- <business capability or behavior>
 
-#### 7. Out of Scope
+### Non-Functional Requirements
+- <performance, security, accessibility, data privacy, reliability, or compliance constraint>
 
-- Clearly list what is _not_ included in this epic to avoid scope creep.
+## 6. Success Metrics
+| Metric | Direction | Target or signal |
+| --- | --- | --- |
+| <KPI> | increase/decrease/maintain | <target or observable signal> |
 
-#### 8. Business Value
+## 7. Out of Scope
+- <excluded work>
 
-- Estimate the business value (e.g., High, Medium, Low) with a brief justification.
+## 8. Business Value
+**Value:** High | Medium | Low
+**Justification:** <business rationale>
 
-## Context Template
+## Assumptions and open questions
+- <only when needed>
+```
 
-- **Epic Idea:** [A high-level description of the epic from the user]
-- **Target Users:** [Optional: Any initial thoughts on who this is for]
+## Quality gate
+
+- [ ] The output is suitable for `/docs/ways-of-work/plan/{epic-name}/epic.md`.
+- [ ] Epic Name, Goal, User Personas, High-Level User Journeys, Business Requirements, Success Metrics, Out of Scope, and Business Value are present.
+- [ ] Problem, Solution, and Impact are all explicit.
+- [ ] Functional and Non-Functional Requirements are business-focused, specific, and testable.
+- [ ] Success Metrics are measurable KPIs with directionality.
+- [ ] Out of Scope prevents scope creep.
+- [ ] Business Value is High, Medium, or Low with justification.

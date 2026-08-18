@@ -1,115 +1,155 @@
 ---
 name: "typescript-mcp-server-generator"
 description: >-
-  Generate a complete MCP server project in TypeScript using the MCP TypeScript SDK v2
-  (@modelcontextprotocol/server) with tools, resources, and proper configuration. Use this skill when
-  the user asks for generate typescript mcp server.
+  Generate complete TypeScript MCP server projects with MCP TypeScript SDK v2 packages, tools, resources, prompts, transports, configuration, testing, migration guidance, and documentation. Use this skill when the user asks to generate a TypeScript MCP server, create an MCP tool server, migrate an MCP server from v1 to v2, or choose stdio versus HTTP transport.
 ---
-# Generate TypeScript MCP Server
 
-Create a complete Model Context Protocol (MCP) server in TypeScript using the **MCP TypeScript SDK v2** with the following specifications:
+# TypeScript MCP server generator
 
-## Requirements
+Generate a production-ready Model Context Protocol server in TypeScript using MCP TypeScript SDK v2, explicit transport selection, full Zod schemas, typed tool handlers, and runnable project commands.
 
-1. **Project Structure**: Create a new TypeScript/Node.js project with proper directory structure
-2. **NPM Packages**: The v1 monolithic `@modelcontextprotocol/sdk` package is retired. Use the focused v2 packages:
-   - `@modelcontextprotocol/server` — server implementation (stdio transport via the `@modelcontextprotocol/server/stdio` subpath)
-   - `@modelcontextprotocol/node` — Node HTTP transport (`NodeStreamableHTTPServerTransport`), or a framework adapter: `@modelcontextprotocol/express`, `@modelcontextprotocol/hono`, `@modelcontextprotocol/fastify` — each adapter requires its peer framework to be installed alongside it (e.g. `@modelcontextprotocol/express` + `express`)
-   - `@modelcontextprotocol/core` — shared protocol schemas (import `*Schema` constants from here, not from `sdk/types.js`)
-   - `zod@^4.2` — v2 requires Zod 4.2+; do not use zod@3
-3. **Runtime**: Node.js 20+ (v2 minimum); ESM-first with `"type": "module"` (a CommonJS build is also shipped, so `require()` works if needed)
-4. **Server Type**: Choose between HTTP (Streamable HTTP transport) or stdio-based server. SSE and WebSocket transports were removed in v2 — do not generate them.
-5. **Tools**: Create at least one useful tool with proper schema validation
-6. **Error Handling**: Include comprehensive error handling and validation
+## When to invoke
 
-## Implementation Details
+- "Generate a TypeScript MCP server."
+- "Create an MCP server with tools and resources."
+- "Build an HTTP MCP server in Node."
+- "Migrate this MCP server from v1 to v2."
+- "Add stdio transport to a TypeScript MCP project."
 
-### Project Setup
-- Initialize with `npm init` and create package.json
-- Install dependencies: `@modelcontextprotocol/server`, `zod@^4.2`, and the transport package — `@modelcontextprotocol/node` for plain Node HTTP, or a framework adapter together with its peer framework (e.g. `npm install @modelcontextprotocol/express express`)
-- Configure TypeScript with ES modules: `"type": "module"` in package.json
-- Add dev dependencies: `tsx` or `ts-node` for development
-- Create proper .gitignore file
+## Prerequisites and context
 
-### Server Configuration
-- Use `McpServer` class from `@modelcontextprotocol/server` for high-level implementation
-- Set server name and version
-- Choose the appropriate transport:
-  - HTTP (Node): `NodeStreamableHTTPServerTransport` from `@modelcontextprotocol/node`
-  - HTTP (Web Standard runtimes): `WebStandardStreamableHTTPServerTransport` from `@modelcontextprotocol/server`
-  - stdio: `StdioServerTransport` from `@modelcontextprotocol/server/stdio`
-- For HTTP: prefer a framework adapter (`@modelcontextprotocol/express`, etc.) with proper middleware and error handling
-- Note that v2 uses Web Standard `Headers`/`Request` types; read headers with `ctx.http?.req?.headers.get('x-custom')`
+- Target Node.js `20+` and ESM-first TypeScript with `"type": "module"`.
+- Use MCP TypeScript SDK v2 focused packages; the v1 monolithic `@modelcontextprotocol/sdk` package is retired.
+- Choose either HTTP Streamable HTTP transport or stdio. SSE and WebSocket transports were removed in v2 and must not be generated.
 
-### Tool Implementation
-- Use `registerTool()` with a config object — v1 variadic `.tool()` signatures are gone:
-  ```typescript
-  server.registerTool('greet', {
-    description: 'Greet user',
-    inputSchema: z.object({ name: z.string() })
-  }, async ({ name }, ctx) => {
-    return { content: [{ type: 'text', text: `Hello, ${name}!` }] };
-  });
-  ```
-- Schemas must be full Zod objects (`z.object({...})`) — raw shape objects (`{ name: z.string() }`) are deprecated
-- Provide clear `title` and `description` fields
-- Return both `content` and `structuredContent` in results
-- The handler's second parameter is a structured `ctx` object (replaces v1 `extra`): `ctx.mcpReq.signal`, `ctx.mcpReq.id`, `ctx.mcpReq.send(...)`, `ctx.mcpReq.notify(...)`
-- Implement proper error handling with try-catch blocks; use the v2 error hierarchy (`ProtocolError`, `SdkError`, `SdkHttpError` with `.status`) instead of v1 `McpError`/`StreamableHTTPError`
-- Support async operations where appropriate
+## Package and runtime choices
 
-### Resource/Prompt Setup (Optional)
-- Add resources using `registerResource()` with ResourceTemplate for dynamic URIs
-- Add prompts using `registerPrompt()` with argument schemas (same config-object style as `registerTool()`)
-- Consider adding completion support for better UX; note the v2 `completable()` wrapper order: `completable(z.string(), callback).optional()` (optional applied outside)
+| Need | Package or setting | Notes |
+| --- | --- | --- |
+| Server implementation | `@modelcontextprotocol/server` | Provides `McpServer`; stdio transport is under `@modelcontextprotocol/server/stdio`. |
+| Plain Node HTTP | `@modelcontextprotocol/node` | Use `NodeStreamableHTTPServerTransport`. |
+| Framework HTTP | `@modelcontextprotocol/express`, `@modelcontextprotocol/hono`, or `@modelcontextprotocol/fastify` | Install the peer framework too, such as `@modelcontextprotocol/express` + `express`. |
+| Web Standard runtimes | `@modelcontextprotocol/server` | Use `WebStandardStreamableHTTPServerTransport`. |
+| Shared protocol schemas | `@modelcontextprotocol/core` | Import `*Schema` constants from here, not from `sdk/types.js`. |
+| Validation | `zod@^4.2` | v2 requires Zod 4.2+; do not use `zod@3`. |
+| Development runner | `tsx` or `ts-node` | Prefer `tsx` for ESM development. |
+| Module system | `"type": "module"` | CommonJS is shipped, so `require()` works if needed, but new projects should be ESM-first. |
 
-### Code Quality
-- Use TypeScript for type safety
-- Follow async/await patterns consistently
-- Implement proper cleanup on transport close events
-- Use environment variables for configuration
-- Add inline comments for complex logic
-- Structure code with clear separation of concerns
+## Project structure
 
-## Example Tool Types to Consider
-- Data processing and transformation
-- External API integrations
-- File system operations (read, search, analyze)
-- Database queries
-- Text analysis or summarization (LLM-assisted via the multi-round `input_required` pattern)
-- System information retrieval
+```text
+mcp-server/
+├── package.json
+├── tsconfig.json
+├── .gitignore
+├── README.md
+└── src/
+    ├── index.ts
+    ├── server.ts
+    ├── tools/
+    │   └── greet.ts
+    ├── resources/
+    ├── prompts/
+    └── config.ts
+```
 
-## Configuration Options
-- **For HTTP Servers**: 
-  - Port configuration via environment variables
-  - CORS setup for browser clients
-  - Session management (stateless vs stateful)
-  - DNS rebinding protection for local servers
-  - Strict `Content-Type` handling: v2 rejects non-`application/json` POST bodies
-  
-- **For stdio Servers**:
-  - Proper stdin/stdout handling
-  - Environment-based configuration
-  - Process lifecycle management
+Initialize with `npm init`, install runtime dependencies such as `@modelcontextprotocol/server`, `zod@^4.2`, and the chosen transport package, then add dev dependencies such as `tsx` and `typescript`.
 
-## Migrating an Existing v1 Server
-- Run the official codemod first: `npx @modelcontextprotocol/codemod@latest v1-to-v2 .`
-- Then search for `@mcp-codemod-error` markers for the parts requiring manual judgment (transport choice, header reads, error classification)
-- Swap `McpError + ErrorCode` checks for the new error classes; HTTP status now lives on `error.status`, not `error.code`
-- `Server.createMessage()`, `listRoots()`, `sendLoggingMessage()` and the `roots`/`sampling`/`logging` capability fields are deprecated in v2 — avoid them in new code
+## Server implementation rules
 
-## Testing Guidance
-- Explain how to run the server (`npm start` or `npx tsx server.ts`)
-- Provide MCP Inspector command: `npx @modelcontextprotocol/inspector`
-- For HTTP servers, include connection URL: `http://localhost:PORT/mcp`
-- Include example tool invocations
-- Add troubleshooting tips for common issues
+| Concern | Rule |
+| --- | --- |
+| Server | Use `McpServer` from `@modelcontextprotocol/server`; set server name and version. |
+| Tool registration | Use `registerTool()` with a config object; v1 variadic `.tool()` signatures are gone. |
+| Tool schemas | Use complete Zod objects such as `z.object({ name: z.string() })`; raw shape objects are deprecated. |
+| Tool metadata | Provide clear `title` and `description` fields. |
+| Tool result | Return `content` and `structuredContent` where structured data exists. |
+| Handler context | Use the second structured `ctx` parameter: `ctx.mcpReq.signal`, `ctx.mcpReq.id`, `ctx.mcpReq.send(...)`, `ctx.mcpReq.notify(...)`. |
+| HTTP headers | v2 uses Web Standard `Headers`/`Request`; read headers with `ctx.http?.req?.headers.get('x-custom')`. |
+| Errors | Use `ProtocolError`, `SdkError`, and `SdkHttpError` with `.status`; do not use v1 `McpError`, `ErrorCode`, or `StreamableHTTPError`. |
+| Cleanup | Handle transport close events and async resource cleanup. |
+| Configuration | Use environment variables for ports, API keys, and feature switches. |
 
-## Additional Features to Consider
-- LLM-powered tools using the multi-round `input_required` pattern (the v2 replacement for the deprecated sampling subsystem)
-- User input elicitation for interactive workflows
-- Dynamic tool registration with enable/disable capabilities
-- Notification debouncing for bulk updates
-- Resource links for efficient data references
+```typescript
+server.registerTool('greet', {
+  title: 'Greet user',
+  description: 'Greet user',
+  inputSchema: z.object({ name: z.string() })
+}, async ({ name }, ctx) => {
+  return {
+    content: [{ type: 'text', text: `Hello, ${name}!` }],
+    structuredContent: { greeting: `Hello, ${name}!`, requestId: ctx.mcpReq.id }
+  };
+});
+```
 
-Generate a complete, production-ready MCP server with comprehensive documentation, type safety, and error handling.
+## Resources, prompts, and advanced features
+
+| Feature | Rule |
+| --- | --- |
+| Resources | Add `registerResource()` with `ResourceTemplate` for dynamic URIs. |
+| Prompts | Add `registerPrompt()` with argument schemas in the same config-object style as `registerTool()`. |
+| Completion | Use `completable(z.string(), callback).optional()`; apply `.optional()` outside the `completable()` wrapper. |
+| LLM-assisted tools | Use the multi-round `input_required` pattern; the v2 sampling subsystem is deprecated. |
+| Dynamic tools | Support enable/disable capabilities and notification debouncing for bulk updates when needed. |
+| Resource links | Prefer links for large data references instead of embedding bulky content in tool responses. |
+
+## Transport configuration
+
+| Transport | Use when | Required details |
+| --- | --- | --- |
+| HTTP | Browser, remote, or multi-client usage. | Port from environment, CORS if browser clients need it, stateless versus stateful sessions, DNS rebinding protection for local servers, strict `Content-Type` handling because v2 rejects non-`application/json` POST bodies, and connection URL `http://localhost:PORT/mcp`. |
+| stdio | Local editor or CLI host launches the server process. | Clean stdin/stdout handling, logs on stderr, environment-based config, and process lifecycle management. |
+
+## Migration from v1
+
+1. Run the official codemod:
+
+   ```bash
+   npx @modelcontextprotocol/codemod@latest v1-to-v2 .
+   ```
+
+2. Search for `@mcp-codemod-error` markers that need manual judgment.
+3. Choose the v2 transport; do not recreate SSE or WebSocket.
+4. Replace `McpError + ErrorCode` checks with `ProtocolError`, `SdkError`, or `SdkHttpError`; HTTP status is `error.status`, not `error.code`.
+5. Remove deprecated `Server.createMessage()`, `listRoots()`, `sendLoggingMessage()`, and `roots`/`sampling`/`logging` capability fields from new code.
+
+## Testing guidance
+
+- Add scripts for `npm start`, `npm run dev`, `npm run build`, and `npm test` when the generated project includes tests.
+- Run the server with `npm start` or `npx tsx src/index.ts`.
+- Inspect with `npx @modelcontextprotocol/inspector`.
+- Include example tool invocations and expected `content`/`structuredContent` output in `README.md`.
+
+Resource/Prompt generation may be included when useful. Stdio examples should import `StdioServerTransport`; stdio-based servers must keep stdout protocol-clean. Use TypeScript/Node.js project defaults, high-level `McpServer` APIs, async/await, and try-catch around external work. Remember that v1 called the handler context `extra`; v2 replaces it with `ctx`. Install adapter peers explicitly, for example `npm install @modelcontextprotocol/express express`. Migration command spelling must remain `npx @modelcontextprotocol/codemod@latest v1-to-v2 .`. A simple development command may be `npx tsx server.ts`. Schema examples may be shown as `z.object({...})`; do not pass raw `{ name: z.string() }` shapes.
+
+## Output template
+
+```markdown
+## TypeScript MCP server result
+
+**Status:** generated | migrated | blocked
+**Transport:** http | stdio
+**Runtime:** Node.js 20+
+
+| Artifact | Path | Notes |
+| --- | --- | --- |
+| Package config | `package.json` | `<dependencies/scripts>` |
+| Server entry | `src/index.ts` | `<transport>` |
+| Tools | `src/tools/<tool>.ts` | `<schemas/results>` |
+| Docs | `README.md` | `<run and inspector commands>` |
+
+**Commands**
+- `npm install ...`: <pass/fail/not run>
+- `npm run build`: <pass/fail/not run>
+- `npx @modelcontextprotocol/inspector`: <usage documented/not run>
+```
+
+## Quality gate
+
+- [ ] Project uses Node.js `20+`, TypeScript, and `"type": "module"` unless the user requested otherwise.
+- [ ] v2 packages are used: `@modelcontextprotocol/server`, transport package, `@modelcontextprotocol/core` when schemas are needed, and `zod@^4.2`.
+- [ ] No new SSE, WebSocket, v1 `.tool()` signatures, raw schema shapes, `McpError`, `ErrorCode`, `StreamableHTTPError`, `Server.createMessage()`, `listRoots()`, `sendLoggingMessage()`, `roots`, `sampling`, or `logging` capability fields are generated.
+- [ ] At least one useful tool has a full Zod input schema, error handling, `content`, and `structuredContent`.
+- [ ] Transport configuration includes lifecycle, environment, and HTTP/stdout details.
+- [ ] README includes run commands, MCP Inspector command, HTTP URL when relevant, and example tool invocations.

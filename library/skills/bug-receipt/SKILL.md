@@ -1,18 +1,91 @@
 ---
-name: "bug-receipt"
+name: bug-receipt
 description: >-
-  Close bugs and incidents with an auditable BUG RECEIPT and VERIFIED, PARTIAL, or BLOCKED status. Use
-  for defect repair, regression proof, production incidents, and issue closeout. Use this skill when |
-  Cross-system blocker | One sanitized failing request/response with timestamp or request ID, edge and
-  application logs, and identity-pro.
+  Close bugs and incidents with an auditable BUG RECEIPT that states VERIFIED, PARTIAL, or BLOCKED based on baseline, root cause, change, proof, gaps, and evidence source. Use when the user asks for defect repair, regression proof, production incident closeout, issue closure, machine-readable receipt JSON, or CI integration of bug evidence.
 ---
-# Bug Receipt
 
-## Mandatory closeout output
+# Bug receipt
 
-For every bug or incident closeout decision, return the complete receipt below as the entire user-facing result, even when the user requests a concise reply or does not name this format. Concision shortens field values; it never removes or renames a row. Do not replace the receipt with prose.
+Turn a bug fix, incident investigation, or closure decision into a strict receipt; preserve the observed defect, prove the responsible mechanism and change, then output only the receipt or its validated JSON artifact.
 
-```text
+## When to invoke
+
+- "Close this bug with proof."
+- "Produce a bug receipt for this incident."
+- "Did the fix actually verify the user-visible behavior?"
+- "Generate the machine-readable bug receipt JSON."
+- "Mark this defect VERIFIED, PARTIAL, or BLOCKED."
+
+## Prerequisites and context
+
+- Use current execution evidence when available; otherwise label evidence as `supplied` or `mixed` and do not imply it was executed now.
+- For JSON artifacts, read `references/receipt-contract.md`, start from `assets/receipt.template.json`, and validate with `node scripts/validate-receipt.mjs <receipt.json>` from this skill directory.
+- Do not commit a generated receipt unless the user explicitly requests it.
+
+## Evidence boundary
+
+Before editing or closing, record the defect, intended behavior, strongest direct check, and source boundary.
+
+| Field | Required standard | Forbidden shortcut |
+| --- | --- | --- |
+| Problem | Observed defect plus intended behavior. | A vague issue title with no observable contract. |
+| Baseline | Failing interaction or command and decisive result, or explicit `not run`. | Treating an old log as a reproduction executed now. |
+| Root cause | Proven mechanism at a concrete location or runtime transition, or explicit `unproven hypothesis`. | Naming a plausible component because the patch touched it. |
+| Change | Responsible repair, or `none`. | Listing unrelated cleanup as proof of repair. |
+| Proof | Executed or supplied check with every decisive layer. | Passing build, stale log, or source read alone for user-visible behavior. |
+| Gaps | `none`, or the exact missing proof and one minimal next experiment/package. | Hiding gaps to make the receipt look verified. |
+| Source | `executed now`, `supplied`, or `mixed`. | Blending supplied and executed evidence without labeling it. |
+
+## Trace and repair rules
+
+1. Follow the live owner path from input to symptom.
+2. Separate observed facts, bounded inferences, and gaps.
+3. Require a concrete code location, configuration setting, request transition, database transition, or runtime handoff before naming root cause.
+4. Make the smallest responsible change.
+5. Avoid unrelated cleanup, retries, silent fallbacks, and fixture-specific exceptions.
+6. Do not convert a plausible patch, stale log, source read, or passing build into proof of user-visible behavior.
+
+## Direct proof boundaries
+
+| Surface | Required direct proof |
+| --- | --- |
+| Logic or failing test | Original failing input or focused regression test now passes. |
+| UI behavior | Real interaction plus relevant console and network observation. |
+| API or integration | Request, response, and responsible service behavior. |
+| Persistence | Write/read or reload round trip through the real owner path. |
+| Race or lifecycle | Repeated concurrent trigger; zero-or-one success; affected-row and transaction evidence; final invariant. |
+| Cross-system blocker | One sanitized failing request/response with timestamp or request ID, edge and application logs, and identity-provider logs when the trace reaches that owner. |
+
+## Cross-system evidence package
+
+When the trace reaches an identity provider, include sanitized identity-provider or `identity-pro` evidence with the request ID, edge log, application log, and timestamp. The receipt may stay `PARTIAL` or `BLOCKED` until that correlated package is available.
+## Status assignment
+
+| Status | Use only when | Required gap language |
+| --- | --- | --- |
+| `VERIFIED` | Baseline observed, concrete cause proven, responsible change made, all declared checks passed, and no material gap remains. | `Gaps       none` |
+| `PARTIAL` | Useful evidence exists, but a required proof layer is missing or inconclusive. | Name the single minimal experiment or correlated evidence package that closes the gap. |
+| `BLOCKED` | A specific external condition prevents reproduction, repair, or proof. | Name the external blocker and the smallest evidence package needed to unblock. |
+
+## Progressive disclosure and bundled resources
+
+| Resource | Use when | Contract |
+| --- | --- | --- |
+| `references/receipt-contract.md` | Machine-readable receipt, CI integration, or status invariants are requested | Follow the JSON fields and status invariants exactly. |
+| `references/receipt.schema.json` | Validating or explaining JSON structure | Treat as the schema source of truth. |
+| `assets/receipt.template.json` | Creating a JSON artifact | Copy to a task-owned path, fill the fields, then validate. |
+| `scripts/validate-receipt.mjs` | Checking a JSON receipt | Run `node scripts/validate-receipt.mjs <receipt.json>` from the skill directory. |
+
+## Gotchas
+
+- **Return the complete receipt as the entire user-facing result**: concision shortens field values; it never removes or renames rows.
+- **Use explicit placeholders**: write `not run`, `unproven`, or `none`; do not omit a row.
+- **Do not overclaim**: supplied evidence stays supplied, and source reads are not behavioral proof.
+- **One gap only**: for `PARTIAL` or `BLOCKED`, name the decisive next experiment or evidence package, not a generic task list.
+
+## Output template
+
+```markdown
 BUG RECEIPT · VERIFIED | PARTIAL | BLOCKED
 
 Problem    <observed defect and intended behavior>
@@ -24,55 +97,15 @@ Gaps       <none; or exact missing proof and single next experiment/package>
 Source     executed now | supplied | mixed
 ```
 
-Use `not run`, `unproven`, or `none` explicitly. Never omit a row to make the receipt look complete.
+## Quality gate
 
-## Establish the evidence boundary
+- [ ] The final user-facing result is the complete BUG RECEIPT and no prose replaces it.
+- [ ] Status is exactly `VERIFIED`, `PARTIAL`, or `BLOCKED` and matches the evidence standard.
+- [ ] `Problem`, `Baseline`, `Root cause`, `Change`, `Proof`, `Gaps`, and `Source` rows are present and not renamed.
+- [ ] The proof includes every decisive layer for the affected surface or names the missing layer as the gap.
+- [ ] Supplied evidence, executed evidence, and mixed evidence are labeled honestly.
+- [ ] JSON artifacts, when requested, were created from `assets/receipt.template.json` and validated with `node scripts/validate-receipt.mjs <receipt.json>`.
 
-Before editing, record the observed problem, intended behavior, strongest direct check, and evidence source: `executed now`, `supplied`, or `mixed`. Never imply that supplied evidence was executed in the current run.
+## References
 
-Reproduce the failure with the narrowest safe check when possible. If reproduction is unavailable, preserve the evidence obtained and cap the result at `PARTIAL` or `BLOCKED`.
-
-## Trace and repair
-
-1. Follow the live owner path from input to symptom.
-2. Separate observed facts, bounded inferences, and gaps.
-3. Require a concrete location or runtime transition before naming root cause.
-4. Make the smallest responsible change; avoid unrelated cleanup, retries, silent fallbacks, and fixture-specific exceptions.
-
-Do not convert a plausible patch, stale log, source read, or passing build into proof of the user-visible behavior.
-
-## Close the proof loop
-
-Run only checks required by the affected contract:
-
-- original reproduction or direct acceptance check;
-- nearest negative or regression check;
-- affected build or integration gate;
-- real UI, API, persistence, concurrency, or runtime path when the claim crosses that boundary.
-
-Use these decisive boundaries:
-
-| Surface | Required direct proof |
-| --- | --- |
-| Logic or failing test | Original failing input or focused test now passes |
-| UI behavior | Real interaction plus relevant console and network observation |
-| API or integration | Request, response, and responsible service behavior |
-| Persistence | Write/read or reload round trip through the real owner path |
-| Race or lifecycle | Repeated concurrent trigger; zero-or-one success; affected-row and transaction evidence; final invariant |
-| Cross-system blocker | One sanitized failing request/response with timestamp or request ID, edge and application logs, and identity-provider logs when the trace reaches that owner |
-
-## Assign status
-
-- `VERIFIED`: observed baseline, concrete cause, responsible change, all declared checks passed, no material gap.
-- `PARTIAL`: useful evidence exists, but a required proof layer is missing or inconclusive.
-- `BLOCKED`: a specific external condition prevents reproduction, repair, or proof.
-
-For `PARTIAL` or `BLOCKED`, name the single minimal experiment or correlated evidence package that closes the decisive gap. Never invent a command, observation, count, location, or result.
-
-For a machine-readable receipt or CI integration, read [references/receipt-contract.md](references/receipt-contract.md) and conform to its JSON fields and status invariants.
-
-When a JSON artifact is requested, start from [assets/receipt.template.json](assets/receipt.template.json), write it to a task-owned path, and validate it with `node scripts/validate-receipt.mjs <receipt.json>` from this skill directory. Do not commit the generated receipt unless the user requests it.
-
-## Source and license
-
-Originally published at https://github.com/lMysticl/bug-receipt under the MIT License.
+- [Original bug-receipt repository](https://github.com/lMysticl/bug-receipt)

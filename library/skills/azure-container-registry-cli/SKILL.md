@@ -1,93 +1,146 @@
 ---
 name: "azure-container-registry-cli"
 description: >-
-  Manage Azure Container Registry via the az acr CLI including registries, images, cloud builds, ACR
-  Tasks, authentication, tokens, geo-replication, and networking. Use when working with ACR, az acr
-  commands, pushing/importing/purging container images in Azure, or when the user mentions Azure
-  Container Registry.
+  Manage Azure Container Registry with az acr CLI commands for registries, images, cloud builds, ACR Tasks, authentication, tokens, geo-replication, networking, purge, import, and diagnostics. Use when working with ACR, az acr, pushing or importing container images in Azure, or Azure Container Registry operations.
 ---
+
 # Azure Container Registry CLI
 
-Manage Azure Container Registry (ACR) resources using the `az acr` command group of the Azure CLI.
+Use the Azure CLI `az acr` command group to create registries, authenticate clients, build or import images, manage repositories and tags, configure security and networking, and diagnose Azure Container Registry behavior.
 
-**CLI:** `az acr` ships with core Azure CLI — no extension required (the `acrtransfer` extension is only needed for export/import pipelines).
+## When to invoke
 
-## Prerequisites
+- "Create an Azure Container Registry and push an image."
+- "Use az acr build instead of local Docker."
+- "Diagnose ACR login or pull permissions."
+- "Import or purge images in Azure Container Registry."
+- "Configure ACR geo-replication, Private Link, or repository tokens."
+
+## Prerequisites and context
+
+`az acr` ships with the core Azure CLI; no extension is required for normal registry work. The `acrtransfer` extension is only needed for export/import pipeline commands.
 
 ```bash
 # Install Azure CLI
-brew install azure-cli  # macOS
-curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash  # Linux
-winget install Microsoft.AzureCLI  # Windows
+brew install azure-cli
+curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+winget install Microsoft.AzureCLI
 
 # Sign in and select subscription
 az login
 az account set --subscription {subscription-id}
 ```
 
-## Quick Start
+Confirm the resource group, registry name, subscription, SKU, and identity model before running mutating commands.
 
-```bash
-# Create a registry (SKU: Basic | Standard | Premium)
-az acr create --resource-group {rg} --name {registry} --sku Standard
+## Command map
 
-# Authenticate Docker/Podman against the registry
-az acr login --name {registry}
+| Need | Command pattern | Notes |
+| --- | --- | --- |
+| Registry lifecycle | `az acr create --resource-group {rg} --name {registry} --sku Standard` | SKU is `Basic`, `Standard`, or `Premium`. |
+| Docker/Podman login | `az acr login --name {registry}` | Uses local credential helper. Use `--expose-token` for token-based flows. |
+| Cloud build | `az acr build --registry {registry} --image app:v1 .` | No local Docker daemon required. |
+| Server-side copy | `az acr import --name {registry} --source mcr.microsoft.com/hello-world:latest` | Avoids local pull and push. |
+| Repositories | `az acr repository list --name {registry} --output table` | Inventory repositories. |
+| Tags | `az acr repository show-tags --name {registry} --repository app --orderby time_desc` | Sort by recency for cleanup. |
+| Health | `az acr check-health --name {registry} --yes` | Diagnoses Docker daemon, network, auth, and config. |
+| Usage | `az acr show-usage --name {registry}` | Review quota and storage. |
 
-# Build and push in the cloud — no local Docker needed
-az acr build --registry {registry} --image app:v1 .
+Common task phrases include pushing/importing/purging images and replacing local pull/push loops with server-side operations.
 
-# Copy an image from another registry without pull/push
-az acr import --name {registry} --source mcr.microsoft.com/hello-world:latest
+## ACR principles
 
-# List repositories and tags
-az acr repository list --name {registry} --output table
-az acr repository show-tags --name {registry} --repository app --orderby time_desc
+| Principle | Why it matters |
+| --- | --- |
+| Prefer `az acr build` and ACR Tasks over `docker build` plus `docker push`. | Builds run in Azure, work without a local daemon, and integrate with source, base-image, and timer triggers. |
+| Prefer `az acr import` for registry-to-registry movement. | Import is server-side, faster, and does not require local storage. |
+| Never enable the admin user for production. | Use Microsoft Entra identities, managed identities, RBAC roles `AcrPull` and `AcrPush`, ABAC roles `Container Registry Repository Reader` and `Container Registry Repository Writer`, or repository-scoped tokens. |
+| Treat Premium-only features as design choices. | Geo-replication, private endpoints, retention policies, connected registries, and agent pools require Premium. Repository-scoped tokens work in all tiers; zone redundancy is automatic in supported regions. |
+| Distinguish untag from delete. | Removing a tag may leave manifests; deleting manifests removes content. Use retention, soft delete, and purge intentionally. |
 
-# Diagnose registry connectivity and configuration
-az acr check-health --name {registry} --yes
-```
+The repository command family covers List/show/delete/untag actions, Push/delete webhooks, artifact cache pull-through rules, soft-delete configuration, `content-trust`, and git/base-image/timer task triggers. ABAC-enabled registries may use `Container Registry Repository Reader`/`Writer` for scoped reads and writes.
 
-## Key Principles
+## CLI structure
 
-- **Prefer `az acr build` / ACR Tasks** over local `docker build` + `docker push`: builds run in Azure, work without a local daemon, and integrate with triggers.
-- **Prefer `az acr import`** to move images between registries: it is server-side, faster, and requires no local storage.
-- **Never enable the admin user for production** — use Microsoft Entra identities (RBAC roles `AcrPull`/`AcrPush`, or `Container Registry Repository Reader`/`Writer` on ABAC-enabled registries), repository-scoped tokens, or managed identities.
-- **Premium-only features**: geo-replication, private endpoints, retention policies, connected registries, agent pools. (Repository-scoped tokens work in all tiers; zone redundancy is automatic in all tiers in supported regions.)
-
-## CLI Structure
-
-```
+```text
 az acr
-├── create / delete / list / show / update   # Registry lifecycle
-├── login                  # Docker credential helper (or --expose-token)
-├── check-health / check-name / show-usage   # Diagnostics & quota
-├── build                  # Cloud image build (quick task)
-├── run                    # Run a command / multi-step task once
-├── task                   # ACR Tasks (triggers, timers, logs, runs)
-├── agentpool              # Dedicated task agent pools (Premium)
-├── import                 # Server-side image copy into the registry
-├── repository             # List/show/delete/untag repos & tags, lock images
-├── manifest               # Manifest metadata, delete, OCI referrers
-├── credential             # Admin user credentials (avoid in production)
-├── token / scope-map      # Repository-scoped tokens (Premium)
-├── replication            # Geo-replication (Premium)
-├── network-rule           # IP network rules
-├── private-endpoint-connection  # Private Link approvals
-├── config                 # content-trust, retention, soft-delete, ...
-├── cache / credential-set # Artifact cache (pull-through cache) rules
-├── webhook                # Push/delete event webhooks
-├── connected-registry     # On-premises / IoT connected registries
-└── export-pipeline / import-pipeline / pipeline-run  # acrtransfer extension
+├── create / delete / list / show / update
+├── login
+├── check-health / check-name / show-usage
+├── build
+├── run
+├── task
+├── agentpool
+├── import
+├── repository
+├── manifest
+├── credential
+├── token / scope-map
+├── replication
+├── network-rule
+├── private-endpoint-connection
+├── config
+├── cache / credential-set
+├── webhook
+├── connected-registry
+└── export-pipeline / import-pipeline / pipeline-run
 ```
 
-## Reference Files
+## Procedure
 
-Read the relevant reference file based on the user's task. Each file contains complete command syntax and examples for its domain.
+1. Run `az account show` and confirm the target subscription if the task mutates resources.
+2. Choose the smallest command group that matches the task: lifecycle, auth, build, repository, networking, or diagnostics.
+3. Prefer read-only `show`, `list`, `show-tags`, `show-usage`, and `check-health` commands before destructive updates.
+4. For builds, imports, purges, retention, private endpoints, geo-replication, or repository-scoped tokens, read the relevant bundled reference first.
+5. Execute the command with explicit `--resource-group`, `--name`, `--repository`, `--image`, `--output`, and confirmation flags rather than relying on defaults.
+6. Report the command, registry, affected repository or tag, and any quota, auth, or network diagnostic result.
 
-| File | When to read | Covers |
-|---|---|---|
-| `references/auth-and-security.md` | Login failures, permissions, CI/CD or AKS pull access | `az acr login` (incl. `--expose-token`), Entra RBAC roles, service principals, managed identities, `--attach-acr` for AKS, repository-scoped tokens & scope maps, admin user, content trust |
-| `references/build-and-tasks.md` | Building images in Azure, automation, CI triggers | `az acr build`, `az acr run`, multi-step task YAML, `az acr task` (git/base-image/timer triggers, logs, runs), agent pools |
-| `references/images-and-artifacts.md` | Managing repos, tags, cleanup, storage costs | `az acr import`, repository & manifest commands, untag vs delete, purge (`acr purge`), image locking, retention policy, soft delete, artifact cache, `show-usage` |
-| `references/networking-and-geo.md` | Multi-region, private access, edge scenarios | Geo-replication, zone redundancy, private endpoints, network rules, dedicated data endpoints, connected registries, registry transfer pipelines |
+## Progressive disclosure and bundled resources
+
+| Resource | Read when | Covers |
+| --- | --- | --- |
+| `references/auth-and-security.md` | Login, permissions, CI/CD, AKS pull access, tokens, or admin-user questions. | `az acr login`, `--expose-token`, Entra RBAC, service principals, managed identities, `--attach-acr`, repository-scoped tokens, scope maps, content trust. |
+| `references/build-and-tasks.md` | Building images in Azure or automating builds. | `az acr build`, `az acr run`, multi-step task YAML, `az acr task`, git triggers, base-image triggers, timer triggers, logs, runs, agent pools. |
+| `references/images-and-artifacts.md` | Repositories, tags, cleanup, storage costs, artifact cache. | `az acr import`, repository and manifest commands, untag vs delete, `acr purge`, image locking, retention policy, soft delete, `show-usage`. |
+| `references/networking-and-geo.md` | Multi-region, private access, edge, or transfer scenarios. | Geo-replication, zone redundancy, private endpoints, network rules, dedicated data endpoints, connected registries, registry transfer pipelines. |
+
+## Gotchas
+
+- **Admin user is not production auth**: enabling it creates broad registry credentials; use identity-based pull and push instead.
+- **Private endpoints change DNS and network paths**: a successful role assignment does not prove network reachability.
+- **ACR Tasks are not local builds**: build context, secrets, and Dockerfile paths must be valid from the cloud task environment.
+- **`acrtransfer` is separate**: install it only for export/import pipeline workflows, not for normal `az acr import`.
+
+## Output template
+
+```markdown
+## Azure Container Registry CLI result
+
+**Status:** complete | needs input | blocked
+**Registry:** `{registry}`
+**Subscription:** `{subscription-id}`
+**Operation:** <lifecycle | auth | build | import | repository | networking | diagnostics>
+
+### Commands
+```bash
+<az acr command executed or recommended>
+```
+
+### Result
+- Affected resource: <registry/repository/tag/task>
+- Output or diagnostic evidence: <summary>
+- Follow-up: <next command or none>
+```
+
+## Quality gate
+
+- [ ] The target subscription, resource group, registry, and SKU assumptions are explicit.
+- [ ] Mutating operations use explicit flags and avoid relying on ambient defaults.
+- [ ] Production auth avoids the admin user unless the user explicitly accepts the risk.
+- [ ] Premium-only features are identified before commands are recommended.
+- [ ] Image cleanup distinguishes tag removal, manifest deletion, retention, soft delete, and `acr purge`.
+- [ ] The relevant bundled reference was read for auth, builds, artifacts, networking, or geo-replication work.
+
+## References
+
+- [Install Azure CLI on Linux](https://aka.ms/InstallAzureCLIDeb)

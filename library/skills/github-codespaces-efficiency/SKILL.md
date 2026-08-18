@@ -1,31 +1,30 @@
 ---
-name: "github-codespaces-efficiency"
+name: github-codespaces-efficiency
 description: >-
-  Audit and improve GitHub Codespaces efficiency. Use this skill when a user wants faster Codespaces
-  startup, lower Codespaces spend, slim devcontainers, right-size machines, tune idle timeout, or
-  scope prebuilds to branches with sustained usage.
+  Audit and improve GitHub Codespaces efficiency. Use this skill when a user wants faster Codespaces startup, lower Codespaces spend, slim devcontainers, right-size machines, tune idle timeout, scope prebuilds, or create an efficient .devcontainer baseline.
 ---
-# GitHub Codespaces Efficiency
 
-Use this skill as a lean entrypoint for GitHub Codespaces efficiency work. Inspect the repo, identify waste, and load only needed references.
+# GitHub Codespaces efficiency
 
-If no `.devcontainer/` exists yet, load [`references/codespaces.md`](./references/codespaces.md) and define a baseline before proceeding with the steps below.
+Inspect Codespaces configuration and usage evidence, identify the largest startup-time or spend waste, apply guardrails that protect developer experience, and return up to three ranked fixes with validation and impact.
 
-## Use This Skill When
+## When to invoke
 
-- The user wants faster Codespaces startup or lower Codespaces spend.
-- The repo has a `.devcontainer/` or explicit Codespaces configuration questions.
-- The user asks for devcontainer optimization, machine sizing, prebuild strategy, or idle-timeout guidance.
-- The user is setting up Codespaces for the first time or needs help creating a new `.devcontainer/` from scratch.
+- "Make our Codespaces start faster."
+- "Reduce GitHub Codespaces cost for this repo."
+- "Audit this devcontainer for waste."
+- "Right-size Codespaces machines and idle timeout."
+- "Set up efficient Codespaces prebuilds."
 
-## Load Only What You Need
+## Prerequisites and context
 
-- [`references/codespaces.md`](./references/codespaces.md) — devcontainer, machine-sizing, prebuild, idle-timeout guidance, and reporting.
-- [`references/review-rubric.md`](./references/review-rubric.md) — load only for review passes.
+- Use repository files under `.devcontainer/` when present.
+- Use GitHub CLI only when authenticated and authorized; if `gh` auth fails or repo admin scope is unavailable, proceed with static analysis and mark machine-type and prebuild recommendations as unverified.
+- If no `.devcontainer/` exists, read `references/codespaces.md` and define a baseline before proposing changes.
 
-## Core Workflow
+## Procedure
 
-### 1. Measure first
+1. Measure the current configuration and available usage evidence:
 
 ```bash
 find .devcontainer -maxdepth 2 -type f
@@ -34,51 +33,71 @@ repo=$(gh repo view --json nameWithOwner --jq .nameWithOwner)
 gh api "/repos/$repo/codespaces/machines"
 ```
 
-If `gh` auth fails or the user lacks repo admin scope, proceed with static analysis of `.devcontainer/` files; mark machine-type and prebuild recommendations as unverified.
+2. Inspect `.devcontainer/` files for image size, features, extensions, ports, post-create work, prebuild scope, machine type, and idle timeout.
+3. Apply the guardrails in this skill before recommending any fix.
+4. Rank supported fixes by estimated monthly cost savings in USD; select all that pass evidence and guardrails, up to three.
+5. Verify by starting a test Codespace when possible; otherwise mark validation as `static-only` and name the remaining risk.
 
-Look for: devcontainer image >2 GB or more than 10 features, machine type larger than usage data supports, missing `devcontainer-lock.json` (recommend adding — many repos predate lock-file support), prebuilds scoped too broadly, and idle timeout mismatched to usage patterns.
+## Waste candidates and thresholds
 
-### 2. Apply guardrails
+| Candidate | Evidence to require | Decision rule |
+| --- | --- | --- |
+| Trim devcontainer | Image greater than 2 GB, more than 10 features, unused packages, or unused extensions. | Remove only tools not used for everyday development. |
+| Right-size machine type | Machine larger than observed usage supports, or user reports over-provisioning. | Balance cost against throughput; do not assume smaller is always better. |
+| Scope prebuilds | Prebuilds run on branches without sustained usage. | Keep default branch, `release/*` branches active in the last 14 days, and branches with more than 5 Codespaces per week. |
+| Tune idle timeout | Sessions usually end before or after the default. | Use 30 min default, 15 min if most sessions end before 30 min, 60 min if most run longer. |
+| Remove unused ports/extensions | Forwarded ports or extensions have no daily workflow owner. | Remove only with evidence or user confirmation. |
+| Improve layer caching | Repeated package installation or volatile Dockerfile layers slow startup. | Put stable dependency layers before frequently changing source layers. |
 
-Check each proposed fix against these rules before recommending it:
+Recommend adding `devcontainer-lock.json` when it is missing, because many repos predate lock-file support.
 
-1. Does not remove tools the team uses every day — drop any fix that strips required development tools or extensions.
-2. Does not assume smaller is always better — balance machine cost against developer experience and throughput.
-3. Does not turn the devcontainer into a production image — drop any fix that adds production-only dependencies unless the team explicitly requires it.
-4. Incremental changes preferred — a greenfield baseline is appropriate only when no `.devcontainer/` exists; flag (do not drop) changes that restructure an existing config.
-5. Repo changes stay separate from org settings — split any fix that mixes repo-editable files with org-level or user-level Codespaces settings into two distinct recommendations.
+## Guardrails
 
-### 3. Select the top 3 fixes
+- Do not remove tools the team uses every day.
+- Do not turn the devcontainer into a production image or add production-only dependencies unless explicitly required.
+- Prefer incremental changes; use a greenfield baseline only when no `.devcontainer/` exists.
+- Split repo-editable changes from org-level or user-level Codespaces settings.
+- Treat unexpected build or startup failures as real bugs even when the configuration appears correct.
 
-From the six candidates below, keep only those supported by audit evidence from step 1 *and* passing all guardrails from step 2. Rank survivors by estimated monthly cost savings (USD). Select all candidates that meet both criteria, up to a maximum of 3.
+## Progressive disclosure and bundled resources
 
-1. Trim devcontainer — remove features, packages, or extensions not needed for everyday development work; target image <2 GB and fewer than 10 features
-2. Right-size machine type — match to observed usage patterns; if data is unavailable, state assumptions explicitly
-3. Scope prebuilds — enable for the default branch, `release/*` branches active in the last 14 days, and branches with more than 5 Codespaces per week; disable for all others
-4. Tune idle timeout — 30 min default; 15 min if most sessions end before 30 min; 60 min if most sessions run longer
-5. Remove unused extensions or port-forwarding rules
-6. Reduce devcontainer image size and improve layer caching
+- `references/codespaces.md`: devcontainer baseline, machine-sizing, machine sizing, prebuild, idle-timeout guidance, port-forwarding guidance, and reporting details.
+- `references/review-rubric.md`: use when reviewing completed Codespaces efficiency work.
 
-### 4. Verify
+## Output template
 
-- Start a test Codespace to confirm devcontainer changes build and start as expected.
-- Validate machine sizing against observed usage when telemetry is available; otherwise mark as unverified.
-- Treat unexpected build or startup failures as real bugs even when the configuration looks correct.
+```markdown
+## GitHub Codespaces efficiency result
 
-## Required Output
+**Status:** proven live | static-only | blocked
+**Scope:** `<repo or .devcontainer path>`
 
-**Waste sources:** [top cost or startup-time drivers]
+### Waste sources
+| Rank | Source | Evidence | Impact |
+| --- | --- | --- | --- |
+| 1 | <cost/startup driver> | <file, command output, or assumption> | <startup/cost/utilization effect> |
 
-**Proposed fixes:** [top 3 changes supported by audit evidence and passing guardrails]
+### Proposed fixes
+| Rank | Fix | Evidence | Estimated monthly savings (USD) | Risk |
+| --- | --- | --- | --- | --- |
+| 1 | <top fix> | <why supported> | <amount or unknown> | <remaining risk> |
 
-**Validation:** [proven live / static-only / remaining risk]
+### Validation
+- Test Codespace: pass | fail | not run, <reason>
+- Machine sizing: verified | unverified, <reason>
+- Prebuild scope: verified | unverified, <reason>
 
-**Impact:**
-- Startup time: [expected] / [measured if available]
-- Monthly spend: [expected] / [measured if available]
-- Resource utilization: [expected] / [measured if available]
+### Impact
+- Startup time: <expected or measured>
+- Monthly spend: <expected or measured>
+- Resource utilization: <expected or measured>
+```
 
-## References
+## Quality gate
 
-- [`references/codespaces.md`](./references/codespaces.md)
-- [`references/review-rubric.md`](./references/review-rubric.md) — load when reviewing completed efficiency work
+- [ ] `.devcontainer/` was inspected or the absence of a devcontainer was handled with `references/codespaces.md`.
+- [ ] `gh codespace list` and `/repos/$repo/codespaces/machines` were attempted when CLI access was available.
+- [ ] Every proposed fix has audit evidence and passes all guardrails.
+- [ ] No more than three fixes are recommended, ranked by estimated monthly cost savings in USD.
+- [ ] Validation is labeled `proven live`, `static-only`, or `blocked` with remaining risk.
+- [ ] Startup time, monthly spend, and resource utilization impact are separated.

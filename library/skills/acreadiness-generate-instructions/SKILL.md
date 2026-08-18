@@ -1,50 +1,47 @@
 ---
 name: "acreadiness-generate-instructions"
 description: >-
-  Generate tailored AI agent instruction files via AgentRC instructions command. Produces
-  .github/copilot-instructions.md (default, recommended for Copilot in VS Code) plus optional per-area
-  .instructions.md files with applyTo globs for monorepos. Use after running /acreadiness-assess to
-  close gaps in the AI Tooling pillar. Use this skill when output options.
+  Generate tailored AI agent instruction files with the AgentRC instructions command, including .github/copilot-instructions.md, AGENTS.md, scoped .github/instructions/*.instructions.md files with applyTo globs, and optional CLAUDE.md output. Use after /acreadiness-assess to close AI Tooling gaps or when the user wants to create, regenerate, refresh, preview, or choose output options for custom instructions.
 argument-hint: "[--output .github/copilot-instructions.md|AGENTS.md] [--strategy flat|nested] [--areas | --area <name>] [--apply-to <glob>] [--claude-md] [--dry-run]"
 ---
-# /acreadiness-generate-instructions — write AI agent instructions
 
-Use this skill whenever the user wants to **create**, **regenerate**, or **refresh** their custom instructions for AI coding agents (Copilot, Claude, etc.). This is the *Generate* step in AgentRC's **Measure → Generate → Maintain** loop and the single highest-leverage action for the **AI Tooling** pillar.
+# AgentRC instruction generation
+
+Generate or refresh repository instruction files through AgentRC's Measure → Generate → Maintain loop, choosing the right output target, strategy, and scoped `applyTo` layout for GitHub Copilot and other agents.
+
+## When to invoke
+
+- "Generate Copilot instructions for this repo."
+- "Refresh our AI agent instructions after acreadiness assess."
+- "Create AGENTS.md and scoped instructions."
+- "Use AgentRC instructions with nested strategy."
+- "Add per-area .instructions.md files with applyTo globs."
+
+## Inputs
+
+Use `$ARGUMENTS` as command-line options for AgentRC generation. Validate supported flags before running anything: `--output`, `--strategy`, `--areas`, `--area`, `--areas-only`, `--apply-to`, `--claude-md`, `--dry-run`, and `--force` when overwriting is confirmed. If `$ARGUMENTS` is empty, default to `.github/copilot-instructions.md` and ask which strategy to use unless the user already specified one.
 
 ## Output options
 
-VS Code recognises several instruction file types — AgentRC generates the most common ones:
-
 | File | Scope | When to use |
-|---|---|---|
-| `.github/copilot-instructions.md` | Always-on, whole workspace | **Default** — VS Code Copilot's native instruction file |
-| `AGENTS.md` | Always-on, whole workspace | Multi-agent repos (Copilot + Claude + others) |
-| `.github/instructions/*.instructions.md` | Scoped by `applyTo` glob | Per-area / per-language rules in monorepos |
-| `CLAUDE.md` | Claude-specific | Add via `--claude-md` (nested only) |
+| --- | --- | --- |
+| `.github/copilot-instructions.md` | Always-on, whole workspace | Default and recommended for GitHub Copilot in VS Code. |
+| `AGENTS.md` | Always-on, whole workspace | Multi-agent repositories using GitHub Copilot, Claude, Cursor, or other agents. |
+| `.github/instructions/*.instructions.md` | Scoped by `applyTo` glob | Per-topic or per-area rules in monorepos and multi-stack repositories. |
+| `CLAUDE.md` | Claude-specific | Add via `--claude-md`; nested strategy only. |
 
-## Strategies
+## Strategy choices
 
-- **`flat`** *(default)* — single `.github/copilot-instructions.md` at the chosen path. Simple, easy to review.
-- **`nested`** — hub at `.github/copilot-instructions.md` + per-topic detail files at `.github/instructions/<topic>.instructions.md`, each with an `applyTo` glob so VS Code only loads the topic when it's relevant. Better for large or multi-stack repos.
+| Strategy | Shape | Use when |
+| --- | --- | --- |
+| `flat` | One `.github/copilot-instructions.md` or chosen output file. | Small or medium repos with one stack; simple review in one PR. |
+| `nested` | Hub `.github/copilot-instructions.md` plus per-topic `.github/instructions/<topic>.instructions.md` files. | Large repos, multi-stack repos, monorepos, or repos with more than 5 top-level directories. |
 
-> **Why `.github/instructions/` and not `.agents/`?** AgentRC's default nested layout writes to `.agents/`, which is the right home for *agent-agnostic* repos (Copilot + Claude + Cursor reading `AGENTS.md`). For VS Code Copilot specifically, the native location is `.github/instructions/` with `applyTo` frontmatter — that's what Copilot auto-discovers. This skill rewrites AgentRC's nested output to the VS Code-native location whenever the main output is `.github/copilot-instructions.md`. If you instead chose `--output AGENTS.md`, nested keeps AgentRC's default `.agents/` layout.
+For GitHub Copilot, native scoped files live in `.github/instructions/` with `applyTo` frontmatter. AgentRC's default nested layout writes `.agents/` for agent-agnostic repositories; rewrite to `.github/instructions/` when the main output is `.github/copilot-instructions.md`. If `--output AGENTS.md` is chosen, keep AgentRC's native `.agents/` layout.
 
-For monorepos, generate **area-scoped** instructions with `--areas`, `--area <name>`, or `--areas-only`. Areas are defined in `agentrc.config.json`. Per-area output is written as VS Code `.instructions.md` files with an `applyTo` glob (see below).
+## Area-scoped instructions
 
-### Topic vs area `.instructions.md` files
-
-Both end up in `.github/instructions/` but they answer different questions:
-
-| Kind | Filename example | `applyTo` example | Where it comes from |
-|---|---|---|---|
-| **Topic** (nested) | `testing.instructions.md` | `**/*.{test,spec}.{ts,tsx,js}` | AgentRC `--strategy nested` topic split |
-| **Area** (monorepo) | `frontend.instructions.md` | `apps/frontend/**` | `agentrc.config.json` areas + `--areas` |
-
-You can have both at once: a nested set of topic files plus per-area files for a monorepo.
-
-## Per-area files with `applyTo`
-
-When the user opts into areas, emit one VS Code-native `.instructions.md` file per area at `.github/instructions/<area>.instructions.md`. Each file MUST start with frontmatter declaring the glob the rules apply to:
+When `agentrc.config.json` declares areas, default to offering per-area `.instructions.md` files. Each area file must be lowercase kebab-case and start with `applyTo` frontmatter.
 
 ```markdown
 ---
@@ -53,58 +50,81 @@ applyTo: "apps/frontend/**"
 
 # Frontend area instructions
 
-…AgentRC-generated content for this area…
+...AgentRC-generated content for this area...
 ```
 
-Workflow:
+| Kind | Filename example | `applyTo` example | Source |
+| --- | --- | --- | --- |
+| Topic | `testing.instructions.md` | `**/*.{test,spec}.{ts,tsx,js}` | AgentRC `--strategy nested` topic split. |
+| Area | `frontend.instructions.md` | `apps/frontend/**` | `agentrc.config.json` areas plus `--areas`. |
 
-1. **Read `agentrc.config.json`** to discover declared areas and their `paths` / globs. If `paths` is missing, ask the user for the glob (e.g. `src/api/**`).
-2. **Run `agentrc instructions --areas`** (or `--area <name>`) to produce the per-area body content.
-3. **Wrap each area's content** in `.github/instructions/<area>.instructions.md` with the `applyTo` frontmatter taken from the area's `paths`. If the user passed `--apply-to <glob>` on a single-area call, use that glob verbatim.
-4. **Leave the main file alone** — the root `.github/copilot-instructions.md` stays as the always-on instructions; `.instructions.md` files only kick in for matching paths.
+## Procedure
 
-Naming: lowercase, kebab-case area name. Examples: `.github/instructions/frontend.instructions.md`, `.github/instructions/api.instructions.md`, `.github/instructions/infra.instructions.md`.
+1. Pick the target file. Default to `.github/copilot-instructions.md`; switch to `AGENTS.md` only for multi-agent, Claude, Cursor, or explicit user request.
+2. Ask which strategy to use, `flat` or `nested`, unless supplied by user or `$ARGUMENTS`. Recommend `nested` when the repo has more than 5 top-level directories, multiple stacks, or monorepo tooling such as turbo, nx, or pnpm workspaces.
+3. Read `agentrc.config.json` to discover areas. If areas exist, ask whether to generate per-area `.instructions.md` files; default to yes. If an area lacks `paths`, ask for a glob such as `src/api/**`. If `--apply-to <glob>` is supplied for a single area, use it verbatim.
+4. Run a dry run first:
 
-## Steps
-
-1. **Pick the target file**. **Default to `.github/copilot-instructions.md`.** Switch to `AGENTS.md` only if the user mentions multi-agent / Claude / Cursor support.
-2. **Always ask which strategy to use** — `flat` or `nested` — unless the user already specified one in their message or via `--strategy`. Present the trade-off briefly:
-   - **Flat** *(default)* — one `.github/copilot-instructions.md`. Simple, easy to review in a single PR. Best for small/medium repos with one stack.
-   - **Nested** — hub `.github/copilot-instructions.md` + per-topic `.github/instructions/<topic>.instructions.md` files (each with an `applyTo` glob so VS Code only loads them when relevant). Best for large or multi-stack repos. Add `--claude-md` to also emit `CLAUDE.md`.
-   Recommend `nested` proactively when the repo has > 5 top-level directories, multiple stacks, or already uses a monorepo tool (turbo/nx/pnpm workspaces).
-3. **Detect monorepo areas** by reading `agentrc.config.json`. If areas exist, ask the user whether they want **per-area `.instructions.md` files with `applyTo`** in addition to the root file. Default to "yes" when `agentrc.config.json` declares areas.
-4. **Run dry-run first** so the user can preview:
    ```bash
    npx -y github:microsoft/agentrc instructions --output <file> --strategy <flat|nested> [--areas|--area <name>] [--claude-md] --dry-run
    ```
-5. **Show a short summary** of what would change — files that would be created or overwritten, area count + their `applyTo` globs, model used (default `claude-sonnet-4.6`).
-6. **On confirmation, run the same command without `--dry-run`** (and optionally `--force` if files already exist).
-7. **Post-process layout for Copilot output**:
-   - **If `--output` ends in `copilot-instructions.md` and strategy is `nested`**: move/rewrite AgentRC's `.agents/<topic>.md` files to `.github/instructions/<topic>.instructions.md`. Add frontmatter to each file with an appropriate `applyTo` glob (see "Topic applyTo defaults" below). Delete the now-empty `.agents/` directory.
-   - **If `--areas` was used**: also write `.github/instructions/<area>.instructions.md` for every area, using each area's `paths` from `agentrc.config.json` as the `applyTo` glob (override with `--apply-to` for single-area calls).
-   - **If `--output AGENTS.md`** was chosen: keep AgentRC's native `.agents/` layout for nested — agent-agnostic readers expect it there.
-   Create the `.github/instructions/` directory if missing.
 
-### Topic `applyTo` defaults
+5. Show a short summary of files to create or overwrite, area count and their `applyTo` globs, and the model used, default `claude-sonnet-4.6`.
+6. On confirmation, run the same command without `--dry-run`, adding `--force` only if overwriting existing files was confirmed.
+7. Post-process layout for GitHub Copilot output:
+   - If `--output` ends in `copilot-instructions.md` and strategy is `nested`, move or rewrite `.agents/<topic>.md` to `.github/instructions/<topic>.instructions.md`, add suitable `applyTo`, and delete now-empty `.agents/`.
+   - If `--areas` or `--area <name>` was used, write `.github/instructions/<area>.instructions.md` for each area using `paths` from `agentrc.config.json` unless overridden by `--apply-to`.
+   - If `--output AGENTS.md` was chosen, keep `.agents/` for nested output.
+8. Verify by reading generated files back and summarize detected stack, conventions captured, length, and `.instructions.md` files with their globs.
+9. Suggest next steps: rerun the `assess` skill to confirm AI Tooling improved; consolidate if both `copilot-instructions.md` and `AGENTS.md` already exist.
 
-When promoting AgentRC's nested topic files to `.instructions.md`, use these defaults unless the user specifies otherwise:
+## Topic applyTo defaults
 
 | Topic | Default `applyTo` |
-|---|---|
+| --- | --- |
 | `testing` | `**/*.{test,spec}.{ts,tsx,js,jsx,mjs,cjs}` |
 | `style` / `code-quality` / `formatting` | `**/*.{ts,tsx,js,jsx,mjs,cjs,py,go,rs,java,kt,cs}` |
 | `build` / `ci` | `**/{package.json,turbo.json,nx.json,.github/workflows/**}` |
 | `docs` | `**/*.md` |
 | `security` | `**` |
 | anything else / hub-level | `**` |
-8. **Verify** by reading the generated file(s) back and showing the user a 1-paragraph synopsis: stack detected, conventions captured, length, list of `.instructions.md` files with their globs.
-9. **Suggest next steps**:
-   - Re-run the `assess` skill to confirm the AI Tooling pillar score improved.
-   - If the user already has both `copilot-instructions.md` and `AGENTS.md`, recommend consolidating to a single source of truth (AgentRC flags this at maturity Level 2+).
 
-## Notes
+## Gotchas
 
-- AgentRC reads your **actual code** — no templates. Output reflects detected languages, frameworks, and conventions.
-- `--claude-md` (nested strategy only) also emits `CLAUDE.md`.
-- VS Code applies `.instructions.md` files automatically when the active file matches `applyTo`. The root `.github/copilot-instructions.md` always loads.
-- Never run this skill non-interactively in CI; instructions are part of the repo and should land via PR.
+- **Always dry-run first**: instruction files are repository policy and should be reviewed before overwrite.
+- **Do not run non-interactively in CI**: generated instructions should land through a PR.
+- **Copilot scoped files are not `.agents/`**: use `.github/instructions/*.instructions.md` with `applyTo` when targeting `.github/copilot-instructions.md`.
+- **AgentRC reads actual code**: do not replace generated content with generic templates.
+
+This is the highest-leverage AgentRC action for AI Tooling. VS Code auto-discovers `.github/instructions/*.instructions.md`; examples include `.github/instructions/frontend.instructions.md`, `.github/instructions/api.instructions.md`, and `.github/instructions/infra.instructions.md`. per-language guidance belongs in scoped files when useful. For monorepos, `agentrc instructions --areas` can generate area-scoped content. In a single-area call, `--apply-to` overrides the area path. Nested Copilot output may require move/rewrite from `.agents/` into `.github/instructions/`. Present the flat versus nested trade-off for small/medium repositories and detect turbo/nx/pnpm workspaces. Area files MUST include `applyTo`.
+
+## Output template
+
+```markdown
+## AgentRC instruction generation result
+
+**Status:** generated | previewed | blocked
+**Target:** `.github/copilot-instructions.md` | `AGENTS.md`
+**Strategy:** `flat` | `nested`
+
+| File | Scope | applyTo | Status |
+| --- | --- | --- | --- |
+| `<path>` | `<root/topic/area/Claude>` | `<glob or always-on>` | `<created/updated/previewed>` |
+
+**Command**
+`npx -y github:microsoft/agentrc instructions --output <file> --strategy <flat|nested> ...`
+
+**Synopsis:** <stack detected, conventions captured, length>
+**Next steps:** <assess rerun or consolidation advice>
+```
+
+## Quality gate
+
+- [ ] `$ARGUMENTS` was parsed and unsupported options were rejected or ignored safely.
+- [ ] The target defaulted to `.github/copilot-instructions.md` unless the user requested `AGENTS.md` or multi-agent output.
+- [ ] Strategy was supplied or confirmed before generation.
+- [ ] `agentrc.config.json` areas and `paths` were read when area output was requested or available.
+- [ ] A dry run was shown before any overwrite or generation.
+- [ ] GitHub Copilot nested output was rewritten to `.github/instructions/*.instructions.md` with `applyTo` frontmatter.
+- [ ] `AGENTS.md` nested output kept `.agents/` when chosen.
+- [ ] Generated files were read back and summarized with lengths and globs.

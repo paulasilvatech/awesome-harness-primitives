@@ -1,56 +1,85 @@
 ---
 name: "bug-reproduction-brief"
 description: >-
-  Turn a vague, intermittent, or environment-specific bug report into a minimal evidence-backed
-  reproduction before proposing a fix. Use this skill when 1. Record the observed failure.
+  Turn vague, intermittent, or environment-specific bug reports into minimal evidence-backed reproductions before diagnosis or repair. Use when a bug report is incomplete, mixed with an assumed cause, hard to reproduce, or needs observed failure, environment, expected/actual behavior, repeatability, and safe next hypothesis.
 ---
-# Bug Reproduction Brief
 
-Use this skill when a bug report is incomplete, intermittent, environment-specific, or mixed with an assumed cause. The goal is to prove the smallest observable failure before diagnosis or repair begins.
+# Bug reproduction brief
 
-## 1. Record the observed failure
+Reduce a reported bug to the smallest observable, repeatable, evidence-backed failure before proposing a root cause or editing implementation code.
 
-Capture the exact error, incorrect output, timestamp, affected route or command, and the smallest known input. Preserve relevant logs without secrets or personal data. Label second-hand descriptions as unverified.
+## When to invoke
 
-## 2. Identify the environment
+- "Reproduce this bug before fixing it."
+- "Turn this intermittent failure into a minimal reproduction."
+- "Write a bug reproduction brief for checkout."
+- "Separate expected and actual behavior from the suspected cause."
+- "Prove this environment-specific bug with command evidence."
 
-Record only facts you can inspect:
+## Evidence to capture
 
-- repository and commit;
-- runtime and package-manager versions;
-- operating system or container;
-- dependency lockfile;
-- relevant feature flags;
-- whether the target is local, test, staging, or production.
+| Area | Record | Avoid |
+| --- | --- | --- |
+| Observed failure | Exact error, incorrect output, timestamp, affected route or command, smallest known input. | Paraphrasing, screenshots without text when logs exist. |
+| Logs | Relevant lines with secrets and personal data removed. | Secrets, customer records, private data, environment variables. |
+| Environment | Repository and commit, runtime and package-manager versions, OS or container, lockfile, feature flags, local/test/staging/production target. | Guessed credentials or production configuration. |
+| Expected vs actual | Two observable statements. | Suspected cause or implementation theory. |
+| Repeatability | Commands, outputs, run count, frequency, and duration. | Calling intermittent failures deterministic without evidence. |
 
-Never guess credentials or production configuration.
-
-## 3. Separate expected from actual behaviour
-
-Write two explicit observable statements:
+Use this exact separation:
 
 ```text
 Expected: [observable result]
 Actual:   [observable result, including status or error]
 ```
 
-Do not put the suspected cause in either statement.
+## Procedure
 
-## 4. Reduce the reproduction
+1. Record the observed failure exactly as reported or observed. Label second-hand descriptions as unverified.
+2. Identify the environment from inspectable facts only.
+3. Write explicit expected and actual behavior statements.
+4. Start from the reported path, command, or route.
+5. Remove unrelated data, services, and steps one at a time.
+6. When the failure stops, restore the last removed condition and record it as necessary.
+7. Prefer an isolated test, minimal script, or smallest safe request over reproducing against production.
+8. Run the minimal reproduction at least twice where safe.
+9. If intermittent, report observed frequency and duration.
+10. Stop before repair; the deliverable is the verified reproduction brief.
 
-Start from the reported path, then remove unrelated data, services, and steps one at a time. Keep the smallest fixture that still fails. If the failure stops, restore the last removed condition and record it.
+## Safety boundaries
 
-Prefer an isolated test, minimal script, or smallest safe request over reproducing against production.
+- Do not change production data merely to reproduce a bug.
+- Do not publish secrets, customer records, private source, credentials, or environment variables.
+- Do not claim a root cause from correlation alone.
+- Use read-only or reversible discovery first.
+- Do not edit implementation code while building the brief because that can destroy evidence or mix diagnosis with remediation.
+- Stop after a verified reproduction; diagnosis and repair are separate workflows.
 
-## 5. Prove repeatability
+## Reduction patterns
 
-Run the minimal reproduction at least twice where safe. Record commands and outputs. If the failure is intermittent, report the observed frequency and duration instead of calling it deterministic.
+| Report shape | Reduction tactic |
+| --- | --- |
+| Failing test suite | Run the smallest test selector that still fails, then reduce fixtures. |
+| API or route bug | Capture the smallest safe request, headers without secrets, status, and body. |
+| CLI bug | Preserve command, arguments, working directory, exit code, stdout, and stderr. |
+| Intermittent behavior | Run repeated attempts with timestamps and count pass/fail frequency. |
+| Environment-specific failure | Compare inspectable versions, lockfile, feature flags, OS/container, and target tier. |
 
-## 6. Stop before repair
+## Examples
 
-A verified reproduction is the deliverable. Do not edit implementation code while building the brief because that can destroy the evidence or mix diagnosis with remediation.
+### Good
 
-## Output
+**Input:** "The checkout test fails sometimes; reproduce but do not fix."
+
+**Expected behavior:** Produce a brief with exact command evidence, expected result, actual error, run count, frequency if intermittent, and unknowns.
+
+### Bad
+
+**Input:** "The checkout test fails because the cache is stale; fix the cache."
+
+**Incorrect behavior:** Editing cache code before proving the smallest failure. Correct by first writing the reproduction brief and labeling the cache claim as an unverified hypothesis.
+
+## Output template
 
 ```markdown
 # Bug Reproduction Brief
@@ -67,20 +96,16 @@ A verified reproduction is the deliverable. Do not edit implementation code whil
 - Safe next hypothesis to test:
 ```
 
-## Safety boundaries
+## Quality gate
 
-- Do not change production data merely to reproduce a bug.
-- Do not publish secrets, customer records, or private source.
-- Do not claim a root cause from correlation alone.
-- Use read-only or reversible discovery first.
-- Stop after a verified reproduction; diagnosis and repair are separate workflows.
+- [ ] The observed failure includes exact error, incorrect output, timestamp, route or command, and smallest known input when available.
+- [ ] Environment facts are inspectable and include repository, commit, runtime, package manager, OS/container, lockfile, feature flags, and target tier when relevant.
+- [ ] Expected and actual behavior are observable and do not include suspected causes.
+- [ ] The reproduction was reduced by removing unrelated steps until the smallest failing condition remained.
+- [ ] The minimal reproduction was run at least twice where safe, or intermittent frequency and duration were reported.
+- [ ] No production data was changed and no secrets or personal data were published.
+- [ ] No implementation code was edited before the brief was delivered.
 
-## Example prompt
+## References
 
-```text
-Use the Bug Reproduction Brief skill on the failing checkout test. Do not fix it yet. Reduce it to the smallest safe failing fixture and report the exact command evidence, expected result, actual result, and remaining unknowns.
-```
-
-## Source and licence
-
-Adapted from the MIT-licensed workflow at https://github.com/skyestrela/ai-agent-skill-preview.
+- [AI agent skill preview workflow](https://github.com/skyestrela/ai-agent-skill-preview.)

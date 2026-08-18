@@ -1,84 +1,107 @@
 ---
-name: "dotnet-best-practices"
-description: "Ensure .NET/C# code meets best practices for the solution/project. Use this skill when the user asks for .net/c# best practices."
+name: dotnet-best-practices
+description: >-
+  Review or improve .NET and C# code against solution/project best practices for documentation, architecture, dependency injection, resources, async, tests, configuration, Semantic Kernel, logging, performance, security, SOLID, and code quality. Use when asked for .net/c# or .NET/C# best practices or cleanup.
 ---
-# .NET/C# Best Practices
 
-Your task is to ensure .NET/C# code in ${selection} meets the best practices specific to this solution/project. This includes:
+# .NET and C# best practices
 
-## Documentation & Structure
+Evaluate selected .NET/C# code or a project area, identify gaps against the solution's conventions, and return actionable refactoring guidance or code changes that preserve behavior while improving maintainability, testability, security, and consistency.
 
-- Create comprehensive XML documentation comments for all public classes, interfaces, methods, and properties
-- Include parameter descriptions and return value descriptions in XML comments
-- Follow the established namespace structure: {Core|Console|App|Service}.{Feature}
+Use the active solution/project. conventions as the source of truth when they are more specific than general .NET guidance.
 
-## Design Patterns & Architecture
+## When to invoke
 
-- Use primary constructor syntax for dependency injection (e.g., `public class MyClass(IDependency dependency)`)
-- Implement the Command Handler pattern with generic base classes (e.g., `CommandHandler<TOptions>`)
-- Use interface segregation with clear naming conventions (prefix interfaces with 'I')
-- Follow the Factory pattern for complex object creation.
+- "Review this C# code for .NET best practices."
+- "Make this .NET service follow our conventions."
+- "Check dependency injection, logging, and async patterns."
+- "Improve Semantic Kernel integration in this project."
+- "Add XML docs and tests for this C# API."
 
-## Dependency Injection & Services
+## Criteria
 
-- Use constructor dependency injection with null checks via ArgumentNullException
-- Register services with appropriate lifetimes (Singleton, Scoped, Transient)
-- Use Microsoft.Extensions.DependencyInjection patterns
-- Implement service interfaces for testability
+### Documentation and structure
 
-## Resource Management & Localization
+- [ ] Public classes, interfaces, methods, and properties have XML documentation comments with parameter and return descriptions where applicable.
+- [ ] Namespaces follow the established `{Core|Console|App|Service}.{Feature}` structure when that convention exists in the solution.
+- [ ] Names reflect domain concepts instead of transport, UI, or implementation details.
 
-- Use ResourceManager for localized messages and error strings
-- Separate LogMessages and ErrorMessages resource files
-- Access resources via `_resourceManager.GetString("MessageKey")`
+### Architecture and dependency injection
 
-## Async/Await Patterns
+| Area | Prefer | Avoid |
+| --- | --- | --- |
+| Construction | Primary constructor syntax such as `public class MyClass(IDependency dependency)` for dependency injection. | Service location or mutable public dependencies. |
+| Handlers | Command Handler pattern with generic base classes such as `CommandHandler<TOptions>`. | Large orchestration methods that mix parsing, validation, and execution. |
+| Interfaces | Interface segregation with `I`-prefixed names for test seams. | One broad interface with unrelated responsibilities. |
+| Factories | Factory pattern for complex object creation. | Repeated ad hoc object graphs in callers. |
+| Lifetimes | Register services as `Singleton`, `Scoped`, or `Transient` based on state and dependency lifetime. | Capturing scoped services in singletons. |
+| Validation | Constructor null checks with `ArgumentNullException`. | Late null failures deep in execution. |
 
-- Use async/await for all I/O operations and long-running tasks
-- Return Task or Task<T> from async methods
-- Use ConfigureAwait(false) where appropriate
-- Handle async exceptions properly
+Use `Microsoft.Extensions.DependencyInjection` patterns and register service interfaces for testability.
 
-## Testing Standards
+### Resources, configuration, and localization
 
-- Use MSTest framework with FluentAssertions for assertions
-- Follow AAA pattern (Arrange, Act, Assert)
-- Use Moq for mocking dependencies
-- Test both success and failure scenarios
-- Include null parameter validation tests
+- [ ] Localized messages and error strings use `ResourceManager`.
+- [ ] Log and error text are separated into `LogMessages` and `ErrorMessages` resource files.
+- [ ] Resource access uses `_resourceManager.GetString("MessageKey")` with a named key, not inline display text.
+- [ ] Settings use strongly-typed configuration classes bound from `IConfiguration` and `appsettings.json`.
+- [ ] Configuration classes carry validation attributes such as `Required` and `NotEmptyOrWhitespace` when values are mandatory.
 
-## Configuration & Settings
+### Async, errors, logging, and security
 
-- Use strongly-typed configuration classes with data annotations
-- Implement validation attributes (Required, NotEmptyOrWhitespace)
-- Use IConfiguration binding for settings
-- Support appsettings.json configuration files
+| Concern | Rule |
+| --- | --- |
+| Async/Await I/O | Use `async`/`await` (async/await) for I/O and long-running tasks; return `Task` or `Task<T>`. |
+| Context capture | Use `ConfigureAwait(false)` where appropriate for library code that does not require a captured context. |
+| Exceptions | Throw specific exceptions with descriptive messages; use try-catch blocks only for expected failure scenarios. |
+| Logging | Use structured logging through `Microsoft.Extensions.Logging` and scopes with meaningful context. |
+| Data access | Use parameterized queries for database operations. |
+| Input | Validate and sanitize external input, especially AI/ML prompts and tool outputs. |
+| Disposal | Implement proper disposal patterns for owned resources. |
 
-## Semantic Kernel & AI Integration
+### Testing and AI integration
 
-- Use Microsoft.SemanticKernel for AI operations
-- Implement proper kernel configuration and service registration
-- Handle AI model settings (ChatCompletion, Embedding, etc.)
-- Use structured output patterns for reliable AI responses
+- [ ] Tests use MSTest, FluentAssertions, and Moq when those are the established project tools.
+- [ ] Tests follow AAA: Arrange, Act, Assert.
+- [ ] Success paths, failure paths, and null parameter validation are covered.
+- [ ] AI operations use `Microsoft.SemanticKernel` with explicit kernel configuration and service registration.
+- [ ] ChatCompletion, Embedding, and related model settings are handled through structured configuration.
+- [ ] Structured output patterns are used where AI responses must be reliable.
 
-## Error Handling & Logging
+## Gotchas
 
-- Use structured logging with Microsoft.Extensions.Logging
-- Include scoped logging with meaningful context
-- Throw specific exceptions with descriptive messages
-- Use try-catch blocks for expected failure scenarios
+- **Do not add XML documentation that restates the method name**: documentation must explain behavior, parameters, return values, or constraints.
+- **Do not make every service `Singleton` for speed**: lifetime must match state and dependencies.
+- **Do not use `ConfigureAwait(false)` blindly in application UI or request code**: apply it where context capture is unnecessary.
+- **Do not weaken tests to satisfy refactoring**: preserve behavior and add assertions for changed seams.
 
-## Performance & Security
+## Output template
 
-- Use C# 12+ features and .NET 8 optimizations where applicable
-- Implement proper input validation and sanitization
-- Use parameterized queries for database operations
-- Follow secure coding practices for AI/ML operations
+```markdown
+## .NET best-practices review
 
-## Code Quality
+**Status:** pass | fixes recommended | blocked
+**Scope:** `<selection/project/path>`
 
-- Ensure SOLID principles compliance
-- Avoid code duplication through base classes and utilities
-- Use meaningful names that reflect domain concepts
-- Keep methods focused and cohesive
-- Implement proper disposal patterns for resources
+| Area | Finding | Severity | Recommendation |
+| --- | --- | --- | --- |
+| Dependency injection | <evidence> | High/Medium/Low | <specific fix> |
+
+### Refactoring plan or changes
+1. <small, behavior-preserving step>
+2. <test or validation step>
+
+### Validation
+- `<command or inspection>`: pass | fail | not run, <reason>
+```
+
+## Quality gate
+
+- [ ] Public API documentation, namespace structure, and naming were checked.
+- [ ] Dependency injection, service lifetimes, interface segregation, and factory seams were evaluated.
+- [ ] ResourceManager, `LogMessages`, `ErrorMessages`, and configuration binding were checked where relevant.
+- [ ] Async, exception, structured logging, disposal, input validation, and parameterized query practices were checked.
+- [ ] MSTest, FluentAssertions, Moq, AAA, success, failure, and null validation tests were considered.
+- [ ] Semantic Kernel usage is reviewed when AI code is in scope.
+- [ ] Recommendations preserve behavior and include validation evidence.
+- [ ] SOLID principles, cohesion, coupling, duplication, and disposal patterns were considered.

@@ -1,68 +1,106 @@
 ---
-name: "microsoft-agent-framework"
+name: microsoft-agent-framework
 description: >-
-  Create, update, refactor, explain, or review Microsoft Agent Framework solutions using shared
-  guidance plus language-specific references for .NET and Python. Use this skill when microsoft Agent
-  Framework is the unified successor to Semantic Kernel and AutoGen, combining their strengths with
-  new capabilities. Becau.
+  Create, update, refactor, explain, or review Microsoft Agent Framework applications, agents, workflows, and migrations in .NET or Python. Use this skill when working with Microsoft Agent Framework, successor guidance for Semantic Kernel or AutoGen, Azure AI Foundry, Azure OpenAI, OpenAI providers, MCP tools, workflows, middleware, checkpointing, or language-specific samples.
 ---
+
 # Microsoft Agent Framework
 
-Use this skill when working with applications, agents, workflows, or migrations built on Microsoft Agent Framework.
+Ground Microsoft Agent Framework work in the latest official documentation, choose the correct .NET or Python reference, and apply up-to-date shared agent/workflow guidance without relying on stale Semantic Kernel or AutoGen assumptions.
 
-Microsoft Agent Framework is the unified successor to Semantic Kernel and AutoGen, combining their strengths with new capabilities. Because it is still in public preview and changes quickly, always ground implementation advice in the latest official documentation and samples rather than relying on stale knowledge.
+## When to invoke
 
-## Determine the target language first
+- "Build a Microsoft Agent Framework agent."
+- "Migrate this Semantic Kernel app to Agent Framework."
+- "Migrate from AutoGen to Microsoft Agent Framework."
+- "Review this Agent Framework workflow."
+- "Show .NET or Python package guidance for Agent Framework."
 
-Choose the language workflow before making recommendations or code changes:
+## Prerequisites and context
 
-1. Use the **.NET** workflow when the repository contains `.cs`, `.csproj`, `.sln`, `.slnx`, or other .NET project files, or when the user explicitly asks for C# or .NET guidance. Follow [references/dotnet.md](references/dotnet.md).
-2. Use the **Python** workflow when the repository contains `.py`, `pyproject.toml`, `requirements.txt`, or the user explicitly asks for Python guidance. Follow [references/python.md](references/python.md).
-3. If the repository contains both ecosystems, match the language used by the files being edited or the user's stated target.
-4. If the language is ambiguous, inspect the current workspace first and then choose the closest language-specific reference.
+- Microsoft Agent Framework is in public preview and changes quickly.
+- Read the official overview at `https://learn.microsoft.com/agent-framework/overview/agent-framework-overview` before making implementation choices.
+- Prefer official docs and samples for current APIs; treat older Semantic Kernel and AutoGen code as migration input.
+- Use live documentation tooling when available to fetch current framework guidance and examples.
 
-## Always consult live documentation
+## Language routing
 
-- Read the Microsoft Agent Framework overview first: <https://learn.microsoft.com/agent-framework/overview/agent-framework-overview>
-- Prefer official docs and samples for the current API surface.
-- Use the Microsoft Docs MCP tooling when available to fetch up-to-date framework guidance and examples.
-- Treat older Semantic Kernel or AutoGen patterns as migration inputs, not as the default implementation model.
+| Repository or request signal | Workflow |
+| --- | --- |
+| `.cs`, `.csproj`, `.sln`, `.slnx`, or explicit C#/.NET request | Follow `references/dotnet.md`. |
+| `.py`, `pyproject.toml`, `requirements.txt`, or explicit Python request | Follow `references/python.md`. |
+| Both ecosystems present | Match the files being edited or the user's stated target language. |
+| Ambiguous language | Inspect the workspace first, then choose the closest language-specific reference. |
 
-## Shared guidance
+## Shared implementation guidance
 
-When working with Microsoft Agent Framework in any language:
-
-- Use async patterns for agent and workflow operations.
-- Implement explicit error handling and logging.
-- Prefer strong typing, clear interfaces, and maintainable composition patterns.
-- Use `DefaultAzureCredential` when Azure authentication is appropriate.
-- Use agents for autonomous decision-making, ad hoc planning, conversation flows, tool usage, and MCP server interactions.
-- Use workflows for multi-step orchestration, predefined execution graphs, long-running tasks, and human-in-the-loop scenarios.
-- Support model providers such as Azure AI Foundry, Azure OpenAI, OpenAI, and others, but prefer Azure AI Foundry services for new projects when that matches user needs.
-- Use thread-based or equivalent state handling, context providers, middleware, checkpointing, routing, and orchestration patterns when they fit the problem.
+| Area | Guidance |
+| --- | --- |
+| Async | Use async patterns for agent and workflow operations. |
+| Reliability | Implement explicit error handling and logging. |
+| Design | Prefer strong typing, clear interfaces, and maintainable composition patterns. |
+| Authentication | Use `DefaultAzureCredential` when Azure authentication is appropriate. |
+| Agents | Use agents for autonomous decision-making, ad hoc planning, conversation flows, tool usage, and MCP server interactions. |
+| Workflows | Use workflows for multi-step orchestration, predefined execution graphs, long-running tasks, and human-in-the-loop scenarios. |
+| Providers | Support Azure AI Foundry, Azure OpenAI, OpenAI, and other model providers; prefer Azure AI Foundry services for new Azure-aligned projects when appropriate. |
+| State and orchestration | Use thread-based or equivalent state handling, context providers, middleware, checkpointing, routing, and orchestration patterns when they fit the problem. |
 
 ## Migration guidance
 
-- If migrating from Semantic Kernel, use the official migration guide: <https://learn.microsoft.com/agent-framework/migration-guide/from-semantic-kernel/>
-- If migrating from AutoGen, use the official migration guide: <https://learn.microsoft.com/agent-framework/migration-guide/from-autogen/>
-- Preserve behavior first, then adopt native Agent Framework patterns incrementally.
+| Source | Rule | Official guide |
+| --- | --- | --- |
+| Semantic Kernel | Preserve behavior first, then adopt native Agent Framework patterns incrementally. | `https://learn.microsoft.com/agent-framework/migration-guide/from-semantic-kernel/` |
+| AutoGen | Preserve agent interactions and orchestration semantics before replacing abstractions. | `https://learn.microsoft.com/agent-framework/migration-guide/from-autogen/` |
 
-## Workflow
+## Procedure
 
-1. Determine the target language and read the matching reference file.
-2. Fetch the latest official docs and samples before making implementation choices.
-3. Apply the shared agent and workflow guidance from this skill.
-4. Use the language-specific package, repository, sample paths, and coding practices from the chosen reference.
-5. When examples in the repo differ from current docs, explain the difference and follow the current supported pattern.
+1. Determine the target language from files or the user's request.
+2. Read `references/dotnet.md` or `references/python.md` for package names, repository paths, sample locations, and language-specific practices.
+3. Fetch the latest official documentation and samples before recommending APIs.
+4. Apply the shared guidance for agents, workflows, providers, state, and authentication.
+5. If repository examples differ from current docs, explain the difference and follow the supported pattern unless the user asks for legacy compatibility.
+
+## Progressive disclosure and bundled resources
+
+- `references/dotnet.md`: .NET-specific package, sample, and coding guidance.
+- `references/python.md`: Python-specific package, sample, and coding guidance.
+
+## Gotchas
+
+- **Do not assume Semantic Kernel or AutoGen APIs are still correct**: use official migration guides and current Agent Framework docs.
+- **Do not skip language routing**: .NET and Python packages, samples, and idioms differ.
+- **Do not present preview APIs as stable contracts**: call out documentation date sensitivity when relevant.
+
+## Output template
+
+```markdown
+## Microsoft Agent Framework result
+
+**Status:** ready | needs docs lookup | blocked
+**Language:** .NET | Python | mixed | unknown
+**Task:** create | update | refactor | explain | review | migrate
+
+| Decision | Recommendation | Source |
+| --- | --- | --- |
+| Language workflow | `<references/dotnet.md or references/python.md>` | <file signal or user request> |
+| Agent/workflow pattern | <agent, workflow, provider, state, auth> | <official doc/sample> |
+| Migration note | <Semantic Kernel, AutoGen, or none> | <guide or reason> |
+
+### Validation
+- <docs consulted, build/test result, or review evidence>
+```
+
+## Quality gate
+
+- [ ] The target language is determined before implementation advice is given.
+- [ ] The matching bundled reference file was consulted for package names and sample paths.
+- [ ] Current official Microsoft Agent Framework documentation was checked.
+- [ ] Recommendations distinguish agents from workflows and name the provider/authentication pattern.
+- [ ] Migration advice mentions Semantic Kernel or AutoGen only when relevant.
+- [ ] Preview uncertainty or documentation mismatch is surfaced rather than hidden.
 
 ## References
 
-- [.NET reference](references/dotnet.md)
-- [Python reference](references/python.md)
-
-## Completion criteria
-
-- Recommendations match the target language.
-- Package names, repository paths, and sample locations match the selected ecosystem.
-- Guidance reflects current Microsoft Agent Framework documentation rather than legacy assumptions.
-- Migration advice calls out Semantic Kernel and AutoGen only when relevant.
+- [Microsoft Agent Framework overview](https://learn.microsoft.com/agent-framework/overview/agent-framework-overview)
+- [Migration guide from Semantic Kernel](https://learn.microsoft.com/agent-framework/migration-guide/from-semantic-kernel/)
+- [Migration guide from AutoGen](https://learn.microsoft.com/agent-framework/migration-guide/from-autogen/)

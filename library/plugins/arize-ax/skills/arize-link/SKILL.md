@@ -1,106 +1,127 @@
 ---
-name: "arize-link"
+name: arize-link
 description: >-
-  Generates deep links to the Arize UI for traces, spans, sessions, datasets, labeling queues,
-  evaluators, and annotation configs. Produces clickable URLs for sharing Arize resources with team
-  members. Use when the user wants to link to or open a trace, span, session, dataset, evaluator, or
-  annotation config in the Arize UI.
+  Generate Arize UI deep links for traces, spans, sessions, datasets, labeling queues, evaluators, and annotation configs using base64 org and space IDs, resource IDs, and trace/session time windows. Use when the user wants to link to, open, share, or debug an Arize trace, span, session, dataset, queue, evaluator, or annotation config.
 metadata:
-  author: "arize"
+  author: arize
   version: "1.0"
 ---
-# Arize Link
 
-Generate deep links to the Arize UI for traces, spans, sessions, datasets, labeling queues, evaluators, and annotation configs.
+# Arize link
 
-## When to Use
+Build clickable Arize UI URLs from exported IDs, logs, or existing browser URLs by validating base64 path IDs, selecting the right resource template, and preserving or computing trace time windows.
 
-- User wants a link to a trace, span, session, dataset, labeling queue, evaluator, or annotation config
-- You have IDs from exported data or logs and need to link back to the UI
-- User asks to "open" or "view" any of the above in Arize
+## When to invoke
 
-## Required Inputs
+- "Create an Arize link for this trace ID."
+- "Open this span in Arize."
+- "Give me a URL for this dataset."
+- "Link to the labeling queue."
+- "Share the evaluator version in Arize."
 
-Collect from the user or context (exported trace data, parsed URLs):
+## Inputs
 
-| Always required | Resource-specific |
-|---|---|
-| `org_id` (base64) | `project_id` + `trace_id` [+ `span_id`] — trace/span |
-| `space_id` (base64) | `project_id` + `session_id` — session |
-| | `dataset_id` — dataset |
-| | `queue_id` — specific queue (omit for list) |
-| | `evaluator_id` [+ `version`] — evaluator |
+| Resource | Required inputs | Optional inputs |
+| --- | --- | --- |
+| Trace | `org_id`, `space_id`, `project_id`, `trace_id`, `startA`, `endA` | `span_id`, `base_url` |
+| Span | `org_id`, `space_id`, `project_id`, `trace_id`, `span_id`, `startA`, `endA` | `base_url` |
+| Session | `org_id`, `space_id`, `project_id`, `session_id`, `startA`, `endA` | `base_url` |
+| Dataset | `org_id`, `space_id`, `dataset_id` | `selectedTab=examples|experiments`, `base_url` |
+| Queue list | `org_id`, `space_id` | `base_url` |
+| Specific queue | `org_id`, `space_id`, `queue_id` | `base_url` |
+| Evaluator | `org_id`, `space_id`, `evaluator_id` | `version`, `base_url` |
+| Annotation configs | `org_id`, `space_id` | `base_url` |
 
-**All path IDs must be base64-encoded** (characters: `A-Za-z0-9+/=`). A raw numeric ID produces a valid-looking URL that 404s. If the user provides a number, ask them to copy the ID directly from their Arize browser URL (`https://app.arize.com/organizations/{org_id}/spaces/{space_id}/…`). If you have a raw internal ID (e.g. `Organization:1:abC1`), base64-encode it before inserting into the URL.
+Default `base_url` is `https://app.arize.com`; override it only for on-prem deployments.
 
-## URL Templates
+## ID validation
 
-Base URL: `https://app.arize.com` (override for on-prem)
+All path IDs must be base64-encoded with characters `A-Za-z0-9+/=`. Raw numeric IDs produce valid-looking URLs that 404. If the user provides a number, ask them to copy the ID directly from an Arize browser URL such as `https://app.arize.com/organizations/{org_id}/spaces/{space_id}/…`. If a raw internal ID is available, such as `Organization:1:abC1`, base64-encode it before inserting it into the URL.
 
-**Trace** (add `&selectedSpanId={span_id}` to highlight a specific span):
-```
-{base_url}/organizations/{org_id}/spaces/{space_id}/projects/{project_id}?selectedTraceId={trace_id}&queryFilterA=&selectedTab=llmTracing&timeZoneA=America%2FLos_Angeles&startA={start_ms}&endA={end_ms}&envA=tracing&modelType=generative_llm
-```
+## URL templates
 
-**Session:**
-```
-{base_url}/organizations/{org_id}/spaces/{space_id}/projects/{project_id}?selectedSessionId={session_id}&queryFilterA=&selectedTab=llmTracing&timeZoneA=America%2FLos_Angeles&startA={start_ms}&endA={end_ms}&envA=tracing&modelType=generative_llm
-```
+| Resource | Template |
+| --- | --- |
+| Trace | `{base_url}/organizations/{org_id}/spaces/{space_id}/projects/{project_id}?selectedTraceId={trace_id}&queryFilterA=&selectedTab=llmTracing&timeZoneA=America%2FLos_Angeles&startA={start_ms}&endA={end_ms}&envA=tracing&modelType=generative_llm` |
+| Span highlight | Append `&selectedSpanId={span_id}` to the trace URL. |
+| Session | `{base_url}/organizations/{org_id}/spaces/{space_id}/projects/{project_id}?selectedSessionId={session_id}&queryFilterA=&selectedTab=llmTracing&timeZoneA=America%2FLos_Angeles&startA={start_ms}&endA={end_ms}&envA=tracing&modelType=generative_llm` |
+| Dataset examples | `{base_url}/organizations/{org_id}/spaces/{space_id}/datasets/{dataset_id}?selectedTab=examples` |
+| Dataset experiments | `{base_url}/organizations/{org_id}/spaces/{space_id}/datasets/{dataset_id}?selectedTab=experiments` |
+| Queue list | `{base_url}/organizations/{org_id}/spaces/{space_id}/queues` |
+| Specific queue | `{base_url}/organizations/{org_id}/spaces/{space_id}/queues/{queue_id}` |
+| Evaluator latest | `{base_url}/organizations/{org_id}/spaces/{space_id}/evaluators/{evaluator_id}` |
+| Evaluator version | `{base_url}/organizations/{org_id}/spaces/{space_id}/evaluators/{evaluator_id}?version={version_url_encoded}` |
+| Annotation configs | `{base_url}/organizations/{org_id}/spaces/{space_id}/annotation-configs` |
 
-**Dataset** (`selectedTab`: `examples` or `experiments`):
-```
-{base_url}/organizations/{org_id}/spaces/{space_id}/datasets/{dataset_id}?selectedTab=examples
-```
+URL-encode `version`; for example, a trailing `=` becomes `%3D`.
 
-**Queue list / specific queue:**
-```
-{base_url}/organizations/{org_id}/spaces/{space_id}/queues
-{base_url}/organizations/{org_id}/spaces/{space_id}/queues/{queue_id}
-```
+## Time range rules
 
-**Evaluator** (omit `?version=…` for latest):
-```
-{base_url}/organizations/{org_id}/spaces/{space_id}/evaluators/{evaluator_id}
-{base_url}/organizations/{org_id}/spaces/{space_id}/evaluators/{evaluator_id}?version={version_url_encoded}
-```
-The `version` value must be URL-encoded (e.g., trailing `=` → `%3D`).
+`startA` and `endA` are required epoch milliseconds for trace, span, and session links. Omitting them defaults to the last 7 days and can show "no recent data" when the trace falls outside that window.
 
-**Annotation configs:**
-```
-{base_url}/organizations/{org_id}/spaces/{space_id}/annotation-configs
-```
+| Priority | Source | Rule |
+| --- | --- | --- |
+| 1 | User-provided URL | Extract and reuse `startA` and `endA` directly. |
+| 2 | Span `start_time` | Pad by ±1 day, or ±1 hour for a tighter window. |
+| 3 | Fallback | Use last 90 days: `now - 90d` to `now`. |
 
-## Time Range
+Prefer tight windows because 90-day windows load slowly.
 
-CRITICAL: `startA` and `endA` (epoch milliseconds) are **required** for trace/span/session links — omitting them defaults to the last 7 days and will show "no recent data" if the trace falls outside that window.
+## Procedure
 
-**Priority order:**
-1. **User-provided URL** — extract and reuse `startA`/`endA` directly.
-2. **Span `start_time`** — pad ±1 day (or ±1 hour for a tighter window).
-3. **Fallback** — last 90 days (`now - 90d` to `now`).
-
-Prefer tight windows; 90-day windows load slowly.
-
-## Instructions
-
-1. Gather IDs from user, exported data, or URL context.
-2. Verify all path IDs are base64-encoded.
-3. Determine `startA`/`endA` using the priority order above.
-4. Substitute into the appropriate template and present as a clickable markdown link.
+1. Gather IDs from the user, exported trace data, logs, or an existing Arize URL.
+2. Validate `org_id`, `space_id`, and other path IDs as base64.
+3. Determine `startA` and `endA` for trace/span/session links using the priority order.
+4. Select the resource template and URL-encode query values such as evaluator `version`.
+5. Present a clickable Markdown link.
 
 ## Troubleshooting
 
-| Problem | Solution |
-|---|---|
-| "No data" / empty view | Trace outside time window — widen `startA`/`endA` (±1h → ±1d → 90d). |
-| 404 | ID wrong or not base64. Re-check `org_id`, `space_id`, `project_id` from the browser URL. |
-| Span not highlighted | `span_id` may belong to a different trace. Verify against exported span data. |
-| `org_id` unknown | `ax` CLI doesn't expose it. Ask user to copy from `https://app.arize.com/organizations/{org_id}/spaces/{space_id}/…`. |
+| Symptom | Likely cause | Resolution |
+| --- | --- | --- |
+| "No data" or empty view | Trace outside time window | Widen `startA`/`endA`: ±1h -> ±1d -> 90d. |
+| 404 | Wrong ID or non-base64 ID | Re-check `org_id`, `space_id`, and `project_id` from the browser URL. |
+| Span not highlighted | `span_id` belongs to a different trace | Verify `span_id` against exported span data. |
+| `org_id` unknown | `ax` CLI does not expose it | Ask the user to copy it from `https://app.arize.com/organizations/{org_id}/spaces/{space_id}/…`. |
 
-## Related Skills
+## Progressive disclosure and bundled resources
 
-- **arize-trace**: Export spans to get `trace_id`, `span_id`, and `start_time`.
+- `references/EXAMPLES.md`: concrete URLs for every supported Arize link type.
 
-## Examples
+## Related primitives
 
-See references/EXAMPLES.md for a complete set of concrete URLs for every link type.
+| Name | Type | Use it when |
+| --- | --- | --- |
+| `arize-trace` | skill | You need to export spans to obtain `trace_id`, `span_id`, or `start_time` before linking. |
+
+The trace/span path uses `trace/span` inputs. `selectedTab` accepts `examples` or `experiments`. Evaluator versions may appear as `?version=…`. Treat missing time range as `CRITICAL`. Preserve the raw-ID note: `). If you have a raw internal ID (e.g. `.
+
+## Output template
+
+```markdown
+## Arize link result
+
+**Status:** linked | blocked
+**Resource:** `trace | span | session | dataset | queue | evaluator | annotation-configs`
+
+[Open in Arize](<generated URL>)
+
+### Inputs used
+- `org_id`: `<base64 id>`
+- `space_id`: `<base64 id>`
+- Resource ID: `<id>`
+- Time range: `<startA>-<endA or not required>`
+```
+
+## Quality gate
+
+- [ ] `org_id` and `space_id` are base64 path IDs, not raw numeric IDs.
+- [ ] The selected URL template matches the requested resource.
+- [ ] Trace, span, and session links include `startA` and `endA` in epoch milliseconds.
+- [ ] Existing `startA` and `endA` values from a user-provided URL were preserved when available.
+- [ ] Evaluator `version` was URL-encoded when present.
+- [ ] The final answer includes a clickable Markdown link.
+
+## References
+
+- [Arize application](https://app.arize.com)

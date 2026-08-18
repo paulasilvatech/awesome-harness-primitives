@@ -1,105 +1,121 @@
 ---
-name: "email-drafter"
+name: email-drafter
 description: >-
-  Draft and review professional emails that match your personal writing style. Analyzes your sent
-  emails for tone, greeting, structure, and sign-off patterns via WorkIQ, then generates context-aware
-  drafts for any recipient. USE FOR: draft email, write email, compose email, reply email, follow-up
-  email, analyze email tone, email style. Use this skill when "Draft an email to [person] about
-  [topic]"; "Write a follow-up email to [customer] regarding [project]"; "Reply to [person]'s email
-  about [subject]".
+  Draft and review professional emails that match the user's established writing style by analyzing recipient context, tone, greeting, structure, sign-off, and language patterns when WorkIQ is available, then saving markdown drafts. Use this skill when the user asks to draft email, write email, compose email, reply email, follow-up email, proposal email, analyze email tone, or perform context-aware email review.
 ---
-# Email Drafter
 
-Draft professional emails that match your established writing style and tone. Uses WorkIQ to analyze your sent emails and prior correspondence with recipients, then produces context-aware drafts you can review and refine.
+# Email drafter
 
-## When to Use
+Draft context-aware professional emails by gathering recipient and purpose, matching the user's prior communication style when available, producing an editable draft, and saving the final version as Markdown.
 
-- "Draft an email to [person] about [topic]"
-- "Write a follow-up email to [customer] regarding [project]"
-- "Reply to [person]'s email about [subject]"
-- "Compose a proposal email for [initiative]"
-- "Analyze my email tone with [recipient]"
+## When to invoke
 
-## Workflow
+- "Draft an email to Sarah about the project timeline."
+- "Write a follow-up email to the customer regarding migration questions."
+- "Reply to John's email and suggest we add monitoring."
+- "Compose a proposal email for the training initiative."
+- "Analyze my email tone with the Acme team."
 
-### Step 1 — Gather Context
+## Prerequisites and context
 
-Before drafting, collect:
+WorkIQ MCP access to Microsoft 365 / Outlook is recommended for tone analysis and recipient history. If WorkIQ is unavailable or no prior correspondence exists, use sensible professional defaults and note that tone was inferred.
 
-1. **Recipient(s)** — who is the email for?
-2. **Purpose** — what is the email about? (proposal, follow-up, technical guidance, introduction, status update, etc.)
-3. **Key points** — what needs to be communicated?
-4. **Relationship context** — use WorkIQ to check prior email history with the recipient if available
+Never send email. Produce drafts only for the user to review and send manually.
 
-If the user provides all of these upfront, proceed directly. Otherwise, ask clarifying questions (max 3).
+## Context gathering
 
-### Step 2 — Analyze Tone
+Collect enough context before drafting:
 
-When drafting for a recipient, use WorkIQ to understand the user's established communication patterns:
+| Context | Required | Notes |
+| --- | --- | --- |
+| Recipient(s) | Yes | Names, roles, and whether internal or external. |
+| Purpose | Yes | Proposal, follow-up, technical guidance, introduction, status update, reply, or other. |
+| Key points | Yes | Facts, asks, decisions, dates, and attachments to mention. |
+| Relationship context | Recommended | Use WorkIQ for prior history when available. |
+| Source email | Required for replies | Preserve the thread's core question and requested action. |
 
-1. Pull 3–5 recent sent emails from the user to the same recipient or similar recipients
-2. Identify patterns:
-   - **Greeting style** — formal ("Dear"), standard ("Hello"), casual ("Hi"), or direct (no greeting)
-   - **Structure** — short paragraphs vs. bullet lists vs. numbered steps
-   - **Sign-off** — what closing and name format the user typically uses
-   - **Formality level** — professional, friendly-professional, casual
-   - **Language** — which language the user writes in with this recipient
-3. Apply those patterns to the draft
+If the user provides all of this upfront, proceed directly. Otherwise ask at most three clarifying questions.
 
-If WorkIQ is unavailable or no prior emails exist, use sensible professional defaults and note that the tone was inferred.
+## Tone analysis
 
-### Step 3 — Draft the Email
+When WorkIQ is available, pull 3-5 recent sent emails to the same recipient or similar recipients. Extract these patterns:
 
-Apply the discovered (or default) style rules:
+| Pattern | What to infer |
+| --- | --- |
+| Greeting style | Formal `Dear`, standard `Hello`, casual `Hi`, or direct with no greeting. |
+| Structure | Short paragraphs, bullet lists, numbered steps, or hybrid. |
+| Sign-off | Closing phrase and name format. |
+| Formality | Professional, friendly-professional, or casual. |
+| Language | English by default, or the language used with this recipient. |
+| Relationship memory | Prior project, customer concern, decision, or follow-up owed. |
 
-**Greeting:**
-- Match whatever greeting style was found in Step 2
-- Default: "Hello [FirstName]," for external, "Hi [FirstName]," for internal
-- For multiple recipients: "Hello [Name1], [Name2],"
+Respect privacy: do not include sensitive information from unrelated threads.
 
-**Tone:**
-- Direct and concise — no filler language
-- Friendly but professional
-- Get to the point quickly
-- Offer help proactively where appropriate ("Happy to discuss further", "Let me know if you need anything")
+## Drafting rules
 
-**Structure:**
-- Short emails (1–2 points): simple paragraphs, no bullets needed
-- Longer emails (proposals, multi-point updates): use bullet points or numbered lists
-- Include context from prior conversations when relevant ("Following our recent conversation about...")
+| Element | Rule |
+| --- | --- |
+| Greeting | Match discovered style. Default to `Hello [FirstName],` for external recipients and `Hi [FirstName],` for internal recipients. For multiple recipients, use `Hello [Name1], [Name2],`. |
+| Opening | Get to the point quickly and include relevant prior context such as "Following our recent conversation about..." when useful. |
+| Body | Use simple paragraphs for 1-2 points; use bullets or numbered lists for proposals, multi-point updates, and technical guidance. |
+| Tone | Be direct, concise, friendly, and professional; avoid filler. |
+| Help offer | Use offers such as "Happy to discuss further" or "Let me know if you need anything" only when appropriate. |
+| Sign-off | Match the user's pattern. Default to `Best regards,` followed by the user's first name on the next line. |
+| Language | Match recipient history or the user's request; otherwise default to English. |
 
-**Sign-off:**
-- Match the user's established sign-off pattern from Step 2
-- Default: "Best regards," followed by the user's first name on the next line
+## Saving drafts
 
-**Language:**
-- Default to English unless the user specifies otherwise
-- Match the recipient's language if prior correspondence was in another language
+Save the final draft, after user-requested edits, under `outputs/<year>/<month>/` with a descriptive filename such as `2026-03-26-email-acme-followup.md`. Use the current date for `<year>` and `<month>`.
 
-### Step 4 — Output
+## Procedure
 
-1. Present the draft for review with a brief note on the tone/style applied
-2. Apply edits as the user requests — iterate until satisfied
-3. Save the final draft to `outputs/<year>/<month>/` with a descriptive filename (e.g., `2026-03-26-email-acme-followup.md`)
+1. Gather recipient, purpose, key points, and source email if replying.
+2. Use WorkIQ for prior recipient context and 3-5 recent sent examples when available.
+3. Infer greeting, structure, sign-off, formality, and language.
+4. Draft the email and include a brief note on the style applied.
+5. Apply user edits until the draft is satisfactory.
+6. Save the final Markdown draft to `outputs/<year>/<month>/`.
 
-## Important Rules
+## Gotchas
 
-- **Never send emails** — only draft them as files for the user to review and send manually
-- Always check WorkIQ for prior context with the recipient when available
-- If the user says "draft email" or "write email", activate this skill automatically
-- Save drafts using the `outputs/<year>/<month>/` folder convention
-- Respect privacy: do not include sensitive information from unrelated email threads
+- **Never send emails**: stop at a saved draft.
+- **Do not overfit unrelated correspondence**: only use relevant recipient or similar-recipient patterns.
+- **Do not leak unrelated sensitive details**: prior email context informs style, not content unless directly relevant.
+- **Do not ask unlimited questions**: ask at most three clarifying questions, then draft with stated assumptions.
 
-## Example Prompts
+Report the applied `tone/style` when presenting a draft.
 
-- "Draft an email to Sarah about the project timeline"
-- "Write a follow-up to the customer about their migration questions"
-- "Compose a proposal email for the new training initiative"
-- "Reply to John's email — agree with his approach but suggest we add monitoring"
-- "Analyze my email tone with the Acme team"
+## Output template
 
-## Requirements
+```markdown
+## Email draft result
 
-- **WorkIQ MCP tool** is recommended for tone analysis and recipient context (Microsoft 365 / Outlook)
-- Without WorkIQ, the skill still works but uses professional defaults instead of personalized tone matching
-- Output is saved as markdown files in the workspace
+**Status:** drafted | revised | saved | blocked
+**Recipient(s):** `<names>`
+**Purpose:** `<purpose>`
+**Tone source:** `WorkIQ recipient history | WorkIQ similar recipients | professional defaults`
+
+### Draft
+Subject: <subject line>
+
+<email body>
+
+### Style notes
+- Greeting: `<matched/default>`
+- Structure: `<paragraphs/bullets/numbered>`
+- Sign-off: `<matched/default>`
+- Language: `<language>`
+
+### Saved file
+`outputs/<year>/<month>/<filename>.md`
+```
+
+## Quality gate
+
+- [ ] Recipient, purpose, and key points were collected or reasonable assumptions were stated.
+- [ ] WorkIQ was used for prior context when available; otherwise professional defaults were disclosed.
+- [ ] Greeting, structure, sign-off, formality, and language match evidence or defaults.
+- [ ] The draft is concise, professional, and context-aware.
+- [ ] No unrelated sensitive information from prior email threads is included.
+- [ ] The email was not sent.
+- [ ] Final drafts are saved under `outputs/<year>/<month>/` with a descriptive filename when the workflow reaches final form.

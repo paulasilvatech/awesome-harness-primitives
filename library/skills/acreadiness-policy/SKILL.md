@@ -1,39 +1,37 @@
 ---
-name: "acreadiness-policy"
+name: acreadiness-policy
 description: >-
-  Help the user pick, write, or apply an AgentRC policy. Policies customise readiness scoring by
-  disabling irrelevant checks, overriding impact/level, setting pass-rate thresholds, or chaining org
-  baselines with team overrides. Use when the user asks about strict mode, AI-only scoring, custom
-  weights, CI gating, or wants org-wide standardisation.
+  Help the user pick, write, or apply an AgentRC policy. Policies customise readiness scoring by disabling irrelevant checks, overriding impact/level, setting pass-rate thresholds, or chaining org baselines with team overrides. Use when the user asks about strict mode, AI-only scoring, custom weights, CI gating, or wants org-wide standardisation.
 argument-hint: "[show | new <name> | apply <path-or-pkg>] — e.g. /acreadiness-policy show, /acreadiness-policy new strict-frontend"
 ---
-# /acreadiness-policy — AgentRC policies
 
-Use this skill when the user asks about **policies**, **strict mode**, **custom scoring**, **disabling checks**, **org standards**, or **CI gating** of readiness.
+# AgentRC readiness policies
 
-A policy is a small JSON file with three optional sections — `criteria`, `extras`, `thresholds` — that customise how AgentRC scores readiness.
+Select, create, or apply AgentRC JSON policies that customize readiness scoring by disabling irrelevant criteria, overriding impact or level, setting pass-rate thresholds, and chaining organization baselines with team-specific overrides.
 
-## Built-in examples
+## When to invoke
 
-AgentRC ships with three example policies in `examples/policies/`:
+- "Show which AgentRC policies are currently in effect."
+- "Create a strict frontend readiness policy."
+- "Apply this AgentRC policy and rerun readiness."
+- "Set custom weights or pass-rate thresholds for CI gating."
+- "Make an org-wide baseline with team overrides."
 
-| Policy | What it does |
-|---|---|
-| `strict.json` | 100% pass rate, raises impact on key criteria |
-| `ai-only.json` | Disables all repo-health checks, focuses on AI tooling |
-| `repo-health-only.json` | Disables AI checks, focuses on traditional quality |
+## Inputs
 
-Recommend these as starting points before writing a custom policy.
+Use `$ARGUMENTS` as one of these subcommands: `show`, `new <name>`, or `apply <path-or-pkg>`. If `$ARGUMENTS` is empty, infer the intended action from the user request and ask only for the missing policy name or source path.
 
-## Policy schema
+## Policy model
+
+A policy is a JSON file with three optional top-level sections: `criteria`, `extras`, and `thresholds`. JSON policies can disable, override, and set thresholds, but cannot add new criteria. For new detection logic, direct users to AgentRC's TypeScript plugin system at `docs/dev/plugins.md`.
 
 ```jsonc
 {
   "name": "my-policy",
   "criteria": {
-    "disable":  ["env-example", "observability", "dependabot"],
+    "disable": ["env-example", "observability", "dependabot"],
     "override": {
-      "readme":      { "impact": "high", "level": 2 },
+      "readme": { "impact": "high", "level": 2 },
       "lint-config": { "title": "Linter required" }
     }
   },
@@ -46,54 +44,96 @@ Recommend these as starting points before writing a custom policy.
 }
 ```
 
-### Impact weights
+Built-in starting points in `examples/policies/`:
+
+| Policy | What it does |
+| --- | --- |
+| `strict.json` | Requires 100% pass rate and raises impact on key criteria. |
+| `ai-only.json` | Disables all repo-health checks and focuses on AI tooling. |
+| `repo-health-only.json` | Disables AI checks and focuses on traditional quality. |
+
+## Scoring and thresholds
 
 | Impact | Weight |
-|---|---|
-| critical | 5 |
-| high | 4 |
-| medium | 3 |
-| low | 2 |
-| info | 0 |
+| --- | --- |
+| `critical` | 5 |
+| `high` | 4 |
+| `medium` | 3 |
+| `low` | 2 |
+| `info` | 0 |
 
-`Score = 1 − (deductions / max possible weight)`. Grades: **A** ≥ 0.9, **B** ≥ 0.8, **C** ≥ 0.7, **D** ≥ 0.6, **F** < 0.6.
+Score formula: `Score = 1 − (deductions / max possible weight)`.
 
-## Sub-commands
+| Grade | Score |
+| --- | --- |
+| A | `≥ 0.9` |
+| B | `≥ 0.8` |
+| C | `≥ 0.7` |
+| D | `≥ 0.6` |
+| F | `< 0.6` |
 
-### `show`
-List policies currently in effect (from `agentrc.config.json` `policies` array, or none).
+Typical pass-rate thresholds: `0.7` lenient, `0.85` standard, and `1.0` strict.
 
-### `new <name>`
-Scaffold `policies/<name>.json` with sensible defaults. Walk the user through:
-1. **What to disable** — irrelevant pillars or extras for their stack (e.g. disable `observability` for a static site).
-2. **What to raise** — override `impact` to `high` or `critical` for must-haves (e.g. `readme`, `codeowners`).
-3. **Pass-rate threshold** — typical org baselines: `0.7` (lenient), `0.85` (standard), `1.0` (strict).
-4. Reference the policy from `agentrc.config.json`:
-   ```json
-   { "policies": ["./policies/<name>.json"] }
-   ```
+## Procedure
 
-### `apply <path-or-pkg>`
-Run `agentrc readiness --json --policy <source>` and re-render the report by handing off to the `assess` skill / `ai-readiness-reporter` agent. Supports chaining:
+1. For `show`, read `agentrc.config.json` and report the `policies` array, or state that no policies are configured.
+2. For `new <name>`, scaffold `policies/<name>.json` with sensible defaults and walk the user through what to disable, what `must-haves` to raise, and the pass-rate threshold.
+3. Reference a new policy from `agentrc.config.json` as `{ "policies": ["./policies/<name>.json"] }`.
+4. For `apply <path-or-pkg>`, run `agentrc readiness --json --policy <source>` and `re-render` the report by handing off to `assess` or the `ai-readiness-reporter` workflow.
+5. For layered policies, chain sources in order with `--policy ./org-baseline.json,./team-frontend.json`.
+6. For CI gating, combine policy selection with `--fail-level`.
+
+## Commands and CI examples
+
 ```bash
 npx -y github:microsoft/agentrc readiness --json --policy ./org-baseline.json,./team-frontend.json
 ```
-
-## CI gating
-
-Combine policies with `--fail-level` to enforce a minimum maturity level in CI:
 
 ```yaml
 - run: npx -y github:microsoft/agentrc readiness --policy ./policies/strict.json --fail-level 3
 ```
 
-## Advanced
-
-JSON policies can disable, override, and set thresholds — but **cannot add new criteria**. For new detection logic, point users at AgentRC's TypeScript plugin system (`docs/dev/plugins.md`).
+| Subcommand | Output |
+| --- | --- |
+| `show` | Current `agentrc.config.json` policy chain or none. |
+| `new <name>` | `policies/<name>.json` plus config reference guidance. |
+| `apply <path-or-pkg>` | Readiness JSON and rendered report using the requested policy source. |
 
 ## Operating rules
 
-- **Never silently disable a pillar.** If the user wants to disable `observability`, confirm and explain the trade-off.
-- **Prefer overriding `impact` over disabling.** Disabling hides the gap entirely; overriding lets it still appear in the report.
-- **Recommend extras stay enabled.** They cost nothing — they don't affect the score.
-- **Suggest layering** — most orgs want a baseline policy + per-team overrides chained with `--policy a.json,b.json`.
+- **Never silently disable a pillar**: if the user wants to disable `observability`, confirm and explain the trade-off.
+- **Prefer overriding `impact` over disabling**: disabling hides the gap entirely; overriding keeps it visible in the report.
+- **Recommend extras stay enabled**: extras cost nothing because they do not affect the score.
+- **Suggest layering**: most organizations want a baseline policy plus per-team overrides chained with `--policy a.json,b.json`.
+- **Use built-in policies first**: start from `strict.json`, `ai-only.json`, or `repo-health-only.json` before writing a custom policy from scratch.
+
+
+- Common override IDs include `readme` and `codeowners`; raise these `must-haves` instead of disabling them when they are organizational requirements.
+
+## Output template
+
+```markdown
+## AgentRC policy result
+
+**Status:** shown | created | applied | needs input | blocked
+**Subcommand:** show | new | apply
+**Policy source:** <path, package, or configured chain>
+
+### Policy effect
+- Disabled criteria/extras: <items or none>
+- Overrides: <criteria and impact/level/title changes>
+- Thresholds: <passRate and CI gate>
+
+### Commands or files
+- `<command or file path>`: <result>
+```
+
+## Quality gate
+
+- [ ] `$ARGUMENTS` was resolved to `show`, `new <name>`, or `apply <path-or-pkg>`.
+- [ ] Built-in policies in `examples/policies/` were considered before custom policy creation.
+- [ ] Disabling a criterion or pillar is confirmed and its trade-off is explained.
+- [ ] Impact weights, pass-rate threshold, and grade effects are stated when scoring changes.
+- [ ] Layered policies preserve org baseline before team override order.
+- [ ] CI gating uses `--fail-level` when enforcement is requested.
+- [ ] The output follows `## Output template` exactly.

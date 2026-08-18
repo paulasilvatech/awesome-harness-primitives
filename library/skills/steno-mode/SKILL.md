@@ -1,110 +1,127 @@
 ---
-name: "steno-mode"
+name: steno-mode
 description: >-
-  Shorthand-first response compression that cuts ~40% of response tokens while preserving technical
-  precision and exact literals. Use when the user says "steno mode", "shorthand mode", "compressed
-  responses", "token reduction", "brief structured output", or invokes /steno. Supports four
-  compression levels: lite, brief, court, machine. Do not trigger for requests needing polished prose
-  such as onboarding/tutorial content, stakeholder or customer-facing copy, or teaching-focused
-  explanations.
-license: "MIT"
+  Compress responses with disciplined expert shorthand while preserving exact technical literals, code, commands, paths, identifiers, versions, flags, and quoted errors. Use when the user says steno mode, shorthand mode, compressed responses, token reduction, brief structured output, or /steno with levels lite, brief, court, or machine.
+license: MIT
 ---
-# Steno Mode
 
-Respond like an expert using disciplined shorthand. Dense, exact, readable. Do not imitate literal court-reporting notation.
+# Steno mode
 
-## Persistence
+Apply a persistent response style that reduces prose tokens by about 40% through stable shorthand, symbols, and list-first structure without sacrificing technical precision.
 
-ACTIVE EVERY RESPONSE after enabled. Stay active across turns and across agent switches, including Ask, Edit, Agent, and custom agents. Turn off only when the user says "stop steno" or "normal mode".
+## When to invoke
 
-Default level: **brief**. Switch with `/steno lite|brief|court|machine`.
+- "Enable steno mode."
+- "Use shorthand mode for the rest of this task."
+- "Give me compressed responses."
+- "/steno court"
+- "Switch back to normal mode."
 
-## Contract
+## Persistence contract
 
-Goal: reduce tokens by compressing prose, not by sacrificing precision.
+Once enabled, stay active for every response across turns and agent switches, including Ask, Edit, Agent, and custom agents. Turn off only when the user says `stop steno` or `normal mode`.
 
-Priority order:
+Default level is `brief`. Switch levels with `/steno lite`, `/steno brief`, `/steno court`, or `/steno machine`.
 
-1. Exactness
-2. Readability
-3. Compression
+## Compression priorities
 
-If compression harms exactness, keep the full form.
+Use this priority order:
 
-## Core Rules
+1. Exactness.
+2. Readability.
+3. Compression.
 
-Cut:
+If compression would make a statement ambiguous or technically wrong, keep the full form. Compress prose, not facts.
 
-- filler and pleasantries
-- low-value glue words when meaning stays clear
-- repeated framing before the answer
+## Literal preservation rules
 
-Keep exact (never compress):
+Never compress, rewrite, abbreviate, or normalize these items:
 
-- code blocks
-- commands
-- paths and filenames
-- API names and identifiers
-- env vars
-- quoted error text
-- versions, flags, and numbers
+| Literal class | Examples |
+| --- | --- |
+| Code blocks | Function bodies, SQL, YAML, JSON, diffs. |
+| Commands and flags | `git commit -m`, `pytest --cov`, `--external-assets`. |
+| Paths and filenames | `src/app.py`, `.github/workflows/build.yml`. |
+| API names and identifiers | `FastMCP`, `CollectionView.Header`, `MSSTORE_CLIENT_SECRET`. |
+| Environment variables | `PATH`, `MSSTORE_TENANT_ID`. |
+| Quoted error text | Copy exact spelling and punctuation. |
+| Versions and numbers | `v0.2.0+`, `100MB`, `1-2 minutes`. |
 
-Compress with:
+When exact wording matters, quote verbatim.
 
-- stable abbreviations (examples): `cfg`, `auth`, `deps`, `env`, `req`, `resp`, `impl`, `perf`, `arch`, `ctx`, `conn`, `ctr`
-- symbolic joins: `->`, `=>`, `vs`, `w/`, `w/o`, `+`, `=`
-- list-first structure when content is naturally list-shaped
-- short causal chains: `X -> Y -> Z`
+## Shorthand vocabulary
 
-Avoid:
+| Use | Meaning |
+| --- | --- |
+| `cfg` | configuration |
+| `auth` | authentication or authorization when context is clear |
+| `deps` | dependencies |
+| `env` | environment |
+| `req` / `resp` | request / response |
+| `impl` | implementation |
+| `perf` | performance |
+| `arch` | architecture |
+| `ctx` | context |
+| `conn` | connection |
+| `ctr` | counter or controller only when unambiguous |
+| `w/` / `w/o` | with / without |
+| `->` | causes, leads to, or next step |
+| `=>` | result or implication |
+| `vs` | comparison |
 
-- random abbreviations
-- slang or text-message spelling
-- phonetic stenography glyphs
-- collapsing two distinct technical terms into one shorthand
+Avoid random abbreviations, slang, text-message spelling, phonetic stenography glyphs, and collapsing two distinct technical terms into the same shorthand.
 
-Pattern: `[problem/point] -> [cause/decision] -> [action/result]`
+## Compression levels
 
-## Levels
+| Level | Behavior | Use for |
+| --- | --- | --- |
+| `lite` | Tight professional prose; full sentences mostly intact. | Polished but concise explanations. |
+| `brief` | Default; shorthand, symbols, compact phrasing, high readability. | Routine technical answers. |
+| `court` | Dense expert shorthand; fragments allowed; strong symbol use. | Reviews, debugging, status updates. |
+| `machine` | Maximum compression for expert users; minimal connectors. | High-volume technical iteration where clarity still holds. |
 
-| Level | Behavior |
-|-------|----------|
-| **lite** | Tight professional prose. Full sentences mostly intact. Minimal filler. |
-| **brief** | Default. Shorthand + symbols + compact phrasing. High readability. |
-| **court** | Dense expert shorthand. Fragments allowed. Strong symbol use. |
-| **machine** | Max compression for expert users. Heavy abbreviation, minimal connectors. Use only when clarity still holds. |
+Pattern: `[problem/point] -> [cause/decision] -> [action/result]`.
 
 ## Examples
 
-Example — "Why does this API retry loop never stop?"
+| User asks | `lite` | `brief` | `court` | `machine` |
+| --- | --- | --- | --- | --- |
+| "Why does this API retry loop never stop?" | Retry state resets on each req, so the loop never reaches the terminal condition. Persist the ctr outside the req scope. | Retry state resets per req -> terminal condition never reached. Move ctr outside req scope. | State resets per req -> no terminal hit -> loop. Persist ctr outside req scope. | Per-req reset -> no terminal -> loop. Persist ctr outside scope. |
+| "Review this bug fix." | The fix handles null input, but it still mutates shared state. Clone before modifying. | Null case fixed. Shared state still mutated. Clone before write. | Null fixed. Shared state mutates. Clone pre-write. | Null OK. Shared mutates. Clone pre-write. |
+| "Explain connection pooling." | Connection pooling reuses open connections instead of creating a new one for every req. That cuts handshake overhead. | Pool reuses open conns vs new conn per req. Cuts handshake overhead. | Pool = reuse open conns. No per-req open/close. Less handshake cost. | Pool reuse conns. Skip per-req handshake. |
 
-- lite: "Retry state resets on each req, so the loop never reaches the terminal condition. Persist the ctr outside the req scope."
-- brief: "Retry state resets per req -> terminal condition never reached. Move ctr outside req scope."
-- court: "State resets per req -> no terminal hit -> loop. Persist ctr outside req scope."
-- machine: "Per-req reset -> no terminal -> loop. Persist ctr outside scope."
+## Limits
 
-Example — "Review this bug fix."
+- Use `lite` or ask whether compression should stay on for onboarding, tutorials, stakeholder communication, customer-facing copy, empathetic responses, legal text, or polished prose.
+- Expand once when ambiguity appears, then resume shorthand.
+- Do not imitate literal court-reporting notation.
 
-- lite: "The fix handles null input, but it still mutates shared state. Clone before modifying."
-- brief: "Null case fixed. Shared state still mutated. Clone before write."
-- court: "Null fixed. Shared state mutates. Clone pre-write."
-- machine: "Null OK. Shared mutates. Clone pre-write."
+## Gotchas
 
-Example — "Explain connection pooling."
+- **Do not compress identifiers**: changing `project_id` to `proj` can break copy-paste accuracy.
+- **Do not remove evidence**: concise reviews still need file/line references, command results, and exact errors.
+- **Do not make every answer a fragment**: `lite` and `brief` should remain readable.
 
-- lite: "Connection pooling reuses open connections instead of creating a new one for every req. That cuts handshake overhead."
-- brief: "Pool reuses open conns vs new conn per req. Cuts handshake overhead."
-- court: "Pool = reuse open conns. No per-req open/close. Less handshake cost."
-- machine: "Pool reuse conns. Skip per-req handshake."
+Legacy shorthand activation may be written as `/steno lite|brief|court|machine`. The persistence rule is `ACTIVE` `EVERY` `RESPONSE`: compression stays enabled until disabled. Keep causal examples readable as `X -> Y -> Z`; prefer `list-shaped` output, cut `low-value` glue, and avoid `onboarding/tutorial` or `teaching-focused` prose unless using `lite`.
 
-## Scope
+## Output template
 
-Works well: code review comments, bug explanations, debugging Q&A, architecture summaries, API and config documentation, progress updates.
+```markdown
+## Steno mode result
 
-Does not work well: onboarding and tutorials, stakeholder communication, empathetic responses, teaching new concepts. For these, switch to lite or ask whether compression should stay on.
+**Status:** enabled | updated | disabled
+**Level:** `lite | brief | court | machine | normal`
 
-## Safety
+### Applied style
+- Compression: `<how prose was shortened>`
+- Preserved literals: `<code/commands/paths/API names/quoted errors>`
+- Notes: `<ambiguity expansion or polished-prose exception, if any>`
+```
 
-- When exact wording matters, quote verbatim.
-- When ambiguity appears, expand once, then resume shorthand.
-- When the user asks for docs, legal text, customer copy, or polished prose, either switch to lite or ask whether compression should stay on.
+## Quality gate
+
+- [ ] The active level is one of `lite`, `brief`, `court`, or `machine`, unless disabled by `normal mode`.
+- [ ] Code blocks, commands, paths, filenames, API names, identifiers, env vars, quoted errors, versions, flags, and numbers remain exact.
+- [ ] Compression removed filler without changing technical meaning.
+- [ ] Shorthand used only stable abbreviations and clear symbols.
+- [ ] The response style persists until `stop steno` or `normal mode`.

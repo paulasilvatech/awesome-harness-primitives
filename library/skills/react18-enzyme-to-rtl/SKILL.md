@@ -1,82 +1,101 @@
 ---
-name: "react18-enzyme-to-rtl"
+name: react18-enzyme-to-rtl
 description: >-
-  Provides exact Enzyme → React Testing Library migration patterns for React 18 upgrades. Use this
-  skill whenever Enzyme tests need to be rewritten - shallow, mount, wrapper.find(),
-  wrapper.simulate(), wrapper.prop(), wrapper.state(), wrapper.instance(), Enzyme configure/Adapter
-  calls, or any test file that imports from enzyme. This skill covers the full API mapping and the
-  philosophy shift from implementation testing to behavior testing. Always read this skill before
-  rewriting Enzyme tests - do not translate Enzyme APIs 1:1, that produces brittle RTL tests.
+  Rewrite Enzyme tests for React 18 into React Testing Library behavior tests. Use when a test imports enzyme, uses shallow, mount, wrapper.find(), wrapper.simulate(), wrapper.prop(), wrapper.state(), wrapper.instance(), Enzyme configure/Adapter, or needs React 18-compatible RTL migration patterns.
 ---
-# React 18 Enzyme → RTL Migration
 
-Enzyme has no React 18 adapter and no React 18 support path. All Enzyme tests must be rewritten using React Testing Library.
+# React 18 Enzyme to RTL migration
 
-## The Philosophy Shift (Read This First)
+Migrate unsupported Enzyme tests to React Testing Library by replacing implementation assertions with user-visible behavior, accessible queries, provider-aware renders, and async-safe interactions.
 
-Enzyme tests implementation. RTL tests behavior.
+## When to invoke
+
+- "Rewrite this Enzyme test for React 18."
+- "Migrate shallow and mount tests to React Testing Library."
+- "Replace wrapper.find() and simulate() in this test."
+- "This file imports enzyme and blocks our React 18 upgrade."
+- "Convert wrapper.state(), wrapper.prop(), or wrapper.instance() assertions."
+
+## Prerequisites and context
+
+- Enzyme has no React 18 adapter and no supported React 18 migration path.
+- Use React Testing Library imports such as `render`, `screen`, `fireEvent`, and `waitFor` from `@testing-library/react`.
+- Prefer `userEvent` from `@testing-library/user-event` for real user interactions.
+- Use project-specific `customRender` helpers when they already wrap providers.
+
+## Philosophy shift
+
+Enzyme tests component internals; RTL tests observable behavior. Do not translate APIs 1:1.
+
+| Enzyme habit | Why it fails in RTL | Replacement mindset |
+| --- | --- | --- |
+| `wrapper.state('count')` | RTL does not expose component state. | Assert visible count, enabled state, submitted text, or emitted output. |
+| `wrapper.instance().handleClick` | Function components have no instance and internals are not user behavior. | Click the control and assert the result. |
+| `wrapper.find('Button').prop('disabled')` | Props are implementation details. | Query by role and assert `toBeDisabled()`. |
+| `shallow(<Component />)` | Shallow rendering hides integrated behavior. | Render the component with required providers and assert user-visible output. |
 
 ```jsx
-// Enzyme: tests that the component has the right internal state
+// Enzyme: tests internals
 expect(wrapper.state('count')).toBe(3);
 expect(wrapper.instance().handleClick).toBeDefined();
 expect(wrapper.find('Button').prop('disabled')).toBe(true);
 
-// RTL: tests what the user actually sees and can do
+// RTL: tests behavior
 expect(screen.getByText('Count: 3')).toBeInTheDocument();
 expect(screen.getByRole('button', { name: /submit/i })).toBeDisabled();
 ```
 
-This is not a 1:1 translation. Enzyme tests that verify internal state or instance methods don't have RTL equivalents - because RTL intentionally doesn't expose internals. **Rewrite the test to assert the visible outcome instead.**
-
-## API Map
-
-For complete before/after code for each Enzyme API, read:
-- **`references/enzyme-api-map.md`** - full mapping: shallow, mount, find, simulate, prop, state, instance, configure
-- **`references/async-patterns.md`** - waitFor, findBy, act(), Apollo MockedProvider, loading states, error states
-
-## Core Rewrite Template
+## Core rewrite template
 
 ```jsx
-// Every Enzyme test rewrites to this shape:
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import MyComponent from './MyComponent';
 
 describe('MyComponent', () => {
   it('does the thing', async () => {
-    // 1. Render (replaces shallow/mount)
     render(<MyComponent prop="value" />);
 
-    // 2. Query (replaces wrapper.find())
     const button = screen.getByRole('button', { name: /submit/i });
-
-    // 3. Interact (replaces simulate())
     await userEvent.setup().click(button);
 
-    // 4. Assert on visible output (replaces wrapper.state() / wrapper.prop())
     expect(screen.getByText('Submitted!')).toBeInTheDocument();
   });
 });
 ```
 
-## RTL Query Priority (use in this order)
+## API migration map
 
-1. `getByRole` - matches accessible roles (button, textbox, heading, checkbox, etc.)
-2. `getByLabelText` - form fields linked to labels
-3. `getByPlaceholderText` - input placeholders
-4. `getByText` - visible text content
-5. `getByDisplayValue` - current value of input/select/textarea
-6. `getByAltText` - image alt text
-7. `getByTitle` - title attribute
-8. `getByTestId` - `data-testid` attribute (last resort)
+Read `references/enzyme-api-map.md` for full before/after examples covering `shallow`, `mount`, `find`, `simulate`, `prop`, `state`, `instance`, `configure`, and `Adapter` setup.
 
-Prefer `getByRole` over `getByTestId`. It tests accessibility too.
+| Enzyme API | RTL direction |
+| --- | --- |
+| `shallow(<Component />)` | `render(<Component />)` with dependencies mocked only at module boundaries. |
+| `mount(<Component />)` | `render(<Component />)` wrapped in required providers. |
+| `wrapper.find(selector)` | `screen.getByRole`, `getByLabelText`, `getByText`, or another user-facing query. |
+| `wrapper.simulate('click')` | `await userEvent.setup().click(element)`; use `fireEvent` for low-level events only. |
+| `wrapper.prop('x')` | Assert visible output or child behavior caused by the prop. |
+| `wrapper.state('x')` | Assert the DOM, callback, network mock, or side effect that reflects the state. |
+| `wrapper.instance()` | Remove direct instance testing; exercise the public UI. |
+| `Enzyme.configure({ adapter })` | Delete Enzyme setup and use RTL/Jest setup such as `@testing-library/jest-dom`. |
 
-## Wrapping with Providers
+## RTL query priority
+
+Use queries in this order; `getByTestId` is the last resort.
+
+1. `getByRole` for accessible roles such as button, textbox, heading, checkbox.
+2. `getByLabelText` for form fields linked to labels.
+3. `getByPlaceholderText` for input placeholders.
+4. `getByText` for visible text content.
+5. `getByDisplayValue` for current `input`, `select`, or `textarea` value.
+6. `getByAltText` for image alt text.
+7. `getByTitle` for title attributes.
+8. `getByTestId` for `data-testid` only when accessible queries cannot express the behavior.
+
+## Providers and async behavior
 
 ```jsx
-// Enzyme with context:
+// Enzyme with context
 const wrapper = mount(
   <ApolloProvider client={client}>
     <ThemeProvider theme={theme}>
@@ -85,8 +104,7 @@ const wrapper = mount(
   </ApolloProvider>
 );
 
-// RTL equivalent (use your project's customRender or wrap inline):
-import { render } from '@testing-library/react';
+// RTL equivalent
 render(
   <MockedProvider mocks={mocks} addTypename={false}>
     <ThemeProvider theme={theme}>
@@ -94,5 +112,59 @@ render(
     </ThemeProvider>
   </MockedProvider>
 );
-// Or use the project's customRender helper if it wraps providers
 ```
+
+Use the project's custom render helper if it wraps `MockedProvider`, `ThemeProvider`, routing, store, or i18n context. Read `references/async-patterns.md` for `waitFor`, `findBy`, `act()`, Apollo `MockedProvider`, loading states, and error states.
+
+## Criteria
+
+- [ ] Replace every Enzyme import and adapter setup; no test file still imports `enzyme`.
+- [ ] Rewrite internal state, instance, and prop assertions as visible behavior or observable side effects.
+- [ ] Prefer accessible RTL queries over selectors and `data-testid`.
+- [ ] Use `userEvent` for user interactions and await async interactions.
+- [ ] Preserve provider context through project `customRender` or inline wrappers.
+- [ ] Cover loading, success, and error states where the Enzyme test previously relied on implementation timing.
+
+## Gotchas
+
+- **No 1:1 translation**: replacing `wrapper.find()` with `container.querySelector()` preserves brittle implementation testing.
+- **Do not assert child props directly**: mock the child only when the child is an external boundary; otherwise assert what the user sees.
+- **Use `findBy` or `waitFor` for async UI**: immediate `getBy*` assertions can race React 18 updates.
+- **Delete Enzyme configure/Adapter calls**: keeping them can hide migration incompleteness.
+
+## Progressive disclosure and bundled resources
+
+- `references/enzyme-api-map.md`: complete Enzyme API mapping for `shallow`, `mount`, `find`, `simulate`, `prop`, `state`, `instance`, `configure`, and `Adapter`.
+- `references/async-patterns.md`: async RTL patterns for `waitFor`, `findBy`, `act()`, Apollo `MockedProvider`, loading states, and error states.
+
+## Migration shorthand
+
+Treat `shallow/mount` as the signal to rewrite render strategy. Use `getByDisplayValue` for current `input/select/textarea` values.
+
+## Output template
+
+```markdown
+## Enzyme to RTL migration result
+
+**Status:** complete | partial | blocked
+**Files changed:** <count>
+**React 18 readiness:** pass | fail
+
+| File | Enzyme APIs removed | RTL patterns used | Remaining blockers |
+| --- | --- | --- | --- |
+| `<test file>` | `shallow`, `wrapper.find()` | `render`, `screen.getByRole`, `userEvent` | <none or blocker> |
+
+### Validation
+- Enzyme imports removed: pass | fail
+- Targeted test command: pass | fail | not run (<reason>)
+```
+
+## Quality gate
+
+- [ ] No migrated file imports `enzyme` or configures an Enzyme `Adapter`.
+- [ ] `shallow`, `mount`, `wrapper.find()`, `wrapper.simulate()`, `wrapper.prop()`, `wrapper.state()`, and `wrapper.instance()` are removed or explicitly reported as remaining blockers.
+- [ ] Assertions target user-visible DOM, accessibility state, callbacks, or externally observable effects.
+- [ ] Query priority favors `getByRole` and avoids `getByTestId` unless justified.
+- [ ] Async behavior uses `findBy`, `waitFor`, or awaited `userEvent` as appropriate.
+- [ ] Provider context is preserved with `customRender` or equivalent wrappers.
+- [ ] Targeted tests were run or a concrete blocker is reported.

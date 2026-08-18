@@ -1,67 +1,120 @@
 ---
-name: "aws-resource-query"
+name: aws-resource-query
 description: >-
-  Query AWS resources using natural language. Covers EC2, S3, RDS, Lambda, ECS, EKS, Secrets Manager,
-  IAM, VPC, networking, messaging, and more. Strictly read-only — no writes, deletes, or mutations.
-  Use this skill when aws lambda list-event-source-mappings \; -query
-  'EventSourceMappings[].[FunctionArn,EventSourceArn,State,BatchSize]' --output table.
+  Answer natural-language questions about AWS resources by running strictly read-only AWS CLI queries. Use when asking about EC2, S3, RDS, Lambda, ECS, EKS, Secrets Manager, IAM, VPC, networking, messaging, `aws lambda list-event-source-mappings --query 'EventSourceMappings[].[FunctionArn,EventSourceArn,State,BatchSize]' --output table`, or current-state inventory.
 ---
-# AWS Resource Query
 
-Answer natural language questions about AWS resources by translating intent into read-only AWS CLI commands. This skill **never** runs commands that create, modify, or delete resources.
+# AWS resource query
 
-## Safety Contract
+Translate resource inventory questions into read-only AWS CLI commands, confirm account and region context, format concise tables, and refuse create/modify/delete actions. This is the intent-to-command bridge for each `service/query`.
 
-**STRICTLY READ-ONLY.** This skill exclusively uses:
-- `aws <service> describe-*`
-- `aws <service> list-*`
-- `aws <service> get-*`
-- `aws sts get-caller-identity`
-- `aws configure get`
-- `aws resourcegroupstaggingapi get-resources`
-- `aws ce get-*`
-- `aws support describe-*`
+## When to invoke
 
-**NEVER** run any of the following, regardless of what the user asks:
-`create-*`, `run-*`, `start-*`, `stop-*`, `reboot-*`, `delete-*`, `terminate-*`, `put-*`, `update-*`, `modify-*`, `attach-*`, `detach-*`, `send-*`, `publish-*`, `invoke-*`, `execute-*`
+- "List my EC2 instances in us-east-1."
+- "Show Lambda event source mappings and batch sizes."
+- "Which S3 buckets exist in this account?"
+- "Find RDS databases by tag."
+- "Query AWS resources without changing anything."
 
-If the user's query implies a write action, respond:
-> "This skill is read-only. I can show you the current state of [resource], but I cannot [create/modify/delete] it. Would you like to see what currently exists?"
+## Safety contract
 
-## Workflow
+STRICTLY READ ONLY. Use ONLY these AWS CLI command families:
 
-### Step 1: Parse Intent
-Identify: target service(s), scope (all / filtered / specific), detail level, and region.
+| Allowed command family | Examples |
+| --- | --- |
+| Describe | `aws <service> describe-*` |
+| List | `aws <service> list-*` |
+| Get | `aws <service> get-*` |
+| Identity | `aws sts get-caller-identity` |
+| Configuration | `aws configure get` |
+| Tags | `aws resourcegroupstaggingapi get-resources` |
+| Cost Explorer | `aws ce get-*` |
+| Support | `aws support describe-*` |
 
-### Step 2: Confirm Account & Region
-```bash
-aws sts get-caller-identity --query '{Account:Account,UserId:UserId}'
-aws configure get region
+NEVER run mutating commands, including `create-*`, `run-*`, `start-*`, `stop-*`, `reboot-*`, `delete-*`, `terminate-*`, `put-*`, `update-*`, `modify-*`, `attach-*`, `detach-*`, `send-*`, `publish-*`, `invoke-*`, or `execute-*`.
+
+If the user's query implies a write action, respond exactly with this pattern:
+
+```markdown
+This skill is read-only. I can show you the current state of [resource], but I cannot [create/modify/delete] it. Would you like to see what currently exists?
 ```
-Append `--region <region>` to all commands when the user specifies one.
 
-### Step 3: Execute & Format
-Run the matched read-only command(s) below and format results as a readable table. For large result sets show a count first and offer to filter further.
+## Procedure
 
----
+1. Parse intent: target service, resource type, filters, detail level, and region.
+2. Confirm account and default region:
+   - `aws sts get-caller-identity --query '{Account:Account,UserId:UserId}'`
+   - `aws configure get region`
+3. Append `--region <region>` to every command when the user specifies a region.
+4. Read `references/intent-command-mapping.md` when translating service/resource intent to AWS CLI commands.
+5. Run only allowed read-only commands.
+6. Format list results with `--output table`; use `--output json` only for explicitly requested deep detail.
+7. Use `--query` to extract relevant fields and avoid dumping raw JSON.
+8. For large result sets over 20 items, show a count first and offer filters.
 
-## Bundled Resources
+## Common query patterns
 
-- [AWS resource query intent-to-command mapping](references/intent-command-mapping.md) — When translating a resource question into AWS CLI commands, open this mapping and select the matching service/query pattern.
+| User intent | Read-only command pattern |
+| --- | --- |
+| Confirm identity | `aws sts get-caller-identity --query '{Account:Account,UserId:UserId}'` |
+| Check default region | `aws configure get region` |
+| Lambda event source mappings | `aws lambda list-event-source-mappings --query 'EventSourceMappings[].[FunctionArn,EventSourceArn,State,BatchSize]' --output table` |
+| Tag-based inventory | `aws resourcegroupstaggingapi get-resources --query '<fields>' --output table` |
+| Cost data | `aws ce get-* --query '<fields>' --output table` |
+| Support metadata | `aws support describe-* --query '<fields>' --output table` |
 
-## Output Formatting Rules
+Services covered include EC2, S3, RDS, Lambda, ECS, EKS, Secrets Manager, IAM, VPC, networking, messaging, and more when the command remains read-only.
 
-1. Always use `--output table` for list results; use `--output json` only when deep detail is explicitly requested
-2. Always use `--query` to extract only relevant fields — never dump raw JSON
-3. For large result sets (>20 items), show a count first, then offer to filter
-4. When a command returns nothing, explain why (wrong region, no resources, insufficient permissions)
-5. Offer to drill into a specific resource: "Found 47 EC2 instances. Filter by state, type, or tag?"
+## Progressive disclosure and bundled resources
 
-## Error Handling
+- `references/intent-command-mapping.md`: open this when mapping natural-language AWS resource questions to service-specific CLI commands.
 
-| Error | Response |
-|---|---|
-| `AccessDenied` | "You don't have permission to list [resource]. Required: `<service>:<Action>`." |
-| `NoCredentialProviders` | "Run `aws configure` or set `AWS_PROFILE`." |
-| Empty result | "No [resources] found in [region]. Check another region?" |
-| Invalid identifier | "Could not find '[name]'. Check the name or provide the resource ID." |
+## Output formatting rules
+
+| Rule | Implementation |
+| --- | --- |
+| Table first | Use `--output table` for list results. |
+| JSON only on request | Use `--output json` only for deep detail the user explicitly asks for. |
+| Query fields | Always include `--query` to select relevant fields. |
+| Large results | If more than 20 items are likely or returned, show count and offer filters. |
+| Empty results | Explain likely causes: wrong region, no resources, or insufficient permissions. |
+| Drill-down | Offer a next filter, such as state, type, tag, or resource ID. |
+
+## Troubleshooting
+
+| Error | Likely cause | Response |
+| --- | --- | --- |
+| `AccessDenied` | Caller lacks permission. | "You don't have permission to list [resource]. Required: `<service>:<Action>`." |
+| `NoCredentialProviders` | AWS credentials are missing. | "Run `aws configure` or set `AWS_PROFILE`." |
+| Empty result | Region, filters, or account do not contain the resource. | "No [resources] found in [region]. Check another region?" |
+| Invalid identifier | Name or ID does not match an existing resource. | "Could not find '[name]'. Check the name or provide the resource ID." |
+
+## Output template
+
+```markdown
+## AWS resource query result
+
+**Status:** complete | read-only refusal | blocked
+**Account:** `<account or not checked>`
+**Region:** `<region or default>`
+**Question:** <user intent>
+
+| Resource | Key fields | Notes |
+| --- | --- | --- |
+| `<id/name>` | `<selected --query fields>` | <state, tags, or caveat> |
+
+### Commands run
+- `<aws read-only command with --query and --output table>`
+
+### Next filter
+- <state, type, tag, resource ID, or none>
+```
+
+## Quality gate
+
+- [ ] Every command is read-only and belongs to an allowed command family.
+- [ ] Mutating verbs such as `create-*`, `delete-*`, `update-*`, `modify-*`, `invoke-*`, and `execute-*` were refused.
+- [ ] Account and region were checked or the inability to check them was reported.
+- [ ] User-specified regions were applied with `--region <region>`.
+- [ ] List output uses `--output table` and a focused `--query`.
+- [ ] Large, empty, or permission-denied results are explained with next-step filters or required permissions.

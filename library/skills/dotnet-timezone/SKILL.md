@@ -1,38 +1,42 @@
 ---
 name: "dotnet-timezone"
 description: >-
-  .NET timezone handling guidance for C# applications. Use when working with TimeZoneInfo,
-  DateTimeOffset, NodaTime, UTC conversion, daylight saving time, scheduling across timezones,
-  cross-platform Windows/IANA timezone IDs, or when a .NET user needs the timezone for a city,
-  address, region, or country and copy-paste-ready C# code.
+  Resolve .NET and C# timezone questions with TimeZoneInfo, DateTimeOffset, TimeZoneConverter, NodaTime, UTC conversion, daylight saving time, scheduling, Windows and IANA timezone IDs, location lookup, and copy-paste-ready code. Use this skill when a .NET user needs the timezone for a city, address, region, or country, or asks about cross-platform timezone handling.
 ---
-# .NET Timezone
 
-Resolve timezone questions for .NET and C# code with production-safe guidance and copy-paste-ready snippets.
+# .NET timezone
 
-## Start With The Right Path
+Resolve timezone IDs, conversions, scheduling, and persistence for .NET applications by selecting the right library, mapping Windows and IANA identifiers, and returning concise C# code that is safe across daylight saving time and platforms.
 
-Identify the request type first:
+## When to invoke
 
-- Address or location lookup
-- Timezone ID lookup
-- UTC/local conversion
-- Cross-platform timezone compatibility
-- Scheduling or DST handling
-- API or persistence design
+- "What timezone should I use for this city in .NET?"
+- "Convert UTC to local time with TimeZoneInfo."
+- "Make this timezone code work on Windows and Linux."
+- "Handle daylight saving time in a C# scheduler."
+- "Should I use DateTimeOffset or NodaTime?"
 
-If the library is unclear, default to `TimeZoneConverter` for cross-platform work. If the scenario involves recurring schedules or strict DST rules, prefer `NodaTime`.
+## Prerequisites and context
 
-## Resolve Addresses And Locations
+- Read `references/timezone-index.md` for common Windows and IANA mappings.
+- Read `references/code-patterns.md` for ready-to-use .NET timezone patterns.
+- Default to `TimeZoneConverter` for cross-platform Windows/IANA compatibility when the target runtime is unclear.
+- Prefer `NodaTime` for recurring schedules, strict timezone arithmetic, and DST-sensitive workflows.
 
-If the user provides an address, city, region, country, or document containing place names:
+## Request routing
 
-1. Extract each location from the input.
-2. Read `references/timezone-index.md` for common Windows and IANA mappings.
-3. If the exact location is not listed, infer the correct IANA zone from geography, then map it to the Windows ID.
-4. Return both IDs and a ready-to-use C# example.
+| Request type | Recommended path |
+| --- | --- |
+| Address or location lookup | Resolve geography to IANA zone, map to Windows ID, then return both IDs and offset/DST notes. |
+| Timezone ID lookup | Use `references/timezone-index.md`; always provide Windows and IANA formats. |
+| UTC/local conversion | Use `TimeZoneInfo` for platform-specific IDs or `TimeZoneConverter` for cross-platform IDs. |
+| Cross-platform compatibility | Use `TZConvert.GetTimeZoneInfo(...)` from `TimeZoneConverter`. |
+| Scheduling or DST handling | Use `NodaTime` and explicitly handle ambiguous and invalid local times. |
+| API or persistence design | Store instants in UTC and use `DateTimeOffset` for data transfer; persist a timezone ID when future local scheduling matters. |
 
-For each resolved location, provide:
+## Location resolution output
+
+For every address, city, region, country, or place name, return this block and then a C# snippet.
 
 ```text
 Location: <resolved place>
@@ -42,7 +46,19 @@ UTC offset: <standard offset and DST offset when relevant>
 DST: <yes/no>
 ```
 
-Then include a cross-platform snippet like:
+If multiple locations are present, include one block per location and a combined multi-timezone snippet. If a location is ambiguous, list possible timezone matches and ask the user to choose.
+
+## Code patterns
+
+| Pattern | Use when | Core API |
+| --- | --- | --- |
+| `TimeZoneInfo` | Windows-only code or known platform-specific ID. | `TimeZoneInfo.FindSystemTimeZoneById()`, `TimeZoneInfo.ConvertTimeFromUtc(...)`. |
+| `TimeZoneConverter` | Cross-platform conversion across Windows, Linux, containers, and Azure. | `TZConvert.GetTimeZoneInfo("Asia/Colombo")`. |
+| `NodaTime` | Recurring schedules, strict arithmetic, DST-sensitive jobs. | `DateTimeZone`, `Instant`, `ZonedDateTime`, resolvers for skipped/repeated local times. |
+| `DateTimeOffset` | APIs and data transfer where offset must travel with the value. | `DateTimeOffset` and UTC normalization. |
+| ASP.NET Core persistence/presentation | Store UTC instants and display in user-selected zone. | Database UTC column plus user timezone ID. |
+| Recurring jobs and schedulers | Future local time must stay local after DST changes. | Store local schedule + zone ID, compute next occurrence with timezone rules. |
+| Ambiguous and invalid DST timestamps | Local time may repeat or not exist. | Validate with `TimeZoneInfo.IsAmbiguousTime()` and `TimeZoneInfo.IsInvalidTime()` or NodaTime resolvers. |
 
 ```csharp
 using TimeZoneConverter;
@@ -51,62 +67,47 @@ TimeZoneInfo tz = TZConvert.GetTimeZoneInfo("Asia/Colombo");
 DateTime local = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, tz);
 ```
 
-If multiple locations are present, include one block per location and then a combined multi-timezone snippet.
+## Pitfall warnings
 
-If a location is ambiguous, list the possible timezone matches and ask the user to choose the correct one.
+| Pitfall | Corrective rule |
+| --- | --- |
+| `TimeZoneInfo.FindSystemTimeZoneById()` is platform-specific | Use Windows IDs on Windows, IANA IDs on Linux/containers, or `TimeZoneConverter` to bridge both. |
+| Storing `DateTime.Now` in databases | Store UTC instants; convert only at boundaries and presentation. |
+| `DateTimeKind.Unspecified` leaks into conversions | Treat it as a bug risk unless it deliberately represents user-entered local wall time. |
+| DST transitions skip or repeat local times | Validate invalid and ambiguous local timestamps before scheduling or converting. |
+| Azure Windows and Azure Linux differ | Use the ID format expected by the host OS or use `TimeZoneConverter`. |
 
-## Look Up Timezone IDs
+Keep answers production-safe, code-first, and explicit about third-party package requirements.
 
-Use `references/timezone-index.md` for Windows to IANA mappings.
+## Output template
 
-Always provide both formats:
+```markdown
+## .NET timezone result
 
-- Windows ID for `TimeZoneInfo.FindSystemTimeZoneById()` on Windows
-- IANA ID for Linux, containers, `NodaTime`, and `TimeZoneConverter`
+**Status:** resolved | ambiguous | blocked
+**Recommended approach:** <TimeZoneInfo | TimeZoneConverter | NodaTime | DateTimeOffset>
 
-## Generate Code
+| Location or scenario | Windows ID | IANA ID | Offset/DST | Notes |
+| --- | --- | --- | --- | --- |
+| `<place or code path>` | `<windows>` | `<iana>` | `<offsets>` | `<pitfall>` |
 
-Use `references/code-patterns.md` and pick the smallest pattern that fits:
+    <copy-paste-ready C# snippet>
 
-- Pattern 1: `TimeZoneInfo` for Windows-only code
-- Pattern 2: `TimeZoneConverter` for cross-platform conversion
-- Pattern 3: `NodaTime` for strict timezone arithmetic and DST-sensitive scheduling
-- Pattern 4: `DateTimeOffset` for APIs and data transfer
-- Pattern 5: ASP.NET Core persistence and presentation
-- Pattern 6: recurring jobs and schedulers
-- Pattern 7: ambiguous and invalid DST timestamps
+**Package requirement:** `<none | TimeZoneConverter | NodaTime>`
+**Warning:** <relevant pitfall>
+```
 
-Always include package guidance when recommending third-party libraries.
+## Quality gate
 
-## Warn About Common Pitfalls
+- [ ] The request type was identified before choosing a library.
+- [ ] Location requests include Windows ID, IANA ID, UTC offset, and DST status for each resolved place.
+- [ ] Cross-platform code uses `TimeZoneConverter` unless the platform-specific ID requirement is explicit.
+- [ ] Recurring schedules or strict DST logic use or recommend `NodaTime`.
+- [ ] API and persistence guidance stores UTC and preserves timezone IDs when future local scheduling matters.
+- [ ] The response includes a minimal copy-paste-ready C# snippet and package guidance.
+- [ ] Ambiguous locations or DST timestamps are not silently guessed.
 
-Mention the relevant warning when applicable:
+## Progressive disclosure and bundled resources
 
-- `TimeZoneInfo.FindSystemTimeZoneById()` is platform-specific for timezone IDs.
-- Avoid storing `DateTime.Now` in databases; store UTC instead.
-- Treat `DateTimeKind.Unspecified` as a bug risk unless it is deliberate input.
-- DST transitions can skip or repeat local times.
-- Azure Windows and Azure Linux environments may expect different timezone ID formats.
-
-## Response Shape
-
-For address and location requests:
-
-1. Return the resolved timezone block for each location.
-2. State the recommended implementation in one sentence.
-3. Include a copy-paste-ready C# snippet.
-
-For code and architecture requests:
-
-1. State the recommended approach in one sentence.
-2. Provide the timezone IDs if relevant.
-3. Include the minimal working code snippet.
-4. Mention the package requirement if needed.
-5. Add one pitfall warning if it matters.
-
-Keep responses concise and code-first.
-
-## References
-
-- `references/timezone-index.md`: common Windows and IANA timezone mappings
-- `references/code-patterns.md`: ready-to-use .NET timezone patterns
+- `references/timezone-index.md`: common Windows and IANA timezone mappings.
+- `references/code-patterns.md`: ready-to-use .NET timezone patterns.

@@ -1,115 +1,152 @@
 ---
 name: "aws-cdk-python-setup"
 description: >-
-  Setup and initialization guide for developing AWS CDK (Cloud Development Kit) applications in
-  Python. This skill enables users to configure environment prerequisites, create new CDK projects,
-  manage dependencies, and deploy to AWS. Use this skill when the user asks for aws cdk python setup
-  instructions.
----
-# AWS CDK Python Setup Instructions
-
-This skill provides setup guidance for working with **AWS CDK (Cloud Development Kit)** projects using **Python**.
-
+  Set up and initialize AWS CDK applications in Python, including prerequisites, credentials, project creation, virtual environments, dependencies, synthesis, bootstrap, diff, deploy, and troubleshooting. Use this skill when the user asks for AWS CDK Python setup instructions, a new CDK Python project, or first deployment guidance.
 ---
 
-## Prerequisites
+# AWS CDK Python setup
 
-Before starting, ensure the following tools are installed:
+Set up a Python AWS CDK project from prerequisites through first deployment, preserving the expected CDK project layout and validating the local environment before touching AWS resources.
 
-- **Node.js** ≥ 14.15.0 — Required for the AWS CDK CLI
-- **Python** ≥ 3.7 — Used for writing CDK code
-- **AWS CLI** — Manages credentials and resources
-- **Git** — Version control and project management
+## When to invoke
 
----
+- "Set up AWS CDK with Python."
+- "Create a new CDK Python app."
+- "What commands do I run before cdk deploy?"
+- "Bootstrap my AWS account for a Python CDK project."
+- "Fix AWS CDK Python setup errors."
 
-## Installation Steps
+## Prerequisites and context
 
-### 1. Install AWS CDK CLI
-```bash
-npm install -g aws-cdk
-cdk --version
+| Tool | Minimum or purpose | Check |
+| --- | --- | --- |
+| Node.js | `>= 14.15.0`; required for the AWS CDK CLI. | `node --version` |
+| Python | `>= 3.7`; used for CDK application code. | `python3 --version` |
+| AWS CLI | Manages AWS credentials and account/region defaults. | `aws --version` |
+| Git | Version control and project management. | `git --version` |
+| AWS credentials | Required before `cdk bootstrap`, `cdk diff`, or `cdk deploy`. | `aws sts get-caller-identity` |
+
+## Setup workflow
+
+1. Install and verify the CDK CLI:
+
+   ```bash
+   npm install -g aws-cdk
+   cdk --version
+   ```
+
+2. Configure AWS credentials if `aws sts get-caller-identity` fails:
+
+   ```bash
+   brew install awscli
+   aws configure
+   ```
+
+   Enter the AWS Access Key, Secret Access Key, default region, and output format when prompted. Prefer existing organization credential flows when the project already uses SSO or environment-based credentials.
+
+3. Create the project:
+
+   ```bash
+   mkdir my-cdk-project
+   cd my-cdk-project
+   cdk init app --language python
+   ```
+
+4. Activate the generated virtual environment:
+
+   ```bash
+   # macOS/Linux
+   source .venv/bin/activate
+
+   # Windows
+   .venv\Scripts\activate
+   ```
+
+5. Install Python dependencies:
+
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+6. Synthesize before deploying:
+
+   ```bash
+   cdk synth
+   ```
+
+7. Bootstrap once per account/region before first deployment:
+
+   ```bash
+   cdk bootstrap
+   ```
+
+8. Preview and deploy:
+
+   ```bash
+   cdk diff
+   cdk deploy
+   ```
+
+## Project anatomy
+
+| Path | Purpose |
+| --- | --- |
+| `app.py` | Main CDK application entry point; instantiates stacks. |
+| `my_cdk_project/` | Python package containing stack definitions and constructs. |
+| `requirements.txt` | Python dependencies; keep it pinned for consistent builds. |
+| `cdk.json` | CDK app command and context configuration. |
+| `cdk.out/` | Generated CloudFormation templates from `cdk synth`; do not hand-edit. |
+
+Primary dependencies are `aws-cdk-lib` for core CDK constructs and `constructs` for the base construct library.
+
+## Development rules
+
+| Rule | Why |
+| --- | --- |
+| Activate `.venv` before working | Ensures `aws-cdk-lib` and project dependencies resolve consistently. |
+| Run `cdk synth` before `cdk deploy` | Catches syntax, construct, and context errors without changing AWS. |
+| Run `cdk diff` before deployment | Shows IAM, replacement, and destructive changes before confirmation. |
+| Use development accounts for testing | Keeps experiments away from production resources. |
+| Follow Pythonic naming and directory conventions | Keeps stacks and constructs discoverable. |
+| Pin `requirements.txt` | Prevents unreviewed dependency drift. |
+
+## Troubleshooting
+
+| Symptom | Likely cause | Resolution |
+| --- | --- | --- |
+| `cdk: command not found` | AWS CDK CLI not installed or global npm bin not on `PATH`. | Run `npm install -g aws-cdk`, then `cdk --version`. |
+| `Unable to resolve AWS account` | Credentials or region missing. | Run `aws configure` or the project's SSO flow, then `aws sts get-caller-identity`. |
+| `This stack uses assets, so the toolkit stack must be deployed` | Account/region not bootstrapped. | Run `cdk bootstrap` for the target account and region. |
+| Python import errors | Virtual environment inactive or dependencies missing. | Run `source .venv/bin/activate` or `.venv\Scripts\activate`, then `pip install -r requirements.txt`. |
+| Unexpected deployment changes | Context or construct changes changed synthesized output. | Run `cdk diff` and inspect `cdk.out/` before `cdk deploy`. |
+| Environment diagnostics needed | Mixed tool versions or missing configuration. | Run `cdk doctor`. |
+
+## Output template
+
+```markdown
+## AWS CDK Python setup result
+
+**Status:** ready | needs credentials | blocked
+**Project path:** `<path>`
+**Account/region:** `<account or unknown>` / `<region or unknown>`
+
+| Step | Command | Result |
+| --- | --- | --- |
+| Prerequisites | `<command>` | `<pass/fail>` |
+| Project init | `cdk init app --language python` | `<pass/fail/not run>` |
+| Dependencies | `pip install -r requirements.txt` | `<pass/fail/not run>` |
+| Synthesis | `cdk synth` | `<pass/fail/not run>` |
+| Deployment readiness | `cdk diff` / `cdk bootstrap` / `cdk deploy` | `<result>` |
+
+**Next action:** <specific command or blocker>
 ```
 
-### 2. Configure AWS Credentials
-```bash
-# Install AWS CLI (if not installed)
-brew install awscli
+## Quality gate
 
-# Configure credentials
-aws configure
-```
-Enter your AWS Access Key, Secret Access Key, default region, and output format when prompted.
-
-### 3. Create a New CDK Project
-```bash
-mkdir my-cdk-project
-cd my-cdk-project
-cdk init app --language python
-```
-
-Your project will include:
-- `app.py` — Main application entry point
-- `my_cdk_project/` — CDK stack definitions
-- `requirements.txt` — Python dependencies
-- `cdk.json` — Configuration file
-
-### 4. Set Up Python Virtual Environment
-```bash
-# macOS/Linux
-source .venv/bin/activate
-
-# Windows
-.venv\Scripts\activate
-```
-
-### 5. Install Python Dependencies
-```bash
-pip install -r requirements.txt
-```
-Primary dependencies:
-- `aws-cdk-lib` — Core CDK constructs
-- `constructs` — Base construct library
-
----
-
-## Development Workflow
-
-### Synthesize CloudFormation Templates
-```bash
-cdk synth
-```
-Generates `cdk.out/` containing CloudFormation templates.
-
-### Deploy Stacks to AWS
-```bash
-cdk deploy
-```
-Reviews and confirms deployment to the configured AWS account.
-
-### Bootstrap (First Deployment Only)
-```bash
-cdk bootstrap
-```
-Prepares environment resources like S3 buckets for asset storage.
-
----
-
-## Best Practices
-
-- Always activate the virtual environment before working.
-- Run `cdk diff` before deployment to preview changes.
-- Use development accounts for testing.
-- Follow Pythonic naming and directory conventions.
-- Keep `requirements.txt` pinned for consistent builds.
-
----
-
-## Troubleshooting Tips
-
-If issues occur, check:
-
-- AWS credentials are correctly configured.
-- Default region is set properly.
-- Node.js and Python versions meet minimum requirements.
-- Run `cdk doctor` to diagnose environment issues.
+- [ ] Node.js, Python, AWS CLI, Git, and credentials were checked before deployment commands.
+- [ ] The CDK CLI was installed or verified with `cdk --version`.
+- [ ] The project uses `cdk init app --language python` and preserves `app.py`, `my_cdk_project/`, `requirements.txt`, and `cdk.json`.
+- [ ] The Python virtual environment was activated before installing dependencies.
+- [ ] `cdk synth` ran before `cdk diff` or `cdk deploy`.
+- [ ] `cdk bootstrap` was run or confirmed for first deployment to the account/region.
+- [ ] Troubleshooting guidance names the failing command and the next corrective command.

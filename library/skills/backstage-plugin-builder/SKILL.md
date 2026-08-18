@@ -1,116 +1,138 @@
 ---
 name: backstage-plugin-builder
-description: "Use this skill when the user asks to plan, architect, scaffold, validate, or prepare a custom Backstage plugin or module using official Backstage documentation. Trigger for frontend plugins, backend plugins, backend modules, catalog processors, scaffolder actions, search collators, auth providers, permission policies, TechDocs addons, common packages, node packages, plugin ADRs, architecture, validation hooks, and community publication preparation."
+description: "Plan, architect, scaffold, validate, and prepare custom Backstage plugins and modules using official Backstage documentation. Use when the user asks for frontend plugins, backend plugins, backend modules, catalog processors, entity providers, scaffolder actions, search collators, auth providers, permission policies, TechDocs addons, common packages, node packages, plugin ADRs, validation hooks, architecture, or community publication preparation."
 ---
 
-# Backstage Plugin Builder
+# Backstage plugin builder
 
-Use this skill for Backstage plugin work. It plans, architects, validates, and prepares Backstage plugins using official Backstage guidance.
+Plan and build Backstage plugin work by routing the request to the correct plugin type, validating current official guidance, producing the smallest useful implementation slice, and reporting the checks needed before integration or publication.
 
-## Scope
+## When to invoke
 
-This skill covers:
+- "Plan a custom Backstage plugin for this app."
+- "Scaffold a Backstage backend module for an extension point."
+- "Add a catalog processor or scaffolder action."
+- "Validate this Backstage plugin before publication."
+- "Write a plugin ADR and architecture plan."
 
-- Frontend plugins using the new frontend system.
-- Backend plugins using the new backend system.
-- Backend modules that extend existing backend plugins through extension points.
-- Catalog processors, entity providers, and catalog integrations.
-- Scaffolder actions and scaffolder modules.
-- Search collators and search modules.
-- Auth providers, resolvers, and auth modules.
-- Permission policies and permission rules.
-- TechDocs addons and documentation integrations.
-- Common packages for shared types, schemas, and clients.
-- Node packages for extension points and backend utilities.
-- Planning artifacts, strategy, ADRs, architecture, hooks, validation scripts, and community publication preparation.
+## Inputs
 
-## First Step
+Collect only missing facts. If intent is already clear, proceed.
 
-Ask only for missing facts. If the intent is clear, proceed with the matching workflow.
-
-Before recommending Backstage APIs, package versions, plugin types, publication steps, or migration guidance, validate current documentation through the `mcp-ecosystem` server when available. If the MCP lookup is unavailable or fails, state that in the output and use the official documentation fallback in [references/mcp-doc-validation.md](references/mcp-doc-validation.md).
-
-Required facts for code generation:
-
-- Plugin ID and package scope.
-- Target Backstage app or monorepo path.
-- Target Backstage version or package version policy.
-- Plugin type: frontend, backend, backend module, catalog, scaffolder, search, auth, permission, TechDocs, common, or node package.
-- Audience: internal, private package, open source, or community candidate.
-- External systems, data sensitivity, auth needs, and runtime configuration.
-
-## Routing
-
-| User intent | Action |
+| Input | Why it matters |
 | --- | --- |
-| Plan, strategy, ADR, architecture | Read [references/planning-strategy-adr.md](references/planning-strategy-adr.md), then generate artifacts with `scripts/create_backstage_plugin_artifacts.py`. |
-| Frontend plugin, page, card, tab, route, entity content | Read [references/frontend-plugin.md](references/frontend-plugin.md). |
-| Backend plugin, API, service backend | Read [references/backend-plugin.md](references/backend-plugin.md). |
-| Backend module, extension point implementation | Read [references/backend-module.md](references/backend-module.md). |
-| Catalog provider, processor, scaffolder action, search, auth, permission, TechDocs | Read [references/catalog-scaffolder-search-auth.md](references/catalog-scaffolder-search-auth.md). |
-| Dynamic loading strategy | Read [references/dynamic-plugin-strategy.md](references/dynamic-plugin-strategy.md). Keep it runtime-neutral. |
-| Official community publication | Read [references/community-publication.md](references/community-publication.md). Prepare a package and PR plan, but do not promise acceptance. |
-| Hooks, quality gates, validation scripts | Read [references/validation-hooks.md](references/validation-hooks.md). |
+| Plugin ID and package scope | Drives package name, route refs, catalog metadata, and publication naming. |
+| Target Backstage app or monorepo path | Determines workspace layout, package manager commands, and integration files. |
+| Target Backstage version or package version policy | Prevents stale API recommendations. |
+| Plugin type | Choose frontend, backend, backend module, catalog, scaffolder, search, auth, permission, TechDocs, common, or node package. |
+| Audience | Internal, private package, open source, or community candidate changes docs and quality gates. |
+| External systems, data sensitivity, auth needs, runtime configuration | Drives permissions, secrets, configuration schema, and backend boundary. |
 
-## Standard Workflow
+## Prerequisites and context
 
-1. Create plan, strategy, ADR, architecture, validation, and publication artifacts.
-2. Scaffold or guide plugin creation using official Backstage commands and APIs.
-3. Implement the smallest useful plugin slice.
-4. Add tests and docs before publication or app integration.
-5. Run validation scripts and package checks.
-6. Prepare community publication only when the plugin is generic enough and the user requests it.
-
-## Official Documentation Source Of Truth
-
-Use [references/official-docs.md](references/official-docs.md) as the index of official Backstage documentation consulted by this skill.
-
-Use [references/mcp-doc-validation.md](references/mcp-doc-validation.md) as the freshness gate for `mcp-ecosystem`, GitHub source lookup, and official web fallback.
-
-Key principles:
-
-- Use the new frontend system for new frontend plugins.
-- Use the new backend system for backend plugins and modules.
-- Use `createBackendPlugin` for standalone backend plugins.
-- Use `createBackendModule` for modules that extend existing backend plugins.
+- Validate current Backstage APIs, package versions, plugin types, publication steps, and migration guidance through the `mcp-ecosystem` server when available.
+- If MCP lookup is unavailable or fails, state that in the output and use the fallback in `references/mcp-doc-validation.md` plus `references/official-docs.md`.
 - Use official extension points instead of reaching into plugin internals.
-- Do not claim community publication is guaranteed. Maintainers decide.
 
-## Scripts
+## Plugin routing
 
-Generate planning artifacts:
+| User intent | Required reference | Output to produce |
+| --- | --- | --- |
+| Plan, strategy, ADR, architecture | `references/planning-strategy-adr.md` | Decision record, architecture sketch, validation plan, and implementation sequence. |
+| Frontend plugin, page, card, tab, route, entity content | `references/frontend-plugin.md` | New frontend system plugin surface with routes, components, APIs, tests, and docs. |
+| Backend plugin, API, service backend | `references/backend-plugin.md` | New backend system plugin using `createBackendPlugin`. |
+| Backend module, extension point implementation | `references/backend-module.md` | Module using `createBackendModule` against an official extension point. |
+| Catalog provider, processor, scaffolder action, search, auth, permission, TechDocs | `references/catalog-scaffolder-search-auth.md` | Specialized module with integration tests and config contract. |
+| Dynamic loading strategy | `references/dynamic-plugin-strategy.md` | Runtime-neutral loading approach that does not assume a proprietary loader. |
+| Official community publication | `references/community-publication.md` | Package and PR plan; never promise maintainer acceptance. |
+| Hooks, quality gates, validation scripts | `references/validation-hooks.md` | Local validation hooks and CI checks. |
+
+## Standard workflow
+
+1. Confirm missing inputs and validate docs freshness through `mcp-ecosystem` or the documented fallback.
+2. Create plan, strategy, ADR, architecture, validation, and publication artifacts when the request is architectural.
+3. Scaffold or guide plugin creation using official Backstage commands and APIs.
+4. Implement the smallest useful plugin slice before expanding surfaces.
+5. Add tests, docs, runtime config, and catalog metadata before publication or app integration.
+6. Run validation scripts and package checks.
+7. Prepare community publication only when the plugin is generic enough and the user explicitly requests it.
+
+## Backstage API rules
+
+| Area | Use | Avoid |
+| --- | --- | --- |
+| Frontend | New frontend system, routes, entity content, app integration points, package-local components. | Legacy examples unless required by the target app. |
+| Backend plugin | `createBackendPlugin`, service factories, explicit config and permissions. | Side effects at import time or hidden singleton clients. |
+| Backend module | `createBackendModule` and official extension points. | Importing another plugin's internal files. |
+| Catalog | Catalog processors, entity providers, and integration points with clear ownership and refresh behavior. | Processors that mutate unrelated entity fields. |
+| Scaffolder | Actions/modules with typed inputs, dry-run-safe logic, and tests. | Actions that shell out with unvalidated input. |
+| Search | Collators/modules with batching and incremental behavior where supported. | Full re-indexing on every request path. |
+| Auth and permission | Providers, resolvers, rules, policies, and least-privilege defaults. | Treating identity claims as authorization. |
+| TechDocs | Addons and documentation integrations that preserve build and reader workflows. | UI-only docs changes with no generated documentation path. |
+| Common and node packages | Shared types, schemas, clients, extension points, and backend utilities. | Cross-package cycles or app-specific leakage. |
+
+## Scripts and commands
+
+Run scripts relative to the installed skill directory; examples show the `.github/skills/backstage-plugin-builder` layout.
 
 ```bash
-python .github/skills/backstage-plugin-builder/scripts/create_backstage_plugin_artifacts.py \
-  --plugin-id my-plugin \
-  --plugin-type frontend \
-  --audience internal \
-  --target-version 1.39.0 \
-  --output plugins/my-plugin/docs
-```
+python .github/skills/backstage-plugin-builder/scripts/create_backstage_plugin_artifacts.py   --plugin-id my-plugin   --plugin-type frontend   --audience internal   --target-version 1.39.0   --output plugins/my-plugin/docs
 
-Validate a plugin package:
-
-```bash
 python .github/skills/backstage-plugin-builder/scripts/validate_backstage_plugin.py plugins/my-plugin
-```
-
-Validate official documentation fallback sources:
-
-```bash
 python .github/skills/backstage-plugin-builder/scripts/validate_official_docs.py
-```
-
-Generate local quality hooks:
-
-```bash
 python .github/skills/backstage-plugin-builder/scripts/generate_quality_hooks.py --root .
+python -m py_compile .github/skills/backstage-plugin-builder/scripts/*.py
 ```
 
-## Validation
+Also run available package checks from the target package: `yarn lint`, `yarn tsc`, `yarn test`, `yarn build`, and for publication `npm pack --dry-run`.
 
-- Run `python -m py_compile .github/skills/backstage-plugin-builder/scripts/*.py` after editing scripts.
-- Validate documentation freshness with `mcp-ecosystem` when available; if not available, run `validate_official_docs.py` and cite the fallback.
-- Run `validate_backstage_plugin.py` against generated or existing plugin packages.
-- Run the package's `yarn lint`, `yarn tsc`, `yarn test`, and `yarn build` when available.
-- For publication, run `npm pack --dry-run` and complete the community publication checklist.
+## Gotchas
+
+- **Documentation freshness is load-bearing**: Backstage plugin APIs move; cite whether `mcp-ecosystem` or fallback docs were used.
+- **New systems are the default**: use the new frontend system and new backend system for new work unless the target app requires otherwise.
+- **Community publication is not guaranteed**: prepare a compliant package and PR plan, but maintainers decide.
+- **Dynamic loading must stay runtime-neutral**: do not bake in a proprietary runtime unless the user named one.
+
+## Progressive disclosure and bundled resources
+
+- `references/official-docs.md`: index of official Backstage documentation.
+- `references/mcp-doc-validation.md`: freshness gate for MCP, GitHub source lookup, and official web fallback.
+- `references/plugin-types.md`: choose the right package and extension shape.
+- `references/planning-strategy-adr.md`, `references/frontend-plugin.md`, `references/backend-plugin.md`, `references/backend-module.md`, `references/catalog-scaffolder-search-auth.md`, `references/dynamic-plugin-strategy.md`, `references/community-publication.md`, `references/validation-hooks.md`: read only the route-specific file.
+- `scripts/create_backstage_plugin_artifacts.py`, `scripts/validate_backstage_plugin.py`, `scripts/validate_official_docs.py`, `scripts/generate_quality_hooks.py`: deterministic artifact and validation helpers.
+- `examples/catalog-info.yaml`, `examples/package-json-checklist.md`, `examples/plugin-readme-template.md`: publication and package examples.
+
+The script names `validate_backstage_plugin.py` and `validate_official_docs.py` are the stable validation entry points even when invoked through a full path.
+
+## Output template
+
+```markdown
+## Backstage plugin plan - <plugin-id>
+
+**Status:** planned | implemented | validated | blocked
+**Plugin type:** <frontend | backend | backend module | catalog | scaffolder | search | auth | permission | TechDocs | common | node>
+**Docs freshness:** <mcp-ecosystem used | fallback used | blocked>
+
+| Area | Decision | Evidence or file |
+| --- | --- | --- |
+| Package | `<package name>` | `<source>` |
+| Architecture | `<key design>` | `<reference or file>` |
+| Validation | `<check>` | `<result>` |
+
+**Commands run**
+- `<command>`: <pass | fail | not available>
+
+**Next steps**
+- <smallest remaining implementation or publication task>
+```
+
+## Quality gate
+
+- [ ] Missing facts were requested only when required to proceed.
+- [ ] Official docs were validated through `mcp-ecosystem` or the fallback was stated.
+- [ ] The chosen route matches the plugin type and request.
+- [ ] New frontend and backend work uses the new systems unless the target app requires legacy integration.
+- [ ] Backend modules use official extension points and `createBackendModule`; backend plugins use `createBackendPlugin`.
+- [ ] Generated artifacts, tests, docs, catalog metadata, and configuration are included when relevant.
+- [ ] Script, package, and publication checks were run when available, with failures reported.
+- [ ] Community publication is framed as a preparation plan, not an acceptance guarantee.

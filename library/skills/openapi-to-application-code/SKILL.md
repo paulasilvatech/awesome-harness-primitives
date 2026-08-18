@@ -1,109 +1,93 @@
 ---
 name: "openapi-to-application-code"
 description: >-
-  Generate a complete, production-ready application from an OpenAPI specification. Use this skill when
-  the user asks for generate application from openapi spec.
+  Generate complete production-ready application code from an OpenAPI specification, including project structure, models, controllers, services, repositories, validation, error handling, tests, documentation, and environment files. Use this skill when the user asks to generate an application from an OpenAPI spec, scaffold an API server from OpenAPI, or turn an OpenAPI URL, file, or pasted spec into runnable code.
 ---
-# Generate Application from OpenAPI Spec
 
-Your goal is to generate a complete, working application from an OpenAPI specification using the active framework's conventions and best practices.
+# OpenAPI to application code
 
-## Input Requirements
+Turn an OpenAPI specification into a runnable application that follows the active framework's conventions, preserves the contract in routes and schemas, and includes tests, documentation, configuration, and clear follow-up questions for ambiguous parts.
 
-1. **OpenAPI Specification**: Provide either:
-   - A URL to the OpenAPI spec (e.g., `https://api.example.com/openapi.json`)
-   - A local file path to the OpenAPI spec
-   - The full OpenAPI specification content pasted directly
+## When to invoke
 
-2. **Project Details** (if not in spec):
-   - Project name and description
-   - Target framework and version
-   - Package/namespace naming conventions
-   - Authentication method (if not specified in OpenAPI)
+- "Generate an application from this OpenAPI spec."
+- "Scaffold a server from this openapi.json file."
+- "Turn https://api.example.com/openapi.json into runnable code."
+- "Create controllers and DTOs from this OpenAPI definition."
+- "Build a production-ready API app from this spec."
 
-## Generation Process
+## Inputs
 
-### Step 1: Analyze the OpenAPI Specification
-- Validate the OpenAPI spec for completeness and correctness
-- Identify all endpoints, HTTP methods, request/response schemas
-- Extract authentication requirements and security schemes
-- Note data model relationships and constraints
-- Flag any ambiguities or incomplete definitions
+Accept one OpenAPI source and enough project details to generate idiomatic code.
 
-### Step 2: Design Application Architecture
-- Plan directory structure appropriate for the framework
-- Identify controller/handler grouping by resource or domain
-- Design service layer organization for business logic
-- Plan data models and entity relationships
-- Design configuration and initialization strategy
+| Input | Acceptable forms | Required handling |
+| --- | --- | --- |
+| OpenAPI specification | URL such as `https://api.example.com/openapi.json`, local file path, or pasted YAML/JSON content. | Validate syntax, version, paths, operations, schemas, responses, and security schemes. |
+| Project name and description | User-supplied or inferred from `info.title` and `info.description`. | Normalize package, module, and README naming. |
+| Target framework and version | User-supplied or inferred from repository conventions. | Follow existing structure rather than imposing a new stack. |
+| Package or namespace conventions | Existing repo naming, group ID, module path, or package scope. | Keep generated code consistent. |
+| Authentication method | Security schemes in OpenAPI or user clarification. | Implement JWT, OAuth2, API key, basic auth, or a documented stub when details are incomplete. |
 
-### Step 3: Generate Application Code
-- Create project structure with build/package configuration files
-- Generate models/DTOs from OpenAPI schemas
-- Generate controllers/handlers with route mappings
-- Generate service layer with business logic
-- Generate repository/data access layer if applicable
-- Add error handling, validation, and logging
-- Generate configuration and startup code
+## Procedure
 
-### Step 4: Add Supporting Files
-- Generate appropriate unit tests for services and controllers
-- Create README with setup and running instructions
-- Add .gitignore and environment configuration templates
-- Generate API documentation files
-- Create example requests/integration tests
+1. Analyze the OpenAPI specification.
+2. Design application architecture from the active framework's conventions.
+3. Generate application code.
+4. Add supporting files, tests, examples, and documentation.
+5. Run the smallest available build or test command that validates generated code.
+6. Report assumptions, unanswered questions, and exact next steps.
 
-## Output Structure
+## Specification analysis
 
-The generated application will include:
+| Analyze | Extract or flag |
+| --- | --- |
+| Completeness | OpenAPI version, `info`, `servers`, `paths`, `components.schemas`, `operationId`, tags, examples. |
+| Endpoints | HTTP methods, route parameters, query parameters, headers, request bodies, responses, and status codes. |
+| Security | Authentication requirements, authorization scopes, per-operation security overrides. |
+| Models | Request/response schemas, enums, required fields, nullable fields, formats, relationships, constraints. |
+| Ambiguities | Missing examples, unclear auth, schema cycles, unsupported formats, missing error responses, undefined pagination/filtering/sorting. |
 
-```
+## Generated application architecture
+
+| Layer | Generate |
+| --- | --- |
+| Build/package | Framework-specific files such as `pom.xml`, `build.gradle`, `package.json`, `pyproject.toml`, or equivalent. |
+| Controllers/handlers | Route mappings grouped by resource, tag, or domain; validation of path/query/body inputs. |
+| Services | Business logic seams with generated stubs where the specification lacks implementation detail. |
+| Models/DTOs | Types from OpenAPI schemas, including enums, validation annotations, and serialization names. |
+| Repositories/data access | Add only when persistence is requested or clearly implied; otherwise use in-memory/mock seams. |
+| Config/startup | Application initialization, environment variables, auth middleware, logging, and error handling. |
+| Tests | Unit tests for services and controllers; integration or example requests when useful. |
+| Documentation | README setup, run instructions, generated API documentation files, and example requests. |
+
+## Output structure
+
+```text
 project-name/
-├── README.md                      # Setup and usage instructions
-├── [build-config]                 # Framework-specific build files (pom.xml, build.gradle, package.json, etc.)
+├── README.md
+├── [build-config]
 ├── src/
 │   ├── main/
 │   │   ├── [language]/
-│   │   │   ├── controllers/       # HTTP endpoint handlers
-│   │   │   ├── services/          # Business logic
-│   │   │   ├── models/            # Data models and DTOs
-│   │   │   ├── repositories/      # Data access (if applicable)
-│   │   │   └── config/            # Application configuration
-│   │   └── resources/             # Configuration files
+│   │   │   ├── controllers/
+│   │   │   ├── services/
+│   │   │   ├── models/
+│   │   │   ├── repositories/
+│   │   │   └── config/
+│   │   └── resources/
 │   └── test/
 │       ├── [language]/
-│       │   ├── controllers/       # Controller tests
-│       │   └── services/          # Service tests
-│       └── resources/             # Test configuration
+│       │   ├── controllers/
+│       │   └── services/
+│       └── resources/
 ├── .gitignore
-├── .env.example                   # Environment variables template
-└── docker-compose.yml             # Optional: Docker setup (if applicable)
+├── .env.example
+└── docker-compose.yml
 ```
 
-## Best Practices Applied
+`docker-compose.yml` is optional and should be generated only when database, queue, or containerized local dependencies are requested or implied.
 
-- **Framework Conventions**: Follows framework-specific naming, structure, and patterns
-- **Separation of Concerns**: Clear layers with controllers, services, and repositories
-- **Error Handling**: Comprehensive error handling with meaningful responses
-- **Validation**: Input validation and schema validation throughout
-- **Logging**: Structured logging for debugging and monitoring
-- **Testing**: Unit tests for services and controllers
-- **Documentation**: Inline code documentation and setup instructions
-- **Security**: Implements authentication/authorization from OpenAPI spec
-- **Scalability**: Design patterns support growth and maintenance
-
-## Next Steps
-
-After generation:
-
-1. Review the generated code structure and make customizations as needed
-2. Install dependencies according to framework requirements
-3. Configure environment variables and database connections
-4. Run tests to verify generated code
-5. Start the development server
-6. Test endpoints using the provided examples
-
-## Questions to Ask if Needed
+## Questions to ask only if needed
 
 - Should the application include database/ORM setup, or just in-memory/mock data?
 - Do you want Docker configuration for containerization?
@@ -111,3 +95,49 @@ After generation:
 - Do you need integration tests or just unit tests?
 - Any specific database technology preferences?
 - Should the API include pagination, filtering, and sorting examples?
+
+## Gotchas
+
+- **Do not invent business logic**: generate service seams and TODOs when the OpenAPI contract defines shape but not behavior.
+- **Security schemes are part of the contract**: do not drop auth because examples are missing.
+- **Framework conventions win**: when generating inside an existing repo, follow its structure and test runner.
+- **Validation must mirror schemas**: required, nullable, enum, format, min/max, and pattern constraints need code-level validation where the framework supports it.
+
+Preserve OpenAPI vocabulary when reporting architecture: Package/namespace choices affect generated imports; build/package files are framework-specific; controller/handler, models/DTOs, repository/data access, authentication/authorization, and example requests/integration tests are separate deliverables.
+
+## Output template
+
+```markdown
+## OpenAPI application generation result
+
+**Status:** generated | planned | blocked
+**Spec source:** `<URL, path, or pasted content>`
+**Framework:** `<framework/version>`
+
+| Artifact | Path | Source from OpenAPI |
+| --- | --- | --- |
+| Models | `<path>` | `<schemas>` |
+| Controllers | `<path>` | `<paths/operations>` |
+| Services | `<path>` | `<business seams>` |
+| Tests | `<path>` | `<operations covered>` |
+| Docs/config | `<path>` | `<README/env/examples>` |
+
+**Assumptions and questions**
+- <assumption or question>
+
+**Validation**
+- `<build/test command>`: <pass | fail | not run>
+```
+
+## Quality gate
+
+- [ ] The OpenAPI source was validated and all endpoints, HTTP methods, request/response schemas, and security schemes were inventoried.
+- [ ] Ambiguities and incomplete definitions were flagged before code relied on assumptions.
+- [ ] Generated structure follows the target framework and existing repository conventions.
+- [ ] Models/DTOs, controllers/handlers, services, repositories when applicable, config, errors, validation, logging, tests, docs, `.gitignore`, and `.env.example` were considered.
+- [ ] Authentication and authorization from the OpenAPI spec were implemented or explicitly stubbed with a blocker.
+- [ ] The generated code was built or tested with the smallest available command, or the missing dependency/blocker is stated.
+
+## References
+
+- [Example OpenAPI URL](https://api.example.com/openapi.json)

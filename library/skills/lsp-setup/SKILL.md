@@ -1,36 +1,52 @@
 ---
-name: "lsp-setup"
+name: lsp-setup
 description: >-
-  Enable code intelligence (go-to-definition, find-references, hover, type info) for any programming
-  language by installing and configuring an LSP server for Copilot CLI. Detects the OS, installs the
-  right server, and generates the JSON configuration (user-level or repo-level). Use when you need
-  deeper code understanding and no LSP server is configured, or when the user asks to set up, install,
-  or configure an LSP server.
+  Install and configure Language Server Protocol servers for GitHub Copilot CLI code intelligence, including go-to-definition, find-references, hover, and type information. Use when the user asks to set up LSP, install a language server, configure Java or TypeScript LSP, fix /lsp status, or enable deeper code understanding in Copilot CLI.
 ---
-# LSP Setup for GitHub Copilot CLI
 
-**UTILITY SKILL** — installs and configures Language Server Protocol servers for Copilot CLI.
-USE FOR: "setup LSP", "install language server", "configure LSP for Java", "add TypeScript LSP", "enable code intelligence", "I need go-to-definition", "find references not working", "need better code understanding"
-DO NOT USE FOR: general coding tasks, IDE/editor LSP configuration, non-Copilot-CLI setups
+# LSP setup for GitHub Copilot CLI
 
-## Workflow
+Detect the target programming language, operating system, server package, and configuration scope; install the correct LSP binary; then merge a valid `lspServers` JSON entry for GitHub Copilot CLI.
 
-1. **Ask the language** — use `ask_user` to ask which programming language(s) the user wants LSP support for
-2. **Detect the OS** — run `uname -s` (or check for Windows via `$env:OS` / `%OS%`) to determine macOS, Linux, or Windows
-3. **Look up the LSP server** — read `references/lsp-servers.md` for known servers, install commands, and config snippets
-4. **Ask scope** — use `ask_user` to ask whether the config should be user-level (`~/.copilot/lsp-config.json`) or repo-level (`lsp.json` at the repo root or `.github/lsp.json`)
-5. **Install the server** — run the appropriate install command for the detected OS
-6. **Write the config** — merge the new server entry into the chosen config file (`~/.copilot/lsp-config.json` for user-level; `lsp.json` or `.github/lsp.json` for repo-level). If a repo-level config already exists, keep using that location; otherwise ask the user which repo-level location they prefer. Create the file if missing and preserve existing entries.
-7. **Verify** — confirm the LSP binary is on `$PATH` and the config file is valid JSON
+## When to invoke
 
-## Configuration Format
+- "Set up LSP for this repository."
+- "Install a language server for Java."
+- "Configure TypeScript LSP for GitHub Copilot CLI."
+- "Go-to-definition and find references are not working."
+- "Help me make `/lsp` show a running server."
 
-Copilot CLI reads LSP configuration from user-level or repo-level locations, and repo-level config takes precedence over user-level config:
+## Prerequisites and context
 
-- **User-level**: `~/.copilot/lsp-config.json`
-- **Repo-level**: `lsp.json` (repo root) or `.github/lsp.json`
+- This skill is for GitHub Copilot CLI LSP configuration, not editor or IDE LSP settings.
+- Read `references/lsp-servers.md` for known server binaries, install commands, and config snippets.
+- The final language server `command` must be on `$PATH` or use an absolute path.
+- In interactive environments that expose `ask_user`, use `ask_user` with `choices` for language and scope selection; in non-interactive environments, infer safely from repository files and document the assumption.
 
-The JSON structure:
+## Procedure
+
+1. Determine the language from user input or repository files.
+2. Detect the OS with `uname -s`, or Windows indicators such as `$env:OS` / `%OS%`.
+3. Read `references/lsp-servers.md` and select the known LSP server, install command, binary, arguments, extensions, and language IDs.
+4. Choose configuration scope: user-level `~/.copilot/lsp-config.json`, repo-level `lsp.json`, or repo-level `.github/lsp.json`.
+5. If a repo-level config already exists, keep that location; otherwise choose the requested location or document the inferred one.
+6. Install the server with the appropriate package manager or manual instruction.
+7. Read existing config first, merge only the target server entry, and preserve all other `lspServers` entries.
+8. Validate the JSON and verify the binary with `which <binary>` or `where.exe <binary>`.
+9. Tell the user to `/exit`, restart `copilot`, run `/lsp`, and try hover, go-to-definition, or find-references.
+
+## Scope exclusions
+
+This is a `UTILITY` `SKILL` for GitHub Copilot CLI only; do not use it for `IDE/editor` configuration. Most server entries use the literal argument `"--stdio"`; verify binaries with `which <binary>` on Unix-like systems and `where.exe <binary>` on Windows; the Windows command name is `where.exe`.
+## Configuration locations
+
+| Scope | Path | Precedence | Use when |
+| --- | --- | --- | --- |
+| User-level | `~/.copilot/lsp-config.json` | Lower than repo-level | The server should be available across repositories. |
+| Repo-level root | `lsp.json` | Higher than user-level | The repository should carry its own CLI LSP configuration. |
+| Repo-level GitHub | `.github/lsp.json` | Higher than user-level | The repository keeps tool configuration under `.github/`. |
+
+## Configuration format
 
 ```json
 {
@@ -47,28 +63,71 @@ The JSON structure:
 }
 ```
 
-### Key rules
+| Key | Rule |
+| --- | --- |
+| `lspServers` | Multiple servers can coexist; never clobber unrelated entries. |
+| `<server-key>` | Stable name for the language server, usually language or binary oriented. |
+| `command` | Binary name on `$PATH` or absolute path. |
+| `args` | Usually includes `--stdio` for standard I/O transport. |
+| `fileExtensions` | Map each extension with leading dot to a valid Language ID. |
 
-- `command` is the binary name (must be on `$PATH`) or an absolute path.
-- `args` almost always includes `"--stdio"` to use standard I/O transport.
-- `fileExtensions` maps each file extension (with leading dot) to a [Language ID](https://code.visualstudio.com/docs/languages/identifiers#_known-language-identifiers).
-- Multiple servers can coexist in `lspServers`.
-- When merging into an existing file, **never overwrite** other server entries — only add or update the target language key.
+## Server selection and fallback
 
-## Behavior
+| Situation | Action |
+| --- | --- |
+| Language appears in `references/lsp-servers.md` | Use the documented server, install command, and config snippet. |
+| Package manager missing, such as no Homebrew on macOS | Suggest an alternative install method from the reference file. |
+| Language is not listed | Search the web for `<language> LSP server`, then guide manual configuration with `command`, `args`, and `fileExtensions`. |
+| Existing config is invalid JSON | Stop before writing; report the parse error and required repair. |
+| Binary not found after install | Check shell path, package-manager bin directory, and absolute binary path. |
 
-- Always use `ask_user` with `choices` when asking the user to pick a language or scope.
-- If the language is not listed in `references/lsp-servers.md`, search the web for "<language> LSP server" and guide the user through manual configuration.
-- If a package manager is not available (e.g. no Homebrew on macOS), suggest alternative install methods from the reference file.
-- After installation, run `which <binary>` (or `where.exe` on Windows) to confirm the binary is accessible.
-- Show the user the final config JSON before writing it.
-- If the config file already exists, read it first and merge — do not clobber.
+## Gotchas
 
-## Verification
+- **Restart is required**: after writing LSP config, the user must type `/exit` and relaunch `copilot` before the server is loaded.
+- **Repo-level config wins**: `lsp.json` or `.github/lsp.json` takes precedence over `~/.copilot/lsp-config.json`.
+- **Do not overwrite config**: merge into `lspServers`; preserve existing entries and formatting as much as possible.
+- **Language IDs are not arbitrary**: use known identifiers from the VS Code language identifier list.
 
-After setup, tell the user:
+## Progressive disclosure and bundled resources
 
-1. Type `/exit` to quit Copilot CLI — this is **required** so the new LSP configuration is loaded on next launch
-2. Re-launch `copilot` in a project with files of the configured language
-3. Run `/lsp` to check the server status
-4. Try code intelligence features like go-to-definition or hover
+| Resource | Use when | Contains |
+| --- | --- | --- |
+| `references/lsp-servers.md` | Always during setup | Known language servers, install commands, config snippets, binary names, and alternatives. |
+
+## Output template
+
+```markdown
+## LSP setup result — <language>
+
+**Status:** configured | partially configured | blocked
+**Scope:** user-level | repo-level root | repo-level .github
+**Config file:** `<~/.copilot/lsp-config.json | lsp.json | .github/lsp.json>`
+**Server key:** `<server-key>`
+**Command:** `<binary>`
+
+### Verification
+- OS detected: `<uname -s | Windows>`
+- Binary check: `which <binary>` or `where.exe <binary>` -> pass | fail
+- JSON valid: pass | fail
+- Existing entries preserved: yes | no
+
+### Next user steps
+1. Type `/exit` to quit GitHub Copilot CLI.
+2. Relaunch `copilot` in a project with `<language>` files.
+3. Run `/lsp` to check server status.
+4. Try go-to-definition, find-references, hover, or type info.
+```
+
+## Quality gate
+
+- [ ] The target language and OS were identified or explicitly assumed.
+- [ ] `references/lsp-servers.md` was read before selecting a known server.
+- [ ] Config scope was chosen among `~/.copilot/lsp-config.json`, `lsp.json`, and `.github/lsp.json`.
+- [ ] Existing config was read and merged without overwriting unrelated `lspServers` entries.
+- [ ] `command`, `args`, and `fileExtensions` are valid for the selected server.
+- [ ] Binary availability was checked with `which <binary>` or `where.exe <binary>`.
+- [ ] The final response tells the user to `/exit`, relaunch `copilot`, run `/lsp`, and test code intelligence.
+
+## References
+
+- [VS Code known language identifiers](https://code.visualstudio.com/docs/languages/identifiers#_known-language-identifiers)

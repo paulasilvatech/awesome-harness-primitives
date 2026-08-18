@@ -1,115 +1,124 @@
 ---
 name: "premium-frontend-ui"
 description: >-
-  Guide Copilot to craft immersive, high-performance web experiences with advanced motion, typography,
-  and architectural polish. Use this skill when the user asks for premium frontend UI, sophisticated
-  animations, scroll-driven interactions, layout polish, or high-end visual design implementation.
+  Craft immersive, high-performance web interfaces with advanced motion, typography, scroll-driven interactions, responsive polish, and product-specific visual direction. Use this skill when the user asks for premium frontend UI, sophisticated animations, Awwwards-style components, high-end landing pages, layout polish, or high-end visual design implementation.
 metadata:
   author: "Utkarsh Patrikar"
   author_url: "https://github.com/utkarsh232005"
 ---
-# Immersive Frontend UI Craftsmanship
 
-As an AI engineering assistant, your role when building premium frontend experiences goes beyond outputting functional HTML and CSS. You must architect **immersive digital environments**. This skill provides the blueprint for generating highly intentional, award-level web applications that prioritize aesthetic quality, deep interactivity, and flawless performance.
+# Premium frontend UI
 
-When a user requests a high-end landing page, an interactive portfolio, or a specialized component that requires top-tier visual polish, apply the following rigorous standards to every line of code you generate.
+Transform a functional frontend request into an immersive, high-performance interface by choosing a clear visual identity, layering motion intentionally, and enforcing accessibility and performance constraints before delivery.
 
----
+## When to invoke
 
-## 1. Establishing the Creative Foundation
+- "Build a premium landing page."
+- "Create an Awwwards-style component."
+- "Make this UI feel high-end and immersive."
+- "Add sophisticated scroll-driven interactions."
+- "Polish this frontend layout and motion system."
 
-Before generating layout code, ensure you understand the core emotional resonance the UI should deliver. Do not default to generic, unopinionated code. 
+## Creative foundation
 
-Commit to a strong visual identity in your CSS and component structure:
-- **Editorial Brutalism**: High-contrast monochromatic palettes, oversized typography, sharp rectangular edges, and raw grid structures.
-- **Organic Fluidity**: Soft gradients, deeply rounded corners, glassmorphism overlays, and bouncy spring-based physics.
-- **Cyber / Technical**: Dark mode dominance, glowing neon accents, monospaced typography, and rapid, staggered reveal animations.
-- **Cinematic Pacing**: Full-viewport imagery, slow cross-fades, profound use of negative space, and scroll-dependent storytelling.
+Commit to one visual identity before writing layout code; do not default to generic neutral UI.
 
----
+| Direction | Use when | Design decisions |
+| --- | --- | --- |
+| Editorial Brutalism | Content needs authority, contrast, and sharp hierarchy. | High-contrast monochrome, oversized typography, raw grid structures, sharp rectangular edges. |
+| Organic Fluidity | Brand should feel soft, expressive, and tactile. | Soft gradients, deeply rounded corners, glassmorphism overlays, bouncy spring-based physics. |
+| Cyber / Technical | Product needs precision, systems, data, or developer energy. | Dark mode dominance, glowing neon accents, monospaced typography, rapid staggered reveal animations. |
+| Cinematic Pacing | Storytelling and atmosphere matter more than density. | Full-viewport imagery, slow cross-fades, negative space, scroll-dependent storytelling. |
 
-## 2. Structural Requirements for Immersive UI
+## Structural requirements
 
-When scaffolding a page or generating core components, include the following architectural layers to transform a standard page into an experience.
+| Layer | Required implementation | Premium failure to avoid |
+| --- | --- | --- |
+| Entry sequence | Add a lightweight preloader or initialization state for fonts, first images, or 3D models, then transition with a split-door reveal, scale-up zoom, or staggered text sweep. | Blank initial screen or abrupt content pop-in. |
+| Hero architecture | Use full-bleed containers such as `100vh` or `100dvh`; break headlines into word or character spans for cascading entrance animations. | A centered card that could belong to any SaaS template. |
+| Depth | Add subtle floating elements, background clipping paths, layered media, or atmospheric surfaces behind primary copy. | Decorative shapes unrelated to hierarchy. |
+| Navigation | Use sticky headers that react to scroll direction, hiding on scroll down and revealing on scroll up. | Standard static navbars with no contextual behavior. |
+| Rich hover | Use previews, mega-menus, or product-relevant hover states where they help choice. | Hover decoration that reveals nothing useful. |
 
-### 2.1 The Entry Sequence (Preloading & Initialization)
-A blank screen is unacceptable. The user's first interaction must set expectations.
-- **Implementation**: Generate a lightweight preloader component that handles asset resolution (fonts, initial images, 3D models).
-- **Animation**: Output code that transitions the preloader away fluidly—such as a split-door reveal, a scale-up zoom, or a staggered text sweep.
+## Motion design system
 
-### 2.2 The Hero Architecture
-The top fold must command attention immediately.
-- **Visuals**: Output code that implements full-bleed containers (`100vh`/`100dvh`).
-- **Typography Engine**: Ensure headlines are broken down syntactically (e.g., span wrapping by word or character) to allow for cascading entrance animations.
-- **Depth**: Utilize subtle floating elements or background clipping paths to create a sense of scale and depth behind the primary copy.
+| Pattern | Implementation guidance | Guardrail |
+| --- | --- | --- |
+| Scroll-driven narratives | Use GSAP ScrollTrigger or framework-equivalent timelines to tie progress to pinned containers, reveals, and transforms. | Do not make essential content inaccessible without scroll scripting. |
+| Horizontal journeys | Translate vertical scroll into horizontal gallery or showcase movement only for content that benefits from sequencing. | Preserve keyboard and reduced-motion alternatives. |
+| Parallax mapping | Assign different scroll speeds to background, midground, and foreground elements with subtle values. | Avoid nausea-inducing large deltas. |
+| Magnetic components | Calculate pointer distance and move buttons slightly toward the cursor. | Limit to `@media (hover: hover) and (pointer: fine)`. |
+| Custom cursor | Follow the pointer with interpolation or `lerp` only when it clarifies interaction. | Never replace native cursor affordances for text input. |
+| Dimensional hover | Use `scale`, `rotateX`, and `translate3d` for tactile weight. | Avoid layout-affecting hover changes. |
 
-### 2.3 Fluid & Contextual Navigation
-- **Implementation**: Do not generate standard static navbars. Output sticky headers that react toscroll direction (hide on scroll down, reveal on scroll up).
-- **Interactivity**: Include hover states that reveal rich content (e.g., mega-menus that display image previews of the hovered link).
+## Typography and texture
 
----
+- Use extreme but controlled type hierarchy: fluid headlines with `clamp()` up to `12vw`, crisp body copy around `16px-18px` minimum.
+- Prefer specific variable fonts or premium typefaces over unconsidered system defaults.
+- Add atmospheric CSS/SVG noise overlays with `mix-blend-mode: overlay` and opacity around `0.02 - 0.05` to avoid digital sterility.
+- Use `backdrop-filter: blur(x)` with thin semi-transparent borders for frosted-glass depth only when the surface has content or hierarchy value.
+- Make headings, labels, and calls to action product-specific; never ship placeholder metrics or vague "learn more" clusters when concrete content exists.
 
-## 3. The Motion Design System
+## Performance and accessibility guardrails
 
-Animation is not an afterthought; it is the connective tissue of a premium site. Always implement the following motion principles:
+| Guardrail | Apply it |
+| --- | --- |
+| Hardware acceleration | Animate only `transform` and `opacity`; avoid animating `width`, `height`, `top`, or `margin`. |
+| Render optimization | Apply `will-change: transform` only shortly before expensive motion and remove it after animation. |
+| Touch degradation | Wrap custom cursor and heavy hover logic in `@media (hover: hover) and (pointer: fine)`. |
+| Motion preference | Wrap heavy continuous animation in `@media (prefers-reduced-motion: no-preference)`. |
+| Accessibility | Preserve semantic structure, focus order, contrast, keyboard behavior, touch targets, zoom readability, and reduced-motion alternatives. |
 
-### 3.1 Scroll-Driven Narratives
-Generate code utilizing modern scroll libraries (like GSAP's ScrollTrigger) to tie animations to user progress.
-- **Pinned Containers**: Create sections that lock into the viewport while secondary content flows past or reveals itself.
-- **Horizontal Journeys**: Translate vertical scroll data into horizontal movement for specific galleries or showcases.
-- **Parallax Mapping**: Assign subtle, varying scroll-speeds to background elements, midground text, and foreground imagery.
+## Implementation ecosystem
 
-### 3.2 High-Fidelity Micro-Interactions
-The cursor is the user's avatar. Build interactions around it.
-- **Magnetic Components**: Write logic that calculates the distance between the mouse pointer and a button, pulling the button towards the cursor dynamically.
-- **Custom Tracking Elements**: Generate custom cursor components that follow the mouse with calculated interpolation (lerp) for a smooth drag effect.
-- **Dimensional Hover States**: Use CSS Transforms (`scale`, `rotateX`, `translate3d`) to give interactive elements weight and tactile feedback.
+| Target | Preferred tools |
+| --- | --- |
+| React / Next.js | Framer Motion for layout transitions and spring physics; Lenis (`@studio-freight/lenis`) for smooth scrolling; React Three Fiber (`@react-three/fiber`) for WebGL or 3D interactions when requested. |
+| Vanilla / HTML / Astro | GSAP (GreenSock Animation Platform) for timeline sequencing; Lenis via CDN for smooth scrolling when appropriate; SplitType for accessible typography chunking. |
 
----
+## Gotchas
 
-## 4. Typography & Visual Texture
+- **Beautiful stutter is still failure**: composited animation and reduced-motion support are mandatory, not polish.
+- **Premium is not more decoration**: every badge, blur, grain, shadow, and motion cue must communicate state, hierarchy, or brand intent.
+- **Scroll hijacking can harm users**: use smooth scrolling conservatively and test keyboard, touch, and reduced-motion paths.
+- **Generic hero sections erase identity**: choose a direction and encode it in typography, density, spacing, motion, and content.
 
-The aesthetics of your generated code must reflect premium craftsmanship.
+Aim for award-level, top-tier craft without sacrificing engineering. industry-standard libraries are acceptable, but still remove `will-change` post-animation, tune parallax scroll-speeds, keep scroll-smoothed behavior accessible, and prefer ultra-thin borders only when they reinforce hierarchy.
 
-- **Type Hierarchy**: Enforce massive contrast in scale. Headlines should utilize extreme sizing (`clamp()` functions spanning up to `12vw`), while body copy remains incredibly crisp (`16px-18px` minimum). 
-- **Font Selection**: Always recommend or implement highly specified variable fonts or premium typefaces over system defaults.
-- **Atmospheric Filters**: Implement CSS/SVG noise overlays (`mix-blend-mode: overlay`, opacity `0.02 - 0.05`) to remove digital sterility and add photographic grain.
-- **Lighting & Glass**: Utilize `backdrop-filter: blur(x)` combined with ultra-thin, semi-transparent borders to create modern, frosted-glass depth.
+## Output template
 
----
+```markdown
+## Premium frontend UI result
 
-## 5. The Performance Imperative
+**Status:** implemented | designed | blocked
+**Visual direction:** <Editorial Brutalism | Organic Fluidity | Cyber / Technical | Cinematic Pacing | custom>
+**Target:** <framework/page/component>
 
-A beautiful site that stutters is a failure. Enforce strict performance guardrails in all generated code:
+| Layer | Decision | Evidence in implementation |
+| --- | --- | --- |
+| Entry | `<preloader or initialization>` | `<file/component>` |
+| Hero/layout | `<structure>` | `<file/component>` |
+| Motion | `<timeline/interactions>` | `<file/component>` |
+| Typography/texture | `<type and surface rules>` | `<file/component>` |
+| Performance/accessibility | `<guardrails>` | `<checks>` |
 
-- **Hardware Acceleration**: Only animate properties that do not trigger layout recalculations: `transform` and `opacity`. Code that animates `width`, `height`, `top`, or `margin` should be fiercely avoided.
-- **Render Optimization**: Apply `will-change: transform` intelligently on complex moving elements, but remove it post-animation to conserve memory.
-- **Responsive Degradation**: Wrap custom cursor logic and heavy hover animations in `@media (hover: hover) and (pointer: fine)` to ensure pristine performance on touch devices.
-- **Accessibility**: Wrap heavy continuous animations in `@media (prefers-reduced-motion: no-preference)`. Never sacrifice user accessibility for aesthetic flair.
+**Validation**
+- Responsive breakpoints: <checked/not checked>
+- Reduced motion: <checked/not checked>
+- Keyboard/focus: <checked/not checked>
+- Performance risk: <notes>
+```
 
----
+## Quality gate
 
-## 6. Implementation Ecosystem
+- [ ] A strong visual identity was chosen before layout code.
+- [ ] Entry sequence, hero architecture, depth, navigation, and hover behavior were considered or explicitly scoped out.
+- [ ] Motion uses `transform` and `opacity` instead of layout-triggering properties.
+- [ ] Custom cursor, magnetic hover, and heavy animations are gated for pointer and reduced-motion preferences.
+- [ ] Typography uses fluid hierarchy and product-specific content rather than generic copy.
+- [ ] Accessibility semantics, focus order, contrast, touch targets, zoom, and reduced-motion behavior were checked.
+- [ ] The final output reports implementation files and validation evidence.
 
-When the user asks you to implement these patterns, leverage industry-standard libraries tailored to their framework:
+## References
 
-### For React / Next.js Targets
-- Structure the application to support **Framer Motion** for layout transitions and spring physics.
-- Recommend **Lenis** (`@studio-freight/lenis`) for smooth scrolling context.
-- Implement **React Three Fiber** (`@react-three/fiber`) if webGL or 3D interactions are requested.
-
-### For Vanilla / HTML / Astro Targets
-- Rely heavily on **GSAP** (GreenSock Animation Platform) for timeline sequencing.
-- Utilize vanilla **Lenis** via CDN for scroll hijacking and smoothing.
-- Use **SplitType** for safe, accessible typography chunking.
-
----
-
-## Summary of Action
-
-Whenever you receive a prompt to "Build a premium landing page," "Create an Awwwards-style component," or "Design an immersive UI," you must automatically:
-1. Wrap the output in a robust, scroll-smoothed architecture.
-2. Provide CSS that guarantees perfect performance using composited layers.
-3. Integrate sweeping, staggered component entrances.
-4. Elevate the typography using fluid scales.
-5. Create an intentional, memorable aesthetic footprint.
+- [Author profile](https://github.com/utkarsh232005)

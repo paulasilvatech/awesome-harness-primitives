@@ -1,113 +1,117 @@
 ---
 name: "integrate-context-matic"
 description: >-
-  Discovers and integrates third-party APIs using the context-matic MCP server. Uses `fetch_api` to
-  find available API SDKs, `ask` for integration guidance, `model_search` and `endpoint_search` for
-  SDK details. Use when the user asks to integrate a third-party API, add an API client, implement
-  features with an external API, or work with any third-party API or SDK.
+  Discover and integrate third-party APIs with the context-matic MCP server using fetch_api, ask, model_search, endpoint_search, add_guidelines, add_skills, and update_activity. Use this skill when the user asks to integrate a third-party API, add an API client or SDK, implement features with an external API, or work with PayPal, Twilio, or another third-party API.
 ---
-# API Integration
 
-When the user asks to integrate a third-party API or implement anything involving an external API or SDK, follow this workflow. Do not rely on your own knowledge for available APIs or their capabilities — always use the context-matic MCP server.
+# API integration with context-matic
 
-## When to Apply
+Integrate external APIs by detecting the project language, ensuring context-matic guidelines and skills exist, discovering the supported API catalog, asking focused implementation questions, looking up SDK models and endpoints, and recording only real integration milestones.
 
-Apply this skill when the user:
-- Asks to integrate a third-party API
-- Wants to add a client or SDK for an external service
-- Requests implementation that depends on an external API
-- Mentions a specific API (e.g. PayPal, Twilio) and implementation or integration
+## When to invoke
 
-## Workflow
+- "Integrate this third-party API."
+- "Add an SDK client for PayPal."
+- "Implement a feature with Twilio."
+- "Use an external API in this project."
+- "Look up endpoint details for this API SDK."
 
-### 1. Ensure Guidelines and Skills Exist
+## Prerequisites and context
 
-#### 1a. Detect the Project's Primary Language
+- Use the context-matic MCP server. Do not rely only on model memory for API availability or SDK details.
+- If the requested API is not returned by `fetch_api`, stop and report that the API is not currently available in context-matic instead of guessing SDK usage.
+- Check context-matic-generated guidelines and skills independently; one present file does not prove the rest exist.
 
-Before checking for guidelines or skills, identify the project's primary programming language by inspecting the workspace:
+## Language detection
 
-| File / Pattern | Language |
-|---|---|
+Inspect the workspace and choose the primary language before any context-matic call that requires `language`.
+
+| File or pattern | Language |
+| --- | --- |
 | `*.csproj`, `*.sln` | `csharp` |
-| `package.json` with `"typescript"` dep or `.ts` files | `typescript` |
+| `package.json` with `"typescript"` dependency or `.ts` files | `typescript` |
 | `requirements.txt`, `pyproject.toml`, `*.py` | `python` |
 | `go.mod`, `*.go` | `go` |
 | `pom.xml`, `build.gradle`, `*.java` | `java` |
 | `Gemfile`, `*.rb` | `ruby` |
 | `composer.json`, `*.php` | `php` |
 
-Use the detected language in all subsequent steps wherever `language` is required.
+## Context-matic workflow
 
-#### 1b. Check for Existing Guidelines and Skills
+1. Detect the language from repository files.
+2. Check for existing generated materials:
+   - `{language}-conventions` skill from `add_skills`.
+   - `{language}-security-guidelines.md` and `{language}-test-guidelines.md` from `add_guidelines`.
+   - `update-activity-workflow.md` from `add_guidelines`.
+3. If required guideline files are missing, call `add_guidelines`.
+4. If `{language}-conventions` is missing, call `add_skills`.
+5. Call `fetch_api` with `language` and the API `key` from the user's request, such as `"paypal"` or `"twilio"`.
+6. If there is no exact match and a catalog is returned, identify the correct API by name and description, then extract its `key`.
+7. Ask focused implementation questions with `ask`, providing `language`, `key`, and `query`.
+8. Look up SDK definitions with `model_search` and endpoint details with `endpoint_search` as needed.
+9. Implement code following the returned guidance and project conventions.
+10. Call `update_activity` only after a milestone is concretely reached in code or infrastructure.
+11. Compile or test the project after each code modification.
 
-Check whether guidelines and skills have already been added for this project by looking for their presence in the workspace.
+## Tool usage rules
 
-- `{language}-conventions` is the skill produced by **add_skills**.
-- `{language}-security-guidelines.md` and `{language}-test-guidelines.md` are language-specific guideline files produced by **add_guidelines**.
-- `update-activity-workflow.md` is a workflow guideline file produced by **add_guidelines** (it is not language-specific).
-- Check these independently. Do not treat the presence of one set as proof that the other set already exists.
-- **If any required guideline files for this project are missing:** Call **add_guidelines**.
-- **If `{language}-conventions` is missing for the project's language:** Call **add_skills**.
-- **If all required guideline files and `{language}-conventions` already exist:** Skip this step and proceed to step 2.
+| Tool | Required parameters | Use it when | Do not use it for |
+| --- | --- | --- | --- |
+| `add_guidelines` | Project context from repository | Missing `{language}-security-guidelines.md`, `{language}-test-guidelines.md`, or `update-activity-workflow.md`. | Refreshing files that already exist unless the user asks. |
+| `add_skills` | Detected `language` | Missing `{language}-conventions`. | Recreating an existing conventions skill. |
+| `fetch_api` | `language`, `key` | First API discovery call for every integration. | Recording progress; it is discovery, not integration. |
+| `ask` | `language`, `key`, `query` | Authentication, create payment, rate limits, error handling, webhook setup, or focused code guidance. | Broad multi-part questions that should be split. |
+| `model_search` | `language`, `key`, case-sensitive `query` such as `availableBalance` or `TransactionId` | Model or object definitions. | Calling the external API. |
+| `endpoint_search` | `language`, `key`, case-sensitive `query` such as `createUser` or `get_account_balance` | Endpoint method details. | Calling the external API. |
+| `update_activity` | Appropriate `milestone` | Concrete progress reached in code or infrastructure. | Questions, searches, planning, or `fetch_api` results. |
 
-### 2. Discover Available APIs
+## Milestones
 
-Call **fetch_api** to find available APIs — always start here.
+| Milestone | Pass it only when |
+| --- | --- |
+| `sdk_setup` | SDK package is installed and the package command succeeded, such as `npm install`, `pip install`, or `go get`. |
+| `auth_configured` | API credentials are explicitly present in runtime configuration such as `.env`, a secrets manager, or config file, and actual code references them. |
+| `first_call_made` | First API call code was written and executed. |
+| `error_encountered` | The developer reports a bug, error response, or failing call. |
+| `error_resolved` | A fix was applied and the API call is confirmed working. |
 
-- Always provide the `language` parameter using the language detected in step 1a.
-- Always provide the `key` parameter: pass the API name/key from the user's request (e.g. `"paypal"`, `"twilio"`).
-- If the user did not provide an API name/key, ask them which API they want to integrate, then call `fetch_api` with that value.
-- The tool returns only the matching API on an exact match, or the full API catalog (name, description, and `key`) when there is no exact match.
-- Identify the API that matches the user's request based on the name and description.
-- Extract the correct `key` for the user's requested API before proceeding. This key will be used for all subsequent tool calls related to that API.
+## Gotchas
 
-**If the requested API is not in the list:**
-- Inform the user that the API is not currently available in this plugin (context-matic) and stop.
-- Request guidance from user on how to proceed with the API's integration.
+- **`fetch_api` is not progress**: do not call `update_activity` just because an API was discovered.
+- **Keys are exact after discovery**: use the returned context-matic `key` for all later calls, not a display name you inferred.
+- **Model and endpoint searches are definitions only**: they do not perform network calls against the third-party API.
+- **Absent APIs are hard stops**: if the API is missing, ask the user how to proceed rather than inventing integration code.
 
-### 3. Get Integration Guidance
+Use the API name/key distinction carefully: the display name may differ from the returned `key`. Guidelines are language-specific, model_search returns a model/object definition, and update_activity is valid only after concrete code/infrastructure progress.
 
-- Provide `ask` with: `language`, `key` (from step 2), and your `query`.
-- Break complex questions into smaller focused queries for best results:
-  - _"How do I authenticate?"_
-  - _"How do I create a payment?"_
-  - _"What are the rate limits?"_
+## Output template
 
-### 4. Look Up SDK Models and Endpoints (as needed)
+```markdown
+## Context-matic API integration result
 
-These tools return definitions only — they do not call APIs or generate code.
+**Status:** integrated | guidance only | blocked
+**Language:** `<language>`
+**API key:** `<context-matic key or not found>`
 
-- **model_search** — look up a model/object definition.
-  - Provide: `language`, `key`, and an exact or partial case-sensitive model name as `query` (e.g. `availableBalance`, `TransactionId`).
-- **endpoint_search** — look up an endpoint method's details.
-  - Provide: `language`, `key`, and an exact or partial case-sensitive method name as `query` (e.g. `createUser`, `get_account_balance`).
+| Step | Tool or check | Result |
+| --- | --- | --- |
+| Language detection | repository files | `<evidence>` |
+| Guidelines/skills | `add_guidelines` / `add_skills` / skipped | `<result>` |
+| API discovery | `fetch_api` | `<result>` |
+| Guidance | `ask` | `<queries asked>` |
+| SDK details | `model_search` / `endpoint_search` | `<models/endpoints>` |
+| Milestone | `update_activity` | `<milestone or none>` |
+| Validation | `<compile/test command>` | `<pass/fail/not run>` |
 
-### 5. Record Milestones
+**Next action:** <specific implementation step or user decision needed>
+```
 
-Call **update_activity** (with the appropriate `milestone`) whenever one of these is **concretely reached in code or infrastructure** — not merely mentioned or planned:
+## Quality gate
 
-| Milestone | When to pass it |
-|---|---|
-| `sdk_setup` | SDK package is installed in the project (e.g. `npm install`, `pip install`, `go get` has run and succeeded). |
-| `auth_configured` | API credentials are explicitly written into the project's runtime environment (e.g. present in a `.env` file, secrets manager, or config file) **and** referenced in actual code. |
-| `first_call_made` | First API call code written and executed |
-| `error_encountered` | Developer reports a bug, error response, or failing call |
-| `error_resolved` | Fix applied and API call confirmed working |
-
-## Checklist
-
-- [ ] Project's primary language detected (step 1a)
-- [ ] `add_guidelines` called if guideline files were missing, otherwise skipped
-- [ ] `add_skills` called if `{language}-conventions` was missing, otherwise skipped
-- [ ] `fetch_api` called with correct `language` and `key` (API name)
-- [ ] Correct `key` identified for the requested API (or user informed if not found)
-- [ ] `update_activity` called only when a milestone is concretely reached in code/infrastructure — never for questions, searches, or tool lookups
-- [ ] `update_activity` called with the appropriate `milestone` at each integration milestone
-- [ ] `ask` used for integration guidance and code samples
-- [ ] `model_search` / `endpoint_search` used as needed for SDK details
-- [ ] Project compiles after each code modification
-
-## Notes
-
-- **API not found**: If an API is missing from `fetch_api`, do not guess at SDK usage — inform the user that the API is not currently available in this plugin and stop.
-- **update_activity and fetch_api**: `fetch_api` is API discovery, not integration — do not call `update_activity` before it.
+- [ ] The primary language was detected from repository files before context-matic calls.
+- [ ] Missing guideline files and `{language}-conventions` were checked independently.
+- [ ] `fetch_api` was called first with the detected `language` and requested API `key`.
+- [ ] The returned API `key` was used for `ask`, `model_search`, and `endpoint_search`.
+- [ ] Missing APIs were reported as unavailable in context-matic without guessing SDK usage.
+- [ ] `update_activity` was called only for concrete milestones: `sdk_setup`, `auth_configured`, `first_call_made`, `error_encountered`, or `error_resolved`.
+- [ ] The project compiled or tested after code changes, or the blocker is stated.

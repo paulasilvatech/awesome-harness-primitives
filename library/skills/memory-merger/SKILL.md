@@ -1,110 +1,122 @@
 ---
-name: "memory-merger"
+name: memory-merger
 description: >-
-  Merges mature lessons from a domain memory file into its instruction file. Syntax: `/memory-merger
-  >domain [scope]` where scope is `global` (default), `user`, `workspace`, or `ws`. Use this skill
-  when the user asks for scopes.
+  Merge mature lessons from a domain memory instruction file into the matching long-lived instruction file while preserving applyTo coverage and removing merged memory sections. Use when the user invokes /memory-merger, asks to merge domain memories, consolidate instruction memories, or move workspace/user memory into instructions.
 ---
-# Memory Merger
 
-You consolidate mature learnings from a domain's memory file into its instruction file, ensuring knowledge preservation with minimal redundancy.
+# Memory merger
 
-**Use the todo list** to track your progress through the process steps and keep the user informed.
+Consolidate a domain-specific memory file into its durable instruction file by parsing the requested domain and scope, proposing candidate memories, merging approved content without knowledge loss, and cleaning up the memory source.
 
-## Scopes
+## When to invoke
 
-Memory instructions can be stored in two scopes:
+- "/memory-merger >prompt-engineering"
+- "/memory-merger >clojure workspace"
+- "Merge my git-workflow memories into instructions."
+- "Consolidate the workspace memory file for this domain."
+- "Move mature lessons from the memory instructions into the main instructions."
 
-- **Global** (`global` or `user`) - Stored in `<global-prompts>` (`vscode-userdata:/User/prompts/`) and apply to all VS Code projects
-- **Workspace** (`workspace` or `ws`) - Stored in `<workspace-instructions>` (`<workspace-root>/.github/instructions/`) and apply only to the current project
+## Inputs
 
-Default scope is **global**.
+Use `$ARGUMENTS` as `/memory-merger >domain-name [scope]`.
 
-Throughout this prompt, `<global-prompts>` and `<workspace-instructions>` refer to these directories.
+| Argument | Required | Accepted values | Meaning |
+| --- | --- | --- | --- |
+| `>domain-name` | Yes | Any domain slug such as `>clojure`, `>git-workflow`, `>prompt-engineering` | Selects `{domain}-memory.instructions.md` and `{domain}.instructions.md`. |
+| `[scope]` | No | `global`, `user`, `workspace`, `ws` | Selects where to read and write instruction files. Defaults to `global`. |
 
-## Syntax
+Reject input that lacks `>domain-name`. Normalize the domain by removing the leading `>` only when constructing paths.
 
-```
-/memory-merger >domain-name [scope]
-```
+## Scope mapping
 
-- `>domain-name` - Required. The domain to merge (e.g., `>clojure`, `>git-workflow`, `>prompt-engineering`)
-- `[scope]` - Optional. One of: `global`, `user` (both mean global), `workspace`, or `ws`. Defaults to `global`
+| Scope input | Canonical scope | Memory file | Instruction file |
+| --- | --- | --- | --- |
+| omitted | `global` | `<global-prompts>/{domain}-memory.instructions.md` | `<global-prompts>/{domain}.instructions.md` |
+| `global` | `global` | `<global-prompts>/{domain}-memory.instructions.md` | `<global-prompts>/{domain}.instructions.md` |
+| `user` | `global` | `<global-prompts>/{domain}-memory.instructions.md` | `<global-prompts>/{domain}.instructions.md` |
+| `workspace` | `workspace` | `<workspace-instructions>/{domain}-memory.instructions.md` | `<workspace-instructions>/{domain}.instructions.md` |
+| `ws` | `workspace` | `<workspace-instructions>/{domain}-memory.instructions.md` | `<workspace-instructions>/{domain}.instructions.md` |
 
-**Examples:**
-- `/memory-merger >prompt-engineering` - merges global prompt engineering memories
-- `/memory-merger >clojure workspace` - merges workspace clojure memories
-- `/memory-merger >git-workflow ws` - merges workspace git-workflow memories
+`<global-prompts>` means `vscode-userdata:/User/prompts/`. `<workspace-instructions>` means `<workspace-root>/.github/instructions/`.
 
-## Process
+## Procedure
 
-### 1. Parse Input and Read Files
+1. Parse `>domain-name` and `[scope]`; default scope to `global`.
+2. Resolve the memory and instruction paths from the scope mapping.
+3. Read the memory file; it must exist. Read the instruction file if present.
+4. If the memory file is missing, glob the chosen directory for nearby `{domain}` matches. If exactly one likely match exists, use it; if multiple plausible matches exist, ask the user to choose.
+5. Inventory every memory section: headline, details, examples, file patterns, and likely destination in the instruction file.
+6. Present the proposal and stop for approval before editing.
+7. After approval, define the quality bar, draft the merged instruction content, evaluate it, and iterate until it reaches the quality bar.
+8. Create or update the instruction file. If creating it, include valid instruction frontmatter.
+9. Merge `applyTo` patterns from both memory and instruction files when both exist, preserving comprehensive coverage without duplicates.
+10. Remove only the merged sections from the memory file; leave skipped or unapproved memories intact.
 
-- **Extract** domain and scope from user input
-- **Determine** file paths:
-  - Global: `<global-prompts>/{domain}-memory.instructions.md` → `<global-prompts>/{domain}.instructions.md`
-  - Workspace: `<workspace-instructions>/{domain}-memory.instructions.md` → `<workspace-instructions>/{domain}.instructions.md`
-- The user can have mistyped the domain, if you don't find the memory file, glob the directory and determine if there may be a match there. Ask the user for input if in doubt.
-- **Read** both files (memory file must exist; instruction file may not)
+## Proposal format
 
-### 2. Analyze and Propose
+Show every candidate before changing files:
 
-Review all memory sections and present them for merger consideration:
-
-```
+```markdown
 ## Proposed Memories for Merger
 
-### Memory: [Headline]
-**Content:** [Key points]
-**Location:** [Where it fits in instructions]
-
-[More memories]...
+### Memory: <headline>
+**Content:** <key points, examples, and constraints>
+**Location:** <target section in {domain}.instructions.md>
+**Disposition:** merge | skip candidate | needs clarification
 ```
 
-Say: "Please review these memories. Approve all with 'go' or specify which to skip."
+Then say exactly: `Please review these memories. Approve all with 'go' or specify which to skip.` Stop and wait.
 
-**STOP and wait for user input.**
+## Merge quality bar
 
-### 3. Define Quality Bar
+| Criterion | 10/10 requirement |
+| --- | --- |
+| Zero knowledge loss | Every detail, example, nuance, command, path, pattern, and exception from approved memories survives. |
+| Minimal redundancy | Overlapping guidance is consolidated once without deleting meaning. |
+| Maximum scannability | Headings, lists, parallel structure, and selective bold text make the result easy to scan. |
+| Frontmatter integrity | `applyTo` patterns from both files are merged and deduplicated. |
+| Safe cleanup | The memory file loses only sections that were actually merged and approved. |
 
-Establish 10/10 criteria for what constitutes awesome merged resulting instructions:
-1. **Zero knowledge loss** - Every detail, example, and nuance preserved
-2. **Minimal redundancy** - Overlapping guidance consolidated
-3. **Maximum scannability** - Clear hierarchy, parallel structure, strategic bold, logical grouping
+## Gotchas
 
-### 4. Merge and Iterate
+- **Do not edit before approval**: the proposal step is an intentional checkpoint; stop after presenting candidate memories.
+- **Do not treat missing instruction files as blockers**: create `{domain}.instructions.md` with proper frontmatter when only `{domain}-memory.instructions.md` exists.
+- **Do not delete skipped memory sections**: memory cleanup applies only to approved and merged content.
+- **Do not collapse `global` and `workspace` paths**: they have different lifetimes and storage locations.
 
-Develop the final merged instructions **without updating files yet**:
+Compatibility literals preserved from legacy invocations: `/memory-merger >prompt-engineering`, `/memory-merger >clojure workspace`, `/memory-merger >git-workflow ws`, `clojure-memory`, `STOP`, `STOPS`, ` (default), `, ` where scope is `, `, or `.
 
-1. Draft the merged instructions incorporating approved memories
-2. Evaluate against quality bar
-3. Refine structure, wording, organization
-4. Repeat until the merged instructions meet 10/10 criteria
+## Output template
 
-### 5. Update Files
+```markdown
+## Memory merger result
 
-Once the final merged instructions meet 10/10 criteria:
+**Status:** proposed | merged | blocked
+**Domain:** `<domain>`
+**Scope:** `global | workspace`
 
-- **Create or update** the instruction file with the final merged content
-  - Include proper frontmatter if creating new file
-  - **Merge `applyTo` patterns** from both memory and instruction files if both exist, ensuring comprehensive coverage without duplication
-- **Remove** merged sections from the memory file
+### Files
+- Memory: `<resolved {domain}-memory.instructions.md path>`
+- Instructions: `<resolved {domain}.instructions.md path>`
 
-## Example
+### Proposed or merged memories
+| Memory | Location | Disposition |
+| --- | --- | --- |
+| `<headline>` | `<target section>` | `merged | skipped | pending approval` |
 
+### Validation
+- Knowledge loss check: `<pass/fail and evidence>`
+- Redundancy check: `<pass/fail and evidence>`
+- `applyTo` merge: `<not needed/pass/fail>`
 ```
-User: "/memory-merger >clojure"
 
-Agent:
-1. Reads clojure-memory.instructions.md and clojure.instructions.md
-2. Proposes 3 memories for merger
-3. [STOPS]
+## Quality gate
 
-User: "go"
-
-Agent:
-4. Defines quality bar for 10/10
-5. Merges new instructions candidate, iterates to 10/10
-6. Updates clojure.instructions.md
-7. Cleans clojure-memory.instructions.md
-```
+- [ ] `$ARGUMENTS` was parsed as `/memory-merger >domain-name [scope]`.
+- [ ] Scope aliases `global`, `user`, `workspace`, and `ws` resolved to the correct paths.
+- [ ] The memory file was read, or a typo recovery glob was performed before blocking.
+- [ ] Every memory section was proposed before any file edit.
+- [ ] User approval was received before updating files.
+- [ ] Approved memories were merged with zero knowledge loss and minimal redundancy.
+- [ ] `applyTo` patterns were merged without duplicates when both files had frontmatter.
+- [ ] Only merged sections were removed from `{domain}-memory.instructions.md`.

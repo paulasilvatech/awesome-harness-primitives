@@ -1,105 +1,124 @@
 ---
-name: "technical-job-search"
+name: technical-job-search
 description: >-
-  Use this skill when a software engineer asks for help with job search tasks: parsing or analyzing a
-  job description, tailoring a CV/resume, writing a cover letter, evaluating a job offer, or drafting
-  a post-interview follow-up email. Do not activate for general career advice unrelated to an active
-  job search action.
+  Help software engineers perform active job-search tasks: analyze job descriptions, tailor resumes, write concise cover letters, evaluate offers, and draft interview follow-ups. Use when the user asks to parse a JD, match a CV to a role, write application material, compare compensation, assess offer risk, or prepare post-interview outreach.
 license: "MIT"
 argument-hint: "Optional: the specific task — e.g. \"analyze this JD\", \"tailor my CV\", \"write cover letter\", \"evaluate this offer\""
 ---
-# Technical Job Search
 
-Helps software engineers with discrete job search tasks: job description analysis, CV tailoring, cover letter writing, offer evaluation, and follow-up emails.
+# Technical job search
 
----
+Turn a concrete job-search input such as a job description, resume, offer, or interview context into a structured hiring artifact that preserves the user's evidence, reduces generic prose, and produces decision-ready application material.
 
-## Job Description Analysis
+## When to invoke
 
-When given a job description, extract and structure:
+- "Analyze this job description for must-haves and red flags."
+- "Tailor my CV to this software engineer role."
+- "Write a cover letter for this job application."
+- "Evaluate this job offer and compensation package."
+- "Draft a follow-up email after my interview."
 
-**Must-haves** (explicitly required or repeated multiple times):
-- Technical skills, years of experience, specific domain knowledge
+## Inputs
 
-**Nice-to-haves** (preferred, a bonus, or mentioned once):
-- List these separately. Candidates often disqualify themselves over requirements that are actually optional.
+Use `$ARGUMENTS` to determine the requested job-search action when it is provided. If `$ARGUMENTS` is empty, infer the action from the user's pasted material and ask only for missing essentials: job description for tailoring, resume for resume edits, offer details for offer evaluation, or interview context for follow-up email.
 
-**What the role actually solves** (inferred from the description):
-- Summarize in 2-3 sentences what business problem this hire addresses
+## Job description analysis
 
-**Red flags to surface**:
-- "Wear many hats" with no clarity on scope — risk of undefined ownership
-- 10+ must-have technologies for a single role — unrealistic bar or poor team planning
-- No mention of team size, tech stack, or what the role ships — may indicate disorganization
+Separate explicit requirements from recruiter filler. Treat repeated items and words such as "required", "must", "minimum", and "need" as stronger signals than isolated "preferred" or "bonus" phrases.
 
----
+| Extract | How to classify | Output rule |
+| --- | --- | --- |
+| Must-haves | Required or repeated technical skills, years of experience, domain knowledge, clearance, location, work authorization, or language requirements. | List as bullets and mark any hard blockers. |
+| Nice-to-haves | Preferred, bonus, familiar-with, or mentioned once without being required. | Keep separate so the candidate does not self-reject. |
+| Role problem | The business or engineering problem the hire is meant to solve. | Summarize in 2-3 sentences, using evidence from the JD. |
+| Seniority signals | Verbs such as build, design, lead, define, mentor, own, influence, or set strategy. | Map to likely level and rewrite resume bullets to match that level. |
+| Red flags | Undefined ownership, impossible stack breadth, vague team or product scope, urgency without clarity. | Surface as questions for the recruiter or hiring manager. |
 
-## CV / Resume Tailoring
+Common red flags to call out:
 
-When tailoring a CV to a specific job description:
+- "Wear many hats" with no scope boundaries: risk of undefined ownership.
+- 10+ must-have technologies for one role: unrealistic bar or poor planning.
+- No team size, tech stack, roadmap, or shipped product: possible disorganization.
+- "Fast-paced" plus after-hours language: probe on on-call and work-life expectations.
 
-1. **Match language exactly** — use the same terminology as the JD, not synonyms. If the JD says "distributed systems", do not write "large-scale systems".
-2. **Lead with impact** — every bullet should have a result: "Reduced P99 latency by 40%" not "Worked on performance improvements".
-3. **Quantify everything possible** — users, QPS, team size, cost saved, revenue impact.
-4. **Cut what does not match** — a two-page CV tailored to the role beats a four-page generic one.
-5. **Mirror the seniority signals** — entry roles want "built", senior roles want "designed", staff and principal roles want "drove" or "defined".
+## Resume and CV tailoring
 
-Do not keyword-stuff. Write for the hiring manager reading it, not for an ATS parser.
+Use this section for `CV/resume` work. Do not `keyword-stuff`; match terms only where the candidate has real evidence.
 
----
 
-## Cover Letter Writing
+Rewrite for the hiring manager first and ATS second. Match real evidence from the user's background to the role; never invent experience.
 
-A cover letter should answer three questions in under 300 words:
+| Rule | Apply it like this | Avoid |
+| --- | --- | --- |
+| Match language exactly | If the JD says `distributed systems`, use `distributed systems`, not `large-scale systems`. | Keyword stuffing that repeats terms without evidence. |
+| Lead with impact | Start bullets with result and scale: "Reduced P99 latency by 40%". | "Worked on performance improvements". |
+| Quantify scope | Include users, QPS, revenue, cost saved, team size, incident volume, or latency. | Unmeasured claims such as "improved reliability". |
+| Cut unrelated detail | Keep a two-page tailored CV over a four-page generic CV. | Keeping every old technology because it is impressive. |
+| Mirror seniority | Entry: built; senior: designed; staff/principal: drove, defined, influenced. | Overstating ownership beyond the evidence. |
 
-1. **Why this company?** Something specific — a product, a technical challenge they have written about, a problem space you care about. Not "I admire your mission."
-2. **Why you?** One or two concrete things from your background that directly match what they need. Link to the specific role, not your full career history.
-3. **Why now?** What is your motivation at this point in your career? One sentence.
+Use this bullet formula when possible: `Verb + technical object + method/constraint + measurable result`. Example: `Reduced checkout P99 latency by 40% by moving payment retries to an idempotent queue-backed workflow`.
 
-Format: three short paragraphs. No preamble ("I am writing to apply for..."). No summary of your CV.
+## Cover letters and follow-up emails
 
-Avoid:
-- Restating your CV in prose form
-- "I am passionate about..."
-- Generic company praise ("a leader in the industry", "innovative company")
-- Going longer than one page
+Keep cover letters under 300 words in three short paragraphs, with no preamble such as "I am writing to apply for" and no prose restatement of the CV.
 
----
+| Artifact | Required content | Hard limit |
+| --- | --- | --- |
+| Cover letter paragraph 1 | Why this company: product, technical challenge, published work, or problem space. | Be specific; never say only "I admire your mission". |
+| Cover letter paragraph 2 | Why this candidate: one or two concrete background matches to the role. | Do not summarize the full career. |
+| Cover letter paragraph 3 | Why now: one sentence on motivation at this career point. | Keep the whole letter under one page. |
+| Follow-up email | Thank them, reference one specific conversation detail, reaffirm genuine interest. | Send within 24 hours; no multi-paragraph recap. |
 
-## Offer Evaluation
+Avoid "I am passionate about", "leader in the industry", "innovative company", and generic praise that could apply to any employer.
 
-When evaluating a job offer, compare across these dimensions:
+## Offer evaluation
 
-**Compensation**
-- Base salary: check against market rate for role, level, and location (levels.fyi, Glassdoor, Blind, Comprehensive.io)
-- Equity: current valuation, vesting schedule (4-year with 1-year cliff is standard), dilution risk for early-stage companies
-- Bonus: target percentage vs actual historical payout
-- Total comp = base + expected bonus + annualized equity value
+Compare total compensation and role risk, not just base salary. Use market sources only as reference points and explain uncertainty when data is stale or sparse.
 
-**Role clarity**
-- Scope: what does "owning" this role actually mean vs what is already decided?
-- Team: size, structure, who you report to, tenure of the team
-- Growth: what does the next level look like and how long do people typically take to get there?
+| Dimension | Questions to answer | Evidence to request |
+| --- | --- | --- |
+| Compensation | Base vs market, target bonus vs historical payout, equity annualized value, refreshers. | Offer letter, vesting schedule, strike price or valuation context, bonus plan. |
+| Equity | Four-year vesting with one-year cliff is common; early-stage equity has dilution and liquidity risk. | Share count, fully diluted shares, latest valuation, exercise window. |
+| Role clarity | What does "own" mean, what is already decided, who sets priorities? | Hiring manager answers, org chart, first-90-days plan. |
+| Growth | What does next level require and how long do people typically take? | Leveling rubric, promotion examples, manager expectations. |
+| Company health | Runway, revenue, growth, customer concentration, funding stage. | Written answers where possible, public filings or credible market data. |
+| Engineering culture | PR review, incident postmortems, on-call load, remote/hybrid reality. | Team interview notes, written policy, sample on-call rotation. |
 
-**Company health**
-- Stage: runway, revenue, growth rate — ask directly if not public
-- Engineering culture signals: PR review process, incident postmortem culture, on-call burden
-- Remote or hybrid reality: written policy vs actual practice
+Offer red flags: pressure to decide in under 48 hours, equity with no liquidity path after 10+ private years, greenfield claims hiding unmaintained code, or refusal to put material terms in writing. Get everything in writing before accepting.
 
-**Red flags in an offer**
-- Pressure to decide in under 48 hours — a reasonable window is one to two weeks
-- Equity with no clear liquidity path for a company that has been private for 10+ years
-- A role described as greenfield that turns out to have 6 months of existing unmaintained code
+## Gotchas
 
-Get everything in writing before accepting.
+- **Do not invent credentials or achievements**: tailor phrasing only from the user's real resume, notes, or interview details.
+- **Do not optimize only for ATS**: keyword matching matters, but the hiring manager must still see impact and evidence.
+- **Do not treat nice-to-haves as blockers**: many candidates self-select out because optional phrases are mixed with requirements.
+- **Do not give legal or financial advice**: explain compensation mechanics and risk questions, and recommend a qualified advisor for contract, tax, visa, or equity exercise decisions.
 
----
+## Output template
 
-## Follow-up Emails
+```markdown
+## Job-search result — <task>
 
-After an interview, send a follow-up within 24 hours:
-- One sentence thanking them for the time
-- One sentence referencing something specific from the conversation (a problem discussed, a question they asked)
-- One sentence reaffirming interest, if genuine
+**Status:** ready | needs input | blocked
+**Target role/company:** <role and company, or "not provided">
+**Source material reviewed:** <JD/resume/offer/interview notes>
 
-Do not write multiple paragraphs. Do not restate your qualifications. Do not follow up more than once if there is no reply.
+### Key findings
+- <must-have, match, risk, or decision point>
+- <must-have, match, risk, or decision point>
+
+### Draft artifact
+<tailored bullets, cover letter, follow-up email, offer comparison, or JD analysis>
+
+### Open questions
+- <question to ask recruiter, hiring manager, or user>
+```
+
+## Quality gate
+
+- [ ] The response stays tied to an active job-search action, not broad career coaching.
+- [ ] Must-haves and nice-to-haves are separated when analyzing a JD.
+- [ ] Resume bullets preserve the user's actual experience and add no invented facts.
+- [ ] Cover letters stay under 300 words and avoid generic company praise.
+- [ ] Offer evaluation includes compensation, role clarity, company health, and written-term risks.
+- [ ] Follow-up emails are concise and reference a real interview detail.
+- [ ] The output follows `## Output template` exactly.

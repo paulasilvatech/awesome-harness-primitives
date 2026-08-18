@@ -1,83 +1,139 @@
 ---
-name: "readme-blueprint-generator"
+name: readme-blueprint-generator
 description: >-
-  Intelligent README.md generation prompt that analyzes project documentation structure and creates
-  comprehensive repository documentation. Scans .github/copilot directory files and
-  copilot-instructions.md to extract project information, technology stack, architecture, development
-  workflow, coding standards, and testing approaches while generating well-structured markdown
-  documentation with proper formatting, cross-references, and developer-focused content. Use this
-  skill when the user asks for readme generator prompt.
+  Generate a comprehensive README.md blueprint by analyzing repository documentation, .github/copilot files, copilot-instructions.md, architecture notes, technology stack, workflow, standards, tests, and exemplars. Use when asked to create or refresh a developer-focused README.
 ---
-# README Generator Prompt
 
-Generate a comprehensive README.md for this repository by analyzing the documentation files in the .github/copilot directory and the copilot-instructions.md file. Follow these steps:
+# README blueprint generator
 
-1. Scan all the files in the .github/copilot folder, like:
-   - Architecture
-   - Code_Exemplars
-   - Coding_Standards
-   - Project_Folder_Structure
-   - Technology_Stack
-   - Unit_Tests
-   - Workflow_Analysis
+Analyze repository guidance and project documentation, extract the facts a new developer or user needs, and produce a concise, well-structured `README.md` with high-level architecture, cross-references, Markdown formatting, and no invented project claims.
 
-2. Also review the copilot-instructions.md file in the .github folder
+## When to invoke
 
-3. Create a README.md with the following sections:
+- "Generate a README for this repository."
+- "Create a README.md from our GitHub Copilot docs."
+- "Build a README blueprint from .github/copilot."
+- "Refresh the README with architecture, stack, workflow, and tests."
+- "Use copilot-instructions.md to document this project."
 
-## Project Name and Description
-- Extract the project name and primary purpose from the documentation
-- Include a concise description of what the project does
+## Source inventory
 
-## Technology Stack
-- List the primary technologies, languages, and frameworks used
-- Include version information when available
-- Source this information primarily from the Technology_Stack file
+Scan the repository for these sources, using available files as evidence and noting gaps rather than inventing content:
 
-## Project Architecture
-- Provide a high-level overview of the architecture
-- Consider including a simple diagram if described in the documentation
-- Source from the Architecture file
+| Source | Extract |
+| --- | --- |
+| `.github/copilot/Architecture` | Project architecture, major components, diagrams, runtime boundaries. |
+| `.github/copilot/Code_Exemplars` | Contribution examples, conventions, patterns worth linking. |
+| `.github/copilot/Coding_Standards` | Naming, formatting, review, and implementation rules. |
+| `.github/copilot/Project_Folder_Structure` | Directory map and ownership of major folders. |
+| `.github/copilot/Technology_Stack` | Languages, frameworks, tools, and versions when available. |
+| `.github/copilot/Unit_Tests` | Test framework, commands, coverage expectations, fixtures. |
+| `.github/copilot/Workflow_Analysis` | Branching, PR flow, release, CI, and development workflow. |
+| `.github/copilot-instructions.md` or `.github/copilot-instructions.md` equivalent | Repository-wide instructions and conventions. |
+| Existing `README.md`, package manifests, workflow files | Fill missing setup, commands, badges, and license facts only when evidenced. |
 
-## Getting Started
-- Include installation instructions based on the technology stack
-- Add setup and configuration steps
-- Include any prerequisites
+## README sections
 
-## Project Structure
-- Brief overview of the folder organization
-- Source from Project_Folder_Structure file
+| Section | Required content | Primary source |
+| --- | --- | --- |
+| Project name and description | Project name, purpose, and what it does. | Existing README, manifests, architecture docs. |
+| Technology stack | Languages, frameworks, services, versions when available. | `Technology_Stack`. |
+| Project architecture | High-level architecture and simple diagram if already described. | `Architecture`. |
+| Getting started | Prerequisites, installation, setup, configuration, first run. | Stack docs, manifests, existing scripts. |
+| Project structure | Brief folder overview. | `Project_Folder_Structure`. |
+| Key features | Main functionality and user/developer value. | Architecture and project docs. |
+| Development workflow | Branching, PR, CI, release, and local workflow. | `Workflow_Analysis`. |
+| Coding standards | Project-specific conventions. | `Coding_Standards`, `copilot-instructions.md`. |
+| Testing | Test approach, commands, and tools. | `Unit_Tests`, package scripts, workflows. |
+| Contributing | How to contribute and where exemplars live. | `Code_Exemplars`, instructions. |
+| License | License name or "Not specified" if no evidence exists. | `LICENSE`, package metadata, existing docs. |
 
-## Key Features
-- List main functionality and features of the project
-- Extract from various documentation files
+## Generation rules
 
-## Development Workflow
-- Summarize the development process
-- Include information about branching strategy if available
-- Source from Workflow_Analysis file
+- Prefer facts from documentation over guesses from code shape.
+- Include version information only when a source states it.
+- Use badges only when build status, package version, coverage, or license data is available.
+- Include links to repository-local documentation files when they exist and are useful.
+- Keep the README concise yet informative; optimize for a new developer's first successful setup.
+- Use clear headings, subheadings, lists, tables, and fenced code blocks for commands.
+- If a source file is missing, omit the unsupported detail or add a short "Not documented yet" note only when the gap matters.
 
-## Coding Standards
-- Summarize key coding standards and conventions
-- Source from the Coding_Standards file
+## Gotchas
+
+- **Do not fabricate setup commands**: derive commands from manifests, scripts, or existing docs.
+- **Do not overfit to `.github/copilot` names**: some repositories may use equivalent documentation; preserve source evidence.
+- **Do not turn README into an architecture spec**: link deeper docs and keep the README navigational.
+- **Do not include empty badges or placeholder links**: every badge and link must resolve to real repository content.
+
+## Output template
+
+```markdown
+# <Project Name>
+
+<One-paragraph description of what the project does and who it is for.>
+
+## Technology stack
+
+| Area | Technology | Version/source |
+| --- | --- | --- |
+| <area> | <tool/framework> | <version or source file> |
+
+## Architecture
+
+<High-level architecture summary.>
+
+## Getting started
+
+### Prerequisites
+- <requirement>
+
+### Install
+```bash
+<install command>
+```
+
+### Run
+```bash
+<run command>
+```
+
+## Project structure
+
+| Path | Purpose |
+| --- | --- |
+| `<path>` | <purpose> |
+
+## Key features
+
+- <feature>
+
+## Development workflow
+
+<workflow summary>
+
+## Coding standards
+
+- <standard>
 
 ## Testing
-- Explain testing approach and tools
-- Source from Unit_Tests file
+
+```bash
+<test command>
+```
 
 ## Contributing
-- Guidelines for contributing to the project
-- Reference any code exemplars for guidance
-- Source from Code_Exemplars and copilot-instructions
+
+<contribution guidance and links to exemplars>
 
 ## License
-- Include license information if available
 
-Format the README with proper Markdown, including:
-- Clear headings and subheadings
-- Code blocks where appropriate
-- Lists for better readability
-- Links to other documentation files
-- Badges for build status, version, etc. if information is available
+<license or "Not specified in repository files.">
+```
 
-Keep the README concise yet informative, focusing on what new developers or users would need to know about the project.
+## Quality gate
+
+- [ ] `.github/copilot` and `copilot-instructions.md` sources were scanned when present.
+- [ ] Architecture, technology stack, project structure, workflow, standards, tests, exemplars, and license are either documented or explicitly omitted for lack of evidence.
+- [ ] Commands, versions, badges, and links are backed by repository files.
+- [ ] The README is concise, developer-focused, and formatted as valid Markdown.
+- [ ] No unsupported project claims or placeholder sections remain.

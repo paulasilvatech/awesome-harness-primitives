@@ -1,107 +1,112 @@
 ---
-name: "mkdocs-translations"
-description: "Generate a language translation for a mkdocs documentation stack. Use this skill when the user asks for mkdocs ai translator."
----
-# MkDocs AI Translator
-
-## Role
-You are a professional technical writer and translator.
-
-## Required Input  
-**Before proceeding, ask the user to specify the target translation language and locale code.**  
-Examples:
-- Spanish (`es`)
-- French (`fr`)
-- Brazilian Portuguese (`pt-BR`)
-- Korean (`ko`)
-
-Use this value consistently in folder names, translated content paths, and MkDocs configuration updates. Once confirmed, proceed with the instructions below.
-
+name: mkdocs-translations
+description: >-
+  Translate an MkDocs documentation stack from docs/docs/en and docs/docs/includes/en into a target ISO 639-1 or locale folder, preserving Markdown structure and updating mkdocs.yml i18n locale, nav_translations, and admonition_translations. Use when the user asks for mkdocs ai translator, MkDocs translation, docs localization, or adding a new documentation locale.
 ---
 
-## Objective  
-Translate all documentation from the `docs/docs/en` and `docs/docs/includes/en` folders into the specified target language. Preserve the original folder structure and all Markdown formatting.
+# MkDocs translations
 
----
+Translate every English MkDocs source file into a target locale, mirror the folder structure, update include paths and `mkdocs.yml`, and continue automatically until source and translated file counts match.
 
-## File Listing and Translation Order
+## When to invoke
 
-The following is the task list you must complete. Check each item off as it is done and report that to the user.
+- "Run the mkdocs ai translator for Spanish."
+- "Translate our MkDocs docs to pt-BR."
+- "Add a French locale to this documentation site."
+- "Localize docs/docs/en and includes/en."
+- "Update mkdocs.yml for a new translated locale."
 
-- [ ] Begin by listing all files and subdirectories under `docs/docs/en`.
-- [ ] Then list all files and subdirectories under `docs/docs/includes/en`.
-- [ ] Translate **every file** in the list **one by one** in the order shown. Do not skip, reorder, or stop after a fixed number of files.
-- [ ] After each translation, **check whether there are remaining files** that have not yet been translated. If there are, **continue automatically** with the next file.
-- [ ] Do **not** prompt for confirmation, approval, or next steps—**proceed automatically** until all files are translated.
-- [ ] Once completed, confirm that the number of translated files matches the number of source files listed. If any files remain unprocessed, resume from where you left off.
+## Inputs
 
----
+Use the target translation language and locale code, such as Spanish `es`, French `fr`, Brazilian Portuguese `pt-BR`, or Korean `ko`. If the user did not provide both a language and a locale code, ask for them before proceeding. Use the locale code consistently in folder names, translated include paths, and MkDocs configuration.
 
-## Folder Structure and Output
+## Source and output layout
 
-Before starting to create **any** new files, create a new git branch using the terminal command `git checkout -b docs-translation-<language>`.
+| Source | Target |
+| --- | --- |
+| `docs/docs/en/**` | `docs/docs/<locale>/**` |
+| `docs/docs/includes/en/**` | `docs/docs/includes/<locale>/**` |
+| Include reference `includes/en/introduction-event.md` | `includes/<locale>/introduction-event.md` |
+| `mkdocs.yml` i18n plugin | Add locale entry, `nav_translations`, and `admonition_translations`. |
 
-- Create a new folder under `docs/docs/` named using the ISO 639-1 or locale code provided by the user.  
-  Examples:  
-  - `es` for Spanish  
-  - `fr` for French  
-  - `pt-BR` for Brazilian Portuguese
-- Mirror the exact folder and file structure from the original `en` directories.
-- For each translated file:
-  - Preserve all Markdown formatting, including headings, code blocks, metadata, and links.
-  - Maintain the original filename.
-  - Do **not** wrap the translated content in Markdown code blocks.
-  - Append this line at the end of the file:  
-    *Translated using GitHub Copilot and GPT-4o.*
-  - Save the translated file into the corresponding target language folder.
+Create a branch before writing files:
 
----
+```bash
+git checkout -b docs-translation-<language>
+```
 
-## Include Path Updates
+## Translation procedure
 
-- Update include references in files to reflect the new locale.  
-  Example:  
-    `includes/en/introduction-event.md` → `includes/es/introduction-event.md`  
-  Replace `es` with the actual locale code provided by the user.
+1. Confirm the target language and locale code.
+2. Create `docs-translation-<language>` with `git checkout -b docs-translation-<language>` before creating any new files.
+3. List all files and subdirectories under `docs/docs/en`.
+4. List all files and subdirectories under `docs/docs/includes/en`.
+5. Translate every file one by one in the listed order; do not skip, reorder, or stop after a fixed number of files.
+6. Mirror the exact folder and filename structure under `docs/docs/<locale>/` and `docs/docs/includes/<locale>/`.
+7. Preserve Markdown formatting, headings, code blocks, metadata, and links.
+8. Update include references from `includes/en/...` to `includes/<locale>/...`.
+9. Append `*Translated using GitHub Copilot and GPT-4o.*` at the end of every translated file.
+10. Update `mkdocs.yml` with the new i18n locale entry, `nav_translations`, and `admonition_translations`.
+11. Count source files and translated files. If any file remains unprocessed, resume from the missing file and continue automatically.
 
----
+## Translation rules
 
-## MkDocs Configuration Update
+| Do | Do not |
+| --- | --- |
+| Use accurate, clear, technically appropriate translations. | Do not wrap translated content or whole files in Markdown code blocks. |
+| Use computer industry-standard terminology, such as "Stack Tecnológica" rather than "Pila Tecnológica". | Do not comment on or fix Markdown linting issues. |
+| Preserve original filenames, folder hierarchy, Markdown formatting, metadata, links, and code blocks. | Do not mention missing blank lines, trailing punctuation in headings, missing alt text, heading levels, line length, or spacing. |
+| Continue automatically until all files are translated. | Do not ask for confirmation between files or before continuing. |
+| Maintain original code and commands unless the prose around them requires localization. | Do not translate code identifiers, paths, or configuration keys. |
 
-- [ ] Modify the `mkdocs.yml` configuration:
-  - [ ] Add a new `locale` entry under the `i18n` plugin using the target language code.
-  - [ ] Provide appropriate translations for:
-    - [ ] `nav_translations`
-    - [ ] `admonition_translations`
+## MkDocs configuration rules
 
----
+Update only the localization-related configuration required for the new locale:
 
-## Translation Rules
+- Add a `locale` entry under the `i18n` plugin using the target locale code.
+- Add appropriate `nav_translations`.
+- Add appropriate `admonition_translations`.
+- Keep existing locales and unrelated MkDocs settings intact.
 
-- Use accurate, clear, and technically appropriate translations.
-- Always use computer industry-standard terminology.  
-  Example: prefer "Stack Tecnológica" over "Pila Tecnológica".
+## Gotchas
 
-**Do not:**
-- Comment on, suggest changes for, or attempt to fix any formatting or Markdown linting issues.  
-  This includes, but is not limited to:
-  - Missing blank lines around headings or lists
-  - Trailing punctuation in headings
-  - Missing alt text for images
-  - Improper heading levels
-  - Line length or spacing issues
-- Do not say things like:  
-  _"There are some linting issues, such as…"_
-  _"Would you like me to fix…"_
-- Never prompt the user about any linting or formatting issues.
-- Do not wait for confirmation before continuing.
-- Do not wrap the translated content or file in Markdown code blocks.
+- **Do not start writing before branching**: `git checkout -b docs-translation-<language>` is required first.
+- **Do not stop after a sample**: every file under both English source trees must be translated.
+- **Do not lint the docs**: preserve formatting and avoid unrelated Markdown cleanup.
+- **Do not translate include paths partially**: every `includes/en/` reference must use the target locale.
 
----
+For Spanish examples, `includes/es/introduction-event.md` is the concrete rewritten include path.
 
-## Translating Includes (`docs/docs/includes/en`)
+## Output template
 
-- Create a new folder under `docs/docs/includes/` using the target language code provided by the user.
-- Translate each file using the same rules as above.
-- Maintain the same file and folder structure in the translated output.
-- Save each translated file in the appropriate target language folder.
+```markdown
+## MkDocs translation result
+
+**Status:** complete | blocked
+**Language:** `<language>`
+**Locale:** `<locale>`
+**Branch:** `docs-translation-<language>`
+
+### File counts
+| Source tree | Source files | Translated files | Status |
+| --- | --- | --- | --- |
+| `docs/docs/en` | `<count>` | `<count>` | `matched | missing` |
+| `docs/docs/includes/en` | `<count>` | `<count>` | `matched | missing` |
+
+### Configuration
+- `mkdocs.yml` locale entry: `<added/updated>`
+- `nav_translations`: `<added/updated>`
+- `admonition_translations`: `<added/updated>`
+```
+
+## Quality gate
+
+- [ ] Target language and locale code were confirmed before translation.
+- [ ] `git checkout -b docs-translation-<language>` ran before creating files.
+- [ ] Every file under `docs/docs/en` was translated in listed order.
+- [ ] Every file under `docs/docs/includes/en` was translated in listed order.
+- [ ] Target folders mirror the source structure exactly.
+- [ ] Markdown formatting, metadata, links, code blocks, paths, and filenames were preserved.
+- [ ] Each translated file ends with `*Translated using GitHub Copilot and GPT-4o.*`.
+- [ ] `mkdocs.yml` includes the locale entry, `nav_translations`, and `admonition_translations`.
+- [ ] Source and translated file counts match.

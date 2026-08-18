@@ -1,117 +1,146 @@
 ---
 name: "dotnet-upgrade"
 description: >-
-  Ready-to-use prompts for comprehensive .NET framework upgrade analysis and execution. Use this skill
-  when the user asks for project discovery & assessment.
+  Guide comprehensive .NET upgrade discovery, assessment, sequencing, dependency review, framework targeting, code modernization, CI/CD updates, validation, breaking-change analysis, PR strategy, communication, automation, and release documentation. Use when asked for .NET Framework, .NET Core, or .NET Standard project discovery, .NET 8 migration planning, Upgrade Assistant guidance, or upgrade execution prompts.
 ---
-# Project Discovery & Assessment
-  - name: "Project Classification Analysis"
-    prompt: "Identify all projects in the solution and classify them by type (`.NET Framework`, `.NET Core`, `.NET Standard`). Analyze each `.csproj` for its current `TargetFramework` and SDK usage."
 
-  - name: "Dependency Compatibility Review"
-    prompt: "Review external and internal dependencies for framework compatibility. Determine the upgrade complexity based on dependency graph depth."
+# .NET upgrade
 
-  - name: "Legacy Package Detection"
-    prompt: "Identify legacy `packages.config` projects needing migration to `PackageReference` format."
+Plan and execute Ready-to-use `ready-to-use` .NET upgrade work by classifying projects, sequencing dependencies, selecting target frameworks, modernizing code and pipelines, validating behavior, and packaging the work into reviewable PRs and release documentation.
 
-  # Upgrade Strategy & Sequencing
-  - name: "Project Upgrade Ordering"
-    prompt: "Recommend a project upgrade order from least to most dependent components. Suggest how to isolate class library upgrades before API or Azure Function migrations."
+## When to invoke
 
-  - name: "Incremental Strategy Planning"
-    prompt: "Propose an incremental upgrade strategy with rollback checkpoints. Evaluate the use of **Upgrade Assistant** or **manual upgrades** based on project structure."
+- "Assess this solution for a .NET upgrade."
+- "Plan a .NET Framework to .NET 8 migration."
+- "Review packages.config projects before upgrading."
+- "Create an Upgrade Assistant strategy and validation checklist."
+- "Generate prompts for .NET project discovery and upgrade execution."
 
-  - name: "Progress Tracking Setup"
-    prompt: "Generate an upgrade checklist for tracking build, test, and deployment readiness across all projects."
+## Prerequisites and context
 
-  # Framework Targeting & Code Adjustments
-  - name: "Target Framework Selection"
-    prompt: "Suggest the correct `TargetFramework` for each project (e.g., `net8.0`). Review and update deprecated SDK or build configurations."
+- Inspect solution files, `.csproj` files, `packages.config`, NuGet dependencies, and CI YAML before recommending changes.
+- Use existing build and test commands when available.
+- Prefer incremental upgrades with rollback checkpoints over broad unreviewable rewrites.
+- Choose `.NET Upgrade Assistant`, manual upgrades, or both based on project structure and risk.
 
-  - name: "Code Modernization Analysis"
-    prompt: "Identify code patterns needing modernization (e.g., `WebHostBuilder` → `HostBuilder`). Suggest replacements for deprecated .NET APIs and third-party libraries."
+## Procedure
 
-  - name: "Async Pattern Conversion"
-    prompt: "Recommend conversion of synchronous calls to async where appropriate for improved performance and scalability."
+1. Discover all projects and classify each as `.NET Framework`, `.NET Core`, or `.NET Standard`.
+2. Analyze each `.csproj` for `TargetFramework`, multi-targeting, SDK-style usage, and deprecated build configuration.
+3. Build the dependency graph and recommend upgrade order from least dependent libraries to APIs, Azure Functions, and other dependents.
+4. Detect legacy `packages.config` projects and plan migration to `PackageReference`.
+5. Review NuGet dependencies, transitive dependencies, and third-party support for the chosen target such as `net8.0`.
+6. Identify code modernization needs such as `WebHostBuilder` → `HostBuilder` and `Startup.cs` → `Program.cs` refactoring.
+7. Update CI/CD plans for SDK pinning, `UseDotNet@2`, `NuGetToolInstaller`, build validation, and feature-branch checks.
+8. Define validation for builds, unit tests, integration tests, service connectivity, logging, telemetry, UAT, and production readiness.
+9. Structure branches, commits, and PRs so each upgrade checkpoint is reviewable and revertible.
+10. Produce release notes and stakeholder communication summarizing framework changes, dependency updates, and validation results.
 
-  # NuGet & Dependency Management
-  - name: "Package Compatibility Analysis"
-    prompt: "Analyze outdated or incompatible NuGet packages and suggest compatible versions. Identify third-party libraries that lack .NET 8 support and provide migration paths."
+## Project discovery and assessment
 
-  - name: "Shared Dependency Strategy"
-    prompt: "Recommend strategies for handling shared dependency upgrades across projects. Evaluate usage of legacy packages and suggest alternatives in Microsoft-supported namespaces."
+| Prompt name | Use it to produce |
+| --- | --- |
+| Project Classification Analysis | Identify all projects and classify by `.NET Framework`, `.NET Core`, `.NET Standard`; inspect `.csproj`, `TargetFramework`, and SDK usage. |
+| Dependency Compatibility Review | Review external and internal dependencies for compatibility and complexity based on dependency graph depth. |
+| Legacy Package Detection | Identify `packages.config` projects that need migration to `PackageReference`. |
 
-  - name: "Transitive Dependency Review"
-    prompt: "Review transitive dependencies and potential version conflicts after upgrade. Suggest resolution strategies for dependency conflicts."
+## Upgrade strategy and sequencing
 
-  # CI/CD & Build Pipeline Updates
-  - name: "Pipeline Configuration Analysis"
-    prompt: "Analyze YAML build definitions for SDK version pinning and recommend updates. Suggest modifications for `UseDotNet@2` and `NuGetToolInstaller` tasks."
+| Prompt name | Use it to produce |
+| --- | --- |
+| Project Upgrade Ordering | Upgrade order from least to most dependent components; isolate class library upgrades before API or Azure Function migrations. |
+| Incremental Strategy Planning | Rollback checkpoints and whether to use `.NET Upgrade Assistant` or manual upgrades. |
+| Progress Tracking Setup | Upgrade checklist for builds/tests/deployment readiness across all projects. |
 
-  - name: "Build Pipeline Modernization"
-    prompt: "Generate updated build pipeline snippets for .NET 8 migration. Recommend validation builds on feature branches before merging to main."
+## Framework targeting and code adjustments
 
-  - name: "CI Automation Enhancement"
-    prompt: "Identify opportunities to automate test and build verification in CI pipelines. Suggest strategies for continuous integration validation."
+| Prompt name | Use it to produce |
+| --- | --- |
+| Target Framework Selection | Correct `TargetFramework` for each project, for example `net8.0`; deprecated SDK or build configuration updates. |
+| Code Modernization Analysis | Replacements for deprecated .NET APIs and third-party libraries, including `WebHostBuilder` → `HostBuilder`. |
+| Async Pattern Conversion | Candidate synchronous calls to convert to async for performance and scalability. |
 
-  # Testing & Validation
-  - name: "Build Validation Strategy"
-    prompt: "Propose validation checks to ensure the upgraded solution builds and runs successfully. Recommend automated test execution for unit and integration suites post-upgrade."
+## NuGet and dependency management
 
-  - name: "Service Integration Verification"
-    prompt: "Generate validation steps to verify logging, telemetry, and service connectivity. Suggest strategies for verifying backward compatibility and runtime behavior."
+| Prompt name | Use it to produce |
+| --- | --- |
+| Package Compatibility Analysis | Outdated or incompatible NuGet packages, compatible versions, libraries without .NET 8 support, and migration paths. |
+| Shared Dependency Strategy | Handling shared dependency upgrades and alternatives in Microsoft-supported namespaces. |
+| Transitive Dependency Review | Version conflict risks and resolution strategies after upgrade. |
 
-  - name: "Deployment Readiness Check"
-    prompt: "Recommend UAT deployment verification steps before production rollout. Create comprehensive testing scenarios for upgraded components."
+## CI/CD and build pipeline updates
 
-  # Breaking Change Analysis
-  - name: "API Deprecation Detection"
-    prompt: "Identify deprecated APIs or removed namespaces between target versions. Suggest automated scanning using `.NET Upgrade Assistant` and API Analyzer."
+| Prompt name | Use it to produce |
+| --- | --- |
+| Pipeline Configuration Analysis | YAML build definition updates, SDK version pinning, `UseDotNet@2`, and `NuGetToolInstaller`. |
+| Build Pipeline Modernization | Updated build pipeline snippets for .NET 8 migration and feature-branch validation builds. |
+| CI Automation Enhancement | Automated test and build verification in CI pipelines. |
 
-  - name: "API Replacement Strategy"
-    prompt: "Recommend replacement APIs or libraries for known breaking areas. Review configuration changes such as `Startup.cs` → `Program.cs` refactoring."
+## Testing, breaking changes, and delivery
 
-  - name: "Regression Testing Focus"
-    prompt: "Suggest regression testing scenarios focused on upgraded API endpoints or services. Create test plans for critical functionality validation."
+| Area | Prompts and expected output |
+| --- | --- |
+| Testing & Validation | Build Validation Strategy; Service Integration Verification for logging, telemetry, service connectivity, backward compatibility, runtime behavior; Deployment Readiness Check for UAT and production rollout. |
+| Breaking Change Analysis | API Deprecation Detection using `.NET Upgrade Assistant` and API Analyzer; API Replacement Strategy for removed namespaces, `Startup.cs` → `Program.cs`; Regression Testing Focus for endpoints and critical functionality. |
+| Version Control & Commit Strategy | Branching Strategy Planning, PR Structure Optimization with `Upgrade to .NET [Version]`, tagging strategies for breaking changes, and Code Review Guidelines. |
+| Documentation & Communication | Upgrade Documentation Strategy, Stakeholder Communication, Progress Tracking Systems, dashboard or markdown checklist. |
+| Tools & Automation | Upgrade Tool Selection for `.NET Upgrade Assistant`, `dotnet list package --outdated`, `dotnet migrate`, `graph.json`; Analysis Script Generation; Multi-Repository Validation. |
+| Final Validation & Delivery | Final Solution Validation, Deployment Readiness Confirmation, post-upgrade build artifacts, Release Documentation, and enterprise-scale validation evidence. |
 
-  # Version Control & Commit Strategy
-  - name: "Branching Strategy Planning"
-    prompt: "Recommend branching strategy for safe upgrade with rollback capability. Generate commit templates for partial and complete project upgrades."
+## Tooling commands
 
-  - name: "PR Structure Optimization"
-    prompt: "Suggest best practices for creating structured PRs (`Upgrade to .NET [Version]`). Identify tagging strategies for PRs involving breaking changes."
+| Tool | Use |
+| --- | --- |
+| `.NET Upgrade Assistant` | Assess and automate framework migrations where project structure is supported. |
+| `dotnet list package --outdated` | Identify outdated package versions before and after target selection. |
+| `dotnet migrate` | Evaluate legacy migration needs where applicable. |
+| `graph.json` | Visualize dependency graph and sequence upgrades. |
 
-  - name: "Code Review Guidelines"
-    prompt: "Recommend peer review focus areas (build, test, and dependency validation). Create checklists for effective upgrade reviews."
+## Output template
 
-  # Documentation & Communication
-  - name: "Upgrade Documentation Strategy"
-    prompt: "Suggest how to document each project's framework change in the PR. Propose automated release note generation summarizing upgrades and test results."
+```markdown
+## .NET upgrade plan
 
-  - name: "Stakeholder Communication"
-    prompt: "Recommend communicating version upgrades and migration timelines to consumers. Generate documentation templates for dependency updates and validation results."
+**Status:** assessed | ready to upgrade | blocked
+**Target:** `.NET [Version]` / `net8.0`
+**Strategy:** `.NET Upgrade Assistant` | manual | hybrid
 
-  - name: "Progress Tracking Systems"
-    prompt: "Suggest maintaining an upgrade summary dashboard or markdown checklist. Create templates for tracking upgrade progress across multiple projects."
+### Project inventory
+| Project | Current type | Current TargetFramework | SDK-style | packages.config | Recommended target | Order |
+| --- | --- | --- | --- | --- | --- | --- |
+| `<project.csproj>` | `.NET Framework` | `<target>` | yes/no | yes/no | `net8.0` | 1 |
 
-  # Tools & Automation
-  - name: "Upgrade Tool Selection"
-    prompt: "Recommend when and how to use: `.NET Upgrade Assistant`, `dotnet list package --outdated`, `dotnet migrate`, and `graph.json` dependency visualization."
+### Dependency and package findings
+| Package/project | Issue | Migration path | Risk |
+| --- | --- | --- | --- |
+| `<dependency>` | <compatibility/version/conflict> | <replacement or version> | low/medium/high |
 
-  - name: "Analysis Script Generation"
-    prompt: "Generate scripts or prompts for analyzing dependency graphs before upgrading. Propose AI-assisted prompts for Copilot to identify upgrade issues automatically."
+### Code and pipeline changes
+- Code modernization: `WebHostBuilder` → `HostBuilder`, `Startup.cs` → `Program.cs`, async conversion candidates.
+- CI/CD: `UseDotNet@2`, `NuGetToolInstaller`, build/test validation, feature-branch checks.
 
-  - name: "Multi-Repository Validation"
-    prompt: "Suggest how to validate automation output across multiple repositories. Create standardized validation workflows for enterprise-scale upgrades."
+### Validation
+- Build: <command/result>
+- Unit tests: <command/result>
+- Integration/UAT: <plan/result>
+- Logging/telemetry/connectivity: <checks>
+- Deployment readiness: <status>
 
-  # Final Validation & Delivery
-  - name: "Final Solution Validation"
-    prompt: "Generate validation steps to confirm the final upgraded solution passes all validation checks. Suggest production deployment verification steps post-upgrade."
+### Delivery plan
+- Branching strategy: <strategy>
+- PR structure: `Upgrade to .NET [Version]`
+- Rollback checkpoints: <checkpoints>
+- Release notes: <summary>
+```
 
-  - name: "Deployment Readiness Confirmation"
-    prompt: "Recommend generating final test results and build artifacts. Create a checklist summarizing completion across projects (builds/tests/deployment)."
+## Quality gate
 
-  - name: "Release Documentation"
-    prompt: "Generate a release note summarizing framework changes and CI/CD updates. Create comprehensive upgrade summary documentation."
-
----
+- [ ] Every project is classified as `.NET Framework`, `.NET Core`, or `.NET Standard`.
+- [ ] Each `.csproj` has `TargetFramework` and SDK usage recorded.
+- [ ] `packages.config` projects and `PackageReference` migration needs are identified.
+- [ ] Upgrade order follows dependency direction from least to most dependent components.
+- [ ] NuGet, transitive dependencies, and third-party .NET 8 support are reviewed.
+- [ ] Code modernization includes deprecated APIs, `WebHostBuilder` → `HostBuilder`, async conversion, and `Startup.cs` → `Program.cs` where applicable.
+- [ ] CI/CD guidance covers YAML SDK pinning, `UseDotNet@2`, `NuGetToolInstaller`, and validation builds.
+- [ ] Validation covers build, unit/integration tests, logging, telemetry, service connectivity, UAT, deployment readiness, and regression testing.
+- [ ] Branching, PR structure, code review focus, stakeholder communication, progress tracking, and release documentation are included.

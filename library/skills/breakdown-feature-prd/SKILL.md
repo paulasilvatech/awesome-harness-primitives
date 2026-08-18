@@ -1,62 +1,101 @@
 ---
 name: "breakdown-feature-prd"
 description: >-
-  Prompt for creating Product Requirements Documents (PRDs) for new features, based on an Epic. Use
-  this skill when the user asks for feature prd prompt.
+  Create a detailed feature Product Requirements Document from an epic and feature idea, including
+  goal, personas, user stories, functional and non-functional requirements, acceptance criteria, and
+  out-of-scope boundaries. Use when asked to write a feature PRD or docs/ways-of-work feature prd.md.
 ---
-# Feature PRD Prompt
 
-## Goal
+# Feature PRD
 
-Act as an expert Product Manager for a large-scale SaaS platform. Your primary responsibility is to take a high-level feature or enabler from an Epic and create a detailed Product Requirements Document (PRD). This PRD will serve as the single source of truth for the engineering team and will be used to generate a comprehensive technical specification.
+Transform a high-level feature or enabler from an Epic into a well-defined, detailed Markdown PRD for a large-scale SaaS platform that becomes the single source of truth for engineering and downstream technical specifications.
 
-Review the user's request for a new feature and the parent Epic, and generate a thorough PRD. If you don't have enough information, ask clarifying questions to ensure all aspects of the feature are well-defined.
+## When to invoke
 
-## Output Format
+- "Create a PRD for this feature from the parent epic."
+- "Write `/docs/ways-of-work/plan/{epic-name}/{feature-name}/prd.md`."
+- "Turn this feature idea into user stories and acceptance criteria."
+- "Break this epic enabler into a feature Product Requirements Document."
 
-The output should be a complete PRD in Markdown format, saved to `/docs/ways-of-work/plan/{epic-name}/{feature-name}/prd.md`.
+## Product context
 
-### PRD Structure
+| Input | How to use it |
+| --- | --- |
+| Epic | Link or reference the parent Epic PRD and Architecture documents. Preserve scope and constraints. |
+| Feature Idea | Convert it into a clear problem, solution, user value, and requirements. |
+| Target Users | Use provided personas; if absent, infer cautiously and mark assumptions. |
+| Engineering downstream | Write requirements precise enough to generate a comprehensive technical specification. |
 
-#### 1. Feature Name
+Do not leave major ambiguity hidden. If information is missing and no interaction is possible, add an Assumptions or Open Questions subsection inside the relevant PRD section.
 
-- A clear, concise, and descriptive name for the feature.
+## PRD structure
 
-#### 2. Epic
+| Section | Required content | Quality bar |
+| --- | --- | --- |
+| Feature Name | Clear, concise, descriptive feature name. | Names user-visible capability or technical enabler. |
+| Epic | Link to parent Epic PRD and Architecture documents. | Uses stable paths or titles provided by the user. |
+| Goal | Problem, Solution, and Impact. | Problem is 3-5 sentences; Impact names expected metrics such as user engagement or conversion rate. |
+| User Personas | Target users. | Includes goals, pain points, permissions, or context when known. |
+| User Stories | "As a `<user persona>`, I want to `<perform an action>` so that I can `<achieve a benefit>`." | Covers primary paths and edge cases. |
+| Requirements | Functional and Non-Functional Requirements. | Specific, unambiguous, testable, and scoped to this feature. |
+| Acceptance Criteria | Checklist or Given/When/Then per story or major requirement. | Validates complete and correct behavior. |
+| Out of Scope | Explicit exclusions. | Prevents scope creep and clarifies handoffs. |
 
-- Link to the parent Epic PRD and Architecture documents.
+## Requirement writing rules
 
-#### 3. Goal
+| Requirement type | Include | Avoid |
+| --- | --- | --- |
+| Functional Requirements | User-visible behaviors, system actions, permissions, data changes, integrations, edge cases. | Vague verbs such as "support" without observable behavior. |
+| Non-Functional Requirements | Performance, security, accessibility, data privacy, reliability, auditability, operational constraints. | Generic quality claims with no threshold or acceptance signal. |
+| Acceptance Criteria | Given/When/Then or checklist statements tied to a requirement; preserve the `Given/When/Then.` notation when requested. | Criteria that merely restate the requirement. |
+| Out of Scope | Deferred features, excluded personas, unsupported platforms, non-goals. | Hidden assumptions that engineering must discover later. |
 
-- **Problem:** Describe the user problem or business need this feature addresses (3-5 sentences).
-- **Solution:** Explain how this feature solves the problem.
-- **Impact:** What are the expected outcomes or metrics to be improved (e.g., user engagement, conversion rate, etc.)?
+## Output template
 
-#### 4. User Personas
+```markdown
+# <Feature Name> PRD
 
-- Describe the target user(s) for this feature.
+## 1. Feature Name
+<clear feature name>
 
-#### 5. User Stories
+## 2. Epic
+- Epic PRD: <link or title>
+- Epic Architecture: <link or title>
 
-- Write user stories in the format: "As a `<user persona>`, I want to `<perform an action>` so that I can `<achieve a benefit>`."
-- Cover the primary paths and edge cases.
+## 3. Goal
+**Problem:** <3-5 sentences describing the user problem or business need>
+**Solution:** <how the feature solves the problem>
+**Impact:** <expected outcomes or metrics, such as user engagement or conversion rate>
 
-#### 6. Requirements
+## 4. User Personas
+- <persona>: <goal, context, or need>
 
-- **Functional Requirements:** A detailed, bulleted list of what the system must do. Be specific and unambiguous.
-- **Non-Functional Requirements:** A bulleted list of constraints and quality attributes (e.g., performance, security, accessibility, data privacy).
+## 5. User Stories
+- As a `<user persona>`, I want to `<perform an action>` so that I can `<achieve a benefit>`.
 
-#### 7. Acceptance Criteria
+## 6. Requirements
+### Functional Requirements
+- <specific behavior>
 
-- For each user story or major requirement, provide a set of acceptance criteria.
-- Use a clear format, such as a checklist or Given/When/Then. This will be used to validate that the feature is complete and correct.
+### Non-Functional Requirements
+- <performance, security, accessibility, data privacy, reliability, or operational constraint>
 
-#### 8. Out of Scope
+## 7. Acceptance Criteria
+- [ ] Given <context>, when <action>, then <observable result>.
 
-- Clearly list what is _not_ included in this feature to avoid scope creep.
+## 8. Out of Scope
+- <excluded work>
 
-## Context Template
+## Assumptions and open questions
+- <only when needed>
+```
 
-- **Epic:** [Link to the parent Epic documents]
-- **Feature Idea:** [A high-level description of the feature request from the user]
-- **Target Users:** [Optional: Any initial thoughts on who this is for]
+## Quality gate
+
+- [ ] The output is suitable for `/docs/ways-of-work/plan/{epic-name}/{feature-name}/prd.md`.
+- [ ] The PRD links or names the parent Epic PRD and Architecture documents.
+- [ ] Problem, Solution, and Impact are all present.
+- [ ] User stories use the required "As a... I want... so that..." format.
+- [ ] Functional and Non-Functional Requirements are specific, unambiguous, and testable.
+- [ ] Acceptance Criteria cover primary paths and edge cases.
+- [ ] Out of Scope is explicit enough to prevent scope creep.

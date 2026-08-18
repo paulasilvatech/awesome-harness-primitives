@@ -1,96 +1,163 @@
 ---
-name: "dotnet-mcp-builder"
+name: dotnet-mcp-builder
 description: >-
-  Build Model Context Protocol (MCP) servers in C#/.NET against the current ModelContextProtocol 2.x
-  NuGet packages. Helps with cases the model gets wrong without guidance — stale versions (0.x preview
-  or 1.x-era defaults), the v2 stateless-by-default HTTP flip, the 2026-07-28 spec deprecations
-  (roots/sampling/logging), MCP Apps and Tasks extension packages, elicitation URL mode, per-session
-  HTTP wiring, OAuth and reverse-proxy deploy specifics, and debugging MapMcp / STDIO /
-  Streamable-HTTP errors. Also covers STDIO and Streamable HTTP transports (SSE is deprecated), tools,
-  prompts, resources, completions, and a basic .NET MCP client. Trigger when the user says or implies
-  any .NET MCP server work: ModelContextProtocol, McpServerTool, MapMcp, WithStdioServerTransport,
-  "MCP server in C#", "MCP tool in dotnet", "expose this as MCP", or names a primitive
-  (prompt/resource/elicitation/MCP App) in a .NET context. Skip for MCP work in other languages.
+  Build and debug C#/.NET MCP servers and clients with current ModelContextProtocol 2.x packages. Use when the user mentions ModelContextProtocol, McpServerTool, MapMcp, WithStdioServerTransport, Streamable HTTP, STDIO, prompts, resources, tools, completions, elicitation, MCP Apps, Tasks, OAuth, reverse proxy deployment, or .NET MCP errors.
 ---
+
 # Building MCP servers in .NET
 
-This skill helps you write production-quality MCP servers and basic clients in C#/.NET against the **official** [`ModelContextProtocol`](https://www.nuget.org/profiles/ModelContextProtocol) NuGet packages, maintained by Microsoft and the MCP project. It targets the **stable 2.x** line and the current spec (2026-07-28).
+Write production-quality MCP servers and basic clients in C#/.NET using the official `ModelContextProtocol` 2.x packages, current transport behavior, modern primitives, and the 2026-07-28 spec rules.
 
-## When this skill earns its keep
+## When to invoke
 
-The .NET MCP SDK had years of preview packages (`0.x-preview`) before reaching `1.0`, and v2 flipped several defaults. Without help, the model tends to:
-- Pin a stale preview version that won't compile against current samples.
-- Apply 1.x-era defaults that v2 reversed (HTTP was stateful by default; in 2.x `Stateless` defaults to `true`).
-- Recommend capabilities the 2026-07-28 spec deprecates (roots, sampling, MCP-channel logging — now `[Obsolete]`, warning `MCP9005`).
-- Miss recent spec features (multi-round-trip `input_required`, discovery-first negotiation, MCP Apps/Tasks extension packages, elicitation URL mode, structured content blocks).
-- Get HTTP transport details wrong (stateful/stateless, proxy buffering, OAuth wiring).
-- Forget the STDIO stdout/stderr trap.
+- "Build an MCP server in C# or .NET."
+- "Add a McpServerTool and register it."
+- "Fix MapMcp, STDIO, or Streamable HTTP errors."
+- "Use WithStdioServerTransport or HTTP transport."
+- "Expose this prompt, resource, elicitation flow, MCP App, or Task in .NET."
 
-If the task is one of those, *load the matching reference* and follow it. If it's truly trivial (e.g. "rename this tool method"), you don't need to read everything — the cardinal rules below are the minimum.
+## Prerequisites and context
 
-## Mental model in 30 seconds
+- Use official packages from the `ModelContextProtocol` NuGet profile, maintained by Microsoft and the MCP project.
+- Target the stable 2.x line unless an existing project is pinned for a documented reason.
+- Default new projects to .NET 10 when the user does not specify a target.
+- Run `dotnet build` for non-trivial changes.
+- Skip this skill for MCP work in other languages.
 
-A .NET MCP server is an ordinary `Microsoft.Extensions.Hosting` (or `WebApplication`) app that wires an MCP server through DI:
+## Mental model
+
+A .NET MCP server is a normal `Microsoft.Extensions.Hosting` or `WebApplication` app that wires an MCP server through dependency injection.
 
 ```csharp
 builder.Services
     .AddMcpServer()
     .WithStdioServerTransport()      // OR .WithHttpTransport(...)
-    .WithToolsFromAssembly()         // discover [McpServerToolType] classes
-    .WithPrompts<MyPrompts>()        // optional
-    .WithResources<MyResources>();   // optional
+    .WithToolsFromAssembly()
+    .WithPrompts<MyPrompts>()
+    .WithResources<MyResources>();
 ```
 
-Primitives are plain C# methods on classes marked with attributes (`[McpServerToolType]` + `[McpServerTool]`, `[McpServerPromptType]` + `[McpServerPrompt]`, `[McpServerResourceType]` + `[McpServerResource]`). Parameters bind from JSON-RPC; the SDK builds the JSON Schema from the signature plus `[Description]` attributes.
+Primitives are C# methods on attributed classes: `[McpServerToolType]` plus `[McpServerTool]`, `[McpServerPromptType]` plus `[McpServerPrompt]`, and `[McpServerResourceType]` plus `[McpServerResource]`. Parameters bind from JSON-RPC through `System.Text.Json`; descriptions become part of the JSON Schema the LLM sees.
 
-Server-to-client features (elicitation, progress notifications, and the now-deprecated sampling/roots/log notifications) are methods on the injected `IMcpServer`.
+## Reference routing
 
-## Decision tree → which references to load
-
-Always load `references/packages.md` if you're creating a new project or unsure of the current package version.
+Always load `references/packages.md` when creating a new project or when the package version is uncertain.
 
 | Task | Load |
-|---|---|
+| --- | --- |
 | New STDIO server | `references/transport-stdio.md` |
-| New HTTP (Streamable) server | `references/transport-http.md` |
-| Add/modify a tool | `references/tool-primitive.md` |
-| Add/modify a prompt | `references/prompt-primitive.md` |
-| Add/modify a resource | `references/resource-primitive.md` |
+| New HTTP Streamable server | `references/transport-http.md` |
+| Add or modify a tool | `references/tool-primitive.md` |
+| Add or modify a prompt | `references/prompt-primitive.md` |
+| Add or modify a resource | `references/resource-primitive.md` |
 | Ask the user a question mid-tool | `references/elicitation.md` |
-| Call the client's LLM from a tool (deprecated in 2026-07-28) | `references/sampling.md` |
-| Read the user's project roots (deprecated in 2026-07-28) | `references/roots.md` |
+| Call the client's LLM from a tool | `references/sampling.md` |
+| Read the user's project roots | `references/roots.md` |
 | Return an interactive UI | `references/mcp-apps.md` |
-| Argument completions, log/progress notifications, filters, server instructions | `references/server-features.md` |
-| Write a .NET program that **consumes** an MCP server | `references/client.md` |
+| Argument completions, progress, filters, instructions | `references/server-features.md` |
+| Write a .NET MCP client | `references/client.md` |
 | MCP Inspector, in-memory tests, mocks, CI | `references/testing.md` |
 
-For multi-primitive tasks, load several at once. For trivial edits in an existing file, you usually don't need any.
+For multi-primitive tasks, load all matching references. For trivial edits in an existing file, apply the cardinal rules without loading every reference.
 
-## Cardinal rules (apply always; these prevent the highest-frequency breakages)
+## Cardinal rules
 
-1. **Pin the current stable package, not a preview.** Use `ModelContextProtocol` / `ModelContextProtocol.AspNetCore` / `ModelContextProtocol.Core` at the latest **2.x**. If you find yourself writing `0.3-preview` or `0.4-preview`, stop and check NuGet — preview APIs have breaking differences. 1.x still works but predates the 2026-07-28 spec.
-2. **STDIO servers must not write to stdout.** Stdout is the JSON-RPC channel. Configure `LogToStandardErrorThreshold = LogLevel.Trace` before anything else and never `Console.WriteLine` from a tool.
-3. **HTTP defaults to stateless in 2.x** (v1.x defaulted to stateful — the single most impactful v2 breaking change). The 2026-07-28 revision has no HTTP sessions at all: setting `Stateless = false` makes the server refuse that revision and serve clients via the legacy `initialize` fallback. For "ask the user something mid-tool" on current-protocol HTTP, use the multi-round-trip `InputRequiredException` pattern; reserve stateful HTTP (or STDIO) for the legacy `ElicitAsync`/sampling/roots paths and pushed notifications.
-4. **SSE-only is deprecated.** Use Streamable HTTP. Only enable legacy SSE (`EnableLegacySse = true`) for an old client you must support, and call it out.
-5. **Don't design new servers around deprecated capabilities.** The 2026-07-28 spec deprecates roots, sampling, and MCP-channel logging; the SDK marks them `[Obsolete]` (warning `MCP9005`). They still work against down-level clients, but for new designs prefer the multi-round-trip `input_required` pattern and `ILogger` logging. Suppress `MCP9005` only as a documented transition measure.
-6. **Always `[Description]` tools and parameters.** This is what the LLM sees when picking and shaping calls. Vague descriptions are the #1 reason tools don't get used.
-7. **Show the registration line every time you add a primitive.** A new `[McpServerPromptType]` class without `.WithPrompts<...>()` (or `.WithPromptsFromAssembly()`) is invisible.
-8. **Don't invent APIs.** If you're unsure a method exists, say so and check the [API reference](https://csharp.sdk.modelcontextprotocol.io/api/ModelContextProtocol.html) — wrong method names cause silent failures. This applies doubly to the new v2 extension packages (`ModelContextProtocol.Extensions.Tasks`, `ModelContextProtocol.Extensions.Apps`) — check their docs before writing code against them.
+| Rule | Why it matters |
+| --- | --- |
+| Pin current stable 2.x packages: `ModelContextProtocol`, `ModelContextProtocol.AspNetCore`, `ModelContextProtocol.Core`. | Stale `0.x-preview`, `0.3-preview`, `0.4-preview`, and 1.x-era samples have breaking API differences. |
+| STDIO servers must not write to stdout. | Stdout is the JSON-RPC channel; use stderr logging with `LogToStandardErrorThreshold = LogLevel.Trace`. |
+| HTTP defaults to stateless in 2.x. | In 1.x HTTP was stateful by default; in 2.x `Stateless` defaults to `true`. |
+| The 2026-07-28 revision has no HTTP sessions. | `Stateless = false` serves current clients only through legacy `initialize` fallback. |
+| Use Streamable HTTP, not SSE-only. | SSE is deprecated; enable `EnableLegacySse = true` only for old clients. |
+| Do not design new servers around deprecated capabilities. | Roots, sampling, and MCP-channel logging are `[Obsolete]` and warn `MCP9005`. |
+| Always add `[Description]` to tools and parameters. | Vague schema descriptions are the main reason tools are not selected. |
+| Show the registration line for every primitive. | A primitive class without `.WithToolsFromAssembly()`, `.WithTools<T>()`, `.WithPrompts<...>()`, `.WithPromptsFromAssembly()`, or resource registration is invisible. |
+| Do not invent APIs. | Check the API reference before using uncertain methods, especially `ModelContextProtocol.Extensions.Tasks` and `ModelContextProtocol.Extensions.Apps`. |
+
+## Transport decisions
+
+| Transport | Use when | Key constraints |
+| --- | --- | --- |
+| STDIO | Local tools, editor-integrated servers, simple process launch. | No stdout writes; logs to stderr; avoid banners and `Console.WriteLine`. |
+| Streamable HTTP stateless | Web-hosted servers and current-protocol clients. | Use `app.MapMcp()` or `app.MapMcp("/mcp")`; no current HTTP sessions. |
+| Stateful HTTP legacy path | Legacy elicitation, sampling, roots, pushed notifications. | Set `Stateless = false` only with a documented compatibility reason. |
+| Legacy SSE | Old clients that cannot use Streamable HTTP. | Enable only with `EnableLegacySse = true` and call out deprecation. |
+
+For current-protocol HTTP mid-tool questions, prefer multi-round-trip `InputRequiredException` over legacy `ElicitAsync`.
+
+## Troubleshooting
+
+| Symptom | Likely cause | Resolution |
+| --- | --- | --- |
+| STDIO server hangs or client cannot parse JSON-RPC | Something writes to stdout. | Remove `Console.WriteLine`, banners, and stdout log sinks; configure stderr logging. |
+| HTTP 404 | Path mismatch. | Remember `app.MapMcp()` maps root and `app.MapMcp("/mcp")` maps `/mcp`. |
+| Tool not appearing | Missing `[McpServerToolType]` or registration. | Add class attribute and `.WithToolsFromAssembly()` or `.WithTools<T>()`. |
+| Arguments not bound | JSON-RPC `arguments` keys do not match parameter names or complex type shape. | Align names and verify `System.Text.Json` binding. |
+| Sampling, elicitation, or roots fail | Legacy server-to-client calls on current-protocol stateless HTTP, or client lacks capability. | Use `InputRequiredException`, or documented `Stateless = false` legacy path; verify advertised capability. |
+| `MCP9005` warnings after upgrade | Deprecated roots, sampling, or logging APIs. | Migrate; suppress only temporarily with documented transition plan. |
 
 ## Working style
 
-- **Make minimal, additive changes.** Add a method to the existing tool class rather than restructuring the project.
-- **For non-trivial setups, run `dotnet build`.** Catches missing usings, attribute typos, and TFM mismatches before the user sees them.
-- **Confirm transport + .NET version + primitives before scaffolding** if context doesn't already make them obvious. Default to **.NET 10** for new projects.
+- Make minimal, additive changes; add methods to existing primitive classes before restructuring.
+- Confirm transport, .NET version, and primitives before scaffolding when context is unclear.
+- For OAuth, reverse-proxy, and per-session HTTP wiring, read `references/transport-http.md` before coding.
+- For MCP Apps or Tasks, read `references/mcp-apps.md` or package docs before using extension APIs.
+- Point to the `EverythingServer` sample when a feature interaction remains unclear.
 
-## When the user is stuck
+## Progressive disclosure and bundled resources
 
-Walk this checklist before guessing:
-1. **STDIO:** something is writing to stdout (logger sink, `Console.WriteLine`, library banner).
-2. **HTTP 404:** path mismatch — `app.MapMcp()` is root, `app.MapMcp("/mcp")` puts it under `/mcp`.
-3. **Tool not appearing:** missing `[McpServerToolType]` on the class, or no `.WithToolsFromAssembly()` / `.WithTools<T>()` registered.
-4. **Args not bound:** parameter names must match the JSON-RPC `arguments` keys; complex types bind via `System.Text.Json`.
-5. **Sampling/elicitation/roots failing:** these legacy server-to-client calls can't run on current-protocol HTTP — migrate to the multi-round-trip `InputRequiredException` pattern, or (legacy paths only) set `Stateless = false`, knowing that pins HTTP clients to a down-level `initialize` revision. Also check the client actually advertises the capability.
-6. **`MCP9005` build warnings after upgrading to 2.x:** the code uses deprecated roots/sampling/logging APIs. Plan the migration; suppress only temporarily.
+- `references/packages.md`: current packages and version guidance.
+- `references/transport-stdio.md`: STDIO server setup and stdout/stderr traps.
+- `references/transport-http.md`: Streamable HTTP, OAuth, reverse proxy, stateful/stateless wiring.
+- `references/tool-primitive.md`: tools, `[McpServerToolType]`, `[McpServerTool]`, descriptions, schemas.
+- `references/prompt-primitive.md`: prompts and registration.
+- `references/resource-primitive.md`: resources and registration.
+- `references/elicitation.md`: `InputRequiredException`, URL mode, and legacy `ElicitAsync`.
+- `references/sampling.md`: deprecated sampling guidance.
+- `references/roots.md`: deprecated roots guidance.
+- `references/mcp-apps.md`: interactive MCP Apps.
+- `references/server-features.md`: completions, progress, filters, server instructions.
+- `references/client.md`: basic .NET MCP client.
+- `references/testing.md`: MCP Inspector, in-memory tests, mocks, and CI.
 
-Still stuck? Point the user at the [`EverythingServer`](https://github.com/modelcontextprotocol/csharp-sdk/tree/main/samples/EverythingServer) sample — it exercises every feature.
+## SDK vocabulary
+
+Remember `stateless-by-default` HTTP behavior, `discovery-first` negotiation, `input_required`, `down-level` fallback, `server-to-client` (`to-client`) calls through `IMcpServer`, `ILogger` for normal logging, and `highest-frequency` breakage prevention. Legacy `roots/sampling/logging`, `sampling/roots`, `sampling/roots/log`, `Sampling/elicitation/roots`, and `now-deprecated` capabilities require transition notes. Load references for `Add/modify` tasks, `Apps/Tasks`, `log/progress`, and `prompt/resource/elicitation/MCP` work.
+
+## Output template
+
+```markdown
+## .NET MCP result
+
+**Status:** complete | needs changes | blocked
+**Transport:** STDIO | Streamable HTTP | stateful HTTP | legacy SSE
+**Packages:** `ModelContextProtocol` <version>, `ModelContextProtocol.AspNetCore` <version>
+**Target framework:** `<TFM>`
+
+| Primitive or feature | Registration | Reference used | Notes |
+| --- | --- | --- | --- |
+| Tool | `.WithToolsFromAssembly()` | `references/tool-primitive.md` | <description/schema note> |
+
+### Validation
+- `dotnet build`: pass | fail | not run (<reason>)
+- STDIO stdout check: pass | fail | not applicable
+- HTTP route check: pass | fail | not applicable
+- Deprecated API check (`MCP9005`): pass | fail | not applicable
+```
+
+## Quality gate
+
+- [ ] Current stable 2.x packages are used or any non-2.x version is justified.
+- [ ] Transport choice is explicit: STDIO, Streamable HTTP, stateful HTTP legacy, or legacy SSE.
+- [ ] STDIO servers write no logs, banners, or tool output to stdout.
+- [ ] HTTP routing uses `app.MapMcp()` or `app.MapMcp("/mcp")` intentionally.
+- [ ] New tools, prompts, and resources include both attributes and registration lines.
+- [ ] Tool and parameter `[Description]` attributes are present and useful.
+- [ ] Deprecated roots, sampling, and MCP-channel logging are avoided for new work or documented with `MCP9005` handling.
+- [ ] `dotnet build` was run for non-trivial code changes or a concrete blocker is reported.
+
+## References
+
+- [ModelContextProtocol NuGet profile](https://www.nuget.org/profiles/ModelContextProtocol)
+- [ModelContextProtocol API reference](https://csharp.sdk.modelcontextprotocol.io/api/ModelContextProtocol.html)
+- [EverythingServer sample](https://github.com/modelcontextprotocol/csharp-sdk/tree/main/samples/EverythingServer)

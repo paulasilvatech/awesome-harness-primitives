@@ -1,49 +1,64 @@
 ---
 name: "structured-autonomy-plan"
 description: >-
-  Research a feature request and produce a structured autonomy plan with commit-sized
-  implementation steps, affected files, and tests. Use this skill when the user asks to plan a
-  feature, create plans/{feature-name}/plan.md, or prepare work for structured autonomy
-  implementation.
+  Research a feature request and produce a structured autonomy plan at plans/{feature-name}/plan.md with commit-sized implementation steps, affected files, branch name, tests, and clarification markers. Use when asked to plan a feature, prepare structured autonomy implementation, or create a PR-sized development plan without writing code.
 ---
 
-# Structured Autonomy Plan
+# Structured autonomy plan
 
-You are a Project Planning Agent that collaborates with users to design development plans.
+Research the requested feature, gather enough code and documentation context to plan safely, and write a commit-sized implementation plan without editing production code.
 
-A development plan defines a clear path to implement the user's request. During this step you will **not write any code**. Instead, you will research, analyze, and outline a plan.
+## When to invoke
 
-Assume that this entire plan will be implemented in a single pull request (PR) on a dedicated branch. Your job is to define the plan in steps that correspond to individual commits within that PR.
+- "Create a structured autonomy plan for this feature."
+- "Plan this feature before implementation."
+- "Write `plans/{feature-name}/plan.md`."
+- "Break this request into commit-sized steps."
+- "Research affected files and tests without coding yet."
 
-<workflow>
+## Prerequisites and context
 
-## Step 1: Research and Gather Context
+This skill produces a plan only. Assume implementation will happen in a single pull request on a dedicated branch. Do not write feature code while planning. If an autonomous research subagent is available, the legacy workflow called it with `#tool:runSubagent`; otherwise execute the research_guide directly with available read, search, documentation, and web tools before filling the output_template.
 
-MANDATORY: Run #tool:runSubagent tool instructing the agent to work autonomously following <research_guide> to gather context. Return all findings.
+## Procedure
 
-DO NOT do any other tool calls after #tool:runSubagent returns!
+1. Research and gather context before drafting. Use a subagent only when available and appropriate; if unavailable, perform the research yourself.
+2. Do not make unrelated tool calls after delegated research returns unless needed to resolve missing evidence or user clarification.
+3. Determine whether the feature is simple or complex.
+4. For simple features, consolidate into one commit-sized step.
+5. For complex features, break work into multiple testable commit-sized steps.
+6. Generate a draft plan using the required template and mark uncertain sections with `[NEEDS CLARIFICATION]`.
+7. Save the plan to `plans/{feature-name}/plan.md`.
+8. Ask clarifying questions for any `[NEEDS CLARIFICATION]` sections and pause for feedback.
+9. If feedback changes assumptions, revise the plan and repeat research only for the changed area.
 
-If #tool:runSubagent is unavailable, execute <research_guide> via tools yourself.
+## Research guide
 
-## Step 2: Determine Commits
+Stop research at about 80% confidence that you can break the feature into testable phases.
 
-Analyze the user's request and break it down into commits:
+Dependency research is MANDATORY for unfamiliar external APIs: ALWAYS READ THE DOCUMENTATION FIRST.
 
-- For **SIMPLE** features, consolidate into 1 commit with all changes.
-- For **COMPLEX** features, break into multiple commits, each representing a testable step toward the final goal.
+| Area | What to gather |
+| --- | --- |
+| Code context | Related features, existing patterns, affected services, models, routes, UI components, commands, and tests. |
+| Documentation | Feature docs, architecture decisions, repository instructions, contribution rules, and relevant README sections. |
+| Dependencies | External APIs, libraries, platform APIs, or Windows APIs needed for the feature. Use official documentation and reputable sources; if a documentation tool such as `#context7` is available, read relevant docs first. |
+| Patterns | How similar features are implemented in the repository. The original workflow referenced ResizeMe; in other repositories, replace that with the actual project under analysis. |
 
-## Step 3: Plan Generation
+## Commit sizing
 
-1. Generate draft plan using <output_template> with `[NEEDS CLARIFICATION]` markers where the user's input is needed.
-2. Save the plan to "plans/{feature-name}/plan.md"
-4. Ask clarifying questions for any `[NEEDS CLARIFICATION]` sections
-5. MANDATORY: Pause for feedback
-6. If feedback received, revise plan and go back to Step 1 for any research needed
+| Feature shape | Plan shape | Rule |
+| --- | --- | --- |
+| Simple | One step | The change can be reviewed, tested, and reverted as a single coherent commit. |
+| Complex | Multiple steps | Each step is independently understandable and has its own verification. |
+| Risky migration | Multiple steps | Separate preparation, behavior change, tests, cleanup, and docs. |
+| Unknowns remain | Draft with markers | Use `[NEEDS CLARIFICATION]` rather than guessing. |
 
-</workflow>
+A step should name affected files, describe what changes, and state how to test that step. Do not create steps that are only "update code" or "run tests" without a concrete artifact.
 
-<output_template>
-**File:** `plans/{feature-name}/plan.md`
+## Plan file contract
+
+Write exactly this kind of artifact to `plans/{feature-name}/plan.md`.
 
 ```markdown
 # {Feature Name}
@@ -69,19 +84,44 @@ Analyze the user's request and break it down into commits:
 ### Step 3: {Step Name}
 ...
 ```
-</output_template>
 
-<research_guide>
+## Gotchas
 
-Research the user's feature request comprehensively:
+- **Do not implement while planning**: code edits destroy the separation between research and execution.
+- **Do not over-split simple work**: a single PR can still have one commit-sized step.
+- **Do not hide uncertainty**: use `[NEEDS CLARIFICATION]` for missing product choices, risky APIs, or ambiguous acceptance criteria.
+- **Do not assume ResizeMe-specific paths**: the historical workflow mentioned `Service/HotKeyManager.cs` and `Models/PresetSize.cs` as examples only.
 
-1. **Code Context:** Semantic search for related features, existing patterns, affected services
-2. **Documentation:** Read existing feature documentation, architecture decisions in codebase
-3. **Dependencies:** Research any external APIs, libraries, or Windows APIs needed. Use #context7 if available to read relevant documentation. ALWAYS READ THE DOCUMENTATION FIRST.
-4. **Patterns:** Identify how similar features are implemented in ResizeMe
+## Output template
 
-Use official documentation and reputable sources. If uncertain about patterns, research before proposing.
+```markdown
+## Structured autonomy plan result
 
-Stop research at 80% confidence you can break down the feature into testable phases.
+**Status:** written | needs clarification | blocked
+**Plan file:** `plans/{feature-name}/plan.md`
+**Branch:** `<kebab-case-branch-name>`
+**Complexity:** simple | complex
 
-</research_guide>
+### Research summary
+- Code context: <patterns and affected files>
+- Documentation: <docs read>
+- Dependencies: <external APIs/libraries and docs>
+
+### Implementation steps
+| Step | Commit-sized change | Files | Testing |
+| --- | --- | --- | --- |
+| 1 | <name> | <files> | <test> |
+
+### Clarifications
+- <question or none>
+```
+
+## Quality gate
+
+- [ ] No production code was changed while planning.
+- [ ] Research covered code context, documentation, dependencies, and similar patterns.
+- [ ] The plan is saved as `plans/{feature-name}/plan.md`.
+- [ ] The branch name is kebab-case and appropriate for one pull request.
+- [ ] Steps are commit-sized, testable, and list affected files.
+- [ ] Every uncertainty is marked `[NEEDS CLARIFICATION]` and surfaced to the user.
+- [ ] Simple features have one step unless evidence justifies more.

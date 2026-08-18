@@ -1,27 +1,48 @@
 ---
-name: "desk-journal"
+name: desk-journal
 description: >-
-  Write, append, or read desk journal entries. The journal is persistent memory — what survives
-  session boundaries. A good entry has: what was done, current state, next step. Use this skill when
-  **End of session:** Write what was done, current state, next step; **Start of session:** Read the
-  journal to pick up where you left off; **Mid-session checkpoint:** Note significant progress or
-  decisions.
+  Read, write, or append persistent desk journal entries that survive session boundaries and capture what was done, current state, next step, dead ends, artifacts, and desk closure handoffs. Use when the user asks to resume from a journal, write an end-of-session entry, add a mid-session checkpoint, or record a desk wind-down.
 ---
-# Desk Journal
 
-Manage a desk's journal — the persistent memory that survives
-session boundaries.
+# Desk journal
 
-## When to use
+Maintain `desks/<desk-name>/journal.md` as a concise persistent trail; read the latest entry to resume work or append a new entry that tells the next session what happened, where things stand, and what to do next.
 
-- **End of session:** Write what was done, current state, next step
-- **Start of session:** Read the journal to pick up where you left off
-- **Mid-session checkpoint:** Note significant progress or decisions
-- **Desk wind-down:** Write a final summary when a desk is being closed
+## When to invoke
 
-## How to write a journal entry
+- "Read the desk journal before we continue."
+- "Write an end-of-session journal entry."
+- "Add a mid-session checkpoint to the journal."
+- "Wind down this desk with a final summary."
+- "Record what was done, current state, and next step."
 
-Append to `desks/<desk-name>/journal.md`. Each entry is a section:
+## Prerequisites and context
+
+- The journal path is `desks/<desk-name>/journal.md`; infer `<desk-name>` from the active desk, user request, or repository convention.
+- The journal is persistent memory, not a full diary. Keep entries short enough for future sessions to scan.
+- If the desk path cannot be inferred, report the missing desk name rather than writing to an arbitrary location.
+
+## Journal entry types
+
+| Situation | Entry type | Required fields |
+| --- | --- | --- |
+| Start of session | Read, not write by default | Most recent `Current state` and `Next step`; earlier history only as needed. |
+| Mid-session checkpoint | Progress entry | `Worked on`, `Current state`, `Next step`; include decisions or significant progress. |
+| End of session | Handoff entry | `Worked on`, `Current state`, `Next step`; include blockers and dead ends. |
+| Desk wind-down | Desk closed entry | `Summary`, `Artifacts`, `Handoff`. |
+
+## Writing rules
+
+- Append to `desks/<desk-name>/journal.md`; do not rewrite history unless the user explicitly asks to correct an entry.
+- Write for someone who knows nothing about the current session.
+- Be specific: name repositories, artifacts, commands, decisions, failures, and next files to inspect when useful.
+- Include what did not work so the next session does not repeat dead ends.
+- Keep normal entries to 3-5 lines; put larger context on the bench as a separate artifact.
+- Always include a next step for session entries.
+
+## Entry templates
+
+### Session or checkpoint entry
 
 ```markdown
 ## <date> — <short summary>
@@ -30,24 +51,7 @@ Append to `desks/<desk-name>/journal.md`. Each entry is a section:
 - **Next step:** <what the next session should pick up>
 ```
 
-### Guidelines
-
-- **Be specific.** "Worked on security scanning" is useless to the
-  next session. "Scanned repos A, B, C for CWE-502; found 3
-  findings in A, 0 in B and C; findings triaged to bench" — that's
-  a trail.
-- **Include what didn't work.** Dead ends are valuable — they prevent
-  the next session from walking the same path.
-- **Keep it short.** The journal is a trail marker, not a diary.
-  3-5 lines per entry. If you need more, the important context
-  should go on the bench as a separate artifact.
-- **Always include next step.** The next session starts from zero.
-  Without a next step, it has to re-derive everything.
-
-## End-of-desk entry
-
-When a desk is being wound down (not just a session ending, but
-the desk itself closing):
+### End-of-desk entry
 
 ```markdown
 ## <date> — Desk closed
@@ -56,17 +60,51 @@ the desk itself closing):
 - **Handoff:** <anything another desk or the operator needs to know>
 ```
 
-## Reading the journal
+## Reading rules
 
-At session start, read the desk's journal to pick up context.
-The most recent entry is the most important — it has the current
-state and next step. Earlier entries provide history if needed.
+| Need | Read |
+| --- | --- |
+| Resume work | The most recent entry first; use `Next step` as the starting point. |
+| Understand decisions | Earlier entries around decision dates. |
+| Close a desk | Recent entries plus bench artifacts so the final `Summary`, `Artifacts`, and `Handoff` are accurate. |
+| Resolve conflicting state | Prefer newer entries unless they explicitly say they are uncertain. |
 
+## Resume discipline
+
+Entries must prevent the next session from having to `re-derive` the current state. Include enough concrete evidence, artifact names, and blockers to make that possible.
 ## Principles
 
-- The journal is a cairn — stones left so the next traveler finds
-  the way. Every entry is a stone.
-- Honesty over completeness. "I got stuck on X and don't know why"
-  is more useful than silence.
-- The journal is for the next session, not for the current one.
-  Write for someone who knows nothing about what you just did.
+- The journal is a cairn: every entry is a stone left so the next traveler finds the way.
+- Honesty beats completeness; "I got stuck on X and don't know why" is more useful than silence.
+- The journal is for the next session, not the current one.
+- A vague entry such as "Worked on security scanning" is weak; a useful entry says which repos were scanned, what was found, what was triaged, and what remains.
+
+## Output template
+
+```markdown
+## Desk journal result
+
+**Status:** read | appended | blocked
+**Journal:** `desks/<desk-name>/journal.md`
+**Entry type:** start-of-session | mid-session checkpoint | end-of-session | desk closed
+
+### Entry or latest state
+```markdown
+## <date> — <short summary or Desk closed>
+- **Worked on:** <what was done this session>
+- **Current state:** <where things stand right now>
+- **Next step:** <what the next session should pick up>
+```
+
+### Notes
+- <dead end, artifact, handoff, or none>
+```
+
+## Quality gate
+
+- [ ] The journal path is `desks/<desk-name>/journal.md` and the desk name is not guessed when unavailable.
+- [ ] Start-of-session work reads the most recent entry before summarizing context.
+- [ ] Appended session entries include `Worked on`, `Current state`, and `Next step`.
+- [ ] Desk closure entries include `Summary`, `Artifacts`, and `Handoff`.
+- [ ] Entries are concise but specific enough for a future session to resume without re-deriving state.
+- [ ] Dead ends, blockers, or uncertainty are recorded honestly when relevant.

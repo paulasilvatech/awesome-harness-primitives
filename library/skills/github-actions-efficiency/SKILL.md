@@ -1,36 +1,30 @@
 ---
-name: "github-actions-efficiency"
+name: github-actions-efficiency
 description: >-
-  Audit GitHub Actions workflow efficiency and recommend fixes to reduce CI minutes and costs. Use
-  this skill when the user wants to reduce GitHub Actions runtime, CI cost, or wasted workflow runs;
-  the repo has existing workflows in `.github/workflows/` or explicit GitHub Actions configuration
-  questions; the user asks for caching, concurrency, path filters, matrix reduction, job optimization,
-  or workflow-specific fixes.
+  Audit GitHub Actions workflow efficiency and recommend fixes that reduce CI runtime, runner minutes, and wasted workflow runs. Use when the user asks about caching, concurrency, path filters, matrix reduction, job optimization, workflow cost, or CI baseline design.
 ---
-# GitHub Actions Efficiency
 
-Use this skill as a lean entrypoint for GitHub Actions efficiency work. Inspect the repo, identify the waste source, and load only the reference material needed for the current task.
+# GitHub Actions efficiency
 
-If no workflows exist yet, load [`references/actions.md`](./references/actions.md) and define a baseline before proceeding with the steps below.
+Inspect workflow YAML and recent run evidence, identify the highest CI-minute waste, protect required validation through guardrails, and return up to three ranked fixes with validation and impact.
 
-**If shell or `gh` CLI access is unavailable:** ask the user to paste `.github/workflows/` contents and `gh run list --limit 10` output. If only partial files are provided, note it: "Audit based on provided files only; some insights may be incomplete." Begin responses from files alone with: "**Static-only analysis** (not confirmed with live runs)."
+## When to invoke
 
-## Use This Skill When
+- "Reduce GitHub Actions runtime and cost."
+- "Audit our workflows for wasted CI minutes."
+- "Add caching and concurrency to these workflows."
+- "Narrow path filters or matrix jobs safely."
+- "Create an efficient GitHub Actions baseline."
 
-- The user wants to reduce GitHub Actions runtime, CI cost, or wasted workflow runs.
-- The repo has existing workflows in `.github/workflows/` or explicit GitHub Actions configuration questions.
-- The user asks for caching, concurrency, path filters, matrix reduction, job optimization, or workflow-specific fixes.
-- The user needs help creating a new GitHub Actions workflow or CI baseline from scratch.
+## Prerequisites and context
 
-## Load Only What You Need
+- Use `.github/workflows/` when workflows exist.
+- If no workflows exist, read `references/actions.md` and define a baseline before proceeding.
+- If shell or `gh` CLI access is unavailable, ask for `.github/workflows/` contents and `gh run list --limit 10` output. If only partial files are provided, state: `Static-only analysis (not confirmed with live runs).`
 
-- [`references/actions.md`](./references/actions.md) — audits, job gating, matrix reduction, live validation, and workflow-specific fixes.
-- [`references/reporting.md`](./references/reporting.md) — when the user asks for a before/after efficiency report.
-- [`references/patterns.md`](./references/patterns.md) — full YAML examples when inline audit commands are not enough.
+## Procedure
 
-## Core Workflow
-
-### 1. Measure first
+1. Measure workflow structure and recent run evidence:
 
 ```bash
 rg -n "on:|concurrency:|paths:|paths-ignore:|strategy:|matrix:|cache:" .github/workflows
@@ -39,45 +33,73 @@ run_id=$(gh run list --limit 1 --json databaseId --jq '.[0].databaseId')
 gh run view "$run_id" --log-failed
 ```
 
-Look for: missing dependency caches, missing `concurrency` cancellation, over-broad triggers, duplicate workflow coverage, and expensive jobs that run on every change regardless of scope.
+2. Look for missing dependency caches, missing `concurrency` cancellation, over-broad triggers, duplicate workflow coverage, and expensive jobs that run on every change regardless of scope.
+3. Apply all guardrails before recommending changes.
+4. Rank supported fixes by estimated daily CI minutes saved: per-run savings multiplied by runs per day.
+5. Select all supported candidates, up to a maximum of three.
+6. Validate path-gating and concurrency cancellation with a live test push on a non-protected branch when `gh` access and repo policy allow it.
 
-### 2. Apply guardrails
+## Waste candidates
 
-Check each proposed fix against these rules before recommending it:
+| Candidate | Evidence | Safe fix pattern |
+| --- | --- | --- |
+| Dependency caching | Repeated install steps and no lockfile-based cache. | Add cache keys derived from lockfiles; avoid caching generated build output unless safe. |
+| `concurrency` cancellation | Multiple runs queue on the same branch or PR. | Add group by workflow and ref/PR, then `cancel-in-progress: true` where safe. |
+| Duplicate workflow coverage | Multiple workflows run equivalent tests on the same event. | Remove overlap before merging jobs; keep release and required checks intact. |
+| Trigger narrowing | Docs-only or unrelated changes run full CI. | Add `paths` or `paths-ignore` at workflow or job level with required validation preserved. |
+| Matrix reduction | Matrix legs lack documented version/platform commitment. | Keep documented legs; reduce low-risk event types or run full matrix on scheduled/release events. |
+| Critical-path parallelism | Independent jobs run serially. | Split jobs only when setup overhead does not erase wall-clock gains. |
 
-1. Does not hide required validation — drop any fix that removes release, schema, migration, or shared-library checks.
-2. Does not reduce parallelism without justification — drop unless the user prioritised cost over latency *and* the new critical path stays within 1.25× the original.
-3. Preserves only documented matrix legs — drop matrix legs with no explicit version or platform commitment.
-4. Write-back jobs use opt-in triggers — flag (do not drop) formatter or bot jobs that run automatically; recommend an opt-in trigger instead.
-5. Repo changes stay separate from org settings — split any fix that mixes repo-editable YAML with org-level or GitHub-account settings into two distinct recommendations.
+## Guardrails
 
-### 3. Select the top 3 fixes
+- Do not hide required validation such as release, schema, migration, or shared-library checks.
+- Do not reduce parallelism unless the user prioritizes cost over latency and the new critical path stays within 1.25× the original.
+- Preserve only documented matrix legs; remove unsupported legs only with evidence.
+- Formatter or bot write-back jobs should use opt-in triggers rather than automatic write-back on every run.
+- Split repo-editable YAML recommendations from org-level or GitHub-account settings.
+- Treat unexpected live behavior as a real bug even when YAML appears correct.
 
-From the six candidates below, keep only those supported by audit evidence from step 1 *and* passing all guardrails from step 2. Rank survivors by estimated daily CI minutes saved (per-run savings × runs per day). Select all candidates that meet both criteria, up to a maximum of 3.
+## Progressive disclosure and bundled resources
 
-1. Add dependency caching with lockfile-based keys
-2. Add or correct `concurrency` cancellation
-3. Remove duplicate workflow coverage before merging jobs
-4. Narrow workflow or job triggers safely
-5. Reduce matrix breadth to match risk and event type
-6. Parallelize independent jobs on the critical path
+- `references/actions.md`: audits, job gating, matrix reduction, live validation, and workflow-specific fixes.
+- `references/reporting.md`: before/after efficiency report format and calculations.
+- `references/patterns.md`: full YAML examples when inline commands are not enough.
+- `references/review-rubric.md`: use when reviewing completed efficiency work.
 
-### 4. Verify
+## Output template
 
-- If `gh` CLI access is available, validate path-gating and concurrency cancellation with a live test push on a non-protected branch.
-- If live validation is not possible, state that explicitly in the output.
-- Treat unexpected live behavior as a real bug even when the YAML looks correct.
+```markdown
+## GitHub Actions efficiency result
 
-## Required Output
+**Status:** proven live | static-only | blocked
+**Scope:** `.github/workflows/<workflow>.yml`
 
-1. **Waste sources** — top cost or latency drivers found in step 1
-2. **Proposed fixes** — top 3 (or all remaining) with supporting audit evidence
-3. **Validation** — what was proven live, what was checked locally only, and any remaining risk
-4. **Impact** — expected savings vs. measured savings; separate PR wall-clock time from total runner time
+### Waste sources
+| Rank | Source | Evidence | Estimated daily CI minutes wasted |
+| --- | --- | --- | --- |
+| 1 | <driver> | <workflow line, run log, or assumption> | <minutes> |
 
-## References
+### Proposed fixes
+| Rank | Fix | Evidence | Estimated daily CI minutes saved | Risk |
+| --- | --- | --- | --- | --- |
+| 1 | <top fix> | <why supported> | <minutes> | <remaining risk> |
 
-- [`references/actions.md`](./references/actions.md)
-- [`references/reporting.md`](./references/reporting.md)
-- [`references/patterns.md`](./references/patterns.md)
-- [`references/review-rubric.md`](./references/review-rubric.md) — load when reviewing completed efficiency work
+### Validation
+- Workflow syntax/static review: pass | fail
+- Live test push: pass | fail | not run, <reason>
+- Path gating: verified | unverified, <reason>
+- Concurrency cancellation: verified | unverified, <reason>
+
+### Impact
+- PR wall-clock time: <expected or measured>
+- Total runner time: <expected or measured>
+```
+
+## Quality gate
+
+- [ ] `.github/workflows/` was inspected or its absence was handled with `references/actions.md`.
+- [ ] `rg`, `gh run list --limit 10`, and `gh run view "$run_id" --log-failed` were run or the static-only limitation is stated.
+- [ ] Every proposed fix has evidence, passes all guardrails, and preserves required validation.
+- [ ] No more than three fixes are recommended, ranked by estimated daily CI minutes saved.
+- [ ] Validation separates live proof from local/static review and remaining risk.
+- [ ] Impact separates PR wall-clock time from total runner time.

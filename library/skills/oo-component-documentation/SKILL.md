@@ -1,76 +1,133 @@
 ---
-name: "oo-component-documentation"
+name: oo-component-documentation
 description: >-
-  Create or update standardized object-oriented component documentation using a shared template plus
-  mode-specific guidance for new and existing docs. Use this skill when the user asks for determine
-  the mode first.
+  Create or update standardized object-oriented component documentation from source code or existing Markdown docs using create-mode and update-mode guidance. Use when the user asks to document a class, component, folder, public API, architecture relationships, design patterns, or refresh existing OO component documentation.
 ---
-# OO Component Documentation
 
-Create new documentation for an object-oriented component or update an existing component documentation file by analyzing the current implementation.
+# OO component documentation
 
-## Determine the mode first
+Analyze object-oriented source code or an existing component document, choose create or update mode, then produce Markdown documentation grounded in the implementation with interfaces, dependencies, diagrams, examples, quality attributes, and explicit gaps.
 
-Choose the workflow before writing anything:
+## When to invoke
 
-1. Use **update mode** when the user provides an existing documentation Markdown file, points to a docs path, or explicitly asks to refresh or revise existing documentation. Follow [references/update-mode.md](references/update-mode.md).
-2. Use **create mode** when the user provides a source file or folder, points to a component path, or asks to generate documentation from code. Follow [references/create-mode.md](references/create-mode.md).
-3. If both code and an existing documentation file are provided, treat the existing documentation file as the output target and use the current source code as the source of truth.
-4. If the request is ambiguous, infer the mode from the path type whenever possible: existing Markdown documentation file means update mode; source/component path means create mode.
+- "Generate documentation for this component."
+- "Refresh the existing Markdown docs from the current code."
+- "Document this class hierarchy and public API."
+- "Create OO component documentation for this folder."
+- "Update component diagrams and examples to match implementation."
+
+## Prerequisites and context
+
+- The user must provide or imply a source file, component folder, or existing documentation Markdown file.
+- Use `assets/documentation-template.md` as the canonical section checklist and baseline structure.
+- Use `references/create-mode.md` for new documentation and `references/update-mode.md` for revising existing documentation.
+
+## Procedure
+
+1. Determine the mode before writing anything.
+2. Inspect the component implementation and related files needed to understand the public surface, internal structure, dependencies, configuration, tests, and runtime boundaries.
+3. Read `assets/documentation-template.md` and use it as the shared scaffold.
+4. Apply `references/create-mode.md` or `references/update-mode.md` based on the selected mode.
+5. Produce or revise Markdown so diagrams, examples, interfaces, dependencies, and quality attributes reflect current implementation.
+6. Call out unknowns, gaps, and unsupported assumptions instead of inventing behavior.
+
+## Mode selection
+
+| Evidence | Mode | Output target |
+| --- | --- | --- |
+| User provides an existing Markdown documentation file, docs path, or asks to refresh/revise docs | Update mode | The existing documentation file. |
+| User provides a source file, component folder, class, or asks to generate docs from code | Create mode | A new Markdown document following the template. |
+| User provides both code and existing documentation | Update mode | Existing documentation is the target; current source code is the source of truth. |
+| Request is ambiguous | Infer from path type | Existing `.md` means update mode; source/component path means create mode. |
 
 ## Documentation standards
 
-- DOC-001: Follow C4 Model documentation levels (Context, Containers, Components, Code)
-- DOC-002: Align with Arc42 software architecture documentation template
-- DOC-003: Comply with IEEE 1016 Software Design Description standard
-- DOC-004: Use Agile Documentation principles (just enough documentation that adds value)
-- DOC-005: Target developers and maintainers as the primary audience
+| ID | Standard | Apply as |
+| --- | --- | --- |
+| DOC-001 | C4 Model | Document Context, Containers, Components, and Code at the level supported by the input. |
+| DOC-002 | Arc42 | Cover architecture decisions, building blocks, runtime view, quality attributes, and risks without padding. |
+| DOC-003 | IEEE 1016 Software Design Description | Make design entities, interfaces, data, and rationale explicit. |
+| DOC-004 | Agile Documentation | Keep just enough documentation that adds value to developers and maintainers. |
+| DOC-005 | Developer-maintainer audience | Prefer implementation-grounded API, dependency, and maintenance detail over marketing prose. |
 
-## Shared analysis guidance
+## Analysis checklist
 
-- ANA-001: Determine the primary component boundary and whether the input represents a folder, file, or existing documentation target
-- ANA-002: Examine source code files for class structures, inheritance, composition, and interfaces
-- ANA-003: Identify design patterns, architectural decisions, and integration points
-- ANA-004: Document or refresh public APIs, interfaces, dependencies, and usage patterns
-- ANA-005: Capture method parameters, return values, asynchronous behavior, exceptions, and lifecycle concerns
-- ANA-006: Assess performance, security, reliability, maintainability, and extensibility characteristics
-- ANA-007: Infer data flow, collaboration patterns, and relationships with surrounding components
-- ANA-008: Keep the documentation grounded in the implementation; avoid inventing behavior that is not supported by the code
+| ID | Inspect | Capture |
+| --- | --- | --- |
+| ANA-001 | Component boundary | Whether the input is a folder, file, package, class, or documentation target. |
+| ANA-002 | Class structures | Inheritance, composition, interfaces, abstract classes, and concrete implementations. |
+| ANA-003 | Design patterns | Architectural decisions, dependency inversion, factories, adapters, observers, strategies, or custom patterns. |
+| ANA-004 | Public APIs | Interfaces, methods, constructors, events, properties, usage patterns, and integration points. |
+| ANA-005 | Method contracts | Parameters, return values, async behavior, exceptions, lifecycle, disposal, and concurrency. |
+| ANA-006 | Quality attributes | Performance, security, reliability, maintainability, extensibility, and testability characteristics. |
+| ANA-007 | Data flow | Collaboration patterns, input/output ownership, state transitions, and surrounding components. |
+| ANA-008 | Evidence discipline | Ground every claim in code, project structure, configuration, tests, or clearly stated assumptions. |
 
-## Shared output requirements
+## Language-specific focus
 
-- Use [assets/documentation-template.md](assets/documentation-template.md) as the canonical section checklist and baseline structure.
-- Keep the output in Markdown with a clear heading hierarchy, tables where useful, code blocks for examples, and Mermaid diagrams when architecture relationships need to be visualized.
-- Make examples and interface descriptions match the current implementation instead of generic placeholders.
-- Include only information that can be supported by the code, project structure, configuration, or clearly stated assumptions.
-- When source coverage is incomplete, document the limitation explicitly instead of guessing.
+| ID | Language | Emphasize |
+| --- | --- | --- |
+| LNG-001 | C#/.NET | `async`/`await`, dependency injection, configuration, disposal, options patterns. |
+| LNG-002 | Java | Spring framework, annotations, exception handling, packaging, dependency injection. |
+| LNG-003 | TypeScript/JavaScript | modules, async patterns, types, npm dependencies, runtime boundaries. |
+| LNG-004 | Python | packages, virtual environments, type hints, testing, dependency management. |
 
-## Language-specific optimizations
+## Mode and language terminology
 
-- LNG-001: **C#/.NET** - async/await, dependency injection, configuration, disposal, options patterns
-- LNG-002: **Java** - Spring framework, annotations, exception handling, packaging, dependency injection
-- LNG-003: **TypeScript/JavaScript** - modules, async patterns, types, npm dependencies, runtime boundaries
-- LNG-004: **Python** - packages, virtual environments, type hints, testing, dependency management
-
+Keep `mode-specific` create/update rules separate. For **TypeScript/JavaScript** and `TypeScript/JavaScript**` legacy wording, inspect module boundaries, runtime boundaries, and `async/await` behavior. If the code uses a `non-standard` architecture, describe it directly rather than forcing a standard label.
 ## Error handling
 
-- ERR-001: If the path does not exist, explain what path was expected and whether the skill needs a source path or an existing documentation file
-- ERR-002: If no relevant source files are found, document the gap and suggest the likely locations to inspect next
-- ERR-003: If the documentation target cannot be inferred from the request, state the ambiguity and ask for the missing path only when inference is not possible
-- ERR-004: If the code uses non-standard architectural patterns, document the custom approach rather than forcing it into a generic pattern
-- ERR-005: If source access is incomplete, continue with available evidence and clearly call out any unsupported sections
+| ID | Condition | Response |
+| --- | --- | --- |
+| ERR-001 | Path does not exist | Explain the expected path and whether a source path or documentation file is needed. |
+| ERR-002 | No relevant source files found | Document the gap and suggest likely locations to inspect next. |
+| ERR-003 | Documentation target cannot be inferred | State the ambiguity and ask for the missing path only when inference is impossible. |
+| ERR-004 | Non-standard architecture | Document the custom approach instead of forcing a generic pattern. |
+| ERR-005 | Incomplete source access | Continue with available evidence and mark unsupported sections clearly. |
 
-## Workflow
+## Progressive disclosure and bundled resources
 
-1. Determine whether the task is create mode or update mode.
-2. Inspect the component implementation and any related files needed to understand its public surface area and internal structure.
-3. Use [assets/documentation-template.md](assets/documentation-template.md) as the shared documentation scaffold.
-4. Apply the mode-specific rules in [references/create-mode.md](references/create-mode.md) or [references/update-mode.md](references/update-mode.md).
-5. Produce or revise the documentation so that diagrams, examples, interfaces, dependencies, and quality attributes reflect the current implementation.
+| Resource | Use when | Purpose |
+| --- | --- | --- |
+| `assets/documentation-template.md` | Every create or update task | Canonical section checklist and baseline Markdown structure. |
+| `references/create-mode.md` | Creating new documentation from source | Mode-specific rules for source-driven documentation. |
+| `references/update-mode.md` | Updating existing documentation | Mode-specific rules for preserving, correcting, and refreshing existing docs. |
 
-## Completion criteria
+## Gotchas
 
-- The documentation clearly identifies the component purpose, architecture, interfaces, implementation details, usage patterns, quality attributes, and references.
-- Front matter fields are accurate for the selected mode.
-- Examples and diagrams match the implementation.
-- Any unknowns, gaps, or assumptions are explicitly called out.
+- **Determine the mode first**: create-mode and update-mode choose different output targets and preservation rules.
+- **Do not invent APIs**: examples and interface descriptions must match current implementation.
+- **Use Mermaid only when it clarifies relationships**: diagrams should reflect real dependencies and flows.
+- **Document limitations explicitly**: incomplete source coverage is a finding, not permission to guess.
+
+## Output template
+
+```markdown
+## OO component documentation result
+
+**Status:** created | updated | partial | blocked
+**Mode:** create | update
+**Source:** `<source file or folder>`
+**Target:** `<documentation file>`
+
+### Coverage
+| Area | Evidence | Notes |
+| --- | --- | --- |
+| Component boundary | `<files/classes inspected>` | <summary> |
+| Public APIs | `<interfaces/methods>` | <summary> |
+| Dependencies | `<dependencies/config>` | <summary> |
+| Quality attributes | `<evidence>` | <summary> |
+
+### Gaps
+- <unsupported section, missing source, or none>
+```
+
+## Quality gate
+
+- [ ] Create mode or update mode was selected before writing.
+- [ ] `assets/documentation-template.md` was used as the section checklist.
+- [ ] The relevant mode file, `references/create-mode.md` or `references/update-mode.md`, was followed.
+- [ ] Public APIs, interfaces, dependencies, examples, diagrams, and quality attributes are grounded in current code.
+- [ ] DOC-001 through DOC-005 and ANA-001 through ANA-008 were considered.
+- [ ] Language-specific concerns LNG-001 through LNG-004 were applied when relevant.
+- [ ] ERR-001 through ERR-005 conditions were handled honestly if encountered.

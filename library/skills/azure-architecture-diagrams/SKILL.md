@@ -1,99 +1,169 @@
 ---
 name: azure-architecture-diagrams
-description: "Produce complete, professional architecture diagrams that use the official Azure, Microsoft, and GitHub (Octicons) icon sets, output as editable draw.io (.drawio) files and exported SVG. Covers the official icon catalogs and their terms of use, the draw.io mxGraph file format, layout and connector conventions, and a bundled draw.io MCP server (Python FastMCP) that creates and edits .drawio diagrams programmatically (add nodes with official icons, connect edges, group, and lay out). Use whenever the deliverable includes an architecture diagram, a system context, a component or deployment diagram, or any cloud diagram that must use official vendor icons. Pairs with ai-native-engineer and agentic-architecture-patterns, and complements svg-professional for hand-crafted SVG."
+description: >-
+  Produce professional Azure, Microsoft, and GitHub architecture diagrams as editable draw.io source and exported SVG. Use when the user asks for an architecture diagram, system context diagram, component or deployment view, AI-native platform diagram, official vendor icons, mxGraph XML, or draw.io MCP-based diagram generation.
 argument-hint: "what to diagram, for example an agentic platform on Foundry with Redis, APIM, and API Center"
 ---
 
-# Azure Architecture Diagrams
+# Azure architecture diagrams
 
-Build complete architecture diagrams with the **official Azure, Microsoft, and GitHub icons**, delivered as editable `.drawio` files plus exported SVG. This skill provides the icon catalogs, the file format, the layout conventions, and a draw.io MCP server that creates and edits diagrams programmatically.
+Build complete architecture diagrams from a service map or written design, using official Azure, Microsoft, and GitHub icons, consistent layout, editable `.drawio` source, and exported SVG that can be embedded in documentation or decks.
 
-> Respect icon terms of use. Azure and Microsoft icons may be used to depict their products in architecture diagrams and must not be modified or re-colored. GitHub Octicons are MIT licensed; the GitHub logos follow the GitHub brand guidelines. See [references/icon-catalogs.md](references/icon-catalogs.md).
+## When to invoke
 
-## What this skill produces
+- "Create an Azure architecture diagram for this system."
+- "Generate a draw.io component and deployment diagram with official icons."
+- "Show the system context for this AI platform."
+- "Export an editable .drawio and SVG for this cloud architecture."
+- "Use the Contoso MCP registry diagram as a baseline."
 
-- **`.drawio` source** (editable in draw.io / diagrams.net and the VS Code extension).
-- **Exported SVG** for embedding in Markdown and the paulasilva-ms documents and decks.
-- Diagrams that use official vendor shapes, with consistent layout, grouping, and connector routing.
+## Inputs
 
-## Professional baseline from assets
+Use `$ARGUMENTS` as the diagram brief: system purpose, audience, services, trust boundaries, regions, flows, and required output formats. If `$ARGUMENTS` is thin, infer only from provided repository or design context; do not invent products, regions, subscriptions, or compliance boundaries.
 
-Use the bundled showcase as the visual quality baseline for enterprise diagrams that mix technical and executive audiences. Do not force every architecture into one layout; choose the diagram shape that answers the question.
+## Prerequisites and context
 
-- Showcase gallery: [assets/showcase-diagrams.drawio](assets/showcase-diagrams.drawio)
-- Selection guide: [references/diagram-showcase.md](references/diagram-showcase.md)
+- Respect icon terms of use. Azure and Microsoft icons may be used to depict their products in architecture diagrams and must not be modified or re-colored.
+- GitHub Octicons are MIT licensed; GitHub marks and wordmarks must follow GitHub brand guidelines.
+- Use draw.io / diagrams.net-compatible `mxGraphModel` XML for `.drawio` source.
+- Use `scripts/drawio_mcp_server.py` for programmatic creation when an MCP host can register the bundled Python FastMCP server; otherwise hand-author mxGraph XML.
+- Keep editable source under `output/` when this skill produces files.
 
-The gallery includes system context, component map, deployment topology, critical path flow, routing decision, and enterprise registry plane examples. Use these as starting points, then adapt the service map and icon set.
+## Diagram deliverables
 
-For dense enterprise registry diagrams, use the bundled Contoso MCP registry example as the quality baseline:
+| Deliverable | Required content | Acceptance rule |
+| --- | --- | --- |
+| `.drawio` source | Valid draw.io XML with named pages, grouped boundaries, official icon styles, and routed connectors. | Opens in draw.io / diagrams.net without broken shapes. |
+| Exported SVG | Same diagram exported for Markdown, docs, and paulasilva-ms documents and decks. | Embeds cleanly and preserves text legibility. |
+| Narrative labels | One title, one subtitle, short node names, edge labels for protocol or data type. | Executive-readable at normal document size. |
+| Icon attribution | Official Azure, Microsoft, and GitHub icons only for vendor products. | No recolored product marks and no generic substitute when an official icon exists. |
 
-- Source baseline: [assets/example-agentic.drawio](assets/example-agentic.drawio)
-- Production-ready baseline copy: [output/contoso-mcp-registry-production-baseline.drawio](output/contoso-mcp-registry-production-baseline.drawio)
+## Diagram set for AI-native systems
 
-When following this baseline, keep these style contracts:
+Produce the smallest set that answers the user's question. Default to these views for broad platform requests:
 
-- Horizontal planes (client, private access, discovery, use, governance) as clear grouped boundaries.
-- Orthogonal connector routing with numbered callouts where sequence matters.
-- Official Azure, Microsoft, and GitHub icons without recoloring product marks.
-- High-contrast typography and short, executive-readable labels per node.
-- One narrative title and one subtitle at the top, then protocol labels on edges.
+| View | Use when | Required elements |
+| --- | --- | --- |
+| System context | The audience needs actors and boundaries. | Users, GitHub Copilot, GitHub Actions, external systems, and the system boundary. |
+| Component map | The audience needs runtime internals. | Agent runtime, model router, cache and memory, retrieval, tools and MCP, gateway, guardrails, observability. |
+| Deployment topology | The audience needs infrastructure shape. | Subscriptions, resource groups, VNets, private endpoints, regions, and managed services. |
+| Sequence or data/control flow | A critical path must be explained. | One agent run, cache hit and miss, approval, tool call, and observable result. |
+| Decision or routing flow | A policy choice must be justified. | Risk, cost, data sensitivity, approval need, model class, fallback, and outcome. |
+| Enterprise plane view | Multi-plane governance must fit on one canvas. | Access, discovery, use, governance, and shared registry/control planes. |
 
-## Diagram set for an AI-native system
+## Professional baseline
 
-Produce these as the default set (add or remove based on the audience and the question):
+Use the bundled showcase as the quality bar, not as a rigid template.
 
-1. **System context**: actors (users, GitHub Copilot, GitHub Actions) and the system boundary.
-2. **Component**: agent runtime, model router, cache and memory, retrieval, tools and MCP, gateway, guardrails, observability.
-3. **Deployment**: subscriptions, resource groups, VNets, private endpoints, regions.
-4. **Sequence or data and control flow**: the critical path of one agent run, including cache hit and miss.
-5. **Decision or routing flow**: routing by risk, cost, data sensitivity, approval need, model class, or fallback.
-6. **Enterprise plane view**: only for multi-plane architectures where access, discovery, use, and governance must fit on one canvas.
+| Resource | Use it for |
+| --- | --- |
+| `assets/showcase-diagrams.drawio` | Gallery of system context, component map, deployment topology, critical path flow, routing decision, and enterprise registry plane examples. |
+| `references/diagram-showcase.md` | Selection guide for choosing the right diagram shape. |
+| `assets/example-agentic.drawio` | Dense enterprise registry baseline. |
+| `output/contoso-mcp-registry-production-baseline.drawio` | Production-ready baseline copy for comparison. |
 
-## Two ways to build
+For the Contoso MCP registry baseline, preserve horizontal planes for client, private access, discovery, use, and governance; use orthogonal connector routing; add numbered callouts only where sequence matters; keep official Azure, Microsoft, and GitHub icons unchanged; and use one narrative title plus one subtitle.
 
-### A. Draw.io MCP server (preferred, programmatic)
+## Build paths
 
-A bundled Python MCP server creates and edits `.drawio` files through tools: create a diagram, add a node with an official icon, connect nodes, group, auto-lay out, and export. Register it with your MCP host and drive it from the agent. See [references/drawio-mcp.md](references/drawio-mcp.md) and the server at [scripts/drawio_mcp_server.py](scripts/drawio_mcp_server.py).
+### Draw.io MCP server
 
-### B. Hand-authored mxGraph XML
+Prefer the bundled MCP server for repeatable, programmatic work. It creates diagrams, adds nodes with official icons, connects edges, groups boundaries, applies layout, and exports files. Read `references/drawio-mcp.md` before registering or driving `scripts/drawio_mcp_server.py`.
 
-For precise control, write the `.drawio` mxGraph XML directly using the icon styles. See [references/drawio-format.md](references/drawio-format.md).
+### Hand-authored mxGraph XML
 
-For hand-crafted, non-icon SVG (quadrants, charts, bespoke infographics), use the `svg-professional` skill instead.
-
-## Icon sources (official only)
-
-- **Azure architecture icons**: the official downloadable SVG set. draw.io also ships an Azure shape library.
-- **Microsoft product icons**: official sets for Microsoft 365, Entra, Power Platform, and more.
-- **GitHub Octicons and logos**: Octicons (MIT) for GitHub UI marks; the GitHub mark and wordmark per brand guidelines.
-
-Catalog details, download locations, and the draw.io shape style strings are in [references/icon-catalogs.md](references/icon-catalogs.md).
+Use hand-authored XML when precise control matters or no MCP host is available. Follow `references/drawio-format.md`; keep pages valid `mxGraphModel`; use draw.io style strings from `references/icon-catalogs.md`; keep geometry, containers, and connectors explicit.
 
 ## Layout conventions
 
-- Left to right or top to bottom flow; keep the primary path on one axis.
-- Group by boundary (subscription, resource group, VNet, trust zone) with labeled containers.
-- Orthogonal connectors, no crossings where avoidable, labels on edges for protocols.
-- One accent color per boundary; do not re-color official product icons.
-- Apply the paulasilva-ms palette to containers, labels, and connectors, never to the vendor icons themselves.
+| Area | Rule |
+| --- | --- |
+| Flow | Use left-to-right or top-to-bottom flow; keep the primary path on one axis. |
+| Boundaries | Group by subscription, resource group, VNet, trust zone, plane, or region. |
+| Connectors | Use orthogonal connectors, avoid crossings, and label edges with protocol or intent. |
+| Color | Apply the paulasilva-ms palette to containers, labels, and connectors, never to vendor icons. |
+| Density | Prefer short labels and grouped zones over crowded explanatory text inside nodes. |
+| Sequence | Use numbered callouts only when the order changes the interpretation. |
 
-## Workflow
+## Procedure
 
-1. Take the service map from the design (from `ai-native-engineer` or `agentic-architecture-patterns`).
-2. Choose the diagram types to produce using [references/diagram-showcase.md](references/diagram-showcase.md).
-3. Build with the draw.io MCP (preferred) or hand-authored XML, placing official icons for each service.
-4. Lay out, group by boundary, route connectors, and label.
-5. Export SVG and embed it; keep the `.drawio` source under `output/`.
-6. Run `scripts/validate_drawio.py` on the `.drawio` source, then verify the diagram opens and every icon resolves.
-7. Walk `references/first-run-checklist.md` before delivery.
-8. For enterprise registry layouts, compare against the Contoso baseline in `assets/example-agentic.drawio` before final export.
+1. Inventory the actors, systems, services, data stores, trust boundaries, deployment units, and critical flows from the user brief or source material.
+2. Choose the diagram types using `references/diagram-showcase.md`; remove views that do not answer the audience's question.
+3. Choose the build path: draw.io MCP server for repeatable generation, or hand-authored mxGraph XML for exact control.
+4. Place official icons for each service from `references/icon-catalogs.md`; use generic shapes only for non-vendor concepts.
+5. Lay out the diagram, group boundaries, route connectors, label protocols, and add a narrative title/subtitle.
+6. Save `.drawio` source under `output/`, export SVG, and keep the source editable.
+7. Run `scripts/validate_drawio.py` on the `.drawio` source, verify it opens, and walk `references/first-run-checklist.md`.
+8. For enterprise registry layouts, compare against `assets/example-agentic.drawio` and `output/contoso-mcp-registry-production-baseline.drawio` before delivery.
+
+## Limits
+
+- Use `svg-professional` for hand-crafted, non-icon SVG such as quadrants, charts, and bespoke infographics.
+- Do not use this skill to invent architecture. If the service map is missing, produce a clearly marked draft with assumptions.
+- Do not recolor, crop, distort, or alter official product icons.
+
+## Progressive disclosure and bundled resources
+
+- `references/icon-catalogs.md`: official icon sources, terms of use, download locations, and draw.io style strings.
+- `references/drawio-format.md`: draw.io mxGraph file format for hand-authored XML.
+- `references/drawio-mcp.md`: bundled draw.io MCP server usage.
+- `references/diagram-showcase.md`: diagram type selection guide.
+- `references/first-run-checklist.md`: final delivery checklist.
+- `references/example-architecture.md`: example architecture source material.
+- `scripts/drawio_mcp_server.py`: Python FastMCP diagram server.
+- `scripts/validate_drawio.py`: draw.io validation script.
+- `scripts/build_showcase_drawio.py`: showcase builder.
+- `assets/showcase-diagrams.drawio` and `assets/example-agentic.drawio`: editable baselines.
+
+## Related primitives
+
+| Name | Type | Use it when |
+| --- | --- | --- |
+| `ai-native-engineer` | skill | You need to design the AI-native service map before diagramming it. |
+| `agentic-architecture-patterns` | skill | You need agent architecture patterns before choosing diagram components. |
+| `svg-professional` | skill | You need bespoke SVG rather than official-icon architecture diagrams. |
+
+## Terminology preservation
+
+Use `auto-lay` behavior only through the MCP server when it can preserve boundaries. Keep labels `executive-readable`, represent `multi-plane` enterprise views clearly, and never `re-color` official icons.
+
+## Output template
+
+```markdown
+## Architecture diagram package - <system name>
+
+**Status:** complete | draft | blocked
+**Audience:** <executive | engineering | operations | mixed>
+**Source files:**
+- `output/<diagram>.drawio`
+- `output/<diagram>.svg`
+
+| View | Purpose | File | Validation |
+| --- | --- | --- | --- |
+| System context | <why included> | `output/<name>.drawio` | opens in draw.io; SVG exported |
+| Component | <why included> | `output/<name>.drawio` | official icons verified |
+
+### Assumptions
+- <assumption or "none">
+
+### Validation
+- `scripts/validate_drawio.py output/<diagram>.drawio`: pass | fail
+- Draw.io open check: pass | fail
+- Official icon and no-recolor check: pass | fail
+```
+
+## Quality gate
+
+- [ ] The diagram package includes editable `.drawio` source and exported SVG unless explicitly blocked.
+- [ ] Every vendor product uses an official Azure, Microsoft, or GitHub icon where one exists.
+- [ ] Official product icons are not recolored, distorted, or modified.
+- [ ] Boundaries, regions, planes, and trust zones are labeled.
+- [ ] Connectors are routed orthogonally, labeled, and avoid unnecessary crossings.
+- [ ] The selected views match the user's audience and question.
+- [ ] `scripts/validate_drawio.py` was run or a concrete blocker is reported.
+- [ ] Bundled references used above exist and are read only when needed.
 
 ## References
 
-- [Icon catalogs and terms of use](references/icon-catalogs.md)
-- [Draw.io mxGraph file format](references/drawio-format.md)
-- [Draw.io MCP server usage](references/drawio-mcp.md)
-- [Diagram showcase and selection guide](references/diagram-showcase.md)
-- [First-run checklist](references/first-run-checklist.md)
 - [Azure architecture icons](https://learn.microsoft.com/azure/architecture/icons/)
 - [GitHub Octicons](https://primer.style/octicons/)

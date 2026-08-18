@@ -1,99 +1,139 @@
 ---
-name: "image-annotations"
+name: image-annotations
 description: >-
-  Annotate screenshots, diagrams, and images with callout rectangles, arrows, labels, and color-coded
-  highlights using PIL. Use this skill when you need to; highlight a specific area in a screenshot for
-  a PR description; annotate before/after images to show what changed.
+  Annotate screenshots, diagrams, and images with PIL/Pillow callout rectangles, arrows, labels, highlights, and GIF overlays. Use when the user needs to highlight a PR screenshot, mark a before/after change, call out a diagram region, or create annotated demo frames.
 ---
-# Image Annotations
 
-Add visual callouts to any image — screenshots, diagrams, architecture docs, demo frames — using PIL/Pillow. Highlights what changed or what to look at, so reviewers don't have to guess.
+# Image annotations
 
-## When to Use This Skill
+Add precise visual callouts to screenshots, diagrams, and demo frames by drawing rounded rectangles, leader lines, and short labels with consistent colors, padding, and typography.
 
-Use this skill when you need to:
+## When to invoke
 
-- Highlight a specific area in a screenshot for a PR description
-- Annotate before/after images to show what changed
-- Add labels and callouts to diagrams or architecture images
-- Create annotated frames for animated GIF demos
+- "Highlight this area in a screenshot for my PR."
+- "Annotate the before and after images."
+- "Add labels and arrows to this architecture diagram."
+- "Create annotated frames for a GIF demo."
+- "Mark what changed in this UI image."
 
-## Prerequisites
+## Prerequisites and context
+
+Install Pillow only if the project environment does not already provide it:
 
 ```bash
 pip install Pillow -q
 ```
 
-## Color Rules
+Check `Image.open(path).size` before placing annotations. HiDPI screenshots are larger than they appear; 150% display scaling means coordinates may be 1.5 times CSS pixel dimensions.
 
-- **Red (`#E63946`)** — only for "bad" / "removed" things (e.g., circling a bug being fixed)
-- **Yellowish-orange (`#FF9F1C`)** — for neutral highlights ("look here", "new feature", etc.)
-- Never use red just because it's eye-catching — red = bad/removed
+## Annotation style rules
 
-## Font
+| Element | Rule | Concrete value |
+| --- | --- | --- |
+| Bad or removed item | Use red only for defects, removals, or negative examples. | `#E63946` |
+| Neutral highlight | Use yellowish-orange for "look here", additions, and feature callouts. | `#FF9F1C` |
+| Shape | Prefer rounded rectangles over circles or ellipses. | `draw.rounded_rectangle(..., radius=14, outline=color, width=5)` |
+| Padding | Pad the target content so the outline does not touch it. | `18px` |
+| Leader line | Keep close to the target; same thickness as the rectangle. | `25-35px` preferred, `width=5` |
+| Label length | Use short labels. | 1-3 words when possible |
+| Text stroke | Use same-color stroke for body. | `stroke_width=1`, `stroke_fill=color` |
+| White stroke | Do not use it. | It creates a bad glow effect. |
 
-- Use **Ink Free** (`C:/Windows/Fonts/Inkfree.ttf`) for a handwritten look on Windows
-- On Linux/macOS, fall back to `ImageFont.load_default()`
-- Size **36** for annotations on ~1400px-wide images
-- `stroke_width=1` with `stroke_fill=<same color as fill>` — gives body without being too thick
-- Do NOT use white stroke — looks like a bad glow effect
+## Font and sizing
 
-## Shapes
+| Platform | Font rule |
+| --- | --- |
+| Windows | Prefer Ink Free at `C:/Windows/Fonts/Inkfree.ttf` for a handwritten look. |
+| Linux/macOS | Fall back to `ImageFont.load_default()` unless the project provides a better font. |
+| Around 1400px-wide images | Use size `36` for annotation labels. |
+| Markdown display | Take screenshots at native 1x and control display size with HTML such as `<img width="300">`. |
 
-- Prefer **rounded rectangles** over circles/ellipses — less pixelation at edges
-- `draw.rounded_rectangle([x1, y1, x2, y2], radius=14, outline=color, width=5)`
-- **Padding 18px** around the target content
+Never resize screenshots with PIL just to fit Markdown; resizing creates artifacts and makes annotation coordinates harder to verify.
 
-## Reference Snippet
+## Reference implementation
 
 ```python
 from PIL import Image, ImageDraw, ImageFont
 
-# Setup
-font = ImageFont.truetype('C:/Windows/Fonts/Inkfree.ttf', 36)  # or load_default()
-color = '#FF9F1C'  # orange for highlights
+font = ImageFont.truetype('C:/Windows/Fonts/Inkfree.ttf', 36)  # or ImageFont.load_default()
+color = '#FF9F1C'
 stroke = 5
 pad = 18
 
 img = Image.open('screenshot.png')
 draw = ImageDraw.Draw(img)
 
+# Inspect before placing callouts: img.size
 # Rounded rect with padding
 draw.rounded_rectangle(
     [x1 - pad, y1 - pad, x2 + pad, y2 + pad],
     radius=14, outline=color, width=stroke
 )
 
-# Leader line (same thickness as rect)
+# Leader line, same thickness as rect
+cy = (y1 + y2) // 2
 draw.line([x2 + pad, cy, x2 + pad + 40, cy - 30], fill=color, width=stroke)
 
-# Label — same-color stroke for body, NO white stroke
+# Label: same-color stroke, no white glow
+_draw_label_at = (x2 + pad + 45, cy - 60)
 draw.text(
-    (x2 + pad + 45, cy - 60), 'label text',
+    _draw_label_at, 'label text',
     fill=color, font=font, stroke_width=1, stroke_fill=color
 )
 
 img.save('annotated.png')
 ```
 
-## Bundled Resources
+## Placement guidelines
 
-- [Image annotation scripts and media workflows](references/annotation-script-and-media.md) — For implementing scripted annotations, image diffs, or GIF overlays, open this code-heavy reference.
+1. Use consistent thickness for rectangles, lines, and visual text weight; `5px` is a good default.
+2. Place labels close to the target with short leader lines.
+3. Allow labels to overlap content only when the same-color stroke keeps them legible.
+4. Use `debug=True` or an equivalent preview mode for the first annotation on a new image.
+5. Show the result locally before uploading to a PR or embedding in a document.
+6. Keep 2-6 annotations per image; more callouts usually need a numbered legend or multiple images.
 
-## Guidelines
+## Limits
 
-1. **All elements same thickness** — rect `width`, line `width`, and visual text weight should feel consistent (~5px)
-2. Place labels **close to the rect** — short leader line (25-35px)
-3. Labels can overlap content — the stroke gives enough contrast
-4. **Show locally first** — verify before uploading to a PR
-5. **Take screenshots at native 1x, control display size in HTML** — use `<img width="300">` in markdown, never resize with PIL (creates artifacts)
-6. **Always check `Image.open(path).size` first** — HiDPI screenshots are larger than they appear (150% scaling = 1.5x CSS pixel dimensions)
-7. **Short labels work better** — wide labels have fewer valid placements. Use 1-3 words when possible
-8. **Verify with debug=True** — always check the first annotation of a new image with debug mode
+- Ink Free is Windows-only; other platforms need `ImageFont.load_default()` or a provided font.
+- PIL text rendering is basic; it does not support rich text or Markdown.
+- Animated GIF annotations require frame-by-frame processing and can be slow for long recordings.
+- Algorithmic placement works best with 2-6 annotations; split crowded images instead of overloading one frame.
 
-## Limitations
+## Progressive disclosure and bundled resources
 
-- Ink Free font is Windows-only; other platforms need a fallback font
-- PIL text rendering is basic — no rich text, no markdown
-- Animated GIF annotations require frame-by-frame processing which can be slow for long recordings
-- Algorithmic placement works best with 2-6 annotations; more than that may produce crowded results
+- `references/annotation-script-and-media.md`: read before implementing scripted annotations, image diffs, GIF overlays, or reusable media workflows.
+
+## Annotation terminology
+
+This skill uses `PIL/Pillow.` workflows for `color-coded` callouts. Treat red as `bad/removed`, avoid `circles/ellipses`, avoid `eye-catching` red, keep `stroke_fill=<same color as fill>`, and preserve line `width` consistency. Read the `code-heavy` bundled reference for scripted media workflows.
+
+## Output template
+
+```markdown
+## Image annotation result
+
+**Status:** complete | blocked | failed
+**Input:** `<path/to/source-image>`
+**Output:** `<path/to/annotated-image>`
+**Image size:** `<width>x<height>`
+
+| Callout | Color | Coordinates | Label | Purpose |
+| --- | --- | --- | --- | --- |
+| 1 | `#FF9F1C` | `[x1, y1, x2, y2]` | `<label>` | <what reviewers should notice> |
+
+### Validation
+- Source image size checked: pass | fail
+- Annotated output opened or previewed locally: pass | fail
+- Markdown display sizing recommended: pass | fail
+```
+
+## Quality gate
+
+- [ ] `Image.open(path).size` was checked before coordinate placement.
+- [ ] Red `#E63946` is used only for bad or removed things.
+- [ ] Neutral highlights use `#FF9F1C` or a justified project color.
+- [ ] Rounded rectangles have `18px` padding and consistent `5px` visual weight unless image scale requires adjustment.
+- [ ] Labels are short, close to the target, and do not use white stroke.
+- [ ] The annotated image was previewed locally before delivery or upload.
+- [ ] GIF work reads `references/annotation-script-and-media.md` before frame-by-frame implementation.
