@@ -1,9 +1,0 @@
-name: Open Horizons CodeQL
-
-queries:
-  - uses: security-extended
-
-paths-ignore:
-  - golden-paths/**/skeleton/**
-  - "**/node_modules/**"
-  - "**/.next/**"
