@@ -2,10 +2,10 @@
 
 This directory packages the Open Horizons agentic DevOps platform customizations for GitHub Copilot. It is both:
 
-1. an installable GitHub Copilot plugin containing agents, skills, and MCP integrations; and
-2. a repository workspace kit containing instructions, prompts, workflows, issue forms, governance, and authoring references for the Open Horizons source repository.
+1. an installable GitHub Copilot plugin containing agents, skills, hooks, and MCP integrations; and
+2. a publishable repository workspace kit containing instructions, prompts, hooks, workflows, issue forms, governance, and authoring references for the Open Horizons source repository.
 
-The package is intentionally self-contained. Its `agents/` and `skills/` directories are canonical plugin content, declared through `extensions.com.paulasilvatech.copilot-primitives.componentSource` in `plugin.json`; the repository component synchronizer must not replace them with unrelated shared-library primitives. For Agent Plugins 1.0 compatibility, the synchronizer mirrors canonical `agents/` files into `com.github.copilot/agents/`, which is the directory GitHub Copilot CLI loads.
+The package is intentionally self-contained. Its `agents/`, `skills/`, and `hooks/` directories are canonical plugin content, declared through `extensions.com.paulasilvatech.copilot-primitives` in `plugin.json`; the repository component synchronizer must not replace them with unrelated shared-library primitives. For Agent Plugins 1.0 compatibility, the synchronizer mirrors canonical agents and hook configuration into `com.github.copilot/`, which is the extension directory GitHub Copilot CLI loads.
 
 ## Supported plugin components
 
@@ -21,10 +21,12 @@ This plugin installs the following supported components:
 | `plugin.json` | Declares plugin identity, version, the GitHub Copilot agent extension, and repository source ownership metadata. |
 | `agents/*.agent.md` | Canonical sources for nine Open Horizons specialist agents. |
 | `com.github.copilot/agents/*.agent.md` | Generated Agent Plugins 1.0 runtime copies of the nine agents. |
-| `skills/*/SKILL.md` | Installs 29 reusable Open Horizons skills and their bundled resources. |
+| `skills/*/SKILL.md` | Installs 30 reusable Open Horizons skills and their bundled resources. |
+| `hooks/open-horizons-safety/` | Canonical confirmation hook and deterministic guard script. |
+| `com.github.copilot/hooks/hooks.json` | Generated Agent Plugins 1.0 runtime hook configuration. |
 | `mcp.json` | Registers four Open Plugin Spec MCP servers: Microsoft Learn, Azure, Terraform, and Playwright. |
 
-The plugin does not currently ship hooks or LSP servers. Do not advertise absent hook packages.
+The plugin does not currently ship LSP servers. The safety hook asks before destructive infrastructure, cluster, repository, filesystem, or database operations; set `OPEN_HORIZONS_HOOK_MODE=off` to disable it or `audit` to evaluate without requesting confirmation.
 
 MCP prerequisites are explicit: Azure and Playwright require Node.js and `npx`; Terraform requires Docker; Azure operations use the operator's existing Azure authentication context; and Microsoft Learn requires outbound HTTPS. The package embeds no credentials.
 
@@ -45,8 +47,9 @@ The following files are useful and supported by GitHub Copilot or GitHub after t
 | `codeql/codeql-config.yml` | `.github/codeql/codeql-config.yml` | The bundled CodeQL workflow. |
 | `docs/` | `.github/docs/` | Maintainers and customization authors. |
 | `model-routing.yaml` | `.github/model-routing.yaml` | Repository convention only; GitHub Copilot does not enforce it. |
+| `hooks/open-horizons-safety/` | `hooks/open-horizons-safety/` plus `.github/hooks/open-horizons-safety.json` | Repository-level GitHub Copilot hooks. |
 
-Prompts are not GitHub Copilot CLI plugin primitives. Instructions are discovered from repository, user, organization, or enterprise instruction locations rather than from a plugin's `instructions/` directory. Keep these assets in the package, but do not claim they become active merely because the plugin is installed.
+Prompts are not GitHub Copilot CLI plugin primitives. Instructions are discovered from repository, user, organization, or enterprise instruction locations rather than from a plugin's `instructions/` directory. Keep these assets in the package, but do not claim they become active merely because the plugin is installed. Use the `open-horizons-workspace-kit` skill to preview and publish them safely.
 
 ## Installation
 
@@ -64,6 +67,15 @@ copilot plugin install open-horizons-platform@copilot-primitives
 
 After installation, use `copilot plugin list`, `copilot skill list --json`, and `copilot mcp list` to confirm discovery. Publish workspace-kit assets separately only when the target repository needs them.
 
+Preview the complementary workspace kit:
+
+```bash
+python3 <installed-plugin>/skills/open-horizons-workspace-kit/scripts/install_workspace_kit.py \
+  --target <repository>
+```
+
+The command is dry-run by default. Add `--apply` only after reviewing the plan; conflicts block all writes unless an explicit `--force` is approved.
+
 Plugin agents are namespaced by plugin name. For example:
 
 ```bash
@@ -80,7 +92,8 @@ flowchart TD
     Skill -->|yes| LoadedSkill[Plugin skill loaded by name]
     Skill -->|no| Work[Plan and act]
     LoadedSkill --> Work
-    Work --> External{External capability needed?}
+    Work --> Hooks[Safety hooks inspect high-impact tool calls]
+    Hooks --> External{External capability needed?}
     External -->|yes| MCP[Manifest-registered MCP server]
     External -->|no| BuiltIn[Built-in GitHub Copilot tool]
     MCP --> Result[Validated result]
@@ -109,13 +122,13 @@ VS Code prompt tool IDs and GitHub Copilot CLI agent tokens are different vocabu
 | Surface | Count |
 | --- | ---: |
 | Agents | 9 |
-| Skills | 29 |
+| Skills | 30 |
 | Instruction files | 10 |
 | VS Code prompts | 9 |
 | Workflows | 13 |
 | Issue forms | 27 |
 | MCP servers | 4 |
-| Hook packages | 0 |
+| Hook packages | 1 |
 
 The workspace-kit source was compared with `Ohorizons/open-horizons-platform` default branch commit `7858578302fe0f54fdb43e15f84b14fd5d7519c2` on 2026-08-19. Package-specific runtime fixes and repository governance can intentionally diverge from upstream.
 
