@@ -2,7 +2,7 @@
 
 [![Validate primitives](https://github.com/paulasilvatech/copilot-primitives/actions/workflows/validate-primitives.yml/badge.svg)](https://github.com/paulasilvatech/copilot-primitives/actions/workflows/validate-primitives.yml)
 
-A curated, spec-validated collection of GitHub Copilot CLI primitives for the Copilot CLI harness. The repository currently contains **225 agents**, **193 instruction files**, **419 skills**, **93 plugin manifests**, and **8 hook packages**, validated against Copilot CLI **1.0.81-0**.
+A curated, spec-validated collection of GitHub Copilot CLI primitives for the Copilot CLI harness. The repository currently contains **225 agents**, **194 instruction files**, **419 skills**, **48 VS Code prompts**, **93 plugin manifests**, and **8 hook packages**, validated against Copilot CLI **1.0.81-0**.
 
 For a generated, alphabetized inventory, see [docs/CATALOG.md](docs/CATALOG.md). `docs/COPILOT-HARNESS-SPEC.md` is the canonical format and discovery reference, and [docs/templates/](docs/templates) holds the authoring templates for each primitive type.
 
@@ -14,11 +14,15 @@ For a generated, alphabetized inventory, see [docs/CATALOG.md](docs/CATALOG.md).
 │   ├── agents/                  # Source *.agent.md files
 │   ├── instructions/            # Source *.instructions.md files
 │   ├── skills/<name>/SKILL.md   # Source skill directories
+│   ├── prompts/                 # Source VS Code *.prompt.md files
 │   ├── plugins/<name>/plugin.json
 │   ├── hooks/<name>/hooks.json
+│   ├── installed-primitives.json # Canonical-to-installed copy manifest
 │   └── scripts/
 │       ├── check_links.py
 │       ├── generate_catalog.py
+│       ├── sync_installed_primitives.py
+│       ├── sync_plugin_components.py
 │       └── validate_primitives.py
 └── docs/
     ├── CATALOG.md
@@ -39,8 +43,24 @@ For a generated, alphabetized inventory, see [docs/CATALOG.md](docs/CATALOG.md).
 
 Every type above is loaded by the Copilot CLI harness except **prompts**: agents running on the Agent
 Host do not use prompt files. They are kept here for VS Code users — see
-[library/prompts/README.md](library/prompts/README.md) for how to convert one into a skill, which works
-in both surfaces.
+[the prompt contract](docs/templates/README.md#prompt) for when to convert one into a skill, which works
+across skills-compatible surfaces.
+
+## Repository governance
+
+The canonical repository-wide instructions live at
+`library/instructions/copilot-repository-governance.instructions.md`. The installed
+`.github/copilot-instructions.md` file and the other declared repository customizations are generated
+from `library/installed-primitives.json`:
+
+```sh
+python3 library/scripts/sync_installed_primitives.py
+python3 library/scripts/sync_installed_primitives.py --check
+```
+
+Do not hand-edit a declared `.github/` mirror. Runtime and first-party documentation checks are recorded
+with dates in `docs/HARNESS-VALIDATION.md`; stable schema and discovery rules belong in
+`docs/COPILOT-HARNESS-SPEC.md`.
 
 ## Install and usage
 
@@ -146,7 +166,7 @@ Useful options:
 
 - `--strict` — fail on warnings as well as errors.
 - `--json` — emit a machine-readable JSON report.
-- `--kind <agents|instructions|skills|plugins|hooks>` — validate only one primitive kind; repeat for multiple kinds.
+- `--kind <agents|instructions|skills|prompts|plugins|hooks>` — validate only one primitive kind; repeat for multiple kinds.
 - `--root <path>` and `--quiet` — validate another root or print only errors plus the summary.
 
 The `hooks` kind covers both the distributable packages under `library/hooks/*/hooks.json` and this
@@ -154,13 +174,22 @@ repository's own installed configs in `.github/hooks/*.json` — the ones the CL
 Script paths are resolved against the root each set is deployed from, so a broken `bash` path in an
 installed config fails CI (`HK008`).
 
-Severity model: **ERROR** fails validation and CI; **WARNING** is valid/loadable but risky or incomplete; **INFO** is compatibility detail. CI runs the default validator as the gate, posts `--strict` output as a non-gating PR summary, and fails if `docs/CATALOG.md` drifts from the generated catalog.
+Severity model: **ERROR** is invalid against the harness or a mandatory repository contract;
+**WARNING** is loadable but risky or incomplete; **INFO** is compatibility detail. CI runs strict
+validation and fails on errors, warnings, catalog drift, plugin-copy drift, or installed-copy drift.
 
 Regenerate or check the catalog with:
 
 ```sh
 python3 library/scripts/generate_catalog.py
 python3 library/scripts/generate_catalog.py --check
+```
+
+Check generated distribution surfaces with:
+
+```sh
+python3 library/scripts/sync_plugin_components.py --check
+python3 library/scripts/sync_installed_primitives.py --check
 ```
 
 ## Contributing

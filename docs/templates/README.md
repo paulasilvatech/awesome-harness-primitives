@@ -1,8 +1,9 @@
 # Primitive Authoring Templates
 
 These templates are starting points for four Copilot customization formats. They are not an exhaustive
-list of every type supported by the harness. `docs/COPILOT-HARNESS-SPEC.md` is the authority for the
-three formats discovered by GitHub Copilot CLI; prompt files are a VS Code feature.
+list of every type supported by the harness. Repository governance defines source precedence and freshness;
+`docs/COPILOT-HARNESS-SPEC.md` is the authority for CLI-discovered formats, and prompt files are a local
+VS Code feature.
 
 | Template | Canonical source in this repository | Purpose | Support |
 | --- | --- | --- | --- |
@@ -31,6 +32,9 @@ three formats discovered by GitHub Copilot CLI; prompt files are a VS Code featu
    capabilities in these templates.
 5. Validate the canonical source, regenerate derived content, and synchronize generated copies when
    applicable. See [Validation and synchronization](#validation-and-synchronization).
+6. When a claim depends on current platform behavior, consult `docs/HARNESS-VALIDATION.md`. Verify a
+   first-party source only when the user requests current behavior, the target version changed, sources
+   conflict, a claim is unverified, or the recorded evidence is older than 90 days.
 
 ## Contracts by type
 
@@ -156,6 +160,13 @@ Do not reference a prompt file from an agent, instructions file, or skill intend
 must run in CLI, or on both surfaces, implement it as a skill. Any packaging relationship is configured
 separately from these semantic references.
 
+## Freshness and evidence
+
+Keep stable authoring rules in primitives and volatile runtime findings in `docs/HARNESS-VALIDATION.md`.
+Do not claim that a field, tool, model, event, or surface is current without a source and verification date.
+Prefer known first-party URLs, record the result once, and update the harness spec before copying changed
+behavior into templates or primitives. Never refresh a date without repeating the check.
+
 ## Authoring placeholders and runtime variables
 
 These forms have different meanings:
@@ -170,7 +181,7 @@ These forms have different meanings:
 
 ## Validation and synchronization
 
-For agents, instructions, and skills under `library/`, run:
+For agents, instructions, skills, and prompts under `library/`, run:
 
 ```sh
 python3 library/scripts/validate_primitives.py
@@ -191,11 +202,19 @@ python3 library/scripts/sync_plugin_components.py
 python3 library/scripts/sync_plugin_components.py --check
 ```
 
-With their default paths, the validator checks `library/agents/`, `library/instructions/`,
-`library/skills/`, `library/plugins/`, and `library/hooks/` plus installed repository hook configs. The
-catalog generator reads those five library trees. Neither script validates `docs/templates/` directly,
-and neither includes prompts.
+Synchronize declared installed repository customizations and compatibility guidance:
 
-For prompts, keep `library/prompts/<name>.prompt.md` as this repository's source, publish or copy it to
-`.github/prompts/<name>.prompt.md` for VS Code discovery when applicable, and test it in VS Code. These
-repository scripts do not provide a prompt publishing command.
+```sh
+python3 library/scripts/sync_installed_primitives.py
+python3 library/scripts/sync_installed_primitives.py --check
+```
+
+With their default paths, the validator checks `library/agents/`, `library/instructions/`,
+`library/skills/`, `library/prompts/`, `library/plugins/`, and `library/hooks/` plus installed repository
+hook configs. The catalog generator excludes VS Code prompts. The installed-copy manifest controls which
+canonical sources publish into `.github/` or compatibility locations; undeclared library prompts remain
+source-only.
+
+For prompts, keep `library/prompts/<name>.prompt.md` as the source, declare a workspace copy only when
+VS Code discovery is required, run installed-copy synchronization, and test the result with **Chat: Run
+Prompt**. Static validation checks metadata and structure but does not execute the prompt.

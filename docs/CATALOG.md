@@ -8,7 +8,7 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | Primitive type | Count |
 | --- | ---: |
 | Agents | 225 |
-| Instructions | 193 |
+| Instructions | 194 |
 | Skills | 419 |
 | Plugins | 93 |
 | Hooks | 8 |
@@ -67,7 +67,7 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | Comet Opik | Unified Comet Opik agent for LLM tracing, prompt governance, workspace/project management, metrics investigation, imports/exports, and Opik MCP or CLI diagnostics. |
 | Context Architect | Plans and executes multi-file code changes by identifying relevant context, dependencies, risks, and validation paths before editing. |
 | Context7-Expert | Documentation-first library and framework expert that uses Context7 and version checks before answering API, syntax, best-practice, migration, or code-generation questions. Use wh… |
-| copilot-primitive-architect | Advises on Copilot primitive architecture: type routing, responsibility boundaries, and read-only reviews; does not create skills or primitives. |
+| copilot-primitive-architect | Advises on current Copilot primitive architecture, type routing, responsibility boundaries, freshness evidence, and read-only reviews; does not create primitives. |
 | Create PRD Chat Mode | Creates comprehensive Product Requirements Documents in Markdown with user stories, acceptance criteria, technical considerations, metrics, and optional GitHub issue creation afte… |
 | Critical thinking mode instructions | Challenges assumptions with concise questions and root-cause probing. Use when an engineer needs to think harder before choosing a solution. |
 | Custom Agent Foundry | Design and create GitHub Copilot custom agents with scoped tools, frontmatter, handoffs, and clear behavior. Use when a user wants a new or improved agent. |
@@ -250,8 +250,8 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | .NET Framework Upgrade Specialist | **/*.{csproj,vbproj,fsproj,sln,props,targets} | Enforces .NET upgrade conventions for project type detection, target framework selection, dependency sequencing, package updates, breaking changes, validation, CI updates, and PR… |
 | a11y | **/*.{html,htm,css,scss,sass,js,jsx,ts,tsx,vue,svelte,astro} | Comprehensive web accessibility conventions based on WCAG 2.2 AA, legal enforcement context, WAI-ARIA rules, anti-patterns, and framework-specific fixes for modern web frameworks. |
 | agent-safety | ** | Enforces safety and governance conventions for AI agent systems, tool-calling LLMs, and multi-agent orchestration. Use when code defines agents, tools, policies, guardrails, or au… |
-| agent-skills | **/skills/**/SKILL.md | Enforces portable high-quality Agent Skill conventions for SKILL.md metadata, descriptions, resources, progressive loading, scripts, security, and validation. |
-| agents | **/*.agent.md | Enforces conventions for GitHub Copilot custom agent files, including frontmatter, tools, handoffs, orchestration, MCP configuration, naming, and validation. |
+| agent-skills | **/skills/**/SKILL.md | Applies current portable Agent Skill conventions for discovery metadata, progressive disclosure, bundled resources, safety, and validation. Use when creating or updating SKILL.md. |
+| agents | **/*.agent.md | Applies current repository conventions for custom-agent metadata, tool scope, body structure, runtime boundaries, and validation. Use when creating or updating an agent. |
 | ai-prompt-engineering-safety-best-practices | **/*.{md,txt,prompt,yml,yaml,json} | Enforces prompt engineering, safety, bias mitigation, security, privacy, evaluation, and responsible AI conventions for Copilot and LLM prompt assets. |
 | ansible | **/*.yaml,**/*.yml | Enforces Ansible conventions for playbook naming, inventory, idempotency, privilege, secret management, YAML style, and validation. Use when editing Ansible YAML files. |
 | apex | **/*.cls,**/*.trigger | Enforces Apex conventions for Salesforce Platform classes and triggers, including bulkification, governor limits, security, testing, asynchronous processing, integrations, and dep… |
@@ -286,7 +286,8 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | context7 | ** | Enforces Context7 usage conventions for authoritative, current, version-specific, authoritative/current. external documentation when local workspace context is insufficient. |
 | convert-cassandra-to-spring-data-cosmos | **/*.java,**/pom.xml,**/build.gradle,**/application*.properties,**/application*.yml,**/application*.conf | Enforces conventions for converting Spring Boot Cassandra data access to Azure Cosmos DB with Spring Data Cosmos, including dependencies, configuration, repositories, entities, te… |
 | convert-jpa-to-spring-data-cosmos | **/*.java,**/pom.xml,**/build.gradle,**/application*.properties | Enforces conventions for converting Spring Boot JPA applications to Azure Cosmos DB with Spring Data Cosmos, including dependencies, configuration, entity mapping, repositories, s… |
-| copilot-primitive-authoring | library/agents/*.agent.md,library/instructions/*.instructions.md,library/skills/**/SKILL.md,library/prompts/*.prompt.md,.github/agents/*.agent.md,.github/instructions/*.instructions.md,.github/skills/**/SKILL.md,.github/prompts/*.prompt.md | Requires routing, canonical paths, frontmatter, tool-token, mirror, and validation conventions when editing Copilot primitives. Use when authoring or reviewing agents, instruction… |
+| copilot-primitive-authoring | library/agents/*.agent.md,library/instructions/*.instructions.md,library/skills/**/SKILL.md,library/prompts/*.prompt.md,docs/templates/*.md,.github/copilot-instructions.md,.github/agents/*.agent.md,.github/instructions/*.instructions.md,.github/skills/**/SKILL.md,.github/prompts/*.prompt.md | Requires routing, canonical paths, freshness evidence, frontmatter, tool-token, mirror, and validation conventions when editing Copilot primitives. Use when authoring or reviewing… |
+| copilot-repository-governance | ** | Applies repository-wide source-of-truth, freshness, synchronization, and validation rules for Copilot primitives. Use for every change in this repository. |
 | copilot-thought-logging | ** | Conventions for concise Copilot process tracking when a workspace-visible progress file is explicitly required. |
 | cpp-language-service-tools | **/*.cpp,**/*.h,**/*.hpp,**/*.cc,**/*.cxx,**/*.c | Enforces C and C++ language-service tool usage for symbol definitions, references, call hierarchy, parameters, line numbers, fallback search, and recovery. |
 | csharp | **/*.cs | Enforces C# application conventions for language features, formatting, nullable reference types, data access, authentication, API documentation, logging, testing, performance, and… |
@@ -332,7 +333,7 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | github-actions-ci-cd-best-practices | .github/workflows/*.yml,.github/workflows/*.yaml | Enforces GitHub Actions CI/CD conventions for workflow structure, permissions, secrets, OIDC, action pinning, caching, testing, deployments, rollback, and troubleshooting. |
 | go | **/*.go,**/go.mod,**/go.sum | Enforces idiomatic Go conventions for package declarations, style, errors, modules, concurrency, HTTP, I/O, tests, security, and documentation. |
 | go-mcp-server | **/*.go,**/go.mod,**/go.sum | Enforces Go conventions for building Model Context Protocol servers with github.com/modelcontextprotocol/go-sdk, including tools, resources, prompts, transports, errors, schema ta… |
-| hooks | .github/hooks/**,hooks/** | Enforces portable hook conventions for discovery, trust, configuration, scripts, events, payloads, blocking, examples, security, packaging, and cross-surface behavior. |
+| hooks | library/hooks/**,.github/hooks/**,hooks/** | Applies current safe hook conventions for Copilot CLI and cloud agent configuration, trust, paths, payloads, scripts, security, packaging, and validation. Use when changing hooks. |
 | html-css-style-color-guide | **/*.html,**/*.css,**/*.js | Enforces accessible, professional HTML/CSS color usage conventions for backgrounds, text, accents, gradients, and contrast-sensitive browser styling. |
 | instructions | **/*.instructions.md | Enforces structure, frontmatter, examples, altitude, maintenance, and validation conventions for GitHub Copilot custom instruction files. |
 | java-11-to-java-17-upgrade | **/*.java,**/*.gradle,**/*.gradle.kts,**/pom.xml | Enforces Java 11 to Java 17 upgrade conventions for language features, API migration, build configuration, removals, JVM tuning, and compatibility testing. |
@@ -402,7 +403,7 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | power-platform-mcp-development | **/*.{json,csx,md} | Enforces Power Platform MCP custom connector conventions for JSON-RPC, Copilot Studio schema constraints, authentication, scripts, Swagger, resources, errors, testing, and certifi… |
 | powershell | **/*.ps1,**/*.psm1 | Enforces PowerShell cmdlet and scripting conventions for naming, parameters, pipeline behavior, output, safety, help, and automation. |
 | powershell-pester-6 | **/*.Tests.ps1 | Enforces Pester v6 conventions for PowerShell test discovery, block structure, assertions, mocks, data-driven cases, tags, skips, and configuration. |
-| prompt | **/*.prompt.md | Enforces VS Code Copilot prompt file conventions for frontmatter, naming, inputs, tools, workflow, output, validation, and maintenance. Use when authoring reusable Copilot Chat pr… |
+| prompt | **/*.prompt.md | Applies current VS Code prompt conventions for canonical sources, metadata, runtime inputs, tools, destination safety, body structure, and testing. Use when creating or updating a… |
 | python-mcp-server | **/*.py,**/pyproject.toml,**/requirements.txt | Enforces Model Context Protocol Python SDK conventions for FastMCP tools, resources, prompts, transports, context, structured output, lifespan, and testing. |
 | qa-engineering-best-practices | ** | Enforces QA engineering conventions for test strategy, naming, assertions, data, automation, CI/CD evidence, bug reports, and coverage across any stack. |
 | quarkus | **/*.java,**/pom.xml,**/build.gradle,**/build.gradle.kts,**/application.properties,**/application.yaml,**/application.yml | Enforces Quarkus Java conventions for project structure, REST resources, Panache data access, configuration, security, and testing. Use when editing Quarkus source, build, or appl… |
@@ -544,7 +545,7 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | copilot-cli-quickstart | Use this skill when someone wants to learn GitHub Copilot CLI from scratch. Offers interactive step-by-step tutorials with separate Developer and Non-Developer tracks, plus on-dem… |
 | copilot-instructions-blueprint-generator | Generate technology-agnostic blueprints for comprehensive copilot-instructions.md files that make GitHub Copilot follow exact project versions, architecture, code quality, documen… |
 | copilot-pr-autopilot | Run a GitHub Copilot Code Review loop on a pull request: request review with GraphQL, wait, list open Copilot/human/advanced-security threads, triage fix/decline/escalate, dispatc… |
-| copilot-primitive-authoring | Author GitHub Copilot agents, instructions, and VS Code prompts in this repository. Use when asked to create or update an agent, instructions file, or VS Code prompt with a known… |
+| copilot-primitive-authoring | Author current GitHub Copilot agents, instructions, and VS Code prompts in this repository. Use when asked to create or update a known primitive type with repository governance, d… |
 | copilot-sdk | Build agentic applications with GitHub Copilot SDK. Use when embedding AI agents in apps, creating custom tools, implementing streaming responses, managing sessions, connecting to… |
 | copilot-spaces | Use GitHub Copilot Spaces to provide project-specific context to conversations. Use this skill when users mention a "GitHub Copilot space", want to load context from a shared know… |
 | copilot-usage-metrics | Retrieve and display GitHub Copilot usage metrics for organizations and enterprises using the GitHub CLI, REST API, and bundled scripts. Use when the user asks about Copilot usage… |

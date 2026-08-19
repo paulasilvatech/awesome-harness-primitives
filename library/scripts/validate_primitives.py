@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate GitHub Copilot primitive files against docs/COPILOT-HARNESS-SPEC.md.
+"""Validate Copilot primitives against the harness spec and repository contracts.
 
 The validator is intentionally dependency-light. It prefers PyYAML when
 available and falls back to a small frontmatter parser that supports the YAML
@@ -25,11 +25,19 @@ try:
 except ImportError:  # pragma: no cover - environment dependent
     yaml = None
 
-KIND_PREFIX = {"agents": "AG", "instructions": "IN", "skills": "SK", "plugins": "PL", "hooks": "HK"}
-ALL_KINDS = ("agents", "instructions", "skills", "plugins", "hooks")
+KIND_PREFIX = {
+    "agents": "AG",
+    "instructions": "IN",
+    "skills": "SK",
+    "prompts": "PR",
+    "plugins": "PL",
+    "hooks": "HK",
+}
+ALL_KINDS = ("agents", "instructions", "skills", "prompts", "plugins", "hooks")
 
 AG_FILENAME_RE = re.compile(r"^[A-Za-z0-9._-]+\.agent\.md$")
 IN_FILENAME_RE = re.compile(r"^[A-Za-z0-9._-]+\.instructions\.md$")
+PR_FILENAME_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*\.prompt\.md$")
 SK_NAME_RE = re.compile(r"^[a-z0-9]([a-z0-9-]*[a-z0-9])?$")
 PL_NAME_RE = re.compile(r"^(?!.*(?:--|\.\.))[a-z0-9][a-z0-9.-]*[a-z0-9]$|^[a-z0-9]$")
 SEMVER_RE = re.compile(r"^\d+\.\d+\.\d+(?:[-+].*)?$")
@@ -38,6 +46,7 @@ LEGACY_MODEL_RE = re.compile(r"^(GPT|Claude|Gemini|o[0-9])")
 SK_WHEN_RE = re.compile(r"use when|use this skill when|when you|when the user|for when|invoke when|trigger", re.I)
 LINK_RE = re.compile(r"(?<!\!)\[[^\]]+\]\(([^)]+)\)")
 PROMPT_FILE_RE = re.compile(r"[\w./-]*\.prompt\.md\b")
+TEMPLATE_PLACEHOLDER_RE = re.compile(r"\{\{[A-Z][A-Z0-9_]*\}\}")
 
 PORTABLE_TOOLS = {
     "execute", "shell", "bash", "powershell",
@@ -74,11 +83,37 @@ NOOP_TOOLS: dict[str, list[str]] = {
 AG_VSCODE_KEYS = {"argument-hint", "handoffs"}
 IN_VALID_KEYS = {"applyTo", "name", "description", "excludeAgent"}
 SK_VALID_KEYS = {"name", "description", "user-invocable", "disable-model-invocation", "allowed-tools", "argument-hint", "license", "metadata", "tags"}
+PR_VALID_KEYS = {"name", "description", "argument-hint", "agent", "model", "tools"}
 PL_VALID_KEYS = {"$schema", "name", "version", "description", "author", "email", "repository", "license", "homepage", "keywords", "extensions", "paths", "exclusive", "skills", "agents", "commands", "mcpServers", "lspServers", "outputStyles", "hooks", "postInstallMessage", "strict"}
 HK_VALID_KEYS = {"type", "bash", "powershell", "command", "cwd", "env", "timeoutSec", "timeout", "matcher", "url", "headers", "allowedEnvVars"}
 HK_EVENTS = {"sessionStart", "sessionEnd", "userPromptSubmitted", "userPromptTransformed", "preToolUse", "postToolUse", "postToolUseFailure", "preMcpToolCall", "permissionRequest", "preCompact", "errorOccurred", "agentStop", "subagentStart", "subagentStop", "notification", "postResult"}
 HK_PASCAL_ALIASES = {"SessionStart", "SessionEnd", "UserPromptSubmit", "UserPromptSubmitted", "UserPromptTransformed", "PreToolUse", "PostToolUse", "PostToolUseFailure", "PreMcpToolCall", "PermissionRequest", "PreCompact", "ErrorOccurred", "Stop", "AgentStop", "SubagentStart", "SubagentStop", "Notification", "PostResult"}
 PLUGIN_MANIFESTS = (".plugin/plugin.json", "plugin.json", ".github/plugin/plugin.json", ".claude-plugin/plugin.json")
+AUTHORING_ONLY_SECTIONS = {"Template Setup", "Section map", "Optional frontmatter"}
+AG_REQUIRED_SECTIONS = (
+    "Mission",
+    "Activation and Scope",
+    "Operating Principles",
+    "What This Agent Knows",
+    "What This Agent Does NOT Know",
+    "Output Format",
+    "Definition of Done",
+    "Anti-Patterns This Agent Rejects",
+)
+IN_REQUIRED_SECTIONS = ("Conventions", "Do / Do Not", "Checklist Before Opening a PR")
+SK_REQUIRED_SECTIONS = ("When to invoke", "Output template", "Quality gate")
+PR_REQUIRED_SECTIONS = (
+    "Objective",
+    "When to Invoke",
+    "Preconditions",
+    "Inputs the Team Must Provide",
+    "What I Will Do",
+    "What I Will NOT Do",
+    "Output Format",
+    "Definition of Done",
+    "Prompt Body",
+    "Invocation Example",
+)
 
 
 def find_repo_root(start: Path) -> Path:
@@ -203,6 +238,7 @@ class Validator:
         for k in sorted(AG_VSCODE_KEYS & set(fm)):
             self.add(kind, p, "AG016", "INFO", f"{k} is VS Code-only and ignored by CLI")
         self._check_body_conventions(kind, p, body, "AG018", "AG019", "AG020")
+        self._check_required_sections(kind, p, body, "AG021", AG_REQUIRED_SECTIONS)
 
     # Instructions
     def validate_instructions(self) -> None:
@@ -239,6 +275,7 @@ class Validator:
         if not body.strip():
             self.add(kind, p, "IN009", "ERROR", "Body must be non-empty")
         self._check_body_conventions(kind, p, body, "IN010", "IN011", "IN012")
+        self._check_required_sections(kind, p, body, "IN013", IN_REQUIRED_SECTIONS)
 
     # Skills
     def validate_skills(self) -> None:
@@ -293,6 +330,58 @@ class Validator:
             if not target.exists():
                 self.add(kind, p, "SK012", "WARNING", f"Relative link points at missing bundled resource: {link}")
         self._check_body_conventions(kind, p, body, "SK013", "SK014", "SK015", bundle_root=p.parent.resolve())
+        self._check_required_sections(kind, p, body, "SK016", SK_REQUIRED_SECTIONS)
+
+    # VS Code prompts
+    def validate_prompts(self) -> None:
+        kind = "prompts"; d = self.root / "prompts"
+        files = sorted(d.glob("*.prompt.md")) if d.is_dir() else []
+        self.file_counts[kind] = len(files)
+        names: dict[str, Path] = {}
+        for p in files:
+            self.catch_file(kind, p, lambda p=p, names=names: self._validate_prompt(p, names))
+
+    def _validate_prompt(self, p: Path, names: dict[str, Path]) -> None:
+        kind = "prompts"
+        if not PR_FILENAME_RE.match(p.name):
+            self.add(kind, p, "PR001", "ERROR", "Filename must be kebab-case and end with .prompt.md")
+        text = read_text(p)
+        fm, body, present, err = parse_frontmatter(text, required=True)
+        if not present or err or not isinstance(fm, dict):
+            self.add(kind, p, "PR002", "ERROR", f"Frontmatter missing or invalid{': ' + err if err else ''}")
+            fm = {}
+        name = fm.get("name")
+        expected_name = p.name[:-len(".prompt.md")]
+        if not isinstance(name, str) or not SK_NAME_RE.match(name) or "--" in name:
+            self.add(kind, p, "PR003", "ERROR", "name must be non-empty kebab-case")
+        else:
+            if name != expected_name:
+                self.add(kind, p, "PR003", "ERROR", "name must match the filename")
+            if name in names:
+                self.add(kind, p, "PR003", "ERROR", f"Duplicate prompt name '{name}' also used by {self.rel(names[name])}")
+            else:
+                names[name] = p
+        desc = fm.get("description")
+        if not isinstance(desc, str) or not desc.strip():
+            self.add(kind, p, "PR004", "ERROR", "description must be a non-empty string")
+        for key in sorted(set(fm) - PR_VALID_KEYS):
+            self.add(kind, p, "PR005", "WARNING", f"Unrecognized VS Code prompt frontmatter key: {key}")
+        for key in ("argument-hint", "agent", "model"):
+            if key in fm and (not isinstance(fm[key], str) or not fm[key].strip()):
+                self.add(kind, p, "PR005", "ERROR", f"{key} must be a non-empty string when present")
+        tools = fm.get("tools")
+        if tools is not None and not (
+            isinstance(tools, str)
+            or (isinstance(tools, list) and all(isinstance(tool, str) and tool for tool in tools))
+        ):
+            self.add(kind, p, "PR005", "ERROR", "tools must be a string or a list of non-empty strings")
+        if not body.strip():
+            self.add(kind, p, "PR006", "ERROR", "Body must be non-empty")
+        elif not body_starts_with_h1(body):
+            self.add(kind, p, "PR006", "ERROR", "Body must open with a single H1 naming the prompt")
+        self._check_required_sections(kind, p, body, "PR007", PR_REQUIRED_SECTIONS)
+        if TEMPLATE_PLACEHOLDER_RE.search(body):
+            self.add(kind, p, "PR008", "ERROR", "Unresolved uppercase double-brace template placeholder")
 
     # Shared body conventions (docs/templates/) — advisory only.
     def _check_body_conventions(self, kind: str, p: Path, body: str, link_rule: str,
@@ -317,6 +406,33 @@ class Validator:
                      "~/.copilot/; reference the primitive by name and type instead")
         if body.strip() and not body_starts_with_h1(body):
             self.add(kind, p, h1_rule, "INFO", "Body should open with a single H1 naming the primitive")
+
+    def _check_required_sections(
+        self,
+        kind: str,
+        p: Path,
+        body: str,
+        rule_id: str,
+        required: tuple[str, ...],
+    ) -> None:
+        """Enforce the repository body contracts encoded by docs/templates/."""
+        headings = h2_headings(body)
+        issues: list[str] = []
+        missing = [heading for heading in required if heading not in headings]
+        duplicates = [heading for heading in required if headings.count(heading) > 1]
+        if missing:
+            issues.append(f"missing required sections: {', '.join(missing)}")
+        if duplicates:
+            issues.append(f"duplicate required sections: {', '.join(duplicates)}")
+        if not missing and not duplicates:
+            positions = [headings.index(heading) for heading in required]
+            if positions != sorted(positions):
+                issues.append("required sections are out of template order")
+        authoring_only = sorted(AUTHORING_ONLY_SECTIONS.intersection(headings))
+        if authoring_only:
+            issues.append(f"authoring-only sections remain: {', '.join(authoring_only)}")
+        if issues:
+            self.add(kind, p, rule_id, "ERROR", "; ".join(issues))
 
     # Plugins
     def validate_plugins(self) -> None:
@@ -620,6 +736,15 @@ def strip_code_fences(body: str) -> str:
         if fence is None:
             out.append(line)
     return "\n".join(out)
+
+
+def h2_headings(body: str) -> list[str]:
+    """Return level-two headings outside fenced examples in document order."""
+    return [
+        line[3:].strip()
+        for line in strip_code_fences(body).splitlines()
+        if line.startswith("## ")
+    ]
 
 
 def is_placeholder_link(target: str) -> bool:

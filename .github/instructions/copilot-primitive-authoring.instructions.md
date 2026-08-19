@@ -1,21 +1,22 @@
 ---
-description: "Requires routing, canonical paths, frontmatter, tool-token, mirror, and validation conventions when editing Copilot primitives. Use when authoring or reviewing agents, instructions, skills, prompts, or installed mirrors."
-applyTo: "library/agents/*.agent.md,library/instructions/*.instructions.md,library/skills/**/SKILL.md,library/prompts/*.prompt.md,.github/agents/*.agent.md,.github/instructions/*.instructions.md,.github/skills/**/SKILL.md,.github/prompts/*.prompt.md"
+description: "Requires routing, canonical paths, freshness evidence, frontmatter, tool-token, mirror, and validation conventions when editing Copilot primitives. Use when authoring or reviewing primitives, templates, or installed mirrors."
+applyTo: "library/agents/*.agent.md,library/instructions/*.instructions.md,library/skills/**/SKILL.md,library/prompts/*.prompt.md,docs/templates/*.md,.github/copilot-instructions.md,.github/agents/*.agent.md,.github/instructions/*.instructions.md,.github/skills/**/SKILL.md,.github/prompts/*.prompt.md"
 ---
 
 # Copilot Primitive Authoring Conventions — Harness-Compatible Files
 
-These instructions apply to Copilot primitive files matched by the `applyTo` globs: agents, instructions, skills, VS Code prompts, and installed mirrors under `library/` or `.github/`. They are authoritative for passive authoring invariants, routing, canonical paths, frontmatter, tool tokens, validation, and cross-primitive references in matched files; `docs/COPILOT-HARNESS-SPEC.md` wins for runtime discovery, schema, and validation semantics.
+These instructions apply to Copilot primitive files, templates, and installed mirrors matched by the `applyTo` globs. They are authoritative for passive authoring invariants, routing, canonical paths, freshness evidence, frontmatter, tool tokens, validation, and cross-primitive references; the repository-wide governance instructions own global precedence and synchronization, while `docs/COPILOT-HARNESS-SPEC.md` wins for runtime discovery and schema.
 
 ## Authoritative Sources and Precedence
 
-Follow these sources in order:
+Use these sources together:
 
-1. `docs/COPILOT-HARNESS-SPEC.md` for CLI-discovered agents, instructions, skills, plugins, hooks, fields, tool tokens, and validation semantics.
-2. `docs/templates/` for this repository's expected primitive shapes and reusable section patterns.
-3. `docs/references/` for calibrated examples of concise, scoped, rationale-driven instructions.
+1. `docs/COPILOT-HARNESS-SPEC.md` as the maintained contract for CLI-discovered agents, instructions, skills, plugins, hooks, fields, tool tokens, and validation semantics.
+2. `docs/HARNESS-VALIDATION.md` for dated runtime evidence, tested versions, divergences, and unverified claims. When this evidence contradicts the spec, update the spec before dependent guidance.
+3. `docs/templates/` for this repository's expected primitive shapes and reusable section patterns.
+4. `docs/references/` for calibrated examples of concise, scoped, rationale-driven instructions.
 
-When sources conflict, `docs/COPILOT-HARNESS-SPEC.md` wins over instruction-authoring guidance. Do not copy a reference file's domain-specific content into a primitive authoring rule.
+Do not copy a reference file's domain-specific content into a primitive authoring rule.
 
 ## Responsibility Split
 
@@ -30,7 +31,7 @@ This file owns passive conventions that apply while editing primitive files. The
 | Skill | `library/skills/<name>/SKILL.md` | Use the `skill-creator` skill. |
 | Prompt | `library/prompts/<name>.prompt.md` | Use the `copilot-primitive-authoring` skill for procedure; treat prompts as VS Code-only. |
 
-Treat `library/` as the canonical source for reusable primitives. Do not edit `.github/` mirrors or plugin copies directly unless a task explicitly targets an installed mirror. Use a valid kebab-case primitive name with no path separators, `..`, leading or trailing hyphen, or double hyphen.
+Treat `library/` as the canonical source for reusable primitives. Do not edit `.github/` mirrors, generated compatibility guidance, or plugin copies directly unless a file has no declared source. Use a valid kebab-case primitive name with no path separators, `..`, leading or trailing hyphen, or double hyphen.
 
 ## Frontmatter and Runtime Fields
 
@@ -47,6 +48,16 @@ Treat `library/` as the canonical source for reusable primitives. Do not edit `.
 ## Cross-Primitive References and Mirrors
 
 Reference other primitives by installed name and type, not by relative link. Use relative paths only inside the same skill package, such as `references/`, `scripts/`, `assets/`, or `templates/`. Consult references of the same primitive type as the target artifact so agent, instruction, skill, and prompt responsibilities do not bleed into one another.
+
+Generate declared repository mirrors with `python3 library/scripts/sync_installed_primitives.py`. Generate plugin-local components with `python3 library/scripts/sync_plugin_components.py`. Never resolve drift by editing both copies.
+
+## Freshness and Evidence
+
+- Use repository manifests, the harness spec, and dated validation evidence before external research.
+- Verify first-party documentation when the user asks for current or latest behavior, a relevant target version changed, local sources conflict, a claim is marked unverified, or affected platform evidence is older than 90 days.
+- Prefer a known official URL and use search only to locate a moved first-party page.
+- Record the source URL, target product or version, verification date, result, and divergence in `docs/HARNESS-VALIDATION.md`; then update the spec and dependent guidance.
+- Do not refresh a date without repeating the check, and do not describe an undated assumption as current platform behavior.
 
 ## Good / Bad Examples
 
@@ -80,6 +91,8 @@ Why: the description is not actionable for discovery, and the listed tools are n
 | Keep descriptions actionable and include when to use the primitive. | Agents and skills are selected from descriptions before full bodies load. |
 | Use only recognized frontmatter fields and valid tool tokens. | Unknown fields or no-op tokens silently break runtime behavior. |
 | Reference primitives by name and type rather than relative links. | Runtime installation paths differ, but semantic names survive copying and packaging. |
+| Keep volatile platform facts in dated validation evidence and stable rules in primitives. | Current behavior can be refreshed once without duplicating dates and version claims. |
+| Synchronize declared installed and plugin copies with repository scripts. | Canonical content cannot drift across distribution surfaces. |
 | Validate primitives with repository scripts before delivery. | Markdown shape alone does not prove harness compatibility. |
 
 ## Do / Do Not
@@ -90,6 +103,7 @@ Why: the description is not actionable for discovery, and the listed tools are n
 | Keep responsibilities separate between agent, instructions, skill, and prompt files. | Put a workflow in instructions or passive conventions in a skill procedure. |
 | Use concise examples that prove the convention. | Add long tutorials or unrelated reference material to the primitive body. |
 | Apply validation appropriate to the primitive type. | Treat a clean-looking Markdown file as runtime-compatible without type-specific checks. |
+| Verify current claims conditionally against first-party sources. | Force network research for stable local edits or refresh dates without evidence. |
 | Use `read`, `grep`, `glob`, `edit`, `execute`, `web_fetch`, and `web_search` where those capabilities are needed. | Use `search`, `web`, `todo`, `all`, `terminal`, `run`, `codebase`, `changes`, `fetch`, or `githubRepo` as CLI tool tokens. |
 
 ## Checklist Before Opening a PR
@@ -103,6 +117,7 @@ Why: the description is not actionable for discovery, and the listed tools are n
 - [ ] Prompt files are treated as VS Code-only and not as CLI primitives.
 - [ ] Cross-primitive references use primitive name and type; relative paths appear only inside a skill package.
 - [ ] No uppercase double-brace placeholders, authoring notes, or unrelated edits remain.
-- [ ] For `agent`, `instructions`, and `skill` primitives, validation passes: `python3 library/scripts/validate_primitives.py --strict`.
-- [ ] For `agent`, `instructions`, and `skill` primitives, catalog drift check passes: `python3 library/scripts/generate_catalog.py --check`.
-- [ ] For `prompt` primitives, do not claim validation from repository validators. Manually verify valid YAML frontmatter on line 1 with non-empty `name` and `description`, non-empty body, and no authoring placeholders; publish manually in `.github/prompts/` only if VS Code discovery is required; test with Chat: Run Prompt.
+- [ ] Current or latest claims are supported by dated first-party or runtime evidence.
+- [ ] All primitive types pass `python3 library/scripts/validate_primitives.py --strict`.
+- [ ] Catalog, plugin component, and declared installed-copy drift checks pass.
+- [ ] Prompt validation is reported accurately: repository validation covers local structure and metadata, while **Chat: Run Prompt** is still required to prove VS Code runtime behavior.

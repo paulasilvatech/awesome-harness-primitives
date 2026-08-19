@@ -390,5 +390,18 @@ Hook scripts must be executable (`chmod +x`).
 
 ## 6. Validation
 
-Run `python3 library/scripts/validate_primitives.py` to check every rule above.
-Use `--strict` to fail on warnings and `--json` for machine-readable output.
+Run `python3 library/scripts/validate_primitives.py` to check every rule above plus this repository's
+mandatory body contracts. The validator also checks `library/prompts/*.prompt.md` against the local VS
+Code prompt policy: metadata and section structure are validated statically, but prompt execution still
+requires **Chat: Run Prompt** in VS Code.
+
+Use `--strict` to fail on warnings, `--json` for machine-readable output, and
+`--kind <agents|instructions|skills|prompts|plugins|hooks>` for a focused check.
+
+Generated distribution surfaces have separate drift gates:
+
+```sh
+python3 library/scripts/generate_catalog.py --check
+python3 library/scripts/sync_plugin_components.py --check
+python3 library/scripts/sync_installed_primitives.py --check
+```

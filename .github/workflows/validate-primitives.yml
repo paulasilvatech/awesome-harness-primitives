@@ -25,31 +25,21 @@ jobs:
         with:
           python-version: "3.12"
 
-      # Gates the build only on ERROR findings.
+      # Enforce harness rules and mandatory repository contracts for every primitive type.
       - name: Validate primitives
-        run: python3 library/scripts/validate_primitives.py
-
-      # Advisory strict mode makes WARNING findings visible without failing PRs.
-      - name: Strict validation advisory
-        if: always()
-        run: |
-          {
-            echo "## Strict validation advisory"
-            echo
-            echo '```'
-            python3 library/scripts/validate_primitives.py --strict || true
-            echo '```'
-          } >> "$GITHUB_STEP_SUMMARY"
+        run: python3 library/scripts/validate_primitives.py --strict
 
       # Prevent committed docs/CATALOG.md from drifting from repository contents.
       - name: Check catalog drift
-        run: |
-          python3 library/scripts/generate_catalog.py --out "$RUNNER_TEMP/CATALOG.md"
-          diff -u docs/CATALOG.md "$RUNNER_TEMP/CATALOG.md"
+        run: python3 library/scripts/generate_catalog.py --check
 
       # Prevent plugin-local generated components from drifting from shared primitives.
       - name: Check plugin component drift
         run: python3 library/scripts/sync_plugin_components.py --check
+
+      # Prevent installed .github customizations and compatibility copies from drifting.
+      - name: Check installed primitive drift
+        run: python3 library/scripts/sync_installed_primitives.py --check
 
   links:
     name: External link audit (advisory)

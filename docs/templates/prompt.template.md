@@ -14,9 +14,9 @@ Delete this section after configuring the prompt.
 
 1. Treat this as a **VS Code-only** prompt file. GitHub Copilot CLI does not discover or execute
    `*.prompt.md`; use an agent skill when a workflow must run in CLI or on both surfaces.
-2. In this repository, author the source at `library/prompts/{{PROMPT_NAME}}.prompt.md`. No repository
-   script publishes prompts to `.github/prompts/`; copy or publish the finished prompt there explicitly
-   when VS Code workspace discovery is required.
+2. In this repository, author the source at `library/prompts/{{PROMPT_NAME}}.prompt.md`. When VS Code
+   workspace discovery is required, declare the installed path in `library/installed-primitives.json`
+   and publish it with `python3 library/scripts/sync_installed_primitives.py`; never maintain both copies.
 3. Replace every `{{UPPER_SNAKE_CASE}}` authoring placeholder. Keep `${input:...}` and `${selection}`
    only when they are intentional VS Code runtime variables, and remove unused inputs, fields, branches,
    sections, and examples.
@@ -28,6 +28,9 @@ Delete this section after configuring the prompt.
 6. Choose the intended destination explicitly. A prompt may return a Chat response, make approved
    workspace edits, or write an exact path, but it must not assume that every invocation writes files.
 7. Refer to another primitive by installed name and type, not by a relative link.
+8. Check `docs/HARNESS-VALIDATION.md` before making a current-platform claim. Verify a first-party source
+   only when the target version changed, sources conflict, the claim is unverified, the user asks for
+   current behavior, or the recorded evidence is older than 90 days.
 
 ## Section map
 
@@ -125,6 +128,7 @@ Use this result skeleton, adapting only the content under each heading:
 - [ ] The result uses the requested destination and no unapproved file was changed.
 - [ ] Claims are supported by provided or inspected evidence; unknowns are labeled explicitly.
 - [ ] Required checks were run, or each check that could not run is named with the reason.
+- [ ] Current platform claims have a source and verification date.
 
 ## Prompt Body
 

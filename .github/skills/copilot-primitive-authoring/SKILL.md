@@ -1,6 +1,6 @@
 ---
 name: copilot-primitive-authoring
-description: "Author GitHub Copilot agents, instructions, and VS Code prompts in this repository. Use when asked to create or update an agent, instructions file, or VS Code prompt with a known primitive type, using repository templates, canonical library paths, and type-specific validation."
+description: "Author current GitHub Copilot agents, instructions, and VS Code prompts in this repository. Use when asked to create or update a known primitive type with repository governance, dated evidence, canonical sources, templates, synchronization, and type-specific validation."
 ---
 
 # Copilot primitive authoring
@@ -19,7 +19,9 @@ Author GitHub Copilot agents, instructions, and VS Code prompt primitives by rou
 
 - Canonical source paths are `library/agents/`, `library/instructions/`, `library/prompts/`, and `library/skills/`.
 - Source templates live in `docs/templates/`: `agent.template.md`, `instructions.template.md`, `prompt.template.md`, and `skill.template.md`.
+- Repository governance owns source precedence, freshness, synchronization, and completion gates.
 - The harness contract is `docs/COPILOT-HARNESS-SPEC.md`; it is authoritative for CLI-discovered agents, instructions, skills, plugins, hooks, and validation.
+- Dated runtime and first-party documentation evidence lives in `docs/HARNESS-VALIDATION.md`.
 - VS Code prompts are VS Code-only. GitHub Copilot CLI does not discover or execute prompt primitives.
 - For creating, auditing, repairing, or optimizing Agent Skills, invoke `skill-creator` (skill) instead of reimplementing that workflow.
 - For consultative architectural review or primitive type selection, use `copilot-primitive-architect` (agent).
@@ -30,37 +32,48 @@ Author GitHub Copilot agents, instructions, and VS Code prompt primitives by rou
 | --- | --- | --- | --- |
 | Persona, judgment boundary, operating posture, tool policy, handoff behavior | Agent | `library/agents/<name>.agent.md` | Continue. |
 | Passive conventions for matching files | Instructions | `library/instructions/<name>.instructions.md` | Continue. |
-| Focused VS Code action explicitly run by a user | Prompt | `library/prompts/<name>` prompt markdown file | Continue, but do not claim CLI validation. |
+| Focused VS Code action explicitly run by a user | Prompt | `library/prompts/<name>.prompt.md` | Continue, but do not claim CLI execution. |
 | Specialized reusable workflow with optional bundled resources | Skill | `library/skills/<name>/SKILL.md` | Hand off to `skill-creator` (skill). |
 | Ambiguous type or architecture review | Unknown | None | Use `copilot-primitive-architect` (agent). |
 
 ## Procedure
 
 1. Route by primitive type before reading templates or writing files.
-2. Validate the requested name against `^[a-z0-9]+(-[a-z0-9]+)*$`: kebab-case only, no path separators, no `..`, no leading or trailing hyphen, and no double hyphen.
-3. Derive the canonical path from the type and refuse any destination outside the matching `library/` path.
-4. Copy the matching template from `docs/templates/` instead of inventing structure.
-5. Place the file only at the canonical `library/` source path. Do not manually edit `.github/` mirrors, generated plugin copies, or packaged plugin components.
-6. Fill frontmatter according to the harness spec:
+2. Read repository governance, the harness spec, dated validation evidence, the matching template, and only the same-type references needed for the task.
+3. Verify a known first-party source when the user requests current or latest behavior, the target version differs from recorded evidence, sources conflict, a claim is unverified, or the relevant evidence is older than 90 days. Record the URL, target version, date, result, and divergence in `docs/HARNESS-VALIDATION.md`.
+4. Validate the requested name against `^[a-z0-9]+(-[a-z0-9]+)*$`: kebab-case only, no path separators, no `..`, no leading or trailing hyphen, and no double hyphen.
+5. Derive the canonical path from the type and refuse any destination outside the matching `library/` path.
+6. Copy the matching template from `docs/templates/` instead of inventing structure.
+7. Place the file only at the canonical `library/` source path. Do not manually edit `.github/` mirrors, generated compatibility guidance, plugin copies, or packaged plugin components.
+8. Fill frontmatter according to the harness spec:
    - Agents require `description`; omit `name` and `model` unless there is a concrete reason. If restricting tools, use valid CLI tokens only.
    - Instructions may use `applyTo`, `description`, `name`, and `excludeAgent`; use one quoted comma-separated glob string for `applyTo` when auto-application is intended.
    - Prompts follow the VS Code prompt schema and may keep VS Code runtime inputs such as `${selection}` only when intentional.
    - Skills require `name` and `description`; detailed skill decisions belong to `skill-creator`.
-7. Write the body to match the type contract: agents define mission and operating posture; instructions define conventions and verification; prompts define invocation, inputs, behavior, destination handling, and done criteria.
-8. Reference related primitives by installed name and type, such as `dependency-review` (skill), never by cross-primitive relative links.
-9. Remove template placeholders, authoring notes, unused alternatives, and unsupported frontmatter keys.
-10. Validate according to primitive type and update generated catalogs only when the canonical source change causes drift.
+9. Write the body to match the type contract: agents define mission and operating posture; instructions define conventions and verification; prompts define invocation, inputs, behavior, destination handling, and done criteria.
+10. Reference related primitives by installed name and type, such as `dependency-review` (skill), never by cross-primitive relative links.
+11. Remove template placeholders, authoring notes, unused alternatives, and unsupported frontmatter keys.
+12. Validate the canonical change, regenerate declared installed or plugin copies when affected, and rerun every applicable drift check.
 
 ## Validation matrix
 
 | Type | Validation |
 | --- | --- |
-| Agent | `python3 library/scripts/validate_primitives.py --strict` and `python3 library/scripts/generate_catalog.py --check`. |
-| Instructions | `python3 library/scripts/validate_primitives.py --strict` and `python3 library/scripts/generate_catalog.py --check`. |
+| Agent | Strict primitive validation, catalog check, and applicable installed or plugin-copy drift checks. |
+| Instructions | Strict primitive validation, catalog check, and applicable installed-copy drift check. |
 | Skill handoff | `skill-creator` owns skill validation; do not duplicate it here. |
-| Prompt | Manually verify YAML frontmatter starts on line 1, `name` and `description` are non-empty, body is non-empty, and no authoring placeholders remain. Test in VS Code with Chat: Run Prompt when discovery is required. |
+| Prompt | Strict repository validation checks metadata and local structure; **Chat: Run Prompt** proves VS Code runtime behavior. Also check installed-copy drift when the prompt is declared for workspace discovery. |
 
-If `generate_catalog.py --check` reports drift caused by your canonical source change, run the corresponding generator, then rerun the check.
+Run these repository gates before delivery:
+
+```sh
+python3 library/scripts/validate_primitives.py --strict
+python3 library/scripts/generate_catalog.py --check
+python3 library/scripts/sync_plugin_components.py --check
+python3 library/scripts/sync_installed_primitives.py --check
+```
+
+If a check reports drift caused by the canonical change, run the corresponding generator or synchronization script, then repeat the check.
 
 ## Limits
 
@@ -68,6 +81,7 @@ If `generate_catalog.py --check` reports drift caused by your canonical source c
 - Do not use this skill for consultative primitive reviews or type-selection decisions. Use `copilot-primitive-architect` (agent).
 - Do not manually edit `.github/` mirrors, plugin-generated copies, packaged plugin components, or `library/plugins/`.
 - Do not treat prompts as CLI primitives.
+- Do not call platform behavior current or latest without dated first-party or runtime evidence.
 - Do not add no-op CLI tool tokens such as `search`, `web`, or `todo`; they do not grant capability in GitHub Copilot CLI.
 - Do not leave placeholders, authoring notes, unused optional sections, or unsupported frontmatter keys in final primitives.
 
@@ -77,6 +91,8 @@ If `generate_catalog.py --check` reports drift caused by your canonical source c
 - **No-op CLI tokens are misleading:** `search`, `web`, and `todo` look useful but grant nothing in CLI. Use valid tokens from the harness spec or omit the allow-list when unrestricted access is intended.
 - **Instructions are passive:** If the requested artifact has ordered setup, migration, generation, or review steps, use a skill or prompt instead of instructions.
 - **Catalog drift is expected after new primitives:** Run the generator when the check command reports drift caused by your canonical source change.
+- **Static prompt validation is not execution:** A clean prompt check does not replace **Chat: Run Prompt**.
+- **Freshness is conditional:** Do not fetch the web for stable local conventions; verify only when a freshness trigger is present.
 
 ## Repository resources
 
@@ -90,11 +106,12 @@ Read these repository sources as needed for the current primitive type:
 | `docs/templates/prompt.template.md` | Authoring a VS Code prompt. |
 | `docs/templates/skill.template.md` | Understanding skill package expectations before handing off to `skill-creator`. |
 | `docs/COPILOT-HARNESS-SPEC.md` | Checking runtime and validation rules. |
+| `docs/HARNESS-VALIDATION.md` | Checking tested versions, verification dates, divergences, and unverified claims. |
 | `docs/references/` | Comparing against finished primitive examples. |
 
 ## Compatibility vocabulary
 
-Use the exact primitive labels `agent`, `instructions`, `prompt`, and `skill` when reporting classification. Legacy repository docs may mention `.github/prompts/`, `github/prompts/`, `library/prompts/<name>` prompt file, and legacy prompt file suffixes; treat those as VS Code prompt publication patterns, not GitHub Copilot CLI runtime primitives. Preserve `prompt-only`, `non-check`, and `upper-snake-case` terminology when explaining validation or cleanup.
+Use the exact primitive labels `agent`, `instructions`, `prompt`, and `skill` when reporting classification. External or legacy material may mention `.github/prompts/`, alternate prompt locations, or legacy prompt suffixes; treat those as VS Code publication patterns, not GitHub Copilot CLI runtime primitives. Preserve `prompt-only`, `non-check`, and `upper-snake-case` terminology when explaining validation or cleanup.
 
 ## Output template
 
@@ -111,6 +128,8 @@ Use the exact primitive labels `agent`, `instructions`, `prompt`, and `skill` wh
 ### Validation
 - `python3 library/scripts/validate_primitives.py --strict`: <pass, fail, or not run with reason>
 - `python3 library/scripts/generate_catalog.py --check`: <pass, fail, or not run with reason>
+- `python3 library/scripts/sync_plugin_components.py --check`: <pass, fail, or not applicable>
+- `python3 library/scripts/sync_installed_primitives.py --check`: <pass or fail>
 - Prompt manual validation and Chat: Run Prompt test: <pass, fail, or not applicable with reason>
 
 ### Follow-up
@@ -123,9 +142,11 @@ Use the exact primitive labels `agent`, `instructions`, `prompt`, and `skill` wh
 - [ ] The primitive type is explicitly classified and matches the user's requested outcome.
 - [ ] The requested name is valid kebab-case and the destination exactly matches the canonical path for that type.
 - [ ] The file starts from the matching `docs/templates/` template or the handoff to `skill-creator` is explicit.
+- [ ] Current platform claims are supported by dated evidence; no verification date was refreshed without a new check.
 - [ ] Final frontmatter satisfies the harness spec for that primitive type.
 - [ ] Canonical paths under `library/` are used, and generated mirrors are not edited manually.
 - [ ] Related primitives are referenced by name and type, not by cross-primitive relative links.
 - [ ] Prompts are documented as VS Code-only when selected.
 - [ ] No double-brace template placeholders, authoring notes, unused alternatives, or unsupported keys remain.
-- [ ] Validation matched the primitive type, and prompt primitives were not declared validated by repository validators.
+- [ ] Canonical, catalog, installed-copy, and plugin-copy checks matched the affected surfaces.
+- [ ] Prompt repository validation and VS Code runtime testing were reported as separate checks.

@@ -8,9 +8,9 @@ argument-hint: 'type=<agent|instructions|skill|prompt> name=<kebab-name> intent=
 
 ## Objective
 
-Create a new Copilot primitive from an explicit request in VS Code. Collect the desired primitive type, name, intent, and destination; apply the matching repository template; adapt the result to the patterns in the reference primitives; and deliver the completed artifact only through the selected destination.
+Create a new Copilot primitive from an explicit request in VS Code. Collect the desired primitive type, name, intent, and destination; apply current repository governance, dated evidence, the matching template, and same-type reference patterns; and deliver the completed artifact only through the selected destination.
 
-Prompts are exclusive to VS Code. GitHub Copilot CLI does not discover or execute `*.prompt.md` files. In this repository, the source for prompts is `library/prompts/`; publish or copy a prompt manually to `.github/prompts/` only when VS Code workspace discovery requires it. Do not claim or assume automatic prompt synchronization.
+Prompts are exclusive to local VS Code chat. GitHub Copilot Agent Host and CLI do not discover or execute `*.prompt.md` files. In this repository, the source for prompts is `library/prompts/`; declared installed prompts are generated under `.github/prompts/` by `sync_installed_primitives.py`.
 
 ## When to Invoke
 
@@ -21,7 +21,7 @@ Before loading any skill, route by primitive type. For `skill`, use the `skill-c
 ## Preconditions
 
 - The workspace contains this repository's authoring templates under `docs/templates/`.
-- The relevant reference patterns under `docs/references/` and the rules in `docs/COPILOT-HARNESS-SPEC.md` are available for inspection.
+- Repository governance, `docs/COPILOT-HARNESS-SPEC.md`, `docs/HARNESS-VALIDATION.md`, and same-type references are available for inspection.
 - The user has provided or will provide the primitive type, primitive name, intent, and destination.
 - The primitive name is valid kebab-case with no path separators, no `..`, no leading or trailing hyphen, and no double hyphen.
 - The destination is one of: Chat response, approved workspace edit to the canonical source path, or the exact canonical source path calculated from the primitive type and name.
@@ -54,6 +54,7 @@ Canonical artifact paths by type, after validating `<name>`:
 - Route by type before loading any skill: `skill` uses `skill-creator`; `agent`, `instructions`, and `prompt` use `copilot-primitive-authoring`; ambiguous type choices or consultative architectural review use `copilot-primitive-architect`.
 - Use the matching template from `docs/templates/` and remove all template setup notes, unused optional branches, and authoring placeholders. Apply current section maps: instructions use an authority paragraph instead of `## Scope and Stack Context` and close with `## Checklist Before Opening a PR`; agents use `## What This Agent Knows`, `## What This Agent Does NOT Know`, and `## Anti-Patterns This Agent Rejects`; prompts use `## Inputs the Team Must Provide`.
 - Apply the current harness rules from `docs/COPILOT-HARNESS-SPEC.md` and reference-primitives style from `docs/references/` for the same primitive type as the target artifact.
+- Use dated evidence from `docs/HARNESS-VALIDATION.md`. Verify a known first-party source only when the user requests current behavior, the target version changed, sources conflict, a claim is unverified, or evidence is older than 90 days.
 - Keep references to other primitives by installed name and type, not by relative link.
 - Deliver only to the explicit destination selected by the user, and write only the canonical source path for the validated type and name.
 
@@ -67,8 +68,9 @@ Canonical artifact paths by type, after validating `<name>`:
 - Declare prompt `tools` unless exact VS Code tool IDs are required and known.
 - Use the `copilot-primitive-authoring` skill to create or audit Agent Skills.
 - Use CLI no-op tool tokens in agents or skills. Tokens such as `search`, `web`, and `todo` do not grant useful CLI capabilities; use `grep`, `glob`, `web_fetch`, and `web_search` instead.
-- Claim that prompts are synchronized automatically from `library/prompts/` to `.github/prompts/`.
-- Claim that prompt artifacts were validated by `validate_primitives.py`; repository validators do not cover prompts.
+- Hand-edit an installed prompt or claim synchronization unless it is declared in `library/installed-primitives.json` and the drift check passes.
+- Claim that static repository validation proves a prompt executed successfully in VS Code.
+- Call platform behavior current or latest without a source and verification date.
 
 ## Output Format
 
@@ -99,10 +101,11 @@ When reporting completion, use this structure:
 - [ ] The correct type-based route was chosen before loading any skill.
 - [ ] The correct template was applied and all authoring placeholders were removed. Instructions, agents, and prompts use the current section names from `docs/templates/`.
 - [ ] The result follows `docs/COPILOT-HARNESS-SPEC.md` and the style of `docs/references/` for the same primitive type as the target artifact.
+- [ ] Current platform claims are supported by dated evidence in `docs/HARNESS-VALIDATION.md` or a newly verified first-party source.
 - [ ] Skill creation was routed to the `skill-creator` skill, and `copilot-primitive-authoring` was not used to create or audit an Agent Skill.
 - [ ] For `agent`, `instructions`, and `prompt`, the `copilot-primitive-authoring` skill informed the authoring procedure.
-- [ ] Prompt artifacts state that prompts are VS Code-only and live under `library/prompts/` in this repository.
-- [ ] Prompt validation, when applicable, was manual and did not rely on `validate_primitives.py`.
+- [ ] Prompt artifacts state that prompts are local VS Code-only and live under `library/prompts/` in this repository.
+- [ ] Repository validation, installed-copy drift, and **Chat: Run Prompt** runtime testing are reported as distinct checks.
 - [ ] No unapproved file was created or modified.
 
 ## Prompt Body
@@ -134,7 +137,7 @@ If the destination is an exact path, it must exactly match the canonical source 
 
 **Step 3 — Route before loading skills.** For `skill`, use the `skill-creator` skill. For `agent`, `instructions`, or `prompt`, use the `copilot-primitive-authoring` skill. For an ambiguous type, a choice between types, or consultative architectural review, use the `copilot-primitive-architect` agent and stop the creation workflow until the type is explicit.
 
-**Step 4 — Inspect sources.** Use the appropriate template from `docs/templates/`, the harness rules from `docs/COPILOT-HARNESS-SPEC.md`, and style patterns from reference files of the same primitive type as the target artifact. Do not copy outdated relative primitive links from references; cite related primitives by name and type.
+**Step 4 — Inspect sources and freshness.** Use repository governance, the appropriate template from `docs/templates/`, harness rules from `docs/COPILOT-HARNESS-SPEC.md`, dated evidence from `docs/HARNESS-VALIDATION.md`, and same-type references. Verify a known first-party URL only when the user asks for current behavior, the target version changed, sources conflict, a claim is unverified, or evidence is older than 90 days. Do not copy outdated relative primitive links from references; cite related primitives by name and type.
 
 **Step 5 — Draft the primitive.** Fill the selected template with the requested intent. Remove template setup notes, unused alternatives, and all authoring placeholders. For prompts, keep valid frontmatter on line 1 with `name` and `description`; include `argument-hint` only when useful; omit `agent` unless explicitly requested; declare `tools` only with exact VS Code tool IDs when necessary; use the ten mandatory prompt sections in order, including `## Inputs the Team Must Provide`.
 
@@ -142,7 +145,7 @@ If the destination is an exact path, it must exactly match the canonical source 
 
 **Step 7 — Deliver conditionally.** If the destination is `response`, return the primitive content in Chat. If the destination is `edit`, apply only the approved edit. If the destination is an exact path, write only that path and only when editing tools are available.
 
-**Step 8 — Validate and report.** Check the Definition of Done. For `agent`, `instructions`, or `skill`, run `python3 library/scripts/validate_primitives.py --strict` and `python3 library/scripts/generate_catalog.py --check`. For `prompt`, do not use repository validators as evidence; manually verify valid YAML frontmatter starts on line 1 with non-empty `name` and `description`, a non-empty body, and no authoring placeholders; publish manually to `.github/prompts/` only if VS Code discovery requires it; test with **Chat: Run Prompt** in a representative scenario. Report the artifact path or Chat-only result, the validation evidence, and any unresolved blockers.
+**Step 8 — Validate and report.** Check the Definition of Done. Run `python3 library/scripts/validate_primitives.py --strict`, `python3 library/scripts/generate_catalog.py --check`, `python3 library/scripts/sync_plugin_components.py --check`, and `python3 library/scripts/sync_installed_primitives.py --check`. For a prompt, also test **Chat: Run Prompt** in a representative scenario; static validation checks metadata and structure but does not execute the prompt. Report the artifact path or Chat-only result, freshness evidence when used, validation evidence, and unresolved blockers.
 
 ## Invocation Example
 

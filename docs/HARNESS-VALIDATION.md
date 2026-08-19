@@ -6,6 +6,25 @@ Binary: `/Users/paulasilva/.local/bin/copilot`
 
 > Note: the requested scratch root was `/tmp/harness-check`, but this execution environment forbids file operations under `/tmp`. I used `/Volumes/T9/harness-check` instead. The live `~/.copilot` tree was not modified; commands used `COPILOT_HOME=/Volumes/T9/harness-check/copilot-home`.
 
+## First-party customization documentation verification
+
+Verification date: 2026-08-19. These checks fetched known first-party pages directly; they did not use
+community sources or treat page availability as runtime proof.
+
+| Area | First-party source | Verified guidance |
+| --- | --- | --- |
+| Repository instructions | https://docs.github.com/en/copilot/how-tos/copilot-on-github/customize-copilot/add-custom-instructions/add-repository-instructions | `.github/copilot-instructions.md` is repository-wide; `.github/instructions/**/*.instructions.md` is path-specific; both apply when matched. Repository instructions should be concise, general, and include project layout and working validation commands. |
+| VS Code instructions | https://code.visualstudio.com/docs/agent-customization/custom-instructions | `.github/copilot-instructions.md` is always-on. File-based instructions use `.instructions.md`; multiple applicable files are combined without a guaranteed order. Start with one concise global file and add focused path-specific rules. |
+| Custom agents | https://code.visualstudio.com/docs/agent-customization/custom-agents | Custom agents define task-specific personas, instructions, and tool sets. Workspace agents live under `.github/agents`; VS Code handoffs are guided transitions between agents. |
+| Agent Skills | https://code.visualstudio.com/docs/agent-customization/agent-skills | Skills are portable on-demand packages. `name` must be kebab-case, no more than 64 characters, and match the parent directory; `description` must state what and when and is no more than 1024 characters. |
+| Prompt files | https://code.visualstudio.com/docs/agent-customization/prompt-files | Prompt files are manually invoked local VS Code slash commands. Agent Host does not use them. Supported metadata includes `description`, `name`, `argument-hint`, `agent`, `model`, and `tools`; unavailable tools are ignored. |
+| Hooks | https://docs.github.com/en/copilot/reference/hooks-reference | Hooks are supported by Copilot CLI and cloud agent. Repository configs live under `.github/hooks/*.json`; cloud agent runs in an ephemeral Linux environment and honors `bash` or `command`, not PowerShell. |
+
+The pages did not expose a product version in the fetched content. Recheck them when a target product
+version changes, local evidence conflicts, a claim is unverified, the user asks for current behavior, or
+this evidence is older than 90 days. Do not refresh this date without repeating the fetch and reviewing
+the relevant sections.
+
 ## Non-interactive surface verified
 
 Working commands/flags:
