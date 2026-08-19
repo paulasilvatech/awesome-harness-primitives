@@ -2,7 +2,7 @@
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "open-horizons-platform",
   "description": "Open Horizons agentic DevOps platform toolkit for Azure, AKS, Backstage, GitHub, Azure DevOps, Terraform, security, reliability, architecture, and deployment operations. Use it to install the platform's specialist agents, reusable skills, and MCP integrations as one GitHub Copilot plugin.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": {
     "name": "Open Horizons Contributors",
     "url": "https://github.com/Ohorizons"

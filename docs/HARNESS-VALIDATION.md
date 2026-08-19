@@ -34,6 +34,8 @@ Verification date: 2026-08-19. Target runtime: GitHub Copilot CLI 1.0.81-0.
 | --- | --- |
 | https://github.com/Ohorizons/open-horizons-platform/commit/7858578302fe0f54fdb43e15f84b14fd5d7519c2 | This was the upstream `main` commit inspected while refreshing the packaged workspace customizations. The plugin intentionally adds package metadata, MCP configuration, harness documentation, and runtime portability fixes that do not exist in the upstream `.github/` tree. |
 | `copilot plugin --help`, `copilot plugin install --help`, and `copilot mcp --help` | The installed CLI supports marketplace and repository plugin installation. MCP configuration is loaded from user, workspace, and installed-plugin sources; local servers use `type: local`, while remote servers use `type: http` or `type: sse`. |
+| Isolated marketplace install with `COPILOT_HOME=<session-artifact>` | `open-horizons-platform@copilot-primitives` installed successfully, reported 29 skills, and exposed `microsoft-docs`, `azure`, `terraform`, and `playwright` as plugin MCP servers. The representative invocation `--agent open-horizons-platform:deploy` returned `ok` after agents were mirrored under `com.github.copilot/agents/`. |
+| GitHub Copilot CLI debug log for the schema-declaring plugin | A top-level legacy `agents` field emitted: `agents are read only from "com.github.copilot/agents"` and was ignored. Moving generated copies to that extension directory loaded the namespaced agents. |
 | `npm view @azure/mcp version` and `npx -y @azure/mcp@3.0.0-beta.36 server start --help` | `3.0.0-beta.36` was the published `latest` tag and the configured startup command parsed successfully. |
 | `npm view @playwright/mcp version` and `npx -y @playwright/mcp@0.0.79 --help` | `0.0.79` was the published `latest` tag and the configured startup command parsed successfully. |
 | https://github.com/hashicorp/terraform-mcp-server/releases/tag/v1.2.0 and `docker manifest inspect hashicorp/terraform-mcp-server:1.2.0` | Release `v1.2.0` was latest and the pinned Docker image tag existed. |
@@ -43,6 +45,11 @@ missing skill, was absent from the marketplace, and left every packaged agent an
 The package was corrected to install its own nine agents, 29 skills, and four MCP servers. Repository-only
 instructions, prompts, workflows, issue forms, and templates remain in the package as a workspace kit and
 are not described as automatically activated plugin components.
+
+Other imported marketplace manifests may still combine the Agent Plugins schema URL with legacy GitHub
+top-level component fields. The repository validator currently grandfathers those packages unless they
+declare `extensions.com.paulasilvatech.copilot-primitives.componentSource: plugin`; migrating every legacy
+package to closed Agent Plugins 1.0 layout is separate work.
 
 ## PowerPlatform Dataverse Client for Python verification
 

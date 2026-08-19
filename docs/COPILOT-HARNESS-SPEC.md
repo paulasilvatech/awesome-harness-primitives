@@ -250,9 +250,7 @@ Declaring the Agent Plugins 1.0 schema switches to its strict manifest contract:
   "homepage": "https://…",
   "keywords": ["…"],
   "extensions": {
-    "com.github.copilot": {
-      "agents": ["./agents/x.agent.md"]
-    }
+    "com.github.copilot": {}
   }
 }
 ```
@@ -260,7 +258,9 @@ Declaring the Agent Plugins 1.0 schema switches to its strict manifest contract:
 The canonical schema allows only `$schema`, `name`, `version`, `description`, `author`, `homepage`,
 `repository`, `license`, `keywords`, and `extensions`. Agent Plugins 1.0 discovers skills from immediate
 children of `skills/` and MCP servers from root `mcp.json`; those locations are fixed and are not declared
-in `plugin.json`. GitHub Copilot agents are declared under `extensions.com.github.copilot.agents`.
+in `plugin.json`. GitHub Copilot's Agent Plugins 1.0 extension discovers agents from the top-level
+`com.github.copilot/agents/` directory. A repository may keep canonical sources in `agents/`, but it must
+generate and validate the extension-directory copies used at runtime.
 
 Agent Plugins 1.0 `mcp.json` requires
 `"$schema": "https://agent-plugins.org/schemas/1.0.0/mcp.schema.json"` and `mcpServers`. Portable server
@@ -268,8 +268,8 @@ types are `stdio`, `streamable-http`, and `sse`; legacy `local` and `http` value
 filters are not valid in this file.
 
 Runtime verification against GitHub Copilot CLI 1.0.81-0 on 2026-08-19 confirmed that a schema-declaring
-plugin's top-level `agents` field is ignored with a warning and only
-`extensions.com.github.copilot.agents` is loaded. See `docs/HARNESS-VALIDATION.md`.
+plugin's top-level `agents` field is ignored with a warning and agents under
+`com.github.copilot/agents/` are loaded. See `docs/HARNESS-VALIDATION.md`.
 
 ### 4.3 Marketplace — `marketplace.json`
 

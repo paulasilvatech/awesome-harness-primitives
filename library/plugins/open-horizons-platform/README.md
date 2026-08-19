@@ -5,7 +5,7 @@ This directory packages the Open Horizons agentic DevOps platform customizations
 1. an installable GitHub Copilot plugin containing agents, skills, and MCP integrations; and
 2. a repository workspace kit containing instructions, prompts, workflows, issue forms, governance, and authoring references for the Open Horizons source repository.
 
-The package is intentionally self-contained. Its `agents/` and `skills/` directories are canonical plugin content, declared through `extensions.com.paulasilvatech.copilot-primitives.componentSource` in `plugin.json`; the repository component synchronizer must not replace them with unrelated shared-library primitives.
+The package is intentionally self-contained. Its `agents/` and `skills/` directories are canonical plugin content, declared through `extensions.com.paulasilvatech.copilot-primitives.componentSource` in `plugin.json`; the repository component synchronizer must not replace them with unrelated shared-library primitives. For Agent Plugins 1.0 compatibility, the synchronizer mirrors canonical `agents/` files into `com.github.copilot/agents/`, which is the directory GitHub Copilot CLI loads.
 
 ## Supported plugin components
 
@@ -19,11 +19,14 @@ This plugin installs the following supported components:
 | Package path | Installed behavior |
 | --- | --- |
 | `plugin.json` | Declares plugin identity, version, the GitHub Copilot agent extension, and repository source ownership metadata. |
-| `agents/*.agent.md` | Installs nine Open Horizons specialist agents. |
+| `agents/*.agent.md` | Canonical sources for nine Open Horizons specialist agents. |
+| `com.github.copilot/agents/*.agent.md` | Generated Agent Plugins 1.0 runtime copies of the nine agents. |
 | `skills/*/SKILL.md` | Installs 29 reusable Open Horizons skills and their bundled resources. |
 | `mcp.json` | Registers four Open Plugin Spec MCP servers: Microsoft Learn, Azure, Terraform, and Playwright. |
 
 The plugin does not currently ship hooks or LSP servers. Do not advertise absent hook packages.
+
+MCP prerequisites are explicit: Azure and Playwright require Node.js and `npx`; Terraform requires Docker; Azure operations use the operator's existing Azure authentication context; and Microsoft Learn requires outbound HTTPS. The package embeds no credentials.
 
 ## Repository workspace kit
 

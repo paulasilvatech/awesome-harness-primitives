@@ -10,7 +10,9 @@ edit the shared primitive, then run this script.
 Self-contained plugins can instead own their components by declaring
 `extensions.com.paulasilvatech.copilot-primitives.componentSource` as `plugin`.
 Those component directories are canonical package content and this script leaves
-them unchanged.
+them unchanged. When such a package also declares the `com.github.copilot`
+extension, canonical `agents/` files are mirrored into the Agent Plugins 1.0
+runtime directory `com.github.copilot/agents/`.
 """
 from __future__ import annotations
 

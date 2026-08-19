@@ -1,4 +1,4 @@
-# Copilot Harness Documentation
+# GitHub Copilot Harness Documentation
 
 This folder documents how Open Horizons authors GitHub Copilot customization primitives.
 
@@ -6,23 +6,22 @@ This folder documents how Open Horizons authors GitHub Copilot customization pri
 
 - [Copilot Harness Specification](COPILOT-HARNESS-SPEC.md): authoritative technical contract for agents, instructions, skills, plugins, hooks, and validation behavior. It is validated against GitHub Copilot CLI 1.0.81-0.
 - [Templates](templates/README.md): starting points for new primitives in this repository.
-- [References](references/README.md): illustrative examples from another domain. They are not installed Open Horizons primitives.
 
 ## Choose the right primitive
 
-| Need | Primitive | Destination |
-| --- | --- | --- |
-| Persona, role, boundaries, and tool access | Agent | `.github/agents/<name>.agent.md` |
-| Passive rules for matching files | Instructions | `.github/instructions/<name>.instructions.md` |
-| Reusable procedure or review checklist | Skill | `.github/skills/<name>/SKILL.md` |
-| User-selected VS Code workflow | Prompt | `.github/prompts/<name>.prompt.md` |
+| Need | Primitive | Package source | Published workspace path |
+| --- | --- | --- | --- |
+| Persona, role, boundaries, and tool access | Agent | `agents/<name>.agent.md` with generated `com.github.copilot/agents/` mirror | `.github/agents/<name>.agent.md` when used without the plugin |
+| Passive rules for matching files | Instructions | `instructions/<name>.instructions.md` | `.github/instructions/<name>.instructions.md` |
+| Reusable procedure or review checklist | Skill | `skills/<name>/SKILL.md` | `.github/skills/<name>/SKILL.md` when used without the plugin |
+| User-selected VS Code workflow | Prompt | `prompts/<name>.prompt.md` | `.github/prompts/<name>.prompt.md` |
 
 ## Validate changes
 
-Run this command from the repository root after changing installed primitives:
+Run this command from the `open-horizons-platform` plugin root:
 
 ```sh
-python3 .github/skills/validation-scripts/scripts/validate-agents.py --strict
+python3 skills/validation-scripts/scripts/validate-agents.py --strict
 ```
 
-The validator is wired into `.github/workflows/validate-agents.yml`. It ignores `.github/docs/` templates and references.
+After publishing the workspace kit, use `python3 .github/skills/validation-scripts/scripts/validate-agents.py --strict`. The validator is wired into `.github/workflows/validate-agents.yml` and ignores documentation templates.

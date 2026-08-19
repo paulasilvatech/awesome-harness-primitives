@@ -10,7 +10,7 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | Agents | 225 |
 | Instructions | 194 |
 | Skills | 419 |
-| Plugins | 93 |
+| Plugins | 95 |
 | Hooks | 8 |
 
 ## Agents
@@ -901,6 +901,7 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | edge-ai-tasks | 1.0.0 | Task Researcher and Task Planner for intermediate to expert users and large codebases - Brought to you by microsoft/edge-ai |
 | ember | 1.2.0 | An AI partner, not a tool. Ember carries fire from person to person — helping humans discover that AI partnership isn't something you learn, it's something you find. |
 | eyeball | 1.0.0 | Document analysis with inline source screenshots. When you ask Copilot to analyze a document, Eyeball generates a Word doc where every factual claim includes a highlighted screens… |
+| fabric-agentic-plugin | — | — |
 | fastah-ip-geo-tools | 0.0.9 | This plugin is for network operations engineers who wish to tune and publish IP geolocation feeds in RFC 8805 format. It consists of an AI Skill and an associated MCP server that… |
 | feedback-themes | 1.0.2 | Explore grouped customer feedback signals by impact and drill into a theme to guide product next steps. |
 | flight-map-canvas | 1.0.0 | A GitHub Copilot canvas that generates a view where Google Maps can be explored using 3D controls, as if a flight simulator. Agents can send the flight anywhere and report what th… |
@@ -916,6 +917,7 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | mcp-m365-copilot | 1.0.0 | Comprehensive collection for building declarative agents with Model Context Protocol integration for Microsoft 365 Copilot |
 | napkin | 1.0.0 | Visual whiteboard collaboration for Copilot CLI. Opens an interactive whiteboard in your browser where you can draw, sketch, and add sticky notes — then share everything back with… |
 | noob-mode | 1.0.0 | Plain-English translation layer for non-technical Copilot CLI users. Translates every approval prompt, error message, and technical output into clear, jargon-free English with col… |
+| open-horizons-platform | 1.0.1 | Open Horizons agentic DevOps platform toolkit for Azure, AKS, Backstage, GitHub, Azure DevOps, Terraform, security, reliability, architecture, and deployment operations. Use it to… |
 | openapi-to-application-csharp-dotnet | 1.0.0 | Generate production-ready .NET applications from OpenAPI specifications. Includes ASP.NET Core project scaffolding, controller generation, entity framework integration, and C# bes… |
 | openapi-to-application-go | 1.0.0 | Generate production-ready Go applications from OpenAPI specifications. Includes project scaffolding, handler generation, middleware setup, and Go best practices for REST APIs. |
 | openapi-to-application-java-spring-boot | 1.0.0 | Generate production-ready Spring Boot applications from OpenAPI specifications. Includes project scaffolding, REST controller generation, service layer organization, and Spring Bo… |

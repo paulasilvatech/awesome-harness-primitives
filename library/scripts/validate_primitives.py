@@ -484,10 +484,23 @@ class Validator:
         desc = data.get("description")
         if not isinstance(desc, str) or not desc.strip() or len(desc) > 1024:
             self.add(kind, p, "PL006", "WARNING", "description missing or > 1024 chars")
-        open_plugin = data.get("$schema") == OPEN_PLUGIN_SCHEMA
-        valid_keys = OPEN_PLUGIN_VALID_KEYS if open_plugin else PL_VALID_KEYS
+        extensions = data.get("extensions")
+        repository_extension = (
+            extensions.get("com.paulasilvatech.copilot-primitives")
+            if isinstance(extensions, dict)
+            else None
+        )
+        # Existing marketplace imports may carry the schema URL while retaining
+        # legacy top-level fields. Enforce the closed v1 schema for packages that
+        # explicitly opt into repository-owned, self-contained components.
+        strict_open_plugin = (
+            data.get("$schema") == OPEN_PLUGIN_SCHEMA
+            and isinstance(repository_extension, dict)
+            and repository_extension.get("componentSource") == "plugin"
+        )
+        valid_keys = OPEN_PLUGIN_VALID_KEYS if strict_open_plugin else PL_VALID_KEYS
         for k in sorted(set(data) - valid_keys):
-            severity = "ERROR" if open_plugin else "WARNING"
+            severity = "ERROR" if strict_open_plugin else "WARNING"
             self.add(kind, p, "PL007", severity, f"Unrecognized top-level key: {k}")
         for label, ref in collect_plugin_refs(data):
             if not isinstance(ref, str) or not ref.strip() or has_variable(ref):
@@ -503,7 +516,7 @@ class Validator:
         author = data.get("author")
         if author is not None and not (isinstance(author, dict) and isinstance(author.get("name"), str) and author.get("name", "").strip()):
             self.add(kind, p, "PL010", "WARNING", "author, if present, should be an object with a name")
-        if open_plugin:
+        if strict_open_plugin:
             self._validate_open_plugin(p, plugin_dir, data)
 
     def _validate_open_plugin(self, p: Path, plugin_dir: Path, data: dict[str, Any]) -> None:

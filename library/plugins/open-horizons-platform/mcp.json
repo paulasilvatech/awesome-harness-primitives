@@ -8,10 +8,7 @@
     "azure": {
       "type": "stdio",
       "command": "npx",
-      "args": ["-y", "@azure/mcp@3.0.0-beta.36", "server", "start"],
-      "env": {
-        "AZURE_SUBSCRIPTION_ID": "${AZURE_SUBSCRIPTION_ID}"
-      }
+      "args": ["-y", "@azure/mcp@3.0.0-beta.36", "server", "start"]
     },
     "terraform": {
       "type": "stdio",
