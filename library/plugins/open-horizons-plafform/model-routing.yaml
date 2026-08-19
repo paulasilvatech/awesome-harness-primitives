@@ -1,0 +1,132 @@
+# Model Routing by SDLC Phase
+# Open Horizons — Context Platform Stack
+#
+# This file is a repo-internal convention and is not consumed by GitHub Copilot.
+# Copilot honors per-agent `model:` frontmatter in `.github/agents/*.agent.md`;
+# it does not parse this routing table.
+#
+# Maps each SDLC phase to the optimal model tier, mode, and cost.
+# Extended thinking costs 43% more and degrades quality by 30%
+# on iterative implementation tasks (arXiv:2502.08235).
+#
+# Ref: Ch. 05 Integration Playbook — Model Routing by SDLC Phase
+
+# Supported models per tier:
+#   high-capability:  Claude Opus 5, GPT-5.6 Sol
+#   mid-tier:         Claude Sonnet 5, GPT-5.4
+#   cost-optimized:   Claude Haiku 4.5, GPT-5 mini
+
+routing:
+  specification:
+    description: "Vague requirements → structured specs"
+    mode: ask
+    model: [claude-opus-5, gpt-5.6-sol]
+    tier: high-capability
+    extended_thinking: true
+    cost_tier: high
+    primitive: "planner + /spec prompt"
+    when: "Requirements are ambiguous, incomplete, or contradictory"
+
+  architecture:
+    description: "Planning affecting >5 files"
+    mode: ask
+    model: [claude-opus-5, gpt-5.6-sol]
+    tier: high-capability
+    extended_thinking: true
+    cost_tier: high
+    primitive: "planner agent"
+    when: "Multi-file changes, system design, ADR creation"
+
+  tdd_spec:
+    description: "Test cases from clear specification"
+    mode: edit
+    model: [claude-sonnet-5, gpt-5.4]
+    tier: mid-tier
+    extended_thinking: false
+    cost_tier: medium
+    primitive: "/tdd prompt"
+    when: "SPECIFICATION.md exists and is approved"
+
+  implementation:
+    description: "Feature code, 3-10 files"
+    mode: agent
+    model: [claude-sonnet-5, gpt-5.4]
+    tier: mid-tier
+    extended_thinking: false
+    cost_tier: medium
+    primitive: "implementer + hooks"
+    when: "IMPLEMENTATION_PLAN.md approved, scope clear"
+
+  docstrings:
+    description: "Docstrings, commit messages, changelogs"
+    mode: ask
+    model: [claude-haiku-4.5, gpt-5-mini]
+    tier: cost-optimized
+    extended_thinking: false
+    cost_tier: low
+    primitive: "direct prompt"
+    when: "Well-defined, small, repetitive tasks"
+
+  code_review:
+    description: "Quality + security review"
+    mode: ask
+    model: [claude-opus-5, gpt-5.6-sol]
+    tier: high-capability
+    extended_thinking: true
+    cost_tier: high
+    primitive: "reviewer (read-only)"
+    when: "PR ready for review, post-implementation"
+
+  summarization:
+    description: "PR descriptions, release notes"
+    mode: ask
+    model: [claude-haiku-4.5, gpt-5-mini]
+    tier: cost-optimized
+    extended_thinking: false
+    cost_tier: low
+    primitive: "direct prompt"
+    when: "Content to summarize is available"
+
+# Agentic Deployment — Agent-to-Model Mapping:
+#   @deploy (orchestrator):    claude-opus-5 / gpt-5.6-sol
+#   @azure-portal-deploy:     claude-sonnet-5 / gpt-5.4
+#   @terraform:               claude-sonnet-5 / gpt-5.4
+#   @backstage-expert:        claude-sonnet-5 / gpt-5.4
+#   @github-integration:      claude-sonnet-5 / gpt-5.4
+#   @ado-integration:         claude-sonnet-5 / gpt-5.4
+#   @hybrid-scenarios:        claude-sonnet-5 / gpt-5.4
+#   @sre (verification):      claude-sonnet-5 / gpt-5.4
+#   @security (audit):        claude-opus-5 / gpt-5.6-sol
+
+# Decision tree for developers:
+#
+#   Is the spec clear?
+#     NO  → specification (Opus + Ask + Extended Thinking)
+#     YES → Is it >5 files?
+#       YES → architecture (Opus + Ask + Extended Thinking)
+#       NO  → Are tests written?
+#         NO  → tdd_spec (Sonnet + Edit)
+#         YES → implementation (Sonnet + Agent + Hooks)
+#
+#   Is it a review?
+#     YES → code_review (Opus + Ask + Extended Thinking)
+#
+#   Is it boilerplate?
+#     YES → docstrings or summarization (Haiku + Ask)
+
+topology:
+  hierarchical:
+    description: "Spec → implementation workflows"
+    use_when: "Feature development with planning phase"
+
+  parallel:
+    description: "Independent subtasks"
+    use_when: "Test generation, multi-file docstrings"
+
+  sequential:
+    description: "Dependent steps"
+    use_when: "Review pipelines, deployment approval chains"
+
+  hybrid:
+    description: "Mixed workloads"
+    use_when: "Sprint execution with mixed task types"

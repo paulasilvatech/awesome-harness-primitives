@@ -1,0 +1,634 @@
+# =============================================================================
+# OPEN HORIZONS PLATFORM - CONTINUOUS INTEGRATION
+# =============================================================================
+#
+# Enhanced CI workflow with comprehensive validation, security scanning,
+# and cost estimation for Terraform changes.
+#
+# =============================================================================
+
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  TF_VERSION: "1.6.6"
+  TFLINT_VERSION: "0.50.2"
+  GO_VERSION: "1.21"
+  PYTHON_VERSION: "3.11"
+  KUBECONFORM_VERSION: "0.6.4"
+  GITLEAKS_VERSION: "v8.30.1"
+
+permissions:
+  contents: read
+
+jobs:
+  # ===========================================================================
+  # DETECT CHANGES
+  # ===========================================================================
+  detect-changes:
+    name: Detect Changes
+    runs-on: ubuntu-latest
+    outputs:
+      terraform: ${{ steps.changes.outputs.terraform }}
+      kubernetes: ${{ steps.changes.outputs.kubernetes }}
+      scripts: ${{ steps.changes.outputs.scripts }}
+      docs: ${{ steps.changes.outputs.docs }}
+      specs: ${{ steps.changes.outputs.specs }}
+      agents: ${{ steps.changes.outputs.agents }}
+      golden-paths: ${{ steps.changes.outputs.golden-paths }}
+      argocd: ${{ steps.changes.outputs.argocd }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - name: Detect Changes
+        id: changes
+        uses: dorny/paths-filter@0e4a8c6effa4802afeda77dc8d303f8176d7dfad # v3
+        with:
+          filters: |
+            terraform:
+              - 'terraform/**'
+              - '.tflint.hcl'
+            kubernetes:
+              - 'deploy/**'
+              - 'argocd/**'
+            scripts:
+              - 'scripts/**'
+            docs:
+              - 'docs/**'
+              - 'specs/**'
+              - '*.md'
+            specs:
+              - 'specs/**'
+              - 'scripts/validate-specs.py'
+              - 'tests/scripts/test_validate_specs.py'
+            agents:
+              - '.github/agents/**'
+              - '.github/prompts/**'
+              - '.github/skills/**/SKILL.md'
+              - '.github/instructions/**'
+              - '.github/ISSUE_TEMPLATE/**'
+              - '.github/workflows/validate-agents.yml'
+              - '.github/skills/validation-scripts/scripts/validate-agents.py'
+              - 'golden-paths/common/agents/**'
+              - '.apm/**'
+            golden-paths:
+              - 'golden-paths/**'
+            argocd:
+              - 'argocd/**'
+
+  # ===========================================================================
+  # TERRAFORM VALIDATION
+  # ===========================================================================
+  terraform-validate:
+    name: Terraform Validate
+    runs-on: ubuntu-latest
+    needs: detect-changes
+    if: needs.detect-changes.outputs.terraform == 'true'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd # v3
+        with:
+          terraform_version: ${{ env.TF_VERSION }}
+
+      - name: Terraform Format Check
+        id: fmt
+        run: |
+          cd terraform
+          terraform fmt -check -recursive -diff
+        continue-on-error: true # Format is a soft check - warns but doesn't block
+
+      - name: Terraform Init
+        id: init
+        run: |
+          cd terraform
+          terraform init -backend=false
+
+      - name: Terraform Validate
+        id: validate
+        run: |
+          cd terraform
+          terraform validate -no-color
+
+      - name: Format Check Summary
+        if: steps.fmt.outcome == 'failure'
+        run: |
+          echo "## Terraform Format Check Failed" >> $GITHUB_STEP_SUMMARY
+          echo "Run \`terraform fmt -recursive\` to fix formatting issues." >> $GITHUB_STEP_SUMMARY
+
+  # ===========================================================================
+  # TFLINT
+  # ===========================================================================
+  terraform-lint:
+    name: TFLint
+    runs-on: ubuntu-latest
+    needs: detect-changes
+    if: needs.detect-changes.outputs.terraform == 'true'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - name: Setup TFLint
+        uses: terraform-linters/setup-tflint@90f302c255ef959cbfb4bd10581afecdb7ece3e6 # v4
+        with:
+          tflint_version: v${{ env.TFLINT_VERSION }}
+
+      - name: Init TFLint
+        run: tflint --init
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run TFLint
+        run: |
+          cd terraform
+          tflint --recursive --format=compact
+
+  # ===========================================================================
+  # TFSEC SECURITY SCAN
+  # ===========================================================================
+  terraform-security:
+    name: TFSec Security Scan
+    runs-on: ubuntu-latest
+    needs: detect-changes
+    if: needs.detect-changes.outputs.terraform == 'true'
+    permissions:
+      contents: read
+      security-events: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - name: TFSec
+        uses: aquasecurity/tfsec-action@b466648d6e39e7c75324f25d83891162a721f2d6 # v1.0.3
+        with:
+          working_directory: terraform
+          soft_fail: false # Block pipeline on security issues
+          format: sarif
+          sarif_file: tfsec.sarif
+
+      - name: Upload SARIF
+        if: always()
+        uses: github/codeql-action/upload-sarif@f3712979fa5f215279b101dd0a2e3bdfb4353324 # v3
+        with:
+          sarif_file: tfsec.sarif
+        continue-on-error: true # Upload failure shouldn't block CI
+
+  # ===========================================================================
+  # CHECKOV SECURITY SCAN
+  # ===========================================================================
+  terraform-checkov:
+    name: Checkov Security Scan
+    runs-on: ubuntu-latest
+    needs: detect-changes
+    if: needs.detect-changes.outputs.terraform == 'true'
+    permissions:
+      contents: read
+      security-events: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - name: Run Checkov
+        uses: bridgecrewio/checkov-action@1246d92f57abae29d5db5f9aeeed2a9813e52d7d # v12
+        with:
+          directory: terraform/
+          framework: terraform
+          output_format: cli,sarif
+          output_file_path: console,checkov.sarif
+          soft_fail: false # Block pipeline on security issues
+          skip_check: CKV_AZURE_35,CKV_AZURE_59,CKV2_AZURE_1,CKV2_AZURE_18
+
+      - name: Upload SARIF
+        if: always()
+        uses: github/codeql-action/upload-sarif@f3712979fa5f215279b101dd0a2e3bdfb4353324 # v3
+        with:
+          sarif_file: checkov.sarif
+        continue-on-error: true # Upload failure shouldn't block CI
+
+  # ===========================================================================
+  # INFRACOST - COST ESTIMATION
+  # ===========================================================================
+  terraform-cost:
+    name: Infracost Cost Estimation
+    runs-on: ubuntu-latest
+    needs: detect-changes
+    if: |
+      needs.detect-changes.outputs.terraform == 'true' &&
+      github.event_name == 'pull_request'
+    permissions:
+      contents: read
+      pull-requests: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - name: Setup Infracost
+        uses: infracost/actions/setup@e9d6e6cd65e168e76b0de50ff9957d2fe8bb1832 # v3
+        with:
+          api-key: ${{ secrets.INFRACOST_API_KEY }}
+
+      - name: Checkout Base Branch
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ github.event.pull_request.base.ref }}
+          path: base
+
+      - name: Generate Infracost Diff
+        run: |
+          infracost breakdown --path=base/terraform --format=json --out-file=/tmp/infracost-base.json || true
+          infracost breakdown --path=terraform --format=json --out-file=/tmp/infracost.json
+          infracost diff --path=terraform --format=json --compare-to=/tmp/infracost-base.json --out-file=/tmp/infracost-diff.json || true
+        continue-on-error: true # Cost estimation is informational only
+
+      - name: Post Infracost Comment
+        uses: infracost/actions/comment@e6a81841e9660a313ac6553cbd0a3705084d6426 # v1
+        with:
+          path: /tmp/infracost-diff.json
+          behavior: update
+        continue-on-error: true # PR comment failure shouldn't block CI
+
+  # ===========================================================================
+  # KUBERNETES VALIDATION
+  # ===========================================================================
+  kubernetes-validate:
+    name: Kubernetes Validate
+    runs-on: ubuntu-latest
+    needs: detect-changes
+    if: |
+      needs.detect-changes.outputs.kubernetes == 'true' ||
+      needs.detect-changes.outputs.argocd == 'true'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - name: Setup Kubeconform
+        run: |
+          wget -q https://github.com/yannh/kubeconform/releases/download/v${{ env.KUBECONFORM_VERSION }}/kubeconform-linux-amd64.tar.gz
+          tar xzf kubeconform-linux-amd64.tar.gz
+          sudo mv kubeconform /usr/local/bin/
+
+      - name: Validate Kubernetes Manifests
+        run: |
+          echo "## Kubernetes Validation Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          ERRORS=0
+          for dir in deploy argocd; do
+            if [ -d "$dir" ]; then
+              echo "### Validating $dir/" >> $GITHUB_STEP_SUMMARY
+              find "$dir" \( -name "*.yaml" -o -name "*.yml" \) ! -name "kustomization*" ! -path "*/templates/*" ! -path "deploy/helm/*" -print0 | \
+                xargs -0 -I {} sh -c 'kubeconform -strict -ignore-missing-schemas -summary "$1" || exit 1' _ {} || ERRORS=$((ERRORS+1))
+            fi
+          done
+          if [ $ERRORS -gt 0 ]; then
+            echo "::error::Kubernetes manifest validation failed"
+            exit 1
+          fi
+
+      - name: Setup Helm
+        uses: azure/setup-helm@1a275c3b69536ee54be43f2070a358922e12c8d4 # v4
+        with:
+          version: "v3.14.0"
+
+      - name: Validate Helm Charts
+        run: |
+          if [ -d "deploy/helm" ]; then
+            for chart in deploy/helm/*/; do
+              if [ -f "${chart}Chart.yaml" ]; then
+                echo "Linting $chart..."
+                helm lint "$chart"
+              fi
+            done
+          fi
+
+      - name: Kubesec Security Scan
+        uses: controlplaneio/kubesec-action@43d0ddff5ffee89a6bb9f29b64cd865411137b14 # v0.0.2
+        with:
+          input: deploy/
+        # Security scan blocks CI on critical findings
+
+  # ===========================================================================
+  # GOLDEN PATHS VALIDATION
+  # ===========================================================================
+  golden-paths-validate:
+    name: Golden Paths Validate
+    runs-on: ubuntu-latest
+    needs: detect-changes
+    if: needs.detect-changes.outputs.golden-paths == 'true'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - name: Setup Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install Dependencies
+        run: pip install pyyaml
+
+      - name: Validate Scaffolder Action Schemas
+        run: ./scripts/validate-scaffolder-templates.sh golden-paths
+
+      - name: Validate Golden Path Templates
+        run: |
+          echo "## Golden Path Validation" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          ERRORS=0
+          for template in $(find golden-paths -name 'template.yaml' 2>/dev/null); do
+            echo "Validating $template..."
+            if python3 -c "import yaml; yaml.safe_load(open('$template'))" 2>/dev/null; then
+              echo "- OK: $template" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "- FAIL: $template - Invalid YAML" >> $GITHUB_STEP_SUMMARY
+              ERRORS=$((ERRORS+1))
+            fi
+          done
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Total templates found:** $(find golden-paths -name 'template.yaml' | wc -l)" >> $GITHUB_STEP_SUMMARY
+          if [ $ERRORS -gt 0 ]; then
+            echo "::error::$ERRORS templates failed validation"
+            exit 1
+          fi
+
+  # ===========================================================================
+  # SCRIPTS LINTING
+  # ===========================================================================
+  scripts-lint:
+    name: Scripts Lint
+    runs-on: ubuntu-latest
+    needs: detect-changes
+    if: needs.detect-changes.outputs.scripts == 'true'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - name: ShellCheck
+        uses: ludeeus/action-shellcheck@00b27aa7cb85167568cb48a3838b75f4265f2bca # master
+        with:
+          scandir: ./scripts
+          severity: warning
+          format: tty
+
+      - name: Check Executable Permissions
+        run: |
+          echo "## Script Permissions" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          find scripts -name "*.sh" -type f | while read -r script; do
+            if [[ -x "$script" ]]; then
+              echo "- OK: $script" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "- WARNING: $script (not executable)" >> $GITHUB_STEP_SUMMARY
+            fi
+          done
+
+  # ===========================================================================
+  # DOCUMENTATION LINTING
+  # ===========================================================================
+  docs-lint:
+    name: Documentation Lint
+    runs-on: ubuntu-latest
+    needs: detect-changes
+    if: needs.detect-changes.outputs.docs == 'true'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - name: Markdown Lint
+        uses: DavidAnson/markdownlint-cli2-action@510b996878fc0d1a46c8a04ec86b06dbfba09de7 # v15
+        with:
+          config: .markdownlint.json
+          globs: |
+            **/*.md
+            !**/node_modules/**
+            !golden-paths/**
+        continue-on-error: true # Documentation lint is a soft check
+
+      - name: Check Links
+        timeout-minutes: 5
+        continue-on-error: true # Link checking is informational and can be delayed by external sites
+        uses: lycheeverse/lychee-action@e7477775783ea5526144ba13e8db5eec57747ce8 # v2
+        with:
+          args: --verbose --no-progress --exclude-all-private './**/*.md'
+          fail: false
+
+  # ===========================================================================
+  # SDD SPECIFICATION VALIDATION
+  # ===========================================================================
+  specs-validate:
+    name: SDD Specifications Validate
+    runs-on: ubuntu-latest
+    needs: detect-changes
+    if: needs.detect-changes.outputs.specs == 'true'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - name: Setup Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install Validator Dependency
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install pyyaml==6.0.2
+
+      - name: Test Specification Validator
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m unittest tests/scripts/test_validate_specs.py
+
+      - name: Validate Numbered Specifications
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/validate-specs.py --strict | tee spec-validation.txt
+          {
+            echo "## SDD Specification Validation"
+            echo '```text'
+            cat spec-validation.txt
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  # ===========================================================================
+  # YAML LINTING
+  # ===========================================================================
+  yaml-lint:
+    name: YAML Lint
+    runs-on: ubuntu-latest
+    needs: detect-changes
+    if: |
+      needs.detect-changes.outputs.kubernetes == 'true' ||
+      needs.detect-changes.outputs.argocd == 'true'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - name: Setup Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install yamllint
+        run: pip install yamllint
+
+      - name: Run yamllint
+        run: yamllint -c .yamllint.yml deploy/ argocd/ config/ --format github
+        continue-on-error: true # YAML lint is a soft check for style issues
+
+  # ===========================================================================
+  # PRIMITIVES VALIDATION
+  # ===========================================================================
+  primitives-validate:
+    name: Copilot Primitives Validate
+    runs-on: ubuntu-latest
+    needs: detect-changes
+    if: needs.detect-changes.outputs.agents == 'true'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - name: Set up Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install Dependencies
+        run: pip install pyyaml
+
+      - name: Validate Copilot Customization Primitives
+        run: |
+          echo "## Copilot Primitives Validation" >> $GITHUB_STEP_SUMMARY
+          ./.github/skills/validation-scripts/scripts/validate-agents.py --strict | tee primitive-validation.txt
+          cat primitive-validation.txt >> $GITHUB_STEP_SUMMARY
+
+  # ===========================================================================
+  # SECURITY SCANNING
+  # ===========================================================================
+  security-scan:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0
+
+      - name: Install Gitleaks
+        run: |
+          version="${GITLEAKS_VERSION#v}"
+          curl -sSfL "https://github.com/gitleaks/gitleaks/releases/download/${GITLEAKS_VERSION}/gitleaks_${version}_linux_x64.tar.gz" -o gitleaks.tar.gz
+          tar -xzf gitleaks.tar.gz gitleaks
+          sudo install -m 0755 gitleaks /usr/local/bin/gitleaks
+
+      - name: Gitleaks Secret Detection
+        run: gitleaks detect --source . --no-git --redact --verbose
+        # CRITICAL: Secret detection must block CI - no continue-on-error
+
+      - name: Dependency Review
+        if: github.event_name == 'pull_request'
+        uses: actions/dependency-review-action@2031cfc080254a8a887f58cffee85186f0e49e48 # v4
+        with:
+          fail-on-severity: high
+        # CRITICAL: High severity vulnerabilities must block CI - no continue-on-error
+
+      - name: OSSF Scorecard
+        if: github.event_name == 'workflow_dispatch'
+        timeout-minutes: 5
+        uses: ossf/scorecard-action@0864cf19026789058feabb7e87baa5f140aac736 # v2.3.1
+        with:
+          results_file: scorecard.sarif
+          results_format: sarif
+          publish_results: true
+        continue-on-error: true # Informational only - scorecard results don't block CI
+
+  # ===========================================================================
+  # CI SUMMARY
+  # ===========================================================================
+  ci-summary:
+    name: CI Summary
+    runs-on: ubuntu-latest
+    needs:
+      - detect-changes
+      - terraform-validate
+      - terraform-lint
+      - terraform-security
+      - terraform-checkov
+      - terraform-cost
+      - kubernetes-validate
+      - golden-paths-validate
+      - scripts-lint
+      - docs-lint
+      - specs-validate
+      - yaml-lint
+      - primitives-validate
+      - security-scan
+    if: always()
+
+    steps:
+      - name: Generate Summary
+        env:
+          SPECS_RESULT: ${{ needs.specs-validate.result || 'skipped' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          {
+            echo "# CI Pipeline Summary"
+            echo ""
+            echo "| Job | Status |"
+            echo "|-----|--------|"
+            echo "| Terraform Validate | ${{ needs.terraform-validate.result || 'skipped' }} |"
+            echo "| TFLint | ${{ needs.terraform-lint.result || 'skipped' }} |"
+            echo "| TFSec | ${{ needs.terraform-security.result || 'skipped' }} |"
+            echo "| Checkov | ${{ needs.terraform-checkov.result || 'skipped' }} |"
+            echo "| Infracost | ${{ needs.terraform-cost.result || 'skipped' }} |"
+            echo "| Kubernetes | ${{ needs.kubernetes-validate.result || 'skipped' }} |"
+            echo "| Golden Paths | ${{ needs.golden-paths-validate.result || 'skipped' }} |"
+            echo "| Scripts | ${{ needs.scripts-lint.result || 'skipped' }} |"
+            echo "| Docs | ${{ needs.docs-lint.result || 'skipped' }} |"
+            printf '| SDD Specifications | %s |\n' "$SPECS_RESULT"
+            echo "| YAML | ${{ needs.yaml-lint.result || 'skipped' }} |"
+            echo "| Copilot Primitives | ${{ needs.primitives-validate.result || 'skipped' }} |"
+            echo "| Security | ${{ needs.security-scan.result }} |"
+            echo ""
+            echo "---"
+            echo "*Generated at: $(date -u)*"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Check for Failures
+        if: contains(needs.*.result, 'failure')
+        run: |
+          echo "::error::One or more CI jobs failed"
+          exit 1

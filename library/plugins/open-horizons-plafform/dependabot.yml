@@ -1,0 +1,110 @@
+# Dependabot configuration for Open Horizons Platform
+# https://docs.github.com/en/code-security/dependabot/dependabot-version-updates
+
+version: 2
+
+registries:
+  # Azure Container Registry (if using private images)
+  # acr:
+  #   type: docker-registry
+  #   url: https://myacr.azurecr.io
+  #   username: ${{ secrets.ACR_USERNAME }}
+  #   password: ${{ secrets.ACR_PASSWORD }}
+
+updates:
+  # GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    commit-message:
+      prefix: "ci"
+    labels:
+      - "dependencies"
+      - "github-actions"
+    reviewers:
+      - "platform-team"
+    groups:
+      github-actions:
+        patterns:
+          - "*"
+
+  # Terraform providers
+  - package-ecosystem: "terraform"
+    directory: "/terraform"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    commit-message:
+      prefix: "infra"
+    labels:
+      - "dependencies"
+      - "terraform"
+    reviewers:
+      - "platform-team"
+    groups:
+      terraform-providers:
+        patterns:
+          - "azurerm"
+          - "azuread"
+          - "kubernetes"
+          - "helm"
+    ignore:
+      # Ignore major version updates for stability
+      - dependency-name: "hashicorp/azurerm"
+        update-types: ["version-update:semver-major"]
+
+  # Python dependencies (if any Python services)
+  - package-ecosystem: "pip"
+    directory: "/scripts"
+    schedule:
+      interval: "weekly"
+      day: "tuesday"
+    commit-message:
+      prefix: "deps"
+    labels:
+      - "dependencies"
+      - "python"
+    reviewers:
+      - "platform-team"
+    groups:
+      python-packages:
+        patterns:
+          - "*"
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+
+  # Docker images (scan Dockerfiles)
+  - package-ecosystem: "docker"
+    directory: "/golden-paths"
+    schedule:
+      interval: "weekly"
+      day: "wednesday"
+    commit-message:
+      prefix: "docker"
+    labels:
+      - "dependencies"
+      - "docker"
+    reviewers:
+      - "platform-team"
+
+  # npm dependencies (for any Node.js tooling)
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "thursday"
+    commit-message:
+      prefix: "deps"
+    labels:
+      - "dependencies"
+      - "npm"
+    reviewers:
+      - "platform-team"
+    open-pull-requests-limit: 5
+    groups:
+      npm-packages:
+        patterns:
+          - "*"

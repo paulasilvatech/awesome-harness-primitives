@@ -1,0 +1,4 @@
+# Draw.io MCP server dependency.
+# The diagram manipulation uses only the Python standard library; the only
+# dependency is the MCP SDK that provides FastMCP.
+mcp[cli]>=1.2.0

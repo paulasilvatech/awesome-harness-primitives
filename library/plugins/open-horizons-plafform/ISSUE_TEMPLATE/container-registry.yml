@@ -1,0 +1,158 @@
+name: "Container Registry Setup"
+description: "Configure Azure Container Registry with scanning and replication"
+title: "[H1] Container Registry - "
+labels: ["agent:deploy", "horizon:h1", "env:dev"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Container Registry Agent
+        
+        This issue triggers the **Container Registry Agent** to configure:
+        - Azure Container Registry (ACR)
+        - Image scanning with Defender
+        - Geo-replication (optional)
+        - Private endpoints
+        - RBAC for AKS pull access
+        
+        ---
+        
+        ### Related Components
+        
+        | Component | Path | Description |
+        |-----------|------|-------------|
+        | Terraform Module | `terraform/modules/container-registry/` | ACR infrastructure |
+        | **Naming Module** | `terraform/modules/naming/` | `cr{project}{env}{region}` |
+        | Agent Spec | `agents/h1-foundation/container-registry-agent.md` | Agent definition |
+        
+        ### ACR Naming (CRITICAL!)
+        
+        [WARN] **ACR names CANNOT contain hyphens!**
+        
+        ```
+        [OK] Correct: cropenhorizonsprdbrs
+        [FAIL] Wrong:   cr-openhorizons-prd-brs
+        
+        Rules:
+        - 5-50 characters
+        - Alphanumeric ONLY (a-z, A-Z, 0-9)
+        - Globally unique
+        ```
+
+  - type: input
+    id: project_name
+    attributes:
+      label: Project Name
+      description: "Lowercase alphanumeric (will be used without hyphens)"
+      placeholder: "myproject"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: environment
+    attributes:
+      label: Environment
+      options:
+        - dev
+        - stg
+        - prd
+      default: 0
+    validations:
+      required: true
+
+  - type: dropdown
+    id: region
+    attributes:
+      label: Azure Region
+      options:
+        - brazilsouth (brs)
+        - eastus (eus)
+        - westeurope (weu)
+      default: 0
+    validations:
+      required: true
+
+  - type: dropdown
+    id: sku
+    attributes:
+      label: ACR SKU
+      description: "Premium required for geo-replication and private endpoints"
+      options:
+        - Basic (dev/test)
+        - Standard (staging)
+        - Premium (production - geo-rep, private endpoints)
+      default: 0
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: features
+    attributes:
+      label: ACR Features
+      options:
+        - label: "Enable Admin User (not recommended for production)"
+        - label: "Enable Content Trust (image signing)"
+        - label: "Enable Defender for Containers (vulnerability scanning)"
+          required: true
+        - label: "Enable Private Endpoint"
+        - label: "Enable Geo-Replication (Premium only)"
+        - label: "Enable Retention Policy"
+
+  - type: input
+    id: retention_days
+    attributes:
+      label: Image Retention (days)
+      description: "Days to retain untagged images (0 = disable)"
+      placeholder: "30"
+
+  - type: textarea
+    id: replication_regions
+    attributes:
+      label: Geo-Replication Regions (Premium SKU only)
+      description: "One region per line"
+      placeholder: |
+        eastus
+        westeurope
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        
+        ## Pre-Deployment Checklist
+        
+        - [ ] Infrastructure deployed via `infrastructure.yml`
+        - [ ] Run `scripts/validate-naming.sh acr cr{project}{env}{region}`
+        - [ ] Verify ACR name has NO HYPHENS
+        - [ ] Confirm Premium SKU if using geo-replication
+        
+        ## Deployment Commands
+        
+        ```bash
+        # Validate ACR naming (no hyphens!)
+        ./scripts/validate-naming.sh acr cropenhorizonsprdbrs
+        
+        # Deploy container registry module
+        cd terraform
+        terraform apply -target=module.container_registry
+        
+        # Attach ACR to AKS
+        az aks update -n aks-myproject-prd-brs -g rg-myproject-prd-brs \
+          --attach-acr cropenhorizonsprdbrs
+        ```
+        
+        ## Related Issues
+        
+        - **Prerequisites**: Infrastructure → `infrastructure.yml`
+        - **Next**: GitHub Runners (for CI/CD) → `github-runners.yml`
+        - **Related**: Defender for Containers → `defender-cloud.yml`
+
+  - type: checkboxes
+    id: confirmation
+    attributes:
+      label: Confirmation
+      options:
+        - label: "ACR name validated (no hyphens, 5-50 chars)"
+          required: true
+        - label: "I understand Premium SKU is required for private endpoints"
+          required: true

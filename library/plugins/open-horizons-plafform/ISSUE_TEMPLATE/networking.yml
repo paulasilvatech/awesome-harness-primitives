@@ -1,0 +1,62 @@
+name: "H1: Networking Setup"
+description: "Deploy hub-spoke network architecture with private endpoints"
+title: "[Networking] Deploy network infrastructure"
+labels: ["h1-foundation", "networking", "copilot-agent"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Network Architecture Deployment
+        This issue triggers the **networking-agent** to deploy hub-spoke topology.
+
+  - type: dropdown
+    id: sizing_profile
+    attributes:
+      label: "T-Shirt Size"
+      options:
+        - "small - Single VNet, basic subnets (~$50/mo)"
+        - "medium - Hub-spoke, NAT Gateway (~$200/mo)"
+        - "large - Multi-hub, ExpressRoute ready (~$500/mo)"
+        - "xlarge - Global hub, Front Door (~$2,000/mo)"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: azure_region
+    attributes:
+      label: "Primary Azure Region"
+      options:
+        - "brazilsouth - Brazil South (São Paulo)"
+        - "eastus2 - East US 2 (Virginia)"
+        - "southcentralus - South Central US (Texas)"
+    validations:
+      required: true
+
+  - type: input
+    id: vnet_cidr
+    attributes:
+      label: "VNet CIDR Range"
+      description: "Primary VNet address space"
+      placeholder: "10.0.0.0/16"
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: network_features
+    attributes:
+      label: "Network Features"
+      options:
+        - label: "Private DNS Zones"
+          required: true
+        - label: "NAT Gateway"
+        - label: "Azure Firewall"
+        - label: "Application Gateway"
+        - label: "Private Endpoints for PaaS"
+        - label: "VNet Peering (multi-region)"
+
+  - type: textarea
+    id: additional_context
+    attributes:
+      label: "Additional Context"
+      description: "Any specific networking requirements"

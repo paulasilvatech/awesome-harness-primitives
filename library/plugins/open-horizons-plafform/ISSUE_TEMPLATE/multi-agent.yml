@@ -1,0 +1,47 @@
+name: "H3: Multi-Agent Orchestration"
+description: "Deploy multi-agent AI systems with Semantic Kernel"
+title: "[Multi-Agent] Deploy agent orchestration"
+labels: ["h3-innovation", "multi-agent", "copilot-agent"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Multi-Agent System Deployment
+        This issue triggers the **multi-agent-setup** for AI agent orchestration.
+
+  - type: dropdown
+    id: sizing_profile
+    attributes:
+      label: "T-Shirt Size"
+      options:
+        - "small - Basic agent framework"
+        - "medium - Multi-agent with tools"
+        - "large - Complex workflows, memory"
+        - "xlarge - Enterprise multi-agent system"
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: agent_types
+    attributes:
+      label: "Agent Types to Deploy"
+      options:
+        - label: "Planning Agent"
+        - label: "Coding Agent"
+        - label: "Research Agent"
+        - label: "Data Analysis Agent"
+        - label: "Documentation Agent"
+        - label: "Review Agent"
+
+  - type: dropdown
+    id: framework
+    attributes:
+      label: "Agent Framework"
+      options:
+        - "Semantic Kernel"
+        - "AutoGen"
+        - "LangGraph"
+        - "CrewAI"
+    validations:
+      required: true

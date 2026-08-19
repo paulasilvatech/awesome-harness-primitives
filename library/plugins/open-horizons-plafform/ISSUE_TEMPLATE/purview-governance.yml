@@ -1,0 +1,57 @@
+name: "H1: Purview Data Governance"
+description: "Deploy Microsoft Purview for data catalog and governance"
+title: "[Purview] Deploy data governance"
+labels: ["h1-foundation", "governance", "purview", "copilot-agent"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Microsoft Purview Deployment
+        This issue triggers the **purview-governance-agent** for data catalog and quality.
+
+  - type: dropdown
+    id: sizing_profile
+    attributes:
+      label: "T-Shirt Size"
+      options:
+        - "small - Free tier, basic catalog (~$0-100/mo)"
+        - "medium - Standard, 1 CU, daily scans (~$500/mo)"
+        - "large - Standard, 4 CU, data quality (~$2,000/mo)"
+        - "xlarge - Standard, 16 CU, full governance (~$5,000/mo)"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: azure_region
+    attributes:
+      label: "Primary Azure Region"
+      options:
+        - "brazilsouth - Brazil South (São Paulo)"
+        - "eastus2 - East US 2 (Virginia)"
+        - "southcentralus - South Central US (Texas)"
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: purview_features
+    attributes:
+      label: "Purview Features"
+      options:
+        - label: "Data Catalog"
+          required: true
+        - label: "Automated Data Scanning"
+          required: true
+        - label: "Business Glossary"
+        - label: "Data Quality Rules"
+        - label: "Data Lineage"
+        - label: "LATAM Classifications (CPF, CNPJ, RUT)"
+        - label: "Sensitivity Labels Integration"
+        - label: "Private Endpoints"
+
+  - type: input
+    id: data_sources
+    attributes:
+      label: "Data Sources to Register"
+      description: "Comma-separated list of data source types"
+      placeholder: "PostgreSQL, Azure SQL, ADLS Gen2, Cosmos DB"

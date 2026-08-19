@@ -25,6 +25,26 @@ version changes, local evidence conflicts, a claim is unverified, the user asks 
 this evidence is older than 90 days. Do not refresh this date without repeating the fetch and reviewing
 the relevant sections.
 
+## PowerPlatform Dataverse Client for Python verification
+
+Verification date: 2026-08-19. Target: latest published GitHub release `v1.0.0`; repository `main`
+declared version `1.0.1` in `pyproject.toml` at verification time. The instruction targets the shared
+1.x GA contract rather than unreleased-only behavior.
+
+| Source | Verified result |
+| --- | --- |
+| https://github.com/microsoft/PowerPlatform-DataverseClient-Python/blob/v1.0.0/src/PowerPlatform/Dataverse/client.py | The v0 shortcuts `create`, `get`, `update`, `delete`, and `upload_file` were removed in 1.0 GA. Access raises `AttributeError` with the namespaced replacement and migration command. |
+| https://github.com/microsoft/PowerPlatform-DataverseClient-Python/blob/v1.0.0/src/PowerPlatform/Dataverse/operations/files.py | The public upload API is `client.files.upload(table, record_id, file_column, path, *, mode=None, mime_type=None, if_none_match=True) -> None`. |
+| https://github.com/microsoft/PowerPlatform-DataverseClient-Python/blob/v1.0.0/src/PowerPlatform/Dataverse/data/_upload.py | Auto mode selects a single PATCH below 128 MiB and chunked PATCH at 128 MiB or above. Chunk mode uses the server's `x-ms-chunk-size` value or a 4 MiB fallback; no public `chunk_size` parameter exists. SDK 1.0 forwards `mime_type` only to the small path and sends chunk segments as `application/octet-stream`. |
+| https://github.com/microsoft/PowerPlatform-DataverseClient-Python/blob/v1.0.0/src/PowerPlatform/Dataverse/operations/records.py | A single-dictionary `records.create` returns one GUID string. Multi-record `records.get` returns pages; `page_size` is the page hint and `top` caps the total number returned. |
+| https://github.com/microsoft/PowerPlatform-DataverseClient-Python/blob/v1.0.0/src/PowerPlatform/Dataverse/core/errors.py | `HttpError` exposes `is_transient`, `retry_after`, status, correlation, request, and trace fields for bounded retry and diagnostics. |
+| https://learn.microsoft.com/en-us/power-apps/developer/data-platform/file-column-data | The page was dated 2026-03-09. File bytes are handled separately from ordinary record create/update. The Dataverse block-message protocol uses blocks of 4 MB or less; it is distinct from the Python SDK's native chunked PATCH implementation. |
+
+This verification found that the earlier `dataverse-python-file-operations` instruction described the
+removed beta `client.upload_file(...)` API, invented a public `chunk_size` argument, treated a single
+create result as a list, and used `top=5000` as if it were a page-size setting. The canonical instruction
+was corrected to the 1.x GA contract.
+
 ## Non-interactive surface verified
 
 Working commands/flags:

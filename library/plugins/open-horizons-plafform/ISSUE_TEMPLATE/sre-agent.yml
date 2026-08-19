@@ -1,0 +1,36 @@
+name: "H3: SRE Agent Setup"
+description: "Deploy AI-powered SRE automation agents"
+title: "[SRE] Deploy SRE automation agents"
+labels: ["h3-innovation", "sre-agent", "copilot-agent"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## SRE Agent Deployment
+        This issue triggers the **sre-agent-setup** for automated operations.
+
+  - type: dropdown
+    id: sizing_profile
+    attributes:
+      label: "T-Shirt Size"
+      options:
+        - "small - Basic alerting and runbooks"
+        - "medium - AI-assisted incident response"
+        - "large - Full SRE automation"
+        - "xlarge - Predictive operations"
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: sre_capabilities
+    attributes:
+      label: "SRE Capabilities"
+      options:
+        - label: "Automated Runbooks"
+        - label: "Incident Detection"
+        - label: "Root Cause Analysis"
+        - label: "Auto-remediation"
+        - label: "Capacity Planning"
+        - label: "Cost Anomaly Detection"
+        - label: "PagerDuty/OpsGenie Integration"

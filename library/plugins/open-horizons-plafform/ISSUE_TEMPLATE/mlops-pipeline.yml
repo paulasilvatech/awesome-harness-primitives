@@ -1,0 +1,49 @@
+name: "H3: MLOps Pipeline"
+description: "Deploy ML model training and deployment pipelines"
+title: "[MLOps] Deploy ML pipelines"
+labels: ["h3-innovation", "mlops", "copilot-agent"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## MLOps Pipeline Deployment
+        This issue triggers the **mlops-pipeline-agent**.
+
+  - type: dropdown
+    id: sizing_profile
+    attributes:
+      label: "T-Shirt Size"
+      options:
+        - "small - Basic ML workspace"
+        - "medium - Training clusters, model registry"
+        - "large - GPU clusters, A/B deployment"
+        - "xlarge - Multi-region, real-time inference"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: azure_region
+    attributes:
+      label: "ML Region"
+      options:
+        - "eastus2 - East US 2"
+        - "southcentralus - South Central US"
+        - "brazilsouth - Brazil South"
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: mlops_features
+    attributes:
+      label: "MLOps Features"
+      options:
+        - label: "Azure ML Workspace"
+          required: true
+        - label: "Model Registry"
+        - label: "Training Compute Clusters"
+        - label: "GPU Support"
+        - label: "Online Endpoints"
+        - label: "Batch Endpoints"
+        - label: "Model Monitoring"
+        - label: "Data Drift Detection"

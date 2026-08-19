@@ -1,0 +1,45 @@
+name: "H2: GitOps Setup"
+description: "Deploy ArgoCD and configure GitOps workflows"
+title: "[GitOps] Deploy ArgoCD infrastructure"
+labels: ["h2-enhancement", "gitops", "copilot-agent"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## GitOps Infrastructure Deployment
+        This issue triggers the **gitops-agent** to deploy ArgoCD.
+
+  - type: dropdown
+    id: sizing_profile
+    attributes:
+      label: "T-Shirt Size"
+      options:
+        - "small - Single ArgoCD instance"
+        - "medium - ArgoCD with ApplicationSets"
+        - "large - ArgoCD HA, multi-cluster"
+        - "xlarge - ArgoCD HA, enterprise plugins"
+    validations:
+      required: true
+
+  - type: input
+    id: gitops_repo
+    attributes:
+      label: "GitOps Repository URL"
+      description: "Repository for ArgoCD to sync from"
+      placeholder: "https://github.com/org/platform-gitops"
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: gitops_features
+    attributes:
+      label: "GitOps Features"
+      options:
+        - label: "ArgoCD Core"
+          required: true
+        - label: "ApplicationSets"
+        - label: "ArgoCD Image Updater"
+        - label: "Notifications (Slack/Teams)"
+        - label: "RBAC with Entra ID"
+        - label: "Multi-cluster support"

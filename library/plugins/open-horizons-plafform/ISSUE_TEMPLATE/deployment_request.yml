@@ -1,0 +1,148 @@
+name: Deployment Request
+description: Request a new platform deployment with T-shirt sizing
+title: "[DEPLOY] "
+labels: ["deployment", "agent:deploy", "workflow:full-deployment"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Open Horizons Platform Deployment Request
+
+        This form will help configure your platform deployment. An AI agent will process this request.
+
+  - type: input
+    id: project_name
+    attributes:
+      label: Project Name
+      description: Unique identifier for your project (lowercase, no spaces)
+      placeholder: "e.g., mycompany-platform"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: environment
+    attributes:
+      label: Environment
+      description: Target deployment environment
+      options:
+        - dev
+        - staging
+        - prod
+    validations:
+      required: true
+
+  - type: dropdown
+    id: size
+    attributes:
+      label: T-Shirt Size
+      description: |
+        Select based on team size and workload:
+        - Small: <10 devs, $2,000-3,000/mo
+        - Medium: 10-50 devs, $5,000-8,000/mo
+        - Large: 50-200 devs, $15,000-25,000/mo
+        - XLarge: 200+ devs, $40,000-60,000/mo
+      options:
+        - Small
+        - Medium
+        - Large
+        - XLarge
+    validations:
+      required: true
+
+  - type: dropdown
+    id: region
+    attributes:
+      label: Azure Region
+      description: Primary deployment region
+      options:
+        - brazilsouth (LGPD compliant, limited AI)
+        - eastus2 (Full AI capabilities)
+        - southcentralus (Full AI, US compliance)
+    validations:
+      required: true
+
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Kubernetes Platform
+      description: Choose your Kubernetes platform
+      options:
+        - AKS (Azure Kubernetes Service)
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: horizons
+    attributes:
+      label: Horizons to Deploy
+      description: Select which horizons to deploy
+      options:
+        - label: "H1 - Foundation (AKS, Networking, Security, ACR, Databases)"
+          required: true
+        - label: "H2 - Enhancement (ArgoCD, Backstage, Observability, Golden Paths)"
+        - label: "H3 - Innovation (AI Foundry, SRE Agent, MLOps)"
+
+  - type: checkboxes
+    id: features
+    attributes:
+      label: Additional Features
+      description: Select optional features
+      options:
+        - label: Defender for Cloud (CSPM, container scanning)
+        - label: Microsoft Purview (Data governance)
+        - label: GitHub Runners (Self-hosted on AKS)
+        - label: Private Endpoints (Enhanced security)
+        - label: Multi-region setup
+
+  - type: dropdown
+    id: authentication
+    attributes:
+      label: Authentication Method
+      description: How will users authenticate?
+      options:
+        - Entra ID (Azure AD) - Recommended for enterprises
+        - GitHub OAuth - For GitHub-centric orgs
+    validations:
+      required: true
+
+  - type: input
+    id: github_org
+    attributes:
+      label: GitHub Organization
+      description: Your GitHub organization name
+      placeholder: "e.g., my-company"
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional_config
+    attributes:
+      label: Additional Configuration
+      description: Any specific requirements or configurations
+      placeholder: |
+        - Custom domain: platform.company.com
+        - Specific network CIDR: 10.0.0.0/16
+        - Integration requirements...
+
+  - type: textarea
+    id: approvers
+    attributes:
+      label: Approvers
+      description: List GitHub handles of approvers (required for staging/prod)
+      placeholder: "@user1, @user2"
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Pre-deployment Checklist
+      options:
+        - label: Azure subscription is ready with required permissions
+          required: true
+        - label: GitHub organization has available seats
+          required: true
+        - label: Budget is approved for estimated costs
+          required: true
+        - label: I have read the README and Deployment Guide
+          required: true

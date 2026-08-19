@@ -1,0 +1,55 @@
+name: "Cross: Migration"
+description: "Migrate from Azure DevOps or other platforms"
+title: "[Migration] Execute platform migration"
+labels: ["cross-cutting", "migration", "copilot-agent"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Platform Migration
+        This issue triggers the **migration-agent** for source platform migration.
+
+  - type: dropdown
+    id: source_platform
+    attributes:
+      label: "Source Platform"
+      options:
+        - "Azure DevOps"
+        - "GitLab"
+        - "Bitbucket"
+        - "Jenkins"
+        - "TeamCity"
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: migration_scope
+    attributes:
+      label: "Migration Scope"
+      options:
+        - label: "Repositories"
+          required: true
+        - label: "Pipelines/Actions"
+        - label: "Work Items/Issues"
+        - label: "Wiki/Documentation"
+        - label: "Artifacts/Packages"
+        - label: "Test Plans"
+        - label: "Variable Groups/Secrets"
+
+  - type: input
+    id: source_org
+    attributes:
+      label: "Source Organization URL"
+      description: "URL of source platform organization"
+      placeholder: "https://dev.azure.com/myorg"
+    validations:
+      required: true
+
+  - type: input
+    id: target_org
+    attributes:
+      label: "Target GitHub Organization"
+      placeholder: "my-github-org"
+    validations:
+      required: true

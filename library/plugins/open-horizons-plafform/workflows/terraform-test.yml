@@ -1,0 +1,293 @@
+# =============================================================================
+# OPEN HORIZONS PLATFORM - TERRAFORM MODULE TESTS
+# =============================================================================
+#
+# Runs Terratest tests for Terraform modules.
+#
+# Test Types:
+# - Unit tests: Run on every PR (no Azure resources)
+# - Integration tests: Run on merge to main (creates real resources)
+#
+# =============================================================================
+
+name: Terraform Tests
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/terraform-test.yml'
+      - 'config/sizing-profiles.yaml'
+      - 'policies/terraform/**'
+      - 'terraform/**'
+      - 'tests/terraform/**'
+  pull_request:
+    branches: [main, develop]
+    paths:
+      - '.github/workflows/terraform-test.yml'
+      - 'config/sizing-profiles.yaml'
+      - 'policies/terraform/**'
+      - 'terraform/**'
+      - 'tests/terraform/**'
+  schedule:
+    # Run full test suite weekly on Sundays at 2 AM UTC
+    - cron: '0 2 * * 0'
+  workflow_dispatch:
+    inputs:
+      test_type:
+        description: 'Test type to run'
+        required: true
+        default: 'unit'
+        type: choice
+        options:
+          - unit
+          - integration
+          - all
+
+env:
+  TF_VERSION: "1.6.6"
+  GO_VERSION: "1.21"
+  TERRATEST_PARALLELISM: "4"
+  CONFTEST_VERSION: "v0.56.0"
+
+permissions:
+  contents: read
+
+jobs:
+  # ===========================================================================
+  # IAC VALIDATION
+  # ===========================================================================
+  iac-validation:
+    name: IaC Validation
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd # v3
+        with:
+          terraform_version: ${{ env.TF_VERSION }}
+          terraform_wrapper: false
+
+      - name: Setup TFLint
+        uses: terraform-linters/setup-tflint@90f302c255ef959cbfb4bd10581afecdb7ece3e6 # v4
+
+      - name: Terraform fmt
+        working-directory: terraform
+        run: terraform fmt -recursive -check
+
+      - name: Terraform init
+        working-directory: terraform
+        run: terraform init -backend=false -input=false -no-color
+
+      - name: Terraform validate
+        working-directory: terraform
+        run: terraform validate -no-color
+
+      - name: TFLint init
+        run: tflint --init
+
+      - name: TFLint recursive scan
+        run: tflint --recursive --minimum-failure-severity=error
+
+      - name: Install conftest
+        shell: bash
+        run: |
+          set -euo pipefail
+          version="${CONFTEST_VERSION#v}"
+          curl -fsSL -o conftest.tar.gz "https://github.com/open-policy-agent/conftest/releases/download/${CONFTEST_VERSION}/conftest_${version}_Linux_x86_64.tar.gz"
+          tar -xzf conftest.tar.gz
+          sudo mv conftest /usr/local/bin/conftest
+          conftest --version
+
+      - name: Validate Terraform OPA policies
+        shell: bash
+        run: |
+          set -euo pipefail
+          printf '{"resource_changes":[]}' > /tmp/empty-tfplan.json
+          conftest test /tmp/empty-tfplan.json --policy policies/terraform --all-namespaces
+
+  # ===========================================================================
+  # UNIT TESTS
+  # ===========================================================================
+  unit-tests:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    if: |
+      github.event_name == 'pull_request' ||
+      github.event.inputs.test_type == 'unit' ||
+      github.event.inputs.test_type == 'all' ||
+      github.event_name == 'schedule'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - name: Setup Go
+        uses: actions/setup-go@40f1582b2485089dde7abd97c1529aa768e1baff # v5
+        with:
+          go-version: ${{ env.GO_VERSION }}
+          cache-dependency-path: tests/terraform/go.sum
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd # v3
+        with:
+          terraform_version: ${{ env.TF_VERSION }}
+          terraform_wrapper: false
+
+      - name: Download Go Dependencies
+        working-directory: tests/terraform
+        run: go mod download
+
+      - name: Run Unit Tests
+        working-directory: tests/terraform
+        run: |
+          go test -v -tags=unit -timeout 30m ./... 2>&1 | tee test-output.txt
+
+      - name: Generate Test Report
+        if: always()
+        working-directory: tests/terraform
+        run: |
+          {
+            echo "## Unit Test Results"
+            echo ""
+            echo '```'
+            tail -50 test-output.txt || echo "No output"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload Test Output
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        if: always()
+        with:
+          name: unit-test-output
+          path: tests/terraform/test-output.txt
+
+  # ===========================================================================
+  # INTEGRATION TESTS
+  # ===========================================================================
+  integration-tests:
+    name: Integration Tests
+    runs-on: ubuntu-latest
+    if: |
+      github.event_name == 'push' && github.ref == 'refs/heads/main' ||
+      github.event.inputs.test_type == 'integration' ||
+      github.event.inputs.test_type == 'all' ||
+      github.event_name == 'schedule'
+    environment: testing
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - name: Setup Go
+        uses: actions/setup-go@40f1582b2485089dde7abd97c1529aa768e1baff # v5
+        with:
+          go-version: ${{ env.GO_VERSION }}
+          cache-dependency-path: tests/terraform/go.sum
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd # v3
+        with:
+          terraform_version: ${{ env.TF_VERSION }}
+          terraform_wrapper: false
+
+      - name: Azure Login
+        uses: azure/login@7184910d9eb2b1c5e48f7073824a90609bb9b6d6 # v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Download Go Dependencies
+        working-directory: tests/terraform
+        run: go mod download
+
+      - name: Run Integration Tests
+        working-directory: tests/terraform
+        env:
+          ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+          ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+          ARM_USE_OIDC: true
+        run: |
+          go test -v -tags=integration -timeout 60m -parallel "$TERRATEST_PARALLELISM" ./... 2>&1 | tee test-output.txt
+
+      - name: Generate Test Report
+        if: always()
+        working-directory: tests/terraform
+        run: |
+          {
+            echo "## Integration Test Results"
+            echo ""
+            echo '```'
+            tail -100 test-output.txt || echo "No output"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Cleanup Azure Resources
+        if: always()
+        run: |
+          # Find and delete any leftover test resource groups
+          echo "Cleaning up test resources..."
+          az group list --query "[?contains(name, 'terratest')].name" -o tsv | while read -r rg; do
+            echo "Deleting resource group: $rg"
+            az group delete --name "$rg" --yes --no-wait || true
+          done
+
+      - name: Upload Test Output
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        if: always()
+        with:
+          name: integration-test-output
+          path: tests/terraform/test-output.txt
+
+  # ===========================================================================
+  # TEST SUMMARY
+  # ===========================================================================
+  test-summary:
+    name: Test Summary
+    runs-on: ubuntu-latest
+    needs: [iac-validation, unit-tests, integration-tests]
+    if: always()
+
+    steps:
+      - name: Download Unit Test Artifacts
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: unit-test-output
+          path: unit-tests
+        continue-on-error: true
+
+      - name: Download Integration Test Artifacts
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: integration-test-output
+          path: integration-tests
+        continue-on-error: true
+
+      - name: Generate Summary
+        run: |
+          {
+            echo "# Terraform Test Summary"
+            echo ""
+            echo "| Test Type | Status |"
+            echo "|-----------|--------|"
+            echo "| IaC Validation | ${{ needs.iac-validation.result || 'skipped' }} |"
+            echo "| Unit Tests | ${{ needs.unit-tests.result || 'skipped' }} |"
+            echo "| Integration Tests | ${{ needs.integration-tests.result || 'skipped' }} |"
+            echo ""
+            echo "---"
+            echo "*Test run completed at: $(date -u)*"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Check Results
+        if: contains(needs.*.result, 'failure')
+        run: |
+          echo "::error::One or more test suites failed"
+          exit 1

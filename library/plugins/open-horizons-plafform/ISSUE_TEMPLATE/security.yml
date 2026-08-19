@@ -1,0 +1,155 @@
+name: "Security Configuration"
+description: "Configure Key Vault, Managed Identities, and security policies"
+title: "[H1] Security - "
+labels: ["agent:security", "horizon:h1", "security"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Security Agent
+        
+        This issue triggers the **Security Agent** to configure:
+        - Azure Key Vault with RBAC
+        - Managed Identities (System & User Assigned)
+        - Private Endpoints
+        - Network Security Groups
+        - Azure Policy assignments
+        
+        ---
+        
+        ### Related Components
+        
+        | Component | Path | Description |
+        |-----------|------|-------------|
+        | Terraform Module | `terraform/modules/security/` | Security infrastructure |
+        | **Naming Module** | `terraform/modules/naming/` | `kv-{project}-{env}-{region}` |
+        | Agent Spec | `agents/h1-foundation/security-agent.md` | Agent definition |
+        | Defender Agent | `agents/h1-foundation/defender-cloud-agent.md` | Advanced security |
+        
+        ### Security Resource Naming
+        
+        ```
+        Key Vault:        kv-{project}-{env}-{region}  (max 24 chars!)
+        Managed Identity: id-{project}-{env}-{region}
+        Private Endpoint: pe-{project}-{env}-{region}-kv
+        ```
+
+  - type: input
+    id: project_name
+    attributes:
+      label: Project Name
+      description: "Must match infrastructure deployment"
+      placeholder: "myproject"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: environment
+    attributes:
+      label: Environment
+      options:
+        - dev
+        - stg
+        - prd
+      default: 0
+    validations:
+      required: true
+
+  - type: dropdown
+    id: region
+    attributes:
+      label: Azure Region
+      options:
+        - brazilsouth (brs)
+        - eastus (eus)
+        - westeurope (weu)
+      default: 0
+    validations:
+      required: true
+
+  - type: dropdown
+    id: keyvault_sku
+    attributes:
+      label: Key Vault SKU
+      options:
+        - standard
+        - premium (HSM-backed keys)
+      default: 0
+
+  - type: checkboxes
+    id: security_features
+    attributes:
+      label: Security Features
+      options:
+        - label: "Enable Soft Delete (recommended)"
+          required: true
+        - label: "Enable Purge Protection"
+        - label: "Enable RBAC Authorization"
+          required: true
+        - label: "Enable Private Endpoint"
+        - label: "Enable Diagnostic Logging"
+        - label: "Configure Firewall Rules"
+
+  - type: checkboxes
+    id: identities
+    attributes:
+      label: Managed Identities to Create
+      options:
+        - label: "AKS Cluster Identity"
+          required: true
+        - label: "ArgoCD Identity"
+        - label: "Backstage Identity"
+        - label: "GitHub Actions Identity (Workload Federation)"
+        - label: "Application Gateway Identity"
+
+  - type: textarea
+    id: rbac_assignments
+    attributes:
+      label: RBAC Role Assignments
+      description: "Define role assignments for identities"
+      placeholder: |
+        # Format: identity -> role -> scope
+        aks-identity:
+          - Key Vault Secrets User -> Key Vault
+          - ACR Pull -> Container Registry
+        argocd-identity:
+          - Key Vault Secrets User -> Key Vault
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        
+        ## Pre-Deployment Checklist
+        
+        - [ ] Infrastructure deployed via `infrastructure.yml`
+        - [ ] Run `scripts/validate-naming.sh keyvault kv-{project}-{env}-{region}`
+        - [ ] Verify Key Vault name is ≤24 characters
+        - [ ] Confirm Entra ID permissions for RBAC
+        
+        ## Deployment Commands
+        
+        ```bash
+        # Validate Key Vault naming
+        ./scripts/validate-naming.sh keyvault kv-myproject-prd-brs
+        
+        # Deploy security module
+        cd terraform
+        terraform apply -target=module.security
+        ```
+        
+        ## Related Issues
+        
+        - **Prerequisites**: Infrastructure → `infrastructure.yml`
+        - **Next**: Identity Federation → `identity-federation.yml`
+        - **Next**: Defender for Cloud → `defender-cloud.yml`
+
+  - type: checkboxes
+    id: confirmation
+    attributes:
+      label: Confirmation
+      options:
+        - label: "Infrastructure has been deployed"
+          required: true
+        - label: "Key Vault name validated (≤24 chars)"
+          required: true

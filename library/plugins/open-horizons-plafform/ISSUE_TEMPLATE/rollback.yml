@@ -1,0 +1,52 @@
+name: "⏪ Cross: Rollback"
+description: "Rollback platform changes to previous state"
+title: "[Rollback] Execute platform rollback"
+labels: ["cross-cutting", "rollback", "copilot-agent"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Platform Rollback
+        This issue triggers the **rollback-agent** for state recovery.
+
+  - type: dropdown
+    id: rollback_type
+    attributes:
+      label: "Rollback Type"
+      options:
+        - "terraform - Infrastructure state"
+        - "gitops - ArgoCD applications"
+        - "database - Database restore"
+        - "full - Complete platform"
+    validations:
+      required: true
+
+  - type: input
+    id: target_version
+    attributes:
+      label: "Target Version/State"
+      description: "Version or state to rollback to"
+      placeholder: "v1.2.0 or terraform state ID"
+    validations:
+      required: true
+
+  - type: textarea
+    id: rollback_reason
+    attributes:
+      label: "Rollback Reason"
+      description: "Why is this rollback needed?"
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: rollback_confirmations
+    attributes:
+      label: "Confirmations"
+      options:
+        - label: "I understand this will revert changes"
+          required: true
+        - label: "I have notified affected teams"
+          required: true
+        - label: "I have documented the issue"
+          required: true

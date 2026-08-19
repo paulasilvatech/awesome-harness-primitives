@@ -1,0 +1,137 @@
+name: "GitHub App / OAuth Setup"
+description: "Create GitHub Apps, OAuth Apps, and webhooks for integrations"
+title: "[GITHUB-APP] "
+labels: ["github", "oauth", "integration", "cross-cutting"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## GitHub App / OAuth Setup
+        Configure GitHub Apps and OAuth Apps for Backstage, ArgoCD, and other integrations.
+
+  - type: dropdown
+    id: app_type
+    attributes:
+      label: "Application Type"
+      description: "What type of GitHub application?"
+      options:
+        - "GitHub App (for Backstage)"
+        - "OAuth App (for ArgoCD SSO)"
+        - "OAuth App (for Backstage SSO)"
+        - "Both GitHub App + OAuth App"
+    validations:
+      required: true
+
+  - type: input
+    id: github_org
+    attributes:
+      label: "GitHub Organization"
+      description: "Your GitHub organization name"
+      placeholder: "my-org"
+    validations:
+      required: true
+
+  - type: input
+    id: app_name
+    attributes:
+      label: "Application Name"
+      description: "Name for the GitHub/OAuth App"
+      placeholder: "my-org-developer-hub"
+    validations:
+      required: true
+
+  - type: input
+    id: homepage_url
+    attributes:
+      label: "Homepage URL"
+      description: "URL of the application (Backstage/ArgoCD)"
+      placeholder: "https://developer-hub.example.com"
+    validations:
+      required: true
+
+  - type: input
+    id: callback_url
+    attributes:
+      label: "OAuth Callback URL"
+      description: "OAuth callback endpoint"
+      placeholder: "https://developer-hub.example.com/api/auth/github/handler/frame"
+    validations:
+      required: true
+
+  - type: input
+    id: webhook_url
+    attributes:
+      label: "Webhook URL (if applicable)"
+      description: "Webhook endpoint for events"
+      placeholder: "https://developer-hub.example.com/api/github/webhook"
+
+  - type: checkboxes
+    id: github_app_permissions
+    attributes:
+      label: "GitHub App Permissions (if GitHub App)"
+      description: "Required permissions for the GitHub App"
+      options:
+        - label: "Repository: Contents (read)"
+          required: true
+        - label: "Repository: Metadata (read)"
+          required: true
+        - label: "Repository: Pull Requests (write)"
+        - label: "Repository: Issues (write)"
+        - label: "Repository: Workflows (write)"
+        - label: "Repository: Actions (read)"
+        - label: "Organization: Members (read)"
+        - label: "Organization: Administration (read)"
+
+  - type: checkboxes
+    id: webhook_events
+    attributes:
+      label: "Webhook Events"
+      description: "Which events should trigger webhooks?"
+      options:
+        - label: "push"
+        - label: "pull_request"
+        - label: "repository"
+        - label: "workflow_run"
+        - label: "create"
+        - label: "delete"
+        - label: "release"
+
+  - type: dropdown
+    id: target_integration
+    attributes:
+      label: "Target Integration"
+      description: "What will use this app?"
+      options:
+        - "Backstage"
+        - "ArgoCD"
+        - "GitHub Actions Runners"
+        - "Custom Integration"
+    validations:
+      required: true
+
+  - type: input
+    id: keyvault_name
+    attributes:
+      label: "Azure Key Vault Name"
+      description: "Key Vault to store secrets (App ID, Private Key)"
+      placeholder: "kv-openhorizons-prod"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: platform
+    attributes:
+      label: "Target Platform"
+      description: "Where will this be deployed?"
+      options:
+        - "AKS (Azure Kubernetes Service)"
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional_notes
+    attributes:
+      label: "Additional Notes"
+      description: "Any other requirements or context"

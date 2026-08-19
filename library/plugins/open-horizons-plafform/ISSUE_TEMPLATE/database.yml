@@ -1,0 +1,167 @@
+name: "Database Provisioning"
+description: "Deploy PostgreSQL, Redis, or Cosmos DB"
+title: "[H1] Database - "
+labels: ["agent:deploy", "horizon:h1", "env:dev"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Database Agent
+        
+        This issue triggers the **Database Agent** to provision:
+        - PostgreSQL Flexible Server
+        - Azure Redis Cache
+        - Cosmos DB (optional)
+        - Private endpoints
+        - Connection strings in Key Vault
+        
+        ---
+        
+        ### Related Components
+        
+        | Component | Path | Description |
+        |-----------|------|-------------|
+        | Terraform Module | `terraform/modules/databases/` | Database infrastructure |
+        | **Naming Module** | `terraform/modules/naming/` | Database naming |
+        | Agent Spec | `agents/h1-foundation/database-agent.md` | Agent definition |
+        | Security Module | `terraform/modules/security/` | Key Vault for secrets |
+        
+        ### Database Naming
+        
+        ```
+        PostgreSQL: psql-{project}-{env}-{region}
+        Redis:      redis-{project}-{env}-{region}
+        Cosmos DB:  cosmos-{project}-{env}-{region}
+        
+        Rules:
+        - Lowercase letters, numbers, hyphens
+        - Cannot start/end with hyphen
+        - Globally unique
+        ```
+
+  - type: input
+    id: project_name
+    attributes:
+      label: Project Name
+      placeholder: "myproject"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: environment
+    attributes:
+      label: Environment
+      options:
+        - dev
+        - stg
+        - prd
+      default: 0
+    validations:
+      required: true
+
+  - type: dropdown
+    id: region
+    attributes:
+      label: Azure Region
+      options:
+        - brazilsouth (brs)
+        - eastus (eus)
+        - westeurope (weu)
+      default: 0
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: database_types
+    attributes:
+      label: Database Types
+      options:
+        - label: "PostgreSQL Flexible Server"
+          required: true
+        - label: "Azure Redis Cache"
+        - label: "Cosmos DB (NoSQL)"
+
+  - type: dropdown
+    id: postgresql_sku
+    attributes:
+      label: PostgreSQL SKU
+      options:
+        - B_Standard_B1ms (Burstable - dev)
+        - GP_Standard_D2s_v3 (General Purpose - staging)
+        - GP_Standard_D4s_v3 (General Purpose - production)
+        - MO_Standard_E4s_v3 (Memory Optimized)
+      default: 0
+
+  - type: dropdown
+    id: postgresql_version
+    attributes:
+      label: PostgreSQL Version
+      options:
+        - "16"
+        - "15"
+        - "14"
+      default: 0
+
+  - type: input
+    id: storage_gb
+    attributes:
+      label: Storage Size (GB)
+      placeholder: "128"
+
+  - type: checkboxes
+    id: features
+    attributes:
+      label: Database Features
+      options:
+        - label: "Enable High Availability (Zone Redundant)"
+        - label: "Enable Private Endpoint"
+          required: true
+        - label: "Enable Backup Retention (7 days min)"
+          required: true
+        - label: "Enable Point-in-Time Restore"
+        - label: "Store connection string in Key Vault"
+          required: true
+        - label: "Enable Microsoft Entra authentication"
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        
+        ## Pre-Deployment Checklist
+        
+        - [ ] Infrastructure & Security deployed
+        - [ ] Run `scripts/validate-naming.sh postgresql psql-{project}-{env}-{region}`
+        - [ ] Key Vault exists for storing connection strings
+        - [ ] VNet subnet for private endpoints exists
+        
+        ## Deployment Commands
+        
+        ```bash
+        # Validate naming
+        ./scripts/validate-naming.sh postgresql psql-myproject-prd-brs
+        
+        # Deploy database module
+        cd terraform
+        terraform apply -target=module.databases
+        
+        # Verify connection string in Key Vault
+        az keyvault secret show --vault-name kv-myproject-prd-brs \
+          --name postgresql-connection-string
+        ```
+        
+        ## Related Issues
+        
+        - **Prerequisites**: Infrastructure → `infrastructure.yml`
+        - **Prerequisites**: Security (Key Vault) → `security.yml`
+        - **Next**: Backstage Portal (needs database) → `backstage-portal.yml`
+
+  - type: checkboxes
+    id: confirmation
+    attributes:
+      label: Confirmation
+      options:
+        - label: "Key Vault is deployed for storing connection strings"
+          required: true
+        - label: "I understand production databases should use HA configuration"
+          required: true

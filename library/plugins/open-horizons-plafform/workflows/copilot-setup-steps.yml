@@ -1,0 +1,109 @@
+name: Copilot Setup Steps
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - .github/workflows/copilot-setup-steps.yml
+  pull_request:
+    paths:
+      - .github/workflows/copilot-setup-steps.yml
+
+permissions:
+  contents: read
+
+jobs:
+  copilot-setup-steps:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: "24"
+          cache: yarn
+          cache-dependency-path: backstage/yarn.lock
+
+      - name: Set up Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: "3.12"
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd # v3
+        with:
+          terraform_version: "1.6.6"
+
+      - name: Install Azure CLI and platform CLIs
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          tool_cache="$GITHUB_WORKSPACE/.github/copilot/tool-cache"
+          install -d "$tool_cache" "$HOME/.local/bin"
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends ca-certificates curl gnupg jq lsb-release apt-transport-https
+
+          curl -fsSL https://packages.microsoft.com/keys/microsoft.asc \
+            | gpg --dearmor > "$tool_cache/microsoft.gpg"
+          sudo install -D -o root -g root -m 0644 "$tool_cache/microsoft.gpg" /etc/apt/keyrings/microsoft.gpg
+          echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/microsoft.gpg] https://packages.microsoft.com/repos/azure-cli/ $(lsb_release -cs) main" \
+            | sudo tee /etc/apt/sources.list.d/azure-cli.list > /dev/null
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends azure-cli
+
+          curl -fsSL -o "$tool_cache/kubectl" \
+            "https://dl.k8s.io/release/v1.29.8/bin/linux/amd64/kubectl"
+          install -m 0755 "$tool_cache/kubectl" "$HOME/.local/bin/kubectl"
+
+          curl -fsSL -o "$tool_cache/helm.tar.gz" \
+            "https://get.helm.sh/helm-v3.15.4-linux-amd64.tar.gz"
+          tar -xzf "$tool_cache/helm.tar.gz" -C "$tool_cache"
+          install -m 0755 "$tool_cache/linux-amd64/helm" "$HOME/.local/bin/helm"
+
+          curl -fsSL -o "$tool_cache/argocd" \
+            "https://github.com/argoproj/argo-cd/releases/download/v2.11.7/argocd-linux-amd64"
+          install -m 0755 "$tool_cache/argocd" "$HOME/.local/bin/argocd"
+
+          curl -fsSL -o "$tool_cache/yq" \
+            "https://github.com/mikefarah/yq/releases/download/v4.44.3/yq_linux_amd64"
+          install -m 0755 "$tool_cache/yq" "$HOME/.local/bin/yq"
+
+      - name: Install Backstage dependencies
+        shell: bash
+        working-directory: backstage
+        run: |
+          set -euo pipefail
+          corepack enable
+          yarn install --immutable
+
+      - name: Install Python agent API dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          for requirements in backstage/server/agent-api*/requirements.txt; do
+            python -m pip install --requirement "$requirements"
+          done
+
+      - name: Validate installed toolchain
+        shell: bash
+        run: |
+          set -euo pipefail
+          az version --query '"azure-cli"' -o tsv
+          terraform version
+          kubectl version --client=true
+          helm version --short
+          gh --version
+          jq --version
+          yq --version
+          argocd version --client --short
+          node --version
+          yarn --version
+          python --version

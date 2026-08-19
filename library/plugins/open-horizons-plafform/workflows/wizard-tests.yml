@@ -1,0 +1,91 @@
+name: Wizard Tests
+
+on:
+  push:
+    branches: [develop, main]
+    paths:
+      - "scripts/install-wizard.sh"
+      - "scripts/render-manifests.sh"
+      - "scripts/openhorizons-selection.schema.json"
+      - "tests/wizard/**"
+      - "terraform/terraform.tfvars.example"
+      - "terraform/variables.tf"
+      - ".github/workflows/wizard-tests.yml"
+  pull_request:
+    paths:
+      - "scripts/install-wizard.sh"
+      - "scripts/render-manifests.sh"
+      - "scripts/openhorizons-selection.schema.json"
+      - "tests/wizard/**"
+      - "terraform/terraform.tfvars.example"
+      - "terraform/variables.tf"
+      - ".github/workflows/wizard-tests.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  wizard-tests:
+    name: Install wizard and render-manifests smoke tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - name: Set up Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: "3.11"
+
+      - name: Install yq
+        run: |
+          sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
+          sudo chmod +x /usr/local/bin/yq
+          yq --version
+
+      - name: Install PyYAML for schema validation
+        run: pip install pyyaml
+
+      - name: Make scripts executable
+        run: |
+          chmod +x scripts/install-wizard.sh
+          chmod +x scripts/render-manifests.sh
+          chmod +x tests/wizard/run.sh
+
+      - name: Verify scripts compile
+        run: |
+          bash -n scripts/install-wizard.sh
+          bash -n scripts/render-manifests.sh
+
+      - name: Run wizard smoke tests
+        run: bash tests/wizard/run.sh
+
+      - name: Run wizard end-to-end tests
+        run: bash tests/wizard/e2e.sh
+
+      - name: Render minimal profile and validate kustomization
+        run: |
+          scripts/install-wizard.sh \
+            --environment dev \
+            --auto \
+            --profile minimal \
+            --dry-run
+          scripts/install-wizard.sh \
+            --environment dev \
+            --auto \
+            --profile minimal
+          scripts/render-manifests.sh
+          test -f backstage/k8s/.rendered/kustomization.yaml
+          test -f backstage/k8s/.rendered/namespace.yaml
+
+      - name: Render full profile and verify all components included
+        run: |
+          scripts/install-wizard.sh \
+            --environment dev \
+            --auto \
+            --profile full
+          scripts/render-manifests.sh
+          test -f backstage/k8s/.rendered/agent-api-deployment.yaml
+          test -f backstage/k8s/.rendered/agent-api-impact-deployment.yaml
+          test -f backstage/k8s/.rendered/mcp-ecosystem-deployment.yaml

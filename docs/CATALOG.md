@@ -303,7 +303,7 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | dataverse-python-authentication-security | **/*.py | Enforces authentication and security conventions for Python Dataverse SDK apps that use Azure Identity credentials, DataverseClient configuration, secure secret handling, tenant i… |
 | dataverse-python-best-practices | **/*.py | Enforces production Python conventions for the PowerPlatform Dataverse SDK, including installation, authentication, client reuse, CRUD operations, metadata, paging, files, OData,… |
 | dataverse-python-error-handling | **/*.py | Enforces Python Dataverse SDK error handling, retry, logging, diagnostics, and troubleshooting conventions. |
-| dataverse-python-file-operations | **/*.py | Enforces Python Dataverse SDK conventions for file uploads, chunking, validation, retries, audit logging, and practical file-operation workflows. |
+| dataverse-python-file-operations | **/*.py | Applies PowerPlatform Dataverse Client 1.x conventions for Python file-column uploads, record lifecycle, validation, retries, integrity, and auditability. |
 | dataverse-python-modules | **/*.py | Enforces Python Dataverse SDK package, client, configuration, error, metadata, SQL, and file-operation conventions. |
 | dataverse-python-pandas-integration | **/*.py | Enforces conventions for integrating the Python Dataverse SDK with pandas DataFrames for analytics, reporting, visualization, and machine-learning workflows. |
 | dataverse-python-performance-optimization | **/*.py | Enforces performance conventions for Python Dataverse SDK queries, pagination, batching, client reuse, file uploads, OData and SQL alternatives, memory management, retries, consis… |

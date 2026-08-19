@@ -1,0 +1,213 @@
+# =============================================================================
+# OPEN HORIZONS PLATFORM - BRANCH PROTECTION WORKFLOW
+# =============================================================================
+#
+# Enforces branch protection rules and validates PRs from develop to main.
+#
+# Branch Strategy:
+#   - main: Production branch (protected)
+#   - develop: Development branch (all changes go here first)
+#
+# Flow:
+#   feature/* --> develop --> main (via PR)
+#
+# =============================================================================
+
+name: Branch Protection
+
+on:
+  pull_request:
+    branches:
+      - main
+      - develop
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - ready_for_review
+
+  push:
+    branches:
+      - develop
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  REQUIRED_APPROVALS: 1
+
+permissions:
+  contents: read
+
+jobs:
+  # ===========================================================================
+  # VALIDATE PR SOURCE BRANCH
+  # ===========================================================================
+  validate-pr-source:
+    name: Validate PR Source
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - name: Check PR source branch
+        env:
+          HEAD_REF: ${{ github.head_ref }}
+          BASE_REF: ${{ github.base_ref }}
+        run: |
+          echo "PR from: $HEAD_REF"
+          echo "PR to: $BASE_REF"
+
+          if [[ "$BASE_REF" != "main" ]]; then
+            echo "Source branch validation is only enforced for PRs to main."
+            exit 0
+          fi
+
+          if [[ "$HEAD_REF" != "develop" ]]; then
+            echo "::error::PRs to main must come from develop branch only!"
+            echo "::error::Current source branch: $HEAD_REF"
+            exit 1
+          fi
+
+          echo "[OK] PR source branch is valid (develop -> main)"
+
+  # ===========================================================================
+  # PR QUALITY CHECKS
+  # ===========================================================================
+  pr-quality:
+    name: PR Quality Checks
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0
+
+      - name: Check PR title format
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+        run: |
+          # Check for conventional commit format
+          if [[ ! "$PR_TITLE" =~ ^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)(\(.+\))?: ]]; then
+            echo "::warning::PR title should follow conventional commit format"
+            echo "Examples: feat: add new feature, fix(module): fix bug, docs: update readme"
+          fi
+
+      - name: Check PR description
+        env:
+          PR_BODY: ${{ github.event.pull_request.body }}
+        run: |
+          if [[ -z "$PR_BODY" || ${#PR_BODY} -lt 50 ]]; then
+            echo "::warning::PR description is too short. Please provide more details."
+          fi
+
+      - name: Check for WIP
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          IS_DRAFT: ${{ github.event.pull_request.draft }}
+        run: |
+          if [[ "$PR_TITLE" =~ ^(WIP|wip|Wip) ]] || [[ "$IS_DRAFT" == "true" ]]; then
+            echo "::notice::This PR is marked as Work in Progress"
+          fi
+
+  # ===========================================================================
+  # COMMIT HISTORY CHECK
+  # ===========================================================================
+  commit-check:
+    name: Commit History Check
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0
+
+      - name: Check commit messages
+        run: |
+          echo "Checking commit messages..."
+
+          COMMITS=$(git log --format="%s" origin/${{ github.base_ref }}..HEAD)
+
+          while IFS= read -r commit; do
+            if [[ -n "$commit" ]]; then
+              echo "Commit: $commit"
+
+              # Check for conventional commit format (warning only)
+              if [[ ! "$commit" =~ ^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)(\(.+\))?: ]]; then
+                echo "::warning::Commit doesn't follow conventional format: $commit"
+              fi
+            fi
+          done <<< "$COMMITS"
+
+      - name: Check for merge commits
+        run: |
+          MERGE_COMMITS=$(git log --merges --format="%h %s" origin/${{ github.base_ref }}..HEAD)
+
+          if [[ -n "$MERGE_COMMITS" ]]; then
+            echo "::notice::Found merge commits in this PR:"
+            echo "$MERGE_COMMITS"
+          fi
+
+  # ===========================================================================
+  # CHANGELOG CHECK (for PRs to main)
+  # ===========================================================================
+  changelog-check:
+    name: Changelog Check
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request' && github.base_ref == 'main'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0
+
+      - name: Check for changelog updates
+        run: |
+          CHANGED_FILES=$(git diff --name-only origin/main...HEAD)
+
+          if echo "$CHANGED_FILES" | grep -q "CHANGELOG.md"; then
+            echo "[OK] CHANGELOG.md has been updated"
+          else
+            echo "::warning::Consider updating CHANGELOG.md for this release"
+          fi
+
+  # ===========================================================================
+  # DEVELOP BRANCH CI TRIGGER
+  # ===========================================================================
+  develop-ci:
+    name: Develop Branch CI
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
+    steps:
+      - name: Trigger CI
+        run: |
+          echo "[OK] Changes pushed to develop branch"
+          echo "CI workflow will run automatically"
+
+  # ===========================================================================
+  # PR STATUS SUMMARY
+  # ===========================================================================
+  pr-summary:
+    name: PR Summary
+    runs-on: ubuntu-latest
+    if: always() && github.event_name == 'pull_request'
+    needs: [validate-pr-source, pr-quality, commit-check]
+    steps:
+      - name: Generate PR Summary
+        env:
+          HEAD_REF: ${{ github.head_ref }}
+          BASE_REF: ${{ github.base_ref }}
+        run: |
+          echo "## Pull Request Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Check | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|-------|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Source Branch Validation | ${{ needs.validate-pr-source.result == 'success' && 'Passed' || needs.validate-pr-source.result == 'skipped' && 'Skipped' || 'Failed' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| PR Quality | ${{ needs.pr-quality.result == 'success' && 'Passed' || 'Failed' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Commit Check | ${{ needs.commit-check.result == 'success' && 'Passed' || 'Failed' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Branch Flow" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          echo "$HEAD_REF --> $BASE_REF" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
