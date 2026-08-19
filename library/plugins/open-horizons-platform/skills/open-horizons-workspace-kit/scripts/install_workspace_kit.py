@@ -238,6 +238,16 @@ def main(argv: list[str] | None = None) -> int:
             raise ValueError(f"target is not a Git repository: {target}")
         components = parse_components(args.components)
         plan = build_plan(target, components, args.force)
+        if args.apply and any(entry.status == "conflict" for entry in plan):
+            print_report(
+                target,
+                components,
+                plan,
+                applied=False,
+                json_output=args.json_output,
+            )
+            print("workspace-kit error: conflicts detected; no files were written", file=sys.stderr)
+            return 2
         if args.apply:
             apply_plan(target, plan)
         print_report(
