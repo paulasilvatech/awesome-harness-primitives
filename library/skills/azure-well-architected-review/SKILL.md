@@ -215,9 +215,9 @@ graph TD
 ```
 
 ## Quality gate
-- All 5 WAF pillars reviewed against IaC and live infrastructure
-- All findings classified by risk level and pillar
-- Actionable remediation steps with IaC examples for each finding
-- GitHub issues created for team tracking
-- Architecture diagram generated for EPIC context
-- Microsoft Learn documentation references included
+- [ ] All 5 WAF pillars reviewed against IaC and live infrastructure
+- [ ] All findings classified by risk level and pillar
+- [ ] Actionable remediation steps with IaC examples for each finding
+- [ ] GitHub issues created for team tracking
+- [ ] Architecture diagram generated for EPIC context
+- [ ] Microsoft Learn documentation references included
