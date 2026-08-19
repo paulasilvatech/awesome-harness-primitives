@@ -18,10 +18,10 @@ This plugin installs the following supported components:
 
 | Package path | Installed behavior |
 | --- | --- |
-| `plugin.json` | Declares plugin identity, component paths, version, MCP configuration, and post-install guidance. |
+| `plugin.json` | Declares plugin identity, version, the GitHub Copilot agent extension, and repository source ownership metadata. |
 | `agents/*.agent.md` | Installs nine Open Horizons specialist agents. |
 | `skills/*/SKILL.md` | Installs 29 reusable Open Horizons skills and their bundled resources. |
-| `mcp.json` | Registers four manifest-referenced MCP servers: Microsoft Learn, Azure, Terraform, and Playwright. |
+| `mcp.json` | Registers four Open Plugin Spec MCP servers: Microsoft Learn, Azure, Terraform, and Playwright. |
 
 The plugin does not currently ship hooks or LSP servers. Do not advertise absent hook packages.
 

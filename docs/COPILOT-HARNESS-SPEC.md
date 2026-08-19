@@ -230,32 +230,46 @@ Keep `SKILL.md` under ~500 lines; move bulk content into bundled resources.
 
 A manifest at the plugin root is valid.
 
-### 4.2 Manifest
+### 4.2 Legacy and Agent Plugins 1.0 manifests
+
+Without the canonical `$schema`, GitHub Copilot CLI accepts the legacy manifest fields `agents`, `skills`,
+`commands`, `hooks`, `mcpServers`, `lspServers`, `outputStyles`, `postInstallMessage`, and related path
+configuration. Legacy component path defaults are `agents/` and `skills/`.
+
+Declaring the Agent Plugins 1.0 schema switches to its strict manifest contract:
 
 ```jsonc
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
-  "name": "my-plugin",          // REQUIRED — kebab-case; letters, numbers, hyphens, dots
-  "version": "1.0.0",           // semver recommended
-  "description": "…",           // ≤ 1024 chars
+  "name": "my-plugin",
+  "version": "1.0.0",
+  "description": "…",
   "author": { "name": "…", "email": "…", "url": "…" },
   "license": "MIT",
   "repository": "https://github.com/owner/repo",
   "homepage": "https://…",
   "keywords": ["…"],
-  "extensions": {               // Agent Plugins 1.0 client namespaces
-    "com.github.copilot": { "agents": ["./agents/x.agent.md"], "skills": ["./skills/y/"] }
+  "extensions": {
+    "com.github.copilot": {
+      "agents": ["./agents/x.agent.md"]
+    }
   }
 }
 ```
 
-BUNDLE-confirmed manifest keys: `$schema`, `name`, `version`, `description`, `author`, `email`, `repository`,
-`license`, `homepage`, `keywords`, `extensions`, `paths`, `exclusive`, `skills`, `agents`, `commands`,
-`mcpServers`, `lspServers`, `outputStyles`, `hooks`, `postInstallMessage`, `strict`.
+The canonical schema allows only `$schema`, `name`, `version`, `description`, `author`, `homepage`,
+`repository`, `license`, `keywords`, and `extensions`. Agent Plugins 1.0 discovers skills from immediate
+children of `skills/` and MCP servers from root `mcp.json`; those locations are fixed and are not declared
+in `plugin.json`. GitHub Copilot agents are declared under `extensions.com.github.copilot.agents`.
 
-BUNDLE error strings enforce: `Plugin name must be kebab-case (letters, numbers, hyphens, and dots)`.
+Agent Plugins 1.0 `mcp.json` requires
+`"$schema": "https://agent-plugins.org/schemas/1.0.0/mcp.schema.json"` and `mcpServers`. Portable server
+types are `stdio`, `streamable-http`, and `sse`; legacy `local` and `http` values and client-only `tools`
+filters are not valid in this file.
 
-Component path defaults when omitted: `agents/`, `skills/`. `${PLUGIN_DATA}` is expanded in plugin scripts.
+Runtime verification against GitHub Copilot CLI 1.0.81-0 on 2026-08-19 confirmed that a schema-declaring
+plugin's top-level `agents` field is ignored with a warning and only
+`extensions.com.github.copilot.agents` is loaded. See `docs/HARNESS-VALIDATION.md`.
 
 ### 4.3 Marketplace — `marketplace.json`
 

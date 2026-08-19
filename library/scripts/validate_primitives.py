@@ -85,6 +85,20 @@ IN_VALID_KEYS = {"applyTo", "name", "description", "excludeAgent"}
 SK_VALID_KEYS = {"name", "description", "user-invocable", "disable-model-invocation", "allowed-tools", "argument-hint", "license", "metadata", "tags"}
 PR_VALID_KEYS = {"name", "description", "argument-hint", "agent", "model", "tools"}
 PL_VALID_KEYS = {"$schema", "name", "version", "description", "author", "email", "repository", "license", "homepage", "keywords", "extensions", "paths", "exclusive", "skills", "agents", "commands", "mcpServers", "lspServers", "outputStyles", "hooks", "postInstallMessage", "strict"}
+OPEN_PLUGIN_SCHEMA = "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json"
+OPEN_MCP_SCHEMA = "https://agent-plugins.org/schemas/1.0.0/mcp.schema.json"
+OPEN_PLUGIN_VALID_KEYS = {
+    "$schema",
+    "name",
+    "version",
+    "description",
+    "author",
+    "homepage",
+    "repository",
+    "license",
+    "keywords",
+    "extensions",
+}
 HK_VALID_KEYS = {"type", "bash", "powershell", "command", "cwd", "env", "timeoutSec", "timeout", "matcher", "url", "headers", "allowedEnvVars"}
 HK_EVENTS = {"sessionStart", "sessionEnd", "userPromptSubmitted", "userPromptTransformed", "preToolUse", "postToolUse", "postToolUseFailure", "preMcpToolCall", "permissionRequest", "preCompact", "errorOccurred", "agentStop", "subagentStart", "subagentStop", "notification", "postResult"}
 HK_PASCAL_ALIASES = {"SessionStart", "SessionEnd", "UserPromptSubmit", "UserPromptSubmitted", "UserPromptTransformed", "PreToolUse", "PostToolUse", "PostToolUseFailure", "PreMcpToolCall", "PermissionRequest", "PreCompact", "ErrorOccurred", "Stop", "AgentStop", "SubagentStart", "SubagentStop", "Notification", "PostResult"}
@@ -456,7 +470,7 @@ class Validator:
             data = json.loads(read_text(p))
             if not isinstance(data, dict):
                 raise ValueError("manifest root must be an object")
-        except Exception as exc:
+        except (OSError, UnicodeError, json.JSONDecodeError, ValueError) as exc:
             self.add(kind, p, "PL002", "ERROR", f"Invalid JSON: {exc}")
             return
         name = data.get("name")
@@ -470,8 +484,11 @@ class Validator:
         desc = data.get("description")
         if not isinstance(desc, str) or not desc.strip() or len(desc) > 1024:
             self.add(kind, p, "PL006", "WARNING", "description missing or > 1024 chars")
-        for k in sorted(set(data) - PL_VALID_KEYS):
-            self.add(kind, p, "PL007", "WARNING", f"Unrecognized top-level key: {k}")
+        open_plugin = data.get("$schema") == OPEN_PLUGIN_SCHEMA
+        valid_keys = OPEN_PLUGIN_VALID_KEYS if open_plugin else PL_VALID_KEYS
+        for k in sorted(set(data) - valid_keys):
+            severity = "ERROR" if open_plugin else "WARNING"
+            self.add(kind, p, "PL007", severity, f"Unrecognized top-level key: {k}")
         for label, ref in collect_plugin_refs(data):
             if not isinstance(ref, str) or not ref.strip() or has_variable(ref):
                 continue
@@ -486,6 +503,129 @@ class Validator:
         author = data.get("author")
         if author is not None and not (isinstance(author, dict) and isinstance(author.get("name"), str) and author.get("name", "").strip()):
             self.add(kind, p, "PL010", "WARNING", "author, if present, should be an object with a name")
+        if open_plugin:
+            self._validate_open_plugin(p, plugin_dir, data)
+
+    def _validate_open_plugin(self, p: Path, plugin_dir: Path, data: dict[str, Any]) -> None:
+        kind = "plugins"
+        extensions = data.get("extensions", {})
+        if not isinstance(extensions, dict):
+            self.add(kind, p, "PL011", "ERROR", "Open Plugin Spec extensions must be an object")
+            return
+        invalid_extensions = [
+            namespace
+            for namespace, config in extensions.items()
+            if not isinstance(namespace, str) or not isinstance(config, dict)
+        ]
+        if invalid_extensions:
+            self.add(
+                kind,
+                p,
+                "PL011",
+                "ERROR",
+                "Open Plugin Spec extension namespaces must map to objects",
+            )
+
+        copilot_extension = extensions.get("com.github.copilot")
+        if copilot_extension is not None:
+            agents = copilot_extension.get("agents")
+            if agents is not None and not (
+                isinstance(agents, list)
+                and all(isinstance(ref, str) and ref.endswith(".agent.md") for ref in agents)
+            ):
+                self.add(
+                    kind,
+                    p,
+                    "PL012",
+                    "ERROR",
+                    "extensions.com.github.copilot.agents must be a list of .agent.md paths",
+                )
+            extension_agents = plugin_dir / "com.github.copilot" / "agents"
+            if not extension_agents.is_dir() or not any(extension_agents.glob("*.agent.md")):
+                self.add(
+                    kind,
+                    p,
+                    "PL012",
+                    "ERROR",
+                    "Agent Plugins 1.0 GitHub agents must be mirrored under com.github.copilot/agents",
+                )
+
+        mcp_path = plugin_dir / "mcp.json"
+        if mcp_path.exists():
+            self._validate_open_plugin_mcp(mcp_path)
+
+    def _validate_open_plugin_mcp(self, p: Path) -> None:
+        kind = "plugins"
+        try:
+            data = json.loads(read_text(p))
+        except (OSError, UnicodeError, json.JSONDecodeError) as exc:
+            self.add(kind, p, "PL013", "ERROR", f"Invalid Open Plugin MCP JSON: {exc}")
+            return
+        if not isinstance(data, dict):
+            self.add(kind, p, "PL013", "ERROR", "Open Plugin MCP root must be an object")
+            return
+        if data.get("$schema") != OPEN_MCP_SCHEMA:
+            self.add(kind, p, "PL013", "ERROR", f"mcp.json must declare $schema {OPEN_MCP_SCHEMA}")
+        extra_keys = sorted(set(data) - {"$schema", "mcpServers"})
+        if extra_keys:
+            self.add(kind, p, "PL013", "ERROR", f"Unsupported mcp.json keys: {', '.join(extra_keys)}")
+        servers = data.get("mcpServers")
+        if not isinstance(servers, dict):
+            self.add(kind, p, "PL013", "ERROR", "mcp.json mcpServers must be an object")
+            return
+        for name, config in servers.items():
+            if not isinstance(name, str) or not name or not isinstance(config, dict):
+                self.add(kind, p, "PL014", "ERROR", "MCP servers require non-empty names and object configs")
+                continue
+            server_type = config.get("type")
+            if server_type == "stdio":
+                allowed = {"type", "command", "args", "env", "cwd"}
+                if not isinstance(config.get("command"), str) or not config["command"]:
+                    self.add(kind, p, "PL014", "ERROR", f"MCP server '{name}' requires a command")
+                args = config.get("args")
+                if args is not None and not (
+                    isinstance(args, list) and all(isinstance(arg, str) for arg in args)
+                ):
+                    self.add(kind, p, "PL014", "ERROR", f"MCP server '{name}' args must be strings")
+                env = config.get("env")
+                if env is not None and not (
+                    isinstance(env, dict)
+                    and all(
+                        isinstance(key, str)
+                        and key not in {"PLUGIN_ROOT", "PLUGIN_DATA"}
+                        and isinstance(value, str)
+                        for key, value in env.items()
+                    )
+                ):
+                    self.add(kind, p, "PL014", "ERROR", f"MCP server '{name}' env is invalid")
+            elif server_type in {"streamable-http", "sse"}:
+                allowed = {"type", "url", "headers"}
+                if not isinstance(config.get("url"), str) or not config["url"]:
+                    self.add(kind, p, "PL014", "ERROR", f"MCP server '{name}' requires a URL")
+                headers = config.get("headers")
+                if headers is not None and not (
+                    isinstance(headers, dict)
+                    and all(isinstance(key, str) and isinstance(value, str) for key, value in headers.items())
+                ):
+                    self.add(kind, p, "PL014", "ERROR", f"MCP server '{name}' headers are invalid")
+            else:
+                self.add(
+                    kind,
+                    p,
+                    "PL014",
+                    "ERROR",
+                    f"MCP server '{name}' type must be stdio, streamable-http, or sse",
+                )
+                continue
+            extra_server_keys = sorted(set(config) - allowed)
+            if extra_server_keys:
+                self.add(
+                    kind,
+                    p,
+                    "PL014",
+                    "ERROR",
+                    f"MCP server '{name}' has unsupported keys: {', '.join(extra_server_keys)}",
+                )
 
     # Hooks
     def validate_hooks(self) -> None:

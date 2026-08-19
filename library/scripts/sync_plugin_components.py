@@ -90,6 +90,20 @@ def collect_component_copies(root: Path) -> list[ComponentCopy]:
             continue
         data = read_json(manifest)
         if owns_plugin_components(data):
+            extension_agents = plugin_dir / "com.github.copilot" / "agents"
+            source_agents = plugin_dir / "agents"
+            if source_agents.is_dir() and isinstance(
+                data.get("extensions", {}).get("com.github.copilot"), dict
+            ):
+                for source in sorted(source_agents.glob("*.agent.md")):
+                    copies.append(
+                        ComponentCopy(
+                            plugin_dir.name,
+                            f"./com.github.copilot/agents/{source.name}",
+                            source,
+                            extension_agents / source.name,
+                        )
+                    )
             continue
         refs = {
             ref
@@ -110,7 +124,12 @@ def remove_generated_dirs(root: Path) -> None:
         if not plugin_dir.is_dir():
             continue
         manifest = plugin_manifest(plugin_dir)
-        if manifest is not None and owns_plugin_components(read_json(manifest)):
+        if manifest is None:
+            continue
+        if owns_plugin_components(read_json(manifest)):
+            extension_agents = plugin_dir / "com.github.copilot" / "agents"
+            if extension_agents.exists():
+                shutil.rmtree(extension_agents)
             continue
         for name in ("agents", "skills"):
             path = plugin_dir / name
@@ -164,7 +183,14 @@ def find_extra_generated_paths(root: Path, copies: list[ComponentCopy]) -> list[
         if not plugin_dir.is_dir():
             continue
         manifest = plugin_manifest(plugin_dir)
-        if manifest is not None and owns_plugin_components(read_json(manifest)):
+        if manifest is None:
+            continue
+        if owns_plugin_components(read_json(manifest)):
+            base = plugin_dir / "com.github.copilot" / "agents"
+            if base.is_dir():
+                for child in base.glob("*.agent.md"):
+                    if child.resolve() not in expected:
+                        extras.append(child)
             continue
         for name in ("agents", "skills"):
             base = plugin_dir / name
