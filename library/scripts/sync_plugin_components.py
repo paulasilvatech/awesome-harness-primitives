@@ -12,7 +12,8 @@ Self-contained plugins can instead own their components by declaring
 Those component directories are canonical package content and this script leaves
 them unchanged. When such a package also declares the `com.github.copilot`
 extension, canonical `agents/` files are mirrored into the Agent Plugins 1.0
-runtime directory `com.github.copilot/agents/`.
+runtime directory `com.github.copilot/agents/`. An optional repository extension
+`hookSource` is mirrored to `com.github.copilot/hooks/hooks.json`.
 """
 from __future__ import annotations
 
@@ -69,15 +70,27 @@ def iter_strings(value: Any):
             yield from iter_strings(item)
 
 
-def owns_plugin_components(data: dict[str, Any]) -> bool:
+def repository_extension_config(data: dict[str, Any]) -> dict[str, Any]:
     extensions = data.get("extensions")
     if not isinstance(extensions, dict):
-        return False
+        return {}
     repository_config = extensions.get(REPOSITORY_EXTENSION)
-    return (
-        isinstance(repository_config, dict)
-        and repository_config.get("componentSource") == "plugin"
-    )
+    return repository_config if isinstance(repository_config, dict) else {}
+
+
+def owns_plugin_components(data: dict[str, Any]) -> bool:
+    return repository_extension_config(data).get("componentSource") == "plugin"
+
+
+def resolve_plugin_source(plugin_dir: Path, ref: str) -> Path:
+    if not ref.startswith("./"):
+        raise ValueError(f"{plugin_dir.name}: component source must start with './': {ref}")
+    source = (plugin_dir / ref[2:]).resolve()
+    try:
+        source.relative_to(plugin_dir.resolve())
+    except ValueError as exc:
+        raise ValueError(f"{plugin_dir.name}: component source escapes plugin root: {ref}") from exc
+    return source
 
 
 def collect_component_copies(root: Path) -> list[ComponentCopy]:
@@ -92,6 +105,7 @@ def collect_component_copies(root: Path) -> list[ComponentCopy]:
             continue
         data = read_json(manifest)
         if owns_plugin_components(data):
+            repository_config = repository_extension_config(data)
             extension_agents = plugin_dir / "com.github.copilot" / "agents"
             source_agents = plugin_dir / "agents"
             if source_agents.is_dir() and isinstance(
@@ -106,6 +120,16 @@ def collect_component_copies(root: Path) -> list[ComponentCopy]:
                             extension_agents / source.name,
                         )
                     )
+            hook_ref = repository_config.get("hookSource")
+            if isinstance(hook_ref, str):
+                copies.append(
+                    ComponentCopy(
+                        plugin_dir.name,
+                        "./com.github.copilot/hooks/hooks.json",
+                        resolve_plugin_source(plugin_dir, hook_ref),
+                        plugin_dir / "com.github.copilot" / "hooks" / "hooks.json",
+                    )
+                )
             continue
         refs = {
             ref
@@ -129,9 +153,10 @@ def remove_generated_dirs(root: Path) -> None:
         if manifest is None:
             continue
         if owns_plugin_components(read_json(manifest)):
-            extension_agents = plugin_dir / "com.github.copilot" / "agents"
-            if extension_agents.exists():
-                shutil.rmtree(extension_agents)
+            for name in ("agents", "hooks"):
+                extension_path = plugin_dir / "com.github.copilot" / name
+                if extension_path.exists():
+                    shutil.rmtree(extension_path)
             continue
         for name in ("agents", "skills"):
             path = plugin_dir / name
@@ -188,11 +213,15 @@ def find_extra_generated_paths(root: Path, copies: list[ComponentCopy]) -> list[
         if manifest is None:
             continue
         if owns_plugin_components(read_json(manifest)):
-            base = plugin_dir / "com.github.copilot" / "agents"
-            if base.is_dir():
-                for child in base.glob("*.agent.md"):
+            extension_root = plugin_dir / "com.github.copilot"
+            agents = extension_root / "agents"
+            if agents.is_dir():
+                for child in agents.glob("*.agent.md"):
                     if child.resolve() not in expected:
                         extras.append(child)
+            hook = extension_root / "hooks" / "hooks.json"
+            if hook.exists() and hook.resolve() not in expected:
+                extras.append(hook)
             continue
         for name in ("agents", "skills"):
             base = plugin_dir / name

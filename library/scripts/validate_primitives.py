@@ -563,6 +563,36 @@ class Validator:
                     "Agent Plugins 1.0 GitHub agents must be mirrored under com.github.copilot/agents",
                 )
 
+        repository_extension = extensions.get("com.paulasilvatech.copilot-primitives")
+        if isinstance(repository_extension, dict) and "hookSource" in repository_extension:
+            hook_ref = repository_extension["hookSource"]
+            if not isinstance(hook_ref, str) or not hook_ref.startswith("./"):
+                self.add(
+                    kind,
+                    p,
+                    "PL015",
+                    "ERROR",
+                    "repository hookSource must be a plugin-relative './' path",
+                )
+            else:
+                source = (plugin_dir / hook_ref[2:]).resolve()
+                try:
+                    source.relative_to(plugin_dir.resolve())
+                except ValueError:
+                    self.add(kind, p, "PL015", "ERROR", "repository hookSource escapes plugin root")
+                else:
+                    if not source.is_file():
+                        self.add(kind, p, "PL015", "ERROR", f"repository hookSource not found: {hook_ref}")
+                runtime_hook = plugin_dir / "com.github.copilot" / "hooks" / "hooks.json"
+                if not runtime_hook.is_file():
+                    self.add(
+                        kind,
+                        p,
+                        "PL015",
+                        "ERROR",
+                        "Agent Plugins 1.0 GitHub hooks must be mirrored under com.github.copilot/hooks",
+                    )
+
         mcp_path = plugin_dir / "mcp.json"
         if mcp_path.exists():
             self._validate_open_plugin_mcp(mcp_path)
