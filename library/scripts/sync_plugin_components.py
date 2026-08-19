@@ -1,11 +1,16 @@
 #!/usr/bin/env python3
-"""Regenerate plugin-local component copies from the shared primitive library.
+"""Regenerate shared-library component copies inside plugin packages.
 
 The shared `library/agents` and `library/skills` trees are the source of truth.
 Marketplace installation currently requires plugin packages to be self-contained,
 so plugin manifests may reference generated copies under each plugin directory
 (`./agents/...`, `./skills/...`). Do not hand-edit those plugin-local copies;
 edit the shared primitive, then run this script.
+
+Self-contained plugins can instead own their components by declaring
+`extensions.com.paulasilvatech.copilot-primitives.componentSource` as `plugin`.
+Those component directories are canonical package content and this script leaves
+them unchanged.
 """
 from __future__ import annotations
 
@@ -25,6 +30,7 @@ except ModuleNotFoundError:  # pragma: no cover - supports python3 -m invocation
 
 REPO_ROOT = find_repo_root(Path(__file__).resolve())
 DEFAULT_LIBRARY_ROOT = REPO_ROOT / "library"
+REPOSITORY_EXTENSION = "com.paulasilvatech.copilot-primitives"
 
 
 @dataclass(frozen=True)
@@ -61,6 +67,17 @@ def iter_strings(value: Any):
             yield from iter_strings(item)
 
 
+def owns_plugin_components(data: dict[str, Any]) -> bool:
+    extensions = data.get("extensions")
+    if not isinstance(extensions, dict):
+        return False
+    repository_config = extensions.get(REPOSITORY_EXTENSION)
+    return (
+        isinstance(repository_config, dict)
+        and repository_config.get("componentSource") == "plugin"
+    )
+
+
 def collect_component_copies(root: Path) -> list[ComponentCopy]:
     plugin_root = root / "plugins"
     copies: list[ComponentCopy] = []
@@ -71,9 +88,12 @@ def collect_component_copies(root: Path) -> list[ComponentCopy]:
         manifest = plugin_manifest(plugin_dir)
         if manifest is None:
             continue
+        data = read_json(manifest)
+        if owns_plugin_components(data):
+            continue
         refs = {
             ref
-            for ref in iter_strings(read_json(manifest))
+            for ref in iter_strings(data)
             if ref.startswith("./agents/") or ref.startswith("./skills/")
         }
         for ref in sorted(refs):
@@ -88,6 +108,9 @@ def remove_generated_dirs(root: Path) -> None:
         return
     for plugin_dir in plugin_root.iterdir():
         if not plugin_dir.is_dir():
+            continue
+        manifest = plugin_manifest(plugin_dir)
+        if manifest is not None and owns_plugin_components(read_json(manifest)):
             continue
         for name in ("agents", "skills"):
             path = plugin_dir / name
@@ -139,6 +162,9 @@ def find_extra_generated_paths(root: Path, copies: list[ComponentCopy]) -> list[
         return extras
     for plugin_dir in plugin_root.iterdir():
         if not plugin_dir.is_dir():
+            continue
+        manifest = plugin_manifest(plugin_dir)
+        if manifest is not None and owns_plugin_components(read_json(manifest)):
             continue
         for name in ("agents", "skills"):
             base = plugin_dir / name

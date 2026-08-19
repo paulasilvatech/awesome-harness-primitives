@@ -17,6 +17,7 @@ community sources or treat page availability as runtime proof.
 | VS Code instructions | https://code.visualstudio.com/docs/agent-customization/custom-instructions | `.github/copilot-instructions.md` is always-on. File-based instructions use `.instructions.md`; multiple applicable files are combined without a guaranteed order. Start with one concise global file and add focused path-specific rules. |
 | Custom agents | https://code.visualstudio.com/docs/agent-customization/custom-agents | Custom agents define task-specific personas, instructions, and tool sets. Workspace agents live under `.github/agents`; VS Code handoffs are guided transitions between agents. |
 | Agent Skills | https://code.visualstudio.com/docs/agent-customization/agent-skills | Skills are portable on-demand packages. `name` must be kebab-case, no more than 64 characters, and match the parent directory; `description` must state what and when and is no more than 1024 characters. |
+| GitHub Copilot plugins | https://docs.github.com/en/copilot/concepts/agents/about-plugins and https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-plugin-reference | An installable plugin can contain agents, skills, hooks, MCP server configurations, and LSP server configurations. The documented component fields do not include repository instructions or VS Code prompt files; those assets must still be published to their repository discovery paths when needed. |
 | Prompt files | https://code.visualstudio.com/docs/agent-customization/prompt-files | Prompt files are manually invoked local VS Code slash commands. Agent Host does not use them. Supported metadata includes `description`, `name`, `argument-hint`, `agent`, `model`, and `tools`; unavailable tools are ignored. |
 | Hooks | https://docs.github.com/en/copilot/reference/hooks-reference | Hooks are supported by Copilot CLI and cloud agent. Repository configs live under `.github/hooks/*.json`; cloud agent runs in an ephemeral Linux environment and honors `bash` or `command`, not PowerShell. |
 
@@ -24,6 +25,24 @@ The pages did not expose a product version in the fetched content. Recheck them 
 version changes, local evidence conflicts, a claim is unverified, the user asks for current behavior, or
 this evidence is older than 90 days. Do not refresh this date without repeating the fetch and reviewing
 the relevant sections.
+
+## Open Horizons plugin integration verification
+
+Verification date: 2026-08-19. Target runtime: GitHub Copilot CLI 1.0.81-0.
+
+| Evidence | Verified result |
+| --- | --- |
+| https://github.com/Ohorizons/open-horizons-platform/commit/7858578302fe0f54fdb43e15f84b14fd5d7519c2 | This was the upstream `main` commit inspected while refreshing the packaged workspace customizations. The plugin intentionally adds package metadata, MCP configuration, harness documentation, and runtime portability fixes that do not exist in the upstream `.github/` tree. |
+| `copilot plugin --help`, `copilot plugin install --help`, and `copilot mcp --help` | The installed CLI supports marketplace and repository plugin installation. MCP configuration is loaded from user, workspace, and installed-plugin sources; local servers use `type: local`, while remote servers use `type: http` or `type: sse`. |
+| `npm view @azure/mcp version` and `npx -y @azure/mcp@3.0.0-beta.36 server start --help` | `3.0.0-beta.36` was the published `latest` tag and the configured startup command parsed successfully. |
+| `npm view @playwright/mcp version` and `npx -y @playwright/mcp@0.0.79 --help` | `0.0.79` was the published `latest` tag and the configured startup command parsed successfully. |
+| https://github.com/hashicorp/terraform-mcp-server/releases/tag/v1.2.0 and `docker manifest inspect hashicorp/terraform-mcp-server:1.2.0` | Release `v1.2.0` was latest and the pinned Docker image tag existed. |
+
+The imported Open Horizons manifest had been an unrelated copy of the `noob-mode` manifest, referenced a
+missing skill, was absent from the marketplace, and left every packaged agent and skill unreferenced.
+The package was corrected to install its own nine agents, 29 skills, and four MCP servers. Repository-only
+instructions, prompts, workflows, issue forms, and templates remain in the package as a workspace kit and
+are not described as automatically activated plugin components.
 
 ## PowerPlatform Dataverse Client for Python verification
 

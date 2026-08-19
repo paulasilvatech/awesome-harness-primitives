@@ -2,7 +2,7 @@
 
 [![Validate primitives](https://github.com/paulasilvatech/copilot-primitives/actions/workflows/validate-primitives.yml/badge.svg)](https://github.com/paulasilvatech/copilot-primitives/actions/workflows/validate-primitives.yml)
 
-A curated, spec-validated collection of GitHub Copilot CLI primitives for the Copilot CLI harness. The repository currently contains **225 agents**, **194 instruction files**, **419 skills**, **48 VS Code prompts**, **93 plugin manifests**, and **8 hook packages**, validated against Copilot CLI **1.0.81-0**.
+A curated, spec-validated collection of GitHub Copilot CLI primitives for the Copilot CLI harness. The repository currently contains **225 agents**, **194 instruction files**, **419 skills**, **48 VS Code prompts**, **94 plugin manifests**, and **8 hook packages**, validated against Copilot CLI **1.0.81-0**.
 
 For a generated, alphabetized inventory, see [docs/CATALOG.md](docs/CATALOG.md). `docs/COPILOT-HARNESS-SPEC.md` is the canonical format and discovery reference, and [docs/templates/](docs/templates) holds the authoring templates for each primitive type.
 
@@ -66,7 +66,7 @@ with dates in `docs/HARNESS-VALIDATION.md`; stable schema and discovery rules be
 
 ### Plugins
 
-This repository publishes **70 installable plugin entries** through `.github/plugin/marketplace.json`.
+This repository publishes **71 installable plugin entries** through `.github/plugin/marketplace.json`.
 
 ```sh
 copilot plugin marketplace add paulasilvatech/copilot-primitives
