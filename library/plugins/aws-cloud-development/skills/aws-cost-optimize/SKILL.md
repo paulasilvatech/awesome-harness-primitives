@@ -212,8 +212,8 @@ Wait for user confirmation before proceeding.
 ```
 
 ## Quality gate
-- All cost estimates verified against actual configurations and AWS pricing
-- Individual GitHub issues created for each optimization
-- EPIC issue provides comprehensive coordination and tracking
-- All recommendations include specific AWS CLI or IaC commands
-- User confirmation obtained before creating issues
+- [ ] All cost estimates verified against actual configurations and AWS pricing
+- [ ] Individual GitHub issues created for each optimization
+- [ ] EPIC issue provides comprehensive coordination and tracking
+- [ ] All recommendations include specific AWS CLI or IaC commands
+- [ ] User confirmation obtained before creating issues
