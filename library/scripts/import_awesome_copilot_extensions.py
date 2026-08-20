@@ -151,7 +151,10 @@ def import_extensions(source: Path, commit: str) -> dict[str, dict[str, Any]]:
 
         repository = extensions.get(REPOSITORY_EXTENSION)
         repository = dict(repository) if isinstance(repository, dict) else {}
-        already_imported = repository.get("extensionLayoutVersion") == EXTENSION_LAYOUT_VERSION
+        already_imported = (
+            repository.get("extensionLayoutVersion") == EXTENSION_LAYOUT_VERSION
+            and repository.get("upstreamCommit") == commit
+        )
         repository.setdefault("componentSource", "plugin")
         repository.setdefault("layoutVersion", 1)
         repository.update(
