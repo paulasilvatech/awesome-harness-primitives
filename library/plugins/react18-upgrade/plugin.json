@@ -2,7 +2,12 @@
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "react18-upgrade",
   "description": "Enterprise React 18 migration toolkit with specialized agents and skills for upgrading React 16/17 class-component codebases to React 18.3.1. Includes auditor, dependency surgeon, class component migration specialist, automatic batching fixer, and test guardian.",
-  "version": "1.0.0",
+  "version": "1.0.1",
+  "author": {
+    "name": "Awesome Copilot Community"
+  },
+  "repository": "https://github.com/github/awesome-copilot",
+  "license": "MIT",
   "keywords": [
     "react18",
     "react",
@@ -12,13 +17,11 @@
     "lifecycle",
     "batching"
   ],
-  "author": {
-    "name": "Awesome Copilot Community"
-  },
-  "repository": "https://github.com/github/awesome-copilot",
-  "license": "MIT",
   "extensions": {
-    "com.github.awesome-copilot": {
+    "com.github.copilot": {},
+    "com.paulasilvatech.copilot-primitives": {
+      "componentSource": "library",
+      "layoutVersion": 1,
       "agents": [
         "./agents/react18-auditor.agent.md",
         "./agents/react18-batching-fixer.agent.md",
@@ -37,22 +40,5 @@
         "./skills/react18-string-refs/"
       ]
     }
-  },
-  "agents": [
-    "./agents/react18-auditor.agent.md",
-    "./agents/react18-batching-fixer.agent.md",
-    "./agents/react18-class-surgeon.agent.md",
-    "./agents/react18-commander.agent.md",
-    "./agents/react18-dep-surgeon.agent.md",
-    "./agents/react18-test-guardian.agent.md"
-  ],
-  "skills": [
-    "./skills/react-audit-grep-patterns/",
-    "./skills/react18-batching-patterns/",
-    "./skills/react18-dep-compatibility/",
-    "./skills/react18-enzyme-to-rtl/",
-    "./skills/react18-legacy-context/",
-    "./skills/react18-lifecycle-patterns/",
-    "./skills/react18-string-refs/"
-  ]
+  }
 }

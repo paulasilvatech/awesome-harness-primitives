@@ -26,6 +26,7 @@
     "com.github.copilot": {},
     "com.paulasilvatech.copilot-primitives": {
       "componentSource": "plugin",
+      "layoutVersion": 1,
       "hookSource": "./hooks/open-horizons-safety/hooks.json"
     }
   }

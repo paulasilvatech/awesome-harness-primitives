@@ -1,20 +1,24 @@
-# Power Apps Component Framework (PCF) Development Plugin
+# PCF development plugin
 
-Complete toolkit for developing custom code components using Power Apps Component Framework for model-driven and canvas apps
+Build and review Power Apps Component Framework code components for model-driven apps, canvas apps, and Power Pages.
+
+## Components
+
+- `power-platform-expert` agent for Power Platform and PCF architecture decisions.
+- `pcf-development` skill for manifest, lifecycle, React, security, accessibility, testing, and ALM workflows.
 
 ## Installation
 
 ```bash
-# Using Copilot CLI
-copilot plugin install pcf-development@awesome-copilot
+copilot plugin install pcf-development@copilot-primitives
 ```
 
-## What's Included
+Invoke the namespaced agent with `copilot --agent pcf-development:power-platform-expert` or ask GitHub Copilot to use the `pcf-development` skill.
 
-## Source
+## Validation
 
-This plugin is part of [Awesome Copilot](https://github.com/github/awesome-copilot), a community-driven collection of GitHub Copilot extensions.
+The package follows Agent Plugins 1.0 and is generated from canonical sources under `library/agents/` and `library/skills/`.
 
-## License
+## Source and license
 
-MIT
+This package is derived from the MIT-licensed Awesome Copilot collection and maintained by the Copilot Primitives repository.

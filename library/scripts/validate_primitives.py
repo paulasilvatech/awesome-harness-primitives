@@ -87,6 +87,7 @@ PR_VALID_KEYS = {"name", "description", "argument-hint", "agent", "model", "tool
 PL_VALID_KEYS = {"$schema", "name", "version", "description", "author", "email", "repository", "license", "homepage", "keywords", "extensions", "paths", "exclusive", "skills", "agents", "commands", "mcpServers", "lspServers", "outputStyles", "hooks", "postInstallMessage", "strict"}
 OPEN_PLUGIN_SCHEMA = "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json"
 OPEN_MCP_SCHEMA = "https://agent-plugins.org/schemas/1.0.0/mcp.schema.json"
+REPOSITORY_EXTENSION = "com.paulasilvatech.copilot-primitives"
 OPEN_PLUGIN_VALID_KEYS = {
     "$schema",
     "name",
@@ -492,11 +493,11 @@ class Validator:
         )
         # Existing marketplace imports may carry the schema URL while retaining
         # legacy top-level fields. Enforce the closed v1 schema for packages that
-        # explicitly opt into repository-owned, self-contained components.
+        # explicitly declare their canonical component ownership.
         strict_open_plugin = (
             data.get("$schema") == OPEN_PLUGIN_SCHEMA
             and isinstance(repository_extension, dict)
-            and repository_extension.get("componentSource") == "plugin"
+            and repository_extension.get("componentSource") in {"plugin", "library"}
         )
         valid_keys = OPEN_PLUGIN_VALID_KEYS if strict_open_plugin else PL_VALID_KEYS
         for k in sorted(set(data) - valid_keys):
@@ -540,6 +541,74 @@ class Validator:
             )
 
         copilot_extension = extensions.get("com.github.copilot")
+        repository_extension = extensions.get(REPOSITORY_EXTENSION)
+        repository_extension = (
+            repository_extension if isinstance(repository_extension, dict) else {}
+        )
+        component_source = repository_extension.get("componentSource")
+        expected_agents: list[str] = []
+        expected_skills: list[str] = []
+        expected_extensions: list[str] = []
+        if component_source == "library":
+            if repository_extension.get("layoutVersion") != 1:
+                self.add(kind, p, "PL016", "ERROR", "library component layoutVersion must equal 1")
+            for key, expected_prefix in (("agents", "./agents/"), ("skills", "./skills/")):
+                refs = repository_extension.get(key)
+                if not isinstance(refs, list) or not all(
+                    isinstance(ref, str) and ref.startswith(expected_prefix) for ref in refs
+                ):
+                    self.add(
+                        kind,
+                        p,
+                        "PL016",
+                        "ERROR",
+                        f"library component `{key}` must be a list of {expected_prefix} references",
+                    )
+                    continue
+                if len(refs) != len(set(refs)):
+                    self.add(kind, p, "PL016", "ERROR", f"library component `{key}` contains duplicates")
+                if key == "agents":
+                    expected_agents = refs
+                else:
+                    expected_skills = refs
+        elif component_source == "plugin":
+            if repository_extension.get("layoutVersion") != 1:
+                self.add(kind, p, "PL016", "ERROR", "plugin component layoutVersion must equal 1")
+            expected_agents = [
+                f"./agents/{path.name}" for path in sorted((plugin_dir / "agents").glob("*.agent.md"))
+            ]
+            expected_skills = [
+                f"./skills/{path.name}/"
+                for path in sorted(plugin_dir.joinpath("skills").iterdir())
+                if path.is_dir() and (path / "SKILL.md").is_file()
+            ] if (plugin_dir / "skills").is_dir() else []
+        else:
+            self.add(
+                kind,
+                p,
+                "PL016",
+                "ERROR",
+                "repository componentSource must be `plugin` or `library`",
+            )
+
+        extension_refs = repository_extension.get("extensionSources", [])
+        if extension_refs is not None:
+            if not isinstance(extension_refs, list) or not all(
+                isinstance(ref, str) and ref.startswith("./extensions/")
+                for ref in extension_refs
+            ):
+                self.add(
+                    kind,
+                    p,
+                    "PL017",
+                    "ERROR",
+                    "extensionSources must be a list of ./extensions/ references",
+                )
+            else:
+                expected_extensions = extension_refs
+                if len(extension_refs) != len(set(extension_refs)):
+                    self.add(kind, p, "PL017", "ERROR", "extensionSources contains duplicates")
+
         if copilot_extension is not None:
             agents = copilot_extension.get("agents")
             if agents is not None and not (
@@ -553,18 +622,32 @@ class Validator:
                     "ERROR",
                     "extensions.com.github.copilot.agents must be a list of .agent.md paths",
                 )
-            extension_agents = plugin_dir / "com.github.copilot" / "agents"
-            if not extension_agents.is_dir() or not any(extension_agents.glob("*.agent.md")):
-                self.add(
-                    kind,
-                    p,
-                    "PL012",
-                    "ERROR",
-                    "Agent Plugins 1.0 GitHub agents must be mirrored under com.github.copilot/agents",
+            if expected_agents:
+                extension_agents = plugin_dir / "com.github.copilot" / "agents"
+                expected_names = {Path(ref).name for ref in expected_agents}
+                actual_names = (
+                    {path.name for path in extension_agents.glob("*.agent.md")}
+                    if extension_agents.is_dir()
+                    else set()
                 )
+                if actual_names != expected_names:
+                    self.add(
+                        kind,
+                        p,
+                        "PL012",
+                        "ERROR",
+                        "Agent Plugins 1.0 GitHub agent mirror does not match canonical agents",
+                    )
+        elif expected_agents:
+            self.add(
+                kind,
+                p,
+                "PL012",
+                "ERROR",
+                "plugins with agents must declare extensions.com.github.copilot",
+            )
 
-        repository_extension = extensions.get("com.paulasilvatech.copilot-primitives")
-        if isinstance(repository_extension, dict) and "hookSource" in repository_extension:
+        if "hookSource" in repository_extension:
             hook_ref = repository_extension["hookSource"]
             if not isinstance(hook_ref, str) or not hook_ref.startswith("./"):
                 self.add(
@@ -595,9 +678,30 @@ class Validator:
                 else:
                     self._validate_hook(runtime_hook, plugin_dir)
 
+        for ref in expected_skills:
+            target = plugin_dir / ref[2:].rstrip("/")
+            if not (target / "SKILL.md").is_file():
+                self.add(kind, p, "PL016", "ERROR", f"plugin skill copy is missing: {ref}")
+
+        for ref in expected_extensions:
+            canonical = plugin_dir / ref[2:].rstrip("/")
+            runtime = plugin_dir / "com.github.copilot" / "extensions" / canonical.name
+            if not canonical.is_dir():
+                self.add(kind, p, "PL017", "ERROR", f"canonical extension is missing: {ref}")
+            if not runtime.is_dir():
+                self.add(kind, p, "PL017", "ERROR", f"runtime extension mirror is missing: {ref}")
+
         mcp_path = plugin_dir / "mcp.json"
         if mcp_path.exists():
             self._validate_open_plugin_mcp(mcp_path)
+        if not (
+            expected_agents
+            or expected_skills
+            or expected_extensions
+            or "hookSource" in repository_extension
+            or mcp_path.is_file()
+        ):
+            self.add(kind, p, "PL018", "ERROR", "plugin declares no installable component")
 
     def _validate_open_plugin_mcp(self, p: Path) -> None:
         kind = "plugins"

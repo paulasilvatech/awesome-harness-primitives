@@ -140,6 +140,8 @@ From this repository root, run:
 python3 library/plugins/open-horizons-platform/skills/validation-scripts/scripts/validate-agents.py --strict
 python3 library/scripts/validate_primitives.py --strict --root library/plugins/open-horizons-platform
 python3 library/scripts/validate_primitives.py --strict
+python3 library/scripts/normalize_plugin_manifests.py --check
+python3 library/scripts/audit_plugins.py --check
 python3 library/scripts/generate_catalog.py --check
 python3 library/scripts/sync_plugin_components.py --check
 python3 library/scripts/sync_installed_primitives.py --check

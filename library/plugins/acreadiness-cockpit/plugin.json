@@ -2,7 +2,12 @@
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "acreadiness-cockpit",
   "description": "Drive Microsoft AgentRC from Copilot chat: assess AI readiness, generate Copilot instructions (flat or nested with applyTo globs for monorepos), and manage policies. Produces a self-contained static HTML dashboard at reports/index.html.",
-  "version": "1.0.0",
+  "version": "1.0.1",
+  "author": {
+    "name": "mvanderbend-msoft"
+  },
+  "repository": "https://github.com/github/awesome-copilot",
+  "license": "MIT",
   "keywords": [
     "agentrc",
     "ai-readiness",
@@ -12,13 +17,11 @@
     "policy",
     "dashboard"
   ],
-  "author": {
-    "name": "mvanderbend-msoft"
-  },
-  "repository": "https://github.com/github/awesome-copilot",
-  "license": "MIT",
   "extensions": {
-    "com.github.awesome-copilot": {
+    "com.github.copilot": {},
+    "com.paulasilvatech.copilot-primitives": {
+      "componentSource": "library",
+      "layoutVersion": 1,
       "agents": [
         "./agents/ai-readiness-reporter.agent.md"
       ],
@@ -28,13 +31,5 @@
         "./skills/acreadiness-policy/"
       ]
     }
-  },
-  "agents": [
-    "./agents/ai-readiness-reporter.agent.md"
-  ],
-  "skills": [
-    "./skills/acreadiness-assess/",
-    "./skills/acreadiness-generate-instructions/",
-    "./skills/acreadiness-policy/"
-  ]
+  }
 }

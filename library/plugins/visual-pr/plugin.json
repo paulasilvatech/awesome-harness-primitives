@@ -2,7 +2,12 @@
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "visual-pr",
   "description": "Capture, annotate, and embed screenshots and animated GIF demos in pull request descriptions. Includes Playwright-based UI capture, PIL image annotations, PR embedding workflows for GitHub and Azure DevOps, and screen recording with variable timing.",
-  "version": "1.0.0",
+  "version": "1.0.1",
+  "author": {
+    "name": "Awesome Copilot Community"
+  },
+  "repository": "https://github.com/github/awesome-copilot",
+  "license": "MIT",
   "keywords": [
     "screenshots",
     "pull-request",
@@ -13,13 +18,12 @@
     "screen-recording",
     "visual"
   ],
-  "author": {
-    "name": "Awesome Copilot Community"
-  },
-  "repository": "https://github.com/github/awesome-copilot",
-  "license": "MIT",
   "extensions": {
-    "com.github.awesome-copilot": {
+    "com.github.copilot": {},
+    "com.paulasilvatech.copilot-primitives": {
+      "componentSource": "library",
+      "layoutVersion": 1,
+      "agents": [],
       "skills": [
         "./skills/image-annotations/",
         "./skills/pr-screenshots/",
@@ -27,11 +31,5 @@
         "./skills/ui-screenshots/"
       ]
     }
-  },
-  "skills": [
-    "./skills/image-annotations/",
-    "./skills/pr-screenshots/",
-    "./skills/screen-recording/",
-    "./skills/ui-screenshots/"
-  ]
+  }
 }

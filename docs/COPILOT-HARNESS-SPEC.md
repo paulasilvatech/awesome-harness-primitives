@@ -268,7 +268,7 @@ Agent Plugins 1.0 `mcp.json` requires
 types are `stdio`, `streamable-http`, and `sse`; legacy `local` and `http` values and client-only `tools`
 filters are not valid in this file.
 
-Runtime verification against GitHub Copilot CLI 1.0.81-0 on 2026-08-19 confirmed that a schema-declaring
+Runtime verification against GitHub Copilot CLI 1.0.81-4 on 2026-08-20 confirmed that a schema-declaring
 plugin's top-level `agents` field is ignored with a warning and agents under
 `com.github.copilot/agents/` are loaded. See `docs/HARNESS-VALIDATION.md`.
 
@@ -421,6 +421,8 @@ Use `--strict` to fail on warnings, `--json` for machine-readable output, and
 Generated distribution surfaces have separate drift gates:
 
 ```sh
+python3 library/scripts/normalize_plugin_manifests.py --check
+python3 library/scripts/audit_plugins.py --check
 python3 library/scripts/generate_catalog.py --check
 python3 library/scripts/sync_plugin_components.py --check
 python3 library/scripts/sync_installed_primitives.py --check

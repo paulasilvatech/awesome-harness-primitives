@@ -49,10 +49,42 @@ The package was corrected to install its own nine agents, 30 skills, one safety 
 servers. Repository-only instructions, prompts, workflows, issue forms, and templates remain in the
 package as a workspace kit and are published only through an explicit dry-run/apply workflow.
 
-Other imported marketplace manifests may still combine the Agent Plugins schema URL with legacy GitHub
-top-level component fields. The repository validator currently grandfathers those packages unless they
-declare `extensions.com.paulasilvatech.copilot-primitives.componentSource: plugin`; migrating every legacy
-package to closed Agent Plugins 1.0 layout is separate work.
+## Marketplace-wide Agent Plugins verification
+
+Verification date: 2026-08-20. Target runtime: GitHub Copilot CLI 1.0.81-4.
+
+| Evidence | Verified result |
+| --- | --- |
+| https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/plugins-creating | GitHub documents agents, skills, hooks, and MCP server configurations as plugin components and requires reinstalling a local plugin to refresh cached content. |
+| https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-plugin-reference | The legacy GitHub manifest supports component path fields. Declaring the canonical `$schema` opts into Agent Plugins 1.0 semantics; the `extensions` field then has client-specific meaning. |
+| https://agent-plugins.org/specification | Agent Plugins 1.0 fixes skills at `skills/` and portable MCP configuration at root `mcp.json`; client-specific content belongs under reverse-domain namespaces. |
+| https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/plugins-marketplace | Marketplace entries require name, description, version, and a source relative to the repository. The marketplace file belongs under `.github/plugin/`. |
+| https://docs.github.com/en/copilot/reference/hooks-reference | Hooks remain supported in GitHub Copilot CLI and cloud agent. Hook commands must be bounded, deterministic, and explicit about blocking behavior. |
+| `azure-cloud-development@copilot-primitives` before migration | The plugin installed four skills, but GitHub Copilot CLI warned that root `agents/` was ignored because `$schema` was present; its namespaced agent was unavailable. |
+| `azure-cloud-development@copilot-primitives` after migration | The plugin installed four skills and `azure-cloud-development:azure-principal-architect` returned `ok` after agents were materialized under `com.github.copilot/agents/`. |
+| `copilot plugin marketplace browse copilot-primitives` | The current CLI listed all 96 entries. Although the fetched plugin reference advertises `browse NAME [--json]`, CLI 1.0.81-4 rejected `--json`; the audit therefore uses the deterministic marketplace file rather than parsing CLI display text. |
+| Awesome Copilot upstream commit `318066d2213b510e89b500ed0d53506c54093ddc` | The current upstream materializer copies agents and client extensions into `com.github.copilot/`, keeps skills in fixed `skills/`, and emits a strict served manifest. Twenty-four client-extension packages were imported from this commit. |
+| npm registry on 2026-08-20 | Imported extensions pin `@github/copilot-sdk` to `1.0.11-preview.2` and Playwright to `1.62.1`; the Power BI reference MCP is pinned to `0.5.0-beta.12`. |
+| Extension validation | 212 JavaScript files passed `node --check`. Signals Dashboard passed 19 tests with one Windows-only skip; Java Modernization Studio passed its Node tests; PR Artifact Explorer passed 13 tests. Windows App Storage Inspector syntax passed, while its runtime self-test was not applicable on macOS because the extension intentionally fails outside Windows. |
+| `accessibility-kanban@copilot-primitives` | The extension-only package installed successfully from the local marketplace on CLI 1.0.81-4. Interactive canvas behavior was not exercised in the non-interactive probe; client-extension packages remain covered by source/runtime mirror checks, pinned dependencies, JavaScript syntax, and available unit tests. |
+| New package runtime probes | `pcf-development` installed one skill and its `power-platform-expert` agent returned `pcf-ok`. `fabric-agentic-plugin` installed one progressive Fabric skill, exposed two MCP servers, and its `FabricAdmin` agent returned `fabric-ok`. |
+| Plugin authoring runtime probe | `copilot-plugin-development` installed the `copilot-plugin-authoring` skill, and its namespaced `copilot-primitive-architect` agent returned `plugin-authoring-ok`. |
+| Full isolated marketplace installation | All 96 entries installed successfully into one fresh `COPILOT_HOME`; `copilot plugin list` reported all 96 installed packages. Component behavior remains covered by representative agent, skill, MCP, hook, and client-extension probes rather than assuming installation alone proves execution. |
+
+The marketplace now contains 96 self-contained entries. Seventy-two packages source agents and skills
+from the shared library; 24 own plugin-local agents, hooks, or client extensions. All manifests use the
+Agent Plugins 1.0 schema, legacy `.mcp.json` files were removed from runtime packages, every package is
+listed exactly once, and deterministic audit results are generated in `docs/PLUGIN-AUDIT.md`.
+
+## Power Apps Component Framework verification
+
+Verification date: 2026-08-20.
+
+| Source | Verified result |
+| --- | --- |
+| https://learn.microsoft.com/en-us/power-apps/developer/component-framework/overview | PCF code components support model-driven and canvas apps, package through solutions, and can become premium when they call external services directly from the browser. The page was dated 2026-01-09. |
+| https://learn.microsoft.com/en-us/power-apps/developer/component-framework/limitations | Canvas PCF does not expose every Dataverse-dependent API, custom authentication is unsupported in canvas components, browser web storage is insecure and unreliable, and connectors should be used for authenticated canvas operations. The page was dated 2025-07-01. |
+| https://learn.microsoft.com/en-us/power-apps/developer/component-framework/manifest-schema-reference/ | The manifest schema remains the authoritative contract for component properties, resources, feature usage, and external-service declarations. |
 
 ## PowerPlatform Dataverse Client for Python verification
 

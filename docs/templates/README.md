@@ -1,6 +1,6 @@
 # Primitive Authoring Templates
 
-These templates are starting points for four Copilot customization formats. They are not an exhaustive
+These templates are starting points for six Copilot customization and package formats. They are not an exhaustive
 list of every type supported by the harness. Repository governance defines source precedence and freshness;
 `docs/COPILOT-HARNESS-SPEC.md` is the authority for CLI-discovered formats, and prompt files are a local
 VS Code feature.
@@ -11,6 +11,8 @@ VS Code feature.
 | [instructions.template.md](instructions.template.md) | `library/instructions/<name>.instructions.md` | Apply passive conventions to matching files. | Copilot CLI and VS Code |
 | [skill.template.md](skill.template.md) | `library/skills/<name>/SKILL.md` | Package a reusable procedure, review, or specialized capability. | Copilot CLI and VS Code |
 | [prompt.template.md](prompt.template.md) | `library/prompts/<name>.prompt.md` | Run a focused, user-selected action with VS Code runtime inputs. | **VS Code only; not a CLI primitive** |
+| [plugin.template.json](plugin.template.json) | `library/plugins/<name>/plugin.json` | Declare a strict Agent Plugins 1.0 package and repository ownership. | GitHub Copilot CLI and compatible Agent Plugins clients |
+| [plugin-mcp.template.json](plugin-mcp.template.json) | `library/plugins/<name>/mcp.json` | Configure portable plugin MCP servers. | Agent Plugins 1.0 clients |
 
 ## Short authoring workflow
 
@@ -22,6 +24,9 @@ VS Code feature.
    mkdir -p library/skills/example-name
    cp docs/templates/skill.template.md library/skills/example-name/SKILL.md
    cp docs/templates/prompt.template.md library/prompts/example-name.prompt.md
+   mkdir -p library/plugins/example-name
+   cp docs/templates/plugin.template.json library/plugins/example-name/plugin.json
+   cp docs/templates/plugin-mcp.template.json library/plugins/example-name/mcp.json
    ```
 
 2. Replace every visible `{{UPPER_SNAKE_CASE}}` authoring placeholder. Search the completed file or skill
@@ -140,6 +145,28 @@ The formats do not share one mandatory body outline. Use the contract that match
   into CLI agent frontmatter.
 - A prompt may edit only when its destination, workflow, and available VS Code tools all permit editing.
 
+### Plugin
+
+- **Manifest:** use the Agent Plugins 1.0 schema and only its closed top-level metadata fields.
+- **Ownership:** declare `componentSource: library` for canonical shared primitives or `plugin` for
+  self-contained packages. Keep source references and `layoutVersion` in the repository extension
+  namespace.
+- **Discovery:** skills live under `skills/`; GitHub agents, hooks, and client extensions are generated
+  under `com.github.copilot/`.
+- **Composition:** package a coherent capability. Reject componentless manifests and unrelated
+  “bundle everything” collections.
+- **Marketplace:** keep source, version, description, uniqueness, and alphabetical ordering synchronized.
+- **Runtime:** reinstall into an isolated `COPILOT_HOME` and prove every claimed surface.
+
+### Plugin MCP
+
+- Use the Agent Plugins MCP schema in root `mcp.json`; do not use legacy `.mcp.json`.
+- Choose exactly one transport per server: `stdio`, `streamable-http`, or `sse`.
+- Pin executable packages and container images. Keep credentials out of `env`, headers, examples, and
+  source control.
+- Treat workspace `.github/mcp.json` as a separate client schema; do not copy portable plugin config
+  verbatim into the workspace.
+
 ## Composition and references
 
 Keep responsibilities separate:
@@ -181,7 +208,7 @@ These forms have different meanings:
 
 ## Validation and synchronization
 
-For agents, instructions, skills, and prompts under `library/`, run:
+For agents, instructions, skills, prompts, and plugins under `library/`, run:
 
 ```sh
 python3 library/scripts/validate_primitives.py
@@ -191,6 +218,8 @@ After changing a primitive included in the generated catalog, regenerate and che
 
 ```sh
 python3 library/scripts/generate_catalog.py
+python3 library/scripts/normalize_plugin_manifests.py --check
+python3 library/scripts/audit_plugins.py --check
 python3 library/scripts/generate_catalog.py --check
 ```
 

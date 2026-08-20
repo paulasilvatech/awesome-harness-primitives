@@ -2,7 +2,14 @@
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "skill-image-gen",
   "description": "Generate images using AI directly from your coding workflow. Supports OpenAI (gpt-image-2) and Google Gemini. BYO API key — the skill guides you through setup on first use.",
-  "version": "1.0.0",
+  "version": "1.0.1",
+  "author": {
+    "name": "adamd9",
+    "url": "https://github.com/adamd9"
+  },
+  "homepage": "https://github.com/adamd9/skill-image-gen",
+  "repository": "https://github.com/github/awesome-copilot",
+  "license": "MIT",
   "keywords": [
     "image-generation",
     "openai",
@@ -13,21 +20,15 @@
     "textures",
     "icons"
   ],
-  "author": {
-    "name": "adamd9",
-    "url": "https://github.com/adamd9"
-  },
-  "homepage": "https://github.com/adamd9/skill-image-gen",
-  "repository": "https://github.com/github/awesome-copilot",
-  "license": "MIT",
   "extensions": {
-    "com.github.awesome-copilot": {
+    "com.github.copilot": {},
+    "com.paulasilvatech.copilot-primitives": {
+      "componentSource": "library",
+      "layoutVersion": 1,
+      "agents": [],
       "skills": [
         "./skills/generate-image/"
       ]
     }
-  },
-  "skills": [
-    "./skills/generate-image/"
-  ]
+  }
 }

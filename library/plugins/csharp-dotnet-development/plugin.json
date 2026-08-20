@@ -2,7 +2,7 @@
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "csharp-dotnet-development",
   "description": "Essential prompts, instructions, and chat modes for C# and .NET development including testing, documentation, and best practices.",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "author": {
     "name": "Awesome Copilot Community"
   },
@@ -15,7 +15,10 @@
     "testing"
   ],
   "extensions": {
-    "com.github.awesome-copilot": {
+    "com.github.copilot": {},
+    "com.paulasilvatech.copilot-primitives": {
+      "componentSource": "library",
+      "layoutVersion": 1,
       "agents": [
         "./agents/expert-dotnet-software-engineer.agent.md"
       ],
@@ -30,18 +33,5 @@
         "./skills/dotnet-upgrade/"
       ]
     }
-  },
-  "agents": [
-    "./agents/expert-dotnet-software-engineer.agent.md"
-  ],
-  "skills": [
-    "./skills/aspnet-minimal-api-openapi/",
-    "./skills/csharp-async/",
-    "./skills/csharp-mstest/",
-    "./skills/csharp-nunit/",
-    "./skills/csharp-tunit/",
-    "./skills/csharp-xunit/",
-    "./skills/dotnet-best-practices/",
-    "./skills/dotnet-upgrade/"
-  ]
+  }
 }

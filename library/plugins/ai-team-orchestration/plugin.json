@@ -2,7 +2,12 @@
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "ai-team-orchestration",
   "description": "Run a lightweight, role-separated AI development team with flexible tools, developer-selected models, proportionate planning, and optional QA.",
-  "version": "2.0.0",
+  "version": "2.0.1",
+  "author": {
+    "name": "Denis Evdokimov"
+  },
+  "repository": "https://github.com/github/awesome-copilot",
+  "license": "MIT",
   "keywords": [
     "ai-team",
     "multi-agent",
@@ -12,13 +17,11 @@
     "orchestration",
     "developer-workflow"
   ],
-  "author": {
-    "name": "Denis Evdokimov"
-  },
-  "repository": "https://github.com/github/awesome-copilot",
-  "license": "MIT",
   "extensions": {
-    "com.github.awesome-copilot": {
+    "com.github.copilot": {},
+    "com.paulasilvatech.copilot-primitives": {
+      "componentSource": "library",
+      "layoutVersion": 1,
       "agents": [
         "./agents/ai-team-dev.agent.md",
         "./agents/ai-team-producer.agent.md",
@@ -28,13 +31,5 @@
         "./skills/ai-team-orchestration/"
       ]
     }
-  },
-  "agents": [
-    "./agents/ai-team-dev.agent.md",
-    "./agents/ai-team-producer.agent.md",
-    "./agents/ai-team-qa.agent.md"
-  ],
-  "skills": [
-    "./skills/ai-team-orchestration/"
-  ]
+  }
 }

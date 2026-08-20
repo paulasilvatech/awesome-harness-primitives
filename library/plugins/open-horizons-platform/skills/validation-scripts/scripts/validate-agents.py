@@ -4,11 +4,12 @@
 from __future__ import annotations
 
 import argparse
+import fnmatch
 import json
 import re
 import subprocess
 import sys
-from pathlib import Path, PurePosixPath
+from pathlib import Path
 from typing import Any
 
 try:
@@ -315,8 +316,25 @@ def git_tracked_files(report: ValidationReport) -> list[str]:
 
 
 def matches_apply_to(pattern: str, tracked_file: str) -> bool:
-    """Match Copilot-style applyTo globs without letting `*` cross directories."""
-    return PurePosixPath(tracked_file).match(pattern)
+    """Match Copilot-style globs where `*` stays local and `**` is recursive."""
+    pattern_parts = tuple(part for part in pattern.split("/") if part)
+    path_parts = tuple(part for part in tracked_file.split("/") if part)
+
+    def match(pattern_index: int, path_index: int) -> bool:
+        if pattern_index == len(pattern_parts):
+            return path_index == len(path_parts)
+        current = pattern_parts[pattern_index]
+        if current == "**":
+            return match(pattern_index + 1, path_index) or (
+                path_index < len(path_parts) and match(pattern_index, path_index + 1)
+            )
+        return (
+            path_index < len(path_parts)
+            and fnmatch.fnmatchcase(path_parts[path_index], current)
+            and match(pattern_index + 1, path_index + 1)
+        )
+
+    return match(0, 0)
 
 
 def collect_agent_names(report: ValidationReport) -> set[str]:

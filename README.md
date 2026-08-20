@@ -2,7 +2,7 @@
 
 [![Validate primitives](https://github.com/paulasilvatech/copilot-primitives/actions/workflows/validate-primitives.yml/badge.svg)](https://github.com/paulasilvatech/copilot-primitives/actions/workflows/validate-primitives.yml)
 
-A curated, spec-validated collection of GitHub Copilot CLI primitives for the Copilot CLI harness. The repository currently contains **225 agents**, **194 instruction files**, **419 skills**, **48 VS Code prompts**, **94 plugin manifests**, and **8 hook packages**, validated against Copilot CLI **1.0.81-0**.
+A curated, spec-validated collection of GitHub Copilot CLI primitives for the Copilot CLI harness. The repository currently contains **225 agents**, **194 instruction files**, **421 skills**, **48 VS Code prompts**, **96 plugin manifests**, and **8 reusable hook packages**, validated against GitHub Copilot CLI **1.0.81-4**.
 
 For a generated, alphabetized inventory, see [docs/CATALOG.md](docs/CATALOG.md). `docs/COPILOT-HARNESS-SPEC.md` is the canonical format and discovery reference, and [docs/templates/](docs/templates) holds the authoring templates for each primitive type.
 
@@ -19,8 +19,10 @@ For a generated, alphabetized inventory, see [docs/CATALOG.md](docs/CATALOG.md).
 │   ├── hooks/<name>/hooks.json
 │   ├── installed-primitives.json # Canonical-to-installed copy manifest
 │   └── scripts/
+│       ├── audit_plugins.py
 │       ├── check_links.py
 │       ├── generate_catalog.py
+│       ├── normalize_plugin_manifests.py
 │       ├── sync_installed_primitives.py
 │       ├── sync_plugin_components.py
 │       └── validate_primitives.py
@@ -66,7 +68,7 @@ with dates in `docs/HARNESS-VALIDATION.md`; stable schema and discovery rules be
 
 ### Plugins
 
-This repository publishes **71 installable plugin entries** through `.github/plugin/marketplace.json`.
+This repository publishes **96 installable plugin entries** through `.github/plugin/marketplace.json`. See the generated [plugin marketplace audit](docs/PLUGIN-AUDIT.md) for component counts, ownership mode, and package-level coverage.
 
 ```sh
 copilot plugin marketplace add paulasilvatech/copilot-primitives
@@ -188,6 +190,8 @@ python3 library/scripts/generate_catalog.py --check
 Check generated distribution surfaces with:
 
 ```sh
+python3 library/scripts/normalize_plugin_manifests.py --check
+python3 library/scripts/audit_plugins.py --check
 python3 library/scripts/sync_plugin_components.py --check
 python3 library/scripts/sync_installed_primitives.py --check
 ```

@@ -68,6 +68,8 @@ Run these repository gates before delivery:
 
 ```sh
 python3 library/scripts/validate_primitives.py --strict
+python3 library/scripts/normalize_plugin_manifests.py --check
+python3 library/scripts/audit_plugins.py --check
 python3 library/scripts/generate_catalog.py --check
 python3 library/scripts/sync_plugin_components.py --check
 python3 library/scripts/sync_installed_primitives.py --check
@@ -127,6 +129,8 @@ Use the exact primitive labels `agent`, `instructions`, `prompt`, and `skill` wh
 
 ### Validation
 - `python3 library/scripts/validate_primitives.py --strict`: <pass, fail, or not run with reason>
+- `python3 library/scripts/normalize_plugin_manifests.py --check`: <pass or fail>
+- `python3 library/scripts/audit_plugins.py --check`: <pass or fail>
 - `python3 library/scripts/generate_catalog.py --check`: <pass, fail, or not run with reason>
 - `python3 library/scripts/sync_plugin_components.py --check`: <pass, fail, or not applicable>
 - `python3 library/scripts/sync_installed_primitives.py --check`: <pass or fail>

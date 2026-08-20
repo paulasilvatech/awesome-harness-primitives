@@ -2,7 +2,13 @@
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "convert-to-md",
   "description": "A collection of Copilot skills that convert common document formats into Markdown so their contents can be accurately analyzed, summarized, searched, or extracted from. Just tell Copilot what you need — the right skill is invoked automatically and the conversion happens behind the scenes.",
-  "version": "1.0.1",
+  "version": "1.0.2",
+  "author": {
+    "name": "Willie Yao",
+    "url": "https://github.com/1YaoWei0"
+  },
+  "repository": "https://github.com/github/awesome-copilot",
+  "license": "MIT",
   "keywords": [
     "skills",
     "configuration",
@@ -11,24 +17,17 @@
     "convert-excel-to-md",
     "convert-pdf-to-md"
   ],
-  "author": {
-    "name": "Willie Yao",
-    "url": "https://github.com/1YaoWei0"
-  },
-  "repository": "https://github.com/github/awesome-copilot",
-  "license": "MIT",
   "extensions": {
-    "com.github.awesome-copilot": {
+    "com.github.copilot": {},
+    "com.paulasilvatech.copilot-primitives": {
+      "componentSource": "library",
+      "layoutVersion": 1,
+      "agents": [],
       "skills": [
         "./skills/convert-excel-to-md/",
         "./skills/convert-pdf-to-md/",
         "./skills/convert-word-to-md/"
       ]
     }
-  },
-  "skills": [
-    "./skills/convert-excel-to-md/",
-    "./skills/convert-pdf-to-md/",
-    "./skills/convert-word-to-md/"
-  ]
+  }
 }

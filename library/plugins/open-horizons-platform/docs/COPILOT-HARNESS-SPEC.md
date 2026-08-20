@@ -356,7 +356,7 @@ Agent Plugins 1.0 `mcp.json` requires
 types are `stdio`, `streamable-http`, and `sse`; legacy `local` and `http` values and client-only `tools`
 filters are not valid in this file.
 
-Runtime verification against GitHub Copilot CLI 1.0.81-0 on 2026-08-19 confirmed that a schema-declaring
+Runtime verification against GitHub Copilot CLI 1.0.81-4 on 2026-08-20 confirmed that a schema-declaring
 plugin's top-level `agents` field is ignored with a warning and agents under
 `com.github.copilot/agents/` are loaded. See the repository's dated harness validation evidence.
 

@@ -119,5 +119,5 @@ Why: the description is not actionable for discovery, and the listed tools are n
 - [ ] No uppercase double-brace placeholders, authoring notes, or unrelated edits remain.
 - [ ] Current or latest claims are supported by dated first-party or runtime evidence.
 - [ ] All primitive types pass `python3 library/scripts/validate_primitives.py --strict`.
-- [ ] Catalog, plugin component, and declared installed-copy drift checks pass.
+- [ ] Plugin normalization, marketplace audit, catalog, plugin component, and declared installed-copy drift checks pass.
 - [ ] Prompt validation is reported accurately: repository validation covers local structure and metadata, while **Chat: Run Prompt** is still required to prove VS Code runtime behavior.

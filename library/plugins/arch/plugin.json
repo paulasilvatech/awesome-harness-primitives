@@ -2,7 +2,12 @@
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "arch",
   "description": "Architecture and modernization toolkit: produce a cited architecture document for a locally-cloned repo, and generate a phased modernization plan that auto-runs Documentation mode when needed.",
-  "version": "1.0.0",
+  "version": "1.0.1",
+  "author": {
+    "name": "Awesome Copilot Community"
+  },
+  "repository": "https://github.com/github/awesome-copilot",
+  "license": "MIT",
   "keywords": [
     "architecture",
     "modernization",
@@ -10,19 +15,15 @@
     "migration",
     "onboarding"
   ],
-  "author": {
-    "name": "Awesome Copilot Community"
-  },
-  "repository": "https://github.com/github/awesome-copilot",
-  "license": "MIT",
   "extensions": {
-    "com.github.awesome-copilot": {
+    "com.github.copilot": {},
+    "com.paulasilvatech.copilot-primitives": {
+      "componentSource": "library",
+      "layoutVersion": 1,
+      "agents": [],
       "skills": [
         "./skills/doc-and-modernize/"
       ]
     }
-  },
-  "skills": [
-    "./skills/doc-and-modernize/"
-  ]
+  }
 }

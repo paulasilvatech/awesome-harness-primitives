@@ -82,6 +82,13 @@ def owns_plugin_components(data: dict[str, Any]) -> bool:
     return repository_extension_config(data).get("componentSource") == "plugin"
 
 
+def uses_github_extension(data: dict[str, Any]) -> bool:
+    extensions = data.get("extensions")
+    return isinstance(extensions, dict) and isinstance(
+        extensions.get("com.github.copilot"), dict
+    )
+
+
 def resolve_plugin_source(plugin_dir: Path, ref: str) -> Path:
     if not ref.startswith("./"):
         raise ValueError(f"{plugin_dir.name}: component source must start with './': {ref}")
@@ -104,13 +111,11 @@ def collect_component_copies(root: Path) -> list[ComponentCopy]:
         if manifest is None:
             continue
         data = read_json(manifest)
+        repository_config = repository_extension_config(data)
         if owns_plugin_components(data):
-            repository_config = repository_extension_config(data)
             extension_agents = plugin_dir / "com.github.copilot" / "agents"
             source_agents = plugin_dir / "agents"
-            if source_agents.is_dir() and isinstance(
-                data.get("extensions", {}).get("com.github.copilot"), dict
-            ):
+            if source_agents.is_dir() and uses_github_extension(data):
                 for source in sorted(source_agents.glob("*.agent.md")):
                     copies.append(
                         ComponentCopy(
@@ -120,25 +125,51 @@ def collect_component_copies(root: Path) -> list[ComponentCopy]:
                             extension_agents / source.name,
                         )
                     )
-            hook_ref = repository_config.get("hookSource")
-            if isinstance(hook_ref, str):
+        else:
+            refs = {
+                ref
+                for ref in iter_strings(data)
+                if ref.startswith("./agents/") or ref.startswith("./skills/")
+            }
+            for ref in sorted(refs):
+                rel = ref[2:].rstrip("/")
+                source = root / rel
+                if ref.startswith("./skills/"):
+                    copies.append(ComponentCopy(plugin_dir.name, ref, source, plugin_dir / rel))
+                if ref.startswith("./agents/") and uses_github_extension(data):
+                    copies.append(
+                        ComponentCopy(
+                            plugin_dir.name,
+                            f"./com.github.copilot/agents/{Path(rel).name}",
+                            source,
+                            plugin_dir / "com.github.copilot" / "agents" / Path(rel).name,
+                        )
+                    )
+
+        hook_ref = repository_config.get("hookSource")
+        if isinstance(hook_ref, str):
+            copies.append(
+                ComponentCopy(
+                    plugin_dir.name,
+                    "./com.github.copilot/hooks/hooks.json",
+                    resolve_plugin_source(plugin_dir, hook_ref),
+                    plugin_dir / "com.github.copilot" / "hooks" / "hooks.json",
+                )
+            )
+        extension_refs = repository_config.get("extensionSources", [])
+        if isinstance(extension_refs, list):
+            for ref in extension_refs:
+                if not isinstance(ref, str):
+                    continue
+                source = resolve_plugin_source(plugin_dir, ref)
                 copies.append(
                     ComponentCopy(
                         plugin_dir.name,
-                        "./com.github.copilot/hooks/hooks.json",
-                        resolve_plugin_source(plugin_dir, hook_ref),
-                        plugin_dir / "com.github.copilot" / "hooks" / "hooks.json",
+                        f"./com.github.copilot/extensions/{source.name}",
+                        source,
+                        plugin_dir / "com.github.copilot" / "extensions" / source.name,
                     )
                 )
-            continue
-        refs = {
-            ref
-            for ref in iter_strings(data)
-            if ref.startswith("./agents/") or ref.startswith("./skills/")
-        }
-        for ref in sorted(refs):
-            rel = ref[2:].rstrip("/")
-            copies.append(ComponentCopy(plugin_dir.name, ref, root / rel, plugin_dir / rel))
     return copies
 
 
@@ -153,7 +184,7 @@ def remove_generated_dirs(root: Path) -> None:
         if manifest is None:
             continue
         if owns_plugin_components(read_json(manifest)):
-            for name in ("agents", "hooks"):
+            for name in ("agents", "hooks", "extensions"):
                 extension_path = plugin_dir / "com.github.copilot" / name
                 if extension_path.exists():
                     shutil.rmtree(extension_path)
@@ -162,6 +193,12 @@ def remove_generated_dirs(root: Path) -> None:
             path = plugin_dir / name
             if path.exists():
                 shutil.rmtree(path)
+        extension_agents = plugin_dir / "com.github.copilot" / "agents"
+        if extension_agents.exists():
+            shutil.rmtree(extension_agents)
+        extension_packages = plugin_dir / "com.github.copilot" / "extensions"
+        if extension_packages.exists():
+            shutil.rmtree(extension_packages)
 
 
 def copy_component(copy: ComponentCopy) -> None:
@@ -222,6 +259,11 @@ def find_extra_generated_paths(root: Path, copies: list[ComponentCopy]) -> list[
             hook = extension_root / "hooks" / "hooks.json"
             if hook.exists() and hook.resolve() not in expected:
                 extras.append(hook)
+            extensions = extension_root / "extensions"
+            if extensions.is_dir():
+                for child in extensions.iterdir():
+                    if child.is_dir() and child.resolve() not in expected:
+                        extras.append(child)
             continue
         for name in ("agents", "skills"):
             base = plugin_dir / name
@@ -230,6 +272,16 @@ def find_extra_generated_paths(root: Path, copies: list[ComponentCopy]) -> list[
             children = list(base.glob("*.agent.md")) if name == "agents" else [p for p in base.iterdir() if p.is_dir()]
             for child in children:
                 if child.resolve() not in expected:
+                    extras.append(child)
+        extension_agents = plugin_dir / "com.github.copilot" / "agents"
+        if extension_agents.is_dir():
+            for child in extension_agents.glob("*.agent.md"):
+                if child.resolve() not in expected:
+                    extras.append(child)
+        extension_packages = plugin_dir / "com.github.copilot" / "extensions"
+        if extension_packages.is_dir():
+            for child in extension_packages.iterdir():
+                if child.is_dir() and child.resolve() not in expected:
                     extras.append(child)
     return sorted(extras)
 
