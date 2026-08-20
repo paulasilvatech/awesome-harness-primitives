@@ -47,6 +47,7 @@ The following files are useful and supported by GitHub Copilot or GitHub after t
 | `docs/` | `.github/docs/` | Maintainers and customization authors. |
 | `model-routing.yaml` | `.github/model-routing.yaml` | Repository convention only; GitHub Copilot does not enforce it. |
 | `hooks/open-horizons-safety/` | `hooks/open-horizons-safety/` plus `.github/hooks/open-horizons-safety.json` | Repository-level GitHub Copilot hooks. |
+| `skills/open-horizons-workspace-kit/templates/mcp.json` | `.github/mcp.json` | Workspace MCP configuration equivalent to plugin-root Agent Plugins 1.0 MCP servers. |
 
 Prompts are not GitHub Copilot CLI plugin primitives. Instructions are discovered from repository, user, organization, or enterprise instruction locations rather than from a plugin's `instructions/` directory. Keep these assets in the package, but do not claim they become active merely because the plugin is installed. Use the `open-horizons-workspace-kit` skill to preview and publish them safely.
 
@@ -73,7 +74,7 @@ python3 <installed-plugin>/skills/open-horizons-workspace-kit/scripts/install_wo
   --target <repository>
 ```
 
-The command is dry-run by default. Add `--apply` only after reviewing the plan; conflicts block all writes unless an explicit `--force` is approved.
+The command is dry-run by default. Its complete default includes repository agents and skills so the named agents in VS Code prompts resolve without a CLI plugin dependency. Add `--apply` only after reviewing the plan; conflicts block all writes unless an explicit `--force` is approved. Use explicit component groups to omit runtime copies when duplication is not desired.
 
 Plugin agents are namespaced by plugin name. For example:
 

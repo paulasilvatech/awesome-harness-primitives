@@ -128,8 +128,10 @@ jobs:
       - name: Format Check Summary
         if: steps.fmt.outcome == 'failure'
         run: |
-          echo "## Terraform Format Check Failed" >> $GITHUB_STEP_SUMMARY
-          echo "Run \`terraform fmt -recursive\` to fix formatting issues." >> $GITHUB_STEP_SUMMARY
+          {
+            echo "## Terraform Format Check Failed"
+            echo "Run \`terraform fmt -recursive\` to fix formatting issues."
+          } >> "$GITHUB_STEP_SUMMARY"
 
   # ===========================================================================
   # TFLINT
@@ -283,23 +285,34 @@ jobs:
 
       - name: Setup Kubeconform
         run: |
-          wget -q https://github.com/yannh/kubeconform/releases/download/v${{ env.KUBECONFORM_VERSION }}/kubeconform-linux-amd64.tar.gz
+          wget -q "https://github.com/yannh/kubeconform/releases/download/v${{ env.KUBECONFORM_VERSION }}/kubeconform-linux-amd64.tar.gz"
           tar xzf kubeconform-linux-amd64.tar.gz
           sudo mv kubeconform /usr/local/bin/
 
       - name: Validate Kubernetes Manifests
         run: |
-          echo "## Kubernetes Validation Results" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          ERRORS=0
+          {
+            echo "## Kubernetes Validation Results"
+            echo ""
+          } >> "$GITHUB_STEP_SUMMARY"
+          errors=0
           for dir in deploy argocd; do
             if [ -d "$dir" ]; then
-              echo "### Validating $dir/" >> $GITHUB_STEP_SUMMARY
-              find "$dir" \( -name "*.yaml" -o -name "*.yml" \) ! -name "kustomization*" ! -path "*/templates/*" ! -path "deploy/helm/*" -print0 | \
-                xargs -0 -I {} sh -c 'kubeconform -strict -ignore-missing-schemas -summary "$1" || exit 1' _ {} || ERRORS=$((ERRORS+1))
+              echo "### Validating $dir/" >> "$GITHUB_STEP_SUMMARY"
+              while IFS= read -r -d '' manifest; do
+                if ! kubeconform -strict -ignore-missing-schemas -summary "$manifest"; then
+                  errors=$((errors + 1))
+                fi
+              done < <(
+                find "$dir" \( -name "*.yaml" -o -name "*.yml" \) \
+                  ! -name "kustomization*" \
+                  ! -path "*/templates/*" \
+                  ! -path "deploy/helm/*" \
+                  -print0
+              )
             fi
           done
-          if [ $ERRORS -gt 0 ]; then
+          if [ "$errors" -gt 0 ]; then
             echo "::error::Kubernetes manifest validation failed"
             exit 1
           fi
@@ -352,22 +365,28 @@ jobs:
 
       - name: Validate Golden Path Templates
         run: |
-          echo "## Golden Path Validation" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          ERRORS=0
-          for template in $(find golden-paths -name 'template.yaml' 2>/dev/null); do
+          {
+            echo "## Golden Path Validation"
+            echo ""
+          } >> "$GITHUB_STEP_SUMMARY"
+          errors=0
+          template_count=0
+          while IFS= read -r -d '' template; do
+            template_count=$((template_count + 1))
             echo "Validating $template..."
-            if python3 -c "import yaml; yaml.safe_load(open('$template'))" 2>/dev/null; then
-              echo "- OK: $template" >> $GITHUB_STEP_SUMMARY
+            if python3 -c 'import sys, yaml; yaml.safe_load(open(sys.argv[1], encoding="utf-8"))' "$template" 2>/dev/null; then
+              echo "- OK: $template" >> "$GITHUB_STEP_SUMMARY"
             else
-              echo "- FAIL: $template - Invalid YAML" >> $GITHUB_STEP_SUMMARY
-              ERRORS=$((ERRORS+1))
+              echo "- FAIL: $template - Invalid YAML" >> "$GITHUB_STEP_SUMMARY"
+              errors=$((errors + 1))
             fi
-          done
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Total templates found:** $(find golden-paths -name 'template.yaml' | wc -l)" >> $GITHUB_STEP_SUMMARY
-          if [ $ERRORS -gt 0 ]; then
-            echo "::error::$ERRORS templates failed validation"
+          done < <(find golden-paths -name 'template.yaml' -print0 2>/dev/null)
+          {
+            echo ""
+            echo "**Total templates found:** $template_count"
+          } >> "$GITHUB_STEP_SUMMARY"
+          if [ "$errors" -gt 0 ]; then
+            echo "::error::$errors templates failed validation"
             exit 1
           fi
 
@@ -393,15 +412,17 @@ jobs:
 
       - name: Check Executable Permissions
         run: |
-          echo "## Script Permissions" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          find scripts -name "*.sh" -type f | while read -r script; do
-            if [[ -x "$script" ]]; then
-              echo "- OK: $script" >> $GITHUB_STEP_SUMMARY
-            else
-              echo "- WARNING: $script (not executable)" >> $GITHUB_STEP_SUMMARY
-            fi
-          done
+          {
+            echo "## Script Permissions"
+            echo ""
+            while IFS= read -r -d '' script; do
+              if [[ -x "$script" ]]; then
+                echo "- OK: $script"
+              else
+                echo "- WARNING: $script (not executable)"
+              fi
+            done < <(find scripts -name "*.sh" -type f -print0)
+          } >> "$GITHUB_STEP_SUMMARY"
 
   # ===========================================================================
   # DOCUMENTATION LINTING
@@ -526,9 +547,9 @@ jobs:
 
       - name: Validate Copilot Customization Primitives
         run: |
-          echo "## Copilot Primitives Validation" >> $GITHUB_STEP_SUMMARY
+          echo "## Copilot Primitives Validation" >> "$GITHUB_STEP_SUMMARY"
           ./.github/skills/validation-scripts/scripts/validate-agents.py --strict | tee primitive-validation.txt
-          cat primitive-validation.txt >> $GITHUB_STEP_SUMMARY
+          cat primitive-validation.txt >> "$GITHUB_STEP_SUMMARY"
 
   # ===========================================================================
   # SECURITY SCANNING

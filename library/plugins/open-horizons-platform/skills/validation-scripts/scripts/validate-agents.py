@@ -67,6 +67,7 @@ VALID_SKILL_FIELDS = {
 VALID_INSTRUCTION_FIELDS = {"description", "applyTo", "excludeAgent", "name"}
 VALID_SKILL_NAME = re.compile(r"^[a-z0-9]+(-[a-z0-9]+)*$")
 AGENT_LABEL = re.compile(r"agent:([a-zA-Z0-9_.-]+)")
+ISSUE_FORM_ID = re.compile(r"^[A-Za-z0-9_-]+$")
 PROMPT_TEMPLATE_VAR = re.compile(r"\{\{[^}]+\}\}")
 SKILL_NAME_TOKEN = re.compile(r"\b[a-z0-9]+(?:-[a-z0-9]+)+\b")
 SKILL_PATH = re.compile(r"\.\./skills/([a-z0-9]+(?:-[a-z0-9]+)*)/SKILL\.md")
@@ -625,7 +626,7 @@ def validate_apply_to_liveness(
             )
 
 
-def validate_issue_template_labels(agent_names: set[str], report: ValidationReport, strict: bool) -> None:
+def validate_issue_templates(agent_names: set[str], report: ValidationReport, strict: bool) -> None:
     for path in sorted(ISSUE_TEMPLATE_DIR.glob("*.yml")) + sorted(ISSUE_TEMPLATE_DIR.glob("*.yaml")):
         content = path.read_text(encoding="utf-8")
         for label in AGENT_LABEL.findall(content):
@@ -637,6 +638,100 @@ def validate_issue_template_labels(agent_names: set[str], report: ValidationRepo
                     report.error(path, message)
                 else:
                     report.warn(path, message)
+        if yaml is None:
+            report.warn(path, "PyYAML is unavailable; issue form structure was not validated")
+            continue
+        try:
+            data = yaml.safe_load(content)
+        except Exception as exc:  # noqa: BLE001 - parser details belong in validation output.
+            report.error(path, f"invalid issue template YAML: {exc}")
+            continue
+        if not isinstance(data, dict):
+            report.error(path, "issue template root must be a mapping")
+            continue
+        if path.stem == "config":
+            validate_issue_config(path, data, report)
+        else:
+            validate_issue_form(path, data, report)
+
+
+def validate_issue_config(
+    path: Path,
+    data: dict[str, Any],
+    report: ValidationReport,
+) -> None:
+    blank = data.get("blank_issues_enabled")
+    if blank is not None and not isinstance(blank, bool):
+        report.error(path, "`blank_issues_enabled` must be a boolean")
+    links = data.get("contact_links")
+    if links is not None and not isinstance(links, list):
+        report.error(path, "`contact_links` must be a list")
+    elif isinstance(links, list):
+        for index, link in enumerate(links, start=1):
+            if not isinstance(link, dict):
+                report.error(path, f"contact link #{index} must be a mapping")
+                continue
+            for field in ("name", "url", "about"):
+                if not isinstance(link.get(field), str) or not link[field].strip():
+                    report.error(path, f"contact link #{index} requires non-empty `{field}`")
+
+
+def validate_issue_form(
+    path: Path,
+    data: dict[str, Any],
+    report: ValidationReport,
+) -> None:
+    for field in ("name", "description"):
+        if not isinstance(data.get(field), str) or not data[field].strip():
+            report.error(path, f"issue form requires non-empty `{field}`")
+    for field in ("labels", "assignees"):
+        value = data.get(field)
+        if value is not None and not (
+            isinstance(value, str)
+            or (isinstance(value, list) and all(isinstance(item, str) for item in value))
+        ):
+            report.error(path, f"`{field}` must be a string or a list of strings")
+
+    body = data.get("body")
+    if not isinstance(body, list) or not body:
+        report.error(path, "issue form `body` must be a non-empty list")
+        return
+
+    seen_ids: set[str] = set()
+    valid_types = {"markdown", "input", "textarea", "dropdown", "checkboxes"}
+    for index, item in enumerate(body, start=1):
+        if not isinstance(item, dict):
+            report.error(path, f"body item #{index} must be a mapping")
+            continue
+        item_type = item.get("type")
+        if item_type not in valid_types:
+            report.error(path, f"body item #{index} has unknown type `{item_type}`")
+            continue
+        attributes = item.get("attributes")
+        if not isinstance(attributes, dict):
+            report.error(path, f"body item #{index} requires an `attributes` mapping")
+            continue
+        if item_type == "markdown":
+            if not isinstance(attributes.get("value"), str) or not attributes["value"].strip():
+                report.error(path, f"markdown body item #{index} requires non-empty `attributes.value`")
+            continue
+
+        item_id = item.get("id")
+        if not isinstance(item_id, str) or not ISSUE_FORM_ID.fullmatch(item_id):
+            report.error(path, f"body item #{index} requires a valid alphanumeric, `_`, or `-` id")
+        elif item_id in seen_ids:
+            report.error(path, f"body item #{index} duplicates id `{item_id}`")
+        else:
+            seen_ids.add(item_id)
+        if not isinstance(attributes.get("label"), str) or not attributes["label"].strip():
+            report.error(path, f"body item #{index} requires non-empty `attributes.label`")
+        validations = item.get("validations")
+        if validations is not None and not isinstance(validations, dict):
+            report.error(path, f"body item #{index} `validations` must be a mapping")
+        if item_type in {"dropdown", "checkboxes"}:
+            options = attributes.get("options")
+            if not isinstance(options, list) or not options:
+                report.error(path, f"{item_type} body item #{index} requires non-empty options")
 
 
 def main() -> int:
@@ -653,7 +748,7 @@ def main() -> int:
     validate_prompts(agent_names, report)
     validate_skills(report)
     validate_instructions(tracked_files, report)
-    validate_issue_template_labels(agent_names, report, args.strict)
+    validate_issue_templates(agent_names, report, args.strict)
 
     print("Validated customization primitives:")
     print(f"  Agents: {len(installable_paths('*.agent.md', AGENTS_DIR))}")

@@ -14,8 +14,19 @@ from pathlib import Path
 from typing import Iterable
 
 PLUGIN_ROOT = Path(__file__).resolve().parents[3]
-DEFAULT_COMPONENTS = ("governance", "instructions", "prompts", "automation", "hooks")
-VALID_COMPONENTS = (*DEFAULT_COMPONENTS, "runtime")
+DEFAULT_COMPONENTS = (
+    "governance",
+    "instructions",
+    "prompts",
+    "automation",
+    "hooks",
+    "mcp",
+    "runtime",
+)
+VALID_COMPONENTS = DEFAULT_COMPONENTS
+WORKSPACE_MCP_TEMPLATE = (
+    PLUGIN_ROOT / "skills/open-horizons-workspace-kit/templates/mcp.json"
+)
 
 
 @dataclass(frozen=True)
@@ -100,6 +111,8 @@ def component_sources(component: str, target: Path) -> Iterable[CopyItem]:
             github / "hooks/open-horizons-safety.json",
             target,
         )
+    elif component == "mcp":
+        yield from iter_files(WORKSPACE_MCP_TEMPLATE, github / "mcp.json", target)
     elif component == "runtime":
         yield from iter_files(PLUGIN_ROOT / "agents", github / "agents", target)
         yield from iter_files(PLUGIN_ROOT / "skills", github / "skills", target)
@@ -206,6 +219,48 @@ def validate_plugin_root() -> None:
     data = json.loads(manifest.read_text(encoding="utf-8"))
     if not isinstance(data, dict) or data.get("name") != "open-horizons-platform":
         raise ValueError(f"unexpected plugin package at {PLUGIN_ROOT}")
+    validate_workspace_mcp_template()
+
+
+def validate_workspace_mcp_template() -> None:
+    plugin_config = json.loads((PLUGIN_ROOT / "mcp.json").read_text(encoding="utf-8"))
+    workspace_config = json.loads(WORKSPACE_MCP_TEMPLATE.read_text(encoding="utf-8"))
+    plugin_servers = plugin_config.get("mcpServers")
+    workspace_servers = workspace_config.get("mcpServers")
+    if not isinstance(plugin_servers, dict) or not isinstance(workspace_servers, dict):
+        raise ValueError("plugin and workspace MCP configurations require `mcpServers` objects")
+
+    expected: dict[str, dict[str, object]] = {}
+    for name, server in plugin_servers.items():
+        if not isinstance(name, str) or not isinstance(server, dict):
+            raise ValueError("plugin MCP server entries must be named objects")
+        server_type = server.get("type")
+        if server_type == "stdio":
+            converted = {
+                key: value
+                for key, value in server.items()
+                if key in {"command", "args", "env", "cwd"}
+            }
+            converted["type"] = "local"
+        elif server_type == "streamable-http":
+            converted = {
+                key: value for key, value in server.items() if key in {"url", "headers"}
+            }
+            converted["type"] = "http"
+        elif server_type == "sse":
+            converted = {
+                key: value for key, value in server.items() if key in {"url", "headers"}
+            }
+            converted["type"] = "sse"
+        else:
+            raise ValueError(f"unsupported plugin MCP transport for `{name}`: {server_type}")
+        converted["tools"] = ["*"]
+        expected[name] = converted
+
+    if workspace_servers != expected:
+        raise ValueError(
+            "templates/mcp.json is stale; update it from the plugin-root mcp.json transport mapping"
+        )
 
 
 def main(argv: list[str] | None = None) -> int:

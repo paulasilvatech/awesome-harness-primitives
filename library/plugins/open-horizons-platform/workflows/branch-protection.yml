@@ -199,15 +199,17 @@ jobs:
           HEAD_REF: ${{ github.head_ref }}
           BASE_REF: ${{ github.base_ref }}
         run: |
-          echo "## Pull Request Summary" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "| Check | Status |" >> $GITHUB_STEP_SUMMARY
-          echo "|-------|--------|" >> $GITHUB_STEP_SUMMARY
-          echo "| Source Branch Validation | ${{ needs.validate-pr-source.result == 'success' && 'Passed' || needs.validate-pr-source.result == 'skipped' && 'Skipped' || 'Failed' }} |" >> $GITHUB_STEP_SUMMARY
-          echo "| PR Quality | ${{ needs.pr-quality.result == 'success' && 'Passed' || 'Failed' }} |" >> $GITHUB_STEP_SUMMARY
-          echo "| Commit Check | ${{ needs.commit-check.result == 'success' && 'Passed' || 'Failed' }} |" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "### Branch Flow" >> $GITHUB_STEP_SUMMARY
-          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
-          echo "$HEAD_REF --> $BASE_REF" >> $GITHUB_STEP_SUMMARY
-          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          {
+            echo "## Pull Request Summary"
+            echo ""
+            echo "| Check | Status |"
+            echo "|-------|--------|"
+            echo "| Source Branch Validation | ${{ needs.validate-pr-source.result == 'success' && 'Passed' || needs.validate-pr-source.result == 'skipped' && 'Skipped' || 'Failed' }} |"
+            echo "| PR Quality | ${{ needs.pr-quality.result == 'success' && 'Passed' || 'Failed' }} |"
+            echo "| Commit Check | ${{ needs.commit-check.result == 'success' && 'Passed' || 'Failed' }} |"
+            echo ""
+            echo "### Branch Flow"
+            echo "\`\`\`"
+            echo "$HEAD_REF --> $BASE_REF"
+            echo "\`\`\`"
+          } >> "$GITHUB_STEP_SUMMARY"

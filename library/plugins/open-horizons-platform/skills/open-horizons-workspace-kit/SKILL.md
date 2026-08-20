@@ -23,11 +23,12 @@ Publish repository-scoped assets that GitHub Copilot plugin installation does no
 | `governance` | Root `AGENTS.md`, repository Copilot instructions, model-routing convention, and customization docs | Yes |
 | `instructions` | Path-specific `.instructions.md` files | Yes |
 | `prompts` | VS Code `.prompt.md` files | Yes |
-| `automation` | Workflows, issue forms, pull request template, Dependabot, and CodeQL configuration | Yes |
+| `automation` | Workflows, issue forms, pull request template, Dependabot, and the self-contained CodeQL workflow | Yes |
 | `hooks` | Canonical safety hook package plus repository hook configuration | Yes |
-| `runtime` | Project `.github/agents/` and `.github/skills/` copies | No; plugin installation already provides them |
+| `mcp` | Workspace `.github/mcp.json` translated from the Agent Plugins 1.0 MCP configuration | Yes |
+| `runtime` | Project `.github/agents/` and `.github/skills/` copies | Yes; required for the bundled VS Code prompts and useful when the plugin is unavailable |
 
-The installer intentionally does not copy plugin `mcp.json` into `.github/mcp.json`: Agent Plugins 1.0 and workspace MCP configurations use different transport vocabulary.
+The installer publishes a separately validated workspace MCP template because Agent Plugins 1.0 and workspace MCP configurations use different transport vocabulary. The script rejects a stale template before planning or writing files.
 
 ## Prerequisites and context
 
@@ -45,7 +46,7 @@ The installer intentionally does not copy plugin `mcp.json` into `.github/mcp.js
    python3 scripts/install_workspace_kit.py --target <repository>
    ```
 
-3. Select component groups when the default is too broad:
+3. Select component groups when the complete default kit is too broad:
 
    ```bash
    python3 scripts/install_workspace_kit.py \
@@ -82,19 +83,20 @@ The installer intentionally does not copy plugin `mcp.json` into `.github/mcp.js
 | Target is not a Git repository | Select the correct repository or use `--allow-non-git` only for intentional scaffolding. |
 | Apply reports conflicts | Review the listed files; merge manually or rerun with explicitly approved `--force`. |
 | Hook script cannot be found | Include the `hooks` group so both the root hook package and `.github/hooks` configuration are copied. |
-| Agents or skills are missing from `.github` | Include the optional `runtime` group; it is omitted by default when plugin installation is used. |
-| MCP tools are missing | Configure workspace MCP separately or install the plugin; this skill does not translate MCP transport schemas. |
+| Agents or skills should not be duplicated in `.github` | Select explicit component groups and omit `runtime`; confirm that no copied prompt depends on a missing named agent. |
+| MCP tools are missing | Include the `mcp` group or install the plugin; verify Node.js, Docker, Azure authentication, and outbound HTTPS prerequisites. |
 
 ## Progressive disclosure and bundled resources
 
 - `scripts/install_workspace_kit.py`: deterministic dry-run and copy installer for the component groups above.
+- `templates/mcp.json`: workspace MCP configuration kept semantically synchronized with plugin-root `mcp.json`.
 
 ## Limits
 
 - Do not use this skill to install or update the GitHub Copilot plugin itself.
 - Do not infer permission to overwrite target files; `--force` requires explicit user approval.
 - Do not claim prompts execute in GitHub Copilot CLI; copied prompts are VS Code-only.
-- Do not copy workspace MCP configuration from the plugin's Agent Plugins 1.0 `mcp.json`.
+- Do not copy Agent Plugins 1.0 `mcp.json` directly into `.github/`; use the validated workspace template.
 
 ## Output template
 
@@ -125,6 +127,6 @@ The installer intentionally does not copy plugin `mcp.json` into `.github/mcp.js
 - [ ] A dry-run was reviewed before apply.
 - [ ] No conflict was overwritten without explicit approval.
 - [ ] Instructions, prompts, hooks, and automation landed in their documented discovery paths.
-- [ ] Runtime agents and skills were copied only when the optional `runtime` group was selected.
-- [ ] No MCP schema was copied into an incompatible workspace path.
+- [ ] Runtime agents and skills are present when copied prompts reference named agents, or the selected reduced component set documents that dependency.
+- [ ] Workspace MCP configuration passed the plugin-to-workspace transport mapping check.
 - [ ] Target validation and `git status --short` were reviewed.

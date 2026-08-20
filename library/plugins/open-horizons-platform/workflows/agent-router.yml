@@ -58,9 +58,11 @@ jobs:
               ;;
           esac
 
-          echo "agent=$agent" >> "$GITHUB_OUTPUT"
-          echo "requested_agent=$requested_agent" >> "$GITHUB_OUTPUT"
-          echo "label=$agent_label" >> "$GITHUB_OUTPUT"
+          {
+            echo "agent=$agent"
+            echo "requested_agent=$requested_agent"
+            echo "label=$agent_label"
+          } >> "$GITHUB_OUTPUT"
 
       - name: Check Environment Policy
         id: policy
