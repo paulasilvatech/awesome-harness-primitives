@@ -1,6 +1,6 @@
 # GitHub Copilot Agent Skills
 
-This directory contains 29 Open Horizons skills for GitHub Copilot, GitHub Copilot CLI, and cloud agent workflows. Skills use progressive loading: only `name` and `description` are loaded for discovery, and the full `SKILL.md` body plus bundled resources load only after activation.
+This directory contains 30 Open Horizons skills for GitHub Copilot, GitHub Copilot CLI, and cloud agent workflows. Skills use progressive loading: only `name` and `description` are loaded for discovery, and the full `SKILL.md` body plus bundled resources load only after activation.
 
 ## Authoritative contract
 
@@ -43,6 +43,7 @@ Required contract points:
 | `markdown-writer` | Markdown document writing | `@deploy` |
 | `mcp-ecosystem` | Local MCP reference server lookup | `@backstage-expert`, `@deploy` |
 | `observability-stack` | Monitoring operations | `@sre`, `@deploy` |
+| `open-horizons-workspace-kit` | Safe publication of instructions, prompts, hooks, automation, governance, and optional project runtime copies | Maintainers and platform teams |
 | `pipeline-diagnostics` | GitHub Actions CI/CD diagnostics | `@deploy` |
 | `prerequisites` | CLI prerequisite validation | `@deploy` |
 | `requirements-engineer` | FRD and NFRD requirements engineering | `@deploy` |

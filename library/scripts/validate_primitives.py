@@ -592,6 +592,8 @@ class Validator:
                         "ERROR",
                         "Agent Plugins 1.0 GitHub hooks must be mirrored under com.github.copilot/hooks",
                     )
+                else:
+                    self._validate_hook(runtime_hook, plugin_dir)
 
         mcp_path = plugin_dir / "mcp.json"
         if mcp_path.exists():

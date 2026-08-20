@@ -347,8 +347,9 @@ The canonical schema allows only `$schema`, `name`, `version`, `description`, `a
 `repository`, `license`, `keywords`, and `extensions`. Agent Plugins 1.0 discovers skills from immediate
 children of `skills/` and MCP servers from root `mcp.json`; those locations are fixed and are not declared
 in `plugin.json`. GitHub Copilot's Agent Plugins 1.0 extension discovers agents from the top-level
-`com.github.copilot/agents/` directory. A repository may keep canonical sources in `agents/`, but it must
-generate and validate the extension-directory copies used at runtime.
+`com.github.copilot/agents/` directory and hooks from `com.github.copilot/hooks/hooks.json`. A repository
+may keep canonical sources in `agents/` and `hooks/`, but it must generate and validate the
+extension-directory copies used at runtime.
 
 Agent Plugins 1.0 `mcp.json` requires
 `"$schema": "https://agent-plugins.org/schemas/1.0.0/mcp.schema.json"` and `mcpServers`. Portable server
@@ -358,6 +359,10 @@ filters are not valid in this file.
 Runtime verification against GitHub Copilot CLI 1.0.81-0 on 2026-08-19 confirmed that a schema-declaring
 plugin's top-level `agents` field is ignored with a warning and agents under
 `com.github.copilot/agents/` are loaded. See the repository's dated harness validation evidence.
+
+Runtime verification on 2026-08-20 confirmed that `hooks/hooks.json` at the schema-declaring plugin root
+did not fire, while the identical configuration under `com.github.copilot/hooks/hooks.json` fired on
+`sessionStart`.
 
 ### 4.3 Marketplace — `marketplace.json`
 
@@ -392,7 +397,8 @@ Install with `copilot plugin marketplace add <owner>/<repo>` then `/plugin insta
 | 3 | User | `~/.copilot/hooks/*.json` |
 | 4 | Repo settings | `hooks` key in `.github/copilot/settings.json` |
 | 5 | User settings | `hooks` key in `~/.copilot/settings.json` |
-| 6 | Plugin | `<plugin-root>/hooks.json` or `<plugin-root>/hooks/hooks.json` |
+| 6 | Legacy plugin | `<plugin-root>/hooks.json` or `<plugin-root>/hooks/hooks.json` |
+| 7 | Agent Plugins 1.0 GitHub extension | `<plugin-root>/com.github.copilot/hooks/hooks.json` |
 
 All matching sources are **merged** — every hook registered for an event runs. Policy hooks cannot be
 disabled by `disableAllHooks`.

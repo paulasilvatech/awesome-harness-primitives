@@ -15,6 +15,7 @@ This folder documents how Open Horizons authors GitHub Copilot customization pri
 | Passive rules for matching files | Instructions | `instructions/<name>.instructions.md` | `.github/instructions/<name>.instructions.md` |
 | Reusable procedure or review checklist | Skill | `skills/<name>/SKILL.md` | `.github/skills/<name>/SKILL.md` when used without the plugin |
 | User-selected VS Code workflow | Prompt | `prompts/<name>.prompt.md` | `.github/prompts/<name>.prompt.md` |
+| Bounded lifecycle automation | Hook | `hooks/<name>/hooks.json` with generated `com.github.copilot/hooks/` mirror | `.github/hooks/<name>.json` plus referenced scripts |
 
 ## Validate changes
 

@@ -44,7 +44,6 @@ The following files are useful and supported by GitHub Copilot or GitHub after t
 | `ISSUE_TEMPLATE/*` | `.github/ISSUE_TEMPLATE/` | GitHub issue forms and routing metadata. |
 | `PULL_REQUEST_TEMPLATE.md` | `.github/PULL_REQUEST_TEMPLATE.md` | Pull request authors. |
 | `dependabot.yml` | `.github/dependabot.yml` | Dependabot. |
-| `codeql/codeql-config.yml` | `.github/codeql/codeql-config.yml` | The bundled CodeQL workflow. |
 | `docs/` | `.github/docs/` | Maintainers and customization authors. |
 | `model-routing.yaml` | `.github/model-routing.yaml` | Repository convention only; GitHub Copilot does not enforce it. |
 | `hooks/open-horizons-safety/` | `hooks/open-horizons-safety/` plus `.github/hooks/open-horizons-safety.json` | Repository-level GitHub Copilot hooks. |
@@ -65,7 +64,7 @@ Install the plugin:
 copilot plugin install open-horizons-platform@copilot-primitives
 ```
 
-After installation, use `copilot plugin list`, `copilot skill list --json`, and `copilot mcp list` to confirm discovery. Publish workspace-kit assets separately only when the target repository needs them.
+After installation, use `copilot plugin list`, `copilot skill list --json`, and `copilot mcp list` to confirm discovery. Plugin hooks run in new sessions; publish workspace-kit assets separately only when the target repository needs them.
 
 Preview the complementary workspace kit:
 

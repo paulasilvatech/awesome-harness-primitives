@@ -212,8 +212,8 @@
     {
       "name": "open-horizons-platform",
       "source": "./library/plugins/open-horizons-platform",
-      "description": "Open Horizons agentic DevOps platform toolkit for Azure, AKS, Backstage, GitHub, Azure DevOps, Terraform, security, reliability, architecture, and deployment operations.",
-      "version": "1.0.1"
+      "description": "Open Horizons agentic DevOps platform toolkit with specialist agents, reusable skills, safety hooks, MCP integrations, and safe publication of repository instructions, prompts, and automation.",
+      "version": "1.1.0"
     },
     {
       "name": "openapi-to-application-csharp-dotnet",

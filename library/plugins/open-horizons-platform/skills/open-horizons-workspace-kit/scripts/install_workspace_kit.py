@@ -83,7 +83,6 @@ def component_sources(component: str, target: Path) -> Iterable[CopyItem]:
             github / "ISSUE_TEMPLATE",
             target,
         )
-        yield from iter_files(PLUGIN_ROOT / "codeql", github / "codeql", target)
         yield from iter_files(
             PLUGIN_ROOT / "PULL_REQUEST_TEMPLATE.md",
             github / "PULL_REQUEST_TEMPLATE.md",
