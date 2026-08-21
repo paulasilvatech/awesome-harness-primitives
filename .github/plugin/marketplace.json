@@ -135,7 +135,7 @@
       "name": "copilot-plugin-development",
       "source": "./library/plugins/copilot-plugin-development",
       "description": "Create, migrate, audit, and validate GitHub Copilot plugins and marketplaces with Agent Plugins 1.0 schemas, canonical component ownership, generated runtime mirrors, dependency pinning, and isolated runtime tests.",
-      "version": "1.0.0"
+      "version": "1.0.1"
     },
     {
       "name": "copilot-sdk",
@@ -297,7 +297,7 @@
       "name": "open-horizons-platform",
       "source": "./library/plugins/open-horizons-platform",
       "description": "Open Horizons agentic DevOps platform toolkit for Azure, AKS, Backstage, GitHub, Azure DevOps, Terraform, security, reliability, architecture, and deployment operations. Use it to install specialist agents, reusable skills, safety hooks, MCP integrations, and a safe publisher for repository instructions, prompts, and automation.",
-      "version": "1.1.0"
+      "version": "1.1.1"
     },
     {
       "name": "openapi-to-application-csharp-dotnet",

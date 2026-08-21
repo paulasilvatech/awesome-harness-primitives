@@ -38,6 +38,8 @@ MARKETPLACE_PATH = REPO_ROOT / ".github" / "plugin" / "marketplace.json"
 EVIDENCE_PATH = REPO_ROOT / "docs" / "HARNESS-VALIDATION.md"
 REPORT_PATH = REPO_ROOT / "docs" / "PRIMITIVE-CONTENT-AUDIT.md"
 LEDGER_PATH = REPO_ROOT / "docs" / "PRIMITIVE-CONTENT-AUDIT.json"
+PLUGIN_MANIFEST_NAME = "plugin.json"
+AGENT_GLOB = "*.agent.md"
 
 TEXT_SUFFIXES = {
     ".bicep",
@@ -134,7 +136,7 @@ def plugin_manifest_dirs() -> list[Path]:
         (
             path
             for path in PLUGIN_ROOT.iterdir()
-            if path.is_dir() and (path / "plugin.json").is_file()
+            if path.is_dir() and (path / PLUGIN_MANIFEST_NAME).is_file()
         ),
         key=lambda path: path.name.casefold(),
     )
@@ -282,7 +284,7 @@ def shared_packaging() -> tuple[
     skills: dict[str, list[str]] = defaultdict(list)
     manifests: dict[str, dict[str, Any]] = {}
     for plugin_dir in plugin_manifest_dirs():
-        data = read_json(plugin_dir / "plugin.json")
+        data = read_json(plugin_dir / PLUGIN_MANIFEST_NAME)
         manifests[plugin_dir.name] = data
         config = repository_config(data)
         if config.get("componentSource") != "library":
@@ -298,7 +300,7 @@ def shared_packaging() -> tuple[
 
 def plugin_owned_components(plugin_dir: Path) -> dict[str, list[Path]]:
     return {
-        "agent": sorted((plugin_dir / "agents").glob("*.agent.md")),
+        "agent": sorted((plugin_dir / "agents").glob(AGENT_GLOB)),
         "skill": sorted(
             path
             for path in (plugin_dir / "skills").iterdir()
@@ -319,7 +321,7 @@ def plugin_scan_paths(
     paths = [
         path
         for path in (
-            plugin_dir / "plugin.json",
+            plugin_dir / PLUGIN_MANIFEST_NAME,
             plugin_dir / "mcp.json",
             plugin_dir / "README.md",
             plugin_dir / "LICENSE",
@@ -398,66 +400,41 @@ def strict_validation() -> dict[str, Any]:
     }
 
 
-def build_audit() -> dict[str, Any]:
-    evidence = EVIDENCE_PATH.read_text(encoding="utf-8")
-    agent_packages, skill_packages, manifests = shared_packaging()
-    unreadable: list[str] = []
+def library_content_units(
+    evidence: str,
+    agent_packages: dict[str, list[str]],
+    skill_packages: dict[str, list[str]],
+    unreadable: list[str],
+) -> list[ContentUnit]:
     units: list[ContentUnit] = []
-
-    for path in sorted((LIBRARY_ROOT / "agents").glob("*.agent.md")):
-        units.append(
-            make_unit(
-                kind="agent",
-                name=parse_name(path, "agent"),
-                path=path,
-                ownership="library",
-                package=None,
-                scan_paths=[path],
-                evidence=evidence,
-                packaged_by=agent_packages.get(path.name, []),
-                unreadable=unreadable,
+    specs = (
+        ("agent", sorted((LIBRARY_ROOT / "agents").glob(AGENT_GLOB)), False, agent_packages),
+        (
+            "instruction",
+            sorted((LIBRARY_ROOT / "instructions").glob("*.instructions.md")),
+            False,
+            {},
+        ),
+        ("skill", sorted((LIBRARY_ROOT / "skills").glob("*/SKILL.md")), True, skill_packages),
+        ("prompt", sorted((LIBRARY_ROOT / "prompts").glob("*.prompt.md")), False, {}),
+    )
+    for kind, sources, scan_directory, package_map in specs:
+        for source in sources:
+            unit_path = source.parent if scan_directory else source
+            package_key = unit_path.name if scan_directory else source.name
+            units.append(
+                make_unit(
+                    kind=kind,
+                    name=parse_name(source, kind),
+                    path=unit_path,
+                    ownership="library",
+                    package=None,
+                    scan_paths=[unit_path],
+                    evidence=evidence,
+                    packaged_by=package_map.get(package_key, []),
+                    unreadable=unreadable,
+                )
             )
-        )
-    for path in sorted((LIBRARY_ROOT / "instructions").glob("*.instructions.md")):
-        units.append(
-            make_unit(
-                kind="instruction",
-                name=parse_name(path, "instruction"),
-                path=path,
-                ownership="library",
-                package=None,
-                scan_paths=[path],
-                evidence=evidence,
-                unreadable=unreadable,
-            )
-        )
-    for path in sorted((LIBRARY_ROOT / "skills").glob("*/SKILL.md")):
-        units.append(
-            make_unit(
-                kind="skill",
-                name=parse_name(path, "skill"),
-                path=path.parent,
-                ownership="library",
-                package=None,
-                scan_paths=[path.parent],
-                evidence=evidence,
-                packaged_by=skill_packages.get(path.parent.name, []),
-                unreadable=unreadable,
-            )
-        )
-    for path in sorted((LIBRARY_ROOT / "prompts").glob("*.prompt.md")):
-        units.append(
-            make_unit(
-                kind="prompt",
-                name=parse_name(path, "prompt"),
-                path=path,
-                ownership="library",
-                package=None,
-                scan_paths=[path],
-                evidence=evidence,
-                unreadable=unreadable,
-            )
-        )
     for path in sorted((LIBRARY_ROOT / "hooks").glob("*/hooks.json")):
         units.append(
             make_unit(
@@ -471,46 +448,75 @@ def build_audit() -> dict[str, Any]:
                 unreadable=unreadable,
             )
         )
+    return units
 
-    active_plugin_hooks = 0
-    for plugin_dir in plugin_manifest_dirs():
-        data = manifests[plugin_dir.name]
-        config = repository_config(data)
-        components = plugin_owned_components(plugin_dir)
-        if config.get("componentSource") == "plugin":
-            for kind, paths in components.items():
-                for path in paths:
-                    source = path / "SKILL.md" if kind == "skill" else path
-                    units.append(
-                        make_unit(
-                            kind=kind,
-                            name=parse_name(source, kind),
-                            path=path,
-                            ownership="plugin",
-                            package=plugin_dir.name,
-                            scan_paths=[path],
-                            evidence=evidence,
-                            packaged_by=[plugin_dir.name],
-                            unreadable=unreadable,
-                        )
-                    )
-        hook_source = config.get("hookSource")
-        if isinstance(hook_source, str) and hook_source.startswith("./"):
-            hook_path = plugin_dir / hook_source.removeprefix("./")
-            active_plugin_hooks += 1
+
+def plugin_primitive_units(
+    plugin_dir: Path,
+    components: dict[str, list[Path]],
+    evidence: str,
+    unreadable: list[str],
+) -> list[ContentUnit]:
+    units: list[ContentUnit] = []
+    for kind, paths in components.items():
+        for path in paths:
+            source = path / "SKILL.md" if kind == "skill" else path
             units.append(
                 make_unit(
-                    kind="hook",
-                    name=f"{plugin_dir.name}:{hook_path.parent.name}",
-                    path=hook_path.parent,
+                    kind=kind,
+                    name=parse_name(source, kind),
+                    path=path,
                     ownership="plugin",
                     package=plugin_dir.name,
-                    scan_paths=[hook_path.parent],
+                    scan_paths=[path],
                     evidence=evidence,
                     packaged_by=[plugin_dir.name],
                     unreadable=unreadable,
                 )
             )
+    return units
+
+
+def plugin_hook_unit(
+    plugin_dir: Path,
+    config: dict[str, Any],
+    evidence: str,
+    unreadable: list[str],
+) -> ContentUnit | None:
+    hook_source = config.get("hookSource")
+    if not isinstance(hook_source, str) or not hook_source.startswith("./"):
+        return None
+    hook_path = plugin_dir / hook_source.removeprefix("./")
+    return make_unit(
+        kind="hook",
+        name=f"{plugin_dir.name}:{hook_path.parent.name}",
+        path=hook_path.parent,
+        ownership="plugin",
+        package=plugin_dir.name,
+        scan_paths=[hook_path.parent],
+        evidence=evidence,
+        packaged_by=[plugin_dir.name],
+        unreadable=unreadable,
+    )
+
+
+def plugin_content_units(
+    evidence: str,
+    manifests: dict[str, dict[str, Any]],
+    unreadable: list[str],
+) -> tuple[list[ContentUnit], int]:
+    units: list[ContentUnit] = []
+    active_hook_count = 0
+    for plugin_dir in plugin_manifest_dirs():
+        data = manifests[plugin_dir.name]
+        config = repository_config(data)
+        components = plugin_owned_components(plugin_dir)
+        if config.get("componentSource") == "plugin":
+            units.extend(plugin_primitive_units(plugin_dir, components, evidence, unreadable))
+        hook_unit = plugin_hook_unit(plugin_dir, config, evidence, unreadable)
+        if hook_unit is not None:
+            active_hook_count += 1
+            units.append(hook_unit)
         units.append(
             make_unit(
                 kind="plugin",
@@ -524,9 +530,28 @@ def build_audit() -> dict[str, Any]:
                 unreadable=unreadable,
             )
         )
+    return units, active_hook_count
+
+
+def build_audit() -> dict[str, Any]:
+    evidence = EVIDENCE_PATH.read_text(encoding="utf-8")
+    agent_packages, skill_packages, manifests = shared_packaging()
+    unreadable: list[str] = []
+    units = library_content_units(
+        evidence,
+        agent_packages,
+        skill_packages,
+        unreadable,
+    )
+    plugin_units, active_plugin_hooks = plugin_content_units(
+        evidence,
+        manifests,
+        unreadable,
+    )
+    units.extend(plugin_units)
 
     units.sort(key=lambda unit: (unit.kind, unit.name.casefold(), unit.path.casefold()))
-    shared_agents = sorted(path.name for path in (LIBRARY_ROOT / "agents").glob("*.agent.md"))
+    shared_agents = sorted(path.name for path in (LIBRARY_ROOT / "agents").glob(AGENT_GLOB))
     shared_skills = sorted(path.parent.name for path in (LIBRARY_ROOT / "skills").glob("*/SKILL.md"))
     marketplace = read_json(MARKETPLACE_PATH).get("plugins", [])
     validation = strict_validation()
@@ -730,6 +755,25 @@ def has_strict_issues(audit: dict[str, Any]) -> bool:
     )
 
 
+def stale_outputs(ledger: str, report: str) -> list[str]:
+    stale: list[str] = []
+    if not LEDGER_PATH.is_file() or LEDGER_PATH.read_text(encoding="utf-8") != ledger:
+        stale.append(relative(LEDGER_PATH))
+    if not REPORT_PATH.is_file() or REPORT_PATH.read_text(encoding="utf-8") != report:
+        stale.append(relative(REPORT_PATH))
+    return stale
+
+
+def report_stale_outputs(stale: list[str]) -> None:
+    print(
+        "Primitive content audit is stale; run "
+        "python3 library/scripts/audit_primitive_content.py",
+        file=sys.stderr,
+    )
+    for path in stale:
+        print(f"  - {path}", file=sys.stderr)
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
         description="Audit primitive content risks and plugin distribution coverage."
@@ -745,19 +789,9 @@ def main(argv: list[str] | None = None) -> int:
         print(ledger, end="")
         return 1 if has_strict_issues(audit) else 0
     if args.check:
-        stale: list[str] = []
-        if not LEDGER_PATH.is_file() or LEDGER_PATH.read_text(encoding="utf-8") != ledger:
-            stale.append(relative(LEDGER_PATH))
-        if not REPORT_PATH.is_file() or REPORT_PATH.read_text(encoding="utf-8") != report:
-            stale.append(relative(REPORT_PATH))
+        stale = stale_outputs(ledger, report)
         if stale:
-            print(
-                "Primitive content audit is stale; run "
-                "python3 library/scripts/audit_primitive_content.py",
-                file=sys.stderr,
-            )
-            for path in stale:
-                print(f"  - {path}", file=sys.stderr)
+            report_stale_outputs(stale)
             return 1
         return 1 if has_strict_issues(audit) else 0
 

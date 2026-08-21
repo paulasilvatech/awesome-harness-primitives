@@ -2,9 +2,9 @@
 
 [![Validate primitives](https://github.com/paulasilvatech/copilot-primitives/actions/workflows/validate-primitives.yml/badge.svg)](https://github.com/paulasilvatech/copilot-primitives/actions/workflows/validate-primitives.yml)
 
-A curated, spec-validated collection of GitHub Copilot CLI primitives for the Copilot CLI harness. The repository currently contains **225 agents**, **194 instruction files**, **421 skills**, **48 VS Code prompts**, **96 plugin manifests**, and **8 reusable hook packages**, validated against GitHub Copilot CLI **1.0.81-4**.
+A curated, spec-validated collection of GitHub Copilot CLI primitives for the Copilot CLI harness. The shared library currently contains **225 agents**, **194 instruction files**, **421 skills**, **48 VS Code prompts**, **96 plugin manifests**, and **8 reusable hook packages**, validated against GitHub Copilot CLI **1.0.81-4**. Self-contained plugins add plugin-owned primitives; the generated content audit reports both scopes without double-counting generated mirrors.
 
-For a generated, alphabetized inventory, see [docs/CATALOG.md](docs/CATALOG.md). `docs/COPILOT-HARNESS-SPEC.md` is the canonical format and discovery reference, and [docs/templates/](docs/templates) holds the authoring templates for each primitive type.
+For a generated, alphabetized inventory, see [docs/CATALOG.md](docs/CATALOG.md). The [primitive content audit](docs/PRIMITIVE-CONTENT-AUDIT.md) separates structural coverage from semantic freshness review. `docs/COPILOT-HARNESS-SPEC.md` is the canonical format and discovery reference, and [docs/templates/](docs/templates) holds the authoring templates for each primitive type.
 
 ## Repository layout
 
@@ -19,6 +19,7 @@ For a generated, alphabetized inventory, see [docs/CATALOG.md](docs/CATALOG.md).
 │   ├── hooks/<name>/hooks.json
 │   ├── installed-primitives.json # Canonical-to-installed copy manifest
 │   └── scripts/
+│       ├── audit_primitive_content.py
 │       ├── audit_plugins.py
 │       ├── check_links.py
 │       ├── generate_catalog.py
@@ -29,6 +30,7 @@ For a generated, alphabetized inventory, see [docs/CATALOG.md](docs/CATALOG.md).
 └── docs/
     ├── CATALOG.md
     ├── COPILOT-HARNESS-SPEC.md
+    ├── PRIMITIVE-CONTENT-AUDIT.md
     └── templates/               # Authoring templates per primitive type
 ```
 
@@ -68,7 +70,7 @@ with dates in `docs/HARNESS-VALIDATION.md`; stable schema and discovery rules be
 
 ### Plugins
 
-This repository publishes **96 installable plugin entries** through `.github/plugin/marketplace.json`. See the generated [plugin marketplace audit](docs/PLUGIN-AUDIT.md) for component counts, ownership mode, and package-level coverage.
+This repository publishes **96 installable plugin entries** through `.github/plugin/marketplace.json`. See the generated [plugin marketplace audit](docs/PLUGIN-AUDIT.md) for component counts, ownership mode, and package-level coverage, and the [primitive content audit](docs/PRIMITIVE-CONTENT-AUDIT.md) for the shared components that are not yet referenced by a plugin.
 
 ```sh
 copilot plugin marketplace add paulasilvatech/copilot-primitives
@@ -192,6 +194,7 @@ Check generated distribution surfaces with:
 ```sh
 python3 library/scripts/normalize_plugin_manifests.py --check
 python3 library/scripts/audit_plugins.py --check
+python3 library/scripts/audit_primitive_content.py --check
 python3 library/scripts/sync_plugin_components.py --check
 python3 library/scripts/sync_installed_primitives.py --check
 ```

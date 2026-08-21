@@ -53,7 +53,7 @@ Current platform and upstream verification evidence is recorded in `docs/HARNESS
 | context-engineering | 1.0.1 | library | 1 | 3 | 0 | 0 | 0 |
 | context-matic | 0.1.1 | library | 0 | 2 | 0 | 1 | 0 |
 | convert-to-md | 1.0.2 | library | 0 | 3 | 0 | 0 | 0 |
-| copilot-plugin-development | 1.0.0 | library | 1 | 1 | 0 | 0 | 0 |
+| copilot-plugin-development | 1.0.1 | library | 1 | 1 | 0 | 0 | 0 |
 | copilot-sdk | 1.0.1 | library | 0 | 1 | 0 | 0 | 0 |
 | csharp-dotnet-development | 1.1.1 | library | 1 | 8 | 0 | 0 | 0 |
 | database-data-management | 1.0.1 | library | 2 | 4 | 0 | 0 | 0 |
@@ -80,7 +80,7 @@ Current platform and upstream verification evidence is recorded in `docs/HARNESS
 | mcp-m365-copilot | 1.0.1 | library | 1 | 3 | 0 | 0 | 0 |
 | napkin | 1.0.1 | library | 0 | 1 | 0 | 0 | 0 |
 | noob-mode | 1.0.1 | library | 0 | 1 | 0 | 0 | 0 |
-| open-horizons-platform | 1.1.0 | plugin | 9 | 30 | 1 | 4 | 0 |
+| open-horizons-platform | 1.1.1 | plugin | 9 | 30 | 1 | 4 | 0 |
 | openapi-to-application-csharp-dotnet | 1.0.1 | library | 1 | 1 | 0 | 0 | 0 |
 | openapi-to-application-go | 1.0.1 | library | 1 | 1 | 0 | 0 | 0 |
 | openapi-to-application-java-spring-boot | 1.0.1 | library | 1 | 1 | 0 | 0 | 0 |

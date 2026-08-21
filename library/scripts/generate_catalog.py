@@ -113,6 +113,18 @@ def skill_rows() -> list[list[str]]:
     return sort_rows(rows)
 
 
+def prompt_rows() -> list[list[str]]:
+    rows = []
+    for path in sorted(
+        (LIBRARY_ROOT / "prompts").glob("*.prompt.md"),
+        key=lambda p: p.name.casefold(),
+    ):
+        fm = frontmatter(path)
+        name = fm.get("name") or path.name.removesuffix(".prompt.md")
+        rows.append([one_line(name), truncate(fm.get("description"))])
+    return sort_rows(rows)
+
+
 def plugin_manifest(plugin_dir: Path) -> Path | None:
     for rel in PLUGIN_MANIFESTS:
         path = plugin_dir / rel
@@ -154,13 +166,14 @@ def build_catalog() -> str:
     agents = agent_rows()
     instructions = instruction_rows()
     skills = skill_rows()
+    prompts = prompt_rows()
     plugins = plugin_rows()
     hooks = hook_rows()
 
     return f"""# Copilot Primitives Catalog
 
 Generated from the current repository contents by `python3 library/scripts/generate_catalog.py`.
-Regenerate this file after changing files under `library/agents/`, `library/instructions/`, `library/skills/`, `library/plugins/`, or `library/hooks/`.
+Regenerate this file after changing files under `library/agents/`, `library/instructions/`, `library/skills/`, `library/prompts/`, `library/plugins/`, or `library/hooks/`.
 
 ## Summary
 
@@ -169,6 +182,7 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | Agents | {len(agents)} |
 | Instructions | {len(instructions)} |
 | Skills | {len(skills)} |
+| VS Code prompts | {len(prompts)} |
 | Plugins | {len(plugins)} |
 | Hooks | {len(hooks)} |
 
@@ -183,6 +197,10 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 ## Skills
 
 {md_table(["Skill", "Description"], skills)}
+
+## VS Code Prompts
+
+{md_table(["Prompt", "Description"], prompts)}
 
 ## Plugins
 

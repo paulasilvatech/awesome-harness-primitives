@@ -220,6 +220,7 @@ After changing a primitive included in the generated catalog, regenerate and che
 python3 library/scripts/generate_catalog.py
 python3 library/scripts/normalize_plugin_manifests.py --check
 python3 library/scripts/audit_plugins.py --check
+python3 library/scripts/audit_primitive_content.py --check
 python3 library/scripts/generate_catalog.py --check
 ```
 

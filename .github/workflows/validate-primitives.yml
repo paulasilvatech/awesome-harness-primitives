@@ -35,6 +35,9 @@ jobs:
       - name: Check plugin marketplace audit
         run: python3 library/scripts/audit_plugins.py --check
 
+      - name: Check primitive content audit
+        run: python3 library/scripts/audit_primitive_content.py --check
+
       # Prevent committed docs/CATALOG.md from drifting from repository contents.
       - name: Check catalog drift
         run: python3 library/scripts/generate_catalog.py --check

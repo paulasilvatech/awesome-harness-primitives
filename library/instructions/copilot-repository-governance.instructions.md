@@ -22,6 +22,7 @@ This repository curates reusable GitHub Copilot agents, instructions, Agent Skil
 | `docs/templates/` | Authoring templates and generated compatibility guidance |
 | `docs/COPILOT-HARNESS-SPEC.md` | Runtime discovery, schema, and validator contract |
 | `docs/HARNESS-VALIDATION.md` | Dated runtime and first-party documentation evidence |
+| `docs/PRIMITIVE-CONTENT-AUDIT.md` | Generated structural coverage, freshness-risk, and plugin-composition inventory |
 | `.github/` | Installed or generated repository customizations and CI configuration |
 
 Edit canonical `library/` sources. Do not hand-edit generated plugin components or installed `.github/` mirrors when a declared canonical source exists.
@@ -66,6 +67,7 @@ Run the smallest applicable checks, then the complete repository gates before de
 python3 library/scripts/validate_primitives.py --strict
 python3 library/scripts/normalize_plugin_manifests.py --check
 python3 library/scripts/audit_plugins.py --check
+python3 library/scripts/audit_primitive_content.py --check
 python3 library/scripts/generate_catalog.py --check
 python3 library/scripts/sync_plugin_components.py --check
 python3 library/scripts/sync_installed_primitives.py --check
@@ -100,7 +102,7 @@ When a check reports generated drift caused by the canonical change, run the cor
 - [ ] Repository-wide and type-specific instructions do not duplicate or contradict each other.
 - [ ] Volatile claims are supported by dated local evidence or newly verified first-party documentation.
 - [ ] Directly related docs, catalogs, installed mirrors, and plugin copies are synchronized.
-- [ ] `validate_primitives.py --strict`, catalog drift, plugin drift, and installed-mirror drift checks pass.
+- [ ] `validate_primitives.py --strict`, content-audit drift, catalog drift, plugin drift, and installed-mirror drift checks pass.
 - [ ] Changed prompts or hooks received their applicable runtime or payload tests, or the unrun check is reported with a reason.
 - [ ] The final diff contains no unrelated edits, unresolved authoring placeholders, secrets, or unsupported metadata.
 

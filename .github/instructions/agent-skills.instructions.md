@@ -53,6 +53,7 @@ Run:
 ```sh
 python3 library/skills/skill-creator/scripts/validate_skill.py library/skills/<name>
 python3 library/scripts/validate_primitives.py --strict
+python3 library/scripts/audit_primitive_content.py --check
 python3 library/scripts/generate_catalog.py --check
 python3 library/scripts/sync_plugin_components.py --check
 python3 library/scripts/sync_installed_primitives.py --check

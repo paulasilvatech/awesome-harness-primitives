@@ -145,7 +145,7 @@ If the destination is an exact path, it must exactly match the canonical source 
 
 **Step 7 — Deliver conditionally.** If the destination is `response`, return the primitive content in Chat. If the destination is `edit`, apply only the approved edit. If the destination is an exact path, write only that path and only when editing tools are available.
 
-**Step 8 — Validate and report.** Check the Definition of Done. Run `python3 library/scripts/validate_primitives.py --strict`, `python3 library/scripts/generate_catalog.py --check`, `python3 library/scripts/sync_plugin_components.py --check`, and `python3 library/scripts/sync_installed_primitives.py --check`. For a prompt, also test **Chat: Run Prompt** in a representative scenario; static validation checks metadata and structure but does not execute the prompt. Report the artifact path or Chat-only result, freshness evidence when used, validation evidence, and unresolved blockers.
+**Step 8 — Validate and report.** Check the Definition of Done. Run `python3 library/scripts/validate_primitives.py --strict`, `python3 library/scripts/audit_primitive_content.py --check`, `python3 library/scripts/generate_catalog.py --check`, `python3 library/scripts/sync_plugin_components.py --check`, and `python3 library/scripts/sync_installed_primitives.py --check`. For a prompt, also test **Chat: Run Prompt** in a representative scenario; static validation checks metadata and structure but does not execute the prompt. Report the artifact path or Chat-only result, freshness evidence when used, validation evidence, and unresolved blockers.
 
 ## Invocation Example
 

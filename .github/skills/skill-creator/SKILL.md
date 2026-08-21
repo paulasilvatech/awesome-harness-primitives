@@ -83,6 +83,7 @@ When working in this repository, also run:
 
 ```bash
 python3 library/scripts/validate_primitives.py --strict
+python3 library/scripts/audit_primitive_content.py --check
 python3 library/scripts/generate_catalog.py --check
 ```
 

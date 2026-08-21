@@ -5279,7 +5279,7 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 6206,
+      "characters_scanned": 6265,
       "external_url_count": 2,
       "files_scanned": 1,
       "kind": "instruction",
@@ -6007,7 +6007,7 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 8510,
+      "characters_scanned": 8710,
       "external_url_count": 2,
       "files_scanned": 1,
       "kind": "instruction",
@@ -10506,7 +10506,7 @@
       ]
     },
     {
-      "characters_scanned": 684663,
+      "characters_scanned": 684722,
       "external_url_count": 80,
       "files_scanned": 121,
       "kind": "plugin",
@@ -11951,7 +11951,7 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 13584,
+      "characters_scanned": 13646,
       "external_url_count": 0,
       "files_scanned": 1,
       "kind": "prompt",
@@ -15067,7 +15067,7 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 7570,
+      "characters_scanned": 7665,
       "external_url_count": 0,
       "files_scanned": 1,
       "kind": "skill",
@@ -15111,7 +15111,7 @@
       ]
     },
     {
-      "characters_scanned": 11191,
+      "characters_scanned": 11329,
       "external_url_count": 0,
       "files_scanned": 1,
       "kind": "skill",
@@ -21130,7 +21130,7 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 37940,
+      "characters_scanned": 37999,
       "external_url_count": 1,
       "files_scanned": 5,
       "kind": "skill",

@@ -1,7 +1,7 @@
 # Copilot Primitives Catalog
 
 Generated from the current repository contents by `python3 library/scripts/generate_catalog.py`.
-Regenerate this file after changing files under `library/agents/`, `library/instructions/`, `library/skills/`, `library/plugins/`, or `library/hooks/`.
+Regenerate this file after changing files under `library/agents/`, `library/instructions/`, `library/skills/`, `library/prompts/`, `library/plugins/`, or `library/hooks/`.
 
 ## Summary
 
@@ -10,6 +10,7 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | Agents | 225 |
 | Instructions | 194 |
 | Skills | 421 |
+| VS Code prompts | 48 |
 | Plugins | 96 |
 | Hooks | 8 |
 
@@ -868,6 +869,59 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | write-coding-standards-from-file | Write a coding standards document by analyzing existing file or folder style. Use when asked to infer project rules, generate CONTRIBUTING.md or CODING_STANDARDS.md, add standards… |
 | x-twitter-scraper | Build Xquik integrations for X API and Twitter scraper workflows using SDKs, REST endpoints, Apify Actors, MCP tools, TweetClaw OpenClaw plugin installs, signed webhooks, tweet se… |
 
+## VS Code Prompts
+
+| Prompt | Description |
+| --- | --- |
+| ai-prompt-engineering-safety-review | Review and improve AI prompts for safety, bias, security risks, and effectiveness. |
+| architecture-blueprint-generator | Generate a comprehensive architecture blueprint from a codebase analysis. |
+| aspnet-minimal-api-openapi | Create ASP.NET Minimal API endpoints with complete OpenAPI documentation. |
+| az-cost-optimize | Analyze Azure application resources and produce cost optimization issues or recommendations. |
+| azure-resource-health-diagnose | Diagnose Azure resource health issues and produce a prioritized remediation plan. |
+| comment-code-generate-a-tutorial | Refactor a Python script into a beginner-friendly project with instructional comments and a tutorial. |
+| containerize-aspnet-framework | Containerize an ASP.NET .NET Framework project with project-specific Docker artifacts. |
+| containerize-aspnetcore | Containerize an ASP.NET Core project with project-specific Docker artifacts. |
+| copilot-instructions-blueprint-generator | Generate a codebase-specific copilot-instructions.md blueprint for consistent Copilot guidance. |
+| create-architectural-decision-record | Create an AI-optimized Architectural Decision Record for a documented technical decision. |
+| create-copilot-primitive | Create a Copilot primitive from this repository's templates and reference patterns. |
+| create-github-action-workflow-specification | Create an AI-ready specification for an existing GitHub Actions workflow. |
+| create-llms | Create an llms.txt file from the repository structure that follows the llms.txt specification. |
+| create-specification | Create an AI-ready solution specification with clear requirements, constraints, and interfaces. |
+| create-spring-boot-java-project | Create a Spring Boot Java project skeleton with required tooling and project structure guidance. |
+| design-agentic-system | Design a production agentic system on GitHub and Azure AI Foundry with architecture documentation and diagrams. |
+| diagram-architecture | Produce an editable draw.io architecture diagram and exported SVG using official Azure, Microsoft, and GitHub icons. |
+| dotnet-best-practices | Apply .NET and C# best practices to selected solution code and document required improvements. |
+| dotnet-design-pattern-review | Review selected C# and .NET code for design pattern usage and recommend improvements. |
+| ef-core | Apply Entity Framework Core best practices to data access code and project configuration. |
+| folder-structure-blueprint-generator | Analyze a project and generate a technology-agnostic folder structure blueprint with naming and placement conventions. |
+| gen-specs-as-issues | Identify missing product features and generate prioritized issue-ready implementation specifications. |
+| git-flow-branch-creator | Analyze Git changes and create an appropriate Git Flow branch with a semantic name. |
+| java-docs | Add or improve Javadoc documentation for Java types according to documentation best practices. |
+| java-junit | Design or review JUnit 5 unit tests with parameterized tests, assertions, mocking, and maintainable organization. |
+| java-springboot | Guide Spring Boot application development with project structure, configuration, web, service, data, logging, testing, and security practices. |
+| javascript-typescript-jest | Guide JavaScript and TypeScript Jest testing with structure, mocking, async, snapshot, React component, and matcher practices. |
+| mkdocs-translations | Generate a complete locale-specific translation workflow for an MkDocs documentation stack. |
+| modernize-assess | Assess a legacy system or modernization portfolio with inventory, complexity, dependencies, risks, and modernization recommendations. |
+| modernize-brief | Capture a modernization brief with scope, drivers, constraints, non-goals, risks, and success criteria. |
+| modernize-extract-rules | Extract cited and testable business rule cards from legacy code, modules, or business processes. |
+| modernize-harden | Harden a modernized module or system with ranked security, testing, observability, and operations findings. |
+| modernize-map | Map legacy modules to target architecture boundaries, data flows, migration sequence, and rollback considerations. |
+| modernize-reimagine | Design a target modernization architecture that preserves required behavior and names intentional changes. |
+| modernize-transform | Transform a bounded legacy module into modernized code with behavior-pinning tests and validation evidence. |
+| multi-stage-dockerfile | Create optimized multi-stage Dockerfiles that reduce image size, improve security, and preserve reproducible builds. |
+| new-skill | Scaffold a new GitHub Copilot Agent Skill using the skill-creator skill workflow. |
+| playwright-automation-fill-in-form | Fill a specified web form with Playwright MCP and pause for review before submission. |
+| playwright-explore-website | Explore a website with Playwright MCP, document core user flows, and propose test cases. |
+| playwright-generate-test | Generate and validate a Playwright test from a provided scenario after browser exploration. |
+| postgresql-code-review | Review PostgreSQL code for database-specific correctness, security, maintainability, and performance risks. |
+| postgresql-optimization | Optimize PostgreSQL implementations using database-specific features, indexing, monitoring, and query tuning guidance. |
+| project-workflow-analysis-blueprint-generator | Generate an implementation-ready blueprint that documents end-to-end application workflows across the detected project architecture. |
+| prompt-builder | Guide creation of a production-ready VS Code prompt file with valid frontmatter, structure, and validation criteria. |
+| sql-code-review | Review SQL code across database engines for security, maintainability, quality, and best-practice issues. |
+| sql-optimization | Optimize SQL queries, indexes, pagination, batching, and performance diagnostics across common database engines. |
+| technology-stack-blueprint-generator | Generate a technology stack blueprint that documents detected languages, frameworks, dependencies, and implementation patterns. |
+| update-llms | Update the root llms.txt file to reflect current repository documentation, specifications, and structure. |
+
 ## Plugins
 
 | Plugin | Version | Description |
@@ -893,7 +947,7 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | context-engineering | 1.0.1 | Tools and techniques for maximizing GitHub Copilot effectiveness through better context management. Includes guidelines for structuring code, an agent for planning multi-file chan… |
 | context-matic | 0.1.1 | Coding agents hallucinate APIs. ContextMatic gives them curated, versioned API and SDK docs. Ask your agent to "integrate the payments API" and it guesses — falling back on outdat… |
 | convert-to-md | 1.0.2 | A collection of Copilot skills that convert common document formats into Markdown so their contents can be accurately analyzed, summarized, searched, or extracted from. Just tell… |
-| copilot-plugin-development | 1.0.0 | Create, migrate, audit, and validate GitHub Copilot plugins and marketplaces with Agent Plugins 1.0 schemas, canonical component ownership, generated runtime mirrors, dependency p… |
+| copilot-plugin-development | 1.0.1 | Create, migrate, audit, and validate GitHub Copilot plugins and marketplaces with Agent Plugins 1.0 schemas, canonical component ownership, generated runtime mirrors, dependency p… |
 | copilot-sdk | 1.0.1 | Build applications with the GitHub Copilot SDK across multiple programming languages. Includes comprehensive instructions for C#, Go, Node.js/TypeScript, and Python to help you cr… |
 | csharp-dotnet-development | 1.1.1 | Essential prompts, instructions, and chat modes for C# and .NET development including testing, documentation, and best practices. |
 | database-data-management | 1.0.1 | Database administration, SQL optimization, and data management tools for PostgreSQL, SQL Server, and general database development best practices. |
@@ -920,7 +974,7 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | mcp-m365-copilot | 1.0.1 | Comprehensive collection for building declarative agents with Model Context Protocol integration for Microsoft 365 Copilot |
 | napkin | 1.0.1 | Visual whiteboard collaboration for Copilot CLI. Opens an interactive whiteboard in your browser where you can draw, sketch, and add sticky notes — then share everything back with… |
 | noob-mode | 1.0.1 | Plain-English translation layer for non-technical Copilot CLI users. Translates every approval prompt, error message, and technical output into clear, jargon-free English with col… |
-| open-horizons-platform | 1.1.0 | Open Horizons agentic DevOps platform toolkit for Azure, AKS, Backstage, GitHub, Azure DevOps, Terraform, security, reliability, architecture, and deployment operations. Use it to… |
+| open-horizons-platform | 1.1.1 | Open Horizons agentic DevOps platform toolkit for Azure, AKS, Backstage, GitHub, Azure DevOps, Terraform, security, reliability, architecture, and deployment operations. Use it to… |
 | openapi-to-application-csharp-dotnet | 1.0.1 | Generate production-ready .NET applications from OpenAPI specifications. Includes ASP.NET Core project scaffolding, controller generation, entity framework integration, and C# bes… |
 | openapi-to-application-go | 1.0.1 | Generate production-ready Go applications from OpenAPI specifications. Includes project scaffolding, handler generation, middleware setup, and Go best practices for REST APIs. |
 | openapi-to-application-java-spring-boot | 1.0.1 | Generate production-ready Spring Boot applications from OpenAPI specifications. Includes project scaffolding, REST controller generation, service layer organization, and Spring Bo… |

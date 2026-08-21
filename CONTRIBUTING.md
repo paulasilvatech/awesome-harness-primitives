@@ -20,6 +20,7 @@ Regenerate the catalog after primitive changes:
 ```sh
 python3 library/scripts/generate_catalog.py
 python3 library/scripts/generate_catalog.py --check
+python3 library/scripts/audit_primitive_content.py --check
 python3 library/scripts/sync_plugin_components.py --check
 python3 library/scripts/sync_installed_primitives.py --check
 ```

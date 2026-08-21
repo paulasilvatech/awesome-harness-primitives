@@ -46,7 +46,7 @@ Instructions and VS Code prompts are repository workspace customizations, not po
 7. Add or update the alphabetized `.github/plugin/marketplace.json` entry with source, exact manifest description, and exact version.
 8. Validate schemas, components, ownership, marketplace coverage, and generated drift.
 9. Install the plugin in an isolated `COPILOT_HOME`, list its skills and MCP servers, invoke a representative namespaced agent, and exercise hooks or extensions when their runtime surface is available.
-10. Record dated current-platform evidence in `docs/HARNESS-VALIDATION.md` and regenerate `docs/PLUGIN-AUDIT.md` and `docs/CATALOG.md`.
+10. Record dated current-platform evidence in `docs/HARNESS-VALIDATION.md` and regenerate `docs/PLUGIN-AUDIT.md`, `docs/PRIMITIVE-CONTENT-AUDIT.md`, and `docs/CATALOG.md`.
 
 ## Required checks
 
@@ -54,6 +54,7 @@ Instructions and VS Code prompts are repository workspace customizations, not po
 python3 library/scripts/validate_primitives.py --strict
 python3 library/scripts/normalize_plugin_manifests.py --check
 python3 library/scripts/audit_plugins.py --check
+python3 library/scripts/audit_primitive_content.py --check
 python3 library/scripts/generate_catalog.py --check
 python3 library/scripts/sync_plugin_components.py --check
 python3 library/scripts/sync_installed_primitives.py --check

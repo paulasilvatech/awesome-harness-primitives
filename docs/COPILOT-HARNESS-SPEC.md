@@ -423,6 +423,7 @@ Generated distribution surfaces have separate drift gates:
 ```sh
 python3 library/scripts/normalize_plugin_manifests.py --check
 python3 library/scripts/audit_plugins.py --check
+python3 library/scripts/audit_primitive_content.py --check
 python3 library/scripts/generate_catalog.py --check
 python3 library/scripts/sync_plugin_components.py --check
 python3 library/scripts/sync_installed_primitives.py --check
