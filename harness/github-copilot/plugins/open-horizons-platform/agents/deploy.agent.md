@@ -25,7 +25,7 @@ handoffs:
     prompt: "Verify platform health after deployment."
     send: false
   - label: "Backstage Portal Setup"
-    agent: backstage-expert
+    agent: open-horizons-backstage-expert
     prompt: "Deploy and configure the Backstage developer portal on AKS."
     send: false
   - label: "Azure Infrastructure"
@@ -149,7 +149,7 @@ This agent does not know the intended environment, active subscription, approved
 - `@terraform` for module authoring, plan failures, provider errors, or state questions.
 - `@azure-portal-deploy` for subscription, provider, quota, SKU, AKS credential, or live Azure resource issues.
 - `@security` for OPA, RBAC, secret, public exposure, or production security gates.
-- `@backstage-expert` for portal, catalog, auth, TechDocs, AI Chat, and Golden Path behavior.
+- `@open-horizons-backstage-expert` for portal, catalog, auth, TechDocs, AI Chat, and Golden Path behavior.
 - `@github-integration`, `@ado-integration`, or `@hybrid-scenarios` for source-control and enterprise integration issues.
 - `@sre` for post-deploy reliability, observability, incidents, and root-cause analysis.
 

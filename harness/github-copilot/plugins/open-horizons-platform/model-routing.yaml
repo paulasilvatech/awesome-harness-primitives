@@ -91,7 +91,7 @@ routing:
 #   @deploy (orchestrator):    claude-opus-5 / gpt-5.6-sol
 #   @azure-portal-deploy:     claude-sonnet-5 / gpt-5.4
 #   @terraform:               claude-sonnet-5 / gpt-5.4
-#   @backstage-expert:        claude-sonnet-5 / gpt-5.4
+#   @open-horizons-backstage-expert: claude-sonnet-5 / gpt-5.4
 #   @github-integration:      claude-sonnet-5 / gpt-5.4
 #   @ado-integration:         claude-sonnet-5 / gpt-5.4
 #   @hybrid-scenarios:        claude-sonnet-5 / gpt-5.4

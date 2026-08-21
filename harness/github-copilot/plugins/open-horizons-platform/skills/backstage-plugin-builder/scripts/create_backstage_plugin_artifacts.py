@@ -40,6 +40,7 @@ def plan(args: argparse.Namespace) -> str:
 
 - Plugin ID: `{args.plugin_id}`
 - Plugin type: `{args.plugin_type}`
+- Frontend mode: `{args.mode}`
 - Audience: `{args.audience}`
 - Target Backstage version: `{args.target_version}`
 
@@ -76,7 +77,7 @@ def strategy(args: argparse.Namespace) -> str:
 {heading(f"{args.plugin_id} Strategy")}
 ## Build Strategy
 
-Use official Backstage plugin APIs for `{args.plugin_type}`. Keep plugin code packaged separately from the app shell unless this is a one-off internal customization.
+Use official Backstage plugin APIs for `{args.plugin_type}` in `{args.mode}` mode. Keep plugin code packaged separately from the app shell unless this is a one-off internal customization.
 
 ## Packaging Strategy
 
@@ -160,7 +161,7 @@ def validation(args: argparse.Namespace) -> str:
 {heading(f"{args.plugin_id} Validation")}
 ## Commands
 
-Run commands that exist in the target package:
+Run commands that exist in the target plugin package. Do not run `yarn build` from the root of `backstage/backstage`:
 
 ```bash
 yarn lint
@@ -212,6 +213,12 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Generate Backstage plugin planning artifacts")
     parser.add_argument("--plugin-id", required=True)
     parser.add_argument("--plugin-type", required=True, choices=sorted(PLUGIN_TYPES))
+    parser.add_argument(
+        "--mode",
+        required=True,
+        choices=["new", "legacy", "dual"],
+        help="Explicit frontend compatibility mode; record it for every generated plan.",
+    )
     parser.add_argument("--audience", default="internal", choices=["internal", "private", "community"])
     parser.add_argument("--target-version", default="unspecified")
     parser.add_argument("--output", required=True)

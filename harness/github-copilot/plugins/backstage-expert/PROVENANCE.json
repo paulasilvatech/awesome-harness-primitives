@@ -1,0 +1,63 @@
+{
+  "files": [
+    {
+      "destination": "LICENSE",
+      "origin": "upstream",
+      "sha256": "e3620220d6f8a43cb5c968720f86d4e7c6e97847ee61a9c7694039896efb869b",
+      "source": "LICENSE"
+    },
+    {
+      "destination": "NOTICE",
+      "origin": "upstream",
+      "sha256": "36395569b3867d0769a40ffb908709c0b5fbfd79bf4b827856dd34feeed644ba",
+      "source": "NOTICE"
+    },
+    {
+      "destination": "skills/app-frontend-system-migration/references/upstream/SKILL.md",
+      "origin": "upstream",
+      "sha256": "31710fa057ffbdb19168a7c2933040b868a7e308302cd81547847114ee58dc86",
+      "source": "docs/.well-known/skills/app-frontend-system-migration/SKILL.md"
+    },
+    {
+      "destination": "skills/backstage-catalog-db-performance/references/upstream/catalog-db-performance.md",
+      "origin": "upstream",
+      "sha256": "b07bb496e9b21f2d269691e9a167dfdd82796f0891538c8511e72bc8340b428b",
+      "source": ".claude/skills/catalog-db-performance.md"
+    },
+    {
+      "destination": "skills/mui-to-bui-migration/references/upstream/SKILL.md",
+      "origin": "upstream",
+      "sha256": "f4e27cdc297195e9feece0f3273e4b4b73dacd361fdac2d0d9c3fc1447a821f5",
+      "source": "docs/.well-known/skills/mui-to-bui-migration/SKILL.md"
+    },
+    {
+      "destination": "skills/onboard-to-openapi-server/references/upstream/SKILL.md",
+      "origin": "upstream",
+      "sha256": "3b6f00ea1aed84e4e57ff4c00785c7dd4a276f41272f76dd96211b9c64fba702",
+      "source": "docs/.well-known/skills/onboard-to-openapi-server/SKILL.md"
+    },
+    {
+      "destination": "skills/plugin-analytics-instrumentation/references/upstream/SKILL.md",
+      "origin": "upstream",
+      "sha256": "36718f870618027136bac027aa42b6831a6cd1c9cd353271dfedbf9c9c52bf53",
+      "source": "docs/.well-known/skills/plugin-analytics-instrumentation/SKILL.md"
+    },
+    {
+      "destination": "skills/plugin-full-frontend-system-migration/references/upstream/SKILL.md",
+      "origin": "upstream",
+      "sha256": "ec899bd0b8107d15d998b426ed646681b77286facc5c46a5fddb6ef17065ba9b",
+      "source": "docs/.well-known/skills/plugin-full-frontend-system-migration/SKILL.md"
+    },
+    {
+      "destination": "skills/plugin-new-frontend-system-support/references/upstream/SKILL.md",
+      "origin": "upstream",
+      "sha256": "b311a53d8c3d6a4a6f4530962ca3ea055147fd4a9bfc2d5adbae57d45113c007",
+      "source": "docs/.well-known/skills/plugin-new-frontend-system-support/SKILL.md"
+    }
+  ],
+  "generator": "harness/github-copilot/scripts/import_backstage_upstream.py",
+  "importDate": "2026-08-21",
+  "license": "Apache-2.0",
+  "sourceCommit": "eeac444a9aba7c107525d2a726851e907418c181",
+  "sourceRepository": "https://github.com/backstage/backstage"
+}

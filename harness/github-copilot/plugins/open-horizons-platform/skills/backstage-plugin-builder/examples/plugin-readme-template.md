@@ -23,6 +23,8 @@ Document required permissions, identity assumptions, and access checks.
 
 ## Development
 
+Run these commands from this plugin package, not from the Backstage core repository root:
+
 ```bash
 yarn install
 yarn lint

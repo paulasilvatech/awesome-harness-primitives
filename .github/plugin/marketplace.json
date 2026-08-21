@@ -90,6 +90,12 @@
       "version": "1.0.1"
     },
     {
+      "name": "backstage-expert",
+      "source": "./harness/github-copilot/plugins/backstage-expert",
+      "description": "Build, configure, authenticate, extend, document, operate, upgrade, and contribute to Backstage applications and the Backstage core repository with current first-party workflows, safety gates, and migration guidance.",
+      "version": "1.0.0"
+    },
+    {
       "name": "cast-imaging",
       "source": "./harness/github-copilot/plugins/cast-imaging",
       "description": "A comprehensive collection of specialized agents for software analysis, impact assessment, structural quality advisories, and architectural review using CAST Imaging.",
@@ -309,7 +315,7 @@
       "name": "open-horizons-platform",
       "source": "./harness/github-copilot/plugins/open-horizons-platform",
       "description": "Open Horizons agentic DevOps platform toolkit for Azure, AKS, Backstage, GitHub, Azure DevOps, Terraform, security, reliability, architecture, and deployment operations. Use it to install specialist agents, reusable skills, safety hooks, MCP integrations, and a safe publisher for repository instructions, prompts, and automation.",
-      "version": "1.1.3"
+      "version": "1.1.4"
     },
     {
       "name": "openapi-to-application-csharp-dotnet",

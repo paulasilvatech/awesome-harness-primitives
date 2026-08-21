@@ -76,5 +76,5 @@ Read more about ACORN in [documentation](https://qdrant.tech/documentation/searc
 ## What NOT to Do
 
 - Do not create payload indexes AFTER HNSW is built (breaks filterable vector index)
-- Do not use `m=0` for bulk uploads into an existing collection, it might drop the existing HNSW and cause long reindexing 
+- Do not use `m=0` for bulk uploads into an existing collection, it might drop the existing HNSW and cause long reindexing
 - Do not upload one point at a time (per-request overhead dominates)

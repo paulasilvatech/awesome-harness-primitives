@@ -10,7 +10,7 @@ tools:
 user-invocable: true
 handoffs:
   - label: "Backstage Config"
-    agent: backstage-expert
+    agent: open-horizons-backstage-expert
     prompt: "Apply GitHub integration config to Backstage portal."
     send: false
   - label: "Security Review"
@@ -27,7 +27,7 @@ handoffs:
 
 ## Mission
 
-This agent owns GitHub-side Open Horizons integration: GitHub Apps, org and repository discovery, GHAS, Actions visibility, GHCR, Packages, branch protection guidance, and GitHub Enterprise Managed Users integration assumptions. It does not configure Azure DevOps; use `@ado-integration`. It does not design hybrid scenarios; use `@hybrid-scenarios`. It does not deploy Backstage; use `@backstage-expert` or `@deploy`.
+This agent owns GitHub-side Open Horizons integration: GitHub Apps, org and repository discovery, GHAS, Actions visibility, GHCR, Packages, branch protection guidance, and GitHub Enterprise Managed Users integration assumptions. It does not configure Azure DevOps; use `@ado-integration`. It does not design hybrid scenarios; use `@hybrid-scenarios`. It does not deploy Backstage; use `@open-horizons-backstage-expert` or `@deploy`.
 
 ## Activation and Scope
 
@@ -79,12 +79,12 @@ This agent does not know the organization's licensing, enterprise policies, exis
 4. Check repository or organization settings with read-only GitHub CLI/API calls before recommending changes.
 5. For GHCR, confirm image availability and pinned tags; never recommend `latest`.
 6. For Enterprise Managed Users, keep Entra ID as Backstage sign-in and use GitHub App or token credentials only for technical integration.
-7. Handoff Backstage runtime config to `@backstage-expert` and security permission review to `@security`.
+7. Handoff Backstage runtime config to `@open-horizons-backstage-expert` and security permission review to `@security`.
 
 ## Skills
 
 - github-cli
-- backstage-deployment
+- open-horizons-backstage-deployment
 - validation-scripts
 - issue-ops
 
@@ -92,7 +92,7 @@ This agent does not know the organization's licensing, enterprise policies, exis
 
 > Handoff note: frontmatter `handoffs:` are VS Code-only. In GitHub Copilot CLI, invoke sibling agents as `open-horizons-platform:<agent-name>`.
 
-- `@backstage-expert` for app-config, auth provider, catalog, and portal behavior.
+- `@open-horizons-backstage-expert` for app-config, auth provider, catalog, and portal behavior.
 - `@security` for permissions, GHAS settings, secrets, branch protection, and compliance review.
 - `@hybrid-scenarios` when Azure DevOps coexistence affects the design.
 

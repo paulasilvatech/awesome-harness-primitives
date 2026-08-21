@@ -16,11 +16,11 @@ Replication factor of 2 means each shard has 1 replica, so you have 2 copies of 
 
 ## Choosing number of shards
 
-Shards are the unit of data distribution. 
+Shards are the unit of data distribution.
 More shards allows more nodes and better distribution, but adds overhead. Fewer shards reduces overhead but limits horizontal scaling.
 
-For cluster of 3-6 nodes the recommended shard count is 6-12. 
-This allows for 2-4 shards per node, which balances distribution and overhead. 
+For cluster of 3-6 nodes the recommended shard count is 6-12.
+This allows for 2-4 shards per node, which balances distribution and overhead.
 
 ## Changing number of shards
 

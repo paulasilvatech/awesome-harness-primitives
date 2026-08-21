@@ -63,7 +63,7 @@ Use when: filtered search is significantly slower than unfiltered. Most common S
 ### Recommended configuration changes
 
 - reduce `optimizer_cpu_budget` to reserve more CPU for queries
-- Use `prevent_unoptimized=true` to prevent creating segments with a large amount of unindexed data for searches. Instead, once a segment reaches the so called indexing_threshold, all additional points will be added in ‘deferred state’. 
+- Use `prevent_unoptimized=true` to prevent creating segments with a large amount of unindexed data for searches. Instead, once a segment reaches the so called indexing_threshold, all additional points will be added in ‘deferred state’.
 
 Learn more [here](https://qdrant.tech/documentation/search/low-latency-search/?s=query-indexed-data-only)
 

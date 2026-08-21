@@ -1,6 +1,6 @@
 ---
 name: codespaces-golden-paths
-description: "Use when configuring GitHub Codespaces devcontainer environments for Open Horizons Golden Path templates; produces devcontainer recommendations, template mapping, validation checks, and README badge guidance. DO NOT USE FOR: Backstage deployment (use backstage-deployment), CI/CD pipeline orchestration (use deploy-orchestration), or creating Backstage templates from scratch (use backstage-deployment). Triggers include \"add Codespaces to a Golden Path\", \"create a devcontainer for this template\", \"validate Codespaces setup\"."
+description: "Use when configuring GitHub Codespaces devcontainer environments for Open Horizons Golden Path templates; produces devcontainer recommendations, template mapping, validation checks, and README badge guidance. DO NOT USE FOR: Backstage deployment (use open-horizons-backstage-deployment), CI/CD pipeline orchestration (use deploy-orchestration), or creating Backstage templates from scratch (use open-horizons-backstage-deployment). Triggers include \"add Codespaces to a Golden Path\", \"create a devcontainer for this template\", \"validate Codespaces setup\"."
 ---
 
 # Codespaces Golden Paths
@@ -93,7 +93,7 @@ A minimal Python/FastAPI profile should include the expected image, features, ex
 
 ## Limits
 
-- Do not use this skill for: Backstage deployment (use backstage-deployment), CI/CD pipeline orchestration (use deploy-orchestration), or creating Backstage templates from scratch (use backstage-deployment).
+- Do not use this skill for: Backstage deployment (use open-horizons-backstage-deployment), CI/CD pipeline orchestration (use deploy-orchestration), or creating Backstage templates from scratch (use open-horizons-backstage-deployment).
 - Keep exclusions and handoffs as by-name references to installed skills or agents, not relative links to other primitives.
 - Stop before mutating infrastructure, clusters, repositories, or generated artifacts unless the procedure's confirmation gate is satisfied.
 

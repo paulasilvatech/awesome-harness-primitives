@@ -1,10 +1,10 @@
-# Validation Hooks
+# Plugin Validation
 
-Use this reference to add safety gates around Backstage plugin development.
+Use this reference to run repository-native and package-local safety gates around Backstage plugin development.
 
 ## Standard Commands
 
-Run what exists in the target package:
+Run what exists from the target plugin package directory:
 
 ```bash
 yarn lint
@@ -19,19 +19,12 @@ For publication preparation:
 npm pack --dry-run
 ```
 
-## Hook Strategy
+Do not run `yarn build` from the root of `backstage/backstage`. For core contributions, use targeted tests, exact root `yarn tsc`, changed-file formatting, `yarn lint --fix`, and `yarn build:api-reports` when the change requires API report updates.
 
-- Hooks are optional and local unless the repository already enforces them.
-- Do not create hooks that require unavailable tools.
-- Generate hooks only after checking `package.json` scripts.
-- CI remains the source of truth for publication.
+## Repository Integration
 
-## Safe Pre-Commit Hook
-
-The generated hook should:
-
-1. Exit on failure.
-2. Detect whether `yarn` exists.
-3. Run only scripts present in `package.json`.
-4. Avoid network or publishing commands.
-5. Never read or print secrets.
+- Reuse existing CI and repository task definitions instead of generating Git hooks.
+- Do not change `core.hooksPath` or install a pre-commit hook as part of plugin scaffolding.
+- Run only scripts declared by the target package and report skipped scripts explicitly.
+- Keep network publication separate from validation.
+- Treat CI as the source of truth for publication readiness.

@@ -149,7 +149,7 @@
     "confirmedDuplicates": 0,
     "exactDuplicateGroups": 0,
     "similarityCandidates": 16,
-    "sources": 950,
+    "sources": 985,
     "unclassifiedCandidates": 0
   },
   "threshold": 0.72

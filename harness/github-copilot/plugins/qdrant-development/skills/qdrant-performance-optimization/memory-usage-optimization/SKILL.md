@@ -64,4 +64,3 @@ Here are the main techniques to achieve that:
 - Consider storing Sparse Vectors and text payload on disk, as they are usually more disk-friendly than dense vectors.
 - Configure payload indexes to be stored on disk [docs](https://qdrant.tech/documentation/manage-data/indexing/?s=on-disk-payload-index)
 - Configure sparse vectors to be stored on disk [docs](https://qdrant.tech/documentation/manage-data/indexing/?s=sparse-vector-index)
-

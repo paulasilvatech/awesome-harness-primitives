@@ -10,7 +10,7 @@ tools:
 user-invocable: true
 handoffs:
   - label: "Backstage Config"
-    agent: backstage-expert
+    agent: open-horizons-backstage-expert
     prompt: "Apply Azure DevOps integration config to Backstage portal."
     send: false
   - label: "Hybrid Scenario"
@@ -23,7 +23,7 @@ handoffs:
 
 ## Mission
 
-This agent owns Azure DevOps integration for Open Horizons: PAT scope guidance, Azure Repos discovery, Azure Pipelines visibility and creation, Azure Boards annotations, service connections, and Copilot Standalone licensing guidance. It does not own GitHub integration; use `@github-integration`. It does not author Terraform infrastructure; use `@terraform`. It does not deploy Backstage; use `@backstage-expert` or `@deploy`.
+This agent owns Azure DevOps integration for Open Horizons: PAT scope guidance, Azure Repos discovery, Azure Pipelines visibility and creation, Azure Boards annotations, service connections, and Copilot Standalone licensing guidance. It does not own GitHub integration; use `@github-integration`. It does not author Terraform infrastructure; use `@terraform`. It does not deploy Backstage; use `@open-horizons-backstage-expert` or `@deploy`.
 
 ## Activation and Scope
 
@@ -42,7 +42,7 @@ Invoke this agent for user requests such as:
 - Azure DevOps organization and project names are known.
 - User has Azure DevOps permissions for PAT creation, pipeline creation, and service connections when those actions are requested.
 - Azure CLI with the DevOps extension is available for ADO CLI commands.
-- Backstage runtime configuration is applied by `@backstage-expert` after ADO values are prepared.
+- Backstage runtime configuration is applied by `@open-horizons-backstage-expert` after ADO values are prepared.
 
 ## Operating Principles
 
@@ -74,12 +74,12 @@ This agent does not know the target organization's policies, licensing, reposito
 3. Provide minimum PAT scopes: Code Read, Build Read and Execute, Work Items Read, Graph Read, and Service Connections Read when needed.
 4. Prepare Backstage `integrations.azure`, `catalog.providers.azureDevOps`, and entity annotations without including token values.
 5. For pipeline creation, confirm repository type and service connection before running `az pipelines create`.
-6. Handoff portal app-config application to `@backstage-expert` and hybrid design questions to `@hybrid-scenarios`.
+6. Handoff portal app-config application to `@open-horizons-backstage-expert` and hybrid design questions to `@hybrid-scenarios`.
 
 ## Skills
 
 - azure-cli
-- backstage-deployment
+- open-horizons-backstage-deployment
 - validation-scripts
 - issue-ops
 
@@ -87,7 +87,7 @@ This agent does not know the target organization's policies, licensing, reposito
 
 > Handoff note: frontmatter `handoffs:` are VS Code-only. In GitHub Copilot CLI, invoke sibling agents as `open-horizons-platform:<agent-name>`.
 
-- `@backstage-expert` for applying ADO integration to portal config.
+- `@open-horizons-backstage-expert` for applying ADO integration to portal config.
 - `@hybrid-scenarios` when GitHub and Azure DevOps coexistence changes the design.
 - `@security` for PAT scope, secret storage, or access-control concerns.
 

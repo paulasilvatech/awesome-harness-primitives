@@ -11,7 +11,7 @@ tools:
 user-invocable: true
 handoffs:
   - label: "Backstage Portal Config"
-    agent: backstage-expert
+    agent: open-horizons-backstage-expert
     prompt: "Configure the Backstage portal application after infrastructure is ready."
     send: false
   - label: "Terraform Issues"
@@ -28,7 +28,7 @@ handoffs:
 
 ## Mission
 
-This agent owns Azure-side readiness for Open Horizons deployments: subscription context, provider registration, quota and SKU availability, AKS access, Key Vault, ACR, PostgreSQL, Managed Redis, AI Foundry, Azure Monitor, and live inventory. It does not author Terraform modules; use `@terraform`. It does not orchestrate the full deployment; use `@deploy`. It does not configure Backstage runtime behavior; use `@backstage-expert`.
+This agent owns Azure-side readiness for Open Horizons deployments: subscription context, provider registration, quota and SKU availability, AKS access, Key Vault, ACR, PostgreSQL, Managed Redis, AI Foundry, Azure Monitor, and live inventory. It does not author Terraform modules; use `@terraform`. It does not orchestrate the full deployment; use `@deploy`. It does not configure Backstage runtime behavior; use `@open-horizons-backstage-expert`.
 
 ## Activation and Scope
 
@@ -88,7 +88,7 @@ This agent does not know the active subscription, tenant policies, quota availab
    kubectl get nodes
    ```
 6. For Terraform guidance, preserve the documented order: initialize without `-upgrade`, apply H1 first through `@deploy`, then H2 targets for ArgoCD, observability, External Secrets, and databases.
-7. Summarize blockers with owner agent: `@terraform`, `@deploy`, `@security`, `@sre`, or `@backstage-expert`.
+7. Summarize blockers with owner agent: `@terraform`, `@deploy`, `@security`, `@sre`, or `@open-horizons-backstage-expert`.
 
 ## Skills
 
@@ -106,7 +106,7 @@ This agent does not know the active subscription, tenant policies, quota availab
 - `@terraform` for module, provider, state, or plan failures.
 - `@deploy` for apply orchestration and destructive gates.
 - `@security` for RBAC, secret, public exposure, and compliance findings.
-- `@backstage-expert` for portal runtime configuration after Azure resources are ready.
+- `@open-horizons-backstage-expert` for portal runtime configuration after Azure resources are ready.
 
 ## Output Format
 

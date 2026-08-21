@@ -18,7 +18,7 @@ handoffs:
     prompt: "Configure Azure DevOps PAT and discovery for hybrid scenario."
     send: false
   - label: "Backstage Config"
-    agent: backstage-expert
+    agent: open-horizons-backstage-expert
     prompt: "Apply hybrid configuration to Backstage portal."
     send: false
 ---
@@ -79,11 +79,11 @@ This agent does not know where authoritative code, work tracking, CI/CD, securit
 3. Produce the minimal catalog annotations for the chosen scenario.
 4. Define which catalog providers are active: GitHub, GitHub Org, Azure DevOps, or a combination.
 5. Document RBAC groups and scaffolder template actions without embedding secrets.
-6. Handoff GitHub implementation to `@github-integration`, ADO implementation to `@ado-integration`, and portal config to `@backstage-expert`.
+6. Handoff GitHub implementation to `@github-integration`, ADO implementation to `@ado-integration`, and portal config to `@open-horizons-backstage-expert`.
 
 ## Skills
 
-- backstage-deployment
+- open-horizons-backstage-deployment
 - github-cli
 - azure-cli
 - codespaces-golden-paths
@@ -95,7 +95,7 @@ This agent does not know where authoritative code, work tracking, CI/CD, securit
 
 - `@github-integration` for GitHub Apps, org discovery, GHAS, Actions, and GHCR.
 - `@ado-integration` for ADO PATs, Azure Repos, Azure Pipelines, Boards, and service connections.
-- `@backstage-expert` for portal app-config, catalog provider, scaffolder, and auth application.
+- `@open-horizons-backstage-expert` for portal app-config, catalog provider, scaffolder, and auth application.
 - `@security` for RBAC, secret, and enterprise identity risk review.
 
 ## Output Format

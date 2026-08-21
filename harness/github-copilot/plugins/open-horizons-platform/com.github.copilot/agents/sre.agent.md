@@ -93,7 +93,7 @@ This agent does not know the active incident severity, customer impact, baseline
 
 - `@deploy` for mitigations requiring rollout, restart, scale, rollback, or manifest application.
 - `@security` for suspected compromise, leaked data, suspicious Defender alerts, or access-control incidents.
-- `@backstage-expert` for portal-specific auth, catalog, plugin, or UI failures.
+- `@open-horizons-backstage-expert` for portal-specific auth, catalog, plugin, or UI failures.
 
 ## Output Format
 

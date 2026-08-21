@@ -15,17 +15,17 @@
     ]
   },
   "packaging": {
-    "activePluginHookPackages": 1,
-    "marketplaceEntries": 99,
+    "activePluginHookPackages": 2,
+    "marketplaceEntries": 100,
     "pluginOwned": {
-      "agents": 14,
+      "agents": 15,
       "errors": 0,
-      "instructions": 10,
-      "prompts": 9,
-      "skills": 29,
+      "instructions": 18,
+      "prompts": 11,
+      "skills": 54,
       "warnings": 0
     },
-    "pluginPackages": 99,
+    "pluginPackages": 100,
     "sharedAgents": {
       "packaged": 124,
       "total": 225,
@@ -135,7 +135,7 @@
     },
     "sharedSkills": {
       "packaged": 172,
-      "total": 421,
+      "total": 420,
       "unpackaged": [
         "acquire-codebase-knowledge",
         "ad-campaign-analyzer",
@@ -166,7 +166,6 @@
         "azure-smart-city-iot-solution-builder",
         "azure-static-web-apps",
         "azure-well-architected-review",
-        "backstage-patterns",
         "batch-files",
         "bigquery-pipeline-audit",
         "boost-prompt",
@@ -464,7 +463,7 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 6030,
+      "characters_scanned": 6114,
       "external_url_count": 1,
       "files_scanned": 1,
       "kind": "agent",
@@ -1072,7 +1071,7 @@
       ]
     },
     {
-      "characters_scanned": 6611,
+      "characters_scanned": 6667,
       "external_url_count": 0,
       "files_scanned": 1,
       "kind": "agent",
@@ -1091,21 +1090,21 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 7186,
+      "characters_scanned": 9891,
       "external_url_count": 0,
       "files_scanned": 1,
       "kind": "agent",
       "local_evidence_mention": false,
       "name": "backstage-expert",
       "ownership": "plugin",
-      "package": "open-horizons-platform",
+      "package": "backstage-expert",
       "packaged_by": [
-        "open-horizons-platform"
+        "backstage-expert"
       ],
-      "path": "harness/github-copilot/plugins/open-horizons-platform/agents/backstage-expert.agent.md",
+      "path": "harness/github-copilot/plugins/backstage-expert/agents/backstage-expert.agent.md",
       "review_status": "needs-current-source-review",
       "signals": [
-        "currency-language"
+        "lifecycle-language"
       ],
       "source_domains": []
     },
@@ -1607,7 +1606,7 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 8517,
+      "characters_scanned": 8545,
       "external_url_count": 0,
       "files_scanned": 1,
       "kind": "agent",
@@ -2486,7 +2485,7 @@
       ]
     },
     {
-      "characters_scanned": 6156,
+      "characters_scanned": 6226,
       "external_url_count": 0,
       "files_scanned": 1,
       "kind": "agent",
@@ -2558,7 +2557,7 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 6210,
+      "characters_scanned": 6266,
       "external_url_count": 0,
       "files_scanned": 1,
       "kind": "agent",
@@ -3161,6 +3160,25 @@
       "package": null,
       "packaged_by": [],
       "path": "harness/github-copilot/agents/one-shot-feature-issue-planner.agent.md",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language"
+      ],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 7228,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "agent",
+      "local_evidence_mention": false,
+      "name": "open-horizons-backstage-expert",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/agents/open-horizons-backstage-expert.agent.md",
       "review_status": "needs-current-source-review",
       "signals": [
         "currency-language"
@@ -4410,7 +4428,7 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 5632,
+      "characters_scanned": 5646,
       "external_url_count": 0,
       "files_scanned": 1,
       "kind": "agent",
@@ -5037,6 +5055,29 @@
       "source_domains": [
         "attester.dev",
         "attester.dev`"
+      ]
+    },
+    {
+      "characters_scanned": 11872,
+      "external_url_count": 1,
+      "files_scanned": 4,
+      "kind": "hook",
+      "local_evidence_mention": false,
+      "name": "backstage-expert:backstage-safety",
+      "ownership": "plugin",
+      "package": "backstage-expert",
+      "packaged_by": [
+        "backstage-expert"
+      ],
+      "path": "harness/github-copilot/plugins/backstage-expert/hooks/backstage-safety",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "version-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "github.com"
       ]
     },
     {
@@ -5670,6 +5711,177 @@
         "github.com",
         "raw.githubusercontent.com",
         "registry.terraform.io"
+      ]
+    },
+    {
+      "characters_scanned": 2597,
+      "external_url_count": 2,
+      "files_scanned": 1,
+      "kind": "instruction",
+      "local_evidence_mention": false,
+      "name": "backstage-ai",
+      "ownership": "plugin",
+      "package": "backstage-expert",
+      "packaged_by": [
+        "backstage-expert"
+      ],
+      "path": "harness/github-copilot/plugins/backstage-expert/instructions/backstage-ai.instructions.md",
+      "review_status": "needs-source-review",
+      "signals": [
+        "external-source"
+      ],
+      "source_domains": [
+        "backstage.io"
+      ]
+    },
+    {
+      "characters_scanned": 2675,
+      "external_url_count": 2,
+      "files_scanned": 1,
+      "kind": "instruction",
+      "local_evidence_mention": false,
+      "name": "backstage-app",
+      "ownership": "plugin",
+      "package": "backstage-expert",
+      "packaged_by": [
+        "backstage-expert"
+      ],
+      "path": "harness/github-copilot/plugins/backstage-expert/instructions/backstage-app.instructions.md",
+      "review_status": "needs-source-review",
+      "signals": [
+        "external-source"
+      ],
+      "source_domains": [
+        "backstage.io"
+      ]
+    },
+    {
+      "characters_scanned": 2786,
+      "external_url_count": 3,
+      "files_scanned": 1,
+      "kind": "instruction",
+      "local_evidence_mention": false,
+      "name": "backstage-auth",
+      "ownership": "plugin",
+      "package": "backstage-expert",
+      "packaged_by": [
+        "backstage-expert"
+      ],
+      "path": "harness/github-copilot/plugins/backstage-expert/instructions/backstage-auth.instructions.md",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "external-source"
+      ],
+      "source_domains": [
+        "backstage.io"
+      ]
+    },
+    {
+      "characters_scanned": 2494,
+      "external_url_count": 2,
+      "files_scanned": 1,
+      "kind": "instruction",
+      "local_evidence_mention": false,
+      "name": "backstage-catalog",
+      "ownership": "plugin",
+      "package": "backstage-expert",
+      "packaged_by": [
+        "backstage-expert"
+      ],
+      "path": "harness/github-copilot/plugins/backstage-expert/instructions/backstage-catalog.instructions.md",
+      "review_status": "needs-source-review",
+      "signals": [
+        "external-source"
+      ],
+      "source_domains": [
+        "backstage.io"
+      ]
+    },
+    {
+      "characters_scanned": 2823,
+      "external_url_count": 3,
+      "files_scanned": 1,
+      "kind": "instruction",
+      "local_evidence_mention": false,
+      "name": "backstage-integrations",
+      "ownership": "plugin",
+      "package": "backstage-expert",
+      "packaged_by": [
+        "backstage-expert"
+      ],
+      "path": "harness/github-copilot/plugins/backstage-expert/instructions/backstage-integrations.instructions.md",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "external-source"
+      ],
+      "source_domains": [
+        "backstage.io"
+      ]
+    },
+    {
+      "characters_scanned": 2794,
+      "external_url_count": 2,
+      "files_scanned": 1,
+      "kind": "instruction",
+      "local_evidence_mention": false,
+      "name": "backstage-plugins",
+      "ownership": "plugin",
+      "package": "backstage-expert",
+      "packaged_by": [
+        "backstage-expert"
+      ],
+      "path": "harness/github-copilot/plugins/backstage-expert/instructions/backstage-plugins.instructions.md",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "lifecycle-language",
+        "external-source"
+      ],
+      "source_domains": [
+        "github.com"
+      ]
+    },
+    {
+      "characters_scanned": 2661,
+      "external_url_count": 2,
+      "files_scanned": 1,
+      "kind": "instruction",
+      "local_evidence_mention": false,
+      "name": "backstage-software-templates",
+      "ownership": "plugin",
+      "package": "backstage-expert",
+      "packaged_by": [
+        "backstage-expert"
+      ],
+      "path": "harness/github-copilot/plugins/backstage-expert/instructions/backstage-software-templates.instructions.md",
+      "review_status": "needs-source-review",
+      "signals": [
+        "external-source"
+      ],
+      "source_domains": [
+        "backstage.io"
+      ]
+    },
+    {
+      "characters_scanned": 2306,
+      "external_url_count": 1,
+      "files_scanned": 1,
+      "kind": "instruction",
+      "local_evidence_mention": false,
+      "name": "backstage-techdocs",
+      "ownership": "plugin",
+      "package": "backstage-expert",
+      "packaged_by": [
+        "backstage-expert"
+      ],
+      "path": "harness/github-copilot/plugins/backstage-expert/instructions/backstage-techdocs.instructions.md",
+      "review_status": "needs-source-review",
+      "signals": [
+        "external-source"
+      ],
+      "source_domains": [
+        "backstage.io"
       ]
     },
     {
@@ -6530,7 +6742,7 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 6203,
+      "characters_scanned": 6217,
       "external_url_count": 1,
       "files_scanned": 1,
       "kind": "instruction",
@@ -8979,7 +9191,7 @@
       ]
     },
     {
-      "characters_scanned": 6478,
+      "characters_scanned": 6492,
       "external_url_count": 0,
       "files_scanned": 1,
       "kind": "instruction",
@@ -9526,6 +9738,35 @@
         "github.com",
         "liberapay.com",
         "registry.npmjs.org"
+      ]
+    },
+    {
+      "characters_scanned": 265145,
+      "external_url_count": 59,
+      "files_scanned": 55,
+      "kind": "plugin",
+      "local_evidence_mention": false,
+      "name": "backstage-expert",
+      "ownership": "plugin",
+      "package": "backstage-expert",
+      "packaged_by": [
+        "backstage-expert"
+      ],
+      "path": "harness/github-copilot/plugins/backstage-expert",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "lifecycle-language",
+        "version-claim",
+        "date-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "agent-plugins.org",
+        "backstage.io",
+        "github.com",
+        "remixicon.com",
+        "ui.backstage.io"
       ]
     },
     {
@@ -10533,7 +10774,7 @@
       ]
     },
     {
-      "characters_scanned": 631951,
+      "characters_scanned": 632525,
       "external_url_count": 65,
       "files_scanned": 96,
       "kind": "plugin",
@@ -11890,18 +12131,37 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 5647,
+      "characters_scanned": 3973,
       "external_url_count": 0,
       "files_scanned": 1,
       "kind": "prompt",
       "local_evidence_mention": false,
-      "name": "backstage",
+      "name": "backstage-assess",
       "ownership": "plugin",
-      "package": "open-horizons-platform",
+      "package": "backstage-expert",
       "packaged_by": [
-        "open-horizons-platform"
+        "backstage-expert"
       ],
-      "path": "harness/github-copilot/plugins/open-horizons-platform/prompts/backstage.prompt.md",
+      "path": "harness/github-copilot/plugins/backstage-expert/prompts/backstage-assess.prompt.md",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language"
+      ],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 4696,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "prompt",
+      "local_evidence_mention": false,
+      "name": "backstage-change",
+      "ownership": "plugin",
+      "package": "backstage-expert",
+      "packaged_by": [
+        "backstage-expert"
+      ],
+      "path": "harness/github-copilot/plugins/backstage-expert/prompts/backstage-change.prompt.md",
       "review_status": "needs-current-source-review",
       "signals": [
         "currency-language"
@@ -12499,6 +12759,25 @@
       "source_domains": []
     },
     {
+      "characters_scanned": 5717,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "prompt",
+      "local_evidence_mention": false,
+      "name": "open-horizons-backstage",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/prompts/open-horizons-backstage.prompt.md",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language"
+      ],
+      "source_domains": []
+    },
+    {
       "characters_scanned": 3971,
       "external_url_count": 2,
       "files_scanned": 1,
@@ -12892,7 +13171,7 @@
       ]
     },
     {
-      "characters_scanned": 22008,
+      "characters_scanned": 22007,
       "external_url_count": 2,
       "files_scanned": 2,
       "kind": "skill",
@@ -12916,7 +13195,7 @@
       ]
     },
     {
-      "characters_scanned": 9571,
+      "characters_scanned": 9570,
       "external_url_count": 3,
       "files_scanned": 1,
       "kind": "skill",
@@ -13143,6 +13422,30 @@
       ],
       "source_domains": [
         "learn.microsoft.com"
+      ]
+    },
+    {
+      "characters_scanned": 26445,
+      "external_url_count": 5,
+      "files_scanned": 2,
+      "kind": "skill",
+      "local_evidence_mention": true,
+      "name": "app-frontend-system-migration",
+      "ownership": "plugin",
+      "package": "backstage-expert",
+      "packaged_by": [
+        "backstage-expert"
+      ],
+      "path": "harness/github-copilot/plugins/backstage-expert/skills/app-frontend-system-migration",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "lifecycle-language",
+        "version-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "backstage.io",
+        "github.com"
       ]
     },
     {
@@ -14188,51 +14491,298 @@
       ]
     },
     {
-      "characters_scanned": 7112,
+      "characters_scanned": 2511,
       "external_url_count": 1,
       "files_scanned": 1,
       "kind": "skill",
       "local_evidence_mention": false,
-      "name": "backstage-deployment",
+      "name": "backstage-ai-catalog",
       "ownership": "plugin",
-      "package": "open-horizons-platform",
+      "package": "backstage-expert",
       "packaged_by": [
-        "open-horizons-platform"
+        "backstage-expert"
       ],
-      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/backstage-deployment",
+      "path": "harness/github-copilot/plugins/backstage-expert/skills/backstage-ai-catalog",
       "review_status": "needs-current-source-review",
       "signals": [
         "currency-language",
         "external-source"
       ],
       "source_domains": [
-        "localhost:7007"
+        "backstage.io"
       ]
     },
     {
-      "characters_scanned": 14156,
+      "characters_scanned": 2827,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "backstage-app-bootstrap",
+      "ownership": "plugin",
+      "package": "backstage-expert",
+      "packaged_by": [
+        "backstage-expert"
+      ],
+      "path": "harness/github-copilot/plugins/backstage-expert/skills/backstage-app-bootstrap",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language"
+      ],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 2880,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "backstage-app-configuration",
+      "ownership": "plugin",
+      "package": "backstage-expert",
+      "packaged_by": [
+        "backstage-expert"
+      ],
+      "path": "harness/github-copilot/plugins/backstage-expert/skills/backstage-app-configuration",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language"
+      ],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 3897,
       "external_url_count": 3,
+      "files_scanned": 1,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "backstage-authentication",
+      "ownership": "plugin",
+      "package": "backstage-expert",
+      "packaged_by": [
+        "backstage-expert"
+      ],
+      "path": "harness/github-copilot/plugins/backstage-expert/skills/backstage-authentication",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "external-source"
+      ],
+      "source_domains": [
+        "backstage.io"
+      ]
+    },
+    {
+      "characters_scanned": 2561,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "backstage-catalog",
+      "ownership": "plugin",
+      "package": "backstage-expert",
+      "packaged_by": [
+        "backstage-expert"
+      ],
+      "path": "harness/github-copilot/plugins/backstage-expert/skills/backstage-catalog",
+      "review_status": "needs-semantic-review",
+      "signals": [],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 4763,
+      "external_url_count": 1,
       "files_scanned": 2,
       "kind": "skill",
       "local_evidence_mention": false,
-      "name": "backstage-patterns",
-      "ownership": "shared",
-      "package": null,
-      "packaged_by": [],
-      "path": "harness/github-copilot/skills/backstage-patterns",
+      "name": "backstage-catalog-db-performance",
+      "ownership": "plugin",
+      "package": "backstage-expert",
+      "packaged_by": [
+        "backstage-expert"
+      ],
+      "path": "harness/github-copilot/plugins/backstage-expert/skills/backstage-catalog-db-performance",
       "review_status": "needs-current-source-review",
       "signals": [
+        "version-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "github.com"
+      ]
+    },
+    {
+      "characters_scanned": 2774,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "backstage-core-contribution",
+      "ownership": "plugin",
+      "package": "backstage-expert",
+      "packaged_by": [
+        "backstage-expert"
+      ],
+      "path": "harness/github-copilot/plugins/backstage-expert/skills/backstage-core-contribution",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "version-claim"
+      ],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 7384,
+      "external_url_count": 6,
+      "files_scanned": 4,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "backstage-external-integrations",
+      "ownership": "plugin",
+      "package": "backstage-expert",
+      "packaged_by": [
+        "backstage-expert"
+      ],
+      "path": "harness/github-copilot/plugins/backstage-expert/skills/backstage-external-integrations",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
         "lifecycle-language",
         "version-claim",
         "external-source"
       ],
       "source_domains": [
-        "backstage.mycompany.com",
+        "backstage.io",
         "github.com"
       ]
     },
     {
-      "characters_scanned": 40349,
+      "characters_scanned": 2656,
+      "external_url_count": 3,
+      "files_scanned": 1,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "backstage-framework",
+      "ownership": "plugin",
+      "package": "backstage-expert",
+      "packaged_by": [
+        "backstage-expert"
+      ],
+      "path": "harness/github-copilot/plugins/backstage-expert/skills/backstage-framework",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "lifecycle-language",
+        "external-source"
+      ],
+      "source_domains": [
+        "backstage.io"
+      ]
+    },
+    {
+      "characters_scanned": 2711,
+      "external_url_count": 2,
+      "files_scanned": 1,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "backstage-kubernetes",
+      "ownership": "plugin",
+      "package": "backstage-expert",
+      "packaged_by": [
+        "backstage-expert"
+      ],
+      "path": "harness/github-copilot/plugins/backstage-expert/skills/backstage-kubernetes",
+      "review_status": "needs-source-review",
+      "signals": [
+        "external-source"
+      ],
+      "source_domains": [
+        "backstage.io"
+      ]
+    },
+    {
+      "characters_scanned": 4849,
+      "external_url_count": 3,
+      "files_scanned": 2,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "backstage-mcp-actions",
+      "ownership": "plugin",
+      "package": "backstage-expert",
+      "packaged_by": [
+        "backstage-expert"
+      ],
+      "path": "harness/github-copilot/plugins/backstage-expert/skills/backstage-mcp-actions",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "date-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "backstage.io"
+      ]
+    },
+    {
+      "characters_scanned": 2637,
+      "external_url_count": 3,
+      "files_scanned": 1,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "backstage-notifications",
+      "ownership": "plugin",
+      "package": "backstage-expert",
+      "packaged_by": [
+        "backstage-expert"
+      ],
+      "path": "harness/github-copilot/plugins/backstage-expert/skills/backstage-notifications",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "version-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "backstage.io"
+      ]
+    },
+    {
+      "characters_scanned": 2782,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "backstage-operations",
+      "ownership": "plugin",
+      "package": "backstage-expert",
+      "packaged_by": [
+        "backstage-expert"
+      ],
+      "path": "harness/github-copilot/plugins/backstage-expert/skills/backstage-operations",
+      "review_status": "needs-semantic-review",
+      "signals": [],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 2831,
+      "external_url_count": 2,
+      "files_scanned": 1,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "backstage-permissions",
+      "ownership": "plugin",
+      "package": "backstage-expert",
+      "packaged_by": [
+        "backstage-expert"
+      ],
+      "path": "harness/github-copilot/plugins/backstage-expert/skills/backstage-permissions",
+      "review_status": "needs-source-review",
+      "signals": [
+        "external-source"
+      ],
+      "source_domains": [
+        "backstage.io"
+      ]
+    },
+    {
+      "characters_scanned": 44725,
       "external_url_count": 10,
       "files_scanned": 19,
       "kind": "skill",
@@ -14241,6 +14791,7 @@
       "ownership": "shared",
       "package": null,
       "packaged_by": [
+        "backstage-expert",
         "open-horizons-platform"
       ],
       "path": "harness/github-copilot/skills/backstage-plugin-builder",
@@ -14255,6 +14806,103 @@
         "github.com",
         "raw.githubusercontent.com"
       ]
+    },
+    {
+      "characters_scanned": 2782,
+      "external_url_count": 3,
+      "files_scanned": 1,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "backstage-search",
+      "ownership": "plugin",
+      "package": "backstage-expert",
+      "packaged_by": [
+        "backstage-expert"
+      ],
+      "path": "harness/github-copilot/plugins/backstage-expert/skills/backstage-search",
+      "review_status": "needs-source-review",
+      "signals": [
+        "external-source"
+      ],
+      "source_domains": [
+        "backstage.io"
+      ]
+    },
+    {
+      "characters_scanned": 2754,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "backstage-software-templates",
+      "ownership": "plugin",
+      "package": "backstage-expert",
+      "packaged_by": [
+        "backstage-expert"
+      ],
+      "path": "harness/github-copilot/plugins/backstage-expert/skills/backstage-software-templates",
+      "review_status": "needs-semantic-review",
+      "signals": [],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 2556,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "backstage-techdocs",
+      "ownership": "plugin",
+      "package": "backstage-expert",
+      "packaged_by": [
+        "backstage-expert"
+      ],
+      "path": "harness/github-copilot/plugins/backstage-expert/skills/backstage-techdocs",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "lifecycle-language"
+      ],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 3050,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "backstage-upgrade",
+      "ownership": "plugin",
+      "package": "backstage-expert",
+      "packaged_by": [
+        "backstage-expert"
+      ],
+      "path": "harness/github-copilot/plugins/backstage-expert/skills/backstage-upgrade",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language"
+      ],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 23458,
+      "external_url_count": 0,
+      "files_scanned": 3,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "backstage-workspace-kit",
+      "ownership": "plugin",
+      "package": "backstage-expert",
+      "packaged_by": [
+        "backstage-expert"
+      ],
+      "path": "harness/github-copilot/plugins/backstage-expert/skills/backstage-workspace-kit",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "lifecycle-language",
+        "version-claim"
+      ],
+      "source_domains": []
     },
     {
       "characters_scanned": 215731,
@@ -14770,7 +15418,7 @@
       ]
     },
     {
-      "characters_scanned": 6590,
+      "characters_scanned": 6646,
       "external_url_count": 2,
       "files_scanned": 1,
       "kind": "skill",
@@ -15916,7 +16564,7 @@
       ]
     },
     {
-      "characters_scanned": 6915,
+      "characters_scanned": 6929,
       "external_url_count": 0,
       "files_scanned": 1,
       "kind": "skill",
@@ -17793,7 +18441,7 @@
       ]
     },
     {
-      "characters_scanned": 10413,
+      "characters_scanned": 10441,
       "external_url_count": 0,
       "files_scanned": 2,
       "kind": "skill",
@@ -18819,6 +19467,30 @@
       ]
     },
     {
+      "characters_scanned": 26159,
+      "external_url_count": 4,
+      "files_scanned": 2,
+      "kind": "skill",
+      "local_evidence_mention": true,
+      "name": "mui-to-bui-migration",
+      "ownership": "plugin",
+      "package": "backstage-expert",
+      "packaged_by": [
+        "backstage-expert"
+      ],
+      "path": "harness/github-copilot/plugins/backstage-expert/skills/mui-to-bui-migration",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "version-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "github.com",
+        "remixicon.com",
+        "ui.backstage.io"
+      ]
+    },
+    {
       "characters_scanned": 5179,
       "external_url_count": 0,
       "files_scanned": 1,
@@ -19072,6 +19744,29 @@
       "source_domains": []
     },
     {
+      "characters_scanned": 18864,
+      "external_url_count": 11,
+      "files_scanned": 2,
+      "kind": "skill",
+      "local_evidence_mention": true,
+      "name": "onboard-to-openapi-server",
+      "ownership": "plugin",
+      "package": "backstage-expert",
+      "packaged_by": [
+        "backstage-expert"
+      ],
+      "path": "harness/github-copilot/plugins/backstage-expert/skills/onboard-to-openapi-server",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "version-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "github.com"
+      ]
+    },
+    {
       "characters_scanned": 14919,
       "external_url_count": 0,
       "files_scanned": 4,
@@ -19088,6 +19783,28 @@
         "lifecycle-language"
       ],
       "source_domains": []
+    },
+    {
+      "characters_scanned": 7140,
+      "external_url_count": 1,
+      "files_scanned": 1,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "open-horizons-backstage-deployment",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/open-horizons-backstage-deployment",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "external-source"
+      ],
+      "source_domains": [
+        "localhost:7007"
+      ]
     },
     {
       "characters_scanned": 18769,
@@ -19533,6 +20250,81 @@
       "review_status": "needs-semantic-review",
       "signals": [],
       "source_domains": []
+    },
+    {
+      "characters_scanned": 12758,
+      "external_url_count": 1,
+      "files_scanned": 2,
+      "kind": "skill",
+      "local_evidence_mention": true,
+      "name": "plugin-analytics-instrumentation",
+      "ownership": "plugin",
+      "package": "backstage-expert",
+      "packaged_by": [
+        "backstage-expert"
+      ],
+      "path": "harness/github-copilot/plugins/backstage-expert/skills/plugin-analytics-instrumentation",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "lifecycle-language",
+        "version-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "github.com"
+      ]
+    },
+    {
+      "characters_scanned": 23177,
+      "external_url_count": 5,
+      "files_scanned": 2,
+      "kind": "skill",
+      "local_evidence_mention": true,
+      "name": "plugin-full-frontend-system-migration",
+      "ownership": "plugin",
+      "package": "backstage-expert",
+      "packaged_by": [
+        "backstage-expert"
+      ],
+      "path": "harness/github-copilot/plugins/backstage-expert/skills/plugin-full-frontend-system-migration",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "lifecycle-language",
+        "version-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "backstage.io",
+        "github.com",
+        "remixicon.com"
+      ]
+    },
+    {
+      "characters_scanned": 18771,
+      "external_url_count": 5,
+      "files_scanned": 2,
+      "kind": "skill",
+      "local_evidence_mention": true,
+      "name": "plugin-new-frontend-system-support",
+      "ownership": "plugin",
+      "package": "backstage-expert",
+      "packaged_by": [
+        "backstage-expert"
+      ],
+      "path": "harness/github-copilot/plugins/backstage-expert/skills/plugin-new-frontend-system-support",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "lifecycle-language",
+        "version-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "backstage.io",
+        "github.com",
+        "remixicon.com"
+      ]
     },
     {
       "characters_scanned": 7005,
@@ -20081,7 +20873,7 @@
       ]
     },
     {
-      "characters_scanned": 21350,
+      "characters_scanned": 21347,
       "external_url_count": 34,
       "files_scanned": 4,
       "kind": "skill",
@@ -20103,7 +20895,7 @@
       ]
     },
     {
-      "characters_scanned": 29463,
+      "characters_scanned": 29458,
       "external_url_count": 27,
       "files_scanned": 9,
       "kind": "skill",
@@ -22354,11 +23146,11 @@
   "unreadableFiles": [],
   "validation": {
     "pluginOwned": {
-      "agents": 14,
+      "agents": 15,
       "errors": 0,
-      "instructions": 10,
-      "prompts": 9,
-      "skills": 29,
+      "instructions": 18,
+      "prompts": 11,
+      "skills": 54,
       "warnings": 0
     },
     "sharedHarness": {
@@ -22378,7 +23170,7 @@
         },
         {
           "errors": 0,
-          "files": 421,
+          "files": 420,
           "kind": "skills",
           "warnings": 0
         },
@@ -22390,7 +23182,7 @@
         },
         {
           "errors": 0,
-          "files": 99,
+          "files": 100,
           "kind": "plugins",
           "warnings": 0
         },

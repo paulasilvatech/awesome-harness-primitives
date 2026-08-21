@@ -97,7 +97,7 @@ kubectl get pods -A
 
 - [ ] AKS credentials target the deployed cluster.
 - [ ] ArgoCD, Backstage, observability, and optional H3 services are healthy for the selected horizon.
-- [ ] Failures are routed to the narrow skill: `argocd-cli`, `backstage-deployment`, `database-management`, or `ai-foundry-operations`.
+- [ ] Failures are routed to the narrow skill: `argocd-cli`, `open-horizons-backstage-deployment`, `database-management`, or `ai-foundry-operations`.
 
 ## Risk classification
 | Severity | Meaning |

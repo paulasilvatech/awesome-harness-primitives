@@ -776,22 +776,21 @@
       "kind": "agent",
       "model": null,
       "name": "backstage-expert",
-      "notes": [
-        "runtime-tool:playwright/*"
-      ],
+      "notes": [],
       "ownership": "plugin",
-      "package": "open-horizons-platform",
-      "path": "harness/github-copilot/plugins/open-horizons-platform/agents/backstage-expert.agent.md",
+      "package": "backstage-expert",
+      "path": "harness/github-copilot/plugins/backstage-expert/agents/backstage-expert.agent.md",
       "selected_agent": null,
-      "status": "runtime-verification-required",
+      "status": "current-static",
       "target": "vscode+github-copilot",
       "tools": [
         "read",
-        "edit",
-        "execute",
         "grep",
         "glob",
-        "playwright/*"
+        "edit",
+        "execute",
+        "web_fetch",
+        "web_search"
       ],
       "tools_mode": "allow-list"
     },
@@ -2970,6 +2969,30 @@
         "glob",
         "web_fetch",
         "web_search"
+      ],
+      "tools_mode": "allow-list"
+    },
+    {
+      "authority": "bounded-write",
+      "kind": "agent",
+      "model": null,
+      "name": "open-horizons-backstage-expert",
+      "notes": [
+        "runtime-tool:playwright/*"
+      ],
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "path": "harness/github-copilot/plugins/open-horizons-platform/agents/open-horizons-backstage-expert.agent.md",
+      "selected_agent": null,
+      "status": "runtime-verification-required",
+      "target": "vscode+github-copilot",
+      "tools": [
+        "read",
+        "edit",
+        "execute",
+        "grep",
+        "glob",
+        "playwright/*"
       ],
       "tools_mode": "allow-list"
     },
@@ -5169,11 +5192,30 @@
       "authority": "unspecified",
       "kind": "prompt",
       "model": null,
-      "name": "backstage",
+      "name": "backstage-assess",
       "notes": [],
       "ownership": "plugin",
-      "package": "open-horizons-platform",
-      "path": "harness/github-copilot/plugins/open-horizons-platform/prompts/backstage.prompt.md",
+      "package": "backstage-expert",
+      "path": "harness/github-copilot/plugins/backstage-expert/prompts/backstage-assess.prompt.md",
+      "selected_agent": "backstage-expert",
+      "status": "current-static",
+      "target": "vscode",
+      "tools": [
+        "read",
+        "search",
+        "web"
+      ],
+      "tools_mode": "allow-list"
+    },
+    {
+      "authority": "unspecified",
+      "kind": "prompt",
+      "model": null,
+      "name": "backstage-change",
+      "notes": [],
+      "ownership": "plugin",
+      "package": "backstage-expert",
+      "path": "harness/github-copilot/plugins/backstage-expert/prompts/backstage-change.prompt.md",
       "selected_agent": "backstage-expert",
       "status": "current-static",
       "target": "vscode",
@@ -5797,6 +5839,27 @@
       "authority": "unspecified",
       "kind": "prompt",
       "model": null,
+      "name": "open-horizons-backstage",
+      "notes": [],
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "path": "harness/github-copilot/plugins/open-horizons-platform/prompts/open-horizons-backstage.prompt.md",
+      "selected_agent": "open-horizons-backstage-expert",
+      "status": "current-static",
+      "target": "vscode",
+      "tools": [
+        "read",
+        "search",
+        "edit",
+        "execute",
+        "web"
+      ],
+      "tools_mode": "allow-list"
+    },
+    {
+      "authority": "unspecified",
+      "kind": "prompt",
+      "model": null,
       "name": "playwright-automation-fill-in-form",
       "notes": [
         "runtime-tool:playwright"
@@ -6065,11 +6128,11 @@
   ],
   "schemaVersion": 1,
   "summary": {
-    "agents": 239,
+    "agents": 240,
     "blocked": 0,
-    "currentStatic": 250,
+    "currentStatic": 253,
     "fixedModels": 0,
-    "prompts": 57,
+    "prompts": 59,
     "readOnlyAgentsInheritingAll": 0,
     "runtimeVerificationRequired": 46
   },

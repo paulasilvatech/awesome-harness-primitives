@@ -19,8 +19,8 @@ enabled tool runs.
 
 | Type | Sources | Inherited tools | Allow-lists | Tools disabled | Current static | Runtime check | Blocked |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| agent | 239 | 44 | 193 | 2 | 196 | 43 | 0 |
-| prompt | 57 | 24 | 33 | 0 | 54 | 3 | 0 |
+| agent | 240 | 44 | 194 | 2 | 197 | 43 | 0 |
+| prompt | 59 | 24 | 35 | 0 | 56 | 3 | 0 |
 
 - Fixed model pins: 0.
 - Read-only agents inheriting all tools: 0.
@@ -40,7 +40,6 @@ server or extension in the target profile.
 | agent | azure-iac-exporter | harness/github-copilot/agents/azure-iac-exporter.agent.md | runtime-tool:azure-mcp/* |
 | agent | azure-iac-generator | harness/github-copilot/agents/azure-iac-generator.agent.md | runtime-tool:azure-mcp/azureterraformbestpractices, runtime-tool:azure-mcp/bicepschema, runtime-tool:azure-mcp/search, runtime-tool:pulumi-mcp/get-type |
 | agent | azure-portal-deploy | harness/github-copilot/plugins/open-horizons-platform/agents/azure-portal-deploy.agent.md | runtime-tool:azure/* |
-| agent | backstage-expert | harness/github-copilot/plugins/open-horizons-platform/agents/backstage-expert.agent.md | runtime-tool:playwright/* |
 | agent | C#/.NET Janitor | harness/github-copilot/agents/csharp-dotnet-janitor.agent.md | runtime-tool:github/* |
 | agent | CAST Imaging Impact Analysis Agent | harness/github-copilot/agents/cast-imaging-impact-analysis.agent.md | runtime-tool:imaging-impact-analysis/* |
 | agent | CAST Imaging Software Discovery Agent | harness/github-copilot/agents/cast-imaging-software-discovery.agent.md | runtime-tool:imaging-structural-search/* |
@@ -62,6 +61,7 @@ server or extension in the target profile.
 | agent | neo4j-docker-client-generator | harness/github-copilot/agents/neo4j-docker-client-generator.agent.md | runtime-tool:neo4j-local/neo4j-local-get_neo4j_schema, runtime-tool:neo4j-local/neo4j-local-read_neo4j_cypher, runtime-tool:neo4j-local/neo4j-local-write_neo4j_cypher |
 | agent | New Relic Incident Response Agent | harness/github-copilot/agents/new-relic-incident-response.agent.md | runtime-tool:new-relic-mcp-server/* |
 | agent | octopus-release-notes-with-mcp | harness/github-copilot/agents/octopus-deploy-release-notes-mcp.agent.md | runtime-tool:octopus/* |
+| agent | open-horizons-backstage-expert | harness/github-copilot/plugins/open-horizons-platform/agents/open-horizons-backstage-expert.agent.md | runtime-tool:playwright/* |
 | agent | PagerDuty Incident Responder | harness/github-copilot/agents/pagerduty-incident-responder.agent.md | runtime-tool:github/create_branch, runtime-tool:github/create_issue, runtime-tool:github/create_or_update_file, runtime-tool:github/create_pull_request, runtime-tool:github/get_commit, runtime-tool:github/get_file_contents, runtime-tool:github/get_pull_request, runtime-tool:github/get_repository, runtime-tool:github/list_branches, runtime-tool:github/list_commits, runtime-tool:github/list_pull_requests, runtime-tool:github/list_repository_contributors, runtime-tool:github/search_code, runtime-tool:github/search_commits, runtime-tool:pagerduty/* |
 | agent | Principal software engineer | harness/github-copilot/agents/principal-software-engineer.agent.md | runtime-tool:github/* |
 | agent | Python Notebook Sample Builder | harness/github-copilot/agents/python-notebook-sample-builder.agent.md | runtime-tool:mslearnmcp/* |

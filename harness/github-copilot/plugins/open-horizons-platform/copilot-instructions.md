@@ -20,7 +20,7 @@ Deploy-managed Copilot chat agents live in `agents/` and define personas, judgme
 - `@terraform`
 - `@security`
 - `@sre`
-- `@backstage-expert`
+- `@open-horizons-backstage-expert`
 - `@azure-portal-deploy`
 - `@github-integration`
 - `@ado-integration`

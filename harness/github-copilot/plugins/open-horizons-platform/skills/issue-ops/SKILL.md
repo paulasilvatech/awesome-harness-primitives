@@ -1,6 +1,6 @@
 ---
 name: issue-ops
-description: 'Use when dispatching GitHub Issue slash commands through the IssueOps workflow, validating dispatcher mappings, or explaining /validate and /check-agents automation. Produces a command safety review, dispatcher execution plan, and GitHub issue comment output. DO NOT USE FOR: manual script execution (use validation-scripts), Backstage deployment (use backstage-deployment), full platform deployment (use deploy-orchestration). Triggers include "run /validate from an issue", "dispatch this slash command", "check the IssueOps mapping", and "why did /check-agents fail".'
+description: 'Use when dispatching GitHub Issue slash commands through the IssueOps workflow, validating dispatcher mappings, or explaining /validate and /check-agents automation. Produces a command safety review, dispatcher execution plan, and GitHub issue comment output. DO NOT USE FOR: manual script execution (use validation-scripts), Backstage deployment (use open-horizons-backstage-deployment), full platform deployment (use deploy-orchestration). Triggers include "run /validate from an issue", "dispatch this slash command", "check the IssueOps mapping", and "why did /check-agents fail".'
 ---
 
 # Issue Ops
@@ -89,7 +89,7 @@ gh run view <run-id> --log-failed
 
 ## Limits
 
-- Do not use this skill for: manual script execution (use validation-scripts), Backstage deployment (use backstage-deployment), full platform deployment (use deploy-orchestration).
+- Do not use this skill for: manual script execution (use validation-scripts), Backstage deployment (use open-horizons-backstage-deployment), full platform deployment (use deploy-orchestration).
 - Keep exclusions and handoffs as by-name references to installed skills or agents, not relative links to other primitives.
 - Stop before mutating infrastructure, clusters, repositories, or generated artifacts unless the procedure's confirmation gate is satisfied.
 

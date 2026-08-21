@@ -20,7 +20,7 @@ When sources conflict, the higher-priority source wins. Do not duplicate or weak
 
 ## Responsibility Split
 
-This file owns passive conventions for docker compose conventions — local agent and mcp services. Use the `backstage-deployment` and `mcp-ecosystem` skills for ordered procedures, command sequences, setup, validation, or troubleshooting that goes beyond these rules.
+This file owns passive conventions for docker compose conventions — local agent and mcp services. Use the `open-horizons-backstage-deployment` and `mcp-ecosystem` skills for ordered procedures, command sequences, setup, validation, or troubleshooting that goes beyond these rules.
 
 > [!NOTE]
 > Compose is for local development and validation. Production runtime configuration belongs in `backstage/k8s/`, `deploy/helm/`, and ArgoCD applications.

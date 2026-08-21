@@ -23,7 +23,7 @@ Use these official sources as the documentation baseline for this skill. For cur
 
 ## Freshness Gate
 
-Before using this cached summary for implementation guidance, validate current documentation through `mcp-ecosystem` when available. If MCP lookup is unavailable, use GitHub source lookup or the official web fallback described in [mcp-doc-validation.md](mcp-doc-validation.md).
+Before using this cached summary for implementation guidance, validate the target behavior against an exact first-party source commit or an official web page as described in [documentation-validation.md](documentation-validation.md).
 
 ## Use With Care
 

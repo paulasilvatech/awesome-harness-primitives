@@ -20,7 +20,7 @@ When sources conflict, the higher-priority source wins. Do not duplicate or weak
 
 ## Responsibility Split
 
-This file owns passive conventions for typescript conventions — backstage app, plugins, and api clients. Use the `backstage-deployment` and `test-coverage` skills for ordered procedures, command sequences, setup, validation, or troubleshooting that goes beyond these rules.
+This file owns passive conventions for typescript conventions — backstage app, plugins, and api clients. Use the `open-horizons-backstage-deployment` and `test-coverage` skills for ordered procedures, command sequences, setup, validation, or troubleshooting that goes beyond these rules.
 
 > [!NOTE]
 > The Backstage workspace uses Node `22 || 24`, Yarn `4.4.1`, TypeScript `~5.8.0`, React 18, and Backstage CLI lint, build, and test commands from `backstage/package.json`.

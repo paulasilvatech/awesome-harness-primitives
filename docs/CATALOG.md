@@ -9,9 +9,9 @@ Regenerate this file after changing files under `harness/github-copilot/agents/`
 | --- | ---: |
 | Agents | 225 |
 | Instructions | 194 |
-| Skills | 421 |
+| Skills | 420 |
 | VS Code prompts | 48 |
-| Plugins | 99 |
+| Plugins | 100 |
 | Hooks | 8 |
 
 ## Agents
@@ -505,8 +505,7 @@ Regenerate this file after changing files under `harness/github-copilot/agents/`
 | azure-smart-city-iot-solution-builder | Design and plan end-to-end Azure IoT and Smart City solutions with requirements, architecture, device and edge strategy, ingestion, analytics, security, operations, cost controls,… |
 | azure-static-web-apps | Create, configure, run, and deploy Azure Static Web Apps with the SWA CLI. Use when asked to deploy a static site to Azure, run SWA locally, configure staticwebapp.config.json, ad… |
 | azure-well-architected-review | Perform an Azure Well-Architected Framework review of the current workload IaC and architecture, generating findings and GitHub issues for improvements. Use this skill when the us… |
-| backstage-patterns | Apply Backstage Software Catalog, TechDocs, Scaffolder, custom plugin, GitHub App, and production configuration patterns. Use when creating, reviewing, or troubleshooting Backstag… |
-| backstage-plugin-builder | Plan, architect, scaffold, validate, and prepare custom Backstage plugins and modules using official Backstage documentation. Use when the user asks for frontend plugins, backend… |
+| backstage-plugin-builder | Plan, architect, scaffold, validate, and prepare custom Backstage plugins and modules using official Backstage documentation. Use when the user asks for new, legacy, or dual front… |
 | batch-files | Expert-level Windows batch file (.bat/.cmd) skill for writing, debugging, and maintaining CMD scripts. Use when asked to "create a batch file", "write a .bat script", "automate a… |
 | bench-read | Read artifacts from a workshop bench where desks leave findings, verdicts, drafts, reports, journals, and cross-desk work products. Use this skill when starting a session, reviewi… |
 | bigquery-pipeline-audit | Audit Python and BigQuery pipeline scripts for cost exposure, dry-run safety, bounded backfills, query pruning, idempotent writes, and observability. Use this skill when reviewing… |
@@ -883,7 +882,7 @@ Regenerate this file after changing files under `harness/github-copilot/agents/`
 | containerize-aspnetcore | Containerize an ASP.NET Core project with project-specific Docker artifacts. |
 | copilot-instructions-blueprint-generator | Generate a codebase-specific copilot-instructions.md blueprint for consistent Copilot guidance. |
 | create-architectural-decision-record | Create an AI-optimized Architectural Decision Record for a documented technical decision. |
-| create-copilot-primitive | Create a Copilot primitive from this repositorys templates and reference patterns. |
+| create-copilot-primitive | Create a Copilot primitive from this repository's templates and reference patterns. |
 | create-github-action-workflow-specification | Create an AI-ready specification for an existing GitHub Actions workflow. |
 | create-llms | Create an llms.txt file from the repository structure that follows the llms.txt specification. |
 | create-specification | Create an AI-ready solution specification with clear requirements, constraints, and interfaces. |
@@ -940,6 +939,7 @@ Regenerate this file after changing files under `harness/github-copilot/agents/`
 | azure-cloud-development | 1.0.3 | Comprehensive Azure cloud development tools including Infrastructure as Code, serverless functions, architecture patterns, and cost optimization for building scalable cloud applic… |
 | backlog-swipe-triage | 1.0.3 | Quickly swipe through backlog issues to triage decisions like assign, needs-info, defer, close, or ignore. |
 | backrooms-canvas | 1.0.1 | Wander an endless first-person backrooms in a Copilot canvas while agents work; their status ghost-writes on the walls. |
+| backstage-expert | 1.0.0 | Build, configure, authenticate, extend, document, operate, upgrade, and contribute to Backstage applications and the Backstage core repository with current first-party workflows,… |
 | cast-imaging | 1.0.2 | A comprehensive collection of specialized agents for software analysis, impact assessment, structural quality advisories, and architectural review using CAST Imaging. |
 | chromium-control-canvas | 1.0.3 | Opens a real Chromium window you can navigate and interact with from a Copilot canvas control panel and agent actions. |
 | clojure-interactive-programming | 1.0.1 | Tools for REPL-first Clojure workflows featuring Clojure instructions, the interactive programming chat mode and supporting guidance. |
@@ -976,7 +976,7 @@ Regenerate this file after changing files under `harness/github-copilot/agents/`
 | mcp-m365-copilot | 1.0.1 | Comprehensive collection for building declarative agents with Model Context Protocol integration for Microsoft 365 Copilot |
 | napkin | 1.0.1 | Visual whiteboard collaboration for Copilot CLI. Opens an interactive whiteboard in your browser where you can draw, sketch, and add sticky notes — then share everything back with… |
 | noob-mode | 1.0.1 | Plain-English translation layer for non-technical Copilot CLI users. Translates every approval prompt, error message, and technical output into clear, jargon-free English with col… |
-| open-horizons-platform | 1.1.3 | Open Horizons agentic DevOps platform toolkit for Azure, AKS, Backstage, GitHub, Azure DevOps, Terraform, security, reliability, architecture, and deployment operations. Use it to… |
+| open-horizons-platform | 1.1.4 | Open Horizons agentic DevOps platform toolkit for Azure, AKS, Backstage, GitHub, Azure DevOps, Terraform, security, reliability, architecture, and deployment operations. Use it to… |
 | openapi-to-application-csharp-dotnet | 1.0.1 | Generate production-ready .NET applications from OpenAPI specifications. Includes ASP.NET Core project scaffolding, controller generation, entity framework integration, and C# bes… |
 | openapi-to-application-go | 1.0.1 | Generate production-ready Go applications from OpenAPI specifications. Includes project scaffolding, handler generation, middleware setup, and Go best practices for REST APIs. |
 | openapi-to-application-java-spring-boot | 1.0.1 | Generate production-ready Spring Boot applications from OpenAPI specifications. Includes project scaffolding, REST controller generation, service layer organization, and Spring Bo… |

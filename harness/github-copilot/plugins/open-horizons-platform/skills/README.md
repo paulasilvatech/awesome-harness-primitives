@@ -30,18 +30,18 @@ Required contract points:
 | `azure-cli` | Azure CLI operations | `@terraform`, `@security`, `@sre`, `@azure-portal-deploy` |
 | `azure-infrastructure` | Azure infrastructure patterns | `@terraform`, `@security`, `@azure-portal-deploy` |
 | `azure-managed-redis-cache` | Azure Managed Redis patterns | `@deploy`, `@terraform` |
-| `backstage-deployment` | Backstage portal operations | `@backstage-expert`, `@deploy` |
-| `backstage-plugin-builder` | Backstage plugin and module planning, scaffolding, validation, and publication preparation | `@backstage-expert`, `@deploy` |
-| `codespaces-golden-paths` | Codespaces dev environments | `@backstage-expert`, `@deploy` |
+| `open-horizons-backstage-deployment` | Open Horizons Backstage portal operations | `@open-horizons-backstage-expert`, `@deploy` |
+| `backstage-plugin-builder` | Backstage plugin and module planning, scaffolding, validation, and publication preparation | `@open-horizons-backstage-expert`, `@deploy` |
+| `codespaces-golden-paths` | Codespaces dev environments | `@open-horizons-backstage-expert`, `@deploy` |
 | `database-management` | Database operations | `@terraform`, `@sre`, `@deploy` |
 | `deploy-orchestration` | End-to-end deployment orchestration | `@deploy` |
 | `foundry-agent-blueprint` | Azure AI Foundry agent blueprint | `@deploy`, `@azure-portal-deploy` |
 | `github-cli` | GitHub API operations | `@deploy`, `@github-integration` |
-| `helm-cli` | Helm chart operations | `@deploy`, `@backstage-expert`, `@sre` |
+| `helm-cli` | Helm chart operations | `@deploy`, `@open-horizons-backstage-expert`, `@sre` |
 | `issue-ops` | IssueOps dispatcher patterns | `@deploy` |
-| `kubectl-cli` | Kubernetes CLI operations | `@deploy`, `@backstage-expert`, `@sre` |
+| `kubectl-cli` | Kubernetes CLI operations | `@deploy`, `@open-horizons-backstage-expert`, `@sre` |
 | `markdown-writer` | Markdown document writing | `@deploy` |
-| `mcp-ecosystem` | Local MCP reference server lookup | `@backstage-expert`, `@deploy` |
+| `mcp-ecosystem` | Local MCP reference server lookup | `@open-horizons-backstage-expert`, `@deploy` |
 | `observability-stack` | Monitoring operations | `@sre`, `@deploy` |
 | `open-horizons-workspace-kit` | Safe publication of instructions, prompts, hooks, automation, governance, and optional project runtime copies | Maintainers and platform teams |
 | `pipeline-diagnostics` | GitHub Actions CI/CD diagnostics | `@deploy` |
