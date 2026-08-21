@@ -2,24 +2,27 @@
 
 [![Validate primitives](https://github.com/paulasilvatech/copilot-primitives/actions/workflows/validate-primitives.yml/badge.svg)](https://github.com/paulasilvatech/copilot-primitives/actions/workflows/validate-primitives.yml)
 
-A curated, spec-validated collection of GitHub Copilot CLI primitives for the Copilot CLI harness. The shared library currently contains **225 agents**, **194 instruction files**, **421 skills**, **48 VS Code prompts**, **96 plugin manifests**, and **8 reusable hook packages**, validated against GitHub Copilot CLI **1.0.81-4**. Self-contained plugins add plugin-owned primitives; the generated content audit reports both scopes without double-counting generated mirrors.
+A curated, spec-validated collection of GitHub Copilot CLI primitives for the Copilot CLI harness. The shared harness currently contains **225 agents**, **194 instruction files**, **421 skills**, **48 VS Code prompts**, **99 plugin manifests**, and **8 reusable hook packages**, validated against GitHub Copilot CLI **1.0.81-4**. Self-contained plugins add plugin-owned primitives; the generated content audit reports both scopes without double-counting generated mirrors.
 
-For a generated, alphabetized inventory, see [docs/CATALOG.md](docs/CATALOG.md). The [primitive content audit](docs/PRIMITIVE-CONTENT-AUDIT.md) separates structural coverage from semantic freshness review. `docs/COPILOT-HARNESS-SPEC.md` is the canonical format and discovery reference, and [docs/templates/](docs/templates) holds the authoring templates for each primitive type.
+For a generated, alphabetized inventory, see [docs/CATALOG.md](docs/CATALOG.md). The [primitive content audit](docs/PRIMITIVE-CONTENT-AUDIT.md) separates structural coverage from semantic freshness review, the [capability audit](docs/PRIMITIVE-CAPABILITIES.md) tracks agent and prompt tool policy, and the [redundancy audit](docs/PRIMITIVE-REDUNDANCY.md) blocks unclassified overlap. `docs/COPILOT-HARNESS-SPEC.md` is the canonical format and discovery reference, and [docs/templates/](docs/templates) holds the authoring templates for each primitive type.
 
 ## Repository layout
 
 ```text
 .
-├── library/
+├── harness/github-copilot/
 │   ├── agents/                  # Source *.agent.md files
 │   ├── instructions/            # Source *.instructions.md files
 │   ├── skills/<name>/SKILL.md   # Source skill directories
 │   ├── prompts/                 # Source VS Code *.prompt.md files
 │   ├── plugins/<name>/plugin.json
 │   ├── hooks/<name>/hooks.json
-│   ├── installed-primitives.json # Canonical-to-installed copy manifest
+│   ├── manifests/
+│   │   └── installed-primitives.json # Canonical-to-installed copy manifest
 │   └── scripts/
+│       ├── audit_primitive_capabilities.py
 │       ├── audit_primitive_content.py
+│       ├── audit_primitive_redundancy.py
 │       ├── audit_plugins.py
 │       ├── check_links.py
 │       ├── generate_catalog.py
@@ -30,7 +33,9 @@ For a generated, alphabetized inventory, see [docs/CATALOG.md](docs/CATALOG.md).
 └── docs/
     ├── CATALOG.md
     ├── COPILOT-HARNESS-SPEC.md
+    ├── PRIMITIVE-CAPABILITIES.md
     ├── PRIMITIVE-CONTENT-AUDIT.md
+    ├── PRIMITIVE-REDUNDANCY.md
     └── templates/               # Authoring templates per primitive type
 ```
 
@@ -38,12 +43,12 @@ For a generated, alphabetized inventory, see [docs/CATALOG.md](docs/CATALOG.md).
 
 | Type | Source in this repo | CLI discovery path | Format |
 | --- | --- | --- | --- |
-| Agents | `library/agents/*.agent.md` | `.github/agents/*.agent.md`, `~/.copilot/agents/*.agent.md`, organization `.github`/`.github-private` `agents/*.agent.md`, or `<plugin-root>/agents/*.agent.md` | Markdown with YAML frontmatter |
-| Instructions | `library/instructions/*.instructions.md` | `.github/instructions/**/*.instructions.md`, `~/.copilot/instructions/**/*.instructions.md`, `.github/copilot-instructions.md`, `~/.copilot/copilot-instructions.md`, `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, or `COPILOT_CUSTOM_INSTRUCTIONS_DIRS` | Markdown with optional YAML frontmatter |
-| Skills | `library/skills/<name>/SKILL.md` | `.github/skills/<name>/SKILL.md`, `~/.copilot/skills/<name>/SKILL.md`, `.claude/skills/`, `.agents/skills/`, or `<plugin-root>/skills/<name>/SKILL.md` | `SKILL.md` with YAML frontmatter |
-| Plugins | `library/plugins/<name>/plugin.json` | Manifest discovery: `.plugin/plugin.json`, `plugin.json`, `.github/plugin/plugin.json`, or `.claude-plugin/plugin.json`; marketplace discovery: `.plugin/marketplace.json`, `.github/plugin/marketplace.json`, or `.claude-plugin/marketplace.json` | JSON manifest |
-| Hooks | `library/hooks/<name>/hooks.json` | `.github/hooks/*.json`, `~/.copilot/hooks/*.json`, policy directories, settings `hooks`, or `<plugin-root>/hooks.json` / `<plugin-root>/hooks/hooks.json` | JSON (`version: 1`) |
-| Prompts *(VS Code only)* | `library/prompts/*.prompt.md` | **Not a CLI primitive** — `.github/prompts/` is read by VS Code chat only | Markdown with YAML frontmatter |
+| Agents | `harness/github-copilot/agents/*.agent.md` | `.github/agents/*.agent.md`, `~/.copilot/agents/*.agent.md`, organization `.github`/`.github-private` `agents/*.agent.md`, or `<plugin-root>/agents/*.agent.md` | Markdown with YAML frontmatter |
+| Instructions | `harness/github-copilot/instructions/*.instructions.md` | `.github/instructions/**/*.instructions.md`, `~/.copilot/instructions/**/*.instructions.md`, `.github/copilot-instructions.md`, `~/.copilot/copilot-instructions.md`, `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, or `COPILOT_CUSTOM_INSTRUCTIONS_DIRS` | Markdown with optional YAML frontmatter |
+| Skills | `harness/github-copilot/skills/<name>/SKILL.md` | `.github/skills/<name>/SKILL.md`, `~/.copilot/skills/<name>/SKILL.md`, `.claude/skills/`, `.agents/skills/`, or `<plugin-root>/skills/<name>/SKILL.md` | `SKILL.md` with YAML frontmatter |
+| Plugins | `harness/github-copilot/plugins/<name>/plugin.json` | Manifest discovery: `.plugin/plugin.json`, `plugin.json`, `.github/plugin/plugin.json`, or `.claude-plugin/plugin.json`; marketplace discovery: `.plugin/marketplace.json`, `.github/plugin/marketplace.json`, or `.claude-plugin/marketplace.json` | JSON manifest |
+| Hooks | `harness/github-copilot/hooks/<name>/hooks.json` | `.github/hooks/*.json`, `~/.copilot/hooks/*.json`, policy directories, settings `hooks`, or `<plugin-root>/hooks.json` / `<plugin-root>/hooks/hooks.json` | JSON (`version: 1`) |
+| Prompts *(VS Code only)* | `harness/github-copilot/prompts/*.prompt.md` | **Not a CLI primitive** — `.github/prompts/` is read by VS Code chat only | Markdown with YAML frontmatter |
 
 Every type above is loaded by the Copilot CLI harness except **prompts**: agents running on the Agent
 Host do not use prompt files. They are kept here for VS Code users — see
@@ -53,13 +58,13 @@ across skills-compatible surfaces.
 ## Repository governance
 
 The canonical repository-wide instructions live at
-`library/instructions/copilot-repository-governance.instructions.md`. The installed
+`harness/github-copilot/instructions/copilot-repository-governance.instructions.md`. The installed
 `.github/copilot-instructions.md` file and the other declared repository customizations are generated
-from `library/installed-primitives.json`:
+from `harness/github-copilot/manifests/installed-primitives.json`:
 
 ```sh
-python3 library/scripts/sync_installed_primitives.py
-python3 library/scripts/sync_installed_primitives.py --check
+python3 harness/github-copilot/scripts/sync_installed_primitives.py
+python3 harness/github-copilot/scripts/sync_installed_primitives.py --check
 ```
 
 Do not hand-edit a declared `.github/` mirror. Runtime and first-party documentation checks are recorded
@@ -70,7 +75,7 @@ with dates in `docs/HARNESS-VALIDATION.md`; stable schema and discovery rules be
 
 ### Plugins
 
-This repository publishes **96 installable plugin entries** through `.github/plugin/marketplace.json`. See the generated [plugin marketplace audit](docs/PLUGIN-AUDIT.md) for component counts, ownership mode, and package-level coverage, and the [primitive content audit](docs/PRIMITIVE-CONTENT-AUDIT.md) for the shared components that are not yet referenced by a plugin.
+This repository publishes **99 installable plugin entries** through `.github/plugin/marketplace.json`. See the generated [plugin marketplace audit](docs/PLUGIN-AUDIT.md) for component counts, ownership mode, and package-level coverage, and the [primitive content audit](docs/PRIMITIVE-CONTENT-AUDIT.md) for the shared components that are not yet referenced by a plugin.
 
 ```sh
 copilot plugin marketplace add paulasilvatech/copilot-primitives
@@ -87,9 +92,9 @@ Then use the in-session plugin commands:
 
 ```sh
 mkdir -p .github/agents
-cp library/agents/accessibility.agent.md .github/agents/
+cp harness/github-copilot/agents/accessibility.agent.md .github/agents/
 mkdir -p ~/.copilot/agents
-cp library/agents/accessibility.agent.md ~/.copilot/agents/
+cp harness/github-copilot/agents/accessibility.agent.md ~/.copilot/agents/
 ```
 
 ```text
@@ -100,9 +105,9 @@ cp library/agents/accessibility.agent.md ~/.copilot/agents/
 
 ```sh
 mkdir -p .github/instructions
-cp library/instructions/markdown.instructions.md .github/instructions/
+cp harness/github-copilot/instructions/markdown.instructions.md .github/instructions/
 mkdir -p ~/.copilot/instructions
-cp library/instructions/markdown.instructions.md ~/.copilot/instructions/
+cp harness/github-copilot/instructions/markdown.instructions.md ~/.copilot/instructions/
 ```
 
 Files with `applyTo` globs are auto-applied to matching paths and can be managed with `/instructions`.
@@ -111,9 +116,9 @@ Files with `applyTo` globs are auto-applied to matching paths and can be managed
 
 ```sh
 mkdir -p .github/skills
-cp -R library/skills/roundup .github/skills/
+cp -R harness/github-copilot/skills/roundup .github/skills/
 mkdir -p ~/.copilot/skills
-cp -R library/skills/roundup ~/.copilot/skills/
+cp -R harness/github-copilot/skills/roundup ~/.copilot/skills/
 ```
 
 Manage loaded skills with `/skills`.
@@ -124,13 +129,13 @@ Manage loaded skills with `/skills`.
 # Repository scope — applies to everyone working in this repo.
 # Copy the whole package: the config references its scripts by workspace-relative path.
 mkdir -p .github/hooks hooks
-cp -R library/hooks/secrets-scanner hooks/
-cp library/hooks/secrets-scanner/hooks.json .github/hooks/secrets-scanner.json
+cp -R harness/github-copilot/hooks/secrets-scanner hooks/
+cp harness/github-copilot/hooks/secrets-scanner/hooks.json .github/hooks/secrets-scanner.json
 
 # User scope — applies to every repo you open.
 # Rewrite the script path to an absolute one first; see the note on path resolution below.
 mkdir -p ~/.copilot/hooks
-cp library/hooks/secrets-scanner/hooks.json ~/.copilot/hooks/secrets-scanner.json
+cp harness/github-copilot/hooks/secrets-scanner/hooks.json ~/.copilot/hooks/secrets-scanner.json
 ```
 
 Copilot CLI merges all hook sources and runs every hook registered for an event.
@@ -163,7 +168,7 @@ running — so removing it is how you switch one on.
 Run the repository validator:
 
 ```sh
-python3 library/scripts/validate_primitives.py
+python3 harness/github-copilot/scripts/validate_primitives.py
 ```
 
 Useful options:
@@ -173,7 +178,7 @@ Useful options:
 - `--kind <agents|instructions|skills|prompts|plugins|hooks>` — validate only one primitive kind; repeat for multiple kinds.
 - `--root <path>` and `--quiet` — validate another root or print only errors plus the summary.
 
-The `hooks` kind covers both the distributable packages under `library/hooks/*/hooks.json` and this
+The `hooks` kind covers both the distributable packages under `harness/github-copilot/hooks/*/hooks.json` and this
 repository's own installed configs in `.github/hooks/*.json` — the ones the CLI actually executes.
 Script paths are resolved against the root each set is deployed from, so a broken `bash` path in an
 installed config fails CI (`HK008`).
@@ -185,18 +190,20 @@ validation and fails on errors, warnings, catalog drift, plugin-copy drift, or i
 Regenerate or check the catalog with:
 
 ```sh
-python3 library/scripts/generate_catalog.py
-python3 library/scripts/generate_catalog.py --check
+python3 harness/github-copilot/scripts/generate_catalog.py
+python3 harness/github-copilot/scripts/generate_catalog.py --check
 ```
 
 Check generated distribution surfaces with:
 
 ```sh
-python3 library/scripts/normalize_plugin_manifests.py --check
-python3 library/scripts/audit_plugins.py --check
-python3 library/scripts/audit_primitive_content.py --check
-python3 library/scripts/sync_plugin_components.py --check
-python3 library/scripts/sync_installed_primitives.py --check
+python3 harness/github-copilot/scripts/normalize_plugin_manifests.py --check
+python3 harness/github-copilot/scripts/audit_plugins.py --check
+python3 harness/github-copilot/scripts/audit_primitive_content.py --check
+python3 harness/github-copilot/scripts/audit_primitive_capabilities.py --check
+python3 harness/github-copilot/scripts/audit_primitive_redundancy.py --check
+python3 harness/github-copilot/scripts/sync_plugin_components.py --check
+python3 harness/github-copilot/scripts/sync_installed_primitives.py --check
 ```
 
 ## Contributing

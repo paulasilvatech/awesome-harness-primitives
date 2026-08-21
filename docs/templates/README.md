@@ -7,26 +7,26 @@ VS Code feature.
 
 | Template | Canonical source in this repository | Purpose | Support |
 | --- | --- | --- | --- |
-| [agent.template.md](agent.template.md) | `library/agents/<name>.agent.md` | Define a persona, judgment boundary, and operating posture. | Copilot CLI and VS Code |
-| [instructions.template.md](instructions.template.md) | `library/instructions/<name>.instructions.md` | Apply passive conventions to matching files. | Copilot CLI and VS Code |
-| [skill.template.md](skill.template.md) | `library/skills/<name>/SKILL.md` | Package a reusable procedure, review, or specialized capability. | Copilot CLI and VS Code |
-| [prompt.template.md](prompt.template.md) | `library/prompts/<name>.prompt.md` | Run a focused, user-selected action with VS Code runtime inputs. | **VS Code only; not a CLI primitive** |
-| [plugin.template.json](plugin.template.json) | `library/plugins/<name>/plugin.json` | Declare a strict Agent Plugins 1.0 package and repository ownership. | GitHub Copilot CLI and compatible Agent Plugins clients |
-| [plugin-mcp.template.json](plugin-mcp.template.json) | `library/plugins/<name>/mcp.json` | Configure portable plugin MCP servers. | Agent Plugins 1.0 clients |
+| [agent.template.md](agent.template.md) | `harness/github-copilot/agents/<name>.agent.md` | Define a persona, judgment boundary, and operating posture. | Copilot CLI and VS Code |
+| [instructions.template.md](instructions.template.md) | `harness/github-copilot/instructions/<name>.instructions.md` | Apply passive conventions to matching files. | Copilot CLI and VS Code |
+| [skill.template.md](skill.template.md) | `harness/github-copilot/skills/<name>/SKILL.md` | Package a reusable procedure, review, or specialized capability. | Copilot CLI and VS Code |
+| [prompt.template.md](prompt.template.md) | `harness/github-copilot/prompts/<name>.prompt.md` | Run a focused, user-selected action with VS Code runtime inputs. | **VS Code only; not a CLI primitive** |
+| [plugin.template.json](plugin.template.json) | `harness/github-copilot/plugins/<name>/plugin.json` | Declare a strict Agent Plugins 1.0 package and repository ownership. | GitHub Copilot CLI and compatible Agent Plugins clients |
+| [plugin-mcp.template.json](plugin-mcp.template.json) | `harness/github-copilot/plugins/<name>/mcp.json` | Configure portable plugin MCP servers. | Agent Plugins 1.0 clients |
 
 ## Short authoring workflow
 
 1. Copy the appropriate template to its canonical source location:
 
    ```sh
-   cp docs/templates/agent.template.md library/agents/example-name.agent.md
-   cp docs/templates/instructions.template.md library/instructions/example-name.instructions.md
-   mkdir -p library/skills/example-name
-   cp docs/templates/skill.template.md library/skills/example-name/SKILL.md
-   cp docs/templates/prompt.template.md library/prompts/example-name.prompt.md
-   mkdir -p library/plugins/example-name
-   cp docs/templates/plugin.template.json library/plugins/example-name/plugin.json
-   cp docs/templates/plugin-mcp.template.json library/plugins/example-name/mcp.json
+   cp docs/templates/agent.template.md harness/github-copilot/agents/example-name.agent.md
+   cp docs/templates/instructions.template.md harness/github-copilot/instructions/example-name.instructions.md
+   mkdir -p harness/github-copilot/skills/example-name
+   cp docs/templates/skill.template.md harness/github-copilot/skills/example-name/SKILL.md
+   cp docs/templates/prompt.template.md harness/github-copilot/prompts/example-name.prompt.md
+   mkdir -p harness/github-copilot/plugins/example-name
+   cp docs/templates/plugin.template.json harness/github-copilot/plugins/example-name/plugin.json
+   cp docs/templates/plugin-mcp.template.json harness/github-copilot/plugins/example-name/mcp.json
    ```
 
 2. Replace every visible `{{UPPER_SNAKE_CASE}}` authoring placeholder. Search the completed file or skill
@@ -208,43 +208,45 @@ These forms have different meanings:
 
 ## Validation and synchronization
 
-For agents, instructions, skills, prompts, and plugins under `library/`, run:
+For agents, instructions, skills, prompts, and plugins under `harness/github-copilot/`, run:
 
 ```sh
-python3 library/scripts/validate_primitives.py
+python3 harness/github-copilot/scripts/validate_primitives.py
 ```
 
 After changing a primitive included in the generated catalog, regenerate and check it:
 
 ```sh
-python3 library/scripts/generate_catalog.py
-python3 library/scripts/normalize_plugin_manifests.py --check
-python3 library/scripts/audit_plugins.py --check
-python3 library/scripts/audit_primitive_content.py --check
-python3 library/scripts/generate_catalog.py --check
+python3 harness/github-copilot/scripts/generate_catalog.py
+python3 harness/github-copilot/scripts/normalize_plugin_manifests.py --check
+python3 harness/github-copilot/scripts/audit_plugins.py --check
+python3 harness/github-copilot/scripts/audit_primitive_content.py --check
+python3 harness/github-copilot/scripts/audit_primitive_capabilities.py --check
+python3 harness/github-copilot/scripts/audit_primitive_redundancy.py --check
+python3 harness/github-copilot/scripts/generate_catalog.py --check
 ```
 
 When a plugin package contains generated copies of a shared agent or skill, synchronize from the
-canonical `library/agents/` or `library/skills/` source and check for drift:
+canonical `harness/github-copilot/agents/` or `harness/github-copilot/skills/` source and check for drift:
 
 ```sh
-python3 library/scripts/sync_plugin_components.py
-python3 library/scripts/sync_plugin_components.py --check
+python3 harness/github-copilot/scripts/sync_plugin_components.py
+python3 harness/github-copilot/scripts/sync_plugin_components.py --check
 ```
 
 Synchronize declared installed repository customizations and compatibility guidance:
 
 ```sh
-python3 library/scripts/sync_installed_primitives.py
-python3 library/scripts/sync_installed_primitives.py --check
+python3 harness/github-copilot/scripts/sync_installed_primitives.py
+python3 harness/github-copilot/scripts/sync_installed_primitives.py --check
 ```
 
-With their default paths, the validator checks `library/agents/`, `library/instructions/`,
-`library/skills/`, `library/prompts/`, `library/plugins/`, and `library/hooks/` plus installed repository
+With their default paths, the validator checks `harness/github-copilot/agents/`, `harness/github-copilot/instructions/`,
+`harness/github-copilot/skills/`, `harness/github-copilot/prompts/`, `harness/github-copilot/plugins/`, and `harness/github-copilot/hooks/` plus installed repository
 hook configs. The catalog generator excludes VS Code prompts. The installed-copy manifest controls which
 canonical sources publish into `.github/` or compatibility locations; undeclared library prompts remain
 source-only.
 
-For prompts, keep `library/prompts/<name>.prompt.md` as the source, declare a workspace copy only when
+For prompts, keep `harness/github-copilot/prompts/<name>.prompt.md` as the source, declare a workspace copy only when
 VS Code discovery is required, run installed-copy synchronization, and test the result with **Chat: Run
 Prompt**. Static validation checks metadata and structure but does not execute the prompt.

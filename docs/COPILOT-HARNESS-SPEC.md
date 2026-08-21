@@ -56,6 +56,7 @@ mcp-servers:                       # OPTIONAL — CLI/cloud only, ignored by VS 
     tools: ["*"]
 argument-hint: "<path>"            # OPTIONAL — VS Code only; CLI warns and ignores it
 handoffs: []                       # OPTIONAL — VS Code only; CLI warns and ignores it
+agents: ["reviewer"]               # OPTIONAL — VS Code subagent allow-list; requires the agent tool
 metadata: {}                       # OPTIONAL — annotation passthrough
 ---
 ```
@@ -74,8 +75,9 @@ metadata: {}                       # OPTIONAL — annotation passthrough
 | `mcp-servers` | optional | ignored | BUNDLE-confirmed key; every server entry requires `tools` |
 | `argument-hint` | ignored (debug warning) | optional | VS Code only |
 | `handoffs` | ignored (debug warning) | optional | VS Code only |
+| `agents` | unverified in tested CLI | optional | VS Code subagent allow-list; include `agent` in an explicit `tools` allow-list |
 | `infer` | **RETIRED** | **RETIRED** | Replace with the two fields above |
-| `mode`, `hidden`, `agents`, `agent`, `title` | **not an agent field** | — | Remove |
+| `mode`, `hidden`, `agent`, `title` | **not an agent field** | — | Remove |
 
 Body: Markdown, **max 30 000 characters**.
 
@@ -115,12 +117,18 @@ tool schema — see [HARNESS-VALIDATION.md](HARNESS-VALIDATION.md).
 | `fetch_copilot_cli_documentation` | `fetch_copilot_cli_documentation` |
 | `write_agent`, `read_agent`, `list_agents`, `read_bash`, `stop_bash`, `list_bash` | the same-named tool |
 
-> **No-op tokens — these grant nothing and are enforced as errors by rule `AG017`:**
+> **No-op tokens in the tested Copilot CLI — these grant nothing and are enforced as errors by rule
+> `AG017` for cross-surface agents:**
 > `search`, `web`, `todo`, `all`, `terminal`, `run`, `codebase`, `changes`, `fetch`, `githubRepo`, `search/codebase`.
 >
 > `search` is the dangerous one: it reads as "let this agent search code" but grants **no** search capability.
 > Use `grep` and `glob` explicitly. Likewise use `web_fetch` and `web_search` instead of `web`.
 > `todo` is unnecessary because the `sql` tool that backs task lists is always in the floor.
+>
+> First-party VS Code and GitHub cloud-agent documentation reverified on 2026-08-21 documents `search`,
+> `web`, and `todo` aliases. A deliberately `target: vscode` agent may use those aliases, but a
+> cross-surface agent must retain the measured CLI-safe spellings until a newer CLI runtime probe changes
+> this evidence.
 >
 > `sql` and `skill` are also no-ops as tokens, but harmlessly so — they are already in the floor.
 
@@ -268,6 +276,11 @@ Agent Plugins 1.0 `mcp.json` requires
 types are `stdio`, `streamable-http`, and `sse`; legacy `local` and `http` values and client-only `tools`
 filters are not valid in this file.
 
+Repository-managed plugin metadata uses `componentSource: "library"` as a layout-version-1 compatibility
+value for shared canonical sources under `harness/github-copilot/`. Plugin-owned packages can declare
+`sharedSkills: ["./skills/<name>/"]`; the synchronizer materializes those skills into the package while the
+shared harness package remains the only canonical source.
+
 Runtime verification against GitHub Copilot CLI 1.0.81-4 on 2026-08-20 confirmed that a schema-declaring
 plugin's top-level `agents` field is ignored with a warning and agents under
 `com.github.copilot/agents/` are loaded. See `docs/HARNESS-VALIDATION.md`.
@@ -288,9 +301,9 @@ Discovery (BUNDLE): `.plugin/marketplace.json`, `.github/plugin/marketplace.json
     "name": "…", "email": "…"
   },
   "plugins": [                // REQUIRED — BUNDLE errors "Marketplace has no plugins defined" when empty
-    { "name": "my-plugin", "source": "./library/plugins/my-plugin", "description": "…", "version": "1.0.0" }
+    { "name": "my-plugin", "source": "./harness/github-copilot/plugins/my-plugin", "description": "…", "version": "1.0.0" }
   ],
-  "metadata": { "pluginRoot": "./library/plugins" }
+  "metadata": { "pluginRoot": "./harness/github-copilot/plugins" }
 }
 ```
 
@@ -410,8 +423,8 @@ Hook scripts must be executable (`chmod +x`).
 
 ## 6. Validation
 
-Run `python3 library/scripts/validate_primitives.py` to check every rule above plus this repository's
-mandatory body contracts. The validator also checks `library/prompts/*.prompt.md` against the local VS
+Run `python3 harness/github-copilot/scripts/validate_primitives.py` to check every rule above plus this repository's
+mandatory body contracts. The validator also checks `harness/github-copilot/prompts/*.prompt.md` against the local VS
 Code prompt policy: metadata and section structure are validated statically, but prompt execution still
 requires **Chat: Run Prompt** in VS Code.
 
@@ -421,10 +434,12 @@ Use `--strict` to fail on warnings, `--json` for machine-readable output, and
 Generated distribution surfaces have separate drift gates:
 
 ```sh
-python3 library/scripts/normalize_plugin_manifests.py --check
-python3 library/scripts/audit_plugins.py --check
-python3 library/scripts/audit_primitive_content.py --check
-python3 library/scripts/generate_catalog.py --check
-python3 library/scripts/sync_plugin_components.py --check
-python3 library/scripts/sync_installed_primitives.py --check
+python3 harness/github-copilot/scripts/normalize_plugin_manifests.py --check
+python3 harness/github-copilot/scripts/audit_plugins.py --check
+python3 harness/github-copilot/scripts/audit_primitive_content.py --check
+python3 harness/github-copilot/scripts/audit_primitive_capabilities.py --check
+python3 harness/github-copilot/scripts/audit_primitive_redundancy.py --check
+python3 harness/github-copilot/scripts/generate_catalog.py --check
+python3 harness/github-copilot/scripts/sync_plugin_components.py --check
+python3 harness/github-copilot/scripts/sync_installed_primitives.py --check
 ```

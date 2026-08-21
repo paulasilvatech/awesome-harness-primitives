@@ -121,8 +121,8 @@ python3 .github/skills/skill-creator/scripts/validate_skill.py .github/skills/<s
 Also run repository gates when working in this repository:
 
 ```bash
-python3 library/scripts/validate_primitives.py --strict
-python3 library/scripts/generate_catalog.py --check
+python3 harness/github-copilot/scripts/validate_primitives.py --strict
+python3 harness/github-copilot/scripts/generate_catalog.py --check
 ```
 
 Fix every error before claiming the skill is ready.

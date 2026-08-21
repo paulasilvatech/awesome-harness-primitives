@@ -14,9 +14,9 @@ Delete this section after configuring the prompt.
 
 1. Treat this as a **VS Code-only** prompt file. GitHub Copilot CLI does not discover or execute
    `*.prompt.md`; use an agent skill when a workflow must run in CLI or on both surfaces.
-2. In this repository, author the source at `library/prompts/{{PROMPT_NAME}}.prompt.md`. When VS Code
-   workspace discovery is required, declare the installed path in `library/installed-primitives.json`
-   and publish it with `python3 library/scripts/sync_installed_primitives.py`; never maintain both copies.
+2. In this repository, author the source at `harness/github-copilot/prompts/{{PROMPT_NAME}}.prompt.md`. When VS Code
+   workspace discovery is required, declare the installed path in `harness/github-copilot/manifests/installed-primitives.json`
+   and publish it with `python3 harness/github-copilot/scripts/sync_installed_primitives.py`; never maintain both copies.
 3. Replace every `{{UPPER_SNAKE_CASE}}` authoring placeholder. Keep `${input:...}` and `${selection}`
    only when they are intentional VS Code runtime variables, and remove unused inputs, fields, branches,
    sections, and examples.

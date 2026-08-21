@@ -8,19 +8,21 @@ This repository curates reusable GitHub Copilot agents, instructions, Agent Skil
 
 | Area | Responsibility |
 | --- | --- |
-| `library/agents/` | Canonical custom-agent sources |
-| `library/instructions/` | Canonical path-specific and repository instruction sources |
-| `library/skills/` | Canonical Agent Skill packages |
-| `library/prompts/` | Canonical VS Code prompt sources; prompts are not Copilot CLI primitives |
-| `library/plugins/` | Self-contained plugin packages, including generated component copies |
-| `library/hooks/` | Canonical reusable hook packages |
+| `harness/github-copilot/agents/` | Canonical custom-agent sources |
+| `harness/github-copilot/instructions/` | Canonical path-specific and repository instruction sources |
+| `harness/github-copilot/skills/` | Canonical Agent Skill packages |
+| `harness/github-copilot/prompts/` | Canonical VS Code prompt sources; prompts are not Copilot CLI primitives |
+| `harness/github-copilot/plugins/` | Self-contained plugin packages, including generated component copies |
+| `harness/github-copilot/hooks/` | Canonical reusable hook packages |
 | `docs/templates/` | Authoring templates and generated compatibility guidance |
 | `docs/COPILOT-HARNESS-SPEC.md` | Runtime discovery, schema, and validator contract |
 | `docs/HARNESS-VALIDATION.md` | Dated runtime and first-party documentation evidence |
 | `docs/PRIMITIVE-CONTENT-AUDIT.md` | Generated structural coverage, freshness-risk, and plugin-composition inventory |
+| `docs/PRIMITIVE-CAPABILITIES.md` | Generated agent/prompt tool, model, target, and runtime-verification inventory |
+| `docs/PRIMITIVE-REDUNDANCY.md` | Generated exact-duplicate and classified similarity inventory |
 | `.github/` | Installed or generated repository customizations and CI configuration |
 
-Edit canonical `library/` sources. Do not hand-edit generated plugin components or installed `.github/` mirrors when a declared canonical source exists.
+Edit canonical `harness/github-copilot/` sources. Do not hand-edit generated plugin components or installed `.github/` mirrors when a declared canonical source exists.
 
 ## Responsibility Split
 
@@ -59,13 +61,15 @@ Do not claim that guidance is current, latest, supported, or deprecated without 
 Run the smallest applicable checks, then the complete repository gates before delivery:
 
 ```sh
-python3 library/scripts/validate_primitives.py --strict
-python3 library/scripts/normalize_plugin_manifests.py --check
-python3 library/scripts/audit_plugins.py --check
-python3 library/scripts/audit_primitive_content.py --check
-python3 library/scripts/generate_catalog.py --check
-python3 library/scripts/sync_plugin_components.py --check
-python3 library/scripts/sync_installed_primitives.py --check
+python3 harness/github-copilot/scripts/validate_primitives.py --strict
+python3 harness/github-copilot/scripts/normalize_plugin_manifests.py --check
+python3 harness/github-copilot/scripts/audit_plugins.py --check
+python3 harness/github-copilot/scripts/audit_primitive_content.py --check
+python3 harness/github-copilot/scripts/audit_primitive_capabilities.py --check
+python3 harness/github-copilot/scripts/audit_primitive_redundancy.py --check
+python3 harness/github-copilot/scripts/generate_catalog.py --check
+python3 harness/github-copilot/scripts/sync_plugin_components.py --check
+python3 harness/github-copilot/scripts/sync_installed_primitives.py --check
 ```
 
 When a check reports generated drift caused by the canonical change, run the corresponding generator or synchronization script and repeat the check. Test changed VS Code prompts with **Chat: Run Prompt** when the environment supports it; otherwise report that runtime test as not run. Test changed hook scripts with representative JSON payloads and validate both canonical and installed hook configurations.
@@ -74,7 +78,7 @@ When a check reports generated drift caused by the canonical change, run the cor
 
 | Rule | Rationale |
 | --- | --- |
-| Keep reusable content canonical under `library/` and generate installed copies. | One source of truth prevents silent drift. |
+| Keep reusable content canonical under `harness/github-copilot/` and generate installed copies. | One source of truth prevents silent drift. |
 | Keep global instructions concise and move type-specific detail to matching instructions and templates. | Always-on context stays relevant and within budget. |
 | Verify volatile platform claims conditionally against first-party sources and record dated evidence once. | Guidance stays current without forcing network research for stable local edits. |
 | Use repository scripts as completion gates and keep CI aligned with local commands. | Maintainers and automation evaluate the same contract. |
@@ -97,7 +101,7 @@ When a check reports generated drift caused by the canonical change, run the cor
 - [ ] Repository-wide and type-specific instructions do not duplicate or contradict each other.
 - [ ] Volatile claims are supported by dated local evidence or newly verified first-party documentation.
 - [ ] Directly related docs, catalogs, installed mirrors, and plugin copies are synchronized.
-- [ ] `validate_primitives.py --strict`, content-audit drift, catalog drift, plugin drift, and installed-mirror drift checks pass.
+- [ ] `validate_primitives.py --strict`, content, capability, redundancy, catalog, plugin, and installed-mirror drift checks pass.
 - [ ] Changed prompts or hooks received their applicable runtime or payload tests, or the unrun check is reported with a reason.
 - [ ] The final diff contains no unrelated edits, unresolved authoring placeholders, secrets, or unsupported metadata.
 

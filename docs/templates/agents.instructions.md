@@ -11,7 +11,7 @@ These instructions apply to custom-agent files matched by `**/*.agent.md`. They 
 
 Use an `agent` for a reusable persona, judgment boundary, operating posture, or deliberately restricted tool policy. Put passive file conventions in `instructions`, reusable procedures or capabilities in a `skill`, and explicit VS Code actions in a `prompt`.
 
-Author the canonical source at `library/agents/<name>.agent.md`. Install declared repository agents through `python3 library/scripts/sync_installed_primitives.py`; do not edit `.github/agents/` independently.
+Author the canonical source at `harness/github-copilot/agents/<name>.agent.md`. Install declared repository agents through `python3 harness/github-copilot/scripts/sync_installed_primitives.py`; do not edit `.github/agents/` independently.
 
 ## Metadata and Discovery
 
@@ -20,6 +20,7 @@ Author the canonical source at `library/agents/<name>.agent.md`. Install declare
 - Omit `model` unless a fixed, verified model is a deployment requirement.
 - Treat `tools` as an allow-list filter. Omit it for full inherited capability or list only verified tool tokens required by the agent.
 - Use `user-invocable`, `disable-model-invocation`, and `mcp-servers` only when the behavior is intentional and supported by the target runtime.
+- Use the VS Code-only `agents` field only for an explicit subagent allow-list. When `tools` is restricted, include the `agent` tool or the allow-list cannot be invoked.
 - Treat `argument-hint` and `handoffs` as VS Code-specific. The tested Copilot CLI version records them as ignored in `docs/HARNESS-VALIDATION.md`.
 - Do not depend on `target` for Copilot CLI routing without new runtime evidence; the tested CLI ignored it.
 
@@ -36,6 +37,13 @@ Use exact Copilot CLI tokens from `docs/COPILOT-HARNESS-SPEC.md`. Common focused
 | Web verification | Add `web_fetch`; add `web_search` only when locating a first-party source is necessary |
 
 Do not use no-op aliases such as `search`, `web`, `todo`, `all`, `terminal`, `run`, `codebase`, `changes`, `fetch`, `githubRepo`, or `search/codebase`. Unrecognized tokens are silently dropped and can leave an agent unable to perform its task.
+
+A deliberately `target: vscode` agent may use the current VS Code aliases `search`, `web`, or `todo`.
+Cross-surface agents must use the measured Copilot CLI-safe spellings until dated runtime evidence changes.
+
+Tool availability is not approval. VS Code permission levels, per-tool approval, URL approval, terminal
+approval, sandboxing, and managed organizational rules are session or policy controls; do not add a
+`permissions` frontmatter field.
 
 ## Body Contract
 
@@ -64,7 +72,7 @@ Test representative invocations in every surface the agent claims to support. Co
 
 | Rule | Rationale |
 | --- | --- |
-| Keep the canonical source under `library/agents/`. | Installed and plugin copies remain reproducible. |
+| Keep the canonical source under `harness/github-copilot/agents/`. | Installed and plugin copies remain reproducible. |
 | Define one focused persona and authority boundary. | Selection and handoff behavior stay predictable. |
 | Omit optional metadata unless it changes verified behavior. | Surface-specific or stale fields do not create false confidence. |
 | Grant the smallest effective tool set. | The allow-list cannot silently remove a required capability. |
@@ -90,7 +98,7 @@ Test representative invocations in every surface the agent claims to support. Co
 - [ ] Knowledge gaps are discovered or reported rather than invented.
 - [ ] Output format, definition of done, and rejected anti-patterns are concrete.
 - [ ] Dated evidence supports current compatibility claims.
-- [ ] `python3 library/scripts/validate_primitives.py --strict` passes.
+- [ ] `python3 harness/github-copilot/scripts/validate_primitives.py --strict` passes.
 - [ ] Catalog and declared installed or plugin copies are synchronized.
 
 ## References

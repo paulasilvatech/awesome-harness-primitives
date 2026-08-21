@@ -1,0 +1,156 @@
+{
+  "candidates": [
+    {
+      "classification": "language-variant",
+      "kind": "agent",
+      "left": "agents/csharp-mcp-expert.agent.md",
+      "rationale": "Different MCP SDK, runtime, examples, and build/test conventions.",
+      "right": "agents/typescript-mcp-expert.agent.md",
+      "similarity": 0.862
+    },
+    {
+      "classification": "language-variant",
+      "kind": "agent",
+      "left": "agents/azure-verified-modules-bicep.agent.md",
+      "rationale": "Bicep and Terraform use different providers, tooling, and module contracts.",
+      "right": "agents/azure-verified-modules-terraform.agent.md",
+      "similarity": 0.833
+    },
+    {
+      "classification": "language-variant",
+      "kind": "agent",
+      "left": "agents/csharp-mcp-expert.agent.md",
+      "rationale": "Different MCP SDK, runtime, examples, and build/test conventions.",
+      "right": "agents/python-mcp-expert.agent.md",
+      "similarity": 0.81
+    },
+    {
+      "classification": "language-variant",
+      "kind": "agent",
+      "left": "agents/python-mcp-expert.agent.md",
+      "rationale": "Different MCP SDK, runtime, examples, and build/test conventions.",
+      "right": "agents/typescript-mcp-expert.agent.md",
+      "similarity": 0.77
+    },
+    {
+      "classification": "language-variant",
+      "kind": "instruction",
+      "left": "instructions/copilot-sdk-csharp.instructions.md",
+      "rationale": "GitHub Copilot SDK guidance is intentionally specialized by programming language.",
+      "right": "instructions/copilot-sdk-python.instructions.md",
+      "similarity": 0.808
+    },
+    {
+      "classification": "language-variant",
+      "kind": "instruction",
+      "left": "instructions/copilot-sdk-csharp.instructions.md",
+      "rationale": "GitHub Copilot SDK guidance is intentionally specialized by programming language.",
+      "right": "instructions/copilot-sdk-nodejs.instructions.md",
+      "similarity": 0.792
+    },
+    {
+      "classification": "source-framework-variant",
+      "kind": "instruction",
+      "left": "instructions/convert-cassandra-to-spring-data-cosmos.instructions.md",
+      "rationale": "Migration sources, mappings, dependencies, and validation differ.",
+      "right": "instructions/convert-jpa-to-spring-data-cosmos.instructions.md",
+      "similarity": 0.791
+    },
+    {
+      "classification": "language-variant",
+      "kind": "instruction",
+      "left": "instructions/copilot-sdk-go.instructions.md",
+      "rationale": "GitHub Copilot SDK guidance is intentionally specialized by programming language.",
+      "right": "instructions/copilot-sdk-java.instructions.md",
+      "similarity": 0.768
+    },
+    {
+      "classification": "language-variant",
+      "kind": "instruction",
+      "left": "instructions/copilot-sdk-csharp.instructions.md",
+      "rationale": "GitHub Copilot SDK guidance is intentionally specialized by programming language.",
+      "right": "instructions/copilot-sdk-go.instructions.md",
+      "similarity": 0.764
+    },
+    {
+      "classification": "language-variant",
+      "kind": "instruction",
+      "left": "instructions/copilot-sdk-go.instructions.md",
+      "rationale": "GitHub Copilot SDK guidance is intentionally specialized by programming language.",
+      "right": "instructions/copilot-sdk-python.instructions.md",
+      "similarity": 0.759
+    },
+    {
+      "classification": "language-variant",
+      "kind": "instruction",
+      "left": "instructions/copilot-sdk-java.instructions.md",
+      "rationale": "GitHub Copilot SDK guidance is intentionally specialized by programming language.",
+      "right": "instructions/copilot-sdk-python.instructions.md",
+      "similarity": 0.742
+    },
+    {
+      "classification": "framework-variant",
+      "kind": "prompt",
+      "left": "prompts/containerize-aspnet-framework.prompt.md",
+      "rationale": ".NET Framework and ASP.NET Core require different Windows/Linux artifacts.",
+      "right": "prompts/containerize-aspnetcore.prompt.md",
+      "similarity": 0.789
+    },
+    {
+      "classification": "lifecycle-variant",
+      "kind": "skill",
+      "left": "skills/create-implementation-plan/SKILL.md",
+      "rationale": "Creation and mutation have different inputs, preservation rules, and outputs.",
+      "right": "skills/update-implementation-plan/SKILL.md",
+      "similarity": 0.793
+    },
+    {
+      "classification": "lifecycle-variant",
+      "kind": "skill",
+      "left": "skills/create-llms/SKILL.md",
+      "rationale": "Creation and synchronization of an existing llms.txt are distinct operations.",
+      "right": "skills/update-llms/SKILL.md",
+      "similarity": 0.761
+    },
+    {
+      "classification": "language-variant",
+      "kind": "skill",
+      "left": "skills/create-spring-boot-java-project/SKILL.md",
+      "rationale": "Java and Kotlin project generators use different source and build conventions.",
+      "right": "skills/create-spring-boot-kotlin-project/SKILL.md",
+      "similarity": 0.752
+    },
+    {
+      "classification": "specialization",
+      "kind": "skill",
+      "left": "skills/mcp-copilot-studio-server-generator/SKILL.md",
+      "rationale": "One generates the MCP server plus connector; the other focuses on connector packaging and validation.",
+      "right": "skills/power-platform-mcp-connector-suite/SKILL.md",
+      "similarity": 0.727
+    }
+  ],
+  "exactDuplicateGroups": [],
+  "policy": {
+    "classifications": [
+      "duplicate",
+      "specialization",
+      "language-variant",
+      "framework-variant",
+      "lifecycle-variant",
+      "source-framework-variant",
+      "complement",
+      "supersedes",
+      "unclassified"
+    ],
+    "note": "Similarity only creates a review candidate. Deletion requires an exact duplicate or an explicit responsibility-boundary decision."
+  },
+  "schemaVersion": 1,
+  "summary": {
+    "confirmedDuplicates": 0,
+    "exactDuplicateGroups": 0,
+    "similarityCandidates": 16,
+    "sources": 950,
+    "unclassifiedCandidates": 0
+  },
+  "threshold": 0.72
+}

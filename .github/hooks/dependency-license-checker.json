@@ -4,7 +4,7 @@
     "sessionEnd": [
       {
         "type": "command",
-        "bash": "library/hooks/dependency-license-checker/check-licenses.sh",
+        "bash": "harness/github-copilot/hooks/dependency-license-checker/check-licenses.sh",
         "cwd": ".",
         "env": {
           "LICENSE_MODE": "warn"

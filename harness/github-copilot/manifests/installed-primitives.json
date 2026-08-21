@@ -1,0 +1,62 @@
+{
+  "version": 1,
+  "copies": [
+    {
+      "source": "harness/github-copilot/instructions/copilot-repository-governance.instructions.md",
+      "target": ".github/copilot-instructions.md",
+      "mode": "strip-frontmatter"
+    },
+    {
+      "source": "harness/github-copilot/instructions/copilot-primitive-authoring.instructions.md",
+      "target": ".github/instructions/copilot-primitive-authoring.instructions.md"
+    },
+    {
+      "source": "harness/github-copilot/instructions/agents.instructions.md",
+      "target": ".github/instructions/agents.instructions.md"
+    },
+    {
+      "source": "harness/github-copilot/instructions/agents.instructions.md",
+      "target": "docs/templates/agents.instructions.md"
+    },
+    {
+      "source": "harness/github-copilot/instructions/agent-skills.instructions.md",
+      "target": ".github/instructions/agent-skills.instructions.md"
+    },
+    {
+      "source": "harness/github-copilot/instructions/agent-skills.instructions.md",
+      "target": "docs/templates/agent-skills.instructions.md"
+    },
+    {
+      "source": "harness/github-copilot/instructions/prompt.instructions.md",
+      "target": ".github/instructions/prompt.instructions.md"
+    },
+    {
+      "source": "harness/github-copilot/instructions/prompt.instructions.md",
+      "target": "docs/templates/prompt.instructions.md"
+    },
+    {
+      "source": "harness/github-copilot/instructions/hooks.instructions.md",
+      "target": ".github/instructions/hooks.instructions.md"
+    },
+    {
+      "source": "harness/github-copilot/instructions/hooks.instructions.md",
+      "target": "docs/templates/hooks.instructions.md"
+    },
+    {
+      "source": "harness/github-copilot/agents/copilot-primitive-architect.agent.md",
+      "target": ".github/agents/copilot-primitive-architect.agent.md"
+    },
+    {
+      "source": "harness/github-copilot/skills/copilot-primitive-authoring",
+      "target": ".github/skills/copilot-primitive-authoring"
+    },
+    {
+      "source": "harness/github-copilot/skills/skill-creator",
+      "target": ".github/skills/skill-creator"
+    },
+    {
+      "source": "harness/github-copilot/prompts/create-copilot-primitive.prompt.md",
+      "target": ".github/prompts/create-copilot-primitive.prompt.md"
+    }
+  ]
+}

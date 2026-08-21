@@ -1,7 +1,7 @@
 # Copilot Primitives Catalog
 
-Generated from the current repository contents by `python3 library/scripts/generate_catalog.py`.
-Regenerate this file after changing files under `library/agents/`, `library/instructions/`, `library/skills/`, `library/prompts/`, `library/plugins/`, or `library/hooks/`.
+Generated from the current repository contents by `python3 harness/github-copilot/scripts/generate_catalog.py`.
+Regenerate this file after changing files under `harness/github-copilot/agents/`, `harness/github-copilot/instructions/`, `harness/github-copilot/skills/`, `harness/github-copilot/prompts/`, `harness/github-copilot/plugins/`, or `harness/github-copilot/hooks/`.
 
 ## Summary
 
@@ -11,7 +11,7 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | Instructions | 194 |
 | Skills | 421 |
 | VS Code prompts | 48 |
-| Plugins | 96 |
+| Plugins | 99 |
 | Hooks | 8 |
 
 ## Agents
@@ -287,7 +287,7 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | context7 | ** | Enforces Context7 usage conventions for authoritative, current, version-specific, authoritative/current. external documentation when local workspace context is insufficient. |
 | convert-cassandra-to-spring-data-cosmos | **/*.java,**/pom.xml,**/build.gradle,**/application*.properties,**/application*.yml,**/application*.conf | Enforces conventions for converting Spring Boot Cassandra data access to Azure Cosmos DB with Spring Data Cosmos, including dependencies, configuration, repositories, entities, te… |
 | convert-jpa-to-spring-data-cosmos | **/*.java,**/pom.xml,**/build.gradle,**/application*.properties | Enforces conventions for converting Spring Boot JPA applications to Azure Cosmos DB with Spring Data Cosmos, including dependencies, configuration, entity mapping, repositories, s… |
-| copilot-primitive-authoring | library/agents/*.agent.md,library/instructions/*.instructions.md,library/skills/**/SKILL.md,library/prompts/*.prompt.md,docs/templates/*.md,.github/copilot-instructions.md,.github/agents/*.agent.md,.github/instructions/*.instructions.md,.github/skills/**/SKILL.md,.github/prompts/*.prompt.md | Requires routing, canonical paths, freshness evidence, frontmatter, tool-token, mirror, and validation conventions when editing Copilot primitives. Use when authoring or reviewing… |
+| copilot-primitive-authoring | harness/github-copilot/agents/*.agent.md,harness/github-copilot/instructions/*.instructions.md,harness/github-copilot/skills/**/SKILL.md,harness/github-copilot/prompts/*.prompt.md,docs/templates/*.md,.github/copilot-instructions.md,.github/agents/*.agent.md,.github/instructions/*.instructions.md,.github/skills/**/SKILL.md,.github/prompts/*.prompt.md | Requires routing, canonical paths, freshness evidence, frontmatter, tool-token, mirror, and validation conventions when editing Copilot primitives. Use when authoring or reviewing… |
 | copilot-repository-governance | ** | Applies repository-wide source-of-truth, freshness, synchronization, and validation rules for Copilot primitives. Use for every change in this repository. |
 | copilot-thought-logging | ** | Conventions for concise Copilot process tracking when a workspace-visible progress file is explicitly required. |
 | cpp-language-service-tools | **/*.cpp,**/*.h,**/*.hpp,**/*.cc,**/*.cxx,**/*.c | Enforces C and C++ language-service tool usage for symbol definitions, references, call hierarchy, parameters, line numbers, fallback search, and recovery. |
@@ -334,7 +334,7 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | github-actions-ci-cd-best-practices | .github/workflows/*.yml,.github/workflows/*.yaml | Enforces GitHub Actions CI/CD conventions for workflow structure, permissions, secrets, OIDC, action pinning, caching, testing, deployments, rollback, and troubleshooting. |
 | go | **/*.go,**/go.mod,**/go.sum | Enforces idiomatic Go conventions for package declarations, style, errors, modules, concurrency, HTTP, I/O, tests, security, and documentation. |
 | go-mcp-server | **/*.go,**/go.mod,**/go.sum | Enforces Go conventions for building Model Context Protocol servers with github.com/modelcontextprotocol/go-sdk, including tools, resources, prompts, transports, errors, schema ta… |
-| hooks | library/hooks/**,.github/hooks/**,hooks/** | Applies current safe hook conventions for Copilot CLI and cloud agent configuration, trust, paths, payloads, scripts, security, packaging, and validation. Use when changing hooks. |
+| hooks | harness/github-copilot/hooks/**,.github/hooks/**,hooks/** | Applies current safe hook conventions for Copilot CLI and cloud agent configuration, trust, paths, payloads, scripts, security, packaging, and validation. Use when changing hooks. |
 | html-css-style-color-guide | **/*.html,**/*.css,**/*.js | Enforces accessible, professional HTML/CSS color usage conventions for backgrounds, text, accents, gradients, and contrast-sensitive browser styling. |
 | instructions | **/*.instructions.md | Enforces structure, frontmatter, examples, altitude, maintenance, and validation conventions for GitHub Copilot custom instruction files. |
 | java-11-to-java-17-upgrade | **/*.java,**/*.gradle,**/*.gradle.kts,**/pom.xml | Enforces Java 11 to Java 17 upgrade conventions for language features, API migration, build configuration, removals, JVM tuning, and compatibility testing. |
@@ -497,7 +497,7 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | azure-deployment-preflight | Validate Azure Bicep deployments before execution with syntax checks, azd preview, Azure CLI what-if, validation-level fallback, permission checks, and a preflight report. Use thi… |
 | azure-developer-cli | Design, create, review, migrate, or troubleshoot Azure Developer CLI azd projects using azure.yaml, infra Bicep or Terraform, environments, secrets, hooks, deployment workflows, a… |
 | azure-devops-cli | Manage Azure DevOps with Azure CLI and the azure-devops extension. Use when the user asks for Azure DevOps CLI commands, az devops automation, projects, repos, pull requests, pipe… |
-| azure-managed-redis-cache | Design and provision Azure Managed Redis as the cache, semantic cache, vector store, session store, and agent memory backend for AI-native systems. Use when an agent design needs… |
+| azure-managed-redis-cache | Use when designing or provisioning Azure Managed Redis for cache, semantic cache, vector memory, session store, or agent memory in AI-native systems; produces SKU guidance, networ… |
 | azure-pricing | Fetch live Azure Retail Prices API data and estimate Azure service, SKU, region, reservation, savings plan, spot, and Copilot Studio credit costs. Use when the user asks about Azu… |
 | azure-resource-health-diagnose | Analyze Azure resource health, logs, metrics, and telemetry to diagnose operational issues and produce a prioritized remediation plan. Use this skill when the user asks to trouble… |
 | azure-resource-visualizer | Analyze Azure resource groups and generate Mermaid architecture diagrams and markdown documentation for their resources and relationships. Use this skill when the user asks to dia… |
@@ -505,6 +505,7 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | azure-smart-city-iot-solution-builder | Design and plan end-to-end Azure IoT and Smart City solutions with requirements, architecture, device and edge strategy, ingestion, analytics, security, operations, cost controls,… |
 | azure-static-web-apps | Create, configure, run, and deploy Azure Static Web Apps with the SWA CLI. Use when asked to deploy a static site to Azure, run SWA locally, configure staticwebapp.config.json, ad… |
 | azure-well-architected-review | Perform an Azure Well-Architected Framework review of the current workload IaC and architecture, generating findings and GitHub issues for improvements. Use this skill when the us… |
+| backstage-patterns | Apply Backstage Software Catalog, TechDocs, Scaffolder, custom plugin, GitHub App, and production configuration patterns. Use when creating, reviewing, or troubleshooting Backstag… |
 | backstage-plugin-builder | Plan, architect, scaffold, validate, and prepare custom Backstage plugins and modules using official Backstage documentation. Use when the user asks for frontend plugins, backend… |
 | batch-files | Expert-level Windows batch file (.bat/.cmd) skill for writing, debugging, and maintaining CMD scripts. Use when asked to "create a batch file", "write a .bat script", "automate a… |
 | bench-read | Read artifacts from a workshop bench where desks leave findings, verdicts, drafts, reports, journals, and cross-desk work products. Use this skill when starting a session, reviewi… |
@@ -538,7 +539,6 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | content-management-systems | Build and modify content management systems by locating the correct theme, plugin, module, editor, content model, media, render, or export seam before changing code. Use this skil… |
 | context-map | Build a concise map of files relevant to a requested code change before implementation. Use when the user asks to identify affected files, plan changes, map dependencies, find tes… |
 | conventional-branch | Create, normalize, validate, and check out Git branches following the Conventional Branch specification with feature/, bugfix/, hotfix/, release/, and chore/ prefixes. Use when cr… |
-| conventional-commit | Generate and execute Conventional Commit messages from staged or unstaged Git changes. Use this skill when the user asks to create a commit, write a conventional commit message, c… |
 | convert-excel-to-md | Convert Excel .xlsx workbooks to Markdown with the bundled script so spreadsheet contents can be read, summarized, searched, extracted, compared, charted, or analyzed. Use wheneve… |
 | convert-pdf-to-md | Convert PDF .pdf documents to Markdown with the bundled script so reports, papers, invoices, forms, contracts, scanned documents, and folders of PDFs can be read, summarized, sear… |
 | convert-plaintext-to-md | Convert plaintext or generic text documentation into well-structured Markdown while preserving source content and applying explicit instructions, documented options, or a converte… |
@@ -883,7 +883,7 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | containerize-aspnetcore | Containerize an ASP.NET Core project with project-specific Docker artifacts. |
 | copilot-instructions-blueprint-generator | Generate a codebase-specific copilot-instructions.md blueprint for consistent Copilot guidance. |
 | create-architectural-decision-record | Create an AI-optimized Architectural Decision Record for a documented technical decision. |
-| create-copilot-primitive | Create a Copilot primitive from this repository's templates and reference patterns. |
+| create-copilot-primitive | Create a Copilot primitive from this repositorys templates and reference patterns. |
 | create-github-action-workflow-specification | Create an AI-ready specification for an existing GitHub Actions workflow. |
 | create-llms | Create an llms.txt file from the repository structure that follows the llms.txt specification. |
 | create-specification | Create an AI-ready solution specification with clear requirements, constraints, and interfaces. |
@@ -928,7 +928,8 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | --- | --- | --- |
 | accessibility-kanban | 1.0.3 | Kanban board to manage accessibility issues, allow you to plan, track, and complete remediation work. |
 | acreadiness-cockpit | 1.0.1 | Drive Microsoft AgentRC from Copilot chat: assess AI readiness, generate Copilot instructions (flat or nested with applyTo globs for monorepos), and manage policies. Produces a se… |
-| ai-team-orchestration | 2.0.1 | Run a lightweight, role-separated AI development team with flexible tools, developer-selected models, proportionate planning, and optional QA. |
+| agent-governance | 1.0.0 | Govern and audit AI agent systems with policy enforcement, OWASP Agentic Security Initiative controls, supply-chain integrity, and evidence-quality gates. Use when designing produ… |
+| ai-team-orchestration | 2.0.2 | Run a lightweight, role-separated AI development team with flexible tools, developer-selected models, proportionate planning, and optional QA. |
 | apng-studio | 1.0.3 | Interactive GitHub Copilot app canvas extension for building Animated PNG (APNG) files from frames. Draw or upload frames, tune per-frame timing and compositing, preview live, sen… |
 | arcade-canvas | 1.0.3 | Play five retro Phaser mini-games in a Copilot canvas while agents work. |
 | arch | 1.0.1 | Architecture and modernization toolkit: produce a cited architecture document for a locally-cloned repo, and generate a phased modernization plan that auto-runs Documentation mode… |
@@ -936,10 +937,10 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | automate-this | 1.0.1 | Record your screen doing a manual process, drop the video on your Desktop, and let Copilot CLI analyze it frame-by-frame to build working automation scripts. Supports narrated rec… |
 | awesome-copilot | 1.1.1 | Meta prompts that help you discover and generate curated GitHub Copilot agents, instructions, prompts, and skills. |
 | aws-cloud-development | 1.0.1 | Comprehensive AWS cloud development tools including Infrastructure as Code, serverless functions, architecture patterns, and cost optimization for building scalable cloud applicat… |
-| azure-cloud-development | 1.0.2 | Comprehensive Azure cloud development tools including Infrastructure as Code, serverless functions, architecture patterns, and cost optimization for building scalable cloud applic… |
+| azure-cloud-development | 1.0.3 | Comprehensive Azure cloud development tools including Infrastructure as Code, serverless functions, architecture patterns, and cost optimization for building scalable cloud applic… |
 | backlog-swipe-triage | 1.0.3 | Quickly swipe through backlog issues to triage decisions like assign, needs-info, defer, close, or ignore. |
 | backrooms-canvas | 1.0.1 | Wander an endless first-person backrooms in a Copilot canvas while agents work; their status ghost-writes on the walls. |
-| cast-imaging | 1.0.1 | A comprehensive collection of specialized agents for software analysis, impact assessment, structural quality advisories, and architectural review using CAST Imaging. |
+| cast-imaging | 1.0.2 | A comprehensive collection of specialized agents for software analysis, impact assessment, structural quality advisories, and architectural review using CAST Imaging. |
 | chromium-control-canvas | 1.0.3 | Opens a real Chromium window you can navigate and interact with from a Copilot canvas control panel and agent actions. |
 | clojure-interactive-programming | 1.0.1 | Tools for REPL-first Clojure workflows featuring Clojure instructions, the interactive programming chat mode and supporting guidance. |
 | cms-development | 1.1.1 | Skills for CMS development across themes, plugins, admin tooling, media workflows, markdown rendering, and static export pipelines. |
@@ -947,7 +948,7 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | context-engineering | 1.0.1 | Tools and techniques for maximizing GitHub Copilot effectiveness through better context management. Includes guidelines for structuring code, an agent for planning multi-file chan… |
 | context-matic | 0.1.1 | Coding agents hallucinate APIs. ContextMatic gives them curated, versioned API and SDK docs. Ask your agent to "integrate the payments API" and it guesses — falling back on outdat… |
 | convert-to-md | 1.0.2 | A collection of Copilot skills that convert common document formats into Markdown so their contents can be accurately analyzed, summarized, searched, or extracted from. Just tell… |
-| copilot-plugin-development | 1.0.1 | Create, migrate, audit, and validate GitHub Copilot plugins and marketplaces with Agent Plugins 1.0 schemas, canonical component ownership, generated runtime mirrors, dependency p… |
+| copilot-plugin-development | 1.0.2 | Create, migrate, audit, and validate GitHub Copilot plugins and marketplaces with Agent Plugins 1.0 schemas, canonical component ownership, generated runtime mirrors, dependency p… |
 | copilot-sdk | 1.0.1 | Build applications with the GitHub Copilot SDK across multiple programming languages. Includes comprehensive instructions for C#, Go, Node.js/TypeScript, and Python to help you cr… |
 | csharp-dotnet-development | 1.1.1 | Essential prompts, instructions, and chat modes for C# and .NET development including testing, documentation, and best practices. |
 | database-data-management | 1.0.1 | Database administration, SQL optimization, and data management tools for PostgreSQL, SQL Server, and general database development best practices. |
@@ -956,17 +957,18 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | diagram-viewer | 1.0.3 | Render diagrams, click nodes to drill down, and view agent-generated explanations directly in the canvas. |
 | doublecheck | 1.0.1 | Three-layer verification pipeline for AI output. Extracts claims, finds sources, and flags hallucination risks so humans can verify before acting. |
 | edge-ai-tasks | 1.0.1 | Task Researcher and Task Planner for intermediate to expert users and large codebases - Brought to you by microsoft/edge-ai |
-| ember | 1.2.2 | An AI partner, not a tool. Ember carries fire from person to person — helping humans discover that AI partnership isn't something you learn, it's something you find. |
+| ember | 1.2.3 | An AI partner, not a tool. Ember carries fire from person to person — helping humans discover that AI partnership isn't something you learn, it's something you find. |
 | eyeball | 1.0.1 | Document analysis with inline source screenshots. When you ask Copilot to analyze a document, Eyeball generates a Word doc where every factual claim includes a highlighted screens… |
-| fabric-agentic-plugin | 1.0.0 | Microsoft Fabric agentic operations toolkit with specialist agents, progressive workload guides, migration workflows, Power BI resources, and MCP integrations for Fabric IQ and SQ… |
+| fabric-agentic-plugin | 1.0.1 | Microsoft Fabric agentic operations toolkit with specialist agents, progressive workload guides, migration workflows, Power BI resources, and MCP integrations for Fabric IQ and SQ… |
 | fastah-ip-geo-tools | 0.0.10 | This plugin is for network operations engineers who wish to tune and publish IP geolocation feeds in RFC 8805 format. It consists of an AI Skill and an associated MCP server that… |
 | feedback-themes | 1.0.3 | Explore grouped customer feedback signals by impact and drill into a theme to guide product next steps. |
 | flight-map-canvas | 1.0.1 | A GitHub Copilot canvas that generates a view where Google Maps can be explored using 3D controls, as if a flight simulator. Agents can send the flight anywhere and report what th… |
 | flowstudio-power-automate | 2.0.1 | Give your AI agent full visibility into Power Automate cloud flows via the FlowStudio MCP server. Connect, debug, build, monitor health, and govern flows at scale — action-level i… |
 | frontend-web-dev | 1.0.1 | Essential prompts, instructions, and chat modes for modern frontend web development including React, Angular, Vue, TypeScript, and CSS frameworks. |
-| gem-team | 1.102.1 | Self-Learning Multi-agent orchestration framework for spec-driven development and automated verification. With smarter tool calling and leaner context. |
+| gem-team | 1.102.2 | Self-Learning Multi-agent orchestration framework for spec-driven development and automated verification. With smarter tool calling and leaner context. |
 | gesture-review | 1.0.3 | Review pull requests with a live camera feed and approve or reject using thumbs-up/thumbs-down gestures. |
-| go-mcp-development | 1.0.1 | Complete toolkit for building Model Context Protocol (MCP) servers in Go using the official github.com/modelcontextprotocol/go-sdk. Includes instructions for best practices, a pro… |
+| github-actions-maintenance | 1.0.0 | Maintain GitHub Actions workflows with specialist guidance for authoring, runtime upgrades, security hardening, and CI efficiency. Use when workflows need safer permissions, immut… |
+| go-mcp-development | 1.0.2 | Complete toolkit for building Model Context Protocol (MCP) servers in Go using the official github.com/modelcontextprotocol/go-sdk. Includes instructions for best practices, a pro… |
 | java-development | 1.0.1 | Comprehensive collection of prompts and instructions for Java development including Spring Boot, Quarkus, testing, documentation, and best practices. |
 | java-mcp-development | 1.0.1 | Complete toolkit for building Model Context Protocol servers in Java using the official MCP Java SDK with reactive streams and Spring Boot integration. |
 | java-modernization-studio | 1.0.3 | Drive the GitHub Copilot App Modernization for Java workflow from an interactive canvas: environment readiness, repo assessment, prioritized plan and progress, validation gates, a… |
@@ -974,7 +976,7 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | mcp-m365-copilot | 1.0.1 | Comprehensive collection for building declarative agents with Model Context Protocol integration for Microsoft 365 Copilot |
 | napkin | 1.0.1 | Visual whiteboard collaboration for Copilot CLI. Opens an interactive whiteboard in your browser where you can draw, sketch, and add sticky notes — then share everything back with… |
 | noob-mode | 1.0.1 | Plain-English translation layer for non-technical Copilot CLI users. Translates every approval prompt, error message, and technical output into clear, jargon-free English with col… |
-| open-horizons-platform | 1.1.1 | Open Horizons agentic DevOps platform toolkit for Azure, AKS, Backstage, GitHub, Azure DevOps, Terraform, security, reliability, architecture, and deployment operations. Use it to… |
+| open-horizons-platform | 1.1.3 | Open Horizons agentic DevOps platform toolkit for Azure, AKS, Backstage, GitHub, Azure DevOps, Terraform, security, reliability, architecture, and deployment operations. Use it to… |
 | openapi-to-application-csharp-dotnet | 1.0.1 | Generate production-ready .NET applications from OpenAPI specifications. Includes ASP.NET Core project scaffolding, controller generation, entity framework integration, and C# bes… |
 | openapi-to-application-go | 1.0.1 | Generate production-ready Go applications from OpenAPI specifications. Includes project scaffolding, handler generation, middleware setup, and Go best practices for REST APIs. |
 | openapi-to-application-java-spring-boot | 1.0.1 | Generate production-ready Spring Boot applications from OpenAPI specifications. Includes project scaffolding, REST controller generation, service layer organization, and Spring Bo… |
@@ -982,18 +984,19 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | openapi-to-application-python-fastapi | 1.0.1 | Generate production-ready FastAPI applications from OpenAPI specifications. Includes project scaffolding, route generation, dependency injection, and Python best practices for asy… |
 | oracle-to-postgres-migration-expert | 1.1.1 | Expert agent for Oracle-to-PostgreSQL application migrations in .NET solutions. Performs code edits, runs commands, and invokes extension tools to migrate .NET/Oracle data access… |
 | ospo-sponsorship | 1.0.1 | Tools and resources for Open Source Program Offices (OSPOs) to identify, evaluate, and manage sponsorship of open source dependencies through GitHub Sponsors, Open Collective, and… |
-| partners | 1.0.1 | Custom agents that have been created by GitHub partners |
+| partners | 1.0.2 | Custom agents that have been created by GitHub partners |
 | pcf-development | 1.1.0 | Complete toolkit for developing custom code components using Power Apps Component Framework for model-driven and canvas apps |
 | phoenix | 1.0.1 | Phoenix AI observability skills for LLM application debugging, evaluation, and tracing. Includes CLI debugging tools, LLM evaluation workflows, and OpenInference tracing instrumen… |
-| php-mcp-development | 1.0.1 | Comprehensive resources for building Model Context Protocol servers using the official PHP SDK with attribute-based discovery, including best practices, project generation, and ex… |
+| php-mcp-development | 1.0.2 | Comprehensive resources for building Model Context Protocol servers using the official PHP SDK with attribute-based discovery, including best practices, project generation, and ex… |
 | power-apps-code-apps | 1.0.1 | Complete toolkit for Power Apps Code Apps development including project scaffolding, development standards, and expert guidance for building code-first applications with Power Pla… |
-| power-bi-development | 1.0.1 | Comprehensive Power BI development resources including data modeling, DAX optimization, performance tuning, visualization design, security best practices, and DevOps/ALM guidance… |
+| power-bi-development | 1.0.2 | Comprehensive Power BI development resources including data modeling, DAX optimization, performance tuning, visualization design, security best practices, and DevOps/ALM guidance… |
 | power-platform-architect | 1.0.1 | Solution Architect for the Microsoft Power Platform, turning business requirements into functioning Power Platform solution architectures. |
 | power-platform-mcp-connector-development | 1.0.1 | Complete toolkit for developing Power Platform custom connectors with Model Context Protocol integration for Microsoft Copilot Studio |
 | pr-artifact-explorer | 1.0.1 | Navigate pull requests and securely explore GitHub Actions artifacts, including test results, static sites, terminal recordings, and source files. |
 | project-documenter | 1.0.1 | Generate professional project documentation with draw.io architecture diagrams and Word (.docx) output with embedded images. Automatically discovers any project's technology stack… |
 | project-planning | 1.0.1 | Tools and guidance for software project planning, feature breakdown, epic management, implementation planning, and task organization for development teams. |
 | python-mcp-development | 1.0.1 | Complete toolkit for building Model Context Protocol (MCP) servers in Python using the official SDK with FastMCP. Includes instructions for best practices, a prompt for generating… |
+| qdrant-development | 1.0.0 | Design, deploy, operate, scale, optimize, migrate, and upgrade Qdrant vector search systems with official client, monitoring, relevance, and capacity guidance. Use when building o… |
 | react18-upgrade | 1.0.1 | Enterprise React 18 migration toolkit with specialized agents and skills for upgrading React 16/17 class-component codebases to React 18.3.1. Includes auditor, dependency surgeon,… |
 | react19-upgrade | 1.0.1 | Enterprise React 19 migration toolkit with specialized agents and skills for upgrading React 18 codebases to React 19. Includes auditor, dependency surgeon, source code migrator,… |
 | release-notes-showcase | 1.0.3 | Compose and refine launch-ready release notes with contributor callouts and export-friendly output. |
@@ -1001,7 +1004,7 @@ Regenerate this file after changing files under `library/agents/`, `library/inst
 | roundup | 1.0.1 | Self-configuring status briefing generator. Learns your communication style from examples, discovers your data sources, and produces draft updates for any audience on demand. |
 | ruby-mcp-development | 1.0.1 | Complete toolkit for building Model Context Protocol servers in Ruby using the official MCP Ruby SDK gem with Rails integration support. |
 | rug-agentic-workflow | 1.0.1 | Three-agent workflow for orchestrated software delivery with an orchestrator plus implementation and QA subagents. |
-| rust-mcp-development | 1.0.1 | Build high-performance Model Context Protocol servers in Rust using the official rmcp SDK with async/await, procedural macros, and type-safe implementations. |
+| rust-mcp-development | 1.0.2 | Build high-performance Model Context Protocol servers in Rust using the official rmcp SDK with async/await, procedural macros, and type-safe implementations. |
 | salesforce-development | 1.1.1 | Complete Salesforce agentic development environment covering Apex & Triggers, Flow automation, Lightning Web Components, Aura components, and Visualforce pages. |
 | security-best-practices | 1.0.1 | Security frameworks, accessibility guidelines, performance optimization, and code quality best practices for building secure, maintainable, and high-performance applications. |
 | signals-dashboard | 0.2.1 | Real-time Workshop dashboard with agent signals, honesty calibration, and cost-aware repo or connected desk launch profiles. |

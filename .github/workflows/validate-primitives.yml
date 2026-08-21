@@ -27,28 +27,34 @@ jobs:
 
       # Enforce harness rules and mandatory repository contracts for every primitive type.
       - name: Validate primitives
-        run: python3 library/scripts/validate_primitives.py --strict
+        run: python3 harness/github-copilot/scripts/validate_primitives.py --strict
 
       - name: Check normalized plugin manifests
-        run: python3 library/scripts/normalize_plugin_manifests.py --check
+        run: python3 harness/github-copilot/scripts/normalize_plugin_manifests.py --check
 
       - name: Check plugin marketplace audit
-        run: python3 library/scripts/audit_plugins.py --check
+        run: python3 harness/github-copilot/scripts/audit_plugins.py --check
 
       - name: Check primitive content audit
-        run: python3 library/scripts/audit_primitive_content.py --check
+        run: python3 harness/github-copilot/scripts/audit_primitive_content.py --check
+
+      - name: Check agent and prompt capability audit
+        run: python3 harness/github-copilot/scripts/audit_primitive_capabilities.py --check
+
+      - name: Check primitive redundancy audit
+        run: python3 harness/github-copilot/scripts/audit_primitive_redundancy.py --check
 
       # Prevent committed docs/CATALOG.md from drifting from repository contents.
       - name: Check catalog drift
-        run: python3 library/scripts/generate_catalog.py --check
+        run: python3 harness/github-copilot/scripts/generate_catalog.py --check
 
       # Prevent plugin-local generated components from drifting from shared primitives.
       - name: Check plugin component drift
-        run: python3 library/scripts/sync_plugin_components.py --check
+        run: python3 harness/github-copilot/scripts/sync_plugin_components.py --check
 
       # Prevent installed .github customizations and compatibility copies from drifting.
       - name: Check installed primitive drift
-        run: python3 library/scripts/sync_installed_primitives.py --check
+        run: python3 harness/github-copilot/scripts/sync_installed_primitives.py --check
 
   links:
     name: External link audit (advisory)
@@ -71,6 +77,6 @@ jobs:
             echo "## External link audit"
             echo
             echo '```'
-            python3 library/scripts/check_links.py --only-problems || true
+            python3 harness/github-copilot/scripts/check_links.py --only-problems || true
             echo '```'
           } >> "$GITHUB_STEP_SUMMARY"

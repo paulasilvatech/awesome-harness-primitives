@@ -8,23 +8,43 @@ Binary: `/Users/paulasilva/.local/bin/copilot`
 
 ## First-party customization documentation verification
 
-Verification date: 2026-08-19. These checks fetched known first-party pages directly; they did not use
+Verification date: 2026-08-21. These checks fetched known first-party pages directly; they did not use
 community sources or treat page availability as runtime proof.
 
 | Area | First-party source | Verified guidance |
 | --- | --- | --- |
 | Repository instructions | https://docs.github.com/en/copilot/how-tos/copilot-on-github/customize-copilot/add-custom-instructions/add-repository-instructions | `.github/copilot-instructions.md` is repository-wide; `.github/instructions/**/*.instructions.md` is path-specific; both apply when matched. Repository instructions should be concise, general, and include project layout and working validation commands. |
 | VS Code instructions | https://code.visualstudio.com/docs/agent-customization/custom-instructions | `.github/copilot-instructions.md` is always-on. File-based instructions use `.instructions.md`; multiple applicable files are combined without a guaranteed order. Start with one concise global file and add focused path-specific rules. |
-| Custom agents | https://code.visualstudio.com/docs/agent-customization/custom-agents | Custom agents define task-specific personas, instructions, and tool sets. Workspace agents live under `.github/agents`; VS Code handoffs are guided transitions between agents. |
+| Custom agents | https://code.visualstudio.com/docs/agent-customization/custom-agents | Custom agents define task-specific personas, instructions, tool sets, optional subagent allow-lists through `agents`, model fallback arrays, visibility, and model-invocation controls. Workspace agents live under `.github/agents`; VS Code handoffs are guided transitions between agents. An explicit `agents` list requires the `agent` tool when `tools` is restricted. |
 | Agent Skills | https://code.visualstudio.com/docs/agent-customization/agent-skills | Skills are portable on-demand packages. `name` must be kebab-case, no more than 64 characters, and match the parent directory; `description` must state what and when and is no more than 1024 characters. |
 | GitHub Copilot plugins | https://docs.github.com/en/copilot/concepts/agents/about-plugins and https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-plugin-reference | An installable plugin can contain agents, skills, hooks, MCP server configurations, and LSP server configurations. The documented component fields do not include repository instructions or VS Code prompt files; those assets must still be published to their repository discovery paths when needed. |
-| Prompt files | https://code.visualstudio.com/docs/agent-customization/prompt-files | Prompt files are manually invoked local VS Code slash commands. Agent Host does not use them. Supported metadata includes `description`, `name`, `argument-hint`, `agent`, `model`, and `tools`; unavailable tools are ignored. |
+| Prompt files | https://code.visualstudio.com/docs/agent-customization/prompt-files | Prompt files are manually invoked local VS Code slash commands. Agent Host does not use them. Supported metadata includes `description`, `name`, `argument-hint`, `agent`, `model`, and `tools`; unavailable tools are ignored. This repository therefore uses stable generic aliases or an intentional tool set instead of retaining historical environment-specific IDs. |
+| VS Code agent tools | https://code.visualstudio.com/docs/agents/run/tools | The current tools picker is the authoritative inventory for a profile. Custom agents and prompts can restrict tools; built-in, MCP, extension, and tool-set availability is environment-specific. VS Code limits one request to 128 enabled tools and recommends selecting only relevant tools. |
+| VS Code approvals and permissions | https://code.visualstudio.com/docs/agents/run/approvals | Permission levels are session controls, not primitive frontmatter. VS Code documents Default Approvals, Assisted permissions, Bypass Approvals, and Autopilot plus tool, URL, terminal, sandbox, and managed-policy controls. Managed rules can still block operations under Bypass Approvals or Autopilot. |
 | Hooks | https://docs.github.com/en/copilot/reference/hooks-reference | Hooks are supported by Copilot CLI and cloud agent. Repository configs live under `.github/hooks/*.json`; cloud agent runs in an ephemeral Linux environment and honors `bash` or `command`, not PowerShell. |
+| GitHub custom-agent tools | https://docs.github.com/en/copilot/reference/custom-agents-configuration | GitHub documents `execute`, `read`, `edit`, `search`, `agent`, `web`, and `todo` aliases and ignores unrecognized names. This conflicts with measured Copilot CLI 1.0.81-0 behavior for `search`, `web`, and `todo`, so cross-surface agents continue using the measured CLI-safe spellings; VS Code-only prompts use the current VS Code aliases. |
 
 The pages did not expose a product version in the fetched content. Recheck them when a target product
 version changes, local evidence conflicts, a claim is unverified, the user asks for current behavior, or
 this evidence is older than 90 days. Do not refresh this date without repeating the fetch and reviewing
 the relevant sections.
+
+## Harness namespace, capability, and composition verification
+
+Verification date: 2026-08-21. Target runtime: GitHub Copilot CLI 1.0.81-4.
+
+| Evidence | Verified result |
+| --- | --- |
+| Canonical relocation to `harness/github-copilot/` | The shared source tree moved without a compatibility symlink or duplicate canonical tree. Repository `.github/` paths remain generated runtime surfaces. All active path references use the new namespace; historical evidence in this file remains unchanged. |
+| Strict validation with Python 3.13 and no PyYAML | The fallback frontmatter parser successfully parsed every shared agent, skill, and prompt, including nested `mcp-servers`, arrays, and mappings. Strict validation reported 225 agents, 194 instructions, 421 skills, 48 prompts, 99 plugins, and 16 canonical/installed hook configs with zero errors or warnings. |
+| `docs/PRIMITIVE-CAPABILITIES.md` | The static audit covered 239 canonical agents and 57 canonical prompts across shared and plugin-owned sources. It found zero fixed model pins, zero read-only agents inheriting all tools, zero legacy prompt tool names, and zero blocking findings. Forty-six environment-specific MCP, extension, or tool-set cases remain explicitly queued for runtime verification. |
+| `docs/PRIMITIVE-REDUNDANCY.md` | The audit found zero exact duplicate groups and zero unclassified candidates. `conventional-commit` was consolidated into `git-commit`; Redis and Backstage shared skills now have one shared canonical source and generated Open Horizons package copies. Sixteen high-similarity pairs remain classified as language, framework, lifecycle, source-framework, or specialization variants. |
+| Naming audit | Every shared agent, instruction, skill, prompt, plugin, hook, and plugin-owned agent/skill identifier uses lowercase kebab-case. The validator now rejects non-kebab agent, instruction, plugin, and hook identifiers. |
+| Fresh isolated marketplace installation | All 99 marketplace entries installed successfully from the local repository into a new isolated `COPILOT_HOME`; `copilot plugin list` reported 99 installed packages. |
+| New plugin probes | `agent-governance:agent-governance-reviewer` returned `governance-ok`; `github-actions-maintenance:github-actions-expert` returned `actions-ok`; the Qdrant plugin exposed all eight expected skills with `source: plugin`. |
+| Renamed and mixed-source plugin probes | `fabric-agentic-plugin:fabric-admin` returned `fabric-ok`; `open-horizons-platform:deploy` returned `horizons-ok`. Open Horizons exposed shared `azure-managed-redis-cache` and `backstage-plugin-builder` as plugin skills while drift checks confirmed their package copies match the shared canonical sources. |
+| Open Horizons safety payloads | A safe `terraform plan` payload produced no stdout. A `terraform apply` payload returned `permissionDecision: ask` with the expected approval reason. |
+| VS Code prompt runtime | First-party prompt/tool/approval pages were reverified and static prompt metadata passed. **Chat: Run Prompt** was not run because no VS Code CLI or customization command was available to this client; environment-specific prompt tool sets remain in the capability audit runtime queue. |
 
 ## Open Horizons plugin integration verification
 

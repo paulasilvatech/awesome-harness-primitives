@@ -562,8 +562,8 @@ export class VisualTestUtils {
 ```typescript
 // Jest test for React component
 import * as React from 'react';
-import { render, screen } from '@testing-library/react';
-import '@testing-library/jest-dom';
+import { render, screen } from '@testing-harness/github-copilot/react';
+import '@testing-harness/github-copilot/jest-dom';
 import ReactCircleCard from '../src/component';
 
 describe('ReactCircleCard', () => {

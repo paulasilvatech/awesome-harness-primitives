@@ -1,0 +1,37 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "qdrant-development",
+  "description": "Design, deploy, operate, scale, optimize, migrate, and upgrade Qdrant vector search systems with official client, monitoring, relevance, and capacity guidance. Use when building or maintaining production Qdrant workloads.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Copilot Primitives Maintainers"
+  },
+  "repository": "https://github.com/paulasilvatech/copilot-primitives",
+  "license": "MIT",
+  "keywords": [
+    "qdrant",
+    "vector-search",
+    "embeddings",
+    "observability",
+    "scaling",
+    "migration"
+  ],
+  "extensions": {
+    "com.github.copilot": {},
+    "com.paulasilvatech.copilot-primitives": {
+      "componentSource": "library",
+      "layoutVersion": 1,
+      "agents": [],
+      "skills": [
+        "./skills/qdrant-clients-sdk/",
+        "./skills/qdrant-deployment-options/",
+        "./skills/qdrant-model-migration/",
+        "./skills/qdrant-monitoring/",
+        "./skills/qdrant-performance-optimization/",
+        "./skills/qdrant-scaling/",
+        "./skills/qdrant-search-quality/",
+        "./skills/qdrant-version-upgrade/"
+      ]
+    }
+  }
+}

@@ -11,7 +11,7 @@ These instructions apply to `SKILL.md` files matched by `**/skills/**/SKILL.md`.
 
 Use a `skill` for a reusable capability, procedure, review method, or task-specific knowledge package that may include scripts and resources. Use `instructions` for passive conventions, an `agent` for persona and judgment, and a `prompt` for a user-invoked VS Code action.
 
-Author the canonical package at `library/skills/<name>/`. Install declared project skills through `python3 library/scripts/sync_installed_primitives.py`; do not edit `.github/skills/` or plugin-local copies independently.
+Author the canonical package at `harness/github-copilot/skills/<name>/`. Install declared project skills through `python3 harness/github-copilot/scripts/sync_installed_primitives.py`; do not edit `.github/skills/` or plugin-local copies independently.
 
 ## Discovery Metadata
 
@@ -51,12 +51,14 @@ Use local manifests, the harness spec, and dated evidence first. Verify first-pa
 Run:
 
 ```sh
-python3 library/skills/skill-creator/scripts/validate_skill.py library/skills/<name>
-python3 library/scripts/validate_primitives.py --strict
-python3 library/scripts/audit_primitive_content.py --check
-python3 library/scripts/generate_catalog.py --check
-python3 library/scripts/sync_plugin_components.py --check
-python3 library/scripts/sync_installed_primitives.py --check
+python3 harness/github-copilot/skills/skill-creator/scripts/validate_skill.py harness/github-copilot/skills/<name>
+python3 harness/github-copilot/scripts/validate_primitives.py --strict
+python3 harness/github-copilot/scripts/audit_primitive_content.py --check
+python3 harness/github-copilot/scripts/audit_primitive_capabilities.py --check
+python3 harness/github-copilot/scripts/audit_primitive_redundancy.py --check
+python3 harness/github-copilot/scripts/generate_catalog.py --check
+python3 harness/github-copilot/scripts/sync_plugin_components.py --check
+python3 harness/github-copilot/scripts/sync_installed_primitives.py --check
 ```
 
 Also execute changed bundled scripts or focused tests that cover their behavior.

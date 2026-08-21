@@ -1,5 +1,5 @@
 ---
-applyTo: "library/hooks/**,.github/hooks/**,hooks/**"
+applyTo: "harness/github-copilot/hooks/**,.github/hooks/**,hooks/**"
 description: "Applies current safe hook conventions for Copilot CLI and cloud agent configuration, trust, paths, payloads, scripts, security, packaging, and validation. Use when changing hooks."
 ---
 
@@ -13,7 +13,7 @@ Use hooks for small, deterministic automation at a lifecycle event. Use instruct
 
 GitHub documents hooks for Copilot CLI and Copilot cloud agent. Do not claim VS Code hook parity without separate first-party evidence. Cloud agent runs hooks in an ephemeral non-interactive Linux environment; only `bash` or `command` entries are effective there, and network access is constrained.
 
-Author reusable packages under `library/hooks/<name>/`. Install repository configs under `.github/hooks/*.json` with any referenced scripts available at workspace-relative paths.
+Author reusable packages under `harness/github-copilot/hooks/<name>/`. Install repository configs under `.github/hooks/*.json` with any referenced scripts available at workspace-relative paths.
 
 ## Configuration, Trust, and Paths
 
@@ -72,7 +72,7 @@ Test the script directly with representative valid, malformed, allow, deny, fail
 - [ ] Matcher-independent policy checks exist where security or correctness depends on filtering.
 - [ ] Direct payload tests cover success, failure, malformed input, and any blocking behavior.
 - [ ] Current schema claims have dated first-party or runtime evidence.
-- [ ] `python3 library/scripts/validate_primitives.py --strict` passes for canonical and installed hooks.
+- [ ] `python3 harness/github-copilot/scripts/validate_primitives.py --strict` passes for canonical and installed hooks.
 
 ## References
 

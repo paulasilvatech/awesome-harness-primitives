@@ -4,7 +4,7 @@
     "preToolUse": [
       {
         "type": "command",
-        "bash": "library/hooks/attester-import-check/check-imports.py",
+        "bash": "harness/github-copilot/hooks/attester-import-check/check-imports.py",
         "cwd": ".",
         "env": {
           "ATTESTER_MODE": "block"

@@ -4,7 +4,7 @@
     "preToolUse": [
       {
         "type": "command",
-        "bash": "library/hooks/tool-guardian/guard-tool.sh",
+        "bash": "harness/github-copilot/hooks/tool-guardian/guard-tool.sh",
         "cwd": ".",
         "env": {
           "GUARD_MODE": "block"

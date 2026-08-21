@@ -11,7 +11,7 @@ These instructions apply to `*.prompt.md` files matched by `**/*.prompt.md`. The
 
 Prompt files are manually invoked slash commands for local VS Code chat. Agent Host sessions do not use prompt files; convert a workflow that must run in Agent Host or Copilot CLI into an Agent Skill.
 
-Author the canonical source at `library/prompts/<name>.prompt.md`. Publish declared project prompts to `.github/prompts/` through `python3 library/scripts/sync_installed_primitives.py`; do not maintain the installed copy independently.
+Author the canonical source at `harness/github-copilot/prompts/<name>.prompt.md`. Publish declared project prompts to `.github/prompts/` through `python3 harness/github-copilot/scripts/sync_installed_primitives.py`; do not maintain the installed copy independently.
 
 ## Metadata and Inputs
 
@@ -22,7 +22,7 @@ The VS Code schema supports `description`, `name`, `argument-hint`, `agent`, `mo
 - Add `argument-hint` only when it helps users supply meaningful input.
 - Omit `agent` to inherit the current agent unless the workflow requires `ask`, `agent`, `plan`, or a named custom agent.
 - Omit `model` unless a verified fixed model is required.
-- Omit `tools` when inherited tools are sufficient. When tools are necessary, use exact IDs from the target VS Code environment; unavailable tools are ignored.
+- Omit `tools` when inherited tools are sufficient. When a stable built-in capability is required, prefer the current aliases `read`, `search`, `edit`, `execute`, `web`, `agent`, or `todo`; use an MCP/extension tool or tool set only when the prompt truly depends on it. Unavailable tools are ignored.
 - Define `${input:name}` values and contextual variables such as `${selection}`, `${file}`, or `${workspaceFolder}` only when the body consumes them and defines missing-input behavior.
 
 ## Body Contract
@@ -48,6 +48,10 @@ Choose exactly one destination mode per invocation: Chat response, approved work
 
 Ask for missing required inputs and stop before side effects. Distinguish inspected evidence from assumptions, validate the completed result, and never claim a file was written or a command passed when the required tool was unavailable.
 
+Prompt frontmatter controls tool availability, not approval. Default Approvals, Assisted permissions,
+Bypass Approvals, Autopilot, URL approval, terminal approval, sandboxing, and managed organizational rules
+remain VS Code session or policy controls. Do not add a `permissions` field.
+
 Repository files may be linked when they are intentional runtime context. References to another primitive use its installed name and type rather than a cross-primitive relative link.
 
 ## Freshness and Testing
@@ -61,7 +65,7 @@ Run repository validation and installed-mirror checks. Then use **Chat: Run Prom
 | Rule | Rationale |
 | --- | --- |
 | Treat prompts as VS Code-only explicit actions. | Agent Host and Copilot CLI users are routed to a portable Skill instead. |
-| Keep canonical sources under `library/prompts/` and generate installed copies. | Source and workspace behavior cannot drift silently. |
+| Keep canonical sources under `harness/github-copilot/prompts/` and generate installed copies. | Source and workspace behavior cannot drift silently. |
 | Require clear inputs, preconditions, limits, output, and done criteria. | Manual invocation remains predictable and safe. |
 | Use exact target-environment tool IDs only when needed. | Unknown tools are ignored and do not provide capability. |
 | Test destination behavior in VS Code. | Static Markdown validation cannot prove runtime side effects. |
