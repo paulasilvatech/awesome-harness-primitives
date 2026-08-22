@@ -74,9 +74,33 @@ The Firecrawl MCP endpoint rejected the request because its token was invalid. A
 therefore fetched directly from their known first-party locations, and repository sources were
 read from exact commits. This fallback did not send private repository content to third parties.
 
-## Open Horizons plugin integration verification
+## Flat GitHub Copilot plugin layout verification
+
+Verification date: 2026-08-22. Target runtime: GitHub Copilot CLI 1.0.81-4.
+
+| Evidence | Verified result |
+| --- | --- |
+| https://docs.github.com/en/copilot/concepts/agents/about-plugins | GitHub documents plugin components directly at the plugin root: agents in `agents/`, skills in `skills/`, hooks as root `hooks.json` or under `hooks/`, MCP configuration at the root, and manifest component paths. |
+| https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/plugins-creating | The current first-party authoring example omits `$schema` and declares `agents`, `skills`, `hooks`, and `mcpServers` directly in `plugin.json`. |
+| https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-plugin-reference | Without the Agent Plugins `$schema`, GitHub Copilot CLI supports direct component path fields and defaults agents and skills to `agents/` and `skills/`. |
+| https://agent-plugins.org/specification | Portable Agent Plugins 1.0 standardizes only skills and MCP servers. Reverse-domain client extension directories are permitted for client-specific behavior but are not required by the portable core. |
+| Isolated flat `backstage-expert` copy | With `$schema` and `com.github.copilot/` removed, the plugin installed 26 skills, resolved `backstage-expert:backstage-expert`, returned `flat-agent-ok`, and its direct `hooks/backstage-safety/hooks.json` blocked a simulated create-app command. |
+| Isolated flat `awesome-copilot` copy | Direct `agents/` and `skills/` loaded, and `mcpServers: "mcp.json"` exposed the `awesome-copilot` server with `source: plugin` while preserving the portable `stdio` configuration. |
+| Isolated flat `backlog-swipe-triage` copy | The extension-only plugin installed successfully with `extensions/backlog-swipe-triage` declared directly and no namespaced mirror. |
+| Repository-wide migration | All 100 manifests use the flat GitHub Copilot contract. Shared-source ownership moved to `harness/github-copilot/manifests/plugin-sources.json`. No `com.github.copilot/` directory remains under the plugin tree. |
+| Full isolated marketplace installation | All 100 entries installed successfully into one fresh `COPILOT_HOME`. The installed packages contained zero namespaced directories, 53 direct agent directories, 72 direct skill directories, three direct hook directories, and 24 direct extension directories. Runtime discovery reported 238 plugin skills and eight plugin MCP servers. |
+| Representative runtime probes | `aws-cloud-development:aws-principal-architect` returned `flat-aws-ok`; the direct Backstage hook denied an approval-gated create-app command; the extension-only Backlog Swipe package retained its direct extension entry point after install. |
+
+The namespaced Agent Plugins probes recorded on 2026-08-20 below remain valid observations about
+schema-declaring packages, but they no longer define this repository's package architecture. The
+2026-08-22 flat-layout verification supersedes that design choice for all managed marketplace plugins.
+
+## Historical Open Horizons namespaced-layout verification
 
 Verification date: 2026-08-20. Target runtime: GitHub Copilot CLI 1.0.81-0.
+
+This section records the previously tested schema-declaring layout. It is retained as historical
+runtime evidence and is superseded by the flat-layout verification above.
 
 | Evidence | Verified result |
 | --- | --- |
@@ -97,9 +121,12 @@ The package was corrected to install its own nine agents, 30 skills, one safety 
 servers. Repository-only instructions, prompts, workflows, issue forms, and templates remain in the
 package as a workspace kit and are published only through an explicit dry-run/apply workflow.
 
-## Marketplace-wide Agent Plugins verification
+## Historical marketplace-wide Agent Plugins verification
 
 Verification date: 2026-08-20. Target runtime: GitHub Copilot CLI 1.0.81-4.
+
+This section records the earlier namespaced migration and its then-current counts. It is retained
+for traceability and is superseded by the 2026-08-22 flat-layout verification.
 
 | Evidence | Verified result |
 | --- | --- |
@@ -111,7 +138,7 @@ Verification date: 2026-08-20. Target runtime: GitHub Copilot CLI 1.0.81-4.
 | `azure-cloud-development@copilot-primitives` before migration | The plugin installed four skills, but GitHub Copilot CLI warned that root `agents/` was ignored because `$schema` was present; its namespaced agent was unavailable. |
 | `azure-cloud-development@copilot-primitives` after migration | The plugin installed four skills and `azure-cloud-development:azure-principal-architect` returned `ok` after agents were materialized under `com.github.copilot/agents/`. |
 | `copilot plugin marketplace browse copilot-primitives` | The current CLI listed all 96 entries. Although the fetched plugin reference advertises `browse NAME [--json]`, CLI 1.0.81-4 rejected `--json`; the audit therefore uses the deterministic marketplace file rather than parsing CLI display text. |
-| Awesome Copilot upstream commit `318066d2213b510e89b500ed0d53506c54093ddc` | The current upstream materializer copies agents and client extensions into `com.github.copilot/`, keeps skills in fixed `skills/`, and emits a strict served manifest. Twenty-four client-extension packages were imported from this commit. |
+| Awesome Copilot upstream commit `318066d2213b510e89b500ed0d53506c54093ddc` | At the time of this probe, the upstream materializer copied agents and client extensions into `com.github.copilot/`, kept skills in fixed `skills/`, and emitted a strict served manifest. Twenty-four client-extension packages were imported from this commit. |
 | npm registry on 2026-08-20 | Imported extensions pin `@github/copilot-sdk` to `1.0.11-preview.2` and Playwright to `1.62.1`; the Power BI reference MCP is pinned to `0.5.0-beta.12`. |
 | Extension validation | 212 JavaScript files passed `node --check`. Signals Dashboard passed 19 tests with one Windows-only skip; Java Modernization Studio passed its Node tests; PR Artifact Explorer passed 13 tests. Windows App Storage Inspector syntax passed, while its runtime self-test was not applicable on macOS because the extension intentionally fails outside Windows. |
 | `accessibility-kanban@copilot-primitives` | The extension-only package installed successfully from the local marketplace on CLI 1.0.81-4. Interactive canvas behavior was not exercised in the non-interactive probe; client-extension packages remain covered by source/runtime mirror checks, pinned dependencies, JavaScript syntax, and available unit tests. |
@@ -119,7 +146,7 @@ Verification date: 2026-08-20. Target runtime: GitHub Copilot CLI 1.0.81-4.
 | Plugin authoring runtime probe | `copilot-plugin-development` installed the `copilot-plugin-authoring` skill, and its namespaced `copilot-primitive-architect` agent returned `plugin-authoring-ok`. |
 | Full isolated marketplace installation | All 96 entries installed successfully into one fresh `COPILOT_HOME`; `copilot plugin list` reported all 96 installed packages. Component behavior remains covered by representative agent, skill, MCP, hook, and client-extension probes rather than assuming installation alone proves execution. |
 
-The marketplace now contains 96 self-contained entries. Seventy-two packages source agents and skills
+At that verification point, the marketplace contained 96 self-contained entries. Seventy-two packages sourced agents and skills
 from the shared library; 24 own plugin-local agents, hooks, or client extensions. All manifests use the
 Agent Plugins 1.0 schema, legacy `.mcp.json` files were removed from runtime packages, every package is
 listed exactly once, and deterministic audit results are generated in `docs/PLUGIN-AUDIT.md`.

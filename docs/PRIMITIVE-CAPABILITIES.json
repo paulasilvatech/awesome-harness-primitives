@@ -1,7 +1,8 @@
 {
   "compatibility": {
-    "componentSourceCompatibilityValue": "library",
-    "copilotCliEvidence": "docs/HARNESS-VALIDATION.md"
+    "copilotCliEvidence": "docs/HARNESS-VALIDATION.md",
+    "pluginLayout": "flat-direct-components",
+    "sourceOwnershipManifest": "harness/github-copilot/manifests/plugin-sources.json"
   },
   "firstPartySources": [
     "https://code.visualstudio.com/docs/agent-customization/custom-agents",

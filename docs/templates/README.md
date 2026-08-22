@@ -11,7 +11,7 @@ VS Code feature.
 | [instructions.template.md](instructions.template.md) | `harness/github-copilot/instructions/<name>.instructions.md` | Apply passive conventions to matching files. | Copilot CLI and VS Code |
 | [skill.template.md](skill.template.md) | `harness/github-copilot/skills/<name>/SKILL.md` | Package a reusable procedure, review, or specialized capability. | Copilot CLI and VS Code |
 | [prompt.template.md](prompt.template.md) | `harness/github-copilot/prompts/<name>.prompt.md` | Run a focused, user-selected action with VS Code runtime inputs. | **VS Code only; not a CLI primitive** |
-| [plugin.template.json](plugin.template.json) | `harness/github-copilot/plugins/<name>/plugin.json` | Declare a strict Agent Plugins 1.0 package and repository ownership. | GitHub Copilot CLI and compatible Agent Plugins clients |
+| [plugin.template.json](plugin.template.json) | `harness/github-copilot/plugins/<name>/plugin.json` | Declare a flat GitHub Copilot plugin with direct component paths. | GitHub Copilot CLI and cloud agent |
 | [plugin-mcp.template.json](plugin-mcp.template.json) | `harness/github-copilot/plugins/<name>/mcp.json` | Configure portable plugin MCP servers. | Agent Plugins 1.0 clients |
 
 ## Short authoring workflow
@@ -147,12 +147,13 @@ The formats do not share one mandatory body outline. Use the contract that match
 
 ### Plugin
 
-- **Manifest:** use the Agent Plugins 1.0 schema and only its closed top-level metadata fields.
-- **Ownership:** declare `componentSource: library` for canonical shared primitives or `plugin` for
-  self-contained packages. Keep source references and `layoutVersion` in the repository extension
-  namespace.
-- **Discovery:** skills live under `skills/`; GitHub agents, hooks, and client extensions are generated
-  under `com.github.copilot/`.
+- **Manifest:** use the flat GitHub Copilot manifest. Omit `$schema` and declare only component paths
+  that exist: `agents`, `skills`, `hooks`, `extensions`, `mcpServers`, and optional LSP fields.
+- **Ownership:** record shared or plugin-owned canonical sources in
+  `harness/github-copilot/manifests/plugin-sources.json`; do not put repository governance metadata in
+  the distributed plugin manifest.
+- **Discovery:** keep runtime content directly under the plugin root in `agents/`, `skills/`, `hooks/`,
+  `extensions/`, and `mcp.json`. Never create a `com.github.copilot/` directory.
 - **Composition:** package a coherent capability. Reject componentless manifests and unrelated
   “bundle everything” collections.
 - **Marketplace:** keep source, version, description, uniqueness, and alphabetical ordering synchronized.

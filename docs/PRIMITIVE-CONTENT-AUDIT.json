@@ -1094,7 +1094,7 @@
       "external_url_count": 0,
       "files_scanned": 1,
       "kind": "agent",
-      "local_evidence_mention": false,
+      "local_evidence_mention": true,
       "name": "backstage-expert",
       "ownership": "plugin",
       "package": "backstage-expert",
@@ -6182,7 +6182,7 @@
       ]
     },
     {
-      "characters_scanned": 10443,
+      "characters_scanned": 10848,
       "external_url_count": 0,
       "files_scanned": 1,
       "kind": "instruction",
@@ -9385,8 +9385,8 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 42481,
-      "external_url_count": 11,
+      "characters_scanned": 42004,
+      "external_url_count": 10,
       "files_scanned": 5,
       "kind": "plugin",
       "local_evidence_mention": false,
@@ -9407,15 +9407,14 @@
       "source_domains": [
         "${req.headers.host",
         "127.0.0.1:${getport(",
-        "agent-plugins.org",
         "api.github.com",
         "fonts.googleapis.com",
         "github.com"
       ]
     },
     {
-      "characters_scanned": 5099,
-      "external_url_count": 3,
+      "characters_scanned": 4665,
+      "external_url_count": 2,
       "files_scanned": 2,
       "kind": "plugin",
       "local_evidence_mention": true,
@@ -9433,13 +9432,12 @@
         "external-source"
       ],
       "source_domains": [
-        "agent-plugins.org",
         "github.com"
       ]
     },
     {
-      "characters_scanned": 1111,
-      "external_url_count": 2,
+      "characters_scanned": 649,
+      "external_url_count": 1,
       "files_scanned": 1,
       "kind": "plugin",
       "local_evidence_mention": false,
@@ -9456,13 +9454,12 @@
         "external-source"
       ],
       "source_domains": [
-        "agent-plugins.org",
         "github.com"
       ]
     },
     {
-      "characters_scanned": 3581,
-      "external_url_count": 2,
+      "characters_scanned": 3163,
+      "external_url_count": 1,
       "files_scanned": 2,
       "kind": "plugin",
       "local_evidence_mention": true,
@@ -9479,13 +9476,12 @@
         "external-source"
       ],
       "source_domains": [
-        "agent-plugins.org",
         "github.com"
       ]
     },
     {
-      "characters_scanned": 135494,
-      "external_url_count": 10,
+      "characters_scanned": 135017,
+      "external_url_count": 9,
       "files_scanned": 10,
       "kind": "plugin",
       "local_evidence_mention": false,
@@ -9506,15 +9502,14 @@
       "source_domains": [
         "${shareserverbindip",
         "127.0.0.1:${port",
-        "agent-plugins.org",
         "github.com",
         "localhost",
         "wiki.mozilla.org"
       ]
     },
     {
-      "characters_scanned": 495723,
-      "external_url_count": 35,
+      "characters_scanned": 495246,
+      "external_url_count": 34,
       "files_scanned": 20,
       "kind": "plugin",
       "local_evidence_mention": false,
@@ -9534,7 +9529,6 @@
       ],
       "source_domains": [
         "127.0.0.1:${port",
-        "agent-plugins.org",
         "creativecommons.org",
         "github.com",
         "juhosprite.itch.io",
@@ -9544,8 +9538,8 @@
       ]
     },
     {
-      "characters_scanned": 2335,
-      "external_url_count": 2,
+      "characters_scanned": 2031,
+      "external_url_count": 1,
       "files_scanned": 2,
       "kind": "plugin",
       "local_evidence_mention": true,
@@ -9563,13 +9557,12 @@
         "external-source"
       ],
       "source_domains": [
-        "agent-plugins.org",
         "github.com"
       ]
     },
     {
-      "characters_scanned": 2653,
-      "external_url_count": 2,
+      "characters_scanned": 2034,
+      "external_url_count": 1,
       "files_scanned": 2,
       "kind": "plugin",
       "local_evidence_mention": false,
@@ -9586,13 +9579,12 @@
         "external-source"
       ],
       "source_domains": [
-        "agent-plugins.org",
         "github.com"
       ]
     },
     {
-      "characters_scanned": 6162,
-      "external_url_count": 2,
+      "characters_scanned": 5862,
+      "external_url_count": 1,
       "files_scanned": 2,
       "kind": "plugin",
       "local_evidence_mention": false,
@@ -9609,16 +9601,15 @@
         "external-source"
       ],
       "source_domains": [
-        "agent-plugins.org",
         "github.com"
       ]
     },
     {
-      "characters_scanned": 3792,
-      "external_url_count": 4,
+      "characters_scanned": 3330,
+      "external_url_count": 3,
       "files_scanned": 3,
       "kind": "plugin",
-      "local_evidence_mention": false,
+      "local_evidence_mention": true,
       "name": "awesome-copilot",
       "ownership": "shared",
       "package": "awesome-copilot",
@@ -9639,8 +9630,8 @@
       ]
     },
     {
-      "characters_scanned": 3336,
-      "external_url_count": 2,
+      "characters_scanned": 2698,
+      "external_url_count": 1,
       "files_scanned": 2,
       "kind": "plugin",
       "local_evidence_mention": false,
@@ -9658,13 +9649,12 @@
         "external-source"
       ],
       "source_domains": [
-        "agent-plugins.org",
         "github.com"
       ]
     },
     {
-      "characters_scanned": 3536,
-      "external_url_count": 2,
+      "characters_scanned": 2725,
+      "external_url_count": 1,
       "files_scanned": 2,
       "kind": "plugin",
       "local_evidence_mention": false,
@@ -9681,16 +9671,15 @@
         "external-source"
       ],
       "source_domains": [
-        "agent-plugins.org",
         "github.com"
       ]
     },
     {
-      "characters_scanned": 92997,
-      "external_url_count": 18,
+      "characters_scanned": 92520,
+      "external_url_count": 17,
       "files_scanned": 6,
       "kind": "plugin",
-      "local_evidence_mention": false,
+      "local_evidence_mention": true,
       "name": "backlog-swipe-triage",
       "ownership": "plugin",
       "package": "backlog-swipe-triage",
@@ -9707,14 +9696,13 @@
       ],
       "source_domains": [
         "127.0.0.1:${port",
-        "agent-plugins.org",
         "github.com",
         "registry.npmjs.org"
       ]
     },
     {
-      "characters_scanned": 188526,
-      "external_url_count": 37,
+      "characters_scanned": 188049,
+      "external_url_count": 36,
       "files_scanned": 9,
       "kind": "plugin",
       "local_evidence_mention": false,
@@ -9734,18 +9722,17 @@
       ],
       "source_domains": [
         "127.0.0.1:${port",
-        "agent-plugins.org",
         "github.com",
         "liberapay.com",
         "registry.npmjs.org"
       ]
     },
     {
-      "characters_scanned": 265145,
-      "external_url_count": 59,
+      "characters_scanned": 264861,
+      "external_url_count": 58,
       "files_scanned": 55,
       "kind": "plugin",
-      "local_evidence_mention": false,
+      "local_evidence_mention": true,
       "name": "backstage-expert",
       "ownership": "plugin",
       "package": "backstage-expert",
@@ -9762,7 +9749,6 @@
         "external-source"
       ],
       "source_domains": [
-        "agent-plugins.org",
         "backstage.io",
         "github.com",
         "remixicon.com",
@@ -9770,8 +9756,8 @@
       ]
     },
     {
-      "characters_scanned": 2054,
-      "external_url_count": 2,
+      "characters_scanned": 1601,
+      "external_url_count": 1,
       "files_scanned": 2,
       "kind": "plugin",
       "local_evidence_mention": false,
@@ -9788,13 +9774,12 @@
         "external-source"
       ],
       "source_domains": [
-        "agent-plugins.org",
         "github.com"
       ]
     },
     {
-      "characters_scanned": 51211,
-      "external_url_count": 26,
+      "characters_scanned": 50734,
+      "external_url_count": 25,
       "files_scanned": 8,
       "kind": "plugin",
       "local_evidence_mention": false,
@@ -9816,7 +9801,6 @@
         "${raw",
         "127.0.0.1",
         "127.0.0.1:${port",
-        "agent-plugins.org",
         "github.com",
         "localhost:9222",
         "registry.npmjs.org",
@@ -9824,8 +9808,8 @@
       ]
     },
     {
-      "characters_scanned": 2181,
-      "external_url_count": 2,
+      "characters_scanned": 1818,
+      "external_url_count": 1,
       "files_scanned": 2,
       "kind": "plugin",
       "local_evidence_mention": false,
@@ -9842,13 +9826,12 @@
         "external-source"
       ],
       "source_domains": [
-        "agent-plugins.org",
         "github.com"
       ]
     },
     {
-      "characters_scanned": 2577,
-      "external_url_count": 2,
+      "characters_scanned": 2193,
+      "external_url_count": 1,
       "files_scanned": 2,
       "kind": "plugin",
       "local_evidence_mention": false,
@@ -9865,13 +9848,12 @@
         "external-source"
       ],
       "source_domains": [
-        "agent-plugins.org",
         "github.com"
       ]
     },
     {
-      "characters_scanned": 18645,
-      "external_url_count": 21,
+      "characters_scanned": 18168,
+      "external_url_count": 20,
       "files_scanned": 5,
       "kind": "plugin",
       "local_evidence_mention": false,
@@ -9891,7 +9873,6 @@
       ],
       "source_domains": [
         "127.0.0.1:${port",
-        "agent-plugins.org",
         "fonts.googleapis.com",
         "github.com",
         "registry.npmjs.org",
@@ -9899,8 +9880,8 @@
       ]
     },
     {
-      "characters_scanned": 2186,
-      "external_url_count": 2,
+      "characters_scanned": 1782,
+      "external_url_count": 1,
       "files_scanned": 2,
       "kind": "plugin",
       "local_evidence_mention": false,
@@ -9917,13 +9898,12 @@
         "external-source"
       ],
       "source_domains": [
-        "agent-plugins.org",
         "github.com"
       ]
     },
     {
-      "characters_scanned": 42279,
-      "external_url_count": 34,
+      "characters_scanned": 41954,
+      "external_url_count": 33,
       "files_scanned": 3,
       "kind": "plugin",
       "local_evidence_mention": false,
@@ -9950,8 +9930,8 @@
       ]
     },
     {
-      "characters_scanned": 2771,
-      "external_url_count": 3,
+      "characters_scanned": 2386,
+      "external_url_count": 2,
       "files_scanned": 2,
       "kind": "plugin",
       "local_evidence_mention": false,
@@ -9968,13 +9948,12 @@
         "external-source"
       ],
       "source_domains": [
-        "agent-plugins.org",
         "github.com"
       ]
     },
     {
-      "characters_scanned": 1647,
-      "external_url_count": 2,
+      "characters_scanned": 1268,
+      "external_url_count": 1,
       "files_scanned": 2,
       "kind": "plugin",
       "local_evidence_mention": true,
@@ -9992,13 +9971,12 @@
         "external-source"
       ],
       "source_domains": [
-        "agent-plugins.org",
         "github.com"
       ]
     },
     {
-      "characters_scanned": 1828,
-      "external_url_count": 2,
+      "characters_scanned": 1530,
+      "external_url_count": 1,
       "files_scanned": 2,
       "kind": "plugin",
       "local_evidence_mention": false,
@@ -10015,13 +9993,12 @@
         "external-source"
       ],
       "source_domains": [
-        "agent-plugins.org",
         "github.com"
       ]
     },
     {
-      "characters_scanned": 2824,
-      "external_url_count": 2,
+      "characters_scanned": 2217,
+      "external_url_count": 1,
       "files_scanned": 2,
       "kind": "plugin",
       "local_evidence_mention": false,
@@ -10038,13 +10015,12 @@
         "external-source"
       ],
       "source_domains": [
-        "agent-plugins.org",
         "github.com"
       ]
     },
     {
-      "characters_scanned": 3337,
-      "external_url_count": 2,
+      "characters_scanned": 2841,
+      "external_url_count": 1,
       "files_scanned": 2,
       "kind": "plugin",
       "local_evidence_mention": false,
@@ -10061,13 +10037,12 @@
         "external-source"
       ],
       "source_domains": [
-        "agent-plugins.org",
         "github.com"
       ]
     },
     {
-      "characters_scanned": 2335,
-      "external_url_count": 2,
+      "characters_scanned": 1857,
+      "external_url_count": 1,
       "files_scanned": 2,
       "kind": "plugin",
       "local_evidence_mention": false,
@@ -10084,13 +10059,12 @@
         "external-source"
       ],
       "source_domains": [
-        "agent-plugins.org",
         "github.com"
       ]
     },
     {
-      "characters_scanned": 1953,
-      "external_url_count": 2,
+      "characters_scanned": 1554,
+      "external_url_count": 1,
       "files_scanned": 2,
       "kind": "plugin",
       "local_evidence_mention": false,
@@ -10107,13 +10081,12 @@
         "external-source"
       ],
       "source_domains": [
-        "agent-plugins.org",
         "github.com"
       ]
     },
     {
-      "characters_scanned": 41088,
-      "external_url_count": 22,
+      "characters_scanned": 40611,
+      "external_url_count": 21,
       "files_scanned": 6,
       "kind": "plugin",
       "local_evidence_mention": false,
@@ -10134,7 +10107,6 @@
       "source_domains": [
         "${req.headers.host",
         "127.0.0.1:${port",
-        "agent-plugins.org",
         "fonts.googleapis.com",
         "github.com",
         "registry.npmjs.org",
@@ -10142,8 +10114,8 @@
       ]
     },
     {
-      "characters_scanned": 7105,
-      "external_url_count": 2,
+      "characters_scanned": 6783,
+      "external_url_count": 1,
       "files_scanned": 2,
       "kind": "plugin",
       "local_evidence_mention": false,
@@ -10160,13 +10132,12 @@
         "external-source"
       ],
       "source_domains": [
-        "agent-plugins.org",
         "github.com"
       ]
     },
     {
-      "characters_scanned": 1577,
-      "external_url_count": 2,
+      "characters_scanned": 1225,
+      "external_url_count": 1,
       "files_scanned": 2,
       "kind": "plugin",
       "local_evidence_mention": false,
@@ -10183,13 +10154,12 @@
         "external-source"
       ],
       "source_domains": [
-        "agent-plugins.org",
         "github.com"
       ]
     },
     {
-      "characters_scanned": 58312,
-      "external_url_count": 5,
+      "characters_scanned": 57604,
+      "external_url_count": 4,
       "files_scanned": 6,
       "kind": "plugin",
       "local_evidence_mention": false,
@@ -10210,13 +10180,12 @@
       "source_domains": [
         "${req.headers.host",
         "127.0.0.1:${port",
-        "agent-plugins.org",
         "github.com"
       ]
     },
     {
-      "characters_scanned": 6124,
-      "external_url_count": 4,
+      "characters_scanned": 5830,
+      "external_url_count": 3,
       "files_scanned": 2,
       "kind": "plugin",
       "local_evidence_mention": false,
@@ -10233,14 +10202,13 @@
         "external-source"
       ],
       "source_domains": [
-        "agent-plugins.org",
         "docs.github.com",
         "example.com",
         "github.com"
       ]
     },
     {
-      "characters_scanned": 4386534,
+      "characters_scanned": 4386367,
       "external_url_count": 544,
       "files_scanned": 288,
       "kind": "plugin",
@@ -10368,8 +10336,8 @@
       ]
     },
     {
-      "characters_scanned": 2032,
-      "external_url_count": 4,
+      "characters_scanned": 1732,
+      "external_url_count": 3,
       "files_scanned": 2,
       "kind": "plugin",
       "local_evidence_mention": false,
@@ -10386,14 +10354,13 @@
         "external-source"
       ],
       "source_domains": [
-        "agent-plugins.org",
         "getfastah.com",
         "github.com"
       ]
     },
     {
-      "characters_scanned": 36148,
-      "external_url_count": 21,
+      "characters_scanned": 35671,
+      "external_url_count": 20,
       "files_scanned": 7,
       "kind": "plugin",
       "local_evidence_mention": false,
@@ -10415,15 +10382,14 @@
       "source_domains": [
         "${req.headers.host",
         "127.0.0.1:${getport(",
-        "agent-plugins.org",
         "fonts.googleapis.com",
         "github.com",
         "registry.npmjs.org"
       ]
     },
     {
-      "characters_scanned": 790906,
-      "external_url_count": 42,
+      "characters_scanned": 790429,
+      "external_url_count": 41,
       "files_scanned": 19,
       "kind": "plugin",
       "local_evidence_mention": false,
@@ -10443,7 +10409,6 @@
       ],
       "source_domains": [
         "127.0.0.1:${port",
-        "agent-plugins.org",
         "github.com",
         "liberapay.com",
         "nominatim.openstreetmap.org",
@@ -10455,8 +10420,8 @@
       ]
     },
     {
-      "characters_scanned": 5084,
-      "external_url_count": 6,
+      "characters_scanned": 4546,
+      "external_url_count": 5,
       "files_scanned": 2,
       "kind": "plugin",
       "local_evidence_mention": false,
@@ -10473,14 +10438,13 @@
         "external-source"
       ],
       "source_domains": [
-        "agent-plugins.org",
         "github.com",
         "mcp.flowstudio.app"
       ]
     },
     {
-      "characters_scanned": 2289,
-      "external_url_count": 2,
+      "characters_scanned": 1834,
+      "external_url_count": 1,
       "files_scanned": 2,
       "kind": "plugin",
       "local_evidence_mention": false,
@@ -10497,13 +10461,12 @@
         "external-source"
       ],
       "source_domains": [
-        "agent-plugins.org",
         "github.com"
       ]
     },
     {
-      "characters_scanned": 9811,
-      "external_url_count": 12,
+      "characters_scanned": 8818,
+      "external_url_count": 11,
       "files_scanned": 2,
       "kind": "plugin",
       "local_evidence_mention": false,
@@ -10521,7 +10484,6 @@
         "external-source"
       ],
       "source_domains": [
-        "agent-plugins.org",
         "aka.ms",
         "github.com",
         "img.shields.io",
@@ -10530,8 +10492,8 @@
       ]
     },
     {
-      "characters_scanned": 50825,
-      "external_url_count": 26,
+      "characters_scanned": 50348,
+      "external_url_count": 25,
       "files_scanned": 5,
       "kind": "plugin",
       "local_evidence_mention": false,
@@ -10551,7 +10513,6 @@
       ],
       "source_domains": [
         "127.0.0.1:${port",
-        "agent-plugins.org",
         "cdn.jsdelivr.net",
         "fonts.googleapis.com",
         "github.com",
@@ -10560,8 +10521,8 @@
       ]
     },
     {
-      "characters_scanned": 1165,
-      "external_url_count": 2,
+      "characters_scanned": 652,
+      "external_url_count": 1,
       "files_scanned": 1,
       "kind": "plugin",
       "local_evidence_mention": false,
@@ -10579,13 +10540,12 @@
         "external-source"
       ],
       "source_domains": [
-        "agent-plugins.org",
         "github.com"
       ]
     },
     {
-      "characters_scanned": 2023,
-      "external_url_count": 2,
+      "characters_scanned": 1687,
+      "external_url_count": 1,
       "files_scanned": 2,
       "kind": "plugin",
       "local_evidence_mention": false,
@@ -10602,13 +10562,12 @@
         "external-source"
       ],
       "source_domains": [
-        "agent-plugins.org",
         "github.com"
       ]
     },
     {
-      "characters_scanned": 1929,
-      "external_url_count": 2,
+      "characters_scanned": 1511,
+      "external_url_count": 1,
       "files_scanned": 2,
       "kind": "plugin",
       "local_evidence_mention": false,
@@ -10625,13 +10584,12 @@
         "external-source"
       ],
       "source_domains": [
-        "agent-plugins.org",
         "github.com"
       ]
     },
     {
-      "characters_scanned": 1953,
-      "external_url_count": 2,
+      "characters_scanned": 1613,
+      "external_url_count": 1,
       "files_scanned": 2,
       "kind": "plugin",
       "local_evidence_mention": false,
@@ -10648,13 +10606,12 @@
         "external-source"
       ],
       "source_domains": [
-        "agent-plugins.org",
         "github.com"
       ]
     },
     {
-      "characters_scanned": 225954,
-      "external_url_count": 5,
+      "characters_scanned": 225477,
+      "external_url_count": 4,
       "files_scanned": 13,
       "kind": "plugin",
       "local_evidence_mention": false,
@@ -10675,14 +10632,13 @@
       ],
       "source_domains": [
         "127.0.0.1",
-        "agent-plugins.org",
         "github.com",
         "learn.microsoft.com"
       ]
     },
     {
-      "characters_scanned": 2102,
-      "external_url_count": 2,
+      "characters_scanned": 1758,
+      "external_url_count": 1,
       "files_scanned": 2,
       "kind": "plugin",
       "local_evidence_mention": false,
@@ -10699,13 +10655,12 @@
         "external-source"
       ],
       "source_domains": [
-        "agent-plugins.org",
         "github.com"
       ]
     },
     {
-      "characters_scanned": 1968,
-      "external_url_count": 2,
+      "characters_scanned": 1526,
+      "external_url_count": 1,
       "files_scanned": 2,
       "kind": "plugin",
       "local_evidence_mention": false,
@@ -10722,13 +10677,12 @@
         "external-source"
       ],
       "source_domains": [
-        "agent-plugins.org",
         "github.com"
       ]
     },
     {
-      "characters_scanned": 7480,
-      "external_url_count": 2,
+      "characters_scanned": 7187,
+      "external_url_count": 1,
       "files_scanned": 2,
       "kind": "plugin",
       "local_evidence_mention": false,
@@ -10745,13 +10699,12 @@
         "external-source"
       ],
       "source_domains": [
-        "agent-plugins.org",
         "github.com"
       ]
     },
     {
-      "characters_scanned": 4044,
-      "external_url_count": 2,
+      "characters_scanned": 3748,
+      "external_url_count": 1,
       "files_scanned": 2,
       "kind": "plugin",
       "local_evidence_mention": true,
@@ -10769,13 +10722,12 @@
         "external-source"
       ],
       "source_domains": [
-        "agent-plugins.org",
         "github.com"
       ]
     },
     {
-      "characters_scanned": 632525,
-      "external_url_count": 65,
+      "characters_scanned": 631844,
+      "external_url_count": 64,
       "files_scanned": 96,
       "kind": "plugin",
       "local_evidence_mention": false,
@@ -10829,8 +10781,8 @@
       ]
     },
     {
-      "characters_scanned": 1900,
-      "external_url_count": 2,
+      "characters_scanned": 1551,
+      "external_url_count": 1,
       "files_scanned": 2,
       "kind": "plugin",
       "local_evidence_mention": false,
@@ -10847,13 +10799,12 @@
         "external-source"
       ],
       "source_domains": [
-        "agent-plugins.org",
         "github.com"
       ]
     },
     {
-      "characters_scanned": 1812,
-      "external_url_count": 2,
+      "characters_scanned": 1463,
+      "external_url_count": 1,
       "files_scanned": 2,
       "kind": "plugin",
       "local_evidence_mention": false,
@@ -10870,13 +10821,12 @@
         "external-source"
       ],
       "source_domains": [
-        "agent-plugins.org",
         "github.com"
       ]
     },
     {
-      "characters_scanned": 1919,
-      "external_url_count": 2,
+      "characters_scanned": 1570,
+      "external_url_count": 1,
       "files_scanned": 2,
       "kind": "plugin",
       "local_evidence_mention": false,
@@ -10893,13 +10843,12 @@
         "external-source"
       ],
       "source_domains": [
-        "agent-plugins.org",
         "github.com"
       ]
     },
     {
-      "characters_scanned": 1911,
-      "external_url_count": 2,
+      "characters_scanned": 1562,
+      "external_url_count": 1,
       "files_scanned": 2,
       "kind": "plugin",
       "local_evidence_mention": false,
@@ -10916,13 +10865,12 @@
         "external-source"
       ],
       "source_domains": [
-        "agent-plugins.org",
         "github.com"
       ]
     },
     {
-      "characters_scanned": 1889,
-      "external_url_count": 2,
+      "characters_scanned": 1540,
+      "external_url_count": 1,
       "files_scanned": 2,
       "kind": "plugin",
       "local_evidence_mention": false,
@@ -10939,13 +10887,12 @@
         "external-source"
       ],
       "source_domains": [
-        "agent-plugins.org",
         "github.com"
       ]
     },
     {
-      "characters_scanned": 9634,
-      "external_url_count": 2,
+      "characters_scanned": 8754,
+      "external_url_count": 1,
       "files_scanned": 2,
       "kind": "plugin",
       "local_evidence_mention": false,
@@ -10962,13 +10909,12 @@
         "external-source"
       ],
       "source_domains": [
-        "agent-plugins.org",
         "github.com"
       ]
     },
     {
-      "characters_scanned": 1809,
-      "external_url_count": 2,
+      "characters_scanned": 1508,
+      "external_url_count": 1,
       "files_scanned": 2,
       "kind": "plugin",
       "local_evidence_mention": false,
@@ -10985,13 +10931,12 @@
         "external-source"
       ],
       "source_domains": [
-        "agent-plugins.org",
         "github.com"
       ]
     },
     {
-      "characters_scanned": 6917,
-      "external_url_count": 2,
+      "characters_scanned": 5637,
+      "external_url_count": 1,
       "files_scanned": 2,
       "kind": "plugin",
       "local_evidence_mention": false,
@@ -11010,13 +10955,12 @@
         "external-source"
       ],
       "source_domains": [
-        "agent-plugins.org",
         "github.com"
       ]
     },
     {
-      "characters_scanned": 1748,
-      "external_url_count": 2,
+      "characters_scanned": 1412,
+      "external_url_count": 1,
       "files_scanned": 2,
       "kind": "plugin",
       "local_evidence_mention": true,
@@ -11033,13 +10977,12 @@
         "external-source"
       ],
       "source_domains": [
-        "agent-plugins.org",
         "github.com"
       ]
     },
     {
-      "characters_scanned": 1666,
-      "external_url_count": 2,
+      "characters_scanned": 1296,
+      "external_url_count": 1,
       "files_scanned": 2,
       "kind": "plugin",
       "local_evidence_mention": false,
@@ -11056,13 +10999,12 @@
         "external-source"
       ],
       "source_domains": [
-        "agent-plugins.org",
         "github.com"
       ]
     },
     {
-      "characters_scanned": 1935,
-      "external_url_count": 2,
+      "characters_scanned": 1597,
+      "external_url_count": 1,
       "files_scanned": 2,
       "kind": "plugin",
       "local_evidence_mention": false,
@@ -11079,13 +11021,12 @@
         "external-source"
       ],
       "source_domains": [
-        "agent-plugins.org",
         "github.com"
       ]
     },
     {
-      "characters_scanned": 1973,
-      "external_url_count": 2,
+      "characters_scanned": 1624,
+      "external_url_count": 1,
       "files_scanned": 2,
       "kind": "plugin",
       "local_evidence_mention": false,
@@ -11102,13 +11043,12 @@
         "external-source"
       ],
       "source_domains": [
-        "agent-plugins.org",
         "github.com"
       ]
     },
     {
-      "characters_scanned": 3658,
-      "external_url_count": 2,
+      "characters_scanned": 2974,
+      "external_url_count": 1,
       "files_scanned": 2,
       "kind": "plugin",
       "local_evidence_mention": false,
@@ -11125,13 +11065,12 @@
         "external-source"
       ],
       "source_domains": [
-        "agent-plugins.org",
         "github.com"
       ]
     },
     {
-      "characters_scanned": 10799,
-      "external_url_count": 10,
+      "characters_scanned": 10488,
+      "external_url_count": 9,
       "files_scanned": 2,
       "kind": "plugin",
       "local_evidence_mention": false,
@@ -11149,7 +11088,6 @@
         "external-source"
       ],
       "source_domains": [
-        "agent-plugins.org",
         "github.com",
         "i.imgur.com",
         "mermaid.ai",
@@ -11159,8 +11097,8 @@
       ]
     },
     {
-      "characters_scanned": 2300,
-      "external_url_count": 2,
+      "characters_scanned": 1872,
+      "external_url_count": 1,
       "files_scanned": 2,
       "kind": "plugin",
       "local_evidence_mention": false,
@@ -11177,13 +11115,12 @@
         "external-source"
       ],
       "source_domains": [
-        "agent-plugins.org",
         "github.com"
       ]
     },
     {
-      "characters_scanned": 1749465,
-      "external_url_count": 30,
+      "characters_scanned": 1748988,
+      "external_url_count": 29,
       "files_scanned": 31,
       "kind": "plugin",
       "local_evidence_mention": false,
@@ -11208,7 +11145,6 @@
         "127.0.0.1:${address.port",
         "127.0.0.1:*",
         "127.0.0.1:1234",
-        "agent-plugins.org",
         "api.github.com",
         "attacker.example",
         "avatars.githubusercontent.com",
@@ -11223,8 +11159,8 @@
       ]
     },
     {
-      "characters_scanned": 5947,
-      "external_url_count": 2,
+      "characters_scanned": 5591,
+      "external_url_count": 1,
       "files_scanned": 2,
       "kind": "plugin",
       "local_evidence_mention": false,
@@ -11241,13 +11177,12 @@
         "external-source"
       ],
       "source_domains": [
-        "agent-plugins.org",
         "github.com"
       ]
     },
     {
-      "characters_scanned": 4688,
-      "external_url_count": 2,
+      "characters_scanned": 3754,
+      "external_url_count": 1,
       "files_scanned": 2,
       "kind": "plugin",
       "local_evidence_mention": false,
@@ -11264,13 +11199,12 @@
         "external-source"
       ],
       "source_domains": [
-        "agent-plugins.org",
         "github.com"
       ]
     },
     {
-      "characters_scanned": 1935,
-      "external_url_count": 2,
+      "characters_scanned": 1591,
+      "external_url_count": 1,
       "files_scanned": 2,
       "kind": "plugin",
       "local_evidence_mention": false,
@@ -11287,13 +11221,12 @@
         "external-source"
       ],
       "source_domains": [
-        "agent-plugins.org",
         "github.com"
       ]
     },
     {
-      "characters_scanned": 1215,
-      "external_url_count": 2,
+      "characters_scanned": 604,
+      "external_url_count": 1,
       "files_scanned": 1,
       "kind": "plugin",
       "local_evidence_mention": false,
@@ -11310,13 +11243,12 @@
         "external-source"
       ],
       "source_domains": [
-        "agent-plugins.org",
         "github.com"
       ]
     },
     {
-      "characters_scanned": 5405,
-      "external_url_count": 2,
+      "characters_scanned": 4545,
+      "external_url_count": 1,
       "files_scanned": 2,
       "kind": "plugin",
       "local_evidence_mention": false,
@@ -11333,13 +11265,12 @@
         "external-source"
       ],
       "source_domains": [
-        "agent-plugins.org",
         "github.com"
       ]
     },
     {
-      "characters_scanned": 5813,
-      "external_url_count": 2,
+      "characters_scanned": 5190,
+      "external_url_count": 1,
       "files_scanned": 2,
       "kind": "plugin",
       "local_evidence_mention": false,
@@ -11357,13 +11288,12 @@
         "external-source"
       ],
       "source_domains": [
-        "agent-plugins.org",
         "github.com"
       ]
     },
     {
-      "characters_scanned": 87423,
-      "external_url_count": 28,
+      "characters_scanned": 86946,
+      "external_url_count": 27,
       "files_scanned": 7,
       "kind": "plugin",
       "local_evidence_mention": false,
@@ -11384,15 +11314,14 @@
       "source_domains": [
         "127.0.0.1",
         "127.0.0.1:${port",
-        "agent-plugins.org",
         "api.github.com",
         "github.com",
         "registry.npmjs.org"
       ]
     },
     {
-      "characters_scanned": 65778,
-      "external_url_count": 5,
+      "characters_scanned": 65301,
+      "external_url_count": 4,
       "files_scanned": 6,
       "kind": "plugin",
       "local_evidence_mention": false,
@@ -11412,13 +11341,12 @@
       ],
       "source_domains": [
         "127.0.0.1:${port",
-        "agent-plugins.org",
         "github.com"
       ]
     },
     {
-      "characters_scanned": 4765,
-      "external_url_count": 2,
+      "characters_scanned": 4436,
+      "external_url_count": 1,
       "files_scanned": 2,
       "kind": "plugin",
       "local_evidence_mention": false,
@@ -11435,13 +11363,12 @@
         "external-source"
       ],
       "source_domains": [
-        "agent-plugins.org",
         "github.com"
       ]
     },
     {
-      "characters_scanned": 1814,
-      "external_url_count": 2,
+      "characters_scanned": 1474,
+      "external_url_count": 1,
       "files_scanned": 2,
       "kind": "plugin",
       "local_evidence_mention": false,
@@ -11458,13 +11385,12 @@
         "external-source"
       ],
       "source_domains": [
-        "agent-plugins.org",
         "github.com"
       ]
     },
     {
-      "characters_scanned": 1807,
-      "external_url_count": 2,
+      "characters_scanned": 1413,
+      "external_url_count": 1,
       "files_scanned": 2,
       "kind": "plugin",
       "local_evidence_mention": false,
@@ -11481,13 +11407,12 @@
         "external-source"
       ],
       "source_domains": [
-        "agent-plugins.org",
         "github.com"
       ]
     },
     {
-      "characters_scanned": 1877,
-      "external_url_count": 2,
+      "characters_scanned": 1537,
+      "external_url_count": 1,
       "files_scanned": 2,
       "kind": "plugin",
       "local_evidence_mention": false,
@@ -11504,13 +11429,12 @@
         "external-source"
       ],
       "source_domains": [
-        "agent-plugins.org",
         "github.com"
       ]
     },
     {
-      "characters_scanned": 2836,
-      "external_url_count": 2,
+      "characters_scanned": 2247,
+      "external_url_count": 1,
       "files_scanned": 2,
       "kind": "plugin",
       "local_evidence_mention": false,
@@ -11527,13 +11451,12 @@
         "external-source"
       ],
       "source_domains": [
-        "agent-plugins.org",
         "github.com"
       ]
     },
     {
-      "characters_scanned": 1856,
-      "external_url_count": 2,
+      "characters_scanned": 1534,
+      "external_url_count": 1,
       "files_scanned": 2,
       "kind": "plugin",
       "local_evidence_mention": false,
@@ -11550,13 +11473,12 @@
         "external-source"
       ],
       "source_domains": [
-        "agent-plugins.org",
         "github.com"
       ]
     },
     {
-      "characters_scanned": 124069,
-      "external_url_count": 6,
+      "characters_scanned": 123483,
+      "external_url_count": 5,
       "files_scanned": 9,
       "kind": "plugin",
       "local_evidence_mention": false,
@@ -11577,13 +11499,12 @@
       "source_domains": [
         "${req.headers.host",
         "127.0.0.1:${port",
-        "agent-plugins.org",
         "github.com"
       ]
     },
     {
-      "characters_scanned": 116800,
-      "external_url_count": 5,
+      "characters_scanned": 116323,
+      "external_url_count": 4,
       "files_scanned": 4,
       "kind": "plugin",
       "local_evidence_mention": false,
@@ -11604,13 +11525,12 @@
       "source_domains": [
         "127.0.0.1",
         "127.0.0.1:${port",
-        "agent-plugins.org",
         "github.com"
       ]
     },
     {
-      "characters_scanned": 2093,
-      "external_url_count": 6,
+      "characters_scanned": 1792,
+      "external_url_count": 5,
       "files_scanned": 2,
       "kind": "plugin",
       "local_evidence_mention": false,
@@ -11627,15 +11547,14 @@
         "external-source"
       ],
       "source_domains": [
-        "agent-plugins.org",
         "aistudio.google.com",
         "github.com",
         "platform.openai.com"
       ]
     },
     {
-      "characters_scanned": 2812,
-      "external_url_count": 2,
+      "characters_scanned": 2179,
+      "external_url_count": 1,
       "files_scanned": 2,
       "kind": "plugin",
       "local_evidence_mention": false,
@@ -11652,13 +11571,12 @@
         "external-source"
       ],
       "source_domains": [
-        "agent-plugins.org",
         "github.com"
       ]
     },
     {
-      "characters_scanned": 1408,
-      "external_url_count": 2,
+      "characters_scanned": 996,
+      "external_url_count": 1,
       "files_scanned": 2,
       "kind": "plugin",
       "local_evidence_mention": false,
@@ -11675,13 +11593,12 @@
         "external-source"
       ],
       "source_domains": [
-        "agent-plugins.org",
         "github.com"
       ]
     },
     {
-      "characters_scanned": 1903,
-      "external_url_count": 2,
+      "characters_scanned": 1561,
+      "external_url_count": 1,
       "files_scanned": 2,
       "kind": "plugin",
       "local_evidence_mention": false,
@@ -11698,13 +11615,12 @@
         "external-source"
       ],
       "source_domains": [
-        "agent-plugins.org",
         "github.com"
       ]
     },
     {
-      "characters_scanned": 1851,
-      "external_url_count": 2,
+      "characters_scanned": 1505,
+      "external_url_count": 1,
       "files_scanned": 2,
       "kind": "plugin",
       "local_evidence_mention": false,
@@ -11721,13 +11637,12 @@
         "external-source"
       ],
       "source_domains": [
-        "agent-plugins.org",
         "github.com"
       ]
     },
     {
-      "characters_scanned": 3152,
-      "external_url_count": 2,
+      "characters_scanned": 2522,
+      "external_url_count": 1,
       "files_scanned": 2,
       "kind": "plugin",
       "local_evidence_mention": false,
@@ -11744,13 +11659,12 @@
         "external-source"
       ],
       "source_domains": [
-        "agent-plugins.org",
         "github.com"
       ]
     },
     {
-      "characters_scanned": 128415,
-      "external_url_count": 8,
+      "characters_scanned": 127653,
+      "external_url_count": 6,
       "files_scanned": 9,
       "kind": "plugin",
       "local_evidence_mention": false,
@@ -11771,13 +11685,12 @@
       "source_domains": [
         "${req.headers.host",
         "127.0.0.1:${port",
-        "agent-plugins.org",
         "github.com"
       ]
     },
     {
-      "characters_scanned": 87318,
-      "external_url_count": 8,
+      "characters_scanned": 86841,
+      "external_url_count": 7,
       "files_scanned": 7,
       "kind": "plugin",
       "local_evidence_mention": false,
@@ -11797,13 +11710,12 @@
       ],
       "source_domains": [
         "127.0.0.1:${port",
-        "agent-plugins.org",
         "github.com"
       ]
     },
     {
-      "characters_scanned": 30270,
-      "external_url_count": 6,
+      "characters_scanned": 29793,
+      "external_url_count": 5,
       "files_scanned": 6,
       "kind": "plugin",
       "local_evidence_mention": false,
@@ -11822,14 +11734,13 @@
       ],
       "source_domains": [
         "127.0.0.1:${port",
-        "agent-plugins.org",
         "gist.github.com",
         "github.com"
       ]
     },
     {
-      "characters_scanned": 1976,
-      "external_url_count": 2,
+      "characters_scanned": 1624,
+      "external_url_count": 1,
       "files_scanned": 2,
       "kind": "plugin",
       "local_evidence_mention": false,
@@ -11846,13 +11757,12 @@
         "external-source"
       ],
       "source_domains": [
-        "agent-plugins.org",
         "github.com"
       ]
     },
     {
-      "characters_scanned": 2097,
-      "external_url_count": 2,
+      "characters_scanned": 1696,
+      "external_url_count": 1,
       "files_scanned": 2,
       "kind": "plugin",
       "local_evidence_mention": false,
@@ -11869,13 +11779,12 @@
         "external-source"
       ],
       "source_domains": [
-        "agent-plugins.org",
         "github.com"
       ]
     },
     {
-      "characters_scanned": 2408,
-      "external_url_count": 3,
+      "characters_scanned": 2109,
+      "external_url_count": 2,
       "files_scanned": 2,
       "kind": "plugin",
       "local_evidence_mention": false,
@@ -11892,14 +11801,13 @@
         "external-source"
       ],
       "source_domains": [
-        "agent-plugins.org",
         "github.com",
         "uizze.com"
       ]
     },
     {
-      "characters_scanned": 4117,
-      "external_url_count": 2,
+      "characters_scanned": 3703,
+      "external_url_count": 1,
       "files_scanned": 2,
       "kind": "plugin",
       "local_evidence_mention": false,
@@ -11917,13 +11825,12 @@
         "external-source"
       ],
       "source_domains": [
-        "agent-plugins.org",
         "github.com"
       ]
     },
     {
-      "characters_scanned": 26435,
-      "external_url_count": 8,
+      "characters_scanned": 25958,
+      "external_url_count": 7,
       "files_scanned": 4,
       "kind": "plugin",
       "local_evidence_mention": false,
@@ -11943,7 +11850,6 @@
       ],
       "source_domains": [
         "127.0.0.1:${port",
-        "agent-plugins.org",
         "fonts.googleapis.com",
         "fonts.gstatic.com",
         "github.com",
@@ -11951,8 +11857,8 @@
       ]
     },
     {
-      "characters_scanned": 329784,
-      "external_url_count": 11,
+      "characters_scanned": 329307,
+      "external_url_count": 10,
       "files_scanned": 24,
       "kind": "plugin",
       "local_evidence_mention": false,
@@ -11973,7 +11879,6 @@
       "source_domains": [
         "127.0.0.1",
         "127.0.0.1:${port",
-        "agent-plugins.org",
         "authoritative.example",
         "example.com",
         "github.com",
@@ -11981,8 +11886,8 @@
       ]
     },
     {
-      "characters_scanned": 157671,
-      "external_url_count": 7,
+      "characters_scanned": 157194,
+      "external_url_count": 6,
       "files_scanned": 7,
       "kind": "plugin",
       "local_evidence_mention": false,
@@ -12003,7 +11908,6 @@
       "source_domains": [
         "127.0.0.1",
         "127.0.0.1:${port",
-        "agent-plugins.org",
         "github.com",
         "www.w3.org"
       ]
@@ -15731,7 +15635,7 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 8904,
+      "characters_scanned": 8779,
       "external_url_count": 0,
       "files_scanned": 1,
       "kind": "skill",

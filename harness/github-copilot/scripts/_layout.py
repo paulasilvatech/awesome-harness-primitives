@@ -6,6 +6,7 @@ from pathlib import Path
 
 HARNESS_RELATIVE = Path("harness") / "github-copilot"
 INSTALLED_MANIFEST_RELATIVE = HARNESS_RELATIVE / "manifests" / "installed-primitives.json"
+PLUGIN_SOURCES_RELATIVE = HARNESS_RELATIVE / "manifests" / "plugin-sources.json"
 MARKETPLACE_RELATIVE = Path(".github") / "plugin" / "marketplace.json"
 
 
@@ -29,8 +30,9 @@ HOOKS_ROOT = HARNESS_ROOT / "hooks"
 PLUGIN_ROOT = HARNESS_ROOT / "plugins"
 MANIFESTS_ROOT = HARNESS_ROOT / "manifests"
 INSTALLED_MANIFEST_PATH = REPO_ROOT / INSTALLED_MANIFEST_RELATIVE
+PLUGIN_SOURCES_PATH = REPO_ROOT / PLUGIN_SOURCES_RELATIVE
 MARKETPLACE_PATH = REPO_ROOT / MARKETPLACE_RELATIVE
 DOCS_ROOT = REPO_ROOT / "docs"
 
-# Layout version 1 manifests use this historical value for shared canonical components.
+# Source metadata uses this historical value for shared canonical components.
 SHARED_COMPONENT_SOURCE = "library"

@@ -16,17 +16,17 @@ from urllib.parse import urlparse
 
 try:
     from _layout import HARNESS_ROOT, MARKETPLACE_PATH, PLUGIN_ROOT, REPO_ROOT
+    from _plugin_sources import load_plugin_sources
     from validate_primitives import (
         ALL_KINDS,
-        REPOSITORY_EXTENSION,
         Validator,
         parse_frontmatter,
     )
 except ModuleNotFoundError:  # pragma: no cover - supports python3 -m invocation
     from ._layout import HARNESS_ROOT, MARKETPLACE_PATH, PLUGIN_ROOT, REPO_ROOT
+    from ._plugin_sources import load_plugin_sources
     from .validate_primitives import (
         ALL_KINDS,
-        REPOSITORY_EXTENSION,
         Validator,
         parse_frontmatter,
     )
@@ -36,6 +36,7 @@ REPORT_PATH = REPO_ROOT / "docs" / "PRIMITIVE-CONTENT-AUDIT.md"
 LEDGER_PATH = REPO_ROOT / "docs" / "PRIMITIVE-CONTENT-AUDIT.json"
 PLUGIN_MANIFEST_NAME = "plugin.json"
 AGENT_GLOB = "*.agent.md"
+PLUGIN_SOURCES = load_plugin_sources()
 
 TEXT_SUFFIXES = {
     ".bicep",
@@ -139,11 +140,8 @@ def plugin_manifest_dirs() -> list[Path]:
 
 
 def repository_config(data: dict[str, Any]) -> dict[str, Any]:
-    extensions = data.get("extensions")
-    if not isinstance(extensions, dict):
-        return {}
-    config = extensions.get(REPOSITORY_EXTENSION)
-    return config if isinstance(config, dict) else {}
+    name = data.get("name")
+    return PLUGIN_SOURCES.get(name, {}) if isinstance(name, str) else {}
 
 
 def text_files(path: Path) -> Iterable[Path]:

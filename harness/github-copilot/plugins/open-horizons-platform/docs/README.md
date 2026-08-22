@@ -11,11 +11,11 @@ This folder documents how Open Horizons authors GitHub Copilot customization pri
 
 | Need | Primitive | Package source | Published workspace path |
 | --- | --- | --- | --- |
-| Persona, role, boundaries, and tool access | Agent | `agents/<name>.agent.md` with generated `com.github.copilot/agents/` mirror | `.github/agents/<name>.agent.md` when used without the plugin |
+| Persona, role, boundaries, and tool access | Agent | `agents/<name>.agent.md` | `.github/agents/<name>.agent.md` when used without the plugin |
 | Passive rules for matching files | Instructions | `instructions/<name>.instructions.md` | `.github/instructions/<name>.instructions.md` |
 | Reusable procedure or review checklist | Skill | `skills/<name>/SKILL.md` | `.github/skills/<name>/SKILL.md` when used without the plugin |
 | User-selected VS Code workflow | Prompt | `prompts/<name>.prompt.md` | `.github/prompts/<name>.prompt.md` |
-| Bounded lifecycle automation | Hook | `hooks/<name>/hooks.json` with generated `com.github.copilot/hooks/` mirror | `.github/hooks/<name>.json` plus referenced scripts |
+| Bounded lifecycle automation | Hook | `hooks/<name>/hooks.json` | `.github/hooks/<name>.json` plus referenced scripts |
 
 ## Validate changes
 

@@ -16,14 +16,17 @@ from typing import Any, Iterable
 
 try:
     from _layout import HARNESS_ROOT, PLUGIN_ROOT, REPO_ROOT
+    from _plugin_sources import load_plugin_sources
     from validate_primitives import parse_frontmatter
 except ModuleNotFoundError:  # pragma: no cover - supports python3 -m invocation
     from ._layout import HARNESS_ROOT, PLUGIN_ROOT, REPO_ROOT
+    from ._plugin_sources import load_plugin_sources
     from .validate_primitives import parse_frontmatter
 
 REPORT_PATH = REPO_ROOT / "docs" / "PRIMITIVE-REDUNDANCY.md"
 LEDGER_PATH = REPO_ROOT / "docs" / "PRIMITIVE-REDUNDANCY.json"
 SIMILARITY_THRESHOLD = 0.72
+PLUGIN_SOURCES = load_plugin_sources()
 STOP_WORDS = {
     "a",
     "an",
@@ -233,15 +236,8 @@ def plugin_primitives() -> Iterable[Primitive]:
         manifest = plugin_dir / "plugin.json"
         if not manifest.is_file():
             continue
-        data = json.loads(manifest.read_text(encoding="utf-8"))
-        repository = (
-            data.get("extensions", {})
-            .get("com.paulasilvatech.copilot-primitives", {})
-        )
-        if not (
-            isinstance(repository, dict)
-            and repository.get("componentSource") == "plugin"
-        ):
+        repository = PLUGIN_SOURCES.get(plugin_dir.name, {})
+        if repository.get("componentSource") != "plugin":
             continue
         shared_skill_names = {
             Path(ref.rstrip("/")).name

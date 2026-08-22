@@ -202,7 +202,7 @@ export function findLocalDelegationSkillDir({
 
     // Marketplace: ~/.copilot/installed-plugins/<marketplace>/<plugin>/
     // Direct:      ~/.copilot/installed-plugins/_direct/<plugin>/
-    // Skill dirs may live at skills/, .github/skills/, or com.github.copilot/skills/.
+    // Skill dirs may live at a plugin's direct skills/ root or .github/skills/.
     const pluginsRoot = join(home, ".copilot", "installed-plugins");
     if (exists(pluginsRoot)) {
         try {
@@ -221,7 +221,6 @@ export function findLocalDelegationSkillDir({
                     const nestedCandidates = [
                         join(pluginRoot, "skills", LOCAL_DELEGATION_SKILL_NAME),
                         join(pluginRoot, ".github", "skills", LOCAL_DELEGATION_SKILL_NAME),
-                        join(pluginRoot, "com.github.copilot", "skills", LOCAL_DELEGATION_SKILL_NAME),
                         join(pluginRoot, "com.github.awesome-copilot", "skills", LOCAL_DELEGATION_SKILL_NAME),
                     ];
                     for (const nested of nestedCandidates) {

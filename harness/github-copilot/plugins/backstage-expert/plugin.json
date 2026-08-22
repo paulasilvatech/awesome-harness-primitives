@@ -1,13 +1,12 @@
 {
-  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "backstage-expert",
   "description": "Build, configure, authenticate, extend, document, operate, upgrade, and contribute to Backstage applications and the Backstage core repository with current first-party workflows, safety gates, and migration guidance.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": {
     "name": "Copilot Primitives Maintainers"
   },
-  "repository": "https://github.com/paulasilvatech/copilot-primitives",
   "homepage": "https://backstage.io/",
+  "repository": "https://github.com/paulasilvatech/copilot-primitives",
   "license": "Apache-2.0",
   "keywords": [
     "backstage",
@@ -18,15 +17,7 @@
     "plugin-development",
     "platform-engineering"
   ],
-  "extensions": {
-    "com.github.copilot": {},
-    "com.paulasilvatech.copilot-primitives": {
-      "componentSource": "plugin",
-      "layoutVersion": 1,
-      "hookSource": "./hooks/backstage-safety/hooks.json",
-      "sharedSkills": [
-        "./skills/backstage-plugin-builder/"
-      ]
-    }
-  }
+  "agents": "agents/",
+  "skills": "skills/",
+  "hooks": "hooks/backstage-safety/hooks.json"
 }

@@ -15,12 +15,13 @@ plugins retain their own author, repository, license, and upstream metadata.
 | `skills/` | Canonical Agent Skill packages |
 | `prompts/` | Canonical VS Code prompt sources; prompts are not Agent Host or Copilot CLI primitives |
 | `hooks/` | Canonical reusable hook packages |
-| `plugins/` | Self-contained Agent Plugins 1.0 packages and generated component copies |
-| `manifests/` | Repository distribution manifests |
+| `plugins/` | Self-contained flat GitHub Copilot packages with direct component directories |
+| `manifests/` | Repository distribution and canonical-source ownership manifests |
 | `scripts/` | Validation, audit, generation, import, and synchronization tooling |
 
 The repository-level `.github/` tree remains the installed runtime surface. Generate it from this source
 tree with `scripts/sync_installed_primitives.py`; do not maintain both locations independently.
 
-`componentSource: "library"` in managed plugin metadata is retained as a layout-version-1 compatibility
-value. In repository documentation, use **shared canonical source** rather than “library-owned.”
+`manifests/plugin-sources.json` records whether packaged components come from shared canonical sources
+or are owned by the plugin. Distributed `plugin.json` files contain only GitHub Copilot metadata and
+direct component paths.

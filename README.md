@@ -2,7 +2,7 @@
 
 [![Validate primitives](https://github.com/paulasilvatech/copilot-primitives/actions/workflows/validate-primitives.yml/badge.svg)](https://github.com/paulasilvatech/copilot-primitives/actions/workflows/validate-primitives.yml)
 
-A curated, spec-validated collection of GitHub Copilot CLI primitives for the Copilot CLI harness. The shared harness currently contains **225 agents**, **194 instruction files**, **421 skills**, **48 VS Code prompts**, **99 plugin manifests**, and **8 reusable hook packages**, validated against GitHub Copilot CLI **1.0.81-4**. Self-contained plugins add plugin-owned primitives; the generated content audit reports both scopes without double-counting generated mirrors.
+A curated, spec-validated collection of GitHub Copilot CLI primitives for the Copilot CLI harness. The shared harness currently contains **225 agents**, **194 instruction files**, **420 skills**, **48 VS Code prompts**, **100 plugin manifests**, and **8 reusable hook packages**, validated against GitHub Copilot CLI **1.0.81-4**. Self-contained plugins add plugin-owned primitives; the generated content audit reports both scopes without double-counting generated copies.
 
 For a generated, alphabetized inventory, see [docs/CATALOG.md](docs/CATALOG.md). The [primitive content audit](docs/PRIMITIVE-CONTENT-AUDIT.md) separates structural coverage from semantic freshness review, the [capability audit](docs/PRIMITIVE-CAPABILITIES.md) tracks agent and prompt tool policy, and the [redundancy audit](docs/PRIMITIVE-REDUNDANCY.md) blocks unclassified overlap. `docs/COPILOT-HARNESS-SPEC.md` is the canonical format and discovery reference, and [docs/templates/](docs/templates) holds the authoring templates for each primitive type.
 
@@ -18,7 +18,8 @@ For a generated, alphabetized inventory, see [docs/CATALOG.md](docs/CATALOG.md).
 │   ├── plugins/<name>/plugin.json
 │   ├── hooks/<name>/hooks.json
 │   ├── manifests/
-│   │   └── installed-primitives.json # Canonical-to-installed copy manifest
+│   │   ├── installed-primitives.json # Canonical-to-installed copy manifest
+│   │   └── plugin-sources.json       # Canonical source ownership for flat plugins
 │   └── scripts/
 │       ├── audit_primitive_capabilities.py
 │       ├── audit_primitive_content.py
@@ -75,7 +76,7 @@ with dates in `docs/HARNESS-VALIDATION.md`; stable schema and discovery rules be
 
 ### Plugins
 
-This repository publishes **99 installable plugin entries** through `.github/plugin/marketplace.json`. See the generated [plugin marketplace audit](docs/PLUGIN-AUDIT.md) for component counts, ownership mode, and package-level coverage, and the [primitive content audit](docs/PRIMITIVE-CONTENT-AUDIT.md) for the shared components that are not yet referenced by a plugin.
+This repository publishes **100 installable plugin entries** through `.github/plugin/marketplace.json`. Every package keeps agents, skills, hooks, extensions, and MCP configuration directly under its plugin root. See the generated [plugin marketplace audit](docs/PLUGIN-AUDIT.md) for component counts, ownership mode, and package-level coverage, and the [primitive content audit](docs/PRIMITIVE-CONTENT-AUDIT.md) for the shared components that are not yet referenced by a plugin.
 
 ```sh
 copilot plugin marketplace add paulasilvatech/copilot-primitives

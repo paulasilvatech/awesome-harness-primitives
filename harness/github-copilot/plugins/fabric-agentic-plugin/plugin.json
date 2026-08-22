@@ -1,8 +1,7 @@
 {
-  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "fabric-agentic-plugin",
   "description": "Microsoft Fabric agentic operations toolkit with specialist agents, progressive workload guides, migration workflows, Power BI resources, and MCP integrations for Fabric IQ and SQL endpoints.",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "author": {
     "name": "Microsoft Fabric contributors"
   },
@@ -16,11 +15,7 @@
     "migration",
     "mcp"
   ],
-  "extensions": {
-    "com.github.copilot": {},
-    "com.paulasilvatech.copilot-primitives": {
-      "componentSource": "plugin",
-      "layoutVersion": 1
-    }
-  }
+  "agents": "agents/",
+  "skills": "skills/",
+  "mcpServers": "mcp.json"
 }

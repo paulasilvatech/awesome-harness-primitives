@@ -238,17 +238,13 @@ Keep `SKILL.md` under ~500 lines; move bulk content into bundled resources.
 
 A manifest at the plugin root is valid.
 
-### 4.2 Legacy and Agent Plugins 1.0 manifests
+### 4.2 Flat GitHub Copilot plugin manifests
 
-Without the canonical `$schema`, GitHub Copilot CLI accepts the legacy manifest fields `agents`, `skills`,
-`commands`, `hooks`, `mcpServers`, `lspServers`, `outputStyles`, `postInstallMessage`, and related path
-configuration. Legacy component path defaults are `agents/` and `skills/`.
-
-Declaring the Agent Plugins 1.0 schema switches to its strict manifest contract:
+This repository packages GitHub Copilot plugins with the direct layout documented by GitHub. The
+distributed manifest omits `$schema` and points to components located directly under the plugin root:
 
 ```jsonc
 {
-  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "my-plugin",
   "version": "1.0.0",
   "description": "…",
@@ -257,37 +253,35 @@ Declaring the Agent Plugins 1.0 schema switches to its strict manifest contract:
   "repository": "https://github.com/owner/repo",
   "homepage": "https://…",
   "keywords": ["…"],
-  "extensions": {
-    "com.github.copilot": {}
-  }
+  "agents": "agents/",
+  "skills": "skills/",
+  "hooks": "hooks/safety/hooks.json",
+  "extensions": ["extensions/my-extension"],
+  "mcpServers": "mcp.json"
 }
 ```
 
-The canonical schema allows only `$schema`, `name`, `version`, `description`, `author`, `homepage`,
-`repository`, `license`, `keywords`, and `extensions`. Agent Plugins 1.0 discovers skills from immediate
-children of `skills/` and MCP servers from root `mcp.json`; those locations are fixed and are not declared
-in `plugin.json`. GitHub Copilot's Agent Plugins 1.0 extension discovers agents from the top-level
-`com.github.copilot/agents/` directory and hooks from `com.github.copilot/hooks/hooks.json`. A repository
-may keep canonical sources in `agents/` and `hooks/`, but it must generate and validate the
-extension-directory copies used at runtime.
+Supported component fields include `agents`, `skills`, `commands`, `hooks`, `extensions`,
+`mcpServers`, and `lspServers`. GitHub documents `agents/` and `skills/` as default paths. This
+repository uses explicit direct paths and prohibits a committed `com.github.copilot/` directory.
 
-Agent Plugins 1.0 `mcp.json` requires
+Shared canonical agents and skills are materialized into the package's direct directories by
+`sync_plugin_components.py`. Plugin-owned content remains canonical in the same direct directories.
+Repository-only ownership, shared-source references, imported extension provenance, and mixed
+`sharedSkills` configuration live in `harness/github-copilot/manifests/plugin-sources.json`; this
+metadata is not distributed in `plugin.json`.
+
+Root `mcp.json` retains the portable Agent Plugins MCP schema:
 `"$schema": "https://agent-plugins.org/schemas/1.0.0/mcp.schema.json"` and `mcpServers`. Portable server
 types are `stdio`, `streamable-http`, and `sse`; legacy `local` and `http` values and client-only `tools`
-filters are not valid in this file.
+filters are not valid in this file. The flat manifest declares it through
+`"mcpServers": "mcp.json"`. Runtime verification on 2026-08-22 confirmed that direct agents, skills,
+hooks, extensions, and this MCP configuration install without a namespaced mirror; see
+`docs/HARNESS-VALIDATION.md`.
 
-Repository-managed plugin metadata uses `componentSource: "library"` as a layout-version-1 compatibility
-value for shared canonical sources under `harness/github-copilot/`. Plugin-owned packages can declare
-`sharedSkills: ["./skills/<name>/"]`; the synchronizer materializes those skills into the package while the
-shared harness package remains the only canonical source.
-
-Runtime verification against GitHub Copilot CLI 1.0.81-4 on 2026-08-20 confirmed that a schema-declaring
-plugin's top-level `agents` field is ignored with a warning and agents under
-`com.github.copilot/agents/` are loaded. See `docs/HARNESS-VALIDATION.md`.
-
-Runtime verification on 2026-08-20 confirmed that `hooks/hooks.json` at the schema-declaring plugin root
-did not fire, while the identical configuration under `com.github.copilot/hooks/hooks.json` fired on
-`sessionStart`.
+The portable Agent Plugins 1.0 specification itself standardizes only skills and MCP servers. It permits
+reverse-domain client extension directories, but this repository intentionally targets GitHub Copilot's
+documented flat package contract for GitHub-specific agents, hooks, and extensions.
 
 ### 4.3 Marketplace — `marketplace.json`
 
@@ -322,8 +316,7 @@ Install with `copilot plugin marketplace add <owner>/<repo>` then `/plugin insta
 | 3 | User | `~/.copilot/hooks/*.json` |
 | 4 | Repo settings | `hooks` key in `.github/copilot/settings.json` |
 | 5 | User settings | `hooks` key in `~/.copilot/settings.json` |
-| 6 | Legacy plugin | `<plugin-root>/hooks.json` or `<plugin-root>/hooks/hooks.json` |
-| 7 | Agent Plugins 1.0 GitHub extension | `<plugin-root>/com.github.copilot/hooks/hooks.json` |
+| 6 | Plugin | Path declared by `hooks`, conventionally `<plugin-root>/hooks.json` or a file under `<plugin-root>/hooks/` |
 
 All matching sources are **merged** — every hook registered for an event runs. Policy hooks cannot be
 disabled by `disableAllHooks`.

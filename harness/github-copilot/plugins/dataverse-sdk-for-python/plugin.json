@@ -1,8 +1,7 @@
 {
-  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "dataverse-sdk-for-python",
   "description": "Comprehensive collection for building production-ready Python integrations with Microsoft Dataverse. Includes official documentation, best practices, advanced features, file operations, and code generation prompts.",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "author": {
     "name": "Awesome Copilot Community"
   },
@@ -14,18 +13,5 @@
     "integration",
     "sdk"
   ],
-  "extensions": {
-    "com.github.copilot": {},
-    "com.paulasilvatech.copilot-primitives": {
-      "componentSource": "library",
-      "layoutVersion": 1,
-      "agents": [],
-      "skills": [
-        "./skills/dataverse-python-advanced-patterns/",
-        "./skills/dataverse-python-production-code/",
-        "./skills/dataverse-python-quickstart/",
-        "./skills/dataverse-python-usecase-builder/"
-      ]
-    }
-  }
+  "skills": "skills/"
 }

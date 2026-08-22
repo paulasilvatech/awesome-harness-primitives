@@ -12,12 +12,13 @@ from pathlib import Path
 from typing import Any
 
 try:
-    from _layout import MARKETPLACE_PATH, PLUGIN_ROOT
+    from _layout import MARKETPLACE_PATH, PLUGIN_ROOT, PLUGIN_SOURCES_PATH
+    from _plugin_sources import load_source_manifest, render_json
 except ModuleNotFoundError:  # pragma: no cover
-    from ._layout import MARKETPLACE_PATH, PLUGIN_ROOT
+    from ._layout import MARKETPLACE_PATH, PLUGIN_ROOT, PLUGIN_SOURCES_PATH
+    from ._plugin_sources import load_source_manifest, render_json
 AWESOME_NAMESPACE = "com.github.awesome-copilot"
 COPILOT_NAMESPACE = "com.github.copilot"
-REPOSITORY_EXTENSION = "com.paulasilvatech.copilot-primitives"
 UPSTREAM_REPOSITORY = "https://github.com/github/awesome-copilot"
 EXTENSION_LAYOUT_VERSION = 1
 COPILOT_SDK_VERSION = "1.0.11-preview.2"
@@ -101,8 +102,13 @@ def pin_package_dependencies(extension_dir: Path) -> None:
     package_path.write_text(render_json(package), encoding="utf-8")
 
 
-def import_extensions(source: Path, commit: str) -> dict[str, dict[str, Any]]:
+def import_extensions(
+    source: Path,
+    commit: str,
+    source_manifest: dict[str, Any],
+) -> dict[str, dict[str, Any]]:
     manifests: dict[str, dict[str, Any]] = {}
+    plugin_sources = source_manifest["plugins"]
     upstream_plugins = source / "plugins"
     for upstream_dir in sorted(
         (path for path in upstream_plugins.iterdir() if path.is_dir()),
@@ -130,29 +136,20 @@ def import_extensions(source: Path, commit: str) -> dict[str, dict[str, Any]]:
             pin_package_dependencies(destination)
 
         local_manifest = read_json(local_manifest_path)
-        extensions = local_manifest.get("extensions")
-        extensions = dict(extensions) if isinstance(extensions, dict) else {}
         upstream_extensions = upstream_manifest.get("extensions")
         upstream_copilot = (
             upstream_extensions.get(COPILOT_NAMESPACE)
             if isinstance(upstream_extensions, dict)
             else None
         )
-        existing_copilot = extensions.get(COPILOT_NAMESPACE)
-        copilot = dict(existing_copilot) if isinstance(existing_copilot, dict) else {}
-        if isinstance(upstream_copilot, dict):
-            copilot.update(upstream_copilot)
-        extensions[COPILOT_NAMESPACE] = copilot
-        extensions.pop(AWESOME_NAMESPACE, None)
-
-        repository = extensions.get(REPOSITORY_EXTENSION)
-        repository = dict(repository) if isinstance(repository, dict) else {}
+        repository = plugin_sources.get(upstream_dir.name)
+        if not isinstance(repository, dict):
+            raise ValueError(f"{upstream_dir.name}: source metadata is missing")
         already_imported = (
             repository.get("extensionLayoutVersion") == EXTENSION_LAYOUT_VERSION
             and repository.get("upstreamCommit") == commit
         )
         repository.setdefault("componentSource", "plugin")
-        repository.setdefault("layoutVersion", 1)
         repository.update(
             {
                 "extensionLayoutVersion": EXTENSION_LAYOUT_VERSION,
@@ -161,8 +158,11 @@ def import_extensions(source: Path, commit: str) -> dict[str, dict[str, Any]]:
                 "upstreamCommit": commit,
             }
         )
-        extensions[REPOSITORY_EXTENSION] = repository
-        local_manifest["extensions"] = extensions
+        if isinstance(upstream_copilot, dict) and upstream_copilot:
+            repository["client"] = dict(upstream_copilot)
+        local_manifest["extensions"] = [
+            f"extensions/{name}" for name in names
+        ]
         if not already_imported:
             local_manifest["version"] = bump_patch(local_manifest.get("version"))
         local_manifest_path.write_text(render_json(local_manifest), encoding="utf-8")
@@ -204,7 +204,9 @@ def main(argv: list[str] | None = None) -> int:
 
     source = args.source.resolve()
     commit = verify_source(source)
-    manifests = import_extensions(source, commit)
+    source_manifest = load_source_manifest()
+    manifests = import_extensions(source, commit, source_manifest)
+    PLUGIN_SOURCES_PATH.write_text(render_json(source_manifest), encoding="utf-8")
     update_marketplace(manifests)
     print(f"Imported {len(manifests)} extension-backed plugins from {commit}.")
     return 0

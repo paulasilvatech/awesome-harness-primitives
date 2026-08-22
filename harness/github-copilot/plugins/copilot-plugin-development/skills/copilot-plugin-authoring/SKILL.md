@@ -1,6 +1,6 @@
 ---
 name: copilot-plugin-authoring
-description: "Create, migrate, audit, and validate GitHub Copilot plugins and marketplaces in this repository using Agent Plugins 1.0, canonical library sources, generated com.github.copilot mirrors, portable MCP configuration, hooks, client extensions, and isolated runtime tests. Use when adding a plugin, repairing a manifest, packaging existing agents or skills, or refreshing marketplace governance."
+description: "Create, migrate, audit, and validate flat GitHub Copilot plugins and marketplaces with direct agents, skills, hooks, extensions, MCP configuration, canonical source ownership, and isolated runtime tests. Use when adding a plugin, repairing a manifest, packaging existing primitives, or refreshing marketplace governance."
 ---
 
 # GitHub Copilot plugin authoring
@@ -21,18 +21,21 @@ Choose component ownership before editing:
 
 | Mode | Canonical source | Runtime package |
 | --- | --- | --- |
-| `library` | `harness/github-copilot/agents/` and `harness/github-copilot/skills/` | Skills under `skills/`; agents generated under `com.github.copilot/agents/`. |
-| `plugin` | The plugin's own `agents/`, `skills/`, `hooks/`, or `extensions/` | Canonical content stays local and runtime mirrors are generated under `com.github.copilot/`. |
-| Mixed plugin-owned | Plugin-local components plus selected shared skills | Keep `componentSource: plugin`, declare `sharedSkills`, and generate those package copies from the shared harness source. |
+| `library` | `harness/github-copilot/agents/` and `harness/github-copilot/skills/` | Agents and skills are generated directly under the plugin's `agents/` and `skills/`. |
+| `plugin` | The plugin's own `agents/`, `skills/`, `hooks/`, or `extensions/` | Canonical content stays directly in those plugin-root directories. |
+| Mixed plugin-owned | Plugin-local components plus selected shared skills | Keep `componentSource: plugin` and `sharedSkills` in `manifests/plugin-sources.json`, then generate those package copies from the shared harness source. |
 
-Every managed manifest declares `extensions.com.paulasilvatech.copilot-primitives` with `componentSource`, `layoutVersion`, and source references. `componentSource: library` is the layout-version-1 compatibility value for shared canonical sources. A plugin-owned package may declare `sharedSkills` to avoid maintaining a second canonical copy. Do not hand-edit generated runtime mirrors.
+Canonical ownership and source references live in
+`harness/github-copilot/manifests/plugin-sources.json`, not in the distributed `plugin.json`. A
+plugin-owned package may declare `sharedSkills` there to avoid maintaining a second canonical copy.
+Do not hand-edit generated shared-source copies.
 
-Agent Plugins 1.0 uses:
+GitHub Copilot plugins use:
 
-- strict root `plugin.json`;
-- fixed `skills/<name>/SKILL.md`;
-- fixed root `mcp.json` with portable `stdio`, `streamable-http`, or `sse` transports;
-- GitHub-specific agents, hooks, and client extensions under `com.github.copilot/`.
+- flat root `plugin.json` without the Agent Plugins `$schema`;
+- direct `agents/`, `skills/`, `hooks/`, and `extensions/` paths;
+- root `mcp.json`, declared through `mcpServers`, with portable transports;
+- no `com.github.copilot/` directory.
 
 Instructions and VS Code prompts are repository workspace customizations, not portable core plugin components. Package a safe publisher skill when they must accompany a plugin.
 
@@ -95,10 +98,10 @@ Reinstall into a fresh isolated home after package changes because GitHub Copilo
 
 | Symptom | Likely cause | Resolution |
 | --- | --- | --- |
-| Skills load but agents do not | Schema plugin still relies on root `agents/` | Generate `com.github.copilot/agents/` and declare the GitHub extension. |
-| Manifest passes CLI but fails schema | Legacy top-level component fields remain | Move composition to repository extension metadata and normalize. |
+| Skills load but agents do not | Manifest omits or mispoints the direct agent directory | Declare `agents: "agents/"` and verify the files are directly present. |
+| Manifest contains repository-only metadata | Canonical ownership leaked into the distributed package | Move it to `manifests/plugin-sources.json` and normalize. |
 | MCP server is absent | Legacy `.mcp.json`, missing schema, or wrong transport vocabulary | Use root `mcp.json` and the Agent Plugins MCP schema. |
-| Hook does not fire | Wrong legacy path or non-executable script | Use the appropriate `com.github.copilot/hooks/hooks.json` mirror and direct payload tests. |
+| Hook does not fire | Wrong direct path or non-executable script | Point `hooks` to the plugin-root config and run direct plus live payload tests. |
 | Marketplace install is stale | Version or entry differs from manifest | Synchronize description/version and reinstall in a fresh home. |
 | Audit reports drift | Canonical source changed without regeneration | Run the declared normalizer, importer, synchronizer, or catalog generator. |
 | Same skill exists in shared and plugin sources | Plugin copied and then edited a shared capability | Keep one shared canonical package, declare it in `sharedSkills`, and regenerate the plugin copy. |

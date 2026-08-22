@@ -22,8 +22,10 @@ from typing import Any, Iterable
 
 try:
     from _layout import HARNESS_ROOT, find_repo_root
+    from _plugin_sources import load_plugin_sources
 except ModuleNotFoundError:  # pragma: no cover - supports python3 -m invocation
     from ._layout import HARNESS_ROOT, find_repo_root
+    from ._plugin_sources import load_plugin_sources
 
 try:
     import yaml  # type: ignore
@@ -132,7 +134,6 @@ LEGACY_PROMPT_TOOLS = {
 PL_VALID_KEYS = {"$schema", "name", "version", "description", "author", "email", "repository", "license", "homepage", "keywords", "extensions", "paths", "exclusive", "skills", "agents", "commands", "mcpServers", "lspServers", "outputStyles", "hooks", "postInstallMessage", "strict"}
 OPEN_PLUGIN_SCHEMA = "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json"
 OPEN_MCP_SCHEMA = "https://agent-plugins.org/schemas/1.0.0/mcp.schema.json"
-REPOSITORY_EXTENSION = "com.paulasilvatech.copilot-primitives"
 OPEN_PLUGIN_VALID_KEYS = {
     "$schema",
     "name",
@@ -193,6 +194,7 @@ class Validator:
         self.quiet = quiet
         self.findings: list[Finding] = []
         self.file_counts: Counter[str] = Counter()
+        self.plugin_sources = load_plugin_sources()
 
     def rel(self, path: Path) -> str:
         try:
@@ -602,23 +604,9 @@ class Validator:
         desc = data.get("description")
         if not isinstance(desc, str) or not desc.strip() or len(desc) > 1024:
             self.add(kind, p, "PL006", "WARNING", "description missing or > 1024 chars")
-        extensions = data.get("extensions")
-        repository_extension = (
-            extensions.get("com.paulasilvatech.copilot-primitives")
-            if isinstance(extensions, dict)
-            else None
-        )
-        # Existing marketplace imports may carry the schema URL while retaining
-        # legacy top-level fields. Enforce the closed v1 schema for packages that
-        # explicitly declare their canonical component ownership.
-        strict_open_plugin = (
-            data.get("$schema") == OPEN_PLUGIN_SCHEMA
-            and isinstance(repository_extension, dict)
-            and repository_extension.get("componentSource") in {"plugin", "library"}
-        )
-        valid_keys = OPEN_PLUGIN_VALID_KEYS if strict_open_plugin else PL_VALID_KEYS
-        for k in sorted(set(data) - valid_keys):
-            severity = "ERROR" if strict_open_plugin else "WARNING"
+        managed_plugin = plugin_dir.name in self.plugin_sources
+        for k in sorted(set(data) - PL_VALID_KEYS):
+            severity = "ERROR" if managed_plugin else "WARNING"
             self.add(kind, p, "PL007", severity, f"Unrecognized top-level key: {k}")
         for label, ref in collect_plugin_refs(data):
             if not isinstance(ref, str) or not ref.strip() or has_variable(ref):
@@ -629,48 +617,60 @@ class Validator:
             # Resolution base is intentionally not emitted on success to avoid noisy INFO; errors include both attempted bases.
             if label.endswith("skills") and not ref.endswith("/"):
                 self.add(kind, p, "PL009", "WARNING", f"skill ref should end with '/': {ref}")
-            if label.endswith("agents") and not ref.endswith(".agent.md"):
-                self.add(kind, p, "PL009", "WARNING", f"agent ref should end with '.agent.md': {ref}")
+            if label.endswith("agents") and not (
+                ref.endswith(".agent.md") or ref.endswith("/")
+            ):
+                self.add(
+                    kind,
+                    p,
+                    "PL009",
+                    "WARNING",
+                    f"agent ref should be an agent directory or end with '.agent.md': {ref}",
+                )
         author = data.get("author")
         if author is not None and not (isinstance(author, dict) and isinstance(author.get("name"), str) and author.get("name", "").strip()):
             self.add(kind, p, "PL010", "WARNING", "author, if present, should be an object with a name")
-        if strict_open_plugin:
-            self._validate_open_plugin(p, plugin_dir, data)
+        if managed_plugin:
+            self._validate_flat_plugin(
+                p,
+                plugin_dir,
+                data,
+                self.plugin_sources[plugin_dir.name],
+            )
 
-    def _validate_open_plugin(self, p: Path, plugin_dir: Path, data: dict[str, Any]) -> None:
+    def _validate_flat_plugin(
+        self,
+        p: Path,
+        plugin_dir: Path,
+        data: dict[str, Any],
+        source_config: dict[str, Any],
+    ) -> None:
         kind = "plugins"
-        extensions = data.get("extensions", {})
-        if not isinstance(extensions, dict):
-            self.add(kind, p, "PL011", "ERROR", "Open Plugin Spec extensions must be an object")
-            return
-        invalid_extensions = [
-            namespace
-            for namespace, config in extensions.items()
-            if not isinstance(namespace, str) or not isinstance(config, dict)
-        ]
-        if invalid_extensions:
+        if "$schema" in data:
             self.add(
                 kind,
                 p,
                 "PL011",
                 "ERROR",
-                "Open Plugin Spec extension namespaces must map to objects",
+                "managed GitHub Copilot plugins use the flat manifest and must not declare the Agent Plugins schema",
+            )
+        namespace = plugin_dir / "com.github.copilot"
+        if namespace.exists():
+            self.add(
+                kind,
+                namespace,
+                "PL011",
+                "ERROR",
+                "com.github.copilot directories are prohibited; keep components at the plugin root",
             )
 
-        copilot_extension = extensions.get("com.github.copilot")
-        repository_extension = extensions.get(REPOSITORY_EXTENSION)
-        repository_extension = (
-            repository_extension if isinstance(repository_extension, dict) else {}
-        )
-        component_source = repository_extension.get("componentSource")
+        component_source = source_config.get("componentSource")
         expected_agents: list[str] = []
         expected_skills: list[str] = []
         expected_extensions: list[str] = []
         if component_source == "library":
-            if repository_extension.get("layoutVersion") != 1:
-                self.add(kind, p, "PL016", "ERROR", "library component layoutVersion must equal 1")
             for key, expected_prefix in (("agents", "./agents/"), ("skills", "./skills/")):
-                refs = repository_extension.get(key)
+                refs = source_config.get(key)
                 if not isinstance(refs, list) or not all(
                     isinstance(ref, str) and ref.startswith(expected_prefix) for ref in refs
                 ):
@@ -689,9 +689,7 @@ class Validator:
                 else:
                     expected_skills = refs
         elif component_source == "plugin":
-            if repository_extension.get("layoutVersion") != 1:
-                self.add(kind, p, "PL016", "ERROR", "plugin component layoutVersion must equal 1")
-            shared_skills = repository_extension.get("sharedSkills", [])
+            shared_skills = source_config.get("sharedSkills", [])
             if not (
                 isinstance(shared_skills, list)
                 and len(shared_skills) == len(set(shared_skills))
@@ -734,10 +732,60 @@ class Validator:
                 p,
                 "PL016",
                 "ERROR",
-                "repository componentSource must be `plugin` or `library`",
+                "source metadata componentSource must be `plugin` or `library`",
             )
 
-        extension_refs = repository_extension.get("extensionSources", [])
+        actual_agents = {
+            path.name for path in (plugin_dir / "agents").glob("*.agent.md")
+        }
+        expected_agent_names = {Path(ref).name for ref in expected_agents}
+        if actual_agents != expected_agent_names:
+            self.add(
+                kind,
+                p,
+                "PL012",
+                "ERROR",
+                "direct agents/ content does not match canonical source metadata",
+            )
+        if expected_agent_names:
+            if data.get("agents") != "agents/":
+                self.add(
+                    kind,
+                    p,
+                    "PL012",
+                    "ERROR",
+                    "plugins with agents must declare `agents: \"agents/\"`",
+                )
+        elif "agents" in data:
+            self.add(kind, p, "PL012", "ERROR", "agents field exists but agents/ is empty")
+
+        actual_skills = {
+            path.name
+            for path in (plugin_dir / "skills").iterdir()
+            if path.is_dir() and (path / "SKILL.md").is_file()
+        } if (plugin_dir / "skills").is_dir() else set()
+        expected_skill_names = {Path(ref.rstrip("/")).name for ref in expected_skills}
+        if actual_skills != expected_skill_names:
+            self.add(
+                kind,
+                p,
+                "PL016",
+                "ERROR",
+                "direct skills/ content does not match canonical source metadata",
+            )
+        if expected_skill_names:
+            if data.get("skills") != "skills/":
+                self.add(
+                    kind,
+                    p,
+                    "PL016",
+                    "ERROR",
+                    "plugins with skills must declare `skills: \"skills/\"`",
+                )
+        elif "skills" in data:
+            self.add(kind, p, "PL016", "ERROR", "skills field exists but skills/ is empty")
+
+        extension_refs = source_config.get("extensionSources", [])
         if extension_refs is not None:
             if not isinstance(extension_refs, list) or not all(
                 isinstance(ref, str) and ref.startswith("./extensions/")
@@ -755,46 +803,8 @@ class Validator:
                 if len(extension_refs) != len(set(extension_refs)):
                     self.add(kind, p, "PL017", "ERROR", "extensionSources contains duplicates")
 
-        if copilot_extension is not None:
-            agents = copilot_extension.get("agents")
-            if agents is not None and not (
-                isinstance(agents, list)
-                and all(isinstance(ref, str) and ref.endswith(".agent.md") for ref in agents)
-            ):
-                self.add(
-                    kind,
-                    p,
-                    "PL012",
-                    "ERROR",
-                    "extensions.com.github.copilot.agents must be a list of .agent.md paths",
-                )
-            if expected_agents:
-                extension_agents = plugin_dir / "com.github.copilot" / "agents"
-                expected_names = {Path(ref).name for ref in expected_agents}
-                actual_names = (
-                    {path.name for path in extension_agents.glob("*.agent.md")}
-                    if extension_agents.is_dir()
-                    else set()
-                )
-                if actual_names != expected_names:
-                    self.add(
-                        kind,
-                        p,
-                        "PL012",
-                        "ERROR",
-                        "Agent Plugins 1.0 GitHub agent mirror does not match canonical agents",
-                    )
-        elif expected_agents:
-            self.add(
-                kind,
-                p,
-                "PL012",
-                "ERROR",
-                "plugins with agents must declare extensions.com.github.copilot",
-            )
-
-        if "hookSource" in repository_extension:
-            hook_ref = repository_extension["hookSource"]
+        if "hookSource" in source_config:
+            hook_ref = source_config["hookSource"]
             if not isinstance(hook_ref, str) or not hook_ref.startswith("./"):
                 self.add(
                     kind,
@@ -812,39 +822,60 @@ class Validator:
                 else:
                     if not source.is_file():
                         self.add(kind, p, "PL015", "ERROR", f"repository hookSource not found: {hook_ref}")
-                runtime_hook = plugin_dir / "com.github.copilot" / "hooks" / "hooks.json"
-                if not runtime_hook.is_file():
+                manifest_hook = hook_ref.removeprefix("./")
+                if data.get("hooks") != manifest_hook:
                     self.add(
                         kind,
                         p,
                         "PL015",
                         "ERROR",
-                        "Agent Plugins 1.0 GitHub hooks must be mirrored under com.github.copilot/hooks",
+                        f"plugin hooks field must equal `{manifest_hook}`",
                     )
                 else:
-                    self._validate_hook(runtime_hook, plugin_dir)
+                    self._validate_hook(source, plugin_dir)
+        elif "hooks" in data:
+            self.add(kind, p, "PL015", "ERROR", "hooks field has no canonical hook source")
 
-        for ref in expected_skills:
-            target = plugin_dir / ref[2:].rstrip("/")
-            if not (target / "SKILL.md").is_file():
-                self.add(kind, p, "PL016", "ERROR", f"plugin skill copy is missing: {ref}")
-
+        manifest_extensions = data.get("extensions", [])
+        normalized_manifest_extensions = (
+            [manifest_extensions]
+            if isinstance(manifest_extensions, str)
+            else manifest_extensions
+        )
+        expected_manifest_extensions = [
+            ref.removeprefix("./") for ref in expected_extensions
+        ]
+        if normalized_manifest_extensions != expected_manifest_extensions:
+            self.add(
+                kind,
+                p,
+                "PL017",
+                "ERROR",
+                "extensions field does not match direct extension sources",
+            )
         for ref in expected_extensions:
             canonical = plugin_dir / ref[2:].rstrip("/")
-            runtime = plugin_dir / "com.github.copilot" / "extensions" / canonical.name
             if not canonical.is_dir():
                 self.add(kind, p, "PL017", "ERROR", f"canonical extension is missing: {ref}")
-            if not runtime.is_dir():
-                self.add(kind, p, "PL017", "ERROR", f"runtime extension mirror is missing: {ref}")
 
         mcp_path = plugin_dir / "mcp.json"
         if mcp_path.exists():
+            if data.get("mcpServers") != "mcp.json":
+                self.add(
+                    kind,
+                    p,
+                    "PL014",
+                    "ERROR",
+                    "plugins with mcp.json must declare `mcpServers: \"mcp.json\"`",
+                )
             self._validate_open_plugin_mcp(mcp_path)
+        elif "mcpServers" in data:
+            self.add(kind, p, "PL014", "ERROR", "mcpServers field exists but mcp.json is missing")
         if not (
             expected_agents
             or expected_skills
             or expected_extensions
-            or "hookSource" in repository_extension
+            or "hookSource" in source_config
             or mcp_path.is_file()
         ):
             self.add(kind, p, "PL018", "ERROR", "plugin declares no installable component")
@@ -1316,14 +1347,8 @@ def collect_plugin_refs(data: dict[str, Any]) -> Iterable[tuple[str, str]]:
                 elif isinstance(v, dict):
                     for k in ("path", "source"):
                         if isinstance(v.get(k), str): yield label, v[k]
-    for key in ("agents", "skills", "commands", "hooks", "mcpServers"):
+    for key in ("agents", "skills", "commands", "hooks", "mcpServers", "extensions"):
         yield from strings(key, data.get(key))
-    ext = data.get("extensions")
-    if isinstance(ext, dict):
-        for ns, cfg in ext.items():
-            if isinstance(cfg, dict):
-                for key in ("agents", "skills", "commands", "hooks", "mcpServers"):
-                    yield from strings(f"extensions.{ns}.{key}", cfg.get(key))
 
 
 def resolve_component_ref(ref: str, manifest_dir: Path, root: Path) -> tuple[Path | None, str | None]:

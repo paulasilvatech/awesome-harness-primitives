@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Normalize shared-source plugin packages to Agent Plugins 1.0 layout."""
+"""Normalize all marketplace packages to the flat GitHub Copilot plugin layout."""
 
 from __future__ import annotations
 
@@ -8,32 +8,29 @@ import json
 import re
 import sys
 from pathlib import Path
-from typing import Any, Iterable
+from typing import Any
 
 try:
-    from _layout import (
-        HARNESS_ROOT,
-        MARKETPLACE_PATH,
-        PLUGIN_ROOT,
-        REPO_ROOT,
-        SHARED_COMPONENT_SOURCE,
+    from _layout import MARKETPLACE_PATH, PLUGIN_ROOT, PLUGIN_SOURCES_PATH, REPO_ROOT
+    from _plugin_sources import (
+        extract_source_manifest,
+        load_source_manifest,
+        render_json,
+        validate_source_manifest,
     )
     from validate_primitives import OPEN_PLUGIN_SCHEMA, PLUGIN_MANIFESTS
 except ModuleNotFoundError:  # pragma: no cover
-    from ._layout import (
-        HARNESS_ROOT,
-        MARKETPLACE_PATH,
-        PLUGIN_ROOT,
-        REPO_ROOT,
-        SHARED_COMPONENT_SOURCE,
+    from ._layout import MARKETPLACE_PATH, PLUGIN_ROOT, PLUGIN_SOURCES_PATH, REPO_ROOT
+    from ._plugin_sources import (
+        extract_source_manifest,
+        load_source_manifest,
+        render_json,
+        validate_source_manifest,
     )
     from .validate_primitives import OPEN_PLUGIN_SCHEMA, PLUGIN_MANIFESTS
 
-REPOSITORY_EXTENSION = "com.paulasilvatech.copilot-primitives"
-LAYOUT_VERSION = 1
 SEMVER = re.compile(r"^(\d+)\.(\d+)\.(\d+)(.*)$")
-OPEN_KEYS = (
-    "$schema",
+METADATA_KEYS = (
     "name",
     "description",
     "version",
@@ -42,7 +39,9 @@ OPEN_KEYS = (
     "repository",
     "license",
     "keywords",
-    "extensions",
+    "category",
+    "tags",
+    "postInstallMessage",
 )
 
 
@@ -61,27 +60,6 @@ def manifest_path(plugin_dir: Path) -> Path | None:
     return None
 
 
-def iter_strings(value: Any) -> Iterable[str]:
-    if isinstance(value, str):
-        yield value
-    elif isinstance(value, list):
-        for item in value:
-            yield from iter_strings(item)
-    elif isinstance(value, dict):
-        for item in value.values():
-            yield from iter_strings(item)
-
-
-def component_refs(data: dict[str, Any], prefix: str) -> list[str]:
-    return sorted(
-        {
-            value
-            for value in iter_strings(data)
-            if value.startswith(prefix)
-        }
-    )
-
-
 def bump_patch(version: Any) -> str:
     if not isinstance(version, str):
         return "1.0.0"
@@ -92,69 +70,66 @@ def bump_patch(version: Any) -> str:
     return f"{major}.{minor}.{int(patch) + 1}{suffix}"
 
 
+def stripped_ref(ref: str) -> str:
+    return ref.removeprefix("./")
+
+
+def plugin_owned_agents(plugin_dir: Path) -> bool:
+    return any((plugin_dir / "agents").glob("*.agent.md"))
+
+
+def plugin_owned_skills(plugin_dir: Path) -> bool:
+    skills = plugin_dir / "skills"
+    return skills.is_dir() and any(
+        path.is_dir() and (path / "SKILL.md").is_file()
+        for path in skills.iterdir()
+    )
+
+
 def normalize_manifest(
     plugin_dir: Path,
     data: dict[str, Any],
-) -> tuple[dict[str, Any], bool]:
-    extensions = data.get("extensions")
-    repository_config = (
-        extensions.get(REPOSITORY_EXTENSION)
-        if isinstance(extensions, dict)
-        else None
+    source: dict[str, Any],
+) -> dict[str, Any]:
+    migrating = (
+        data.get("$schema") == OPEN_PLUGIN_SCHEMA
+        or isinstance(data.get("extensions"), dict)
     )
-    if (
-        isinstance(repository_config, dict)
-        and repository_config.get("componentSource") == "plugin"
-    ):
-        return data, False
-
-    agents = component_refs(data, "./agents/")
-    skills = component_refs(data, "./skills/")
-    if not agents and not skills:
-        return data, False
-
-    for ref in (*agents, *skills):
-        source = HARNESS_ROOT / ref[2:].rstrip("/")
-        if not source.exists():
-            raise ValueError(f"{plugin_dir.name}: canonical component source not found: {source}")
-
-    if not isinstance(extensions, dict):
-        extensions = {}
-    extensions = dict(extensions)
-    extensions.pop("com.github.awesome-copilot", None)
-    extensions.setdefault("com.github.copilot", {})
-    if not isinstance(extensions["com.github.copilot"], dict):
-        raise ValueError(f"{plugin_dir.name}: extensions.com.github.copilot must be an object")
-
-    repository_config = extensions.get(REPOSITORY_EXTENSION)
-    if not isinstance(repository_config, dict):
-        repository_config = {}
-    repository_config = dict(repository_config)
-    already_normalized = (
-        repository_config.get("componentSource") == SHARED_COMPONENT_SOURCE
-        and repository_config.get("layoutVersion") == LAYOUT_VERSION
-    )
-    repository_config.update(
-        {
-            "componentSource": SHARED_COMPONENT_SOURCE,
-            "layoutVersion": LAYOUT_VERSION,
-            "agents": agents,
-            "skills": skills,
-        }
-    )
-    extensions[REPOSITORY_EXTENSION] = repository_config
-
-    normalized: dict[str, Any] = {}
-    for key in OPEN_KEYS:
-        if key == "$schema":
-            normalized[key] = OPEN_PLUGIN_SCHEMA
-        elif key == "extensions":
-            normalized[key] = extensions
-        elif key in data:
-            normalized[key] = data[key]
-    if not already_normalized:
+    normalized = {
+        key: data[key]
+        for key in METADATA_KEYS
+        if key in data
+    }
+    if migrating:
         normalized["version"] = bump_patch(normalized.get("version"))
-    return normalized, True
+
+    component_source = source.get("componentSource")
+    has_agents = bool(source.get("agents")) if component_source == "library" else plugin_owned_agents(plugin_dir)
+    has_skills = (
+        bool(source.get("skills"))
+        if component_source == "library"
+        else plugin_owned_skills(plugin_dir) or bool(source.get("sharedSkills"))
+    )
+    if has_agents:
+        normalized["agents"] = "agents/"
+    if has_skills:
+        normalized["skills"] = "skills/"
+
+    hook_source = source.get("hookSource")
+    if isinstance(hook_source, str):
+        normalized["hooks"] = stripped_ref(hook_source)
+
+    extension_sources = source.get("extensionSources", [])
+    if extension_sources:
+        normalized["extensions"] = [
+            stripped_ref(ref)
+            for ref in extension_sources
+            if isinstance(ref, str)
+        ]
+
+    if (plugin_dir / "mcp.json").is_file():
+        normalized["mcpServers"] = "mcp.json"
+    return normalized
 
 
 def normalize_marketplace(
@@ -171,43 +146,72 @@ def normalize_marketplace(
             raise ValueError(f"{MARKETPLACE_PATH}: plugin entries must be objects")
         name = entry.get("name")
         manifest = manifests.get(name) if isinstance(name, str) else None
-        if manifest is None:
-            normalized_plugins.append(entry)
-            continue
         updated = dict(entry)
-        updated["description"] = manifest.get("description", updated.get("description", ""))
-        updated["version"] = manifest.get("version", updated.get("version", "1.0.0"))
+        if manifest is not None:
+            updated["description"] = manifest.get(
+                "description", updated.get("description", "")
+            )
+            updated["version"] = manifest.get(
+                "version", updated.get("version", "1.0.0")
+            )
         normalized_plugins.append(updated)
     normalized["plugins"] = normalized_plugins
     return normalized
 
 
-def render_json(data: dict[str, Any]) -> str:
-    return json.dumps(data, indent=2, ensure_ascii=False) + "\n"
-
-
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
-        description="Normalize shared-source plugins to strict Agent Plugins 1.0 manifests."
+        description="Normalize marketplace packages to direct plugin-root components."
     )
     parser.add_argument("--check", action="store_true", help="report drift without writing")
     args = parser.parse_args(argv)
 
-    drift: list[str] = []
-    normalized_manifests: dict[str, dict[str, Any]] = {}
-    writes: list[tuple[Path, str]] = []
+    source_manifest = (
+        load_source_manifest()
+        if PLUGIN_SOURCES_PATH.is_file()
+        else extract_source_manifest()
+    )
+    validate_source_manifest(source_manifest)
+    source_plugins = source_manifest["plugins"]
 
-    for plugin_dir in sorted(
+    drift: list[str] = []
+    writes: list[tuple[Path, str]] = []
+    normalized_manifests: dict[str, dict[str, Any]] = {}
+
+    rendered_sources = render_json(source_manifest)
+    if (
+        not PLUGIN_SOURCES_PATH.is_file()
+        or PLUGIN_SOURCES_PATH.read_text(encoding="utf-8") != rendered_sources
+    ):
+        drift.append(PLUGIN_SOURCES_PATH.relative_to(REPO_ROOT).as_posix())
+        writes.append((PLUGIN_SOURCES_PATH, rendered_sources))
+
+    plugin_dirs = sorted(
         (path for path in PLUGIN_ROOT.iterdir() if path.is_dir()),
         key=lambda path: path.name.casefold(),
-    ):
+    )
+    manifest_names = {
+        plugin_dir.name
+        for plugin_dir in plugin_dirs
+        if manifest_path(plugin_dir) is not None
+    }
+    if set(source_plugins) != manifest_names:
+        missing = sorted(manifest_names - set(source_plugins))
+        extra = sorted(set(source_plugins) - manifest_names)
+        raise ValueError(
+            f"plugin source metadata mismatch; missing={missing}, extra={extra}"
+        )
+
+    for plugin_dir in plugin_dirs:
         path = manifest_path(plugin_dir)
         if path is None:
             continue
         original = read_json(path)
-        normalized, managed = normalize_manifest(plugin_dir, original)
-        if not managed:
-            continue
+        normalized = normalize_manifest(
+            plugin_dir,
+            original,
+            source_plugins[plugin_dir.name],
+        )
         name = normalized.get("name")
         if not isinstance(name, str):
             raise ValueError(f"{path}: plugin name is required")
@@ -218,7 +222,9 @@ def main(argv: list[str] | None = None) -> int:
             writes.append((path, rendered))
 
     marketplace = read_json(MARKETPLACE_PATH)
-    normalized_marketplace = normalize_marketplace(marketplace, normalized_manifests)
+    normalized_marketplace = normalize_marketplace(
+        marketplace, normalized_manifests
+    )
     rendered_marketplace = render_json(normalized_marketplace)
     if MARKETPLACE_PATH.read_text(encoding="utf-8") != rendered_marketplace:
         drift.append(MARKETPLACE_PATH.relative_to(REPO_ROOT).as_posix())
@@ -226,15 +232,16 @@ def main(argv: list[str] | None = None) -> int:
 
     if args.check:
         if drift:
-            print("Plugin manifests require normalization:", file=sys.stderr)
+            print("Plugin manifests require flat-layout normalization:", file=sys.stderr)
             for path in drift:
                 print(f"  - {path}", file=sys.stderr)
             return 1
         return 0
 
     for path, rendered in writes:
+        path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(rendered, encoding="utf-8")
-    print(f"Normalized {len(normalized_manifests)} shared-source plugin manifests.")
+    print(f"Normalized {len(normalized_manifests)} flat plugin manifests.")
     return 0
 
 

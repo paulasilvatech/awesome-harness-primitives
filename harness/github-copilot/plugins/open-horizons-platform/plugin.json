@@ -1,14 +1,13 @@
 {
-  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "open-horizons-platform",
   "description": "Open Horizons agentic DevOps platform toolkit for Azure, AKS, Backstage, GitHub, Azure DevOps, Terraform, security, reliability, architecture, and deployment operations. Use it to install specialist agents, reusable skills, safety hooks, MCP integrations, and a safe publisher for repository instructions, prompts, and automation.",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "author": {
     "name": "Open Horizons Contributors",
     "url": "https://github.com/Ohorizons"
   },
-  "repository": "https://github.com/paulasilvatech/copilot-primitives",
   "homepage": "https://github.com/Ohorizons/open-horizons-platform",
+  "repository": "https://github.com/paulasilvatech/copilot-primitives",
   "license": "MIT",
   "keywords": [
     "open-horizons",
@@ -22,16 +21,8 @@
     "copilot-cli",
     "github-copilot"
   ],
-  "extensions": {
-    "com.github.copilot": {},
-    "com.paulasilvatech.copilot-primitives": {
-      "componentSource": "plugin",
-      "layoutVersion": 1,
-      "hookSource": "./hooks/open-horizons-safety/hooks.json",
-      "sharedSkills": [
-        "./skills/azure-managed-redis-cache/",
-        "./skills/backstage-plugin-builder/"
-      ]
-    }
-  }
+  "agents": "agents/",
+  "skills": "skills/",
+  "hooks": "hooks/open-horizons-safety/hooks.json",
+  "mcpServers": "mcp.json"
 }

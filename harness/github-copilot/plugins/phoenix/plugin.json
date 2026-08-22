@@ -1,8 +1,7 @@
 {
-  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "phoenix",
   "description": "Phoenix AI observability skills for LLM application debugging, evaluation, and tracing. Includes CLI debugging tools, LLM evaluation workflows, and OpenInference tracing instrumentation.",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "author": {
     "name": "Arize AI"
   },
@@ -18,17 +17,5 @@
     "openinference",
     "instrumentation"
   ],
-  "extensions": {
-    "com.github.copilot": {},
-    "com.paulasilvatech.copilot-primitives": {
-      "componentSource": "library",
-      "layoutVersion": 1,
-      "agents": [],
-      "skills": [
-        "./skills/phoenix-cli/",
-        "./skills/phoenix-evals/",
-        "./skills/phoenix-tracing/"
-      ]
-    }
-  }
+  "skills": "skills/"
 }

@@ -14,19 +14,17 @@ from typing import Any
 
 try:
     from _layout import HARNESS_ROOT, MARKETPLACE_PATH, PLUGIN_ROOT, REPO_ROOT, SHARED_COMPONENT_SOURCE
+    from _plugin_sources import load_plugin_sources
     from validate_primitives import (
         OPEN_MCP_SCHEMA,
-        OPEN_PLUGIN_SCHEMA,
-        OPEN_PLUGIN_VALID_KEYS,
-        REPOSITORY_EXTENSION,
+        PL_VALID_KEYS,
     )
 except ModuleNotFoundError:  # pragma: no cover
     from ._layout import HARNESS_ROOT, MARKETPLACE_PATH, PLUGIN_ROOT, REPO_ROOT, SHARED_COMPONENT_SOURCE
+    from ._plugin_sources import load_plugin_sources
     from .validate_primitives import (
         OPEN_MCP_SCHEMA,
-        OPEN_PLUGIN_SCHEMA,
-        OPEN_PLUGIN_VALID_KEYS,
-        REPOSITORY_EXTENSION,
+        PL_VALID_KEYS,
     )
 
 REPORT_PATH = REPO_ROOT / "docs" / "PLUGIN-AUDIT.md"
@@ -67,7 +65,11 @@ def names_from_refs(refs: list[str]) -> set[str]:
     return {Path(ref.rstrip("/")).name for ref in refs}
 
 
-def audit_plugin(plugin_dir: Path, marketplace: dict[str, dict[str, Any]]) -> tuple[PluginRow, list[str]]:
+def audit_plugin(
+    plugin_dir: Path,
+    marketplace: dict[str, dict[str, Any]],
+    source_config: dict[str, Any],
+) -> tuple[PluginRow, list[str]]:
     errors: list[str] = []
     manifest_path = plugin_dir / "plugin.json"
     if not manifest_path.is_file():
@@ -79,34 +81,24 @@ def audit_plugin(plugin_dir: Path, marketplace: dict[str, dict[str, Any]]) -> tu
     name = name if isinstance(name, str) else plugin_dir.name
     version = manifest.get("version")
     version = version if isinstance(version, str) else ""
-    if manifest.get("$schema") != OPEN_PLUGIN_SCHEMA:
-        errors.append(f"{name}: canonical Agent Plugins 1.0 schema is required")
-    extra_keys = sorted(set(manifest) - OPEN_PLUGIN_VALID_KEYS)
+    if "$schema" in manifest:
+        errors.append(f"{name}: flat GitHub Copilot manifests must not declare $schema")
+    extra_keys = sorted(set(manifest) - PL_VALID_KEYS)
     if extra_keys:
         errors.append(f"{name}: unsupported top-level fields: {', '.join(extra_keys)}")
     if (plugin_dir / ".mcp.json").exists():
         errors.append(f"{name}: legacy .mcp.json must be migrated to mcp.json")
 
-    extensions = manifest.get("extensions")
-    if not isinstance(extensions, dict):
-        extensions = {}
-        errors.append(f"{name}: extensions object is required")
-    if not isinstance(extensions.get("com.github.copilot"), dict):
-        errors.append(f"{name}: com.github.copilot extension object is required")
-    repository = extensions.get(REPOSITORY_EXTENSION)
-    if not isinstance(repository, dict):
-        repository = {}
-        errors.append(f"{name}: repository ownership extension is required")
-    source = repository.get("componentSource")
+    if (plugin_dir / "com.github.copilot").exists():
+        errors.append(f"{name}: com.github.copilot directory is prohibited")
+
+    source = source_config.get("componentSource")
     if source not in {SHARED_COMPONENT_SOURCE, "plugin"}:
         errors.append(f"{name}: componentSource must be {SHARED_COMPONENT_SOURCE} or plugin")
         source = "unknown"
-    if repository.get("layoutVersion") != 1:
-        errors.append(f"{name}: layoutVersion must equal 1")
-
     runtime_agents = {
         path.name
-        for path in (plugin_dir / "com.github.copilot" / "agents").glob("*.agent.md")
+        for path in (plugin_dir / "agents").glob("*.agent.md")
     }
     runtime_skills = {
         path.name
@@ -116,10 +108,10 @@ def audit_plugin(plugin_dir: Path, marketplace: dict[str, dict[str, Any]]) -> tu
 
     if source == SHARED_COMPONENT_SOURCE:
         agent_refs = string_list(
-            repository.get("agents"), field="agents", errors=errors, plugin=name
+            source_config.get("agents"), field="agents", errors=errors, plugin=name
         )
         skill_refs = string_list(
-            repository.get("skills"), field="skills", errors=errors, plugin=name
+            source_config.get("skills"), field="skills", errors=errors, plugin=name
         )
         if runtime_agents != names_from_refs(agent_refs):
             errors.append(f"{name}: runtime agent mirror differs from library references")
@@ -131,7 +123,7 @@ def audit_plugin(plugin_dir: Path, marketplace: dict[str, dict[str, Any]]) -> tu
                 errors.append(f"{name}: canonical shared source is missing: {ref}")
     elif source == "plugin":
         shared_skill_refs = string_list(
-            repository.get("sharedSkills", []),
+            source_config.get("sharedSkills", []),
             field="sharedSkills",
             errors=errors,
             plugin=name,
@@ -164,24 +156,24 @@ def audit_plugin(plugin_dir: Path, marketplace: dict[str, dict[str, Any]]) -> tu
                 errors.append(f"{name}: shared canonical skill is missing: {ref}")
 
     extension_refs = string_list(
-        repository.get("extensionSources", []),
+        source_config.get("extensionSources", []),
         field="extensionSources",
         errors=errors,
         plugin=name,
     )
     runtime_extensions = {
         path.name
-        for path in (plugin_dir / "com.github.copilot" / "extensions").iterdir()
+        for path in (plugin_dir / "extensions").iterdir()
         if path.is_dir()
-    } if (plugin_dir / "com.github.copilot" / "extensions").is_dir() else set()
+    } if (plugin_dir / "extensions").is_dir() else set()
     if runtime_extensions != names_from_refs(extension_refs):
         errors.append(f"{name}: runtime extension mirror differs from canonical extensions")
     if extension_refs:
-        if repository.get("extensionLayoutVersion") != 1:
+        if source_config.get("extensionLayoutVersion") != 1:
             errors.append(f"{name}: extensionLayoutVersion must equal 1")
-        if repository.get("upstreamRepository") != "https://github.com/github/awesome-copilot":
+        if source_config.get("upstreamRepository") != "https://github.com/github/awesome-copilot":
             errors.append(f"{name}: extension upstreamRepository is missing or unexpected")
-        upstream_commit = repository.get("upstreamCommit")
+        upstream_commit = source_config.get("upstreamCommit")
         if not isinstance(upstream_commit, str) or not COMMIT_SHA.fullmatch(upstream_commit):
             errors.append(f"{name}: extension upstreamCommit must be a full Git commit SHA")
     for ref in extension_refs:
@@ -203,21 +195,45 @@ def audit_plugin(plugin_dir: Path, marketplace: dict[str, dict[str, Any]]) -> tu
                     errors.append(f"{name}: Playwright must be pinned")
 
     hook_count = 0
-    hook_source = repository.get("hookSource")
+    hook_source = source_config.get("hookSource")
     if hook_source is not None:
         if not isinstance(hook_source, str) or not (
             plugin_dir / hook_source.removeprefix("./")
         ).is_file():
             errors.append(f"{name}: hookSource is invalid or missing")
-        runtime_hook = plugin_dir / "com.github.copilot" / "hooks" / "hooks.json"
-        if not runtime_hook.is_file():
-            errors.append(f"{name}: runtime hook mirror is missing")
-        else:
+        expected_hook = hook_source.removeprefix("./") if isinstance(hook_source, str) else ""
+        if manifest.get("hooks") != expected_hook:
+            errors.append(f"{name}: hooks manifest field differs from canonical source")
+        if isinstance(hook_source, str) and (plugin_dir / expected_hook).is_file():
             hook_count = 1
+
+    if runtime_agents:
+        if manifest.get("agents") != "agents/":
+            errors.append(f"{name}: agents manifest field must equal agents/")
+    elif "agents" in manifest:
+        errors.append(f"{name}: agents manifest field exists but agents/ is empty")
+    if runtime_skills:
+        if manifest.get("skills") != "skills/":
+            errors.append(f"{name}: skills manifest field must equal skills/")
+    elif "skills" in manifest:
+        errors.append(f"{name}: skills manifest field exists but skills/ is empty")
+    expected_extension_paths = [
+        ref.removeprefix("./") for ref in extension_refs
+    ]
+    manifest_extensions = manifest.get("extensions", [])
+    manifest_extension_paths = (
+        [manifest_extensions]
+        if isinstance(manifest_extensions, str)
+        else manifest_extensions
+    )
+    if manifest_extension_paths != expected_extension_paths:
+        errors.append(f"{name}: extensions manifest field differs from canonical sources")
 
     mcp_count = 0
     mcp_path = plugin_dir / "mcp.json"
     if mcp_path.is_file():
+        if manifest.get("mcpServers") != "mcp.json":
+            errors.append(f"{name}: mcpServers manifest field must equal mcp.json")
         mcp = read_json(mcp_path)
         if mcp.get("$schema") != OPEN_MCP_SCHEMA:
             errors.append(f"{name}: mcp.json requires the Agent Plugins 1.0 MCP schema")
@@ -226,6 +242,8 @@ def audit_plugin(plugin_dir: Path, marketplace: dict[str, dict[str, Any]]) -> tu
             errors.append(f"{name}: mcpServers must be an object")
         else:
             mcp_count = len(servers)
+    elif "mcpServers" in manifest:
+        errors.append(f"{name}: mcpServers field exists but mcp.json is missing")
 
     if not (runtime_agents or runtime_skills or runtime_extensions or hook_count or mcp_count):
         errors.append(f"{name}: plugin has no installable component")
@@ -278,7 +296,7 @@ def render_report(rows: list[PluginRow]) -> str:
         f"| Marketplace entries | {len(rows)} |",
         f"| Shared-source packages | {modes[SHARED_COMPONENT_SOURCE]} |",
         f"| Plugin-owned packages | {modes['plugin']} |",
-        f"| Runtime agent copies | {totals['agents']} |",
+        f"| Packaged agents | {totals['agents']} |",
         f"| Installed skills | {totals['skills']} |",
         f"| Hook packages | {totals['hooks']} |",
         f"| MCP servers | {totals['mcp']} |",
@@ -286,10 +304,10 @@ def render_report(rows: list[PluginRow]) -> str:
         "",
         "## Policy",
         "",
-        "- Every package uses the Agent Plugins 1.0 manifest schema and repository ownership metadata.",
-        "- Shared agents are materialized under `com.github.copilot/agents/`; skills use fixed `skills/` discovery.",
-        "- Plugin-owned agents, hooks, and client extensions keep canonical local sources and generated `com.github.copilot/` mirrors.",
-        "- `mcp.json` uses the portable Agent Plugins MCP schema; `.mcp.json` is rejected.",
+        "- Every package uses the flat GitHub Copilot manifest documented for direct `agents/`, `skills/`, `hooks/`, `extensions/`, and MCP paths.",
+        "- Shared agents and skills are materialized directly under each package's `agents/` and `skills/` directories.",
+        "- Plugin-owned agents, hooks, and client extensions remain canonical at the plugin root; `com.github.copilot/` directories are prohibited.",
+        "- Root `mcp.json` uses the portable MCP schema and is declared through `mcpServers`; `.mcp.json` is rejected.",
         "- Marketplace source, version, description, coverage, uniqueness, and ordering are validated.",
         "- `python3 harness/github-copilot/scripts/normalize_plugin_manifests.py --check` and `python3 harness/github-copilot/scripts/sync_plugin_components.py --check` are required drift gates.",
         "- Awesome Copilot client extensions record their exact upstream commit and pin runtime dependencies; refreshes use `import_awesome_copilot_extensions.py` with a clean checkout.",
@@ -337,19 +355,25 @@ def main(argv: list[str] | None = None) -> int:
         errors.append("marketplace entries must be alphabetized")
 
     rows: list[PluginRow] = []
+    source_map = load_plugin_sources()
     plugin_dirs = sorted(
         (path for path in PLUGIN_ROOT.iterdir() if path.is_dir()),
         key=lambda path: path.name.casefold(),
     )
     for plugin_dir in plugin_dirs:
         try:
-            row, findings = audit_plugin(plugin_dir, marketplace)
+            source_config = source_map.get(plugin_dir.name)
+            if source_config is None:
+                raise ValueError(f"{plugin_dir.name}: source metadata is missing")
+            row, findings = audit_plugin(plugin_dir, marketplace, source_config)
             rows.append(row)
             errors.extend(findings)
         except (OSError, ValueError, json.JSONDecodeError) as exc:
             errors.append(str(exc))
     extra_entries = sorted(set(marketplace) - {row.name for row in rows})
     errors.extend(f"{name}: marketplace source directory is missing" for name in extra_entries)
+    extra_sources = sorted(set(source_map) - {row.name for row in rows})
+    errors.extend(f"{name}: source metadata directory is missing" for name in extra_sources)
 
     if errors:
         print("Plugin audit failed:", file=sys.stderr)

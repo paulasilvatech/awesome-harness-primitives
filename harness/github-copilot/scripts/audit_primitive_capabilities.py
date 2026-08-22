@@ -13,7 +13,8 @@ from pathlib import Path
 from typing import Any, Iterable
 
 try:
-    from _layout import HARNESS_ROOT, PLUGIN_ROOT, REPO_ROOT, SHARED_COMPONENT_SOURCE
+    from _layout import HARNESS_ROOT, PLUGIN_ROOT, REPO_ROOT
+    from _plugin_sources import load_plugin_sources
     from validate_primitives import (
         LEGACY_PROMPT_TOOLS,
         MCP_TOOL_RE,
@@ -23,7 +24,8 @@ try:
         parse_frontmatter,
     )
 except ModuleNotFoundError:  # pragma: no cover - supports python3 -m invocation
-    from ._layout import HARNESS_ROOT, PLUGIN_ROOT, REPO_ROOT, SHARED_COMPONENT_SOURCE
+    from ._layout import HARNESS_ROOT, PLUGIN_ROOT, REPO_ROOT
+    from ._plugin_sources import load_plugin_sources
     from .validate_primitives import (
         LEGACY_PROMPT_TOOLS,
         MCP_TOOL_RE,
@@ -36,6 +38,7 @@ except ModuleNotFoundError:  # pragma: no cover - supports python3 -m invocation
 REPORT_PATH = REPO_ROOT / "docs" / "PRIMITIVE-CAPABILITIES.md"
 LEDGER_PATH = REPO_ROOT / "docs" / "PRIMITIVE-CAPABILITIES.json"
 VERIFICATION_DATE = "2026-08-21"
+PLUGIN_SOURCES = load_plugin_sources()
 FIRST_PARTY_SOURCES = [
     "https://code.visualstudio.com/docs/agent-customization/custom-agents",
     "https://code.visualstudio.com/docs/agent-customization/prompt-files",
@@ -135,16 +138,8 @@ def plugin_sources(kind: str) -> Iterable[tuple[Path, str, str | None]]:
         manifest = plugin_dir / "plugin.json"
         if not manifest.is_file():
             continue
-        config = read_manifest(manifest).get("extensions", {})
-        repository = (
-            config.get("com.paulasilvatech.copilot-primitives", {})
-            if isinstance(config, dict)
-            else {}
-        )
-        if not (
-            isinstance(repository, dict)
-            and repository.get("componentSource") == "plugin"
-        ):
+        repository = PLUGIN_SOURCES.get(plugin_dir.name, {})
+        if repository.get("componentSource") != "plugin":
             continue
         for path in sorted((plugin_dir / folder).glob(pattern)):
             yield path, "plugin", plugin_dir.name
@@ -296,7 +291,8 @@ def build_audit() -> dict[str, Any]:
             ),
         },
         "compatibility": {
-            "componentSourceCompatibilityValue": SHARED_COMPONENT_SOURCE,
+            "pluginLayout": "flat-direct-components",
+            "sourceOwnershipManifest": "harness/github-copilot/manifests/plugin-sources.json",
             "copilotCliEvidence": "docs/HARNESS-VALIDATION.md",
         },
         "summary": {

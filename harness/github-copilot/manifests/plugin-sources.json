@@ -1,0 +1,1107 @@
+{
+  "version": 2,
+  "plugins": {
+    "accessibility-kanban": {
+      "componentSource": "plugin",
+      "extensionLayoutVersion": 1,
+      "extensionSources": [
+        "./extensions/accessibility-kanban"
+      ],
+      "upstreamRepository": "https://github.com/github/awesome-copilot",
+      "upstreamCommit": "318066d2213b510e89b500ed0d53506c54093ddc",
+      "client": {
+        "logo": "assets/preview.png"
+      }
+    },
+    "acreadiness-cockpit": {
+      "componentSource": "library",
+      "agents": [
+        "./agents/ai-readiness-reporter.agent.md"
+      ],
+      "skills": [
+        "./skills/acreadiness-assess/",
+        "./skills/acreadiness-generate-instructions/",
+        "./skills/acreadiness-policy/"
+      ]
+    },
+    "agent-governance": {
+      "componentSource": "library",
+      "agents": [
+        "./agents/agent-governance-reviewer.agent.md"
+      ],
+      "skills": [
+        "./skills/agent-governance/",
+        "./skills/agent-owasp-compliance/",
+        "./skills/agent-supply-chain/",
+        "./skills/audit-integrity/"
+      ]
+    },
+    "ai-team-orchestration": {
+      "componentSource": "library",
+      "agents": [
+        "./agents/ai-team-dev.agent.md",
+        "./agents/ai-team-producer.agent.md",
+        "./agents/ai-team-qa.agent.md"
+      ],
+      "skills": [
+        "./skills/ai-team-orchestration/"
+      ]
+    },
+    "apng-studio": {
+      "componentSource": "plugin",
+      "extensionLayoutVersion": 1,
+      "extensionSources": [
+        "./extensions/apng-studio"
+      ],
+      "upstreamRepository": "https://github.com/github/awesome-copilot",
+      "upstreamCommit": "318066d2213b510e89b500ed0d53506c54093ddc",
+      "client": {
+        "logo": "assets/preview.png"
+      }
+    },
+    "arcade-canvas": {
+      "componentSource": "plugin",
+      "extensionLayoutVersion": 1,
+      "extensionSources": [
+        "./extensions/arcade-canvas"
+      ],
+      "upstreamRepository": "https://github.com/github/awesome-copilot",
+      "upstreamCommit": "318066d2213b510e89b500ed0d53506c54093ddc",
+      "client": {
+        "logo": "assets/preview.png"
+      }
+    },
+    "arch": {
+      "componentSource": "library",
+      "agents": [],
+      "skills": [
+        "./skills/doc-and-modernize/"
+      ]
+    },
+    "arize-ax": {
+      "componentSource": "library",
+      "agents": [],
+      "skills": [
+        "./skills/arize-ai-provider-integration/",
+        "./skills/arize-annotation/",
+        "./skills/arize-dataset/",
+        "./skills/arize-evaluator/",
+        "./skills/arize-experiment/",
+        "./skills/arize-instrumentation/",
+        "./skills/arize-link/",
+        "./skills/arize-prompt-optimization/",
+        "./skills/arize-trace/"
+      ]
+    },
+    "automate-this": {
+      "componentSource": "library",
+      "agents": [],
+      "skills": [
+        "./skills/automate-this/"
+      ]
+    },
+    "awesome-copilot": {
+      "componentSource": "library",
+      "agents": [
+        "./agents/meta-agentic-project-scaffold.agent.md"
+      ],
+      "skills": [
+        "./skills/suggest-awesome-github-copilot-agents/",
+        "./skills/suggest-awesome-github-copilot-instructions/",
+        "./skills/suggest-awesome-github-copilot-skills/"
+      ]
+    },
+    "aws-cloud-development": {
+      "componentSource": "library",
+      "agents": [
+        "./agents/aws-principal-architect.agent.md",
+        "./agents/aws-serverless-architect.agent.md",
+        "./agents/terraform-aws-implement.agent.md",
+        "./agents/terraform-aws-planning.agent.md"
+      ],
+      "skills": [
+        "./skills/aws-cost-optimize/",
+        "./skills/aws-resource-health-diagnose/",
+        "./skills/aws-resource-query/",
+        "./skills/aws-well-architected-review/"
+      ]
+    },
+    "azure-cloud-development": {
+      "componentSource": "library",
+      "agents": [
+        "./agents/azure-logic-apps-expert.agent.md",
+        "./agents/azure-principal-architect.agent.md",
+        "./agents/azure-saas-architect.agent.md",
+        "./agents/azure-verified-modules-bicep.agent.md",
+        "./agents/azure-verified-modules-terraform.agent.md",
+        "./agents/terraform-azure-implement.agent.md",
+        "./agents/terraform-azure-planning.agent.md"
+      ],
+      "skills": [
+        "./skills/az-cost-optimize/",
+        "./skills/azure-pricing/",
+        "./skills/azure-resource-health-diagnose/",
+        "./skills/import-infrastructure-as-code/"
+      ]
+    },
+    "backlog-swipe-triage": {
+      "componentSource": "plugin",
+      "extensionLayoutVersion": 1,
+      "extensionSources": [
+        "./extensions/backlog-swipe-triage"
+      ],
+      "upstreamRepository": "https://github.com/github/awesome-copilot",
+      "upstreamCommit": "318066d2213b510e89b500ed0d53506c54093ddc",
+      "client": {
+        "logo": "assets/preview.png"
+      }
+    },
+    "backrooms-canvas": {
+      "componentSource": "plugin",
+      "extensionLayoutVersion": 1,
+      "extensionSources": [
+        "./extensions/backrooms-canvas"
+      ],
+      "upstreamRepository": "https://github.com/github/awesome-copilot",
+      "upstreamCommit": "318066d2213b510e89b500ed0d53506c54093ddc",
+      "client": {
+        "logo": "assets/preview.png"
+      }
+    },
+    "backstage-expert": {
+      "componentSource": "plugin",
+      "hookSource": "./hooks/backstage-safety/hooks.json",
+      "sharedSkills": [
+        "./skills/backstage-plugin-builder/"
+      ]
+    },
+    "cast-imaging": {
+      "componentSource": "library",
+      "agents": [
+        "./agents/cast-imaging-impact-analysis.agent.md",
+        "./agents/cast-imaging-software-discovery.agent.md",
+        "./agents/cast-imaging-structural-quality-advisor.agent.md"
+      ],
+      "skills": []
+    },
+    "chromium-control-canvas": {
+      "componentSource": "plugin",
+      "extensionLayoutVersion": 1,
+      "extensionSources": [
+        "./extensions/chromium-control-canvas"
+      ],
+      "upstreamRepository": "https://github.com/github/awesome-copilot",
+      "upstreamCommit": "318066d2213b510e89b500ed0d53506c54093ddc",
+      "client": {
+        "logo": "assets/preview.png"
+      }
+    },
+    "clojure-interactive-programming": {
+      "componentSource": "library",
+      "agents": [
+        "./agents/clojure-interactive-programming.agent.md"
+      ],
+      "skills": [
+        "./skills/remember-interactive-programming/"
+      ]
+    },
+    "cms-development": {
+      "componentSource": "library",
+      "agents": [],
+      "skills": [
+        "./skills/content-management-systems/",
+        "./skills/markdown-to-html/",
+        "./skills/quasi-coder/"
+      ]
+    },
+    "color-orb": {
+      "componentSource": "plugin",
+      "extensionLayoutVersion": 1,
+      "extensionSources": [
+        "./extensions/color-orb"
+      ],
+      "upstreamRepository": "https://github.com/github/awesome-copilot",
+      "upstreamCommit": "318066d2213b510e89b500ed0d53506c54093ddc",
+      "client": {
+        "logo": "assets/preview.png"
+      }
+    },
+    "context-engineering": {
+      "componentSource": "library",
+      "agents": [
+        "./agents/context-architect.agent.md"
+      ],
+      "skills": [
+        "./skills/context-map/",
+        "./skills/refactor-plan/",
+        "./skills/what-context-needed/"
+      ]
+    },
+    "context-matic": {
+      "componentSource": "library",
+      "agents": [],
+      "skills": [
+        "./skills/integrate-context-matic/",
+        "./skills/onboard-context-matic/"
+      ]
+    },
+    "convert-to-md": {
+      "componentSource": "library",
+      "agents": [],
+      "skills": [
+        "./skills/convert-excel-to-md/",
+        "./skills/convert-pdf-to-md/",
+        "./skills/convert-word-to-md/"
+      ]
+    },
+    "copilot-plugin-development": {
+      "componentSource": "library",
+      "agents": [
+        "./agents/copilot-primitive-architect.agent.md"
+      ],
+      "skills": [
+        "./skills/copilot-plugin-authoring/"
+      ]
+    },
+    "copilot-sdk": {
+      "componentSource": "library",
+      "agents": [],
+      "skills": [
+        "./skills/copilot-sdk/"
+      ]
+    },
+    "csharp-dotnet-development": {
+      "componentSource": "library",
+      "agents": [
+        "./agents/expert-dotnet-software-engineer.agent.md"
+      ],
+      "skills": [
+        "./skills/aspnet-minimal-api-openapi/",
+        "./skills/csharp-async/",
+        "./skills/csharp-mstest/",
+        "./skills/csharp-nunit/",
+        "./skills/csharp-tunit/",
+        "./skills/csharp-xunit/",
+        "./skills/dotnet-best-practices/",
+        "./skills/dotnet-upgrade/"
+      ]
+    },
+    "database-data-management": {
+      "componentSource": "library",
+      "agents": [
+        "./agents/ms-sql-dba.agent.md",
+        "./agents/postgresql-dba.agent.md"
+      ],
+      "skills": [
+        "./skills/postgresql-code-review/",
+        "./skills/postgresql-optimization/",
+        "./skills/sql-code-review/",
+        "./skills/sql-optimization/"
+      ]
+    },
+    "dataverse-sdk-for-python": {
+      "componentSource": "library",
+      "agents": [],
+      "skills": [
+        "./skills/dataverse-python-advanced-patterns/",
+        "./skills/dataverse-python-production-code/",
+        "./skills/dataverse-python-quickstart/",
+        "./skills/dataverse-python-usecase-builder/"
+      ]
+    },
+    "devops-oncall": {
+      "componentSource": "library",
+      "agents": [
+        "./agents/azure-principal-architect.agent.md"
+      ],
+      "skills": [
+        "./skills/azure-resource-health-diagnose/",
+        "./skills/multi-stage-dockerfile/"
+      ]
+    },
+    "diagram-viewer": {
+      "componentSource": "plugin",
+      "extensionLayoutVersion": 1,
+      "extensionSources": [
+        "./extensions/diagram-viewer"
+      ],
+      "upstreamRepository": "https://github.com/github/awesome-copilot",
+      "upstreamCommit": "318066d2213b510e89b500ed0d53506c54093ddc",
+      "client": {
+        "logo": "assets/preview.png"
+      }
+    },
+    "doublecheck": {
+      "componentSource": "library",
+      "agents": [
+        "./agents/doublecheck.agent.md"
+      ],
+      "skills": [
+        "./skills/doublecheck/"
+      ]
+    },
+    "edge-ai-tasks": {
+      "componentSource": "library",
+      "agents": [
+        "./agents/task-planner.agent.md",
+        "./agents/task-researcher.agent.md"
+      ],
+      "skills": []
+    },
+    "ember": {
+      "componentSource": "library",
+      "agents": [
+        "./agents/ember.agent.md"
+      ],
+      "skills": [
+        "./skills/daily-focus-board/",
+        "./skills/from-the-other-side-anitta/",
+        "./skills/from-the-other-side-quinn/",
+        "./skills/from-the-other-side-vega/",
+        "./skills/from-the-other-side-wiggins/"
+      ],
+      "extensionLayoutVersion": 1,
+      "extensionSources": [
+        "./extensions/daily-focus-board"
+      ],
+      "upstreamRepository": "https://github.com/github/awesome-copilot",
+      "upstreamCommit": "318066d2213b510e89b500ed0d53506c54093ddc"
+    },
+    "eyeball": {
+      "componentSource": "library",
+      "agents": [],
+      "skills": [
+        "./skills/eyeball/"
+      ]
+    },
+    "fabric-agentic-plugin": {
+      "componentSource": "plugin"
+    },
+    "fastah-ip-geo-tools": {
+      "componentSource": "library",
+      "agents": [],
+      "skills": [
+        "./skills/geofeed-tuner/"
+      ]
+    },
+    "feedback-themes": {
+      "componentSource": "plugin",
+      "extensionLayoutVersion": 1,
+      "extensionSources": [
+        "./extensions/feedback-themes"
+      ],
+      "upstreamRepository": "https://github.com/github/awesome-copilot",
+      "upstreamCommit": "318066d2213b510e89b500ed0d53506c54093ddc",
+      "client": {
+        "logo": "assets/preview.png"
+      }
+    },
+    "flight-map-canvas": {
+      "componentSource": "plugin",
+      "extensionLayoutVersion": 1,
+      "extensionSources": [
+        "./extensions/flight-map-canvas"
+      ],
+      "upstreamRepository": "https://github.com/github/awesome-copilot",
+      "upstreamCommit": "318066d2213b510e89b500ed0d53506c54093ddc",
+      "client": {
+        "logo": "assets/preview.png"
+      }
+    },
+    "flowstudio-power-automate": {
+      "componentSource": "library",
+      "agents": [],
+      "skills": [
+        "./skills/flowstudio-power-automate-build/",
+        "./skills/flowstudio-power-automate-debug/",
+        "./skills/flowstudio-power-automate-governance/",
+        "./skills/flowstudio-power-automate-mcp/",
+        "./skills/flowstudio-power-automate-monitoring/"
+      ]
+    },
+    "frontend-web-dev": {
+      "componentSource": "library",
+      "agents": [
+        "./agents/electron-angular-native.agent.md",
+        "./agents/expert-react-frontend-engineer.agent.md"
+      ],
+      "skills": [
+        "./skills/playwright-explore-website/",
+        "./skills/playwright-generate-test/"
+      ]
+    },
+    "gem-team": {
+      "componentSource": "library",
+      "agents": [
+        "./agents/gem-browser-tester.agent.md",
+        "./agents/gem-code-simplifier.agent.md",
+        "./agents/gem-critic.agent.md",
+        "./agents/gem-debugger.agent.md",
+        "./agents/gem-designer-mobile.agent.md",
+        "./agents/gem-designer.agent.md",
+        "./agents/gem-devops.agent.md",
+        "./agents/gem-documentation-writer.agent.md",
+        "./agents/gem-implementer-mobile.agent.md",
+        "./agents/gem-implementer.agent.md",
+        "./agents/gem-mobile-tester.agent.md",
+        "./agents/gem-orchestrator.agent.md",
+        "./agents/gem-planner.agent.md",
+        "./agents/gem-researcher.agent.md",
+        "./agents/gem-reviewer.agent.md",
+        "./agents/gem-skill-creator.agent.md"
+      ],
+      "skills": []
+    },
+    "gesture-review": {
+      "componentSource": "plugin",
+      "extensionLayoutVersion": 1,
+      "extensionSources": [
+        "./extensions/gesture-review"
+      ],
+      "upstreamRepository": "https://github.com/github/awesome-copilot",
+      "upstreamCommit": "318066d2213b510e89b500ed0d53506c54093ddc",
+      "client": {
+        "logo": "assets/preview.png"
+      }
+    },
+    "github-actions-maintenance": {
+      "componentSource": "library",
+      "agents": [
+        "./agents/github-actions-expert.agent.md",
+        "./agents/github-actions-node-upgrade.agent.md"
+      ],
+      "skills": [
+        "./skills/github-actions-efficiency/",
+        "./skills/github-actions-hardening/",
+        "./skills/github-actions-runtime-upgrade-conventions/"
+      ]
+    },
+    "go-mcp-development": {
+      "componentSource": "library",
+      "agents": [
+        "./agents/go-mcp-expert.agent.md"
+      ],
+      "skills": [
+        "./skills/go-mcp-server-generator/"
+      ]
+    },
+    "java-development": {
+      "componentSource": "library",
+      "agents": [],
+      "skills": [
+        "./skills/create-spring-boot-java-project/",
+        "./skills/java-docs/",
+        "./skills/java-junit/",
+        "./skills/java-springboot/"
+      ]
+    },
+    "java-mcp-development": {
+      "componentSource": "library",
+      "agents": [
+        "./agents/java-mcp-expert.agent.md"
+      ],
+      "skills": [
+        "./skills/java-mcp-server-generator/"
+      ]
+    },
+    "java-modernization-studio": {
+      "componentSource": "plugin",
+      "extensionLayoutVersion": 1,
+      "extensionSources": [
+        "./extensions/java-modernization-studio"
+      ],
+      "upstreamRepository": "https://github.com/github/awesome-copilot",
+      "upstreamCommit": "318066d2213b510e89b500ed0d53506c54093ddc",
+      "client": {
+        "logo": "assets/preview.png"
+      }
+    },
+    "kotlin-mcp-development": {
+      "componentSource": "library",
+      "agents": [
+        "./agents/kotlin-mcp-expert.agent.md"
+      ],
+      "skills": [
+        "./skills/kotlin-mcp-server-generator/"
+      ]
+    },
+    "mcp-m365-copilot": {
+      "componentSource": "library",
+      "agents": [
+        "./agents/mcp-m365-agent-expert.agent.md"
+      ],
+      "skills": [
+        "./skills/mcp-create-adaptive-cards/",
+        "./skills/mcp-create-declarative-agent/",
+        "./skills/mcp-deploy-manage-agents/"
+      ]
+    },
+    "napkin": {
+      "componentSource": "library",
+      "agents": [],
+      "skills": [
+        "./skills/napkin/"
+      ]
+    },
+    "noob-mode": {
+      "componentSource": "library",
+      "agents": [],
+      "skills": [
+        "./skills/noob-mode/"
+      ]
+    },
+    "open-horizons-platform": {
+      "componentSource": "plugin",
+      "hookSource": "./hooks/open-horizons-safety/hooks.json",
+      "sharedSkills": [
+        "./skills/azure-managed-redis-cache/",
+        "./skills/backstage-plugin-builder/"
+      ]
+    },
+    "openapi-to-application-csharp-dotnet": {
+      "componentSource": "library",
+      "agents": [
+        "./agents/openapi-to-application.agent.md"
+      ],
+      "skills": [
+        "./skills/openapi-to-application-code/"
+      ]
+    },
+    "openapi-to-application-go": {
+      "componentSource": "library",
+      "agents": [
+        "./agents/openapi-to-application.agent.md"
+      ],
+      "skills": [
+        "./skills/openapi-to-application-code/"
+      ]
+    },
+    "openapi-to-application-java-spring-boot": {
+      "componentSource": "library",
+      "agents": [
+        "./agents/openapi-to-application.agent.md"
+      ],
+      "skills": [
+        "./skills/openapi-to-application-code/"
+      ]
+    },
+    "openapi-to-application-nodejs-nestjs": {
+      "componentSource": "library",
+      "agents": [
+        "./agents/openapi-to-application.agent.md"
+      ],
+      "skills": [
+        "./skills/openapi-to-application-code/"
+      ]
+    },
+    "openapi-to-application-python-fastapi": {
+      "componentSource": "library",
+      "agents": [
+        "./agents/openapi-to-application.agent.md"
+      ],
+      "skills": [
+        "./skills/openapi-to-application-code/"
+      ]
+    },
+    "oracle-to-postgres-migration-expert": {
+      "componentSource": "library",
+      "agents": [
+        "./agents/oracle-to-postgres-migration-expert.agent.md"
+      ],
+      "skills": [
+        "./skills/creating-oracle-to-postgres-master-migration-plan/",
+        "./skills/creating-oracle-to-postgres-migration-bug-report/",
+        "./skills/creating-oracle-to-postgres-migration-integration-tests/",
+        "./skills/migrating-oracle-to-postgres-data-access-code/",
+        "./skills/migrating-oracle-to-postgres-stored-procedures/",
+        "./skills/planning-oracle-to-postgres-migration-integration-testing/",
+        "./skills/reviewing-oracle-to-postgres-migration/",
+        "./skills/scaffolding-oracle-to-postgres-migration-test-project/"
+      ]
+    },
+    "ospo-sponsorship": {
+      "componentSource": "library",
+      "agents": [],
+      "skills": [
+        "./skills/sponsor-finder/"
+      ]
+    },
+    "partners": {
+      "componentSource": "library",
+      "agents": [
+        "./agents/amplitude-experiment-implementation.agent.md",
+        "./agents/apify-integration-expert.agent.md",
+        "./agents/arm-migration.agent.md",
+        "./agents/comet-opik.agent.md",
+        "./agents/diffblue-cover.agent.md",
+        "./agents/droid.agent.md",
+        "./agents/dynatrace-expert.agent.md",
+        "./agents/elasticsearch-observability.agent.md",
+        "./agents/jfrog-sec.agent.md",
+        "./agents/launchdarkly-flag-cleanup.agent.md",
+        "./agents/lingodotdev-i18n.agent.md",
+        "./agents/monday-bug-fixer.agent.md",
+        "./agents/mongodb-performance-advisor.agent.md",
+        "./agents/neo4j-docker-client-generator.agent.md",
+        "./agents/neon-migration-specialist.agent.md",
+        "./agents/neon-optimization-analyzer.agent.md",
+        "./agents/octopus-deploy-release-notes-mcp.agent.md",
+        "./agents/pagerduty-incident-responder.agent.md",
+        "./agents/stackhawk-security-onboarding.agent.md",
+        "./agents/terraform.agent.md"
+      ],
+      "skills": []
+    },
+    "pcf-development": {
+      "componentSource": "library",
+      "agents": [
+        "./agents/power-platform-expert.agent.md"
+      ],
+      "skills": [
+        "./skills/pcf-development/"
+      ]
+    },
+    "phoenix": {
+      "componentSource": "library",
+      "agents": [],
+      "skills": [
+        "./skills/phoenix-cli/",
+        "./skills/phoenix-evals/",
+        "./skills/phoenix-tracing/"
+      ]
+    },
+    "php-mcp-development": {
+      "componentSource": "library",
+      "agents": [
+        "./agents/php-mcp-expert.agent.md"
+      ],
+      "skills": [
+        "./skills/php-mcp-server-generator/"
+      ]
+    },
+    "power-apps-code-apps": {
+      "componentSource": "library",
+      "agents": [
+        "./agents/power-platform-expert.agent.md"
+      ],
+      "skills": [
+        "./skills/power-apps-code-app-scaffold/"
+      ]
+    },
+    "power-bi-development": {
+      "componentSource": "library",
+      "agents": [
+        "./agents/power-bi-data-modeling-expert.agent.md",
+        "./agents/power-bi-dax-expert.agent.md",
+        "./agents/power-bi-performance-expert.agent.md",
+        "./agents/power-bi-visualization-expert.agent.md"
+      ],
+      "skills": [
+        "./skills/power-bi-dax-optimization/",
+        "./skills/power-bi-model-design-review/",
+        "./skills/power-bi-performance-troubleshooting/",
+        "./skills/power-bi-report-design-consultation/"
+      ]
+    },
+    "power-platform-architect": {
+      "componentSource": "library",
+      "agents": [],
+      "skills": [
+        "./skills/power-platform-architect/"
+      ]
+    },
+    "power-platform-mcp-connector-development": {
+      "componentSource": "library",
+      "agents": [
+        "./agents/power-platform-mcp-integration-expert.agent.md"
+      ],
+      "skills": [
+        "./skills/mcp-copilot-studio-server-generator/",
+        "./skills/power-platform-mcp-connector-suite/"
+      ]
+    },
+    "pr-artifact-explorer": {
+      "componentSource": "plugin",
+      "extensionLayoutVersion": 1,
+      "extensionSources": [
+        "./extensions/pr-artifact-explorer"
+      ],
+      "upstreamRepository": "https://github.com/github/awesome-copilot",
+      "upstreamCommit": "318066d2213b510e89b500ed0d53506c54093ddc",
+      "client": {
+        "logo": "assets/preview.png"
+      }
+    },
+    "project-documenter": {
+      "componentSource": "library",
+      "agents": [
+        "./agents/project-documenter.agent.md"
+      ],
+      "skills": [
+        "./skills/drawio/",
+        "./skills/md-to-docx/"
+      ]
+    },
+    "project-planning": {
+      "componentSource": "library",
+      "agents": [
+        "./agents/implementation-plan.agent.md",
+        "./agents/plan.agent.md",
+        "./agents/planner.agent.md",
+        "./agents/prd.agent.md",
+        "./agents/research-technical-spike.agent.md",
+        "./agents/task-planner.agent.md",
+        "./agents/task-researcher.agent.md"
+      ],
+      "skills": [
+        "./skills/breakdown-epic-arch/",
+        "./skills/breakdown-epic-pm/",
+        "./skills/breakdown-feature-implementation/",
+        "./skills/breakdown-feature-prd/",
+        "./skills/create-github-issues-feature-from-implementation-plan/",
+        "./skills/create-implementation-plan/",
+        "./skills/create-technical-spike/",
+        "./skills/update-implementation-plan/"
+      ]
+    },
+    "python-mcp-development": {
+      "componentSource": "library",
+      "agents": [
+        "./agents/python-mcp-expert.agent.md"
+      ],
+      "skills": [
+        "./skills/python-mcp-server-generator/"
+      ]
+    },
+    "qdrant-development": {
+      "componentSource": "library",
+      "agents": [],
+      "skills": [
+        "./skills/qdrant-clients-sdk/",
+        "./skills/qdrant-deployment-options/",
+        "./skills/qdrant-model-migration/",
+        "./skills/qdrant-monitoring/",
+        "./skills/qdrant-performance-optimization/",
+        "./skills/qdrant-scaling/",
+        "./skills/qdrant-search-quality/",
+        "./skills/qdrant-version-upgrade/"
+      ]
+    },
+    "react18-upgrade": {
+      "componentSource": "library",
+      "agents": [
+        "./agents/react18-auditor.agent.md",
+        "./agents/react18-batching-fixer.agent.md",
+        "./agents/react18-class-surgeon.agent.md",
+        "./agents/react18-commander.agent.md",
+        "./agents/react18-dep-surgeon.agent.md",
+        "./agents/react18-test-guardian.agent.md"
+      ],
+      "skills": [
+        "./skills/react-audit-grep-patterns/",
+        "./skills/react18-batching-patterns/",
+        "./skills/react18-dep-compatibility/",
+        "./skills/react18-enzyme-to-rtl/",
+        "./skills/react18-legacy-context/",
+        "./skills/react18-lifecycle-patterns/",
+        "./skills/react18-string-refs/"
+      ]
+    },
+    "react19-upgrade": {
+      "componentSource": "library",
+      "agents": [
+        "./agents/react19-auditor.agent.md",
+        "./agents/react19-commander.agent.md",
+        "./agents/react19-dep-surgeon.agent.md",
+        "./agents/react19-migrator.agent.md",
+        "./agents/react19-test-guardian.agent.md"
+      ],
+      "skills": [
+        "./skills/react19-concurrent-patterns/",
+        "./skills/react19-source-patterns/",
+        "./skills/react19-test-patterns/"
+      ]
+    },
+    "release-notes-showcase": {
+      "componentSource": "plugin",
+      "extensionLayoutVersion": 1,
+      "extensionSources": [
+        "./extensions/release-notes-showcase"
+      ],
+      "upstreamRepository": "https://github.com/github/awesome-copilot",
+      "upstreamCommit": "318066d2213b510e89b500ed0d53506c54093ddc",
+      "client": {
+        "logo": "assets/preview.png"
+      }
+    },
+    "repo-actions-hub": {
+      "componentSource": "plugin",
+      "extensionLayoutVersion": 1,
+      "extensionSources": [
+        "./extensions/repo-actions-hub"
+      ],
+      "upstreamRepository": "https://github.com/github/awesome-copilot",
+      "upstreamCommit": "318066d2213b510e89b500ed0d53506c54093ddc",
+      "client": {
+        "logo": "assets/preview.png"
+      }
+    },
+    "roundup": {
+      "componentSource": "library",
+      "agents": [],
+      "skills": [
+        "./skills/roundup-setup/",
+        "./skills/roundup/"
+      ]
+    },
+    "ruby-mcp-development": {
+      "componentSource": "library",
+      "agents": [
+        "./agents/ruby-mcp-expert.agent.md"
+      ],
+      "skills": [
+        "./skills/ruby-mcp-server-generator/"
+      ]
+    },
+    "rug-agentic-workflow": {
+      "componentSource": "library",
+      "agents": [
+        "./agents/qa-subagent.agent.md",
+        "./agents/rug-orchestrator.agent.md",
+        "./agents/swe-subagent.agent.md"
+      ],
+      "skills": []
+    },
+    "rust-mcp-development": {
+      "componentSource": "library",
+      "agents": [
+        "./agents/rust-mcp-expert.agent.md"
+      ],
+      "skills": [
+        "./skills/rust-mcp-server-generator/"
+      ]
+    },
+    "salesforce-development": {
+      "componentSource": "library",
+      "agents": [
+        "./agents/salesforce-apex-triggers.agent.md",
+        "./agents/salesforce-aura-lwc.agent.md",
+        "./agents/salesforce-flow.agent.md",
+        "./agents/salesforce-visualforce.agent.md"
+      ],
+      "skills": [
+        "./skills/salesforce-apex-quality/",
+        "./skills/salesforce-component-standards/",
+        "./skills/salesforce-flow-design/"
+      ]
+    },
+    "security-best-practices": {
+      "componentSource": "library",
+      "agents": [],
+      "skills": [
+        "./skills/ai-prompt-engineering-safety-review/"
+      ]
+    },
+    "signals-dashboard": {
+      "componentSource": "plugin",
+      "extensionLayoutVersion": 1,
+      "extensionSources": [
+        "./extensions/signals-dashboard"
+      ],
+      "upstreamRepository": "https://github.com/github/awesome-copilot",
+      "upstreamCommit": "318066d2213b510e89b500ed0d53506c54093ddc",
+      "client": {
+        "logo": "assets/preview.png"
+      }
+    },
+    "site-studio": {
+      "componentSource": "plugin",
+      "extensionLayoutVersion": 1,
+      "extensionSources": [
+        "./extensions/site-studio"
+      ],
+      "upstreamRepository": "https://github.com/github/awesome-copilot",
+      "upstreamCommit": "318066d2213b510e89b500ed0d53506c54093ddc",
+      "client": {
+        "logo": "assets/preview.png"
+      }
+    },
+    "skill-image-gen": {
+      "componentSource": "library",
+      "agents": [],
+      "skills": [
+        "./skills/generate-image/"
+      ]
+    },
+    "software-engineering-team": {
+      "componentSource": "library",
+      "agents": [
+        "./agents/se-gitops-ci-specialist.agent.md",
+        "./agents/se-product-manager-advisor.agent.md",
+        "./agents/se-responsible-ai-code.agent.md",
+        "./agents/se-security-reviewer.agent.md",
+        "./agents/se-system-architecture-reviewer.agent.md",
+        "./agents/se-technical-writer.agent.md",
+        "./agents/se-ux-ui-designer.agent.md"
+      ],
+      "skills": []
+    },
+    "structured-autonomy": {
+      "componentSource": "library",
+      "agents": [],
+      "skills": [
+        "./skills/structured-autonomy-generate/",
+        "./skills/structured-autonomy-implement/",
+        "./skills/structured-autonomy-plan/"
+      ]
+    },
+    "swift-mcp-development": {
+      "componentSource": "library",
+      "agents": [
+        "./agents/swift-mcp-expert.agent.md"
+      ],
+      "skills": [
+        "./skills/swift-mcp-server-generator/"
+      ]
+    },
+    "technical-spike": {
+      "componentSource": "library",
+      "agents": [
+        "./agents/research-technical-spike.agent.md"
+      ],
+      "skills": [
+        "./skills/create-technical-spike/"
+      ]
+    },
+    "testing-automation": {
+      "componentSource": "library",
+      "agents": [
+        "./agents/playwright-tester.agent.md",
+        "./agents/tdd-green.agent.md",
+        "./agents/tdd-red.agent.md",
+        "./agents/tdd-refactor.agent.md"
+      ],
+      "skills": [
+        "./skills/ai-prompt-engineering-safety-review/",
+        "./skills/csharp-nunit/",
+        "./skills/java-junit/",
+        "./skills/playwright-explore-website/",
+        "./skills/playwright-generate-test/"
+      ]
+    },
+    "the-workshop": {
+      "componentSource": "library",
+      "agents": [
+        "./agents/workshop-ta.agent.md"
+      ],
+      "skills": [
+        "./skills/bench-read/",
+        "./skills/desk-journal/",
+        "./skills/desk-open/",
+        "./skills/signal-write/",
+        "./skills/workshop-create/"
+      ],
+      "extensionLayoutVersion": 1,
+      "extensionSources": [
+        "./extensions/signals-dashboard"
+      ],
+      "upstreamRepository": "https://github.com/github/awesome-copilot",
+      "upstreamCommit": "318066d2213b510e89b500ed0d53506c54093ddc"
+    },
+    "tiny-tool-town-submitter": {
+      "componentSource": "plugin",
+      "extensionLayoutVersion": 1,
+      "extensionSources": [
+        "./extensions/tiny-tool-town-submitter"
+      ],
+      "upstreamRepository": "https://github.com/github/awesome-copilot",
+      "upstreamCommit": "318066d2213b510e89b500ed0d53506c54093ddc",
+      "client": {
+        "logo": "assets/preview.png"
+      }
+    },
+    "token-pacman": {
+      "componentSource": "plugin",
+      "extensionLayoutVersion": 1,
+      "extensionSources": [
+        "./extensions/token-pacman"
+      ],
+      "upstreamRepository": "https://github.com/github/awesome-copilot",
+      "upstreamCommit": "318066d2213b510e89b500ed0d53506c54093ddc",
+      "client": {
+        "logo": "assets/preview.png"
+      }
+    },
+    "typescript-mcp-development": {
+      "componentSource": "library",
+      "agents": [
+        "./agents/typescript-mcp-expert.agent.md"
+      ],
+      "skills": [
+        "./skills/typescript-mcp-server-generator/"
+      ]
+    },
+    "typespec-m365-copilot": {
+      "componentSource": "library",
+      "agents": [],
+      "skills": [
+        "./skills/typespec-api-operations/",
+        "./skills/typespec-create-agent/",
+        "./skills/typespec-create-api-plugin/"
+      ]
+    },
+    "uizze": {
+      "componentSource": "library",
+      "agents": [],
+      "skills": [
+        "./skills/anti-ui-slop/"
+      ]
+    },
+    "visual-pr": {
+      "componentSource": "library",
+      "agents": [],
+      "skills": [
+        "./skills/image-annotations/",
+        "./skills/pr-screenshots/",
+        "./skills/screen-recording/",
+        "./skills/ui-screenshots/"
+      ]
+    },
+    "where-was-i": {
+      "componentSource": "plugin",
+      "extensionLayoutVersion": 1,
+      "extensionSources": [
+        "./extensions/where-was-i"
+      ],
+      "upstreamRepository": "https://github.com/github/awesome-copilot",
+      "upstreamCommit": "318066d2213b510e89b500ed0d53506c54093ddc",
+      "client": {
+        "logo": "assets/preview.png"
+      }
+    },
+    "windows-app-storage-inspector-cleanup": {
+      "componentSource": "plugin",
+      "extensionLayoutVersion": 1,
+      "extensionSources": [
+        "./extensions/windows-app-storage-inspector-cleanup"
+      ],
+      "upstreamRepository": "https://github.com/github/awesome-copilot",
+      "upstreamCommit": "318066d2213b510e89b500ed0d53506c54093ddc",
+      "client": {
+        "logo": "assets/preview.png"
+      }
+    },
+    "work-hub": {
+      "componentSource": "plugin",
+      "extensionLayoutVersion": 1,
+      "extensionSources": [
+        "./extensions/work-hub"
+      ],
+      "upstreamRepository": "https://github.com/github/awesome-copilot",
+      "upstreamCommit": "318066d2213b510e89b500ed0d53506c54093ddc",
+      "client": {
+        "logo": "assets/preview.png"
+      }
+    }
+  }
+}

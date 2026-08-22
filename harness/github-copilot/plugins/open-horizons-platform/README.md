@@ -5,7 +5,7 @@ This directory packages the Open Horizons agentic DevOps platform customizations
 1. an installable GitHub Copilot plugin containing agents, skills, hooks, and MCP integrations; and
 2. a publishable repository workspace kit containing instructions, prompts, hooks, workflows, issue forms, governance, and authoring references for the Open Horizons source repository.
 
-The package is intentionally self-contained. Its `agents/`, `skills/`, and `hooks/` directories are canonical plugin content, declared through `extensions.com.paulasilvatech.copilot-primitives` in `plugin.json`; the repository component synchronizer must not replace them with unrelated shared canonical primitives. For Agent Plugins 1.0 compatibility, the synchronizer mirrors canonical agents and hook configuration into `com.github.copilot/`, which is the extension directory GitHub Copilot CLI loads.
+The package is intentionally self-contained. Its `agents/`, `skills/`, and `hooks/` directories are canonical plugin content and remain directly under the plugin root. Shared-skill ownership is recorded in the repository's `manifests/plugin-sources.json`; the component synchronizer must not replace plugin-owned content with unrelated shared primitives.
 
 ## Supported plugin components
 
@@ -18,13 +18,11 @@ This plugin installs the following supported components:
 
 | Package path | Installed behavior |
 | --- | --- |
-| `plugin.json` | Declares plugin identity, version, the GitHub Copilot agent extension, and repository source ownership metadata. |
-| `agents/*.agent.md` | Canonical sources for nine Open Horizons specialist agents. |
-| `com.github.copilot/agents/*.agent.md` | Generated Agent Plugins 1.0 runtime copies of the nine agents. |
+| `plugin.json` | Declares plugin identity, version, and direct component paths. |
+| `agents/*.agent.md` | Canonical and runtime files for nine Open Horizons specialist agents. |
 | `skills/*/SKILL.md` | Installs 30 reusable Open Horizons skills and their bundled resources. |
-| `hooks/open-horizons-safety/` | Canonical confirmation hook and deterministic guard script. |
-| `com.github.copilot/hooks/hooks.json` | Generated Agent Plugins 1.0 runtime hook configuration. |
-| `mcp.json` | Registers four Open Plugin Spec MCP servers: Microsoft Learn, Azure, Terraform, and Playwright. |
+| `hooks/open-horizons-safety/` | Canonical confirmation hook, direct hook configuration, and deterministic guard script. |
+| `mcp.json` | Registers four portable MCP servers: Microsoft Learn, Azure, Terraform, and Playwright. |
 
 The plugin does not currently ship LSP servers. The safety hook asks before destructive infrastructure, cluster, repository, filesystem, or database operations; set `OPEN_HORIZONS_HOOK_MODE=off` to disable it or `audit` to evaluate without requesting confirmation.
 

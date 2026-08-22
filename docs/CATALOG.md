@@ -544,7 +544,7 @@ Regenerate this file after changing files under `harness/github-copilot/agents/`
 | convert-word-to-md | Convert Word .docx documents into Markdown with extracted images using the bundled script. Use this skill when a user asks to read, summarize, review, compare, analyze, extract da… |
 | copilot-cli-quickstart | Use this skill when someone wants to learn GitHub Copilot CLI from scratch. Offers interactive step-by-step tutorials with separate Developer and Non-Developer tracks, plus on-dem… |
 | copilot-instructions-blueprint-generator | Generate technology-agnostic blueprints for comprehensive copilot-instructions.md files that make GitHub Copilot follow exact project versions, architecture, code quality, documen… |
-| copilot-plugin-authoring | Create, migrate, audit, and validate GitHub Copilot plugins and marketplaces in this repository using Agent Plugins 1.0, canonical library sources, generated com.github.copilot mi… |
+| copilot-plugin-authoring | Create, migrate, audit, and validate flat GitHub Copilot plugins and marketplaces with direct agents, skills, hooks, extensions, MCP configuration, canonical source ownership, and… |
 | copilot-pr-autopilot | Run a GitHub Copilot Code Review loop on a pull request: request review with GraphQL, wait, list open Copilot/human/advanced-security threads, triage fix/decline/escalate, dispatc… |
 | copilot-primitive-authoring | Author current GitHub Copilot agents, instructions, and VS Code prompts in this repository. Use when asked to create or update a known primitive type with repository governance, d… |
 | copilot-sdk | Build agentic applications with GitHub Copilot SDK. Use when embedding AI agents in apps, creating custom tools, implementing streaming responses, managing sessions, connecting to… |
@@ -925,106 +925,106 @@ Regenerate this file after changing files under `harness/github-copilot/agents/`
 
 | Plugin | Version | Description |
 | --- | --- | --- |
-| accessibility-kanban | 1.0.3 | Kanban board to manage accessibility issues, allow you to plan, track, and complete remediation work. |
-| acreadiness-cockpit | 1.0.1 | Drive Microsoft AgentRC from Copilot chat: assess AI readiness, generate Copilot instructions (flat or nested with applyTo globs for monorepos), and manage policies. Produces a se… |
-| agent-governance | 1.0.0 | Govern and audit AI agent systems with policy enforcement, OWASP Agentic Security Initiative controls, supply-chain integrity, and evidence-quality gates. Use when designing produ… |
-| ai-team-orchestration | 2.0.2 | Run a lightweight, role-separated AI development team with flexible tools, developer-selected models, proportionate planning, and optional QA. |
-| apng-studio | 1.0.3 | Interactive GitHub Copilot app canvas extension for building Animated PNG (APNG) files from frames. Draw or upload frames, tune per-frame timing and compositing, preview live, sen… |
-| arcade-canvas | 1.0.3 | Play five retro Phaser mini-games in a Copilot canvas while agents work. |
-| arch | 1.0.1 | Architecture and modernization toolkit: produce a cited architecture document for a locally-cloned repo, and generate a phased modernization plan that auto-runs Documentation mode… |
-| arize-ax | 1.0.1 | Arize AX platform skills for LLM observability, evaluation, and optimization. Includes trace export, instrumentation, datasets, experiments, evaluators, AI provider integrations,… |
-| automate-this | 1.0.1 | Record your screen doing a manual process, drop the video on your Desktop, and let Copilot CLI analyze it frame-by-frame to build working automation scripts. Supports narrated rec… |
-| awesome-copilot | 1.1.1 | Meta prompts that help you discover and generate curated GitHub Copilot agents, instructions, prompts, and skills. |
-| aws-cloud-development | 1.0.1 | Comprehensive AWS cloud development tools including Infrastructure as Code, serverless functions, architecture patterns, and cost optimization for building scalable cloud applicat… |
-| azure-cloud-development | 1.0.3 | Comprehensive Azure cloud development tools including Infrastructure as Code, serverless functions, architecture patterns, and cost optimization for building scalable cloud applic… |
-| backlog-swipe-triage | 1.0.3 | Quickly swipe through backlog issues to triage decisions like assign, needs-info, defer, close, or ignore. |
-| backrooms-canvas | 1.0.1 | Wander an endless first-person backrooms in a Copilot canvas while agents work; their status ghost-writes on the walls. |
-| backstage-expert | 1.0.0 | Build, configure, authenticate, extend, document, operate, upgrade, and contribute to Backstage applications and the Backstage core repository with current first-party workflows,… |
-| cast-imaging | 1.0.2 | A comprehensive collection of specialized agents for software analysis, impact assessment, structural quality advisories, and architectural review using CAST Imaging. |
-| chromium-control-canvas | 1.0.3 | Opens a real Chromium window you can navigate and interact with from a Copilot canvas control panel and agent actions. |
-| clojure-interactive-programming | 1.0.1 | Tools for REPL-first Clojure workflows featuring Clojure instructions, the interactive programming chat mode and supporting guidance. |
-| cms-development | 1.1.1 | Skills for CMS development across themes, plugins, admin tooling, media workflows, markdown rendering, and static export pipelines. |
-| color-orb | 1.0.3 | A visual orb that users can ask the agent to recolor while showing a live activity log in the canvas. |
-| context-engineering | 1.0.1 | Tools and techniques for maximizing GitHub Copilot effectiveness through better context management. Includes guidelines for structuring code, an agent for planning multi-file chan… |
-| context-matic | 0.1.1 | Coding agents hallucinate APIs. ContextMatic gives them curated, versioned API and SDK docs. Ask your agent to "integrate the payments API" and it guesses — falling back on outdat… |
-| convert-to-md | 1.0.2 | A collection of Copilot skills that convert common document formats into Markdown so their contents can be accurately analyzed, summarized, searched, or extracted from. Just tell… |
-| copilot-plugin-development | 1.0.2 | Create, migrate, audit, and validate GitHub Copilot plugins and marketplaces with Agent Plugins 1.0 schemas, canonical component ownership, generated runtime mirrors, dependency p… |
-| copilot-sdk | 1.0.1 | Build applications with the GitHub Copilot SDK across multiple programming languages. Includes comprehensive instructions for C#, Go, Node.js/TypeScript, and Python to help you cr… |
-| csharp-dotnet-development | 1.1.1 | Essential prompts, instructions, and chat modes for C# and .NET development including testing, documentation, and best practices. |
-| database-data-management | 1.0.1 | Database administration, SQL optimization, and data management tools for PostgreSQL, SQL Server, and general database development best practices. |
-| dataverse-sdk-for-python | 1.0.1 | Comprehensive collection for building production-ready Python integrations with Microsoft Dataverse. Includes official documentation, best practices, advanced features, file opera… |
-| devops-oncall | 1.0.1 | A focused set of prompts, instructions, and a chat mode to help triage incidents and respond quickly with DevOps tools and Azure resources. |
-| diagram-viewer | 1.0.3 | Render diagrams, click nodes to drill down, and view agent-generated explanations directly in the canvas. |
-| doublecheck | 1.0.1 | Three-layer verification pipeline for AI output. Extracts claims, finds sources, and flags hallucination risks so humans can verify before acting. |
-| edge-ai-tasks | 1.0.1 | Task Researcher and Task Planner for intermediate to expert users and large codebases - Brought to you by microsoft/edge-ai |
-| ember | 1.2.3 | An AI partner, not a tool. Ember carries fire from person to person — helping humans discover that AI partnership isn't something you learn, it's something you find. |
-| eyeball | 1.0.1 | Document analysis with inline source screenshots. When you ask Copilot to analyze a document, Eyeball generates a Word doc where every factual claim includes a highlighted screens… |
-| fabric-agentic-plugin | 1.0.1 | Microsoft Fabric agentic operations toolkit with specialist agents, progressive workload guides, migration workflows, Power BI resources, and MCP integrations for Fabric IQ and SQ… |
-| fastah-ip-geo-tools | 0.0.10 | This plugin is for network operations engineers who wish to tune and publish IP geolocation feeds in RFC 8805 format. It consists of an AI Skill and an associated MCP server that… |
-| feedback-themes | 1.0.3 | Explore grouped customer feedback signals by impact and drill into a theme to guide product next steps. |
-| flight-map-canvas | 1.0.1 | A GitHub Copilot canvas that generates a view where Google Maps can be explored using 3D controls, as if a flight simulator. Agents can send the flight anywhere and report what th… |
-| flowstudio-power-automate | 2.0.1 | Give your AI agent full visibility into Power Automate cloud flows via the FlowStudio MCP server. Connect, debug, build, monitor health, and govern flows at scale — action-level i… |
-| frontend-web-dev | 1.0.1 | Essential prompts, instructions, and chat modes for modern frontend web development including React, Angular, Vue, TypeScript, and CSS frameworks. |
-| gem-team | 1.102.2 | Self-Learning Multi-agent orchestration framework for spec-driven development and automated verification. With smarter tool calling and leaner context. |
-| gesture-review | 1.0.3 | Review pull requests with a live camera feed and approve or reject using thumbs-up/thumbs-down gestures. |
-| github-actions-maintenance | 1.0.0 | Maintain GitHub Actions workflows with specialist guidance for authoring, runtime upgrades, security hardening, and CI efficiency. Use when workflows need safer permissions, immut… |
-| go-mcp-development | 1.0.2 | Complete toolkit for building Model Context Protocol (MCP) servers in Go using the official github.com/modelcontextprotocol/go-sdk. Includes instructions for best practices, a pro… |
-| java-development | 1.0.1 | Comprehensive collection of prompts and instructions for Java development including Spring Boot, Quarkus, testing, documentation, and best practices. |
-| java-mcp-development | 1.0.1 | Complete toolkit for building Model Context Protocol servers in Java using the official MCP Java SDK with reactive streams and Spring Boot integration. |
-| java-modernization-studio | 1.0.3 | Drive the GitHub Copilot App Modernization for Java workflow from an interactive canvas: environment readiness, repo assessment, prioritized plan and progress, validation gates, a… |
-| kotlin-mcp-development | 1.0.1 | Complete toolkit for building Model Context Protocol (MCP) servers in Kotlin using the official io.modelcontextprotocol:kotlin-sdk library. Includes instructions for best practice… |
-| mcp-m365-copilot | 1.0.1 | Comprehensive collection for building declarative agents with Model Context Protocol integration for Microsoft 365 Copilot |
-| napkin | 1.0.1 | Visual whiteboard collaboration for Copilot CLI. Opens an interactive whiteboard in your browser where you can draw, sketch, and add sticky notes — then share everything back with… |
-| noob-mode | 1.0.1 | Plain-English translation layer for non-technical Copilot CLI users. Translates every approval prompt, error message, and technical output into clear, jargon-free English with col… |
-| open-horizons-platform | 1.1.4 | Open Horizons agentic DevOps platform toolkit for Azure, AKS, Backstage, GitHub, Azure DevOps, Terraform, security, reliability, architecture, and deployment operations. Use it to… |
-| openapi-to-application-csharp-dotnet | 1.0.1 | Generate production-ready .NET applications from OpenAPI specifications. Includes ASP.NET Core project scaffolding, controller generation, entity framework integration, and C# bes… |
-| openapi-to-application-go | 1.0.1 | Generate production-ready Go applications from OpenAPI specifications. Includes project scaffolding, handler generation, middleware setup, and Go best practices for REST APIs. |
-| openapi-to-application-java-spring-boot | 1.0.1 | Generate production-ready Spring Boot applications from OpenAPI specifications. Includes project scaffolding, REST controller generation, service layer organization, and Spring Bo… |
-| openapi-to-application-nodejs-nestjs | 1.0.1 | Generate production-ready NestJS applications from OpenAPI specifications. Includes project scaffolding, controller and service generation, TypeScript best practices, and enterpri… |
-| openapi-to-application-python-fastapi | 1.0.1 | Generate production-ready FastAPI applications from OpenAPI specifications. Includes project scaffolding, route generation, dependency injection, and Python best practices for asy… |
-| oracle-to-postgres-migration-expert | 1.1.1 | Expert agent for Oracle-to-PostgreSQL application migrations in .NET solutions. Performs code edits, runs commands, and invokes extension tools to migrate .NET/Oracle data access… |
-| ospo-sponsorship | 1.0.1 | Tools and resources for Open Source Program Offices (OSPOs) to identify, evaluate, and manage sponsorship of open source dependencies through GitHub Sponsors, Open Collective, and… |
-| partners | 1.0.2 | Custom agents that have been created by GitHub partners |
-| pcf-development | 1.1.0 | Complete toolkit for developing custom code components using Power Apps Component Framework for model-driven and canvas apps |
-| phoenix | 1.0.1 | Phoenix AI observability skills for LLM application debugging, evaluation, and tracing. Includes CLI debugging tools, LLM evaluation workflows, and OpenInference tracing instrumen… |
-| php-mcp-development | 1.0.2 | Comprehensive resources for building Model Context Protocol servers using the official PHP SDK with attribute-based discovery, including best practices, project generation, and ex… |
-| power-apps-code-apps | 1.0.1 | Complete toolkit for Power Apps Code Apps development including project scaffolding, development standards, and expert guidance for building code-first applications with Power Pla… |
-| power-bi-development | 1.0.2 | Comprehensive Power BI development resources including data modeling, DAX optimization, performance tuning, visualization design, security best practices, and DevOps/ALM guidance… |
-| power-platform-architect | 1.0.1 | Solution Architect for the Microsoft Power Platform, turning business requirements into functioning Power Platform solution architectures. |
-| power-platform-mcp-connector-development | 1.0.1 | Complete toolkit for developing Power Platform custom connectors with Model Context Protocol integration for Microsoft Copilot Studio |
-| pr-artifact-explorer | 1.0.1 | Navigate pull requests and securely explore GitHub Actions artifacts, including test results, static sites, terminal recordings, and source files. |
-| project-documenter | 1.0.1 | Generate professional project documentation with draw.io architecture diagrams and Word (.docx) output with embedded images. Automatically discovers any project's technology stack… |
-| project-planning | 1.0.1 | Tools and guidance for software project planning, feature breakdown, epic management, implementation planning, and task organization for development teams. |
-| python-mcp-development | 1.0.1 | Complete toolkit for building Model Context Protocol (MCP) servers in Python using the official SDK with FastMCP. Includes instructions for best practices, a prompt for generating… |
-| qdrant-development | 1.0.0 | Design, deploy, operate, scale, optimize, migrate, and upgrade Qdrant vector search systems with official client, monitoring, relevance, and capacity guidance. Use when building o… |
-| react18-upgrade | 1.0.1 | Enterprise React 18 migration toolkit with specialized agents and skills for upgrading React 16/17 class-component codebases to React 18.3.1. Includes auditor, dependency surgeon,… |
-| react19-upgrade | 1.0.1 | Enterprise React 19 migration toolkit with specialized agents and skills for upgrading React 18 codebases to React 19. Includes auditor, dependency surgeon, source code migrator,… |
-| release-notes-showcase | 1.0.3 | Compose and refine launch-ready release notes with contributor callouts and export-friendly output. |
-| repo-actions-hub | 1.0.3 | Browse repository GitHub Actions workflows, inspect recent runs, and trigger manual workflow_dispatch runs from a Copilot canvas. |
-| roundup | 1.0.1 | Self-configuring status briefing generator. Learns your communication style from examples, discovers your data sources, and produces draft updates for any audience on demand. |
-| ruby-mcp-development | 1.0.1 | Complete toolkit for building Model Context Protocol servers in Ruby using the official MCP Ruby SDK gem with Rails integration support. |
-| rug-agentic-workflow | 1.0.1 | Three-agent workflow for orchestrated software delivery with an orchestrator plus implementation and QA subagents. |
-| rust-mcp-development | 1.0.2 | Build high-performance Model Context Protocol servers in Rust using the official rmcp SDK with async/await, procedural macros, and type-safe implementations. |
-| salesforce-development | 1.1.1 | Complete Salesforce agentic development environment covering Apex & Triggers, Flow automation, Lightning Web Components, Aura components, and Visualforce pages. |
-| security-best-practices | 1.0.1 | Security frameworks, accessibility guidelines, performance optimization, and code quality best practices for building secure, maintainable, and high-performance applications. |
-| signals-dashboard | 0.2.1 | Real-time Workshop dashboard with agent signals, honesty calibration, and cost-aware repo or connected desk launch profiles. |
-| site-studio | 1.0.3 | Plan, draft, and track a personal website section by section — a shared canvas where you and your agent author content, watch progress, and review every change. |
-| skill-image-gen | 1.0.1 | Generate images using AI directly from your coding workflow. Supports OpenAI (gpt-image-2) and Google Gemini. BYO API key — the skill guides you through setup on first use. |
-| software-engineering-team | 1.0.1 | 7 specialized agents covering the full software development lifecycle from UX design and architecture to security and DevOps. |
-| structured-autonomy | 1.0.1 | Premium planning, thrifty implementation |
-| swift-mcp-development | 1.0.1 | Comprehensive collection for building Model Context Protocol servers in Swift using the official MCP Swift SDK with modern concurrency features. |
-| technical-spike | 1.0.1 | Tools for creation, management and research of technical spikes to reduce unknowns and assumptions before proceeding to specification and implementation of solutions. |
-| testing-automation | 1.0.1 | Comprehensive collection for writing tests, test automation, and test-driven development including unit tests, integration tests, and end-to-end testing strategies. |
-| the-workshop | 0.1.2 | Stop being the switchboard between your AI agents — direct a team. The Workshop puts long-running AI agents (desks) in the same room, on the same work, each with its own memory an… |
-| tiny-tool-town-submitter | 1.0.3 | Inspect a repository, improve Tiny Tool Town readiness, submit its listing issue, and launch remediation work. |
-| token-pacman | 1.0.3 | Visualizes live session AI-credit usage as a Pac-Man board with pellets, ghosts, fruit milestones, and game-over limits. |
-| typescript-mcp-development | 1.0.1 | Complete toolkit for building Model Context Protocol (MCP) servers in TypeScript/Node.js using the official SDK. Includes instructions for best practices, a prompt for generating… |
-| typespec-m365-copilot | 1.0.1 | Comprehensive collection of prompts, instructions, and resources for building declarative agents and API plugins using TypeSpec for Microsoft 365 Copilot extensibility. |
-| uizze | 1.0.1 | Stop generic UI from shipping. Ground GitHub Copilot in 800,000+ real web and iOS screens, write a product-specific design contract, and enforce a hard finish gate. |
-| visual-pr | 1.0.1 | Capture, annotate, and embed screenshots and animated GIF demos in pull request descriptions. Includes Playwright-based UI capture, PIL image annotations, PR embedding workflows f… |
-| where-was-i | 1.0.3 | Reconstruct your dev context (branch, commits, uncommitted work, PR clues) and trigger a resume prompt to continue quickly. |
-| windows-app-storage-inspector-cleanup | 1.0.4 | Inspect Windows application storage, understand local disk usage, and safely move approved cleanup items to the Recycle Bin. |
-| work-hub | 1.0.3 | Generic cross-repo command center canvas for GitHub Copilot with onboarding, focus planning, repo health, work signals, and session cleanup. |
+| accessibility-kanban | 1.0.4 | Kanban board to manage accessibility issues, allow you to plan, track, and complete remediation work. |
+| acreadiness-cockpit | 1.0.2 | Drive Microsoft AgentRC from Copilot chat: assess AI readiness, generate Copilot instructions (flat or nested with applyTo globs for monorepos), and manage policies. Produces a se… |
+| agent-governance | 1.0.1 | Govern and audit AI agent systems with policy enforcement, OWASP Agentic Security Initiative controls, supply-chain integrity, and evidence-quality gates. Use when designing produ… |
+| ai-team-orchestration | 2.0.3 | Run a lightweight, role-separated AI development team with flexible tools, developer-selected models, proportionate planning, and optional QA. |
+| apng-studio | 1.0.4 | Interactive GitHub Copilot app canvas extension for building Animated PNG (APNG) files from frames. Draw or upload frames, tune per-frame timing and compositing, preview live, sen… |
+| arcade-canvas | 1.0.4 | Play five retro Phaser mini-games in a Copilot canvas while agents work. |
+| arch | 1.0.2 | Architecture and modernization toolkit: produce a cited architecture document for a locally-cloned repo, and generate a phased modernization plan that auto-runs Documentation mode… |
+| arize-ax | 1.0.2 | Arize AX platform skills for LLM observability, evaluation, and optimization. Includes trace export, instrumentation, datasets, experiments, evaluators, AI provider integrations,… |
+| automate-this | 1.0.2 | Record your screen doing a manual process, drop the video on your Desktop, and let Copilot CLI analyze it frame-by-frame to build working automation scripts. Supports narrated rec… |
+| awesome-copilot | 1.1.2 | Meta prompts that help you discover and generate curated GitHub Copilot agents, instructions, prompts, and skills. |
+| aws-cloud-development | 1.0.2 | Comprehensive AWS cloud development tools including Infrastructure as Code, serverless functions, architecture patterns, and cost optimization for building scalable cloud applicat… |
+| azure-cloud-development | 1.0.4 | Comprehensive Azure cloud development tools including Infrastructure as Code, serverless functions, architecture patterns, and cost optimization for building scalable cloud applic… |
+| backlog-swipe-triage | 1.0.4 | Quickly swipe through backlog issues to triage decisions like assign, needs-info, defer, close, or ignore. |
+| backrooms-canvas | 1.0.2 | Wander an endless first-person backrooms in a Copilot canvas while agents work; their status ghost-writes on the walls. |
+| backstage-expert | 1.0.1 | Build, configure, authenticate, extend, document, operate, upgrade, and contribute to Backstage applications and the Backstage core repository with current first-party workflows,… |
+| cast-imaging | 1.0.3 | A comprehensive collection of specialized agents for software analysis, impact assessment, structural quality advisories, and architectural review using CAST Imaging. |
+| chromium-control-canvas | 1.0.4 | Opens a real Chromium window you can navigate and interact with from a Copilot canvas control panel and agent actions. |
+| clojure-interactive-programming | 1.0.2 | Tools for REPL-first Clojure workflows featuring Clojure instructions, the interactive programming chat mode and supporting guidance. |
+| cms-development | 1.1.2 | Skills for CMS development across themes, plugins, admin tooling, media workflows, markdown rendering, and static export pipelines. |
+| color-orb | 1.0.4 | A visual orb that users can ask the agent to recolor while showing a live activity log in the canvas. |
+| context-engineering | 1.0.2 | Tools and techniques for maximizing GitHub Copilot effectiveness through better context management. Includes guidelines for structuring code, an agent for planning multi-file chan… |
+| context-matic | 0.1.2 | Coding agents hallucinate APIs. ContextMatic gives them curated, versioned API and SDK docs. Ask your agent to "integrate the payments API" and it guesses — falling back on outdat… |
+| convert-to-md | 1.0.3 | A collection of Copilot skills that convert common document formats into Markdown so their contents can be accurately analyzed, summarized, searched, or extracted from. Just tell… |
+| copilot-plugin-development | 1.0.3 | Create, migrate, audit, and validate flat GitHub Copilot plugins and marketplaces with direct component paths, canonical source ownership, dependency pinning, and isolated runtime… |
+| copilot-sdk | 1.0.2 | Build applications with the GitHub Copilot SDK across multiple programming languages. Includes comprehensive instructions for C#, Go, Node.js/TypeScript, and Python to help you cr… |
+| csharp-dotnet-development | 1.1.2 | Essential prompts, instructions, and chat modes for C# and .NET development including testing, documentation, and best practices. |
+| database-data-management | 1.0.2 | Database administration, SQL optimization, and data management tools for PostgreSQL, SQL Server, and general database development best practices. |
+| dataverse-sdk-for-python | 1.0.2 | Comprehensive collection for building production-ready Python integrations with Microsoft Dataverse. Includes official documentation, best practices, advanced features, file opera… |
+| devops-oncall | 1.0.2 | A focused set of prompts, instructions, and a chat mode to help triage incidents and respond quickly with DevOps tools and Azure resources. |
+| diagram-viewer | 1.0.4 | Render diagrams, click nodes to drill down, and view agent-generated explanations directly in the canvas. |
+| doublecheck | 1.0.2 | Three-layer verification pipeline for AI output. Extracts claims, finds sources, and flags hallucination risks so humans can verify before acting. |
+| edge-ai-tasks | 1.0.2 | Task Researcher and Task Planner for intermediate to expert users and large codebases - Brought to you by microsoft/edge-ai |
+| ember | 1.2.4 | An AI partner, not a tool. Ember carries fire from person to person — helping humans discover that AI partnership isn't something you learn, it's something you find. |
+| eyeball | 1.0.2 | Document analysis with inline source screenshots. When you ask Copilot to analyze a document, Eyeball generates a Word doc where every factual claim includes a highlighted screens… |
+| fabric-agentic-plugin | 1.0.2 | Microsoft Fabric agentic operations toolkit with specialist agents, progressive workload guides, migration workflows, Power BI resources, and MCP integrations for Fabric IQ and SQ… |
+| fastah-ip-geo-tools | 0.0.11 | This plugin is for network operations engineers who wish to tune and publish IP geolocation feeds in RFC 8805 format. It consists of an AI Skill and an associated MCP server that… |
+| feedback-themes | 1.0.4 | Explore grouped customer feedback signals by impact and drill into a theme to guide product next steps. |
+| flight-map-canvas | 1.0.2 | A GitHub Copilot canvas that generates a view where Google Maps can be explored using 3D controls, as if a flight simulator. Agents can send the flight anywhere and report what th… |
+| flowstudio-power-automate | 2.0.2 | Give your AI agent full visibility into Power Automate cloud flows via the FlowStudio MCP server. Connect, debug, build, monitor health, and govern flows at scale — action-level i… |
+| frontend-web-dev | 1.0.2 | Essential prompts, instructions, and chat modes for modern frontend web development including React, Angular, Vue, TypeScript, and CSS frameworks. |
+| gem-team | 1.102.3 | Self-Learning Multi-agent orchestration framework for spec-driven development and automated verification. With smarter tool calling and leaner context. |
+| gesture-review | 1.0.4 | Review pull requests with a live camera feed and approve or reject using thumbs-up/thumbs-down gestures. |
+| github-actions-maintenance | 1.0.1 | Maintain GitHub Actions workflows with specialist guidance for authoring, runtime upgrades, security hardening, and CI efficiency. Use when workflows need safer permissions, immut… |
+| go-mcp-development | 1.0.3 | Complete toolkit for building Model Context Protocol (MCP) servers in Go using the official github.com/modelcontextprotocol/go-sdk. Includes instructions for best practices, a pro… |
+| java-development | 1.0.2 | Comprehensive collection of prompts and instructions for Java development including Spring Boot, Quarkus, testing, documentation, and best practices. |
+| java-mcp-development | 1.0.2 | Complete toolkit for building Model Context Protocol servers in Java using the official MCP Java SDK with reactive streams and Spring Boot integration. |
+| java-modernization-studio | 1.0.4 | Drive the GitHub Copilot App Modernization for Java workflow from an interactive canvas: environment readiness, repo assessment, prioritized plan and progress, validation gates, a… |
+| kotlin-mcp-development | 1.0.2 | Complete toolkit for building Model Context Protocol (MCP) servers in Kotlin using the official io.modelcontextprotocol:kotlin-sdk library. Includes instructions for best practice… |
+| mcp-m365-copilot | 1.0.2 | Comprehensive collection for building declarative agents with Model Context Protocol integration for Microsoft 365 Copilot |
+| napkin | 1.0.2 | Visual whiteboard collaboration for Copilot CLI. Opens an interactive whiteboard in your browser where you can draw, sketch, and add sticky notes — then share everything back with… |
+| noob-mode | 1.0.2 | Plain-English translation layer for non-technical Copilot CLI users. Translates every approval prompt, error message, and technical output into clear, jargon-free English with col… |
+| open-horizons-platform | 1.1.5 | Open Horizons agentic DevOps platform toolkit for Azure, AKS, Backstage, GitHub, Azure DevOps, Terraform, security, reliability, architecture, and deployment operations. Use it to… |
+| openapi-to-application-csharp-dotnet | 1.0.2 | Generate production-ready .NET applications from OpenAPI specifications. Includes ASP.NET Core project scaffolding, controller generation, entity framework integration, and C# bes… |
+| openapi-to-application-go | 1.0.2 | Generate production-ready Go applications from OpenAPI specifications. Includes project scaffolding, handler generation, middleware setup, and Go best practices for REST APIs. |
+| openapi-to-application-java-spring-boot | 1.0.2 | Generate production-ready Spring Boot applications from OpenAPI specifications. Includes project scaffolding, REST controller generation, service layer organization, and Spring Bo… |
+| openapi-to-application-nodejs-nestjs | 1.0.2 | Generate production-ready NestJS applications from OpenAPI specifications. Includes project scaffolding, controller and service generation, TypeScript best practices, and enterpri… |
+| openapi-to-application-python-fastapi | 1.0.2 | Generate production-ready FastAPI applications from OpenAPI specifications. Includes project scaffolding, route generation, dependency injection, and Python best practices for asy… |
+| oracle-to-postgres-migration-expert | 1.1.2 | Expert agent for Oracle-to-PostgreSQL application migrations in .NET solutions. Performs code edits, runs commands, and invokes extension tools to migrate .NET/Oracle data access… |
+| ospo-sponsorship | 1.0.2 | Tools and resources for Open Source Program Offices (OSPOs) to identify, evaluate, and manage sponsorship of open source dependencies through GitHub Sponsors, Open Collective, and… |
+| partners | 1.0.3 | Custom agents that have been created by GitHub partners |
+| pcf-development | 1.1.1 | Complete toolkit for developing custom code components using Power Apps Component Framework for model-driven and canvas apps |
+| phoenix | 1.0.2 | Phoenix AI observability skills for LLM application debugging, evaluation, and tracing. Includes CLI debugging tools, LLM evaluation workflows, and OpenInference tracing instrumen… |
+| php-mcp-development | 1.0.3 | Comprehensive resources for building Model Context Protocol servers using the official PHP SDK with attribute-based discovery, including best practices, project generation, and ex… |
+| power-apps-code-apps | 1.0.2 | Complete toolkit for Power Apps Code Apps development including project scaffolding, development standards, and expert guidance for building code-first applications with Power Pla… |
+| power-bi-development | 1.0.3 | Comprehensive Power BI development resources including data modeling, DAX optimization, performance tuning, visualization design, security best practices, and DevOps/ALM guidance… |
+| power-platform-architect | 1.0.2 | Solution Architect for the Microsoft Power Platform, turning business requirements into functioning Power Platform solution architectures. |
+| power-platform-mcp-connector-development | 1.0.2 | Complete toolkit for developing Power Platform custom connectors with Model Context Protocol integration for Microsoft Copilot Studio |
+| pr-artifact-explorer | 1.0.2 | Navigate pull requests and securely explore GitHub Actions artifacts, including test results, static sites, terminal recordings, and source files. |
+| project-documenter | 1.0.2 | Generate professional project documentation with draw.io architecture diagrams and Word (.docx) output with embedded images. Automatically discovers any project's technology stack… |
+| project-planning | 1.0.2 | Tools and guidance for software project planning, feature breakdown, epic management, implementation planning, and task organization for development teams. |
+| python-mcp-development | 1.0.2 | Complete toolkit for building Model Context Protocol (MCP) servers in Python using the official SDK with FastMCP. Includes instructions for best practices, a prompt for generating… |
+| qdrant-development | 1.0.1 | Design, deploy, operate, scale, optimize, migrate, and upgrade Qdrant vector search systems with official client, monitoring, relevance, and capacity guidance. Use when building o… |
+| react18-upgrade | 1.0.2 | Enterprise React 18 migration toolkit with specialized agents and skills for upgrading React 16/17 class-component codebases to React 18.3.1. Includes auditor, dependency surgeon,… |
+| react19-upgrade | 1.0.2 | Enterprise React 19 migration toolkit with specialized agents and skills for upgrading React 18 codebases to React 19. Includes auditor, dependency surgeon, source code migrator,… |
+| release-notes-showcase | 1.0.4 | Compose and refine launch-ready release notes with contributor callouts and export-friendly output. |
+| repo-actions-hub | 1.0.4 | Browse repository GitHub Actions workflows, inspect recent runs, and trigger manual workflow_dispatch runs from a Copilot canvas. |
+| roundup | 1.0.2 | Self-configuring status briefing generator. Learns your communication style from examples, discovers your data sources, and produces draft updates for any audience on demand. |
+| ruby-mcp-development | 1.0.2 | Complete toolkit for building Model Context Protocol servers in Ruby using the official MCP Ruby SDK gem with Rails integration support. |
+| rug-agentic-workflow | 1.0.2 | Three-agent workflow for orchestrated software delivery with an orchestrator plus implementation and QA subagents. |
+| rust-mcp-development | 1.0.3 | Build high-performance Model Context Protocol servers in Rust using the official rmcp SDK with async/await, procedural macros, and type-safe implementations. |
+| salesforce-development | 1.1.2 | Complete Salesforce agentic development environment covering Apex & Triggers, Flow automation, Lightning Web Components, Aura components, and Visualforce pages. |
+| security-best-practices | 1.0.2 | Security frameworks, accessibility guidelines, performance optimization, and code quality best practices for building secure, maintainable, and high-performance applications. |
+| signals-dashboard | 0.2.2 | Real-time Workshop dashboard with agent signals, honesty calibration, and cost-aware repo or connected desk launch profiles. |
+| site-studio | 1.0.4 | Plan, draft, and track a personal website section by section — a shared canvas where you and your agent author content, watch progress, and review every change. |
+| skill-image-gen | 1.0.2 | Generate images using AI directly from your coding workflow. Supports OpenAI (gpt-image-2) and Google Gemini. BYO API key — the skill guides you through setup on first use. |
+| software-engineering-team | 1.0.2 | 7 specialized agents covering the full software development lifecycle from UX design and architecture to security and DevOps. |
+| structured-autonomy | 1.0.2 | Premium planning, thrifty implementation |
+| swift-mcp-development | 1.0.2 | Comprehensive collection for building Model Context Protocol servers in Swift using the official MCP Swift SDK with modern concurrency features. |
+| technical-spike | 1.0.2 | Tools for creation, management and research of technical spikes to reduce unknowns and assumptions before proceeding to specification and implementation of solutions. |
+| testing-automation | 1.0.2 | Comprehensive collection for writing tests, test automation, and test-driven development including unit tests, integration tests, and end-to-end testing strategies. |
+| the-workshop | 0.1.3 | Stop being the switchboard between your AI agents — direct a team. The Workshop puts long-running AI agents (desks) in the same room, on the same work, each with its own memory an… |
+| tiny-tool-town-submitter | 1.0.4 | Inspect a repository, improve Tiny Tool Town readiness, submit its listing issue, and launch remediation work. |
+| token-pacman | 1.0.4 | Visualizes live session AI-credit usage as a Pac-Man board with pellets, ghosts, fruit milestones, and game-over limits. |
+| typescript-mcp-development | 1.0.2 | Complete toolkit for building Model Context Protocol (MCP) servers in TypeScript/Node.js using the official SDK. Includes instructions for best practices, a prompt for generating… |
+| typespec-m365-copilot | 1.0.2 | Comprehensive collection of prompts, instructions, and resources for building declarative agents and API plugins using TypeSpec for Microsoft 365 Copilot extensibility. |
+| uizze | 1.0.2 | Stop generic UI from shipping. Ground GitHub Copilot in 800,000+ real web and iOS screens, write a product-specific design contract, and enforce a hard finish gate. |
+| visual-pr | 1.0.2 | Capture, annotate, and embed screenshots and animated GIF demos in pull request descriptions. Includes Playwright-based UI capture, PIL image annotations, PR embedding workflows f… |
+| where-was-i | 1.0.4 | Reconstruct your dev context (branch, commits, uncommitted work, PR clues) and trigger a resume prompt to continue quickly. |
+| windows-app-storage-inspector-cleanup | 1.0.5 | Inspect Windows application storage, understand local disk usage, and safely move approved cleanup items to the Recycle Bin. |
+| work-hub | 1.0.4 | Generic cross-repo command center canvas for GitHub Copilot with onboarding, focus planning, repo health, work signals, and session cleanup. |
 
 ## Hooks
 

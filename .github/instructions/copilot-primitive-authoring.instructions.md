@@ -33,6 +33,12 @@ This file owns passive conventions that apply while editing primitive files. The
 
 Treat `harness/github-copilot/` as the canonical source for reusable primitives. Do not edit `.github/` mirrors, generated compatibility guidance, or plugin copies directly unless a file has no declared source. Use a valid kebab-case primitive name with no path separators, `..`, leading or trailing hyphen, or double hyphen.
 
+GitHub Copilot plugin packages keep installable components directly under the plugin root:
+`agents/`, `skills/`, `hooks/`, `extensions/`, and `mcp.json`. The distributed `plugin.json` uses
+direct component path fields and omits the Agent Plugins `$schema`. Repository-only source ownership
+lives in `harness/github-copilot/manifests/plugin-sources.json`. Do not create
+`com.github.copilot/` directories.
+
 ## Frontmatter and Runtime Fields
 
 - Use only fields recognized by the target primitive type.

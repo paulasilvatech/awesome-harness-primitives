@@ -14,12 +14,12 @@ first-party evidence and its runtime surface is exercised where applicable.
 
 | Content type | Sources | Shared canonical | Plugin-owned | Mentioned in dated evidence |
 | --- | --- | --- | --- | --- |
-| agent | 240 | 225 | 15 | 5 |
+| agent | 240 | 225 | 15 | 6 |
 | instruction | 212 | 194 | 18 | 16 |
 | skill | 474 | 420 | 54 | 26 |
 | prompt | 59 | 48 | 11 | 4 |
 | hook | 10 | 8 | 2 | 3 |
-| plugin | 100 | 75 | 25 | 7 |
+| plugin | 100 | 75 | 25 | 10 |
 
 - Shared-harness strict validation: 0 errors, 0 warnings.
 - Plugin-owned primitive validation: 0 errors, 0 warnings.

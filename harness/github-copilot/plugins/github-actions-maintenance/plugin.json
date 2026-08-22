@@ -1,8 +1,7 @@
 {
-  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "github-actions-maintenance",
   "description": "Maintain GitHub Actions workflows with specialist guidance for authoring, runtime upgrades, security hardening, and CI efficiency. Use when workflows need safer permissions, immutable action pins, faster runs, or deprecated runtime remediation.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": {
     "name": "Copilot Primitives Maintainers"
   },
@@ -15,20 +14,6 @@
     "runtime-upgrade",
     "optimization"
   ],
-  "extensions": {
-    "com.github.copilot": {},
-    "com.paulasilvatech.copilot-primitives": {
-      "componentSource": "library",
-      "layoutVersion": 1,
-      "agents": [
-        "./agents/github-actions-expert.agent.md",
-        "./agents/github-actions-node-upgrade.agent.md"
-      ],
-      "skills": [
-        "./skills/github-actions-efficiency/",
-        "./skills/github-actions-hardening/",
-        "./skills/github-actions-runtime-upgrade-conventions/"
-      ]
-    }
-  }
+  "agents": "agents/",
+  "skills": "skills/"
 }

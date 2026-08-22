@@ -1,5 +1,4 @@
 {
-  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "{{PLUGIN_NAME}}",
   "description": "{{WHAT_THE_PLUGIN_INSTALLS_AND_WHEN_TO_USE_IT}}",
   "version": "1.0.0",
@@ -11,13 +10,11 @@
   "keywords": [
     "{{DISCOVERY_KEYWORD}}"
   ],
-  "extensions": {
-    "com.github.copilot": {},
-    "com.paulasilvatech.copilot-primitives": {
-      "componentSource": "{{library-or-plugin}}",
-      "layoutVersion": 1,
-      "agents": [],
-      "skills": []
-    }
-  }
+  "agents": "agents/",
+  "skills": "skills/",
+  "hooks": "hooks/{{HOOK_NAME}}/hooks.json",
+  "extensions": [
+    "extensions/{{EXTENSION_NAME}}"
+  ],
+  "mcpServers": "mcp.json"
 }
