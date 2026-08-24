@@ -1,0 +1,21 @@
+{
+  "name": "azure-ai-foundry",
+  "description": "Azure AI Foundry agent development toolkit covering Agent Service synchronization, hosted agents with AG-UI frontends, Microsoft Agent Framework and Semantic Kernel, gateway and API governance, semantic caching, agent identity, and evaluation loops.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Paula Silva"
+  },
+  "repository": "https://github.com/paulasilvatech/copilot-primitives",
+  "license": "MIT",
+  "keywords": [
+    "azure",
+    "foundry",
+    "ai-agents",
+    "agent-service",
+    "hosted-agents",
+    "agent-framework",
+    "semantic-kernel",
+    "evaluation"
+  ],
+  "skills": "skills/"
+}

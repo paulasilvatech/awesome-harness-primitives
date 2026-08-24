@@ -134,6 +134,21 @@
         "evidence": "docs/HARNESS-VALIDATION.md#flat-github-copilot-plugin-layout-verification"
       }
     },
+    "azure-ai-foundry": {
+      "componentSource": "library",
+      "agents": [],
+      "skills": [
+        "./skills/agentic-eval/",
+        "./skills/apim-ai-gateway/",
+        "./skills/azure-api-center/",
+        "./skills/azure-managed-redis-cache/",
+        "./skills/entra-agent-user/",
+        "./skills/foundry-agent-sync/",
+        "./skills/foundry-hosted-agent-copilotkit/",
+        "./skills/microsoft-agent-framework/",
+        "./skills/semantic-kernel/"
+      ]
+    },
     "azure-cloud-development": {
       "componentSource": "library",
       "agents": [
