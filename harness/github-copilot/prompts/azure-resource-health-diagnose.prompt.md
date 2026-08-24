@@ -2,6 +2,7 @@
 name: 'azure-resource-health-diagnose'
 description: 'Diagnose Azure resource health issues and produce a prioritized remediation plan.'
 agent: 'agent'
+tools: ['read', 'search', 'azure-mcp/*']
 argument-hint: 'resource=<name-or-id> resource-group=<optional> subscription=<optional>'
 ---
 

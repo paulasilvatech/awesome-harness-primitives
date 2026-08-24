@@ -1090,7 +1090,7 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 9891,
+      "characters_scanned": 9897,
       "external_url_count": 0,
       "files_scanned": 1,
       "kind": "agent",
@@ -1492,7 +1492,7 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 12042,
+      "characters_scanned": 11976,
       "external_url_count": 0,
       "files_scanned": 1,
       "kind": "agent",
@@ -2633,7 +2633,7 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 13523,
+      "characters_scanned": 13560,
       "external_url_count": 0,
       "files_scanned": 1,
       "kind": "agent",
@@ -4337,7 +4337,7 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 10369,
+      "characters_scanned": 10436,
       "external_url_count": 0,
       "files_scanned": 1,
       "kind": "agent",
@@ -9728,7 +9728,7 @@
       ]
     },
     {
-      "characters_scanned": 264861,
+      "characters_scanned": 264867,
       "external_url_count": 58,
       "files_scanned": 55,
       "kind": "plugin",
@@ -11981,7 +11981,7 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 13933,
+      "characters_scanned": 13976,
       "external_url_count": 1,
       "files_scanned": 1,
       "kind": "prompt",
@@ -12018,7 +12018,7 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 11817,
+      "characters_scanned": 11858,
       "external_url_count": 0,
       "files_scanned": 1,
       "kind": "prompt",

@@ -1,6 +1,7 @@
 ---
 name: "Senior Cloud Architect"
 description: "Creates comprehensive architecture documentation and Mermaid diagrams for cloud-native systems, NFRs, deployment, data flow, and phased designs. Use for architecture planning, not code generation."
+tools: ["read", "grep", "glob", "edit", "web_fetch", "web_search"]
 ---
 
 # Senior Cloud Architect

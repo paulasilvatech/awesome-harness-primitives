@@ -50,12 +50,28 @@ SK_NAME_RE = re.compile(r"^[a-z0-9]([a-z0-9-]*[a-z0-9])?$")
 PL_NAME_RE = re.compile(rf"^{IDENTIFIER_PATTERN}$")
 SEMVER_RE = re.compile(r"^\d+\.\d+\.\d+(?:[-+].*)?$")
 DATE_RE = re.compile(r"^20\d{2}-\d{2}-\d{2}$")
-MCP_TOOL_RE = re.compile(r"^([a-zA-Z0-9_.-]+/(?:\*|[a-zA-Z0-9_.-]+))(?::(.+))?$")
+MCP_TOOL_RE = re.compile(
+    r"^([a-zA-Z0-9_.-]+/(?:\*|[a-zA-Z0-9_.-]+))(?::(.+))?$")
 LEGACY_MODEL_RE = re.compile(r"^(GPT|Claude|Gemini|o[0-9])")
-SK_WHEN_RE = re.compile(r"use when|use this skill when|when you|when the user|for when|invoke when|trigger", re.I)
+SK_WHEN_RE = re.compile(
+    r"use when|use this skill when|when you|when the user|for when|invoke when|trigger", re.I)
 LINK_RE = re.compile(r"(?<!\!)\[[^\]]+\]\(([^)]+)\)")
 PROMPT_FILE_RE = re.compile(r"[\w./-]*\.prompt\.md\b")
 TEMPLATE_PLACEHOLDER_RE = re.compile(r"\{\{[A-Z][A-Z0-9_]*\}\}")
+TOOL_TOKEN_CHARS = r"[A-Za-z0-9_./*-]+"
+BODY_TOOL_LIST_RE = re.compile(r"\[[^\[\]\n]*\]")
+BODY_QUOTED_TOKEN_RE = re.compile(rf"['\"]({TOOL_TOKEN_CHARS})['\"]")
+BODY_BACKTICK_RUN_RE = re.compile(
+    rf"(?:`{TOOL_TOKEN_CHARS}`(?:\s*(?:,|/)\s*(?:and\s+)?|\s+and\s+)){{2,}}`{TOOL_TOKEN_CHARS}`"
+)
+BODY_BACKTICK_TOKEN_RE = re.compile(rf"`({TOOL_TOKEN_CHARS})`")
+# Lines that name a token in order to reject, hedge, or historicize it are the correct
+# pattern, not a defect, so they must not be flagged.
+BODY_TOOL_HEDGE_RE = re.compile(
+    r"\b(?:avoid|reject|rejected|no-op|do not|don't|never|unavailable|unrecognized"
+    r"|legacy|historical|intent label|not guaranteed|deprecated)\b",
+    re.IGNORECASE,
+)
 
 PORTABLE_TOOLS = {
     "execute", "shell", "bash", "powershell",
@@ -66,7 +82,8 @@ PORTABLE_TOOLS = {
     "web", "web_fetch", "web_search", "websearch", "webfetch",
     "todo", "todowrite", "update_todo",
 }
-NATIVE_TOOLS = {"grep", "glob", "view", "bash", "read_bash", "stop_bash", "powershell", "read_powershell", "stop_powershell", "lsp"}
+NATIVE_TOOLS = {"grep", "glob", "view", "bash", "read_bash",
+                "stop_bash", "powershell", "read_powershell", "stop_powershell", "lsp"}
 VSCODE_ONLY = {
     "codebase", "editfiles", "vscodeapi", "opensimplebrowser", "findtestfiles", "githubrepo",
     "terminallastcommand", "terminalselection", "testfailure", "problems", "usages", "changes",
@@ -91,8 +108,10 @@ NOOP_TOOLS: dict[str, list[str]] = {
 }
 AG_VSCODE_KEYS = {"argument-hint", "handoffs", "agents"}
 IN_VALID_KEYS = {"applyTo", "name", "description", "excludeAgent"}
-SK_VALID_KEYS = {"name", "description", "user-invocable", "disable-model-invocation", "allowed-tools", "argument-hint", "license", "metadata", "tags"}
-PR_VALID_KEYS = {"name", "description", "argument-hint", "agent", "model", "tools"}
+SK_VALID_KEYS = {"name", "description", "user-invocable", "disable-model-invocation",
+                 "allowed-tools", "argument-hint", "license", "metadata", "tags"}
+PR_VALID_KEYS = {"name", "description",
+                 "argument-hint", "agent", "model", "tools"}
 VSCODE_PROMPT_TOOL_ALIASES = {
     "read",
     "search",
@@ -131,7 +150,13 @@ LEGACY_PROMPT_TOOLS = {
     "usages",
     "vscodeapi",
 }
-PL_VALID_KEYS = {"$schema", "name", "version", "description", "author", "email", "repository", "license", "homepage", "keywords", "extensions", "paths", "exclusive", "skills", "agents", "commands", "mcpServers", "lspServers", "outputStyles", "hooks", "postInstallMessage", "strict"}
+# MCP server identifiers that stay legitimate prose references inside an agent body
+# even though they are legacy VS Code *prompt* tool IDs.
+BODY_TOOL_ALLOWED = {"microsoft docs", "microsoft.docs.mcp"}
+BODY_TOOL_VOCABULARY = (
+    set(NOOP_TOOLS) | LEGACY_PROMPT_TOOLS) - BODY_TOOL_ALLOWED
+PL_VALID_KEYS = {"$schema", "name", "version", "description", "author", "email", "repository", "license", "homepage", "keywords", "extensions",
+                 "paths", "exclusive", "skills", "agents", "commands", "mcpServers", "lspServers", "outputStyles", "hooks", "postInstallMessage", "strict"}
 OPEN_PLUGIN_SCHEMA = "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json"
 OPEN_MCP_SCHEMA = "https://agent-plugins.org/schemas/1.0.0/mcp.schema.json"
 OPEN_PLUGIN_VALID_KEYS = {
@@ -146,11 +171,16 @@ OPEN_PLUGIN_VALID_KEYS = {
     "keywords",
     "extensions",
 }
-HK_VALID_KEYS = {"type", "bash", "powershell", "command", "cwd", "env", "timeoutSec", "timeout", "matcher", "url", "headers", "allowedEnvVars"}
-HK_EVENTS = {"sessionStart", "sessionEnd", "userPromptSubmitted", "userPromptTransformed", "preToolUse", "postToolUse", "postToolUseFailure", "preMcpToolCall", "permissionRequest", "preCompact", "errorOccurred", "agentStop", "subagentStart", "subagentStop", "notification", "postResult"}
-HK_PASCAL_ALIASES = {"SessionStart", "SessionEnd", "UserPromptSubmit", "UserPromptSubmitted", "UserPromptTransformed", "PreToolUse", "PostToolUse", "PostToolUseFailure", "PreMcpToolCall", "PermissionRequest", "PreCompact", "ErrorOccurred", "Stop", "AgentStop", "SubagentStart", "SubagentStop", "Notification", "PostResult"}
-PLUGIN_MANIFESTS = (".plugin/plugin.json", "plugin.json", ".github/plugin/plugin.json", ".claude-plugin/plugin.json")
-AUTHORING_ONLY_SECTIONS = {"Template Setup", "Section map", "Optional frontmatter"}
+HK_VALID_KEYS = {"type", "bash", "powershell", "command", "cwd", "env",
+                 "timeoutSec", "timeout", "matcher", "url", "headers", "allowedEnvVars"}
+HK_EVENTS = {"sessionStart", "sessionEnd", "userPromptSubmitted", "userPromptTransformed", "preToolUse", "postToolUse", "postToolUseFailure",
+             "preMcpToolCall", "permissionRequest", "preCompact", "errorOccurred", "agentStop", "subagentStart", "subagentStop", "notification", "postResult"}
+HK_PASCAL_ALIASES = {"SessionStart", "SessionEnd", "UserPromptSubmit", "UserPromptSubmitted", "UserPromptTransformed", "PreToolUse", "PostToolUse", "PostToolUseFailure",
+                     "PreMcpToolCall", "PermissionRequest", "PreCompact", "ErrorOccurred", "Stop", "AgentStop", "SubagentStart", "SubagentStop", "Notification", "PostResult"}
+PLUGIN_MANIFESTS = (".plugin/plugin.json", "plugin.json",
+                    ".github/plugin/plugin.json", ".claude-plugin/plugin.json")
+AUTHORING_ONLY_SECTIONS = {"Template Setup",
+                           "Section map", "Optional frontmatter"}
 AG_REQUIRED_SECTIONS = (
     "Mission",
     "Activation and Scope",
@@ -161,7 +191,8 @@ AG_REQUIRED_SECTIONS = (
     "Definition of Done",
     "Anti-Patterns This Agent Rejects",
 )
-IN_REQUIRED_SECTIONS = ("Conventions", "Do / Do Not", "Checklist Before Opening a PR")
+IN_REQUIRED_SECTIONS = ("Conventions", "Do / Do Not",
+                        "Checklist Before Opening a PR")
 SK_REQUIRED_SECTIONS = ("When to invoke", "Output template", "Quality gate")
 PR_REQUIRED_SECTIONS = (
     "Objective",
@@ -180,6 +211,7 @@ PR_REQUIRED_SECTIONS = (
 def default_harness_root() -> Path:
     return HARNESS_ROOT
 
+
 @dataclass
 class Finding:
     kind: str
@@ -187,6 +219,7 @@ class Finding:
     rule_id: str
     severity: str
     message: str
+
 
 class Validator:
     def __init__(self, root: Path, quiet: bool = False):
@@ -210,7 +243,8 @@ class Validator:
         try:
             fn()
         except Exception as exc:  # robust per-file fallback
-            self.add(kind, path, f"{KIND_PREFIX[kind]}000", "ERROR", f"Unexpected validator failure: {exc}")
+            self.add(kind, path, f"{KIND_PREFIX[kind]}000",
+                     "ERROR", f"Unexpected validator failure: {exc}")
 
     def validate(self, kinds: Iterable[str]) -> None:
         for kind in kinds:
@@ -218,14 +252,16 @@ class Validator:
 
     # Agents
     def validate_agents(self) -> None:
-        kind = "agents"; d = self.root / "agents"
+        kind = "agents"
+        d = self.root / "agents"
         files = sorted(d.glob("*.agent.md")) if d.is_dir() else []
         self.file_counts[kind] = len(files)
         seen: dict[str, Path] = {}
         for p in files:
             key = p.name[:-len(".agent.md")]
             if key in seen:
-                self.add(kind, p, "AG014", "ERROR", f"Duplicate agent dedup key '{key}' also used by {self.rel(seen[key])}")
+                self.add(kind, p, "AG014", "ERROR",
+                         f"Duplicate agent dedup key '{key}' also used by {self.rel(seen[key])}")
             else:
                 seen[key] = p
             self.catch_file(kind, p, lambda p=p: self._validate_agent(p))
@@ -243,20 +279,24 @@ class Validator:
         text = read_text(p)
         fm, body, present, err = parse_frontmatter(text, required=True)
         if not present or err or not isinstance(fm, dict):
-            self.add(kind, p, "AG002", "ERROR", f"Frontmatter missing or invalid{': ' + err if err else ''}")
+            self.add(kind, p, "AG002", "ERROR",
+                     f"Frontmatter missing or invalid{': ' + err if err else ''}")
             fm = {}
         desc = fm.get("description")
         if not isinstance(desc, str) or not desc.strip():
-            self.add(kind, p, "AG003", "ERROR", "description must be a non-empty string")
+            self.add(kind, p, "AG003", "ERROR",
+                     "description must be a non-empty string")
         elif "\n" in desc or len(desc) > 500:
-            self.add(kind, p, "AG004", "WARNING", "description should be a single line ≤ 500 chars")
+            self.add(kind, p, "AG004", "WARNING",
+                     "description should be a single line ≤ 500 chars")
         if not body.strip():
             self.add(kind, p, "AG005", "ERROR", "Body must be non-empty")
         if len(body) > 30000:
             self.add(kind, p, "AG006", "ERROR", "Body must be ≤ 30000 chars")
         target = fm.get("target")
         if target is not None and target not in {"vscode", "github-copilot"}:
-            self.add(kind, p, "AG007", "ERROR", "target must be 'vscode' or 'github-copilot'")
+            self.add(kind, p, "AG007", "ERROR",
+                     "target must be 'vscode' or 'github-copilot'")
         tools = fm.get("tools")
         tool_list: list[str] = []
         if tools is not None:
@@ -265,9 +305,11 @@ class Validator:
             elif isinstance(tools, list) and all(isinstance(x, str) for x in tools):
                 tool_list = tools
             else:
-                self.add(kind, p, "AG008", "ERROR", "tools must be a string or list of strings")
+                self.add(kind, p, "AG008", "ERROR",
+                         "tools must be a string or list of strings")
             if tool_list and all(is_vscode_only_tool(t) for t in tool_list):
-                self.add(kind, p, "AG009", "WARNING", "tools contains only VS Code-only names; CLI effective tool set is empty")
+                self.add(kind, p, "AG009", "WARNING",
+                         "tools contains only VS Code-only names; CLI effective tool set is empty")
             for t in tool_list:
                 if t.lower() in NOOP_TOOLS:
                     if target != "vscode":
@@ -278,14 +320,16 @@ class Validator:
                             "or set target: vscode when the agent is intentionally VS Code-only",
                         )
                 elif not is_recognized_tool(t):
-                    self.add(kind, p, "AG010", "INFO", f"Unrecognized tool name '{t}'")
+                    self.add(kind, p, "AG010", "INFO",
+                             f"Unrecognized tool name '{t}'")
         available_agents = fm.get("agents")
         if available_agents is not None:
             if not (
                 isinstance(available_agents, list)
                 and all(isinstance(agent_name, str) and agent_name for agent_name in available_agents)
             ):
-                self.add(kind, p, "AG023", "ERROR", "agents must be a list of non-empty agent names")
+                self.add(kind, p, "AG023", "ERROR",
+                         "agents must be a list of non-empty agent names")
             elif tools is not None and not any(
                 tool.casefold() in {"agent", "task", "custom-agent"}
                 for tool in tool_list
@@ -298,7 +342,8 @@ class Validator:
                     "agents requires the agent tool when tools is explicitly restricted",
                 )
         for k in sorted(AG_RETIRED_KEYS & set(fm)):
-            self.add(kind, p, "AG011", "WARNING", f"Retired/invalid key present: {k}")
+            self.add(kind, p, "AG011", "WARNING",
+                     f"Retired/invalid key present: {k}")
         model = fm.get("model")
         models: list[str] = []
         if model is not None:
@@ -307,10 +352,12 @@ class Validator:
             elif isinstance(model, list) and all(isinstance(x, str) for x in model):
                 models = model
             else:
-                self.add(kind, p, "AG012", "ERROR", "model must be a string or list of strings")
+                self.add(kind, p, "AG012", "ERROR",
+                         "model must be a string or list of strings")
             for m in models:
                 if " " in m or LEGACY_MODEL_RE.match(m):
-                    self.add(kind, p, "AG013", "WARNING", f"model '{m}' looks like a legacy VS Code display name")
+                    self.add(kind, p, "AG013", "WARNING",
+                             f"model '{m}' looks like a legacy VS Code display name")
             metadata = fm.get("metadata")
             if not (
                 isinstance(metadata, dict)
@@ -329,15 +376,26 @@ class Validator:
                 )
         name = fm.get("name")
         if name is not None and (not isinstance(name, str) or not name.strip()):
-            self.add(kind, p, "AG015", "WARNING", "name, if present, should be a non-empty string")
+            self.add(kind, p, "AG015", "WARNING",
+                     "name, if present, should be a non-empty string")
         for k in sorted(AG_VSCODE_KEYS & set(fm)):
-            self.add(kind, p, "AG016", "INFO", f"{k} is VS Code-only and ignored by CLI")
+            self.add(kind, p, "AG016", "INFO",
+                     f"{k} is VS Code-only and ignored by CLI")
+        for token in body_tool_tokens(body):
+            self.add(
+                kind, p, "AG024", "WARNING",
+                f"Body teaches tool token '{token}' inside a tool list; it grants nothing in "
+                "the tested Copilot CLI and is dropped silently, so agents written from this "
+                "example lose capability. Use spec-valid tokens",
+            )
         self._check_body_conventions(kind, p, body, "AG018", "AG019", "AG020")
-        self._check_required_sections(kind, p, body, "AG021", AG_REQUIRED_SECTIONS)
+        self._check_required_sections(
+            kind, p, body, "AG021", AG_REQUIRED_SECTIONS)
 
     # Instructions
     def validate_instructions(self) -> None:
-        kind = "instructions"; d = self.root / "instructions"
+        kind = "instructions"
+        d = self.root / "instructions"
         files = sorted(d.glob("*.instructions.md")) if d.is_dir() else []
         self.file_counts[kind] = len(files)
         for p in files:
@@ -356,69 +414,88 @@ class Validator:
         text = read_text(p)
         fm, body, present, err = parse_frontmatter(text, required=False)
         if present and (err or not isinstance(fm, dict)):
-            self.add(kind, p, "IN002", "ERROR", f"Frontmatter delimiters exist but YAML did not parse{': ' + err if err else ''}")
+            self.add(kind, p, "IN002", "ERROR",
+                     f"Frontmatter delimiters exist but YAML did not parse{': ' + err if err else ''}")
             fm = {}
         if not present:
-            self.add(kind, p, "IN003", "WARNING", "Frontmatter is missing entirely")
+            self.add(kind, p, "IN003", "WARNING",
+                     "Frontmatter is missing entirely")
             fm = {}
         if "applyTo" not in fm:
-            self.add(kind, p, "IN004", "WARNING", "applyTo missing; file is never auto-applied")
+            self.add(kind, p, "IN004", "WARNING",
+                     "applyTo missing; file is never auto-applied")
         else:
             if not valid_apply_to(fm.get("applyTo")):
-                self.add(kind, p, "IN005", "ERROR", "applyTo must be a non-empty string/list of balanced non-empty globs")
+                self.add(kind, p, "IN005", "ERROR",
+                         "applyTo must be a non-empty string/list of balanced non-empty globs")
         exclude_agent = fm.get("excludeAgent")
         if exclude_agent is not None and (not isinstance(exclude_agent, str) or exclude_agent not in {"code-review", "cloud-agent"}):
-            self.add(kind, p, "IN006", "ERROR", "excludeAgent must be 'code-review' or 'cloud-agent'")
+            self.add(kind, p, "IN006", "ERROR",
+                     "excludeAgent must be 'code-review' or 'cloud-agent'")
         for k in sorted(set(fm) - IN_VALID_KEYS):
-            self.add(kind, p, "IN007", "WARNING", f"Unrecognized frontmatter key: {k}")
+            self.add(kind, p, "IN007", "WARNING",
+                     f"Unrecognized frontmatter key: {k}")
         if "description" not in fm or not isinstance(fm.get("description"), str) or not fm.get("description", "").strip():
             self.add(kind, p, "IN008", "WARNING", "description missing")
         if not body.strip():
             self.add(kind, p, "IN009", "ERROR", "Body must be non-empty")
         self._check_body_conventions(kind, p, body, "IN010", "IN011", "IN012")
-        self._check_required_sections(kind, p, body, "IN013", IN_REQUIRED_SECTIONS)
+        self._check_required_sections(
+            kind, p, body, "IN013", IN_REQUIRED_SECTIONS)
 
     # Skills
     def validate_skills(self) -> None:
-        kind = "skills"; d = self.root / "skills"
-        dirs = sorted([x for x in d.iterdir() if x.is_dir()]) if d.is_dir() else []
+        kind = "skills"
+        d = self.root / "skills"
+        dirs = sorted([x for x in d.iterdir() if x.is_dir()]
+                      ) if d.is_dir() else []
         self.file_counts[kind] = len(dirs)
         names: dict[str, Path] = {}
         for sd in dirs:
             p = sd / "SKILL.md"
             if not p.exists():
-                self.add(kind, p, "SK010", "ERROR", "Every skill directory must contain SKILL.md")
+                self.add(kind, p, "SK010", "ERROR",
+                         "Every skill directory must contain SKILL.md")
                 continue
-            self.catch_file(kind, p, lambda p=p, names=names: self._validate_skill(p, names))
+            self.catch_file(kind, p, lambda p=p,
+                            names=names: self._validate_skill(p, names))
 
     def _validate_skill(self, p: Path, names: dict[str, Path]) -> None:
         kind = "skills"
         text = read_text(p)
         fm, body, present, err = parse_frontmatter(text, required=True)
         if not present or err or not isinstance(fm, dict):
-            self.add(kind, p, "SK001", "ERROR", f"Frontmatter missing or invalid{': ' + err if err else ''}")
+            self.add(kind, p, "SK001", "ERROR",
+                     f"Frontmatter missing or invalid{': ' + err if err else ''}")
             fm = {}
         name = fm.get("name")
         if not isinstance(name, str) or not (1 <= len(name) <= 64) or not SK_NAME_RE.match(name) or "--" in name:
-            self.add(kind, p, "SK002", "ERROR", "name must be 1–64 chars, kebab-case, and not contain --")
+            self.add(kind, p, "SK002", "ERROR",
+                     "name must be 1–64 chars, kebab-case, and not contain --")
         else:
             if name != p.parent.name:
-                self.add(kind, p, "SK003", "ERROR", "name must equal parent directory name")
+                self.add(kind, p, "SK003", "ERROR",
+                         "name must equal parent directory name")
             if name in names:
-                self.add(kind, p, "SK011", "ERROR", f"Duplicate skill name '{name}' also used by {self.rel(names[name])}")
+                self.add(kind, p, "SK011", "ERROR",
+                         f"Duplicate skill name '{name}' also used by {self.rel(names[name])}")
             else:
                 names[name] = p
         desc = fm.get("description")
         if not isinstance(desc, str) or not (1 <= len(desc) <= 1024):
-            self.add(kind, p, "SK004", "ERROR", "description must be present and 1–1024 chars")
+            self.add(kind, p, "SK004", "ERROR",
+                     "description must be present and 1–1024 chars")
         elif not SK_WHEN_RE.search(desc):
-            self.add(kind, p, "SK005", "WARNING", "description should express WHEN to use the skill")
+            self.add(kind, p, "SK005", "WARNING",
+                     "description should express WHEN to use the skill")
         for k in sorted(set(fm) - SK_VALID_KEYS):
-            self.add(kind, p, "SK006", "WARNING", f"Unrecognized top-level key: {k}")
+            self.add(kind, p, "SK006", "WARNING",
+                     f"Unrecognized top-level key: {k}")
         if not body.strip():
             self.add(kind, p, "SK007", "ERROR", "Body must be non-empty")
         if len(body.splitlines()) > 500:
-            self.add(kind, p, "SK008", "WARNING", "Body > 500 lines; use progressive disclosure resources")
+            self.add(kind, p, "SK008", "WARNING",
+                     "Body > 500 lines; use progressive disclosure resources")
         for k in ("user-invocable", "disable-model-invocation"):
             if k in fm and not isinstance(fm[k], bool):
                 self.add(kind, p, "SK009", "ERROR", f"{k} must be boolean")
@@ -429,53 +506,67 @@ class Validator:
             except ValueError:
                 continue
             if not target.exists():
-                self.add(kind, p, "SK012", "WARNING", f"Relative link points at missing bundled resource: {link}")
-        self._check_body_conventions(kind, p, body, "SK013", "SK014", "SK015", bundle_root=p.parent.resolve())
-        self._check_required_sections(kind, p, body, "SK016", SK_REQUIRED_SECTIONS)
+                self.add(kind, p, "SK012", "WARNING",
+                         f"Relative link points at missing bundled resource: {link}")
+        self._check_body_conventions(
+            kind, p, body, "SK013", "SK014", "SK015", bundle_root=p.parent.resolve())
+        self._check_required_sections(
+            kind, p, body, "SK016", SK_REQUIRED_SECTIONS)
 
     # VS Code prompts
     def validate_prompts(self) -> None:
-        kind = "prompts"; d = self.root / "prompts"
+        kind = "prompts"
+        d = self.root / "prompts"
         files = sorted(d.glob("*.prompt.md")) if d.is_dir() else []
         self.file_counts[kind] = len(files)
         names: dict[str, Path] = {}
         for p in files:
-            self.catch_file(kind, p, lambda p=p, names=names: self._validate_prompt(p, names))
+            self.catch_file(kind, p, lambda p=p,
+                            names=names: self._validate_prompt(p, names))
 
     def _validate_prompt(self, p: Path, names: dict[str, Path]) -> None:
         kind = "prompts"
         if not PR_FILENAME_RE.match(p.name):
-            self.add(kind, p, "PR001", "ERROR", "Filename must be kebab-case and end with .prompt.md")
+            self.add(kind, p, "PR001", "ERROR",
+                     "Filename must be kebab-case and end with .prompt.md")
         text = read_text(p)
         fm, body, present, err = parse_frontmatter(text, required=True)
         if not present or err or not isinstance(fm, dict):
-            self.add(kind, p, "PR002", "ERROR", f"Frontmatter missing or invalid{': ' + err if err else ''}")
+            self.add(kind, p, "PR002", "ERROR",
+                     f"Frontmatter missing or invalid{': ' + err if err else ''}")
             fm = {}
         name = fm.get("name")
         expected_name = p.name[:-len(".prompt.md")]
         if not isinstance(name, str) or not SK_NAME_RE.match(name) or "--" in name:
-            self.add(kind, p, "PR003", "ERROR", "name must be non-empty kebab-case")
+            self.add(kind, p, "PR003", "ERROR",
+                     "name must be non-empty kebab-case")
         else:
             if name != expected_name:
-                self.add(kind, p, "PR003", "ERROR", "name must match the filename")
+                self.add(kind, p, "PR003", "ERROR",
+                         "name must match the filename")
             if name in names:
-                self.add(kind, p, "PR003", "ERROR", f"Duplicate prompt name '{name}' also used by {self.rel(names[name])}")
+                self.add(kind, p, "PR003", "ERROR",
+                         f"Duplicate prompt name '{name}' also used by {self.rel(names[name])}")
             else:
                 names[name] = p
         desc = fm.get("description")
         if not isinstance(desc, str) or not desc.strip():
-            self.add(kind, p, "PR004", "ERROR", "description must be a non-empty string")
+            self.add(kind, p, "PR004", "ERROR",
+                     "description must be a non-empty string")
         for key in sorted(set(fm) - PR_VALID_KEYS):
-            self.add(kind, p, "PR005", "WARNING", f"Unrecognized VS Code prompt frontmatter key: {key}")
+            self.add(kind, p, "PR005", "WARNING",
+                     f"Unrecognized VS Code prompt frontmatter key: {key}")
         for key in ("argument-hint", "agent", "model"):
             if key in fm and (not isinstance(fm[key], str) or not fm[key].strip()):
-                self.add(kind, p, "PR005", "ERROR", f"{key} must be a non-empty string when present")
+                self.add(kind, p, "PR005", "ERROR",
+                         f"{key} must be a non-empty string when present")
         tools = fm.get("tools")
         if tools is not None and not (
             isinstance(tools, str)
             or (isinstance(tools, list) and all(isinstance(tool, str) and tool for tool in tools))
         ):
-            self.add(kind, p, "PR005", "ERROR", "tools must be a string or a list of non-empty strings")
+            self.add(kind, p, "PR005", "ERROR",
+                     "tools must be a string or a list of non-empty strings")
         else:
             tool_list = [tools] if isinstance(tools, str) else tools or []
             for tool in tool_list:
@@ -512,10 +603,13 @@ class Validator:
         if not body.strip():
             self.add(kind, p, "PR006", "ERROR", "Body must be non-empty")
         elif not body_starts_with_h1(body):
-            self.add(kind, p, "PR006", "ERROR", "Body must open with a single H1 naming the prompt")
-        self._check_required_sections(kind, p, body, "PR007", PR_REQUIRED_SECTIONS)
+            self.add(kind, p, "PR006", "ERROR",
+                     "Body must open with a single H1 naming the prompt")
+        self._check_required_sections(
+            kind, p, body, "PR007", PR_REQUIRED_SECTIONS)
         if TEMPLATE_PLACEHOLDER_RE.search(body):
-            self.add(kind, p, "PR008", "ERROR", "Unresolved uppercase double-brace template placeholder")
+            self.add(kind, p, "PR008", "ERROR",
+                     "Unresolved uppercase double-brace template placeholder")
 
     # Shared body conventions (docs/templates/) — advisory only.
     def _check_body_conventions(self, kind: str, p: Path, body: str, link_rule: str,
@@ -539,7 +633,8 @@ class Validator:
                      f"Relative link '{link}' does not survive installation into .github/ or "
                      "~/.copilot/; reference the primitive by name and type instead")
         if body.strip() and not body_starts_with_h1(body):
-            self.add(kind, p, h1_rule, "INFO", "Body should open with a single H1 naming the primitive")
+            self.add(kind, p, h1_rule, "INFO",
+                     "Body should open with a single H1 naming the primitive")
 
     def _check_required_sections(
         self,
@@ -553,36 +648,44 @@ class Validator:
         headings = h2_headings(body)
         issues: list[str] = []
         missing = [heading for heading in required if heading not in headings]
-        duplicates = [heading for heading in required if headings.count(heading) > 1]
+        duplicates = [
+            heading for heading in required if headings.count(heading) > 1]
         if missing:
             issues.append(f"missing required sections: {', '.join(missing)}")
         if duplicates:
-            issues.append(f"duplicate required sections: {', '.join(duplicates)}")
+            issues.append(
+                f"duplicate required sections: {', '.join(duplicates)}")
         if not missing and not duplicates:
             positions = [headings.index(heading) for heading in required]
             if positions != sorted(positions):
                 issues.append("required sections are out of template order")
         authoring_only = sorted(AUTHORING_ONLY_SECTIONS.intersection(headings))
         if authoring_only:
-            issues.append(f"authoring-only sections remain: {', '.join(authoring_only)}")
+            issues.append(
+                f"authoring-only sections remain: {', '.join(authoring_only)}")
         if issues:
             self.add(kind, p, rule_id, "ERROR", "; ".join(issues))
 
     # Plugins
     def validate_plugins(self) -> None:
-        kind = "plugins"; d = self.root / "plugins"
-        dirs = sorted([x for x in d.iterdir() if x.is_dir()]) if d.is_dir() else []
+        kind = "plugins"
+        d = self.root / "plugins"
+        dirs = sorted([x for x in d.iterdir() if x.is_dir()]
+                      ) if d.is_dir() else []
         self.file_counts[kind] = len(dirs)
         for pd in dirs:
             manifest = None
             for rel in PLUGIN_MANIFESTS:
                 q = pd / rel
                 if q.exists():
-                    manifest = q; break
+                    manifest = q
+                    break
             if manifest is None:
-                self.add(kind, pd, "PL001", "ERROR", "No plugin manifest found in supported locations")
+                self.add(kind, pd, "PL001", "ERROR",
+                         "No plugin manifest found in supported locations")
                 continue
-            self.catch_file(kind, manifest, lambda manifest=manifest, pd=pd: self._validate_plugin(manifest, pd))
+            self.catch_file(kind, manifest, lambda manifest=manifest,
+                            pd=pd: self._validate_plugin(manifest, pd))
 
     def _validate_plugin(self, p: Path, plugin_dir: Path) -> None:
         kind = "plugins"
@@ -595,28 +698,35 @@ class Validator:
             return
         name = data.get("name")
         if not isinstance(name, str) or len(name) > 64 or not PL_NAME_RE.match(name):
-            self.add(kind, p, "PL003", "ERROR", "name must be kebab-case and ≤ 64 chars")
+            self.add(kind, p, "PL003", "ERROR",
+                     "name must be kebab-case and ≤ 64 chars")
         elif name != plugin_dir.name:
-            self.add(kind, p, "PL004", "WARNING", "name differs from plugin directory name")
+            self.add(kind, p, "PL004", "WARNING",
+                     "name differs from plugin directory name")
         version = data.get("version")
         if not isinstance(version, str) or not SEMVER_RE.match(version):
-            self.add(kind, p, "PL005", "WARNING", "version missing or not semver")
+            self.add(kind, p, "PL005", "WARNING",
+                     "version missing or not semver")
         desc = data.get("description")
         if not isinstance(desc, str) or not desc.strip() or len(desc) > 1024:
-            self.add(kind, p, "PL006", "WARNING", "description missing or > 1024 chars")
+            self.add(kind, p, "PL006", "WARNING",
+                     "description missing or > 1024 chars")
         managed_plugin = plugin_dir.name in self.plugin_sources
         for k in sorted(set(data) - PL_VALID_KEYS):
             severity = "ERROR" if managed_plugin else "WARNING"
-            self.add(kind, p, "PL007", severity, f"Unrecognized top-level key: {k}")
+            self.add(kind, p, "PL007", severity,
+                     f"Unrecognized top-level key: {k}")
         for label, ref in collect_plugin_refs(data):
             if not isinstance(ref, str) or not ref.strip() or has_variable(ref):
                 continue
             resolved, base = resolve_component_ref(ref, p.parent, self.root)
             if resolved is None:
-                self.add(kind, p, "PL008", "ERROR", f"{label} path '{ref}' did not resolve relative to manifest dir or repo root")
+                self.add(kind, p, "PL008", "ERROR",
+                         f"{label} path '{ref}' did not resolve relative to manifest dir or repo root")
             # Resolution base is intentionally not emitted on success to avoid noisy INFO; errors include both attempted bases.
             if label.endswith("skills") and not ref.endswith("/"):
-                self.add(kind, p, "PL009", "WARNING", f"skill ref should end with '/': {ref}")
+                self.add(kind, p, "PL009", "WARNING",
+                         f"skill ref should end with '/': {ref}")
             if label.endswith("agents") and not (
                 ref.endswith(".agent.md") or ref.endswith("/")
             ):
@@ -629,7 +739,8 @@ class Validator:
                 )
         author = data.get("author")
         if author is not None and not (isinstance(author, dict) and isinstance(author.get("name"), str) and author.get("name", "").strip()):
-            self.add(kind, p, "PL010", "WARNING", "author, if present, should be an object with a name")
+            self.add(kind, p, "PL010", "WARNING",
+                     "author, if present, should be an object with a name")
         if managed_plugin:
             self._validate_flat_plugin(
                 p,
@@ -683,7 +794,8 @@ class Validator:
                     )
                     continue
                 if len(refs) != len(set(refs)):
-                    self.add(kind, p, "PL016", "ERROR", f"library component `{key}` contains duplicates")
+                    self.add(kind, p, "PL016", "ERROR",
+                             f"library component `{key}` contains duplicates")
                 if key == "agents":
                     expected_agents = refs
                 else:
@@ -757,14 +869,16 @@ class Validator:
                     "plugins with agents must declare `agents: \"agents/\"`",
                 )
         elif "agents" in data:
-            self.add(kind, p, "PL012", "ERROR", "agents field exists but agents/ is empty")
+            self.add(kind, p, "PL012", "ERROR",
+                     "agents field exists but agents/ is empty")
 
         actual_skills = {
             path.name
             for path in (plugin_dir / "skills").iterdir()
             if path.is_dir() and (path / "SKILL.md").is_file()
         } if (plugin_dir / "skills").is_dir() else set()
-        expected_skill_names = {Path(ref.rstrip("/")).name for ref in expected_skills}
+        expected_skill_names = {
+            Path(ref.rstrip("/")).name for ref in expected_skills}
         if actual_skills != expected_skill_names:
             self.add(
                 kind,
@@ -783,7 +897,8 @@ class Validator:
                     "plugins with skills must declare `skills: \"skills/\"`",
                 )
         elif "skills" in data:
-            self.add(kind, p, "PL016", "ERROR", "skills field exists but skills/ is empty")
+            self.add(kind, p, "PL016", "ERROR",
+                     "skills field exists but skills/ is empty")
 
         extension_refs = source_config.get("extensionSources", [])
         if extension_refs is not None:
@@ -801,7 +916,8 @@ class Validator:
             else:
                 expected_extensions = extension_refs
                 if len(extension_refs) != len(set(extension_refs)):
-                    self.add(kind, p, "PL017", "ERROR", "extensionSources contains duplicates")
+                    self.add(kind, p, "PL017", "ERROR",
+                             "extensionSources contains duplicates")
 
         if "hookSource" in source_config:
             hook_ref = source_config["hookSource"]
@@ -818,10 +934,12 @@ class Validator:
                 try:
                     source.relative_to(plugin_dir.resolve())
                 except ValueError:
-                    self.add(kind, p, "PL015", "ERROR", "repository hookSource escapes plugin root")
+                    self.add(kind, p, "PL015", "ERROR",
+                             "repository hookSource escapes plugin root")
                 else:
                     if not source.is_file():
-                        self.add(kind, p, "PL015", "ERROR", f"repository hookSource not found: {hook_ref}")
+                        self.add(kind, p, "PL015", "ERROR",
+                                 f"repository hookSource not found: {hook_ref}")
                 manifest_hook = hook_ref.removeprefix("./")
                 if data.get("hooks") != manifest_hook:
                     self.add(
@@ -834,7 +952,8 @@ class Validator:
                 else:
                     self._validate_hook(source, plugin_dir)
         elif "hooks" in data:
-            self.add(kind, p, "PL015", "ERROR", "hooks field has no canonical hook source")
+            self.add(kind, p, "PL015", "ERROR",
+                     "hooks field has no canonical hook source")
 
         manifest_extensions = data.get("extensions", [])
         normalized_manifest_extensions = (
@@ -856,7 +975,8 @@ class Validator:
         for ref in expected_extensions:
             canonical = plugin_dir / ref[2:].rstrip("/")
             if not canonical.is_dir():
-                self.add(kind, p, "PL017", "ERROR", f"canonical extension is missing: {ref}")
+                self.add(kind, p, "PL017", "ERROR",
+                         f"canonical extension is missing: {ref}")
 
         mcp_path = plugin_dir / "mcp.json"
         if mcp_path.exists():
@@ -870,7 +990,8 @@ class Validator:
                 )
             self._validate_open_plugin_mcp(mcp_path)
         elif "mcpServers" in data:
-            self.add(kind, p, "PL014", "ERROR", "mcpServers field exists but mcp.json is missing")
+            self.add(kind, p, "PL014", "ERROR",
+                     "mcpServers field exists but mcp.json is missing")
         if not (
             expected_agents
             or expected_skills
@@ -878,41 +999,51 @@ class Validator:
             or "hookSource" in source_config
             or mcp_path.is_file()
         ):
-            self.add(kind, p, "PL018", "ERROR", "plugin declares no installable component")
+            self.add(kind, p, "PL018", "ERROR",
+                     "plugin declares no installable component")
 
     def _validate_open_plugin_mcp(self, p: Path) -> None:
         kind = "plugins"
         try:
             data = json.loads(read_text(p))
         except (OSError, UnicodeError, json.JSONDecodeError) as exc:
-            self.add(kind, p, "PL013", "ERROR", f"Invalid Open Plugin MCP JSON: {exc}")
+            self.add(kind, p, "PL013", "ERROR",
+                     f"Invalid Open Plugin MCP JSON: {exc}")
             return
         if not isinstance(data, dict):
-            self.add(kind, p, "PL013", "ERROR", "Open Plugin MCP root must be an object")
+            self.add(kind, p, "PL013", "ERROR",
+                     "Open Plugin MCP root must be an object")
             return
         if data.get("$schema") != OPEN_MCP_SCHEMA:
-            self.add(kind, p, "PL013", "ERROR", f"mcp.json must declare $schema {OPEN_MCP_SCHEMA}")
+            self.add(kind, p, "PL013", "ERROR",
+                     f"mcp.json must declare $schema {OPEN_MCP_SCHEMA}")
         extra_keys = sorted(set(data) - {"$schema", "mcpServers"})
         if extra_keys:
-            self.add(kind, p, "PL013", "ERROR", f"Unsupported mcp.json keys: {', '.join(extra_keys)}")
+            self.add(kind, p, "PL013", "ERROR",
+                     f"Unsupported mcp.json keys: {', '.join(extra_keys)}")
         servers = data.get("mcpServers")
         if not isinstance(servers, dict):
-            self.add(kind, p, "PL013", "ERROR", "mcp.json mcpServers must be an object")
+            self.add(kind, p, "PL013", "ERROR",
+                     "mcp.json mcpServers must be an object")
             return
         for name, config in servers.items():
             if not isinstance(name, str) or not name or not isinstance(config, dict):
-                self.add(kind, p, "PL014", "ERROR", "MCP servers require non-empty names and object configs")
+                self.add(kind, p, "PL014", "ERROR",
+                         "MCP servers require non-empty names and object configs")
                 continue
             server_type = config.get("type")
             if server_type == "stdio":
                 allowed = {"type", "command", "args", "env", "cwd"}
                 if not isinstance(config.get("command"), str) or not config["command"]:
-                    self.add(kind, p, "PL014", "ERROR", f"MCP server '{name}' requires a command")
+                    self.add(kind, p, "PL014", "ERROR",
+                             f"MCP server '{name}' requires a command")
                 args = config.get("args")
                 if args is not None and not (
-                    isinstance(args, list) and all(isinstance(arg, str) for arg in args)
+                    isinstance(args, list) and all(isinstance(arg, str)
+                                                   for arg in args)
                 ):
-                    self.add(kind, p, "PL014", "ERROR", f"MCP server '{name}' args must be strings")
+                    self.add(kind, p, "PL014", "ERROR",
+                             f"MCP server '{name}' args must be strings")
                 env = config.get("env")
                 if env is not None and not (
                     isinstance(env, dict)
@@ -923,17 +1054,20 @@ class Validator:
                         for key, value in env.items()
                     )
                 ):
-                    self.add(kind, p, "PL014", "ERROR", f"MCP server '{name}' env is invalid")
+                    self.add(kind, p, "PL014", "ERROR",
+                             f"MCP server '{name}' env is invalid")
             elif server_type in {"streamable-http", "sse"}:
                 allowed = {"type", "url", "headers"}
                 if not isinstance(config.get("url"), str) or not config["url"]:
-                    self.add(kind, p, "PL014", "ERROR", f"MCP server '{name}' requires a URL")
+                    self.add(kind, p, "PL014", "ERROR",
+                             f"MCP server '{name}' requires a URL")
                 headers = config.get("headers")
                 if headers is not None and not (
                     isinstance(headers, dict)
                     and all(isinstance(key, str) and isinstance(value, str) for key, value in headers.items())
                 ):
-                    self.add(kind, p, "PL014", "ERROR", f"MCP server '{name}' headers are invalid")
+                    self.add(kind, p, "PL014", "ERROR",
+                             f"MCP server '{name}' headers are invalid")
             else:
                 self.add(
                     kind,
@@ -955,8 +1089,10 @@ class Validator:
 
     # Hooks
     def validate_hooks(self) -> None:
-        kind = "hooks"; d = self.root / "hooks"
-        files: list[tuple[Path, Path]] = [(p, self.root) for p in sorted(d.glob("*/hooks.json"))] if d.is_dir() else []
+        kind = "hooks"
+        d = self.root / "hooks"
+        files: list[tuple[Path, Path]] = [(p, self.root) for p in sorted(
+            d.glob("*/hooks.json"))] if d.is_dir() else []
         repo_root = find_repo_root(self.root)
         installed = repo_root / ".github" / "hooks"
         if installed.is_dir() and installed.resolve() != d.resolve():
@@ -972,7 +1108,8 @@ class Validator:
                     "ERROR",
                     "Hook package and installed file identifiers must be kebab-case",
                 )
-            self.catch_file(kind, p, lambda p=p, base=base: self._validate_hook(p, base))
+            self.catch_file(kind, p, lambda p=p,
+                            base=base: self._validate_hook(p, base))
 
     def _validate_hook(self, p: Path, base: Path | None = None) -> None:
         kind = "hooks"
@@ -993,36 +1130,47 @@ class Validator:
         for event, entries in hooks.items():
             if event not in HK_EVENTS:
                 if event in HK_PASCAL_ALIASES:
-                    self.add(kind, p, "HK005", "WARNING", f"Use native camelCase event name instead of PascalCase alias '{event}'")
+                    self.add(kind, p, "HK005", "WARNING",
+                             f"Use native camelCase event name instead of PascalCase alias '{event}'")
                 else:
-                    self.add(kind, p, "HK004", "ERROR", f"Unknown hook event name: {event}")
+                    self.add(kind, p, "HK004", "ERROR",
+                             f"Unknown hook event name: {event}")
             if not isinstance(entries, list):
-                self.add(kind, p, "HK006", "ERROR", f"Entries for {event} must be a list")
+                self.add(kind, p, "HK006", "ERROR",
+                         f"Entries for {event} must be a list")
                 continue
             for idx, entry in enumerate(entries):
                 if not isinstance(entry, dict):
-                    self.add(kind, p, "HK006", "ERROR", f"Hook entry {event}[{idx}] must be an object")
+                    self.add(kind, p, "HK006", "ERROR",
+                             f"Hook entry {event}[{idx}] must be an object")
                     continue
                 loc = f"{event}[{idx}]"
                 etype = entry.get("type")
                 if etype is not None and etype not in {"command", "http"}:
-                    self.add(kind, p, "HK011", "WARNING", f"{loc} type should be 'command' or 'http'")
-                has_runner = any(entry.get(k) for k in ("bash", "powershell", "command")) or (entry.get("type") == "http" and entry.get("url"))
+                    self.add(kind, p, "HK011", "WARNING",
+                             f"{loc} type should be 'command' or 'http'")
+                has_runner = any(entry.get(k) for k in ("bash", "powershell", "command")) or (
+                    entry.get("type") == "http" and entry.get("url"))
                 if not has_runner:
-                    self.add(kind, p, "HK006", "ERROR", f"{loc} must define bash, powershell, command, or http url")
+                    self.add(kind, p, "HK006", "ERROR",
+                             f"{loc} must define bash, powershell, command, or http url")
                 for k in sorted(set(entry) - HK_VALID_KEYS):
-                    self.add(kind, p, "HK007", "WARNING", f"{loc} has unrecognized key: {k}")
+                    self.add(kind, p, "HK007", "WARNING",
+                             f"{loc} has unrecognized key: {k}")
                 timeout = entry.get("timeoutSec")
                 if not isinstance(timeout, int) or timeout <= 0:
-                    self.add(kind, p, "HK010", "WARNING", f"{loc} timeoutSec missing or not a positive integer")
+                    self.add(kind, p, "HK010", "WARNING",
+                             f"{loc} timeoutSec missing or not a positive integer")
                 for k in ("bash", "powershell", "command"):
                     cmd = entry.get(k)
                     for script in referenced_scripts(cmd):
                         resolved = resolve_script(script, p.parent, base)
                         if resolved is None:
-                            self.add(kind, p, "HK008", "ERROR", f"{loc} {k} script '{script}' does not exist relative to repo root or hook dir")
+                            self.add(
+                                kind, p, "HK008", "ERROR", f"{loc} {k} script '{script}' does not exist relative to repo root or hook dir")
                         elif not os.access(resolved, os.X_OK):
-                            self.add(kind, p, "HK009", "ERROR", f"{loc} {k} script '{script}' is not executable")
+                            self.add(
+                                kind, p, "HK009", "ERROR", f"{loc} {k} script '{script}' is not executable")
 
 
 def read_text(path: Path) -> str:
@@ -1036,7 +1184,8 @@ def parse_frontmatter(text: str, required: bool) -> tuple[dict[str, Any], str, b
     end_idx = None
     for i in range(1, len(lines)):
         if lines[i].strip() == "---":
-            end_idx = i; break
+            end_idx = i
+            break
     if end_idx is None:
         return {}, "", True, "closing --- not found"
     raw = "".join(lines[1:end_idx])
@@ -1126,7 +1275,8 @@ def _parse_yaml_mapping(src: list[str], index: int, indent: int) -> tuple[dict[s
             result[key] = {}
             index = child
             continue
-        result[key], index = _parse_yaml_node(src, child, _yaml_indent(src[child]))
+        result[key], index = _parse_yaml_node(
+            src, child, _yaml_indent(src[child]))
     return result, index
 
 
@@ -1147,12 +1297,14 @@ def _parse_yaml_sequence(src: list[str], index: int, indent: int) -> tuple[list[
             result.append(parse_scalar(raw_item))
             continue
         key, raw_value = match.groups()
-        item: dict[str, Any] = {key: parse_scalar(raw_value.strip()) if raw_value.strip() else {}}
+        item: dict[str, Any] = {key: parse_scalar(
+            raw_value.strip()) if raw_value.strip() else {}}
         child = _next_yaml_content(src, index)
         if child < len(src) and _yaml_indent(src[child]) > indent:
             child_indent = _yaml_indent(src[child])
             if raw_value.strip():
-                remainder, index = _parse_yaml_mapping(src, child, child_indent)
+                remainder, index = _parse_yaml_mapping(
+                    src, child, child_indent)
                 item.update(remainder)
             else:
                 item[key], index = _parse_yaml_node(src, child, child_indent)
@@ -1174,7 +1326,8 @@ def _parse_yaml_block_scalar(
             indent = _yaml_indent(line)
             if indent <= parent_indent:
                 break
-            content_indent = indent if content_indent is None else min(content_indent, indent)
+            content_indent = indent if content_indent is None else min(
+                content_indent, indent)
         block.append(line)
         index += 1
     base_indent = content_indent if content_indent is not None else parent_indent + 2
@@ -1188,10 +1341,14 @@ def _parse_yaml_block_scalar(
 
 
 def parse_scalar(val: str) -> Any:
-    if val == "": return ""
-    if val in {"true", "True"}: return True
-    if val in {"false", "False"}: return False
-    if val in {"null", "Null", "~"}: return None
+    if val == "":
+        return ""
+    if val in {"true", "True"}:
+        return True
+    if val in {"false", "False"}:
+        return False
+    if val in {"null", "Null", "~"}:
+        return None
     if val.startswith("[") and val.endswith("]"):
         try:
             return ast.literal_eval(val)
@@ -1204,8 +1361,10 @@ def parse_scalar(val: str) -> Any:
         except Exception:
             return val[1:-1]
     if re.fullmatch(r"-?\d+", val):
-        try: return int(val)
-        except Exception: pass
+        try:
+            return int(val)
+        except Exception:
+            pass
     return val.split(" #", 1)[0].strip()
 
 
@@ -1233,7 +1392,6 @@ def valid_apply_to(value: Any) -> bool:
     return bool(globs) and all(g.strip() and balanced(g.strip()) for g in globs)
 
 
-
 def split_globs(s: str) -> list[str]:
     parts: list[str] = []
     start = 0
@@ -1253,16 +1411,20 @@ def split_globs(s: str) -> list[str]:
     parts.append(s[start:])
     return parts
 
+
 def balanced(s: str) -> bool:
     pairs = [("[", "]"), ("{", "}")]
     for open_c, close_c in pairs:
         depth = 0
         for ch in s:
-            if ch == open_c: depth += 1
+            if ch == open_c:
+                depth += 1
             elif ch == close_c:
                 depth -= 1
-                if depth < 0: return False
-        if depth != 0: return False
+                if depth < 0:
+                    return False
+        if depth != 0:
+            return False
     return True
 
 
@@ -1323,6 +1485,30 @@ def relative_links(body: str) -> Iterable[str]:
         yield target.replace("%20", " ")
 
 
+def body_tool_tokens(body: str) -> list[str]:
+    """Return no-op or legacy tool tokens taught as usable tool lists in a body.
+
+    Agents that document tool lists propagate them into the agents they generate, and
+    the CLI drops unrecognized tokens silently, so a wrong example removes capability
+    with no error anywhere. Fenced blocks are skipped: they hold source samples and MCP
+    server configuration whose arrays legitimately contain words like `run` or `search`.
+    """
+    offenders: set[str] = set()
+    for line in strip_code_fences(body).splitlines():
+        if BODY_TOOL_HEDGE_RE.search(line):
+            continue
+        candidates: list[str] = []
+        for match in BODY_TOOL_LIST_RE.finditer(line):
+            candidates.extend(BODY_QUOTED_TOKEN_RE.findall(match.group(0)))
+        for match in BODY_BACKTICK_RUN_RE.finditer(line):
+            candidates.extend(BODY_BACKTICK_TOKEN_RE.findall(match.group(0)))
+        offenders.update(
+            token for token in candidates
+            if token.casefold() in BODY_TOOL_VOCABULARY
+        )
+    return sorted(offenders)
+
+
 def has_variable(ref: str) -> bool:
     return "${" in ref or ref.startswith("~")
 
@@ -1337,16 +1523,20 @@ def collect_plugin_refs(data: dict[str, Any]) -> Iterable[tuple[str, str]]:
                     yield label, x
                 elif isinstance(x, dict):
                     for k in ("path", "source"):
-                        if isinstance(x.get(k), str): yield label, x[k]
+                        if isinstance(x.get(k), str):
+                            yield label, x[k]
         elif isinstance(val, dict):
             for k in ("path", "source"):
-                if isinstance(val.get(k), str): yield label, val[k]
+                if isinstance(val.get(k), str):
+                    yield label, val[k]
             # mcpServers may be name -> path/config
             for v in val.values():
-                if isinstance(v, str): yield label, v
+                if isinstance(v, str):
+                    yield label, v
                 elif isinstance(v, dict):
                     for k in ("path", "source"):
-                        if isinstance(v.get(k), str): yield label, v[k]
+                        if isinstance(v.get(k), str):
+                            yield label, v[k]
     for key in ("agents", "skills", "commands", "hooks", "mcpServers", "extensions"):
         yield from strings(key, data.get(key))
 
@@ -1354,7 +1544,8 @@ def collect_plugin_refs(data: dict[str, Any]) -> Iterable[tuple[str, str]]:
 def resolve_component_ref(ref: str, manifest_dir: Path, root: Path) -> tuple[Path | None, str | None]:
     cleaned = ref.split("#", 1)[0]
     for base_name, base in (("manifest", manifest_dir), ("root", root)):
-        candidate = (base / cleaned).resolve() if not Path(cleaned).is_absolute() else Path(cleaned)
+        candidate = (
+            base / cleaned).resolve() if not Path(cleaned).is_absolute() else Path(cleaned)
         if candidate.exists():
             return candidate, base_name
     return None, None
@@ -1372,7 +1563,8 @@ def referenced_scripts(cmd: Any) -> Iterable[str]:
         if part.startswith("-"):
             continue
         if part.startswith(("./", "../", "/")) or "/" in part:
-            refs.append(part); break
+            refs.append(part)
+            break
     return refs
 
 
@@ -1389,14 +1581,16 @@ def report_json(v: Validator) -> dict[str, Any]:
     summary = []
     for kind in ALL_KINDS:
         fs = [f for f in v.findings if f.kind == kind]
-        summary.append({"kind": kind, "files": v.file_counts.get(kind, 0), "errors": sum(f.severity == "ERROR" for f in fs), "warnings": sum(f.severity == "WARNING" for f in fs)})
+        summary.append({"kind": kind, "files": v.file_counts.get(kind, 0), "errors": sum(
+            f.severity == "ERROR" for f in fs), "warnings": sum(f.severity == "WARNING" for f in fs)})
     return {"summary": summary, "findings": [asdict(f) for f in v.findings]}
 
 
 def print_human(v: Validator) -> None:
     order = {"ERROR": 0, "WARNING": 1, "INFO": 2}
     for kind in ALL_KINDS:
-        fs = [f for f in v.findings if f.kind == kind and (not v.quiet or f.severity == "ERROR")]
+        fs = [f for f in v.findings if f.kind == kind and (
+            not v.quiet or f.severity == "ERROR")]
         if not fs and v.quiet:
             continue
         print(f"\n## {kind} ({v.file_counts.get(kind, 0)} files)")
@@ -1405,7 +1599,8 @@ def print_human(v: Validator) -> None:
             grouped[f.rule_id].append(f)
         for rule, items in grouped.items():
             counts = Counter(i.severity for i in items)
-            count_s = ", ".join(f"{sev}={counts[sev]}" for sev in ("ERROR", "WARNING", "INFO") if counts[sev])
+            count_s = ", ".join(f"{sev}={counts[sev]}" for sev in (
+                "ERROR", "WARNING", "INFO") if counts[sev])
             print(f"  {rule} ({count_s})")
             for f in items:
                 print(f"    [{f.severity}] {f.file}: {f.message}")
@@ -1422,17 +1617,22 @@ def print_summary(v: Validator) -> None:
 
 
 def main(argv: list[str] | None = None) -> int:
-    ap = argparse.ArgumentParser(description="Validate Copilot primitive files against the canonical harness spec.")
-    ap.add_argument("--strict", action="store_true", help="exit 1 on warnings as well as errors")
-    ap.add_argument("--json", action="store_true", dest="json_out", help="emit machine-readable JSON report to stdout")
-    ap.add_argument("--kind", action="append", choices=ALL_KINDS, help="validate only this kind; repeatable")
+    ap = argparse.ArgumentParser(
+        description="Validate Copilot primitive files against the canonical harness spec.")
+    ap.add_argument("--strict", action="store_true",
+                    help="exit 1 on warnings as well as errors")
+    ap.add_argument("--json", action="store_true", dest="json_out",
+                    help="emit machine-readable JSON report to stdout")
+    ap.add_argument("--kind", action="append", choices=ALL_KINDS,
+                    help="validate only this kind; repeatable")
     ap.add_argument(
         "--root",
         type=Path,
         default=default_harness_root(),
         help="canonical harness root (default: <repo>/harness/github-copilot)",
     )
-    ap.add_argument("--quiet", action="store_true", help="human output: only summary and errors")
+    ap.add_argument("--quiet", action="store_true",
+                    help="human output: only summary and errors")
     args = ap.parse_args(argv)
 
     v = Validator(args.root, quiet=args.quiet)
@@ -1445,6 +1645,7 @@ def main(argv: list[str] | None = None) -> int:
     errors = any(f.severity == "ERROR" for f in v.findings)
     warnings = any(f.severity == "WARNING" for f in v.findings)
     return 1 if errors or (args.strict and warnings) else 0
+
 
 if __name__ == "__main__":
     raise SystemExit(main())

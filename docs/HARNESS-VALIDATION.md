@@ -46,6 +46,21 @@ Verification date: 2026-08-21. Target runtime: GitHub Copilot CLI 1.0.81-4.
 | Open Horizons safety payloads | A safe `terraform plan` payload produced no stdout. A `terraform apply` payload returned `permissionDecision: ask` with the expected approval reason. |
 | VS Code prompt runtime | First-party prompt/tool/approval pages were reverified and static prompt metadata passed. **Chat: Run Prompt** was not run because no VS Code CLI or customization command was available to this client; environment-specific prompt tool sets remain in the capability audit runtime queue. |
 
+## Body tool-token rule and capability authority verification
+
+Verification date: 2026-08-24. Target runtime: repository validators only. No product version was probed,
+so the CLI tool-token evidence recorded above is unchanged and its dates were not refreshed.
+
+| Evidence | Verified result |
+| --- | --- |
+| Frontmatter-only coverage gap | Every body rule in `validate_primitives.py` (`AG018`-`AG021`, `IN010`-`IN013`, `SK013`-`SK016`, `PR006`-`PR008`) is structural and INFO level, so no gate inspected prose for tool tokens. `custom-agent-foundry.agent.md` taught `search`, `fetch`, `githubRepo`, `usages`, and `run_in_terminal` as literal `tools:` values and passed every check. |
+| `AG024` (new, WARNING) | Scans the agent body for no-op or legacy tokens presented inside a usable tool list. A first pass produced 31 findings across 7 files; 26 of those were the correct pattern (tokens named in order to reject or historicize them) plus legitimate `microsoft.docs.mcp` MCP references. Adding a negative-context guard and excluding MCP server identifiers reduced the result to the 5 real tokens in `custom-agent-foundry.agent.md`. Fenced blocks are skipped so source samples and MCP `args` arrays containing `run` or `search` stay silent. |
+| `AG024` negative test | A scratch agent declaring `tools: ["search"]` with a body list of `['search', 'githubRepo', 'usages']` raised `AG017` as ERROR and three `AG024` WARNINGs, then was removed. |
+| Capability authority detection | `authority()` matched only the literal phrases `read-only policy`, `read-only reviewer`, `editing policy`, and `write policy`. Broadening it to imperative wording reclassified `java-mcp-expert.agent.md` from `unspecified` to `read-only`, exposing a read-only agent that inherited every tool. |
+| Bounded-write review queue | No rule covered a bounded-write agent that declares no `tools:` allow-list. Forty-three agents are in that state. A tool allow-list cannot express a policy that scopes which files an agent may touch, so these are reported as `capability-review-required` rather than blocked, and each needs a recorded human decision. |
+| Stale committed ledger | `docs/PRIMITIVE-CAPABILITIES.json` at `HEAD` recorded `tools: ['read', 'grep', 'glob', 'edit', 'execute', 'web_fetch', 'web_search']` for `plugins/backstage-expert/agents/backstage-expert.agent.md`, but the unmodified source declared `[execute, read, ms-vscode.vscode-websearchforcopilot/websearch, edit, search]`. The committed ledger was hiding a real `search` no-op token. |
+| Gate suite after the change | All nine repository gates pass, including `validate_primitives.py --strict` with zero errors and zero warnings. Blocking capability findings went from a falsely reported 0 to 2 real findings, both fixed. |
+
 ## Backstage Expert source and capability verification
 
 Verification date: 2026-08-21. Source application: Backstage `1.54.0-next.3`. Exact reviewed

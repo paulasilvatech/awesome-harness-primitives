@@ -62,8 +62,23 @@ GENERIC_AGENT_TOOLS = {
     "web_fetch",
     "web_search",
 }
-READ_ONLY_RE = re.compile(r"\bread-only (?:policy|reviewer)\b", re.IGNORECASE)
-EDIT_POLICY_RE = re.compile(r"\b(?:editing|write) policy\b", re.IGNORECASE)
+# Bodies declare authority in prose. The labelled "policy" forms are the common shape, but
+# several agents only carry the imperative sentence, so both spellings must be detected or
+# the agent silently classifies as unspecified and escapes every capability check below.
+READ_ONLY_RE = re.compile(
+    r"\bread-only (?:policy|reviewer)\b"
+    r"|\bdo not create,\s*edit,\s*move\b",
+    re.IGNORECASE,
+)
+SOURCE_SCOPED_RE = re.compile(
+    r"(?:read-only policy|do not create,\s*edit,\s*move)[^.]*source files",
+    re.IGNORECASE,
+)
+EDIT_POLICY_RE = re.compile(
+    r"\b(?:editing|write) policy\b"
+    r"|^\s*(?:[-*]\s*)?(?:\*\*)?(?:modify|create or update|create and edit) only\b",
+    re.IGNORECASE | re.MULTILINE,
+)
 
 
 @dataclass(frozen=True)
@@ -114,7 +129,7 @@ def tool_list(value: Any) -> list[str]:
 
 def authority(body: str) -> str:
     if READ_ONLY_RE.search(body):
-        if re.search(r"read-only policy.*source files", body, re.IGNORECASE):
+        if SOURCE_SCOPED_RE.search(body):
             return "source-read-only"
         return "read-only"
     if EDIT_POLICY_RE.search(body):
@@ -160,7 +175,8 @@ def agent_row(
 ) -> CapabilityRow:
     data, body = metadata(path)
     tools = tool_list(data.get("tools"))
-    mode = "inherit-all" if "tools" not in data else ("disabled" if not tools else "allow-list")
+    mode = "inherit-all" if "tools" not in data else (
+        "disabled" if not tools else "allow-list")
     target = str(data.get("target", "vscode+github-copilot"))
     agent_authority = authority(body)
     notes: list[str] = []
@@ -176,6 +192,10 @@ def agent_row(
     ):
         notes.append("read-only-allows-editing")
         blocking = True
+    # A bounded-write policy scopes which files an agent may touch, which no tool
+    # allow-list can express, so this is a review queue rather than a blocker.
+    if agent_authority == "bounded-write" and mode == "inherit-all":
+        notes.append("bounded-write-inherits-all-tools")
     for tool in tools:
         normalized = tool.casefold()
         if normalized in NOOP_TOOLS and target != "vscode":
@@ -185,11 +205,16 @@ def agent_row(
             notes.append(f"runtime-tool:{tool}")
         elif normalized not in GENERIC_AGENT_TOOLS:
             notes.append(f"environment-tool:{tool}")
-    status = "blocked" if blocking else (
-        "runtime-verification-required"
-        if any(note.startswith(("runtime-tool:", "environment-tool:")) for note in notes)
-        else "current-static"
-    )
+    if blocking:
+        status = "blocked"
+    elif any(
+        note.startswith(("runtime-tool:", "environment-tool:")) for note in notes
+    ):
+        status = "runtime-verification-required"
+    elif "bounded-write-inherits-all-tools" in notes:
+        status = "capability-review-required"
+    else:
+        status = "current-static"
     return CapabilityRow(
         kind="agent",
         name=source_name(path, "agent", data),
@@ -215,7 +240,8 @@ def prompt_row(
 ) -> CapabilityRow:
     data, body = metadata(path)
     tools = tool_list(data.get("tools"))
-    mode = "inherit-agent" if "tools" not in data else ("disabled" if not tools else "allow-list")
+    mode = "inherit-agent" if "tools" not in data else (
+        "disabled" if not tools else "allow-list")
     selected_agent = data.get("agent")
     notes: list[str] = []
     blocking = False
@@ -250,7 +276,8 @@ def prompt_row(
         authority=authority(body),
         tools_mode=mode,
         tools=tools,
-        selected_agent=selected_agent if isinstance(selected_agent, str) else None,
+        selected_agent=selected_agent if isinstance(
+            selected_agent, str) else None,
         model=data.get("model"),
         status=status,
         notes=sorted(set(notes)),
@@ -301,10 +328,17 @@ def build_audit() -> dict[str, Any]:
             "blocked": status_counts["blocked"],
             "currentStatic": status_counts["current-static"],
             "runtimeVerificationRequired": status_counts["runtime-verification-required"],
+            "capabilityReviewRequired": status_counts["capability-review-required"],
             "fixedModels": sum(row.model is not None for row in rows),
             "readOnlyAgentsInheritingAll": sum(
                 row.kind == "agent"
                 and row.authority == "read-only"
+                and row.tools_mode == "inherit-all"
+                for row in rows
+            ),
+            "boundedWriteAgentsInheritingAll": sum(
+                row.kind == "agent"
+                and row.authority == "bounded-write"
                 and row.tools_mode == "inherit-all"
                 for row in rows
             ),
@@ -342,6 +376,7 @@ def render_report(audit: dict[str, Any]) -> str:
             by_kind_mode[(kind, "disabled")],
             by_kind_status[(kind, "current-static")],
             by_kind_status[(kind, "runtime-verification-required")],
+            by_kind_status[(kind, "capability-review-required")],
             by_kind_status[(kind, "blocked")],
         ]
         for kind in ("agent", "prompt")
@@ -359,6 +394,16 @@ def render_report(audit: dict[str, Any]) -> str:
     runtime_table = (
         table(["Type", "Name", "Path", "Reason"], runtime_rows)
         if runtime_rows
+        else "None."
+    )
+    review_rows = [
+        [row["kind"], row["name"], row["path"], row["authority"]]
+        for row in rows
+        if row["status"] == "capability-review-required"
+    ]
+    review_table = (
+        table(["Type", "Name", "Path", "Authority"], review_rows)
+        if review_rows
         else "None."
     )
     return f"""# Primitive Capability Audit
@@ -381,21 +426,23 @@ enabled tool runs.
 ## Summary
 
 {table(
-    [
-        "Type",
-        "Sources",
-        "Inherited tools",
-        "Allow-lists",
-        "Tools disabled",
-        "Current static",
-        "Runtime check",
-        "Blocked",
-    ],
-    summary_rows,
-)}
+        [
+            "Type",
+            "Sources",
+            "Inherited tools",
+            "Allow-lists",
+            "Tools disabled",
+            "Current static",
+            "Runtime check",
+            "Capability review",
+            "Blocked",
+        ],
+        summary_rows,
+    )}
 
 - Fixed model pins: {summary["fixedModels"]}.
 - Read-only agents inheriting all tools: {summary["readOnlyAgentsInheritingAll"]}.
+- Bounded-write agents inheriting all tools: {summary["boundedWriteAgentsInheritingAll"]}.
 - Blocking capability findings: {summary["blocked"]}.
 - Full machine-readable ledger: `docs/PRIMITIVE-CAPABILITIES.json`.
 
@@ -406,6 +453,15 @@ server or extension in the target profile.
 
 {runtime_table}
 
+## Capability review queue
+
+These agents state a bounded-write editing policy in the body but declare no `tools:` allow-list, so
+they inherit every tool. A policy that scopes *which files* an agent may touch cannot be expressed as a
+tool allow-list, so each entry needs a human decision: narrow the tools, narrow the prose, or accept the
+inheritance deliberately.
+
+{review_table}
+
 ## Acceptance
 
 Static capability policy passes only when:
@@ -414,8 +470,10 @@ Static capability policy passes only when:
 2. No Copilot CLI no-op token appears in a cross-surface agent.
 3. No legacy VS Code prompt tool name remains.
 4. Read-only agents do not silently inherit all tools.
-5. Prompt agent references resolve to a built-in role or canonical custom-agent identifier.
-6. Environment-specific tools stay in the runtime verification queue until exercised in that environment.
+5. Bounded-write agents that inherit all tools stay in the capability review queue until a
+   human decision is recorded.
+6. Prompt agent references resolve to a built-in role or canonical custom-agent identifier.
+7. Environment-specific tools stay in the runtime verification queue until exercised in that environment.
 
 Static validation does not replace **Configure Tools**, **Chat: Run Prompt**, approval-policy review, or an
 interactive test in the target VS Code profile.
@@ -433,7 +491,8 @@ def stale_outputs(ledger: str, report: str) -> list[Path]:
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--check", action="store_true", help="fail when reports are stale")
+    parser.add_argument("--check", action="store_true",
+                        help="fail when reports are stale")
     parser.add_argument("--json", action="store_true", dest="json_output")
     args = parser.parse_args(argv)
 

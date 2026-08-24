@@ -2,6 +2,7 @@
 name: 'az-cost-optimize'
 description: 'Analyze Azure application resources and produce cost optimization issues or recommendations.'
 agent: 'agent'
+tools: ['read', 'search', 'azure-mcp/*', 'github/*']
 argument-hint: 'repository=<owner/repo> subscription=<optional> resource-group=<optional>'
 ---
 
@@ -36,7 +37,7 @@ Use this prompt when Azure resources are deployed and the team wants trackable c
 
 - Run `azmcp-bestpractices-get` to retrieve Azure optimization best practices and cite applicable guidance.
 - Discover subscriptions, resource groups, resources, SKUs, tiers, settings, relationships, and dependencies.
-- Scan only IaC files using `file_search` patterns: `**/*.bicep`, `**/*.tf`, `**/main.json`, and `**/*template*.json`.
+- Scan only IaC files using `search` patterns: `**/*.bicep`, `**/*.tf`, `**/main.json`, and `**/*template*.json`.
 - Stop and report no IaC files found if the IaC scan finds none.
 - Use Azure MCP tools first and Azure CLI fallbacks where MCP coverage is unavailable.
 - Collect usage metrics from Log Analytics and monitoring data.
@@ -201,7 +202,7 @@ Execute `azmcp-bestpractices-get` to get some of the latest Azure optimization g
 Execute `azmcp-subscription-list` to find available subscriptions. Execute `azmcp-group-list --subscription <subscription-id>` to find resource groups. List all resources in relevant groups with `az resource list --subscription <id> --resource-group <name>`. For each resource type, use MCP tools first when possible, then CLI fallback: `azmcp-cosmos-account-list --subscription <id>` for Cosmos DB accounts, `azmcp-storage-account-list --subscription <id>` for Storage accounts, `azmcp-monitor-workspace-list --subscription <id>` for Log Analytics workspaces, `azmcp-keyvault-key-list` for Key Vaults, `az webapp list` for Web Apps, `az appservice plan list` for App Service Plans, `az functionapp list` for Function Apps, `az sql server list` for SQL Servers, and `az redis list` for Redis Cache.
 
 **Step 3 — Detect IaC files only.**
-Use `file_search` for `**/*.bicep`, `**/*.tf`, `**/main.json`, and `**/*template*.json`. Parse resource definitions to understand intended configurations. Compare against discovered resources to identify discrepancies. Note IaC presence for implementation recommendations later on. Do not use any other repository files; they are not a source of truth. If no IaC files are found, stop and report no IaC files found to the user.
+Use `search` for `**/*.bicep`, `**/*.tf`, `**/main.json`, and `**/*template*.json`. Parse resource definitions to understand intended configurations. Compare against discovered resources to identify discrepancies. Note IaC presence for implementation recommendations later on. Do not use any other repository files; they are not a source of truth. If no IaC files are found, stop and report no IaC files found to the user.
 
 **Step 4 — Analyze configuration.**
 Extract current SKUs, tiers, and settings for each resource. Identify relationships and dependencies. Map utilization patterns where available.

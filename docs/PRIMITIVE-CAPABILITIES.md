@@ -17,13 +17,14 @@ enabled tool runs.
 
 ## Summary
 
-| Type | Sources | Inherited tools | Allow-lists | Tools disabled | Current static | Runtime check | Blocked |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| agent | 240 | 44 | 194 | 2 | 197 | 43 | 0 |
-| prompt | 59 | 24 | 35 | 0 | 56 | 3 | 0 |
+| Type | Sources | Inherited tools | Allow-lists | Tools disabled | Current static | Runtime check | Capability review | Blocked |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| agent | 240 | 42 | 196 | 2 | 154 | 44 | 42 | 0 |
+| prompt | 59 | 22 | 37 | 0 | 54 | 5 | 0 | 0 |
 
 - Fixed model pins: 0.
 - Read-only agents inheriting all tools: 0.
+- Bounded-write agents inheriting all tools: 42.
 - Blocking capability findings: 0.
 - Full machine-readable ledger: `docs/PRIMITIVE-CAPABILITIES.json`.
 
@@ -40,6 +41,7 @@ server or extension in the target profile.
 | agent | azure-iac-exporter | harness/github-copilot/agents/azure-iac-exporter.agent.md | runtime-tool:azure-mcp/* |
 | agent | azure-iac-generator | harness/github-copilot/agents/azure-iac-generator.agent.md | runtime-tool:azure-mcp/azureterraformbestpractices, runtime-tool:azure-mcp/bicepschema, runtime-tool:azure-mcp/search, runtime-tool:pulumi-mcp/get-type |
 | agent | azure-portal-deploy | harness/github-copilot/plugins/open-horizons-platform/agents/azure-portal-deploy.agent.md | runtime-tool:azure/* |
+| agent | backstage-expert | harness/github-copilot/plugins/backstage-expert/agents/backstage-expert.agent.md | runtime-tool:ms-vscode.vscode-websearchforcopilot/websearch |
 | agent | C#/.NET Janitor | harness/github-copilot/agents/csharp-dotnet-janitor.agent.md | runtime-tool:github/* |
 | agent | CAST Imaging Impact Analysis Agent | harness/github-copilot/agents/cast-imaging-impact-analysis.agent.md | runtime-tool:imaging-impact-analysis/* |
 | agent | CAST Imaging Software Discovery Agent | harness/github-copilot/agents/cast-imaging-software-discovery.agent.md | runtime-tool:imaging-structural-search/* |
@@ -77,9 +79,63 @@ server or extension in the target profile.
 | agent | Terraform Agent | harness/github-copilot/agents/terraform.agent.md | runtime-tool:terraform/* |
 | agent | Universal Janitor | harness/github-copilot/agents/janitor.agent.md | runtime-tool:github/* |
 | agent | VS Code Insiders Accessibility Tracker | harness/github-copilot/agents/insiders-a11y-tracker.agent.md | runtime-tool:github/issue_read, runtime-tool:github/search_issues |
+| prompt | az-cost-optimize | harness/github-copilot/prompts/az-cost-optimize.prompt.md | runtime-tool:azure-mcp/*, runtime-tool:github/* |
+| prompt | azure-resource-health-diagnose | harness/github-copilot/prompts/azure-resource-health-diagnose.prompt.md | runtime-tool:azure-mcp/* |
 | prompt | playwright-automation-fill-in-form | harness/github-copilot/prompts/playwright-automation-fill-in-form.prompt.md | runtime-tool:playwright |
 | prompt | playwright-explore-website | harness/github-copilot/prompts/playwright-explore-website.prompt.md | runtime-tool:playwright |
 | prompt | playwright-generate-test | harness/github-copilot/prompts/playwright-generate-test.prompt.md | runtime-tool:playwright |
+
+## Capability review queue
+
+These agents state a bounded-write editing policy in the body but declare no `tools:` allow-list, so
+they inherit every tool. A policy that scopes *which files* an agent may touch cannot be expressed as a
+tool allow-list, so each entry needs a human decision: narrow the tools, narrow the prose, or accept the
+inheritance deliberately.
+
+| Type | Name | Path | Authority |
+| --- | --- | --- | --- |
+| agent | ADR Generator | harness/github-copilot/agents/adr-generator.agent.md | bounded-write |
+| agent | ai-team-dev | harness/github-copilot/agents/ai-team-dev.agent.md | bounded-write |
+| agent | ai-team-qa | harness/github-copilot/agents/ai-team-qa.agent.md | bounded-write |
+| agent | Amplitude Experiment Implementation | harness/github-copilot/agents/amplitude-experiment-implementation.agent.md | bounded-write |
+| agent | API Architect | harness/github-copilot/agents/api-architect.agent.md | bounded-write |
+| agent | apify-integration-expert | harness/github-copilot/agents/apify-integration-expert.agent.md | bounded-write |
+| agent | arm-migration-agent | harness/github-copilot/agents/arm-migration.agent.md | bounded-write |
+| agent | Blueprint Mode | harness/github-copilot/agents/blueprint-mode.agent.md | bounded-write |
+| agent | C# Expert | harness/github-copilot/agents/csharp-expert.agent.md | bounded-write |
+| agent | C# MCP Server Expert | harness/github-copilot/agents/csharp-mcp-expert.agent.md | bounded-write |
+| agent | Caveman Mode | harness/github-copilot/agents/caveman-mode.agent.md | bounded-write |
+| agent | Clojure Interactive Programming | harness/github-copilot/agents/clojure-interactive-programming.agent.md | bounded-write |
+| agent | FabricAdmin | harness/github-copilot/plugins/fabric-agentic-plugin/agents/fabric-admin.agent.md | bounded-write |
+| agent | FabricAppDev | harness/github-copilot/plugins/fabric-agentic-plugin/agents/fabric-app-dev.agent.md | bounded-write |
+| agent | FabricDataEngineer | harness/github-copilot/plugins/fabric-agentic-plugin/agents/fabric-data-engineer.agent.md | bounded-write |
+| agent | FabricMigrationEngineer | harness/github-copilot/plugins/fabric-agentic-plugin/agents/fabric-migration-engineer.agent.md | bounded-write |
+| agent | gem-code-simplifier | harness/github-copilot/agents/gem-code-simplifier.agent.md | bounded-write |
+| agent | gem-designer-mobile | harness/github-copilot/agents/gem-designer-mobile.agent.md | bounded-write |
+| agent | gem-devops | harness/github-copilot/agents/gem-devops.agent.md | bounded-write |
+| agent | gem-documentation-writer | harness/github-copilot/agents/gem-documentation-writer.agent.md | bounded-write |
+| agent | gem-implementer | harness/github-copilot/agents/gem-implementer.agent.md | bounded-write |
+| agent | gem-implementer-mobile | harness/github-copilot/agents/gem-implementer-mobile.agent.md | bounded-write |
+| agent | gem-planner | harness/github-copilot/agents/gem-planner.agent.md | bounded-write |
+| agent | gem-skill-creator | harness/github-copilot/agents/gem-skill-creator.agent.md | bounded-write |
+| agent | GitHub Actions Windows ARM64 wheel builder | harness/github-copilot/agents/python-win-arm64-gha-wheel-builder.agent.md | bounded-write |
+| agent | JFrog Security Agent | harness/github-copilot/agents/jfrog-sec.agent.md | bounded-write |
+| agent | Kotlin MCP Server Development Expert | harness/github-copilot/agents/kotlin-mcp-expert.agent.md | bounded-write |
+| agent | MAUI Expert | harness/github-copilot/agents/dotnet-maui.agent.md | bounded-write |
+| agent | MCP M365 Agent Expert | harness/github-copilot/agents/mcp-m365-agent-expert.agent.md | bounded-write |
+| agent | Neon Migration Specialist | harness/github-copilot/agents/neon-migration-specialist.agent.md | bounded-write |
+| agent | Neon Performance Analyzer | harness/github-copilot/agents/neon-optimization-analyzer.agent.md | bounded-write |
+| agent | Power Platform Expert | harness/github-copilot/agents/power-platform-expert.agent.md | bounded-write |
+| agent | Power Platform MCP Integration Expert | harness/github-copilot/agents/power-platform-mcp-integration-expert.agent.md | bounded-write |
+| agent | PySpark Expert Agent | harness/github-copilot/agents/spark-performance.agent.md | bounded-write |
+| agent | Python MCP Server Expert | harness/github-copilot/agents/python-mcp-expert.agent.md | bounded-write |
+| agent | Ruby MCP Expert | harness/github-copilot/agents/ruby-mcp-expert.agent.md | bounded-write |
+| agent | Swift MCP Expert | harness/github-copilot/agents/swift-mcp-expert.agent.md | bounded-write |
+| agent | TypeScript MCP Server Expert | harness/github-copilot/agents/typescript-mcp-expert.agent.md | bounded-write |
+| agent | Ultimate Transparent Thinking Beast Mode | harness/github-copilot/agents/ultimate-transparent-thinking-beast-mode.agent.md | bounded-write |
+| agent | VSCode Tour Expert | harness/github-copilot/agents/code-tour.agent.md | bounded-write |
+| agent | WinForms Expert | harness/github-copilot/agents/winforms-expert.agent.md | bounded-write |
+| agent | Workshop TA | harness/github-copilot/agents/workshop-ta.agent.md | bounded-write |
 
 ## Acceptance
 
@@ -89,8 +145,10 @@ Static capability policy passes only when:
 2. No Copilot CLI no-op token appears in a cross-surface agent.
 3. No legacy VS Code prompt tool name remains.
 4. Read-only agents do not silently inherit all tools.
-5. Prompt agent references resolve to a built-in role or canonical custom-agent identifier.
-6. Environment-specific tools stay in the runtime verification queue until exercised in that environment.
+5. Bounded-write agents that inherit all tools stay in the capability review queue until a
+   human decision is recorded.
+6. Prompt agent references resolve to a built-in role or canonical custom-agent identifier.
+7. Environment-specific tools stay in the runtime verification queue until exercised in that environment.
 
 Static validation does not replace **Configure Tools**, **Chat: Run Prompt**, approval-policy review, or an
 interactive test in the target VS Code profile.

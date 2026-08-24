@@ -131,6 +131,12 @@ tool schema — see [HARNESS-VALIDATION.md](HARNESS-VALIDATION.md).
 > this evidence.
 >
 > `sql` and `skill` are also no-ops as tokens, but harmlessly so — they are already in the floor.
+>
+> Rule `AG024` extends this to prose: an agent body that presents these tokens inside a usable tool
+> list is flagged, because agents that document tool lists propagate them into the agents they
+> generate. Naming a token in order to reject, hedge, or historicize it is the correct pattern and is
+> not flagged, and fenced blocks are skipped so source samples and MCP server configuration whose
+> arrays legitimately contain `run` or `search` stay silent.
 
 MCP / namespaced tools use `server/tool` or `server/*`, matching BUNDLE regex
 `^([a-zA-Z0-9_.-]+/(?:\*|[a-zA-Z0-9_.-]+))(?::(.+))?$` — for example `github-mcp-server/search_code`.
@@ -423,6 +429,12 @@ requires **Chat: Run Prompt** in VS Code.
 
 Use `--strict` to fail on warnings, `--json` for machine-readable output, and
 `--kind <agents|instructions|skills|prompts|plugins|hooks>` for a focused check.
+
+Frontmatter rules cover what an agent declares; `AG024` additionally scans the agent body for no-op or
+legacy tool tokens taught as usable tool lists. The capability audit classifies each agent's stated
+authority against its declared tools: a read-only agent that inherits every tool is blocking, while a
+bounded-write agent that inherits every tool enters a review queue, because a policy that scopes which
+files an agent may touch cannot be expressed as a tool allow-list.
 
 Generated distribution surfaces have separate drift gates:
 
