@@ -1,123 +1,96 @@
 ---
-name: "webapp-testing"
-description: >-
-  Test and debug local or accessible web applications in a real browser using Playwright automation. Use when asked to verify frontend functionality, UI behavior, forms, navigation, console logs, screenshots, network activity, responsive viewports, or user flows.
+name: webapp-testing
+description: Toolkit for interacting with and testing local web applications using Playwright. Supports verifying frontend functionality, debugging UI behavior, capturing browser screenshots, and viewing browser logs.
+license: Complete terms in LICENSE.txt
 ---
 
-# Web application testing
+# Web Application Testing
 
-Drive a local or accessible web application through Playwright, verify user-visible behavior, capture diagnostics, and report the browser evidence behind each finding.
+To test local web applications, write native Python Playwright scripts.
 
-## When to invoke
+**Helper Scripts Available**:
+- `scripts/with_server.py` - Manages server lifecycle (supports multiple servers)
 
-- "Test this web app in a browser."
-- "Verify this form submission flow."
-- "Capture screenshots for this UI bug."
-- "Inspect browser console logs and network requests."
-- "Check the responsive layout across viewports."
+**Always run scripts with `--help` first** to see usage. DO NOT read the source until you try running the script first and find that a customized solution is abslutely necessary. These scripts can be very large and thus pollute your context window. They exist to be called directly as black-box scripts rather than ingested into your context window.
 
-## Prerequisites and context
+## Decision Tree: Choosing Your Approach
 
-- A locally running web application or accessible URL is required.
-- Node.js is required when falling back to local Playwright code.
-- Prefer the Playwright MCP server when available; otherwise run local Node.js with Playwright installed.
-- Playwright can be installed automatically if not present.
-- This skill does not test native mobile apps; use React Native Testing Library for those.
-
-## Browser testing capabilities
-
-| Capability | Examples |
-| --- | --- |
-| Browser automation | Navigate to URLs, click buttons and links, fill fields, select dropdowns, handle dialogs and alerts. |
-| Verification | Assert element presence, verify text content, check visibility, validate URLs, and test responsive behavior. |
-| Debugging | Capture screenshots, view console logs, inspect network requests, and debug failed tests. |
-
-Prefer user-facing selectors: roles, labels, text, and `data-testid`. Use role-based selectors before CSS classes when no stable semantic selector exists.
-
-## Procedure
-
-1. Confirm the application is running and the target URL is reachable.
-2. Start with a small navigation or smoke test before complex flows.
-3. Use explicit waits for elements or navigation before interacting.
-4. Exercise the requested user flow with realistic input.
-5. Capture screenshots on failure and collect console or network evidence when debugging.
-6. Close browsers and clean up resources when using local Playwright code.
-7. Report actions, observations, evidence, and remaining gaps.
-
-## Playwright patterns
-
-```javascript
-// Navigate to a page and verify title
-await page.goto("http://localhost:3000");
-const title = await page.title();
-console.log("Page title:", title);
+```
+User task → Is it static HTML?
+    ├─ Yes → Read HTML file directly to identify selectors
+    │         ├─ Success → Write Playwright script using selectors
+    │         └─ Fails/Incomplete → Treat as dynamic (below)
+    │
+    └─ No (dynamic webapp) → Is the server already running?
+        ├─ No → Run: python scripts/with_server.py --help
+        │        Then use the helper + write simplified Playwright script
+        │
+        └─ Yes → Reconnaissance-then-action:
+            1. Navigate and wait for networkidle
+            2. Take screenshot or inspect DOM
+            3. Identify selectors from rendered state
+            4. Execute actions with discovered selectors
 ```
 
-```javascript
-// Fill out and submit a form
-await page.fill("#username", "testuser");
-await page.fill("#password", "password123");
-await page.click('button[type="submit"]');
-await page.waitForURL("**/dashboard");
+## Example: Using with_server.py
+
+To start a server, run `--help` first, then use the helper:
+
+**Single server:**
+```bash
+python scripts/with_server.py --server "npm run dev" --port 5173 -- python your_automation.py
 ```
 
-```javascript
-// Capture a screenshot for debugging
-await page.screenshot({ path: "debug.png", fullPage: true });
+**Multiple servers (e.g., backend + frontend):**
+```bash
+python scripts/with_server.py \
+  --server "cd backend && python server.py" --port 3000 \
+  --server "cd frontend && npm run dev" --port 5173 \
+  -- python your_automation.py
 ```
 
-```javascript
-await page.waitForSelector("#element-id", { state: "visible" });
-const exists = (await page.locator("#element-id").count()) > 0;
-page.on("console", (msg) => console.log("Browser log:", msg.text()));
+To create an automation script, include only Playwright logic (servers are managed automatically):
+```python
+from playwright.sync_api import sync_playwright
+
+with sync_playwright() as p:
+    browser = p.chromium.launch(headless=True) # Always launch chromium in headless mode
+    page = browser.new_page()
+    page.goto('http://localhost:5173') # Server already running and ready
+    page.wait_for_load_state('networkidle') # CRITICAL: Wait for JS to execute
+    # ... your automation logic
+    browser.close()
 ```
 
-```javascript
-try {
-  await page.click("#button");
-} catch (error) {
-  await page.screenshot({ path: "error.png" });
-  throw error;
-}
-```
+## Reconnaissance-Then-Action Pattern
 
-## Gotchas
+1. **Inspect rendered DOM**:
+   ```python
+   page.screenshot(path='/tmp/inspect.png', full_page=True)
+   content = page.content()
+   page.locator('button').all()
+   ```
 
-- **Always verify the app is running first**: failing browser actions against a dead server hides the actual setup problem.
-- **Use explicit waits**: interact only after the element or navigation target is ready.
-- **Capture screenshots on failure**: visual evidence usually shortens UI debugging.
-- **Set reasonable timeouts**: slow local builds and API calls need bounded waiting, not infinite hangs.
-- **Test incrementally**: one small verified step is easier to debug than a long failing script.
-- **Complex authentication may need setup**: use existing test accounts, storage state, or documented login helpers rather than bypassing auth.
+2. **Identify selectors** from inspection results
 
-## Progressive disclosure and bundled resources
+3. **Execute actions** using discovered selectors
 
-- `assets/test-helper.js` / `test-helper.js`: helper functions for waiting for elements, capturing screenshots, and handling errors. Import it when writing reusable local Playwright tests.
+## Common Pitfall
 
-## Output template
+❌ **Don't** inspect the DOM before waiting for `networkidle` on dynamic apps
+✅ **Do** wait for `page.wait_for_load_state('networkidle')` before inspection
 
-```markdown
-## Web application test result
+## Best Practices
 
-**Status:** pass | fail | blocked
-**URL:** `<tested URL>`
-**Browser path:** Playwright MCP | local Playwright
+- **Use bundled scripts as black boxes** - To accomplish a task, consider whether one of the scripts available in `scripts/` can help. These scripts handle common, complex workflows reliably without cluttering the context window. Use `--help` to see usage, then invoke directly. 
+- Use `sync_playwright()` for synchronous scripts
+- Always close the browser when done
+- Use descriptive selectors: `text=`, `role=`, CSS selectors, or IDs
+- Add appropriate waits: `page.wait_for_selector()` or `page.wait_for_timeout()`
 
-| Flow | Action | Expected | Observed | Evidence |
-| --- | --- | --- | --- | --- |
-| <flow name> | <click/fill/navigate/assert> | <expected behavior> | <actual behavior> | <screenshot, console log, network request, or selector> |
+## Reference Files
 
-### Diagnostics
-- Console: <errors, warnings, or none>
-- Network: <failed requests or none>
-- Screenshots: <paths or not captured>
-```
-
-## Quality gate
-
-- [ ] The target app or URL was verified reachable before testing.
-- [ ] Browser interactions used explicit waits or locator assertions.
-- [ ] Selectors prefer roles, labels, text, or `data-testid` over fragile CSS classes.
-- [ ] Failures include screenshot, console, network, or DOM evidence.
-- [ ] Browser resources were closed when local Playwright was used.
-- [ ] The final result states pass, fail, or blocked for each requested flow.
+- **examples/** - Examples showing common patterns:
+  - `element_discovery.py` - Discovering buttons, links, and inputs on a page
+  - `static_html_automation.py` - Using file:// URLs for local HTML
+  - `console_logging.py` - Capturing console logs during automation
