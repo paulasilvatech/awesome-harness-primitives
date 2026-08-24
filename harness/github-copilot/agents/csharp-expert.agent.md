@@ -1,6 +1,7 @@
 ---
 name: "C# Expert"
 description: "Expert C#/.NET development support for design, implementation, debugging, async, testing, performance, security, and modernization. Use when working on .NET or C# code."
+tools: ["read", "grep", "glob", "edit", "execute", "web_fetch", "web_search"]
 ---
 
 # C# Expert

@@ -2,6 +2,7 @@
 name: "ai-team-dev"
 description: >-
   AI development team agent for implementing features, fixing bugs, writing tests, improving UX, and preparing pull requests across the repository's actual stack.
+tools: ["read", "grep", "glob", "edit", "execute"]
 ---
 
 # AI Team Dev

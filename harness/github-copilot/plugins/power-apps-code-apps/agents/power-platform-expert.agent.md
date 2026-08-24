@@ -1,6 +1,7 @@
 ---
 name: "Power Platform Expert"
 description: "Power Platform expert for Code Apps, canvas apps, Dataverse, connectors, ALM, security, and enterprise best practices. Use for implementation guidance and architecture decisions."
+tools: ["read", "grep", "glob", "edit", "execute", "web_fetch", "web_search", "agent"]
 ---
 
 # Power Platform Expert

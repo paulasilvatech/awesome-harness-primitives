@@ -141,17 +141,20 @@
       "kind": "agent",
       "model": null,
       "name": "ADR Generator",
-      "notes": [
-        "bounded-write-inherits-all-tools"
-      ],
+      "notes": [],
       "ownership": "shared",
       "package": null,
       "path": "harness/github-copilot/agents/adr-generator.agent.md",
       "selected_agent": null,
-      "status": "capability-review-required",
+      "status": "current-static",
       "target": "vscode+github-copilot",
-      "tools": [],
-      "tools_mode": "inherit-all"
+      "tools": [
+        "read",
+        "grep",
+        "glob",
+        "edit"
+      ],
+      "tools_mode": "allow-list"
     },
     {
       "authority": "bounded-write",
@@ -219,17 +222,21 @@
       "kind": "agent",
       "model": null,
       "name": "ai-team-dev",
-      "notes": [
-        "bounded-write-inherits-all-tools"
-      ],
+      "notes": [],
       "ownership": "shared",
       "package": null,
       "path": "harness/github-copilot/agents/ai-team-dev.agent.md",
       "selected_agent": null,
-      "status": "capability-review-required",
+      "status": "current-static",
       "target": "vscode+github-copilot",
-      "tools": [],
-      "tools_mode": "inherit-all"
+      "tools": [
+        "read",
+        "grep",
+        "glob",
+        "edit",
+        "execute"
+      ],
+      "tools_mode": "allow-list"
     },
     {
       "authority": "source-read-only",
@@ -256,51 +263,63 @@
       "kind": "agent",
       "model": null,
       "name": "ai-team-qa",
-      "notes": [
-        "bounded-write-inherits-all-tools"
-      ],
+      "notes": [],
       "ownership": "shared",
       "package": null,
       "path": "harness/github-copilot/agents/ai-team-qa.agent.md",
       "selected_agent": null,
-      "status": "capability-review-required",
+      "status": "current-static",
       "target": "vscode+github-copilot",
-      "tools": [],
-      "tools_mode": "inherit-all"
+      "tools": [
+        "read",
+        "grep",
+        "glob",
+        "edit",
+        "execute"
+      ],
+      "tools_mode": "allow-list"
     },
     {
       "authority": "bounded-write",
       "kind": "agent",
       "model": null,
       "name": "Amplitude Experiment Implementation",
-      "notes": [
-        "bounded-write-inherits-all-tools"
-      ],
+      "notes": [],
       "ownership": "shared",
       "package": null,
       "path": "harness/github-copilot/agents/amplitude-experiment-implementation.agent.md",
       "selected_agent": null,
-      "status": "capability-review-required",
+      "status": "current-static",
       "target": "vscode+github-copilot",
-      "tools": [],
-      "tools_mode": "inherit-all"
+      "tools": [
+        "read",
+        "grep",
+        "glob",
+        "edit",
+        "execute"
+      ],
+      "tools_mode": "allow-list"
     },
     {
       "authority": "bounded-write",
       "kind": "agent",
       "model": null,
       "name": "API Architect",
-      "notes": [
-        "bounded-write-inherits-all-tools"
-      ],
+      "notes": [],
       "ownership": "shared",
       "package": null,
       "path": "harness/github-copilot/agents/api-architect.agent.md",
       "selected_agent": null,
-      "status": "capability-review-required",
+      "status": "current-static",
       "target": "vscode+github-copilot",
-      "tools": [],
-      "tools_mode": "inherit-all"
+      "tools": [
+        "read",
+        "grep",
+        "glob",
+        "edit",
+        "execute"
+      ],
+      "tools_mode": "allow-list"
     },
     {
       "authority": "bounded-write",
@@ -308,16 +327,25 @@
       "model": null,
       "name": "apify-integration-expert",
       "notes": [
-        "bounded-write-inherits-all-tools"
+        "runtime-tool:apify/*"
       ],
       "ownership": "shared",
       "package": null,
       "path": "harness/github-copilot/agents/apify-integration-expert.agent.md",
       "selected_agent": null,
-      "status": "capability-review-required",
+      "status": "runtime-verification-required",
       "target": "vscode+github-copilot",
-      "tools": [],
-      "tools_mode": "inherit-all"
+      "tools": [
+        "read",
+        "grep",
+        "glob",
+        "edit",
+        "execute",
+        "web_fetch",
+        "web_search",
+        "apify/*"
+      ],
+      "tools_mode": "allow-list"
     },
     {
       "authority": "bounded-write",
@@ -346,16 +374,23 @@
       "model": null,
       "name": "arm-migration-agent",
       "notes": [
-        "bounded-write-inherits-all-tools"
+        "runtime-tool:custom-mcp/*"
       ],
       "ownership": "shared",
       "package": null,
       "path": "harness/github-copilot/agents/arm-migration.agent.md",
       "selected_agent": null,
-      "status": "capability-review-required",
+      "status": "runtime-verification-required",
       "target": "vscode+github-copilot",
-      "tools": [],
-      "tools_mode": "inherit-all"
+      "tools": [
+        "read",
+        "grep",
+        "glob",
+        "edit",
+        "execute",
+        "custom-mcp/*"
+      ],
+      "tools_mode": "allow-list"
     },
     {
       "authority": "read-only",
@@ -805,8 +840,10 @@
         "read",
         "grep",
         "glob",
-        "ms-vscode.vscode-websearchforcopilot/websearch",
-        "edit"
+        "edit",
+        "web_fetch",
+        "web_search",
+        "ms-vscode.vscode-websearchforcopilot/websearch"
       ],
       "tools_mode": "allow-list"
     },
@@ -861,51 +898,70 @@
       "kind": "agent",
       "model": null,
       "name": "Blueprint Mode",
-      "notes": [
-        "bounded-write-inherits-all-tools"
-      ],
+      "notes": [],
       "ownership": "shared",
       "package": null,
       "path": "harness/github-copilot/agents/blueprint-mode.agent.md",
       "selected_agent": null,
-      "status": "capability-review-required",
+      "status": "current-static",
       "target": "vscode+github-copilot",
-      "tools": [],
-      "tools_mode": "inherit-all"
+      "tools": [
+        "read",
+        "grep",
+        "glob",
+        "edit",
+        "execute",
+        "web_fetch",
+        "web_search",
+        "agent"
+      ],
+      "tools_mode": "allow-list"
     },
     {
       "authority": "bounded-write",
       "kind": "agent",
       "model": null,
       "name": "C# Expert",
-      "notes": [
-        "bounded-write-inherits-all-tools"
-      ],
+      "notes": [],
       "ownership": "shared",
       "package": null,
       "path": "harness/github-copilot/agents/csharp-expert.agent.md",
       "selected_agent": null,
-      "status": "capability-review-required",
+      "status": "current-static",
       "target": "vscode+github-copilot",
-      "tools": [],
-      "tools_mode": "inherit-all"
+      "tools": [
+        "read",
+        "grep",
+        "glob",
+        "edit",
+        "execute",
+        "web_fetch",
+        "web_search"
+      ],
+      "tools_mode": "allow-list"
     },
     {
       "authority": "bounded-write",
       "kind": "agent",
       "model": null,
       "name": "C# MCP Server Expert",
-      "notes": [
-        "bounded-write-inherits-all-tools"
-      ],
+      "notes": [],
       "ownership": "shared",
       "package": null,
       "path": "harness/github-copilot/agents/csharp-mcp-expert.agent.md",
       "selected_agent": null,
-      "status": "capability-review-required",
+      "status": "current-static",
       "target": "vscode+github-copilot",
-      "tools": [],
-      "tools_mode": "inherit-all"
+      "tools": [
+        "read",
+        "grep",
+        "glob",
+        "edit",
+        "execute",
+        "web_fetch",
+        "web_search"
+      ],
+      "tools_mode": "allow-list"
     },
     {
       "authority": "bounded-write",
@@ -1027,17 +1083,17 @@
       "kind": "agent",
       "model": null,
       "name": "Caveman Mode",
-      "notes": [
-        "bounded-write-inherits-all-tools"
-      ],
+      "notes": [],
       "ownership": "shared",
       "package": null,
       "path": "harness/github-copilot/agents/caveman-mode.agent.md",
       "selected_agent": null,
-      "status": "capability-review-required",
+      "status": "current-static",
       "target": "vscode+github-copilot",
-      "tools": [],
-      "tools_mode": "inherit-all"
+      "tools": [
+        "*"
+      ],
+      "tools_mode": "allow-list"
     },
     {
       "authority": "bounded-write",
@@ -1065,17 +1121,21 @@
       "kind": "agent",
       "model": null,
       "name": "Clojure Interactive Programming",
-      "notes": [
-        "bounded-write-inherits-all-tools"
-      ],
+      "notes": [],
       "ownership": "shared",
       "package": null,
       "path": "harness/github-copilot/agents/clojure-interactive-programming.agent.md",
       "selected_agent": null,
-      "status": "capability-review-required",
+      "status": "current-static",
       "target": "vscode+github-copilot",
-      "tools": [],
-      "tools_mode": "inherit-all"
+      "tools": [
+        "read",
+        "grep",
+        "glob",
+        "edit",
+        "execute"
+      ],
+      "tools_mode": "allow-list"
     },
     {
       "authority": "read-only",
@@ -1791,51 +1851,67 @@
       "kind": "agent",
       "model": null,
       "name": "FabricAdmin",
-      "notes": [
-        "bounded-write-inherits-all-tools"
-      ],
+      "notes": [],
       "ownership": "plugin",
       "package": "fabric-agentic-plugin",
       "path": "harness/github-copilot/plugins/fabric-agentic-plugin/agents/fabric-admin.agent.md",
       "selected_agent": null,
-      "status": "capability-review-required",
+      "status": "current-static",
       "target": "vscode+github-copilot",
-      "tools": [],
-      "tools_mode": "inherit-all"
+      "tools": [
+        "read",
+        "grep",
+        "glob",
+        "edit",
+        "web_fetch",
+        "web_search",
+        "agent"
+      ],
+      "tools_mode": "allow-list"
     },
     {
       "authority": "bounded-write",
       "kind": "agent",
       "model": null,
       "name": "FabricAppDev",
-      "notes": [
-        "bounded-write-inherits-all-tools"
-      ],
+      "notes": [],
       "ownership": "plugin",
       "package": "fabric-agentic-plugin",
       "path": "harness/github-copilot/plugins/fabric-agentic-plugin/agents/fabric-app-dev.agent.md",
       "selected_agent": null,
-      "status": "capability-review-required",
+      "status": "current-static",
       "target": "vscode+github-copilot",
-      "tools": [],
-      "tools_mode": "inherit-all"
+      "tools": [
+        "read",
+        "grep",
+        "glob",
+        "edit",
+        "execute",
+        "agent"
+      ],
+      "tools_mode": "allow-list"
     },
     {
       "authority": "bounded-write",
       "kind": "agent",
       "model": null,
       "name": "FabricDataEngineer",
-      "notes": [
-        "bounded-write-inherits-all-tools"
-      ],
+      "notes": [],
       "ownership": "plugin",
       "package": "fabric-agentic-plugin",
       "path": "harness/github-copilot/plugins/fabric-agentic-plugin/agents/fabric-data-engineer.agent.md",
       "selected_agent": null,
-      "status": "capability-review-required",
+      "status": "current-static",
       "target": "vscode+github-copilot",
-      "tools": [],
-      "tools_mode": "inherit-all"
+      "tools": [
+        "read",
+        "grep",
+        "glob",
+        "edit",
+        "execute",
+        "agent"
+      ],
+      "tools_mode": "allow-list"
     },
     {
       "authority": "read-only",
@@ -1861,17 +1937,22 @@
       "kind": "agent",
       "model": null,
       "name": "FabricMigrationEngineer",
-      "notes": [
-        "bounded-write-inherits-all-tools"
-      ],
+      "notes": [],
       "ownership": "plugin",
       "package": "fabric-agentic-plugin",
       "path": "harness/github-copilot/plugins/fabric-agentic-plugin/agents/fabric-migration-engineer.agent.md",
       "selected_agent": null,
-      "status": "capability-review-required",
+      "status": "current-static",
       "target": "vscode+github-copilot",
-      "tools": [],
-      "tools_mode": "inherit-all"
+      "tools": [
+        "read",
+        "grep",
+        "glob",
+        "edit",
+        "execute",
+        "agent"
+      ],
+      "tools_mode": "allow-list"
     },
     {
       "authority": "bounded-write",
@@ -1944,17 +2025,21 @@
       "kind": "agent",
       "model": null,
       "name": "gem-code-simplifier",
-      "notes": [
-        "bounded-write-inherits-all-tools"
-      ],
+      "notes": [],
       "ownership": "shared",
       "package": null,
       "path": "harness/github-copilot/agents/gem-code-simplifier.agent.md",
       "selected_agent": null,
-      "status": "capability-review-required",
+      "status": "current-static",
       "target": "vscode+github-copilot",
-      "tools": [],
-      "tools_mode": "inherit-all"
+      "tools": [
+        "read",
+        "grep",
+        "glob",
+        "edit",
+        "execute"
+      ],
+      "tools_mode": "allow-list"
     },
     {
       "authority": "read-only",
@@ -2019,85 +2104,107 @@
       "kind": "agent",
       "model": null,
       "name": "gem-designer-mobile",
-      "notes": [
-        "bounded-write-inherits-all-tools"
-      ],
+      "notes": [],
       "ownership": "shared",
       "package": null,
       "path": "harness/github-copilot/agents/gem-designer-mobile.agent.md",
       "selected_agent": null,
-      "status": "capability-review-required",
+      "status": "current-static",
       "target": "vscode+github-copilot",
-      "tools": [],
-      "tools_mode": "inherit-all"
+      "tools": [
+        "read",
+        "grep",
+        "glob",
+        "edit"
+      ],
+      "tools_mode": "allow-list"
     },
     {
       "authority": "bounded-write",
       "kind": "agent",
       "model": null,
       "name": "gem-devops",
-      "notes": [
-        "bounded-write-inherits-all-tools"
-      ],
+      "notes": [],
       "ownership": "shared",
       "package": null,
       "path": "harness/github-copilot/agents/gem-devops.agent.md",
       "selected_agent": null,
-      "status": "capability-review-required",
+      "status": "current-static",
       "target": "vscode+github-copilot",
-      "tools": [],
-      "tools_mode": "inherit-all"
+      "tools": [
+        "read",
+        "grep",
+        "glob",
+        "edit",
+        "execute",
+        "web_fetch",
+        "web_search"
+      ],
+      "tools_mode": "allow-list"
     },
     {
       "authority": "bounded-write",
       "kind": "agent",
       "model": null,
       "name": "gem-documentation-writer",
-      "notes": [
-        "bounded-write-inherits-all-tools"
-      ],
+      "notes": [],
       "ownership": "shared",
       "package": null,
       "path": "harness/github-copilot/agents/gem-documentation-writer.agent.md",
       "selected_agent": null,
-      "status": "capability-review-required",
+      "status": "current-static",
       "target": "vscode+github-copilot",
-      "tools": [],
-      "tools_mode": "inherit-all"
+      "tools": [
+        "read",
+        "grep",
+        "glob",
+        "edit",
+        "web_fetch",
+        "web_search"
+      ],
+      "tools_mode": "allow-list"
     },
     {
       "authority": "bounded-write",
       "kind": "agent",
       "model": null,
       "name": "gem-implementer",
-      "notes": [
-        "bounded-write-inherits-all-tools"
-      ],
+      "notes": [],
       "ownership": "shared",
       "package": null,
       "path": "harness/github-copilot/agents/gem-implementer.agent.md",
       "selected_agent": null,
-      "status": "capability-review-required",
+      "status": "current-static",
       "target": "vscode+github-copilot",
-      "tools": [],
-      "tools_mode": "inherit-all"
+      "tools": [
+        "read",
+        "grep",
+        "glob",
+        "edit",
+        "execute"
+      ],
+      "tools_mode": "allow-list"
     },
     {
       "authority": "bounded-write",
       "kind": "agent",
       "model": null,
       "name": "gem-implementer-mobile",
-      "notes": [
-        "bounded-write-inherits-all-tools"
-      ],
+      "notes": [],
       "ownership": "shared",
       "package": null,
       "path": "harness/github-copilot/agents/gem-implementer-mobile.agent.md",
       "selected_agent": null,
-      "status": "capability-review-required",
+      "status": "current-static",
       "target": "vscode+github-copilot",
-      "tools": [],
-      "tools_mode": "inherit-all"
+      "tools": [
+        "read",
+        "grep",
+        "glob",
+        "edit",
+        "execute"
+      ],
+      "tools_mode": "allow-list"
     },
     {
       "authority": "source-read-only",
@@ -2141,17 +2248,20 @@
       "kind": "agent",
       "model": null,
       "name": "gem-planner",
-      "notes": [
-        "bounded-write-inherits-all-tools"
-      ],
+      "notes": [],
       "ownership": "shared",
       "package": null,
       "path": "harness/github-copilot/agents/gem-planner.agent.md",
       "selected_agent": null,
-      "status": "capability-review-required",
+      "status": "current-static",
       "target": "vscode+github-copilot",
-      "tools": [],
-      "tools_mode": "inherit-all"
+      "tools": [
+        "read",
+        "grep",
+        "glob",
+        "edit"
+      ],
+      "tools_mode": "allow-list"
     },
     {
       "authority": "read-only",
@@ -2198,17 +2308,22 @@
       "kind": "agent",
       "model": null,
       "name": "gem-skill-creator",
-      "notes": [
-        "bounded-write-inherits-all-tools"
-      ],
+      "notes": [],
       "ownership": "shared",
       "package": null,
       "path": "harness/github-copilot/agents/gem-skill-creator.agent.md",
       "selected_agent": null,
-      "status": "capability-review-required",
+      "status": "current-static",
       "target": "vscode+github-copilot",
-      "tools": [],
-      "tools_mode": "inherit-all"
+      "tools": [
+        "read",
+        "grep",
+        "glob",
+        "edit",
+        "web_fetch",
+        "web_search"
+      ],
+      "tools_mode": "allow-list"
     },
     {
       "authority": "read-only",
@@ -2281,17 +2396,23 @@
       "kind": "agent",
       "model": null,
       "name": "GitHub Actions Windows ARM64 wheel builder",
-      "notes": [
-        "bounded-write-inherits-all-tools"
-      ],
+      "notes": [],
       "ownership": "shared",
       "package": null,
       "path": "harness/github-copilot/agents/python-win-arm64-gha-wheel-builder.agent.md",
       "selected_agent": null,
-      "status": "capability-review-required",
+      "status": "current-static",
       "target": "vscode+github-copilot",
-      "tools": [],
-      "tools_mode": "inherit-all"
+      "tools": [
+        "read",
+        "grep",
+        "glob",
+        "edit",
+        "execute",
+        "web_fetch",
+        "web_search"
+      ],
+      "tools_mode": "allow-list"
     },
     {
       "authority": "bounded-write",
@@ -2492,34 +2613,44 @@
       "kind": "agent",
       "model": null,
       "name": "JFrog Security Agent",
-      "notes": [
-        "bounded-write-inherits-all-tools"
-      ],
+      "notes": [],
       "ownership": "shared",
       "package": null,
       "path": "harness/github-copilot/agents/jfrog-sec.agent.md",
       "selected_agent": null,
-      "status": "capability-review-required",
+      "status": "current-static",
       "target": "vscode+github-copilot",
-      "tools": [],
-      "tools_mode": "inherit-all"
+      "tools": [
+        "read",
+        "grep",
+        "glob",
+        "edit",
+        "execute"
+      ],
+      "tools_mode": "allow-list"
     },
     {
       "authority": "bounded-write",
       "kind": "agent",
       "model": null,
       "name": "Kotlin MCP Server Development Expert",
-      "notes": [
-        "bounded-write-inherits-all-tools"
-      ],
+      "notes": [],
       "ownership": "shared",
       "package": null,
       "path": "harness/github-copilot/agents/kotlin-mcp-expert.agent.md",
       "selected_agent": null,
-      "status": "capability-review-required",
+      "status": "current-static",
       "target": "vscode+github-copilot",
-      "tools": [],
-      "tools_mode": "inherit-all"
+      "tools": [
+        "read",
+        "grep",
+        "glob",
+        "edit",
+        "execute",
+        "web_fetch",
+        "web_search"
+      ],
+      "tools_mode": "allow-list"
     },
     {
       "authority": "read-only",
@@ -2684,34 +2815,44 @@
       "kind": "agent",
       "model": null,
       "name": "MAUI Expert",
-      "notes": [
-        "bounded-write-inherits-all-tools"
-      ],
+      "notes": [],
       "ownership": "shared",
       "package": null,
       "path": "harness/github-copilot/agents/dotnet-maui.agent.md",
       "selected_agent": null,
-      "status": "capability-review-required",
+      "status": "current-static",
       "target": "vscode+github-copilot",
-      "tools": [],
-      "tools_mode": "inherit-all"
+      "tools": [
+        "read",
+        "grep",
+        "glob",
+        "edit",
+        "execute",
+        "web_fetch",
+        "web_search"
+      ],
+      "tools_mode": "allow-list"
     },
     {
       "authority": "bounded-write",
       "kind": "agent",
       "model": null,
       "name": "MCP M365 Agent Expert",
-      "notes": [
-        "bounded-write-inherits-all-tools"
-      ],
+      "notes": [],
       "ownership": "shared",
       "package": null,
       "path": "harness/github-copilot/agents/mcp-m365-agent-expert.agent.md",
       "selected_agent": null,
-      "status": "capability-review-required",
+      "status": "current-static",
       "target": "vscode+github-copilot",
-      "tools": [],
-      "tools_mode": "inherit-all"
+      "tools": [
+        "read",
+        "grep",
+        "glob",
+        "edit",
+        "execute"
+      ],
+      "tools_mode": "allow-list"
     },
     {
       "authority": "read-only",
@@ -2925,34 +3066,41 @@
       "kind": "agent",
       "model": null,
       "name": "Neon Migration Specialist",
-      "notes": [
-        "bounded-write-inherits-all-tools"
-      ],
+      "notes": [],
       "ownership": "shared",
       "package": null,
       "path": "harness/github-copilot/agents/neon-migration-specialist.agent.md",
       "selected_agent": null,
-      "status": "capability-review-required",
+      "status": "current-static",
       "target": "vscode+github-copilot",
-      "tools": [],
-      "tools_mode": "inherit-all"
+      "tools": [
+        "read",
+        "grep",
+        "glob",
+        "edit",
+        "execute"
+      ],
+      "tools_mode": "allow-list"
     },
     {
       "authority": "bounded-write",
       "kind": "agent",
       "model": null,
       "name": "Neon Performance Analyzer",
-      "notes": [
-        "bounded-write-inherits-all-tools"
-      ],
+      "notes": [],
       "ownership": "shared",
       "package": null,
       "path": "harness/github-copilot/agents/neon-optimization-analyzer.agent.md",
       "selected_agent": null,
-      "status": "capability-review-required",
+      "status": "current-static",
       "target": "vscode+github-copilot",
-      "tools": [],
-      "tools_mode": "inherit-all"
+      "tools": [
+        "read",
+        "grep",
+        "glob",
+        "edit"
+      ],
+      "tools_mode": "allow-list"
     },
     {
       "authority": "read-only",
@@ -3402,34 +3550,47 @@
       "kind": "agent",
       "model": null,
       "name": "Power Platform Expert",
-      "notes": [
-        "bounded-write-inherits-all-tools"
-      ],
+      "notes": [],
       "ownership": "shared",
       "package": null,
       "path": "harness/github-copilot/agents/power-platform-expert.agent.md",
       "selected_agent": null,
-      "status": "capability-review-required",
+      "status": "current-static",
       "target": "vscode+github-copilot",
-      "tools": [],
-      "tools_mode": "inherit-all"
+      "tools": [
+        "read",
+        "grep",
+        "glob",
+        "edit",
+        "execute",
+        "web_fetch",
+        "web_search",
+        "agent"
+      ],
+      "tools_mode": "allow-list"
     },
     {
       "authority": "bounded-write",
       "kind": "agent",
       "model": null,
       "name": "Power Platform MCP Integration Expert",
-      "notes": [
-        "bounded-write-inherits-all-tools"
-      ],
+      "notes": [],
       "ownership": "shared",
       "package": null,
       "path": "harness/github-copilot/agents/power-platform-mcp-integration-expert.agent.md",
       "selected_agent": null,
-      "status": "capability-review-required",
+      "status": "current-static",
       "target": "vscode+github-copilot",
-      "tools": [],
-      "tools_mode": "inherit-all"
+      "tools": [
+        "read",
+        "grep",
+        "glob",
+        "edit",
+        "execute",
+        "web_fetch",
+        "web_search"
+      ],
+      "tools_mode": "allow-list"
     },
     {
       "authority": "bounded-write",
@@ -3547,34 +3708,43 @@
       "kind": "agent",
       "model": null,
       "name": "PySpark Expert Agent",
-      "notes": [
-        "bounded-write-inherits-all-tools"
-      ],
+      "notes": [],
       "ownership": "shared",
       "package": null,
       "path": "harness/github-copilot/agents/spark-performance.agent.md",
       "selected_agent": null,
-      "status": "capability-review-required",
+      "status": "current-static",
       "target": "vscode+github-copilot",
-      "tools": [],
-      "tools_mode": "inherit-all"
+      "tools": [
+        "read",
+        "grep",
+        "glob",
+        "edit"
+      ],
+      "tools_mode": "allow-list"
     },
     {
       "authority": "bounded-write",
       "kind": "agent",
       "model": null,
       "name": "Python MCP Server Expert",
-      "notes": [
-        "bounded-write-inherits-all-tools"
-      ],
+      "notes": [],
       "ownership": "shared",
       "package": null,
       "path": "harness/github-copilot/agents/python-mcp-expert.agent.md",
       "selected_agent": null,
-      "status": "capability-review-required",
+      "status": "current-static",
       "target": "vscode+github-copilot",
-      "tools": [],
-      "tools_mode": "inherit-all"
+      "tools": [
+        "read",
+        "grep",
+        "glob",
+        "edit",
+        "execute",
+        "web_fetch",
+        "web_search"
+      ],
+      "tools_mode": "allow-list"
     },
     {
       "authority": "bounded-write",
@@ -3966,17 +4136,23 @@
       "kind": "agent",
       "model": null,
       "name": "Ruby MCP Expert",
-      "notes": [
-        "bounded-write-inherits-all-tools"
-      ],
+      "notes": [],
       "ownership": "shared",
       "package": null,
       "path": "harness/github-copilot/agents/ruby-mcp-expert.agent.md",
       "selected_agent": null,
-      "status": "capability-review-required",
+      "status": "current-static",
       "target": "vscode+github-copilot",
-      "tools": [],
-      "tools_mode": "inherit-all"
+      "tools": [
+        "read",
+        "grep",
+        "glob",
+        "edit",
+        "execute",
+        "web_fetch",
+        "web_search"
+      ],
+      "tools_mode": "allow-list"
     },
     {
       "authority": "read-only",
@@ -4560,17 +4736,23 @@
       "kind": "agent",
       "model": null,
       "name": "Swift MCP Expert",
-      "notes": [
-        "bounded-write-inherits-all-tools"
-      ],
+      "notes": [],
       "ownership": "shared",
       "package": null,
       "path": "harness/github-copilot/agents/swift-mcp-expert.agent.md",
       "selected_agent": null,
-      "status": "capability-review-required",
+      "status": "current-static",
       "target": "vscode+github-copilot",
-      "tools": [],
-      "tools_mode": "inherit-all"
+      "tools": [
+        "read",
+        "grep",
+        "glob",
+        "edit",
+        "execute",
+        "web_fetch",
+        "web_search"
+      ],
+      "tools_mode": "allow-list"
     },
     {
       "authority": "bounded-write",
@@ -4974,34 +5156,46 @@
       "kind": "agent",
       "model": null,
       "name": "TypeScript MCP Server Expert",
-      "notes": [
-        "bounded-write-inherits-all-tools"
-      ],
+      "notes": [],
       "ownership": "shared",
       "package": null,
       "path": "harness/github-copilot/agents/typescript-mcp-expert.agent.md",
       "selected_agent": null,
-      "status": "capability-review-required",
+      "status": "current-static",
       "target": "vscode+github-copilot",
-      "tools": [],
-      "tools_mode": "inherit-all"
+      "tools": [
+        "read",
+        "grep",
+        "glob",
+        "edit",
+        "execute",
+        "web_fetch",
+        "web_search"
+      ],
+      "tools_mode": "allow-list"
     },
     {
       "authority": "bounded-write",
       "kind": "agent",
       "model": null,
       "name": "Ultimate Transparent Thinking Beast Mode",
-      "notes": [
-        "bounded-write-inherits-all-tools"
-      ],
+      "notes": [],
       "ownership": "shared",
       "package": null,
       "path": "harness/github-copilot/agents/ultimate-transparent-thinking-beast-mode.agent.md",
       "selected_agent": null,
-      "status": "capability-review-required",
+      "status": "current-static",
       "target": "vscode+github-copilot",
-      "tools": [],
-      "tools_mode": "inherit-all"
+      "tools": [
+        "read",
+        "grep",
+        "glob",
+        "edit",
+        "execute",
+        "web_fetch",
+        "web_search"
+      ],
+      "tools_mode": "allow-list"
     },
     {
       "authority": "bounded-write",
@@ -5081,17 +5275,21 @@
       "kind": "agent",
       "model": null,
       "name": "VSCode Tour Expert",
-      "notes": [
-        "bounded-write-inherits-all-tools"
-      ],
+      "notes": [],
       "ownership": "shared",
       "package": null,
       "path": "harness/github-copilot/agents/code-tour.agent.md",
       "selected_agent": null,
-      "status": "capability-review-required",
+      "status": "current-static",
       "target": "vscode+github-copilot",
-      "tools": [],
-      "tools_mode": "inherit-all"
+      "tools": [
+        "read",
+        "grep",
+        "glob",
+        "edit",
+        "execute"
+      ],
+      "tools_mode": "allow-list"
     },
     {
       "authority": "bounded-write",
@@ -5142,34 +5340,42 @@
       "kind": "agent",
       "model": null,
       "name": "WinForms Expert",
-      "notes": [
-        "bounded-write-inherits-all-tools"
-      ],
+      "notes": [],
       "ownership": "shared",
       "package": null,
       "path": "harness/github-copilot/agents/winforms-expert.agent.md",
       "selected_agent": null,
-      "status": "capability-review-required",
+      "status": "current-static",
       "target": "vscode+github-copilot",
-      "tools": [],
-      "tools_mode": "inherit-all"
+      "tools": [
+        "read",
+        "grep",
+        "glob",
+        "edit",
+        "execute"
+      ],
+      "tools_mode": "allow-list"
     },
     {
       "authority": "bounded-write",
       "kind": "agent",
       "model": null,
       "name": "Workshop TA",
-      "notes": [
-        "bounded-write-inherits-all-tools"
-      ],
+      "notes": [],
       "ownership": "shared",
       "package": null,
       "path": "harness/github-copilot/agents/workshop-ta.agent.md",
       "selected_agent": null,
-      "status": "capability-review-required",
+      "status": "current-static",
       "target": "vscode+github-copilot",
-      "tools": [],
-      "tools_mode": "inherit-all"
+      "tools": [
+        "read",
+        "grep",
+        "glob",
+        "edit",
+        "agent"
+      ],
+      "tools_mode": "allow-list"
     },
     {
       "authority": "unspecified",
@@ -6243,13 +6449,13 @@
   "summary": {
     "agents": 240,
     "blocked": 0,
-    "boundedWriteAgentsInheritingAll": 42,
-    "capabilityReviewRequired": 42,
-    "currentStatic": 208,
+    "boundedWriteAgentsInheritingAll": 0,
+    "capabilityReviewRequired": 0,
+    "currentStatic": 248,
     "fixedModels": 0,
     "prompts": 59,
     "readOnlyAgentsInheritingAll": 0,
-    "runtimeVerificationRequired": 49
+    "runtimeVerificationRequired": 51
   },
   "verificationDate": "2026-08-21"
 }

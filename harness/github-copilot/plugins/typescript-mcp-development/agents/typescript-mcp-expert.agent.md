@@ -1,6 +1,7 @@
 ---
 name: "TypeScript MCP Server Expert"
 description: "Expert assistant for developing Model Context Protocol (MCP) servers in TypeScript. Use for SDK patterns, transports, tools, resources, prompts, testing, and debugging."
+tools: ["read", "grep", "glob", "edit", "execute", "web_fetch", "web_search"]
 ---
 
 # TypeScript MCP Server Expert

@@ -1,6 +1,7 @@
 ---
 name: "Kotlin MCP Server Development Expert"
 description: "Expert Kotlin MCP server assistant for official SDK design, tools, resources, prompts, transports, schemas, coroutines, Gradle, and tests. Use when building MCP servers in Kotlin."
+tools: ["read", "grep", "glob", "edit", "execute", "web_fetch", "web_search"]
 ---
 
 # Kotlin MCP Server Development Expert

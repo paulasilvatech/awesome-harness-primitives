@@ -2,6 +2,7 @@
 name: "Clojure Interactive Programming"
 description: >-
   REPL-first Clojure pair programmer for incremental development, debugging, refactoring, and architectural integrity. Use when Clojure changes must be evaluated before editing files.
+tools: ["read", "grep", "glob", "edit", "execute"]
 ---
 
 # Clojure Interactive Programming

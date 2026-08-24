@@ -3,6 +3,7 @@ name: "gem-planner"
 description: "Create DAG-based execution plans, wave schedules, task decomposition, risk analysis, and `plan.yaml`. Use when the GEM orchestrator needs a plan_id-bound plan before implementation."
 user-invocable: false
 disable-model-invocation: false
+tools: ["read", "grep", "glob", "edit"]
 ---
 
 # GEM Planner

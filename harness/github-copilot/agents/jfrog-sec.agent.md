@@ -2,6 +2,7 @@
 name: "JFrog Security Agent"
 description: >-
   Dedicated application-security agent for policy-compliant open source vulnerability remediation with JFrog security intelligence. Use when dependency fixes must satisfy JFrog Curation Policy and CVE-specific remediation guidance.
+tools: ["read", "grep", "glob", "edit", "execute"]
 ---
 
 # JFrog Security Agent

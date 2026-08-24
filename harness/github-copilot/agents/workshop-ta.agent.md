@@ -2,6 +2,7 @@
 name: "Workshop TA"
 description: >-
   Coordinates multi-agent workshops by creating workshops, opening desks, reading journals and bench artifacts, routing work, writing signals, and summarizing room state. Use for workshop orchestration, not desk execution.
+tools: ["read", "grep", "glob", "edit", "agent"]
 ---
 
 # Workshop TA

@@ -5,6 +5,7 @@ description: >-
 user-invocable: false
 disable-model-invocation: false
 argument-hint: "Enter task_id, plan_id, plan_path, patterns, source_task_id."
+tools: ["read", "grep", "glob", "edit", "web_fetch", "web_search"]
 ---
 
 # GEM Skill Creator

@@ -1,6 +1,7 @@
 ---
 name: "Python MCP Server Expert"
 description: "Expert assistant for developing Model Context Protocol (MCP) servers in Python. Use for FastMCP, tools, resources, prompts, transports, and testing."
+tools: ["read", "grep", "glob", "edit", "execute", "web_fetch", "web_search"]
 ---
 
 # Python MCP Server Expert

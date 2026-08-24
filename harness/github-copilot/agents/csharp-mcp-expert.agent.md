@@ -1,6 +1,7 @@
 ---
 name: "C# MCP Server Expert"
 description: "Expert assistant for developing Model Context Protocol (MCP) servers in C#. Use for SDK design, tools, prompts, resources, testing, and debugging."
+tools: ["read", "grep", "glob", "edit", "execute", "web_fetch", "web_search"]
 ---
 
 # C# MCP Server Expert

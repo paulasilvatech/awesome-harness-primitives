@@ -4,6 +4,7 @@ description: "Refactoring specialist: removes dead code, reduces complexity, con
 user-invocable: false
 disable-model-invocation: false
 argument-hint: "Enter task_id, scope (single_file|multiple_files|project_wide), targets (file paths/patterns), and focus (dead_code|complexity|duplication|naming|all)."
+tools: ["read", "grep", "glob", "edit", "execute"]
 ---
 
 # Code Simplifier

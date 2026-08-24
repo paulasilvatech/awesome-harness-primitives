@@ -2,6 +2,7 @@
 name: "PySpark Expert Agent"
 description: >-
   Diagnose PySpark performance bottlenecks, distributed execution pitfalls, and suggest Spark-native rewrites and safer distributed patterns (incl. mapInPandas guidance). Use when PySpark code may not scale or may not be truly distributed.
+tools: ["read", "grep", "glob", "edit"]
 ---
 
 # PySpark Performance and Parallelism Reviewer

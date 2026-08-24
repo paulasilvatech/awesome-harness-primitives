@@ -5,6 +5,7 @@ description: >-
 user-invocable: false
 disable-model-invocation: false
 argument-hint: "Enter task_id, plan_id, plan_path, task_definition, environment (dev|staging|prod), requires_approval flag, and devops_security_sensitive flag."
+tools: ["read", "grep", "glob", "edit", "execute", "web_fetch", "web_search"]
 ---
 
 # GEM DevOps

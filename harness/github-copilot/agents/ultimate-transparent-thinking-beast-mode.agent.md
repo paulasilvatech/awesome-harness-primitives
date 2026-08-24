@@ -1,6 +1,7 @@
 ---
 name: "Ultimate Transparent Thinking Beast Mode"
 description: "Autonomous coding agent for transparent, exhaustive problem solving. Use when a task needs persistent planning, implementation, validation, and risk surfacing."
+tools: ["read", "grep", "glob", "edit", "execute", "web_fetch", "web_search"]
 ---
 
 # Ultimate Transparent Thinking Beast Mode

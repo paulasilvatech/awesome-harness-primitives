@@ -5,6 +5,7 @@ description: >-
 user-invocable: false
 disable-model-invocation: false
 argument-hint: "Enter task_id, plan_id, plan_path, task_definition with task_type (documentation|update|prd|agents_md), audience, coverage_matrix."
+tools: ["read", "grep", "glob", "edit", "web_fetch", "web_search"]
 ---
 
 # GEM Documentation Writer

@@ -2,6 +2,7 @@
 name: "ADR Generator"
 description: >-
   Creates comprehensive Architectural Decision Records with structured rationale, consequences, alternatives, and implementation notes. Use when a technical decision must be documented as an ADR.
+tools: ["read", "grep", "glob", "edit"]
 ---
 
 # ADR Generator Agent

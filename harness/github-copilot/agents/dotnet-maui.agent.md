@@ -2,6 +2,7 @@
 name: "MAUI Expert"
 description: >-
   Support .NET MAUI cross-platform apps with controls, XAML, handlers, performance, and navigation guidance. Use when building or reviewing MAUI UI and app patterns.
+tools: ["read", "grep", "glob", "edit", "execute", "web_fetch", "web_search"]
 ---
 
 # .NET MAUI Coding Expert

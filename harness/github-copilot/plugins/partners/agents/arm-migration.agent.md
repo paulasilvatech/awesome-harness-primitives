@@ -10,6 +10,7 @@ mcp-servers:
       ["run", "--rm", "-i", "-v", "${{ github.workspace }}:/workspace", "--name", "arm-mcp", "armlimited/arm-mcp:latest"]
     tools:
       ["skopeo", "check_image", "knowledge_base_search", "migrate_ease_scan", "mcp", "sysreport_instructions"]
+tools: ["read", "grep", "glob", "edit", "execute", "custom-mcp/*"]
 ---
 
 # Arm Migration

@@ -2,6 +2,7 @@
 name: "Amplitude Experiment Implementation"
 description: >-
   Amplitude experiment implementation agent for issue-driven feature work, instrumentation, experiment creation, and variant wrapping. Use when deploying product experiments through Amplitude.
+tools: ["read", "grep", "glob", "edit", "execute"]
 ---
 
 # Amplitude Experiment Implementation

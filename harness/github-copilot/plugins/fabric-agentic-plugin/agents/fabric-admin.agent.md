@@ -1,6 +1,7 @@
 ---
 name: FabricAdmin
 description: "Manage Microsoft Fabric capacity, workspaces, governance, security, cost, observability, access, compliance, inventory, and operational incidents. Use for tenant or cross-workload administration and delegate workload-specific execution through the fabric-agentic-platform skill."
+tools: ["read", "grep", "glob", "edit", "web_fetch", "web_search", "agent"]
 ---
 
 # FabricAdmin — Fabric Administration Agent

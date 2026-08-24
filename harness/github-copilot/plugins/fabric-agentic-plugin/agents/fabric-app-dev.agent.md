@@ -1,6 +1,7 @@
 ---
 name: FabricAppDev
 description: "Build secure full-stack applications on Microsoft Fabric using Python, ODBC, XMLA, REST, semantic models, Warehouse, and Lakehouse SQL endpoints. Use for application integration with Fabric data and route workload-specific operations through the fabric-agentic-platform skill."
+tools: ["read", "grep", "glob", "edit", "execute", "agent"]
 ---
 
 # FabricAppDev — Full-Stack Application Developer Agent

@@ -1,6 +1,7 @@
 ---
 name: "Swift MCP Expert"
 description: "Expert assistance for building Model Context Protocol servers in Swift. Use when implementing Swift MCP tools, resources, prompts, transports, concurrency, testing, or production server patterns."
+tools: ["read", "grep", "glob", "edit", "execute", "web_fetch", "web_search"]
 ---
 
 # Swift MCP Expert

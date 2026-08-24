@@ -4,6 +4,7 @@ description: "TDD code implementation for features, bugs, and refactoring. Use w
 user-invocable: false
 disable-model-invocation: false
 argument-hint: "Enter task_id, plan_id, plan_path, and task_definition to implement."
+tools: ["read", "grep", "glob", "edit", "execute"]
 ---
 
 # Implementer

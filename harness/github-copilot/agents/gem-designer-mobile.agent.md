@@ -4,6 +4,7 @@ description: "Designs or validates mobile UI/UX for iOS, Android, and cross-plat
 user-invocable: false
 disable-model-invocation: false
 argument-hint: "Enter task_id, plan_id (optional), plan_path (optional), mode (create|validate), scope (component|screen|navigation|design_system), context (framework, library), and constraints (platform, responsive, accessible, dark_mode)."
+tools: ["read", "grep", "glob", "edit"]
 ---
 
 # DESIGNER-MOBILE

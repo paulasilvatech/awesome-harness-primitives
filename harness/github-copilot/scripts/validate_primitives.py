@@ -251,11 +251,25 @@ class Validator:
             getattr(self, f"validate_{kind}")()
 
     # Agents
+    def plugin_owned_agents(self) -> list[Path]:
+        """Agents a plugin owns outright.
+
+        Library copies are generated from the flat tree and are already validated at
+        their canonical source, so validating them again would double-report.
+        """
+        paths: list[Path] = []
+        for name, config in sorted(self.plugin_sources.items()):
+            if config.get("componentSource") != "plugin":
+                continue
+            folder = self.root / "plugins" / name / "agents"
+            if folder.is_dir():
+                paths.extend(sorted(folder.glob("*.agent.md")))
+        return paths
+
     def validate_agents(self) -> None:
         kind = "agents"
         d = self.root / "agents"
         files = sorted(d.glob("*.agent.md")) if d.is_dir() else []
-        self.file_counts[kind] = len(files)
         seen: dict[str, Path] = {}
         for p in files:
             key = p.name[:-len(".agent.md")]
@@ -265,6 +279,10 @@ class Validator:
             else:
                 seen[key] = p
             self.catch_file(kind, p, lambda p=p: self._validate_agent(p))
+        plugin_files = self.plugin_owned_agents()
+        for p in plugin_files:
+            self.catch_file(kind, p, lambda p=p: self._validate_agent(p))
+        self.file_counts[kind] = len(files) + len(plugin_files)
 
     def _validate_agent(self, p: Path) -> None:
         kind = "agents"

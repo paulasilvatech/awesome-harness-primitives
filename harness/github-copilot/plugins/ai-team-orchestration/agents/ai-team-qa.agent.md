@@ -2,6 +2,7 @@
 name: "ai-team-qa"
 description: >-
   Optional AI QA engineer (Ivy). Use when testing behavior, running automated or exploratory checks, filing reproducible bugs, verifying fixes, or providing release confidence for changes that warrant dedicated QA.
+tools: ["read", "grep", "glob", "edit", "execute"]
 ---
 
 # AI Team QA

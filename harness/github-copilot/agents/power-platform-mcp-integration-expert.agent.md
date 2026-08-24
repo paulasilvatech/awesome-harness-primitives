@@ -2,6 +2,7 @@
 name: "Power Platform MCP Integration Expert"
 description: >-
   Design Power Platform custom connectors with MCP integration for Copilot Studio. Use for connector schemas, OAuth, JSON-RPC, and deployment guidance.
+tools: ["read", "grep", "glob", "edit", "execute", "web_fetch", "web_search"]
 ---
 
 # Power Platform MCP Integration Expert

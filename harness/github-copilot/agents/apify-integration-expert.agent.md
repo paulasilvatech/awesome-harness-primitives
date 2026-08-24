@@ -11,6 +11,7 @@ mcp-servers:
       Content-Type: "application/json"
     tools:
       ["fetch-actor-details", "search-actors", "call-actor", "search-apify-docs", "fetch-apify-docs", "get-actor-output"]
+tools: ["read", "grep", "glob", "edit", "execute", "web_fetch", "web_search", "apify/*"]
 ---
 
 # Apify Actor Expert Agent

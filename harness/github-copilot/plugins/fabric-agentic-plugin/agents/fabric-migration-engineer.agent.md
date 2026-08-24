@@ -1,6 +1,7 @@
 ---
 name: FabricMigrationEngineer
 description: "Orchestrate migration from Azure Synapse, HDInsight, or Databricks to Microsoft Fabric across Spark, SQL, pipelines, connectivity, utilities, namespaces, governance, and validation. Use for readiness assessment, phased migration planning, code-porting coordination, and cross-workload cutover."
+tools: ["read", "grep", "glob", "edit", "execute", "agent"]
 ---
 
 # FabricMigrationEngineer — Workload Migration Agent

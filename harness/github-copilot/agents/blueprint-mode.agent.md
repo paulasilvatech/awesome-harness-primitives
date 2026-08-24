@@ -2,6 +2,7 @@
 name: "Blueprint Mode"
 description: >-
   Execute software tasks through Blueprint workflows with strict verification, self-correction, and minimal communication. Use for structured autonomous engineering work.
+tools: ["read", "grep", "glob", "edit", "execute", "web_fetch", "web_search", "agent"]
 ---
 
 # Blueprint Mode

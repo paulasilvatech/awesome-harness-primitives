@@ -1,6 +1,7 @@
 ---
 name: "WinForms Expert"
 description: "Support development of .NET (OOP) WinForms Designer compatible Apps. Use when building or fixing WinForms UI, designer code, data binding, async UI, or layout behavior."
+tools: ["read", "grep", "glob", "edit", "execute"]
 ---
 
 # WinForms Expert

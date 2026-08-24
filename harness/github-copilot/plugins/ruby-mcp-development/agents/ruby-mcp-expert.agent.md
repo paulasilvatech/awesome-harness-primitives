@@ -1,6 +1,7 @@
 ---
 name: "Ruby MCP Expert"
 description: "Expert Ruby MCP server agent. Use when building, testing, or reviewing Model Context Protocol servers in Ruby with the official MCP Ruby SDK and Rails integration."
+tools: ["read", "grep", "glob", "edit", "execute", "web_fetch", "web_search"]
 ---
 
 # Ruby MCP Expert

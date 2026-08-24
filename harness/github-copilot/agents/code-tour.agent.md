@@ -1,6 +1,7 @@
 ---
 name: "VSCode Tour Expert"
 description: "Creates and maintains VS Code CodeTour .tour walkthroughs. Use for onboarding tours, feature tours, schema fixes, and tour drift review."
+tools: ["read", "grep", "glob", "edit", "execute"]
 ---
 
 # VSCode Tour Expert

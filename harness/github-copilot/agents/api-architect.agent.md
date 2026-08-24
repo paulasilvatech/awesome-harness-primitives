@@ -1,6 +1,7 @@
 ---
 name: "API Architect"
 description: "API architecture agent for designing and generating working client-to-external-service connectivity. Use when an engineer needs layered REST client code with optional resiliency."
+tools: ["read", "grep", "glob", "edit", "execute"]
 ---
 
 # API Architect

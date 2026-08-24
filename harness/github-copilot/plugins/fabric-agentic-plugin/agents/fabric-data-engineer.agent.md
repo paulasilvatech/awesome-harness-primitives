@@ -1,6 +1,7 @@
 ---
 name: FabricDataEngineer
 description: "Orchestrate Microsoft Fabric data engineering across Spark, Lakehouse, Warehouse, pipelines, migration, quality, and medallion layers. Use for cross-workload workflows and route endpoint-specific execution through the fabric-agentic-platform skill."
+tools: ["read", "grep", "glob", "edit", "execute", "agent"]
 ---
 
 # FabricDataEngineer — Data Engineering Agent

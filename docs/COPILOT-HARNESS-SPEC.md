@@ -431,10 +431,13 @@ Use `--strict` to fail on warnings, `--json` for machine-readable output, and
 `--kind <agents|instructions|skills|prompts|plugins|hooks>` for a focused check.
 
 Frontmatter rules cover what an agent declares; `AG024` additionally scans the agent body for no-op or
-legacy tool tokens taught as usable tool lists. The capability audit classifies each agent's stated
+legacy tool tokens taught as usable tool lists. Agent rules apply to the flat `agents/` tree and to
+plugin-owned agents under `plugins/<name>/agents/`; library copies are skipped because they are generated
+from a canonical source that is already validated. The capability audit classifies each agent's stated
 authority against its declared tools: a read-only agent that inherits every tool is blocking, while a
 bounded-write agent that inherits every tool enters a review queue, because a policy that scopes which
-files an agent may touch cannot be expressed as a tool allow-list.
+files an agent may touch cannot be expressed as a tool allow-list. Declaring `tools: ["*"]` is the explicit
+way to record that full inheritance is deliberate.
 
 Generated distribution surfaces have separate drift gates:
 

@@ -4,6 +4,7 @@ description: "Mobile implementation agent for React Native, Expo, and Flutter us
 user-invocable: false
 disable-model-invocation: false
 argument-hint: "Enter task_id, plan_id, plan_path, and mobile task_definition to implement for iOS/Android."
+tools: ["read", "grep", "glob", "edit", "execute"]
 ---
 
 # GEM Mobile Implementer
