@@ -19,7 +19,7 @@ first-party evidence and its runtime surface is exercised where applicable.
 | skill | 474 | 420 | 54 | 26 |
 | prompt | 59 | 48 | 11 | 4 |
 | hook | 10 | 8 | 2 | 3 |
-| plugin | 100 | 75 | 25 | 10 |
+| plugin | 100 | 75 | 25 | 16 |
 
 - Shared-harness strict validation: 0 errors, 0 warnings.
 - Plugin-owned primitive validation: 0 errors, 0 warnings.

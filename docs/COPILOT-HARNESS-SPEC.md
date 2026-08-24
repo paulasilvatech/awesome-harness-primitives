@@ -289,7 +289,30 @@ The portable Agent Plugins 1.0 specification itself standardizes only skills and
 reverse-domain client extension directories, but this repository intentionally targets GitHub Copilot's
 documented flat package contract for GitHub-specific agents, hooks, and extensions.
 
-### 4.3 Marketplace — `marketplace.json`
+### 4.3 Plugin classification
+
+`plugin.json` carries no maturity, tier, status, or category field: unsupported top-level keys fail rule
+`PL007`, and `keywords` is a discovery taxonomy that must not double as governance. Classification
+therefore lives in the canonical `harness/github-copilot/manifests/plugin-sources.json` under an optional
+`governance` object and is projected into `docs/PLUGIN-AUDIT.md` and `docs/CATALOG.md` by the shared
+classifier `harness/github-copilot/scripts/_plugin_governance.py`.
+
+`governance` accepts only `lifecycle`, `lastRuntimeProbe`, and `evidence`. A probe date requires evidence,
+and a `deprecated` lifecycle requires evidence. Because it is repository governance rather than
+distribution metadata, `normalize_plugin_manifests.py` never copies it into `plugin.json`.
+
+| Axis | Values | Derivation |
+| --- | --- | --- |
+| Lifecycle | `active`, `incubating`, `deprecated` | `incubating` is derived from a `0.x` manifest version. `deprecated` is an explicit, evidence-backed override. `active` is the default. |
+| Assurance | `runtime-verified`, `runtime-stale`, `runtime-required`, `static-validated` | A dated representative probe within 90 days is `runtime-verified` and becomes `runtime-stale` afterwards. Packages shipping MCP servers, hooks, or client extensions are `runtime-required` until probed, because static checks never exercise those surfaces. |
+| Provenance | `repository`, `upstream-mirror` | `upstream-mirror` requires both `upstreamRepository` and a pinned `upstreamCommit`. |
+
+Classification is descriptive and is never authority to remove, hide, or block a package. A deprecated or
+unprobed package remains installable. Installing a marketplace entry is not evidence of runtime behavior:
+`runtime-verified` requires a representative activation, such as an agent invocation, a hook decision, or
+an MCP server exposure, recorded with a date in `docs/HARNESS-VALIDATION.md`.
+
+### 4.4 Marketplace — `marketplace.json`
 
 Discovery (BUNDLE): `.plugin/marketplace.json`, `.github/plugin/marketplace.json`, `.claude-plugin/marketplace.json`.
 

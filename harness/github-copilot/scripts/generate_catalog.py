@@ -5,14 +5,19 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+from datetime import date
 from pathlib import Path
 from typing import Any
 
 try:
     from _layout import HARNESS_ROOT, REPO_ROOT
+    from _plugin_governance import classify
+    from _plugin_sources import load_plugin_sources
     from validate_primitives import PLUGIN_MANIFESTS, parse_frontmatter
 except ModuleNotFoundError:  # pragma: no cover - supports python3 -m invocation
     from ._layout import HARNESS_ROOT, REPO_ROOT
+    from ._plugin_governance import classify
+    from ._plugin_sources import load_plugin_sources
     from .validate_primitives import PLUGIN_MANIFESTS, parse_frontmatter
 
 DEFAULT_OUT = REPO_ROOT / "docs" / "CATALOG.md"
@@ -135,6 +140,8 @@ def plugin_manifest(plugin_dir: Path) -> Path | None:
 
 def plugin_rows() -> list[list[str]]:
     rows = []
+    source_map = load_plugin_sources()
+    as_of = date.today()
     plugin_dirs = [p for p in (SOURCE_ROOT / "plugins").iterdir()
                    if p.is_dir()] if (SOURCE_ROOT / "plugins").is_dir() else []
     for plugin_dir in sorted(plugin_dirs, key=lambda p: p.name.casefold()):
@@ -142,9 +149,28 @@ def plugin_rows() -> list[list[str]]:
         data: dict[str, Any] = {}
         if manifest is not None:
             data = json.loads(manifest.read_text(encoding="utf-8"))
+        mcp_path = plugin_dir / "mcp.json"
+        mcp_servers = 0
+        if mcp_path.is_file():
+            mcp = json.loads(mcp_path.read_text(encoding="utf-8"))
+            servers = mcp.get("mcpServers")
+            mcp_servers = len(servers) if isinstance(servers, dict) else 0
+        source_config = source_map.get(plugin_dir.name, {})
+        extensions = source_config.get("extensionSources") or []
+        classification = classify(
+            version=data.get("version"),
+            source_config=source_config,
+            mcp_servers=mcp_servers,
+            hooks=1 if source_config.get("hookSource") else 0,
+            extensions=len(extensions),
+            as_of=as_of,
+        )
         rows.append([
             one_line(data.get("name") or plugin_dir.name),
             one_line(data.get("version")),
+            classification.lifecycle,
+            classification.assurance,
+            classification.provenance,
             truncate(data.get("description")),
         ])
     return sort_rows(rows)
@@ -204,7 +230,10 @@ Regenerate this file after changing files under `harness/github-copilot/agents/`
 
 ## Plugins
 
-{md_table(["Plugin", "Version", "Description"], plugins)}
+Lifecycle, assurance, and provenance are descriptive classifications generated from repository evidence.
+They exist to filter a large marketplace and never remove, hide, or block a package.
+
+{md_table(["Plugin", "Version", "Lifecycle", "Assurance", "Provenance", "Description"], plugins)}
 
 ## Hooks
 

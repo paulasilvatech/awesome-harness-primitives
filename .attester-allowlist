@@ -1,0 +1,6 @@
+# Local sibling modules under harness/github-copilot/scripts/.
+# They are imported by path, not installed from PyPI.
+_layout
+_plugin_sources
+_plugin_governance
+validate_primitives

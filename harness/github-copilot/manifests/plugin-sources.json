@@ -109,7 +109,11 @@
         "./skills/suggest-awesome-github-copilot-agents/",
         "./skills/suggest-awesome-github-copilot-instructions/",
         "./skills/suggest-awesome-github-copilot-skills/"
-      ]
+      ],
+      "governance": {
+        "lastRuntimeProbe": "2026-08-22",
+        "evidence": "docs/HARNESS-VALIDATION.md#flat-github-copilot-plugin-layout-verification"
+      }
     },
     "aws-cloud-development": {
       "componentSource": "library",
@@ -124,7 +128,11 @@
         "./skills/aws-resource-health-diagnose/",
         "./skills/aws-resource-query/",
         "./skills/aws-well-architected-review/"
-      ]
+      ],
+      "governance": {
+        "lastRuntimeProbe": "2026-08-22",
+        "evidence": "docs/HARNESS-VALIDATION.md#flat-github-copilot-plugin-layout-verification"
+      }
     },
     "azure-cloud-development": {
       "componentSource": "library",
@@ -173,7 +181,11 @@
       "hookSource": "./hooks/backstage-safety/hooks.json",
       "sharedSkills": [
         "./skills/backstage-plugin-builder/"
-      ]
+      ],
+      "governance": {
+        "lastRuntimeProbe": "2026-08-22",
+        "evidence": "docs/HARNESS-VALIDATION.md#flat-github-copilot-plugin-layout-verification"
+      }
     },
     "cast-imaging": {
       "componentSource": "library",
