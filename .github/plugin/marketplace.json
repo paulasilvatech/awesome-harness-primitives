@@ -72,6 +72,12 @@
       "version": "1.0.2"
     },
     {
+      "name": "azure-ai-foundry",
+      "source": "./harness/github-copilot/plugins/azure-ai-foundry",
+      "description": "Azure AI Foundry agent development toolkit covering Agent Service synchronization, hosted agents with AG-UI frontends, Microsoft Agent Framework and Semantic Kernel, gateway and API governance, semantic caching, agent identity, and evaluation loops.",
+      "version": "1.0.0"
+    },
+    {
       "name": "azure-cloud-development",
       "source": "./harness/github-copilot/plugins/azure-cloud-development",
       "description": "Comprehensive Azure cloud development tools including Infrastructure as Code, serverless functions, architecture patterns, and cost optimization for building scalable cloud applications.",

@@ -16,7 +16,7 @@
   },
   "packaging": {
     "activePluginHookPackages": 2,
-    "marketplaceEntries": 100,
+    "marketplaceEntries": 101,
     "pluginOwned": {
       "agents": 15,
       "errors": 0,
@@ -25,7 +25,7 @@
       "skills": 54,
       "warnings": 0
     },
-    "pluginPackages": 100,
+    "pluginPackages": 101,
     "sharedAgents": {
       "packaged": 124,
       "total": 225,
@@ -134,7 +134,7 @@
       ]
     },
     "sharedSkills": {
-      "packaged": 172,
+      "packaged": 180,
       "total": 420,
       "unpackaged": [
         "acquire-codebase-knowledge",
@@ -142,9 +142,7 @@
         "add-educational-comments",
         "adobe-illustrator-scripting",
         "agent-skill-stack",
-        "agentic-eval",
         "ai-ready",
-        "apim-ai-gateway",
         "appinsights-instrumentation",
         "apple-appstore-reviewer",
         "arch-linux-triage",
@@ -154,7 +152,6 @@
         "autoresearch",
         "aws-cdk-python-setup",
         "aws-cloudwatch-investigation",
-        "azure-api-center",
         "azure-architecture-autopilot",
         "azure-architecture-diagrams",
         "azure-container-registry-cli",
@@ -228,7 +225,6 @@
         "efcore-d2-db-diagram",
         "em-dash",
         "email-drafter",
-        "entra-agent-user",
         "eval-driven-dev",
         "exam-ready",
         "excalidraw-diagram-generator",
@@ -239,8 +235,6 @@
         "first-ask",
         "fluentui-blazor",
         "folder-structure-blueprint-generator",
-        "foundry-agent-sync",
-        "foundry-hosted-agent-copilotkit",
         "freecad-scripts",
         "game-engine",
         "gdpr-compliant",
@@ -292,7 +286,6 @@
         "meeting-minutes",
         "memory-merger",
         "mentoring-juniors",
-        "microsoft-agent-framework",
         "microsoft-code-reference",
         "microsoft-docs",
         "microsoft-skill-creator",
@@ -346,7 +339,6 @@
         "scoutqa-test",
         "secret-scanning",
         "security-review",
-        "semantic-kernel",
         "server-side-conversion-tracking",
         "setup-my-iq",
         "shopify-review-triage",
@@ -9653,6 +9645,28 @@
       ]
     },
     {
+      "characters_scanned": 3338,
+      "external_url_count": 1,
+      "files_scanned": 2,
+      "kind": "plugin",
+      "local_evidence_mention": false,
+      "name": "azure-ai-foundry",
+      "ownership": "shared",
+      "package": "azure-ai-foundry",
+      "packaged_by": [
+        "azure-ai-foundry"
+      ],
+      "path": "harness/github-copilot/plugins/azure-ai-foundry",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "version-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "github.com"
+      ]
+    },
+    {
       "characters_scanned": 2725,
       "external_url_count": 1,
       "files_scanned": 2,
@@ -13203,7 +13217,9 @@
       "name": "agentic-eval",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "azure-ai-foundry"
+      ],
       "path": "harness/github-copilot/skills/agentic-eval",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -13317,7 +13333,9 @@
       "name": "apim-ai-gateway",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "azure-ai-foundry"
+      ],
       "path": "harness/github-copilot/skills/apim-ai-gateway",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -13970,7 +13988,9 @@
       "name": "azure-api-center",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "azure-ai-foundry"
+      ],
       "path": "harness/github-copilot/skills/azure-api-center",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -14227,6 +14247,7 @@
       "ownership": "shared",
       "package": null,
       "packaged_by": [
+        "azure-ai-foundry",
         "open-horizons-platform"
       ],
       "path": "harness/github-copilot/skills/azure-managed-redis-cache",
@@ -16861,7 +16882,9 @@
       "name": "entra-agent-user",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "azure-ai-foundry"
+      ],
       "path": "harness/github-copilot/skills/entra-agent-user",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -17357,7 +17380,9 @@
       "name": "foundry-agent-sync",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "azure-ai-foundry"
+      ],
       "path": "harness/github-copilot/skills/foundry-agent-sync",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -17378,7 +17403,9 @@
       "name": "foundry-hosted-agent-copilotkit",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "azure-ai-foundry"
+      ],
       "path": "harness/github-copilot/skills/foundry-hosted-agent-copilotkit",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -19157,7 +19184,9 @@
       "name": "microsoft-agent-framework",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "azure-ai-foundry"
+      ],
       "path": "harness/github-copilot/skills/microsoft-agent-framework",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -21755,7 +21784,9 @@
       "name": "semantic-kernel",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "azure-ai-foundry"
+      ],
       "path": "harness/github-copilot/skills/semantic-kernel",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -23086,7 +23117,7 @@
         },
         {
           "errors": 0,
-          "files": 100,
+          "files": 101,
           "kind": "plugins",
           "warnings": 0
         },

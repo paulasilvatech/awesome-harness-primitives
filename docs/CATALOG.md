@@ -11,7 +11,7 @@ Regenerate this file after changing files under `harness/github-copilot/agents/`
 | Instructions | 194 |
 | Skills | 420 |
 | VS Code prompts | 48 |
-| Plugins | 100 |
+| Plugins | 101 |
 | Hooks | 8 |
 
 ## Agents
@@ -939,6 +939,7 @@ They exist to filter a large marketplace and never remove, hide, or block a pack
 | automate-this | 1.0.2 | active | static-validated | repository | Record your screen doing a manual process, drop the video on your Desktop, and let Copilot CLI analyze it frame-by-frame to build working automation scripts. Supports narrated rec… |
 | awesome-copilot | 1.1.2 | active | runtime-verified | repository | Meta prompts that help you discover and generate curated GitHub Copilot agents, instructions, prompts, and skills. |
 | aws-cloud-development | 1.0.2 | active | runtime-verified | repository | Comprehensive AWS cloud development tools including Infrastructure as Code, serverless functions, architecture patterns, and cost optimization for building scalable cloud applicat… |
+| azure-ai-foundry | 1.0.0 | active | static-validated | repository | Azure AI Foundry agent development toolkit covering Agent Service synchronization, hosted agents with AG-UI frontends, Microsoft Agent Framework and Semantic Kernel, gateway and A… |
 | azure-cloud-development | 1.0.4 | active | static-validated | repository | Comprehensive Azure cloud development tools including Infrastructure as Code, serverless functions, architecture patterns, and cost optimization for building scalable cloud applic… |
 | backlog-swipe-triage | 1.0.4 | active | runtime-required | upstream-mirror | Quickly swipe through backlog issues to triage decisions like assign, needs-info, defer, close, or ignore. |
 | backrooms-canvas | 1.0.2 | active | runtime-required | upstream-mirror | Wander an endless first-person backrooms in a Copilot canvas while agents work; their status ghost-writes on the walls. |
