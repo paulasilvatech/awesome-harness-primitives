@@ -1,6 +1,6 @@
 {
   "name": "clojure-interactive-programming",
-  "description": "Tools for REPL-first Clojure workflows featuring Clojure instructions, the interactive programming chat mode and supporting guidance.",
+  "description": "Tools for REPL-first Clojure workflows featuring Clojure instructions, the interactive programming agent and supporting guidance.",
   "version": "1.0.2",
   "author": {
     "name": "Awesome Copilot Community"

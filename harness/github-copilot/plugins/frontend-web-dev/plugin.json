@@ -1,6 +1,6 @@
 {
   "name": "frontend-web-dev",
-  "description": "Essential prompts, instructions, and chat modes for modern frontend web development including React, Angular, Vue, TypeScript, and CSS frameworks.",
+  "description": "Essential prompts, instructions, and agents for modern frontend web development including React, Angular, Vue, TypeScript, and CSS frameworks.",
   "version": "1.0.2",
   "author": {
     "name": "Awesome Copilot Community"

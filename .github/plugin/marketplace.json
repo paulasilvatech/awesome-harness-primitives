@@ -110,7 +110,7 @@
     {
       "name": "clojure-interactive-programming",
       "source": "./harness/github-copilot/plugins/clojure-interactive-programming",
-      "description": "Tools for REPL-first Clojure workflows featuring Clojure instructions, the interactive programming chat mode and supporting guidance.",
+      "description": "Tools for REPL-first Clojure workflows featuring Clojure instructions, the interactive programming agent and supporting guidance.",
       "version": "1.0.2"
     },
     {
@@ -158,7 +158,7 @@
     {
       "name": "csharp-dotnet-development",
       "source": "./harness/github-copilot/plugins/csharp-dotnet-development",
-      "description": "Essential prompts, instructions, and chat modes for C# and .NET development including testing, documentation, and best practices.",
+      "description": "Essential prompts, instructions, and agents for C# and .NET development including testing, documentation, and best practices.",
       "version": "1.1.2"
     },
     {
@@ -176,7 +176,7 @@
     {
       "name": "devops-oncall",
       "source": "./harness/github-copilot/plugins/devops-oncall",
-      "description": "A focused set of prompts, instructions, and a chat mode to help triage incidents and respond quickly with DevOps tools and Azure resources.",
+      "description": "A focused set of prompts, instructions, and an agent to help triage incidents and respond quickly with DevOps tools and Azure resources.",
       "version": "1.0.2"
     },
     {
@@ -242,7 +242,7 @@
     {
       "name": "frontend-web-dev",
       "source": "./harness/github-copilot/plugins/frontend-web-dev",
-      "description": "Essential prompts, instructions, and chat modes for modern frontend web development including React, Angular, Vue, TypeScript, and CSS frameworks.",
+      "description": "Essential prompts, instructions, and agents for modern frontend web development including React, Angular, Vue, TypeScript, and CSS frameworks.",
       "version": "1.0.2"
     },
     {
@@ -266,7 +266,7 @@
     {
       "name": "go-mcp-development",
       "source": "./harness/github-copilot/plugins/go-mcp-development",
-      "description": "Complete toolkit for building Model Context Protocol (MCP) servers in Go using the official github.com/modelcontextprotocol/go-sdk. Includes instructions for best practices, a prompt for generating servers, and an expert chat mode for guidance.",
+      "description": "Complete toolkit for building Model Context Protocol (MCP) servers in Go using the official github.com/modelcontextprotocol/go-sdk. Includes instructions for best practices, a prompt for generating servers, and an expert agent for guidance.",
       "version": "1.0.3"
     },
     {
@@ -290,7 +290,7 @@
     {
       "name": "kotlin-mcp-development",
       "source": "./harness/github-copilot/plugins/kotlin-mcp-development",
-      "description": "Complete toolkit for building Model Context Protocol (MCP) servers in Kotlin using the official io.modelcontextprotocol:kotlin-sdk library. Includes instructions for best practices, a prompt for generating servers, and an expert chat mode for guidance.",
+      "description": "Complete toolkit for building Model Context Protocol (MCP) servers in Kotlin using the official io.modelcontextprotocol:kotlin-sdk library. Includes instructions for best practices, a prompt for generating servers, and an expert agent for guidance.",
       "version": "1.0.2"
     },
     {
@@ -428,7 +428,7 @@
     {
       "name": "python-mcp-development",
       "source": "./harness/github-copilot/plugins/python-mcp-development",
-      "description": "Complete toolkit for building Model Context Protocol (MCP) servers in Python using the official SDK with FastMCP. Includes instructions for best practices, a prompt for generating servers, and an expert chat mode for guidance.",
+      "description": "Complete toolkit for building Model Context Protocol (MCP) servers in Python using the official SDK with FastMCP. Includes instructions for best practices, a prompt for generating servers, and an expert agent for guidance.",
       "version": "1.0.2"
     },
     {
@@ -566,7 +566,7 @@
     {
       "name": "typescript-mcp-development",
       "source": "./harness/github-copilot/plugins/typescript-mcp-development",
-      "description": "Complete toolkit for building Model Context Protocol (MCP) servers in TypeScript/Node.js using the official SDK. Includes instructions for best practices, a prompt for generating servers, and an expert chat mode for guidance.",
+      "description": "Complete toolkit for building Model Context Protocol (MCP) servers in TypeScript/Node.js using the official SDK. Includes instructions for best practices, a prompt for generating servers, and an expert agent for guidance.",
       "version": "1.0.2"
     },
     {

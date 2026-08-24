@@ -1,6 +1,6 @@
 {
   "name": "devops-oncall",
-  "description": "A focused set of prompts, instructions, and a chat mode to help triage incidents and respond quickly with DevOps tools and Azure resources.",
+  "description": "A focused set of prompts, instructions, and an agent to help triage incidents and respond quickly with DevOps tools and Azure resources.",
   "version": "1.0.2",
   "author": {
     "name": "Awesome Copilot Community"

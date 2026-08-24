@@ -51,7 +51,7 @@ server or extension in the target profile.
 | agent | Cloud and SaaS Outage Triage | harness/github-copilot/agents/cloud-saas-outage-triage.agent.md | runtime-tool:outagedeck/* |
 | agent | Comet Opik | harness/github-copilot/agents/comet-opik.agent.md | runtime-tool:opik/* |
 | agent | Context7-Expert | harness/github-copilot/agents/context7.agent.md | runtime-tool:context7/* |
-| agent | Create PRD Chat Mode | harness/github-copilot/agents/prd.agent.md | runtime-tool:github/add_issue_comment, runtime-tool:github/create_issue, runtime-tool:github/get_issue, runtime-tool:github/list_issues, runtime-tool:github/search_issues, runtime-tool:github/update_issue |
+| agent | Create PRD | harness/github-copilot/agents/prd.agent.md | runtime-tool:github/add_issue_comment, runtime-tool:github/create_issue, runtime-tool:github/get_issue, runtime-tool:github/list_issues, runtime-tool:github/search_issues, runtime-tool:github/update_issue |
 | agent | Custom Agent Foundry | harness/github-copilot/agents/custom-agent-foundry.agent.md | runtime-tool:github/* |
 | agent | deploy | harness/github-copilot/plugins/open-horizons-platform/agents/deploy.agent.md | runtime-tool:azure/*, runtime-tool:terraform/* |
 | agent | DiffblueCover | harness/github-copilot/agents/diffblue-cover.agent.md | runtime-tool:DiffblueCover/* |

@@ -1,6 +1,6 @@
 # C# .NET Development Plugin
 
-Essential prompts, instructions, and chat modes for C# and .NET development including testing, documentation, and best practices.
+Essential prompts, instructions, and agents for C# and .NET development including testing, documentation, and best practices.
 
 ## Installation
 

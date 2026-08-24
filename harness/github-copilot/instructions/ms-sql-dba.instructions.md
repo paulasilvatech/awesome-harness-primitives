@@ -5,7 +5,7 @@ description: "Conventions for Microsoft SQL Server DBA guidance in SQL files, in
 
 # MS-SQL DBA Conventions — Administrative Guidance
 
-These instructions apply to SQL Server scripts and DBA-focused SQL guidance. They are authoritative for Microsoft SQL Server administration advice in matched `**/*.sql` files, especially when the `ms-sql-dba.agent.md` chat mode is active; project-specific database architecture, application data-access conventions, and security policies win when they impose stricter requirements.
+These instructions apply to SQL Server scripts and DBA-focused SQL guidance. They are authoritative for Microsoft SQL Server administration advice in matched `**/*.sql` files, especially when the `ms-sql-dba` agent is active; project-specific database architecture, application data-access conventions, and security policies win when they impose stricter requirements.
 
 ## Tooling and Inspection
 

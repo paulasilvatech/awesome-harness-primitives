@@ -1004,7 +1004,7 @@
       ]
     },
     {
-      "characters_scanned": 12904,
+      "characters_scanned": 12896,
       "external_url_count": 1,
       "files_scanned": 1,
       "kind": "agent",
@@ -1456,12 +1456,12 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 9131,
+      "characters_scanned": 9111,
       "external_url_count": 0,
       "files_scanned": 1,
       "kind": "agent",
       "local_evidence_mention": false,
-      "name": "Create PRD Chat Mode",
+      "name": "Create PRD",
       "ownership": "shared",
       "package": null,
       "packaged_by": [
@@ -2886,7 +2886,7 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 10533,
+      "characters_scanned": 10758,
       "external_url_count": 1,
       "files_scanned": 1,
       "kind": "agent",
@@ -4511,7 +4511,7 @@
       ]
     },
     {
-      "characters_scanned": 17178,
+      "characters_scanned": 17156,
       "external_url_count": 0,
       "files_scanned": 1,
       "kind": "agent",
@@ -7661,7 +7661,7 @@
       ]
     },
     {
-      "characters_scanned": 6018,
+      "characters_scanned": 6010,
       "external_url_count": 0,
       "files_scanned": 1,
       "kind": "instruction",
@@ -7698,7 +7698,7 @@
       ]
     },
     {
-      "characters_scanned": 7641,
+      "characters_scanned": 7628,
       "external_url_count": 0,
       "files_scanned": 1,
       "kind": "instruction",
@@ -9148,7 +9148,7 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 18195,
+      "characters_scanned": 18186,
       "external_url_count": 1,
       "files_scanned": 1,
       "kind": "instruction",
@@ -9808,7 +9808,7 @@
       ]
     },
     {
-      "characters_scanned": 1818,
+      "characters_scanned": 1810,
       "external_url_count": 1,
       "files_scanned": 2,
       "kind": "plugin",
@@ -9997,7 +9997,7 @@
       ]
     },
     {
-      "characters_scanned": 2217,
+      "characters_scanned": 2209,
       "external_url_count": 1,
       "files_scanned": 2,
       "kind": "plugin",
@@ -10063,7 +10063,7 @@
       ]
     },
     {
-      "characters_scanned": 1554,
+      "characters_scanned": 1548,
       "external_url_count": 1,
       "files_scanned": 2,
       "kind": "plugin",
@@ -10443,7 +10443,7 @@
       ]
     },
     {
-      "characters_scanned": 1834,
+      "characters_scanned": 1826,
       "external_url_count": 1,
       "files_scanned": 2,
       "kind": "plugin",
@@ -10544,7 +10544,7 @@
       ]
     },
     {
-      "characters_scanned": 1687,
+      "characters_scanned": 1679,
       "external_url_count": 1,
       "files_scanned": 2,
       "kind": "plugin",
@@ -10637,7 +10637,7 @@
       ]
     },
     {
-      "characters_scanned": 1758,
+      "characters_scanned": 1750,
       "external_url_count": 1,
       "files_scanned": 2,
       "kind": "plugin",
@@ -11203,7 +11203,7 @@
       ]
     },
     {
-      "characters_scanned": 1591,
+      "characters_scanned": 1583,
       "external_url_count": 1,
       "files_scanned": 2,
       "kind": "plugin",
@@ -11739,7 +11739,7 @@
       ]
     },
     {
-      "characters_scanned": 1624,
+      "characters_scanned": 1616,
       "external_url_count": 1,
       "files_scanned": 2,
       "kind": "plugin",
@@ -17802,7 +17802,7 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 13953,
+      "characters_scanned": 13956,
       "external_url_count": 11,
       "files_scanned": 1,
       "kind": "skill",
@@ -23068,19 +23068,19 @@
         },
         {
           "errors": 0,
-          "files": 194,
+          "files": 212,
           "kind": "instructions",
           "warnings": 0
         },
         {
           "errors": 0,
-          "files": 420,
+          "files": 474,
           "kind": "skills",
           "warnings": 0
         },
         {
           "errors": 0,
-          "files": 48,
+          "files": 59,
           "kind": "prompts",
           "warnings": 0
         },

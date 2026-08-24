@@ -251,19 +251,29 @@ class Validator:
             getattr(self, f"validate_{kind}")()
 
     # Agents
-    def plugin_owned_agents(self) -> list[Path]:
-        """Agents a plugin owns outright.
+    def plugin_owned_files(self, folder: str, pattern: str,
+                           generated_key: str | None = None) -> list[Path]:
+        """Components a plugin owns outright.
 
-        Library copies are generated from the flat tree and are already validated at
-        their canonical source, so validating them again would double-report.
+        Copies generated from the flat tree are already validated at their canonical
+        source, so validating them here would double-report the same findings.
         """
         paths: list[Path] = []
         for name, config in sorted(self.plugin_sources.items()):
             if config.get("componentSource") != "plugin":
                 continue
-            folder = self.root / "plugins" / name / "agents"
-            if folder.is_dir():
-                paths.extend(sorted(folder.glob("*.agent.md")))
+            base = self.root / "plugins" / name / folder
+            if not base.is_dir():
+                continue
+            generated = {
+                ref.strip("./").rstrip("/").rsplit("/", 1)[-1]
+                for ref in (config.get(generated_key) or [])
+            } if generated_key else set()
+            for path in sorted(base.glob(pattern)):
+                label = path.parent.name if path.name == "SKILL.md" else path.name
+                if label in generated:
+                    continue
+                paths.append(path)
         return paths
 
     def validate_agents(self) -> None:
@@ -279,7 +289,7 @@ class Validator:
             else:
                 seen[key] = p
             self.catch_file(kind, p, lambda p=p: self._validate_agent(p))
-        plugin_files = self.plugin_owned_agents()
+        plugin_files = self.plugin_owned_files("agents", "*.agent.md")
         for p in plugin_files:
             self.catch_file(kind, p, lambda p=p: self._validate_agent(p))
         self.file_counts[kind] = len(files) + len(plugin_files)
@@ -415,6 +425,7 @@ class Validator:
         kind = "instructions"
         d = self.root / "instructions"
         files = sorted(d.glob("*.instructions.md")) if d.is_dir() else []
+        files += self.plugin_owned_files("instructions", "*.instructions.md")
         self.file_counts[kind] = len(files)
         for p in files:
             self.catch_file(kind, p, lambda p=p: self._validate_instruction(p))
@@ -467,7 +478,6 @@ class Validator:
         d = self.root / "skills"
         dirs = sorted([x for x in d.iterdir() if x.is_dir()]
                       ) if d.is_dir() else []
-        self.file_counts[kind] = len(dirs)
         names: dict[str, Path] = {}
         for sd in dirs:
             p = sd / "SKILL.md"
@@ -477,6 +487,13 @@ class Validator:
                 continue
             self.catch_file(kind, p, lambda p=p,
                             names=names: self._validate_skill(p, names))
+        plugin_skills = self.plugin_owned_files(
+            "skills", "*/SKILL.md", generated_key="sharedSkills")
+        plugin_names: dict[str, Path] = {}
+        for p in plugin_skills:
+            self.catch_file(kind, p, lambda p=p,
+                            names=plugin_names: self._validate_skill(p, names))
+        self.file_counts[kind] = len(dirs) + len(plugin_skills)
 
     def _validate_skill(self, p: Path, names: dict[str, Path]) -> None:
         kind = "skills"
@@ -536,11 +553,16 @@ class Validator:
         kind = "prompts"
         d = self.root / "prompts"
         files = sorted(d.glob("*.prompt.md")) if d.is_dir() else []
-        self.file_counts[kind] = len(files)
         names: dict[str, Path] = {}
         for p in files:
             self.catch_file(kind, p, lambda p=p,
                             names=names: self._validate_prompt(p, names))
+        plugin_files = self.plugin_owned_files("prompts", "*.prompt.md")
+        plugin_names: dict[str, Path] = {}
+        for p in plugin_files:
+            self.catch_file(kind, p, lambda p=p,
+                            names=plugin_names: self._validate_prompt(p, names))
+        self.file_counts[kind] = len(files) + len(plugin_files)
 
     def _validate_prompt(self, p: Path, names: dict[str, Path]) -> None:
         kind = "prompts"

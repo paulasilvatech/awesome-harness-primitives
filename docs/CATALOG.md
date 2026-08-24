@@ -69,7 +69,7 @@ Regenerate this file after changing files under `harness/github-copilot/agents/`
 | Context Architect | Plans and executes multi-file code changes by identifying relevant context, dependencies, risks, and validation paths before editing. |
 | Context7-Expert | Documentation-first library and framework expert that uses Context7 and version checks before answering API, syntax, best-practice, migration, or code-generation questions. Use wh… |
 | copilot-primitive-architect | Advises on current Copilot primitive architecture, type routing, responsibility boundaries, freshness evidence, and read-only reviews; does not create primitives. |
-| Create PRD Chat Mode | Creates comprehensive Product Requirements Documents in Markdown with user stories, acceptance criteria, technical considerations, metrics, and optional GitHub issue creation afte… |
+| Create PRD | Creates comprehensive Product Requirements Documents in Markdown with user stories, acceptance criteria, technical considerations, metrics, and optional GitHub issue creation afte… |
 | Critical thinking mode instructions | Challenges assumptions with concise questions and root-cause probing. Use when an engineer needs to think harder before choosing a solution. |
 | Custom Agent Foundry | Design and create GitHub Copilot custom agents with scoped tools, frontmatter, handoffs, and clear behavior. Use when a user wants a new or improved agent. |
 | Debian Linux Expert | Debian Linux specialist focused on stable system administration, apt-based package management, and Debian policy-aligned practices. |
@@ -136,7 +136,7 @@ Regenerate this file after changing files under `harness/github-copilot/agents/`
 | MAUI Expert | Support .NET MAUI cross-platform apps with controls, XAML, handlers, performance, and navigation guidance. Use when building or reviewing MAUI UI and app patterns. |
 | MCP M365 Agent Expert | Expert assistant for building MCP-based declarative agents for Microsoft 365 Copilot with Model Context Protocol integration |
 | Mentor mode | Guides engineers through features or refactors with Socratic questions, codebase context, and supportive challenge. Use when learning and judgment matter more than direct answers. |
-| Meta Agentic Project Scaffold | Finds, copies, and installs relevant awesome-copilot prompts, instructions, and chat modes. Use when scaffolding reusable Copilot workflow assets for an application project. |
+| Meta Agentic Project Scaffold | Finds, copies, and installs relevant awesome-copilot prompts, instructions, and custom agents. Use when scaffolding reusable Copilot workflow assets for an application project. |
 | Microsoft Learn Contributor | Microsoft Learn documentation contributor and reviewer. Use when writing, editing, or reviewing Learn articles for Microsoft Writing Style Guide, accessibility, Markdown, metadata… |
 | Microsoft Study and Learn | Acts as a Microsoft and Azure tutor using guided discovery, practice, and verified learning resources. Use when the user wants to study rather than receive direct answers. |
 | modernization | Human-in-the-loop modernization agent for exhaustive project analysis, feature documentation, architecture recommendations, and migration planning. Use when a repository needs com… |
@@ -942,7 +942,7 @@ Regenerate this file after changing files under `harness/github-copilot/agents/`
 | backstage-expert | 1.0.1 | Build, configure, authenticate, extend, document, operate, upgrade, and contribute to Backstage applications and the Backstage core repository with current first-party workflows,… |
 | cast-imaging | 1.0.3 | A comprehensive collection of specialized agents for software analysis, impact assessment, structural quality advisories, and architectural review using CAST Imaging. |
 | chromium-control-canvas | 1.0.4 | Opens a real Chromium window you can navigate and interact with from a Copilot canvas control panel and agent actions. |
-| clojure-interactive-programming | 1.0.2 | Tools for REPL-first Clojure workflows featuring Clojure instructions, the interactive programming chat mode and supporting guidance. |
+| clojure-interactive-programming | 1.0.2 | Tools for REPL-first Clojure workflows featuring Clojure instructions, the interactive programming agent and supporting guidance. |
 | cms-development | 1.1.2 | Skills for CMS development across themes, plugins, admin tooling, media workflows, markdown rendering, and static export pipelines. |
 | color-orb | 1.0.4 | A visual orb that users can ask the agent to recolor while showing a live activity log in the canvas. |
 | context-engineering | 1.0.2 | Tools and techniques for maximizing GitHub Copilot effectiveness through better context management. Includes guidelines for structuring code, an agent for planning multi-file chan… |
@@ -950,10 +950,10 @@ Regenerate this file after changing files under `harness/github-copilot/agents/`
 | convert-to-md | 1.0.3 | A collection of Copilot skills that convert common document formats into Markdown so their contents can be accurately analyzed, summarized, searched, or extracted from. Just tell… |
 | copilot-plugin-development | 1.0.3 | Create, migrate, audit, and validate flat GitHub Copilot plugins and marketplaces with direct component paths, canonical source ownership, dependency pinning, and isolated runtime… |
 | copilot-sdk | 1.0.2 | Build applications with the GitHub Copilot SDK across multiple programming languages. Includes comprehensive instructions for C#, Go, Node.js/TypeScript, and Python to help you cr… |
-| csharp-dotnet-development | 1.1.2 | Essential prompts, instructions, and chat modes for C# and .NET development including testing, documentation, and best practices. |
+| csharp-dotnet-development | 1.1.2 | Essential prompts, instructions, and agents for C# and .NET development including testing, documentation, and best practices. |
 | database-data-management | 1.0.2 | Database administration, SQL optimization, and data management tools for PostgreSQL, SQL Server, and general database development best practices. |
 | dataverse-sdk-for-python | 1.0.2 | Comprehensive collection for building production-ready Python integrations with Microsoft Dataverse. Includes official documentation, best practices, advanced features, file opera… |
-| devops-oncall | 1.0.2 | A focused set of prompts, instructions, and a chat mode to help triage incidents and respond quickly with DevOps tools and Azure resources. |
+| devops-oncall | 1.0.2 | A focused set of prompts, instructions, and an agent to help triage incidents and respond quickly with DevOps tools and Azure resources. |
 | diagram-viewer | 1.0.4 | Render diagrams, click nodes to drill down, and view agent-generated explanations directly in the canvas. |
 | doublecheck | 1.0.2 | Three-layer verification pipeline for AI output. Extracts claims, finds sources, and flags hallucination risks so humans can verify before acting. |
 | edge-ai-tasks | 1.0.2 | Task Researcher and Task Planner for intermediate to expert users and large codebases - Brought to you by microsoft/edge-ai |
@@ -964,7 +964,7 @@ Regenerate this file after changing files under `harness/github-copilot/agents/`
 | feedback-themes | 1.0.4 | Explore grouped customer feedback signals by impact and drill into a theme to guide product next steps. |
 | flight-map-canvas | 1.0.2 | A GitHub Copilot canvas that generates a view where Google Maps can be explored using 3D controls, as if a flight simulator. Agents can send the flight anywhere and report what th… |
 | flowstudio-power-automate | 2.0.2 | Give your AI agent full visibility into Power Automate cloud flows via the FlowStudio MCP server. Connect, debug, build, monitor health, and govern flows at scale — action-level i… |
-| frontend-web-dev | 1.0.2 | Essential prompts, instructions, and chat modes for modern frontend web development including React, Angular, Vue, TypeScript, and CSS frameworks. |
+| frontend-web-dev | 1.0.2 | Essential prompts, instructions, and agents for modern frontend web development including React, Angular, Vue, TypeScript, and CSS frameworks. |
 | gem-team | 1.102.3 | Self-Learning Multi-agent orchestration framework for spec-driven development and automated verification. With smarter tool calling and leaner context. |
 | gesture-review | 1.0.4 | Review pull requests with a live camera feed and approve or reject using thumbs-up/thumbs-down gestures. |
 | github-actions-maintenance | 1.0.1 | Maintain GitHub Actions workflows with specialist guidance for authoring, runtime upgrades, security hardening, and CI efficiency. Use when workflows need safer permissions, immut… |

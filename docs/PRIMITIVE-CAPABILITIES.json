@@ -1255,7 +1255,7 @@
       "authority": "bounded-write",
       "kind": "agent",
       "model": null,
-      "name": "Create PRD Chat Mode",
+      "name": "Create PRD",
       "notes": [
         "runtime-tool:github/add_issue_comment",
         "runtime-tool:github/create_issue",

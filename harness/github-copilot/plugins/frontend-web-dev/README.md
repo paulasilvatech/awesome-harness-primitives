@@ -1,6 +1,6 @@
 # Frontend Web Development Plugin
 
-Essential prompts, instructions, and chat modes for modern frontend web development including React, Angular, Vue, TypeScript, and CSS frameworks.
+Essential prompts, instructions, and agents for modern frontend web development including React, Angular, Vue, TypeScript, and CSS frameworks.
 
 ## Installation
 

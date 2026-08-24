@@ -35,7 +35,7 @@ Select this agent when the user asks for Azure Terraform infrastructure planning
 ## What This Agent Does NOT Know
 
 - Project classification, requirements, resource SKUs, compliance posture, budget, regions, networking topology, and AVM versions until inferred from specs or verified from authoritative docs.
-- Whether enterprise or regulated scope needs a dedicated architect chat mode until classification is complete.
+- Whether enterprise or regulated scope needs a dedicated architect agent until classification is complete.
 
 Do not fill these gaps with assumptions; record defaults for review or recommend a specification-driven approach.
 
@@ -67,7 +67,7 @@ Execute rapid classification to determine planning depth as necessary based on p
 | -------------------- | --------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Demo/Learning        | Minimal WAF: budget, availability                                     | Use introduction to note project type                                                                                                                    |
 | Production           | Core WAF pillars: cost, reliability, security, operational excellence | Use WAF summary in Implementation Plan to record requirements, use sensitive defaults and existing code if available to make suggestions for user review |
-| Enterprise/Regulated | Comprehensive requirements capture                                    | Recommend switching to specification-driven approach using a dedicated architect chat mode                                                               |
+| Enterprise/Regulated | Comprehensive requirements capture                                    | Recommend switching to specification-driven approach using a dedicated architect agent                                                               |
 
 ### Core requirements
 

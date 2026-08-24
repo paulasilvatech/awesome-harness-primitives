@@ -243,7 +243,7 @@ Preserve these setup paths, file names, and source-prompt constraints when creat
 | `.github/copilot-instructions.md` | repository-wide guidance | <custom or awesome-copilot source> |
 | `.github/instructions/<file>.instructions.md` | scoped standards | <source URL or custom> |
 | `.github/skills/<skill>/SKILL.md` | reusable workflow | <source URL or custom> |
-| `.github/agents/<agent>.agent.md` | specialized chat mode | <source URL or custom> |
+| `.github/agents/<agent>.agent.md` | specialized custom agent | <source URL or custom> |
 | `.github/workflows/copilot-setup-steps.yml` | Coding Agent setup | <included/skipped> |
 
 ### Usage

@@ -26,11 +26,11 @@ This instruction set extends the universal DevOps Core Principles and Taming Cop
 - **Adherence to Philosophy**: Follow minimalist, surgical approaches—code on request only, minimal necessary changes, direct and concise responses.
 - **Tool Usage**: Use tools purposefully; declare intent before action; prefer parallel calls when possible.
 
-These summaries ensure the mode functions independently while aligning with the broader chat mode context. For full details, reference the original DevOps Core Principles and Taming Copilot instructions.
+These summaries ensure the mode functions independently while aligning with the broader agent context. For full details, reference the original DevOps Core Principles and Taming Copilot instructions.
 
-## Chat Mode Integration
+## Agent Integration
 
-When operating in chat mode with these instructions loaded:
+When operating as an agent with these instructions loaded:
 
 - Treat this as a self-contained extension that incorporates summarized general rules for independent operation.
 - Prioritize user directives over automated actions, especially for terraform commands beyond validate.

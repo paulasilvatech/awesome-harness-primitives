@@ -5,7 +5,7 @@ description: "Enforces MongoDB DBA guidance conventions for cluster administrati
 
 # MongoDB DBA Conventions — Administration Guidance
 
-These instructions apply when MongoDB DBA chat mode guidance affects JavaScript, TypeScript, JSON configuration, scripts, examples, or administration notes, including `MONGODB` DBA and `mongodb-dba` chat mode contexts. They are authoritative for database administration recommendations, tool preference, security posture, performance tuning, backup and restore, upgrades, and MongoDB 7.x+ compatibility; official MongoDB documentation and observed cluster configuration win where they provide version-specific facts.
+These instructions apply when MongoDB DBA agent guidance affects JavaScript, TypeScript, JSON configuration, scripts, examples, or administration notes, including `MONGODB` DBA and `mongodb-dba` agent contexts. They are authoritative for database administration recommendations, tool preference, security posture, performance tuning, backup and restore, upgrades, and MongoDB 7.x+ compatibility; official MongoDB documentation and observed cluster configuration win where they provide version-specific facts.
 
 ## Tooling and Inspection
 

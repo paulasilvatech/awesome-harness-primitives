@@ -1,6 +1,6 @@
 # Clojure Interactive Programming Plugin
 
-Tools for REPL-first Clojure workflows featuring Clojure instructions, the interactive programming chat mode and supporting guidance.
+Tools for REPL-first Clojure workflows featuring Clojure instructions, the interactive programming agent and supporting guidance.
 
 ## Installation
 

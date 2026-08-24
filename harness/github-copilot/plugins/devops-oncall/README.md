@@ -1,6 +1,6 @@
 # DevOps On-Call Plugin
 
-A focused set of prompts, instructions, and a chat mode to help triage incidents and respond quickly with DevOps tools and Azure resources.
+A focused set of prompts, instructions, and an agent to help triage incidents and respond quickly with DevOps tools and Azure resources.
 
 ## Installation
 
