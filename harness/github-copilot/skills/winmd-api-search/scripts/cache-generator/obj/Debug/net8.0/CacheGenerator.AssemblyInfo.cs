@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("CacheGenerator")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d3659928cc4dcd17853a159780d27b779cfa1205")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f7bf40d350fa30da9c10aa340afa71f38ce1aa2f")]
 [assembly: System.Reflection.AssemblyProductAttribute("CacheGenerator")]
 [assembly: System.Reflection.AssemblyTitleAttribute("CacheGenerator")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
