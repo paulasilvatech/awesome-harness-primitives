@@ -1,14 +1,8 @@
 ---
 name: backstage-expert
 description: "Build, configure, authenticate, extend, document, operate, upgrade, and contribute to Backstage. Use for Backstage apps, catalog entities, software templates, TechDocs, plugins, frontend migrations, backend modules, production operations, upgrades, or backstage/backstage contributor work."
-tools:
-  - read
-  - grep
-  - glob
-  - edit
-  - execute
-  - web_fetch
-  - web_search
+
+tools: [execute, read, ms-vscode.vscode-websearchforcopilot/websearch, edit, search]
 user-invocable: true
 ---
 
