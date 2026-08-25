@@ -1997,6 +1997,71 @@
       "tools_mode": "allow-list"
     },
     {
+      "authority": "bounded-write",
+      "kind": "agent",
+      "model": null,
+      "name": "frontend-experience-engineer",
+      "notes": [],
+      "ownership": "shared",
+      "package": null,
+      "path": "harness/github-copilot/agents/frontend-experience-engineer.agent.md",
+      "selected_agent": null,
+      "status": "current-static",
+      "target": "vscode+github-copilot",
+      "tools": [
+        "read",
+        "grep",
+        "glob",
+        "edit",
+        "execute"
+      ],
+      "tools_mode": "allow-list"
+    },
+    {
+      "authority": "read-only",
+      "kind": "agent",
+      "model": null,
+      "name": "frontend-product-designer",
+      "notes": [],
+      "ownership": "shared",
+      "package": null,
+      "path": "harness/github-copilot/agents/frontend-product-designer.agent.md",
+      "selected_agent": null,
+      "status": "current-static",
+      "target": "vscode+github-copilot",
+      "tools": [
+        "read",
+        "grep",
+        "glob",
+        "web_fetch",
+        "web_search"
+      ],
+      "tools_mode": "allow-list"
+    },
+    {
+      "authority": "read-only",
+      "kind": "agent",
+      "model": null,
+      "name": "frontend-qa-engineer",
+      "notes": [
+        "runtime-tool:playwright/*"
+      ],
+      "ownership": "shared",
+      "package": null,
+      "path": "harness/github-copilot/agents/frontend-qa-engineer.agent.md",
+      "selected_agent": null,
+      "status": "runtime-verification-required",
+      "target": "vscode+github-copilot",
+      "tools": [
+        "read",
+        "grep",
+        "glob",
+        "execute",
+        "playwright/*"
+      ],
+      "tools_mode": "allow-list"
+    },
+    {
       "authority": "source-read-only",
       "kind": "agent",
       "model": null,
@@ -6447,15 +6512,15 @@
   ],
   "schemaVersion": 1,
   "summary": {
-    "agents": 240,
+    "agents": 243,
     "blocked": 0,
     "boundedWriteAgentsInheritingAll": 0,
     "capabilityReviewRequired": 0,
-    "currentStatic": 248,
+    "currentStatic": 250,
     "fixedModels": 0,
     "prompts": 59,
     "readOnlyAgentsInheritingAll": 0,
-    "runtimeVerificationRequired": 51
+    "runtimeVerificationRequired": 52
   },
   "verificationDate": "2026-08-21"
 }

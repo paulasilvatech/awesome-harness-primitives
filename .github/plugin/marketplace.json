@@ -246,6 +246,12 @@
       "version": "2.0.2"
     },
     {
+      "name": "frontend-experience",
+      "source": "./harness/github-copilot/plugins/frontend-experience",
+      "description": "Product-specific frontend design, implementation, accessibility, discoverability, integration testing, and release validation for web, mobile, and desktop projects.",
+      "version": "0.1.0"
+    },
+    {
       "name": "frontend-web-dev",
       "source": "./harness/github-copilot/plugins/frontend-web-dev",
       "description": "Essential prompts, instructions, and agents for modern frontend web development including React, Angular, Vue, TypeScript, and CSS frameworks.",

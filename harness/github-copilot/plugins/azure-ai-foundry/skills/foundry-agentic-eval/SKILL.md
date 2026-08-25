@@ -1,5 +1,5 @@
 ---
-name: agentic-eval
+name: foundry-agentic-eval
 description: >-
   Design evaluator-optimizer, reflection, rubric, LLM-as-judge, and test-driven refinement loops for AI agent outputs. Use when implementing self-critique, iterative improvement, quality gates, agent response evaluation, code refinement, or rubric-based scoring for generated code, reports, or analysis.
 ---

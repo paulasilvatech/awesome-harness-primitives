@@ -1,0 +1,2 @@
+[      73ms] [INFO] frontend-experience fixture loaded @ http://127.0.0.1:18765/:24
+[     141ms] [ERROR] Failed to load resource: the server responded with a status of 404 (File not found) @ http://127.0.0.1:18765/favicon.ico:0

@@ -1,0 +1,38 @@
+{
+  "skill_name": "frontend-visual-e2e-testing",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Explore and validate this checkout flow at mobile and desktop boundary viewports, including console and network failures.",
+      "expected_output": "Executed browser evidence mapped to acceptance IDs, environment, states, and reproducible defects.",
+      "files": [],
+      "assertions": [
+        "Exploration occurs before test generation.",
+        "Behavioral assertions accompany screenshots.",
+        "Console and network evidence is recorded."
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Create a stable visual regression plan for this dashboard with dynamic dates, charts, fonts, and loading data.",
+      "expected_output": "A deterministic fixture and baseline plan with documented variability and environment.",
+      "files": [],
+      "assertions": [
+        "Dates, data, fonts, animation, browser, and OS are controlled.",
+        "Masks are limited and documented.",
+        "Baseline changes require product review."
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Investigate this flaky Playwright flow and report whether the issue is product, test, data, or environment instability.",
+      "expected_output": "First-attempt evidence, classification, targeted correction, and exact retest procedure.",
+      "files": [],
+      "assertions": [
+        "Retries do not erase the initial failure.",
+        "Arbitrary sleeps are not the default fix.",
+        "The report includes environment and retest details."
+      ]
+    }
+  ]
+}

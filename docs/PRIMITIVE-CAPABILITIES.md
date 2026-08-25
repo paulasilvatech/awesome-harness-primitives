@@ -19,7 +19,7 @@ enabled tool runs.
 
 | Type | Sources | Inherited tools | Allow-lists | Tools disabled | Current static | Runtime check | Capability review | Blocked |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| agent | 240 | 0 | 238 | 2 | 194 | 46 | 0 | 0 |
+| agent | 243 | 0 | 241 | 2 | 196 | 47 | 0 | 0 |
 | prompt | 59 | 22 | 37 | 0 | 54 | 5 | 0 | 0 |
 
 - Fixed model pins: 0.
@@ -58,6 +58,7 @@ server or extension in the target profile.
 | agent | Dynatrace Expert | harness/github-copilot/agents/dynatrace-expert.agent.md | runtime-tool:dynatrace/* |
 | agent | elasticsearch-agent | harness/github-copilot/agents/elasticsearch-observability.agent.md | runtime-tool:elastic-mcp/* |
 | agent | FabricIQ | harness/github-copilot/plugins/fabric-agentic-plugin/agents/fabric-iq.agent.md | runtime-tool:FabricIQ/* |
+| agent | frontend-qa-engineer | harness/github-copilot/agents/frontend-qa-engineer.agent.md | runtime-tool:playwright/* |
 | agent | gem-browser-tester | harness/github-copilot/agents/gem-browser-tester.agent.md | runtime-tool:playwright/* |
 | agent | GitHub Actions Expert | harness/github-copilot/agents/github-actions-expert.agent.md | runtime-tool:github/* |
 | agent | Lingo.dev Localization (i18n) Agent | harness/github-copilot/agents/lingodotdev-i18n.agent.md | runtime-tool:lingo/* |

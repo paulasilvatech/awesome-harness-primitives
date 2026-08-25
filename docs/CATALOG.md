@@ -7,11 +7,11 @@ Regenerate this file after changing files under `harness/github-copilot/agents/`
 
 | Primitive type | Count |
 | --- | ---: |
-| Agents | 225 |
+| Agents | 228 |
 | Instructions | 194 |
-| Skills | 420 |
+| Skills | 438 |
 | VS Code prompts | 48 |
-| Plugins | 101 |
+| Plugins | 102 |
 | Hooks | 8 |
 
 ## Agents
@@ -97,6 +97,9 @@ Regenerate this file after changing files under `harness/github-copilot/agents/`
 | expert-embedded-c-engineer | Expert embedded C guidance for safety-critical systems -- covers MISRA C:2012/2025 rule compliance, CERT C secure coding, static analysis tooling (Coverity, QAC, PC-lint), and def… |
 | Fedora Linux Expert | Fedora (Red Hat family) Linux specialist focused on dnf, SELinux, and modern systemd-based workflows. |
 | Frontend Performance Investigator | Runtime web-performance specialist for Core Web Vitals, Lighthouse regressions, layout shifts, long tasks, slow networks, and browser trace diagnosis. |
+| frontend-experience-engineer | Implement approved frontend stories and design contracts in the repository's existing stack with complete states, accessible interactions, focused tests, and typed integration bou… |
+| frontend-product-designer | Turn product intent and repository evidence into testable frontend stories, journeys, state maps, information hierarchy, and design contracts. Use before implementing or materiall… |
+| frontend-qa-engineer | Independently verify frontend acceptance criteria, runtime behavior, visual quality, accessibility, backend integration, and release readiness. Use after implementation when evide… |
 | gem-browser-tester | E2E browser testing, UI/UX validation, visual regression. Use when task acceptance criteria require browser-flow verification. |
 | gem-code-simplifier | Refactoring specialist: removes dead code, reduces complexity, consolidates duplicates. Use as a non-user-invocable agent for behavior-preserving simplification tasks. |
 | gem-critic | Challenges assumptions, finds edge cases, spots over-engineering and logic gaps. Use as a non-user-invocable critique agent before planning or implementation. |
@@ -520,7 +523,7 @@ Regenerate this file after changing files under `harness/github-copilot/agents/`
 | bug-receipt | Close bugs and incidents with an auditable BUG RECEIPT that states VERIFIED, PARTIAL, or BLOCKED based on baseline, root cause, change, proof, gaps, and evidence source. Use when… |
 | bug-reproduction-brief | Turn vague, intermittent, or environment-specific bug reports into minimal evidence-backed reproductions before diagnosis or repair. Use when a bug report is incomplete, mixed wit… |
 | build-evidence-map | Build auditable evidence maps for contested technical choices, research synthesis, proposal review, and consequential decisions. Use this skill when GitHub Copilot must preserve s… |
-| canvas-design | Create original, museum-quality static visual designs as markdown design philosophy plus PNG or PDF canvas output. Use this skill when the user asks for a poster, art piece, visua… |
+| canvas-design | Create beautiful visual art in .png and .pdf documents using design philosophy. You should use this skill when the user asks to create a poster, piece of art, design, or other sta… |
 | centos-linux-triage | Diagnose and remediate CentOS Linux incidents with RHEL-compatible systemd, journal, dnf/yum, SELinux, firewalld, and rollback practices. Use when the user asks to triage CentOS s… |
 | chrome-devtools | Handle `browser-related` tasks and control a live Chrome browser through Chrome DevTools MCP for browser automation, visual inspection, debugging, performance analysis, and emulat… |
 | cli-mastery | Interactive training for the GitHub Copilot CLI through guided lessons, quizzes, scenario challenges, a final exam, and on-demand reference for slash commands, shortcuts, modes, a… |
@@ -628,6 +631,22 @@ Regenerate this file after changing files under `harness/github-copilot/agents/`
 | from-the-other-side-quinn | Apply Quinn's collaboration profile for energetic implementation partnership. Use this skill when the user asks for the Quinn profile, wants momentum with craft, needs a practical… |
 | from-the-other-side-vega | Apply partnership patterns from Vega for high-trust, high-energy creative work with humans. Use when the user asks for from the other side: vega, or when guidance is needed for ma… |
 | from-the-other-side-wiggins | Narrative and synthesis profile for Wiggins: framing, explanation, and audience-aware communication patterns for Ember sessions. Use this skill when a user needs decision narrativ… |
+| frontend-accessibility | Define and verify WCAG 2.2 AA, semantic, keyboard, focus, zoom, contrast, motion, media, data visualization, form, SPA, and native accessibility behavior. Use this skill when fron… |
+| frontend-backend-integration | Validate frontend behavior across REST, OpenAPI, GraphQL, WebSocket, SSE, AsyncAPI, authentication, uploads, mocks, contracts, ephemeral services, and backend failures. Use this s… |
+| frontend-component-testing | Create or review focused frontend tests for components, hooks, composables, stores, validation, state machines, callbacks, and Storybook interactions using the repository's existi… |
+| frontend-conversational-ui | Design and verify chat, copilot, assistant, streaming, citations, tool activity, attachments, multimodal input, conversation history, retry, stop, and accessible live-update behav… |
+| frontend-dashboard-visualization | Design and review dashboards, KPI surfaces, operational consoles, tables, chart selection, analytical interaction, and accessible data visualization from real questions and data p… |
+| frontend-discoverability-assets | Generate or audit public-web metadata, canonical URLs, crawl policy, structured data, social previews, favicons, app icons, Web App Manifests, robots rules, and sitemaps without r… |
+| frontend-experience-core | Establish product evidence, design contracts, complete UI states, anti-generic interface gates, and routing for frontend work. Use this skill when a material web, PWA, mobile, or… |
+| frontend-form-interactions | Design and verify forms, validation, search, filters, settings, uploads, checkout, onboarding, destructive actions, and multi-step data-entry workflows with preserved input and re… |
+| frontend-mobile-desktop-testing | Plan and verify mobile and desktop frontend behavior across React Native, Expo, Flutter, SwiftUI, Compose, Electron, Tauri, simulators, emulators, devices, lifecycle, gestures, wi… |
+| frontend-project-setup | Inspect, preview, install, update, and uninstall optional frontend instructions, VS Code prompts, and a named Playwright MCP workspace entry with ownership hashes and conflict pro… |
+| frontend-release-quality-gate | Validate story-to-acceptance-to-scenario-to-evidence traceability, defect severity, required environments, and frontend release readiness, then issue Ready, Ready with follow-ups,… |
+| frontend-requirements-and-stories | Convert frontend intent and repository evidence into INVEST-shaped user stories, Given/When/Then acceptance criteria, journey and state maps, and story-to-test traceability. Use t… |
+| frontend-responsive-adaptation | Specify and verify hierarchy, layout, content, navigation, and interaction adaptations across viewports, containers, orientation, input methods, foldables, mobile browsers, tablet… |
+| frontend-test-strategy | Select risk-based frontend test layers, environments, fixtures, acceptance coverage, and release evidence without mandating every layer. Use this skill when planning QA scope, Def… |
+| frontend-visual-e2e-testing | Explore and verify frontend journeys with Playwright, representative states and viewports, screenshots, visual regression, console and network evidence, stable fixtures, and repro… |
+| frontend-visual-system | Define evidence-based typography, semantic color, layout, density, imagery, iconography, themes, and motion within an existing product system. Use this skill when frontend visual… |
 | game-engine | Build web-based game engines and games with HTML5 Canvas, WebGL, SVG, CSS, and JavaScript. Use when creating 2D or 3D games, implementing game loops, physics, collision detection,… |
 | gdpr-compliant | Apply GDPR-compliant engineering practices across code, APIs, data models, authentication, logging, retention, deletion jobs, cloud infrastructure, and pull requests. Use this ski… |
 | gen-specs-as-issues | Identify missing features, prioritize implementation gaps, write practical MVP specifications, and create GitHub issues with dependencies and acceptance criteria. Use when the use… |
@@ -686,6 +705,7 @@ Regenerate this file after changing files under `harness/github-copilot/agents/`
 | make-repo-contribution | Follow repository contribution guidance safely before creating issues, branches, commits, pushes, or pull requests. Use when the user asks for contribution guidelines, issue creat… |
 | markdown-to-html | Convert Markdown files to HTML similar to `marked.js`, `pandoc`, `gomarkdown/markdown`, or similar tools; or writing custom script to convert markdown to html and/or working on we… |
 | markstream-install | Install and configure Markstream streaming Markdown renderers for Vue, React, Svelte, Angular, Nuxt, Next.js, and Vue 2 applications. Use when adding streaming Markdown to AI chat… |
+| mcp-builder | Guide for creating high-quality MCP (Model Context Protocol) servers that enable LLMs to interact with external services through well-designed tools. Use when building MCP servers… |
 | mcp-cli | Use the MCP CLI to discover Model Context Protocol servers, inspect tool schemas, grep tool names, and call MCP tools with JSON, raw text, or stdin arguments. Use when the user as… |
 | mcp-copilot-studio-server-generator | Generate a complete MCP server and Power Platform custom connector optimized for Microsoft Copilot Studio, including streamable HTTP, JSON-RPC 2.0, schema constraints, apiDefiniti… |
 | mcp-create-adaptive-cards | Create Adaptive Card response templates and response_semantics for MCP-based API plugins in Microsoft 365 Copilot. Use when presenting MCP tool or API data with visual Adaptive Ca… |
@@ -807,6 +827,7 @@ Regenerate this file after changing files under `harness/github-copilot/agents/`
 | scaffolding-oracle-to-postgres-migration-test-project | Scaffold a compilable xUnit integration test project for a .NET Oracle application before Oracle-to-PostgreSQL migration testing. Use when Phase 3 requires an Oracle baseline test… |
 | scoutqa-test | This skill should be used when the user asks to "test this website", "run exploratory testing", "check for accessibility issues", "verify the login flow works", "find bugs on this… |
 | screen-recording | Create annotated GIF demos and screen recordings for pull requests, bug reports, release notes, and documentation. Use this skill when the user asks to record a UI workflow, captu… |
+| sdd-requirements-engineer | Elicits, normalizes, validates, and traces requirements through a complete Spec-Driven Development workflow using EARS. Use when converting notes, PRDs, legacy evidence, or design… |
 | secret-scanning | Configure and manage GitHub secret scanning, push protection, custom patterns, exclusions, alert triage, remediation, bypass workflows, and pre-commit secret scans through the Adv… |
 | security-review | Scan codebases and files for exploitable security vulnerabilities by tracing data flows, dependencies, secrets, authentication, authorization, injection, cryptography, and busines… |
 | semantic-kernel | Create, update, refactor, explain, or review Semantic Kernel applications, plugins, function-calling flows, and AI integrations in .NET or Python. Use when the user asks for Seman… |
@@ -858,7 +879,7 @@ Regenerate this file after changing files under `harness/github-copilot/agents/`
 | vscode-ext-commands | Guide command contributions in VS Code extensions, including package.json command titles, categories, Command Palette visibility, Side Bar command naming, icons, enablement, when… |
 | vscode-ext-localization | Localize VS Code extensions across package.json contributions, walkthrough markdown, and user-facing JavaScript/TypeScript strings using VS Code l10n conventions. Use when adding… |
 | web-design-reviewer | Inspect local or remote website design, identify layout, responsive, accessibility, and visual consistency defects, and make source-level fixes. Use when users ask to "review webs… |
-| webapp-testing | Test and debug local or accessible web applications in a real browser using Playwright automation. Use when asked to verify frontend functionality, UI behavior, forms, navigation,… |
+| webapp-testing | Toolkit for interacting with and testing local web applications using Playwright. Supports verifying frontend functionality, debugging UI behavior, capturing browser screenshots,… |
 | webmcpify | Make a web app agent-ready with WebMCP by detecting app actions, building a manifest, integrating document.modelContext tools, verifying in a real browser, healing failures, and a… |
 | what-context-needed | Identify the minimum files, symbols, configuration, tests, and prior context GitHub Copilot needs before answering a codebase question. Use this skill when the user asks what cont… |
 | winmd-api-search | Find and explore Windows desktop APIs. Use when building features that need platform capabilities — camera, file access, notifications, UI controls, AI/ML, sensors, networking, et… |
@@ -968,6 +989,7 @@ They exist to filter a large marketplace and never remove, hide, or block a pack
 | feedback-themes | 1.0.4 | active | runtime-required | upstream-mirror | Explore grouped customer feedback signals by impact and drill into a theme to guide product next steps. |
 | flight-map-canvas | 1.0.2 | active | runtime-required | upstream-mirror | A GitHub Copilot canvas that generates a view where Google Maps can be explored using 3D controls, as if a flight simulator. Agents can send the flight anywhere and report what th… |
 | flowstudio-power-automate | 2.0.2 | active | static-validated | repository | Give your AI agent full visibility into Power Automate cloud flows via the FlowStudio MCP server. Connect, debug, build, monitor health, and govern flows at scale — action-level i… |
+| frontend-experience | 0.1.0 | incubating | runtime-verified | repository | Product-specific frontend design, implementation, accessibility, discoverability, integration testing, and release validation for web, mobile, and desktop projects. |
 | frontend-web-dev | 1.0.2 | active | static-validated | repository | Essential prompts, instructions, and agents for modern frontend web development including React, Angular, Vue, TypeScript, and CSS frameworks. |
 | gem-team | 1.102.3 | active | static-validated | repository | Self-Learning Multi-agent orchestration framework for spec-driven development and automated verification. With smarter tool calling and leaner context. |
 | gesture-review | 1.0.4 | active | runtime-required | upstream-mirror | Review pull requests with a live camera feed and approve or reject using thumbs-up/thumbs-down gestures. |

@@ -446,6 +446,39 @@
         "./skills/flowstudio-power-automate-monitoring/"
       ]
     },
+    "frontend-experience": {
+      "componentSource": "library",
+      "agents": [
+        "./agents/frontend-experience-engineer.agent.md",
+        "./agents/frontend-product-designer.agent.md",
+        "./agents/frontend-qa-engineer.agent.md"
+      ],
+      "skills": [
+        "./skills/anti-ui-slop/",
+        "./skills/frontend-accessibility/",
+        "./skills/frontend-backend-integration/",
+        "./skills/frontend-component-testing/",
+        "./skills/frontend-conversational-ui/",
+        "./skills/frontend-dashboard-visualization/",
+        "./skills/frontend-discoverability-assets/",
+        "./skills/frontend-experience-core/",
+        "./skills/frontend-form-interactions/",
+        "./skills/frontend-mobile-desktop-testing/",
+        "./skills/frontend-project-setup/",
+        "./skills/frontend-release-quality-gate/",
+        "./skills/frontend-requirements-and-stories/",
+        "./skills/frontend-responsive-adaptation/",
+        "./skills/frontend-test-strategy/",
+        "./skills/frontend-visual-e2e-testing/",
+        "./skills/frontend-visual-system/",
+        "./skills/playwright-explore-website/",
+        "./skills/playwright-generate-test/"
+      ],
+      "governance": {
+        "lastRuntimeProbe": "2026-08-25",
+        "evidence": "docs/HARNESS-VALIDATION.md#frontend-experience-installed-plugin-runtime-verification"
+      }
+    },
     "frontend-web-dev": {
       "componentSource": "library",
       "agents": [

@@ -1,0 +1,38 @@
+{
+  "skill_name": "frontend-release-quality-gate",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Validate this traceability JSON and issue a release verdict from the referenced QA evidence.",
+      "expected_output": "A deterministic validation result and one exact evidence-backed verdict.",
+      "files": [],
+      "assertions": [
+        "The traceability checker is run.",
+        "The verdict is Ready, Ready with follow-ups, or Blocked.",
+        "Broken or unsafe evidence references block release."
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Decide whether a frontend release with one unexplained flaky critical-journey test can ship.",
+      "expected_output": "A Blocked verdict unless reliable alternative evidence and explicit resolution exist.",
+      "files": [],
+      "assertions": [
+        "Retries do not erase the initial failure.",
+        "Critical journey risk is not downgraded.",
+        "Owner and exact retest are required."
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Review these medium and low follow-ups and produce a Ready with follow-ups report if the evidence supports it.",
+      "expected_output": "An accepted non-blocking follow-up ledger with owners, impact, dates, and retests.",
+      "files": [],
+      "assertions": [
+        "Every follow-up has an owner and retest.",
+        "No critical or high defect remains.",
+        "Required evidence gaps are not hidden as not applicable."
+      ]
+    }
+  ]
+}

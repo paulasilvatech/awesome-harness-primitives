@@ -16,7 +16,7 @@
   },
   "packaging": {
     "activePluginHookPackages": 2,
-    "marketplaceEntries": 101,
+    "marketplaceEntries": 102,
     "pluginOwned": {
       "agents": 15,
       "errors": 0,
@@ -25,10 +25,10 @@
       "skills": 54,
       "warnings": 0
     },
-    "pluginPackages": 101,
+    "pluginPackages": 102,
     "sharedAgents": {
-      "packaged": 124,
-      "total": 225,
+      "packaged": 127,
+      "total": 228,
       "unpackaged": [
         "accessibility-runtime-tester.agent.md",
         "accessibility.agent.md",
@@ -134,8 +134,8 @@
       ]
     },
     "sharedSkills": {
-      "packaged": 180,
-      "total": 420,
+      "packaged": 196,
+      "total": 438,
       "unpackaged": [
         "acquire-codebase-knowledge",
         "ad-campaign-analyzer",
@@ -279,6 +279,7 @@
         "lsp-setup",
         "make-repo-contribution",
         "markstream-install",
+        "mcp-builder",
         "mcp-cli",
         "mcp-implementation-security-review",
         "mcp-release-qa",
@@ -337,6 +338,7 @@
         "ruff-recursive-fix",
         "sandbox-npm-install",
         "scoutqa-test",
+        "sdd-requirements-engineer",
         "secret-scanning",
         "security-review",
         "server-side-conversion-tracking",
@@ -2061,6 +2063,63 @@
       "path": "harness/github-copilot/agents/frontend-performance-investigator.agent.md",
       "review_status": "needs-semantic-review",
       "signals": [],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 7905,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "agent",
+      "local_evidence_mention": true,
+      "name": "frontend-experience-engineer",
+      "ownership": "shared",
+      "package": null,
+      "packaged_by": [
+        "frontend-experience"
+      ],
+      "path": "harness/github-copilot/agents/frontend-experience-engineer.agent.md",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "lifecycle-language"
+      ],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 8644,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "agent",
+      "local_evidence_mention": true,
+      "name": "frontend-product-designer",
+      "ownership": "shared",
+      "package": null,
+      "packaged_by": [
+        "frontend-experience"
+      ],
+      "path": "harness/github-copilot/agents/frontend-product-designer.agent.md",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language"
+      ],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 8332,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "agent",
+      "local_evidence_mention": true,
+      "name": "frontend-qa-engineer",
+      "ownership": "shared",
+      "package": null,
+      "packaged_by": [
+        "frontend-experience"
+      ],
+      "path": "harness/github-copilot/agents/frontend-qa-engineer.agent.md",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "lifecycle-language"
+      ],
       "source_domains": []
     },
     {
@@ -10457,6 +10516,31 @@
       ]
     },
     {
+      "characters_scanned": 5762,
+      "external_url_count": 2,
+      "files_scanned": 3,
+      "kind": "plugin",
+      "local_evidence_mention": true,
+      "name": "frontend-experience",
+      "ownership": "shared",
+      "package": "frontend-experience",
+      "packaged_by": [
+        "frontend-experience"
+      ],
+      "path": "harness/github-copilot/plugins/frontend-experience",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "lifecycle-language",
+        "version-claim",
+        "date-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "agent-plugins.org",
+        "github.com"
+      ]
+    },
+    {
       "characters_scanned": 1826,
       "external_url_count": 1,
       "files_scanned": 2,
@@ -12720,7 +12804,7 @@
       "external_url_count": 1,
       "files_scanned": 1,
       "kind": "prompt",
-      "local_evidence_mention": false,
+      "local_evidence_mention": true,
       "name": "playwright-explore-website",
       "ownership": "shared",
       "package": null,
@@ -13308,11 +13392,12 @@
       "external_url_count": 1,
       "files_scanned": 1,
       "kind": "skill",
-      "local_evidence_mention": false,
+      "local_evidence_mention": true,
       "name": "anti-ui-slop",
       "ownership": "shared",
       "package": null,
       "packaged_by": [
+        "frontend-experience",
         "uizze"
       ],
       "path": "harness/github-copilot/skills/anti-ui-slop",
@@ -15148,9 +15233,9 @@
       ]
     },
     {
-      "characters_scanned": 32533,
-      "external_url_count": 5,
-      "files_scanned": 5,
+      "characters_scanned": 141924,
+      "external_url_count": 24,
+      "files_scanned": 29,
       "kind": "skill",
       "local_evidence_mention": false,
       "name": "canvas-design",
@@ -15166,7 +15251,8 @@
       "source_domains": [
         "github.com",
         "openfontlicense.org",
-        "www.apache.org"
+        "www.apache.org",
+        "www.github.com"
       ]
     },
     {
@@ -17515,6 +17601,311 @@
       "source_domains": []
     },
     {
+      "characters_scanned": 7973,
+      "external_url_count": 2,
+      "files_scanned": 4,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "frontend-accessibility",
+      "ownership": "shared",
+      "package": null,
+      "packaged_by": [
+        "frontend-experience"
+      ],
+      "path": "harness/github-copilot/skills/frontend-accessibility",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "version-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "www.w3.org"
+      ]
+    },
+    {
+      "characters_scanned": 9650,
+      "external_url_count": 0,
+      "files_scanned": 6,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "frontend-backend-integration",
+      "ownership": "shared",
+      "package": null,
+      "packaged_by": [
+        "frontend-experience"
+      ],
+      "path": "harness/github-copilot/skills/frontend-backend-integration",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "lifecycle-language",
+        "version-claim"
+      ],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 7342,
+      "external_url_count": 0,
+      "files_scanned": 5,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "frontend-component-testing",
+      "ownership": "shared",
+      "package": null,
+      "packaged_by": [
+        "frontend-experience"
+      ],
+      "path": "harness/github-copilot/skills/frontend-component-testing",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "lifecycle-language"
+      ],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 8070,
+      "external_url_count": 0,
+      "files_scanned": 6,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "frontend-conversational-ui",
+      "ownership": "shared",
+      "package": null,
+      "packaged_by": [
+        "frontend-experience"
+      ],
+      "path": "harness/github-copilot/skills/frontend-conversational-ui",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language"
+      ],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 8527,
+      "external_url_count": 0,
+      "files_scanned": 6,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "frontend-dashboard-visualization",
+      "ownership": "shared",
+      "package": null,
+      "packaged_by": [
+        "frontend-experience"
+      ],
+      "path": "harness/github-copilot/skills/frontend-dashboard-visualization",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language"
+      ],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 11939,
+      "external_url_count": 6,
+      "files_scanned": 7,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "frontend-discoverability-assets",
+      "ownership": "shared",
+      "package": null,
+      "packaged_by": [
+        "frontend-experience"
+      ],
+      "path": "harness/github-copilot/skills/frontend-discoverability-assets",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "lifecycle-language",
+        "external-source"
+      ],
+      "source_domains": [
+        "developers.google.com",
+        "html.spec.whatwg.org",
+        "ogp.me"
+      ]
+    },
+    {
+      "characters_scanned": 11059,
+      "external_url_count": 0,
+      "files_scanned": 5,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "frontend-experience-core",
+      "ownership": "shared",
+      "package": null,
+      "packaged_by": [
+        "frontend-experience"
+      ],
+      "path": "harness/github-copilot/skills/frontend-experience-core",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language"
+      ],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 9021,
+      "external_url_count": 0,
+      "files_scanned": 6,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "frontend-form-interactions",
+      "ownership": "shared",
+      "package": null,
+      "packaged_by": [
+        "frontend-experience"
+      ],
+      "path": "harness/github-copilot/skills/frontend-form-interactions",
+      "review_status": "needs-semantic-review",
+      "signals": [],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 8320,
+      "external_url_count": 0,
+      "files_scanned": 5,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "frontend-mobile-desktop-testing",
+      "ownership": "shared",
+      "package": null,
+      "packaged_by": [
+        "frontend-experience"
+      ],
+      "path": "harness/github-copilot/skills/frontend-mobile-desktop-testing",
+      "review_status": "needs-semantic-review",
+      "signals": [],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 81146,
+      "external_url_count": 0,
+      "files_scanned": 12,
+      "kind": "skill",
+      "local_evidence_mention": true,
+      "name": "frontend-project-setup",
+      "ownership": "shared",
+      "package": null,
+      "packaged_by": [
+        "frontend-experience"
+      ],
+      "path": "harness/github-copilot/skills/frontend-project-setup",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "lifecycle-language",
+        "version-claim"
+      ],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 21299,
+      "external_url_count": 0,
+      "files_scanned": 7,
+      "kind": "skill",
+      "local_evidence_mention": true,
+      "name": "frontend-release-quality-gate",
+      "ownership": "shared",
+      "package": null,
+      "packaged_by": [
+        "frontend-experience"
+      ],
+      "path": "harness/github-copilot/skills/frontend-release-quality-gate",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language"
+      ],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 8899,
+      "external_url_count": 0,
+      "files_scanned": 5,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "frontend-requirements-and-stories",
+      "ownership": "shared",
+      "package": null,
+      "packaged_by": [
+        "frontend-experience"
+      ],
+      "path": "harness/github-copilot/skills/frontend-requirements-and-stories",
+      "review_status": "needs-semantic-review",
+      "signals": [],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 6643,
+      "external_url_count": 0,
+      "files_scanned": 4,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "frontend-responsive-adaptation",
+      "ownership": "shared",
+      "package": null,
+      "packaged_by": [
+        "frontend-experience"
+      ],
+      "path": "harness/github-copilot/skills/frontend-responsive-adaptation",
+      "review_status": "needs-semantic-review",
+      "signals": [],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 8851,
+      "external_url_count": 0,
+      "files_scanned": 5,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "frontend-test-strategy",
+      "ownership": "shared",
+      "package": null,
+      "packaged_by": [
+        "frontend-experience"
+      ],
+      "path": "harness/github-copilot/skills/frontend-test-strategy",
+      "review_status": "needs-semantic-review",
+      "signals": [],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 7777,
+      "external_url_count": 0,
+      "files_scanned": 5,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "frontend-visual-e2e-testing",
+      "ownership": "shared",
+      "package": null,
+      "packaged_by": [
+        "frontend-experience"
+      ],
+      "path": "harness/github-copilot/skills/frontend-visual-e2e-testing",
+      "review_status": "needs-semantic-review",
+      "signals": [],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 7541,
+      "external_url_count": 0,
+      "files_scanned": 6,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "frontend-visual-system",
+      "ownership": "shared",
+      "package": null,
+      "packaged_by": [
+        "frontend-experience"
+      ],
+      "path": "harness/github-copilot/skills/frontend-visual-system",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language"
+      ],
+      "source_domains": []
+    },
+    {
       "characters_scanned": 360995,
       "external_url_count": 45,
       "files_scanned": 15,
@@ -18894,6 +19285,34 @@
       ]
     },
     {
+      "characters_scanned": 121628,
+      "external_url_count": 9,
+      "files_scanned": 10,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "mcp-builder",
+      "ownership": "shared",
+      "package": null,
+      "packaged_by": [],
+      "path": "harness/github-copilot/skills/mcp-builder",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "lifecycle-language",
+        "version-claim",
+        "date-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "api.example.com",
+        "example.com",
+        "localhost:${port",
+        "modelcontextprotocol.io",
+        "raw.githubusercontent.com",
+        "www.apache.org"
+      ]
+    },
+    {
       "characters_scanned": 6495,
       "external_url_count": 0,
       "files_scanned": 1,
@@ -20151,11 +20570,12 @@
       "external_url_count": 0,
       "files_scanned": 1,
       "kind": "skill",
-      "local_evidence_mention": false,
+      "local_evidence_mention": true,
       "name": "playwright-explore-website",
       "ownership": "shared",
       "package": null,
       "packaged_by": [
+        "frontend-experience",
         "frontend-web-dev",
         "testing-automation"
       ],
@@ -20176,6 +20596,7 @@
       "ownership": "shared",
       "package": null,
       "packaged_by": [
+        "frontend-experience",
         "frontend-web-dev",
         "testing-automation"
       ],
@@ -21705,6 +22126,31 @@
       "source_domains": []
     },
     {
+      "characters_scanned": 49022,
+      "external_url_count": 3,
+      "files_scanned": 7,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "sdd-requirements-engineer",
+      "ownership": "shared",
+      "package": null,
+      "packaged_by": [],
+      "path": "harness/github-copilot/skills/sdd-requirements-engineer",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "lifecycle-language",
+        "version-claim",
+        "date-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "alistairmavin.com",
+        "doi.org",
+        "research.manchester.ac.uk"
+      ]
+    },
+    {
       "characters_scanned": 12689,
       "external_url_count": 2,
       "files_scanned": 3,
@@ -22866,9 +23312,9 @@
       ]
     },
     {
-      "characters_scanned": 6573,
-      "external_url_count": 1,
-      "files_scanned": 2,
+      "characters_scanned": 22347,
+      "external_url_count": 3,
+      "files_scanned": 6,
       "kind": "skill",
       "local_evidence_mention": false,
       "name": "webapp-testing",
@@ -22876,12 +23322,14 @@
       "package": null,
       "packaged_by": [],
       "path": "harness/github-copilot/skills/webapp-testing",
-      "review_status": "needs-source-review",
+      "review_status": "needs-current-source-review",
       "signals": [
+        "version-claim",
         "external-source"
       ],
       "source_domains": [
-        "localhost:3000"
+        "localhost:5173",
+        "www.apache.org"
       ]
     },
     {
@@ -23089,11 +23537,11 @@
       "warnings": 0
     },
     "sharedHarness": {
-      "errors": 0,
+      "errors": 4,
       "summary": [
         {
           "errors": 0,
-          "files": 240,
+          "files": 243,
           "kind": "agents",
           "warnings": 0
         },
@@ -23104,10 +23552,10 @@
           "warnings": 0
         },
         {
-          "errors": 0,
-          "files": 474,
+          "errors": 3,
+          "files": 492,
           "kind": "skills",
-          "warnings": 0
+          "warnings": 1
         },
         {
           "errors": 0,
@@ -23116,8 +23564,8 @@
           "warnings": 0
         },
         {
-          "errors": 0,
-          "files": 101,
+          "errors": 1,
+          "files": 102,
           "kind": "plugins",
           "warnings": 0
         },
@@ -23128,7 +23576,7 @@
           "warnings": 0
         }
       ],
-      "warnings": 0
+      "warnings": 1
     }
   }
 }

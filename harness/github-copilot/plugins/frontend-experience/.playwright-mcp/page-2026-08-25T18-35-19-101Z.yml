@@ -1,0 +1,6 @@
+- main [ref=e2]:
+  - heading "Frontend Experience Runtime Fixture" [level=1] [ref=e3]
+  - paragraph [ref=e4]: This disposable page verifies the installed plugin browser boundary.
+  - status [ref=e5]: Local fixture service is ready.
+  - button "Show verification detail" [active] [ref=e6]
+  - paragraph [ref=e7]: Keyboard, focus, snapshot, screenshot, console, and network evidence are available.
