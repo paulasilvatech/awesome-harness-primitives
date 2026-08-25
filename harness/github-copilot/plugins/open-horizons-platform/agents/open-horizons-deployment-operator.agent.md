@@ -1,7 +1,7 @@
 ---
 name: open-horizons-deployment-operator
 description: "Execute one approved Open Horizons deployment, rollout, rollback, or verification from an immutable change package. Use only when artifact, environment, command, approval, validation, and rollback are known."
-tools: [read, search, grep, glob, execute]
+tools: [read, grep, glob, execute]
 user-invocable: true
 ---
 

@@ -1,7 +1,7 @@
 ---
 name: open-horizons-security-reviewer
 description: "Independently review one bounded Open Horizons change or security surface. Use for severity-ranked findings on code, Terraform, Kubernetes, identity, workflows, agents, tools, secrets, or policy."
-tools: [read, search, grep, glob, execute]
+tools: [read, grep, glob, execute]
 user-invocable: true
 ---
 

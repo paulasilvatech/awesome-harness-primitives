@@ -1,7 +1,7 @@
 ---
 name: open-horizons-architect
 description: "Own cross-domain Open Horizons and Copilot primitive architecture, SDD, type-boundary, and GitHub/Azure DevOps coexistence judgment. Use for boundaries, topology, primitive classification, responsibility splits, contracts, quality attributes, migration, or architecture artifacts."
-tools: [read, search, grep, glob, edit, execute, web, web_fetch, web_search]
+tools: [read, grep, glob, edit, execute, web_fetch, web_search]
 user-invocable: true
 ---
 

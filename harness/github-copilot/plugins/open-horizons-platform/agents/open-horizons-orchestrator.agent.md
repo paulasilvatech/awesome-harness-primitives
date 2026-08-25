@@ -1,7 +1,7 @@
 ---
 name: open-horizons-orchestrator
 description: "Route cross-domain Open Horizons repository work among the final agent portfolio. Use when ownership is unclear, multiple domains are involved, or staged delegation and validation are required."
-tools: [read, search, grep, glob, agent]
+tools: [read, grep, glob, agent]
 user-invocable: true
 ---
 

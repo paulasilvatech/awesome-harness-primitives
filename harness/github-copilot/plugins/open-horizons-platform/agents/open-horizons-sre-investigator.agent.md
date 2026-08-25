@@ -1,7 +1,7 @@
 ---
 name: open-horizons-sre-investigator
 description: "Investigate one Open Horizons reliability symptom or incident with read-only telemetry. Use to establish impact, test causal hypotheses, identify ownership, and define mitigation and verification."
-tools: [read, search, grep, glob, execute]
+tools: [read, grep, glob, execute]
 user-invocable: true
 ---
 

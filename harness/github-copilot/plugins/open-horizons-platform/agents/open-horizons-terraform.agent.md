@@ -1,7 +1,7 @@
 ---
 name: open-horizons-terraform
 description: "Author and validate one bounded Open Horizons Terraform change. Use for modules, live-root configuration, variables, providers, tests, formatting, validation, or approved plan inspection; never apply."
-tools: [read, search, grep, glob, edit, execute]
+tools: [read, grep, glob, edit, execute]
 user-invocable: true
 ---
 

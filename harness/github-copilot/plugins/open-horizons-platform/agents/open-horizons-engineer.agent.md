@@ -1,7 +1,7 @@
 ---
 name: open-horizons-engineer
 description: "Implement focused Open Horizons code and repository changes. Use for runtime services, GitHub or Azure DevOps automation, tests, documentation, bug fixes, features, and refactoring when no narrower final agent owns the work."
-tools: [read, search, grep, glob, edit, execute]
+tools: [read, grep, glob, edit, execute]
 user-invocable: true
 ---
 

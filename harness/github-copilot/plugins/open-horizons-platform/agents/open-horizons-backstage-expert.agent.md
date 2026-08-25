@@ -1,7 +1,7 @@
 ---
 name: open-horizons-backstage-expert
 description: "Own generic and Open Horizons Backstage engineering judgment. Use for portal configuration, catalog, templates, TechDocs, plugins, authentication, permissions, integrations, upgrades, operations, or remediation."
-tools: [read, search, edit, execute, web, web_fetch, web_search]
+tools: [read, grep, glob, edit, execute, web_fetch, web_search]
 user-invocable: true
 ---
 

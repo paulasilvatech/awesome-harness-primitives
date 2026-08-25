@@ -1,7 +1,7 @@
 ---
 name: open-horizons-azure-readiness
 description: "Assess one Open Horizons Azure deployment scope with read-only provider, quota, SKU, identity, network, and resource evidence. Use before planning or deployment."
-tools: [read, search, grep, glob, execute]
+tools: [read, grep, glob, execute]
 user-invocable: true
 ---
 
