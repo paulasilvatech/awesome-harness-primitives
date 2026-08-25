@@ -1,0 +1,66 @@
+[
+    {
+        "query": "Start an AEG modernization run for our existing payments repository.",
+        "should_trigger": true
+    },
+    {
+        "query": "What is blocking AEG run run-42 and which artifact comes next?",
+        "should_trigger": true
+    },
+    {
+        "query": "Present the G1 decision package and record my rejection feedback.",
+        "should_trigger": true
+    },
+    {
+        "query": "Show broken requirement-to-resource links for this AEG run.",
+        "should_trigger": true
+    },
+    {
+        "query": "Compare AEG gate latency by worker engine without mixing billing units.",
+        "should_trigger": true
+    },
+    {
+        "query": "Propose a golden path from these completed AEG runs.",
+        "should_trigger": true
+    },
+    {
+        "query": "Wire the AEG feature into our Open Horizons Backstage portal.",
+        "should_trigger": true
+    },
+    {
+        "query": "Review whether our AEG MCP adapter derives actor identity securely.",
+        "should_trigger": true
+    },
+    {
+        "query": "Apply this Terraform plan to the production subscription.",
+        "should_trigger": false
+    },
+    {
+        "query": "Upgrade Backstage to the latest version.",
+        "should_trigger": false
+    },
+    {
+        "query": "Write EARS requirements for a standalone mobile application.",
+        "should_trigger": false
+    },
+    {
+        "query": "Investigate why the AKS ingress is returning 502.",
+        "should_trigger": false
+    },
+    {
+        "query": "Create a generic MCP server for a weather API.",
+        "should_trigger": false
+    },
+    {
+        "query": "Approve the production GitHub environment deployment.",
+        "should_trigger": false
+    },
+    {
+        "query": "Design a multi-agent system in Microsoft Foundry.",
+        "should_trigger": false
+    },
+    {
+        "query": "Fix the Open Horizons portal navigation styling.",
+        "should_trigger": false
+    }
+]
