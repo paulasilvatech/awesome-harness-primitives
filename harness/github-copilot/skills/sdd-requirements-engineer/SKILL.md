@@ -130,8 +130,9 @@ Prioritize from evidenced release impact: P0 blocks the named increment; P1 lose
 - `shall` belongs in the EARS statement; descriptive prose may use ordinary language.
 - A technology named by a stakeholder is not automatically a functional requirement. Classify it as a sourced constraint or an unresolved design preference.
 - A task can be parallel only when both dependency and change-surface conflicts are absent.
-- Performance wording is not measurable unless the workload and observation method are also defined.
-- A vendor logo is not a generic architecture symbol. Use official product icons only for the products they represent and route professional branded diagrams through `azure-draw-io-diagram-generator`.
+
+## Related primitives
+- `azure-draw-io-diagram-generator` (`skill`): create and validate editable professional diagrams with permitted official assets and provenance after the SDD design scope is established.
 
 ## Progressive disclosure and bundled resources
 
@@ -193,7 +194,7 @@ Return exactly this structure:
 - [ ] Vendor-specific architecture diagrams use official permitted assets, provenance, accessible labels, and editable source through `azure-draw-io-diagram-generator`.
 - [ ] Every active requirement traces from source through design, tasks, acceptance, and verification.
 - [ ] Requirement lifecycle changes preserve IDs or include explicit dispositions.
-- [ ] No metric, approval, compatibility claim, or current platform fact is fabricated.
+- [ ] No metric, approval, compatibility claim, current platform fact, or vendor asset status is fabricated.
 - [ ] Every applicable detailed check in the [unified quality gates](references/quality-gates.md) passes or is reported as a blocker.
 - [ ] The response follows `## Output template` exactly.
 - [ ] Every bundled resource referenced by this skill exists.

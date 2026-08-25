@@ -20,7 +20,7 @@ Use this prompt when a user asks to design an agentic system, agentic RAG servic
 - The system to design is provided through `${input:system:the agentic system to design, for example an agentic RAG service on Foundry}` or the prompt argument.
 - The `AI-Native Engineer` agent persona is available or can be followed as the role.
 - The `agentic-architecture-patterns` skill is available before clarification, design, generation, or editing.
-- Companion skills are available as needed: `azure-managed-redis-cache`, `foundry-agent-blueprint`, `azure-api-center`, `apim-ai-gateway`, and `azure-architecture-diagrams`.
+- Companion skills are available as needed: `azure-managed-redis-cache`, `foundry-agent-blueprint`, `azure-api-center`, `apim-ai-gateway`, and `azure-draw-io-diagram-generator`.
 - Output under the requested document path and `output/` for diagrams is permitted.
 
 ## Inputs the Team Must Provide
@@ -33,7 +33,7 @@ Use this prompt when a user asks to design an agentic system, agentic RAG servic
 ## What I Will Do
 
 - Use the `AI-Native Engineer` persona and load `agentic-architecture-patterns` before clarifying, designing, generating, or editing.
-- Load companion skills that match the design: `azure-managed-redis-cache`, `foundry-agent-blueprint`, `azure-api-center`, `apim-ai-gateway`, and `azure-architecture-diagrams`.
+- Load companion skills that match the design: `azure-managed-redis-cache`, `foundry-agent-blueprint`, `azure-api-center`, `apim-ai-gateway`, and `azure-draw-io-diagram-generator`.
 - Walk seven decisions in order: model routing, caching, memory, context curation, tools and MCP, identity and guardrails, evaluation and observability and cost.
 - Map each decision to concrete services, managed identity, and network posture.
 - Produce `{system}_AI_Architecture.md` and render diagrams using official Azure, Microsoft, and GitHub icons.
@@ -96,7 +96,7 @@ Return only the concise architecture delivery report:
 
 Follow these steps in order. Do not clarify, design, generate, or edit before loading the required agentic architecture patterns.
 
-**Step 1 — Assume the role and load skills.** Use the `AI-Native Engineer` agent persona. Load `agentic-architecture-patterns` before clarifying, designing, generating, or editing. Then load companion skills that match the design: `azure-managed-redis-cache`, `foundry-agent-blueprint`, `azure-api-center`, `apim-ai-gateway`, and `azure-architecture-diagrams`. Apply the `paulasilva-ms` design system to rendered output.
+**Step 1 — Assume the role and load skills.** Use the `AI-Native Engineer` agent persona. Load `agentic-architecture-patterns` before clarifying, designing, generating, or editing. Then load companion skills that match the design: `azure-managed-redis-cache`, `foundry-agent-blueprint`, `azure-api-center`, `apim-ai-gateway`, and `azure-draw-io-diagram-generator`. Apply the `paulasilva-ms` design system to rendered output.
 
 **Step 2 — Clarify scope.** Clarify use case, scale, latency and cost targets, data sensitivity, identity model, and where it runs: GitHub Actions, Container Apps, AKS, or Foundry hosted. Ask only for what is missing.
 
@@ -106,7 +106,7 @@ Follow these steps in order. Do not clarify, design, generate, or edit before lo
 
 **Step 5 — Produce the architecture document.** Create `{system}_AI_Architecture.md` with executive summary, the agentic decision record, service mapping, diagrams, a phased path from MVP to target, non-functional analysis, risks and mitigations, and a References section. Never fabricate limits, prices, or benchmarks. Verify against Microsoft Learn and the model card, cite them, or state the value as an explicit assumption.
 
-**Step 6 — Render diagrams.** Render diagrams with `azure-architecture-diagrams` using official Azure, Microsoft, and GitHub icons. Produce context, component, deployment, and a sequence for the critical path. Keep `.drawio` sources under `output/` and embed exported SVG. Do not modify or re-color official product icons. Write “GitHub Copilot”, never “Copilot” alone. Do not use em dashes.
+**Step 6 — Render diagrams.** Render diagrams with `azure-draw-io-diagram-generator` using permitted current official Azure, Microsoft, and GitHub assets with source, terms, retrieval date, usage basis, and SHA-256 provenance. Produce context, component, deployment, and a sequence for the critical path. Keep `.drawio` sources under `output/`, export self-contained SVG, preserve artwork and aspect ratio, and use neutral shapes for generic concepts. Write “GitHub Copilot”, never “Copilot” alone. Do not use em dashes.
 
 **Step 7 — Validate and report.** Confirm the document exists, all seven decisions are traced, all four diagrams render, every icon resolves, the phased path and non-functional analysis are present, and every data claim is sourced. Return only the architecture document path, diagram artifact paths, validation status, and critical findings or blockers.
 

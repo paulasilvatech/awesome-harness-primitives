@@ -1,12 +1,12 @@
 ---
-name: "backstage-assess"
-description: "Assess one Backstage scope from repository evidence and report findings in Chat without making changes."
-argument-hint: "scope=<Backstage subsystem or question>"
-agent: "backstage-expert"
+name: "open-horizons-backstage-assess"
+description: "Assess one Open Horizons Backstage scope from repository evidence and report findings in Chat without making changes."
+argument-hint: "scope=<Open Horizons Backstage subsystem or question>"
+agent: "open-horizons-backstage-expert"
 tools: ["read", "search", "web"]
 ---
 
-# Backstage assessment
+# Open Horizons Backstage assessment
 
 ## Objective
 
@@ -14,7 +14,7 @@ Assess `${input:scope}` and return an evidence-based, read-only report in Chat.
 
 ## When to Invoke
 
-Use when a bounded Backstage question must be answered before planning or implementation.
+Use when a bounded Open Horizons Backstage question must be answered before planning or implementation.
 
 ## Preconditions
 
@@ -30,20 +30,20 @@ If either condition fails, identify the missing input in Chat and stop.
 
 ## What I Will Do
 
-- Use the `backstage-expert` agent's assessment behavior within the supplied scope.
+- Use the `open-horizons-backstage-expert` agent's assessment behavior within the supplied scope.
 - Distinguish inspected evidence, inference, and unknowns.
 - Return prioritized findings and validation gaps to Chat.
 
 ## What I Will NOT Do
 
 - Edit files, run mutating commands, or change external systems.
-- expand the assessment beyond `${input:scope}`.
+- Expand the assessment beyond `${input:scope}`.
 - Present static inspection as runtime proof.
 
 ## Output Format
 
 ```markdown
-## Backstage assessment
+## Open Horizons Backstage assessment
 
 **Scope:** <subsystem>
 **Mode/version:** <value and evidence, or unknown>
@@ -65,11 +65,12 @@ If either condition fails, identify the missing input in Chat and stop.
 
 ## Prompt Body
 
-Ask for a missing scope, otherwise have `backstage-expert` assess only `${input:scope}` using
-`${selection}` when present. Remain read-only and return the required report in Chat.
+Ask for a missing scope, otherwise have `open-horizons-backstage-expert` assess only
+`${input:scope}` using `${selection}` when present. Remain read-only and return the required report
+in Chat.
 
 ## Invocation Example
 
-Run **Chat: Run Prompt**, select `backstage-assess`, and enter
+Run **Chat: Run Prompt**, select `open-horizons-backstage-assess`, and enter
 `catalog entity ownership and discovery configuration`. Verify that the response stays in Chat and
 the workspace remains unchanged.

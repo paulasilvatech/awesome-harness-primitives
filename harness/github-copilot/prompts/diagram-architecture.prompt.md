@@ -18,7 +18,7 @@ Use this prompt when a user asks for an architecture diagram, draw.io source, ex
 ## Preconditions
 
 - The target system or diagram subject is provided through `${input:target:what to diagram, for example an agentic platform on Foundry}` or the prompt argument.
-- The `azure-architecture-diagrams` skill is available.
+- The `azure-draw-io-diagram-generator` skill is available.
 - For an AI-native system, `agentic-architecture-patterns` is available.
 - Output under `output/` is permitted.
 
@@ -31,11 +31,11 @@ Use this prompt when a user asks for an architecture diagram, draw.io source, ex
 
 ## What I Will Do
 
-- Load `azure-architecture-diagrams` before deriving the diagram or editing output.
+- Load `azure-draw-io-diagram-generator` before deriving the diagram or editing output.
 - Load `agentic-architecture-patterns` first for AI-native systems to get the service map.
 - Apply the `paulasilva-ms` palette to containers, labels, and connectors, never to vendor icons.
 - Produce default diagram types: system context, component, deployment, and a sequence or data and control flow for the critical path.
-- Use official Azure architecture icons, Microsoft product icons, and GitHub Octicons or the GitHub logo as appropriate.
+- Use permitted current official Azure architecture icons, Microsoft product icons, GitHub Octicons, or GitHub product lockups as appropriate; record source, terms, retrieval date, usage basis, and SHA-256 for embedded official assets.
 - Save `.drawio` sources under `output/`, export self-contained SVG with embedded images, and verify the diagram opens with every icon resolved.
 
 ## What I Will NOT Do
@@ -64,7 +64,7 @@ Return only the concise artifact report:
 - Sequence or data and control flow for the critical path
 
 ### Validation Status
-- `azure-architecture-diagrams` loaded: `<passed|failed>`
+- `azure-draw-io-diagram-generator` loaded: `<passed|failed>`
 - `agentic-architecture-patterns` loaded for AI-native system: `<passed|failed|not applicable>`
 - Official icons used and labeled with exact service names: `<passed|failed>`
 - Boundaries grouped by subscription, resource group, VNet, or trust zone: `<passed|failed>`
@@ -78,7 +78,7 @@ Return only the concise artifact report:
 ## Definition of Done
 
 - [ ] The `.drawio` source and exported SVG exist under `output/`.
-- [ ] Every node uses an official icon and is labeled with the exact service name.
+- [ ] Every named vendor product uses a permitted official icon with provenance; generic concepts use labeled neutral shapes.
 - [ ] Containers, labels, and connectors use the `paulasilva-ms` palette; vendor icons are not modified.
 - [ ] Boundaries are grouped and connectors are clean, orthogonal, and protocol-labeled.
 - [ ] The diagram opens and every icon resolves.
@@ -88,17 +88,17 @@ Return only the concise artifact report:
 
 Follow these steps in order. Do not derive or edit diagram output before loading the required diagram skill.
 
-**Step 1 — Load required skills.** Load `azure-architecture-diagrams` before deriving the diagram or editing any output. For an AI-native system, also load `agentic-architecture-patterns` to get the service map first. Apply the `paulasilva-ms` palette to containers, labels, and connectors, never to vendor icons themselves.
+**Step 1 — Load required skills.** Load `azure-draw-io-diagram-generator` before deriving the diagram or editing any output. For an AI-native system, also load `agentic-architecture-patterns` to get the service map first. Apply the `paulasilva-ms` palette to containers, labels, and connectors, never to vendor icons themselves.
 
 **Step 2 — Build or confirm the service map.** Take or derive services, boundaries, and relationships from the user input and inspected context. Ask only for missing information that prevents correct service mapping.
 
 **Step 3 — Choose diagram views.** Produce the default set unless the user asks otherwise: system context, component, deployment, and a sequence or data and control flow for the critical path.
 
-**Step 4 — Build the draw.io diagram.** Use the bundled draw.io MCP server when available, or hand-authored mxGraph XML otherwise. Place an official icon for each service: Azure architecture icons for Azure services, Microsoft product icons for Microsoft products, and GitHub Octicons or the GitHub logo for GitHub platform elements.
+**Step 4 — Build the draw.io diagram.** Use the generator's templates and deterministic scripts. Embed a local first-party SVG with provenance for each named vendor product; use neutral shapes for generic concepts. Do not fetch or infer unofficial assets.
 
-**Step 5 — Apply layout and branding rules.** Group nodes by boundary such as subscription, resource group, VNet, or trust zone. Route orthogonal connectors and label edges with protocols. Use only official icon sets and respect their terms. Do not modify, distort, or re-color product icons. Keep clear space around the GitHub mark. Label every icon with the exact service name. Use one icon set per product family and no look-alike third-party icons. Write “GitHub Copilot”, never “Copilot” alone. Do not use em dashes.
+**Step 5 — Apply layout and branding rules.** Group nodes by boundary such as subscription, resource group, VNet, or trust zone. Route orthogonal connectors and label edges with protocols. Preserve official artwork and aspect ratio, keep clear space, label every product with its exact service name, and store first-party source, terms, retrieval date, usage basis, and SHA-256. Write “GitHub Copilot”, never “Copilot” alone. Do not use em dashes.
 
-**Step 6 — Export and verify.** Export SVG with embedded images for a self-contained file and keep the `.drawio` source under `output/`. Verify that the diagram opens and every icon resolves.
+**Step 6 — Export and verify.** Run structural validation plus `--require-official-icons --require-icon-provenance`, inspect the editable source visually, then export SVG with embedded images. Verify that the diagram opens and every icon resolves.
 
 **Step 7 — Report concisely.** Return only the `.drawio` and SVG artifact paths, validation status, and critical findings or blockers.
 

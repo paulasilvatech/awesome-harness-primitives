@@ -82,7 +82,7 @@ Return exactly this structure:
 ## Limits
 
 - Do not use this skill for creating cloud diagrams.
-- Use `azure-architecture-diagrams` (`skill`) instead when the deliverable is a diagram file or rendered cloud diagram.
+- Use `azure-draw-io-diagram-generator` (`skill`) instead when the deliverable is an editable diagram file or rendered cloud diagram.
 - Use `markdown-writer` (`skill`) instead when the task is generic Markdown writing.
 - Use `agentic-architecture-patterns` (`skill`) instead when designing agent architecture.
 - The script cannot fully render Mermaid; it uses high-signal structural checks.
@@ -102,7 +102,7 @@ At discovery time, only `name` and `description` are loaded. Execute the script 
 
 | Name | Type | Use it when |
 | --- | --- | --- |
-| `azure-architecture-diagrams` | `skill` | The task is creating or rendering architecture diagrams. |
+| `azure-draw-io-diagram-generator` | `skill` | The task is creating or rendering professional architecture diagrams. |
 | `markdown-writer` | `skill` | The task is general Markdown authoring or formatting. |
 | `agentic-architecture-patterns` | `skill` | The task is designing agentic architecture decisions. |
 | `open-horizons-architect` | `agent` | A persistent architecture role should own the design. |

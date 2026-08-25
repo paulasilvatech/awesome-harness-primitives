@@ -26,7 +26,7 @@ Required contract points:
 | `ai-foundry-operations` | Azure AI Foundry operations | `@deploy`, `@azure-portal-deploy` |
 | `architecture-doc` | Architecture document validation | `@deploy` |
 | `argocd-cli` | ArgoCD operations | `@deploy`, `@sre` |
-| `azure-architecture-diagrams` | Azure architecture diagrams | `@deploy` |
+| `azure-draw-io-diagram-generator` | Professional draw.io diagrams with official icon provenance | `@deploy` |
 | `azure-cli` | Azure CLI operations | `@terraform`, `@security`, `@sre`, `@azure-portal-deploy` |
 | `azure-infrastructure` | Azure infrastructure patterns | `@terraform`, `@security`, `@azure-portal-deploy` |
 | `azure-managed-redis-cache` | Azure Managed Redis patterns | `@deploy`, `@terraform` |

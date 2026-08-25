@@ -137,7 +137,6 @@ Do not treat GitHub Octicons as GitHub product logos. Do not use a deprecated Gi
 
 | Name | Type | Use it when |
 | --- | --- | --- |
-| `azure-architecture-diagrams` | `skill` | Azure architecture semantics, view selection, or cloud topology is the primary task. |
 | `sdd-requirements-engineer` | `skill` | The diagram must trace to EARS requirements, design decisions, tasks, and verification. |
 
 ## Output template

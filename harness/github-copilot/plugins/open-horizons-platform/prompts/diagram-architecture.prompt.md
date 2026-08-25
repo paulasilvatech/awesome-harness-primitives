@@ -36,7 +36,7 @@ report the blocker and do not write any artifact.
 
 ## What I Will Do
 
-- Invoke the `azure-architecture-diagrams` and `draw-io-diagram-generator` skills.
+- Invoke the `azure-draw-io-diagram-generator` skill.
 - Inspect supplied repository context and make unresolved architecture assumptions explicit.
 - Write only the selected destination or destinations and validate the editable source.
 
@@ -62,12 +62,12 @@ report the blocker and do not write any artifact.
 
 - [ ] The editable source exists at exactly `${input:drawio_destination}`.
 - [ ] SVG exists at exactly `${input:svg_destination}` when requested, and nowhere otherwise.
-- [ ] Both diagram skills were invoked and their applicable validation ran.
+- [ ] The diagram skill was invoked and structural plus official-icon provenance validation ran.
 - [ ] No unapproved path or non-diagram source changed.
 
 ## Prompt Body
 
-Have `open-horizons-architect` invoke both diagram skills, use `${input:diagram_context}` to diagram
+Have `open-horizons-architect` invoke `azure-draw-io-diagram-generator`, use `${input:diagram_context}` to diagram
 `${input:subject}`, and write only `${input:drawio_destination}` plus the optional
 `${input:svg_destination}`. Stop on destination or architecture ambiguity rather than choosing a path
 or inventing system facts.

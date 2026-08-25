@@ -614,6 +614,7 @@
       "componentSource": "plugin",
       "hookSource": "./hooks/open-horizons-safety/hooks.json",
       "sharedSkills": [
+        "./skills/azure-draw-io-diagram-generator/",
         "./skills/azure-managed-redis-cache/",
         "./skills/backstage-plugin-builder/"
       ]

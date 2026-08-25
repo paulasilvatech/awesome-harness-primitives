@@ -100,7 +100,7 @@ Return exactly this structure:
 - Do not use this skill for Azure AI Foundry provisioning.
 - Use `foundry-agent-blueprint` (`skill`) instead when the task is a Foundry agent service blueprint.
 - Do not use this skill for Redis implementation details.
-- Use `azure-architecture-diagrams` (`skill`) instead when the task is diagram rendering.
+- Use `azure-draw-io-diagram-generator` (`skill`) instead when the task is professional diagram rendering.
 - Do not invent limits, prices, benchmarks, or citations.
 
 ## Gotchas
@@ -130,7 +130,7 @@ At discovery time, only `name` and `description` are loaded. Read the relevant r
 | --- | --- | --- |
 | `foundry-agent-blueprint` | `skill` | The architecture needs an Azure AI Foundry Agent Service blueprint. |
 | `azure-infrastructure` | `skill` | The design needs Azure infrastructure patterns beyond agentic decisions. |
-| `azure-architecture-diagrams` | `skill` | The decision record needs a professional diagram. |
+| `azure-draw-io-diagram-generator` | `skill` | The decision record needs a professional editable diagram. |
 | `architecture-doc` | `skill` | The architecture Markdown deliverable needs compliance validation. |
 | `open-horizons-architect` | `agent` | A persistent architecture agent should own the broader design. |
 
