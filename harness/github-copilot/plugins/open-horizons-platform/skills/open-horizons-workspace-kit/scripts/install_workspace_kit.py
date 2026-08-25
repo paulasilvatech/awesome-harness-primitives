@@ -94,7 +94,9 @@ def checked_source(relative: str) -> Path:
     if source.is_symlink():
         raise ValueError(f"source symlink is not allowed: {source}")
     if not source.is_file():
-        raise FileNotFoundError(f"workspace-kit source does not exist: {source}")
+        raise FileNotFoundError(
+            f"workspace-kit source does not exist: {source}"
+        )
     resolved = source.resolve()
     try:
         resolved.relative_to(PACKAGE_ROOT.resolve())
@@ -251,7 +253,9 @@ def build_install_plan(
         else:
             current_hash = digest_file(destination)
             if current_hash == source_hash:
-                status = "unchanged" if previous_hash else "unmanaged-identical"
+                status = (
+                    "unchanged" if previous_hash else "unmanaged-identical"
+                )
             elif previous_hash and current_hash == previous_hash:
                 status = "update"
             else:
@@ -338,7 +342,9 @@ def apply_install(
 
 def apply_uninstall(target: Path, state: dict, plan: list[PlanEntry]) -> None:
     if any(entry.status == "backup-conflict" for entry in plan):
-        raise ValueError("workspace kit backup conflicts; no files were archived")
+        raise ValueError(
+            "workspace kit backup conflicts; no files were archived"
+        )
     remaining = dict(state.get("managed", {}))
     for entry in plan:
         if entry.status == "archive":
@@ -355,7 +361,9 @@ def apply_uninstall(target: Path, state: dict, plan: list[PlanEntry]) -> None:
     if remaining:
         atomic_write(
             path,
-            (json.dumps(payload, indent=2, sort_keys=True) + "\n").encode("utf-8"),
+            (
+                json.dumps(payload, indent=2, sort_keys=True) + "\n"
+            ).encode("utf-8"),
         )
     elif path.exists():
         archive = backup_path(target, "workspace-kit-state.json")
@@ -364,7 +372,9 @@ def apply_uninstall(target: Path, state: dict, plan: list[PlanEntry]) -> None:
 
 
 def validate_workspace_mcp_template() -> None:
-    package = json.loads((PACKAGE_ROOT / "mcp.json").read_text(encoding="utf-8"))
+    package = json.loads(
+        (PACKAGE_ROOT / "mcp.json").read_text(encoding="utf-8")
+    )
     workspace = json.loads(WORKSPACE_MCP_TEMPLATE.read_text(encoding="utf-8"))
     expected: dict[str, dict[str, object]] = {}
     for name, server in package.get("mcpServers", {}).items():
@@ -430,7 +440,7 @@ def print_report(
     print(f"Target: {target}")
     print(f"Profile: {profile}")
     summary = ", ".join(
-        f"{name}={count}" for name, count in payload["summary"].items()
+        f"{name}={count}" for name, count in sorted(counts.items())
     )
     print(f"Summary: {summary or 'empty'}")
     for entry in plan:
@@ -440,7 +450,9 @@ def print_report(
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Plan, apply, or uninstall the Open Horizons workspace kit."
+        description=(
+            "Plan, apply, or uninstall the Open Horizons workspace kit."
+        )
     )
     parser.add_argument("--target", type=Path, default=Path.cwd())
     parser.add_argument("--profile", required=True, choices=PROFILES)
@@ -482,7 +494,7 @@ def main(argv: list[str] | None = None) -> int:
         )
         blocked = {"conflict", "backup-conflict"}
         return 2 if any(entry.status in blocked for entry in plan) else 0
-    except (FileNotFoundError, OSError, ValueError, json.JSONDecodeError) as exc:
+    except (OSError, ValueError) as exc:
         print(f"workspace-kit error: {exc}", file=sys.stderr)
         return 2
 

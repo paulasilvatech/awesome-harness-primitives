@@ -68,6 +68,8 @@ Before embedding an official asset, capture:
 | Method | `embedded-svg` by default; `drawio-stencil` only after version-specific verification |
 
 `scripts/add-icon.py` writes these values to the `mxCell`. Do not hand-edit the hash or mark an asset official without evidence.
+The helper and validator also require source and terms URLs on recognized first-party Microsoft, Azure,
+or GitHub hosts; a third-party HTTPS URL is not sufficient provenance.
 
 ## Safe embedding
 

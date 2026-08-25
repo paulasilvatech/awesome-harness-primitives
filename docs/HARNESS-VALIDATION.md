@@ -43,11 +43,14 @@ grant permission beyond each source's stated terms or visually certify any user-
 | General Microsoft marks | [Microsoft Trademark and Brand Guidelines](https://www.microsoft.com/en-us/legal/intellectualproperty/trademarks) | Microsoft identifies logos, app icons, and product icons as proprietary brand assets and states that many uses require a license. The architecture-icon permission is therefore not generalized to arbitrary corporate-logo or marketing use. |
 | GitHub icons and marks | [Primer Octicons](https://github.com/primer/octicons), [GitHub logo guidance](https://brand.github.com/foundations/logo), and [GitHub Copilot brand guidance](https://brand.github.com/brand-identity/copilot) | Octicons are GitHub-built SVG interface icons under the repository's MIT code license, but GitHub logos and product lockups remain governed by brand and trademark rules. Permitted logo use must not imply affiliation or endorsement and must not modify the mark. GitHub states that the former standalone Copilot logo has been deprecated since 2025. |
 
-Local divergence resolved: `azure-draw-io-diagram-generator` previously delegated official-icon work to
-another skill and had no deterministic provenance or hash validation. It now owns safe local SVG
-embedding, source and terms metadata, SHA-256 verification, external-image rejection, and visual/brand
-review gates. `sdd-requirements-engineer` routes named Microsoft, Azure, and GitHub product diagrams to
-that capability while retaining Mermaid for concise vendor-neutral logical views.
+The general-purpose canonical `azure-draw-io-diagram-generator` now owns service-map rendering, safe
+local SVG embedding, recognized first-party source and terms validation, SHA-256 verification,
+external-image rejection, accessibility, and visual/brand review gates. The intentionally removed
+`azure-architecture-diagrams` package is neither a source nor a dependency for this guidance.
+`sdd-requirements-engineer` routes named Microsoft, Azure, and GitHub product diagrams to the general
+generator while retaining Mermaid for concise vendor-neutral logical views. Product-specific plugins,
+including Open Horizons, may consume the general skill through generated shared copies without becoming
+its canonical owner.
 
 ## Frontend experience planning source verification
 

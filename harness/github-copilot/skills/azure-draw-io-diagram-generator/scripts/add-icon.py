@@ -33,6 +33,28 @@ def _validate_https_url(value: str, field: str) -> None:
         raise ValueError(f"{field} must be an absolute HTTPS URL")
 
 
+def _provider_owns_url(provider: str, value: str) -> bool:
+    parsed = urllib.parse.urlparse(value)
+    host = (parsed.hostname or "").lower()
+    path = parsed.path.lower()
+    if provider in {"azure", "microsoft"}:
+        microsoft_host = host == "microsoft.com" or host.endswith(".microsoft.com")
+        azure_icon_host = host == "arch-center.azureedge.net"
+        microsoft_github = host == "github.com" and path.startswith("/microsoft/")
+        return microsoft_host or azure_icon_host or microsoft_github
+    if provider == "github":
+        return host in {"brand.github.com", "primer.style"} or host == "github.com"
+    return False
+
+
+def _validate_provider_url(provider: str, value: str, field: str) -> None:
+    _validate_https_url(value, field)
+    if not _provider_owns_url(provider, value):
+        raise ValueError(
+            f"{field} is not a recognized first-party {provider} URL"
+        )
+
+
 def _validate_date(value: str) -> None:
     try:
         retrieved = date.fromisoformat(value)
@@ -99,6 +121,9 @@ def _validate_svg(path: Path) -> bytes:
                 raise ValueError(f"SVG contains external reference '{value}'")
             if "@import" in lowered or re.search(r"url\(\s*['\"]?(?:https?:)?//", lowered):
                 raise ValueError("SVG contains an external stylesheet or URL")
+        text = (element.text or "").lower()
+        if "@import" in text or re.search(r"url\(\s*['\"]?(?:https?:)?//", text):
+            raise ValueError("SVG contains an external stylesheet or URL")
 
     return data
 
@@ -154,8 +179,8 @@ def add_icon(args: argparse.Namespace) -> str:
     if args.width <= 0 or args.height <= 0:
         raise ValueError("--width and --height must be positive")
 
-    _validate_https_url(args.source_url, "--source-url")
-    _validate_https_url(args.terms_url, "--terms-url")
+    _validate_provider_url(args.provider, args.source_url, "--source-url")
+    _validate_provider_url(args.provider, args.terms_url, "--terms-url")
     _validate_date(args.retrieved)
     _validate_usage_basis(args.provider, args.usage_basis)
     svg_data = _validate_svg(svg_path)
