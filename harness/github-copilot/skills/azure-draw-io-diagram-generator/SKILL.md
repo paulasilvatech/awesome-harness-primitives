@@ -13,7 +13,7 @@ Turn an evidenced system model into an accurate, self-contained, reviewable `.dr
 - "Create an Azure architecture diagram with official service icons."
 - "Generate an editable draw.io diagram for Microsoft and GitHub services."
 - "Update this .drawio file and preserve official logos and provenance."
-- "Create a professional deployment, network, flow, sequence, ER, or UML diagram."
+- "Create a professional deployment, network, flow, sequence, ER, or UML diagram with official vendor icons."
 - "Validate this diagram for icon integrity, layout, accessibility, and mxGraph structure."
 
 ## Professional diagram contract
@@ -139,7 +139,6 @@ Do not treat GitHub Octicons as GitHub product logos. Do not use a deprecated Gi
 | --- | --- | --- |
 | `azure-architecture-diagrams` | `skill` | Azure architecture semantics, view selection, or cloud topology is the primary task. |
 | `sdd-requirements-engineer` | `skill` | The diagram must trace to EARS requirements, design decisions, tasks, and verification. |
-| `architecture-doc` | `skill` | The diagram belongs to an Open Horizons architecture document. |
 
 ## Output template
 
