@@ -1,3 +1,6 @@
+# .github/workflows/agent-router.yml
+# Agent Router - Routes issues to appropriate agents based on labels
+
 name: Agent Router
 
 on:
@@ -9,149 +12,283 @@ on:
 permissions:
   contents: read
 
+env:
+  AGENT_ASSIGNEE: "copilot-swe-agent" # Change to your Copilot Coding Agent
+
 jobs:
+  # Job 1: Route single-agent issues
   route-agent:
     runs-on: ubuntu-latest
-    if: |
-      github.event_name == 'issues' &&
-      contains(toJson(github.event.issue.labels), 'agent:') &&
-      !contains(toJson(github.event.issue.labels), 'workflow:')
     permissions:
       contents: read
       issues: write
+    if: |
+      github.event_name == 'issues' && 
+      contains(toJson(github.event.issue.labels), 'agent:') &&
+      !contains(toJson(github.event.issue.labels), 'agent:executing') &&
+      !contains(toJson(github.event.issue.labels), 'workflow:')
+
     outputs:
       agent: ${{ steps.identify.outputs.agent }}
+      requested_agent: ${{ steps.identify.outputs.requested_agent }}
+      effective_agent: ${{ steps.identify.outputs.effective_agent }}
       environment: ${{ steps.policy.outputs.environment }}
       auto_execute: ${{ steps.policy.outputs.auto_execute }}
       require_approval: ${{ steps.policy.outputs.require_approval }}
 
     steps:
+      - name: Checkout Repository
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
       - name: Identify Agent
         id: identify
         env:
-          LABELS_JSON: ${{ toJson(github.event.issue.labels) }}
+          LABELS: ${{ toJson(github.event.issue.labels) }}
         run: |
-          agent_label=$(jq -r '.[] | select(.name | startswith("agent:")) | .name' <<< "$LABELS_JSON" | head -1)
-          requested_agent="${agent_label#agent:}"
+          set -euo pipefail
 
-          case "$requested_agent" in
-            deploy|architect|terraform|devops|platform|backstage-expert|security|reviewer|test|docs|sre|pipeline|sentinel|compass)
-              agent="$requested_agent"
+          AGENT_LABEL=$(jq -r 'first(.[].name | select(startswith("agent:"))) // empty' <<<"$LABELS")
+          HORIZON=$(jq -r 'first(.[].name | select(startswith("horizon:"))) // empty' <<<"$LABELS")
+          REQUESTED_AGENT="${AGENT_LABEL#agent:}"
+
+          # Temporary compatibility aliases keep existing issues routable while
+          # labels are migrated. Runtime agent IDs outside agent:* labels are
+          # intentionally not interpreted here.
+          case "$REQUESTED_AGENT" in
+            arch|azure-principal-architect|specification|tech-debt-remediation-plan)
+              EFFECTIVE_AGENT="open-horizons-architect"
               ;;
-            azure-portal-deploy|azure|infrastructure|networking|container-registry|database|defender|purview|github-runners|ai-foundry|mlops|multi-agent|validation|rollback|cost-optimization|identity-federation)
-              agent="deploy"
+            azure-terraform-implement|azure-terraform-planning|azure-verified-modules-terraform|terraform-azure-implement|terraform-azure-planning|terraform-iac-reviewer|terraform|terratest-module-testing)
+              EFFECTIVE_AGENT="open-horizons-terraform"
               ;;
-            gitops|golden-paths|observability)
-              agent="devops"
+            context-architect|task-planner|task-researcher)
+              EFFECTIVE_AGENT="open-horizons-orchestrator"
               ;;
-            github-app)
-              agent="platform"
+            copilot-primitive-architect|custom-agent-foundry|prompt)
+              EFFECTIVE_AGENT="open-horizons-architect"
               ;;
-            migration|hybrid-scenarios)
-              agent="platform"
+            github-actions-expert|open-horizons-ado-integration|open-horizons-github-integration|playwright-tester|postgresql-dba|qa-subagent|swe-subagent|taxcore-technical-writer|tdd-green|tdd-red|tdd-refactor)
+              EFFECTIVE_AGENT="open-horizons-engineer"
               ;;
-            orchestrator)
-              agent="deploy"
+            open-horizons-hybrid-architect|architect|hybrid-scenarios|compass)
+              EFFECTIVE_AGENT="open-horizons-architect"
+              ;;
+            open-horizons-portal-integrator|backstage)
+              EFFECTIVE_AGENT="backstage-expert"
+              ;;
+            deploy|azure-portal-deploy)
+              EFFECTIVE_AGENT="open-horizons-deployment-operator"
+              ;;
+            devops|docs|github-integration|pipeline|sentinel|test|ado-integration)
+              EFFECTIVE_AGENT="open-horizons-engineer"
+              ;;
+            platform)
+              EFFECTIVE_AGENT="open-horizons-orchestrator"
+              ;;
+            reviewer|security)
+              EFFECTIVE_AGENT="open-horizons-security-reviewer"
+              ;;
+            sre)
+              EFFECTIVE_AGENT="open-horizons-sre-investigator"
+              ;;
+            backstage-expert|open-horizons-architect|open-horizons-azure-readiness|open-horizons-deployment-operator|open-horizons-engineer|open-horizons-orchestrator|open-horizons-security-reviewer|open-horizons-sre-investigator|open-horizons-terraform)
+              EFFECTIVE_AGENT="$REQUESTED_AGENT"
               ;;
             *)
-              agent="unknown"
+              EFFECTIVE_AGENT="unknown"
               ;;
           esac
 
+          # Fail closed if a known route is not backed by a checked-in profile.
+          if [ "$EFFECTIVE_AGENT" != "unknown" ] &&
+             [ ! -f ".github/agents/${EFFECTIVE_AGENT}.agent.md" ]; then
+            EFFECTIVE_AGENT="unknown"
+          fi
+          HORIZON="${HORIZON:-unspecified}"
+
           {
-            echo "agent=$agent"
-            echo "requested_agent=$requested_agent"
-            echo "label=$agent_label"
+            echo "agent=$EFFECTIVE_AGENT"
+            echo "requested_agent=${REQUESTED_AGENT:-unknown}"
+            echo "effective_agent=$EFFECTIVE_AGENT"
+            echo "label=$AGENT_LABEL"
+            echo "horizon=$HORIZON"
           } >> "$GITHUB_OUTPUT"
+
+          echo "🤖 Requested agent: ${REQUESTED_AGENT:-unknown}; effective agent: $EFFECTIVE_AGENT (Horizon: $HORIZON)"
 
       - name: Check Environment Policy
         id: policy
         env:
-          LABELS_JSON: ${{ toJson(github.event.issue.labels) }}
+          LABELS: ${{ toJson(github.event.issue.labels) }}
+          ROUTED_AGENT: ${{ steps.identify.outputs.agent }}
         run: |
-          env_label=$(jq -r '.[] | select(.name | startswith("env:")) | .name' <<< "$LABELS_JSON" | head -1)
-          if [ -z "$env_label" ]; then
-            env_label="env:dev"
+          set -euo pipefail
+
+          # Extract environment label
+          ENV_LABEL=$(jq -r 'first(.[].name | select(startswith("env:"))) // empty' <<<"$LABELS")
+
+          # Default to dev if no env label
+          if [ -z "$ENV_LABEL" ]; then
+            ENV_LABEL="env:dev"
           fi
 
-          case "$env_label" in
-            env:prod|env:production)
-              echo "environment=prod" >> "$GITHUB_OUTPUT"
-              echo "auto_execute=false" >> "$GITHUB_OUTPUT"
-              echo "require_approval=true" >> "$GITHUB_OUTPUT"
+          if [ "$ROUTED_AGENT" = "open-horizons-deployment-operator" ]; then
+            {
+              echo "environment=${ENV_LABEL#env:}"
+              echo "auto_execute=false"
+              echo "require_approval=true"
+            } >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          if [ "$ROUTED_AGENT" = "unknown" ]; then
+            {
+              echo "environment=${ENV_LABEL#env:}"
+              echo "auto_execute=false"
+              echo "require_approval=false"
+            } >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          case "$ENV_LABEL" in
+            "env:dev")
+              {
+                echo "environment=dev"
+                echo "auto_execute=true"
+                echo "require_approval=false"
+              } >> "$GITHUB_OUTPUT"
               ;;
-            env:staging)
-              echo "environment=staging" >> "$GITHUB_OUTPUT"
-              echo "auto_execute=false" >> "$GITHUB_OUTPUT"
-              echo "require_approval=true" >> "$GITHUB_OUTPUT"
+            "env:staging")
+              {
+                echo "environment=staging"
+                echo "auto_execute=true"
+                echo "require_approval=true"
+              } >> "$GITHUB_OUTPUT"
+              ;;
+            "env:prod")
+              {
+                echo "environment=prod"
+                echo "auto_execute=false"
+                echo "require_approval=true"
+              } >> "$GITHUB_OUTPUT"
               ;;
             *)
-              echo "environment=dev" >> "$GITHUB_OUTPUT"
-              echo "auto_execute=true" >> "$GITHUB_OUTPUT"
-              echo "require_approval=false" >> "$GITHUB_OUTPUT"
+              {
+                echo "environment=dev"
+                echo "auto_execute=true"
+                echo "require_approval=false"
+              } >> "$GITHUB_OUTPUT"
               ;;
           esac
 
+          echo "📋 Environment: ${ENV_LABEL#env:}"
+
       - name: Add Routing Comment
         uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7
+        env:
+          REQUESTED_AGENT: ${{ steps.identify.outputs.requested_agent }}
+          EFFECTIVE_AGENT: ${{ steps.identify.outputs.effective_agent }}
+          HORIZON: ${{ steps.identify.outputs.horizon }}
+          ROUTE_ENVIRONMENT: ${{ steps.policy.outputs.environment }}
+          AUTO_EXECUTE: ${{ steps.policy.outputs.auto_execute }}
+          REQUIRE_APPROVAL: ${{ steps.policy.outputs.require_approval }}
         with:
           script: |
-            const agent = '${{ steps.identify.outputs.agent }}';
-            const requestedAgent = '${{ steps.identify.outputs.requested_agent }}';
-            const environment = '${{ steps.policy.outputs.environment }}';
-            const autoExecute = '${{ steps.policy.outputs.auto_execute }}';
-            const requireApproval = '${{ steps.policy.outputs.require_approval }}';
+            const requestedAgent = process.env.REQUESTED_AGENT;
+            const effectiveAgent = process.env.EFFECTIVE_AGENT;
+            const horizon = process.env.HORIZON;
+            const environment = process.env.ROUTE_ENVIRONMENT;
+            const autoExecute = process.env.AUTO_EXECUTE;
+            const requireApproval = process.env.REQUIRE_APPROVAL;
+
+            let statusEmoji;
+            let statusText;
+            if (effectiveAgent === 'unknown') {
+              statusEmoji = '⚠️';
+              statusText = 'Route rejected';
+            } else if (requireApproval === 'true') {
+              statusEmoji = '⏳';
+              statusText = 'Waiting for approval';
+            } else if (autoExecute === 'true') {
+              statusEmoji = '🚀';
+              statusText = 'Preparing for execution';
+            } else {
+              statusEmoji = '⏸️';
+              statusText = 'Execution not scheduled';
+            }
 
             const body = [
-              '## Agent Router',
+              '## 🤖 Agent Router',
               '',
-              `Requested agent label: \`agent:${requestedAgent}\``,
-              `Canonical agent: \`${agent}\``,
-              `Environment: \`${environment}\``,
+              '**Requested Agent:** `' + requestedAgent + '`',
+              '**Effective Agent:** `' + effectiveAgent + '`',
+              '**Horizon:** ' + horizon,
+              '**Environment:** ' + environment,
               '',
               '### Execution Policy',
               '| Setting | Value |',
-              '| --- | --- |',
-              `| Auto-execute | ${autoExecute === 'true' ? 'Yes' : 'No'} |`,
-              `| Requires approval | ${requireApproval === 'true' ? 'Yes' : 'No'} |`,
+              '|---------|-------|',
+              '| Auto-execute | ' + (autoExecute === 'true' ? '✅ Yes' : '❌ No') + ' |',
+              '| Require approval | ' + (requireApproval === 'true' ? '✅ Yes' : '❌ No') + ' |',
               '',
-              agent === 'unknown'
-                ? 'Status: unknown agent label. Please relabel with a supported canonical agent.'
-                : 'Status: routed to the canonical Open Horizons agent workflow.',
+              '### Status',
+              statusEmoji + ' **' + statusText + '**',
+              '',
+              '---',
+              '_The agent will process this request and provide updates in the comments._'
             ].join('\n');
 
             await github.rest.issues.createComment({
+              issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              issue_number: context.issue.number,
-              body,
+              body: body
             });
 
       - name: Add Executing Label
-        if: steps.identify.outputs.agent != 'unknown' && steps.policy.outputs.auto_execute == 'true'
+        if: |
+          steps.policy.outputs.auto_execute == 'true' &&
+          steps.policy.outputs.require_approval == 'false'
         uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7
         with:
           script: |
-            const labels = new Set(context.payload.issue.labels.map(label => label.name));
-            labels.add('agent:executing');
-            labels.add('agent:${{ steps.identify.outputs.agent }}');
+            const { data: issue } = await github.rest.issues.get({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo
+            });
+            const labels = issue.labels.map(label =>
+              typeof label === 'string' ? label : label.name
+            );
+            const assignees = issue.assignees.map(assignee => assignee.login);
+            const configuredAssignee = process.env.AGENT_ASSIGNEE;
+
+            if (!labels.includes('agent:executing')) {
+              labels.push('agent:executing');
+            }
+            if (!assignees.includes(configuredAssignee)) {
+              assignees.push(configuredAssignee);
+            }
 
             await github.rest.issues.update({
+              issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              issue_number: context.issue.number,
-              labels: Array.from(labels),
+              labels,
+              assignees
             });
 
+  # Job 2: Request approval for staging/prod
   request-approval:
     runs-on: ubuntu-latest
     needs: route-agent
-    if: |
-      needs.route-agent.outputs.require_approval == 'true' &&
-      needs.route-agent.outputs.agent != 'unknown'
     permissions:
       contents: read
       issues: write
+    env:
+      REQUEST_TITLE: ${{ github.event.issue.title }}
+    if: needs.route-agent.outputs.require_approval == 'true'
+
     steps:
       - name: Request Approval
         uses: trstringer/manual-approval@fa642940caf8412403569b28b2db4a1df08a83a3 # v1
@@ -159,153 +296,256 @@ jobs:
           secret: ${{ secrets.GITHUB_TOKEN }}
           approvers: platform-team,platform-leads
           minimum-approvals: 1
-          issue-title: "Approval Required: ${{ github.event.issue.title }}"
+          issue-title: "🔒 Approval Required: ${{ env.REQUEST_TITLE }}"
           exclude-workflow-initiator-as-approver: false
 
       - name: Update Issue on Approval
         uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7
         with:
           script: |
-            await github.rest.issues.createComment({
+            const { data: issue } = await github.rest.issues.get({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo
+            });
+            const labels = issue.labels.map(label =>
+              typeof label === 'string' ? label : label.name
+            );
+            const assignees = issue.assignees.map(assignee => assignee.login);
+            const configuredAssignee = process.env.AGENT_ASSIGNEE;
+
+            if (!labels.includes('agent:executing')) {
+              labels.push('agent:executing');
+            }
+            if (!assignees.includes(configuredAssignee)) {
+              assignees.push(configuredAssignee);
+            }
+
+            await github.rest.issues.update({
+              issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              issue_number: context.issue.number,
-              body: 'Approval granted. Agent execution may proceed.',
+              labels,
+              assignees
             });
 
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '✅ **Approval Granted**\n\nThe request has been approved. Agent execution will proceed.'
+            });
+
+  # Job 3: Orchestrate multi-agent workflows
   orchestrate-workflow:
     runs-on: ubuntu-latest
-    if: |
-      github.event_name == 'issues' &&
-      contains(toJson(github.event.issue.labels), 'workflow:')
     permissions:
       contents: read
       issues: write
+    if: |
+      github.event_name == 'issues' &&
+      contains(toJson(github.event.issue.labels), 'workflow:')
+
     steps:
+      - name: Checkout Repository
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
       - name: Identify Workflow
         id: workflow
         env:
-          LABELS_JSON: ${{ toJson(github.event.issue.labels) }}
+          LABELS: ${{ toJson(github.event.issue.labels) }}
         run: |
-          workflow_label=$(jq -r '.[] | select(.name | startswith("workflow:")) | .name' <<< "$LABELS_JSON" | head -1)
-          workflow_name="${workflow_label#workflow:}"
-          echo "workflow=$workflow_name" >> "$GITHUB_OUTPUT"
+          set -euo pipefail
 
-      - name: Create Deploy-Led Stage Issues
+          WORKFLOW_LABEL=$(jq -r 'first(.[] | select(.name | startswith("workflow:")) | .name) // empty' <<<"$LABELS")
+          WORKFLOW_NAME="${WORKFLOW_LABEL#workflow:}"
+
+          echo "workflow=$WORKFLOW_NAME" >> "$GITHUB_OUTPUT"
+          echo "🔄 Workflow identified: $WORKFLOW_NAME"
+
+      - name: Create Stage Issues
         uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7
         with:
           script: |
             const workflow = '${{ steps.workflow.outputs.workflow }}';
             const parentIssue = context.issue.number;
             const parentTitle = context.payload.issue.title;
-            const projectMatch = parentTitle.match(/- (.+)$/);
-            const projectName = projectMatch ? projectMatch[1] : 'Open Horizons Platform';
-            const envLabel = context.payload.issue.labels
-              .map(label => label.name)
-              .find(name => name.startsWith('env:')) || 'env:dev';
 
+            // Extract project name from title if present
+            const projectMatch = parentTitle.match(/- (.+)$/);
+            const projectName = projectMatch ? projectMatch[1] : 'Project';
+
+            // Define workflow stages
             const workflows = {
               'full-deployment': [
-                { stage: 1, horizon: 'H1', agent: 'deploy', title: `[Deploy] Foundation Setup - ${projectName}`, deps: [], description: 'Run prerequisites, install wizard, configuration validation, manifest rendering, and H1 infrastructure plan.' },
-                { stage: 2, horizon: 'H1', agent: 'terraform', title: `[Terraform] Infrastructure Plan - ${projectName}`, deps: ['deploy'], description: 'Validate Terraform modules, backend, environment tfvars, and plan output.' },
-                { stage: 3, horizon: 'Security', agent: 'security', title: `[Security] Pre-Apply Review - ${projectName}`, deps: ['terraform'], description: 'Review identity, RBAC, network, Key Vault, policy, and secret handling before apply.' },
-                { stage: 4, horizon: 'H2', agent: 'devops', title: `[DevOps] GitOps and Platform Services - ${projectName}`, deps: ['security'], description: 'Configure ArgoCD, Helm/Kustomize, observability, and deployment gates.' },
-                { stage: 5, horizon: 'H2', agent: 'backstage-expert', title: `[Backstage] Portal Configuration - ${projectName}`, deps: ['devops'], description: 'Configure Backstage OSS on AKS, auth, catalog, TechDocs, and Golden Paths.' },
-                { stage: 6, horizon: 'H3', agent: 'architect', title: `[Architecture] H3 AI Capabilities - ${projectName}`, deps: ['backstage-expert'], description: 'Validate AI Foundry, agent catalog, MCP ecosystem, and model routing architecture.' },
-                { stage: 7, horizon: 'Validation', agent: 'sre', title: `[SRE] Post-Deploy Verification - ${projectName}`, deps: ['architect'], description: 'Run health checks, observability checks, and deployment validation.' },
+                { 
+                  stage: 1, 
+                  horizon: 'H1', 
+                  agent: 'open-horizons-terraform', 
+                  title: `[H1] Infrastructure - ${projectName}`,
+                  deps: [],
+                  description: 'Create Azure resources, AKS cluster, ACR, Key Vault'
+                },
+                { 
+                  stage: 2, 
+                  horizon: 'H1', 
+                  agent: 'open-horizons-security-reviewer', 
+                  title: `[H1] Security - ${projectName}`,
+                  deps: ['infrastructure'],
+                  description: 'Configure Workload Identity, RBAC, policies'
+                },
+                { 
+                  stage: 3, 
+                  horizon: 'H2', 
+                  agent: 'open-horizons-deployment-operator', 
+                  title: `[H2] GitOps - ${projectName}`,
+                  deps: ['infrastructure'],
+                  description: 'Install and configure ArgoCD'
+                },
+                { 
+                  stage: 4, 
+                  horizon: 'H2', 
+                  agent: 'open-horizons-terraform', 
+                  title: `[H2] Observability - ${projectName}`,
+                  deps: ['gitops'],
+                  description: 'Install Prometheus, Grafana, Alertmanager'
+                },
+                { 
+                  stage: 5, 
+                  horizon: 'H2', 
+                  agent: 'backstage-expert',
+                  title: `[H2] Golden Paths - ${projectName}`,
+                  deps: ['gitops'],
+                  description: 'Register templates in catalog'
+                },
+                { 
+                  stage: 6, 
+                  horizon: 'H3', 
+                  agent: 'open-horizons-terraform', 
+                  title: `[H3] AI Foundry - ${projectName}`,
+                  deps: ['gitops', 'observability'],
+                  description: 'Setup Azure AI Foundry and models'
+                },
+                { 
+                  stage: 7, 
+                  horizon: 'Validation', 
+                  agent: 'open-horizons-sre-investigator', 
+                  title: `[Validation] Platform Audit - ${projectName}`,
+                  deps: ['ai-foundry'],
+                  description: 'Complete platform validation'
+                }
               ],
               'h1-only': [
-                { stage: 1, horizon: 'H1', agent: 'deploy', title: `[Deploy] H1 Foundation - ${projectName}`, deps: [], description: 'Run prerequisites, configuration validation, and H1 deployment sequence.' },
-                { stage: 2, horizon: 'H1', agent: 'terraform', title: `[Terraform] H1 Plan - ${projectName}`, deps: ['deploy'], description: 'Validate H1 Terraform plan and module outputs.' },
-                { stage: 3, horizon: 'Validation', agent: 'sre', title: `[SRE] H1 Validation - ${projectName}`, deps: ['terraform'], description: 'Verify H1 cluster and platform health.' },
+                { stage: 1, horizon: 'H1', agent: 'open-horizons-terraform', title: `[H1] Infrastructure - ${projectName}`, deps: [] },
+                { stage: 2, horizon: 'H1', agent: 'open-horizons-security-reviewer', title: `[H1] Security - ${projectName}`, deps: ['infrastructure'] },
+                { stage: 3, horizon: 'Validation', agent: 'open-horizons-sre-investigator', title: `[Validation] H1 Validation - ${projectName}`, deps: ['security'] }
               ],
               'h2-only': [
-                { stage: 1, horizon: 'H2', agent: 'devops', title: `[DevOps] H2 Platform Services - ${projectName}`, deps: [], description: 'Configure GitOps, observability, and reusable deployment workflows.' },
-                { stage: 2, horizon: 'H2', agent: 'backstage-expert', title: `[Backstage] H2 Portal - ${projectName}`, deps: ['devops'], description: 'Configure Backstage catalog, TechDocs, auth, and Golden Paths.' },
-                { stage: 3, horizon: 'Validation', agent: 'sre', title: `[SRE] H2 Validation - ${projectName}`, deps: ['backstage-expert'], description: 'Verify platform services and portal health.' },
+                { stage: 1, horizon: 'H2', agent: 'open-horizons-deployment-operator', title: `[H2] GitOps - ${projectName}`, deps: [] },
+                { stage: 2, horizon: 'H2', agent: 'open-horizons-terraform', title: `[H2] Observability - ${projectName}`, deps: ['gitops'] },
+                { stage: 3, horizon: 'H2', agent: 'backstage-expert', title: `[H2] Golden Paths - ${projectName}`, deps: ['gitops'] },
+                { stage: 4, horizon: 'Validation', agent: 'open-horizons-sre-investigator', title: `[Validation] H2 Validation - ${projectName}`, deps: ['golden-paths'] }
               ],
-              migration: [
-                { stage: 1, horizon: 'Migration', agent: 'platform', title: `[Platform] Migration Planning - ${projectName}`, deps: [], description: 'Plan repository, catalog, template, and integration migration.' },
-                { stage: 2, horizon: 'Validation', agent: 'reviewer', title: `[Review] Migration Validation - ${projectName}`, deps: ['platform'], description: 'Review migration completeness, risks, and follow-up tasks.' },
-              ],
+              'migration': [
+                { stage: 1, horizon: 'Migration', agent: 'open-horizons-architect', title: `[Migration] ADO → GitHub - ${projectName}`, deps: [] },
+                { stage: 2, horizon: 'Validation', agent: 'open-horizons-security-reviewer', title: `[Validation] Migration Validation - ${projectName}`, deps: ['migration'] }
+              ]
             };
 
             const stages = workflows[workflow] || [];
+
             if (stages.length === 0) {
               await github.rest.issues.createComment({
+                issue_number: parentIssue,
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                issue_number: parentIssue,
-                body: `Unknown workflow \`${workflow}\`. Supported workflows: \`full-deployment\`, \`h1-only\`, \`h2-only\`, \`migration\`.`,
+                body: `⚠️ **Unknown Workflow**\n\nWorkflow \`${workflow}\` is not defined. Available workflows:\n- \`full-deployment\`\n- \`h1-only\`\n- \`h2-only\`\n- \`migration\``
               });
               return;
             }
 
             const createdIssues = [];
-            for (const stage of stages) {
-              const metadata = [
-                '```yaml',
-                'workflow:',
-                `  parent: ${parentIssue}`,
-                `  name: ${workflow}`,
-                `  stage: ${stage.stage}`,
-                `  agent: ${stage.agent}`,
-                `  horizon: ${stage.horizon}`,
-                `  dependencies: [${stage.deps.join(', ')}]`,
-                '```',
-              ].join('\n');
 
+            for (const stage of stages) {
+              const depsText = stage.deps.length > 0 
+                ? `Depends on: ${stage.deps.join(', ')}` 
+                : 'No dependencies';
+              
               const body = [
-                '## Auto-Generated Stage Issue',
+                '## 🤖 Auto-Generated Stage Issue',
                 '',
-                `Parent workflow: #${parentIssue}`,
-                `Stage: ${stage.stage} of ${stages.length}`,
-                `Canonical agent: \`${stage.agent}\``,
-                `Dependencies: ${stage.deps.length ? stage.deps.join(', ') : 'none'}`,
+                '**Parent Workflow:** #' + parentIssue,
+                '**Stage:** ' + stage.stage + ' of ' + stages.length,
+                '**Horizon:** ' + stage.horizon,
+                '**' + depsText + '**',
                 '',
                 '### Description',
-                stage.description,
+                stage.description || 'Execute agent tasks',
                 '',
-                '### Machine Metadata',
-                metadata,
+                '### Configuration',
+                '_Copy configuration from parent issue #' + parentIssue + '_',
                 '',
-                'Copy configuration values from the parent issue before execution.',
+                '---',
+                '_This issue was automatically created by the Agent Router workflow._'
               ].join('\n');
-
+              
+              const envLabel = context.payload.issue.labels
+                .map(l => l.name)
+                .find(n => n.startsWith('env:')) || 'env:dev';
+              
               const result = await github.rest.issues.create({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 title: stage.title,
-                body,
+                body: body,
                 labels: [
                   `agent:${stage.agent}`,
                   `horizon:${stage.horizon.toLowerCase()}`,
                   envLabel,
-                  `workflow:${workflow}`,
-                  `workflow-stage:${stage.stage}`,
-                ],
+                  'stage:auto-created'
+                ]
               });
-
-              createdIssues.push({ number: result.data.number, stage: stage.stage, horizon: stage.horizon, agent: stage.agent });
+              
+              createdIssues.push({
+                number: result.data.number,
+                title: stage.title,
+                stage: stage.stage,
+                horizon: stage.horizon
+              });
             }
 
-            const progressTable = [
-              '| Stage | Horizon | Agent | Issue | Status |',
-              '| --- | --- | --- | --- | --- |',
-              ...createdIssues.map(issue => `| ${issue.stage} | ${issue.horizon} | ${issue.agent} | #${issue.number} | Pending |`),
-            ].join('\n');
+            // Build progress table
+            let progressTable = '| Stage | Horizon | Issue | Status |\n|-------|---------|-------|--------|\n';
+            for (const issue of createdIssues) {
+              progressTable += `| ${issue.stage} | ${issue.horizon} | #${issue.number} | ⏳ Pending |\n`;
+            }
 
+            // Comment on parent issue
             await github.rest.issues.createComment({
+              issue_number: parentIssue,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              issue_number: parentIssue,
-              body: ['## Deploy-Led Workflow Orchestration', '', `Workflow: \`${workflow}\``, '', progressTable].join('\n'),
+              body: [
+                '## 📋 Workflow Orchestration',
+                '',
+                '**Workflow:** `' + workflow + '`',
+                '**Stages Created:** ' + createdIssues.length,
+                '',
+                '### Stage Progress',
+                '',
+                progressTable,
+                '',
+                '---',
+                '_Progress will be updated as stages complete._'
+              ].join('\n')
             });
 
+  # Job 4: Send notifications
   notify:
     runs-on: ubuntu-latest
     needs: [route-agent]
     if: always() && needs.route-agent.result == 'success'
+
     steps:
       - name: Send Teams Notification
         if: env.TEAMS_WEBHOOK != ''
@@ -317,13 +557,14 @@ jobs:
           ISSUE_URL: ${{ github.event.issue.html_url }}
           ACTOR: ${{ github.actor }}
         run: |
+
           curl -H "Content-Type: application/json" -d '{
             "@type": "MessageCard",
             "@context": "http://schema.org/extensions",
             "themeColor": "0078D4",
             "summary": "Agent Activated",
             "sections": [{
-              "activityTitle": "Agent Activated",
+              "activityTitle": "🤖 Agent Activated",
               "facts": [
                 {"name": "Issue", "value": "'"$ISSUE_TITLE"'"},
                 {"name": "Agent", "value": "'"$AGENT"'"},

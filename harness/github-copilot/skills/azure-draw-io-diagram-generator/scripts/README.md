@@ -1,11 +1,11 @@
 # draw-io Scripts
 
-Utility scripts for working with `.drawio` diagram files in the cxp-bu-order-ms project.
+Dependency-free utilities for creating and validating editable `.drawio` diagram files.
 
 ## Requirements
 
 - Python 3.8+
-- No external dependencies (uses standard library only: `xml.etree.ElementTree`, `argparse`, `json`, `sys`, `pathlib`)
+- No external dependencies. The scripts use the Python standard library only.
 
 ## Scripts
 
@@ -17,6 +17,8 @@ Validates the XML structure of a `.drawio` file against required constraints.
 
 ```bash
 python scripts/validate-drawio.py <path-to-diagram.drawio>
+python scripts/validate-drawio.py <path-to-diagram.drawio> \
+  --require-official-icons --require-icon-provenance
 ```
 
 **Examples**
@@ -39,11 +41,36 @@ for f in docs/**/*.drawio; do python scripts/validate-drawio.py "$f"; done
 | Geometry | Every vertex cell has an `mxGeometry` child element |
 | Parent chain | Every cell's `parent` attribute references an existing cell id |
 | XML well-formedness | File is valid XML |
+| Self-containment | Rejects external image URLs |
+| Official icon provenance | Validates provider, product, source, terms, date, usage basis, method, and SHA-256 |
 
 **Exit codes**
 
 - `0` — Validation passed
 - `1` — One or more validation errors found (errors printed to stdout)
+
+---
+
+### `add-icon.py`
+
+Embeds a local SVG as a self-contained official product or service icon and writes provenance metadata
+to the generated `mxCell`. The script never downloads network content and rejects active or externally
+referenced SVG content.
+
+```bash
+python scripts/add-icon.py docs/architecture.drawio ./icons/key-vault.svg \
+  "Azure Key Vault" 320 180 \
+  --provider azure \
+  --source-url https://learn.microsoft.com/en-us/azure/architecture/icons/ \
+  --terms-url https://learn.microsoft.com/en-us/azure/architecture/icons/ \
+  --retrieved 2026-08-25 \
+  --usage-basis microsoft-architecture-terms
+```
+
+Required provenance is stored in `iconProvider`, `iconProduct`, `iconSource`, `iconTerms`,
+`iconRetrieved`, `iconUsageBasis`, `iconMethod`, and `iconSha256`. Use
+`--usage-basis github-octicons-mit` only for Octicons and `github-brand-permission` only when the
+specific GitHub brand use is permitted.
 
 ---
 
@@ -110,6 +137,13 @@ find . -name "*.drawio" -not -path "*/node_modules/*" | \
   xargs -I{} python scripts/validate-drawio.py {}
 ```
 
+For diagrams that use official product assets:
+
+```bash
+python scripts/validate-drawio.py docs/architecture.drawio \
+  --require-official-icons --require-icon-provenance
+```
+
 ### Quickly add a placeholder node
 
 ```bash
@@ -120,5 +154,5 @@ python scripts/add-shape.py docs/architecture.drawio "TODO: Service" 800 400 \
 ### Check a template is valid
 
 ```bash
-python scripts/validate-drawio.py .github/skills/draw-io-diagram-generator/templates/flowchart.drawio
+python scripts/validate-drawio.py assets/templates/flowchart.drawio
 ```

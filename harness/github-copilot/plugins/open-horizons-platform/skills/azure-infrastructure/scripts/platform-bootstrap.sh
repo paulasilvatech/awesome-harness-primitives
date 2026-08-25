@@ -216,7 +216,7 @@ check_prerequisites() {
     local helm_version=$(helm version --short)
     log INFO "Helm version: $helm_version"
     
-    log INFO "All prerequisites satisfied [OK]"
+    log INFO "All prerequisites satisfied ✓"
 }
 
 load_environment_config() {
@@ -331,7 +331,7 @@ deploy_h1_foundation() {
         -var="environment=${ENVIRONMENT}"
     
     save_checkpoint "h1_complete"
-    log INFO "H1 Foundation deployment complete [OK]"
+    log INFO "H1 Foundation deployment complete ✓"
 }
 
 deploy_h2_enhancement() {
@@ -392,7 +392,7 @@ deploy_h2_enhancement() {
         -var="environment=${ENVIRONMENT}"
     
     save_checkpoint "h2_complete"
-    log INFO "H2 Enhancement deployment complete [OK]"
+    log INFO "H2 Enhancement deployment complete ✓"
 }
 
 deploy_h3_innovation() {
@@ -419,7 +419,7 @@ deploy_h3_innovation() {
         -var="environment=${ENVIRONMENT}"
     
     save_checkpoint "h3_complete"
-    log INFO "H3 Innovation deployment complete [OK]"
+    log INFO "H3 Innovation deployment complete ✓"
 }
 
 configure_gitops() {
@@ -444,7 +444,7 @@ configure_gitops() {
     sleep 30
     
     save_checkpoint "gitops_complete"
-    log INFO "GitOps configuration complete [OK]"
+    log INFO "GitOps configuration complete ✓"
 }
 
 register_golden_paths() {
@@ -466,26 +466,26 @@ register_golden_paths() {
     log INFO "Registering Golden Path templates in Backstage..."
     
     # Register H1 templates
-    for template in "${ACCELERATOR_ROOT}/golden-paths/h1-foundation/"*/template.yaml; do
+    for template in "${ACCELERATOR_ROOT}/scripts/golden-paths/h1-foundation/"*/template.yaml; do
         local name=$(basename $(dirname "$template"))
         log INFO "Registering H1 template: $name"
         # Backstage API call to register template
     done
     
     # Register H2 templates
-    for template in "${ACCELERATOR_ROOT}/golden-paths/h2-enhancement/"*/template.yaml; do
+    for template in "${ACCELERATOR_ROOT}/scripts/golden-paths/h2-enhancement/"*/template.yaml; do
         local name=$(basename $(dirname "$template"))
         log INFO "Registering H2 template: $name"
     done
     
     # Register H3 templates
-    for template in "${ACCELERATOR_ROOT}/golden-paths/h3-innovation/"*/template.yaml; do
+    for template in "${ACCELERATOR_ROOT}/scripts/golden-paths/h3-innovation/"*/template.yaml; do
         local name=$(basename $(dirname "$template"))
         log INFO "Registering H3 template: $name"
     done
     
     save_checkpoint "golden_paths_complete"
-    log INFO "Golden Path registration complete [OK]"
+    log INFO "Golden Path registration complete ✓"
 }
 
 deploy_grafana_dashboards() {
@@ -512,7 +512,7 @@ deploy_grafana_dashboards() {
             --overwrite
     done
     
-    log INFO "Grafana dashboards deployed [OK]"
+    log INFO "Grafana dashboards deployed ✓"
 }
 
 print_summary() {
@@ -590,7 +590,7 @@ destroy_platform() {
     # Clean up checkpoint
     rm -f "$CHECKPOINT_FILE"
     
-    log INFO "Platform destroyed [OK]"
+    log INFO "Platform destroyed ✓"
 }
 
 # =============================================================================

@@ -29,6 +29,26 @@ version changes, local evidence conflicts, a claim is unverified, the user asks 
 this evidence is older than 90 days. Do not refresh this date without repeating the fetch and reviewing
 the relevant sections.
 
+## Official architecture icon and diagram guidance verification
+
+Verification date: 2026-08-25. Target: `azure-draw-io-diagram-generator` icon policy and its
+`sdd-requirements-engineer` integration. These checks verified first-party documentation; they did not
+grant permission beyond each source's stated terms or visually certify any user-supplied asset.
+
+| Area | First-party source | Verified result |
+| --- | --- | --- |
+| Architecture diagram quality | [Azure Well-Architected Framework diagram guidance](https://learn.microsoft.com/en-us/azure/well-architected/architect-role/design-diagrams) | Effective diagrams are audience- and question-specific, use standard notation and directional arrows, label entities and non-obvious relationships, remain accurate, include metadata and legends, support accessibility, use progressive disclosure, live under version control, and use current official icons and service names without arbitrary stretching or recoloring. |
+| Azure icons | [Azure Architecture Center icons](https://learn.microsoft.com/en-us/azure/architecture/icons/) | Microsoft permits the supplied icons for architecture diagrams, training materials, or documentation. The page requires nearby product names and prohibits cropping, flipping, rotating, distortion, and using Microsoft product icons to represent another product. The page reports an icon update in July 2026. |
+| Microsoft product families | [Microsoft Entra](https://learn.microsoft.com/en-us/entra/architecture/architecture-icons), [Microsoft Fabric](https://learn.microsoft.com/en-us/fabric/fundamentals/icons), [Power Platform](https://learn.microsoft.com/en-us/power-platform/guidance/icons), and [Dynamics 365](https://learn.microsoft.com/en-us/dynamics365/get-started/icons) | Each page publishes a product-specific official set and comparable no-modification terms. Entra additionally prohibits marketing use. Dynamics reports removal of deprecated icons in its January 2026 package. The Microsoft 365 icon page now redirects to archived, retired documentation, so it is treated as a fallback rather than a current preferred source. |
+| General Microsoft marks | [Microsoft Trademark and Brand Guidelines](https://www.microsoft.com/en-us/legal/intellectualproperty/trademarks) | Microsoft identifies logos, app icons, and product icons as proprietary brand assets and states that many uses require a license. The architecture-icon permission is therefore not generalized to arbitrary corporate-logo or marketing use. |
+| GitHub icons and marks | [Primer Octicons](https://github.com/primer/octicons), [GitHub logo guidance](https://brand.github.com/foundations/logo), and [GitHub Copilot brand guidance](https://brand.github.com/brand-identity/copilot) | Octicons are GitHub-built SVG interface icons under the repository's MIT code license, but GitHub logos and product lockups remain governed by brand and trademark rules. Permitted logo use must not imply affiliation or endorsement and must not modify the mark. GitHub states that the former standalone Copilot logo has been deprecated since 2025. |
+
+Local divergence resolved: `azure-draw-io-diagram-generator` previously delegated official-icon work to
+another skill and had no deterministic provenance or hash validation. It now owns safe local SVG
+embedding, source and terms metadata, SHA-256 verification, external-image rejection, and visual/brand
+review gates. `sdd-requirements-engineer` routes named Microsoft, Azure, and GitHub product diagrams to
+that capability while retaining Mermaid for concise vendor-neutral logical views.
+
 ## Frontend experience planning source verification
 
 Verification date: 2026-08-25. Target: planning evidence for

@@ -15,7 +15,7 @@ Plan and build Backstage plugin work by routing the request to the correct plugi
 - "Validate this Backstage plugin before publication."
 - "Write a plugin ADR and architecture plan."
 
-## Inputs
+## Prerequisites and context
 
 Collect only missing facts. If intent is already clear, proceed.
 

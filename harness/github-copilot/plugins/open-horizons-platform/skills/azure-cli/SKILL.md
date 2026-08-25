@@ -1,135 +1,159 @@
 ---
 name: azure-cli
-description: "Use when running focused Azure CLI operations for Open Horizons cloud resources, including account context, AKS credentials, ACR, Key Vault metadata, resource inventory, provider registration, and RBAC checks; produces commands, results, and safe next steps. DO NOT USE FOR: Terraform IaC (use terraform-cli), Kubernetes operations (use kubectl-cli), or Helm charts (use helm-cli). Triggers include \"check Azure resources\", \"get AKS credentials\", \"register an Azure provider\"."
+description: >-
+  Azure CLI operations run az commands for cloud resource discovery, subscription context, identity, AKS, ACR, Key Vault, RBAC, managed identity, and federated credential workflows. Use this skill when working with az login, az account, az aks, az acr, az keyvault, resource group checks, or Azure day-2 operations.
 ---
 
 # Azure CLI
 
-This workflow performs focused `az` operations for Azure resource discovery and controlled mutations. It produces verified command output while protecting secrets and keeping Terraform-managed infrastructure under Terraform ownership.
-
-> [!NOTE]
-> This skill shells out to the Azure CLI (`az`). Authentication, subscription selection, and RBAC must be verified before use. For GitHub OIDC federation setup, use bundled `scripts/setup-identity-federation.sh` from this skill directory.
+Use this skill to turn Azure operations requests into ordered `az` command workflows, verify the active cloud context, and return resource, identity, AKS, ACR, Key Vault, RBAC, or subscription evidence without exposing secrets.
 
 ## When to invoke
-- "Check which Azure subscription and resource group I am targeting."
-- "Get AKS credentials for the Open Horizons cluster."
-- "List ACR repositories and image tags."
-- "Register the Azure providers needed by the platform."
-- "Create an RBAC assignment after I approve the exact scope."
+
+- "Check the current Azure subscription and account context."
+- "Query Azure resources in a resource group."
+- "Get AKS credentials or inspect an AKS cluster."
+- "List Key Vault secret names or ACR repositories."
+- "Configure or validate Azure RBAC, managed identity, or federated credentials."
 
 ## Prerequisites and context
-- Azure CLI installed and authenticated with `az account show` succeeding.
-- Target subscription ID and resource group known.
-- Appropriate Azure RBAC permissions for the operation.
-- Understanding of whether the target resource is Terraform-managed under `terraform/`.
-- Explicit approval before provider registration, role assignment, scaling, or resource creation.
+
+- Azure CLI installed.
+- Authenticated with `az login` or managed identity.
+- Subscription selected.
+- Appropriate RBAC roles.
 
 ## Procedure
 
-### Step 1: Verify account context
+1. Confirm authentication and subscription context before querying or changing Azure resources.
+2. Select the narrowest `az` command for the requested resource type.
+3. Prefer readable table output for human review and JSON output when another tool will parse the result.
+4. Redact or avoid secret values in any returned output.
+5. Return the result using the output template.
+
+### Context
+
 ```bash
+# Show current account
 az account show -o table
+
+# List subscriptions
 az account list -o table --query "[].{Name:name, ID:id, State:state}"
+
+# Set subscription
 az account set --subscription "<subscription-id>"
 ```
 
-- [ ] Tenant and subscription match the user's target.
-- [ ] Environment and resource group are identified.
-- [ ] Output does not include secrets.
+### Resource queries
 
-### Step 2: Inventory resources safely
 ```bash
-az resource list --resource-group <resource-group> -o table
-az resource list --resource-group <resource-group> --query "[?type=='Microsoft.ContainerService/managedClusters']" -o table
-az provider list --query "[?registrationState!='Registered'].{Namespace:namespace, State:registrationState}" -o table
+# List resources in RG
+az resource list -g <resource-group> -o table
+
+# Show resource
+az resource show --ids <resource-id>
+
+# Query with JMESPath
+az resource list -g <rg> --query "[?type=='Microsoft.ContainerService/managedClusters']"
 ```
 
-### Step 3: Run focused read operations
+### AKS operations
+
 ```bash
-az aks show --resource-group <resource-group> --name <cluster> -o table
-az acr repository list --name <acr-name> -o table
-az acr repository show-tags --name <acr-name> --repository <repo> --orderby time_desc -o table
-az keyvault secret list --vault-name <vault-name> --query "[].{Name:name}" -o table
+# Get credentials
+az aks get-credentials -g <rg> -n <cluster> --overwrite-existing
+
+# Show cluster
+az aks show -g <rg> -n <cluster> -o table
+
+# Node pools
+az aks nodepool list -g <rg> --cluster-name <cluster> -o table
+
+# Scale cluster
+az aks scale -g <rg> -n <cluster> --node-count 5
 ```
 
-Do not print secret values. Prefer listing names and metadata.
+### Key Vault
 
-### Step 4: Confirm before mutating Azure state
-```text
-Azure CLI mutation summary:
-- Subscription:
-- Resource group or scope:
-- Command category: provider registration | RBAC | AKS credentials | scale | create | update
-- Resources affected:
-Proceed with this Azure CLI mutation? (y/n)
-```
-
-> [!IMPORTANT]
-> Only proceed with provider registration, role assignment, scaling, resource creation, or other Azure state changes if the user gives an explicit affirmative. On a negative, ambiguous, or missing response, output the proposed command and stop.
-
-### Step 5: Execute approved mutations and verify
 ```bash
-az provider register --namespace Microsoft.ContainerService
-az role assignment create --assignee <principal-id> --role <role-name> --scope <resource-scope>
-az aks get-credentials --resource-group <resource-group> --name <cluster> --overwrite-existing
+# List secrets (names only)
+az keyvault secret list --vault-name <kv> -o table --query "[].{Name:name}"
+
+# Get secret
+az keyvault secret show --vault-name <kv> -n <secret> --query value -o tsv
 ```
 
-- [ ] Verify the result with a read command.
-- [ ] Record the exact scope and principal for RBAC changes.
-- [ ] Route persistent infrastructure changes back to Terraform when applicable.
+### ACR
 
-## Risk classification
-| Severity | Meaning |
-|---|---|
-| Critical | Wrong subscription, secret value exposed, or destructive change proposed outside Terraform. |
-| High | Broad RBAC scope, public network exposure, or production scaling without approval. |
-| Medium | Provider not registered, stale credentials, or incomplete resource inventory. |
-| Low | Output formatting, naming, or tagging issues. |
+```bash
+# List repositories
+az acr repository list -n <acr> -o table
 
-## Limits
+# Show tags
+az acr repository show-tags -n <acr> --repository <repo> --orderby time_desc
+```
 
-- Do not use this skill for: Terraform IaC (use terraform-cli), Kubernetes operations (use kubectl-cli), or Helm charts (use helm-cli).
-- Keep exclusions and handoffs as by-name references to installed skills or agents, not relative links to other primitives.
-- Stop before mutating infrastructure, clusters, repositories, or generated artifacts unless the procedure's confirmation gate is satisfied.
+### Best practices
 
-## Troubleshooting
-| Situation | Action |
-|---|---|
-| Not authenticated | Run `az login` or use managed identity, then verify `az account show`. |
-| Wrong subscription | Stop, set the intended subscription, and rerun only read commands first. |
-| Insufficient permissions | Report the missing role and exact scope needed. |
-| Secret value requested | Refuse to print it; provide a safe retrieval or Key Vault reference pattern. |
+1. Use -o table for readable output.
+2. Use -o json for parsing with jq.
+3. Use --query for filtering.
+4. Never expose secrets in output.
+5. Verify subscription before operations.
 
 ## Output template
 
 Return exactly this structure:
+
 ```markdown
-# Azure CLI Operation Report
+**Status:** PASS | FAIL | BLOCKED
+**Summary:** One sentence describing the Azure resource, identity, AKS, ACR, Key Vault, or subscription outcome.
 
-## Context
-- Tenant:
-- Subscription:
-- Resource group:
+### Details
+1. Command executed: `<az command>`
+2. Subscription context: `<subscription name or ID>`
+3. Target resource: `<resource group, resource ID, AKS cluster, ACR, Key Vault, or not applicable>`
+4. Results: `<table summary, JSON summary, or operation result>`
+5. Warnings or issues: `<RBAC, context, secret-handling, or none>`
+6. Next steps: `<next Azure action or none>`
 
-## Commands
-| Command | Result |
-|---|---|
-
-## Findings
-| Severity | Finding | Recommendation |
-|---|---|---|
-
-## Next Steps
-- 
+### Validation
+- Context check: `<az account show evidence or reason not checked>`
+- Command result: `<exit code or observed az output>`
 ```
 
+## Limits
+
+- Do not use this skill for Terraform IaC.
+- Use `terraform-cli` (`skill`) instead when the task is Terraform init, plan, apply, validate, fmt, state, import, module development, provider locks, tfvars, or tfsec scanning.
+- Do not use this skill for Azure architecture patterns.
+- Use `azure-infrastructure` (`skill`) instead when the task is architecture design, hub-spoke networking, private endpoints, Workload Identity patterns, naming, or tagging strategy.
+- Do not use this skill for Kubernetes kubectl commands.
+- Use `kubectl-cli` (`skill`) instead when the task is direct Kubernetes resource inspection, logs, rollout status, events, or manifests.
+- Do not use this skill for Helm charts.
+- Use `helm-cli` (`skill`) instead when the task is chart repositories, values, templates, releases, upgrades, or rollbacks.
+
+## Progressive disclosure and bundled resources
+
+- `scripts/setup-identity-federation.sh`: use when the Azure task requires identity federation setup automation.
+
+## Related primitives
+
+| Name | Type | Use it when |
+| --- | --- | --- |
+| `open-horizons-terraform` | `agent` | Planning or implementing Terraform-based Azure infrastructure changes. |
+| `open-horizons-security-reviewer` | `agent` | Reviewing Azure RBAC, identity, or secret-handling risk. |
+| `open-horizons-sre-investigator` | `agent` | Diagnosing Azure-side operational issues for running services. |
+| `open-horizons-azure-readiness` | `agent` | Validating Azure subscription, provider, quota, and resource readiness. |
+| `terraform-cli` | `skill` | Managing infrastructure through Terraform rather than direct `az` commands. |
+| `kubectl-cli` | `skill` | Inspecting Kubernetes resources after AKS credentials are configured. |
+| `azure-infrastructure` | `skill` | Designing Azure architecture patterns before CLI execution. |
+
 ## Quality gate
-- [ ] Subscription context is verified before every operation.
-- [ ] Mutations have explicit user confirmation.
-- [ ] Secrets are never printed in output.
-- [ ] Terraform-managed resources are not changed imperatively without approval.
-- [ ] Frontmatter contains a valid `name` matching the directory and a `description` with positive activation language.
-- [ ] The response follows `## Output template` and includes evidence for checks actually performed.
-- [ ] Tool, command, and file usage stays within this skill's procedure and confirmation gates.
-- [ ] Referenced repository paths and bundled resources exist before use.
-- [ ] This `SKILL.md` remains under 500 lines and contains no emojis.
+
+- [ ] `name` is `azure-cli` and matches the parent directory.
+- [ ] The active subscription is verified before resource operations.
+- [ ] Secret values are not exposed in the response unless the user explicitly requested retrieval and the value is handled safely.
+- [ ] `--query` or output mode choices are reported when they materially affect the result.
+- [ ] AKS, ACR, and Key Vault commands include the target resource name or resource group when applicable.
+- [ ] The bundled script path listed above exists before referring to it.

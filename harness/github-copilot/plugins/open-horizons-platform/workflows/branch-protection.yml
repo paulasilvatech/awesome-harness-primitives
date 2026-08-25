@@ -30,15 +30,16 @@ on:
     branches:
       - develop
 
+permissions:
+  contents: read
+  pull-requests: read
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 env:
   REQUIRED_APPROVALS: 1
-
-permissions:
-  contents: read
 
 jobs:
   # ===========================================================================
@@ -47,7 +48,7 @@ jobs:
   validate-pr-source:
     name: Validate PR Source
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
+    if: github.event_name == 'pull_request' && github.base_ref == 'main'
     steps:
       - name: Check PR source branch
         env:
@@ -57,18 +58,13 @@ jobs:
           echo "PR from: $HEAD_REF"
           echo "PR to: $BASE_REF"
 
-          if [[ "$BASE_REF" != "main" ]]; then
-            echo "Source branch validation is only enforced for PRs to main."
-            exit 0
-          fi
-
           if [[ "$HEAD_REF" != "develop" ]]; then
             echo "::error::PRs to main must come from develop branch only!"
             echo "::error::Current source branch: $HEAD_REF"
             exit 1
           fi
 
-          echo "[OK] PR source branch is valid (develop -> main)"
+          echo "✅ PR source branch is valid (develop -> main)"
 
   # ===========================================================================
   # PR QUALITY CHECKS
@@ -167,7 +163,7 @@ jobs:
           CHANGED_FILES=$(git diff --name-only origin/main...HEAD)
 
           if echo "$CHANGED_FILES" | grep -q "CHANGELOG.md"; then
-            echo "[OK] CHANGELOG.md has been updated"
+            echo "✅ CHANGELOG.md has been updated"
           else
             echo "::warning::Consider updating CHANGELOG.md for this release"
           fi
@@ -182,7 +178,7 @@ jobs:
     steps:
       - name: Trigger CI
         run: |
-          echo "[OK] Changes pushed to develop branch"
+          echo "✅ Changes pushed to develop branch"
           echo "CI workflow will run automatically"
 
   # ===========================================================================
@@ -198,15 +194,18 @@ jobs:
         env:
           HEAD_REF: ${{ github.head_ref }}
           BASE_REF: ${{ github.base_ref }}
+          SOURCE_STATUS: ${{ needs.validate-pr-source.result == 'success' && '✅ Passed' || needs.validate-pr-source.result == 'skipped' && '⏭️ Skipped' || '❌ Failed' }}
+          PR_QUALITY_STATUS: ${{ needs.pr-quality.result == 'success' && '✅ Passed' || '❌ Failed' }}
+          COMMIT_STATUS: ${{ needs.commit-check.result == 'success' && '✅ Passed' || '❌ Failed' }}
         run: |
           {
             echo "## Pull Request Summary"
             echo ""
             echo "| Check | Status |"
             echo "|-------|--------|"
-            echo "| Source Branch Validation | ${{ needs.validate-pr-source.result == 'success' && 'Passed' || needs.validate-pr-source.result == 'skipped' && 'Skipped' || 'Failed' }} |"
-            echo "| PR Quality | ${{ needs.pr-quality.result == 'success' && 'Passed' || 'Failed' }} |"
-            echo "| Commit Check | ${{ needs.commit-check.result == 'success' && 'Passed' || 'Failed' }} |"
+            echo "| Source Branch Validation | $SOURCE_STATUS |"
+            echo "| PR Quality | $PR_QUALITY_STATUS |"
+            echo "| Commit Check | $COMMIT_STATUS |"
             echo ""
             echo "### Branch Flow"
             echo "\`\`\`"

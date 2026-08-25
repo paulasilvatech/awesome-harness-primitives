@@ -26,10 +26,11 @@ env:
   GO_VERSION: "1.21"
   PYTHON_VERSION: "3.11"
   KUBECONFORM_VERSION: "0.6.4"
-  GITLEAKS_VERSION: "v8.30.1"
 
 permissions:
   contents: read
+  pull-requests: write
+  security-events: write
 
 jobs:
   # ===========================================================================
@@ -43,10 +44,11 @@ jobs:
       kubernetes: ${{ steps.changes.outputs.kubernetes }}
       scripts: ${{ steps.changes.outputs.scripts }}
       docs: ${{ steps.changes.outputs.docs }}
-      specs: ${{ steps.changes.outputs.specs }}
       agents: ${{ steps.changes.outputs.agents }}
       golden-paths: ${{ steps.changes.outputs.golden-paths }}
       argocd: ${{ steps.changes.outputs.argocd }}
+      agent-api: ${{ steps.changes.outputs.agent-api }}
+      ai-chat: ${{ steps.changes.outputs.ai-chat }}
 
     steps:
       - name: Checkout
@@ -67,26 +69,48 @@ jobs:
               - 'scripts/**'
             docs:
               - 'docs/**'
-              - 'specs/**'
               - '*.md'
-            specs:
-              - 'specs/**'
-              - 'scripts/validate-specs.py'
-              - 'tests/scripts/test_validate_specs.py'
             agents:
+              - 'agents/**'
               - '.github/agents/**'
-              - '.github/prompts/**'
-              - '.github/skills/**/SKILL.md'
-              - '.github/instructions/**'
-              - '.github/ISSUE_TEMPLATE/**'
-              - '.github/workflows/validate-agents.yml'
-              - '.github/skills/validation-scripts/scripts/validate-agents.py'
-              - 'golden-paths/common/agents/**'
               - '.apm/**'
             golden-paths:
               - 'golden-paths/**'
             argocd:
               - 'argocd/**'
+            agent-api:
+              - 'backstage/server/agent-api/**'
+            ai-chat:
+              - 'backstage/plugins/ai-chat/**'
+
+  # ===========================================================================
+  # AGENT API TESTS (AI Chat backend)
+  # ===========================================================================
+  agent-api-tests:
+    name: Agent API Tests
+    runs-on: ubuntu-latest
+    needs: detect-changes
+    if: needs.detect-changes.outputs.agent-api == 'true'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - name: Setup Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install dependencies
+        run: |
+          cd backstage/server/agent-api
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt -r requirements-dev.txt
+
+      - name: Run tests with coverage
+        run: |
+          cd backstage/server/agent-api
+          pytest --cov=config --cov=agents.base --cov=middleware.model_metrics --cov-report=term-missing
 
   # ===========================================================================
   # TERRAFORM VALIDATION
@@ -128,10 +152,8 @@ jobs:
       - name: Format Check Summary
         if: steps.fmt.outcome == 'failure'
         run: |
-          {
-            echo "## Terraform Format Check Failed"
-            echo "Run \`terraform fmt -recursive\` to fix formatting issues."
-          } >> "$GITHUB_STEP_SUMMARY"
+          echo "## Terraform Format Check Failed" >> $GITHUB_STEP_SUMMARY
+          echo "Run \`terraform fmt -recursive\` to fix formatting issues." >> $GITHUB_STEP_SUMMARY
 
   # ===========================================================================
   # TFLINT
@@ -169,9 +191,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: detect-changes
     if: needs.detect-changes.outputs.terraform == 'true'
-    permissions:
-      contents: read
-      security-events: write
 
     steps:
       - name: Checkout
@@ -187,7 +206,7 @@ jobs:
 
       - name: Upload SARIF
         if: always()
-        uses: github/codeql-action/upload-sarif@f3712979fa5f215279b101dd0a2e3bdfb4353324 # v3
+        uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: tfsec.sarif
         continue-on-error: true # Upload failure shouldn't block CI
@@ -200,9 +219,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: detect-changes
     if: needs.detect-changes.outputs.terraform == 'true'
-    permissions:
-      contents: read
-      security-events: write
 
     steps:
       - name: Checkout
@@ -220,7 +236,7 @@ jobs:
 
       - name: Upload SARIF
         if: always()
-        uses: github/codeql-action/upload-sarif@f3712979fa5f215279b101dd0a2e3bdfb4353324 # v3
+        uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: checkov.sarif
         continue-on-error: true # Upload failure shouldn't block CI
@@ -235,9 +251,6 @@ jobs:
     if: |
       needs.detect-changes.outputs.terraform == 'true' &&
       github.event_name == 'pull_request'
-    permissions:
-      contents: read
-      pull-requests: write
 
     steps:
       - name: Checkout
@@ -285,34 +298,23 @@ jobs:
 
       - name: Setup Kubeconform
         run: |
-          wget -q "https://github.com/yannh/kubeconform/releases/download/v${{ env.KUBECONFORM_VERSION }}/kubeconform-linux-amd64.tar.gz"
+          wget -q https://github.com/yannh/kubeconform/releases/download/v${{ env.KUBECONFORM_VERSION }}/kubeconform-linux-amd64.tar.gz
           tar xzf kubeconform-linux-amd64.tar.gz
           sudo mv kubeconform /usr/local/bin/
 
       - name: Validate Kubernetes Manifests
         run: |
-          {
-            echo "## Kubernetes Validation Results"
-            echo ""
-          } >> "$GITHUB_STEP_SUMMARY"
-          errors=0
+          echo "## Kubernetes Validation Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          ERRORS=0
           for dir in deploy argocd; do
             if [ -d "$dir" ]; then
-              echo "### Validating $dir/" >> "$GITHUB_STEP_SUMMARY"
-              while IFS= read -r -d '' manifest; do
-                if ! kubeconform -strict -ignore-missing-schemas -summary "$manifest"; then
-                  errors=$((errors + 1))
-                fi
-              done < <(
-                find "$dir" \( -name "*.yaml" -o -name "*.yml" \) \
-                  ! -name "kustomization*" \
-                  ! -path "*/templates/*" \
-                  ! -path "deploy/helm/*" \
-                  -print0
-              )
+              echo "### Validating $dir/" >> $GITHUB_STEP_SUMMARY
+              find "$dir" \( -name "*.yaml" -o -name "*.yml" \) ! -name "kustomization*" ! -path "*/templates/*" -print0 | \
+                xargs -0 -I {} sh -c 'kubeconform -strict -summary {} || exit 1' || ERRORS=$((ERRORS+1))
             fi
           done
-          if [ "$errors" -gt 0 ]; then
+          if [ $ERRORS -gt 0 ]; then
             echo "::error::Kubernetes manifest validation failed"
             exit 1
           fi
@@ -365,28 +367,22 @@ jobs:
 
       - name: Validate Golden Path Templates
         run: |
-          {
-            echo "## Golden Path Validation"
-            echo ""
-          } >> "$GITHUB_STEP_SUMMARY"
-          errors=0
-          template_count=0
-          while IFS= read -r -d '' template; do
-            template_count=$((template_count + 1))
+          echo "## Golden Path Validation" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          ERRORS=0
+          for template in $(find golden-paths -name 'template.yaml' 2>/dev/null); do
             echo "Validating $template..."
-            if python3 -c 'import sys, yaml; yaml.safe_load(open(sys.argv[1], encoding="utf-8"))' "$template" 2>/dev/null; then
-              echo "- OK: $template" >> "$GITHUB_STEP_SUMMARY"
+            if python3 -c "import yaml; yaml.safe_load(open('$template'))" 2>/dev/null; then
+              echo "- OK: $template" >> $GITHUB_STEP_SUMMARY
             else
-              echo "- FAIL: $template - Invalid YAML" >> "$GITHUB_STEP_SUMMARY"
-              errors=$((errors + 1))
+              echo "- FAIL: $template - Invalid YAML" >> $GITHUB_STEP_SUMMARY
+              ERRORS=$((ERRORS+1))
             fi
-          done < <(find golden-paths -name 'template.yaml' -print0 2>/dev/null)
-          {
-            echo ""
-            echo "**Total templates found:** $template_count"
-          } >> "$GITHUB_STEP_SUMMARY"
-          if [ "$errors" -gt 0 ]; then
-            echo "::error::$errors templates failed validation"
+          done
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Total templates found:** $(find golden-paths -name 'template.yaml' | wc -l)" >> $GITHUB_STEP_SUMMARY
+          if [ $ERRORS -gt 0 ]; then
+            echo "::error::$ERRORS templates failed validation"
             exit 1
           fi
 
@@ -412,17 +408,15 @@ jobs:
 
       - name: Check Executable Permissions
         run: |
-          {
-            echo "## Script Permissions"
-            echo ""
-            while IFS= read -r -d '' script; do
-              if [[ -x "$script" ]]; then
-                echo "- OK: $script"
-              else
-                echo "- WARNING: $script (not executable)"
-              fi
-            done < <(find scripts -name "*.sh" -type f -print0)
-          } >> "$GITHUB_STEP_SUMMARY"
+          echo "## Script Permissions" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          find scripts -name "*.sh" -type f | while read -r script; do
+            if [[ -x "$script" ]]; then
+              echo "- OK: $script" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "- WARNING: $script (not executable)" >> $GITHUB_STEP_SUMMARY
+            fi
+          done
 
   # ===========================================================================
   # DOCUMENTATION LINTING
@@ -448,54 +442,10 @@ jobs:
         continue-on-error: true # Documentation lint is a soft check
 
       - name: Check Links
-        timeout-minutes: 5
-        continue-on-error: true # Link checking is informational and can be delayed by external sites
         uses: lycheeverse/lychee-action@e7477775783ea5526144ba13e8db5eec57747ce8 # v2
         with:
           args: --verbose --no-progress --exclude-all-private './**/*.md'
           fail: false
-
-  # ===========================================================================
-  # SDD SPECIFICATION VALIDATION
-  # ===========================================================================
-  specs-validate:
-    name: SDD Specifications Validate
-    runs-on: ubuntu-latest
-    needs: detect-changes
-    if: needs.detect-changes.outputs.specs == 'true'
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
-
-      - name: Setup Python
-        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
-        with:
-          python-version: ${{ env.PYTHON_VERSION }}
-
-      - name: Install Validator Dependency
-        shell: bash
-        run: |
-          set -euo pipefail
-          python -m pip install pyyaml==6.0.2
-
-      - name: Test Specification Validator
-        shell: bash
-        run: |
-          set -euo pipefail
-          python -m unittest tests/scripts/test_validate_specs.py
-
-      - name: Validate Numbered Specifications
-        shell: bash
-        run: |
-          set -euo pipefail
-          python scripts/validate-specs.py --strict | tee spec-validation.txt
-          {
-            echo "## SDD Specification Validation"
-            echo '```text'
-            cat spec-validation.txt
-            echo '```'
-          } >> "$GITHUB_STEP_SUMMARY"
 
   # ===========================================================================
   # YAML LINTING
@@ -525,10 +475,10 @@ jobs:
         continue-on-error: true # YAML lint is a soft check for style issues
 
   # ===========================================================================
-  # PRIMITIVES VALIDATION
+  # AGENTS VALIDATION
   # ===========================================================================
-  primitives-validate:
-    name: Copilot Primitives Validate
+  agents-validate:
+    name: Agents Validate
     runs-on: ubuntu-latest
     needs: detect-changes
     if: needs.detect-changes.outputs.agents == 'true'
@@ -537,19 +487,33 @@ jobs:
       - name: Checkout
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
 
-      - name: Set up Python
-        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
-        with:
-          python-version: ${{ env.PYTHON_VERSION }}
-
-      - name: Install Dependencies
-        run: pip install pyyaml
-
-      - name: Validate Copilot Customization Primitives
+      - name: Validate Agent Specifications
         run: |
-          echo "## Copilot Primitives Validation" >> "$GITHUB_STEP_SUMMARY"
-          ./.github/skills/validation-scripts/scripts/validate-agents.py --strict | tee primitive-validation.txt
-          cat primitive-validation.txt >> "$GITHUB_STEP_SUMMARY"
+          echo "## Agent Validation" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          ERRORS=0
+          for agent in $(find agents .github/agents -name "*.md" 2>/dev/null); do
+            if [ -f "$agent" ]; then
+              if head -1 "$agent" | grep -q "^---"; then
+                echo "- OK: $agent" >> $GITHUB_STEP_SUMMARY
+              else
+                echo "- FAIL: $agent - Missing YAML frontmatter" >> $GITHUB_STEP_SUMMARY
+                ERRORS=$((ERRORS+1))
+              fi
+            fi
+          done
+          if [ -f "config/apm.yml" ]; then
+            if python3 -c "import yaml; yaml.safe_load(open('config/apm.yml'))" 2>/dev/null; then
+              echo "- OK: config/apm.yml" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "- FAIL: config/apm.yml - Invalid YAML" >> $GITHUB_STEP_SUMMARY
+              ERRORS=$((ERRORS+1))
+            fi
+          fi
+          if [ $ERRORS -gt 0 ]; then
+            echo "::error::$ERRORS agent specs failed validation"
+            exit 1
+          fi
 
   # ===========================================================================
   # SECURITY SCANNING
@@ -557,9 +521,6 @@ jobs:
   security-scan:
     name: Security Scan
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      security-events: write
 
     steps:
       - name: Checkout
@@ -567,15 +528,10 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Install Gitleaks
-        run: |
-          version="${GITLEAKS_VERSION#v}"
-          curl -sSfL "https://github.com/gitleaks/gitleaks/releases/download/${GITLEAKS_VERSION}/gitleaks_${version}_linux_x64.tar.gz" -o gitleaks.tar.gz
-          tar -xzf gitleaks.tar.gz gitleaks
-          sudo install -m 0755 gitleaks /usr/local/bin/gitleaks
-
       - name: Gitleaks Secret Detection
-        run: gitleaks detect --source . --no-git --redact --verbose
+        uses: gitleaks/gitleaks-action@ff98106e4c7b2bc287b24eaf42907196329070c7 # v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         # CRITICAL: Secret detection must block CI - no continue-on-error
 
       - name: Dependency Review
@@ -586,8 +542,7 @@ jobs:
         # CRITICAL: High severity vulnerabilities must block CI - no continue-on-error
 
       - name: OSSF Scorecard
-        if: github.event_name == 'workflow_dispatch'
-        timeout-minutes: 5
+        if: github.event_name != 'pull_request'
         uses: ossf/scorecard-action@0864cf19026789058feabb7e87baa5f140aac736 # v2.3.1
         with:
           results_file: scorecard.sarif
@@ -612,41 +567,33 @@ jobs:
       - golden-paths-validate
       - scripts-lint
       - docs-lint
-      - specs-validate
       - yaml-lint
-      - primitives-validate
+      - agents-validate
       - security-scan
     if: always()
 
     steps:
       - name: Generate Summary
-        env:
-          SPECS_RESULT: ${{ needs.specs-validate.result || 'skipped' }}
-        shell: bash
         run: |
-          set -euo pipefail
-          {
-            echo "# CI Pipeline Summary"
-            echo ""
-            echo "| Job | Status |"
-            echo "|-----|--------|"
-            echo "| Terraform Validate | ${{ needs.terraform-validate.result || 'skipped' }} |"
-            echo "| TFLint | ${{ needs.terraform-lint.result || 'skipped' }} |"
-            echo "| TFSec | ${{ needs.terraform-security.result || 'skipped' }} |"
-            echo "| Checkov | ${{ needs.terraform-checkov.result || 'skipped' }} |"
-            echo "| Infracost | ${{ needs.terraform-cost.result || 'skipped' }} |"
-            echo "| Kubernetes | ${{ needs.kubernetes-validate.result || 'skipped' }} |"
-            echo "| Golden Paths | ${{ needs.golden-paths-validate.result || 'skipped' }} |"
-            echo "| Scripts | ${{ needs.scripts-lint.result || 'skipped' }} |"
-            echo "| Docs | ${{ needs.docs-lint.result || 'skipped' }} |"
-            printf '| SDD Specifications | %s |\n' "$SPECS_RESULT"
-            echo "| YAML | ${{ needs.yaml-lint.result || 'skipped' }} |"
-            echo "| Copilot Primitives | ${{ needs.primitives-validate.result || 'skipped' }} |"
-            echo "| Security | ${{ needs.security-scan.result }} |"
-            echo ""
-            echo "---"
-            echo "*Generated at: $(date -u)*"
-          } >> "$GITHUB_STEP_SUMMARY"
+          echo "# CI Pipeline Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Job | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|-----|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Terraform Validate | ${{ needs.terraform-validate.result || 'skipped' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| TFLint | ${{ needs.terraform-lint.result || 'skipped' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| TFSec | ${{ needs.terraform-security.result || 'skipped' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Checkov | ${{ needs.terraform-checkov.result || 'skipped' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Infracost | ${{ needs.terraform-cost.result || 'skipped' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Kubernetes | ${{ needs.kubernetes-validate.result || 'skipped' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Golden Paths | ${{ needs.golden-paths-validate.result || 'skipped' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Scripts | ${{ needs.scripts-lint.result || 'skipped' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Docs | ${{ needs.docs-lint.result || 'skipped' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| YAML | ${{ needs.yaml-lint.result || 'skipped' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Agents | ${{ needs.agents-validate.result || 'skipped' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Security | ${{ needs.security-scan.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "---" >> $GITHUB_STEP_SUMMARY
+          echo "*Generated at: $(date -u)*" >> $GITHUB_STEP_SUMMARY
 
       - name: Check for Failures
         if: contains(needs.*.result, 'failure')

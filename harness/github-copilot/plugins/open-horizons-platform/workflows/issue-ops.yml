@@ -3,68 +3,77 @@ name: IssueOps Dispatcher
 on:
   issue_comment:
     types: [created]
-  issues:
-    types: [opened]
 
-permissions:
-  contents: read
+permissions: {}
 
 jobs:
   issue-ops:
-    if: |
-      (github.event_name == 'issue_comment' && startsWith(github.event.comment.body, '/')) ||
-      (github.event_name == 'issues' && startsWith(github.event.issue.body, '/'))
+    if: >-
+      github.event.issue.pull_request == null &&
+      startsWith(github.event.comment.body, '/') &&
+      contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.comment.author_association)
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     permissions:
-      issues: write
-      pull-requests: write
       contents: read
-      id-token: write # Required for Azure OIDC when /validate is used
+      issues: write
 
     defaults:
       run:
         shell: bash
 
     steps:
-      - name: Checkout Code
+      - name: Checkout repository
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
 
-      - name: Setup Python
+      - name: Set up Python
         uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
         with:
           python-version: "3.11"
 
-      - name: Azure Login (OIDC)
-        if: |
-          (github.event_name == 'issue_comment' && startsWith(github.event.comment.body, '/validate')) ||
-          (github.event_name == 'issues' && startsWith(github.event.issue.body, '/validate'))
-        uses: azure/login@7184910d9eb2b1c5e48f7073824a90609bb9b6d6 # v2
-        with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      - name: Install agent validator dependency
+        run: |
+          set -euo pipefail
+          python -m pip install --disable-pip-version-check --no-cache-dir "PyYAML==6.0.3"
 
-      - name: Execute Dispatcher
+      - name: Execute dispatcher
         id: dispatch
         env:
-          ISSUE_BODY: ${{ github.event.comment.body || github.event.issue.body }}
-          GITHUB_ORG: ${{ github.repository_owner }}
-          TF_STATE_RG: ${{ secrets.TF_STATE_RG }}
-          TF_STATE_STORAGE: ${{ secrets.TF_STATE_STORAGE }}
+          ISSUE_COMMENT: ${{ github.event.comment.body }}
         run: |
-          set +e
-          python .github/skills/issue-ops/dispatcher.py > command_output.md 2>&1
-          dispatch_status=$?
+          set -euo pipefail
 
-          if [ "$dispatch_status" -eq 0 ]; then
-            echo "status=success" >> "$GITHUB_OUTPUT"
+          if python .github/skills/issue-ops/dispatcher.py > command_output.md 2>&1; then
+            command_status=0
           else
-            echo "status=failure" >> "$GITHUB_OUTPUT"
+            command_status=$?
           fi
+          echo "exit_code=${command_status}" >> "$GITHUB_OUTPUT"
 
-      - name: Post Result to Issue
+      - name: Post result to issue
         uses: peter-evans/create-or-update-comment@71345be0265236311c031f5c7866368bd1eff043 # v4
         with:
           issue-number: ${{ github.event.issue.number }}
           body-file: command_output.md
-          reactions: ${{ steps.dispatch.outputs.status == 'success' && 'rocket' || 'confused' }}
+          reactions: ${{ steps.dispatch.outputs.exit_code == '0' && 'rocket' || 'confused' }}
+
+      - name: Propagate command status
+        if: steps.dispatch.outputs.exit_code != '0'
+        env:
+          COMMAND_EXIT_CODE: ${{ steps.dispatch.outputs.exit_code }}
+        run: |
+          set -euo pipefail
+
+          case "$COMMAND_EXIT_CODE" in
+            ''|*[!0-9]*)
+              echo "Invalid dispatcher exit code." >&2
+              exit 1
+              ;;
+          esac
+          if (( COMMAND_EXIT_CODE < 1 || COMMAND_EXIT_CODE > 255 )); then
+            echo "Dispatcher exit code is out of range." >&2
+            exit 1
+          fi
+          exit "$COMMAND_EXIT_CODE"

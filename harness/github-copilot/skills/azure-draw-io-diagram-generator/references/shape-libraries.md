@@ -2,6 +2,14 @@
 
 Reference guide for all built-in shape libraries. Enable via `View > Shapes` in the draw.io editor (or VS Code extension shape panel).
 
+## Official vendor assets
+
+Built-in shape libraries are convenience surfaces, not authoritative brand sources. For named Microsoft,
+Azure, or GitHub products, apply the [official icon and logo policy](./official-icon-policy.md). Prefer an
+embedded current official SVG with provenance. Use a built-in vendor stencil only after verifying the
+exact shape and draw.io version against the current first-party asset. Generic shapes remain appropriate
+for vendor-neutral concepts.
+
 ---
 
 ## Library Catalog

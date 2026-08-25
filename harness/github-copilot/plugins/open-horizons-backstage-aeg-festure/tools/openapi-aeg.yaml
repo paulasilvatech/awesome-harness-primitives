@@ -1,0 +1,220 @@
+openapi: 3.0.3
+info:
+  title: AEG Orchestrator API (via Backstage proxy)
+  version: 1.0.0
+  description: >-
+    Minimal tool contract for Backstage chat agents that start runs, inspect
+    lifecycle state, review G1/G2 gate packages, inspect traceability, read
+    fleet metrics, and propose harvest drafts. The lifecycle is AEG-native:
+    runs progress through CONSTITUTION.md, EARS-based FRD/NFRD requirements,
+    ADRs, specs/tasks.yaml, and specs/traceability.yaml.
+servers:
+  - url: /api/proxy/aeg
+paths:
+  /runs:
+    post:
+      operationId: aeg_start_run
+      summary: Start a run (greenfield, modernization, change, or system)
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - intent
+                - name
+                - need
+                - initiated_by
+              properties:
+                intent:
+                  type: string
+                  enum: [greenfield, modernization, change, system]
+                  description: Run intent selected by the concierge.
+                name:
+                  type: string
+                  description: Short run name shown in Backstage and orchestrator views.
+                need:
+                  type: string
+                  description: Plain-English problem statement or desired outcome for the run.
+                source_repo:
+                  type: string
+                  description: Source repository URL for modernization work.
+                change_type:
+                  type: string
+                  enum: [feature, bugfix]
+                  description: Change classification for change runs.
+                component_ref:
+                  type: string
+                  description: Backstage entity reference for change or modernization runs.
+                decomposition_hint:
+                  type: string
+                  description: Optional system decomposition hint for multi-repo design runs.
+                topology:
+                  type: string
+                  enum: [auto, single-repo, multi-repo]
+                  description: Topology hint for `system` runs.
+                release_train:
+                  type: string
+                  enum: [independent, coordinated]
+                  description: Promotion model for `system` runs.
+                constitution_overrides:
+                  type: object
+                  description: Optional run-level overrides that seed `CONSTITUTION.md`.
+                  properties:
+                    cloud:
+                      type: string
+                      enum: [azure]
+                    environment_profile:
+                      type: string
+                      enum: [sandbox, production]
+                      description: Environment path; use sandbox for dev-only runs or the production approval profile.
+                    worker_engine:
+                      type: string
+                      enum: [claude-code, copilot-cli, copilot-sdk, inherit]
+                      description: Worker engine selection; inherit keeps the existing default where allowed.
+                    stack_mode:
+                      type: string
+                      enum: [auto, constrained, golden-path, open]
+                      description: Stack-selection mode for the run.
+                initiated_by:
+                  type: string
+                  description: Logged-in Backstage identity that initiated the run.
+      responses:
+        "201":
+          description: Run created.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  run_id:
+                    type: string
+                  run_url:
+                    type: string
+                  repo_url:
+                    type: string
+                  repo_contents_url:
+                    type: string
+    get:
+      operationId: aeg_list_runs
+      summary: List runs with current state
+      responses:
+        "200":
+          description: Run list returned.
+  /runs/{run_id}:
+    get:
+      operationId: aeg_get_run
+      summary: Get the full state of a run
+      parameters:
+        - name: run_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Run identifier returned by aeg_start_run.
+      responses:
+        "200":
+          description: Run state returned.
+  /runs/{run_id}/gates/{gate_id}/package:
+    get:
+      operationId: aeg_get_gate_package
+      summary: Get the one-screen decision package for gate G1 or G2
+      parameters:
+        - name: run_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Run identifier returned by aeg_start_run.
+        - name: gate_id
+          in: path
+          required: true
+          schema:
+            type: string
+            enum: [G1, G2]
+          description: Gate identifier.
+      responses:
+        "200":
+          description: Decision package returned.
+  /gates/decision:
+    post:
+      operationId: aeg_decide_gate
+      summary: Record a G1/G2 decision (identity is validated against the approver role)
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - run_id
+                - gate_id
+                - decision
+                - decided_by
+              properties:
+                run_id:
+                  type: string
+                  description: Run identifier returned by aeg_start_run.
+                gate_id:
+                  type: string
+                  enum: [G1, G2]
+                  description: Gate identifier to approve or reject.
+                decision:
+                  type: string
+                  enum: [approve, reject]
+                  description: Gate decision.
+                feedback:
+                  type: string
+                  description: Actionable feedback to record when the decision is reject.
+                decided_by:
+                  type: string
+                  description: Logged-in Backstage identity of the approver.
+      responses:
+        "200":
+          description: Decision recorded.
+        "403":
+          description: Caller does not hold the required approver role.
+  /runs/{run_id}/traceability:
+    get:
+      operationId: aeg_get_traceability
+      summary: Get the requirement -> ADR -> task -> test -> resource matrix
+      parameters:
+        - name: run_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Run identifier returned by aeg_start_run.
+      responses:
+        "200":
+          description: Traceability matrix returned.
+  /metrics:
+    get:
+      operationId: aeg_get_metrics
+      summary: Get fleet metrics (iterations, cost per requirement by engine, gate latency)
+      responses:
+        "200":
+          description: Fleet metrics returned.
+  /harvest/propose:
+    post:
+      operationId: aeg_propose_profile
+      summary: Create a draft stack-profile or template proposal from evidence runs
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - evidence_runs
+                - proposed_by
+              properties:
+                evidence_runs:
+                  type: array
+                  items:
+                    type: string
+                  description: Completed run IDs used as evidence for the proposal.
+                proposed_by:
+                  type: string
+                  description: Logged-in Backstage identity creating the draft proposal.
+      responses:
+        "201":
+          description: Draft proposal created.

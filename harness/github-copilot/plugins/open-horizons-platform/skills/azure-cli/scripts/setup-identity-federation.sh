@@ -3,7 +3,7 @@
 # OPEN HORIZONS PLATFORM - IDENTITY FEDERATION SETUP
 # =============================================================================
 #
-# Configures Azure to GitHub identity federation using OIDC
+# Configures Azure ↔ GitHub identity federation using OIDC
 # No secrets required - uses federated credentials
 #
 # Usage: ./scripts/setup-identity-federation.sh [options]
@@ -46,7 +46,7 @@ usage() {
     cat << EOF
 Usage: $(basename "$0") [OPTIONS]
 
-Configure Azure to GitHub identity federation using OIDC.
+Configure Azure ↔ GitHub identity federation using OIDC.
 
 OPTIONS:
     --github-org        GitHub organization name (required)
@@ -59,8 +59,8 @@ OPTIONS:
     --help              Show this help message
 
 EXAMPLES:
-    $(basename "$0") --github-org myorg --github-repo platform-gitops --resource-group rg-<environment>
-    $(basename "$0") --github-org myorg --github-repo "*" --resource-group rg-<environment> --environments dev,prod
+    $(basename "$0") --github-org myorg --github-repo platform-gitops --resource-group rg-prod
+    $(basename "$0") --github-org myorg --github-repo "*" --resource-group rg-prod --environments dev,prod
 
 EOF
     exit 0

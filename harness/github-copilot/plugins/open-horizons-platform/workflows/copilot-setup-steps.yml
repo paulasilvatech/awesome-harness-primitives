@@ -15,95 +15,67 @@ permissions:
 jobs:
   copilot-setup-steps:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 30
     permissions:
       contents: read
     steps:
       - name: Checkout repository
-        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
-
-      - name: Set up Node.js
-        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
-        with:
-          node-version: "24"
-          cache: yarn
-          cache-dependency-path: backstage/yarn.lock
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
 
       - name: Set up Python
         uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
         with:
-          python-version: "3.12"
+          python-version: '3.11'
 
-      - name: Set up Terraform
-        uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd # v3
-        with:
-          terraform_version: "1.6.6"
-
-      - name: Install Azure CLI and platform CLIs
+      - name: Install Azure CLI if missing
         shell: bash
         run: |
           set -euo pipefail
+          if ! command -v az >/dev/null 2>&1; then
+            sudo apt-get update -y
+            sudo apt-get install -y --no-install-recommends ca-certificates curl gnupg lsb-release
+            curl -fsSL https://packages.microsoft.com/keys/microsoft.asc -o microsoft.asc
+            fingerprint=$(gpg --show-keys --with-colons microsoft.asc | awk -F: '/^fpr:/ {print $10; exit}')
+            if [ "$fingerprint" != "BC528686B50D79E339D3721CEB3E94ADBE1229CF" ]; then
+              echo "Unexpected Microsoft package signing key fingerprint: $fingerprint" >&2
+              exit 1
+            fi
+            gpg --dearmor -o packages.microsoft.gpg microsoft.asc
+            sudo install -o root -g root -m 644 packages.microsoft.gpg /usr/share/keyrings/microsoft-packages.gpg
+            echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/microsoft-packages.gpg] https://packages.microsoft.com/repos/azure-cli/ $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/azure-cli.list >/dev/null
+            sudo apt-get update -y
+            sudo apt-get install -y --no-install-recommends azure-cli
+          fi
+          az version --output table
 
-          tool_cache="$GITHUB_WORKSPACE/.github/copilot/tool-cache"
-          install -d "$tool_cache" "$HOME/.local/bin"
-          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
-
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends ca-certificates curl gnupg jq lsb-release apt-transport-https
-
-          curl -fsSL https://packages.microsoft.com/keys/microsoft.asc \
-            | gpg --dearmor > "$tool_cache/microsoft.gpg"
-          sudo install -D -o root -g root -m 0644 "$tool_cache/microsoft.gpg" /etc/apt/keyrings/microsoft.gpg
-          echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/microsoft.gpg] https://packages.microsoft.com/repos/azure-cli/ $(lsb_release -cs) main" \
-            | sudo tee /etc/apt/sources.list.d/azure-cli.list > /dev/null
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends azure-cli
-
-          curl -fsSL -o "$tool_cache/kubectl" \
-            "https://dl.k8s.io/release/v1.29.8/bin/linux/amd64/kubectl"
-          install -m 0755 "$tool_cache/kubectl" "$HOME/.local/bin/kubectl"
-
-          curl -fsSL -o "$tool_cache/helm.tar.gz" \
-            "https://get.helm.sh/helm-v3.15.4-linux-amd64.tar.gz"
-          tar -xzf "$tool_cache/helm.tar.gz" -C "$tool_cache"
-          install -m 0755 "$tool_cache/linux-amd64/helm" "$HOME/.local/bin/helm"
-
-          curl -fsSL -o "$tool_cache/argocd" \
-            "https://github.com/argoproj/argo-cd/releases/download/v2.11.7/argocd-linux-amd64"
-          install -m 0755 "$tool_cache/argocd" "$HOME/.local/bin/argocd"
-
-          curl -fsSL -o "$tool_cache/yq" \
-            "https://github.com/mikefarah/yq/releases/download/v4.44.3/yq_linux_amd64"
-          install -m 0755 "$tool_cache/yq" "$HOME/.local/bin/yq"
-
-      - name: Install Backstage dependencies
-        shell: bash
-        working-directory: backstage
-        run: |
-          set -euo pipefail
-          corepack enable
-          yarn install --immutable
-
-      - name: Install Python agent API dependencies
+      - name: Install Terraform CLI
         shell: bash
         run: |
           set -euo pipefail
-          for requirements in backstage/server/agent-api*/requirements.txt; do
-            python -m pip install --requirement "$requirements"
-          done
+          sudo apt-get update -y
+          sudo apt-get install -y --no-install-recommends gnupg software-properties-common
+          wget -O- https://apt.releases.hashicorp.com/gpg | gpg --dearmor | sudo tee /usr/share/keyrings/hashicorp-archive-keyring.gpg >/dev/null
+          echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list >/dev/null
+          sudo apt-get update -y
+          sudo apt-get install -y terraform
+          terraform version
 
-      - name: Validate installed toolchain
+      - name: Install kubectl
         shell: bash
         run: |
           set -euo pipefail
-          az version --query '"azure-cli"' -o tsv
+          az aks install-cli
+          kubectl version --client=true
+
+      - name: Install Helm
+        uses: azure/setup-helm@1a275c3b69536ee54be43f2070a358922e12c8d4 # v4
+
+      - name: Verify platform toolchain
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 --version
+          az version --query '"azure-cli"' --output tsv
           terraform version
           kubectl version --client=true
           helm version --short
-          gh --version
-          jq --version
-          yq --version
-          argocd version --client --short
-          node --version
-          yarn --version
-          python --version

@@ -81,7 +81,7 @@ Assign each source a stable `SRC-###` identifier. A derived artifact is not the 
    - Reuse the repository-level constitution when one exists. Do not create a conflicting feature-local constitution.
    - For full SDD, create or update the applicable specification, analysis, design, tasks, checklist, cross-analysis, verification, decisions, and source-traceability artifacts.
    - Add `IMPLEMENTATION_PLAN.md`, `TEST_PLAN.md`, or a machine-readable test manifest only when repository conventions or risk justify separate artifacts.
-   - Use Mermaid when architecture, state, sequence, or data flow needs reviewable visual evidence.
+   - Use Mermaid for concise vendor-neutral logical views. When a design names Microsoft, Azure, or GitHub products or needs an editable professional diagram, use `azure-draw-io-diagram-generator` (`skill`) and require official assets, icon provenance, accessible labels, and editable `.drawio` source.
    - Mark a task `[P]` only when it has no unmet dependency and cannot conflict on files, state, schema, or environment.
    - Use sequential feature folders such as `001-feature-name` only when starting or following that repository convention.
 
@@ -131,10 +131,9 @@ Prioritize from evidenced release impact: P0 blocks the named increment; P1 lose
 - A technology named by a stakeholder is not automatically a functional requirement. Classify it as a sourced constraint or an unresolved design preference.
 - A task can be parallel only when both dependency and change-surface conflicts are absent.
 - Performance wording is not measurable unless the workload and observation method are also defined.
+- A vendor logo is not a generic architecture symbol. Use official product icons only for the products they represent and route professional branded diagrams through `azure-draw-io-diagram-generator`.
 
 ## Progressive disclosure and bundled resources
-
-Load only the resources required by the selected mode:
 
 - [EARS notation](references/ears-notation.md): syntax, classification, examples, defects, and academic references.
 - [FRD template](references/frd-template.md): functional scope, actors, domain requirements, acceptance, and phased delivery.
@@ -191,6 +190,7 @@ Return exactly this structure:
 - [ ] Every normative requirement satisfies the EARS requirement contract.
 - [ ] FRD and NFRD content is complete for every applicable category.
 - [ ] SDD artifacts are internally consistent and proportional to scope.
+- [ ] Vendor-specific architecture diagrams use official permitted assets, provenance, accessible labels, and editable source through `azure-draw-io-diagram-generator`.
 - [ ] Every active requirement traces from source through design, tasks, acceptance, and verification.
 - [ ] Requirement lifecycle changes preserve IDs or include explicit dispositions.
 - [ ] No metric, approval, compatibility claim, or current platform fact is fabricated.

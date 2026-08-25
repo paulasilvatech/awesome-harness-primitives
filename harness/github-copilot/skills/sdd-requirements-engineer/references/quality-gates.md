@@ -60,12 +60,14 @@ Apply every relevant check. Mark a check `PASS`, `FAIL`, `BLOCKED`, or `NOT APPL
 - [ ] G5.02 `SPECIFICATION.md` contains the canonical active requirements.
 - [ ] G5.03 `ANALYSIS.md` records evidence, gaps, risks, and alternatives.
 - [ ] G5.04 `DESIGN.md` covers architecture, data, interfaces, security, failures, and trade-offs required by scope.
-- [ ] G5.05 Mermaid diagrams are present and valid when visual architecture, state, sequence, or data flow is material.
-- [ ] G5.06 `TASKS.md` is dependency ordered and every task has an expected evidence result.
-- [ ] G5.07 Every `[P]` task is independent in both dependencies and change surface.
-- [ ] G5.08 `CHECKLIST.md` contains review, implementation, verification, and release gates applicable to scope.
-- [ ] G5.09 `DECISIONS.md` records consequential choices, alternatives, consequences, evidence, and revisit triggers.
-- [ ] G5.10 Optional artifacts exist only when repository conventions or risk justify them.
+- [ ] G5.05 The smallest useful diagrams are present when architecture, state, sequence, data flow, deployment, or trust boundaries are material.
+- [ ] G5.06 Vendor-neutral logical views use consistent notation; named Microsoft, Azure, or GitHub products use editable `.drawio` source with permitted official assets and provenance through `azure-draw-io-diagram-generator`.
+- [ ] G5.07 Diagram labels, directed flows, boundaries, legend, metadata, accessibility, and source traceability pass review.
+- [ ] G5.08 `TASKS.md` is dependency ordered and every task has an expected evidence result.
+- [ ] G5.09 Every `[P]` task is independent in both dependencies and change surface.
+- [ ] G5.10 `CHECKLIST.md` contains review, implementation, verification, and release gates applicable to scope.
+- [ ] G5.11 `DECISIONS.md` records consequential choices, alternatives, consequences, evidence, and revisit triggers.
+- [ ] G5.12 Optional artifacts exist only when repository conventions or risk justify them.
 
 ## G6. Traceability and lifecycle
 

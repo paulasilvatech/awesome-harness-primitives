@@ -18,6 +18,9 @@ Use these concise templates to build a complete, traceable Spec-Driven Developme
 | `SOURCE_TRACEABILITY.md` | Feature or increment | Provenance for every active and historical requirement ID |
 
 Reuse an existing constitution. Create one only when the repository has no governing artifact and the requested scope includes governance.
+Use Mermaid for compact vendor-neutral logical views. When named Microsoft, Azure, or GitHub products
+appear, use the installed `azure-draw-io-diagram-generator` skill to produce editable `.drawio` source
+with permitted official assets and provenance.
 
 ## Suggested layout
 
@@ -148,7 +151,13 @@ Use a different layout when the repository already has one.
 ## Architecture overview
 <Components, boundaries, and rationale.>
 
-## Diagram
+## Diagram inventory
+| View | Audience question | Format and path | Source IDs | Icon policy |
+| --- | --- | --- | --- | --- |
+| <view> | <question> | <.drawio, .svg, or Mermaid> | <SRC/REQ/DEC IDs> | <official-provenance|vendor-neutral> |
+
+## Vendor-neutral logical view
+
 ```mermaid
 flowchart LR
   Actor --> Boundary[System Boundary]
@@ -177,6 +186,9 @@ flowchart LR
 
 ## Decisions and trade-offs
 <Link decision IDs and unresolved design questions.>
+
+## Diagram provenance
+<For named Microsoft, Azure, or GitHub products, link the editable .drawio source and its official-icon provenance summary. Otherwise state "Vendor-neutral notation only.">
 ````
 
 ## TASKS.md

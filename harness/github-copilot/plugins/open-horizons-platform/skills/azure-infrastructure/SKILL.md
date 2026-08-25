@@ -1,136 +1,144 @@
 ---
 name: azure-infrastructure
-description: "Use when designing Azure infrastructure patterns for Open Horizons, including hub-spoke networking, private endpoints, Workload Identity, naming, tagging, provider registration, and resource guardrails; produces an architecture pattern recommendation and implementation checklist. DO NOT USE FOR: Terraform CLI commands (use terraform-cli), Azure CLI operations (use azure-cli), or Kubernetes operations (use kubectl-cli). Triggers include \"design Azure infrastructure\", \"review private endpoint strategy\", \"define naming and tags\"."
+description: >-
+  Azure infrastructure patterns guide landing-zone, networking, identity, naming, tagging, and private connectivity decisions. Use this skill when designing hub-spoke networks, private endpoint patterns, Workload Identity, naming conventions, tag strategies, AKS architecture, Key Vault access, or secure PaaS topology.
 ---
 
 # Azure Infrastructure
 
-This workflow turns an Azure platform requirement into an Open Horizons infrastructure pattern: naming, tags, identity, network posture, private endpoints, diagnostics, and module alignment. It produces a recommendation and checklist rather than directly replacing Terraform module work.
-
-> [!NOTE]
-> This skill may reference Azure CLI and bundled bootstrap scripts for context, including `scripts/bootstrap.sh` and `scripts/platform-bootstrap.sh`, but infrastructure changes should be implemented through `terraform/` or the deployment orchestration workflow. Run bundled commands from this skill directory.
+Convert Azure infrastructure planning needs into opinionated Open Horizons patterns for naming, tagging, security posture, and platform resource design without executing deployment commands.
 
 ## When to invoke
-- "Design the Azure infrastructure pattern for a new Open Horizons environment."
-- "Review our private endpoint and hub-spoke networking approach."
-- "Define the naming and tagging strategy for Terraform modules."
-- "Plan Workload Identity and managed identity access for AKS services."
+
+- "Plan Azure infrastructure for Open Horizons."
+- "Design a hub-spoke network or private endpoint pattern."
+- "Define Workload Identity and managed identity access."
+- "Create naming conventions and tag strategy."
+- "Review AKS, Key Vault, or secure PaaS topology."
 
 ## Prerequisites and context
-- Target environment and region are known.
-- Required Azure services and data sensitivity are identified.
-- Terraform modules exist under `terraform/modules/` and environment files under `terraform/environments/`.
-- Required tags are known: environment, project, owner, cost-center.
-- User approval is available before running any bootstrap or provisioning script.
 
-## Procedure
+- Azure subscription access.
+- Terraform knowledge.
+- Understanding of Azure services.
+- Use bundled scripts only when infrastructure bootstrap automation is explicitly needed.
 
-### Step 1: Confirm infrastructure scope
-```text
-Infrastructure design scope:
-- Environment:
-- Region:
-- Services:
-- Network posture:
-- Identity model:
-- Artifacts or scripts to run:
-Proceed with creating artifacts or running provisioning scripts? (y/n)
+## Criteria
+
+### Reference patterns
+
+#### Resource Group Naming
+
+```
+rg-<project>-<environment>-<region>
+Example: rg-3horizons-prod-eastus2
 ```
 
-> [!IMPORTANT]
-> Only proceed with creating artifacts, running bootstrap scripts, or recommending paid resource creation as an action if the user gives an explicit affirmative. On a negative, ambiguous, or missing response, output the design recommendation and stop.
+#### AKS Cluster Naming
 
-### Step 2: Map services to repository modules
-```bash
-find terraform/modules -maxdepth 1 -mindepth 1 -type d | sort
-find terraform/environments -maxdepth 1 -type f | sort
+```
+aks-<project>-<environment>-<region>
+Example: aks-3horizons-prod-eastus2
 ```
 
-- [ ] AKS aligns to `terraform/modules/aks-cluster/`.
-- [ ] Networking aligns to `terraform/modules/networking/`.
-- [ ] Databases align to `terraform/modules/databases/`.
-- [ ] ArgoCD aligns to `terraform/modules/argocd/`.
-- [ ] Backstage aligns to `terraform/modules/backstage/`.
-- [ ] AI Foundry aligns to `terraform/modules/ai-foundry/`.
+#### Key Vault Naming
 
-### Step 3: Apply Azure landing-zone checks
-- [ ] Naming follows `{project}-{environment}-{resource}-{region}` or module-specific Azure constraints.
-- [ ] Tags include `environment`, `project`, `owner`, and `cost-center`.
-- [ ] PaaS services use private endpoints for production-sensitive data.
-- [ ] AKS uses Workload Identity rather than service principal secrets.
-- [ ] Diagnostic settings route logs and metrics to the approved observability workspace.
-- [ ] Network security groups and Kubernetes network policies follow least privilege.
-- [ ] Resource locks are considered for production critical resources.
-
-### Step 4: Use bootstrap scripts only as approved orchestration helpers
-```bash
-scripts/platform-bootstrap.sh --horizon h1 --environment dev --dry-run
-scripts/bootstrap.sh express
+```
+kv-<project>-<environment>-<region>
+Example: kv-3horizons-prod-eus2
 ```
 
-Run dry-run first when available, and prefer `scripts/deploy-full.sh` for full platform orchestration.
+#### Storage Account Naming
 
-### Step 5: Produce the implementation checklist
-- Identify Terraform module changes, validation commands, and security controls.
-- Route actual `terraform plan` and `terraform apply` execution to `terraform-cli` or `deploy-orchestration`.
-- Route direct Azure discovery to `azure-cli`.
+```
+st<project><environment><region>
+Example: st3horizonsprodeus2
+```
 
-## Risk classification
-| Severity | Meaning |
-|---|---|
-| Critical | Public exposure of sensitive PaaS data, shared credentials, or missing tenant isolation. |
-| High | No private endpoint, broad RBAC, unsupported region/SKU, or missing diagnostics for production. |
-| Medium | Naming/tagging drift, incomplete module mapping, or unclear cost ownership. |
-| Low | Documentation gaps or non-blocking optimization opportunities. |
+### Required Tags
 
-## Limits
+```hcl
+locals {
+  common_tags = {
+    Environment = var.environment
+    Project     = var.project_name
+    Owner       = var.owner
+    CostCenter  = var.cost_center
+    ManagedBy   = "terraform"
+  }
+}
+```
 
-- Do not use this skill for: Terraform CLI commands (use terraform-cli), Azure CLI operations (use azure-cli), or Kubernetes operations (use kubectl-cli).
-- Keep exclusions and handoffs as by-name references to installed skills or agents, not relative links to other primitives.
-- Stop before mutating infrastructure, clusters, repositories, or generated artifacts unless the procedure's confirmation gate is satisfied.
+### Security Patterns
 
-## Troubleshooting
-| Situation | Action |
-|---|---|
-| Module does not exist | Report the missing module and propose a Terraform module task; do not invent paths. |
-| Region or SKU unavailable | Use `azure-cli` discovery or official docs and record alternatives. |
-| Bootstrap script scope is unclear | Run only `--dry-run` if available and ask for confirmation before mutation. |
-| Requirement conflicts with policy | State the conflict and propose the least-privilege compliant option. |
+- Use Workload Identity (not service principals).
+- Enable private endpoints for PaaS services.
+- Configure NSGs with deny-all default.
+- Enable Azure Defender for Cloud.
+
+### Best practices
+
+1. Use Azure Verified Modules when available.
+2. Follow CAF naming conventions.
+3. Enable diagnostic settings.
+4. Configure resource locks for production.
+5. Use managed identities.
 
 ## Output template
 
 Return exactly this structure:
+
 ```markdown
-# Azure Infrastructure Pattern Recommendation
+Azure Infrastructure Recommendation
 
-## Scope
-- Environment:
-- Region:
-- Services:
+**Status:** PASS | FAIL | BLOCKED
+**Summary:** One sentence describing the recommended Azure infrastructure pattern.
 
-## Module Mapping
-| Capability | Repository module | Notes |
-|---|---|---|
+### Details
+- Scope: landing zone, network, identity, naming, tagging, AKS, Key Vault, or PaaS topology
+- Recommended pattern: selected pattern and rationale
+- Naming and tags: required names and tag block or deviations
+- Security posture: Workload Identity, private endpoints, NSGs, Defender, diagnostics, and locks
 
-## Controls
-| Area | Decision | Rationale |
-|---|---|---|
-
-## Risks
-| Severity | Finding | Mitigation |
-|---|---|---|
-
-## Implementation Checklist
-- [ ] 
+### Validation
+- Pattern fit: PASS | FAIL with evidence from the request and repository context
+- Security check: PASS | FAIL | SKIPPED with managed identity and private connectivity evidence
+- Handoff check: PASS | FAIL with any required `azure-cli`, `terraform-cli`, or `deploy-orchestration` boundary
 ```
 
+## Limits
+
+- Do not use this skill for running `az` commands.
+- Use `azure-cli` (`skill`) instead when command execution or live Azure resource changes are required.
+- Do not use this skill for writing Terraform plans.
+- Use `terraform-cli` (`skill`) instead when the task needs Terraform command execution or plan output.
+- Do not use this skill for Kubernetes operations.
+- Use `kubectl-cli` (`skill`) instead when inspecting or mutating Kubernetes resources.
+- Do not use this skill for full deployment sequencing.
+- Use `deploy-orchestration` (`skill`) instead when coordinating H1, H2, or H3 deployment order.
+
+## Progressive disclosure and bundled resources
+
+At discovery time, only `name` and `description` are loaded. Read or run bundled resources only when the requested task needs bootstrap automation.
+
+- `scripts/bootstrap.sh`: infrastructure bootstrap script.
+- `scripts/platform-bootstrap.sh`: platform bootstrap script.
+
+## Related primitives
+
+| Name | Type | Use it when |
+| --- | --- | --- |
+| `open-horizons-terraform` | `agent` | Azure infrastructure guidance must become Terraform module code or review. |
+| `open-horizons-security-reviewer` | `agent` | The infrastructure design needs security posture, RBAC, or compliance review. |
+| `open-horizons-azure-readiness` | `agent` | Azure provider registration, quotas, resource inventory, or portal validation is needed. |
+| `azure-cli` | `skill` | The next step is executing Azure CLI operations. |
+| `deploy-orchestration` | `skill` | The task needs end-to-end platform deployment sequencing. |
+
 ## Quality gate
-- [ ] Every referenced repository path exists.
-- [ ] Identity uses managed identity or Workload Identity.
-- [ ] Private endpoint and diagnostic decisions are documented.
-- [ ] Mutating scripts or paid resource actions require explicit confirmation.
-- [ ] Frontmatter contains a valid `name` matching the directory and a `description` with positive activation language.
-- [ ] The response follows `## Output template` and includes evidence for checks actually performed.
-- [ ] Tool, command, and file usage stays within this skill's procedure and confirmation gates.
-- [ ] Referenced repository paths and bundled resources exist before use.
-- [ ] This `SKILL.md` remains under 500 lines and contains no emojis.
+
+- [ ] `name` matches the `azure-infrastructure` directory.
+- [ ] The recommendation uses existing naming patterns, required tags, and security patterns.
+- [ ] Workload Identity, private endpoints, NSG posture, and Defender are considered when relevant.
+- [ ] No live `az`, Terraform, or Kubernetes operation is presented as completed unless actually run by the owning primitive.
+- [ ] Every bundled resource path referenced above exists.
+- [ ] The response follows the output template with validation evidence.

@@ -1,99 +1,79 @@
 ---
 name: "create-mcp-server"
-description: "Create or extend the repository-native MCP ecosystem server with typed tools, validation, documentation, and client registration guidance."
-argument-hint: "server_name=my-mcp-server language=TypeScript transport=HTTP tools_description='describe the tools'"
-tools: ['read', 'search', 'edit', 'execute']
+description: "Create or extend an approved MCP implementation under mcp-servers using the repository's MCP skills."
+argument-hint: "approved_paths=<mcp-servers/...> behavior=<tool or server contract>"
+agent: "open-horizons-engineer"
+tools: ["read", "search", "edit", "execute", "web"]
 ---
 
-# /create-mcp-server
+# Create MCP server
 
 ## Objective
-Create a repository-native Model Context Protocol implementation by extending the existing TypeScript MCP ecosystem under `mcp-servers/` or, when explicitly requested, by scaffolding a separate MCP server with the same quality standards.
+
+Implement `${input:behavior}` only in the explicitly approved `${input:approved_paths}` under
+`mcp-servers/`.
 
 ## When to Invoke
-Invoke this when the team needs a new MCP tool module, resource surface, or server scaffold that will be developed in this repository and validated with the existing `mcp-servers` build workflow.
+
+Use when an MCP tool, resource, prompt, transport, or server change has an approved repository-local
+write scope.
 
 ## Preconditions
-- The requested server or tool name `${input:server_name:my-mcp-server}` is kebab-case or can be converted safely.
-- The implementation language `${input:language:TypeScript}` is confirmed; this repository's existing MCP server is TypeScript.
-- The desired transport `${input:transport:HTTP}` is known.
-- Tool behavior is described in `${input:tools_description:describe each tool purpose and inputs}`.
-- No new secrets, credentials, or private third-party data are required for scaffolding.
+
+- `${input:approved_paths}` lists exact repository-relative paths, all beneath `mcp-servers/`.
+- `${input:behavior}` defines the intended MCP contract and security boundary.
+- The requested change does not require secrets in source.
+
+If any precondition fails, report the blocker and do not edit.
 
 ## Inputs the Team Must Provide
-- `server_name`: Kebab-case MCP server or module name.
-- `language`: Implementation language; prefer `TypeScript` for this repository.
-- `transport`: MCP transport, typically `HTTP` for the existing `mcp-ecosystem` server.
-- `tools_description`: Concrete description of each tool, inputs, validation rules, and output shape.
+
+- Approved write paths: `${input:approved_paths}`.
+- Tool or server contract: `${input:behavior}`.
+- Language and transport constraints: `${input:language_transport}`.
+- Required validation: `${input:validation}`.
 
 ## What I Will Do
-- Inspect `mcp-servers/package.json`, `mcp-servers/src/index.ts`, `mcp-servers/src/shared/server-factory.ts`, and existing files under `mcp-servers/src/tools/` before editing.
-- Prefer adding a TypeScript tool module under `mcp-servers/src/tools/` and registering it in `mcp-servers/src/index.ts`.
-- Use typed schemas with `zod`, structured responses, and clear tool names and descriptions.
-- Update MCP documentation or client registration guidance only where it directly relates to the new tool or server.
-- Validate with existing commands such as `cd mcp-servers && npm run build`.
+
+- Invoke the `mcp-builder` skill for implementation and security criteria.
+- Invoke the `mcp-ecosystem` skill to ground current protocol, SDK, and ecosystem references.
+- Inspect the actual root `mcp.json` before giving client registration guidance.
+- Edit only approved `mcp-servers/` paths and run the supplied repository validation.
 
 ## What I Will NOT Do
-- I will not bind this prompt to an existing agent because no current Open Horizons agent owns MCP server creation end to end.
-- I will not invent non-existent generator skills or scripts.
-- I will not add Python or C# scaffolding inside `mcp-servers/` unless the team explicitly chooses a separate project path and accepts a new build workflow.
-- I will not add tools that exfiltrate secrets, bypass repository content exclusions, or call unapproved third-party services.
-- I will not edit agents, skills, instructions, workflows, or docs outside the prompt-requested MCP implementation scope.
+
+- Edit root `mcp.json`, `.github/`, or any path outside `mcp-servers/`.
+- Invent undeclared server keys, SDK APIs, credentials, or validation results.
+- Add destructive MCP behavior without an explicit approval boundary.
 
 ## Output Format
-Approved workspace edit. Modify only files required by the prompt scope, then return a chat summary with changed paths and validation evidence.
 
-Return the scaffold or change summary in this shape:
+Approved workspace edit limited to `${input:approved_paths}`, followed by:
 
-````markdown
-# MCP Server Change Summary
-
-| Artifact | Path | Purpose | Status |
-| --- | --- | --- | --- |
-| Tool module | `mcp-servers/src/tools/<name>.ts` | typed MCP tools | Created |
-| Registration | `mcp-servers/src/index.ts` | register tools | Updated |
-| Validation | `mcp-servers/package.json` | `npm run build` | Pass |
-
-## Tool Contract
-```yaml
-name: <tool-name>
-description: <clear user-facing description>
-input_schema:
-  field: type and validation
-output:
-  content: text summary
-  structured: JSON-compatible object
+```markdown
+## MCP change result
+- Changed paths: <paths>
+- Contract and security boundary: <summary>
+- Validation: <commands and actual results>
+- Registration guidance: <root mcp.json evidence or not applicable>
+- Blockers: <none or details>
 ```
-
-## Quick Start
-```bash
-cd mcp-servers
-npm run build
-npm start
-```
-````
 
 ## Definition of Done
-- [ ] New MCP behavior is grounded in the existing `mcp-servers/` project structure.
-- [ ] Tool inputs are validated with typed schemas.
-- [ ] The new module is registered in `mcp-servers/src/index.ts` when extending `mcp-ecosystem`.
-- [ ] Existing build commands are listed and, when possible, run successfully.
-- [ ] Client registration guidance references declared MCP server keys from `.github/mcp.json` only.
+
+- [ ] The `mcp-builder` and `mcp-ecosystem` skills were invoked.
+- [ ] Every changed path was explicitly approved and is under `mcp-servers/`.
+- [ ] The requested contract and security boundaries are implemented.
+- [ ] Actual validation results and any root `mcp.json` evidence are reported.
 
 ## Prompt Body
-Use the available tools directly; this prompt is intentionally agent-less because MCP server creation spans code generation and repository validation without matching one existing Open Horizons specialist agent.
 
-**Step 1 - Inspect the MCP project.** Read `mcp-servers/package.json`, `mcp-servers/src/index.ts`, `mcp-servers/src/shared/server-factory.ts`, and similar modules in `mcp-servers/src/tools/` before writing code.
-
-**Step 2 - Choose the implementation path.** If `${input:language:TypeScript}` fits the existing project, extend `mcp-ecosystem`. If another language is requested, explain the repository mismatch and create a separate scaffold only when the target path and validation commands are explicit.
-
-**Step 3 - Define the tool contract.** Convert `${input:tools_description:describe each tool purpose and inputs}` into concrete tool names, descriptions, input schemas, and structured output. Do not proceed with vague or unsafe tool behavior.
-
-**Step 4 - Implement and register.** Create or update TypeScript files under `mcp-servers/src/tools/`, register them in `mcp-servers/src/index.ts`, and preserve the HTTP server behavior implemented by `mcp-servers/src/shared/server-factory.ts`.
-
-**Step 5 - Validate and document.** Run or recommend `cd mcp-servers && npm run build`, summarize created files, and provide registration guidance using only MCP server keys declared in `.github/mcp.json`.
+Have `open-horizons-engineer` invoke `mcp-builder` and `mcp-ecosystem`, then
+implement `${input:behavior}` within `${input:approved_paths}`. Use `${input:language_transport}` and
+`${input:validation}` as constraints. Stop rather than widening the write scope.
 
 ## Invocation Example
-```text
-/create-mcp-server server_name=platform-docs language=TypeScript transport=HTTP tools_description="Search internal platform runbooks by title and return Markdown summaries."
-```
+
+Run **Chat: Run Prompt**, select `create-mcp-server`, set approved paths to
+`mcp-servers/src/tools/platform-docs.ts,mcp-servers/src/index.ts`, and provide the tool contract,
+transport, and validation command.

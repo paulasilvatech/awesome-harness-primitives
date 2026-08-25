@@ -201,18 +201,22 @@ Use the AWS4 library. Common shapes:
 | VPC | `shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_vpc;` |
 | Region | `shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_region;` |
 
-### Azure Shapes (`mxgraph.azure.*`)
+### Official Microsoft, Azure, and GitHub icons
 
-| Shape | Style String |
-| ------- | ------------- |
-| App Service | `shape=mxgraph.azure.app_service;` |
-| Function App | `shape=mxgraph.azure.function_apps;` |
-| SQL Database | `shape=mxgraph.azure.sql_database;` |
-| Blob Storage | `shape=mxgraph.azure.blob_storage;` |
-| API Management | `shape=mxgraph.azure.api_management;` |
-| Service Bus | `shape=mxgraph.azure.service_bus;` |
-| AKS | `shape=mxgraph.azure.aks;` |
-| Container Registry | `shape=mxgraph.azure.container_registry_registries;` |
+Do not treat hard-coded stencil names as a current icon catalog. Vendor stencils vary by draw.io version
+and can lag current product branding. Follow the
+[official icon and logo policy](./official-icon-policy.md), then either:
+
+- embed the exact official SVG with `scripts/add-icon.py`, or
+- use a verified version-specific stencil and record the draw.io version in provenance.
+
+Embedded official SVG style:
+
+```text
+shape=image;html=1;imageAspect=1;aspect=fixed;verticalLabelPosition=bottom;verticalAlign=top;align=center;spacingTop=4;image=data:image/svg+xml,<percent-encoded-svg>;
+```
+
+Apply semantic colors to containers and connectors, never to the official icon.
 
 ### GCP Shapes (`mxgraph.gcp2.*`)
 

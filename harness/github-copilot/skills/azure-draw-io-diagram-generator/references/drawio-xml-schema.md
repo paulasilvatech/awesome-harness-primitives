@@ -118,6 +118,35 @@ These two cells MUST be the first entries inside `<root>`. IDs `0` and `1` are r
 | `height` | Yes | float | Shape height in px |
 | `as` | Yes | `"geometry"` | Always `"geometry"` |
 
+### Self-contained official SVG vertex
+
+Use `scripts/add-icon.py` rather than hand-authoring this cell. The helper embeds the exact SVG bytes as
+a percent-encoded data URI and records provenance:
+
+```xml
+<mxCell id="azure-key-vault"
+        value="Azure Key Vault"
+        style="shape=image;html=1;imageAspect=1;aspect=fixed;verticalLabelPosition=bottom;verticalAlign=top;align=center;spacingTop=4;image=data:image/svg+xml,%3Csvg...%3E;"
+        vertex="1"
+        parent="1"
+        iconOfficial="true"
+        iconProvider="azure"
+        iconProduct="Azure Key Vault"
+        iconSource="https://learn.microsoft.com/en-us/azure/architecture/icons/"
+        iconTerms="https://learn.microsoft.com/en-us/azure/architecture/icons/"
+        iconRetrieved="2026-08-25"
+        iconUsageBasis="microsoft-architecture-terms"
+        iconMethod="embedded-svg"
+        iconSha256="&lt;64 lowercase hexadecimal characters&gt;">
+  <mxGeometry x="200" y="160" width="64" height="64" as="geometry" />
+</mxCell>
+```
+
+The required provenance fields are `iconOfficial`, `iconProvider`, `iconProduct`, `iconSource`,
+`iconTerms`, `iconRetrieved`, `iconUsageBasis`, `iconMethod`, and `iconSha256`. The validator recomputes
+the SHA-256 for embedded SVG content. Keep the exact product name in `value`; do not rely on icon
+recognition alone.
+
 ---
 
 ## Edge (Connector) Element

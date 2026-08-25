@@ -473,37 +473,37 @@ run_health_check() {
     
     # Check AKS
     if kubectl cluster-info &> /dev/null; then
-        log_success "[OK] Kubernetes cluster healthy"
+        log_success "✓ Kubernetes cluster healthy"
         checks_passed=$((checks_passed + 1))
     else
-        log_error "[FAIL] Kubernetes cluster unhealthy"
+        log_error "✗ Kubernetes cluster unhealthy"
         checks_failed=$((checks_failed + 1))
     fi
     
     # Check ArgoCD
     if kubectl get deployment argocd-server -n argocd &> /dev/null; then
-        log_success "[OK] ArgoCD running"
+        log_success "✓ ArgoCD running"
         checks_passed=$((checks_passed + 1))
     else
-        log_error "[FAIL] ArgoCD not running"
+        log_error "✗ ArgoCD not running"
         checks_failed=$((checks_failed + 1))
     fi
     
     # Check Backstage
     if kubectl get deployment backstage -n backstage &> /dev/null; then
-        log_success "[OK] Backstage running"
+        log_success "✓ Backstage running"
         checks_passed=$((checks_passed + 1))
     else
-        log_error "[FAIL] Backstage not running"
+        log_error "✗ Backstage not running"
         checks_failed=$((checks_failed + 1))
     fi
     
     # Check ingress
     if kubectl get svc ingress-nginx-controller -n ingress-nginx &> /dev/null; then
-        log_success "[OK] Ingress controller running"
+        log_success "✓ Ingress controller running"
         checks_passed=$((checks_passed + 1))
     else
-        log_error "[FAIL] Ingress controller not running"
+        log_error "✗ Ingress controller not running"
         checks_failed=$((checks_failed + 1))
     fi
     
@@ -556,7 +556,7 @@ print_summary() {
     echo "Documentation: ./docs/"
     echo "Runbooks:      ./docs/operations/runbooks/"
     echo ""
-    echo -e "${GREEN}Happy building! ${NC}"
+    echo -e "${GREEN}Happy building! 🚀${NC}"
 }
 
 # =============================================================================

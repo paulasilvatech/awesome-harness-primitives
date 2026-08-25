@@ -32,6 +32,8 @@ Use this catalog during repair and validation. Fix the underlying requirement, e
 | NFR repeated across contexts without a measurement envelope | A target may mean different things in each environment. | Define workload, environment, aggregation, window, and instrumentation. |
 | Strong status without evidence | "Implemented" or "Verified" becomes success-shaped fiction. | Link repository or execution evidence and retain a weaker status otherwise. |
 | Arbitrary P0 count rule | Mechanical limits hide release risk or force misclassification. | Justify each P0 and split the increment when the set is not reviewable. |
+| Third-party or modified vendor icon | The diagram can violate brand terms and misidentify a product. | Use a current permitted official asset with provenance or a neutral labeled fallback. |
+| Vendor logo used for a generic concept | A brand mark falsely implies product selection, ownership, or endorsement. | Use a neutral shape for the concept and reserve the official mark for the named product. |
 | Broken relative resource link | The skill cannot load its own guidance after installation. | Use a path relative to the current skill package and validate that it exists. |
 
 ## Review questions
