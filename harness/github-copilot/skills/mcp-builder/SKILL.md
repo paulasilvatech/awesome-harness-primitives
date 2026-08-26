@@ -6,6 +6,12 @@ license: Complete terms in LICENSE.txt
 
 # MCP Server Development Guide
 
+## When to invoke
+
+- "Build an MCP server for this API or external service."
+- "Design typed MCP tools with safe authentication and pagination."
+- "Create and evaluate a Python or TypeScript MCP integration."
+
 ## Overview
 
 Create MCP (Model Context Protocol) servers that enable LLMs to interact with external services through well-designed tools. The quality of an MCP server is measured by how well it enables LLMs to accomplish real-world tasks.
@@ -234,3 +240,33 @@ Load these resources as needed during development:
   - XML format specifications
   - Example questions and answers
   - Running an evaluation with the provided scripts
+
+## Output template
+
+```markdown
+## MCP server result
+
+**Status:** completed | blocked
+**Language:** TypeScript | Python
+**Transport:** stdio | streamable-http
+
+### Tools
+| Tool | Purpose | Read-only | Idempotent | Destructive | Authorization |
+| --- | --- | --- | --- | --- | --- |
+
+### Validation
+- Build or syntax check: <pass, fail, or not run>
+- Inspector or protocol check: <pass, fail, or not run>
+- Authentication and denial tests: <pass, fail, or not run>
+- Evaluation artifact: <path or not created>
+```
+
+## Quality gate
+
+- [ ] Tool names, descriptions, inputs, outputs, and annotations are explicit and stable.
+- [ ] Authentication and execution-time authorization are enforced outside model-authored inputs.
+- [ ] Results are bounded and pagination is available for list operations.
+- [ ] Secrets and private upstream responses do not enter schemas, logs, or model-visible errors.
+- [ ] Mutating and destructive tools have appropriate confirmation and idempotency behavior.
+- [ ] Transport, cancellation, timeout, retry, and dependency-failure paths are tested.
+- [ ] Build, protocol, and evaluation results are reported only when actually executed.

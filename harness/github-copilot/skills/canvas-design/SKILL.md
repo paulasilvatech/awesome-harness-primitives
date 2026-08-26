@@ -4,7 +4,15 @@ description: Create beautiful visual art in .png and .pdf documents using design
 license: Complete terms in LICENSE.txt
 ---
 
+# Canvas design
+
 These are instructions for creating design philosophies - aesthetic movements that are then EXPRESSED VISUALLY. Output only .md files, .pdf files, and .png files.
+
+## When to invoke
+
+- "Create an original poster or static visual artwork."
+- "Design a museum-quality one-page PDF or PNG."
+- "Develop a visual philosophy and express it as a canvas."
 
 Complete this in two steps:
 1. Design Philosophy Creation (.md file)
@@ -128,3 +136,31 @@ Take a second pass. Go back to the code and refine/polish further to make this a
 ## MULTI-PAGE OPTION
 
 To create additional pages when requested, create more creative pages along the same lines as the design philosophy but distinctly different as well. Bundle those pages in the same .pdf or many .pngs. Treat the first page as just a single page in a whole coffee table book waiting to be filled. Make the next pages unique twists and memories of the original. Have them almost tell a story in a very tasteful way. Exercise full creative freedom.
+
+## Output template
+
+```markdown
+## Canvas design result
+
+**Status:** completed | blocked
+**Design philosophy:** <path to the Markdown philosophy>
+**Artwork:** <path to the PNG or PDF output>
+
+### Visual direction
+<movement name, palette, composition, typography, and subtle reference>
+
+### Validation
+- Canvas bounds and overlap check: <pass or blocker>
+- Output rendering check: <pass or blocker>
+- Originality and copyright review: <pass or blocker>
+```
+
+## Quality gate
+
+- [ ] The design philosophy and visual artifact are original and do not imitate a living artist.
+- [ ] The composition communicates primarily through form, space, color, image, and rhythm.
+- [ ] Text is intentional, legible, sparse, and contained within the canvas.
+- [ ] No visual element overlaps incoherently or falls outside the page boundary.
+- [ ] Typography, spacing, alignment, color, and image treatment received a deliberate refinement pass.
+- [ ] The final PNG or PDF renders successfully at the requested dimensions.
+- [ ] Every reported check was actually completed; unresolved rendering limitations are explicit.

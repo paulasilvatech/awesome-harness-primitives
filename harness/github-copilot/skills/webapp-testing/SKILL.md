@@ -1,10 +1,16 @@
 ---
 name: webapp-testing
-description: Toolkit for interacting with and testing local web applications using Playwright. Supports verifying frontend functionality, debugging UI behavior, capturing browser screenshots, and viewing browser logs.
+description: Toolkit for interacting with and testing local web applications using Playwright. Use when verifying frontend functionality, debugging rendered UI behavior, capturing screenshots, inspecting browser logs, or automating a local web workflow.
 license: Complete terms in LICENSE.txt
 ---
 
 # Web Application Testing
+
+## When to invoke
+
+- "Test this local web application with Playwright."
+- "Reproduce and diagnose this rendered UI behavior."
+- "Capture screenshots, console logs, and interaction evidence for this workflow."
 
 To test local web applications, write native Python Playwright scripts.
 
@@ -94,3 +100,36 @@ with sync_playwright() as p:
   - `element_discovery.py` - Discovering buttons, links, and inputs on a page
   - `static_html_automation.py` - Using file:// URLs for local HTML
   - `console_logging.py` - Capturing console logs during automation
+
+## Output template
+
+```markdown
+## Web application test result
+
+**Status:** passed | failed | blocked
+**Target:** <URL or local HTML path>
+**Scenario:** <tested user workflow>
+
+### Evidence
+- Browser and viewport: <value>
+- Screenshots: <paths or none>
+- Console errors: <count and summary>
+- Failed requests: <count and summary>
+
+### Findings
+- <observed behavior with selector or step evidence>
+
+### Validation
+- Server lifecycle: <pass, not needed, or blocker>
+- Browser cleanup: <pass or blocker>
+```
+
+## Quality gate
+
+- [ ] The tested target, scenario, browser, and viewport are explicit.
+- [ ] Dynamic pages are inspected only after an appropriate readiness condition.
+- [ ] Selectors come from inspected HTML or rendered-state evidence.
+- [ ] Screenshots, console output, and request failures are captured when relevant.
+- [ ] Credentials, tokens, personal data, and private page content are not leaked in artifacts.
+- [ ] The browser and any helper-managed server are closed after the test.
+- [ ] Pass, fail, and blocked claims reflect observed behavior rather than expected output.

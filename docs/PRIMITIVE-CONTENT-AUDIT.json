@@ -16047,7 +16047,7 @@
       ]
     },
     {
-      "characters_scanned": 141924,
+      "characters_scanned": 143228,
       "external_url_count": 24,
       "files_scanned": 29,
       "kind": "skill",
@@ -20379,7 +20379,7 @@
       ]
     },
     {
-      "characters_scanned": 121628,
+      "characters_scanned": 123000,
       "external_url_count": 9,
       "files_scanned": 10,
       "kind": "skill",
@@ -25020,7 +25020,7 @@
       ]
     },
     {
-      "characters_scanned": 22347,
+      "characters_scanned": 23685,
       "external_url_count": 3,
       "files_scanned": 6,
       "kind": "skill",
@@ -25245,7 +25245,7 @@
       "warnings": 0
     },
     "sharedHarness": {
-      "errors": 5,
+      "errors": 0,
       "summary": [
         {
           "errors": 0,
@@ -25260,10 +25260,10 @@
           "warnings": 0
         },
         {
-          "errors": 3,
+          "errors": 0,
           "files": 553,
           "kind": "skills",
-          "warnings": 1
+          "warnings": 0
         },
         {
           "errors": 0,
@@ -25272,7 +25272,7 @@
           "warnings": 0
         },
         {
-          "errors": 2,
+          "errors": 0,
           "files": 102,
           "kind": "plugins",
           "warnings": 0
@@ -25284,7 +25284,7 @@
           "warnings": 0
         }
       ],
-      "warnings": 1
+      "warnings": 0
     }
   }
 }

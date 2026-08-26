@@ -879,7 +879,7 @@ Regenerate this file after changing files under `harness/github-copilot/agents/`
 | vscode-ext-commands | Guide command contributions in VS Code extensions, including package.json command titles, categories, Command Palette visibility, Side Bar command naming, icons, enablement, when… |
 | vscode-ext-localization | Localize VS Code extensions across package.json contributions, walkthrough markdown, and user-facing JavaScript/TypeScript strings using VS Code l10n conventions. Use when adding… |
 | web-design-reviewer | Inspect local or remote website design, identify layout, responsive, accessibility, and visual consistency defects, and make source-level fixes. Use when users ask to "review webs… |
-| webapp-testing | Toolkit for interacting with and testing local web applications using Playwright. Supports verifying frontend functionality, debugging UI behavior, capturing browser screenshots,… |
+| webapp-testing | Toolkit for interacting with and testing local web applications using Playwright. Use when verifying frontend functionality, debugging rendered UI behavior, capturing screenshots,… |
 | webmcpify | Make a web app agent-ready with WebMCP by detecting app actions, building a manifest, integrating document.modelContext tools, verifying in a real browser, healing failures, and a… |
 | what-context-needed | Identify the minimum files, symbols, configuration, tests, and prior context GitHub Copilot needs before answering a codebase question. Use this skill when the user asks what cont… |
 | winmd-api-search | Find and explore Windows desktop APIs. Use when building features that need platform capabilities — camera, file access, notifications, UI controls, AI/ML, sensors, networking, et… |

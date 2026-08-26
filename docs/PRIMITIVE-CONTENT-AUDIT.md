@@ -21,7 +21,7 @@ first-party evidence and its runtime surface is exercised where applicable.
 | hook | 10 | 8 | 2 | 3 |
 | plugin | 102 | 77 | 25 | 18 |
 
-- Shared-harness strict validation: 5 errors, 1 warnings.
+- Shared-harness strict validation: 0 errors, 0 warnings.
 - Plugin-owned primitive validation: 0 errors, 0 warnings.
 - Unreadable text files: 0.
 - Full per-source ledger: `docs/PRIMITIVE-CONTENT-AUDIT.json`.
