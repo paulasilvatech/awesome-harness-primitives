@@ -1,6 +1,12 @@
 __pycache__/
 *.py[cod]
 
+# macOS metadata is local-only.
+.DS_Store
+
+# Large Microsoft security reference PDFs remain local and outside Git LFS.
+docs/microsoft-security/**/*.pdf
+
 # Hook runtime logs should live in Copilot/XDG state, not the repo.
 logs/
 .github/logs/
