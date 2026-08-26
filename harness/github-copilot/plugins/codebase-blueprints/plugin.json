@@ -1,0 +1,20 @@
+{
+  "name": "codebase-blueprints",
+  "description": "Analyze an existing codebase and generate evidence-backed blueprints: architecture, folder structure, technology stack, code exemplars, workflow analysis, repository history, and Copilot instruction scaffolds.",
+  "version": "1.0.0",
+  "author": {
+    "name": "paulasilvatech"
+  },
+  "repository": "https://github.com/paulasilvatech/copilot-primitives",
+  "license": "MIT",
+  "keywords": [
+    "codebase",
+    "architecture",
+    "blueprint",
+    "onboarding",
+    "analysis",
+    "documentation"
+  ],
+  "agents": "agents/",
+  "skills": "skills/"
+}

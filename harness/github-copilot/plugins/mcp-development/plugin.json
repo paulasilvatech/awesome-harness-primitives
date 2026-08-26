@@ -1,0 +1,20 @@
+{
+  "name": "mcp-development",
+  "description": "Build, test, secure, and release Model Context Protocol servers and clients, including CLI exploration, configuration auditing, implementation security review, pre-release QA, and making web apps agent-ready.",
+  "version": "1.0.0",
+  "author": {
+    "name": "paulasilvatech"
+  },
+  "repository": "https://github.com/paulasilvatech/copilot-primitives",
+  "license": "MIT",
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "server",
+    "security",
+    "release",
+    "tooling"
+  ],
+  "agents": "agents/",
+  "skills": "skills/"
+}

@@ -16,7 +16,7 @@
   },
   "packaging": {
     "activePluginHookPackages": 2,
-    "marketplaceEntries": 109,
+    "marketplaceEntries": 122,
     "pluginOwned": {
       "agents": 24,
       "errors": 0,
@@ -25,41 +25,29 @@
       "skills": 118,
       "warnings": 0
     },
-    "pluginPackages": 109,
+    "pluginPackages": 122,
     "sharedAgents": {
-      "packaged": 127,
+      "packaged": 152,
       "total": 228,
       "unpackaged": [
         "accessibility-runtime-tester.agent.md",
         "accessibility.agent.md",
-        "address-comments.agent.md",
-        "adr-generator.agent.md",
         "aem-frontend-specialist.agent.md",
         "api-architect.agent.md",
-        "arch-linux-expert.agent.md",
-        "arch.agent.md",
         "atlassian-requirements-to-jira.agent.md",
         "aws-cloud-expert.agent.md",
         "aws-incident-triage.agent.md",
-        "azure-iac-exporter.agent.md",
-        "azure-iac-generator.agent.md",
-        "azure-policy-analyzer.agent.md",
         "azure-smart-city-iot-architect.agent.md",
         "azure-verified-modules-owner-triage.agent.md",
-        "bicep-implement.agent.md",
-        "bicep-plan.agent.md",
         "blueprint-mode.agent.md",
         "caveman-mode.agent.md",
-        "centos-linux-expert.agent.md",
         "cloud-saas-outage-triage.agent.md",
         "code-tour.agent.md",
         "context7.agent.md",
         "critical-thinking.agent.md",
         "csharp-dotnet-janitor.agent.md",
         "csharp-expert.agent.md",
-        "csharp-mcp-expert.agent.md",
         "custom-agent-foundry.agent.md",
-        "debian-linux-expert.agent.md",
         "debug.agent.md",
         "declarative-agents-architect.agent.md",
         "defender-scout-kql.agent.md",
@@ -69,25 +57,20 @@
         "devops-expert.agent.md",
         "devtools-regression-investigator.agent.md",
         "dotnet-fullstack-mentor.agent.md",
-        "dotnet-maui.agent.md",
         "dotnet-self-learning-architect.agent.md",
         "dotnet-upgrade.agent.md",
         "drupal-expert.agent.md",
         "expert-cpp-software-engineer.agent.md",
         "expert-embedded-c-engineer.agent.md",
         "expert-nextjs-developer.agent.md",
-        "fedora-linux-expert.agent.md",
         "frontend-performance-investigator.agent.md",
         "gilfoyle.agent.md",
-        "gitmoji-setup.agent.md",
         "hlbpa.agent.md",
         "insiders-a11y-tracker.agent.md",
-        "interview-prep.agent.md",
         "janitor.agent.md",
         "kubestellar-console.agent.md",
         "kusto-assistant.agent.md",
         "laravel-expert-agent.agent.md",
-        "linkedin-post-writer.agent.md",
         "markdown-accessibility-assistant.agent.md",
         "mentor.agent.md",
         "mentoring-juniors.agent.md",
@@ -96,21 +79,15 @@
         "modernization.agent.md",
         "new-relic-incident-response.agent.md",
         "nuxt-expert.agent.md",
-        "one-shot-feature-issue-planner.agent.md",
         "pimcore-expert.agent.md",
         "platform-sre-kubernetes.agent.md",
         "principal-software-engineer.agent.md",
-        "project-architecture-planner.agent.md",
         "prompt-builder.agent.md",
         "prompt-engineer.agent.md",
         "python-notebook-sample-builder.agent.md",
         "python-win-arm64-gha-wheel-builder.agent.md",
         "quality-playbook.agent.md",
-        "reepl-linkedin.agent.md",
-        "refine-issue.agent.md",
-        "repo-architect.agent.md",
         "salesforce-expert.agent.md",
-        "sast-sca-security-analyzer.agent.md",
         "scientific-paper-research.agent.md",
         "search-ai-optimization-expert.agent.md",
         "shopify-expert.agent.md",
@@ -128,156 +105,74 @@
         "trojan-skill-hunter.agent.md",
         "ultimate-transparent-thinking-beast-mode.agent.md",
         "vuejs-expert.agent.md",
-        "wg-code-alchemist.agent.md",
-        "wg-code-sentinel.agent.md",
-        "winforms-expert.agent.md"
+        "wg-code-alchemist.agent.md"
       ]
     },
     "sharedSkills": {
-      "packaged": 247,
+      "packaged": 362,
       "total": 481,
       "unpackaged": [
-        "acquire-codebase-knowledge",
-        "ad-campaign-analyzer",
-        "add-educational-comments",
         "adobe-illustrator-scripting",
         "agent-skill-stack",
         "ai-ready",
         "apple-appstore-reviewer",
-        "arch-linux-triage",
-        "architecture-blueprint-generator",
         "arduino-azure-iot-edge-integration",
         "aspire",
         "autoresearch",
         "aws-cdk-python-setup",
         "aws-cloudwatch-investigation",
-        "azure-architecture-autopilot",
-        "azure-container-registry-cli",
-        "azure-deployment-preflight",
-        "azure-developer-cli",
-        "azure-devops-cli",
         "azure-smart-city-iot-solution-builder",
-        "azure-static-web-apps",
         "batch-files",
         "bigquery-pipeline-audit",
         "boost-prompt",
-        "brag-sheet",
         "breakdown-plan",
         "breakdown-test",
         "bug-receipt",
         "bug-reproduction-brief",
         "build-evidence-map",
-        "canvas-design",
-        "centos-linux-triage",
         "chrome-devtools",
         "cli-mastery",
-        "cloud-design-patterns",
-        "code-exemplars-blueprint-generator",
         "code-tour",
         "codebase-memory-mcp",
-        "codeql",
-        "comment-code-generate-a-tutorial",
-        "commit-message-storyteller",
-        "competitor-ad-intelligence",
         "containerize-aspnet-framework",
         "containerize-aspnetcore",
-        "conventional-branch",
-        "convert-plaintext-to-md",
         "copilot-cli-quickstart",
-        "copilot-instructions-blueprint-generator",
-        "copilot-pr-autopilot",
         "copilot-primitive-authoring",
         "copilot-spaces",
         "copilot-usage-metrics",
-        "cosmosdb-datamodeling",
-        "create-agentsmd",
         "create-github-action-workflow-specification",
         "create-github-issue-feature-from-specification",
         "create-github-issues-for-unmet-specification-requirements",
-        "create-llms",
-        "create-readme",
         "create-specification",
-        "create-spring-boot-kotlin-project",
-        "create-tldr-page",
-        "csharp-docs",
-        "daily-prep",
-        "data-breach-blast-radius",
         "datanalysis-credit-risk",
-        "debian-linux-triage",
         "declarative-agents",
-        "dependabot",
         "devops-rollout-plan",
         "diagnose",
-        "documentation-writer",
         "dotnet-design-pattern-review",
-        "dotnet-mcp-builder",
-        "dotnet-timezone",
-        "draw-io-diagram-generator",
         "editorconfig",
         "ef-core",
-        "efcore-d2-db-diagram",
         "em-dash",
-        "email-drafter",
         "eval-driven-dev",
-        "exam-ready",
-        "excalidraw-diagram-generator",
         "fabric-lakehouse",
-        "fedora-linux-triage",
         "finalize-agent-prompt",
         "finnish-humanizer",
         "first-ask",
-        "fluentui-blazor",
-        "folder-structure-blueprint-generator",
         "freecad-scripts",
         "game-engine",
-        "gdpr-compliant",
         "gen-specs-as-issues",
         "generate-custom-instructions-from-codebase",
-        "gh-attach",
-        "git-commit",
-        "git-flow-branch-creator",
         "github-codespaces-efficiency",
         "github-copilot-starter",
-        "github-issues",
-        "github-release",
-        "gitmoji",
         "gsap-framer-scroll-animation",
-        "gtm-0-to-1-launch",
-        "gtm-ai-gtm",
-        "gtm-board-and-investor-communication",
-        "gtm-developer-ecosystem",
-        "gtm-enterprise-account-planning",
-        "gtm-enterprise-onboarding",
-        "gtm-operating-cadence",
-        "gtm-partnership-architecture",
-        "gtm-positioning-strategy",
-        "gtm-product-led-growth",
-        "gtm-technical-product-pricing",
         "harness-engineering",
         "image-manipulation-image-magick",
         "impediment-prioritization",
         "incident-postmortem",
-        "issue-fields-migration",
-        "java-add-graalvm-native-image-support",
-        "java-helidon",
-        "java-refactoring-extract-method",
-        "java-refactoring-remove-parameter",
         "javascript-typescript-jest",
-        "javax-to-jakarta-migration",
-        "kotlin-springboot",
-        "landing-page-conversion-audit",
         "latchshot-page-capture",
         "legacy-circuit-mockups",
-        "linkedin-post-formatter",
         "lsp-setup",
-        "make-repo-contribution",
         "markstream-install",
-        "mcp-builder",
-        "mcp-cli",
-        "mcp-implementation-security-review",
-        "mcp-release-qa",
-        "mcp-security-audit",
-        "meeting-minutes",
         "memory-merger",
         "mentoring-juniors",
         "microsoft-code-reference",
@@ -285,31 +180,17 @@
         "microsoft-skill-creator",
         "minecraft-plugin-development",
         "mini-context-graph",
-        "mkdocs-translations",
         "msgraph-sdk",
-        "msstore-cli",
-        "mvvm-toolkit",
-        "mvvm-toolkit-di",
-        "mvvm-toolkit-messenger",
         "namecheap",
         "nano-banana-pro-openrouter",
         "next-intl-add-language",
-        "nuget-manager",
-        "oo-component-documentation",
         "optimize-simplicite-logs",
         "pdftk-server",
-        "penpot-uiux-design",
-        "performance-review-writer",
         "pester-migration",
         "pester-should-migration",
         "pinecone-rag",
-        "plantuml-ascii",
-        "playwright-automation-fill-in-form",
         "powerbi-modeling",
-        "pr-dashboard",
         "prd",
-        "premium-frontend-ui",
-        "project-workflow-analysis-blueprint-generator",
         "prompt-optimizer",
         "publish-to-pages",
         "pytest-coverage",
@@ -317,11 +198,9 @@
         "python-pypi-package-builder",
         "quality-playbook",
         "react-container-presentation-component",
-        "readme-blueprint-generator",
         "refactor",
         "refactor-method-complexity-reduce",
         "remember",
-        "repo-story-time",
         "resemble-detect",
         "review-and-refactor",
         "rhdh",
@@ -331,45 +210,26 @@
         "ruff-recursive-fix",
         "sandbox-npm-install",
         "scoutqa-test",
-        "secret-scanning",
-        "security-review",
-        "server-side-conversion-tracking",
         "setup-my-iq",
         "shopify-review-triage",
         "shuffle-json-data",
         "skill-creator",
         "slang-shader-engineer",
         "snowflake-semanticview",
-        "spring-boot-testing",
         "sql-server-table-reconciliation",
         "ssma-console",
         "steno-mode",
-        "system-commandline-cli",
-        "technical-job-search",
-        "technology-stack-blueprint-generator",
         "terraform-azurerm-set-diff-analyzer",
-        "threat-model-analyst",
         "tiny-stepping",
-        "tldr-prompt",
-        "tm7-threat-model",
         "transloadit-media-processing",
         "unit-test-vue-pinia",
-        "update-avm-modules-in-bicep",
-        "update-llms",
-        "update-markdown-file-index",
         "update-specification",
         "vardoger-analyze",
         "vcpkg",
         "verify-agent-action",
         "vscode-ext-commands",
         "vscode-ext-localization",
-        "web-design-reviewer",
-        "webapp-testing",
-        "webmcpify",
-        "winmd-api-search",
-        "winui3-migration-guide",
         "workiq-copilot",
-        "write-coding-standards-from-file",
         "x-twitter-scraper"
       ]
     }
@@ -457,7 +317,9 @@
       "name": "ADR Generator",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "codebase-blueprints"
+      ],
       "path": "harness/github-copilot/agents/adr-generator.agent.md",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -642,7 +504,9 @@
       "name": "Arch Linux Expert",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "linux-operations"
+      ],
       "path": "harness/github-copilot/agents/arch-linux-expert.agent.md",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -871,7 +735,9 @@
       "name": "Azure Policy Analyzer",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "azure-developer-tooling"
+      ],
       "path": "harness/github-copilot/agents/azure-policy-analyzer.agent.md",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -1000,7 +866,9 @@
       "name": "azure-iac-exporter",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "azure-developer-tooling"
+      ],
       "path": "harness/github-copilot/agents/azure-iac-exporter.agent.md",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -1022,7 +890,9 @@
       "name": "azure-iac-generator",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "azure-developer-tooling"
+      ],
       "path": "harness/github-copilot/agents/azure-iac-generator.agent.md",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -1062,7 +932,9 @@
       "name": "Bicep Planning",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "azure-developer-tooling"
+      ],
       "path": "harness/github-copilot/agents/bicep-plan.agent.md",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -1082,7 +954,9 @@
       "name": "Bicep Specialist",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "azure-developer-tooling"
+      ],
       "path": "harness/github-copilot/agents/bicep-implement.agent.md",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -1137,7 +1011,9 @@
       "name": "C# MCP Server Expert",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "mcp-development"
+      ],
       "path": "harness/github-copilot/agents/csharp-mcp-expert.agent.md",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -1267,7 +1143,9 @@
       "name": "CentOS Linux Expert",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "linux-operations"
+      ],
       "path": "harness/github-copilot/agents/centos-linux-expert.agent.md",
       "review_status": "needs-semantic-review",
       "signals": [],
@@ -1463,7 +1341,9 @@
       "name": "Debian Linux Expert",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "linux-operations"
+      ],
       "path": "harness/github-copilot/agents/debian-linux-expert.agent.md",
       "review_status": "needs-semantic-review",
       "signals": [],
@@ -1973,7 +1853,9 @@
       "name": "Fedora Linux Expert",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "linux-operations"
+      ],
       "path": "harness/github-copilot/agents/fedora-linux-expert.agent.md",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -2475,7 +2357,9 @@
       "name": "Gitmoji Setup",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "git-github-workflow"
+      ],
       "path": "harness/github-copilot/agents/gitmoji-setup.agent.md",
       "review_status": "needs-source-review",
       "signals": [
@@ -2568,7 +2452,9 @@
       "name": "interview-prep",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "career-productivity"
+      ],
       "path": "harness/github-copilot/agents/interview-prep.agent.md",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -2742,7 +2628,9 @@
       "name": "LinkedIn Post Writer",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "career-productivity"
+      ],
       "path": "harness/github-copilot/agents/linkedin-post-writer.agent.md",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -2780,7 +2668,9 @@
       "name": "MAUI Expert",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "dotnet-desktop-development"
+      ],
       "path": "harness/github-copilot/agents/dotnet-maui.agent.md",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -3102,7 +2992,9 @@
       "name": "one-shot-feature-issue-planner",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "git-github-workflow"
+      ],
       "path": "harness/github-copilot/agents/one-shot-feature-issue-planner.agent.md",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -3695,7 +3587,9 @@
       "name": "Project Architecture Planner",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "codebase-blueprints"
+      ],
       "path": "harness/github-copilot/agents/project-architecture-planner.agent.md",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -4086,7 +3980,9 @@
       "name": "reepl-linkedin",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "career-productivity"
+      ],
       "path": "harness/github-copilot/agents/reepl-linkedin.agent.md",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -4108,7 +4004,9 @@
       "name": "Refine Requirement or Issue",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "git-github-workflow"
+      ],
       "path": "harness/github-copilot/agents/refine-issue.agent.md",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -4125,7 +4023,9 @@
       "name": "Repo Architect Agent",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "codebase-blueprints"
+      ],
       "path": "harness/github-copilot/agents/repo-architect.agent.md",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -4294,7 +4194,9 @@
       "name": "sast-sca-security-analyzer",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "application-security"
+      ],
       "path": "harness/github-copilot/agents/sast-sca-security-analyzer.agent.md",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -4488,7 +4390,9 @@
       "name": "Senior Cloud Architect",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "codebase-blueprints"
+      ],
       "path": "harness/github-copilot/agents/arch.agent.md",
       "review_status": "needs-semantic-review",
       "signals": [],
@@ -5121,7 +5025,9 @@
       "name": "Universal PR Comment Addresser",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "git-github-workflow"
+      ],
       "path": "harness/github-copilot/agents/address-comments.agent.md",
       "review_status": "needs-semantic-review",
       "signals": [],
@@ -5187,7 +5093,9 @@
       "name": "WG Code Sentinel",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "application-security"
+      ],
       "path": "harness/github-copilot/agents/wg-code-sentinel.agent.md",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -5204,7 +5112,9 @@
       "name": "WinForms Expert",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "dotnet-desktop-development"
+      ],
       "path": "harness/github-copilot/agents/winforms-expert.agent.md",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -10158,6 +10068,28 @@
       ]
     },
     {
+      "characters_scanned": 3252,
+      "external_url_count": 1,
+      "files_scanned": 2,
+      "kind": "plugin",
+      "local_evidence_mention": false,
+      "name": "application-security",
+      "ownership": "shared",
+      "package": "application-security",
+      "packaged_by": [
+        "application-security"
+      ],
+      "path": "harness/github-copilot/plugins/application-security",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "version-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "github.com"
+      ]
+    },
+    {
       "characters_scanned": 495246,
       "external_url_count": 34,
       "files_scanned": 20,
@@ -10392,6 +10324,29 @@
       ]
     },
     {
+      "characters_scanned": 4066,
+      "external_url_count": 1,
+      "files_scanned": 2,
+      "kind": "plugin",
+      "local_evidence_mention": false,
+      "name": "azure-developer-tooling",
+      "ownership": "shared",
+      "package": "azure-developer-tooling",
+      "packaged_by": [
+        "azure-developer-tooling"
+      ],
+      "path": "harness/github-copilot/plugins/azure-developer-tooling",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "lifecycle-language",
+        "version-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "github.com"
+      ]
+    },
+    {
       "characters_scanned": 2473,
       "external_url_count": 1,
       "files_scanned": 2,
@@ -10562,6 +10517,28 @@
       ]
     },
     {
+      "characters_scanned": 3684,
+      "external_url_count": 1,
+      "files_scanned": 2,
+      "kind": "plugin",
+      "local_evidence_mention": false,
+      "name": "career-productivity",
+      "ownership": "shared",
+      "package": "career-productivity",
+      "packaged_by": [
+        "career-productivity"
+      ],
+      "path": "harness/github-copilot/plugins/career-productivity",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "version-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "github.com"
+      ]
+    },
+    {
       "characters_scanned": 1601,
       "external_url_count": 1,
       "files_scanned": 2,
@@ -10650,6 +10627,29 @@
       "path": "harness/github-copilot/plugins/cms-development",
       "review_status": "needs-current-source-review",
       "signals": [
+        "version-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "github.com"
+      ]
+    },
+    {
+      "characters_scanned": 4665,
+      "external_url_count": 1,
+      "files_scanned": 2,
+      "kind": "plugin",
+      "local_evidence_mention": false,
+      "name": "codebase-blueprints",
+      "ownership": "shared",
+      "package": "codebase-blueprints",
+      "packaged_by": [
+        "codebase-blueprints"
+      ],
+      "path": "harness/github-copilot/plugins/codebase-blueprints",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "lifecycle-language",
         "version-claim",
         "external-source"
       ],
@@ -10803,7 +10803,7 @@
       ]
     },
     {
-      "characters_scanned": 2209,
+      "characters_scanned": 3031,
       "external_url_count": 1,
       "files_scanned": 2,
       "kind": "plugin",
@@ -10891,6 +10891,28 @@
       ]
     },
     {
+      "characters_scanned": 2277,
+      "external_url_count": 1,
+      "files_scanned": 2,
+      "kind": "plugin",
+      "local_evidence_mention": false,
+      "name": "diagram-authoring",
+      "ownership": "shared",
+      "package": "diagram-authoring",
+      "packaged_by": [
+        "diagram-authoring"
+      ],
+      "path": "harness/github-copilot/plugins/diagram-authoring",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "version-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "github.com"
+      ]
+    },
+    {
       "characters_scanned": 40611,
       "external_url_count": 21,
       "files_scanned": 6,
@@ -10917,6 +10939,28 @@
         "github.com",
         "registry.npmjs.org",
         "www.w3.org"
+      ]
+    },
+    {
+      "characters_scanned": 3589,
+      "external_url_count": 1,
+      "files_scanned": 2,
+      "kind": "plugin",
+      "local_evidence_mention": false,
+      "name": "dotnet-desktop-development",
+      "ownership": "shared",
+      "package": "dotnet-desktop-development",
+      "packaged_by": [
+        "dotnet-desktop-development"
+      ],
+      "path": "harness/github-copilot/plugins/dotnet-desktop-development",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "version-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "github.com"
       ]
     },
     {
@@ -11249,7 +11293,7 @@
       ]
     },
     {
-      "characters_scanned": 5762,
+      "characters_scanned": 5810,
       "external_url_count": 2,
       "files_scanned": 3,
       "kind": "plugin",
@@ -11352,6 +11396,29 @@
       ]
     },
     {
+      "characters_scanned": 4601,
+      "external_url_count": 2,
+      "files_scanned": 2,
+      "kind": "plugin",
+      "local_evidence_mention": false,
+      "name": "git-github-workflow",
+      "ownership": "shared",
+      "package": "git-github-workflow",
+      "packaged_by": [
+        "git-github-workflow"
+      ],
+      "path": "harness/github-copilot/plugins/git-github-workflow",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "version-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "github.com",
+        "gitmoji.dev"
+      ]
+    },
+    {
       "characters_scanned": 652,
       "external_url_count": 1,
       "files_scanned": 1,
@@ -11397,6 +11464,28 @@
       ]
     },
     {
+      "characters_scanned": 4397,
+      "external_url_count": 1,
+      "files_scanned": 2,
+      "kind": "plugin",
+      "local_evidence_mention": false,
+      "name": "go-to-market",
+      "ownership": "shared",
+      "package": "go-to-market",
+      "packaged_by": [
+        "go-to-market"
+      ],
+      "path": "harness/github-copilot/plugins/go-to-market",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "version-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "github.com"
+      ]
+    },
+    {
       "characters_scanned": 1511,
       "external_url_count": 1,
       "files_scanned": 2,
@@ -11409,6 +11498,28 @@
         "java-development"
       ],
       "path": "harness/github-copilot/plugins/java-development",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "version-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "github.com"
+      ]
+    },
+    {
+      "characters_scanned": 2855,
+      "external_url_count": 1,
+      "files_scanned": 2,
+      "kind": "plugin",
+      "local_evidence_mention": false,
+      "name": "java-kotlin-development",
+      "ownership": "shared",
+      "package": "java-kotlin-development",
+      "packaged_by": [
+        "java-kotlin-development"
+      ],
+      "path": "harness/github-copilot/plugins/java-kotlin-development",
       "review_status": "needs-current-source-review",
       "signals": [
         "version-claim",
@@ -11490,6 +11601,28 @@
       ]
     },
     {
+      "characters_scanned": 2638,
+      "external_url_count": 1,
+      "files_scanned": 2,
+      "kind": "plugin",
+      "local_evidence_mention": false,
+      "name": "linux-operations",
+      "ownership": "shared",
+      "package": "linux-operations",
+      "packaged_by": [
+        "linux-operations"
+      ],
+      "path": "harness/github-copilot/plugins/linux-operations",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "version-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "github.com"
+      ]
+    },
+    {
       "characters_scanned": 240145,
       "external_url_count": 7,
       "files_scanned": 46,
@@ -11516,6 +11649,29 @@
         "docs.github.com",
         "github.com",
         "www.w3.org"
+      ]
+    },
+    {
+      "characters_scanned": 2815,
+      "external_url_count": 1,
+      "files_scanned": 2,
+      "kind": "plugin",
+      "local_evidence_mention": false,
+      "name": "mcp-development",
+      "ownership": "shared",
+      "package": "mcp-development",
+      "packaged_by": [
+        "mcp-development"
+      ],
+      "path": "harness/github-copilot/plugins/mcp-development",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "version-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "github.com"
       ]
     },
     {
@@ -12240,6 +12396,29 @@
       ]
     },
     {
+      "characters_scanned": 4158,
+      "external_url_count": 1,
+      "files_scanned": 2,
+      "kind": "plugin",
+      "local_evidence_mention": false,
+      "name": "repo-documentation",
+      "ownership": "shared",
+      "package": "repo-documentation",
+      "packaged_by": [
+        "repo-documentation"
+      ],
+      "path": "harness/github-copilot/plugins/repo-documentation",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "version-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "github.com"
+      ]
+    },
+    {
       "characters_scanned": 4436,
       "external_url_count": 1,
       "files_scanned": 2,
@@ -12536,7 +12715,7 @@
       ]
     },
     {
-      "characters_scanned": 2522,
+      "characters_scanned": 3008,
       "external_url_count": 1,
       "files_scanned": 2,
       "kind": "plugin",
@@ -12698,6 +12877,28 @@
       "source_domains": [
         "github.com",
         "uizze.com"
+      ]
+    },
+    {
+      "characters_scanned": 2019,
+      "external_url_count": 1,
+      "files_scanned": 2,
+      "kind": "plugin",
+      "local_evidence_mention": false,
+      "name": "ux-design-tooling",
+      "ownership": "shared",
+      "package": "ux-design-tooling",
+      "packaged_by": [
+        "ux-design-tooling"
+      ],
+      "path": "harness/github-copilot/plugins/ux-design-tooling",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "version-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "github.com"
       ]
     },
     {
@@ -13918,7 +14119,9 @@
       "name": "acquire-codebase-knowledge",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "codebase-blueprints"
+      ],
       "path": "harness/github-copilot/skills/acquire-codebase-knowledge",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -14000,7 +14203,9 @@
       "name": "ad-campaign-analyzer",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "go-to-market"
+      ],
       "path": "harness/github-copilot/skills/ad-campaign-analyzer",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -14038,7 +14243,9 @@
       "name": "add-educational-comments",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "repo-documentation"
+      ],
       "path": "harness/github-copilot/skills/add-educational-comments",
       "review_status": "needs-source-review",
       "signals": [
@@ -14364,7 +14571,9 @@
       "name": "arch-linux-triage",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "linux-operations"
+      ],
       "path": "harness/github-copilot/skills/arch-linux-triage",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -14381,7 +14590,9 @@
       "name": "architecture-blueprint-generator",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "codebase-blueprints"
+      ],
       "path": "harness/github-copilot/skills/architecture-blueprint-generator",
       "review_status": "needs-semantic-review",
       "signals": [],
@@ -15153,7 +15364,9 @@
       "name": "azure-architecture-autopilot",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "azure-developer-tooling"
+      ],
       "path": "harness/github-copilot/skills/azure-architecture-autopilot",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -15371,7 +15584,9 @@
       "name": "azure-container-registry-cli",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "azure-developer-tooling"
+      ],
       "path": "harness/github-copilot/skills/azure-container-registry-cli",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -15482,7 +15697,9 @@
       "name": "azure-deployment-preflight",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "azure-developer-tooling"
+      ],
       "path": "harness/github-copilot/skills/azure-deployment-preflight",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -15506,7 +15723,9 @@
       "name": "azure-developer-cli",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "azure-developer-tooling"
+      ],
       "path": "harness/github-copilot/skills/azure-developer-cli",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -15534,7 +15753,9 @@
       "name": "azure-devops-cli",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "azure-developer-tooling"
+      ],
       "path": "harness/github-copilot/skills/azure-devops-cli",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -16529,7 +16750,9 @@
       "name": "azure-static-web-apps",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "azure-developer-tooling"
+      ],
       "path": "harness/github-copilot/skills/azure-static-web-apps",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -17438,7 +17661,9 @@
       "name": "brag-sheet",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "career-productivity"
+      ],
       "path": "harness/github-copilot/skills/brag-sheet",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -17624,7 +17849,9 @@
       "name": "canvas-design",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "ux-design-tooling"
+      ],
       "path": "harness/github-copilot/skills/canvas-design",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -17647,7 +17874,9 @@
       "name": "centos-linux-triage",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "linux-operations"
+      ],
       "path": "harness/github-copilot/skills/centos-linux-triage",
       "review_status": "needs-semantic-review",
       "signals": [],
@@ -17737,7 +17966,9 @@
       "name": "cloud-design-patterns",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "azure-developer-tooling"
+      ],
       "path": "harness/github-copilot/skills/cloud-design-patterns",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -17758,7 +17989,9 @@
       "name": "code-exemplars-blueprint-generator",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "codebase-blueprints"
+      ],
       "path": "harness/github-copilot/skills/code-exemplars-blueprint-generator",
       "review_status": "needs-semantic-review",
       "signals": [],
@@ -17838,7 +18071,9 @@
       "name": "codeql",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "application-security"
+      ],
       "path": "harness/github-copilot/skills/codeql",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -17862,7 +18097,9 @@
       "name": "comment-code-generate-a-tutorial",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "repo-documentation"
+      ],
       "path": "harness/github-copilot/skills/comment-code-generate-a-tutorial",
       "review_status": "needs-semantic-review",
       "signals": [],
@@ -17877,7 +18114,9 @@
       "name": "commit-message-storyteller",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "git-github-workflow"
+      ],
       "path": "harness/github-copilot/skills/commit-message-storyteller",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -17898,7 +18137,9 @@
       "name": "competitor-ad-intelligence",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "go-to-market"
+      ],
       "path": "harness/github-copilot/skills/competitor-ad-intelligence",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -18003,7 +18244,9 @@
       "name": "conventional-branch",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "git-github-workflow"
+      ],
       "path": "harness/github-copilot/skills/conventional-branch",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -18067,7 +18310,9 @@
       "name": "convert-plaintext-to-md",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "repo-documentation"
+      ],
       "path": "harness/github-copilot/skills/convert-plaintext-to-md",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -18136,7 +18381,9 @@
       "name": "copilot-instructions-blueprint-generator",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "codebase-blueprints"
+      ],
       "path": "harness/github-copilot/skills/copilot-instructions-blueprint-generator",
       "review_status": "needs-semantic-review",
       "signals": [],
@@ -18171,7 +18418,9 @@
       "name": "copilot-pr-autopilot",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "git-github-workflow"
+      ],
       "path": "harness/github-copilot/skills/copilot-pr-autopilot",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -18272,7 +18521,9 @@
       "name": "cosmosdb-datamodeling",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "azure-developer-tooling"
+      ],
       "path": "harness/github-copilot/skills/cosmosdb-datamodeling",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -18291,7 +18542,9 @@
       "name": "create-agentsmd",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "repo-documentation"
+      ],
       "path": "harness/github-copilot/skills/create-agentsmd",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -18439,7 +18692,9 @@
       "name": "create-llms",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "repo-documentation"
+      ],
       "path": "harness/github-copilot/skills/create-llms",
       "review_status": "needs-source-review",
       "signals": [
@@ -18458,7 +18713,9 @@
       "name": "create-readme",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "repo-documentation"
+      ],
       "path": "harness/github-copilot/skills/create-readme",
       "review_status": "needs-source-review",
       "signals": [
@@ -18519,7 +18776,9 @@
       "name": "create-spring-boot-kotlin-project",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "java-kotlin-development"
+      ],
       "path": "harness/github-copilot/skills/create-spring-boot-kotlin-project",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -18558,7 +18817,9 @@
       "name": "create-tldr-page",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "repo-documentation"
+      ],
       "path": "harness/github-copilot/skills/create-tldr-page",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -18652,7 +18913,9 @@
       "name": "csharp-docs",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "repo-documentation"
+      ],
       "path": "harness/github-copilot/skills/csharp-docs",
       "review_status": "needs-semantic-review",
       "signals": [],
@@ -18781,7 +19044,9 @@
       "name": "daily-prep",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "career-productivity"
+      ],
       "path": "harness/github-copilot/skills/daily-prep",
       "review_status": "needs-semantic-review",
       "signals": [],
@@ -18796,7 +19061,9 @@
       "name": "data-breach-blast-radius",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "application-security"
+      ],
       "path": "harness/github-copilot/skills/data-breach-blast-radius",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -18929,7 +19196,9 @@
       "name": "debian-linux-triage",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "linux-operations"
+      ],
       "path": "harness/github-copilot/skills/debian-linux-triage",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -18963,7 +19232,9 @@
       "name": "dependabot",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "git-github-workflow"
+      ],
       "path": "harness/github-copilot/skills/dependabot",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -19080,7 +19351,9 @@
       "name": "documentation-writer",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "repo-documentation"
+      ],
       "path": "harness/github-copilot/skills/documentation-writer",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -19132,7 +19405,9 @@
       "name": "dotnet-mcp-builder",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "mcp-development"
+      ],
       "path": "harness/github-copilot/skills/dotnet-mcp-builder",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -19165,7 +19440,9 @@
       "name": "dotnet-timezone",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "dotnet-desktop-development"
+      ],
       "path": "harness/github-copilot/skills/dotnet-timezone",
       "review_status": "needs-semantic-review",
       "signals": [],
@@ -19220,7 +19497,9 @@
       "name": "draw-io-diagram-generator",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "diagram-authoring"
+      ],
       "path": "harness/github-copilot/skills/draw-io-diagram-generator",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -19294,7 +19573,9 @@
       "name": "efcore-d2-db-diagram",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "diagram-authoring"
+      ],
       "path": "harness/github-copilot/skills/efcore-d2-db-diagram",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -19341,7 +19622,9 @@
       "name": "email-drafter",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "career-productivity"
+      ],
       "path": "harness/github-copilot/skills/email-drafter",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -19406,7 +19689,9 @@
       "name": "exam-ready",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "career-productivity"
+      ],
       "path": "harness/github-copilot/skills/exam-ready",
       "review_status": "needs-semantic-review",
       "signals": [],
@@ -19421,7 +19706,9 @@
       "name": "excalidraw-diagram-generator",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "diagram-authoring"
+      ],
       "path": "harness/github-copilot/skills/excalidraw-diagram-generator",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -19609,7 +19896,9 @@
       "name": "fedora-linux-triage",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "linux-operations"
+      ],
       "path": "harness/github-copilot/skills/fedora-linux-triage",
       "review_status": "needs-semantic-review",
       "signals": [],
@@ -19804,7 +20093,9 @@
       "name": "fluentui-blazor",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "csharp-dotnet-development"
+      ],
       "path": "harness/github-copilot/skills/fluentui-blazor",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -19823,7 +20114,9 @@
       "name": "folder-structure-blueprint-generator",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "codebase-blueprints"
+      ],
       "path": "harness/github-copilot/skills/folder-structure-blueprint-generator",
       "review_status": "needs-semantic-review",
       "signals": [],
@@ -20512,7 +20805,9 @@
       "name": "gdpr-compliant",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "application-security"
+      ],
       "path": "harness/github-copilot/skills/gdpr-compliant",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -20632,7 +20927,9 @@
       "name": "gh-attach",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "git-github-workflow"
+      ],
       "path": "harness/github-copilot/skills/gh-attach",
       "review_status": "needs-semantic-review",
       "signals": [],
@@ -20647,7 +20944,9 @@
       "name": "git-commit",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "git-github-workflow"
+      ],
       "path": "harness/github-copilot/skills/git-commit",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -20664,7 +20963,9 @@
       "name": "git-flow-branch-creator",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "git-github-workflow"
+      ],
       "path": "harness/github-copilot/skills/git-flow-branch-creator",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -20949,7 +21250,9 @@
       "name": "github-issues",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "git-github-workflow"
+      ],
       "path": "harness/github-copilot/skills/github-issues",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -20991,7 +21294,9 @@
       "name": "github-release",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "git-github-workflow"
+      ],
       "path": "harness/github-copilot/skills/github-release",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -21016,7 +21321,9 @@
       "name": "gitmoji",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "git-github-workflow"
+      ],
       "path": "harness/github-copilot/skills/gitmoji",
       "review_status": "needs-source-review",
       "signals": [
@@ -21079,7 +21386,9 @@
       "name": "gtm-0-to-1-launch",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "go-to-market"
+      ],
       "path": "harness/github-copilot/skills/gtm-0-to-1-launch",
       "review_status": "needs-source-review",
       "signals": [
@@ -21099,7 +21408,9 @@
       "name": "gtm-ai-gtm",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "go-to-market"
+      ],
       "path": "harness/github-copilot/skills/gtm-ai-gtm",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -21121,7 +21432,9 @@
       "name": "gtm-board-and-investor-communication",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "go-to-market"
+      ],
       "path": "harness/github-copilot/skills/gtm-board-and-investor-communication",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -21143,7 +21456,9 @@
       "name": "gtm-developer-ecosystem",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "go-to-market"
+      ],
       "path": "harness/github-copilot/skills/gtm-developer-ecosystem",
       "review_status": "needs-source-review",
       "signals": [
@@ -21163,7 +21478,9 @@
       "name": "gtm-enterprise-account-planning",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "go-to-market"
+      ],
       "path": "harness/github-copilot/skills/gtm-enterprise-account-planning",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -21184,7 +21501,9 @@
       "name": "gtm-enterprise-onboarding",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "go-to-market"
+      ],
       "path": "harness/github-copilot/skills/gtm-enterprise-onboarding",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -21205,7 +21524,9 @@
       "name": "gtm-operating-cadence",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "go-to-market"
+      ],
       "path": "harness/github-copilot/skills/gtm-operating-cadence",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -21226,7 +21547,9 @@
       "name": "gtm-partnership-architecture",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "go-to-market"
+      ],
       "path": "harness/github-copilot/skills/gtm-partnership-architecture",
       "review_status": "needs-source-review",
       "signals": [
@@ -21246,7 +21569,9 @@
       "name": "gtm-positioning-strategy",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "go-to-market"
+      ],
       "path": "harness/github-copilot/skills/gtm-positioning-strategy",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -21268,7 +21593,9 @@
       "name": "gtm-product-led-growth",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "go-to-market"
+      ],
       "path": "harness/github-copilot/skills/gtm-product-led-growth",
       "review_status": "needs-source-review",
       "signals": [
@@ -21288,7 +21615,9 @@
       "name": "gtm-technical-product-pricing",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "go-to-market"
+      ],
       "path": "harness/github-copilot/skills/gtm-technical-product-pricing",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -21446,7 +21775,9 @@
       "name": "issue-fields-migration",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "git-github-workflow"
+      ],
       "path": "harness/github-copilot/skills/issue-fields-migration",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -21468,7 +21799,9 @@
       "name": "java-add-graalvm-native-image-support",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "java-kotlin-development"
+      ],
       "path": "harness/github-copilot/skills/java-add-graalvm-native-image-support",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -21513,7 +21846,9 @@
       "name": "java-helidon",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "java-kotlin-development"
+      ],
       "path": "harness/github-copilot/skills/java-helidon",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -21572,7 +21907,9 @@
       "name": "java-refactoring-extract-method",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "java-kotlin-development"
+      ],
       "path": "harness/github-copilot/skills/java-refactoring-extract-method",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -21589,7 +21926,9 @@
       "name": "java-refactoring-remove-parameter",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "java-kotlin-development"
+      ],
       "path": "harness/github-copilot/skills/java-refactoring-remove-parameter",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -21640,7 +21979,9 @@
       "name": "javax-to-jakarta-migration",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "java-kotlin-development"
+      ],
       "path": "harness/github-copilot/skills/javax-to-jakarta-migration",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -21681,7 +22022,9 @@
       "name": "kotlin-springboot",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "java-kotlin-development"
+      ],
       "path": "harness/github-copilot/skills/kotlin-springboot",
       "review_status": "needs-semantic-review",
       "signals": [],
@@ -21696,7 +22039,9 @@
       "name": "landing-page-conversion-audit",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "go-to-market"
+      ],
       "path": "harness/github-copilot/skills/landing-page-conversion-audit",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -21836,7 +22181,9 @@
       "name": "linkedin-post-formatter",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "career-productivity"
+      ],
       "path": "harness/github-copilot/skills/linkedin-post-formatter",
       "review_status": "needs-semantic-review",
       "signals": [],
@@ -21879,7 +22226,9 @@
       "name": "make-repo-contribution",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "git-github-workflow"
+      ],
       "path": "harness/github-copilot/skills/make-repo-contribution",
       "review_status": "needs-semantic-review",
       "signals": [],
@@ -22000,7 +22349,9 @@
       "name": "mcp-builder",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "mcp-development"
+      ],
       "path": "harness/github-copilot/skills/mcp-builder",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -22047,7 +22398,9 @@
       "name": "mcp-cli",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "mcp-development"
+      ],
       "path": "harness/github-copilot/skills/mcp-cli",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -22163,7 +22516,9 @@
       "name": "mcp-implementation-security-review",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "mcp-development"
+      ],
       "path": "harness/github-copilot/skills/mcp-implementation-security-review",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -22188,7 +22543,9 @@
       "name": "mcp-release-qa",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "mcp-development"
+      ],
       "path": "harness/github-copilot/skills/mcp-release-qa",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -22205,7 +22562,9 @@
       "name": "mcp-security-audit",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "mcp-development"
+      ],
       "path": "harness/github-copilot/skills/mcp-security-audit",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -22249,7 +22608,9 @@
       "name": "meeting-minutes",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "career-productivity"
+      ],
       "path": "harness/github-copilot/skills/meeting-minutes",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -22558,7 +22919,9 @@
       "name": "mkdocs-translations",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "repo-documentation"
+      ],
       "path": "harness/github-copilot/skills/mkdocs-translations",
       "review_status": "needs-semantic-review",
       "signals": [],
@@ -22598,7 +22961,9 @@
       "name": "msstore-cli",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "dotnet-desktop-development"
+      ],
       "path": "harness/github-copilot/skills/msstore-cli",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -22668,7 +23033,9 @@
       "name": "mvvm-toolkit",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "dotnet-desktop-development"
+      ],
       "path": "harness/github-copilot/skills/mvvm-toolkit",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -22691,7 +23058,9 @@
       "name": "mvvm-toolkit-di",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "dotnet-desktop-development"
+      ],
       "path": "harness/github-copilot/skills/mvvm-toolkit-di",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -22711,7 +23080,9 @@
       "name": "mvvm-toolkit-messenger",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "dotnet-desktop-development"
+      ],
       "path": "harness/github-copilot/skills/mvvm-toolkit-messenger",
       "review_status": "needs-source-review",
       "signals": [
@@ -22858,7 +23229,9 @@
       "name": "nuget-manager",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "dotnet-desktop-development"
+      ],
       "path": "harness/github-copilot/skills/nuget-manager",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -22917,7 +23290,9 @@
       "name": "oo-component-documentation",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "repo-documentation"
+      ],
       "path": "harness/github-copilot/skills/oo-component-documentation",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -23666,7 +24041,9 @@
       "name": "penpot-uiux-design",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "ux-design-tooling"
+      ],
       "path": "harness/github-copilot/skills/penpot-uiux-design",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -23693,7 +24070,9 @@
       "name": "performance-review-writer",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "career-productivity"
+      ],
       "path": "harness/github-copilot/skills/performance-review-writer",
       "review_status": "needs-semantic-review",
       "signals": [],
@@ -23896,7 +24275,9 @@
       "name": "plantuml-ascii",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "diagram-authoring"
+      ],
       "path": "harness/github-copilot/skills/plantuml-ascii",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -23917,7 +24298,9 @@
       "name": "playwright-automation-fill-in-form",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "testing-automation"
+      ],
       "path": "harness/github-copilot/skills/playwright-automation-fill-in-form",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -24254,7 +24637,9 @@
       "name": "pr-dashboard",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "git-github-workflow"
+      ],
       "path": "harness/github-copilot/skills/pr-dashboard",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -24315,7 +24700,9 @@
       "name": "premium-frontend-ui",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "frontend-experience"
+      ],
       "path": "harness/github-copilot/skills/premium-frontend-ui",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -24335,7 +24722,9 @@
       "name": "project-workflow-analysis-blueprint-generator",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "codebase-blueprints"
+      ],
       "path": "harness/github-copilot/skills/project-workflow-analysis-blueprint-generator",
       "review_status": "needs-semantic-review",
       "signals": [],
@@ -25043,7 +25432,9 @@
       "name": "readme-blueprint-generator",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "codebase-blueprints"
+      ],
       "path": "harness/github-copilot/skills/readme-blueprint-generator",
       "review_status": "needs-semantic-review",
       "signals": [],
@@ -25148,7 +25539,9 @@
       "name": "repo-story-time",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "codebase-blueprints"
+      ],
       "path": "harness/github-copilot/skills/repo-story-time",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -25614,7 +26007,9 @@
       "name": "secret-scanning",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "application-security"
+      ],
       "path": "harness/github-copilot/skills/secret-scanning",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -25636,7 +26031,9 @@
       "name": "security-review",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "application-security"
+      ],
       "path": "harness/github-copilot/skills/security-review",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -25685,7 +26082,9 @@
       "name": "server-side-conversion-tracking",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "go-to-market"
+      ],
       "path": "harness/github-copilot/skills/server-side-conversion-tracking",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -25975,7 +26374,9 @@
       "name": "spring-boot-testing",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "java-kotlin-development"
+      ],
       "path": "harness/github-copilot/skills/spring-boot-testing",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -26233,7 +26634,9 @@
       "name": "system-commandline-cli",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "dotnet-desktop-development"
+      ],
       "path": "harness/github-copilot/skills/system-commandline-cli",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -26250,7 +26653,9 @@
       "name": "technical-job-search",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "career-productivity"
+      ],
       "path": "harness/github-copilot/skills/technical-job-search",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -26267,7 +26672,9 @@
       "name": "technology-stack-blueprint-generator",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "codebase-blueprints"
+      ],
       "path": "harness/github-copilot/skills/technology-stack-blueprint-generator",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -26310,7 +26717,9 @@
       "name": "threat-model-analyst",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "application-security"
+      ],
       "path": "harness/github-copilot/skills/threat-model-analyst",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -26360,7 +26769,9 @@
       "name": "tldr-prompt",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "repo-documentation"
+      ],
       "path": "harness/github-copilot/skills/tldr-prompt",
       "review_status": "needs-source-review",
       "signals": [
@@ -26384,7 +26795,9 @@
       "name": "tm7-threat-model",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "application-security"
+      ],
       "path": "harness/github-copilot/skills/tm7-threat-model",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -26556,7 +26969,9 @@
       "name": "update-avm-modules-in-bicep",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "azure-developer-tooling"
+      ],
       "path": "harness/github-copilot/skills/update-avm-modules-in-bicep",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -26603,7 +27018,9 @@
       "name": "update-llms",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "repo-documentation"
+      ],
       "path": "harness/github-copilot/skills/update-llms",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -26624,7 +27041,9 @@
       "name": "update-markdown-file-index",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "repo-documentation"
+      ],
       "path": "harness/github-copilot/skills/update-markdown-file-index",
       "review_status": "needs-semantic-review",
       "signals": [],
@@ -26752,7 +27171,9 @@
       "name": "web-design-reviewer",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "frontend-experience"
+      ],
       "path": "harness/github-copilot/skills/web-design-reviewer",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -26777,7 +27198,9 @@
       "name": "webapp-testing",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "testing-automation"
+      ],
       "path": "harness/github-copilot/skills/webapp-testing",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -26798,7 +27221,9 @@
       "name": "webmcpify",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "mcp-development"
+      ],
       "path": "harness/github-copilot/skills/webmcpify",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -26846,7 +27271,9 @@
       "name": "winmd-api-search",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "dotnet-desktop-development"
+      ],
       "path": "harness/github-copilot/skills/winmd-api-search",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -26869,7 +27296,9 @@
       "name": "winui3-migration-guide",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "dotnet-desktop-development"
+      ],
       "path": "harness/github-copilot/skills/winui3-migration-guide",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -26923,7 +27352,9 @@
       "name": "write-coding-standards-from-file",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "repo-documentation"
+      ],
       "path": "harness/github-copilot/skills/write-coding-standards-from-file",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -27022,7 +27453,7 @@
         },
         {
           "errors": 0,
-          "files": 109,
+          "files": 122,
           "kind": "plugins",
           "warnings": 0
         },

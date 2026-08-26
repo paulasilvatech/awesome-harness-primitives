@@ -14,6 +14,8 @@ copilot plugin install ux-design-tooling@copilot-primitives
 
 | Command | Description |
 |---------|-------------|
+| `/ux-design-tooling:canvas-design` | Create beautiful visual art in .png and .pdf documents using design philosophy. You should use this skill when the user asks to create a poster, piece of art, design, or other static piece. Create original visual designs, never copying existing artists' work to avoid copyright violations. |
+| `/ux-design-tooling:penpot-uiux-design` | Create, review, and improve professional UI/UX designs in Penpot using penpot/penpot-mcp tools, design systems, component patterns, accessibility checks, and platform guidelines. |
 
 ## Boundary
 

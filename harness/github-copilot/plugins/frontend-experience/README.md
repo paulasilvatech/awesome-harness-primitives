@@ -38,6 +38,7 @@ The MCP configuration uses `npx -y @playwright/mcp@0.0.79 --headless --isolated`
 - `frontend-discoverability-assets`
 - `frontend-accessibility`
 - `anti-ui-slop`
+- `premium-frontend-ui`
 
 ### Engineering and quality
 
@@ -47,6 +48,7 @@ The MCP configuration uses `npx -y @playwright/mcp@0.0.79 --headless --isolated`
 - `frontend-backend-integration`
 - `frontend-mobile-desktop-testing`
 - `frontend-release-quality-gate`
+- `web-design-reviewer`
 - `playwright-explore-website`
 - `playwright-generate-test`
 

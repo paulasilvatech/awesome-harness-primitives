@@ -1,0 +1,19 @@
+{
+  "name": "java-kotlin-development",
+  "description": "Develop and modernize Java and Kotlin services: Spring Boot and Helidon applications, GraalVM native image support, javax to jakarta migration, focused refactorings, and Spring Boot testing.",
+  "version": "1.0.0",
+  "author": {
+    "name": "paulasilvatech"
+  },
+  "repository": "https://github.com/paulasilvatech/copilot-primitives",
+  "license": "MIT",
+  "keywords": [
+    "java",
+    "kotlin",
+    "spring-boot",
+    "helidon",
+    "graalvm",
+    "jakarta"
+  ],
+  "skills": "skills/"
+}

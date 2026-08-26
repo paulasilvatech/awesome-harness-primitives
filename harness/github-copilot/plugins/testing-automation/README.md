@@ -15,11 +15,13 @@ copilot plugin install testing-automation@awesome-copilot
 
 | Command | Description |
 |---------|-------------|
-| `/testing-automation:playwright-explore-website` | Website exploration for testing using Playwright MCP |
-| `/testing-automation:playwright-generate-test` | Generate a Playwright test based on a scenario using Playwright MCP |
-| `/testing-automation:csharp-nunit` | Get best practices for NUnit unit testing, including data-driven tests |
-| `/testing-automation:java-junit` | Get best practices for JUnit 5 unit testing, including data-driven tests |
-| `/testing-automation:ai-prompt-engineering-safety-review` | Comprehensive AI prompt engineering safety review and improvement prompt. Analyzes prompts for safety, bias, security vulnerabilities, and effectiveness while providing detailed improvement recommendations with extensive frameworks, testing methodologies, and educational content. |
+| `/testing-automation:ai-prompt-engineering-safety-review` | Review and improve AI prompts for safety, bias, security, privacy, effectiveness, robustness, and testability. |
+| `/testing-automation:csharp-nunit` | Design, write, and review NUnit tests for .NET projects, including standard tests, data-driven tests, assertions, setup/teardown, categories, and isolation with mocks. |
+| `/testing-automation:java-junit` | Apply JUnit 5 best practices for Java tests, including Maven or Gradle setup, standard and parameterized tests, lifecycle hooks, assertions, Mockito isolation, tags, nested tests, and test commands. |
+| `/testing-automation:playwright-automation-fill-in-form` | Automate filling and reviewing a Microsoft Forms response with Playwright MCP. |
+| `/testing-automation:playwright-explore-website` | Explore a website with Playwright MCP, identify 3-5 core user flows, capture locators and expected outcomes, close the browser context, and propose test cases. |
+| `/testing-automation:playwright-generate-test` | Generate, save, run, and stabilize Playwright TypeScript tests from a user scenario using Playwright MCP exploration evidence. |
+| `/testing-automation:webapp-testing` | Toolkit for interacting with and testing local web applications using Playwright. |
 
 ### Agents
 

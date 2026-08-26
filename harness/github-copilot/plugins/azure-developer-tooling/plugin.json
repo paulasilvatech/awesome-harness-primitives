@@ -1,0 +1,21 @@
+{
+  "name": "azure-developer-tooling",
+  "description": "Use Azure developer tooling day to day: Azure Developer CLI projects, Container Registry and DevOps CLI operations, Static Web Apps, Bicep deployment preflight, Azure Verified Module updates, Cosmos DB data modeling, and cloud design patterns.",
+  "version": "1.0.0",
+  "author": {
+    "name": "paulasilvatech"
+  },
+  "repository": "https://github.com/paulasilvatech/copilot-primitives",
+  "license": "MIT",
+  "keywords": [
+    "azure",
+    "azd",
+    "cli",
+    "bicep",
+    "devops",
+    "static-web-apps",
+    "cosmosdb"
+  ],
+  "agents": "agents/",
+  "skills": "skills/"
+}

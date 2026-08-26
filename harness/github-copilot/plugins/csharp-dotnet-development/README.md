@@ -15,14 +15,15 @@ copilot plugin install csharp-dotnet-development@awesome-copilot
 
 | Command | Description |
 |---------|-------------|
-| `/csharp-dotnet-development:csharp-async` | Get best practices for C# async programming |
-| `/csharp-dotnet-development:aspnet-minimal-api-openapi` | Create ASP.NET Minimal API endpoints with proper OpenAPI documentation |
-| `/csharp-dotnet-development:csharp-xunit` | Get best practices for XUnit unit testing, including data-driven tests |
-| `/csharp-dotnet-development:csharp-nunit` | Get best practices for NUnit unit testing, including data-driven tests |
-| `/csharp-dotnet-development:csharp-mstest` | Get best practices for MSTest 3.x/4.x unit testing, including modern assertion APIs and data-driven tests |
-| `/csharp-dotnet-development:csharp-tunit` | Get best practices for TUnit unit testing, including data-driven tests |
-| `/csharp-dotnet-development:dotnet-best-practices` | Ensure .NET/C# code meets best practices for the solution/project. |
-| `/csharp-dotnet-development:dotnet-upgrade` | Ready-to-use prompts for comprehensive .NET framework upgrade analysis and execution |
+| `/csharp-dotnet-development:aspnet-minimal-api-openapi` | Create or review ASP.NET Minimal API endpoints with typed results, DTO validation, endpoint groups, filters, ProblemDetails, and OpenAPI documentation. |
+| `/csharp-dotnet-development:csharp-async` | Review, design, and fix C# async code using Task, Task<T>, ValueTask<T>, cancellation, ConfigureAwait, async streams, and TAP conventions. |
+| `/csharp-dotnet-development:csharp-mstest` | Apply modern MSTest 3.x/4.x testing practices for C# projects. |
+| `/csharp-dotnet-development:csharp-nunit` | Design, write, and review NUnit tests for .NET projects, including standard tests, data-driven tests, assertions, setup/teardown, categories, and isolation with mocks. |
+| `/csharp-dotnet-development:csharp-tunit` | Write, review, or migrate C# unit tests using TUnit. |
+| `/csharp-dotnet-development:csharp-xunit` | Apply xUnit best practices for C# unit tests, including test project setup, Fact and Theory structure, data-driven tests, assertions, fixtures, mocking, categorization, diagnostics, and dotnet test execution. |
+| `/csharp-dotnet-development:dotnet-best-practices` | Review or improve .NET and C# code against solution/project best practices for documentation, architecture, dependency injection, resources, async, tests, configuration, Semantic Kernel, logging, performance, security, SOLID, and code quality. |
+| `/csharp-dotnet-development:dotnet-upgrade` | Guide comprehensive .NET upgrade discovery, assessment, sequencing, dependency review, framework targeting, code modernization, CI/CD updates, validation, breaking-change analysis, PR strategy, communication, automation, and release documentation. |
+| `/csharp-dotnet-development:fluentui-blazor` | Guide for using Microsoft.FluentUI.AspNetCore.Components in Blazor applications. |
 
 ### Agents
 

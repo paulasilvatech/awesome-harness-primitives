@@ -36,6 +36,12 @@
       "version": "1.0.4"
     },
     {
+      "name": "application-security",
+      "source": "./harness/github-copilot/plugins/application-security",
+      "description": "Assess and harden application security: source vulnerability review, secret scanning, CodeQL scanning, STRIDE and TM7 threat models, data-breach blast radius, and GDPR engineering practices.",
+      "version": "1.0.0"
+    },
+    {
       "name": "arcade-canvas",
       "source": "./harness/github-copilot/plugins/arcade-canvas",
       "description": "Play five retro Phaser mini-games in a Copilot canvas while agents work.",
@@ -96,6 +102,12 @@
       "version": "1.0.0"
     },
     {
+      "name": "azure-developer-tooling",
+      "source": "./harness/github-copilot/plugins/azure-developer-tooling",
+      "description": "Use Azure developer tooling day to day: Azure Developer CLI projects, Container Registry and DevOps CLI operations, Static Web Apps, Bicep deployment preflight, Azure Verified Module updates, Cosmos DB data modeling, and cloud design patterns.",
+      "version": "1.0.0"
+    },
+    {
       "name": "azure-governance",
       "source": "./harness/github-copilot/plugins/azure-governance",
       "description": "Govern Azure environments with compliance and security auditing, Microsoft Entra identity and app registration, agent identities, quota management, RBAC role selection, and Well-Architected review.",
@@ -138,6 +150,12 @@
       "version": "1.0.1"
     },
     {
+      "name": "career-productivity",
+      "source": "./harness/github-copilot/plugins/career-productivity",
+      "description": "Support individual work output: impact and brag sheets, performance and peer reviews, job-search materials, daily preparation, professional emails, meeting minutes, LinkedIn posts, and exam preparation.",
+      "version": "1.0.0"
+    },
+    {
       "name": "cast-imaging",
       "source": "./harness/github-copilot/plugins/cast-imaging",
       "description": "A comprehensive collection of specialized agents for software analysis, impact assessment, structural quality advisories, and architectural review using CAST Imaging.",
@@ -160,6 +178,12 @@
       "source": "./harness/github-copilot/plugins/cms-development",
       "description": "Skills for CMS development across themes, plugins, admin tooling, media workflows, markdown rendering, and static export pipelines.",
       "version": "1.1.2"
+    },
+    {
+      "name": "codebase-blueprints",
+      "source": "./harness/github-copilot/plugins/codebase-blueprints",
+      "description": "Analyze an existing codebase and generate evidence-backed blueprints: architecture, folder structure, technology stack, code exemplars, workflow analysis, repository history, and Copilot instruction scaffolds.",
+      "version": "1.0.0"
     },
     {
       "name": "color-orb",
@@ -222,10 +246,22 @@
       "version": "1.0.2"
     },
     {
+      "name": "diagram-authoring",
+      "source": "./harness/github-copilot/plugins/diagram-authoring",
+      "description": "Author technical diagrams as source files: draw.io mxGraph XML, Excalidraw JSON, PlantUML ASCII output, and D2 entity-relationship diagrams generated from Entity Framework Core models.",
+      "version": "1.0.0"
+    },
+    {
       "name": "diagram-viewer",
       "source": "./harness/github-copilot/plugins/diagram-viewer",
       "description": "Render diagrams, click nodes to drill down, and view agent-generated explanations directly in the canvas.",
       "version": "1.0.4"
+    },
+    {
+      "name": "dotnet-desktop-development",
+      "source": "./harness/github-copilot/plugins/dotnet-desktop-development",
+      "description": "Build Windows and cross-platform .NET client applications with the MVVM Toolkit, dependency injection, messaging, Windows metadata APIs, WinUI 3 migration, Microsoft Store publishing, System.CommandLine, NuGet, and timezone handling.",
+      "version": "1.0.0"
     },
     {
       "name": "doublecheck",
@@ -306,6 +342,12 @@
       "version": "1.0.4"
     },
     {
+      "name": "git-github-workflow",
+      "source": "./harness/github-copilot/plugins/git-github-workflow",
+      "description": "Run day-to-day Git and GitHub workflows: conventional commits and branches, issue and release management, pull request review loops, dashboards, Dependabot, and contribution guardrails.",
+      "version": "1.0.0"
+    },
+    {
       "name": "github-actions-maintenance",
       "source": "./harness/github-copilot/plugins/github-actions-maintenance",
       "description": "Maintain GitHub Actions workflows with specialist guidance for authoring, runtime upgrades, security hardening, and CI efficiency. Use when workflows need safer permissions, immutable action pins, faster runs, or deprecated runtime remediation.",
@@ -318,10 +360,22 @@
       "version": "1.0.3"
     },
     {
+      "name": "go-to-market",
+      "source": "./harness/github-copilot/plugins/go-to-market",
+      "description": "Plan and execute go-to-market work for technical products: positioning, pricing, product-led growth, partnerships, enterprise accounts and onboarding, operating cadence, investor communication, and paid-campaign analysis.",
+      "version": "1.0.0"
+    },
+    {
       "name": "java-development",
       "source": "./harness/github-copilot/plugins/java-development",
       "description": "Comprehensive collection of prompts and instructions for Java development including Spring Boot, Quarkus, testing, documentation, and best practices.",
       "version": "1.0.2"
+    },
+    {
+      "name": "java-kotlin-development",
+      "source": "./harness/github-copilot/plugins/java-kotlin-development",
+      "description": "Develop and modernize Java and Kotlin services: Spring Boot and Helidon applications, GraalVM native image support, javax to jakarta migration, focused refactorings, and Spring Boot testing.",
+      "version": "1.0.0"
     },
     {
       "name": "java-mcp-development",
@@ -342,10 +396,22 @@
       "version": "1.0.2"
     },
     {
+      "name": "linux-operations",
+      "source": "./harness/github-copilot/plugins/linux-operations",
+      "description": "Diagnose and remediate Linux incidents across Arch, CentOS, Debian, and Fedora with distribution-correct package managers, systemd, journal analysis, security modules, and rollback discipline.",
+      "version": "1.0.0"
+    },
+    {
       "name": "mainframe-modernization",
       "source": "./harness/github-copilot/plugins/mainframe-modernization",
       "description": "Modernize the SIFAP Natural/Adabas workshop system with evidence-first archaeology, REQ-NNN lineage, modular-monolith design, behavior-equivalence testing, secure delivery, and a preview-first workspace publisher.",
       "version": "0.1.0"
+    },
+    {
+      "name": "mcp-development",
+      "source": "./harness/github-copilot/plugins/mcp-development",
+      "description": "Build, test, secure, and release Model Context Protocol servers and clients, including CLI exploration, configuration auditing, implementation security review, pre-release QA, and making web apps agent-ready.",
+      "version": "1.0.0"
     },
     {
       "name": "mcp-m365-copilot",
@@ -516,6 +582,12 @@
       "version": "1.0.4"
     },
     {
+      "name": "repo-documentation",
+      "source": "./harness/github-copilot/plugins/repo-documentation",
+      "description": "Author and maintain repository documentation: READMEs, AGENTS.md, llms.txt, Diataxis guides, component docs, tutorials, coding standards, tldr pages, and Markdown conversion or translation.",
+      "version": "1.0.0"
+    },
+    {
       "name": "roundup",
       "source": "./harness/github-copilot/plugins/roundup",
       "description": "Self-configuring status briefing generator. Learns your communication style from examples, discovers your data sources, and produces draft updates for any audience on demand.",
@@ -634,6 +706,12 @@
       "source": "./harness/github-copilot/plugins/uizze",
       "description": "Stop generic UI from shipping. Ground GitHub Copilot in 800,000+ real web and iOS screens, write a product-specific design contract, and enforce a hard finish gate.",
       "version": "1.0.2"
+    },
+    {
+      "name": "ux-design-tooling",
+      "source": "./harness/github-copilot/plugins/ux-design-tooling",
+      "description": "Design-time UX and visual tooling: build and review UI/UX designs in Penpot with design systems, component patterns, and accessibility checks, and create original poster, art, and static visual pieces as PNG or PDF.",
+      "version": "1.0.0"
     },
     {
       "name": "visual-pr",

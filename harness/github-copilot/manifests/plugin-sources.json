@@ -59,6 +59,22 @@
         "logo": "assets/preview.png"
       }
     },
+    "application-security": {
+      "componentSource": "library",
+      "agents": [
+        "./agents/sast-sca-security-analyzer.agent.md",
+        "./agents/wg-code-sentinel.agent.md"
+      ],
+      "skills": [
+        "./skills/codeql/",
+        "./skills/data-breach-blast-radius/",
+        "./skills/gdpr-compliant/",
+        "./skills/secret-scanning/",
+        "./skills/security-review/",
+        "./skills/threat-model-analyst/",
+        "./skills/tm7-threat-model/"
+      ]
+    },
     "arcade-canvas": {
       "componentSource": "plugin",
       "extensionLayoutVersion": 1,
@@ -202,6 +218,27 @@
         "./skills/azure-storage/"
       ]
     },
+    "azure-developer-tooling": {
+      "componentSource": "library",
+      "agents": [
+        "./agents/azure-iac-exporter.agent.md",
+        "./agents/azure-iac-generator.agent.md",
+        "./agents/azure-policy-analyzer.agent.md",
+        "./agents/bicep-implement.agent.md",
+        "./agents/bicep-plan.agent.md"
+      ],
+      "skills": [
+        "./skills/azure-architecture-autopilot/",
+        "./skills/azure-container-registry-cli/",
+        "./skills/azure-deployment-preflight/",
+        "./skills/azure-developer-cli/",
+        "./skills/azure-devops-cli/",
+        "./skills/azure-static-web-apps/",
+        "./skills/cloud-design-patterns/",
+        "./skills/cosmosdb-datamodeling/",
+        "./skills/update-avm-modules-in-bicep/"
+      ]
+    },
     "azure-governance": {
       "componentSource": "library",
       "agents": [],
@@ -281,6 +318,24 @@
         "evidence": "docs/HARNESS-VALIDATION.md#flat-github-copilot-plugin-layout-verification"
       }
     },
+    "career-productivity": {
+      "componentSource": "library",
+      "agents": [
+        "./agents/interview-prep.agent.md",
+        "./agents/linkedin-post-writer.agent.md",
+        "./agents/reepl-linkedin.agent.md"
+      ],
+      "skills": [
+        "./skills/brag-sheet/",
+        "./skills/daily-prep/",
+        "./skills/email-drafter/",
+        "./skills/exam-ready/",
+        "./skills/linkedin-post-formatter/",
+        "./skills/meeting-minutes/",
+        "./skills/performance-review-writer/",
+        "./skills/technical-job-search/"
+      ]
+    },
     "cast-imaging": {
       "componentSource": "library",
       "agents": [
@@ -318,6 +373,26 @@
         "./skills/content-management-systems/",
         "./skills/markdown-to-html/",
         "./skills/quasi-coder/"
+      ]
+    },
+    "codebase-blueprints": {
+      "componentSource": "library",
+      "agents": [
+        "./agents/adr-generator.agent.md",
+        "./agents/arch.agent.md",
+        "./agents/project-architecture-planner.agent.md",
+        "./agents/repo-architect.agent.md"
+      ],
+      "skills": [
+        "./skills/acquire-codebase-knowledge/",
+        "./skills/architecture-blueprint-generator/",
+        "./skills/code-exemplars-blueprint-generator/",
+        "./skills/copilot-instructions-blueprint-generator/",
+        "./skills/folder-structure-blueprint-generator/",
+        "./skills/project-workflow-analysis-blueprint-generator/",
+        "./skills/readme-blueprint-generator/",
+        "./skills/repo-story-time/",
+        "./skills/technology-stack-blueprint-generator/"
       ]
     },
     "color-orb": {
@@ -426,6 +501,16 @@
         "./skills/multi-stage-dockerfile/"
       ]
     },
+    "diagram-authoring": {
+      "componentSource": "library",
+      "agents": [],
+      "skills": [
+        "./skills/draw-io-diagram-generator/",
+        "./skills/efcore-d2-db-diagram/",
+        "./skills/excalidraw-diagram-generator/",
+        "./skills/plantuml-ascii/"
+      ]
+    },
     "diagram-viewer": {
       "componentSource": "plugin",
       "extensionLayoutVersion": 1,
@@ -437,6 +522,24 @@
       "client": {
         "logo": "assets/preview.png"
       }
+    },
+    "dotnet-desktop-development": {
+      "componentSource": "library",
+      "agents": [
+        "./agents/dotnet-maui.agent.md",
+        "./agents/winforms-expert.agent.md"
+      ],
+      "skills": [
+        "./skills/dotnet-timezone/",
+        "./skills/msstore-cli/",
+        "./skills/mvvm-toolkit/",
+        "./skills/mvvm-toolkit-di/",
+        "./skills/mvvm-toolkit-messenger/",
+        "./skills/nuget-manager/",
+        "./skills/system-commandline-cli/",
+        "./skills/winmd-api-search/",
+        "./skills/winui3-migration-guide/"
+      ]
     },
     "doublecheck": {
       "componentSource": "library",
@@ -606,6 +709,30 @@
         "logo": "assets/preview.png"
       }
     },
+    "git-github-workflow": {
+      "componentSource": "library",
+      "agents": [
+        "./agents/address-comments.agent.md",
+        "./agents/gitmoji-setup.agent.md",
+        "./agents/one-shot-feature-issue-planner.agent.md",
+        "./agents/refine-issue.agent.md"
+      ],
+      "skills": [
+        "./skills/commit-message-storyteller/",
+        "./skills/conventional-branch/",
+        "./skills/copilot-pr-autopilot/",
+        "./skills/dependabot/",
+        "./skills/gh-attach/",
+        "./skills/git-commit/",
+        "./skills/git-flow-branch-creator/",
+        "./skills/github-issues/",
+        "./skills/github-release/",
+        "./skills/gitmoji/",
+        "./skills/issue-fields-migration/",
+        "./skills/make-repo-contribution/",
+        "./skills/pr-dashboard/"
+      ]
+    },
     "github-actions-maintenance": {
       "componentSource": "library",
       "agents": [
@@ -627,6 +754,27 @@
         "./skills/go-mcp-server-generator/"
       ]
     },
+    "go-to-market": {
+      "componentSource": "library",
+      "agents": [],
+      "skills": [
+        "./skills/ad-campaign-analyzer/",
+        "./skills/competitor-ad-intelligence/",
+        "./skills/gtm-0-to-1-launch/",
+        "./skills/gtm-ai-gtm/",
+        "./skills/gtm-board-and-investor-communication/",
+        "./skills/gtm-developer-ecosystem/",
+        "./skills/gtm-enterprise-account-planning/",
+        "./skills/gtm-enterprise-onboarding/",
+        "./skills/gtm-operating-cadence/",
+        "./skills/gtm-partnership-architecture/",
+        "./skills/gtm-positioning-strategy/",
+        "./skills/gtm-product-led-growth/",
+        "./skills/gtm-technical-product-pricing/",
+        "./skills/landing-page-conversion-audit/",
+        "./skills/server-side-conversion-tracking/"
+      ]
+    },
     "java-development": {
       "componentSource": "library",
       "agents": [],
@@ -635,6 +783,20 @@
         "./skills/java-docs/",
         "./skills/java-junit/",
         "./skills/java-springboot/"
+      ]
+    },
+    "java-kotlin-development": {
+      "componentSource": "library",
+      "agents": [],
+      "skills": [
+        "./skills/create-spring-boot-kotlin-project/",
+        "./skills/java-add-graalvm-native-image-support/",
+        "./skills/java-helidon/",
+        "./skills/java-refactoring-extract-method/",
+        "./skills/java-refactoring-remove-parameter/",
+        "./skills/javax-to-jakarta-migration/",
+        "./skills/kotlin-springboot/",
+        "./skills/spring-boot-testing/"
       ]
     },
     "java-mcp-development": {
@@ -667,6 +829,21 @@
         "./skills/kotlin-mcp-server-generator/"
       ]
     },
+    "linux-operations": {
+      "componentSource": "library",
+      "agents": [
+        "./agents/arch-linux-expert.agent.md",
+        "./agents/centos-linux-expert.agent.md",
+        "./agents/debian-linux-expert.agent.md",
+        "./agents/fedora-linux-expert.agent.md"
+      ],
+      "skills": [
+        "./skills/arch-linux-triage/",
+        "./skills/centos-linux-triage/",
+        "./skills/debian-linux-triage/",
+        "./skills/fedora-linux-triage/"
+      ]
+    },
     "mainframe-modernization": {
       "componentSource": "plugin",
       "sharedSkills": [
@@ -687,6 +864,21 @@
         "lastRuntimeProbe": "2026-08-26",
         "evidence": "docs/HARNESS-VALIDATION.md#mainframe-modernization-plugin-runtime-verification"
       }
+    },
+    "mcp-development": {
+      "componentSource": "library",
+      "agents": [
+        "./agents/csharp-mcp-expert.agent.md"
+      ],
+      "skills": [
+        "./skills/dotnet-mcp-builder/",
+        "./skills/mcp-builder/",
+        "./skills/mcp-cli/",
+        "./skills/mcp-implementation-security-review/",
+        "./skills/mcp-release-qa/",
+        "./skills/mcp-security-audit/",
+        "./skills/webmcpify/"
+      ]
     },
     "mcp-m365-copilot": {
       "componentSource": "library",
@@ -1015,6 +1207,27 @@
       "client": {
         "logo": "assets/preview.png"
       }
+    },
+    "repo-documentation": {
+      "componentSource": "library",
+      "agents": [],
+      "skills": [
+        "./skills/add-educational-comments/",
+        "./skills/comment-code-generate-a-tutorial/",
+        "./skills/convert-plaintext-to-md/",
+        "./skills/create-agentsmd/",
+        "./skills/create-llms/",
+        "./skills/create-readme/",
+        "./skills/create-tldr-page/",
+        "./skills/csharp-docs/",
+        "./skills/documentation-writer/",
+        "./skills/mkdocs-translations/",
+        "./skills/oo-component-documentation/",
+        "./skills/tldr-prompt/",
+        "./skills/update-llms/",
+        "./skills/update-markdown-file-index/",
+        "./skills/write-coding-standards-from-file/"
+      ]
     },
     "roundup": {
       "componentSource": "library",
