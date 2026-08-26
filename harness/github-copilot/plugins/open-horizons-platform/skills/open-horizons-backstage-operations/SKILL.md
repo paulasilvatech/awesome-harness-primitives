@@ -41,6 +41,12 @@ Backstage service and its infrastructure.
 - Recent error signatures and affected plugin.
 - Resource saturation, scheduler backlog, provider throttling, or integration failures.
 
+## Open Horizons integration
+
+- Scope operations to the Developer IDP or Agent IDP objective and current Horizon stage.
+- Preserve Open Horizons Backstage, AKS, observability, managed-identity, and evidence boundaries where applicable.
+- Route cross-domain sequencing through `open-horizons-orchestration` (`skill`).
+
 ## Output template
 
 ```markdown

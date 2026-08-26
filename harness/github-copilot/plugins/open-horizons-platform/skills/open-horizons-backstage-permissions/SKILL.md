@@ -38,6 +38,12 @@ not only in the UI.
 - Conditional filtering must occur before pagination so unauthorized resources do not distort
   result counts or leak through.
 
+## Open Horizons integration
+
+- Scope permissions to the Developer IDP or Agent IDP objective and current Horizon stage.
+- Preserve Open Horizons Backstage, least-privilege, managed-identity, and evidence boundaries where applicable.
+- Route cross-domain sequencing through `open-horizons-orchestration` (`skill`).
+
 ## Output template
 
 ```markdown

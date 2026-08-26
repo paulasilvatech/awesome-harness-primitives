@@ -37,6 +37,12 @@ describes.
 - Provider and static-location sources do not duplicate the same entities.
 - Deprecation and orphan status are explicit lifecycle signals, not cleanup shortcuts.
 
+## Open Horizons integration
+
+- Scope catalog changes to the Developer IDP or Agent IDP objective and current Horizon stage.
+- Preserve Open Horizons Backstage ownership, managed-identity, AKS, and evidence boundaries where applicable.
+- Route cross-domain sequencing through `open-horizons-orchestration` (`skill`).
+
 ## Output template
 
 ```markdown

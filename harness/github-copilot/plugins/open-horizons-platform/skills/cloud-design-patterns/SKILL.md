@@ -80,6 +80,12 @@ Load bundled references only when the task needs that category. Relative paths b
 - **Technology-agnostic first**: select the pattern before choosing Azure, another cloud platform, on-premises, or hybrid services.
 - **Cost is part of architecture**: queues, caches, multi-region replicas, and gateway layers add spend and operations.
 
+## Open Horizons integration
+
+- Evaluate patterns against the Developer IDP or Agent IDP objective and current Horizon stage.
+- Preserve Open Horizons Azure, Backstage, AKS, managed-identity, and evidence boundaries where applicable.
+- Route cross-domain sequencing through `open-horizons-orchestration` (`skill`).
+
 ## Output template
 
 ```markdown

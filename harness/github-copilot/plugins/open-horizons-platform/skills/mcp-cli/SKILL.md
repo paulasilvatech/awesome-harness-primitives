@@ -114,6 +114,12 @@ Use discovery to move from `servers/tools` lists to specific schemas, and pipe f
 - **Do not confuse tool discovery with authorization**: a listed tool can still fail because the backing service lacks credentials.
 - **Prefer `--json` for scripts**: parsing human text output is brittle when descriptions or formatting change.
 
+## Open Horizons integration
+
+- Scope MCP CLI operations to approved Open Horizons servers and the current Horizon stage.
+- Preserve repository trust, credential, tool-authority, and evidence boundaries.
+- Route cross-domain sequencing through `open-horizons-orchestration` (`skill`).
+
 ## Output template
 
 ```markdown

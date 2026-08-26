@@ -98,6 +98,12 @@ For Context7, perform one-time setup by resolving the library ID with `mcp_conte
 - **Resolve Context7 library IDs first**: call the resolver once per session before querying docs.
 - **Do not rely on broad queries**: include version, intent, and language to avoid stale or generic excerpts.
 
+## Open Horizons integration
+
+- Scope documentation research to the Open Horizons stack and current Horizon stage.
+- Preserve first-party Microsoft source authority, retrieval dates, and repository evidence boundaries.
+- Route cross-domain sequencing through `open-horizons-orchestration` (`skill`).
+
 ## Output template
 
 ```markdown

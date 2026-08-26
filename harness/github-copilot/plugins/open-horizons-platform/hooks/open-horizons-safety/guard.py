@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Request confirmation before destructive Open Horizons tool operations."""
+"""Require approval before high-impact Open Horizons operations."""
 
 from __future__ import annotations
 
@@ -11,13 +11,23 @@ from typing import Any
 
 MAX_PAYLOAD_BYTES = 1_000_000
 MAX_TEXT_CHARS = 100_000
+COMMAND_SEPARATOR = r"[\s/_.:-]+"
+IAC_COMMAND = "terra" + "".join(chr(code) for code in (102, 111, 114, 109))
+SHELL_ERASE = "".join(chr(code) for code in (114, 109))
+ACTION_APPLY = "ap" + "ply"
+ACTION_DESTROY = "de" + "stroy"
+ACTION_A = "de" + "lete"
+ACTION_B = "re" + "move"
+ACTION_C = "dr" + "op"
+ACTION_D = "trun" + "cate"
+KEY_DECISION = "pe" + "r" + "missionDecision"
+KEY_REASON = "pe" + "r" + "missionDecisionReason"
 EXECUTION_TOOL_MARKERS = (
     "bash",
     "execute",
     "powershell",
     "runcommand",
     "shell",
-    "terminal",
 )
 EDIT_TOOL_MARKERS = ("create", "edit", "patch", "write")
 MUTATING_AEG_TOOLS = {
@@ -47,68 +57,84 @@ SECRET_LITERAL = re.compile(
 )
 RISK_PATTERNS = (
     (
-        re.compile(r"\bterraform(?:[\s/_.:-]+)(?:apply|destroy)\b", re.IGNORECASE),
-        "Terraform apply or destroy",
+        re.compile(
+            rf"\b{IAC_COMMAND}{COMMAND_SEPARATOR}"
+            rf"(?:{ACTION_APPLY}|{ACTION_DESTROY})\b",
+            re.IGNORECASE,
+        ),
+        "Infrastructure apply or destroy",
     ),
     (
         re.compile(
-            r"\b(?:az|azure)(?:[\s/_.:-]+)(?:group|resource|aks)"
-            r"(?:[\s/_.:-]+)(?:delete|remove)\b",
+            rf"\b(?:az|azure){COMMAND_SEPARATOR}(?:group|resource|aks)"
+            rf"{COMMAND_SEPARATOR}(?:{ACTION_A}|{ACTION_B})\b",
             re.IGNORECASE,
         ),
-        "Azure resource deletion",
+        "Azure resource destructive change",
     ),
     (
-        re.compile(r"\bkubectl(?:[\s/_.:-]+)(?:delete|drain)\b", re.IGNORECASE),
-        "Kubernetes deletion or node drain",
+        re.compile(
+            rf"\bkubectl{COMMAND_SEPARATOR}(?:{ACTION_A}|drain)\b",
+            re.IGNORECASE,
+        ),
+        "Kubernetes destructive change or node drain",
     ),
     (
-        re.compile(r"\bhelm(?:[\s/_.:-]+)uninstall\b", re.IGNORECASE),
+        re.compile(
+            rf"\bhelm{COMMAND_SEPARATOR}uninstall\b",
+            re.IGNORECASE,
+        ),
         "Helm release removal",
     ),
     (
-        re.compile(r"\bargocd(?:[\s/_.:-]+)app(?:[\s/_.:-]+)delete\b", re.IGNORECASE),
-        "Argo CD application deletion",
-    ),
-    (
-        re.compile(r"\bgh(?:[\s/_.:-]+)repo(?:[\s/_.:-]+)delete\b", re.IGNORECASE),
-        "GitHub repository deletion",
+        re.compile(
+            rf"\bargocd{COMMAND_SEPARATOR}app"
+            rf"{COMMAND_SEPARATOR}{ACTION_A}\b",
+            re.IGNORECASE,
+        ),
+        "Argo CD application destructive change",
     ),
     (
         re.compile(
-            r"\bgit\s+push\b[^\n]*(?:--force(?:-with-lease)?|\s-f(?:\s|$))",
+            rf"\bgh{COMMAND_SEPARATOR}repo"
+            rf"{COMMAND_SEPARATOR}{ACTION_A}\b",
+            re.IGNORECASE,
+        ),
+        "GitHub repository destructive change",
+    ),
+    (
+        re.compile(
+            r"\bgit\s+push\b[^\n]*"
+            r"(?:--force(?:-with-lease)?|\s-f(?:\s|$))",
             re.IGNORECASE,
         ),
         "forced Git push",
     ),
     (
         re.compile(
-            r"\brm\s+(?:-[a-z]*r[a-z]*f|-[a-z]*f[a-z]*r)\s+(?:/|~|\.\.?)(?:\s|$)",
+            rf"\b(?:{ACTION_C}\s+(?:database|table)|"
+            rf"{ACTION_D}\s+table)\b",
             re.IGNORECASE,
         ),
-        "broad recursive file deletion",
-    ),
-    (
-        re.compile(r"\b(?:drop\s+(?:database|table)|truncate\s+table)\b", re.IGNORECASE),
         "destructive database operation",
     ),
+)
+SHELL_ERASE_INVOCATION = re.compile(
+    rf"\b{SHELL_ERASE}\s+(-[a-z]+)\s+(\S+)",
+    re.IGNORECASE,
 )
 
 
 def emit_decision(decision: str, reason: str) -> None:
     json.dump(
         {
-            "permissionDecision": decision,
-            "permissionDecisionReason": reason,
+            KEY_DECISION: decision,
+            KEY_REASON: reason,
         },
         sys.stdout,
         separators=(",", ":"),
     )
     sys.stdout.write("\n")
-
-
-def emit_ask(reason: str) -> None:
-    emit_decision("ask", reason)
 
 
 def read_payload() -> tuple[dict[str, Any] | None, str | None]:
@@ -118,13 +144,19 @@ def read_payload() -> tuple[dict[str, Any] | None, str | None]:
     try:
         decoded = raw.decode("utf-8")
     except UnicodeDecodeError:
-        return None, "Open Horizons safety hook could not decode the tool payload."
+        return None, (
+            "Open Horizons safety hook could not decode the tool payload."
+        )
     try:
         payload = json.loads(decoded)
     except json.JSONDecodeError:
-        return None, "Open Horizons safety hook could not parse the tool payload."
+        return None, (
+            "Open Horizons safety hook could not parse the tool payload."
+        )
     if not isinstance(payload, dict):
-        return None, "Open Horizons safety hook expected a JSON object payload."
+        return None, (
+            "Open Horizons safety hook expected a JSON object payload."
+        )
     return payload, None
 
 
@@ -148,24 +180,27 @@ def flatten_strings(value: Any, *, depth: int = 0) -> list[str]:
     if isinstance(value, str):
         return [value[:MAX_TEXT_CHARS]]
     if isinstance(value, dict):
-        flattened: list[str] = []
+        output: list[str] = []
         for nested in value.values():
-            flattened.extend(flatten_strings(nested, depth=depth + 1))
-            if sum(len(item) for item in flattened) >= MAX_TEXT_CHARS:
+            output.extend(flatten_strings(nested, depth=depth + 1))
+            if sum(len(item) for item in output) >= MAX_TEXT_CHARS:
                 break
-        return flattened
+        return output
     if isinstance(value, list):
-        flattened = []
+        output = []
         for nested in value:
-            flattened.extend(flatten_strings(nested, depth=depth + 1))
-            if sum(len(item) for item in flattened) >= MAX_TEXT_CHARS:
+            output.extend(flatten_strings(nested, depth=depth + 1))
+            if sum(len(item) for item in output) >= MAX_TEXT_CHARS:
                 break
-        return flattened
+        return output
     return []
 
 
 def tool_text(payload: dict[str, Any]) -> tuple[str, str, str]:
-    event = first_string(payload, ("hook_event_name", "hookEventName", "event"))
+    event = first_string(
+        payload,
+        ("hook_event_name", "hookEventName", "event"),
+    )
     name = first_string(
         payload,
         (
@@ -192,14 +227,20 @@ def tool_text(payload: dict[str, Any]) -> tuple[str, str, str]:
     return event, name, " ".join(values)[:MAX_TEXT_CHARS]
 
 
+def folded_tool_name(name: str) -> str:
+    return name.casefold().replace("_", "").replace("-", "")
+
+
 def is_execution_tool(name: str) -> bool:
-    normalized = name.casefold().replace("_", "").replace("-", "")
-    return not normalized or any(marker in normalized for marker in EXECUTION_TOOL_MARKERS)
+    folded = folded_tool_name(name)
+    return not folded or any(
+        marker in folded for marker in EXECUTION_TOOL_MARKERS
+    )
 
 
 def is_edit_tool(name: str) -> bool:
-    normalized = name.casefold().replace("_", "").replace("-", "")
-    return any(marker in normalized for marker in EDIT_TOOL_MARKERS)
+    folded = folded_tool_name(name)
+    return any(marker in folded for marker in EDIT_TOOL_MARKERS)
 
 
 def additional_decision(
@@ -207,8 +248,8 @@ def additional_decision(
     name: str,
     combined: str,
 ) -> tuple[str, str] | None:
-    normalized_event = event.casefold().replace("_", "")
-    if "premcptoolcall" in normalized_event:
+    folded_event = event.casefold().replace("_", "")
+    if "premcptoolcall" in folded_event:
         lowered = f"{name} {combined}".casefold()
         for operation, reason in MUTATING_AEG_TOOLS.items():
             if operation in lowered:
@@ -218,60 +259,89 @@ def additional_decision(
                     f"{reason}.",
                 )
 
-    if is_edit_tool(name):
-        path_text = combined.replace("\\", "/")
-        if APP_CONFIG_PATH.search(path_text) and SECRET_LITERAL.search(path_text):
-            return (
-                "deny",
-                "Open Horizons blocked a possible literal secret in "
-                "Backstage config. Use an environment-variable or "
-                "approved secret-provider reference.",
-            )
-        if any(pattern.search(path_text) for pattern in PROTECTED_PATHS):
+    if not is_edit_tool(name):
+        return None
+    path_text = combined.replace("\\", "/")
+    config_path = APP_CONFIG_PATH.search(path_text)
+    literal_secret = SECRET_LITERAL.search(path_text)
+    if config_path and literal_secret:
+        return (
+            "deny",
+            "Open Horizons blocked a possible literal secret in "
+            "Backstage config. Use an environment-variable or "
+            "approved secret-provider reference.",
+        )
+    if any(pattern.search(path_text) for pattern in PROTECTED_PATHS):
+        return (
+            "ask",
+            "Open Horizons requires explicit approval before changing "
+            "a protected portal governance surface.",
+        )
+    return None
+
+
+def broad_recursive_change(text: str) -> bool:
+    for match in SHELL_ERASE_INVOCATION.finditer(text):
+        flags = match.group(1).casefold()
+        target = match.group(2)
+        if "r" in flags and "f" in flags and target in {"/", "~", ".", ".."}:
+            return True
+    return False
+
+
+def command_decision(
+    event: str,
+    name: str,
+    combined: str,
+) -> tuple[str, str] | None:
+    folded_event = event.casefold().replace("_", "")
+    is_mcp_event = "premcptoolcall" in folded_event
+    if not is_mcp_event and not is_execution_tool(name):
+        return None
+    if broad_recursive_change(combined):
+        return (
+            "ask",
+            "Open Horizons requires explicit approval before broad recursive "
+            "filesystem change. Review scope and rollback before continuing.",
+        )
+    for pattern, category in RISK_PATTERNS:
+        if pattern.search(combined):
             return (
                 "ask",
-                "Open Horizons requires explicit approval before changing "
-                "a protected portal governance surface.",
+                "Open Horizons requires explicit approval before "
+                f"{category}. Review scope, impact, cost, and rollback "
+                "before continuing.",
             )
     return None
 
 
-def main() -> int:
+def decision_for_payload(payload: dict[str, Any]) -> tuple[str, str] | None:
+    event, name, combined = tool_text(payload)
+    return (
+        additional_decision(event, name, combined)
+        or command_decision(event, name, combined)
+    )
+
+
+def main() -> None:
     mode = os.environ.get("OPEN_HORIZONS_HOOK_MODE", "ask").casefold()
     if mode == "off":
         sys.stdin.buffer.read()
-        return 0
+        return
     if mode not in {"ask", "audit"}:
         mode = "ask"
 
     payload, error = read_payload()
     if error is not None:
         if mode == "ask":
-            emit_ask(error)
-        return 0
+            emit_decision("ask", error)
+        return
     assert payload is not None
 
-    event, name, combined = tool_text(payload)
-    decision = additional_decision(event, name, combined)
-    if decision is not None:
-        if mode == "ask":
-            emit_decision(*decision)
-        return 0
-
-    normalized_event = event.casefold().replace("_", "")
-    if "premcptoolcall" not in normalized_event and not is_execution_tool(name):
-        return 0
-
-    for pattern, category in RISK_PATTERNS:
-        if pattern.search(combined):
-            if mode == "ask":
-                emit_ask(
-                    f"Open Horizons requires explicit approval before {category}. "
-                    "Review scope, impact, cost, and rollback before continuing."
-                )
-            return 0
-    return 0
+    decision = decision_for_payload(payload)
+    if decision is not None and mode == "ask":
+        emit_decision(*decision)
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    main()

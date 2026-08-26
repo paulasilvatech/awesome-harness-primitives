@@ -37,6 +37,12 @@ repository.
 - `mcp-server` is an API subtype and uses `remotes`, not an embedded OpenAPI definition.
 - Source content remains external and addressable through source-location annotations.
 
+## Open Horizons integration
+
+- Scope the catalog output to the Developer IDP or Agent IDP objective and current Horizon stage.
+- Preserve Open Horizons Backstage ownership, managed-identity, AKS, and evidence boundaries where applicable.
+- Route cross-domain sequencing through `open-horizons-orchestration` (`skill`).
+
 ## Output template
 
 ```markdown

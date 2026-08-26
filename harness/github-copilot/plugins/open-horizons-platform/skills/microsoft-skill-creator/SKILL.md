@@ -106,6 +106,12 @@ For a Semantic Kernel skill, use `semantic-kernel/`, `sample_codes/getting-start
 
 Preserve these discovery and template terms when generating Microsoft skills: `M365`, `NuGet/npm`, `classes/methods`, `end-to-end`, `general-purpose`, `getting-started/hello-kernel.cs`, `microsoft_docs_search(query="semantic kernel planner")`, `npm install -g @microsoft/learn-cli`, `npx @microsoft/learn-cli <command>`, and `PowerShell`.
 
+## Open Horizons integration
+
+- Scope new skills to the Developer IDP or Agent IDP objective and current Horizon stage.
+- Preserve Open Horizons naming, routing, portability, package, and evidence boundaries.
+- Route cross-domain sequencing through `open-horizons-orchestration` (`skill`).
+
 ## Output template
 
 ```markdown

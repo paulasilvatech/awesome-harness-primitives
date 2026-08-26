@@ -34,6 +34,12 @@ collators, and frontend result extensions are independently configurable.
    behavior.
 10. Diagnose engine, scheduler, collator, permission, or presentation layers separately.
 
+## Open Horizons integration
+
+- Scope search behavior to the Developer IDP or Agent IDP objective and current Horizon stage.
+- Preserve Open Horizons Backstage ownership, data access, observability, and evidence boundaries where applicable.
+- Route cross-domain sequencing through `open-horizons-orchestration` (`skill`).
+
 ## Output template
 
 ```markdown

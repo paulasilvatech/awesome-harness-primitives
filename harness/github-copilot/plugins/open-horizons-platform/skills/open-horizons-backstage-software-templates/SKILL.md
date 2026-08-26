@@ -39,6 +39,12 @@ visible outputs.
 - Do not report success when publication succeeded but catalog registration failed.
 - Preserve the task log needed for diagnosis while redacting secrets.
 
+## Open Horizons integration
+
+- Scope templates to the Developer IDP or Agent IDP objective and current Horizon stage.
+- Preserve Open Horizons golden-path, Backstage, managed-identity, and evidence boundaries where applicable.
+- Route cross-domain sequencing through `open-horizons-orchestration` (`skill`).
+
 ## Output template
 
 ```markdown

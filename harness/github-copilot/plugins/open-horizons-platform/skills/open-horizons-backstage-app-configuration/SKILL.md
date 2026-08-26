@@ -48,6 +48,12 @@ untracked environment values.
 - Config available to the frontend is public to browser users.
 - Sign-in credentials and GitHub integration credentials have different purposes.
 
+## Open Horizons integration
+
+- Scope configuration changes to the Developer IDP or Agent IDP objective and current Horizon stage.
+- Preserve Open Horizons Backstage ownership, managed-identity, AKS, and evidence boundaries where applicable.
+- Route cross-domain sequencing through `open-horizons-orchestration` (`skill`).
+
 ## Output template
 
 ```markdown

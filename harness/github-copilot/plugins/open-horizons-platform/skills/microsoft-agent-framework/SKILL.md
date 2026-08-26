@@ -71,6 +71,12 @@ Ground Microsoft Agent Framework work in the latest official documentation, choo
 - **Do not skip language routing**: .NET and Python packages, samples, and idioms differ.
 - **Do not present preview APIs as stable contracts**: call out documentation date sensitivity when relevant.
 
+## Open Horizons integration
+
+- Scope Microsoft Agent Framework work to the seven application agents and current Horizon stage.
+- Preserve the boundary between Microsoft Foundry application agents and GitHub Copilot harness agents.
+- Route cross-domain sequencing through `open-horizons-orchestration` (`skill`).
+
 ## Output template
 
 ```markdown

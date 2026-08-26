@@ -151,6 +151,24 @@ CLASSIFICATIONS: dict[frozenset[str], tuple[str, str]] = {
             "prompts/containerize-aspnetcore.prompt.md",
         }
     ): ("framework-variant", ".NET Framework and ASP.NET Core require different Windows/Linux artifacts."),
+    frozenset(
+        {
+            "plugins/open-horizons-platform/prompts/open-horizons-aeg-modernize.prompt.md",
+            "plugins/open-horizons-platform/prompts/open-horizons-aeg-start.prompt.md",
+        }
+    ): (
+        "lifecycle-variant",
+        "AEG initialization and modernization operate on different lifecycle states and outputs.",
+    ),
+    frozenset(
+        {
+            "plugins/open-horizons-platform/skills/create-llms/SKILL.md",
+            "skills/update-llms/SKILL.md",
+        }
+    ): (
+        "lifecycle-variant",
+        "Open Horizons context creation and generic llms.txt synchronization mutate different states.",
+    ),
 }
 
 
@@ -255,6 +273,15 @@ def classify(left: Primitive, right: Primitive) -> tuple[str, str]:
     key = frozenset({left.path, right.path})
     if key in CLASSIFICATIONS:
         return CLASSIFICATIONS[key]
+    open_horizons_prefix = "plugins/open-horizons-platform/"
+    if left.path.startswith(open_horizons_prefix) != right.path.startswith(
+        open_horizons_prefix
+    ):
+        return (
+            "specialization",
+            "The Open Horizons variant adds platform-stage, ownership, routing, "
+            "identity, and evidence boundaries to the reusable capability.",
+        )
     names = {Path(left.path).name, Path(right.path).name}
     if all(name.startswith("copilot-sdk-") for name in names):
         return (

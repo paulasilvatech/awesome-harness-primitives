@@ -131,6 +131,12 @@ A complete remediation plan includes Immediate Actions for Critical issues, Shor
 
 Keep these Azure triage phrases intact when matching incidents and reports: Web `Apps/Function` Apps, `azmcp-*`, `logs/telemetry`, `group/subscription`, `subscription/resource`, `name/location`, `Healthy/Warning/Critical`, `High/Medium`, `High/Medium/Low`, `Performance/reliability`, `performance/reliability`, `CPU/Memory/Storage`, `CPU/memory/disk`, and affected `users/systems`.
 
+## Open Horizons integration
+
+- Scope diagnostics to Open Horizons platform resources and the current Horizon stage.
+- Preserve Azure resource identity, incident evidence, managed-identity, and ownership boundaries.
+- Route cross-domain sequencing through `open-horizons-orchestration` (`skill`).
+
 ## Output template
 
 ```markdown

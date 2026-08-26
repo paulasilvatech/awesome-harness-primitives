@@ -156,6 +156,12 @@ Preserve these legacy terms, API names, command placeholders, and literal phrase
 - `monthly/annual`
 - `real-time`
 
+## Open Horizons integration
+
+- Scope pricing analysis to the platform objective, deployment environment, and current Horizon stage.
+- Preserve Open Horizons Azure resource, region, ownership, and evidence boundaries where applicable.
+- Route cross-domain sequencing through `open-horizons-orchestration` (`skill`).
+
 ## Output template
 
 ```markdown

@@ -2,8 +2,6 @@
 name: "create-llms"
 description: >-
   Create a new repository-root llms.txt file from repository structure and documentation according to the llms.txt specification. Use when users ask to create llms.txt, generate LLM navigation, document repository structure for LLMs, or add an llms.txt compliant with https://llmstxt.org/.
-metadata:
-  link-format-token: "`[descriptive-name](relative-url): optional description`"
 ---
 
 # Create llms.txt
@@ -100,6 +98,12 @@ Write concise, unambiguous descriptions for both human and LLM readers. Prefer e
 The file is a high-level, human-readable entry point for the repository/project. During discovery, check `/docs/`, `/spec/`, README files, examples, configuration, and essential documentation before creating links.
 
 - Preserve exact scope term `repository/project` for the llms.txt title and summary.
+
+## Open Horizons integration
+
+- Scope generated context to Open Horizons platform vocabulary, ownership, and the current Horizon stage.
+- Preserve repository source precedence and exclude secrets, runtime state, and unsupported claims.
+- Route cross-domain sequencing through `open-horizons-orchestration` (`skill`).
 
 ## Output template
 

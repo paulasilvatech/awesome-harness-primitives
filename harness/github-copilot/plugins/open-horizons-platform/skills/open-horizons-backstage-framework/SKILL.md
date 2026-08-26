@@ -33,6 +33,12 @@ plugins to implementation internals.
 8. Validate startup ordering, lifecycle cleanup, permission and auth propagation, scheduled-task
    uniqueness, and error handling.
 
+## Open Horizons integration
+
+- Scope framework decisions to the Developer IDP or Agent IDP objective and current Horizon stage.
+- Preserve Open Horizons Backstage ownership, platform compatibility, and evidence boundaries where applicable.
+- Route cross-domain sequencing through `open-horizons-orchestration` (`skill`).
+
 ## Output template
 
 ```markdown

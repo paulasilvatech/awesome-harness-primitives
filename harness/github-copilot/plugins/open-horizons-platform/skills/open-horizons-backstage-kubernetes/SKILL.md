@@ -39,6 +39,12 @@ console.
 
 Treat proxy access as higher risk because it can forward arbitrary Kubernetes API requests.
 
+## Open Horizons integration
+
+- Scope Kubernetes changes to the Developer IDP or Agent IDP objective and current Horizon stage.
+- Preserve Open Horizons AKS, managed-identity, Backstage, and evidence boundaries where applicable.
+- Route cross-domain sequencing through `open-horizons-orchestration` (`skill`).
+
 ## Output template
 
 ```markdown

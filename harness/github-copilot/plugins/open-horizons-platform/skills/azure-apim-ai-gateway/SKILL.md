@@ -89,6 +89,12 @@ Agents / GitHub Copilot / apps
 | `azure-managed-redis-cache` | skill | You need the cache backend design behind semantic caching. |
 | `agentic-architecture-patterns` | skill | You need agent routing and tool-use architecture decisions. |
 
+## Open Horizons integration
+
+- Scope AI gateway work to the Agent IDP objective and current Horizon stage.
+- Preserve Open Horizons Azure ownership, managed-identity, network, policy, and evidence boundaries where applicable.
+- Route cross-domain sequencing through `open-horizons-orchestration` (`skill`).
+
 ## Output template
 
 ```markdown

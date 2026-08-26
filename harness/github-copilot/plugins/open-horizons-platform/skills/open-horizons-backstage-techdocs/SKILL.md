@@ -39,6 +39,12 @@ separate authoring from storage credentials.
 | External builder | CI-based production generation with controlled publication. |
 | External source | Documentation sourced from another approved location. |
 
+## Open Horizons integration
+
+- Scope TechDocs output to the Developer IDP or Agent IDP objective and current Horizon stage.
+- Preserve Open Horizons Backstage ownership, publication, access, and evidence boundaries where applicable.
+- Route cross-domain sequencing through `open-horizons-orchestration` (`skill`).
+
 ## Output template
 
 ```markdown

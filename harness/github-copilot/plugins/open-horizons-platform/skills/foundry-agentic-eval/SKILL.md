@@ -136,6 +136,12 @@ Preserve these legacy terms, API names, command placeholders, and literal phrase
 - `self-improvement`
 - `single-shot`
 
+## Open Horizons integration
+
+- Scope evaluation to the Agent IDP objective, approved datasets, and current Horizon stage.
+- Preserve Open Horizons Foundry deployment, tracing, safety, and evidence boundaries where applicable.
+- Route cross-domain sequencing through `open-horizons-orchestration` (`skill`).
+
 ## Output template
 
 ```markdown

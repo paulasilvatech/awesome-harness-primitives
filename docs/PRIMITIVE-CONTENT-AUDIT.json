@@ -5253,7 +5253,7 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 13216,
+      "characters_scanned": 15577,
       "external_url_count": 0,
       "files_scanned": 4,
       "kind": "hook",
@@ -11162,7 +11162,7 @@
       ]
     },
     {
-      "characters_scanned": 2255093,
+      "characters_scanned": 2266058,
       "external_url_count": 300,
       "files_scanned": 310,
       "kind": "plugin",
@@ -14374,7 +14374,7 @@
       ]
     },
     {
-      "characters_scanned": 6950,
+      "characters_scanned": 7271,
       "external_url_count": 3,
       "files_scanned": 1,
       "kind": "skill",
@@ -14418,7 +14418,7 @@
       ]
     },
     {
-      "characters_scanned": 7950,
+      "characters_scanned": 8259,
       "external_url_count": 4,
       "files_scanned": 1,
       "kind": "skill",
@@ -14872,7 +14872,7 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 25827,
+      "characters_scanned": 26144,
       "external_url_count": 6,
       "files_scanned": 5,
       "kind": "skill",
@@ -14928,7 +14928,7 @@
       ]
     },
     {
-      "characters_scanned": 10254,
+      "characters_scanned": 10552,
       "external_url_count": 0,
       "files_scanned": 1,
       "kind": "skill",
@@ -14984,7 +14984,7 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 9429,
+      "characters_scanned": 9733,
       "external_url_count": 0,
       "files_scanned": 2,
       "kind": "skill",
@@ -16137,7 +16137,7 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 37744,
+      "characters_scanned": 38060,
       "external_url_count": 2,
       "files_scanned": 10,
       "kind": "skill",
@@ -16836,7 +16836,7 @@
       ]
     },
     {
-      "characters_scanned": 6354,
+      "characters_scanned": 6582,
       "external_url_count": 3,
       "files_scanned": 1,
       "kind": "skill",
@@ -16848,8 +16848,9 @@
         "open-horizons-platform"
       ],
       "path": "harness/github-copilot/plugins/open-horizons-platform/skills/create-llms",
-      "review_status": "needs-source-review",
+      "review_status": "needs-current-source-review",
       "signals": [
+        "currency-language",
         "external-source"
       ],
       "source_domains": [
@@ -18302,7 +18303,7 @@
       ]
     },
     {
-      "characters_scanned": 7710,
+      "characters_scanned": 8004,
       "external_url_count": 2,
       "files_scanned": 1,
       "kind": "skill",
@@ -18316,6 +18317,7 @@
       "path": "harness/github-copilot/plugins/open-horizons-platform/skills/foundry-agent-sync",
       "review_status": "needs-current-source-review",
       "signals": [
+        "currency-language",
         "lifecycle-language",
         "date-claim",
         "external-source"
@@ -18348,7 +18350,7 @@
       ]
     },
     {
-      "characters_scanned": 6779,
+      "characters_scanned": 7088,
       "external_url_count": 0,
       "files_scanned": 1,
       "kind": "skill",
@@ -18362,6 +18364,7 @@
       "path": "harness/github-copilot/plugins/open-horizons-platform/skills/foundry-agentic-eval",
       "review_status": "needs-current-source-review",
       "signals": [
+        "currency-language",
         "version-claim"
       ],
       "source_domains": []
@@ -18434,7 +18437,7 @@
       ]
     },
     {
-      "characters_scanned": 47710,
+      "characters_scanned": 48009,
       "external_url_count": 3,
       "files_scanned": 7,
       "kind": "skill",
@@ -20407,7 +20410,7 @@
       ]
     },
     {
-      "characters_scanned": 6495,
+      "characters_scanned": 6781,
       "external_url_count": 0,
       "files_scanned": 1,
       "kind": "skill",
@@ -20686,7 +20689,7 @@
       ]
     },
     {
-      "characters_scanned": 7825,
+      "characters_scanned": 8139,
       "external_url_count": 10,
       "files_scanned": 3,
       "kind": "skill",
@@ -20734,7 +20737,7 @@
       ]
     },
     {
-      "characters_scanned": 7191,
+      "characters_scanned": 7477,
       "external_url_count": 1,
       "files_scanned": 1,
       "kind": "skill",
@@ -20778,7 +20781,7 @@
       ]
     },
     {
-      "characters_scanned": 7004,
+      "characters_scanned": 7305,
       "external_url_count": 2,
       "files_scanned": 1,
       "kind": "skill",
@@ -20824,7 +20827,7 @@
       ]
     },
     {
-      "characters_scanned": 16398,
+      "characters_scanned": 16689,
       "external_url_count": 4,
       "files_scanned": 2,
       "kind": "skill",
@@ -21336,7 +21339,7 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 2525,
+      "characters_scanned": 2846,
       "external_url_count": 1,
       "files_scanned": 1,
       "kind": "skill",
@@ -21377,7 +21380,7 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 2894,
+      "characters_scanned": 3218,
       "external_url_count": 0,
       "files_scanned": 1,
       "kind": "skill",
@@ -21396,7 +21399,7 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 3911,
+      "characters_scanned": 4236,
       "external_url_count": 3,
       "files_scanned": 1,
       "kind": "skill",
@@ -21418,7 +21421,7 @@
       ]
     },
     {
-      "characters_scanned": 2575,
+      "characters_scanned": 2893,
       "external_url_count": 0,
       "files_scanned": 1,
       "kind": "skill",
@@ -21430,8 +21433,10 @@
         "open-horizons-platform"
       ],
       "path": "harness/github-copilot/plugins/open-horizons-platform/skills/open-horizons-backstage-catalog",
-      "review_status": "needs-semantic-review",
-      "signals": [],
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language"
+      ],
       "source_domains": []
     },
     {
@@ -21457,7 +21462,7 @@
       ]
     },
     {
-      "characters_scanned": 2788,
+      "characters_scanned": 3101,
       "external_url_count": 0,
       "files_scanned": 1,
       "kind": "skill",
@@ -21471,6 +21476,7 @@
       "path": "harness/github-copilot/plugins/open-horizons-platform/skills/open-horizons-backstage-core-contribution",
       "review_status": "needs-current-source-review",
       "signals": [
+        "currency-language",
         "version-claim"
       ],
       "source_domains": []
@@ -21501,7 +21507,7 @@
       ]
     },
     {
-      "characters_scanned": 2670,
+      "characters_scanned": 2993,
       "external_url_count": 3,
       "files_scanned": 1,
       "kind": "skill",
@@ -21515,6 +21521,7 @@
       "path": "harness/github-copilot/plugins/open-horizons-platform/skills/open-horizons-backstage-framework",
       "review_status": "needs-current-source-review",
       "signals": [
+        "currency-language",
         "lifecycle-language",
         "external-source"
       ],
@@ -21523,7 +21530,7 @@
       ]
     },
     {
-      "characters_scanned": 2725,
+      "characters_scanned": 3036,
       "external_url_count": 2,
       "files_scanned": 1,
       "kind": "skill",
@@ -21535,8 +21542,9 @@
         "open-horizons-platform"
       ],
       "path": "harness/github-copilot/plugins/open-horizons-platform/skills/open-horizons-backstage-kubernetes",
-      "review_status": "needs-source-review",
+      "review_status": "needs-current-source-review",
       "signals": [
+        "currency-language",
         "external-source"
       ],
       "source_domains": [
@@ -21567,7 +21575,7 @@
       ]
     },
     {
-      "characters_scanned": 2651,
+      "characters_scanned": 2964,
       "external_url_count": 3,
       "files_scanned": 1,
       "kind": "skill",
@@ -21581,6 +21589,7 @@
       "path": "harness/github-copilot/plugins/open-horizons-platform/skills/open-horizons-backstage-notifications",
       "review_status": "needs-current-source-review",
       "signals": [
+        "currency-language",
         "version-claim",
         "external-source"
       ],
@@ -21589,7 +21598,7 @@
       ]
     },
     {
-      "characters_scanned": 2796,
+      "characters_scanned": 3114,
       "external_url_count": 0,
       "files_scanned": 1,
       "kind": "skill",
@@ -21601,12 +21610,14 @@
         "open-horizons-platform"
       ],
       "path": "harness/github-copilot/plugins/open-horizons-platform/skills/open-horizons-backstage-operations",
-      "review_status": "needs-semantic-review",
-      "signals": [],
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language"
+      ],
       "source_domains": []
     },
     {
-      "characters_scanned": 2845,
+      "characters_scanned": 3161,
       "external_url_count": 2,
       "files_scanned": 1,
       "kind": "skill",
@@ -21618,8 +21629,9 @@
         "open-horizons-platform"
       ],
       "path": "harness/github-copilot/plugins/open-horizons-platform/skills/open-horizons-backstage-permissions",
-      "review_status": "needs-source-review",
+      "review_status": "needs-current-source-review",
       "signals": [
+        "currency-language",
         "external-source"
       ],
       "source_domains": [
@@ -21627,7 +21639,7 @@
       ]
     },
     {
-      "characters_scanned": 2796,
+      "characters_scanned": 3119,
       "external_url_count": 3,
       "files_scanned": 1,
       "kind": "skill",
@@ -21639,8 +21651,9 @@
         "open-horizons-platform"
       ],
       "path": "harness/github-copilot/plugins/open-horizons-platform/skills/open-horizons-backstage-search",
-      "review_status": "needs-source-review",
+      "review_status": "needs-current-source-review",
       "signals": [
+        "currency-language",
         "external-source"
       ],
       "source_domains": [
@@ -21648,7 +21661,7 @@
       ]
     },
     {
-      "characters_scanned": 2768,
+      "characters_scanned": 3078,
       "external_url_count": 0,
       "files_scanned": 1,
       "kind": "skill",
@@ -21660,12 +21673,14 @@
         "open-horizons-platform"
       ],
       "path": "harness/github-copilot/plugins/open-horizons-platform/skills/open-horizons-backstage-software-templates",
-      "review_status": "needs-semantic-review",
-      "signals": [],
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language"
+      ],
       "source_domains": []
     },
     {
-      "characters_scanned": 2570,
+      "characters_scanned": 2886,
       "external_url_count": 0,
       "files_scanned": 1,
       "kind": "skill",
@@ -21679,6 +21694,7 @@
       "path": "harness/github-copilot/plugins/open-horizons-platform/skills/open-horizons-backstage-techdocs",
       "review_status": "needs-current-source-review",
       "signals": [
+        "currency-language",
         "lifecycle-language"
       ],
       "source_domains": []

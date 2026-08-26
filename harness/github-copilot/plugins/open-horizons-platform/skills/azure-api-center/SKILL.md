@@ -84,6 +84,12 @@ Backend APIs / Tools / MCP servers
 - **Linting must run before registration is trusted**: imported OpenAPI alone does not guarantee secure or usable APIs.
 - **MCP tool descriptions affect agent behavior**: document side effects, auth, and rate limits, not just endpoints.
 
+## Open Horizons integration
+
+- Scope API Center work to the Developer IDP or Agent IDP objective and current Horizon stage.
+- Preserve Open Horizons Azure ownership, managed-identity, governance, and evidence boundaries where applicable.
+- Route cross-domain sequencing through `open-horizons-orchestration` (`skill`).
+
 ## Output template
 
 ```markdown

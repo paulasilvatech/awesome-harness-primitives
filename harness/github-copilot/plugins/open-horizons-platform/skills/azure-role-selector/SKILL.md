@@ -84,6 +84,12 @@ Select the minimal Azure RBAC role that grants the requested actions at the narr
 - **Custom roles need assignable scopes**: a custom role cannot be assigned outside its `AssignableScopes`.
 - **Role names can be ambiguous**: use role definition IDs when generating durable automation.
 
+## Open Horizons integration
+
+- Scope role selection to the Developer IDP or Agent IDP objective and current Horizon stage.
+- Preserve Open Horizons least-privilege, managed-identity, Azure scope, and evidence boundaries.
+- Route cross-domain sequencing through `open-horizons-orchestration` (`skill`).
+
 ## Output template
 
 ````markdown

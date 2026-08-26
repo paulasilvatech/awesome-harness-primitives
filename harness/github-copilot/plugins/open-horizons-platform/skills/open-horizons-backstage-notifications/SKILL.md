@@ -31,6 +31,12 @@ Deliver user-facing messages through the notifications service, not as inter-pro
 11. Test unread/read/saved behavior, preferences, signals, processor failure, and delivery to users
     or groups.
 
+## Open Horizons integration
+
+- Scope notifications to the Developer IDP or Agent IDP objective and current Horizon stage.
+- Preserve Open Horizons Backstage ownership, identity, delivery, and evidence boundaries where applicable.
+- Route cross-domain sequencing through `open-horizons-orchestration` (`skill`).
+
 ## Output template
 
 ```markdown

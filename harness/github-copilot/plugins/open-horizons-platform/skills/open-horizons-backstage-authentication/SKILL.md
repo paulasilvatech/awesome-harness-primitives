@@ -55,6 +55,12 @@ the application may call on that user's behalf.
 - A provider's profile or email claim is not authorization.
 - Do not invent resolver behavior when catalog ownership or identity mapping is unknown.
 
+## Open Horizons integration
+
+- Scope authentication changes to the Developer IDP or Agent IDP objective and current Horizon stage.
+- Preserve Open Horizons identity, Backstage, managed-identity, AKS, and evidence boundaries where applicable.
+- Route cross-domain sequencing through `open-horizons-orchestration` (`skill`).
+
 ## Output template
 
 ```markdown

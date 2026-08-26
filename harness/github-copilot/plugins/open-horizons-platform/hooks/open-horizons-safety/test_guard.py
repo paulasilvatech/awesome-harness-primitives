@@ -81,6 +81,30 @@ class OpenHorizonsSafetyTests(unittest.TestCase):
         )
         self.assertEqual(result[0], "ask")
 
+    def test_infrastructure_plan_requires_no_decision(self) -> None:
+        result = GUARD.command_decision(
+            "preToolUse",
+            "bash",
+            f"{GUARD.IAC_COMMAND} plan",
+        )
+        self.assertIsNone(result)
+
+    def test_infrastructure_apply_requires_approval(self) -> None:
+        result = GUARD.command_decision(
+            "preToolUse",
+            "bash",
+            f"{GUARD.IAC_COMMAND} {GUARD.ACTION_APPLY}",
+        )
+        self.assertEqual(result[0], "ask")
+
+    def test_broad_recursive_filesystem_change_requires_approval(self) -> None:
+        result = GUARD.command_decision(
+            "preToolUse",
+            "bash",
+            f"{GUARD.SHELL_ERASE} -rf /",
+        )
+        self.assertEqual(result[0], "ask")
+
 
 if __name__ == "__main__":
     unittest.main()

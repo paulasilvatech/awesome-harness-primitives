@@ -80,6 +80,12 @@ Read bundled references on demand; each file is self-contained.
 
 - Preserve `JSON` payload shape when parameters are renamed or `re-typed`; any workaround removal must be `re-validated` against the tracked upstream issue.
 
+## Open Horizons integration
+
+- Scope hosted-agent work to the Agent IDP objective and current Horizon stage.
+- Preserve Open Horizons Foundry, CopilotKit, identity, network, and evidence boundaries where applicable.
+- Route cross-domain sequencing through `open-horizons-orchestration` (`skill`).
+
 ## Output template
 
 ```markdown

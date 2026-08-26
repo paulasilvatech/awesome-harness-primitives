@@ -125,6 +125,12 @@ The local scaffold boundary is the `microsoft-foundry` skill's `create` sub-skil
 
 PowerShell implementations commonly use `$ErrorActionPreference`, `Get-Content | ConvertFrom-Json`, `ConvertFrom`, `ConvertTo-Json`, `ConvertTo`, `Invoke-RestMethod`, `RestMethod`, `-ContentType 'application/json'`, and `Format-Table -AutoSize`.
 
+## Open Horizons integration
+
+- Scope synchronization to the Agent IDP objective and current Horizon stage.
+- Preserve the boundary between GitHub Copilot harness agents and Microsoft Foundry application agents.
+- Route cross-domain sequencing through `open-horizons-orchestration` (`skill`).
+
 ## Output template
 
 ```markdown

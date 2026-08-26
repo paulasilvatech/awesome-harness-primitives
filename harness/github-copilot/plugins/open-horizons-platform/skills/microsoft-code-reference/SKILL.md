@@ -93,6 +93,12 @@ Pass `--json` for `JSON` to `search` or `code-search` when downstream processing
 - **Samples show `initialization/setup` context**: copy client construction and authentication shape, not just the final method call.
 - **Version lines matter**: v11 Azure Storage types such as `CloudBlobClient` do not mix with v12 clients such as `BlobServiceClient`.
 
+## Open Horizons integration
+
+- Scope code references to the Open Horizons stack and current Horizon stage.
+- Preserve first-party Microsoft source authority, repository evidence, and version boundaries.
+- Route cross-domain sequencing through `open-horizons-orchestration` (`skill`).
+
 ## Output template
 
 ````markdown
