@@ -1,0 +1,20 @@
+{
+  "name": "azure-kubernetes-development",
+  "description": "Plan, secure, and operate Azure Kubernetes Service: cluster design and Day-0 decisions, application deployment with safeguards, AKS Automatic readiness, GPU model serving, and kubectl, Helm, and Argo CD workflows.",
+  "version": "1.0.0",
+  "author": {
+    "name": "paulasilvatech"
+  },
+  "repository": "https://github.com/paulasilvatech/copilot-primitives",
+  "license": "MIT",
+  "keywords": [
+    "azure",
+    "kubernetes",
+    "aks",
+    "helm",
+    "kubectl",
+    "argocd",
+    "gitops"
+  ],
+  "skills": "skills/"
+}

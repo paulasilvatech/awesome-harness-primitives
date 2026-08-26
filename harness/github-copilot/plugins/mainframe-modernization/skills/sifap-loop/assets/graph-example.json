@@ -1,0 +1,230 @@
+{
+  "version": 1,
+  "nodes": [
+    {
+      "id": "jcl:PAYJOB",
+      "type": "JclJob",
+      "label": "PAYJOB",
+      "slice": "001-payment-inspection",
+      "evidence": "01-archaeology/legacy-sifap/natural-programs/PAYJOB.jcl"
+    },
+    {
+      "id": "natural:PAY0100",
+      "type": "NaturalProgram",
+      "label": "PAY0100",
+      "slice": "001-payment-inspection",
+      "evidence": "01-archaeology/legacy-sifap/natural-programs/PAY0100.NSP"
+    },
+    {
+      "id": "natural:PAY0110",
+      "type": "NaturalSubprogram",
+      "label": "PAY0110",
+      "slice": "001-payment-inspection",
+      "evidence": "01-archaeology/legacy-sifap/natural-programs/PAY0110.NSN"
+    },
+    {
+      "id": "adabas:PAYMENT",
+      "type": "AdabasFile",
+      "label": "PAYMENT",
+      "slice": "001-payment-inspection",
+      "evidence": "01-archaeology/legacy-sifap/adabas-ddms/PAYMENT.NSD"
+    },
+    {
+      "id": "ddm:PAYMENT",
+      "type": "Ddm",
+      "label": "PAYMENT DDM",
+      "slice": "001-payment-inspection",
+      "evidence": "01-archaeology/legacy-sifap/adabas-ddms/PAYMENT.NSD#L1-L64"
+    },
+    {
+      "id": "adabas:PAYMENT.AMOUNT",
+      "type": "AdabasField",
+      "label": "PAYMENT.AMOUNT P11.2",
+      "slice": "001-payment-inspection",
+      "evidence": "01-archaeology/legacy-sifap/adabas-ddms/PAYMENT.NSD#L22"
+    },
+    {
+      "id": "descriptor:PAYMENT.AA",
+      "type": "Descriptor",
+      "label": "PAYMENT.AA",
+      "slice": "001-payment-inspection",
+      "evidence": "01-archaeology/legacy-sifap/adabas-ddms/PAYMENT.NSD#L9"
+    },
+    {
+      "id": "rule:duplicate-payment-line",
+      "type": "BusinessRule",
+      "label": "Reject a duplicate payment line",
+      "slice": "001-payment-inspection",
+      "status": "accepted",
+      "owner": "Par 01 Vision",
+      "evidence": "01-archaeology/rules/duplicate-payment-line.md"
+    },
+    {
+      "id": "req:REQ-021",
+      "type": "Requirement",
+      "label": "REQ-021 Reject a duplicate payment line",
+      "slice": "001-payment-inspection",
+      "evidence": "specs/001-payment-inspection/requirements.md#L40-L52"
+    },
+    {
+      "id": "adr:ADR-004",
+      "type": "Decision",
+      "label": "ADR-004 Store monetary values as NUMERIC(13,2)",
+      "slice": "001-payment-inspection",
+      "evidence": "docs/adr/ADR-004-monetary-precision.md"
+    },
+    {
+      "id": "java:PaymentInspectionService",
+      "type": "JavaType",
+      "label": "PaymentInspectionService",
+      "slice": "001-payment-inspection",
+      "evidence": "backend/src/main/java/.../PaymentInspectionService.java"
+    },
+    {
+      "id": "api:payment-inspection-create",
+      "type": "Endpoint",
+      "label": "POST /api/v1/payments/inspections",
+      "slice": "001-payment-inspection",
+      "evidence": "backend/src/main/java/.../PaymentInspectionController.java"
+    },
+    {
+      "id": "pg:payment",
+      "type": "PgTable",
+      "label": "payment",
+      "slice": "001-payment-inspection",
+      "evidence": "backend/src/main/resources/db/migration/V3__payment.sql"
+    },
+    {
+      "id": "pg:payment.amount",
+      "type": "PgColumn",
+      "label": "payment.amount NUMERIC(13,2)",
+      "slice": "001-payment-inspection",
+      "evidence": "backend/src/main/resources/db/migration/V3__payment.sql#L7"
+    },
+    {
+      "id": "test:PaymentInspectionServiceTest",
+      "type": "Test",
+      "label": "PaymentInspectionServiceTest",
+      "slice": "001-payment-inspection",
+      "evidence": "backend/src/test/java/.../PaymentInspectionServiceTest.java"
+    },
+    {
+      "id": "ci:build-and-test",
+      "type": "Workflow",
+      "label": "build-and-test",
+      "slice": "001-payment-inspection",
+      "evidence": ".github/workflows/build-and-test.yml"
+    },
+    {
+      "id": "doc:payment-inspection-runbook",
+      "type": "Runbook",
+      "label": "Payment inspection runbook",
+      "slice": "001-payment-inspection",
+      "evidence": "docs/runbooks/payment-inspection.md"
+    }
+  ],
+  "edges": [
+    {
+      "from": "jcl:PAYJOB",
+      "type": "RUNS",
+      "to": "natural:PAY0100",
+      "evidence": "01-archaeology/legacy-sifap/natural-programs/PAYJOB.jcl#L12"
+    },
+    {
+      "from": "natural:PAY0100",
+      "type": "CALLNAT",
+      "to": "natural:PAY0110",
+      "evidence": "01-archaeology/legacy-sifap/natural-programs/PAY0100.NSP#L120"
+    },
+    {
+      "from": "natural:PAY0110",
+      "type": "READS",
+      "to": "adabas:PAYMENT",
+      "evidence": "01-archaeology/legacy-sifap/natural-programs/PAY0110.NSN#L44"
+    },
+    {
+      "from": "natural:PAY0110",
+      "type": "STORES",
+      "to": "adabas:PAYMENT",
+      "evidence": "01-archaeology/legacy-sifap/natural-programs/PAY0110.NSN#L91"
+    },
+    {
+      "from": "adabas:PAYMENT",
+      "type": "DEFINED_BY",
+      "to": "ddm:PAYMENT",
+      "evidence": "01-archaeology/legacy-sifap/adabas-ddms/PAYMENT.NSD#L1"
+    },
+    {
+      "from": "adabas:PAYMENT",
+      "type": "HAS_FIELD",
+      "to": "adabas:PAYMENT.AMOUNT",
+      "evidence": "01-archaeology/legacy-sifap/adabas-ddms/PAYMENT.NSD#L22"
+    },
+    {
+      "from": "adabas:PAYMENT",
+      "type": "INDEXED_BY",
+      "to": "descriptor:PAYMENT.AA",
+      "evidence": "01-archaeology/legacy-sifap/adabas-ddms/PAYMENT.NSD#L9"
+    },
+    {
+      "from": "natural:PAY0110",
+      "type": "DERIVES_RULE",
+      "to": "rule:duplicate-payment-line",
+      "evidence": "01-archaeology/legacy-sifap/natural-programs/PAY0110.NSN#L40-L88"
+    },
+    {
+      "from": "rule:duplicate-payment-line",
+      "type": "SATISFIED_BY",
+      "to": "req:REQ-021",
+      "evidence": "specs/001-payment-inspection/requirements.md#L40"
+    },
+    {
+      "from": "req:REQ-021",
+      "type": "DECIDED_BY",
+      "to": "adr:ADR-004",
+      "evidence": "docs/adr/ADR-004-monetary-precision.md#L18"
+    },
+    {
+      "from": "req:REQ-021",
+      "type": "IMPLEMENTED_BY",
+      "to": "java:PaymentInspectionService",
+      "evidence": "backend/src/main/java/.../PaymentInspectionService.java#L61"
+    },
+    {
+      "from": "req:REQ-021",
+      "type": "VERIFIED_BY",
+      "to": "test:PaymentInspectionServiceTest",
+      "evidence": "backend/src/test/java/.../PaymentInspectionServiceTest.java#L34"
+    },
+    {
+      "from": "adabas:PAYMENT",
+      "type": "MIGRATES_TO",
+      "to": "pg:payment",
+      "evidence": "backend/src/main/resources/db/migration/V3__payment.sql#L1"
+    },
+    {
+      "from": "adabas:PAYMENT.AMOUNT",
+      "type": "MIGRATES_TO",
+      "to": "pg:payment.amount",
+      "evidence": "backend/src/main/resources/db/migration/V3__payment.sql#L7"
+    },
+    {
+      "from": "java:PaymentInspectionService",
+      "type": "EXPOSED_BY",
+      "to": "api:payment-inspection-create",
+      "evidence": "backend/src/main/java/.../PaymentInspectionController.java#L28"
+    },
+    {
+      "from": "api:payment-inspection-create",
+      "type": "DEPLOYED_BY",
+      "to": "ci:build-and-test",
+      "evidence": ".github/workflows/build-and-test.yml#L3"
+    },
+    {
+      "from": "adr:ADR-004",
+      "type": "DOCUMENTED_BY",
+      "to": "doc:payment-inspection-runbook",
+      "evidence": "docs/runbooks/payment-inspection.md#L12"
+    }
+  ]
+}

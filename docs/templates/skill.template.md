@@ -60,6 +60,7 @@ Add only the relevant lines inside the opening frontmatter block:
 user-invocable: true
 argument-hint: "{{ARGUMENT_HINT}}"
 allowed-tools: ["{{MINIMUM_REQUIRED_TOOL}}"]
+compatibility: "{{ENVIRONMENT_REQUIREMENT}}"
 ```
 
 - Add `user-invocable` only when direct invocation is useful.
@@ -68,6 +69,11 @@ allowed-tools: ["{{MINIMUM_REQUIRED_TOOL}}"]
 - Omit `allowed-tools` by default. If used, list only tools the skill actually
   requires. Do not add editing tools to consultative or review skills unless
   the skill is explicitly expected to change files.
+- Add `compatibility` only for a genuine environment requirement such as a
+  required runtime, system package, or network access. Keep it at or below 500
+  characters, and also state the requirement in
+  `## Prerequisites and context` because current GitHub Copilot surfaces do not
+  enforce the field.
 - Other supported fields such as `disable-model-invocation`, `license`,
   `metadata`, and `tags` are optional. Add them only for a concrete need.
 

@@ -17,7 +17,7 @@ Redis vector search stores embeddings and retrieves them by similarity, which ma
 ## Read and write policy
 
 - **Write.** Extract durable facts and summaries at session end or on explicit save. Do not embed every turn.
-- **Read.** Retrieve top candidates, rerank, and inject a budgeted slice into context (see context curation in `agentic-architecture-patterns`).
+- **Read.** Retrieve top candidates, rerank, and inject a budgeted slice into context (see context curation in `azure-agentic-architecture-patterns`).
 - **Isolation.** Always include a tenant and user filter in the query. Never run an unfiltered nearest-neighbor search across tenants.
 - **Lifecycle.** Set retention and support deletion for privacy and correctness.
 

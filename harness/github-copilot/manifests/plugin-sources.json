@@ -140,6 +140,8 @@
       "skills": [
         "./skills/agentic-eval/",
         "./skills/apim-ai-gateway/",
+        "./skills/azure-agentic-architecture-patterns/",
+        "./skills/azure-ai/",
         "./skills/azure-api-center/",
         "./skills/azure-managed-redis-cache/",
         "./skills/entra-agent-user/",
@@ -147,6 +149,18 @@
         "./skills/foundry-hosted-agent-copilotkit/",
         "./skills/microsoft-agent-framework/",
         "./skills/semantic-kernel/"
+      ]
+    },
+    "azure-app-lifecycle": {
+      "componentSource": "library",
+      "agents": [],
+      "skills": [
+        "./skills/azure-app-onboard/",
+        "./skills/azure-app-onboard-prereq/",
+        "./skills/azure-deploy/",
+        "./skills/azure-prepare/",
+        "./skills/azure-scaffold-wizard/",
+        "./skills/azure-validate/"
       ]
     },
     "azure-cloud-development": {
@@ -162,9 +176,74 @@
       ],
       "skills": [
         "./skills/az-cost-optimize/",
+        "./skills/azure-cli/",
+        "./skills/azure-compute/",
+        "./skills/azure-enterprise-infra-planner/",
+        "./skills/azure-infrastructure/",
         "./skills/azure-pricing/",
         "./skills/azure-resource-health-diagnose/",
+        "./skills/azure-resource-lookup/",
+        "./skills/azure-resource-visualizer/",
+        "./skills/azure-terraform-cli/",
+        "./skills/azure-terraform-terratest-module-testing/",
         "./skills/import-infrastructure-as-code/"
+      ]
+    },
+    "azure-data-development": {
+      "componentSource": "library",
+      "agents": [],
+      "skills": [
+        "./skills/azure-kusto/",
+        "./skills/azure-kusto-graph/",
+        "./skills/azure-kusto-irql/",
+        "./skills/azure-kusto-irql-graph/",
+        "./skills/azure-messaging/",
+        "./skills/azure-postgre-database-management/",
+        "./skills/azure-storage/"
+      ]
+    },
+    "azure-governance": {
+      "componentSource": "library",
+      "agents": [],
+      "skills": [
+        "./skills/azure-compliance/",
+        "./skills/azure-entra-agent-id/",
+        "./skills/azure-entra-app-registration/",
+        "./skills/azure-quotas/",
+        "./skills/azure-role-selector/",
+        "./skills/azure-well-architected-review/"
+      ]
+    },
+    "azure-kubernetes-development": {
+      "componentSource": "library",
+      "agents": [],
+      "skills": [
+        "./skills/azure-airunway-aks-setup/",
+        "./skills/azure-argocd-cli/",
+        "./skills/azure-helm-cli/",
+        "./skills/azure-kubectl-cli/",
+        "./skills/azure-kubernetes/",
+        "./skills/azure-kubernetes-app-deploy/",
+        "./skills/azure-kubernetes-automatic-readiness/"
+      ]
+    },
+    "azure-modernization": {
+      "componentSource": "library",
+      "agents": [],
+      "skills": [
+        "./skills/azure-cloud-migrate/",
+        "./skills/azure-upgrade/"
+      ]
+    },
+    "azure-observability-operations": {
+      "componentSource": "library",
+      "agents": [],
+      "skills": [
+        "./skills/appinsights-instrumentation/",
+        "./skills/azure-cost/",
+        "./skills/azure-diagnostics/",
+        "./skills/azure-observability-stack/",
+        "./skills/azure-reliability/"
       ]
     },
     "backlog-swipe-triage": {
@@ -585,6 +664,26 @@
         "./skills/kotlin-mcp-server-generator/"
       ]
     },
+    "mainframe-modernization": {
+      "componentSource": "plugin",
+      "sharedSkills": [
+        "./skills/code-modernization/",
+        "./skills/create-architectural-decision-record/",
+        "./skills/github-actions-hardening/",
+        "./skills/java-springboot/",
+        "./skills/legacy-business-rule-extraction/",
+        "./skills/legacy-characterization-testing/",
+        "./skills/natural-adabas-analysis/",
+        "./skills/postgresql-code-review/",
+        "./skills/postgresql-optimization/",
+        "./skills/sdd-requirements-engineer/",
+        "./skills/java-junit/"
+      ],
+      "governance": {
+        "lastRuntimeProbe": "2026-08-26",
+        "evidence": "docs/HARNESS-VALIDATION.md#mainframe-modernization-plugin-runtime-verification"
+      }
+    },
     "mcp-m365-copilot": {
       "componentSource": "library",
       "agents": [
@@ -616,6 +715,8 @@
       "sharedSkills": [
         "./skills/azure-draw-io-diagram-generator/",
         "./skills/azure-managed-redis-cache/",
+        "./skills/azure-scaffold-wizard/",
+        "./skills/azure-terraform-terratest-module-testing/",
         "./skills/backstage-plugin-builder/"
       ],
       "governance": {

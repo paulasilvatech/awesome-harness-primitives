@@ -121,7 +121,7 @@ Payload:
 
 ## Script and API vocabulary
 
-The local scaffold boundary is the `microsoft-foundry` skill's `create` sub-skill; this skill syncs server-side agents. Preserve `sync-foundry-agents.ps1`, `project-endpoint`, `endpoint/agents`, Create/Update semantics, opt in/out. gates, and `application/json` content type.
+The local scaffold boundary is the `microsoft-agent-framework` skill's `create` sub-skill; this skill syncs server-side agents. Preserve `sync-foundry-agents.ps1`, `project-endpoint`, `endpoint/agents`, Create/Update semantics, opt in/out. gates, and `application/json` content type.
 
 PowerShell implementations commonly use `$ErrorActionPreference`, `Get-Content | ConvertFrom-Json`, `ConvertFrom`, `ConvertTo-Json`, `ConvertTo`, `Invoke-RestMethod`, `RestMethod`, `-ContentType 'application/json'`, and `Format-Table -AutoSize`.
 

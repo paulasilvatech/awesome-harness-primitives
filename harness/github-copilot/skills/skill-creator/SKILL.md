@@ -38,8 +38,9 @@ skill-name/
 | `SKILL.md` | Start YAML frontmatter on line 1, followed by exactly one H1 and skill instructions. |
 | `name` | Required. Match the parent folder. |
 | `description` | Required. Explain what the skill does and when to use it. Keep it at or below 1024 characters. |
-| Optional keys | Use only `argument-hint`, `license`, `user-invocable`, `disable-model-invocation`, `allowed-tools`, `metadata`, and `tags`. |
-| Unsupported keys | Do not use top-level `context`, `compatibility`, `authors`, `category`, or `version`; move useful annotations under `metadata`. |
+| Optional keys | Use only `argument-hint`, `compatibility`, `license`, `user-invocable`, `disable-model-invocation`, `allowed-tools`, `metadata`, and `tags`. |
+| `compatibility` | Optional, at or below 500 characters. Use only for a real environment requirement, and repeat it in the body because current GitHub Copilot surfaces do not enforce it. |
+| Unsupported keys | Do not use top-level `context`, `authors`, `category`, or `version`; move useful annotations under `metadata`. |
 
 Minimum frontmatter shape:
 

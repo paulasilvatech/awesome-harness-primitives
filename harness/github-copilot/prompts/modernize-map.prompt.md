@@ -1,7 +1,7 @@
 ---
 name: 'modernize-map'
 description: 'Map legacy modules to target architecture boundaries, data flows, migration sequence, and rollback considerations.'
-agent: 'agent'
+agent: 'modernization'
 argument-hint: 'legacy system folder and target architecture'
 ---
 
@@ -32,7 +32,7 @@ Use this prompt after `modernize-assess` and preferably after `modernize-extract
 ## What I Will Do
 
 - Load the `code-modernization` skill before mapping.
-- Use the `Legacy Analyst` agent for source structure and the `Architecture Critic` agent to review the mapping in the VS Code agent environment.
+- Use the applicable source-analysis skill for legacy structure and use `critical-thinking` to pressure-test material mapping assumptions when useful.
 - Identify legacy modules, data stores, integrations, and business domains.
 - Map each legacy area to target packages, services, modules, or retained components.
 - Define sequencing, strangler boundaries, data migration checkpoints, and rollback considerations.
@@ -44,7 +44,7 @@ Use this prompt after `modernize-assess` and preferably after `modernize-extract
 - Invent target services, packages, modules, or retained components without evidence or an explicit architecture direction.
 - Ignore data flows, rollback considerations, or migration checkpoints when sequencing migration.
 - Replace `modernize-reimagine`; this map is the boundary and sequence input for target design.
-- Treat the first sequence as final when the `Architecture Critic` identifies unresolved risk.
+- Treat the first sequence as final when pressure-testing identifies unresolved risk.
 
 ## Output Format
 
@@ -105,7 +105,7 @@ flowchart LR
 Follow these steps in order. Keep the map traceable to source evidence and target architecture constraints.
 
 **Step 1 — Load the modernization workflow.**
-Load the `code-modernization` skill. Use the `Legacy Analyst` agent to clarify source structure and the `Architecture Critic` agent to challenge the mapping where useful.
+Load the `code-modernization` skill and the applicable source-analysis skill. Use `critical-thinking` to pressure-test material mapping assumptions when useful.
 
 **Step 2 — Resolve source and target boundaries.**
 Read `${input:target:legacy system folder and target architecture}`. Identify the system name for `analysis/<system>/MAP.md` and `analysis/<system>/MAP.mmd`.

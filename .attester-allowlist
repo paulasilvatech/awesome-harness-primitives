@@ -4,3 +4,5 @@ _layout
 _plugin_sources
 _plugin_governance
 validate_primitives
+# Local sibling modules bundled inside skill packages.
+sifap_loop_graph

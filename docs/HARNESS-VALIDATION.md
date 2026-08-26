@@ -6,6 +6,26 @@ Binary: `/Users/paulasilva/.local/bin/copilot`
 
 > Note: the requested scratch root was `/tmp/harness-check`, but this execution environment forbids file operations under `/tmp`. I used `/Volumes/T9/harness-check` instead. The live `~/.copilot` tree was not modified; commands used `COPILOT_HOME=/Volumes/T9/harness-check/copilot-home`.
 
+## Mainframe modernization plugin runtime verification
+
+Verification date: 2026-08-26. Target runtime: GitHub Copilot CLI 1.0.81-9. The probe used
+new temporary repositories and an isolated `COPILOT_HOME`; the live user configuration was not modified.
+
+| Evidence | Verified result |
+| --- | --- |
+| Local marketplace registration and `copilot plugin install mainframe-modernization@copilot-primitives` | The plugin installed and enabled successfully as version 0.1.0 from the local repository marketplace. |
+| `copilot skill list --json` | Plugin discovery exposed 15 skills, including `sifap-modernization-context`, `sifap-requirements-traceability`, `sifap-workshop-orchestration`, and `sifap-workspace-kit`. |
+| Qualified agent invocation | `mainframe-modernization:sifap-archaeologist` resolved and returned the requested `sifap-ok` probe response. |
+| Traceability validator tests | Five standard-library tests passed for real legacy evidence, justified greenfield evidence, missing source, placeholder source, and duplicate identifier cases. |
+| Workspace publisher tests | Sixteen standard-library tests passed for profiles, preview, idempotence, conflicts, transaction rollback, retired assets, profile switching, archive-based uninstall, modified-file preservation, and state validity. |
+| Disposable repository lifecycle | The `full` profile published 36 managed files; a second preview reported all 36 `unchanged`; uninstall archived all 36 managed files. |
+
+This probe verifies plugin installation, skill discovery, one agent activation, deterministic traceability
+validation, and the workspace publisher lifecycle. It does not verify Natural compiler behavior, a real
+SIFAP corpus, Java/Next.js builds, Azure access, deployment, GitHub mutations, or VS Code prompt execution.
+The four prompt files passed static validation, but **Chat: Run Prompt** was not available through this CLI
+probe and remains unverified.
+
 ## First-party customization documentation verification
 
 Verification date: 2026-08-21. These checks fetched known first-party pages directly; they did not use
@@ -28,6 +48,26 @@ The pages did not expose a product version in the fetched content. Recheck them 
 version changes, local evidence conflicts, a claim is unverified, the user asks for current behavior, or
 this evidence is older than 90 days. Do not refresh this date without repeating the fetch and reviewing
 the relevant sections.
+
+## Agent Skills compatibility field verification
+
+Verification date: 2026-08-25. Trigger: the repository harness spec listed `compatibility` as an
+unrecognized top-level key while imported Azure skill packages used it, so local sources conflicted.
+
+| Source | Fetched | Result |
+| --- | --- | --- |
+| https://agentskills.io/specification | 2026-08-25 | `compatibility` is an optional standard frontmatter field, maximum 500 characters, for environment requirements such as intended product, required system packages, or network access. The standard field set is `name`, `description`, `license`, `compatibility`, `metadata`, and `allowed-tools`. |
+| https://code.visualstudio.com/docs/agent-customization/agent-skills | 2026-08-25 | The VS Code header reference documents `name`, `description`, `argument-hint`, `user-invocable`, `disable-model-invocation`, and experimental `context`. It does not list `compatibility`. Page footer showed a 2026-08-19 edit date. |
+
+Local divergence and resolution: `compatibility` is valid in the portable standard but is not acted on
+by the current VS Code surface, and BUNDLE generation guidance does not mention it. This repository now
+accepts the field with the 500-character bound in
+`harness/github-copilot/skills/skill-creator/scripts/validate_skill.py` and
+`harness/github-copilot/scripts/validate_primitives.py`, and requires any blocking prerequisite to also
+appear in the skill body. Covered by `harness/github-copilot/skills/skill-creator/scripts/test_validate_skill.py`.
+
+Not verified: whether GitHub Copilot CLI or the cloud agent surfaces `compatibility` to users. No
+runtime probe was run for this field.
 
 ## Open Horizons 2.0.0 aggregate plugin runtime verification
 

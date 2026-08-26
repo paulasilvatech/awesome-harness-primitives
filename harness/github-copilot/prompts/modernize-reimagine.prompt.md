@@ -1,7 +1,7 @@
 ---
 name: 'modernize-reimagine'
 description: 'Design a target modernization architecture that preserves required behavior and names intentional changes.'
-agent: 'agent'
+agent: 'modernization'
 argument-hint: 'legacy system, rules artifact, map artifact, or target stack'
 ---
 
@@ -32,7 +32,7 @@ Use this prompt after `modernize-brief`, `modernize-assess`, `modernize-extract-
 ## What I Will Do
 
 - Load the `code-modernization` skill before designing.
-- Use the `Architecture Critic` agent to challenge the design before finalizing it in the VS Code agent environment.
+- Use `critical-thinking` to pressure-test material architecture assumptions before finalizing the design.
 - Read the brief, assessment, rules, and map artifacts when available.
 - Define target APIs, data model, runtime, deployment model, observability, security, and migration phases.
 - Explicitly list what stays behaviorally identical and what changes intentionally.
@@ -120,7 +120,7 @@ Write `analysis/<system>/DESIGN.md` with this shape:
 Follow these steps in order. Preserve required behavior and make every intentional change visible.
 
 **Step 1 — Load the modernization workflow.**
-Load the `code-modernization` skill. Use the `Architecture Critic` agent to challenge the design before finalizing it.
+Load the `code-modernization` skill. Use `critical-thinking` to pressure-test material architecture assumptions before finalizing the design.
 
 **Step 2 — Gather design inputs.**
 Read `${input:target:legacy system, rules artifact, map artifact, or target stack}`. Read the brief, assessment, rules, and map artifacts when available.

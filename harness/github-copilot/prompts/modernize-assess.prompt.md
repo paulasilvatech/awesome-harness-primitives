@@ -1,7 +1,7 @@
 ---
 name: 'modernize-assess'
 description: 'Assess a legacy system or modernization portfolio with inventory, complexity, dependencies, risks, and modernization recommendations.'
-agent: 'agent'
+agent: 'modernization'
 argument-hint: 'system folder, or --portfolio parent folder'
 ---
 
@@ -33,7 +33,7 @@ Use this prompt after `modernize-brief` exists or enough initiative context is a
 ## What I Will Do
 
 - Load the `code-modernization` skill before scanning or writing artifacts.
-- Use the `Legacy Analyst`, `Security Auditor`, and `Modernization Test Engineer` agents where useful in the VS Code agent environment.
+- Load a product-specific context skill when available, use `natural-adabas-analysis` for Natural/Adabas sources, and use `se-security-reviewer` for a focused security pass when risk warrants it.
 - Assess each immediate system folder when the target starts with `--portfolio` and write `analysis/portfolio.html`.
 - Assess a single system otherwise and write `analysis/<system>/ASSESSMENT.md`.
 - Inventory languages, build system, dependencies, tests, data stores, integrations, and runtime entry points.
@@ -114,7 +114,7 @@ For portfolio mode, write `analysis/portfolio.html` with one section per immedia
 Follow these steps in order. Keep the assessment evidence-based and non-destructive.
 
 **Step 1 — Load the modernization workflow.**
-Load the `code-modernization` skill. Use the `Legacy Analyst`, `Security Auditor`, and `Modernization Test Engineer` agents where useful for specialized review.
+Load the `code-modernization` skill and any product-specific context skill. Use `natural-adabas-analysis` for Natural/Adabas sources and `se-security-reviewer` for a focused security pass when risk warrants it.
 
 **Step 2 — Resolve assessment mode.**
 Read `${input:target:system folder, or --portfolio parent folder}`. If it starts with `--portfolio`, enumerate each immediate system folder under the parent folder. Otherwise assess the single system folder.

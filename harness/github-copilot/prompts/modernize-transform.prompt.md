@@ -1,7 +1,7 @@
 ---
 name: 'modernize-transform'
 description: 'Transform a bounded legacy module into modernized code with behavior-pinning tests and validation evidence.'
-agent: 'agent'
+agent: 'modernization'
 argument-hint: 'legacy module and target stack'
 ---
 
@@ -37,7 +37,7 @@ Use this prompt after `modernize-reimagine` has defined the target architecture 
 - Confirm the legacy source remains read-only unless the user explicitly requests otherwise.
 - Read the relevant brief, assessment, rules, map, and design artifacts.
 - Select one bounded legacy module or behavior slice.
-- Use the `Modernization Test Engineer` agent to define behavior-pinning tests in the VS Code agent environment.
+- Load `legacy-characterization-testing` to select the behavior oracle and define behavior-pinning tests.
 - Implement the modernized module under `modernized/**`.
 - Run available tests and compare behavior against legacy evidence or recorded cases.
 
@@ -106,7 +106,7 @@ Read `${input:target:legacy module and target stack}` plus the relevant brief, a
 Select one bounded legacy module or behavior slice. Reject requests that would transform the whole system in one pass.
 
 **Step 4 — Define behavior-pinning tests.**
-Use the `Modernization Test Engineer` agent to identify behavior-pinning tests from rules, legacy evidence, recorded cases, and acceptance examples.
+Load `legacy-characterization-testing` and identify behavior-pinning tests from rules, legacy evidence, recorded cases, and acceptance examples.
 
 **Step 5 — Implement under the target tree.**
 Create or update modernized code only under `modernized/**` and approved test locations. Keep implementation aligned with the target stack and design artifacts.

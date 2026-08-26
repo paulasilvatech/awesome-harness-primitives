@@ -147,9 +147,73 @@
     {
       "classification": "specialization",
       "kind": "skill",
+      "left": "plugins/open-horizons-platform/skills/azure-agentic-architecture-patterns/SKILL.md",
+      "rationale": "The Open Horizons variant adds platform-stage, ownership, routing, identity, and evidence boundaries to the reusable capability.",
+      "right": "skills/azure-agentic-architecture-patterns/SKILL.md",
+      "similarity": 1.0
+    },
+    {
+      "classification": "specialization",
+      "kind": "skill",
       "left": "plugins/open-horizons-platform/skills/azure-api-center/SKILL.md",
       "rationale": "The Open Horizons variant adds platform-stage, ownership, routing, identity, and evidence boundaries to the reusable capability.",
       "right": "skills/azure-api-center/SKILL.md",
+      "similarity": 1.0
+    },
+    {
+      "classification": "specialization",
+      "kind": "skill",
+      "left": "plugins/open-horizons-platform/skills/azure-argocd-cli/SKILL.md",
+      "rationale": "The Open Horizons variant adds platform-stage, ownership, routing, identity, and evidence boundaries to the reusable capability.",
+      "right": "skills/azure-argocd-cli/SKILL.md",
+      "similarity": 1.0
+    },
+    {
+      "classification": "specialization",
+      "kind": "skill",
+      "left": "plugins/open-horizons-platform/skills/azure-cli/SKILL.md",
+      "rationale": "The Open Horizons variant adds platform-stage, ownership, routing, identity, and evidence boundaries to the reusable capability.",
+      "right": "skills/azure-cli/SKILL.md",
+      "similarity": 1.0
+    },
+    {
+      "classification": "specialization",
+      "kind": "skill",
+      "left": "plugins/open-horizons-platform/skills/azure-helm-cli/SKILL.md",
+      "rationale": "The Open Horizons variant adds platform-stage, ownership, routing, identity, and evidence boundaries to the reusable capability.",
+      "right": "skills/azure-helm-cli/SKILL.md",
+      "similarity": 1.0
+    },
+    {
+      "classification": "specialization",
+      "kind": "skill",
+      "left": "plugins/open-horizons-platform/skills/azure-infrastructure/SKILL.md",
+      "rationale": "The Open Horizons variant adds platform-stage, ownership, routing, identity, and evidence boundaries to the reusable capability.",
+      "right": "skills/azure-infrastructure/SKILL.md",
+      "similarity": 1.0
+    },
+    {
+      "classification": "specialization",
+      "kind": "skill",
+      "left": "plugins/open-horizons-platform/skills/azure-kubectl-cli/SKILL.md",
+      "rationale": "The Open Horizons variant adds platform-stage, ownership, routing, identity, and evidence boundaries to the reusable capability.",
+      "right": "skills/azure-kubectl-cli/SKILL.md",
+      "similarity": 1.0
+    },
+    {
+      "classification": "specialization",
+      "kind": "skill",
+      "left": "plugins/open-horizons-platform/skills/azure-observability-stack/SKILL.md",
+      "rationale": "The Open Horizons variant adds platform-stage, ownership, routing, identity, and evidence boundaries to the reusable capability.",
+      "right": "skills/azure-observability-stack/SKILL.md",
+      "similarity": 1.0
+    },
+    {
+      "classification": "specialization",
+      "kind": "skill",
+      "left": "plugins/open-horizons-platform/skills/azure-postgre-database-management/SKILL.md",
+      "rationale": "The Open Horizons variant adds platform-stage, ownership, routing, identity, and evidence boundaries to the reusable capability.",
+      "right": "skills/azure-postgre-database-management/SKILL.md",
       "similarity": 1.0
     },
     {
@@ -174,6 +238,14 @@
       "left": "plugins/open-horizons-platform/skills/azure-role-selector/SKILL.md",
       "rationale": "The Open Horizons variant adds platform-stage, ownership, routing, identity, and evidence boundaries to the reusable capability.",
       "right": "skills/azure-role-selector/SKILL.md",
+      "similarity": 1.0
+    },
+    {
+      "classification": "specialization",
+      "kind": "skill",
+      "left": "plugins/open-horizons-platform/skills/azure-terraform-cli/SKILL.md",
+      "rationale": "The Open Horizons variant adds platform-stage, ownership, routing, identity, and evidence boundaries to the reusable capability.",
+      "right": "skills/azure-terraform-cli/SKILL.md",
       "similarity": 1.0
     },
     {
@@ -564,8 +636,8 @@
   "summary": {
     "confirmedDuplicates": 0,
     "exactDuplicateGroups": 0,
-    "similarityCandidates": 68,
-    "sources": 1087,
+    "similarityCandidates": 77,
+    "sources": 1150,
     "unclassifiedCandidates": 0
   },
   "threshold": 0.72

@@ -1,0 +1,20 @@
+{
+  "name": "datacorp-mm-team-kit",
+  "owner": { "name": "DataCorp Modernization Team Kit" },
+  "metadata": {
+    "description": "Local marketplace bundling the curated Copilot skills and agents committed under .github/ for the SIFAP modernization workshop kit.",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    { "name": "arch", "source": "arch", "version": "1.0.0", "description": "Architecture and modernization toolkit (catalog entry; no components vendored in this kit)." },
+    { "name": "azure-cloud-development", "source": "azure-cloud-development", "version": "1.0.1", "description": "Azure IaC, cost optimization, pricing, and resource health skills." },
+    { "name": "chromium-control-canvas", "source": "chromium-control-canvas", "version": "1.0.2", "description": "Interactive Chromium canvas (catalog entry; CLI extension not vendored in this kit)." },
+    { "name": "context-engineering", "source": "context-engineering", "version": "1.0.0", "description": "Context mapping for maximizing Copilot effectiveness." },
+    { "name": "copilot-sdk", "source": "copilot-sdk", "version": "1.0.0", "description": "Build agentic applications with the GitHub Copilot SDK." },
+    { "name": "database-data-management", "source": "database-data-management", "version": "1.0.0", "description": "PostgreSQL code review and optimization skills." },
+    { "name": "frontend-web-dev", "source": "frontend-web-dev", "version": "1.0.0", "description": "React frontend agent and Playwright test generation skill." },
+    { "name": "java-development", "source": "java-development", "version": "1.0.0", "description": "Spring Boot scaffolding, Javadoc, JUnit 5, and Spring Boot best-practice skills." },
+    { "name": "software-engineering-team", "source": "software-engineering-team", "version": "1.0.0", "description": "UX/UI designer agent from the software engineering team set." },
+    { "name": "testing-automation", "source": "testing-automation", "version": "1.0.0", "description": "JUnit 5 and Playwright test-generation skills." }
+  ]
+}

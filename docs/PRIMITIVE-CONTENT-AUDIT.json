@@ -16,16 +16,16 @@
   },
   "packaging": {
     "activePluginHookPackages": 2,
-    "marketplaceEntries": 102,
+    "marketplaceEntries": 109,
     "pluginOwned": {
-      "agents": 19,
+      "agents": 23,
       "errors": 0,
-      "instructions": 34,
-      "prompts": 11,
-      "skills": 115,
+      "instructions": 43,
+      "prompts": 15,
+      "skills": 118,
       "warnings": 0
     },
-    "pluginPackages": 102,
+    "pluginPackages": 109,
     "sharedAgents": {
       "packaged": 127,
       "total": 228,
@@ -134,8 +134,8 @@
       ]
     },
     "sharedSkills": {
-      "packaged": 197,
-      "total": 438,
+      "packaged": 246,
+      "total": 480,
       "unpackaged": [
         "acquire-codebase-knowledge",
         "ad-campaign-analyzer",
@@ -143,7 +143,6 @@
         "adobe-illustrator-scripting",
         "agent-skill-stack",
         "ai-ready",
-        "appinsights-instrumentation",
         "apple-appstore-reviewer",
         "arch-linux-triage",
         "architecture-blueprint-generator",
@@ -157,11 +156,8 @@
         "azure-deployment-preflight",
         "azure-developer-cli",
         "azure-devops-cli",
-        "azure-resource-visualizer",
-        "azure-role-selector",
         "azure-smart-city-iot-solution-builder",
         "azure-static-web-apps",
-        "azure-well-architected-review",
         "batch-files",
         "bigquery-pipeline-audit",
         "boost-prompt",
@@ -177,7 +173,6 @@
         "cli-mastery",
         "cloud-design-patterns",
         "code-exemplars-blueprint-generator",
-        "code-modernization",
         "code-tour",
         "codebase-memory-mcp",
         "codeql",
@@ -196,7 +191,6 @@
         "copilot-usage-metrics",
         "cosmosdb-datamodeling",
         "create-agentsmd",
-        "create-architectural-decision-record",
         "create-github-action-workflow-specification",
         "create-github-issue-feature-from-specification",
         "create-github-issues-for-unmet-specification-requirements",
@@ -337,7 +331,6 @@
         "ruff-recursive-fix",
         "sandbox-npm-install",
         "scoutqa-test",
-        "sdd-requirements-engineer",
         "secret-scanning",
         "security-review",
         "server-side-conversion-tracking",
@@ -2896,7 +2889,7 @@
       ]
     },
     {
-      "characters_scanned": 30353,
+      "characters_scanned": 7682,
       "external_url_count": 0,
       "files_scanned": 1,
       "kind": "agent",
@@ -2909,7 +2902,7 @@
       "review_status": "needs-current-source-review",
       "signals": [
         "currency-language",
-        "version-claim"
+        "lifecycle-language"
       ],
       "source_domains": []
     },
@@ -4542,6 +4535,79 @@
       "source_domains": []
     },
     {
+      "characters_scanned": 4259,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "agent",
+      "local_evidence_mention": false,
+      "name": "sifap-archaeologist",
+      "ownership": "plugin",
+      "package": "mainframe-modernization",
+      "packaged_by": [
+        "mainframe-modernization"
+      ],
+      "path": "harness/github-copilot/plugins/mainframe-modernization/agents/sifap-archaeologist.agent.md",
+      "review_status": "needs-semantic-review",
+      "signals": [],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 4739,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "agent",
+      "local_evidence_mention": false,
+      "name": "sifap-architect",
+      "ownership": "plugin",
+      "package": "mainframe-modernization",
+      "packaged_by": [
+        "mainframe-modernization"
+      ],
+      "path": "harness/github-copilot/plugins/mainframe-modernization/agents/sifap-architect.agent.md",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language"
+      ],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 4712,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "agent",
+      "local_evidence_mention": false,
+      "name": "sifap-builder",
+      "ownership": "plugin",
+      "package": "mainframe-modernization",
+      "packaged_by": [
+        "mainframe-modernization"
+      ],
+      "path": "harness/github-copilot/plugins/mainframe-modernization/agents/sifap-builder.agent.md",
+      "review_status": "needs-semantic-review",
+      "signals": [],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 5044,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "agent",
+      "local_evidence_mention": false,
+      "name": "sifap-evolution",
+      "ownership": "plugin",
+      "package": "mainframe-modernization",
+      "packaged_by": [
+        "mainframe-modernization"
+      ],
+      "path": "harness/github-copilot/plugins/mainframe-modernization/agents/sifap-evolution.agent.md",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "lifecycle-language"
+      ],
+      "source_domains": []
+    },
+    {
       "characters_scanned": 14670,
       "external_url_count": 0,
       "files_scanned": 1,
@@ -5429,7 +5495,7 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 6556,
+      "characters_scanned": 6769,
       "external_url_count": 2,
       "files_scanned": 1,
       "kind": "instruction",
@@ -6314,6 +6380,21 @@
       "signals": [
         "currency-language"
       ],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 3552,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "instruction",
+      "local_evidence_mention": false,
+      "name": "code-modernization",
+      "ownership": "shared",
+      "package": null,
+      "packaged_by": [],
+      "path": "harness/github-copilot/instructions/code-modernization.instructions.md",
+      "review_status": "needs-semantic-review",
+      "signals": [],
       "source_domains": []
     },
     {
@@ -9322,6 +9403,169 @@
       "source_domains": []
     },
     {
+      "characters_scanned": 2784,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "instruction",
+      "local_evidence_mention": false,
+      "name": "sifap-backend",
+      "ownership": "plugin",
+      "package": "mainframe-modernization",
+      "packaged_by": [
+        "mainframe-modernization"
+      ],
+      "path": "harness/github-copilot/plugins/mainframe-modernization/instructions/sifap-backend.instructions.md",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "version-claim"
+      ],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 2737,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "instruction",
+      "local_evidence_mention": false,
+      "name": "sifap-cicd",
+      "ownership": "plugin",
+      "package": "mainframe-modernization",
+      "packaged_by": [
+        "mainframe-modernization"
+      ],
+      "path": "harness/github-copilot/plugins/mainframe-modernization/instructions/sifap-cicd.instructions.md",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "lifecycle-language"
+      ],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 2990,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "instruction",
+      "local_evidence_mention": false,
+      "name": "sifap-database",
+      "ownership": "plugin",
+      "package": "mainframe-modernization",
+      "packaged_by": [
+        "mainframe-modernization"
+      ],
+      "path": "harness/github-copilot/plugins/mainframe-modernization/instructions/sifap-database.instructions.md",
+      "review_status": "needs-semantic-review",
+      "signals": [],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 2853,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "instruction",
+      "local_evidence_mention": false,
+      "name": "sifap-frontend",
+      "ownership": "plugin",
+      "package": "mainframe-modernization",
+      "packaged_by": [
+        "mainframe-modernization"
+      ],
+      "path": "harness/github-copilot/plugins/mainframe-modernization/instructions/sifap-frontend.instructions.md",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "version-claim"
+      ],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 2930,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "instruction",
+      "local_evidence_mention": false,
+      "name": "sifap-infrastructure",
+      "ownership": "plugin",
+      "package": "mainframe-modernization",
+      "packaged_by": [
+        "mainframe-modernization"
+      ],
+      "path": "harness/github-copilot/plugins/mainframe-modernization/instructions/sifap-infrastructure.instructions.md",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language"
+      ],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 2906,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "instruction",
+      "local_evidence_mention": false,
+      "name": "sifap-natural-adabas",
+      "ownership": "plugin",
+      "package": "mainframe-modernization",
+      "packaged_by": [
+        "mainframe-modernization"
+      ],
+      "path": "harness/github-copilot/plugins/mainframe-modernization/instructions/sifap-natural-adabas.instructions.md",
+      "review_status": "needs-semantic-review",
+      "signals": [],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 2680,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "instruction",
+      "local_evidence_mention": false,
+      "name": "sifap-requirements",
+      "ownership": "plugin",
+      "package": "mainframe-modernization",
+      "packaged_by": [
+        "mainframe-modernization"
+      ],
+      "path": "harness/github-copilot/plugins/mainframe-modernization/instructions/sifap-requirements.instructions.md",
+      "review_status": "needs-semantic-review",
+      "signals": [],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 3306,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "instruction",
+      "local_evidence_mention": false,
+      "name": "sifap-security",
+      "ownership": "plugin",
+      "package": "mainframe-modernization",
+      "packaged_by": [
+        "mainframe-modernization"
+      ],
+      "path": "harness/github-copilot/plugins/mainframe-modernization/instructions/sifap-security.instructions.md",
+      "review_status": "needs-semantic-review",
+      "signals": [],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 2710,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "instruction",
+      "local_evidence_mention": false,
+      "name": "sifap-tests",
+      "ownership": "plugin",
+      "package": "mainframe-modernization",
+      "packaged_by": [
+        "mainframe-modernization"
+      ],
+      "path": "harness/github-copilot/plugins/mainframe-modernization/instructions/sifap-tests.instructions.md",
+      "review_status": "needs-semantic-review",
+      "signals": [],
+      "source_domains": []
+    },
+    {
       "characters_scanned": 13459,
       "external_url_count": 0,
       "files_scanned": 1,
@@ -10064,6 +10308,28 @@
       ]
     },
     {
+      "characters_scanned": 3983,
+      "external_url_count": 1,
+      "files_scanned": 2,
+      "kind": "plugin",
+      "local_evidence_mention": false,
+      "name": "azure-app-lifecycle",
+      "ownership": "shared",
+      "package": "azure-app-lifecycle",
+      "packaged_by": [
+        "azure-app-lifecycle"
+      ],
+      "path": "harness/github-copilot/plugins/azure-app-lifecycle",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "version-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "github.com"
+      ]
+    },
+    {
       "characters_scanned": 2725,
       "external_url_count": 1,
       "files_scanned": 2,
@@ -10076,6 +10342,117 @@
         "azure-cloud-development"
       ],
       "path": "harness/github-copilot/plugins/azure-cloud-development",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "version-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "github.com"
+      ]
+    },
+    {
+      "characters_scanned": 3778,
+      "external_url_count": 1,
+      "files_scanned": 2,
+      "kind": "plugin",
+      "local_evidence_mention": false,
+      "name": "azure-data-development",
+      "ownership": "shared",
+      "package": "azure-data-development",
+      "packaged_by": [
+        "azure-data-development"
+      ],
+      "path": "harness/github-copilot/plugins/azure-data-development",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "version-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "github.com"
+      ]
+    },
+    {
+      "characters_scanned": 2721,
+      "external_url_count": 1,
+      "files_scanned": 2,
+      "kind": "plugin",
+      "local_evidence_mention": false,
+      "name": "azure-governance",
+      "ownership": "shared",
+      "package": "azure-governance",
+      "packaged_by": [
+        "azure-governance"
+      ],
+      "path": "harness/github-copilot/plugins/azure-governance",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "version-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "github.com"
+      ]
+    },
+    {
+      "characters_scanned": 4338,
+      "external_url_count": 1,
+      "files_scanned": 2,
+      "kind": "plugin",
+      "local_evidence_mention": false,
+      "name": "azure-kubernetes-development",
+      "ownership": "shared",
+      "package": "azure-kubernetes-development",
+      "packaged_by": [
+        "azure-kubernetes-development"
+      ],
+      "path": "harness/github-copilot/plugins/azure-kubernetes-development",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "version-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "github.com"
+      ]
+    },
+    {
+      "characters_scanned": 1540,
+      "external_url_count": 1,
+      "files_scanned": 2,
+      "kind": "plugin",
+      "local_evidence_mention": false,
+      "name": "azure-modernization",
+      "ownership": "shared",
+      "package": "azure-modernization",
+      "packaged_by": [
+        "azure-modernization"
+      ],
+      "path": "harness/github-copilot/plugins/azure-modernization",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "version-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "github.com"
+      ]
+    },
+    {
+      "characters_scanned": 2528,
+      "external_url_count": 1,
+      "files_scanned": 2,
+      "kind": "plugin",
+      "local_evidence_mention": false,
+      "name": "azure-observability-operations",
+      "ownership": "shared",
+      "package": "azure-observability-operations",
+      "packaged_by": [
+        "azure-observability-operations"
+      ],
+      "path": "harness/github-copilot/plugins/azure-observability-operations",
       "review_status": "needs-current-source-review",
       "signals": [
         "version-claim",
@@ -11095,6 +11472,35 @@
       ]
     },
     {
+      "characters_scanned": 215802,
+      "external_url_count": 7,
+      "files_scanned": 43,
+      "kind": "plugin",
+      "local_evidence_mention": false,
+      "name": "mainframe-modernization",
+      "ownership": "plugin",
+      "package": "mainframe-modernization",
+      "packaged_by": [
+        "mainframe-modernization"
+      ],
+      "path": "harness/github-copilot/plugins/mainframe-modernization",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "lifecycle-language",
+        "version-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "agentskills.io",
+        "code.visualstudio.com",
+        "developer.hashicorp.com",
+        "docs.github.com",
+        "github.com",
+        "www.w3.org"
+      ]
+    },
+    {
       "characters_scanned": 1526,
       "external_url_count": 1,
       "files_scanned": 2,
@@ -11162,9 +11568,9 @@
       ]
     },
     {
-      "characters_scanned": 2266058,
+      "characters_scanned": 2241225,
       "external_url_count": 300,
-      "files_scanned": 310,
+      "files_scanned": 307,
       "kind": "plugin",
       "local_evidence_mention": true,
       "name": "open-horizons-platform",
@@ -12952,7 +13358,7 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 6864,
+      "characters_scanned": 6982,
       "external_url_count": 0,
       "files_scanned": 1,
       "kind": "prompt",
@@ -12967,7 +13373,7 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 5722,
+      "characters_scanned": 5730,
       "external_url_count": 0,
       "files_scanned": 1,
       "kind": "prompt",
@@ -12982,7 +13388,7 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 5374,
+      "characters_scanned": 5377,
       "external_url_count": 0,
       "files_scanned": 1,
       "kind": "prompt",
@@ -12997,7 +13403,7 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 5123,
+      "characters_scanned": 5229,
       "external_url_count": 0,
       "files_scanned": 1,
       "kind": "prompt",
@@ -13012,7 +13418,7 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 5889,
+      "characters_scanned": 5883,
       "external_url_count": 0,
       "files_scanned": 1,
       "kind": "prompt",
@@ -13029,7 +13435,7 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 5796,
+      "characters_scanned": 5817,
       "external_url_count": 0,
       "files_scanned": 1,
       "kind": "prompt",
@@ -13044,7 +13450,7 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 5432,
+      "characters_scanned": 5429,
       "external_url_count": 0,
       "files_scanned": 1,
       "kind": "prompt",
@@ -13321,6 +13727,77 @@
         "currency-language",
         "lifecycle-language"
       ],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 3336,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "prompt",
+      "local_evidence_mention": false,
+      "name": "sifap-archaeology",
+      "ownership": "plugin",
+      "package": "mainframe-modernization",
+      "packaged_by": [
+        "mainframe-modernization"
+      ],
+      "path": "harness/github-copilot/plugins/mainframe-modernization/prompts/sifap-archaeology.prompt.md",
+      "review_status": "needs-semantic-review",
+      "signals": [],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 3532,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "prompt",
+      "local_evidence_mention": false,
+      "name": "sifap-build-slice",
+      "ownership": "plugin",
+      "package": "mainframe-modernization",
+      "packaged_by": [
+        "mainframe-modernization"
+      ],
+      "path": "harness/github-copilot/plugins/mainframe-modernization/prompts/sifap-build-slice.prompt.md",
+      "review_status": "needs-semantic-review",
+      "signals": [],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 3754,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "prompt",
+      "local_evidence_mention": false,
+      "name": "sifap-evolve",
+      "ownership": "plugin",
+      "package": "mainframe-modernization",
+      "packaged_by": [
+        "mainframe-modernization"
+      ],
+      "path": "harness/github-copilot/plugins/mainframe-modernization/prompts/sifap-evolve.prompt.md",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "lifecycle-language"
+      ],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 3313,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "prompt",
+      "local_evidence_mention": false,
+      "name": "sifap-specify",
+      "ownership": "plugin",
+      "package": "mainframe-modernization",
+      "packaged_by": [
+        "mainframe-modernization"
+      ],
+      "path": "harness/github-copilot/plugins/mainframe-modernization/prompts/sifap-specify.prompt.md",
+      "review_status": "needs-semantic-review",
+      "signals": [],
       "source_domains": []
     },
     {
@@ -13734,9 +14211,9 @@
       ]
     },
     {
-      "characters_scanned": 7944,
-      "external_url_count": 4,
-      "files_scanned": 1,
+      "characters_scanned": 43251,
+      "external_url_count": 21,
+      "files_scanned": 9,
       "kind": "skill",
       "local_evidence_mention": false,
       "name": "apim-ai-gateway",
@@ -13749,10 +14226,18 @@
       "review_status": "needs-current-source-review",
       "signals": [
         "currency-language",
+        "lifecycle-language",
+        "version-claim",
+        "date-claim",
         "external-source"
       ],
       "source_domains": [
-        "learn.microsoft.com"
+        "aoai-eastus.openai.azure.com",
+        "aoai-westus.openai.azure.com",
+        "cognitiveservices.azure.com",
+        "github.com",
+        "learn.microsoft.com",
+        "raw.githubusercontent.com"
       ]
     },
     {
@@ -13788,7 +14273,9 @@
       "name": "appinsights-instrumentation",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "azure-observability-operations"
+      ],
       "path": "harness/github-copilot/skills/appinsights-instrumentation",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -14374,6 +14861,79 @@
       ]
     },
     {
+      "characters_scanned": 24953,
+      "external_url_count": 19,
+      "files_scanned": 8,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "azure-agentic-architecture-patterns",
+      "ownership": "shared",
+      "package": null,
+      "packaged_by": [
+        "azure-ai-foundry"
+      ],
+      "path": "harness/github-copilot/skills/azure-agentic-architecture-patterns",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "external-source"
+      ],
+      "source_domains": [
+        "docs.github.com",
+        "learn.microsoft.com",
+        "modelcontextprotocol.io",
+        "opentelemetry.io",
+        "redis.io"
+      ]
+    },
+    {
+      "characters_scanned": 29806,
+      "external_url_count": 9,
+      "files_scanned": 16,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "azure-ai",
+      "ownership": "shared",
+      "package": null,
+      "packaged_by": [
+        "azure-ai-foundry"
+      ],
+      "path": "harness/github-copilot/skills/azure-ai",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "lifecycle-language",
+        "version-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "learn.microsoft.com"
+      ]
+    },
+    {
+      "characters_scanned": 25220,
+      "external_url_count": 2,
+      "files_scanned": 11,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "azure-airunway-aks-setup",
+      "ownership": "shared",
+      "package": null,
+      "packaged_by": [
+        "azure-kubernetes-development"
+      ],
+      "path": "harness/github-copilot/skills/azure-airunway-aks-setup",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "version-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "localhost:8080",
+        "svc-name.namespace:port`"
+      ]
+    },
+    {
       "characters_scanned": 7271,
       "external_url_count": 3,
       "files_scanned": 1,
@@ -14396,7 +14956,7 @@
       ]
     },
     {
-      "characters_scanned": 6950,
+      "characters_scanned": 6956,
       "external_url_count": 3,
       "files_scanned": 1,
       "kind": "skill",
@@ -14438,6 +14998,75 @@
       "source_domains": [
         "learn.microsoft.com"
       ]
+    },
+    {
+      "characters_scanned": 375642,
+      "external_url_count": 47,
+      "files_scanned": 68,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "azure-app-onboard",
+      "ownership": "shared",
+      "package": null,
+      "packaged_by": [
+        "azure-app-lifecycle"
+      ],
+      "path": "harness/github-copilot/skills/azure-app-onboard",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "lifecycle-language",
+        "version-claim",
+        "date-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "$swahost",
+        "${apicontainerapp.name",
+        "${containerapp.properties.configuration.ingress.fqdn",
+        "${hostname",
+        "${keyvault.name",
+        "${kvname",
+        "${workercontainerapp.name",
+        "azure.microsoft.com",
+        "graph.microsoft.com",
+        "learn.microsoft.com",
+        "localhost:3001`",
+        "management.azure.com",
+        "myapp-ca-dev-a1b2.azurecontainerapps.io",
+        "portal.azure.com",
+        "prices.azure.com",
+        "registry.terraform.io",
+        "schema.management.azure.com",
+        "{api-fqdn",
+        "{app",
+        "{container-app-name",
+        "{defaulthostname",
+        "{fqdn",
+        "{ingressfqdn",
+        "{name"
+      ]
+    },
+    {
+      "characters_scanned": 76851,
+      "external_url_count": 0,
+      "files_scanned": 16,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "azure-app-onboard-prereq",
+      "ownership": "shared",
+      "package": null,
+      "packaged_by": [
+        "azure-app-lifecycle"
+      ],
+      "path": "harness/github-copilot/skills/azure-app-onboard-prereq",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "lifecycle-language",
+        "version-claim"
+      ],
+      "source_domains": []
     },
     {
       "characters_scanned": 14677,
@@ -14516,6 +15145,30 @@
       ]
     },
     {
+      "characters_scanned": 8926,
+      "external_url_count": 2,
+      "files_scanned": 2,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "azure-argocd-cli",
+      "ownership": "shared",
+      "package": null,
+      "packaged_by": [
+        "azure-kubernetes-development"
+      ],
+      "path": "harness/github-copilot/skills/azure-argocd-cli",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "version-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "argoproj.github.io",
+        "github.com"
+      ]
+    },
+    {
       "characters_scanned": 19922,
       "external_url_count": 1,
       "files_scanned": 2,
@@ -14536,6 +15189,125 @@
       ],
       "source_domains": [
         "token.actions.githubusercontent.com"
+      ]
+    },
+    {
+      "characters_scanned": 19952,
+      "external_url_count": 1,
+      "files_scanned": 2,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "azure-cli",
+      "ownership": "shared",
+      "package": null,
+      "packaged_by": [
+        "azure-cloud-development"
+      ],
+      "path": "harness/github-copilot/skills/azure-cli",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "lifecycle-language",
+        "external-source"
+      ],
+      "source_domains": [
+        "token.actions.githubusercontent.com"
+      ]
+    },
+    {
+      "characters_scanned": 182171,
+      "external_url_count": 39,
+      "files_scanned": 31,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "azure-cloud-migrate",
+      "ownership": "shared",
+      "package": null,
+      "packaged_by": [
+        "azure-modernization"
+      ],
+      "path": "harness/github-copilot/skills/azure-cloud-migrate",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "lifecycle-language",
+        "version-claim",
+        "date-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "$($app.properties.configuration.ingress.fqdn",
+        "$fqdn",
+        "${fqdn",
+        "${functionapp.properties.defaulthostname",
+        "aka.ms",
+        "github.com",
+        "learn.microsoft.com",
+        "order-service.internal",
+        "order-service:3001`",
+        "ossrdbms-aad.database.windows.net",
+        "spring.io",
+        "svc:port`"
+      ]
+    },
+    {
+      "characters_scanned": 49025,
+      "external_url_count": 16,
+      "files_scanned": 16,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "azure-compliance",
+      "ownership": "shared",
+      "package": null,
+      "packaged_by": [
+        "azure-governance"
+      ],
+      "path": "harness/github-copilot/skills/azure-compliance",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "lifecycle-language",
+        "version-claim",
+        "date-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "${vaultname",
+        "aka.ms",
+        "azure.github.io",
+        "github.com",
+        "learn.microsoft.com"
+      ]
+    },
+    {
+      "characters_scanned": 134415,
+      "external_url_count": 41,
+      "files_scanned": 41,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "azure-compute",
+      "ownership": "shared",
+      "package": null,
+      "packaged_by": [
+        "azure-cloud-development"
+      ],
+      "path": "harness/github-copilot/skills/azure-compute",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "lifecycle-language",
+        "version-claim",
+        "date-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "azure.microsoft.com",
+        "github.com",
+        "graph.microsoft.com",
+        "learn.microsoft.com",
+        "management.azure.com",
+        "prices.azure.com",
+        "prices.azure.com:443"
       ]
     },
     {
@@ -14565,6 +15337,34 @@
       ]
     },
     {
+      "characters_scanned": 97257,
+      "external_url_count": 16,
+      "files_scanned": 23,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "azure-cost",
+      "ownership": "shared",
+      "package": null,
+      "packaged_by": [
+        "azure-observability-operations"
+      ],
+      "path": "harness/github-copilot/skills/azure-cost",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "version-claim",
+        "date-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "azure.microsoft.com",
+        "learn.microsoft.com",
+        "management.azure.com",
+        "portal.azure.com",
+        "status.azure.com"
+      ]
+    },
+    {
       "characters_scanned": 4527,
       "external_url_count": 2,
       "files_scanned": 1,
@@ -14584,6 +15384,41 @@
       ],
       "source_domains": [
         "learn.microsoft.com"
+      ]
+    },
+    {
+      "characters_scanned": 131848,
+      "external_url_count": 23,
+      "files_scanned": 41,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "azure-deploy",
+      "ownership": "shared",
+      "package": null,
+      "packaged_by": [
+        "azure-app-lifecycle"
+      ],
+      "path": "harness/github-copilot/skills/azure-deploy",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "lifecycle-language",
+        "version-claim",
+        "date-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "$(terraform",
+        "$fqdn",
+        "$hostname",
+        "`",
+        "api-xxxx.azurecontainerapps.io",
+        "apiservice.xxx.azurecontainerapps.io",
+        "aspire-dashboard.xxx.azurecontainerapps.io",
+        "azure.microsoft.com",
+        "learn.microsoft.com",
+        "myapp.azurewebsites.net`",
+        "schema.management.azure.com"
       ]
     },
     {
@@ -14665,6 +15500,37 @@
       ]
     },
     {
+      "characters_scanned": 201590,
+      "external_url_count": 79,
+      "files_scanned": 51,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "azure-diagnostics",
+      "ownership": "shared",
+      "package": null,
+      "packaged_by": [
+        "azure-observability-operations"
+      ],
+      "path": "harness/github-copilot/skills/azure-diagnostics",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "lifecycle-language",
+        "version-claim",
+        "date-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "$fqdn",
+        "app.azurewebsites.net",
+        "app.region.azurecontainerapps.io",
+        "app.scm.azurewebsites.net",
+        "azure.status.microsoft",
+        "github.com",
+        "learn.microsoft.com"
+      ]
+    },
+    {
       "characters_scanned": 105508,
       "external_url_count": 11,
       "files_scanned": 10,
@@ -14693,6 +15559,68 @@
       ]
     },
     {
+      "characters_scanned": 145167,
+      "external_url_count": 162,
+      "files_scanned": 41,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "azure-enterprise-infra-planner",
+      "ownership": "shared",
+      "package": null,
+      "packaged_by": [
+        "azure-cloud-development"
+      ],
+      "path": "harness/github-copilot/skills/azure-enterprise-infra-planner",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "lifecycle-language",
+        "version-claim",
+        "date-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "azure.microsoft.com",
+        "learn.microsoft.com"
+      ]
+    },
+    {
+      "characters_scanned": 48516,
+      "external_url_count": 32,
+      "files_scanned": 7,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "azure-entra-agent-id",
+      "ownership": "shared",
+      "package": null,
+      "packaged_by": [
+        "azure-governance"
+      ],
+      "path": "harness/github-copilot/skills/azure-entra-agent-id",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "lifecycle-language",
+        "version-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "+:5000",
+        "127.0.0.1:5000",
+        "127.0.0.1:5000`",
+        "aka.ms",
+        "github.com",
+        "graph.microsoft.com",
+        "graph.microsoft.com`",
+        "learn.microsoft.com",
+        "localhost:5000",
+        "localhost:8400",
+        "login.microsoftonline.com",
+        "sidecar:5000",
+        "sts.windows.net"
+      ]
+    },
+    {
       "characters_scanned": 4041,
       "external_url_count": 1,
       "files_scanned": 1,
@@ -14714,6 +15642,49 @@
       ]
     },
     {
+      "characters_scanned": 84468,
+      "external_url_count": 53,
+      "files_scanned": 17,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "azure-entra-app-registration",
+      "ownership": "shared",
+      "package": null,
+      "packaged_by": [
+        "azure-governance"
+      ],
+      "path": "harness/github-copilot/skills/azure-entra-app-registration",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "lifecycle-language",
+        "version-claim",
+        "date-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "developer.microsoft.com",
+        "graph.microsoft.com",
+        "jwt.ms",
+        "learn.microsoft.com",
+        "localhost",
+        "localhost:3000",
+        "localhost:3000`",
+        "localhost:5000",
+        "localhost:5001",
+        "localhost`",
+        "login.microsoftonline.com",
+        "microsoft.com",
+        "myapp.azurewebsites.net",
+        "myapp.com",
+        "myapp.example.com",
+        "portal.azure.com",
+        "sts.windows.net",
+        "www.rfc-editor.org",
+        "your-app.com"
+      ]
+    },
+    {
       "characters_scanned": 4775,
       "external_url_count": 0,
       "files_scanned": 1,
@@ -14726,6 +15697,25 @@
         "open-horizons-platform"
       ],
       "path": "harness/github-copilot/plugins/open-horizons-platform/skills/azure-helm-cli",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "lifecycle-language"
+      ],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 4839,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "azure-helm-cli",
+      "ownership": "shared",
+      "package": null,
+      "packaged_by": [
+        "azure-kubernetes-development"
+      ],
+      "path": "harness/github-copilot/skills/azure-helm-cli",
       "review_status": "needs-current-source-review",
       "signals": [
         "lifecycle-language"
@@ -14783,6 +15773,34 @@
       ]
     },
     {
+      "characters_scanned": 47003,
+      "external_url_count": 6,
+      "files_scanned": 3,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "azure-infrastructure",
+      "ownership": "shared",
+      "package": null,
+      "packaged_by": [
+        "azure-cloud-development"
+      ],
+      "path": "harness/github-copilot/skills/azure-infrastructure",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "lifecycle-language",
+        "version-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "${argocd_url",
+        "${backstage_url",
+        "${grafana_url",
+        "aka.ms",
+        "raw.githubusercontent.com",
+        "||"
+      ]
+    },
+    {
       "characters_scanned": 5748,
       "external_url_count": 0,
       "files_scanned": 1,
@@ -14803,7 +15821,201 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 16272,
+      "characters_scanned": 5812,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "azure-kubectl-cli",
+      "ownership": "shared",
+      "package": null,
+      "packaged_by": [
+        "azure-kubernetes-development"
+      ],
+      "path": "harness/github-copilot/skills/azure-kubectl-cli",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "lifecycle-language"
+      ],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 25454,
+      "external_url_count": 1,
+      "files_scanned": 6,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "azure-kubernetes",
+      "ownership": "shared",
+      "package": null,
+      "packaged_by": [
+        "azure-kubernetes-development"
+      ],
+      "path": "harness/github-copilot/skills/azure-kubernetes",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "version-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "learn.microsoft.com"
+      ]
+    },
+    {
+      "characters_scanned": 117312,
+      "external_url_count": 11,
+      "files_scanned": 30,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "azure-kubernetes-app-deploy",
+      "ownership": "shared",
+      "package": null,
+      "packaged_by": [
+        "azure-kubernetes-development"
+      ],
+      "path": "harness/github-copilot/skills/azure-kubernetes-app-deploy",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "version-claim",
+        "date-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "*",
+        "*:8080",
+        "+:8080",
+        "+:8080`",
+        "0.0.0.0:8000`",
+        "github.com",
+        "oidc.prod-aks.azure.com",
+        "ossrdbms-aad.database.windows.net",
+        "portal.azure.com",
+        "redis.azure.com"
+      ]
+    },
+    {
+      "characters_scanned": 52711,
+      "external_url_count": 3,
+      "files_scanned": 5,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "azure-kubernetes-automatic-readiness",
+      "ownership": "shared",
+      "package": null,
+      "packaged_by": [
+        "azure-kubernetes-development"
+      ],
+      "path": "harness/github-copilot/skills/azure-kubernetes-automatic-readiness",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "lifecycle-language",
+        "version-claim",
+        "date-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "aka.ms",
+        "learn.microsoft.com"
+      ]
+    },
+    {
+      "characters_scanned": 9221,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "azure-kusto",
+      "ownership": "shared",
+      "package": null,
+      "packaged_by": [
+        "azure-data-development"
+      ],
+      "path": "harness/github-copilot/skills/azure-kusto",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "version-claim"
+      ],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 29289,
+      "external_url_count": 2,
+      "files_scanned": 4,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "azure-kusto-graph",
+      "ownership": "shared",
+      "package": null,
+      "packaged_by": [
+        "azure-data-development"
+      ],
+      "path": "harness/github-copilot/skills/azure-kusto-graph",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "version-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "dataexplorer.azure.com",
+        "kc7001.eastus.kusto.windows.net`"
+      ]
+    },
+    {
+      "characters_scanned": 16084,
+      "external_url_count": 2,
+      "files_scanned": 3,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "azure-kusto-irql",
+      "ownership": "shared",
+      "package": null,
+      "packaged_by": [
+        "azure-data-development"
+      ],
+      "path": "harness/github-copilot/skills/azure-kusto-irql",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "version-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "dataexplorer.azure.com",
+        "kc7001.eastus.kusto.windows.net`"
+      ]
+    },
+    {
+      "characters_scanned": 37244,
+      "external_url_count": 11,
+      "files_scanned": 4,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "azure-kusto-irql-graph",
+      "ownership": "shared",
+      "package": null,
+      "packaged_by": [
+        "azure-data-development"
+      ],
+      "path": "harness/github-copilot/skills/azure-kusto-irql-graph",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "version-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "dataexplorer.azure.com",
+        "kc7001.eastus.kusto.windows.net`",
+        "raw.githubusercontent.com"
+      ]
+    },
+    {
+      "characters_scanned": 16278,
       "external_url_count": 9,
       "files_scanned": 6,
       "kind": "skill",
@@ -14830,6 +16042,26 @@
       ]
     },
     {
+      "characters_scanned": 3549,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "azure-messaging",
+      "ownership": "shared",
+      "package": null,
+      "packaged_by": [
+        "azure-data-development"
+      ],
+      "path": "harness/github-copilot/skills/azure-messaging",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "version-claim"
+      ],
+      "source_domains": []
+    },
+    {
       "characters_scanned": 8157,
       "external_url_count": 5,
       "files_scanned": 3,
@@ -14842,6 +16074,31 @@
         "open-horizons-platform"
       ],
       "path": "harness/github-copilot/plugins/open-horizons-platform/skills/azure-observability-stack",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "version-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "localhost:3000",
+        "localhost:9090",
+        "localhost:9093",
+        "prometheus-community.github.io"
+      ]
+    },
+    {
+      "characters_scanned": 8217,
+      "external_url_count": 5,
+      "files_scanned": 3,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "azure-observability-stack",
+      "ownership": "shared",
+      "package": null,
+      "packaged_by": [
+        "azure-observability-operations"
+      ],
+      "path": "harness/github-copilot/skills/azure-observability-stack",
       "review_status": "needs-current-source-review",
       "signals": [
         "version-claim",
@@ -14870,6 +16127,84 @@
       "review_status": "needs-semantic-review",
       "signals": [],
       "source_domains": []
+    },
+    {
+      "characters_scanned": 4650,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "azure-postgre-database-management",
+      "ownership": "shared",
+      "package": null,
+      "packaged_by": [
+        "azure-data-development"
+      ],
+      "path": "harness/github-copilot/skills/azure-postgre-database-management",
+      "review_status": "needs-semantic-review",
+      "signals": [],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 548863,
+      "external_url_count": 127,
+      "files_scanned": 164,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "azure-prepare",
+      "ownership": "shared",
+      "package": null,
+      "packaged_by": [
+        "azure-app-lifecycle"
+      ],
+      "path": "harness/github-copilot/skills/azure-prepare",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "lifecycle-language",
+        "version-claim",
+        "date-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "${accountname",
+        "${trusted_host",
+        "${webapp.properties.defaulthostname",
+        "*.azurewebsites.net",
+        "api.example.com",
+        "api.github.com",
+        "aspire.dev",
+        "azure.github.io",
+        "azure.microsoft.com",
+        "cdn.functions.azure.com",
+        "central.sonatype.com",
+        "database.windows.net",
+        "github.com",
+        "learn.microsoft.com",
+        "localhost:3000",
+        "localhost:8080",
+        "localhost:8080;authentication=none;taskhub=default",
+        "localhost:8080;authentication=none;taskhub=default`",
+        "localhost:8080;taskhub=default;authentication=none",
+        "localhost:8082",
+        "login.microsoftonline.com",
+        "mcr.microsoft.com",
+        "modelcontextprotocol.io",
+        "my-api.azurecontainerapps.io",
+        "my-api.example.com",
+        "myscheduler-abc123.westus2.durabletask.io`",
+        "myvault.vault.azure.net",
+        "portal.azure.com",
+        "pypi.org",
+        "raw.githubusercontent.com",
+        "redis.azure.com",
+        "registry.terraform.io",
+        "schema.management.azure.com",
+        "www.npmjs.com",
+        "www.nuget.org",
+        "{account",
+        "{vault-name"
+      ]
     },
     {
       "characters_scanned": 26144,
@@ -14928,6 +16263,56 @@
       ]
     },
     {
+      "characters_scanned": 31497,
+      "external_url_count": 5,
+      "files_scanned": 5,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "azure-quotas",
+      "ownership": "shared",
+      "package": null,
+      "packaged_by": [
+        "azure-governance"
+      ],
+      "path": "harness/github-copilot/skills/azure-quotas",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "version-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "learn.microsoft.com",
+        "portal.azure.com"
+      ]
+    },
+    {
+      "characters_scanned": 98749,
+      "external_url_count": 3,
+      "files_scanned": 13,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "azure-reliability",
+      "ownership": "shared",
+      "package": null,
+      "packaged_by": [
+        "azure-observability-operations"
+      ],
+      "path": "harness/github-copilot/skills/azure-reliability",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "version-claim",
+        "date-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "${endpoint.properties.hostname",
+        "learn.microsoft.com",
+        "management.azure.com"
+      ]
+    },
+    {
       "characters_scanned": 10552,
       "external_url_count": 0,
       "files_scanned": 1,
@@ -14967,15 +16352,36 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 10217,
+      "characters_scanned": 10817,
       "external_url_count": 0,
-      "files_scanned": 3,
+      "files_scanned": 2,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "azure-resource-lookup",
+      "ownership": "shared",
+      "package": null,
+      "packaged_by": [
+        "azure-cloud-development"
+      ],
+      "path": "harness/github-copilot/skills/azure-resource-lookup",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "version-claim"
+      ],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 14383,
+      "external_url_count": 0,
+      "files_scanned": 5,
       "kind": "skill",
       "local_evidence_mention": false,
       "name": "azure-resource-visualizer",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "azure-cloud-development"
+      ],
       "path": "harness/github-copilot/skills/azure-resource-visualizer",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -15012,7 +16418,9 @@
       "name": "azure-role-selector",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "azure-governance"
+      ],
       "path": "harness/github-copilot/skills/azure-role-selector",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -15022,18 +16430,19 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 18202,
+      "characters_scanned": 18017,
       "external_url_count": 0,
       "files_scanned": 1,
       "kind": "skill",
       "local_evidence_mention": false,
       "name": "azure-scaffold-wizard",
-      "ownership": "plugin",
-      "package": "open-horizons-platform",
+      "ownership": "shared",
+      "package": null,
       "packaged_by": [
+        "azure-app-lifecycle",
         "open-horizons-platform"
       ],
-      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/azure-scaffold-wizard",
+      "path": "harness/github-copilot/skills/azure-scaffold-wizard",
       "review_status": "needs-current-source-review",
       "signals": [
         "currency-language"
@@ -15086,6 +16495,31 @@
       ]
     },
     {
+      "characters_scanned": 29270,
+      "external_url_count": 12,
+      "files_scanned": 14,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "azure-storage",
+      "ownership": "shared",
+      "package": null,
+      "packaged_by": [
+        "azure-data-development"
+      ],
+      "path": "harness/github-copilot/skills/azure-storage",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "lifecycle-language",
+        "version-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "${accountname",
+        "account.blob.core.windows.net",
+        "learn.microsoft.com"
+      ]
+    },
+    {
       "characters_scanned": 6053,
       "external_url_count": 0,
       "files_scanned": 1,
@@ -15105,23 +16539,104 @@
       "source_domains": []
     },
     {
+      "characters_scanned": 6110,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "azure-terraform-cli",
+      "ownership": "shared",
+      "package": null,
+      "packaged_by": [
+        "azure-cloud-development"
+      ],
+      "path": "harness/github-copilot/skills/azure-terraform-cli",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "version-claim"
+      ],
+      "source_domains": []
+    },
+    {
       "characters_scanned": 6629,
       "external_url_count": 0,
       "files_scanned": 2,
       "kind": "skill",
       "local_evidence_mention": false,
       "name": "azure-terraform-terratest-module-testing",
-      "ownership": "plugin",
-      "package": "open-horizons-platform",
+      "ownership": "shared",
+      "package": null,
       "packaged_by": [
+        "azure-cloud-development",
         "open-horizons-platform"
       ],
-      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/azure-terraform-terratest-module-testing",
+      "path": "harness/github-copilot/skills/azure-terraform-terratest-module-testing",
       "review_status": "needs-current-source-review",
       "signals": [
         "currency-language"
       ],
       "source_domains": []
+    },
+    {
+      "characters_scanned": 165930,
+      "external_url_count": 44,
+      "files_scanned": 31,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "azure-upgrade",
+      "ownership": "shared",
+      "package": null,
+      "packaged_by": [
+        "azure-modernization"
+      ],
+      "path": "harness/github-copilot/skills/azure-upgrade",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "lifecycle-language",
+        "version-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "$default_host",
+        "aka.ms",
+        "docs.openrewrite.org",
+        "github.com",
+        "learn.microsoft.com",
+        "maven.apache.org",
+        "raw.githubusercontent.com",
+        "repo1.maven.org"
+      ]
+    },
+    {
+      "characters_scanned": 92422,
+      "external_url_count": 6,
+      "files_scanned": 27,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "azure-validate",
+      "ownership": "shared",
+      "package": null,
+      "packaged_by": [
+        "azure-app-lifecycle"
+      ],
+      "path": "harness/github-copilot/skills/azure-validate",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "lifecycle-language",
+        "version-claim",
+        "date-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "${azurerm_linux_web_app.api.default_hostname",
+        "${azurerm_linux_web_app.frontend.default_hostname",
+        "app-web-*.azurewebsites.net`",
+        "azure.microsoft.com",
+        "developer.hashicorp.com",
+        "learn.microsoft.com"
+      ]
     },
     {
       "characters_scanned": 4187,
@@ -15154,7 +16669,9 @@
       "name": "azure-well-architected-review",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "azure-governance"
+      ],
       "path": "harness/github-copilot/skills/azure-well-architected-review",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -16196,7 +17713,7 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 6593,
+      "characters_scanned": 6916,
       "external_url_count": 0,
       "files_scanned": 1,
       "kind": "skill",
@@ -16204,7 +17721,9 @@
       "name": "code-modernization",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "mainframe-modernization"
+      ],
       "path": "harness/github-copilot/skills/code-modernization",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -16740,7 +18259,9 @@
       "name": "create-architectural-decision-record",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "mainframe-modernization"
+      ],
       "path": "harness/github-copilot/skills/create-architectural-decision-record",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -18327,7 +19848,7 @@
       ]
     },
     {
-      "characters_scanned": 7710,
+      "characters_scanned": 7718,
       "external_url_count": 2,
       "files_scanned": 1,
       "kind": "skill",
@@ -19130,7 +20651,8 @@
       "ownership": "shared",
       "package": null,
       "packaged_by": [
-        "github-actions-maintenance"
+        "github-actions-maintenance",
+        "mainframe-modernization"
       ],
       "path": "harness/github-copilot/skills/github-actions-hardening",
       "review_status": "needs-current-source-review",
@@ -19958,6 +21480,7 @@
       "package": null,
       "packaged_by": [
         "java-development",
+        "mainframe-modernization",
         "testing-automation"
       ],
       "path": "harness/github-copilot/skills/java-junit",
@@ -20033,7 +21556,8 @@
       "ownership": "shared",
       "package": null,
       "packaged_by": [
-        "java-development"
+        "java-development",
+        "mainframe-modernization"
       ],
       "path": "harness/github-copilot/skills/java-springboot",
       "review_status": "needs-semantic-review",
@@ -20155,6 +21679,40 @@
         "latchshot.fly.dev",
         "latchshot.fly.dev`"
       ]
+    },
+    {
+      "characters_scanned": 4432,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "legacy-business-rule-extraction",
+      "ownership": "shared",
+      "package": null,
+      "packaged_by": [
+        "mainframe-modernization"
+      ],
+      "path": "harness/github-copilot/skills/legacy-business-rule-extraction",
+      "review_status": "needs-semantic-review",
+      "signals": [],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 4405,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "legacy-characterization-testing",
+      "ownership": "shared",
+      "package": null,
+      "packaged_by": [
+        "mainframe-modernization"
+      ],
+      "path": "harness/github-copilot/skills/legacy-characterization-testing",
+      "review_status": "needs-semantic-review",
+      "signals": [],
+      "source_domains": []
     },
     {
       "characters_scanned": 145973,
@@ -21179,6 +22737,23 @@
         "currency-language",
         "version-claim"
       ],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 5073,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "natural-adabas-analysis",
+      "ownership": "shared",
+      "package": null,
+      "packaged_by": [
+        "mainframe-modernization"
+      ],
+      "path": "harness/github-copilot/skills/natural-adabas-analysis",
+      "review_status": "needs-semantic-review",
+      "signals": [],
       "source_domains": []
     },
     {
@@ -22426,7 +24001,8 @@
       "ownership": "shared",
       "package": null,
       "packaged_by": [
-        "database-data-management"
+        "database-data-management",
+        "mainframe-modernization"
       ],
       "path": "harness/github-copilot/skills/postgresql-code-review",
       "review_status": "needs-semantic-review",
@@ -22443,7 +24019,8 @@
       "ownership": "shared",
       "package": null,
       "packaged_by": [
-        "database-data-management"
+        "database-data-management",
+        "mainframe-modernization"
       ],
       "path": "harness/github-copilot/skills/postgresql-optimization",
       "review_status": "needs-current-source-review",
@@ -23958,7 +25535,9 @@
       "name": "sdd-requirements-engineer",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "mainframe-modernization"
+      ],
       "path": "harness/github-copilot/skills/sdd-requirements-engineer",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -24123,6 +25702,107 @@
       "source_domains": []
     },
     {
+      "characters_scanned": 72438,
+      "external_url_count": 0,
+      "files_scanned": 8,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "sifap-loop",
+      "ownership": "plugin",
+      "package": "mainframe-modernization",
+      "packaged_by": [
+        "mainframe-modernization"
+      ],
+      "path": "harness/github-copilot/plugins/mainframe-modernization/skills/sifap-loop",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language"
+      ],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 11613,
+      "external_url_count": 0,
+      "files_scanned": 7,
+      "kind": "skill",
+      "local_evidence_mention": true,
+      "name": "sifap-modernization-context",
+      "ownership": "plugin",
+      "package": "mainframe-modernization",
+      "packaged_by": [
+        "mainframe-modernization"
+      ],
+      "path": "harness/github-copilot/plugins/mainframe-modernization/skills/sifap-modernization-context",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "version-claim"
+      ],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 13230,
+      "external_url_count": 0,
+      "files_scanned": 3,
+      "kind": "skill",
+      "local_evidence_mention": true,
+      "name": "sifap-requirements-traceability",
+      "ownership": "plugin",
+      "package": "mainframe-modernization",
+      "packaged_by": [
+        "mainframe-modernization"
+      ],
+      "path": "harness/github-copilot/plugins/mainframe-modernization/skills/sifap-requirements-traceability",
+      "review_status": "needs-semantic-review",
+      "signals": [],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 4464,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "skill",
+      "local_evidence_mention": true,
+      "name": "sifap-workshop-orchestration",
+      "ownership": "plugin",
+      "package": "mainframe-modernization",
+      "packaged_by": [
+        "mainframe-modernization"
+      ],
+      "path": "harness/github-copilot/plugins/mainframe-modernization/skills/sifap-workshop-orchestration",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language"
+      ],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 52303,
+      "external_url_count": 3,
+      "files_scanned": 5,
+      "kind": "skill",
+      "local_evidence_mention": true,
+      "name": "sifap-workspace-kit",
+      "ownership": "plugin",
+      "package": "mainframe-modernization",
+      "packaged_by": [
+        "mainframe-modernization"
+      ],
+      "path": "harness/github-copilot/plugins/mainframe-modernization/skills/sifap-workspace-kit",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "lifecycle-language",
+        "version-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "developer.hashicorp.com",
+        "github.com",
+        "www.w3.org"
+      ]
+    },
+    {
       "characters_scanned": 5922,
       "external_url_count": 0,
       "files_scanned": 1,
@@ -24142,11 +25822,11 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 38200,
+      "characters_scanned": 42469,
       "external_url_count": 1,
-      "files_scanned": 5,
+      "files_scanned": 6,
       "kind": "skill",
-      "local_evidence_mention": false,
+      "local_evidence_mention": true,
       "name": "skill-creator",
       "ownership": "shared",
       "package": null,
@@ -25253,11 +26933,11 @@
   "unreadableFiles": [],
   "validation": {
     "pluginOwned": {
-      "agents": 19,
+      "agents": 23,
       "errors": 0,
-      "instructions": 34,
-      "prompts": 11,
-      "skills": 115,
+      "instructions": 43,
+      "prompts": 15,
+      "skills": 118,
       "warnings": 0
     },
     "sharedHarness": {
@@ -25265,31 +26945,31 @@
       "summary": [
         {
           "errors": 0,
-          "files": 247,
+          "files": 251,
           "kind": "agents",
           "warnings": 0
         },
         {
           "errors": 0,
-          "files": 228,
+          "files": 238,
           "kind": "instructions",
           "warnings": 0
         },
         {
           "errors": 0,
-          "files": 553,
+          "files": 598,
           "kind": "skills",
           "warnings": 0
         },
         {
           "errors": 0,
-          "files": 59,
+          "files": 63,
           "kind": "prompts",
           "warnings": 0
         },
         {
           "errors": 0,
-          "files": 102,
+          "files": 109,
           "kind": "plugins",
           "warnings": 0
         },

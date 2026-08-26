@@ -1,7 +1,7 @@
 ---
 name: 'modernize-extract-rules'
 description: 'Extract cited and testable business rule cards from legacy code, modules, or business processes.'
-agent: 'agent'
+agent: 'modernization'
 argument-hint: 'legacy folder, module, or business process'
 ---
 
@@ -33,7 +33,7 @@ Use this prompt after `modernize-assess` has identified the relevant system or m
 ## What I Will Do
 
 - Load the `code-modernization` skill before extracting rules.
-- Use the `Business Rules Extractor` agent for deep rule mining in the VS Code agent environment.
+- Load `legacy-business-rule-extraction` for evidence states, rule-card shape, confidence, and SME questions.
 - Locate calculations, validations, eligibility checks, authorizations, policies, and state transitions.
 - Cite each rule with source file evidence.
 - Convert each rule into plain language and Given/When/Then examples with concrete values.
@@ -98,7 +98,7 @@ Write `analysis/<system>/RULES.md` with this shape:
 Follow these steps in order. Preserve behavior evidence and avoid target-design decisions.
 
 **Step 1 — Load the modernization workflow.**
-Load the `code-modernization` skill. Use the `Business Rules Extractor` agent for deep rule mining where useful.
+Load the `code-modernization` and `legacy-business-rule-extraction` skills before mining rules.
 
 **Step 2 — Resolve the source scope.**
 Read `${input:target:legacy folder, module, or business process}` and determine the system name for `analysis/<system>/RULES.md`. Ask for missing scope before continuing.

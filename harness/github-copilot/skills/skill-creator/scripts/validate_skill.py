@@ -19,6 +19,7 @@ SUPPORTED_KEYS = {
     "name",
     "description",
     "argument-hint",
+    "compatibility",
     "license",
     "user-invocable",
     "disable-model-invocation",
@@ -33,7 +34,8 @@ SANDBOX_PATTERNS = (
     "/mnt/" + "user-data",
 )
 NAME_RE = re.compile(r"^(?!.*--)[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$")
-WHEN_RE = re.compile(r"\b(use when|use this skill when|when (?:the )?(?:user|users|asked|working|you)|for when|invoke when|trigger)\b", re.I)
+WHEN_RE = re.compile(
+    r"\b(use when|use this skill when|when (?:the )?(?:user|users|asked|working|you)|for when|invoke when|trigger)\b", re.I)
 REF_RE = re.compile(r"\]\(([^)]+)\)")
 
 
@@ -150,7 +152,8 @@ def parse_nested(lines: list[str], i: int, parent_indent: int) -> tuple[Any, int
             items.append(parse_scalar(stripped[2:].strip()))
         elif ":" in stripped:
             key, value = stripped.split(":", 1)
-            mapping[key.strip()] = parse_scalar(value.strip()) if value.strip() else {}
+            mapping[key.strip()] = parse_scalar(
+                value.strip()) if value.strip() else {}
         else:
             raise ValueError(f"cannot parse nested line: {line}")
         i += 1
@@ -241,17 +244,26 @@ def validate_frontmatter(folder_name: str, fields: dict[str, Any], errors: list[
     if name and name != folder_name:
         fail(errors, f"name '{name}' does not match folder '{folder_name}'")
     if name and (not (1 <= len(name) <= 64) or not NAME_RE.match(name)):
-        fail(errors, f"name '{name}' is not lowercase hyphenated Agent Skills format")
+        fail(
+            errors, f"name '{name}' is not lowercase hyphenated Agent Skills format")
     description = fields.get("description", "")
     if description and not isinstance(description, str):
         fail(errors, "description must be a string")
         description = ""
     if description and len(description) > 1024:
-        fail(errors, f"description is {len(description)} characters, maximum is 1024")
+        fail(
+            errors, f"description is {len(description)} characters, maximum is 1024")
     if description and not WHEN_RE.search(description):
         fail(errors, "description must state when to use the skill")
     if "allowed-tools" in fields and not valid_string_or_string_list(fields["allowed-tools"]):
         fail(errors, "allowed-tools must be a string or list of strings")
+    compatibility = fields.get("compatibility")
+    if compatibility is not None:
+        if not isinstance(compatibility, str) or not compatibility.strip():
+            fail(errors, "compatibility must be a non-empty string")
+        elif len(compatibility) > 500:
+            fail(
+                errors, f"compatibility is {len(compatibility)} characters, maximum is 500")
     if "metadata" in fields and not isinstance(fields["metadata"], dict):
         fail(errors, "metadata must be a map")
     if "tags" in fields and not valid_string_or_string_list(fields["tags"]):
@@ -283,7 +295,8 @@ def validate_line_count(text: str, errors: list[str], warnings: list[str]) -> No
     if lines > 500:
         fail(errors, f"SKILL.md is {lines} lines, maximum is 500")
     elif lines > 200:
-        warn(warnings, f"SKILL.md is {lines} lines; consider moving detail into bundled resources")
+        warn(
+            warnings, f"SKILL.md is {lines} lines; consider moving detail into bundled resources")
 
 
 def validate_references(path: Path, text: str, errors: list[str]) -> None:
@@ -307,11 +320,13 @@ def validate_scripts(path: Path, errors: list[str]) -> None:
         try:
             compile(source, str(script), "exec")
         except SyntaxError as exc:
-            fail(errors, f"script does not compile: {script.relative_to(path)} ({exc})")
+            fail(
+                errors, f"script does not compile: {script.relative_to(path)} ({exc})")
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Validate a GitHub Copilot Agent Skill folder")
+    parser = argparse.ArgumentParser(
+        description="Validate a GitHub Copilot Agent Skill folder")
     parser.add_argument("skill", help="Path to the skill folder")
     args = parser.parse_args()
     errors, warnings = validate_skill(Path(args.skill))

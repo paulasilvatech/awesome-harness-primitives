@@ -1,7 +1,7 @@
 ---
 name: 'modernize-brief'
 description: 'Capture a modernization brief with scope, drivers, constraints, non-goals, risks, and success criteria.'
-agent: 'agent'
+agent: 'modernization'
 argument-hint: 'legacy system folder or modernization initiative'
 ---
 

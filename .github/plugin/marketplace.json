@@ -78,10 +78,46 @@
       "version": "1.0.0"
     },
     {
+      "name": "azure-app-lifecycle",
+      "source": "./harness/github-copilot/plugins/azure-app-lifecycle",
+      "description": "Take an application from idea or existing code to a running Azure deployment: readiness assessment, architecture and cost planning, infrastructure scaffolding, pre-deployment validation, and gated deployment.",
+      "version": "1.0.0"
+    },
+    {
       "name": "azure-cloud-development",
       "source": "./harness/github-copilot/plugins/azure-cloud-development",
       "description": "Comprehensive Azure cloud development tools including Infrastructure as Code, serverless functions, architecture patterns, and cost optimization for building scalable cloud applications.",
       "version": "1.0.4"
+    },
+    {
+      "name": "azure-data-development",
+      "source": "./harness/github-copilot/plugins/azure-data-development",
+      "description": "Work with Azure data and messaging services: Kusto and KQL analytics, IRQL security hunting, graph queries, Event Hubs and Service Bus troubleshooting, PostgreSQL management, and Azure Storage design.",
+      "version": "1.0.0"
+    },
+    {
+      "name": "azure-governance",
+      "source": "./harness/github-copilot/plugins/azure-governance",
+      "description": "Govern Azure environments with compliance and security auditing, Microsoft Entra identity and app registration, agent identities, quota management, RBAC role selection, and Well-Architected review.",
+      "version": "1.0.0"
+    },
+    {
+      "name": "azure-kubernetes-development",
+      "source": "./harness/github-copilot/plugins/azure-kubernetes-development",
+      "description": "Plan, secure, and operate Azure Kubernetes Service: cluster design and Day-0 decisions, application deployment with safeguards, AKS Automatic readiness, GPU model serving, and kubectl, Helm, and Argo CD workflows.",
+      "version": "1.0.0"
+    },
+    {
+      "name": "azure-modernization",
+      "source": "./harness/github-copilot/plugins/azure-modernization",
+      "description": "Modernize and migrate workloads to Azure: cross-cloud assessment and code conversion from AWS, GCP, and Heroku, plus plan, tier, SKU, and Azure SDK upgrades.",
+      "version": "1.0.0"
+    },
+    {
+      "name": "azure-observability-operations",
+      "source": "./harness/github-copilot/plugins/azure-observability-operations",
+      "description": "Operate Azure workloads with cost management, production diagnostics and triage, Application Insights instrumentation, observability stack design, and reliability posture assessment.",
+      "version": "1.0.0"
     },
     {
       "name": "backlog-swipe-triage",
@@ -304,6 +340,12 @@
       "source": "./harness/github-copilot/plugins/kotlin-mcp-development",
       "description": "Complete toolkit for building Model Context Protocol (MCP) servers in Kotlin using the official io.modelcontextprotocol:kotlin-sdk library. Includes instructions for best practices, a prompt for generating servers, and an expert agent for guidance.",
       "version": "1.0.2"
+    },
+    {
+      "name": "mainframe-modernization",
+      "source": "./harness/github-copilot/plugins/mainframe-modernization",
+      "description": "Modernize the SIFAP Natural/Adabas workshop system with evidence-first archaeology, REQ-NNN lineage, modular-monolith design, behavior-equivalence testing, secure delivery, and a preview-first workspace publisher.",
+      "version": "0.1.0"
     },
     {
       "name": "mcp-m365-copilot",

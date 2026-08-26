@@ -38,6 +38,18 @@ PLUGIN_MANIFEST_NAME = "plugin.json"
 AGENT_GLOB = "*.agent.md"
 PLUGIN_SOURCES = load_plugin_sources()
 
+
+def url_netloc(url: str) -> str:
+    """Host of a URL, or "" when the text is not a parseable URL.
+
+    Documented code samples legitimately contain template interpolation such as
+    Terraform `${resource.ingress[0].fqdn}`, which `urlparse` rejects.
+    """
+    try:
+        return urlparse(url).netloc.casefold()
+    except ValueError:
+        return ""
+
 TEXT_SUFFIXES = {
     ".bicep",
     ".c",
@@ -244,13 +256,7 @@ def make_unit(
     text, files_scanned = collect_text(scan_paths, unreadable)
     urls = clean_urls(text)
     signals = review_signals(text, urls)
-    domains = sorted(
-        {
-            parsed.netloc.casefold()
-            for url in urls
-            if (parsed := urlparse(url)).netloc
-        }
-    )
+    domains = sorted({netloc for netloc in map(url_netloc, urls) if netloc})
     rel_path = relative(path)
     return ContentUnit(
         kind=kind,

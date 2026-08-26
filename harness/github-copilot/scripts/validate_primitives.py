@@ -109,7 +109,7 @@ NOOP_TOOLS: dict[str, list[str]] = {
 AG_VSCODE_KEYS = {"argument-hint", "handoffs", "agents"}
 IN_VALID_KEYS = {"applyTo", "name", "description", "excludeAgent"}
 SK_VALID_KEYS = {"name", "description", "user-invocable", "disable-model-invocation",
-                 "allowed-tools", "argument-hint", "license", "metadata", "tags"}
+                 "allowed-tools", "argument-hint", "compatibility", "license", "metadata", "tags"}
 PR_VALID_KEYS = {"name", "description",
                  "argument-hint", "agent", "model", "tools"}
 VSCODE_PROMPT_TOOL_ALIASES = {

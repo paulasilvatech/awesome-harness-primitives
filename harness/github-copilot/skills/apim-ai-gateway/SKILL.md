@@ -23,7 +23,7 @@ Use `$ARGUMENTS` as the runtime gateway scenario: what callers invoke, which mod
 
 - Verify current Azure API Management policy names and behavior on Microsoft Learn before committing exact XML policy syntax.
 - The Developer tier of API Management cannot be created with `publicNetworkAccess=Disabled`; create it enabled and harden later if that tier is required.
-- Use the installed `azure-aigateway` skill for deep policy examples when available; this skill defines the primitive design shape.
+- Use the installed `apim-ai-gateway` skill for deep policy examples when available; this skill defines the primitive design shape.
 
 ## Gateway capabilities
 
@@ -70,7 +70,7 @@ Agents / GitHub Copilot / apps
 | --- | --- |
 | Governance vs runtime | `azure-api-center` catalogs APIs, tools, and MCP servers; APIM enforces and routes calls at runtime. |
 | Caching | Gateway semantic caching is the lowest-change option; app-level caching belongs in `azure-managed-redis-cache`. |
-| Routing | Centralizing model calls behind APIM makes routing tiers from `agentic-architecture-patterns` enforceable in one place. |
+| Routing | Centralizing model calls behind APIM makes routing tiers from `azure-agentic-architecture-patterns` enforceable in one place. |
 | Tool calls | Treat governed tool APIs like any other backend: authenticate callers, enforce quotas, monitor errors, and document ownership. |
 
 ## Gotchas
@@ -84,10 +84,10 @@ Agents / GitHub Copilot / apps
 
 | Name | Type | Use it when |
 | --- | --- | --- |
-| `azure-aigateway` | skill | You need exact APIM AI policy syntax or current Microsoft Learn examples. |
+| `apim-ai-gateway` | skill | You need exact APIM AI policy syntax or current Microsoft Learn examples. |
 | `azure-api-center` | skill | You need catalog, governance, discovery, or linter rules rather than runtime enforcement. |
 | `azure-managed-redis-cache` | skill | You need the cache backend design behind semantic caching. |
-| `agentic-architecture-patterns` | skill | You need agent routing and tool-use architecture decisions. |
+| `azure-agentic-architecture-patterns` | skill | You need agent routing and tool-use architecture decisions. |
 
 ## Output template
 

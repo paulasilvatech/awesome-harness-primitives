@@ -8,10 +8,10 @@ Regenerate this file after changing files under `harness/github-copilot/agents/`
 | Primitive type | Count |
 | --- | ---: |
 | Agents | 228 |
-| Instructions | 194 |
-| Skills | 438 |
+| Instructions | 195 |
+| Skills | 480 |
 | VS Code prompts | 48 |
-| Plugins | 102 |
+| Plugins | 109 |
 | Hooks | 8 |
 
 ## Agents
@@ -142,7 +142,7 @@ Regenerate this file after changing files under `harness/github-copilot/agents/`
 | Meta Agentic Project Scaffold | Finds, copies, and installs relevant awesome-copilot prompts, instructions, and custom agents. Use when scaffolding reusable Copilot workflow assets for an application project. |
 | Microsoft Learn Contributor | Microsoft Learn documentation contributor and reviewer. Use when writing, editing, or reviewing Learn articles for Microsoft Writing Style Guide, accessibility, Markdown, metadata… |
 | Microsoft Study and Learn | Acts as a Microsoft and Azure tutor using guided discovery, practice, and verified learning resources. Use when the user wants to study rather than receive direct answers. |
-| modernization | Human-in-the-loop modernization agent for exhaustive project analysis, feature documentation, architecture recommendations, and migration planning. Use when a repository needs com… |
+| modernization | Orchestrate evidence-driven legacy modernization from brief through assessment, rule extraction, mapping, target design, bounded transformation, and hardening. Use when a reposito… |
 | Monday Bug Context Fixer | Elite bug-fixing agent that enriches task context from Monday.com platform data. Use when a Monday bug item ID needs full context discovery, root-cause analysis, production-qualit… |
 | mongodb-performance-advisor | Analyze MongoDB database performance, query patterns, aggregation pipelines, indexes, logs, and Atlas Performance Advisor output. Use when MongoDB workloads need read-only optimiz… |
 | MS-SQL Database Administrator | Manages and troubleshoots Microsoft SQL Server databases with DBA discipline. Use for T-SQL, performance, backup/restore, security, migration, and SQL Server 2025+ compatibility t… |
@@ -280,6 +280,7 @@ Regenerate this file after changing files under `harness/github-copilot/agents/`
 | CentOS Administration Conventions | ** | Enforces CentOS administration conventions for RHEL-compatible package management, repositories, systemd services, firewalld, SELinux, validation, and rollback guidance. |
 | clojure | **/*.{clj,cljs,cljc,bb,edn.mdx?} | Enforces Clojure and ClojureScript conventions for Calva REPL-first development, structural editing, namespace handling, data shape, rich comment forms, and tests. |
 | cmake-vcpkg | **/*.cmake,**/CMakeLists.txt,**/*.cpp,**/*.c,**/*.h,**/*.hpp | Conventions for cross-platform CMake C and C++ projects that use vcpkg manifest mode, CMakePresets.json, policies, and compiler-portable build configuration. |
+| code-modernization | legacy/**,analysis/**,modernized/** | Preserves legacy evidence, separates modernization analysis from implementation, and requires traceable behavior validation. Use when editing legacy, analysis, or modernized sourc… |
 | code-review-generic | ** | Enforces generic GitHub Copilot code-review conventions for severity, comment format, and cross-cutting checks across reviewable files. |
 | codexer | **/*.py | Enforces Codexer Python research and implementation conventions for Python files, dependency hygiene, code quality, testing, security, and research-backed decisions. |
 | coldfusion-cfc | **/*.cfc | Enforces ColdFusion CFC conventions for CFScript, component structure, access modifiers, dependency injection, SQL safety, input validation, error handling, documentation, and for… |
@@ -493,20 +494,59 @@ Regenerate this file after changing files under `harness/github-copilot/agents/`
 | aws-resource-query | Answer natural-language questions about AWS resources by running strictly read-only AWS CLI queries. Use when asking about EC2, S3, RDS, Lambda, ECS, EKS, Secrets Manager, IAM, VP… |
 | aws-well-architected-review | Review AWS workloads against the AWS Well-Architected Framework across Operational Excellence, Security, Reliability, Performance Efficiency, Cost Optimization, and Sustainability… |
 | az-cost-optimize | Analyze Azure IaC files and deployed Azure resources for evidence-based cost optimization, validate current costs, calculate priority scores, and draft GitHub issues. Use when ask… |
+| azure-agentic-architecture-patterns | Provides a decision framework for production multi-agent and AI-native systems on GitHub and Azure AI Foundry. Use this skill when designing model routing, prompt caching, semanti… |
+| azure-ai | Build on Azure AI services including AI Search, Speech, Azure OpenAI, and Document Intelligence, covering keyword, vector, hybrid, and semantic search, speech-to-text, text-to-spe… |
+| azure-airunway-aks-setup | Set up AI Runway on AKS from a bare cluster to a running model, covering cluster verification, controller install, GPU assessment, provider setup, and the first deployment. Use wh… |
 | azure-api-center | Design Azure API Center as the enterprise inventory and governance plane for APIs, agent tools, OpenAPI definitions, environments, deployments, metadata, linting, and MCP server d… |
+| azure-app-onboard | Orchestrate an app end to end from a business idea, app idea, or existing codebase to a running Azure deployment with cost estimates and a pre-deploy approval gate, auto-detecting… |
+| azure-app-onboard-prereq | Assess whether source code is ready to deploy to Azure before any infrastructure work, evaluating build health, app completeness, dependencies and local services, stack compatibil… |
 | azure-architecture-autopilot | Design new Azure infrastructure or analyze existing Azure resources, generate interactive architecture diagrams, refine through conversation, produce Bicep, review, and deploy. Us… |
+| azure-argocd-cli | ArgoCD CLI operations manage GitOps installation, bootstrap, synchronization, drift detection, rollback checks, and day-2 application workflows. Use this skill when working with a… |
+| azure-cli | Azure CLI operations run az commands for cloud resource discovery, subscription context, identity, AKS, ACR, Key Vault, RBAC, managed identity, and federated credential workflows.… |
+| azure-cloud-migrate | Assess and migrate cross-cloud workloads to Azure with assessment reports and code conversion, supporting Lambda to Functions, Beanstalk, Heroku, and App Engine to App Service, an… |
+| azure-compliance | Run Azure compliance and security audits with azqr plus Key Vault expiration checks, covering best-practice assessment, resource review, policy and compliance validation, and secu… |
+| azure-compute | Route Azure virtual machine and scale set work, including size and image selection, pricing comparison, autoscale and orchestration modes, capacity reservation groups, and Essenti… |
 | azure-container-registry-cli | Manage Azure Container Registry with az acr CLI commands for registries, images, cloud builds, ACR Tasks, authentication, tokens, geo-replication, networking, purge, import, and d… |
+| azure-cost | Manage Azure cost by querying actual spend, forecasting future spending, and optimizing resources to reduce waste. Use when the user asks about Azure costs or bills, wants a cost… |
+| azure-deploy | Execute Azure deployments for ALREADY-PREPARED applications that have existing .azure/deployment-plan.md and infrastructure files. DO NOT use this skill when the user asks to CREA… |
 | azure-deployment-preflight | Validate Azure Bicep deployments before execution with syntax checks, azd preview, Azure CLI what-if, validation-level fallback, permission checks, and a preflight report. Use thi… |
 | azure-developer-cli | Design, create, review, migrate, or troubleshoot Azure Developer CLI azd projects using azure.yaml, infra Bicep or Terraform, environments, secrets, hooks, deployment workflows, a… |
 | azure-devops-cli | Manage Azure DevOps with Azure CLI and the azure-devops extension. Use when the user asks for Azure DevOps CLI commands, az devops automation, projects, repos, pull requests, pipe… |
+| azure-diagnostics | Debug Azure production issues with AppLens, Azure Monitor, resource health, and safe triage across App Service, Container Apps, Functions, AKS, virtual machines, and messaging. Us… |
 | azure-draw-io-diagram-generator | Creates and validates professional, accessible, editable draw.io diagrams with official Microsoft, Azure, and GitHub product or service icons plus recorded provenance. Use when ge… |
+| azure-enterprise-infra-planner | Architect and provision enterprise Azure infrastructure from workload descriptions for cloud architects and platform engineers, covering networking, identity, security, compliance… |
+| azure-entra-agent-id | Provision Microsoft Entra Agent Identity Blueprints, BlueprintPrincipals, and per-instance Agent Identities through Microsoft Graph, and configure OAuth 2.0 token exchange includi… |
+| azure-entra-app-registration | Guide Microsoft Entra ID app registration, OAuth 2.0 authentication, and MSAL integration. Use when the user wants to create or register an Entra ID application, configure OAuth,… |
+| azure-helm-cli | Helm CLI operations manage Kubernetes packages, charts, releases, repositories, values, upgrades, rollbacks, template rendering, release history, chart debugging, and package vali… |
+| azure-infrastructure | Azure infrastructure patterns guide landing-zone, networking, identity, naming, tagging, and private connectivity decisions. Use this skill when designing hub-spoke networks, priv… |
+| azure-kubectl-cli | kubectl CLI operations inspect and manage AKS and Kubernetes resources directly, including health checks, manifests, rollout status, logs, events, namespaces, pod troubleshooting,… |
+| azure-kubernetes | Plan, create, and configure production-ready Azure Kubernetes Service clusters, covering the Day-0 checklist, Automatic versus Standard SKU selection, networking such as private A… |
+| azure-kubernetes-app-deploy | Use when deploying an existing web application or API to an already-running Azure Kubernetes Service cluster. Detects the framework, generates a Dockerfile and Kubernetes manifest… |
+| azure-kubernetes-automatic-readiness | Assess Kubernetes workloads and cluster configuration for AKS Automatic compatibility, identify incompatibilities, generate fixes, and guide migration from AKS Standard to AKS Aut… |
+| azure-kusto | Query and analyze data in Azure Data Explorer with KQL for log analytics, telemetry, and time series analysis. Use when the user writes KQL queries, queries a Kusto database or AD… |
+| azure-kusto-graph | Build and query Kusto graphs from natural language, covering transient graphs with make-graph, persistent graph models and snapshots, pattern matching with graph-match, shortest p… |
+| azure-kusto-irql | Compose Incident Response Query Language queries for Kusto cybersecurity investigations, translating natural language hunting questions into composable IRQL pipelines built from G… |
+| azure-kusto-irql-graph | Apply IRQL graph functions to existing KQL or IRQL query results for Kusto Explorer visualization, generating Lift_To_Graph mappings and composing Graph_Render_View, Graph_Fold_By… |
 | azure-managed-redis-cache | Use when designing or provisioning Azure Managed Redis for cache, semantic cache, vector memory, session store, or agent memory in AI-native systems; produces SKU guidance, networ… |
+| azure-messaging | Troubleshoot and resolve issues with the Azure Messaging SDKs for Event Hubs and Service Bus, covering connection failures, authentication errors, message processing problems, and… |
+| azure-observability-stack | Deploys and operates Prometheus, Grafana, Loki, and Alertmanager for Open Horizons observability. Use this skill when deploying the monitoring stack, configuring dashboards, valid… |
+| azure-postgre-database-management | Performs database operations and health monitoring for Open Horizons platform data services. Use this skill when checking PostgreSQL health, validating connections, reviewing back… |
+| azure-prepare | Prepare azd-based Azure projects for deployment: generates azure.yaml, infrastructure (Bicep/Terraform), and Dockerfiles for the Azure Developer CLI (azd) workflow. USE ONLY when… |
 | azure-pricing | Fetch live Azure Retail Prices API data and estimate Azure service, SKU, region, reservation, savings plan, spot, and Copilot Studio credit costs. Use when the user asks about Azu… |
+| azure-quotas | Check and manage Azure quotas and usage across resource providers for deployment planning, capacity validation, and region selection. Use when the user asks to check quotas, servi… |
+| azure-reliability | Assess and improve the reliability posture of Azure Functions and Azure App Service workloads by scanning deployed resources for zone redundancy, ZRS storage, health probes, and m… |
 | azure-resource-health-diagnose | Analyze Azure resource health, logs, metrics, and telemetry to diagnose operational issues and produce a prioritized remediation plan. Use this skill when the user asks to trouble… |
+| azure-resource-lookup | List, find, and show Azure resources across subscriptions or resource groups using Azure Resource Graph queries. Use when the user asks to list websites, web apps, app services, v… |
 | azure-resource-visualizer | Analyze Azure resource groups and generate Mermaid architecture diagrams and markdown documentation for their resources and relationships. Use this skill when the user asks to dia… |
 | azure-role-selector | Select the least-privilege Azure RBAC role for an identity, compare built-in and custom role options, and produce assignment commands or Bicep snippets. Use this skill when the us… |
+| azure-scaffold-wizard | Scaffold a complete, production-ready Azure project from scratch for any use case, including RAG chatbots, multi-agent systems, API backends, data pipelines, Azure Functions, full… |
 | azure-smart-city-iot-solution-builder | Design and plan end-to-end Azure IoT and Smart City solutions with requirements, architecture, device and edge strategy, ingestion, analytics, security, operations, cost controls,… |
 | azure-static-web-apps | Create, configure, run, and deploy Azure Static Web Apps with the SWA CLI. Use when asked to deploy a static site to Azure, run SWA locally, configure staticwebapp.config.json, ad… |
+| azure-storage | Design and operate Azure Storage services including Blob Storage, File Shares, Queue Storage, Table Storage, and Data Lake, covering object storage, SMB file shares, async messagi… |
+| azure-terraform-cli | Terraform CLI operations manage Azure infrastructure as code through Terraform formatting, validation, initialization, planning, apply workflows, destroy workflows, state inspecti… |
+| azure-terraform-terratest-module-testing | Creates, repairs, and runs scoped Terratest coverage for Open Horizons Terraform modules under tests/terraform. Use when adding module tests, testing validation failures, selectin… |
+| azure-upgrade | Assess and upgrade Azure workloads between plans, tiers, or SKUs, and modernize Azure SDK dependencies in source code. Use when the user wants to upgrade Consumption to Flex Consu… |
+| azure-validate | Run pre-deployment validation for Azure readiness with deep checks on configuration, Bicep or Terraform infrastructure, RBAC role assignments, managed identity permissions, and pr… |
 | azure-well-architected-review | Perform an Azure Well-Architected Framework review of the current workload IaC and architecture, generating findings and GitHub issues for improvements. Use this skill when the us… |
 | backstage-plugin-builder | Plan, architect, scaffold, validate, and prepare custom Backstage plugins and modules using official Backstage documentation. Use when the user asks for new, legacy, or dual front… |
 | batch-files | Expert-level Windows batch file (.bat/.cmd) skill for writing, debugging, and maintaining CMD scripts. Use when asked to "create a batch file", "write a .bat script", "automate a… |
@@ -699,6 +739,8 @@ Regenerate this file after changing files under `harness/github-copilot/agents/`
 | kotlin-springboot | Build, review, and test idiomatic Spring Boot applications written in Kotlin. Use this skill when the user asks for Spring Boot with Kotlin best practices, Kotlin JPA entities, co… |
 | landing-page-conversion-audit | Audit a landing page, sales page, opt-in page, product page, or checkout flow for conversion leaks and return a ranked fix list ordered by expected revenue impact. Use this skill… |
 | latchshot-page-capture | Capture public HTTP(S) webpages as local PNG, JPEG, or PDF artifacts through Latchshot. Use when the user needs screenshots, website thumbnails, full-page captures, PDFs, QA repor… |
+| legacy-business-rule-extraction | Extract cited business-rule cards from legacy code, batch jobs, database definitions, screens, and process documents while separating observed behavior from inferred intent. Use w… |
+| legacy-characterization-testing | Design and implement characterization, differential, golden-master, and behavior-equivalence tests that pin observable legacy behavior before modernization. Use when a legacy slic… |
 | legacy-circuit-mockups | Generates breadboard circuit mockups and visual electronics diagrams with HTML5 Canvas conventions for retro computers, 6502 builds, 555 timer circuits, EEPROM/RAM/VIA wiring, 740… |
 | linkedin-post-formatter | Draft and format LinkedIn posts with Unicode bold, italic, bold-italic, separators, hooks, CTAs, hashtags, and plain-text layouts. Use when the user asks to write a LinkedIn post,… |
 | lsp-setup | Install and configure Language Server Protocol servers for GitHub Copilot CLI code intelligence, including go-to-definition, find-references, hover, and type information. Use when… |
@@ -736,6 +778,7 @@ Regenerate this file after changing files under `harness/github-copilot/agents/`
 | namecheap | Manage Namecheap DNS through the bundled Python API utility, including domain listing, DNS host record view/add/update/remove operations, nameserver changes, email forwarding, glu… |
 | nano-banana-pro-openrouter | Generate or edit images through OpenRouter with the `google/gemini-3-pro-image-preview` model. Use when prompt-only image generation, single-image edits, multi-image compositing,… |
 | napkin | Open and read a browser-based visual whiteboard for GitHub Copilot CLI collaboration. Use when the user says "let's napkin", "open a napkin", "start a whiteboard", "check the napk… |
+| natural-adabas-analysis | Analyze Software AG Natural programs, maps, data areas, copycodes, JCL, Adabas DDMs, FDTs, descriptors, MU/PE fields, and call or data dependencies with source citations. Use when… |
 | next-intl-add-language | Add a new locale to a Next.js application that uses next-intl, including message JSON, routing, middleware, and the language toggle UI. Use this skill when the user asks to add a… |
 | noob-mode | Translate GitHub Copilot CLI approvals, command output, errors, jargon, and completion summaries into plain English for non-technical users. Use this skill when the user says "tur… |
 | nuget-manager | Manage NuGet packages safely in .NET projects and solutions using the `dotnet` CLI. Use this skill when adding, removing, or updating package versions, verifying `PACKAGE_NAME` av… |
@@ -961,7 +1004,13 @@ They exist to filter a large marketplace and never remove, hide, or block a pack
 | awesome-copilot | 1.1.2 | active | runtime-verified | repository | Meta prompts that help you discover and generate curated GitHub Copilot agents, instructions, prompts, and skills. |
 | aws-cloud-development | 1.0.2 | active | runtime-verified | repository | Comprehensive AWS cloud development tools including Infrastructure as Code, serverless functions, architecture patterns, and cost optimization for building scalable cloud applicat… |
 | azure-ai-foundry | 1.0.0 | active | static-validated | repository | Azure AI Foundry agent development toolkit covering Agent Service synchronization, hosted agents with AG-UI frontends, Microsoft Agent Framework and Semantic Kernel, gateway and A… |
+| azure-app-lifecycle | 1.0.0 | active | static-validated | repository | Take an application from idea or existing code to a running Azure deployment: readiness assessment, architecture and cost planning, infrastructure scaffolding, pre-deployment vali… |
 | azure-cloud-development | 1.0.4 | active | static-validated | repository | Comprehensive Azure cloud development tools including Infrastructure as Code, serverless functions, architecture patterns, and cost optimization for building scalable cloud applic… |
+| azure-data-development | 1.0.0 | active | static-validated | repository | Work with Azure data and messaging services: Kusto and KQL analytics, IRQL security hunting, graph queries, Event Hubs and Service Bus troubleshooting, PostgreSQL management, and… |
+| azure-governance | 1.0.0 | active | static-validated | repository | Govern Azure environments with compliance and security auditing, Microsoft Entra identity and app registration, agent identities, quota management, RBAC role selection, and Well-A… |
+| azure-kubernetes-development | 1.0.0 | active | static-validated | repository | Plan, secure, and operate Azure Kubernetes Service: cluster design and Day-0 decisions, application deployment with safeguards, AKS Automatic readiness, GPU model serving, and kub… |
+| azure-modernization | 1.0.0 | active | static-validated | repository | Modernize and migrate workloads to Azure: cross-cloud assessment and code conversion from AWS, GCP, and Heroku, plus plan, tier, SKU, and Azure SDK upgrades. |
+| azure-observability-operations | 1.0.0 | active | static-validated | repository | Operate Azure workloads with cost management, production diagnostics and triage, Application Insights instrumentation, observability stack design, and reliability posture assessme… |
 | backlog-swipe-triage | 1.0.4 | active | runtime-required | upstream-mirror | Quickly swipe through backlog issues to triage decisions like assign, needs-info, defer, close, or ignore. |
 | backrooms-canvas | 1.0.2 | active | runtime-required | upstream-mirror | Wander an endless first-person backrooms in a Copilot canvas while agents work; their status ghost-writes on the walls. |
 | backstage-expert | 1.0.1 | active | runtime-verified | repository | Build, configure, authenticate, extend, document, operate, upgrade, and contribute to Backstage applications and the Backstage core repository with current first-party workflows,… |
@@ -999,6 +1048,7 @@ They exist to filter a large marketplace and never remove, hide, or block a pack
 | java-mcp-development | 1.0.2 | active | static-validated | repository | Complete toolkit for building Model Context Protocol servers in Java using the official MCP Java SDK with reactive streams and Spring Boot integration. |
 | java-modernization-studio | 1.0.4 | active | runtime-required | upstream-mirror | Drive the GitHub Copilot App Modernization for Java workflow from an interactive canvas: environment readiness, repo assessment, prioritized plan and progress, validation gates, a… |
 | kotlin-mcp-development | 1.0.2 | active | static-validated | repository | Complete toolkit for building Model Context Protocol (MCP) servers in Kotlin using the official io.modelcontextprotocol:kotlin-sdk library. Includes instructions for best practice… |
+| mainframe-modernization | 0.1.0 | incubating | runtime-verified | repository | Modernize the SIFAP Natural/Adabas workshop system with evidence-first archaeology, REQ-NNN lineage, modular-monolith design, behavior-equivalence testing, secure delivery, and a… |
 | mcp-m365-copilot | 1.0.2 | active | static-validated | repository | Comprehensive collection for building declarative agents with Model Context Protocol integration for Microsoft 365 Copilot |
 | napkin | 1.0.2 | active | static-validated | repository | Visual whiteboard collaboration for Copilot CLI. Opens an interactive whiteboard in your browser where you can draw, sketch, and add sticky notes — then share everything back with… |
 | noob-mode | 1.0.2 | active | static-validated | repository | Plain-English translation layer for non-technical Copilot CLI users. Translates every approval prompt, error message, and technical output into clear, jargon-free English with col… |

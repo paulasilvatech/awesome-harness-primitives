@@ -19,6 +19,7 @@ Author the canonical package at `harness/github-copilot/skills/<name>/`. Install
 - `description` is required, is 1-1024 characters, and states both what the skill does and when it should load.
 - Keep positive trigger terms in the description. Put exclusions and non-goals in `## Limits`.
 - Add `argument-hint` only when user arguments change execution; consume and validate `$ARGUMENTS` in `## Inputs`.
+- Add `compatibility` only for a real environment requirement, keep it at or below 500 characters, and repeat any blocking prerequisite in the body because current GitHub Copilot surfaces do not act on the field.
 - Add `allowed-tools`, invocation controls, license metadata, tags, or metadata only for a concrete need supported by the target surfaces.
 
 ## Body and Progressive Disclosure

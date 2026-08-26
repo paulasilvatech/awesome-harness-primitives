@@ -1,7 +1,7 @@
 ---
 name: 'modernize-harden'
 description: 'Harden a modernized module or system with ranked security, testing, observability, and operations findings.'
-agent: 'agent'
+agent: 'modernization'
 argument-hint: 'modernized folder or module'
 ---
 
@@ -33,7 +33,7 @@ Use this prompt after `modernize-transform` has produced modernized code under `
 ## What I Will Do
 
 - Load the `code-modernization` skill before reviewing.
-- Use the `Security Auditor`, `Architecture Critic`, and `Modernization Test Engineer` agents where useful in the VS Code agent environment.
+- Use `se-security-reviewer` for focused security findings, `critical-thinking` for material design assumptions, and `legacy-characterization-testing` for behavior-drift coverage.
 - Review transformed code for security, behavior drift, error handling, observability, and operational readiness.
 - Check tests for meaningful assertions and legacy behavior coverage.
 - Run available test, build, and static analysis commands.
@@ -106,7 +106,7 @@ Write `analysis/<system>/HARDENING.md` with this shape:
 Follow these steps in order. Treat hardening as evidence review plus targeted recommendations.
 
 **Step 1 — Load the modernization workflow.**
-Load the `code-modernization` skill. Use the `Security Auditor`, `Architecture Critic`, and `Modernization Test Engineer` agents where useful.
+Load the `code-modernization` and `legacy-characterization-testing` skills. Use `se-security-reviewer` for focused security findings and `critical-thinking` for material design assumptions when useful.
 
 **Step 2 — Resolve the hardening scope.**
 Read `${input:target:modernized folder or module}` and determine the system name for `analysis/<system>/HARDENING.md`.

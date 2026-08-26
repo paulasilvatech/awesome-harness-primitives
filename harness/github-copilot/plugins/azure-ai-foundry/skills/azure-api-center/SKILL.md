@@ -75,7 +75,7 @@ Backend APIs / Tools / MCP servers
 | --- | --- | --- |
 | `apim-ai-gateway` | skill | You need runtime enforcement, authN, token limits, cache, routing, and metrics. |
 | `foundry-agent-blueprint` | skill | Agents need to consume cataloged APIs as OpenAPI or MCP tools. |
-| `agentic-architecture-patterns` | skill | You need architecture guidance for tools and MCP boundaries. |
+| `azure-agentic-architecture-patterns` | skill | You need architecture guidance for tools and MCP boundaries. |
 
 ## Gotchas
 

@@ -217,13 +217,20 @@ user-invocable: true             # OPTIONAL — BUNDLE-confirmed
 disable-model-invocation: false  # OPTIONAL — BUNDLE-confirmed
 allowed-tools: ["view", "grep"]  # OPTIONAL — pre-approved tools
 argument-hint: "<arg>"           # OPTIONAL — BUNDLE-confirmed; body may use $ARGUMENTS
+compatibility: "Requires az CLI" # OPTIONAL — Agent Skills standard, 1-500 chars
 license: MIT                     # OPTIONAL
 metadata: { author: "…" }        # OPTIONAL — string→string map
 tags: ["ci", "deploy"]           # OPTIONAL — add only when useful and non-redundant
 ---
 ```
 
-Not recognized: `compatibility`, `authors`, `context`, `category`, `version` at top level
+`compatibility` is defined by the Agent Skills standard (max 500 characters) and verified on
+2026-08-25 against the [Agent Skills specification](https://agentskills.io/specification). The
+current VS Code Agent Skills reference does not list it, and BUNDLE does not act on it, so treat it
+as portable documentation only and repeat any blocking prerequisite in the skill body — see
+[HARNESS-VALIDATION.md](HARNESS-VALIDATION.md#agent-skills-compatibility-field-verification).
+
+Not recognized: `authors`, `context`, `category`, `version` at top level
 (use `metadata:` for those). Unknown keys are ignored rather than rejected.
 
 ### 3.3 Progressive disclosure
