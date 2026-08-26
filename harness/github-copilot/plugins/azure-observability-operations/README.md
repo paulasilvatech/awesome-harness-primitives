@@ -17,7 +17,7 @@ copilot plugin install azure-observability-operations@copilot-primitives
 | `/azure-observability-operations:appinsights-instrumentation` | Instrument Azure-hosted web apps with Azure Application Insights telemetry by choosing auto-instrumentation or code instrumentation for ASP.NET Core, Node.js, or Python. |
 | `/azure-observability-operations:azure-cost` | Manage Azure cost by querying actual spend, forecasting future spending, and optimizing resources to reduce waste. |
 | `/azure-observability-operations:azure-diagnostics` | Debug Azure production issues with AppLens, Azure Monitor, resource health, and safe triage across App Service, Container Apps, Functions, AKS, virtual machines, and messaging. |
-| `/azure-observability-operations:azure-observability-stack` | Deploys and operates Prometheus, Grafana, Loki, and Alertmanager for Open Horizons observability. Use this skill when deploying the monitoring stack, configuring dashboards, validating alert rules, checking metrics, reviewing SLO signals, or troubleshooting observability behavior.. |
+| `/azure-observability-operations:azure-observability-stack` | Deploys and operates Prometheus, Grafana, Loki, and Alertmanager for Open Horizons observability. |
 | `/azure-observability-operations:azure-reliability` | Assess and improve the reliability posture of Azure Functions and Azure App Service workloads by scanning deployed resources for zone redundancy, ZRS storage, health probes, and multi-region failover, then driving staged remediation through CLI or infrastructure-as-code patches with user confirmation. |
 
 ## Source

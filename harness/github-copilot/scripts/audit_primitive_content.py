@@ -50,6 +50,7 @@ def url_netloc(url: str) -> str:
     except ValueError:
         return ""
 
+
 TEXT_SUFFIXES = {
     ".bicep",
     ".c",
@@ -372,7 +373,8 @@ def validate_plugin_owned(manifests: dict[str, dict[str, Any]]) -> dict[str, int
                 plural = f"{kind}s"
                 for source in paths:
                     target = root / plural / source.name
-                    target.symlink_to(source, target_is_directory=source.is_dir())
+                    target.symlink_to(
+                        source, target_is_directory=source.is_dir())
                     totals[kind] += 1
             validator = Validator(root, quiet=True)
             validator.validate(["agents", "instructions", "skills", "prompts"])
@@ -421,14 +423,16 @@ def library_content_units(
 ) -> list[ContentUnit]:
     units: list[ContentUnit] = []
     specs = (
-        ("agent", sorted((HARNESS_ROOT / "agents").glob(AGENT_GLOB)), False, agent_packages),
+        ("agent", sorted((HARNESS_ROOT / "agents").glob(AGENT_GLOB)),
+         False, agent_packages),
         (
             "instruction",
             sorted((HARNESS_ROOT / "instructions").glob("*.instructions.md")),
             False,
             {},
         ),
-        ("skill", sorted((HARNESS_ROOT / "skills").glob("*/SKILL.md")), True, skill_packages),
+        ("skill", sorted((HARNESS_ROOT / "skills").glob("*/SKILL.md")),
+         True, skill_packages),
         ("prompt", sorted((HARNESS_ROOT / "prompts").glob("*.prompt.md")), False, {}),
     )
     for kind, sources, scan_directory, package_map in specs:
@@ -525,7 +529,8 @@ def plugin_content_units(
         config = repository_config(data)
         components = plugin_owned_components(plugin_dir, data)
         if config.get("componentSource") == "plugin":
-            units.extend(plugin_primitive_units(plugin_dir, components, evidence, unreadable))
+            units.extend(plugin_primitive_units(
+                plugin_dir, components, evidence, unreadable))
         hook_unit = plugin_hook_unit(plugin_dir, config, evidence, unreadable)
         if hook_unit is not None:
             active_hook_count += 1
@@ -567,9 +572,12 @@ def build_audit() -> dict[str, Any]:
     )
     units.extend(plugin_units)
 
-    units.sort(key=lambda unit: (unit.kind, unit.name.casefold(), unit.path.casefold()))
-    shared_agents = sorted(path.name for path in (HARNESS_ROOT / "agents").glob(AGENT_GLOB))
-    shared_skills = sorted(path.parent.name for path in (HARNESS_ROOT / "skills").glob("*/SKILL.md"))
+    units.sort(key=lambda unit: (
+        unit.kind, unit.name.casefold(), unit.path.casefold()))
+    shared_agents = sorted(path.name for path in (
+        HARNESS_ROOT / "agents").glob(AGENT_GLOB))
+    shared_skills = sorted(path.parent.name for path in (
+        HARNESS_ROOT / "skills").glob("*/SKILL.md"))
     marketplace = read_json(MARKETPLACE_PATH).get("plugins", [])
     validation = strict_validation()
     plugin_owned_validation = validate_plugin_owned(manifests)
@@ -692,9 +700,10 @@ first-party evidence and its runtime surface is exercised where applicable.
 ## Structural coverage
 
 {markdown_table(
-    ["Content type", "Sources", "Shared canonical", "Plugin-owned", "Mentioned in dated evidence"],
-    source_rows,
-)}
+        ["Content type", "Sources", "Shared canonical",
+            "Plugin-owned", "Mentioned in dated evidence"],
+        source_rows,
+    )}
 
 - Shared-harness strict validation: {shared_validation["errors"]} errors, {shared_validation["warnings"]} warnings.
 - Plugin-owned primitive validation: {plugin_owned["errors"]} errors, {plugin_owned["warnings"]} warnings.
@@ -707,19 +716,19 @@ The “mentioned in dated evidence” column is only an index hint. A mention in
 ## Freshness review inventory
 
 {markdown_table(
-    [
-        "Content type",
-        "Currency wording",
-        "Lifecycle wording",
-        "Version claims",
-        "Date claims",
-        "External sources",
-        "Current-source review",
-        "Source review",
-        "Semantic review",
-    ],
-    risk_rows,
-)}
+        [
+            "Content type",
+            "Currency wording",
+            "Lifecycle wording",
+            "Version claims",
+            "Date claims",
+            "External sources",
+            "Current-source review",
+            "Source review",
+            "Semantic review",
+        ],
+        risk_rows,
+    )}
 
 These are review signals, not automatic defects. Code samples naturally contain versions and URLs, while
 words such as “latest”, “preview”, “deprecated”, and “current” require dated evidence before delivery.
@@ -795,7 +804,8 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
         description="Audit primitive content risks and plugin distribution coverage."
     )
-    parser.add_argument("--check", action="store_true", help="fail if committed reports are stale")
+    parser.add_argument("--check", action="store_true",
+                        help="fail if committed reports are stale")
     parser.add_argument("--json", action="store_true", dest="json_output")
     args = parser.parse_args(argv)
 

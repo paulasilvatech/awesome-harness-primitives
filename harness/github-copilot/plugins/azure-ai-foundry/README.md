@@ -14,15 +14,17 @@ copilot plugin install azure-ai-foundry@copilot-primitives
 
 | Skill | Description |
 |-------|-------------|
-| `foundry-agent-sync` | Create, register, deploy, update, and synchronize prompt-based Foundry agents from a local manifest through the Agent Service REST API. |
-| `foundry-hosted-agent-copilotkit` | Build CopilotKit frontends over AG-UI against Microsoft Agent Framework agents and Foundry hosted agents, including human-in-the-loop approval and the deploy loop. |
-| `microsoft-agent-framework` | Create, refactor, and review Microsoft Agent Framework agents, workflows, and migrations in .NET or Python. |
-| `semantic-kernel` | Build Semantic Kernel applications, plugins, and function-calling flows with Azure OpenAI and Foundry connectors. |
-| `apim-ai-gateway` | Put API Management in front of Foundry inference endpoints with token limits, managed identity, backend pools, and content safety. |
-| `azure-api-center` | Govern the API and MCP catalog that agents discover and call. |
-| `azure-managed-redis-cache` | Design semantic cache, vector memory, and agent session state on Azure Managed Redis. |
-| `entra-agent-user` | Create Microsoft Entra agent users so agents can act with a user-backed identity. |
-| `agentic-eval` | Run evaluator-optimizer, rubric, and LLM-as-judge loops over agent output. |
+| `agentic-eval` | Design evaluator-optimizer, reflection, rubric, LLM-as-judge, and test-driven refinement loops for AI agent outputs. |
+| `apim-ai-gateway` | Design Azure API Management as the runtime AI gateway for model and tool traffic, including token-per-minute controls, token limits, quotas, multi-backend load-balanced backend pools, circuit breakers, semantic caching, token metrics, managed identity, and content safety. |
+| `azure-agentic-architecture-patterns` | Provides a decision framework for production multi-agent and AI-native systems on GitHub and Azure AI Foundry. |
+| `azure-ai` | Build on Azure AI services including AI Search, Speech, Azure OpenAI, and Document Intelligence, covering keyword, vector, hybrid, and semantic search, speech-to-text, text-to-speech, transcription, and OCR. |
+| `azure-api-center` | Design Azure API Center as the enterprise inventory and governance plane for APIs, agent tools, OpenAPI definitions, environments, deployments, metadata, linting, and MCP server discovery. |
+| `azure-managed-redis-cache` | Use when designing or provisioning Azure Managed Redis for cache, semantic cache, vector memory, session store, or agent memory in AI-native systems; produces SKU guidance, network and identity controls, Bicep deployment steps, and integration recommendations. DO NOT USE FOR: general agent architecture (use agentic-architecture-patterns), Foundry agent runtime design (use foundry-agent-blueprint), or general Azure infrastructure (use azure-infrastructure). Triggers include \"design Redis semantic cache\", \"provision Azure Managed Redis\", \"add vector memory\". |
+| `entra-agent-user` | Create Agent Users in Microsoft Entra ID from Agent Identities, enabling AI agents to act as digital workers with user identity capabilities in Microsoft 365 and Azure environments. |
+| `foundry-agent-sync` | Create, register, deploy, update, and synchronize prompt-based Azure AI Foundry agents from a local JSON manifest using the Agent Service REST API. |
+| `foundry-hosted-agent-copilotkit` | Guide ongoing development of CopilotKit frontends connected over AG-UI to Microsoft Agent Framework agents and Azure AI Foundry hosted agents. |
+| `microsoft-agent-framework` | Create, update, refactor, explain, or review Microsoft Agent Framework applications, agents, workflows, and migrations in .NET or Python. |
+| `semantic-kernel` | Create, update, refactor, explain, or review Semantic Kernel applications, plugins, function-calling flows, and AI integrations in .NET or Python. |
 
 ## Related primitives outside this package
 

@@ -389,7 +389,8 @@
         "./skills/csharp-tunit/",
         "./skills/csharp-xunit/",
         "./skills/dotnet-best-practices/",
-        "./skills/dotnet-upgrade/"
+        "./skills/dotnet-upgrade/",
+        "./skills/fluentui-blazor/"
       ]
     },
     "database-data-management": {
@@ -551,7 +552,9 @@
         "./skills/frontend-visual-e2e-testing/",
         "./skills/frontend-visual-system/",
         "./skills/playwright-explore-website/",
-        "./skills/playwright-generate-test/"
+        "./skills/playwright-generate-test/",
+        "./skills/premium-frontend-ui/",
+        "./skills/web-design-reviewer/"
       ],
       "governance": {
         "lastRuntimeProbe": "2026-08-25",
@@ -667,6 +670,7 @@
     "mainframe-modernization": {
       "componentSource": "plugin",
       "sharedSkills": [
+        "./skills/adabas-postgresql-migration/",
         "./skills/code-modernization/",
         "./skills/create-architectural-decision-record/",
         "./skills/github-actions-hardening/",
@@ -1151,8 +1155,10 @@
         "./skills/ai-prompt-engineering-safety-review/",
         "./skills/csharp-nunit/",
         "./skills/java-junit/",
+        "./skills/playwright-automation-fill-in-form/",
         "./skills/playwright-explore-website/",
-        "./skills/playwright-generate-test/"
+        "./skills/playwright-generate-test/",
+        "./skills/webapp-testing/"
       ]
     },
     "the-workshop": {
@@ -1221,6 +1227,14 @@
       "agents": [],
       "skills": [
         "./skills/anti-ui-slop/"
+      ]
+    },
+    "ux-design-tooling": {
+      "componentSource": "library",
+      "agents": [],
+      "skills": [
+        "./skills/canvas-design/",
+        "./skills/penpot-uiux-design/"
       ]
     },
     "visual-pr": {

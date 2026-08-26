@@ -18,8 +18,8 @@ copilot plugin install azure-governance@copilot-primitives
 | `/azure-governance:azure-entra-agent-id` | Provision Microsoft Entra Agent Identity Blueprints, BlueprintPrincipals, and per-instance Agent Identities through Microsoft Graph, and configure OAuth 2.0 token exchange including fmi_path, on-behalf-of, and cross-tenant flows with the Microsoft Entra SDK for AgentID sidecar. |
 | `/azure-governance:azure-entra-app-registration` | Guide Microsoft Entra ID app registration, OAuth 2.0 authentication, and MSAL integration. |
 | `/azure-governance:azure-quotas` | Check and manage Azure quotas and usage across resource providers for deployment planning, capacity validation, and region selection. |
-| `/azure-governance:azure-role-selector` | Select the least-privilege Azure RBAC role for an identity, compare built-in and custom role options, and produce assignment commands or Bicep snippets. Use this skill when the user asks which Azure role to assign for permissions, scopes, identities, data-plane access, control-plane access, custom roles, or access requirements.. |
-| `/azure-governance:azure-well-architected-review` | Perform an Azure Well-Architected Framework review of the current workload IaC and architecture, generating findings and GitHub issues for improvements. Use this skill when the user asks for azure well-architected review.. |
+| `/azure-governance:azure-role-selector` | Select the least-privilege Azure RBAC role for an identity, compare built-in and custom role options, and produce assignment commands or Bicep snippets. |
+| `/azure-governance:azure-well-architected-review` | Perform an Azure Well-Architected Framework review of the current workload IaC and architecture, generating findings and GitHub issues for improvements. |
 
 ## Source
 

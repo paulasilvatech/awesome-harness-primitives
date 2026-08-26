@@ -1,7 +1,7 @@
 # Mainframe modernization
 
 `mainframe-modernization` is the SIFAP Natural/Adabas workshop plugin. It combines reusable
-modernization capabilities with a small SIFAP-specific context layer and four evidence-gated stage
+modernization capabilities with a small SIFAP-specific context layer and five evidence-gated stage
 agents.
 
 ## Included runtime capabilities
@@ -11,7 +11,8 @@ agents.
 | Archaeology | `sifap-archaeologist` agent |
 | Requirements and architecture | `sifap-architect` agent |
 | Bounded implementation | `sifap-builder` agent |
-| Hardening and operations | `sifap-evolution` agent |
+| Behavior and data equivalence | `sifap-quality` agent |
+| Delivery, infrastructure, and documentation | `sifap-operations` agent |
 | SIFAP product context | `sifap-modernization-context` skill |
 | Requirement lineage | `sifap-requirements-traceability` skill |
 | Stage coordination | `sifap-workshop-orchestration` skill |
@@ -19,8 +20,94 @@ agents.
 | Repository publication | `sifap-workspace-kit` skill |
 
 The package also materializes shared canonical skills for general modernization, Natural/Adabas
-analysis, business-rule extraction, characterization testing, requirements, ADRs, Java/Spring,
-PostgreSQL, GitHub Actions, and Azure infrastructure.
+analysis, Adabas-to-PostgreSQL migration, business-rule extraction, characterization testing,
+requirements, ADRs, Java/Spring, PostgreSQL, GitHub Actions, and Azure infrastructure.
+
+## Installation
+
+```bash
+copilot plugin install mainframe-modernization@copilot-primitives
+```
+
+Installation exposes the agents and skills. It does not activate repository instructions or VS Code
+prompts. Publish those into the target repository with `sifap-workspace-kit`:
+
+```bash
+python3 scripts/install_workspace_kit.py --target <repository> --profile full
+python3 scripts/install_workspace_kit.py --target <repository> --profile full --apply
+```
+
+The first command previews and writes nothing. Review every create, update, retired, and conflict result
+before adding `--apply`. Run the preview again afterwards and require every managed destination to be
+`unchanged`.
+
+## Running one slice
+
+The workshop moves one bounded slice through six loops. Ask for a stage by name, or invoke the prompt.
+
+| Loop | Ask for | Prompt | Produces |
+| --- | --- | --- | --- |
+| Archaeology | `sifap-archaeologist` | `/sifap-archaeology` | Inventory, dependencies, rule candidates, open questions |
+| Vision | `sifap-architect` with the product owner | — | Accepted, rejected, or deferred rule candidates with owners |
+| Architecture | `sifap-architect` | `/sifap-specify` | `REQ-NNN` requirements, ADRs, module plan |
+| Implementation | `sifap-builder` | `/sifap-build-slice` | Modern code and behavior-pinning tests |
+| Quality | `sifap-quality` | `/sifap-verify` | Verification coverage, migration mapping, reconciliation numbers |
+| Operations | `sifap-operations` | `/sifap-operate` | Pipeline, IaC, runbook, approvals, retrospective |
+
+Prompts are VS Code only. In GitHub Copilot CLI, name the agent or the skill instead.
+
+Each loop keeps its state in the slice folder, which is what makes a run resumable:
+
+```text
+<slice>/
+  graph.json          engineering graph, extended by every loop
+  ledger.md           iteration ledger
+  defects/            routed defect records
+  decisions/          accepted deviations and approval records
+```
+
+Gates are computed from the graph, not asserted:
+
+```bash
+python3 scripts/sifap_loop_graph.py validate --graph <slice>/graph.json
+python3 scripts/sifap_loop_graph.py gate --graph <slice>/graph.json --phase quality --slice <NNN-slug>
+python3 scripts/sifap_loop_graph.py query --graph <slice>/graph.json --query slice-order
+```
+
+Run those from the `sifap-loop` skill directory. `slice-order` returns the legacy call components in
+dependency order, which is how the next slice is chosen.
+
+## Autonomy and human gates
+
+Declare an autonomy level when starting a run. The level changes how many loops run between stops; it
+never changes which decisions require a human.
+
+| Level | The agent does | The human does |
+| --- | --- | --- |
+| L0 manual | Answers one question at a time | Runs every step |
+| L1 assisted | Runs one inner loop and reports the gate | Closes every gate |
+| L2 supervised | Chains loops across phases, stops at each human gate | Decides at the gates only |
+| L3 delegated | Prepares an issue and reviews the delegated pull request | Approves the delegation and the merge |
+
+L2 is the recommended default. Start it with something like:
+
+```text
+Run the SIFAP loop at L2 for slice 001-payment-inspection.
+Stop at every human gate and report the pending decision.
+```
+
+**Never autonomous, at any level:** scope acceptance, requirement approval, binding technical decisions,
+accepted deviations, slice re-scoping, budget-exhaustion escalation, reconciliation sign-off, legacy
+source writes, external mutations such as pushes, issues, and delegation, merges, and deployments.
+
+**Autonomous without a gate:** reading legacy evidence, building and querying the graph, running builds,
+tests, and reconciliation queries, writing the slice folder, and drafting issues, runbooks, and decision
+records for review.
+
+A run also stops when the iteration budget is exhausted, a defect routes back more than one phase, a
+required check cannot run, the graph fails validation, or a gate has zero subjects. A stop is a normal
+outcome, not a failure. The full register, resume sequence, and pause report live in the `sifap-loop`
+skill reference `references/autonomous-run.md`.
 
 ## Runtime boundaries
 

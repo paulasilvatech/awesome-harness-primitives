@@ -27,8 +27,8 @@ planned transaction; `--uninstall` selects an archive-based uninstall plan. Do n
 
 | Profile | Published assets |
 | --- | --- |
-| `core` | Global SIFAP instructions, four stage agents, four SIFAP Skills, and core evidence/security instructions. |
-| `workshop` | `core` plus backend, frontend, database, infrastructure, test, CI/CD instructions, and four stage prompts. |
+| `core` | Global SIFAP instructions, five stage agents, five SIFAP Skills, and core evidence/security instructions. |
+| `workshop` | `core` plus backend, frontend, database, infrastructure, test, CI/CD instructions, and five stage prompts. |
 | `automation` | Traceability validator and pinned GitHub Actions workflow. |
 | `full` | Union of `workshop` and `automation`. |
 

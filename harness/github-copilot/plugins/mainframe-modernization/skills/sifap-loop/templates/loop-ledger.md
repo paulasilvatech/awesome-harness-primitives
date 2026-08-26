@@ -26,6 +26,14 @@ One ledger per slice. Append; never rewrite a closed iteration.
 | --- | --- | --- | --- |
 | `<what failed>` | local-defect / upstream-defect / accepted-deviation / environment-failure | `<phase>` | `<corrected here, DEF-NNN raised, or decision recorded>` |
 
+### Human gates
+
+| Gate | Decision | Owner | Decided on | Evidence |
+| --- | --- | --- | --- | --- |
+| `<scope acceptance, requirement approval, deviation, reconciliation sign-off, merge, deploy>` | `<what was decided>` | `<person>` | `<YYYY-MM-DD>` | `<record path>` |
+
+An undecided gate stays in this table with an empty decision. The agent never fills it in on the owner's behalf.
+
 ### Close-out
 
 - **Status:** closed / iterating / escalated / blocked

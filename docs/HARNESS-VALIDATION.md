@@ -26,6 +26,13 @@ SIFAP corpus, Java/Next.js builds, Azure access, deployment, GitHub mutations, o
 The four prompt files passed static validation, but **Chat: Run Prompt** was not available through this CLI
 probe and remains unverified.
 
+The package changed after this probe on the same date: the `sifap-loop` and `adabas-postgresql-migration`
+skills were added, `sifap-evolution` was split into `sifap-quality` and `sifap-operations`, and
+`sifap-evolve` was replaced by `sifap-verify` and `sifap-operate`. The recorded skill count, agent name,
+and the 36-file publisher lifecycle figure describe the pre-change package and were not re-probed. The
+standard-library traceability, workspace-publisher, and loop-graph tests were re-run against the current
+package and passed.
+
 ## First-party customization documentation verification
 
 Verification date: 2026-08-21. These checks fetched known first-party pages directly; they did not use

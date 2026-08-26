@@ -19,8 +19,8 @@ enabled tool runs.
 
 | Type | Sources | Inherited tools | Allow-lists | Tools disabled | Current static | Runtime check | Capability review | Blocked |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| agent | 251 | 0 | 249 | 2 | 204 | 47 | 0 | 0 |
-| prompt | 63 | 31 | 32 | 0 | 58 | 5 | 0 | 0 |
+| agent | 252 | 0 | 250 | 2 | 205 | 47 | 0 | 0 |
+| prompt | 64 | 32 | 32 | 0 | 59 | 5 | 0 | 0 |
 
 - Fixed model pins: 0.
 - Read-only agents inheriting all tools: 0.

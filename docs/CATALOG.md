@@ -9,7 +9,7 @@ Regenerate this file after changing files under `harness/github-copilot/agents/`
 | --- | ---: |
 | Agents | 228 |
 | Instructions | 195 |
-| Skills | 480 |
+| Skills | 481 |
 | VS Code prompts | 48 |
 | Plugins | 109 |
 | Hooks | 8 |
@@ -456,6 +456,7 @@ Regenerate this file after changing files under `harness/github-copilot/agents/`
 | acreadiness-generate-instructions | Generate tailored AI agent instruction files with the AgentRC instructions command, including .github/copilot-instructions.md, AGENTS.md, scoped .github/instructions/*.instruction… |
 | acreadiness-policy | Help the user pick, write, or apply an AgentRC policy. Policies customise readiness scoring by disabling irrelevant checks, overriding impact/level, setting pass-rate thresholds,… |
 | ad-campaign-analyzer | Analyze ad campaign performance data to diagnose waste, identify winners, validate A/B tests, compare channels, and recommend cuts, scaling, tests, and budget reallocation. Use wh… |
+| adabas-postgresql-migration | Model Adabas files, DDM and FDT definitions, MU and PE structures, packed and unpacked numerics, descriptors, and ISN identity as a PostgreSQL schema, then prove equivalence with… |
 | add-educational-comments | Add educational comments to existing code files while preserving encoding, line endings, indentation, syntax, and build correctness. Use this skill when the user asks to annotate… |
 | adobe-illustrator-scripting | Write, debug, and optimize Adobe Illustrator automation scripts using ExtendScript (JavaScript/JSX). Use when creating or modifying scripts that manipulate documents, layers, path… |
 | agent-governance | Design governance, safety, policy enforcement, trust scoring, and audit controls for AI agent systems. Use when building agents with external tools, policy-based tool access, sema… |

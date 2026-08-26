@@ -12,7 +12,7 @@ Replace `<graph>` with the slice graph path and `<slice>` with the slice identif
 
 **Entry:** an agreed legacy scope and read access to the Natural/Adabas corpus.
 
-### Exit criteria
+### L0 exit criteria
 
 | # | Criterion | Check |
 | --- | --- | --- |
@@ -25,7 +25,7 @@ Replace `<graph>` with the slice graph path and `<slice>` with the slice identif
 **Typical defects:** inferred purpose promoted to observed behavior; a `CALLNAT` target never opened;
 packed decimal read as floating point; MU/PE occurrence semantics dropped.
 
-### Commands
+### L0 commands
 
 ```bash
 python3 scripts/sifap_loop_graph.py validate --graph <graph>
@@ -39,7 +39,7 @@ python3 scripts/sifap_loop_graph.py query --graph <graph> --query dead-legacy
 
 **Entry:** archaeology gate closed, and rule candidates exist with evidence.
 
-### Exit criteria
+### L1 exit criteria
 
 | # | Criterion | Check |
 | --- | --- | --- |
@@ -52,7 +52,7 @@ python3 scripts/sifap_loop_graph.py query --graph <graph> --query dead-legacy
 **Typical defects:** the whole backlog accepted without prioritization; scope defined by legacy program
 count instead of by business outcome; acceptance written as "migrate PAY0100".
 
-### Commands
+### L1 commands
 
 ```bash
 python3 scripts/sifap_loop_graph.py gate --graph <graph> --phase vision --slice <slice>
@@ -64,7 +64,7 @@ python3 scripts/sifap_loop_graph.py gate --graph <graph> --phase vision --slice 
 
 **Entry:** vision gate closed, and accepted rule candidates carry owners.
 
-### Exit criteria
+### L2 exit criteria
 
 | # | Criterion | Check |
 | --- | --- | --- |
@@ -77,7 +77,7 @@ python3 scripts/sifap_loop_graph.py gate --graph <graph> --phase vision --slice 
 **Typical defects:** one requirement hiding two behaviors; a `source_legacy` path adjusted to make the
 validator pass; a dependency added without a decision record; MU/PE storage decided implicitly in code.
 
-### Commands
+### L2 commands
 
 Run the requirement validator bundled with `sifap-requirements-traceability`, then the graph gate.
 
@@ -91,7 +91,7 @@ python3 scripts/sifap_loop_graph.py gate --graph <graph> --phase architecture --
 
 **Entry:** architecture gate closed, and the slice is bounded.
 
-### Exit criteria
+### L3 exit criteria
 
 | # | Criterion | Check |
 | --- | --- | --- |
@@ -104,7 +104,7 @@ python3 scripts/sifap_loop_graph.py gate --graph <graph> --phase architecture --
 **Typical defects:** scope creep into the next slice; a test written after the fact to match the code;
 monetary values mapped to binary floating point; a no-record legacy branch silently dropped.
 
-### Commands
+### L3 commands
 
 ```bash
 python3 scripts/sifap_loop_graph.py gate --graph <graph> --phase implementation --slice <slice>
@@ -113,11 +113,11 @@ python3 scripts/sifap_loop_graph.py query --graph <graph> --query blast-radius -
 
 ## L4 quality
 
-**Pair:** Par 04, DBA and QA Engineer. **Lead:** `sifap-builder` with `sifap-evolution` review. **Budget:** 3 inner iterations.
+**Pair:** Par 04, DBA and QA Engineer. **Lead:** `sifap-quality`. **Budget:** 3 inner iterations.
 
 **Entry:** implementation gate closed with build and test evidence.
 
-### Exit criteria
+### L4 exit criteria
 
 | # | Criterion | Check |
 | --- | --- | --- |
@@ -130,7 +130,7 @@ python3 scripts/sifap_loop_graph.py query --graph <graph> --query blast-radius -
 **Typical defects:** a descriptor treated as a primary key; an MU field flattened into a delimited
 string; reconciliation declared without recorded totals; production extract used as a fixture.
 
-### Commands
+### L4 commands
 
 ```bash
 python3 scripts/sifap_loop_graph.py gate --graph <graph> --phase quality --slice <slice>
@@ -139,11 +139,11 @@ python3 scripts/sifap_loop_graph.py query --graph <graph> --query coverage --sli
 
 ## L5 operations
 
-**Pair:** Par 05, DevOps Engineer and Tech Writer. **Lead:** `sifap-evolution`. **Budget:** 2 inner iterations.
+**Pair:** Par 05, DevOps Engineer and Tech Writer. **Lead:** `sifap-operations`. **Budget:** 2 inner iterations.
 
 **Entry:** quality gate closed with reconciliation evidence.
 
-### Exit criteria
+### L5 exit criteria
 
 | # | Criterion | Check |
 | --- | --- | --- |
@@ -156,7 +156,7 @@ python3 scripts/sifap_loop_graph.py query --graph <graph> --query coverage --sli
 **Typical defects:** an unpinned action tag; a secret in Terraform state output; a merge recorded as
 approved without a reviewer; a runbook that documents the intent instead of the deployed behavior.
 
-### Commands
+### L5 commands
 
 ```bash
 python3 scripts/sifap_loop_graph.py gate --graph <graph> --phase operations --slice <slice>

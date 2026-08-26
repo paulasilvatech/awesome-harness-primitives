@@ -71,7 +71,7 @@ This skill owns only SIFAP-specific context. Use general skills for procedure:
 - `references/target-stack.md`: approved workshop baseline and change policy.
 - `references/traceability-contract.md`: requirement IDs, lineage, and acceptance evidence.
 - `references/security-and-data.md`: sensitive-data, authentication, infrastructure, and trust rules.
-- `references/workshop-flow.md`: four stages, branch intent, and handoff gates.
+- `references/workshop-flow.md`: five stages, branch intent, and handoff gates.
 
 ## Output template
 

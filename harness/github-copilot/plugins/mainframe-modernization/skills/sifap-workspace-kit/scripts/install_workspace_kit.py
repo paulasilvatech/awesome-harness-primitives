@@ -23,18 +23,21 @@ STAGE_AGENTS = (
     "sifap-archaeologist.agent.md",
     "sifap-architect.agent.md",
     "sifap-builder.agent.md",
-    "sifap-evolution.agent.md",
+    "sifap-quality.agent.md",
+    "sifap-operations.agent.md",
 )
 STAGE_PROMPTS = (
     "sifap-archaeology.prompt.md",
     "sifap-specify.prompt.md",
     "sifap-build-slice.prompt.md",
-    "sifap-evolve.prompt.md",
+    "sifap-verify.prompt.md",
+    "sifap-operate.prompt.md",
 )
 PROJECT_SKILLS = (
     "sifap-modernization-context",
     "sifap-requirements-traceability",
     "sifap-workshop-orchestration",
+    "sifap-loop",
     "sifap-workspace-kit",
 )
 CORE_INSTRUCTIONS = (

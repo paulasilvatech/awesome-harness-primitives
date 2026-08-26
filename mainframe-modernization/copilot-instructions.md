@@ -12,7 +12,7 @@ This workshop uses a **fixed toolchain**: VS Code, GitHub Copilot (Ask + Plan + 
 
 Modernization of the Natural/Adabas **SIFAP** legacy system (Payment Inspection and Administration System) to Java 21 + Next.js 15. Treat historical corpus counts as fixture assumptions until checked against the [system profile](../harness/github-copilot/plugins/mainframe-modernization/skills/sifap-modernization-context/references/system-profile.md) and [source layout](../harness/github-copilot/plugins/mainframe-modernization/skills/sifap-modernization-context/references/source-layout.md).
 
-The maintained kit uses four evidence-gated stage agents. See the [workshop orchestration skill](../harness/github-copilot/plugins/mainframe-modernization/skills/sifap-workshop-orchestration/SKILL.md).
+The maintained kit uses five evidence-gated stage agents. See the [workshop orchestration skill](../harness/github-copilot/plugins/mainframe-modernization/skills/sifap-workshop-orchestration/SKILL.md).
 
 Use the skills in [`.github/skills/`](.github/skills/) for specialized workflows. Copilot selects the relevant skill from its description; do not duplicate specialized workflows in these global instructions.
 

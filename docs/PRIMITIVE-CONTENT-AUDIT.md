@@ -14,10 +14,10 @@ first-party evidence and its runtime surface is exercised where applicable.
 
 | Content type | Sources | Shared canonical | Plugin-owned | Mentioned in dated evidence |
 | --- | --- | --- | --- | --- |
-| agent | 251 | 228 | 23 | 8 |
+| agent | 252 | 228 | 24 | 10 |
 | instruction | 238 | 195 | 43 | 17 |
-| skill | 598 | 480 | 118 | 42 |
-| prompt | 63 | 48 | 15 | 4 |
+| skill | 599 | 481 | 118 | 44 |
+| prompt | 64 | 48 | 16 | 6 |
 | hook | 10 | 8 | 2 | 3 |
 | plugin | 109 | 83 | 26 | 18 |
 
@@ -33,12 +33,12 @@ The “mentioned in dated evidence” column is only an index hint. A mention in
 
 | Content type | Currency wording | Lifecycle wording | Version claims | Date claims | External sources | Current-source review | Source review | Semantic review |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| agent | 168 | 66 | 81 | 4 | 67 | 194 | 11 | 46 |
+| agent | 168 | 66 | 81 | 4 | 67 | 194 | 11 | 47 |
 | instruction | 112 | 62 | 98 | 14 | 107 | 180 | 22 | 36 |
-| skill | 349 | 206 | 302 | 77 | 315 | 479 | 25 | 94 |
-| prompt | 24 | 10 | 9 | 3 | 9 | 32 | 3 | 28 |
+| skill | 349 | 207 | 302 | 77 | 315 | 479 | 25 | 95 |
+| prompt | 24 | 10 | 9 | 3 | 9 | 32 | 3 | 29 |
 | hook | 4 | 2 | 6 | 0 | 4 | 7 | 1 | 2 |
-| plugin | 39 | 33 | 109 | 7 | 109 | 109 | 0 | 0 |
+| plugin | 40 | 33 | 109 | 7 | 109 | 109 | 0 | 0 |
 
 These are review signals, not automatic defects. Code samples naturally contain versions and URLs, while
 words such as “latest”, “preview”, “deprecated”, and “current” require dated evidence before delivery.
@@ -51,12 +51,12 @@ words such as “latest”, “preview”, “deprecated”, and “current” r
 | Marketplace entries | 109 |
 | Shared agents packaged | 127 / 228 |
 | Shared agents not packaged | 101 |
-| Shared skills packaged | 246 / 480 |
+| Shared skills packaged | 247 / 481 |
 | Shared skills not packaged | 234 |
-| Plugin-owned agents | 23 |
+| Plugin-owned agents | 24 |
 | Plugin-owned skills | 118 |
 | Plugin-owned workspace instructions | 43 |
-| Plugin-owned VS Code prompts | 15 |
+| Plugin-owned VS Code prompts | 16 |
 | Active plugin hook packages | 2 |
 
 The 335 unreferenced shared agents and

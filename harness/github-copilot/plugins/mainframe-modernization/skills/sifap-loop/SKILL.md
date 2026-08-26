@@ -56,8 +56,8 @@ Binding rules:
 | `vision` | Par 01 Vision | `sifap-architect` | No rule candidate is left undecided; each has value, priority, and acceptance intent. | `vision` |
 | `architecture` | Par 02 Architecture | `sifap-architect` | Every requirement has a valid source and every binding choice has a decision record. | `architecture` |
 | `implementation` | Par 03 Implementation | `sifap-builder` | Every in-scope requirement has code and a passing focused check. | `implementation` |
-| `quality` | Par 04 Quality | `sifap-builder` with `sifap-evolution` review | Every requirement is verified by a test and every Adabas file has a migration mapping. | `quality` |
-| `operations` | Par 05 Operations | `sifap-evolution` | Delivery, infrastructure, approval, and documentation evidence exists for the slice. | `operations` |
+| `quality` | Par 04 Quality | `sifap-quality` | Every requirement is verified by a test and every Adabas file has a migration mapping. | `quality` |
+| `operations` | Par 05 Operations | `sifap-operations` | Delivery, infrastructure, approval, and documentation evidence exists for the slice. | `operations` |
 
 Full entry criteria, exit criteria, typical defects, and per-phase commands: [references/phase-gates.md](references/phase-gates.md).
 
@@ -75,6 +75,16 @@ Route by root cause, not by the phase that observed the symptom.
 | Behavior is correct but not deployable, observable, or documented | Delivery or documentation gap | `operations` |
 
 Defect record shape, escalation thresholds, and budget-exhaustion handling: [references/defect-protocol.md](references/defect-protocol.md).
+
+## Human gates
+
+A gate result is evidence. A gate decision is authority. The loop computes the first and never claims the second.
+
+These never close autonomously, at any autonomy level: scope acceptance, requirement approval, binding technical decisions, accepted deviations, slice re-scoping, budget-exhaustion escalation, reconciliation sign-off, legacy source writes, external mutations, merges, and deployments. Prepare the material, recommend an answer with evidence, then stop and report.
+
+Everything read-only, local, or reversible runs unattended: reading legacy evidence, building and querying the graph, running builds and tests, writing the slice folder, and drafting issues, runbooks, and decision records for review.
+
+Autonomy levels, the resume sequence, the full gate register, and the pause report: [references/autonomous-run.md](references/autonomous-run.md).
 
 ## Engineering graph
 
@@ -101,6 +111,7 @@ The validator requires an `evidence` value on every node and edge, so an unprove
 
 - `references/phase-gates.md`: entry and exit criteria, typical defects, and commands for the six loops.
 - `references/defect-protocol.md`: defect classification, routing, record shape, and escalation thresholds.
+- `references/autonomous-run.md`: autonomy levels, durable state, human gate register, and stop conditions.
 - `references/graph-schema.md`: graph document shape, node and edge vocabulary, and gate query definitions.
 - `scripts/sifap_loop_graph.py`: read-only graph validator, gate evaluator, query engine, and Mermaid renderer.
 - `scripts/test_sifap_loop_graph.py`: focused tests for validation, gates, cycles, slice order, and rendering.
@@ -112,7 +123,7 @@ The validator requires an `evidence` value on every node and edge, so an unprove
 - This skill owns loop mechanics, gate evaluation, defect routing, and the graph. It does not duplicate Natural analysis, requirement authoring, implementation, testing, security, or infrastructure procedures.
 - Stage sequencing and handoff contracts belong to `sifap-workshop-orchestration`; this skill closes the loop inside a stage and decides when a handoff is earned.
 - Requirement form and `source_legacy` lineage belong to `sifap-requirements-traceability`; the graph consumes that result and does not re-implement it.
-- The `quality` loop has no dedicated agent today. Assign an explicit owner for the pair before opening it.
+- The `vision` loop has no dedicated agent; `sifap-architect` leads it with the product owner accountable for scope.
 - A green graph gate proves declared coverage, not business correctness. A missing node produces a silent pass, so gate results are only as complete as the recorded evidence.
 
 ## Output template
@@ -122,7 +133,7 @@ The validator requires an `evidence` value on every node and edge, so an unprove
 
 **Phase:** archaeology | vision | architecture | implementation | quality | operations
 **Slice:** <NNN-slug or unscoped>
-**Status:** closed | iterating | escalated | blocked
+**Status:** closed | iterating | escalated | blocked | paused-for-human
 **Iterations:** <used>/3
 
 ### Gate
@@ -149,5 +160,6 @@ The validator requires an `evidence` value on every node and edge, so an unprove
 - [ ] Failures are classified as local defect, upstream defect, or accepted deviation, and upstream defects were escalated instead of patched.
 - [ ] The iteration budget was respected and exhaustion produced an escalation, not a fourth attempt.
 - [ ] Graph nodes and edges added during the loop carry evidence paths.
+- [ ] Every decision in the human gate register was left to its owner, with the material prepared but not decided.
 - [ ] Sensitive values are absent from the graph, ledger, defect records, and output.
 - [ ] Closing the loop did not merge, deploy, or mutate anything without the owning phase's approval.

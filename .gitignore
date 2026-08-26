@@ -10,3 +10,6 @@ docs/microsoft-security/**/*.pdf
 # Hook runtime logs should live in Copilot/XDG state, not the repo.
 logs/
 .github/logs/
+
+# Playwright MCP run artifacts are session output, not plugin components.
+.playwright-mcp/

@@ -96,4 +96,4 @@ Stop before editing when behavior, scope, or writable paths are ambiguous.
 | Name | Type | Relationship |
 | --- | --- | --- |
 | `sifap-builder` | agent | Owns implementation scope and validation judgment. |
-| `sifap-evolve` | prompt | Hardens and operationalizes the validated slice. |
+| `sifap-verify` | prompt | Proves behavior and data equivalence for the validated slice. |

@@ -18,10 +18,10 @@
     "activePluginHookPackages": 2,
     "marketplaceEntries": 109,
     "pluginOwned": {
-      "agents": 23,
+      "agents": 24,
       "errors": 0,
       "instructions": 43,
-      "prompts": 15,
+      "prompts": 16,
       "skills": 118,
       "warnings": 0
     },
@@ -134,8 +134,8 @@
       ]
     },
     "sharedSkills": {
-      "packaged": 246,
-      "total": 480,
+      "packaged": 247,
+      "total": 481,
       "unpackaged": [
         "acquire-codebase-knowledge",
         "ad-campaign-analyzer",
@@ -4571,7 +4571,7 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 4712,
+      "characters_scanned": 4714,
       "external_url_count": 0,
       "files_scanned": 1,
       "kind": "agent",
@@ -4588,23 +4588,40 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 5044,
+      "characters_scanned": 5875,
       "external_url_count": 0,
       "files_scanned": 1,
       "kind": "agent",
-      "local_evidence_mention": false,
-      "name": "sifap-evolution",
+      "local_evidence_mention": true,
+      "name": "sifap-operations",
       "ownership": "plugin",
       "package": "mainframe-modernization",
       "packaged_by": [
         "mainframe-modernization"
       ],
-      "path": "harness/github-copilot/plugins/mainframe-modernization/agents/sifap-evolution.agent.md",
+      "path": "harness/github-copilot/plugins/mainframe-modernization/agents/sifap-operations.agent.md",
       "review_status": "needs-current-source-review",
       "signals": [
         "currency-language",
         "lifecycle-language"
       ],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 5847,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "agent",
+      "local_evidence_mention": true,
+      "name": "sifap-quality",
+      "ownership": "plugin",
+      "package": "mainframe-modernization",
+      "packaged_by": [
+        "mainframe-modernization"
+      ],
+      "path": "harness/github-copilot/plugins/mainframe-modernization/agents/sifap-quality.agent.md",
+      "review_status": "needs-semantic-review",
+      "signals": [],
       "source_domains": []
     },
     {
@@ -10286,7 +10303,7 @@
       ]
     },
     {
-      "characters_scanned": 3283,
+      "characters_scanned": 4611,
       "external_url_count": 1,
       "files_scanned": 2,
       "kind": "plugin",
@@ -10308,7 +10325,7 @@
       ]
     },
     {
-      "characters_scanned": 3983,
+      "characters_scanned": 3981,
       "external_url_count": 1,
       "files_scanned": 2,
       "kind": "plugin",
@@ -10330,7 +10347,7 @@
       ]
     },
     {
-      "characters_scanned": 2725,
+      "characters_scanned": 5055,
       "external_url_count": 1,
       "files_scanned": 2,
       "kind": "plugin",
@@ -10344,6 +10361,7 @@
       "path": "harness/github-copilot/plugins/azure-cloud-development",
       "review_status": "needs-current-source-review",
       "signals": [
+        "currency-language",
         "version-claim",
         "external-source"
       ],
@@ -10352,7 +10370,7 @@
       ]
     },
     {
-      "characters_scanned": 3778,
+      "characters_scanned": 2946,
       "external_url_count": 1,
       "files_scanned": 2,
       "kind": "plugin",
@@ -10374,7 +10392,7 @@
       ]
     },
     {
-      "characters_scanned": 2721,
+      "characters_scanned": 2473,
       "external_url_count": 1,
       "files_scanned": 2,
       "kind": "plugin",
@@ -10397,7 +10415,7 @@
       ]
     },
     {
-      "characters_scanned": 4338,
+      "characters_scanned": 3653,
       "external_url_count": 1,
       "files_scanned": 2,
       "kind": "plugin",
@@ -10441,7 +10459,7 @@
       ]
     },
     {
-      "characters_scanned": 2528,
+      "characters_scanned": 2343,
       "external_url_count": 1,
       "files_scanned": 2,
       "kind": "plugin",
@@ -11472,9 +11490,9 @@
       ]
     },
     {
-      "characters_scanned": 215802,
+      "characters_scanned": 240145,
       "external_url_count": 7,
-      "files_scanned": 43,
+      "files_scanned": 46,
       "kind": "plugin",
       "local_evidence_mention": false,
       "name": "mainframe-modernization",
@@ -13747,7 +13765,7 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 3532,
+      "characters_scanned": 3545,
       "external_url_count": 0,
       "files_scanned": 1,
       "kind": "prompt",
@@ -13764,18 +13782,18 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 3754,
+      "characters_scanned": 4040,
       "external_url_count": 0,
       "files_scanned": 1,
       "kind": "prompt",
-      "local_evidence_mention": false,
-      "name": "sifap-evolve",
+      "local_evidence_mention": true,
+      "name": "sifap-operate",
       "ownership": "plugin",
       "package": "mainframe-modernization",
       "packaged_by": [
         "mainframe-modernization"
       ],
-      "path": "harness/github-copilot/plugins/mainframe-modernization/prompts/sifap-evolve.prompt.md",
+      "path": "harness/github-copilot/plugins/mainframe-modernization/prompts/sifap-operate.prompt.md",
       "review_status": "needs-current-source-review",
       "signals": [
         "currency-language",
@@ -13796,6 +13814,23 @@
         "mainframe-modernization"
       ],
       "path": "harness/github-copilot/plugins/mainframe-modernization/prompts/sifap-specify.prompt.md",
+      "review_status": "needs-semantic-review",
+      "signals": [],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 4608,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "prompt",
+      "local_evidence_mention": true,
+      "name": "sifap-verify",
+      "ownership": "plugin",
+      "package": "mainframe-modernization",
+      "packaged_by": [
+        "mainframe-modernization"
+      ],
+      "path": "harness/github-copilot/plugins/mainframe-modernization/prompts/sifap-verify.prompt.md",
       "review_status": "needs-semantic-review",
       "signals": [],
       "source_domains": []
@@ -13976,6 +14011,23 @@
       "source_domains": [
         "github.com"
       ]
+    },
+    {
+      "characters_scanned": 9247,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "skill",
+      "local_evidence_mention": true,
+      "name": "adabas-postgresql-migration",
+      "ownership": "shared",
+      "package": null,
+      "packaged_by": [
+        "mainframe-modernization"
+      ],
+      "path": "harness/github-copilot/skills/adabas-postgresql-migration",
+      "review_status": "needs-semantic-review",
+      "signals": [],
+      "source_domains": []
     },
     {
       "characters_scanned": 7417,
@@ -25702,11 +25754,11 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 72438,
+      "characters_scanned": 79962,
       "external_url_count": 0,
-      "files_scanned": 8,
+      "files_scanned": 9,
       "kind": "skill",
-      "local_evidence_mention": false,
+      "local_evidence_mention": true,
       "name": "sifap-loop",
       "ownership": "plugin",
       "package": "mainframe-modernization",
@@ -25716,12 +25768,13 @@
       "path": "harness/github-copilot/plugins/mainframe-modernization/skills/sifap-loop",
       "review_status": "needs-current-source-review",
       "signals": [
-        "currency-language"
+        "currency-language",
+        "lifecycle-language"
       ],
       "source_domains": []
     },
     {
-      "characters_scanned": 11613,
+      "characters_scanned": 12028,
       "external_url_count": 0,
       "files_scanned": 7,
       "kind": "skill",
@@ -25758,7 +25811,7 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 4464,
+      "characters_scanned": 4935,
       "external_url_count": 0,
       "files_scanned": 1,
       "kind": "skill",
@@ -25777,7 +25830,7 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 52303,
+      "characters_scanned": 52480,
       "external_url_count": 3,
       "files_scanned": 5,
       "kind": "skill",
@@ -26933,10 +26986,10 @@
   "unreadableFiles": [],
   "validation": {
     "pluginOwned": {
-      "agents": 23,
+      "agents": 24,
       "errors": 0,
       "instructions": 43,
-      "prompts": 15,
+      "prompts": 16,
       "skills": 118,
       "warnings": 0
     },
@@ -26945,7 +26998,7 @@
       "summary": [
         {
           "errors": 0,
-          "files": 251,
+          "files": 252,
           "kind": "agents",
           "warnings": 0
         },
@@ -26957,13 +27010,13 @@
         },
         {
           "errors": 0,
-          "files": 598,
+          "files": 599,
           "kind": "skills",
           "warnings": 0
         },
         {
           "errors": 0,
-          "files": 63,
+          "files": 64,
           "kind": "prompts",
           "warnings": 0
         },

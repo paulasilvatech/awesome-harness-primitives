@@ -1,20 +1,20 @@
 {
-    "name": "mainframe-modernization",
-    "description": "Modernize the SIFAP Natural/Adabas workshop system with evidence-first archaeology, REQ-NNN lineage, modular-monolith design, behavior-equivalence testing, secure delivery, and a preview-first workspace publisher.",
-    "version": "0.1.0",
-    "author": {
-        "name": "paulasilvatech"
-    },
-    "repository": "https://github.com/paulasilvatech/copilot-primitives",
-    "keywords": [
-        "mainframe",
-        "natural",
-        "adabas",
-        "sifap",
-        "modernization",
-        "java",
-        "github-copilot"
-    ],
-    "agents": "agents/",
-    "skills": "skills/"
+  "name": "mainframe-modernization",
+  "description": "Modernize the SIFAP Natural/Adabas workshop system with evidence-first archaeology, REQ-NNN lineage, modular-monolith design, behavior-equivalence testing, secure delivery, and a preview-first workspace publisher.",
+  "version": "0.1.0",
+  "author": {
+    "name": "paulasilvatech"
+  },
+  "repository": "https://github.com/paulasilvatech/copilot-primitives",
+  "keywords": [
+    "mainframe",
+    "natural",
+    "adabas",
+    "sifap",
+    "modernization",
+    "java",
+    "github-copilot"
+  ],
+  "agents": "agents/",
+  "skills": "skills/"
 }

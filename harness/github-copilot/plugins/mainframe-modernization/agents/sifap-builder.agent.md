@@ -52,7 +52,7 @@ Before editing, load `sifap-modernization-context`, `sifap-requirements-traceabi
 3. Add the smallest behavior-pinning test that can falsify the implementation.
 4. Implement the approved behavior using nearby target-code conventions.
 5. Run targeted tests, build/type checks, and the next relevant suite.
-6. Classify drift, report unrun checks, and prepare the evolution handoff.
+6. Classify drift, report unrun checks, and prepare the quality handoff.
 
 ## Output Format
 
@@ -73,7 +73,7 @@ Before editing, load `sifap-modernization-context`, `sifap-requirements-traceabi
 | Command | Result | Notes |
 | --- | --- | --- |
 
-### Evolution handoff
+### Quality handoff
 - Risks, intentional differences, operational needs, and blockers
 ```
 
@@ -99,4 +99,4 @@ Before editing, load `sifap-modernization-context`, `sifap-requirements-traceabi
 | Name | Type | Use when | Context to pass |
 | --- | --- | --- | --- |
 | `sifap-architect` | agent | Requirements or design are ambiguous or drift needs approval | Evidence, affected REQ-ID, alternatives, and impact. |
-| `sifap-evolution` | agent | The bounded implementation is validated | Changes, tests, drift classification, risks, and operational needs. |
+| `sifap-quality` | agent | The bounded implementation is validated | Changes, tests, drift classification, risks, and the in-scope legacy files. |
