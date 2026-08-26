@@ -33,6 +33,38 @@
       "similarity": 0.77
     },
     {
+      "classification": "unclassified",
+      "kind": "instruction",
+      "left": "instructions/agent-skills.instructions.md",
+      "rationale": "Requires responsibility-boundary review.",
+      "right": "plugins/open-horizons-platform/instructions/agent-skills.instructions.md",
+      "similarity": 1.0
+    },
+    {
+      "classification": "unclassified",
+      "kind": "instruction",
+      "left": "instructions/agents.instructions.md",
+      "rationale": "Requires responsibility-boundary review.",
+      "right": "plugins/open-horizons-platform/instructions/agents.instructions.md",
+      "similarity": 1.0
+    },
+    {
+      "classification": "unclassified",
+      "kind": "instruction",
+      "left": "instructions/copilot-primitive-authoring.instructions.md",
+      "rationale": "Requires responsibility-boundary review.",
+      "right": "plugins/open-horizons-platform/instructions/copilot-primitive-authoring.instructions.md",
+      "similarity": 1.0
+    },
+    {
+      "classification": "unclassified",
+      "kind": "instruction",
+      "left": "instructions/prompt.instructions.md",
+      "rationale": "Requires responsibility-boundary review.",
+      "right": "plugins/open-horizons-platform/instructions/prompt.instructions.md",
+      "similarity": 1.0
+    },
+    {
       "classification": "language-variant",
       "kind": "instruction",
       "left": "instructions/copilot-sdk-csharp.instructions.md",
@@ -89,6 +121,14 @@
       "similarity": 0.742
     },
     {
+      "classification": "unclassified",
+      "kind": "instruction",
+      "left": "plugins/backstage-expert/instructions/backstage-app.instructions.md",
+      "rationale": "Requires responsibility-boundary review.",
+      "right": "plugins/open-horizons-platform/instructions/backstage-app.instructions.md",
+      "similarity": 0.738
+    },
+    {
       "classification": "framework-variant",
       "kind": "prompt",
       "left": "prompts/containerize-aspnet-framework.prompt.md",
@@ -97,12 +137,388 @@
       "similarity": 0.789
     },
     {
+      "classification": "unclassified",
+      "kind": "prompt",
+      "left": "plugins/open-horizons-platform/prompts/open-horizons-aeg-modernize.prompt.md",
+      "rationale": "Requires responsibility-boundary review.",
+      "right": "plugins/open-horizons-platform/prompts/open-horizons-aeg-start.prompt.md",
+      "similarity": 0.783
+    },
+    {
+      "classification": "unclassified",
+      "kind": "skill",
+      "left": "plugins/open-horizons-platform/skills/azure-api-center/SKILL.md",
+      "rationale": "Requires responsibility-boundary review.",
+      "right": "skills/azure-api-center/SKILL.md",
+      "similarity": 1.0
+    },
+    {
+      "classification": "unclassified",
+      "kind": "skill",
+      "left": "plugins/open-horizons-platform/skills/azure-pricing/SKILL.md",
+      "rationale": "Requires responsibility-boundary review.",
+      "right": "skills/azure-pricing/SKILL.md",
+      "similarity": 1.0
+    },
+    {
+      "classification": "unclassified",
+      "kind": "skill",
+      "left": "plugins/open-horizons-platform/skills/azure-resource-health-diagnose/SKILL.md",
+      "rationale": "Requires responsibility-boundary review.",
+      "right": "skills/azure-resource-health-diagnose/SKILL.md",
+      "similarity": 1.0
+    },
+    {
+      "classification": "unclassified",
+      "kind": "skill",
+      "left": "plugins/open-horizons-platform/skills/azure-role-selector/SKILL.md",
+      "rationale": "Requires responsibility-boundary review.",
+      "right": "skills/azure-role-selector/SKILL.md",
+      "similarity": 1.0
+    },
+    {
+      "classification": "unclassified",
+      "kind": "skill",
+      "left": "plugins/open-horizons-platform/skills/cloud-design-patterns/SKILL.md",
+      "rationale": "Requires responsibility-boundary review.",
+      "right": "skills/cloud-design-patterns/SKILL.md",
+      "similarity": 1.0
+    },
+    {
+      "classification": "unclassified",
+      "kind": "skill",
+      "left": "plugins/open-horizons-platform/skills/create-llms/SKILL.md",
+      "rationale": "Requires responsibility-boundary review.",
+      "right": "skills/create-llms/SKILL.md",
+      "similarity": 1.0
+    },
+    {
+      "classification": "unclassified",
+      "kind": "skill",
+      "left": "plugins/open-horizons-platform/skills/foundry-agent-sync/SKILL.md",
+      "rationale": "Requires responsibility-boundary review.",
+      "right": "skills/foundry-agent-sync/SKILL.md",
+      "similarity": 1.0
+    },
+    {
+      "classification": "unclassified",
+      "kind": "skill",
+      "left": "plugins/open-horizons-platform/skills/foundry-hosted-agent-copilotkit/SKILL.md",
+      "rationale": "Requires responsibility-boundary review.",
+      "right": "skills/foundry-hosted-agent-copilotkit/SKILL.md",
+      "similarity": 1.0
+    },
+    {
+      "classification": "unclassified",
+      "kind": "skill",
+      "left": "plugins/open-horizons-platform/skills/mcp-cli/SKILL.md",
+      "rationale": "Requires responsibility-boundary review.",
+      "right": "skills/mcp-cli/SKILL.md",
+      "similarity": 1.0
+    },
+    {
+      "classification": "unclassified",
+      "kind": "skill",
+      "left": "plugins/open-horizons-platform/skills/microsoft-agent-framework/SKILL.md",
+      "rationale": "Requires responsibility-boundary review.",
+      "right": "skills/microsoft-agent-framework/SKILL.md",
+      "similarity": 1.0
+    },
+    {
+      "classification": "unclassified",
+      "kind": "skill",
+      "left": "plugins/open-horizons-platform/skills/microsoft-code-reference/SKILL.md",
+      "rationale": "Requires responsibility-boundary review.",
+      "right": "skills/microsoft-code-reference/SKILL.md",
+      "similarity": 1.0
+    },
+    {
+      "classification": "unclassified",
+      "kind": "skill",
+      "left": "plugins/open-horizons-platform/skills/microsoft-docs/SKILL.md",
+      "rationale": "Requires responsibility-boundary review.",
+      "right": "skills/microsoft-docs/SKILL.md",
+      "similarity": 1.0
+    },
+    {
+      "classification": "unclassified",
+      "kind": "skill",
+      "left": "plugins/open-horizons-platform/skills/microsoft-skill-creator/SKILL.md",
+      "rationale": "Requires responsibility-boundary review.",
+      "right": "skills/microsoft-skill-creator/SKILL.md",
+      "similarity": 1.0
+    },
+    {
+      "classification": "unclassified",
+      "kind": "skill",
+      "left": "plugins/open-horizons-platform/skills/sdd-requirements-engineer/SKILL.md",
+      "rationale": "Requires responsibility-boundary review.",
+      "right": "skills/sdd-requirements-engineer/SKILL.md",
+      "similarity": 1.0
+    },
+    {
+      "classification": "unclassified",
+      "kind": "skill",
+      "left": "plugins/open-horizons-platform/skills/azure-apim-ai-gateway/SKILL.md",
+      "rationale": "Requires responsibility-boundary review.",
+      "right": "skills/apim-ai-gateway/SKILL.md",
+      "similarity": 0.994
+    },
+    {
+      "classification": "unclassified",
+      "kind": "skill",
+      "left": "plugins/open-horizons-platform/skills/github-copilot-usage-metrics/SKILL.md",
+      "rationale": "Requires responsibility-boundary review.",
+      "right": "skills/copilot-usage-metrics/SKILL.md",
+      "similarity": 0.994
+    },
+    {
+      "classification": "unclassified",
+      "kind": "skill",
+      "left": "plugins/open-horizons-platform/skills/github-copilot-instructions-blueprint-generator/SKILL.md",
+      "rationale": "Requires responsibility-boundary review.",
+      "right": "skills/copilot-instructions-blueprint-generator/SKILL.md",
+      "similarity": 0.993
+    },
+    {
+      "classification": "unclassified",
+      "kind": "skill",
+      "left": "plugins/backstage-expert/skills/app-frontend-system-migration/SKILL.md",
+      "rationale": "Requires responsibility-boundary review.",
+      "right": "plugins/open-horizons-platform/skills/backstage-app-frontend-system-migration/SKILL.md",
+      "similarity": 0.992
+    },
+    {
+      "classification": "unclassified",
+      "kind": "skill",
+      "left": "plugins/backstage-expert/skills/mui-to-bui-migration/SKILL.md",
+      "rationale": "Requires responsibility-boundary review.",
+      "right": "plugins/open-horizons-platform/skills/backstage-mui-to-bui-migration/SKILL.md",
+      "similarity": 0.992
+    },
+    {
+      "classification": "unclassified",
+      "kind": "skill",
+      "left": "plugins/open-horizons-platform/skills/azure-appinsights-instrumentation/SKILL.md",
+      "rationale": "Requires responsibility-boundary review.",
+      "right": "skills/appinsights-instrumentation/SKILL.md",
+      "similarity": 0.992
+    },
+    {
+      "classification": "unclassified",
+      "kind": "skill",
+      "left": "plugins/backstage-expert/skills/plugin-new-frontend-system-support/SKILL.md",
+      "rationale": "Requires responsibility-boundary review.",
+      "right": "plugins/open-horizons-platform/skills/backstage-plugin-new-frontend-system-support/SKILL.md",
+      "similarity": 0.991
+    },
+    {
+      "classification": "unclassified",
+      "kind": "skill",
+      "left": "plugins/backstage-expert/skills/plugin-full-frontend-system-migration/SKILL.md",
+      "rationale": "Requires responsibility-boundary review.",
+      "right": "plugins/open-horizons-platform/skills/backstage-plugin-full-frontend-system-migration/SKILL.md",
+      "similarity": 0.99
+    },
+    {
+      "classification": "unclassified",
+      "kind": "skill",
+      "left": "plugins/backstage-expert/skills/onboard-to-openapi-server/SKILL.md",
+      "rationale": "Requires responsibility-boundary review.",
+      "right": "plugins/open-horizons-platform/skills/backstage-onboard-to-openapi-server/SKILL.md",
+      "similarity": 0.989
+    },
+    {
+      "classification": "unclassified",
+      "kind": "skill",
+      "left": "plugins/backstage-expert/skills/plugin-analytics-instrumentation/SKILL.md",
+      "rationale": "Requires responsibility-boundary review.",
+      "right": "plugins/open-horizons-platform/skills/backstage-plugin-analytics-instrumentation/SKILL.md",
+      "similarity": 0.988
+    },
+    {
+      "classification": "unclassified",
+      "kind": "skill",
+      "left": "plugins/backstage-expert/skills/backstage-mcp-actions/SKILL.md",
+      "rationale": "Requires responsibility-boundary review.",
+      "right": "plugins/open-horizons-platform/skills/open-horizons-backstage-mcp-actions/SKILL.md",
+      "similarity": 0.987
+    },
+    {
+      "classification": "unclassified",
+      "kind": "skill",
+      "left": "plugins/open-horizons-platform/skills/foundry-agentic-eval/SKILL.md",
+      "rationale": "Requires responsibility-boundary review.",
+      "right": "skills/agentic-eval/SKILL.md",
+      "similarity": 0.987
+    },
+    {
+      "classification": "unclassified",
+      "kind": "skill",
+      "left": "plugins/backstage-expert/skills/backstage-app-bootstrap/SKILL.md",
+      "rationale": "Requires responsibility-boundary review.",
+      "right": "plugins/open-horizons-platform/skills/open-horizons-backstage-app-bootstrap/SKILL.md",
+      "similarity": 0.981
+    },
+    {
+      "classification": "unclassified",
+      "kind": "skill",
+      "left": "plugins/backstage-expert/skills/backstage-app-configuration/SKILL.md",
+      "rationale": "Requires responsibility-boundary review.",
+      "right": "plugins/open-horizons-platform/skills/open-horizons-backstage-app-configuration/SKILL.md",
+      "similarity": 0.98
+    },
+    {
+      "classification": "unclassified",
+      "kind": "skill",
+      "left": "plugins/backstage-expert/skills/backstage-catalog-db-performance/SKILL.md",
+      "rationale": "Requires responsibility-boundary review.",
+      "right": "plugins/open-horizons-platform/skills/open-horizons-backstage-catalog-db-performance/SKILL.md",
+      "similarity": 0.979
+    },
+    {
+      "classification": "unclassified",
+      "kind": "skill",
+      "left": "plugins/backstage-expert/skills/backstage-core-contribution/SKILL.md",
+      "rationale": "Requires responsibility-boundary review.",
+      "right": "plugins/open-horizons-platform/skills/open-horizons-backstage-core-contribution/SKILL.md",
+      "similarity": 0.979
+    },
+    {
+      "classification": "unclassified",
+      "kind": "skill",
+      "left": "plugins/backstage-expert/skills/backstage-techdocs/SKILL.md",
+      "rationale": "Requires responsibility-boundary review.",
+      "right": "plugins/open-horizons-platform/skills/open-horizons-backstage-techdocs/SKILL.md",
+      "similarity": 0.979
+    },
+    {
+      "classification": "unclassified",
+      "kind": "skill",
+      "left": "plugins/open-horizons-platform/skills/github-copilot-harness-engineering/SKILL.md",
+      "rationale": "Requires responsibility-boundary review.",
+      "right": "skills/harness-engineering/SKILL.md",
+      "similarity": 0.979
+    },
+    {
+      "classification": "unclassified",
+      "kind": "skill",
+      "left": "plugins/backstage-expert/skills/backstage-ai-catalog/SKILL.md",
+      "rationale": "Requires responsibility-boundary review.",
+      "right": "plugins/open-horizons-platform/skills/open-horizons-backstage-ai-catalog/SKILL.md",
+      "similarity": 0.978
+    },
+    {
+      "classification": "unclassified",
+      "kind": "skill",
+      "left": "plugins/backstage-expert/skills/backstage-catalog/SKILL.md",
+      "rationale": "Requires responsibility-boundary review.",
+      "right": "plugins/open-horizons-platform/skills/open-horizons-backstage-catalog/SKILL.md",
+      "similarity": 0.978
+    },
+    {
+      "classification": "unclassified",
+      "kind": "skill",
+      "left": "plugins/backstage-expert/skills/backstage-external-integrations/SKILL.md",
+      "rationale": "Requires responsibility-boundary review.",
+      "right": "plugins/open-horizons-platform/skills/open-horizons-backstage-external-integrations/SKILL.md",
+      "similarity": 0.977
+    },
+    {
+      "classification": "unclassified",
+      "kind": "skill",
+      "left": "plugins/backstage-expert/skills/backstage-notifications/SKILL.md",
+      "rationale": "Requires responsibility-boundary review.",
+      "right": "plugins/open-horizons-platform/skills/open-horizons-backstage-notifications/SKILL.md",
+      "similarity": 0.977
+    },
+    {
+      "classification": "unclassified",
+      "kind": "skill",
+      "left": "plugins/backstage-expert/skills/backstage-framework/SKILL.md",
+      "rationale": "Requires responsibility-boundary review.",
+      "right": "plugins/open-horizons-platform/skills/open-horizons-backstage-framework/SKILL.md",
+      "similarity": 0.976
+    },
+    {
+      "classification": "unclassified",
+      "kind": "skill",
+      "left": "plugins/backstage-expert/skills/backstage-search/SKILL.md",
+      "rationale": "Requires responsibility-boundary review.",
+      "right": "plugins/open-horizons-platform/skills/open-horizons-backstage-search/SKILL.md",
+      "similarity": 0.976
+    },
+    {
+      "classification": "unclassified",
+      "kind": "skill",
+      "left": "plugins/backstage-expert/skills/backstage-software-templates/SKILL.md",
+      "rationale": "Requires responsibility-boundary review.",
+      "right": "plugins/open-horizons-platform/skills/open-horizons-backstage-software-templates/SKILL.md",
+      "similarity": 0.976
+    },
+    {
+      "classification": "unclassified",
+      "kind": "skill",
+      "left": "plugins/backstage-expert/skills/backstage-upgrade/SKILL.md",
+      "rationale": "Requires responsibility-boundary review.",
+      "right": "plugins/open-horizons-platform/skills/open-horizons-backstage-upgrade/SKILL.md",
+      "similarity": 0.976
+    },
+    {
+      "classification": "unclassified",
+      "kind": "skill",
+      "left": "plugins/backstage-expert/skills/backstage-kubernetes/SKILL.md",
+      "rationale": "Requires responsibility-boundary review.",
+      "right": "plugins/open-horizons-platform/skills/open-horizons-backstage-kubernetes/SKILL.md",
+      "similarity": 0.975
+    },
+    {
+      "classification": "unclassified",
+      "kind": "skill",
+      "left": "plugins/backstage-expert/skills/backstage-permissions/SKILL.md",
+      "rationale": "Requires responsibility-boundary review.",
+      "right": "plugins/open-horizons-platform/skills/open-horizons-backstage-permissions/SKILL.md",
+      "similarity": 0.974
+    },
+    {
+      "classification": "unclassified",
+      "kind": "skill",
+      "left": "plugins/backstage-expert/skills/backstage-authentication/SKILL.md",
+      "rationale": "Requires responsibility-boundary review.",
+      "right": "plugins/open-horizons-platform/skills/open-horizons-backstage-authentication/SKILL.md",
+      "similarity": 0.973
+    },
+    {
+      "classification": "unclassified",
+      "kind": "skill",
+      "left": "plugins/backstage-expert/skills/backstage-operations/SKILL.md",
+      "rationale": "Requires responsibility-boundary review.",
+      "right": "plugins/open-horizons-platform/skills/open-horizons-backstage-operations/SKILL.md",
+      "similarity": 0.972
+    },
+    {
       "classification": "lifecycle-variant",
       "kind": "skill",
       "left": "skills/create-implementation-plan/SKILL.md",
       "rationale": "Creation and mutation have different inputs, preservation rules, and outputs.",
       "right": "skills/update-implementation-plan/SKILL.md",
       "similarity": 0.793
+    },
+    {
+      "classification": "unclassified",
+      "kind": "skill",
+      "left": "plugins/open-horizons-platform/skills/azure-cost-optimize/SKILL.md",
+      "rationale": "Requires responsibility-boundary review.",
+      "right": "skills/az-cost-optimize/SKILL.md",
+      "similarity": 0.786
+    },
+    {
+      "classification": "unclassified",
+      "kind": "skill",
+      "left": "plugins/open-horizons-platform/skills/create-llms/SKILL.md",
+      "rationale": "Requires responsibility-boundary review.",
+      "right": "skills/update-llms/SKILL.md",
+      "similarity": 0.761
     },
     {
       "classification": "lifecycle-variant",
@@ -129,7 +545,120 @@
       "similarity": 0.727
     }
   ],
-  "exactDuplicateGroups": [],
+  "exactDuplicateGroups": [
+    [
+      "plugins/backstage-expert/skills/backstage-ai-catalog/SKILL.md",
+      "plugins/open-horizons-platform/skills/open-horizons-backstage-ai-catalog/SKILL.md"
+    ],
+    [
+      "plugins/backstage-expert/skills/backstage-app-configuration/SKILL.md",
+      "plugins/open-horizons-platform/skills/open-horizons-backstage-app-configuration/SKILL.md"
+    ],
+    [
+      "plugins/backstage-expert/skills/backstage-authentication/SKILL.md",
+      "plugins/open-horizons-platform/skills/open-horizons-backstage-authentication/SKILL.md"
+    ],
+    [
+      "plugins/backstage-expert/skills/backstage-catalog/SKILL.md",
+      "plugins/open-horizons-platform/skills/open-horizons-backstage-catalog/SKILL.md"
+    ],
+    [
+      "plugins/backstage-expert/skills/backstage-core-contribution/SKILL.md",
+      "plugins/open-horizons-platform/skills/open-horizons-backstage-core-contribution/SKILL.md"
+    ],
+    [
+      "plugins/backstage-expert/skills/backstage-framework/SKILL.md",
+      "plugins/open-horizons-platform/skills/open-horizons-backstage-framework/SKILL.md"
+    ],
+    [
+      "plugins/backstage-expert/skills/backstage-kubernetes/SKILL.md",
+      "plugins/open-horizons-platform/skills/open-horizons-backstage-kubernetes/SKILL.md"
+    ],
+    [
+      "plugins/backstage-expert/skills/backstage-notifications/SKILL.md",
+      "plugins/open-horizons-platform/skills/open-horizons-backstage-notifications/SKILL.md"
+    ],
+    [
+      "plugins/backstage-expert/skills/backstage-operations/SKILL.md",
+      "plugins/open-horizons-platform/skills/open-horizons-backstage-operations/SKILL.md"
+    ],
+    [
+      "plugins/backstage-expert/skills/backstage-permissions/SKILL.md",
+      "plugins/open-horizons-platform/skills/open-horizons-backstage-permissions/SKILL.md"
+    ],
+    [
+      "plugins/backstage-expert/skills/backstage-search/SKILL.md",
+      "plugins/open-horizons-platform/skills/open-horizons-backstage-search/SKILL.md"
+    ],
+    [
+      "plugins/backstage-expert/skills/backstage-software-templates/SKILL.md",
+      "plugins/open-horizons-platform/skills/open-horizons-backstage-software-templates/SKILL.md"
+    ],
+    [
+      "plugins/backstage-expert/skills/backstage-techdocs/SKILL.md",
+      "plugins/open-horizons-platform/skills/open-horizons-backstage-techdocs/SKILL.md"
+    ],
+    [
+      "plugins/open-horizons-platform/skills/azure-api-center/SKILL.md",
+      "skills/azure-api-center/SKILL.md"
+    ],
+    [
+      "plugins/open-horizons-platform/skills/azure-apim-ai-gateway/SKILL.md",
+      "skills/apim-ai-gateway/SKILL.md"
+    ],
+    [
+      "plugins/open-horizons-platform/skills/azure-pricing/SKILL.md",
+      "skills/azure-pricing/SKILL.md"
+    ],
+    [
+      "plugins/open-horizons-platform/skills/azure-resource-health-diagnose/SKILL.md",
+      "skills/azure-resource-health-diagnose/SKILL.md"
+    ],
+    [
+      "plugins/open-horizons-platform/skills/azure-role-selector/SKILL.md",
+      "skills/azure-role-selector/SKILL.md"
+    ],
+    [
+      "plugins/open-horizons-platform/skills/cloud-design-patterns/SKILL.md",
+      "skills/cloud-design-patterns/SKILL.md"
+    ],
+    [
+      "plugins/open-horizons-platform/skills/create-llms/SKILL.md",
+      "skills/create-llms/SKILL.md"
+    ],
+    [
+      "plugins/open-horizons-platform/skills/foundry-agent-sync/SKILL.md",
+      "skills/foundry-agent-sync/SKILL.md"
+    ],
+    [
+      "plugins/open-horizons-platform/skills/foundry-agentic-eval/SKILL.md",
+      "skills/agentic-eval/SKILL.md"
+    ],
+    [
+      "plugins/open-horizons-platform/skills/foundry-hosted-agent-copilotkit/SKILL.md",
+      "skills/foundry-hosted-agent-copilotkit/SKILL.md"
+    ],
+    [
+      "plugins/open-horizons-platform/skills/mcp-cli/SKILL.md",
+      "skills/mcp-cli/SKILL.md"
+    ],
+    [
+      "plugins/open-horizons-platform/skills/microsoft-agent-framework/SKILL.md",
+      "skills/microsoft-agent-framework/SKILL.md"
+    ],
+    [
+      "plugins/open-horizons-platform/skills/microsoft-code-reference/SKILL.md",
+      "skills/microsoft-code-reference/SKILL.md"
+    ],
+    [
+      "plugins/open-horizons-platform/skills/microsoft-docs/SKILL.md",
+      "skills/microsoft-docs/SKILL.md"
+    ],
+    [
+      "plugins/open-horizons-platform/skills/microsoft-skill-creator/SKILL.md",
+      "skills/microsoft-skill-creator/SKILL.md"
+    ]
+  ],
   "policy": {
     "classifications": [
       "duplicate",
@@ -147,10 +676,10 @@
   "schemaVersion": 1,
   "summary": {
     "confirmedDuplicates": 0,
-    "exactDuplicateGroups": 0,
-    "similarityCandidates": 16,
-    "sources": 1006,
-    "unclassifiedCandidates": 0
+    "exactDuplicateGroups": 28,
+    "similarityCandidates": 68,
+    "sources": 1087,
+    "unclassifiedCandidates": 52
   },
   "threshold": 0.72
 }

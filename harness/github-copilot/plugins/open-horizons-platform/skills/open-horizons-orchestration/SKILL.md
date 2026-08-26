@@ -2,7 +2,7 @@
 name: open-horizons-orchestration
 description: >-
   Classifies and coordinates repository work across Open Horizons agents with bounded delegation,
-  validation, review, and approval gates. Use this skill for cross-domain maintenance, feature,
+  validation, review, and approval gates. Use when handling cross-domain maintenance, feature,
   improvement, modernization, incident, review, or explicitly requested greenfield workflows.
 ---
 

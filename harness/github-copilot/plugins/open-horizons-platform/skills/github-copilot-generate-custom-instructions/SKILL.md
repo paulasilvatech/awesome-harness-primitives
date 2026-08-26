@@ -1,7 +1,7 @@
 ---
 name: github-copilot-generate-custom-instructions
 description: >-
-  Generates path-scoped GitHub Copilot migration instructions from actual branch, commit, tag, or release diffs. Use for framework upgrades, architecture refactors, technology migrations, dependency updates, API changes, and obsolete-pattern prevention.
+  Generates path-scoped GitHub Copilot migration instructions from actual branch, commit, tag, or release diffs. Use when handling framework upgrades, architecture refactors, technology migrations, dependency updates, API changes, and obsolete-pattern prevention.
 argument-hint: "MIGRATION_TYPE=<type> SOURCE_REFERENCE=<ref> TARGET_REFERENCE=<ref>"
 ---
 

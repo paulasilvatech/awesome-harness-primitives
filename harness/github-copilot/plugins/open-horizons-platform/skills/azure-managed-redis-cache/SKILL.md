@@ -1,128 +1,135 @@
 ---
 name: azure-managed-redis-cache
-description: >-
-  Azure Managed Redis Cache designs Redis as a cache, semantic cache, vector memory, session state, and agent memory backend. Use this skill when selecting Redis SKUs, Balanced or MemoryOptimized tiers, RedisVL, vector search, semantic caching, tenant isolation, Entra access, private networking, or the bundled Bicep sample.
+description: "Use when designing or provisioning Azure Managed Redis for cache, semantic cache, vector memory, session store, or agent memory in AI-native systems; produces SKU guidance, network and identity controls, Bicep deployment steps, and integration recommendations. DO NOT USE FOR: general agent architecture (use agentic-architecture-patterns), Foundry agent runtime design (use foundry-agent-blueprint), or general Azure infrastructure (use azure-infrastructure). Triggers include \"design Redis semantic cache\", \"provision Azure Managed Redis\", \"add vector memory\"."
 ---
 
 # Azure Managed Redis Cache
 
-Azure Managed Redis is the default in-memory engine for caching, semantic caching, vector memory, and session state in this workspace. This skill turns an agent's caching and memory needs into a concrete Redis design and a deployable Bicep.
+This workflow turns an agent cache or memory requirement into an Azure Managed Redis design, including SKU profile, private networking, managed identity access, key isolation, TTL policy, and optional Bicep deployment. It produces a Redis design note and deployment checklist.
 
-> Important: **Azure Cache for Redis Enterprise is retired for new creations.** Use **Azure Managed Redis** SKUs. The resource type is still `Microsoft.Cache/redisEnterprise` (use a current API version such as `2025-07-01`), and `publicNetworkAccess` is a required property. Verify the current SKU list and API version on Microsoft Learn before deploying.
+> [!NOTE]
+> This skill may shell out to Azure CLI for Bicep deployment using bundled `scripts/redis-managed.bicep`. Resolve bundled paths relative to this `SKILL.md`. Verify current Azure Managed Redis SKUs, API versions, module support, and pricing on Microsoft Learn before provisioning.
 
 ## When to invoke
+- "Design a Redis semantic cache for our agent gateway."
+- "Provision Azure Managed Redis for vector memory."
+- "Add session state for agent runs using Redis."
+- "Choose the Redis SKU for cache, memory, and tenant isolation."
 
-- "Design Redis for semantic cache or vector memory."
-- "Choose an Azure Managed Redis SKU and tier."
-- "Use RedisVL or vector search for agent memory."
-- "Plan Redis tenant isolation, Entra access, or private networking."
-- "Adapt the Azure Managed Redis Bicep sample."
+## Prerequisites and context
+- Cache or memory role is known: key-value cache, semantic cache, vector memory, or session store.
+- Target region, environment, network posture, and data sensitivity are known.
+- Azure CLI is authenticated if deploying.
+- Bicep file exists at `scripts/redis-managed.bicep`.
+- Reference files exist under `references/`.
 
-## Criteria
+## Procedure
 
-### When to use Redis in an agent
+### Step 1: Classify the Redis role
+| Need | Redis role | Reference |
+|---|---|---|
+| Reuse repeated prompts or intents | Semantic cache | `references/semantic-cache.md` |
+| Store durable agent facts or embeddings | Vector memory | `references/vector-memory.md` |
+| Hold conversation or run state | Session store | `references/session-store.md` |
+| Secure access and network path | Identity and network | `references/access-and-network.md` |
 
-| Need | Redis role | Detail |
-| --- | --- | --- |
-| Cut repeated model cost and latency | semantic cache | vector similarity over prior requests, see `references/semantic-cache.md` |
-| Long term agent memory | vector store | embeddings of facts and documents, see `references/vector-memory.md` |
-| Conversation and run state | session store | short term thread state, see `references/session-store.md` |
-| Hot data and rate state | key value cache | classic cache-aside and counters |
+### Step 2: Select SKU and controls
+- [ ] Choose Balanced for general cache and small vector sets.
+- [ ] Choose MemoryOptimized for larger working sets.
+- [ ] Choose ComputeOptimized for high-throughput or vector-heavy workloads.
+- [ ] Choose FlashOptimized only when very large datasets justify tiered storage.
+- [ ] Use tenant and user key namespaces such as `t:<tenant>:u:<user>:<purpose>`.
+- [ ] Require TLS and managed identity where supported.
+- [ ] Prefer private endpoint and disabled public network access for sensitive workloads.
 
-### SKU selection
+### Step 3: Confirm before provisioning
+```text
+Redis deployment summary:
+- Name:
+- Resource group:
+- Location:
+- SKU:
+- Public network access:
+- Data roles:
+Proceed with Azure Managed Redis deployment or update? (y/n)
+```
 
-Azure Managed Redis groups SKUs by profile. Pick by working set size and access pattern (verify exact names, sizes, and prices on Microsoft Learn):
+> [!IMPORTANT]
+> Only proceed with Redis deployment, SKU changes, or paid resource updates if the user gives an explicit affirmative. On a negative, ambiguous, or missing response, output the design and stop.
 
-- **Balanced (for example `Balanced_B1`)**: general purpose, balanced memory and vCPU. Good default for caches and small vector sets.
-- **MemoryOptimized**: more memory per vCPU, for large caches and larger vector indexes.
-- **ComputeOptimized**: more vCPU per memory, for high-throughput, compute-heavy access (heavy vector search).
-- **FlashOptimized**: tiered memory plus flash for very large datasets at lower cost per GB.
+### Step 4: Deploy from the repository Bicep when approved
+```bash
+az deployment group create \
+  --resource-group <resource-group> \
+  --template-file scripts/redis-managed.bicep \
+  --parameters name=<redis-name> location=<location> sku=Balanced_B1 publicNetworkAccess=Disabled
+```
 
-Use the vector search and RediSearch capabilities (modules) for semantic cache and memory. Confirm module availability for the chosen tier.
+### Step 5: Validate integration decisions
+- [ ] Application uses managed identity or Key Vault-managed connection secrets.
+- [ ] Semantic cache threshold, TTL, invalidation, and embedding model are documented.
+- [ ] Vector memory read/write policy prevents cross-tenant leakage.
+- [ ] Session keys have expiration and bounded payload size.
 
-### Access and security (best practice)
+## Risk classification
+| Severity | Meaning |
+|---|---|
+| Critical | Cross-tenant key leakage, public access for sensitive memory, or secrets committed to code. |
+| High | No TTL/invalidation for semantic cache, no managed identity plan, or undersized production SKU. |
+| Medium | Missing private DNS, unclear vector schema, or no cache observability. |
+| Low | Naming, tagging, or documentation gaps. |
 
-- **Use Entra (AAD) authentication with managed identity.** Prefer `DefaultAzureCredential` over access keys. Some tenant policies disable local auth, so design for AAD from the start. See `references/access-and-network.md`.
-- **Tenant isolation.** Namespace every key by tenant and user (for example `t:{tenant}:u:{user}:...`) so a shared cache cannot leak across boundaries.
-- **Private networking.** Use private endpoints and set `publicNetworkAccess` to disabled where data sensitivity requires it. Plan the VNet and DNS up front.
-- **Encryption and TLS.** Require TLS for all connections.
+## Limits
 
-### Provision
+- Do not use this skill for: general agent architecture (use agentic-architecture-patterns), Foundry agent runtime design (use foundry-agent-blueprint), or general Azure infrastructure (use azure-infrastructure).
+- Keep exclusions and handoffs as by-name references to installed skills or agents, not relative links to other primitives.
+- Stop before mutating infrastructure, clusters, repositories, or generated artifacts unless the procedure's confirmation gate is satisfied.
 
-A minimal, idempotent Bicep is in `scripts/redis-managed.bicep`. It creates an Azure Managed Redis database with a chosen SKU and exposes the host. Review parameters, then deploy with the Azure CLI. Validate against Microsoft Learn for the latest API version and SKU names before applying.
-
-### How to use this skill
-
-1. Identify which roles Redis plays (semantic cache, vector memory, session, key value) from the agent design.
-2. Size the working set and pick a SKU profile.
-3. Choose AAD plus managed identity access and the network posture.
-4. Adapt the Bicep, deploy, and wire the app with the appropriate client (RedisVL for semantic cache and vector memory).
-5. Add key namespacing, time to live, and invalidation. Record the design in the architecture decision record.
+## Troubleshooting
+| Situation | Action |
+|---|---|
+| SKU is unavailable | Verify current regional SKU availability and choose an approved alternative. |
+| Bicep deployment fails | Report the Azure error, resource group, and parameters; do not retry with different settings without approval. |
+| Managed identity is unsupported by client path | Use Key Vault for secrets and document the migration path to identity. |
+| Public access is required temporarily | Add an expiration, network restriction, and risk note. |
 
 ## Output template
 
 Return exactly this structure:
-
 ```markdown
-Azure Managed Redis Design
+# Azure Managed Redis Design
 
-**Status:** PASS | FAIL | BLOCKED
-**Summary:** One sentence describing the Redis design decision.
+## Scope
+- Role:
+- Environment:
+- Region:
 
-### Details
-- Redis roles: semantic cache, vector memory, session store, key value cache, or a combination
-- Chosen SKU and tier: profile, example tier when known, and justification
-- Access model: Entra authentication, managed identity, TLS, and local auth considerations
-- Network posture: private endpoint, `publicNetworkAccess`, VNet, and DNS notes
-- Implementation notes: RedisVL, vector search, RediSearch modules, key namespace, TTL, invalidation, and Bicep path
+## SKU And Network
+| Decision | Value | Rationale |
+|---|---|---|
 
-### Validation
-- SKU fit: PASS | FAIL with working set and access-pattern evidence
-- Security fit: PASS | FAIL with tenant isolation, Entra, TLS, and private networking evidence
-- Resource path check: PASS | FAIL with referenced `references/` and `scripts/` paths
+## Key Design
+- Namespace:
+- TTL:
+- Invalidation:
+
+## Deployment
+```bash
+az deployment group create --resource-group <resource-group> --template-file scripts/redis-managed.bicep --parameters name=<redis-name>
 ```
 
-## Limits
-
-- Do not use this skill for general agent architecture.
-- Use `agentic-architecture-patterns` (`skill`) instead when designing broader model routing, tools, memory strategy, or guardrails.
-- Do not use this skill for Foundry agent wiring.
-- Use `foundry-agent-blueprint` (`skill`) instead when mapping Redis into Azure AI Foundry Agent Service connections or tools.
-- Do not use this skill for Azure CLI or Terraform execution.
-- Use `azure-cli` (`skill`) or `terraform-cli` (`skill`) instead when commands must be run.
-
-## Progressive disclosure and bundled resources
-
-At discovery time, only `name` and `description` are loaded. Read bundled references only when the Redis role needs deeper implementation detail; use the script only when a Bicep sample is requested.
-
-- `references/access-and-network.md`: Entra access, managed identity, private networking, and DNS considerations.
-- `references/semantic-cache.md`: semantic cache design with RedisVL.
-- `references/session-store.md`: conversation and run state patterns.
-- `references/vector-memory.md`: long term memory and vector search design.
-- `scripts/redis-managed.bicep`: minimal Azure Managed Redis Bicep sample.
-
-External references to verify before deployment:
-
-- [Azure Managed Redis](https://learn.microsoft.com/azure/redis/)
-- [Azure Managed Redis vector search](https://learn.microsoft.com/azure/redis/redis-vector-search)
-- [Authenticate with Microsoft Entra ID](https://learn.microsoft.com/azure/redis/entra-for-authentication)
-- [RedisVL](https://redis.io/docs/latest/integrate/redisvl/)
-
-## Related primitives
-
-| Name | Type | Use it when |
-| --- | --- | --- |
-| `agentic-architecture-patterns` | `skill` | Redis is part of a broader agent memory, cache, context, or guardrail design. |
-| `foundry-agent-blueprint` | `skill` | Redis must be mapped into Foundry Agent Service connections or tools. |
-| `azure-infrastructure` | `skill` | Network, identity, or private endpoint architecture needs broader Azure design. |
-| `azure-cli` | `skill` | Azure CLI deployment or live resource inspection is required. |
-| `terraform-cli` | `skill` | Terraform plan or apply workflow is required. |
+## Risks
+| Severity | Finding | Mitigation |
+|---|---|---|
+```
 
 ## Quality gate
-
-- [ ] `name` matches the `azure-managed-redis-cache` directory.
-- [ ] The Redis role, SKU profile, access model, and network posture are explicitly stated.
-- [ ] Balanced, MemoryOptimized, ComputeOptimized, and FlashOptimized guidance is preserved when SKU selection is discussed.
-- [ ] RedisVL, vector search, RediSearch modules, tenant key namespace, TTL, and invalidation are considered where relevant.
-- [ ] Every bundled resource path referenced above exists.
-- [ ] The response follows the output template with validation evidence.
+- [ ] Redis role, SKU, network posture, and identity model are documented.
+- [ ] Paid deployment or SKU changes have explicit confirmation.
+- [ ] Tenant isolation and TTL policy are defined.
+- [ ] Bicep path and all references exist in the repository.
+- [ ] Frontmatter contains a valid `name` matching the directory and a `description` with positive activation language.
+- [ ] The response follows `## Output template` and includes evidence for checks actually performed.
+- [ ] Tool, command, and file usage stays within this skill's procedure and confirmation gates.
+- [ ] Referenced repository paths and bundled resources exist before use.
+- [ ] This `SKILL.md` remains under 500 lines and contains no emojis.

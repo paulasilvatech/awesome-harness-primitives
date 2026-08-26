@@ -21,3 +21,18 @@ description: "Use when editing Backstage Software Templates or generated skeleto
 - Template linting accepts the schema and referenced action IDs.
 - Representative rendering leaves no unresolved template tokens or sensitive values.
 - Generated manifests and package files pass their owning domain checks.
+
+## Do / Do Not
+
+| Do | Do not |
+| --- | --- |
+| Keep parameters explicit and test representative rendered output. | Hide optional behavior or leave invalid output when an option is omitted. |
+| Use registered action IDs and sanitized examples. | Embed credentials, repository-specific secrets, or unresolved tokens. |
+
+## Checklist Before Opening a PR
+
+- [ ] The change matches this instruction's `applyTo` scope.
+- [ ] Parameter schemas and referenced action IDs validate.
+- [ ] Representative rendering contains no unresolved token or sensitive value.
+- [ ] Generated files pass their owning domain checks.
+- [ ] No unrelated edits or unresolved placeholders remain.

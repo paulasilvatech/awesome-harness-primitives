@@ -22,3 +22,18 @@ description: "Use when editing tracked Terraform modules, environments, provider
 - Formatting and targeted validation pass in the owning root.
 - Plans are reviewed for replacement, deletion, privilege, public exposure, and secret leakage.
 - Module changes preserve naming, tags, provider constraints, and output compatibility or document the intentional break.
+
+## Do / Do Not
+
+| Do | Do not |
+| --- | --- |
+| Pin providers, preserve module contracts, and review saved plans before approval. | Apply infrastructure, use unreviewed targets, or hide replacement and deletion. |
+| Keep examples sanitized and state in approved backends. | Commit credentials, state, plans, or private tenant values. |
+
+## Checklist Before Opening a PR
+
+- [ ] The change matches this instruction's `applyTo` scope.
+- [ ] Formatting and targeted validation pass in the owning root.
+- [ ] The reviewed plan exposes replacement, deletion, privilege, and network changes.
+- [ ] Naming, tags, provider constraints, and outputs remain compatible or document the break.
+- [ ] No state, saved plan, credential, or unrelated edit is included.

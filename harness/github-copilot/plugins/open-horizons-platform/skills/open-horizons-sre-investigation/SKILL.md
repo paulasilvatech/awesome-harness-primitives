@@ -1,7 +1,7 @@
 ---
 name: open-horizons-sre-investigation
 description: >-
-  Investigates one Open Horizons reliability symptom or incident through read-only telemetry, timeline construction, causal hypothesis testing, ownership assignment, and verification planning. Use for outages, latency, errors, unhealthy workloads, alerts, SLO breaches, or deployment regressions.
+  Investigates one Open Horizons reliability symptom or incident through read-only telemetry, timeline construction, causal hypothesis testing, ownership assignment, and verification planning. Use when investigating outages, latency, errors, unhealthy workloads, alerts, SLO breaches, or deployment regressions.
 ---
 
 # Open Horizons SRE investigation

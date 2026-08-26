@@ -20,3 +20,18 @@ description: "Use when editing Backstage catalog entities, ownership, relations,
 - Catalog validation resolves owners and relation targets.
 - Location targets and source annotations exist.
 - Entity examples contain no credentials, tenant IDs, or customer-specific values.
+
+## Do / Do Not
+
+| Do | Do not |
+| --- | --- |
+| Preserve stable entity identity, ownership, and resolvable relations. | Create duplicate entity triplets or dangling references. |
+| Validate locations and sanitize examples. | Put credentials, tenant IDs, or customer data in catalog files. |
+
+## Checklist Before Opening a PR
+
+- [ ] The change matches this instruction's `applyTo` scope.
+- [ ] Owners, relations, locations, and source annotations resolve.
+- [ ] Entity identity remains unique and stable.
+- [ ] Catalog validation passes and examples are sanitized.
+- [ ] No unrelated edits or unresolved placeholders remain.

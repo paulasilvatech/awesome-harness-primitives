@@ -21,3 +21,18 @@ description: "Use when editing repository GitHub Actions workflows or generated 
 - Workflow syntax and repository policy checks pass.
 - Actions are immutable-pinned and permissions match job behavior.
 - Fork and untrusted-input paths cannot reach secrets, OIDC tokens, or protected environments.
+
+## Do / Do Not
+
+| Do | Do not |
+| --- | --- |
+| Pin actions, minimize permissions, and treat external inputs as untrusted. | Interpolate untrusted values into shell code or grant broad write access. |
+| Bind protected operations to immutable artifacts and environments. | Let fork or issue input reach secrets, OIDC, or deployment authority. |
+
+## Checklist Before Opening a PR
+
+- [ ] The change matches this instruction's `applyTo` scope.
+- [ ] Syntax, action pins, permissions, and timeouts validate.
+- [ ] Untrusted-input paths cannot reach secrets or protected environments.
+- [ ] Deployment jobs consume immutable reviewed artifacts.
+- [ ] No unrelated edits or unresolved placeholders remain.

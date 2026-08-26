@@ -2,7 +2,7 @@
 name: python-development
 description: >
   Coding standards, conventions, and patterns for developing Python code in the
-  Agent Framework repository. Use this when writing or modifying Python source
+  Agent Framework repository. Use when writing or modifying Python source
   files in the python/ directory.
 ---
 

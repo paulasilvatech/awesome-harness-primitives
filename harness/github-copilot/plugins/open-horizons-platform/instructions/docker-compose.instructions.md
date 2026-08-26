@@ -20,3 +20,18 @@ description: "Use when editing the tracked Backstage agent or MCP Docker Compose
 - `docker compose config` renders without unresolved required variables.
 - Health checks and dependency conditions describe the actual startup behavior.
 - The rendered configuration contains no committed secret or mutable `latest` tag.
+
+## Do / Do Not
+
+| Do | Do not |
+| --- | --- |
+| Keep ports, health checks, dependencies, and application contracts aligned. | Encode startup assumptions that the service does not satisfy. |
+| Render configuration with explicit variables and immutable images. | Commit secrets or use mutable image tags. |
+
+## Checklist Before Opening a PR
+
+- [ ] The change matches this instruction's `applyTo` scope.
+- [ ] `docker compose config` resolves all required variables.
+- [ ] Health and dependency behavior match the application contract.
+- [ ] Rendered output contains no secret or mutable image tag.
+- [ ] No unrelated edits or unresolved placeholders remain.

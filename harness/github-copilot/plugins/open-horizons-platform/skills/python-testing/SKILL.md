@@ -2,7 +2,7 @@
 name: python-testing
 description: >
   Guidelines for writing and running tests in the Agent Framework Python
-  codebase. Use this when creating, modifying, or running tests.
+  codebase. Use when creating, modifying, or running tests.
 ---
 
 # Python Testing

@@ -2,7 +2,7 @@
 name: open-horizons-brownfield-engineering
 description: >-
   Implements focused changes in an existing repository through evidence-driven diagnosis,
-  minimal edits, immediate checks, and proportionate regression validation. Use this skill for
+  minimal edits, immediate checks, and proportionate regression validation. Use when handling
   bug fixes, features, improvements, refactoring, modernization, tests, and documentation updates.
 ---
 

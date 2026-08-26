@@ -24,3 +24,18 @@ The `sdd-spec-engineer` skill owns lifecycle and generation procedures. These in
 - Required artifacts, metadata, IDs, and cross-references are internally consistent.
 - Every active requirement maps to acceptance, implementation, and verification evidence or an explicit blocker.
 - Artifact-only validation is not reported as implementation success.
+
+## Do / Do Not
+
+| Do | Do not |
+| --- | --- |
+| Preserve stable IDs, explicit source classes, and bidirectional traceability. | Reuse retired IDs or present plans as executed evidence. |
+| Keep unknown status and missing evidence visible. | Invent metrics, live state, acceptance, or verification results. |
+
+## Checklist Before Opening a PR
+
+- [ ] The change matches this instruction's `applyTo` scope.
+- [ ] Requirement, acceptance, decision, task, test, and evidence IDs resolve.
+- [ ] Status and blockers match available evidence.
+- [ ] Sensitive data is redacted from traceability and verification artifacts.
+- [ ] Artifact checks pass without claiming implementation success.

@@ -14,14 +14,14 @@ first-party evidence and its runtime surface is exercised where applicable.
 
 | Content type | Sources | Shared canonical | Plugin-owned | Mentioned in dated evidence |
 | --- | --- | --- | --- | --- |
-| agent | 243 | 228 | 15 | 9 |
-| instruction | 212 | 194 | 18 | 16 |
-| skill | 492 | 438 | 54 | 30 |
-| prompt | 59 | 48 | 11 | 5 |
+| agent | 247 | 228 | 19 | 8 |
+| instruction | 228 | 194 | 34 | 17 |
+| skill | 553 | 438 | 115 | 37 |
+| prompt | 59 | 48 | 11 | 4 |
 | hook | 10 | 8 | 2 | 3 |
-| plugin | 102 | 77 | 25 | 17 |
+| plugin | 102 | 77 | 25 | 18 |
 
-- Shared-harness strict validation: 4 errors, 1 warnings.
+- Shared-harness strict validation: 5 errors, 1 warnings.
 - Plugin-owned primitive validation: 0 errors, 0 warnings.
 - Unreadable text files: 0.
 - Full per-source ledger: `docs/PRIMITIVE-CONTENT-AUDIT.json`.
@@ -33,10 +33,10 @@ The “mentioned in dated evidence” column is only an index hint. A mention in
 
 | Content type | Currency wording | Lifecycle wording | Version claims | Date claims | External sources | Current-source review | Source review | Semantic review |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| agent | 165 | 64 | 84 | 4 | 68 | 192 | 11 | 40 |
-| instruction | 105 | 63 | 99 | 14 | 107 | 173 | 22 | 17 |
-| skill | 272 | 156 | 247 | 50 | 250 | 383 | 22 | 87 |
-| prompt | 22 | 9 | 10 | 4 | 10 | 31 | 3 | 25 |
+| agent | 166 | 64 | 82 | 4 | 67 | 192 | 11 | 44 |
+| instruction | 109 | 61 | 96 | 14 | 107 | 176 | 22 | 30 |
+| skill | 304 | 184 | 267 | 62 | 285 | 432 | 29 | 92 |
+| prompt | 23 | 9 | 9 | 3 | 9 | 31 | 3 | 25 |
 | hook | 4 | 2 | 6 | 0 | 4 | 7 | 1 | 2 |
 | plugin | 37 | 32 | 102 | 7 | 102 | 102 | 0 | 0 |
 
@@ -51,15 +51,15 @@ words such as “latest”, “preview”, “deprecated”, and “current” r
 | Marketplace entries | 102 |
 | Shared agents packaged | 127 / 228 |
 | Shared agents not packaged | 101 |
-| Shared skills packaged | 196 / 438 |
-| Shared skills not packaged | 242 |
-| Plugin-owned agents | 15 |
-| Plugin-owned skills | 54 |
-| Plugin-owned workspace instructions | 18 |
+| Shared skills packaged | 197 / 438 |
+| Shared skills not packaged | 241 |
+| Plugin-owned agents | 19 |
+| Plugin-owned skills | 115 |
+| Plugin-owned workspace instructions | 34 |
 | Plugin-owned VS Code prompts | 11 |
 | Active plugin hook packages | 2 |
 
-The 343 unreferenced shared agents and
+The 342 unreferenced shared agents and
 skills are **composition candidates**, not missing plugins by definition. A new plugin is justified only
 when those components form one coherent installable capability without duplicating an existing package.
 Instructions and VS Code prompts are not portable core Agent Plugins 1.0 components; publish them through

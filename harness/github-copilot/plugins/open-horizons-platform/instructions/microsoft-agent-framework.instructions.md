@@ -24,3 +24,18 @@ The owning manifest defines the supported API surface. The Backstage runtime cur
 - Tests run against dependencies resolved from the owning manifest.
 - Tool, stream, checkpoint-resume, invalid-checkpoint, cancellation, and provider-failure paths are covered.
 - Logs and traces contain stable IDs and redacted metadata rather than prompts, tokens, or checkpoint payloads.
+
+## Do / Do Not
+
+| Do | Do not |
+| --- | --- |
+| Resolve APIs from the owning manifest and keep tools typed and authorized. | Assume separate runtimes share one SDK version or trust tool visibility as permission. |
+| Bound asynchronous work and validate checkpoint integrity and ownership. | Persist credentials, provider clients, open handles, or raw sensitive content. |
+
+## Checklist Before Opening a PR
+
+- [ ] The change matches this instruction's `applyTo` scope.
+- [ ] Dependency and API choices match the owning manifest.
+- [ ] Tool, stream, cancellation, checkpoint, and provider-failure tests pass.
+- [ ] Identity, mutation approval, and restored-state trust boundaries remain enforced.
+- [ ] Logs and traces contain only redacted metadata and stable IDs.

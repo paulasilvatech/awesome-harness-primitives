@@ -2,7 +2,7 @@
 name: python-code-quality
 description: >
   Code quality checks, linting, formatting, and type checking commands for the
-  Agent Framework Python codebase. Use this when running checks, fixing lint
+  Agent Framework Python codebase. Use when running checks, fixing lint
   errors, or troubleshooting CI failures.
 ---
 

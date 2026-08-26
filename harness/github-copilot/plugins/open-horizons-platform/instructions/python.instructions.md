@@ -24,3 +24,18 @@ These rules intentionally exclude general repository utilities and skill scripts
 - The owning runtime's pytest suite covers success, denial, malformed input, timeout, and dependency failure.
 - Async routes contain no unbounded synchronous network, subprocess, or file work.
 - Type and lint checks use the owning manifest and Python version.
+
+## Do / Do Not
+
+| Do | Do not |
+| --- | --- |
+| Use typed boundaries, bounded async work, and the owning dependency manifest. | Block the event loop, invent dependency versions, or bypass tool governance. |
+| Test success, denial, malformed input, timeout, and dependency failure. | Report a static check as runtime behavior. |
+
+## Checklist Before Opening a PR
+
+- [ ] The change matches this instruction's `applyTo` scope.
+- [ ] Type, lint, and focused pytest checks use the owning Python version.
+- [ ] Async paths contain no unbounded synchronous work.
+- [ ] Authorization and pre/post tool governance remain intact.
+- [ ] No secret, raw provider payload, or unrelated edit was introduced.

@@ -1,7 +1,7 @@
 ---
 name: open-horizons-azure-readiness
 description: >-
-  Assesses read-only Azure readiness for one Open Horizons deployment scope using current subscription, provider, quota, SKU, identity, network, and resource evidence. Use before Terraform planning or deployment when Azure prerequisites may block the requested components.
+  Assesses read-only Azure readiness for one Open Horizons deployment scope using current subscription, provider, quota, SKU, identity, network, and resource evidence. Use when needed before Terraform planning or deployment when Azure prerequisites may block the requested components.
 ---
 
 # Open Horizons Azure readiness

@@ -12,6 +12,8 @@ Open Horizons operations. It does not claim VS Code hook support.
 
 Safe operations emit no output. Decisions contain a category and remediation only; tool arguments,
 paths containing credentials, tokens, and secret values are never echoed.
+Path policy normalizes `/` and `\` separators before matching so the same protection applies to
+Linux, macOS, and Windows tool payloads.
 
 ## Runtime contract
 

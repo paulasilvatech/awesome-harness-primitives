@@ -39,14 +39,14 @@ Load only the Backstage skills needed by the selected surface:
 
 | Change | Skill |
 | --- | --- |
-| Config layers or schema | `backstage-app-configuration` |
-| Sign-in or delegated identity | `backstage-authentication` |
-| Authorization or resource filtering | `backstage-permissions` |
-| Catalog entities or discovery | `backstage-catalog` or `backstage-ai-catalog` |
-| Frontend/backend plugin composition | `backstage-plugin-builder` or `backstage-framework` |
-| Kubernetes visibility or manifests | `backstage-kubernetes` |
-| External provider integration | `backstage-external-integrations` |
-| Actions exposed as MCP tools | `backstage-mcp-actions` |
+| Config layers or schema | `open-horizons-backstage-app-configuration` |
+| Sign-in or delegated identity | `open-horizons-backstage-authentication` |
+| Authorization or resource filtering | `open-horizons-backstage-permissions` |
+| Catalog entities or discovery | `open-horizons-backstage-catalog` or `open-horizons-backstage-ai-catalog` |
+| Frontend/backend plugin composition | `backstage-plugin-builder` or `open-horizons-backstage-framework` |
+| Kubernetes visibility or manifests | `open-horizons-backstage-kubernetes` |
+| External provider integration | `open-horizons-backstage-external-integrations` |
+| Actions exposed as MCP tools | `open-horizons-backstage-mcp-actions` |
 
 ## Procedure
 
@@ -60,7 +60,7 @@ Load only the Backstage skills needed by the selected surface:
    errors remain tested, and the frontend does not call a model provider directly.
 5. Preserve model routing: repository harness model IDs stay on the GitHub Copilot surface, while
    application agents use the Microsoft Agent Framework and Microsoft Foundry deployment profiles
-   defined by `.github/model-routing.yaml`. Fail closed on unknown routes or deployments.
+   owned by the application service. Fail closed on unknown routes or deployments.
 6. Put shared defaults in `app-config.yaml`, environment overrides in the matching overlay, and
    secrets only in approved external configuration. Do not expose secrets through frontend config,
    catalog metadata, logs, or manifests.

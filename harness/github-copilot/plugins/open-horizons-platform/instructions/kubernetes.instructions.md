@@ -22,3 +22,18 @@ description: "Use when editing tracked AKS, Kubernetes, Helm, Kustomize, or gene
 - YAML, Helm, and Kustomize rendering produce valid resources with no unresolved tokens.
 - Policy checks cover tags, resources, non-root execution, privilege, and registry restrictions.
 - Rendered workloads have immutable images, probes, resources, identity, and secret references.
+
+## Do / Do Not
+
+| Do | Do not |
+| --- | --- |
+| Render manifests and enforce identity, resources, probes, and policy controls. | Apply unrendered files or weaken controls to make a deployment pass. |
+| Use immutable images and external secret references. | Use floating tags or commit secret values. |
+
+## Checklist Before Opening a PR
+
+- [ ] The change matches this instruction's `applyTo` scope.
+- [ ] YAML, Helm, and Kustomize rendering pass without unresolved tokens.
+- [ ] Policy checks cover identity, privilege, network, resources, and registry rules.
+- [ ] Workloads use immutable images, probes, and external secret references.
+- [ ] No unrelated edits or unresolved placeholders remain.

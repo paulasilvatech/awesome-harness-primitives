@@ -617,7 +617,11 @@
         "./skills/azure-draw-io-diagram-generator/",
         "./skills/azure-managed-redis-cache/",
         "./skills/backstage-plugin-builder/"
-      ]
+      ],
+      "governance": {
+        "lastRuntimeProbe": "2026-08-25",
+        "evidence": "docs/HARNESS-VALIDATION.md#open-horizons-200-aggregate-plugin-runtime-verification"
+      }
     },
     "openapi-to-application-csharp-dotnet": {
       "componentSource": "library",

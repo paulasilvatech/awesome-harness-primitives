@@ -326,8 +326,8 @@
     {
       "name": "open-horizons-platform",
       "source": "./harness/github-copilot/plugins/open-horizons-platform",
-      "description": "Open Horizons agentic DevOps platform toolkit for Azure, AKS, Backstage, GitHub, Azure DevOps, Terraform, security, reliability, architecture, and deployment operations. Use it to install specialist agents, reusable skills, safety hooks, MCP integrations, and a safe publisher for repository instructions, prompts, and automation.",
-      "version": "1.1.5"
+      "description": "Open Horizons agentic DevOps platform toolkit for Azure, AKS, Backstage, AEG, GitHub, Azure DevOps, Terraform, security, reliability, architecture, and deployment operations. Use it to install specialist agents, reusable skills, safety hooks, MCP integrations, and a safe publisher for repository customizations.",
+      "version": "2.0.0"
     },
     {
       "name": "openapi-to-application-csharp-dotnet",

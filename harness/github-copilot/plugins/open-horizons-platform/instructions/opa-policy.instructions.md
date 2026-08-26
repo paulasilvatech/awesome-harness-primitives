@@ -22,3 +22,18 @@ description: "Use when editing tracked Rego, OPA, Gatekeeper templates, or polic
 - Rego formatting, parsing, and policy tests pass with the repository-supported OPA tooling.
 - Gatekeeper templates and constraints agree on API versions, kinds, names, and parameters.
 - Repeated evaluation of identical input produces identical structured results.
+
+## Do / Do Not
+
+| Do | Do not |
+| --- | --- |
+| Keep policy decisions stable, structured, and covered by allow and deny fixtures. | Hide exceptions, depend on evaluation order, or mutate external state. |
+| Keep Gatekeeper templates and constraints schema-aligned. | Change parameters on one side without updating the other. |
+
+## Checklist Before Opening a PR
+
+- [ ] The change matches this instruction's `applyTo` scope.
+- [ ] Formatting, parsing, and policy tests pass.
+- [ ] Allow, deny, missing, malformed, boundary, and exemption fixtures are covered.
+- [ ] Templates and constraints agree on API, kind, name, and parameters.
+- [ ] No unrelated edits or unresolved placeholders remain.

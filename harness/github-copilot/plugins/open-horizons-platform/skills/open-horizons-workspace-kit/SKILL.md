@@ -9,7 +9,7 @@ user-invocable: true
 
 Publish repository-scoped assets that plugin installation does not activate automatically, or create
 explicit project copies for teams that require checked-in primitives. Planning is the default and
-uninstall preserves files changed after installation.
+uninstall archives unchanged managed files while preserving files changed after installation.
 
 ## When to invoke
 
@@ -24,11 +24,13 @@ uninstall preserves files changed after installation.
 | --- | --- |
 | `aeg` | Four AEG agents, the AEG feature skill, one instruction, five VS Code prompts, and the safety hook. |
 | `core` | `AGENTS.md`, repository instructions, all agents, skills, instructions, prompts, safety hook, and workspace MCP configuration. |
-| `automation` | GitHub Actions workflows and issue templates. |
+| `automation` | Self-contained GitHub Actions workflows and issue templates. |
 | `full` | The union of `core` and `automation`. |
 
 The AEG profile does not fabricate an AEG endpoint. Its agents return `blocked` until an authenticated
 `open-horizons-aeg` MCP server exposes the contract documented by the AEG feature skill.
+The target-specific agent validation workflow is not published because it requires an
+application-owned routing contract and service source tree that are not bundled here.
 
 ## Procedure
 
@@ -65,16 +67,18 @@ The AEG profile does not fabricate an AEG endpoint. Its agents return `blocked` 
 
 - No file changes occur without `--apply`.
 - Any conflict blocks the complete apply before the first write.
+- Source content and state are staged before commit; a commit failure restores prior files and state.
 - Existing identical files are not silently adopted as managed files.
+- Upgrades archive unchanged retired destinations and preserve modified retired destinations as managed.
 - Paths that escape the target or traverse symlinks are rejected.
 - State is written atomically to `.github/.open-horizons-workspace-kit.json`.
-- Uninstall removes only managed files whose hash still matches the installed hash.
+- Uninstall archives only managed files whose hash still matches the installed hash.
 - The installer does not install dependencies, call networks, stage, commit, push, deploy, or prune
   unrelated files.
 
 ## Progressive disclosure and bundled resources
 
-- `scripts/install_workspace_kit.py`: repeatable plan, apply, and uninstall implementation.
+- `scripts/install_workspace_kit.py`: repeatable plan, apply, and archive implementation.
 - `scripts/test_install_workspace_kit.py`: focused transaction and safety tests.
 - `templates/mcp.json`: workspace MCP syntax corresponding to the plugin's portable MCP manifest.
 
@@ -110,7 +114,9 @@ The AEG profile does not fabricate an AEG endpoint. Its agents return `blocked` 
 
 - [ ] Target and profile are explicit.
 - [ ] A dry run was reviewed before apply or uninstall.
-- [ ] No conflict or modified managed file was overwritten or removed.
+- [ ] No conflict or modified managed file was overwritten or archived.
+- [ ] Fault-injection coverage proves failed commits restore files and managed state.
+- [ ] Retired managed destinations are archived or explicitly preserved when modified.
 - [ ] Managed state was written atomically and remains inside the target.
 - [ ] Apply is idempotent for every managed destination.
 - [ ] AEG runtime availability is reported separately from static publication.

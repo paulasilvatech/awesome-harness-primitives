@@ -21,3 +21,18 @@ description: "Use when editing tracked Backstage, agent, MCP, or Golden Path Doc
 - The intended target builds from a clean context.
 - Image inspection confirms the non-root user, pinned base, and absence of secret material.
 - The container starts and responds on its documented health endpoint.
+
+## Do / Do Not
+
+| Do | Do not |
+| --- | --- |
+| Pin base images, minimize build context, and execute as a non-root user. | Bake credentials, mutable bases, or unnecessary build artifacts into an image. |
+| Keep health behavior aligned with deployed probes. | Add a conflicting or artificial health endpoint. |
+
+## Checklist Before Opening a PR
+
+- [ ] The change matches this instruction's `applyTo` scope.
+- [ ] The intended target builds from a clean context.
+- [ ] Image inspection verifies the base, user, and absence of secrets.
+- [ ] The container responds on the documented health endpoint.
+- [ ] No unrelated edits or unresolved placeholders remain.

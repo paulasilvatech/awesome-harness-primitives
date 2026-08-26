@@ -20,3 +20,18 @@ description: "Use when editing Open Horizons GitHub Issue Forms, chooser configu
 - YAML and Issue Form schema validation pass.
 - Every routed form resolves to an existing agent label and stable field IDs.
 - Chooser configuration remains label-free and no form solicits sensitive values.
+
+## Do / Do Not
+
+| Do | Do not |
+| --- | --- |
+| Use stable field IDs, valid routing labels, and explicit approval acknowledgements. | Collect secrets or route chooser configuration as an issue. |
+| Validate every template against its schema and installed agent inventory. | Add a label that has no owning agent or automation. |
+
+## Checklist Before Opening a PR
+
+- [ ] The change matches this instruction's `applyTo` scope.
+- [ ] YAML and Issue Form schema validation pass.
+- [ ] Every routed label resolves to an installed agent.
+- [ ] No field solicits credentials, tokens, or private tenant values.
+- [ ] Chooser configuration remains label-free.

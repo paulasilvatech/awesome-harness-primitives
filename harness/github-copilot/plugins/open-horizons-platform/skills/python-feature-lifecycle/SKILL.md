@@ -3,7 +3,7 @@ name: python-feature-lifecycle
 description: >
   Guidance for package and feature lifecycle in the Agent Framework Python
   codebase, including stage meanings, feature-stage decorators, feature enums,
-  and how to move APIs from one stage to the next.
+  and how to move APIs from one stage to the next. Use when changing API lifecycle stages or feature annotations.
 ---
 
 # Python Feature Lifecycle

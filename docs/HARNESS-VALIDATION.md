@@ -29,6 +29,26 @@ version changes, local evidence conflicts, a claim is unverified, the user asks 
 this evidence is older than 90 days. Do not refresh this date without repeating the fetch and reviewing
 the relevant sections.
 
+## Open Horizons 2.0.0 aggregate plugin runtime verification
+
+Verification date: 2026-08-25. Target runtime: GitHub Copilot CLI 1.0.81-9. The probe used a
+new temporary `COPILOT_HOME`; the live user configuration was not modified and no agent or model was
+invoked.
+
+| Evidence | Verified result |
+| --- | --- |
+| Local marketplace registration and `copilot plugin install open-horizons-platform@copilot-primitives` | The package installed successfully from the local marketplace, was enabled as version 2.0.0, and was loaded live from `harness/github-copilot/plugins/open-horizons-platform`. |
+| `copilot skill list --json` | Discovery exposed `open-horizons-backstage-aeg-feature`, the product-qualified `open-horizons-backstage-authentication`, and `open-horizons-workspace-kit`. This verifies representative renamed and new skills without relying on a hand-maintained count. |
+| `copilot mcp list` | The installed package exposed `microsoft-docs` over HTTP and local `azure`, `terraform`, and `playwright` servers from the portable MCP manifest. The commands behind those local servers were not started by this probe. |
+| AEG contract validator | Eight expected operations passed identity-field exclusion, mutation classification, minimum evidence-run, bearer-security, and `worker_engine: inherit` checks. |
+| Safety hook tests | Seven direct payload tests passed for read-only AEG access, mutating AEG approval, literal-secret denial with redaction, environment-variable acceptance, protected portal approval, and equivalent Windows-path handling. |
+| Workspace-kit tests | Seventeen standard-library tests passed for focused AEG publication, dry-run behavior, idempotence, transaction-wide conflict blocking, injected install, uninstall, and partial-uninstall state-commit rollback, retired-path reconciliation, reversible archive behavior, modified-file preservation, profile switching, MCP translation, target-specific workflow exclusion, blocking dry-run exit codes, and handled transaction errors without tracebacks. |
+
+The probe supports package-level runtime verification for local installation, skill discovery, and MCP
+exposure. It does not prove remote AEG authentication or authorization, AEG tool execution, custom-agent
+invocation, MCP subprocess startup, or VS Code prompt execution; those remain environment-specific runtime
+checks.
+
 ## Official architecture icon and diagram guidance verification
 
 Verification date: 2026-08-25. Target: `azure-draw-io-diagram-generator` icon policy and its

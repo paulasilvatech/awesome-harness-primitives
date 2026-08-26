@@ -3,7 +3,7 @@ name: python-package-management
 description: >
   Guide for managing packages in the Agent Framework Python monorepo, including
   creating new connector packages, versioning, and the lazy-loading pattern.
-  Use this when adding, modifying, or releasing packages.
+  Use when adding, modifying, or releasing packages.
 ---
 
 # Python Package Management

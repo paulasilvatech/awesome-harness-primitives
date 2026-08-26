@@ -19,6 +19,32 @@ EXECUTION_TOOL_MARKERS = (
     "shell",
     "terminal",
 )
+EDIT_TOOL_MARKERS = ("create", "edit", "patch", "write")
+MUTATING_AEG_TOOLS = {
+    "aeg_decide_gate": "recording an AEG gate decision",
+    "aeg_propose_profile": "creating an AEG golden-path proposal",
+    "aeg_start_run": "starting an AEG run",
+}
+PROTECTED_PATHS = (
+    re.compile(
+        r"(?:^|/)app-config\.production\.ya?ml(?:\s|$)",
+        re.IGNORECASE,
+    ),
+    re.compile(
+        r"(?:^|/)packages/backend/src/plugins/auth\.ts(?:\s|$)",
+        re.IGNORECASE,
+    ),
+    re.compile(r"(?:^|/)backstage/ai-kit/agents/", re.IGNORECASE),
+)
+APP_CONFIG_PATH = re.compile(
+    r"(?:^|/)app-config[^/\s]*\.ya?ml(?:\s|$)",
+    re.IGNORECASE,
+)
+SECRET_LITERAL = re.compile(
+    r"(?:token|api[_-]?key|secret|password)\s*:\s*"
+    r"(?!['\"]?\$\{)['\"]?[A-Za-z0-9+/_=-]{12,}",
+    re.IGNORECASE,
+)
 RISK_PATTERNS = (
     (
         re.compile(r"\bterraform(?:[\s/_.:-]+)(?:apply|destroy)\b", re.IGNORECASE),
@@ -69,16 +95,20 @@ RISK_PATTERNS = (
 )
 
 
-def emit_ask(reason: str) -> None:
+def emit_decision(decision: str, reason: str) -> None:
     json.dump(
         {
-            "permissionDecision": "ask",
+            "permissionDecision": decision,
             "permissionDecisionReason": reason,
         },
         sys.stdout,
         separators=(",", ":"),
     )
     sys.stdout.write("\n")
+
+
+def emit_ask(reason: str) -> None:
+    emit_decision("ask", reason)
 
 
 def read_payload() -> tuple[dict[str, Any] | None, str | None]:
@@ -167,6 +197,45 @@ def is_execution_tool(name: str) -> bool:
     return not normalized or any(marker in normalized for marker in EXECUTION_TOOL_MARKERS)
 
 
+def is_edit_tool(name: str) -> bool:
+    normalized = name.casefold().replace("_", "").replace("-", "")
+    return any(marker in normalized for marker in EDIT_TOOL_MARKERS)
+
+
+def additional_decision(
+    event: str,
+    name: str,
+    combined: str,
+) -> tuple[str, str] | None:
+    normalized_event = event.casefold().replace("_", "")
+    if "premcptoolcall" in normalized_event:
+        lowered = f"{name} {combined}".casefold()
+        for operation, reason in MUTATING_AEG_TOOLS.items():
+            if operation in lowered:
+                return (
+                    "ask",
+                    "Open Horizons requires explicit approval before "
+                    f"{reason}.",
+                )
+
+    if is_edit_tool(name):
+        path_text = combined.replace("\\", "/")
+        if APP_CONFIG_PATH.search(path_text) and SECRET_LITERAL.search(path_text):
+            return (
+                "deny",
+                "Open Horizons blocked a possible literal secret in "
+                "Backstage config. Use an environment-variable or "
+                "approved secret-provider reference.",
+            )
+        if any(pattern.search(path_text) for pattern in PROTECTED_PATHS):
+            return (
+                "ask",
+                "Open Horizons requires explicit approval before changing "
+                "a protected portal governance surface.",
+            )
+    return None
+
+
 def main() -> int:
     mode = os.environ.get("OPEN_HORIZONS_HOOK_MODE", "ask").casefold()
     if mode == "off":
@@ -183,6 +252,12 @@ def main() -> int:
     assert payload is not None
 
     event, name, combined = tool_text(payload)
+    decision = additional_decision(event, name, combined)
+    if decision is not None:
+        if mode == "ask":
+            emit_decision(*decision)
+        return 0
+
     normalized_event = event.casefold().replace("_", "")
     if "premcptoolcall" not in normalized_event and not is_execution_tool(name):
         return 0

@@ -4,7 +4,7 @@ description: "Use when validating requirements against EARS notation patterns. T
 ---
 # EARS validation
 
-## When to invoke the Open Horizons EARS validation skill
+## When to invoke
 
 - "Review these requirements for EARS compliance."
 - "Is this requirement testable?"

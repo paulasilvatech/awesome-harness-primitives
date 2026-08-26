@@ -119,27 +119,6 @@
       "authority": "bounded-write",
       "kind": "agent",
       "model": null,
-      "name": "ado-integration",
-      "notes": [],
-      "ownership": "plugin",
-      "package": "open-horizons-platform",
-      "path": "harness/github-copilot/plugins/open-horizons-platform/agents/ado-integration.agent.md",
-      "selected_agent": null,
-      "status": "current-static",
-      "target": "vscode+github-copilot",
-      "tools": [
-        "read",
-        "edit",
-        "execute",
-        "grep",
-        "glob"
-      ],
-      "tools_mode": "allow-list"
-    },
-    {
-      "authority": "bounded-write",
-      "kind": "agent",
-      "model": null,
       "name": "ADR Generator",
       "notes": [],
       "ownership": "shared",
@@ -801,30 +780,6 @@
       "authority": "bounded-write",
       "kind": "agent",
       "model": null,
-      "name": "azure-portal-deploy",
-      "notes": [
-        "runtime-tool:azure/*"
-      ],
-      "ownership": "plugin",
-      "package": "open-horizons-platform",
-      "path": "harness/github-copilot/plugins/open-horizons-platform/agents/azure-portal-deploy.agent.md",
-      "selected_agent": null,
-      "status": "runtime-verification-required",
-      "target": "vscode+github-copilot",
-      "tools": [
-        "read",
-        "edit",
-        "execute",
-        "grep",
-        "glob",
-        "azure/*"
-      ],
-      "tools_mode": "allow-list"
-    },
-    {
-      "authority": "bounded-write",
-      "kind": "agent",
-      "model": null,
       "name": "backstage-expert",
       "notes": [
         "runtime-tool:ms-vscode.vscode-websearchforcopilot/websearch"
@@ -1456,33 +1411,6 @@
         "glob",
         "web_fetch",
         "web_search"
-      ],
-      "tools_mode": "allow-list"
-    },
-    {
-      "authority": "bounded-write",
-      "kind": "agent",
-      "model": null,
-      "name": "deploy",
-      "notes": [
-        "runtime-tool:azure/*",
-        "runtime-tool:terraform/*"
-      ],
-      "ownership": "plugin",
-      "package": "open-horizons-platform",
-      "path": "harness/github-copilot/plugins/open-horizons-platform/agents/deploy.agent.md",
-      "selected_agent": null,
-      "status": "runtime-verification-required",
-      "target": "vscode+github-copilot",
-      "tools": [
-        "read",
-        "edit",
-        "execute",
-        "grep",
-        "glob",
-        "agent",
-        "azure/*",
-        "terraform/*"
       ],
       "tools_mode": "allow-list"
     },
@@ -2483,27 +2411,6 @@
       "authority": "bounded-write",
       "kind": "agent",
       "model": null,
-      "name": "github-integration",
-      "notes": [],
-      "ownership": "plugin",
-      "package": "open-horizons-platform",
-      "path": "harness/github-copilot/plugins/open-horizons-platform/agents/github-integration.agent.md",
-      "selected_agent": null,
-      "status": "current-static",
-      "target": "vscode+github-copilot",
-      "tools": [
-        "read",
-        "edit",
-        "execute",
-        "grep",
-        "glob"
-      ],
-      "tools_mode": "allow-list"
-    },
-    {
-      "authority": "bounded-write",
-      "kind": "agent",
-      "model": null,
       "name": "Gitmoji Setup",
       "notes": [],
       "ownership": "shared",
@@ -2562,27 +2469,6 @@
         "execute",
         "web_fetch",
         "web_search"
-      ],
-      "tools_mode": "allow-list"
-    },
-    {
-      "authority": "bounded-write",
-      "kind": "agent",
-      "model": null,
-      "name": "hybrid-scenarios",
-      "notes": [],
-      "ownership": "plugin",
-      "package": "open-horizons-platform",
-      "path": "harness/github-copilot/plugins/open-horizons-platform/agents/hybrid-scenarios.agent.md",
-      "selected_agent": null,
-      "status": "current-static",
-      "target": "vscode+github-copilot",
-      "tools": [
-        "read",
-        "edit",
-        "execute",
-        "grep",
-        "glob"
       ],
       "tools_mode": "allow-list"
     },
@@ -3256,26 +3142,284 @@
       "tools_mode": "allow-list"
     },
     {
-      "authority": "bounded-write",
+      "authority": "read-only",
       "kind": "agent",
       "model": null,
-      "name": "open-horizons-backstage-expert",
+      "name": "open-horizons-aeg-analyst",
       "notes": [
-        "runtime-tool:playwright/*"
+        "runtime-tool:open-horizons-aeg/aeg_get_metrics",
+        "runtime-tool:open-horizons-aeg/aeg_get_run",
+        "runtime-tool:open-horizons-aeg/aeg_get_traceability",
+        "runtime-tool:open-horizons-aeg/aeg_list_runs"
       ],
       "ownership": "plugin",
       "package": "open-horizons-platform",
-      "path": "harness/github-copilot/plugins/open-horizons-platform/agents/open-horizons-backstage-expert.agent.md",
+      "path": "harness/github-copilot/plugins/open-horizons-platform/agents/open-horizons-aeg-analyst.agent.md",
       "selected_agent": null,
       "status": "runtime-verification-required",
       "target": "vscode+github-copilot",
       "tools": [
+        "open-horizons-aeg/aeg_get_run",
+        "open-horizons-aeg/aeg_list_runs",
+        "open-horizons-aeg/aeg_get_traceability",
+        "open-horizons-aeg/aeg_get_metrics"
+      ],
+      "tools_mode": "allow-list"
+    },
+    {
+      "authority": "read-only",
+      "kind": "agent",
+      "model": null,
+      "name": "open-horizons-aeg-concierge",
+      "notes": [
+        "runtime-tool:open-horizons-aeg/aeg_get_run",
+        "runtime-tool:open-horizons-aeg/aeg_list_runs",
+        "runtime-tool:open-horizons-aeg/aeg_start_run"
+      ],
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "path": "harness/github-copilot/plugins/open-horizons-platform/agents/open-horizons-aeg-concierge.agent.md",
+      "selected_agent": null,
+      "status": "runtime-verification-required",
+      "target": "vscode+github-copilot",
+      "tools": [
+        "open-horizons-aeg/aeg_start_run",
+        "open-horizons-aeg/aeg_get_run",
+        "open-horizons-aeg/aeg_list_runs"
+      ],
+      "tools_mode": "allow-list"
+    },
+    {
+      "authority": "read-only",
+      "kind": "agent",
+      "model": null,
+      "name": "open-horizons-aeg-gatekeeper",
+      "notes": [
+        "runtime-tool:open-horizons-aeg/aeg_decide_gate",
+        "runtime-tool:open-horizons-aeg/aeg_get_gate_package",
+        "runtime-tool:open-horizons-aeg/aeg_get_run"
+      ],
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "path": "harness/github-copilot/plugins/open-horizons-platform/agents/open-horizons-aeg-gatekeeper.agent.md",
+      "selected_agent": null,
+      "status": "runtime-verification-required",
+      "target": "vscode+github-copilot",
+      "tools": [
+        "open-horizons-aeg/aeg_get_run",
+        "open-horizons-aeg/aeg_get_gate_package",
+        "open-horizons-aeg/aeg_decide_gate"
+      ],
+      "tools_mode": "allow-list"
+    },
+    {
+      "authority": "read-only",
+      "kind": "agent",
+      "model": null,
+      "name": "open-horizons-aeg-harvester",
+      "notes": [
+        "runtime-tool:open-horizons-aeg/aeg_get_run",
+        "runtime-tool:open-horizons-aeg/aeg_get_traceability",
+        "runtime-tool:open-horizons-aeg/aeg_propose_profile"
+      ],
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "path": "harness/github-copilot/plugins/open-horizons-platform/agents/open-horizons-aeg-harvester.agent.md",
+      "selected_agent": null,
+      "status": "runtime-verification-required",
+      "target": "vscode+github-copilot",
+      "tools": [
+        "open-horizons-aeg/aeg_get_run",
+        "open-horizons-aeg/aeg_get_traceability",
+        "open-horizons-aeg/aeg_propose_profile"
+      ],
+      "tools_mode": "allow-list"
+    },
+    {
+      "authority": "bounded-write",
+      "kind": "agent",
+      "model": null,
+      "name": "open-horizons-architect",
+      "notes": [],
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "path": "harness/github-copilot/plugins/open-horizons-platform/agents/open-horizons-architect.agent.md",
+      "selected_agent": null,
+      "status": "current-static",
+      "target": "vscode+github-copilot",
+      "tools": [
         "read",
-        "edit",
-        "execute",
         "grep",
         "glob",
-        "playwright/*"
+        "edit",
+        "execute",
+        "web_fetch",
+        "web_search"
+      ],
+      "tools_mode": "allow-list"
+    },
+    {
+      "authority": "read-only",
+      "kind": "agent",
+      "model": null,
+      "name": "open-horizons-azure-readiness",
+      "notes": [],
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "path": "harness/github-copilot/plugins/open-horizons-platform/agents/open-horizons-azure-readiness.agent.md",
+      "selected_agent": null,
+      "status": "current-static",
+      "target": "vscode+github-copilot",
+      "tools": [
+        "read",
+        "grep",
+        "glob",
+        "execute"
+      ],
+      "tools_mode": "allow-list"
+    },
+    {
+      "authority": "bounded-write",
+      "kind": "agent",
+      "model": null,
+      "name": "open-horizons-backstage-expert",
+      "notes": [],
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "path": "harness/github-copilot/plugins/open-horizons-platform/agents/open-horizons-backstage-expert.agent.md",
+      "selected_agent": null,
+      "status": "current-static",
+      "target": "vscode+github-copilot",
+      "tools": [
+        "read",
+        "grep",
+        "glob",
+        "edit",
+        "execute",
+        "web_fetch",
+        "web_search"
+      ],
+      "tools_mode": "allow-list"
+    },
+    {
+      "authority": "unspecified",
+      "kind": "agent",
+      "model": null,
+      "name": "open-horizons-deployment-operator",
+      "notes": [],
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "path": "harness/github-copilot/plugins/open-horizons-platform/agents/open-horizons-deployment-operator.agent.md",
+      "selected_agent": null,
+      "status": "current-static",
+      "target": "vscode+github-copilot",
+      "tools": [
+        "read",
+        "grep",
+        "glob",
+        "execute"
+      ],
+      "tools_mode": "allow-list"
+    },
+    {
+      "authority": "bounded-write",
+      "kind": "agent",
+      "model": null,
+      "name": "open-horizons-engineer",
+      "notes": [],
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "path": "harness/github-copilot/plugins/open-horizons-platform/agents/open-horizons-engineer.agent.md",
+      "selected_agent": null,
+      "status": "current-static",
+      "target": "vscode+github-copilot",
+      "tools": [
+        "read",
+        "grep",
+        "glob",
+        "edit",
+        "execute"
+      ],
+      "tools_mode": "allow-list"
+    },
+    {
+      "authority": "read-only",
+      "kind": "agent",
+      "model": null,
+      "name": "open-horizons-orchestrator",
+      "notes": [],
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "path": "harness/github-copilot/plugins/open-horizons-platform/agents/open-horizons-orchestrator.agent.md",
+      "selected_agent": null,
+      "status": "current-static",
+      "target": "vscode+github-copilot",
+      "tools": [
+        "read",
+        "grep",
+        "glob",
+        "agent"
+      ],
+      "tools_mode": "allow-list"
+    },
+    {
+      "authority": "read-only",
+      "kind": "agent",
+      "model": null,
+      "name": "open-horizons-security-reviewer",
+      "notes": [],
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "path": "harness/github-copilot/plugins/open-horizons-platform/agents/open-horizons-security-reviewer.agent.md",
+      "selected_agent": null,
+      "status": "current-static",
+      "target": "vscode+github-copilot",
+      "tools": [
+        "read",
+        "grep",
+        "glob",
+        "execute"
+      ],
+      "tools_mode": "allow-list"
+    },
+    {
+      "authority": "read-only",
+      "kind": "agent",
+      "model": null,
+      "name": "open-horizons-sre-investigator",
+      "notes": [],
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "path": "harness/github-copilot/plugins/open-horizons-platform/agents/open-horizons-sre-investigator.agent.md",
+      "selected_agent": null,
+      "status": "current-static",
+      "target": "vscode+github-copilot",
+      "tools": [
+        "read",
+        "grep",
+        "glob",
+        "execute"
+      ],
+      "tools_mode": "allow-list"
+    },
+    {
+      "authority": "bounded-write",
+      "kind": "agent",
+      "model": null,
+      "name": "open-horizons-terraform",
+      "notes": [],
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "path": "harness/github-copilot/plugins/open-horizons-platform/agents/open-horizons-terraform.agent.md",
+      "selected_agent": null,
+      "status": "current-static",
+      "target": "vscode+github-copilot",
+      "tools": [
+        "read",
+        "grep",
+        "glob",
+        "edit",
+        "execute"
       ],
       "tools_mode": "allow-list"
     },
@@ -4596,27 +4740,6 @@
       "authority": "bounded-write",
       "kind": "agent",
       "model": null,
-      "name": "security",
-      "notes": [],
-      "ownership": "plugin",
-      "package": "open-horizons-platform",
-      "path": "harness/github-copilot/plugins/open-horizons-platform/agents/security.agent.md",
-      "selected_agent": null,
-      "status": "current-static",
-      "target": "vscode+github-copilot",
-      "tools": [
-        "read",
-        "edit",
-        "execute",
-        "grep",
-        "glob"
-      ],
-      "tools_mode": "allow-list"
-    },
-    {
-      "authority": "bounded-write",
-      "kind": "agent",
-      "model": null,
       "name": "Senior Cloud Architect",
       "notes": [],
       "ownership": "shared",
@@ -4724,27 +4847,6 @@
         "execute",
         "web_fetch",
         "web_search"
-      ],
-      "tools_mode": "allow-list"
-    },
-    {
-      "authority": "bounded-write",
-      "kind": "agent",
-      "model": null,
-      "name": "sre",
-      "notes": [],
-      "ownership": "plugin",
-      "package": "open-horizons-platform",
-      "path": "harness/github-copilot/plugins/open-horizons-platform/agents/sre.agent.md",
-      "selected_agent": null,
-      "status": "current-static",
-      "target": "vscode+github-copilot",
-      "tools": [
-        "read",
-        "edit",
-        "execute",
-        "grep",
-        "glob"
       ],
       "tools_mode": "allow-list"
     },
@@ -5033,30 +5135,6 @@
         "read",
         "grep",
         "glob"
-      ],
-      "tools_mode": "allow-list"
-    },
-    {
-      "authority": "bounded-write",
-      "kind": "agent",
-      "model": null,
-      "name": "terraform",
-      "notes": [
-        "runtime-tool:terraform/*"
-      ],
-      "ownership": "plugin",
-      "package": "open-horizons-platform",
-      "path": "harness/github-copilot/plugins/open-horizons-platform/agents/terraform.agent.md",
-      "selected_agent": null,
-      "status": "runtime-verification-required",
-      "target": "vscode+github-copilot",
-      "tools": [
-        "read",
-        "edit",
-        "execute",
-        "grep",
-        "glob",
-        "terraform/*"
       ],
       "tools_mode": "allow-list"
     },
@@ -5446,24 +5524,6 @@
       "authority": "unspecified",
       "kind": "prompt",
       "model": null,
-      "name": "ado-setup",
-      "notes": [],
-      "ownership": "plugin",
-      "package": "open-horizons-platform",
-      "path": "harness/github-copilot/plugins/open-horizons-platform/prompts/ado-setup.prompt.md",
-      "selected_agent": "ado-integration",
-      "status": "current-static",
-      "target": "vscode",
-      "tools": [
-        "read",
-        "search"
-      ],
-      "tools_mode": "allow-list"
-    },
-    {
-      "authority": "unspecified",
-      "kind": "prompt",
-      "model": null,
       "name": "ai-prompt-engineering-safety-review",
       "notes": [],
       "ownership": "shared",
@@ -5529,25 +5589,6 @@
         "search",
         "azure-mcp/*",
         "github/*"
-      ],
-      "tools_mode": "allow-list"
-    },
-    {
-      "authority": "unspecified",
-      "kind": "prompt",
-      "model": null,
-      "name": "azure-infra",
-      "notes": [],
-      "ownership": "plugin",
-      "package": "open-horizons-platform",
-      "path": "harness/github-copilot/plugins/open-horizons-platform/prompts/azure-infra.prompt.md",
-      "selected_agent": "azure-portal-deploy",
-      "status": "current-static",
-      "target": "vscode",
-      "tools": [
-        "read",
-        "search",
-        "execute"
       ],
       "tools_mode": "allow-list"
     },
@@ -5766,14 +5807,15 @@
       "ownership": "plugin",
       "package": "open-horizons-platform",
       "path": "harness/github-copilot/plugins/open-horizons-platform/prompts/create-mcp-server.prompt.md",
-      "selected_agent": null,
+      "selected_agent": "open-horizons-engineer",
       "status": "current-static",
       "target": "vscode",
       "tools": [
         "read",
         "search",
         "edit",
-        "execute"
+        "execute",
+        "web"
       ],
       "tools_mode": "allow-list"
     },
@@ -5827,14 +5869,13 @@
       "ownership": "plugin",
       "package": "open-horizons-platform",
       "path": "harness/github-copilot/plugins/open-horizons-platform/prompts/deploy-platform.prompt.md",
-      "selected_agent": "deploy",
+      "selected_agent": "open-horizons-deployment-operator",
       "status": "current-static",
       "target": "vscode",
       "tools": [
         "read",
         "search",
-        "execute",
-        "agent"
+        "execute"
       ],
       "tools_mode": "allow-list"
     },
@@ -5852,6 +5893,27 @@
       "target": "vscode",
       "tools": [],
       "tools_mode": "inherit-agent"
+    },
+    {
+      "authority": "bounded-write",
+      "kind": "prompt",
+      "model": null,
+      "name": "diagram-architecture",
+      "notes": [],
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "path": "harness/github-copilot/plugins/open-horizons-platform/prompts/diagram-architecture.prompt.md",
+      "selected_agent": "open-horizons-architect",
+      "status": "current-static",
+      "target": "vscode",
+      "tools": [
+        "read",
+        "search",
+        "edit",
+        "execute",
+        "web"
+      ],
+      "tools_mode": "allow-list"
     },
     {
       "authority": "unspecified",
@@ -5962,24 +6024,6 @@
       "target": "vscode",
       "tools": [
         "execute"
-      ],
-      "tools_mode": "allow-list"
-    },
-    {
-      "authority": "unspecified",
-      "kind": "prompt",
-      "model": null,
-      "name": "hybrid-setup",
-      "notes": [],
-      "ownership": "plugin",
-      "package": "open-horizons-platform",
-      "path": "harness/github-copilot/plugins/open-horizons-platform/prompts/hybrid-setup.prompt.md",
-      "selected_agent": "hybrid-scenarios",
-      "status": "current-static",
-      "target": "vscode",
-      "tools": [
-        "read",
-        "search"
       ],
       "tools_mode": "allow-list"
     },
@@ -6223,19 +6267,92 @@
       "authority": "unspecified",
       "kind": "prompt",
       "model": null,
-      "name": "open-horizons-backstage",
+      "name": "open-horizons-aeg-approve",
       "notes": [],
       "ownership": "plugin",
       "package": "open-horizons-platform",
-      "path": "harness/github-copilot/plugins/open-horizons-platform/prompts/open-horizons-backstage.prompt.md",
+      "path": "harness/github-copilot/plugins/open-horizons-platform/prompts/open-horizons-aeg-approve.prompt.md",
+      "selected_agent": "open-horizons-aeg-gatekeeper",
+      "status": "current-static",
+      "target": "vscode",
+      "tools": [],
+      "tools_mode": "inherit-agent"
+    },
+    {
+      "authority": "unspecified",
+      "kind": "prompt",
+      "model": null,
+      "name": "open-horizons-aeg-harvest",
+      "notes": [],
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "path": "harness/github-copilot/plugins/open-horizons-platform/prompts/open-horizons-aeg-harvest.prompt.md",
+      "selected_agent": "open-horizons-aeg-harvester",
+      "status": "current-static",
+      "target": "vscode",
+      "tools": [],
+      "tools_mode": "inherit-agent"
+    },
+    {
+      "authority": "unspecified",
+      "kind": "prompt",
+      "model": null,
+      "name": "open-horizons-aeg-modernize",
+      "notes": [],
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "path": "harness/github-copilot/plugins/open-horizons-platform/prompts/open-horizons-aeg-modernize.prompt.md",
+      "selected_agent": "open-horizons-aeg-concierge",
+      "status": "current-static",
+      "target": "vscode",
+      "tools": [],
+      "tools_mode": "inherit-agent"
+    },
+    {
+      "authority": "unspecified",
+      "kind": "prompt",
+      "model": null,
+      "name": "open-horizons-aeg-start",
+      "notes": [],
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "path": "harness/github-copilot/plugins/open-horizons-platform/prompts/open-horizons-aeg-start.prompt.md",
+      "selected_agent": "open-horizons-aeg-concierge",
+      "status": "current-static",
+      "target": "vscode",
+      "tools": [],
+      "tools_mode": "inherit-agent"
+    },
+    {
+      "authority": "unspecified",
+      "kind": "prompt",
+      "model": null,
+      "name": "open-horizons-aeg-status",
+      "notes": [],
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "path": "harness/github-copilot/plugins/open-horizons-platform/prompts/open-horizons-aeg-status.prompt.md",
+      "selected_agent": "open-horizons-aeg-concierge",
+      "status": "current-static",
+      "target": "vscode",
+      "tools": [],
+      "tools_mode": "inherit-agent"
+    },
+    {
+      "authority": "unspecified",
+      "kind": "prompt",
+      "model": null,
+      "name": "open-horizons-backstage-assess",
+      "notes": [],
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "path": "harness/github-copilot/plugins/open-horizons-platform/prompts/open-horizons-backstage-assess.prompt.md",
       "selected_agent": "open-horizons-backstage-expert",
       "status": "current-static",
       "target": "vscode",
       "tools": [
         "read",
         "search",
-        "edit",
-        "execute",
         "web"
       ],
       "tools_mode": "allow-list"
@@ -6383,24 +6500,6 @@
       "authority": "unspecified",
       "kind": "prompt",
       "model": null,
-      "name": "security-review",
-      "notes": [],
-      "ownership": "plugin",
-      "package": "open-horizons-platform",
-      "path": "harness/github-copilot/plugins/open-horizons-platform/prompts/security-review.prompt.md",
-      "selected_agent": "security",
-      "status": "current-static",
-      "target": "vscode",
-      "tools": [
-        "read",
-        "search"
-      ],
-      "tools_mode": "allow-list"
-    },
-    {
-      "authority": "unspecified",
-      "kind": "prompt",
-      "model": null,
       "name": "sql-code-review",
       "notes": [],
       "ownership": "shared",
@@ -6454,45 +6553,6 @@
       "authority": "unspecified",
       "kind": "prompt",
       "model": null,
-      "name": "terraform",
-      "notes": [],
-      "ownership": "plugin",
-      "package": "open-horizons-platform",
-      "path": "harness/github-copilot/plugins/open-horizons-platform/prompts/terraform.prompt.md",
-      "selected_agent": "terraform",
-      "status": "current-static",
-      "target": "vscode",
-      "tools": [
-        "read",
-        "search",
-        "edit",
-        "execute"
-      ],
-      "tools_mode": "allow-list"
-    },
-    {
-      "authority": "unspecified",
-      "kind": "prompt",
-      "model": null,
-      "name": "troubleshoot-incident",
-      "notes": [],
-      "ownership": "plugin",
-      "package": "open-horizons-platform",
-      "path": "harness/github-copilot/plugins/open-horizons-platform/prompts/troubleshoot-incident.prompt.md",
-      "selected_agent": "sre",
-      "status": "current-static",
-      "target": "vscode",
-      "tools": [
-        "read",
-        "search",
-        "execute"
-      ],
-      "tools_mode": "allow-list"
-    },
-    {
-      "authority": "unspecified",
-      "kind": "prompt",
-      "model": null,
       "name": "update-llms",
       "notes": [],
       "ownership": "shared",
@@ -6512,11 +6572,11 @@
   ],
   "schemaVersion": 1,
   "summary": {
-    "agents": 243,
+    "agents": 247,
     "blocked": 0,
     "boundedWriteAgentsInheritingAll": 0,
     "capabilityReviewRequired": 0,
-    "currentStatic": 250,
+    "currentStatic": 254,
     "fixedModels": 0,
     "prompts": 59,
     "readOnlyAgentsInheritingAll": 0,

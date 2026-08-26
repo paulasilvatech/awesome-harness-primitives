@@ -21,3 +21,18 @@ description: "Use when editing Backstage sign-in, identity resolution, service a
 - Tests cover valid sign-in, unresolved identity, wrong audience, expired credentials, and denied permissions.
 - Production configuration has no guest fallback or literal credential.
 - Trusted actor and trusted service identities remain distinct throughout requests.
+
+## Do / Do Not
+
+| Do | Do not |
+| --- | --- |
+| Validate identity and authorization independently at backend boundaries. | Trust request identity fields, hidden UI, or a successful sign-in as authorization. |
+| Keep secrets external and errors safely redacted. | Put credentials in source, browser configuration, or user-visible errors. |
+
+## Checklist Before Opening a PR
+
+- [ ] The change matches this instruction's `applyTo` scope.
+- [ ] Actor, service, delegated-provider, and permission identities remain distinct.
+- [ ] Valid, unresolved, expired, wrong-audience, and denied cases are tested.
+- [ ] Production configuration contains no guest fallback or literal credential.
+- [ ] No unrelated edits or unresolved placeholders remain.

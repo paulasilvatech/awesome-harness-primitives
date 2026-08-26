@@ -19,8 +19,8 @@ enabled tool runs.
 
 | Type | Sources | Inherited tools | Allow-lists | Tools disabled | Current static | Runtime check | Capability review | Blocked |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| agent | 243 | 0 | 241 | 2 | 196 | 47 | 0 | 0 |
-| prompt | 59 | 22 | 37 | 0 | 54 | 5 | 0 | 0 |
+| agent | 247 | 0 | 245 | 2 | 200 | 47 | 0 | 0 |
+| prompt | 59 | 27 | 32 | 0 | 54 | 5 | 0 | 0 |
 
 - Fixed model pins: 0.
 - Read-only agents inheriting all tools: 0.
@@ -42,7 +42,6 @@ server or extension in the target profile.
 | agent | Azure Terraform IaC Implementation Specialist | harness/github-copilot/agents/terraform-azure-implement.agent.md | runtime-tool:azure-mcp/* |
 | agent | azure-iac-exporter | harness/github-copilot/agents/azure-iac-exporter.agent.md | runtime-tool:azure-mcp/* |
 | agent | azure-iac-generator | harness/github-copilot/agents/azure-iac-generator.agent.md | runtime-tool:azure-mcp/azureterraformbestpractices, runtime-tool:azure-mcp/bicepschema, runtime-tool:azure-mcp/search, runtime-tool:pulumi-mcp/get-type |
-| agent | azure-portal-deploy | harness/github-copilot/plugins/open-horizons-platform/agents/azure-portal-deploy.agent.md | runtime-tool:azure/* |
 | agent | backstage-expert | harness/github-copilot/plugins/backstage-expert/agents/backstage-expert.agent.md | runtime-tool:ms-vscode.vscode-websearchforcopilot/websearch |
 | agent | C#/.NET Janitor | harness/github-copilot/agents/csharp-dotnet-janitor.agent.md | runtime-tool:github/* |
 | agent | CAST Imaging Impact Analysis Agent | harness/github-copilot/agents/cast-imaging-impact-analysis.agent.md | runtime-tool:imaging-impact-analysis/* |
@@ -53,7 +52,6 @@ server or extension in the target profile.
 | agent | Context7-Expert | harness/github-copilot/agents/context7.agent.md | runtime-tool:context7/* |
 | agent | Create PRD | harness/github-copilot/agents/prd.agent.md | runtime-tool:github/add_issue_comment, runtime-tool:github/create_issue, runtime-tool:github/get_issue, runtime-tool:github/list_issues, runtime-tool:github/search_issues, runtime-tool:github/update_issue |
 | agent | Custom Agent Foundry | harness/github-copilot/agents/custom-agent-foundry.agent.md | runtime-tool:github/* |
-| agent | deploy | harness/github-copilot/plugins/open-horizons-platform/agents/deploy.agent.md | runtime-tool:azure/*, runtime-tool:terraform/* |
 | agent | DiffblueCover | harness/github-copilot/agents/diffblue-cover.agent.md | runtime-tool:DiffblueCover/* |
 | agent | Dynatrace Expert | harness/github-copilot/agents/dynatrace-expert.agent.md | runtime-tool:dynatrace/* |
 | agent | elasticsearch-agent | harness/github-copilot/agents/elasticsearch-observability.agent.md | runtime-tool:elastic-mcp/* |
@@ -66,7 +64,10 @@ server or extension in the target profile.
 | agent | neo4j-docker-client-generator | harness/github-copilot/agents/neo4j-docker-client-generator.agent.md | runtime-tool:neo4j-local/neo4j-local-get_neo4j_schema, runtime-tool:neo4j-local/neo4j-local-read_neo4j_cypher, runtime-tool:neo4j-local/neo4j-local-write_neo4j_cypher |
 | agent | New Relic Incident Response Agent | harness/github-copilot/agents/new-relic-incident-response.agent.md | runtime-tool:new-relic-mcp-server/* |
 | agent | octopus-release-notes-with-mcp | harness/github-copilot/agents/octopus-deploy-release-notes-mcp.agent.md | runtime-tool:octopus/* |
-| agent | open-horizons-backstage-expert | harness/github-copilot/plugins/open-horizons-platform/agents/open-horizons-backstage-expert.agent.md | runtime-tool:playwright/* |
+| agent | open-horizons-aeg-analyst | harness/github-copilot/plugins/open-horizons-platform/agents/open-horizons-aeg-analyst.agent.md | runtime-tool:open-horizons-aeg/aeg_get_metrics, runtime-tool:open-horizons-aeg/aeg_get_run, runtime-tool:open-horizons-aeg/aeg_get_traceability, runtime-tool:open-horizons-aeg/aeg_list_runs |
+| agent | open-horizons-aeg-concierge | harness/github-copilot/plugins/open-horizons-platform/agents/open-horizons-aeg-concierge.agent.md | runtime-tool:open-horizons-aeg/aeg_get_run, runtime-tool:open-horizons-aeg/aeg_list_runs, runtime-tool:open-horizons-aeg/aeg_start_run |
+| agent | open-horizons-aeg-gatekeeper | harness/github-copilot/plugins/open-horizons-platform/agents/open-horizons-aeg-gatekeeper.agent.md | runtime-tool:open-horizons-aeg/aeg_decide_gate, runtime-tool:open-horizons-aeg/aeg_get_gate_package, runtime-tool:open-horizons-aeg/aeg_get_run |
+| agent | open-horizons-aeg-harvester | harness/github-copilot/plugins/open-horizons-platform/agents/open-horizons-aeg-harvester.agent.md | runtime-tool:open-horizons-aeg/aeg_get_run, runtime-tool:open-horizons-aeg/aeg_get_traceability, runtime-tool:open-horizons-aeg/aeg_propose_profile |
 | agent | PagerDuty Incident Responder | harness/github-copilot/agents/pagerduty-incident-responder.agent.md | runtime-tool:github/create_branch, runtime-tool:github/create_issue, runtime-tool:github/create_or_update_file, runtime-tool:github/create_pull_request, runtime-tool:github/get_commit, runtime-tool:github/get_file_contents, runtime-tool:github/get_pull_request, runtime-tool:github/get_repository, runtime-tool:github/list_branches, runtime-tool:github/list_commits, runtime-tool:github/list_pull_requests, runtime-tool:github/list_repository_contributors, runtime-tool:github/search_code, runtime-tool:github/search_commits, runtime-tool:pagerduty/* |
 | agent | Principal software engineer | harness/github-copilot/agents/principal-software-engineer.agent.md | runtime-tool:github/* |
 | agent | Python Notebook Sample Builder | harness/github-copilot/agents/python-notebook-sample-builder.agent.md | runtime-tool:mslearnmcp/* |
@@ -78,7 +79,6 @@ server or extension in the target profile.
 | agent | TDD Green Phase - Make Tests Pass Quickly | harness/github-copilot/agents/tdd-green.agent.md | runtime-tool:github/* |
 | agent | TDD Red Phase - Write Failing Tests First | harness/github-copilot/agents/tdd-red.agent.md | runtime-tool:github/* |
 | agent | TDD Refactor Phase - Improve Quality & Security | harness/github-copilot/agents/tdd-refactor.agent.md | runtime-tool:github/* |
-| agent | terraform | harness/github-copilot/plugins/open-horizons-platform/agents/terraform.agent.md | runtime-tool:terraform/* |
 | agent | Terraform Agent | harness/github-copilot/agents/terraform.agent.md | runtime-tool:terraform/* |
 | agent | Universal Janitor | harness/github-copilot/agents/janitor.agent.md | runtime-tool:github/* |
 | agent | VS Code Insiders Accessibility Tracker | harness/github-copilot/agents/insiders-a11y-tracker.agent.md | runtime-tool:github/issue_read, runtime-tool:github/search_issues |

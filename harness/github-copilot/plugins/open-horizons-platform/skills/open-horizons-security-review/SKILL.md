@@ -1,7 +1,7 @@
 ---
 name: open-horizons-security-review
 description: >-
-  Performs an independent, read-only security review of one Open Horizons change or surface with severity-ranked, evidence-backed findings and verification criteria. Use for code, Terraform, Kubernetes, identity, workflows, Backstage, MAF agents, MCP tools, secrets, or policy review.
+  Performs an independent, read-only security review of one Open Horizons change or surface with severity-ranked, evidence-backed findings and verification criteria. Use when reviewing code, Terraform, Kubernetes, identity, workflows, Backstage, MAF agents, MCP tools, secrets, or policy review.
 ---
 
 # Open Horizons security review

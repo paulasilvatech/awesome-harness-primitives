@@ -1,64 +1,79 @@
-# GitHub Copilot Agent Skills
+# Open Horizons Agent Skills
 
-This directory contains 30 Open Horizons skills for GitHub Copilot, GitHub Copilot CLI, and cloud agent workflows. Skills use progressive loading: only `name` and `description` are loaded for discovery, and the full `SKILL.md` body plus bundled resources load only after activation.
+Skills in this directory provide reusable procedures for GitHub Copilot CLI, VS Code,
+and compatible Agent Skills hosts. Discovery loads only `name` and `description`; the
+full body and bundled resources load after activation.
 
-## Authoritative contract
+This document defines naming and ownership. It intentionally omits a hand-maintained
+inventory count or exhaustive skill table. Inspect the directories and the generated
+repository catalog for the current package contents.
 
-Skills in this directory follow the package contract in `../docs/templates/skill.template.md` and the empirically validated harness specification in `../docs/COPILOT-HARNESS-SPEC.md` (validated against GitHub Copilot CLI 1.0.81-0).
+## Naming taxonomy
 
-Required contract points:
+| Prefix | Capability boundary |
+| --- | --- |
+| `open-horizons-aeg-*` | AEG lifecycle and Backstage integration. |
+| `open-horizons-*` | Product-specific engineering, operations, and publication. |
+| `backstage-*` | Reusable Backstage development and operations. |
+| `azure-*` | Azure architecture, infrastructure, and service operations. |
+| `foundry-*` | Microsoft Foundry and application-agent work. |
+| `github-*` | GitHub APIs, automation, and Copilot customization. |
+| `python-*` | Reusable Python engineering workflows. |
 
-1. Frontmatter includes required `name` and `description`. The `name` is kebab-case, 1-64 characters, and exactly matches the parent directory.
-2. `description` is 1-1024 characters, starts with positive trigger language, states what the skill does and when to use it, preserves `DO NOT USE FOR:` routing disambiguation, and includes natural trigger phrases.
-3. Optional frontmatter is minimal. `argument-hint` is valid for skills, but only belongs on skills that consume and validate `$ARGUMENTS` in an `## Inputs` section. `allowed-tools` is omitted unless the procedure truly needs a restricted pre-approval list.
-4. The body uses `## When to invoke`, `## Prerequisites and context`, `## Procedure` when order matters, `## Criteria` only when judgment matters, `## Limits`, `## Troubleshooting` for real failure modes, `## Output template`, and `## Quality gate`.
-5. `## Output template` must be precise enough for repeatable results.
-6. `## Quality gate` verifies frontmatter, activation language, output conformance, evidence, tool scope, confirmation gates, bundled resources, line count, and no emoji usage.
-7. `SKILL.md` stays under 500 lines, preferably under 200; longer material lives in bundled `references/`, `scripts/`, `assets/`, or `templates/` resources.
-8. Cross-references to other primitives use installed name and type, not relative Markdown links. Relative paths are used only for files bundled in the same skill or concrete repository paths.
-9. Skills never reference `.prompt.md` files; prompts are VS Code-only and are not GitHub Copilot CLI primitives.
+Use lowercase kebab-case. A skill directory and its frontmatter `name` must match.
+Prefer a domain-qualified name when it makes activation intent clear inside a large
+repository. Avoid aliases that differ only by wording.
 
-## Available skills
+## AEG capability
 
-| Skill name | Purpose | Common users |
-| --- | --- | --- |
-| `agentic-architecture-patterns` | Agentic system architecture decisions and reviews | `@deploy`, `@security` |
-| `ai-foundry-operations` | Azure AI Foundry operations | `@deploy`, `@azure-portal-deploy` |
-| `architecture-doc` | Architecture document validation | `@deploy` |
-| `argocd-cli` | ArgoCD operations | `@deploy`, `@sre` |
-| `azure-draw-io-diagram-generator` | Professional draw.io diagrams with official icon provenance | `@deploy` |
-| `azure-cli` | Azure CLI operations | `@terraform`, `@security`, `@sre`, `@azure-portal-deploy` |
-| `azure-infrastructure` | Azure infrastructure patterns | `@terraform`, `@security`, `@azure-portal-deploy` |
-| `azure-managed-redis-cache` | Azure Managed Redis patterns | `@deploy`, `@terraform` |
-| `open-horizons-backstage-deployment` | Open Horizons Backstage portal operations | `@open-horizons-backstage-expert`, `@deploy` |
-| `backstage-plugin-builder` | Backstage plugin and module planning, scaffolding, validation, and publication preparation | `@open-horizons-backstage-expert`, `@deploy` |
-| `codespaces-golden-paths` | Codespaces dev environments | `@open-horizons-backstage-expert`, `@deploy` |
-| `database-management` | Database operations | `@terraform`, `@sre`, `@deploy` |
-| `deploy-orchestration` | End-to-end deployment orchestration | `@deploy` |
-| `foundry-agent-blueprint` | Azure AI Foundry agent blueprint | `@deploy`, `@azure-portal-deploy` |
-| `github-cli` | GitHub API operations | `@deploy`, `@github-integration` |
-| `helm-cli` | Helm chart operations | `@deploy`, `@open-horizons-backstage-expert`, `@sre` |
-| `issue-ops` | IssueOps dispatcher patterns | `@deploy` |
-| `kubectl-cli` | Kubernetes CLI operations | `@deploy`, `@open-horizons-backstage-expert`, `@sre` |
-| `markdown-writer` | Markdown document writing | `@deploy` |
-| `mcp-ecosystem` | Local MCP reference server lookup | `@open-horizons-backstage-expert`, `@deploy` |
-| `observability-stack` | Monitoring operations | `@sre`, `@deploy` |
-| `open-horizons-workspace-kit` | Safe publication of instructions, prompts, hooks, automation, governance, and optional project runtime copies | Maintainers and platform teams |
-| `pipeline-diagnostics` | GitHub Actions CI/CD diagnostics | `@deploy` |
-| `prerequisites` | CLI prerequisite validation | `@deploy` |
-| `requirements-engineer` | FRD and NFRD requirements engineering | `@deploy` |
-| `sdd-spec-engineer` | Spec-driven development artifacts | `@deploy` |
-| `story-planning` | INVEST story planning and optional GitHub Issues | `@deploy` |
-| `terraform-cli` | Terraform CLI operations | `@terraform`, `@security`, `@deploy` |
-| `test-coverage` | Test coverage and quality gates | `@deploy` |
-| `validation-scripts` | Repository validation scripts | `@deploy`, `@sre`, `@security` |
+`open-horizons-backstage-aeg-feature` is the reusable AEG capability. It owns lifecycle
+artifacts, role workflows, authenticated actor handling, mutation classification, and the
+adapter contract. The four `open-horizons-aeg-*` agents remain lean and load this skill
+before acting.
+
+`open-horizons-workspace-kit` publishes either the focused AEG profile or broader
+repository assets. It is dry-run-first, conflict-blocking, hash-managed, and archives
+unchanged managed files during uninstall.
+
+## Package contract
+
+Every skill follows these rules:
+
+1. `SKILL.md` starts with valid frontmatter and one H1.
+2. `name` matches the parent directory and `description` states what and when.
+3. Ordered work uses a procedure; evaluative work uses criteria.
+4. Detailed knowledge goes in `references/`, repeatable automation in `scripts/`, and
+   static material in `assets/` or `templates/`.
+5. Scripts use explicit inputs, bounded side effects, safe paths, and focused tests.
+6. Cross-primitive references use installed names and types rather than relative links.
+7. VS Code prompt files are never treated as CLI capabilities.
+8. Live state, metrics, identity, cost, and validation results require evidence.
+
+## Source ownership
+
+Most directories are owned by this package. Shared generated copies are declared in
+`harness/github-copilot/manifests/plugin-sources.json` and synchronized from their
+canonical library sources. Do not edit a generated copy independently.
 
 ## Validation
 
-Run strict validation after changing skills:
+From the repository root:
 
 ```bash
-python3 validation-scripts/scripts/validate-agents.py --strict
+python3 harness/github-copilot/skills/skill-creator/scripts/validate_skill.py \
+  harness/github-copilot/plugins/PACKAGE_NAME/skills/<skill-name>
+python3 harness/github-copilot/scripts/validate_primitives.py --strict
+python3 harness/github-copilot/scripts/audit_primitive_content.py --check
+python3 harness/github-copilot/scripts/audit_primitive_capabilities.py --check
+python3 harness/github-copilot/scripts/audit_primitive_redundancy.py --check
+python3 harness/github-copilot/scripts/sync_plugin_components.py --check
 ```
 
-Review `git status --short` and confirm changes are limited to the intended skill packages, bundled resources, and directly related integration files.
+Run every changed bundled script or focused test. Report environment-dependent runtime
+checks separately from static validation.
+
+## References
+
+- [Agent Skills specification](https://agentskills.io/)
+- [VS Code Agent Skills](https://code.visualstudio.com/docs/agent-customization/agent-skills)
+- [GitHub Copilot plugins](https://docs.github.com/en/copilot/concepts/agents/about-plugins)

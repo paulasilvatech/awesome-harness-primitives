@@ -19,3 +19,18 @@ description: "Use when editing tracked TechDocs configuration, annotations, navi
 - MkDocs strict build or the repository documentation check resolves navigation and links.
 - TechDocs annotations resolve from the entity's source location.
 - Publication configuration exposes no storage key or service credential.
+
+## Do / Do Not
+
+| Do | Do not |
+| --- | --- |
+| Keep documentation portable and validate navigation, links, and entity annotations. | Depend on absolute checkout paths or unverified publication settings. |
+| Use external credential providers for publication. | Commit storage keys or service credentials. |
+
+## Checklist Before Opening a PR
+
+- [ ] The change matches this instruction's `applyTo` scope.
+- [ ] Strict documentation build or the repository documentation check passes.
+- [ ] Entity annotations resolve from the source location.
+- [ ] Publication configuration contains no literal credential.
+- [ ] No unrelated edits or unresolved placeholders remain.

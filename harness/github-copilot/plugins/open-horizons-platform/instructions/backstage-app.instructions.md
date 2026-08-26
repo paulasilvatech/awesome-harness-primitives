@@ -22,3 +22,18 @@ These rules cover the adopter app under `backstage/`. App configuration is owned
 - The owning package's test, lint, typecheck, or build script covers the change.
 - Dependency changes remain version-aligned across Backstage workspaces.
 - Frontend bundles contain no secrets or backend-only configuration.
+
+## Do / Do Not
+
+| Do | Do not |
+| --- | --- |
+| Use package public APIs and execute the owning package checks. | Reach across package internals or claim an unrun build passed. |
+| Preserve version alignment and frontend/backend boundaries. | Bundle secrets or backend-only configuration in browser code. |
+
+## Checklist Before Opening a PR
+
+- [ ] The change matches this instruction's `applyTo` scope.
+- [ ] Package public APIs and workspace version alignment are preserved.
+- [ ] Focused test, lint, typecheck, or build checks pass.
+- [ ] Frontend output contains no secret or backend-only configuration.
+- [ ] No unrelated edits or unresolved placeholders remain.

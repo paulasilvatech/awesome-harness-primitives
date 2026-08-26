@@ -21,3 +21,18 @@ description: "Use when editing Backstage integrations with GitHub, Azure, Azure 
 - Integration tests use fixtures or mocks rather than production credentials.
 - Permission scopes are documented by the owning configuration and match actual operations.
 - Discovery, webhook replay, throttling, and provider-unavailable paths remain deterministic.
+
+## Do / Do Not
+
+| Do | Do not |
+| --- | --- |
+| Keep providers behind typed adapters and test bounded failure behavior. | Couple catalog or UI contracts to provider-specific response objects. |
+| Use fixtures and least-privilege scopes. | Test with production credentials or broaden permissions implicitly. |
+
+## Checklist Before Opening a PR
+
+- [ ] The change matches this instruction's `applyTo` scope.
+- [ ] Adapter contracts and permission scopes match actual operations.
+- [ ] Discovery, replay, throttling, and unavailable-provider cases are tested.
+- [ ] Fixtures contain no production credential or private tenant data.
+- [ ] No unrelated edits or unresolved placeholders remain.

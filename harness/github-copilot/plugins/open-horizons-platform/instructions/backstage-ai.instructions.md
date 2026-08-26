@@ -23,3 +23,18 @@ These rules cover the catalog and application boundary between Backstage AI Chat
 - Catalog identities and runtime role inventories agree.
 - The browser receives no secret-bearing configuration or raw provider error.
 - Tool execution remains governed even when invoked through MCP or delegated agents.
+
+## Do / Do Not
+
+| Do | Do not |
+| --- | --- |
+| Preserve typed streaming, identity, authorization, and tool contracts. | Expose deployment details, credentials, raw errors, or unrestricted tools. |
+| Execute routing, denied-tool, malformed-event, and dependency-failure tests. | Treat catalog visibility or hidden UI as execution permission. |
+
+## Checklist Before Opening a PR
+
+- [ ] The change matches this instruction's `applyTo` scope.
+- [ ] Catalog, agent, route, and tool identities remain aligned.
+- [ ] Authentication and backend authorization are tested separately.
+- [ ] Streaming and failure-path contract tests pass or blockers are recorded.
+- [ ] No secret-bearing client configuration or raw provider error is exposed.

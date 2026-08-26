@@ -25,3 +25,18 @@ These rules apply to executable agent, tool, orchestration, and policy surfaces.
 - Safety checks execute immediately before the protected action and fail closed.
 - Tests prove that delegation, retries, and alternate tool transports cannot bypass authorization.
 - Audit records are useful for correlation without containing sensitive payloads.
+
+## Do / Do Not
+
+| Do | Do not |
+| --- | --- |
+| Follow the conventions and execute the verification checks above. | Bypass the owning contract or report an unrun check as passed. |
+| Keep changes inside the matched scope and preserve approval boundaries. | Expand into unrelated files, credentials, or live mutation. |
+
+## Checklist Before Opening a PR
+
+- [ ] The change matches this instruction's `applyTo` scope.
+- [ ] Existing safety and authorization boundaries are preserved.
+- [ ] Focused allow, deny, malformed-input, and bypass tests pass.
+- [ ] Logs and errors contain no credentials or sensitive payloads.
+- [ ] No unrelated edits or unresolved placeholders remain.

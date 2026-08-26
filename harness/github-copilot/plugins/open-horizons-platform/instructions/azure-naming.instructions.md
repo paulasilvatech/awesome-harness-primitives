@@ -22,3 +22,18 @@ description: "Use when editing Terraform that creates or changes Azure resource 
 - New Azure resources consume a suitable `module.naming` output or record a justified exception.
 - Naming-module changes cover restricted-character, maximum-length, and deterministic-output cases.
 - Examples contain sanitized values and match the current module interface.
+
+## Do / Do Not
+
+| Do | Do not |
+| --- | --- |
+| Follow the naming module and execute the verification checks above. | Rename live resources implicitly or report an unrun check as passed. |
+| Document legacy exceptions in the owning environment. | Encode tenant data, credentials, or mutable values in names. |
+
+## Checklist Before Opening a PR
+
+- [ ] The change matches this instruction's `applyTo` scope.
+- [ ] Naming-module outputs and documented exceptions cover every new resource.
+- [ ] Character, length, uniqueness, and stable-output cases are tested.
+- [ ] Examples are sanitized and match the current module interface.
+- [ ] No unrelated edits or unresolved placeholders remain.

@@ -18,11 +18,11 @@
     "activePluginHookPackages": 2,
     "marketplaceEntries": 102,
     "pluginOwned": {
-      "agents": 15,
+      "agents": 19,
       "errors": 0,
-      "instructions": 18,
+      "instructions": 34,
       "prompts": 11,
-      "skills": 54,
+      "skills": 115,
       "warnings": 0
     },
     "pluginPackages": 102,
@@ -134,7 +134,7 @@
       ]
     },
     "sharedSkills": {
-      "packaged": 196,
+      "packaged": 197,
       "total": 438,
       "unpackaged": [
         "acquire-codebase-knowledge",
@@ -153,7 +153,6 @@
         "aws-cdk-python-setup",
         "aws-cloudwatch-investigation",
         "azure-architecture-autopilot",
-        "azure-architecture-diagrams",
         "azure-container-registry-cli",
         "azure-deployment-preflight",
         "azure-developer-cli",
@@ -455,28 +454,6 @@
       "review_status": "needs-semantic-review",
       "signals": [],
       "source_domains": []
-    },
-    {
-      "characters_scanned": 6114,
-      "external_url_count": 1,
-      "files_scanned": 1,
-      "kind": "agent",
-      "local_evidence_mention": false,
-      "name": "ado-integration",
-      "ownership": "plugin",
-      "package": "open-horizons-platform",
-      "packaged_by": [
-        "open-horizons-platform"
-      ],
-      "path": "harness/github-copilot/plugins/open-horizons-platform/agents/ado-integration.agent.md",
-      "review_status": "needs-current-source-review",
-      "signals": [
-        "currency-language",
-        "external-source"
-      ],
-      "source_domains": [
-        "dev.azure.com"
-      ]
     },
     {
       "characters_scanned": 9463,
@@ -1065,25 +1042,6 @@
       ]
     },
     {
-      "characters_scanned": 6667,
-      "external_url_count": 0,
-      "files_scanned": 1,
-      "kind": "agent",
-      "local_evidence_mention": false,
-      "name": "azure-portal-deploy",
-      "ownership": "plugin",
-      "package": "open-horizons-platform",
-      "packaged_by": [
-        "open-horizons-platform"
-      ],
-      "path": "harness/github-copilot/plugins/open-horizons-platform/agents/azure-portal-deploy.agent.md",
-      "review_status": "needs-current-source-review",
-      "signals": [
-        "currency-language"
-      ],
-      "source_domains": []
-    },
-    {
       "characters_scanned": 9920,
       "external_url_count": 0,
       "files_scanned": 1,
@@ -1596,26 +1554,6 @@
       "review_status": "needs-current-source-review",
       "signals": [
         "lifecycle-language"
-      ],
-      "source_domains": []
-    },
-    {
-      "characters_scanned": 8545,
-      "external_url_count": 0,
-      "files_scanned": 1,
-      "kind": "agent",
-      "local_evidence_mention": false,
-      "name": "deploy",
-      "ownership": "plugin",
-      "package": "open-horizons-platform",
-      "packaged_by": [
-        "open-horizons-platform"
-      ],
-      "path": "harness/github-copilot/plugins/open-horizons-platform/agents/deploy.agent.md",
-      "review_status": "needs-current-source-review",
-      "signals": [
-        "currency-language",
-        "version-claim"
       ],
       "source_domains": []
     },
@@ -2536,25 +2474,6 @@
       ]
     },
     {
-      "characters_scanned": 6226,
-      "external_url_count": 0,
-      "files_scanned": 1,
-      "kind": "agent",
-      "local_evidence_mention": false,
-      "name": "github-integration",
-      "ownership": "plugin",
-      "package": "open-horizons-platform",
-      "packaged_by": [
-        "open-horizons-platform"
-      ],
-      "path": "harness/github-copilot/plugins/open-horizons-platform/agents/github-integration.agent.md",
-      "review_status": "needs-current-source-review",
-      "signals": [
-        "currency-language"
-      ],
-      "source_domains": []
-    },
-    {
       "characters_scanned": 12435,
       "external_url_count": 2,
       "files_scanned": 1,
@@ -2601,25 +2520,6 @@
       "package": null,
       "packaged_by": [],
       "path": "harness/github-copilot/agents/hlbpa.agent.md",
-      "review_status": "needs-current-source-review",
-      "signals": [
-        "currency-language"
-      ],
-      "source_domains": []
-    },
-    {
-      "characters_scanned": 6266,
-      "external_url_count": 0,
-      "files_scanned": 1,
-      "kind": "agent",
-      "local_evidence_mention": false,
-      "name": "hybrid-scenarios",
-      "ownership": "plugin",
-      "package": "open-horizons-platform",
-      "packaged_by": [
-        "open-horizons-platform"
-      ],
-      "path": "harness/github-copilot/plugins/open-horizons-platform/agents/hybrid-scenarios.agent.md",
       "review_status": "needs-current-source-review",
       "signals": [
         "currency-language"
@@ -3218,7 +3118,119 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 7228,
+      "characters_scanned": 3043,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "agent",
+      "local_evidence_mention": false,
+      "name": "open-horizons-aeg-analyst",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/agents/open-horizons-aeg-analyst.agent.md",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language"
+      ],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 3102,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "agent",
+      "local_evidence_mention": false,
+      "name": "open-horizons-aeg-concierge",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/agents/open-horizons-aeg-concierge.agent.md",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language"
+      ],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 2938,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "agent",
+      "local_evidence_mention": false,
+      "name": "open-horizons-aeg-gatekeeper",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/agents/open-horizons-aeg-gatekeeper.agent.md",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language"
+      ],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 3112,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "agent",
+      "local_evidence_mention": false,
+      "name": "open-horizons-aeg-harvester",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/agents/open-horizons-aeg-harvester.agent.md",
+      "review_status": "needs-semantic-review",
+      "signals": [],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 4466,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "agent",
+      "local_evidence_mention": false,
+      "name": "open-horizons-architect",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/agents/open-horizons-architect.agent.md",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language"
+      ],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 2924,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "agent",
+      "local_evidence_mention": false,
+      "name": "open-horizons-azure-readiness",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/agents/open-horizons-azure-readiness.agent.md",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language"
+      ],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 3780,
       "external_url_count": 0,
       "files_scanned": 1,
       "kind": "agent",
@@ -3230,6 +3242,110 @@
         "open-horizons-platform"
       ],
       "path": "harness/github-copilot/plugins/open-horizons-platform/agents/open-horizons-backstage-expert.agent.md",
+      "review_status": "needs-semantic-review",
+      "signals": [],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 3307,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "agent",
+      "local_evidence_mention": false,
+      "name": "open-horizons-deployment-operator",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/agents/open-horizons-deployment-operator.agent.md",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language"
+      ],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 3272,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "agent",
+      "local_evidence_mention": false,
+      "name": "open-horizons-engineer",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/agents/open-horizons-engineer.agent.md",
+      "review_status": "needs-semantic-review",
+      "signals": [],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 3680,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "agent",
+      "local_evidence_mention": false,
+      "name": "open-horizons-orchestrator",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/agents/open-horizons-orchestrator.agent.md",
+      "review_status": "needs-semantic-review",
+      "signals": [],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 3191,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "agent",
+      "local_evidence_mention": false,
+      "name": "open-horizons-security-reviewer",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/agents/open-horizons-security-reviewer.agent.md",
+      "review_status": "needs-semantic-review",
+      "signals": [],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 3103,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "agent",
+      "local_evidence_mention": false,
+      "name": "open-horizons-sre-investigator",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/agents/open-horizons-sre-investigator.agent.md",
+      "review_status": "needs-semantic-review",
+      "signals": [],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 3298,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "agent",
+      "local_evidence_mention": false,
+      "name": "open-horizons-terraform",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/agents/open-horizons-terraform.agent.md",
       "review_status": "needs-current-source-review",
       "signals": [
         "currency-language"
@@ -4371,23 +4487,6 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 6001,
-      "external_url_count": 0,
-      "files_scanned": 1,
-      "kind": "agent",
-      "local_evidence_mention": false,
-      "name": "security",
-      "ownership": "plugin",
-      "package": "open-horizons-platform",
-      "packaged_by": [
-        "open-horizons-platform"
-      ],
-      "path": "harness/github-copilot/plugins/open-horizons-platform/agents/security.agent.md",
-      "review_status": "needs-semantic-review",
-      "signals": [],
-      "source_domains": []
-    },
-    {
       "characters_scanned": 10436,
       "external_url_count": 0,
       "files_scanned": 1,
@@ -4476,23 +4575,6 @@
         "currency-language",
         "version-claim"
       ],
-      "source_domains": []
-    },
-    {
-      "characters_scanned": 5646,
-      "external_url_count": 0,
-      "files_scanned": 1,
-      "kind": "agent",
-      "local_evidence_mention": false,
-      "name": "sre",
-      "ownership": "plugin",
-      "package": "open-horizons-platform",
-      "packaged_by": [
-        "open-horizons-platform"
-      ],
-      "path": "harness/github-copilot/plugins/open-horizons-platform/agents/sre.agent.md",
-      "review_status": "needs-semantic-review",
-      "signals": [],
       "source_domains": []
     },
     {
@@ -4747,25 +4829,6 @@
       "review_status": "needs-current-source-review",
       "signals": [
         "currency-language"
-      ],
-      "source_domains": []
-    },
-    {
-      "characters_scanned": 6052,
-      "external_url_count": 0,
-      "files_scanned": 1,
-      "kind": "agent",
-      "local_evidence_mention": true,
-      "name": "terraform",
-      "ownership": "plugin",
-      "package": "open-horizons-platform",
-      "packaged_by": [
-        "open-horizons-platform"
-      ],
-      "path": "harness/github-copilot/plugins/open-horizons-platform/agents/terraform.agent.md",
-      "review_status": "needs-current-source-review",
-      "signals": [
-        "version-claim"
       ],
       "source_domains": []
     },
@@ -5190,9 +5253,9 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 8201,
+      "characters_scanned": 13216,
       "external_url_count": 0,
-      "files_scanned": 3,
+      "files_scanned": 4,
       "kind": "hook",
       "local_evidence_mention": false,
       "name": "open-horizons-platform:open-horizons-safety",
@@ -5317,22 +5380,20 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 6498,
+      "characters_scanned": 2061,
       "external_url_count": 0,
       "files_scanned": 1,
       "kind": "instruction",
       "local_evidence_mention": false,
-      "name": "agent-files",
+      "name": "agent-framework-python",
       "ownership": "plugin",
       "package": "open-horizons-platform",
       "packaged_by": [
         "open-horizons-platform"
       ],
-      "path": "harness/github-copilot/plugins/open-horizons-platform/instructions/agent-files.instructions.md",
-      "review_status": "needs-current-source-review",
-      "signals": [
-        "lifecycle-language"
-      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/instructions/agent-framework-python.instructions.md",
+      "review_status": "needs-semantic-review",
+      "signals": [],
       "source_domains": []
     },
     {
@@ -5346,6 +5407,23 @@
       "package": null,
       "packaged_by": [],
       "path": "harness/github-copilot/instructions/agent-safety.instructions.md",
+      "review_status": "needs-semantic-review",
+      "signals": [],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 2756,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "instruction",
+      "local_evidence_mention": true,
+      "name": "agent-safety",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/instructions/agent-safety.instructions.md",
       "review_status": "needs-semantic-review",
       "signals": [],
       "source_domains": []
@@ -5372,6 +5450,29 @@
       ]
     },
     {
+      "characters_scanned": 5863,
+      "external_url_count": 2,
+      "files_scanned": 1,
+      "kind": "instruction",
+      "local_evidence_mention": false,
+      "name": "agent-skills",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/instructions/agent-skills.instructions.md",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "external-source"
+      ],
+      "source_domains": [
+        "agentskills.io",
+        "code.visualstudio.com"
+      ]
+    },
+    {
       "characters_scanned": 7090,
       "external_url_count": 2,
       "files_scanned": 1,
@@ -5382,6 +5483,29 @@
       "package": null,
       "packaged_by": [],
       "path": "harness/github-copilot/instructions/agents.instructions.md",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "external-source"
+      ],
+      "source_domains": [
+        "code.visualstudio.com",
+        "docs.github.com"
+      ]
+    },
+    {
+      "characters_scanned": 6881,
+      "external_url_count": 2,
+      "files_scanned": 1,
+      "kind": "instruction",
+      "local_evidence_mention": true,
+      "name": "agents",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/instructions/agents.instructions.md",
       "review_status": "needs-current-source-review",
       "signals": [
         "currency-language",
@@ -5717,6 +5841,25 @@
       ]
     },
     {
+      "characters_scanned": 2466,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "instruction",
+      "local_evidence_mention": false,
+      "name": "azure-naming",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/instructions/azure-naming.instructions.md",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language"
+      ],
+      "source_domains": []
+    },
+    {
       "characters_scanned": 10934,
       "external_url_count": 15,
       "files_scanned": 1,
@@ -5786,6 +5929,23 @@
       ]
     },
     {
+      "characters_scanned": 2481,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "instruction",
+      "local_evidence_mention": false,
+      "name": "backstage-ai",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/instructions/backstage-ai.instructions.md",
+      "review_status": "needs-semantic-review",
+      "signals": [],
+      "source_domains": []
+    },
+    {
       "characters_scanned": 2675,
       "external_url_count": 2,
       "files_scanned": 1,
@@ -5805,6 +5965,25 @@
       "source_domains": [
         "backstage.io"
       ]
+    },
+    {
+      "characters_scanned": 2218,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "instruction",
+      "local_evidence_mention": false,
+      "name": "backstage-app",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/instructions/backstage-app.instructions.md",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language"
+      ],
+      "source_domains": []
     },
     {
       "characters_scanned": 2786,
@@ -5829,6 +6008,23 @@
       ]
     },
     {
+      "characters_scanned": 2249,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "instruction",
+      "local_evidence_mention": false,
+      "name": "backstage-auth",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/instructions/backstage-auth.instructions.md",
+      "review_status": "needs-semantic-review",
+      "signals": [],
+      "source_domains": []
+    },
+    {
       "characters_scanned": 2494,
       "external_url_count": 2,
       "files_scanned": 1,
@@ -5848,6 +6044,40 @@
       "source_domains": [
         "backstage.io"
       ]
+    },
+    {
+      "characters_scanned": 2073,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "instruction",
+      "local_evidence_mention": false,
+      "name": "backstage-catalog",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/instructions/backstage-catalog.instructions.md",
+      "review_status": "needs-semantic-review",
+      "signals": [],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 2206,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "instruction",
+      "local_evidence_mention": false,
+      "name": "backstage-config",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/instructions/backstage-config.instructions.md",
+      "review_status": "needs-semantic-review",
+      "signals": [],
+      "source_domains": []
     },
     {
       "characters_scanned": 2823,
@@ -5870,6 +6100,23 @@
       "source_domains": [
         "backstage.io"
       ]
+    },
+    {
+      "characters_scanned": 2206,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "instruction",
+      "local_evidence_mention": false,
+      "name": "backstage-integrations",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/instructions/backstage-integrations.instructions.md",
+      "review_status": "needs-semantic-review",
+      "signals": [],
+      "source_domains": []
     },
     {
       "characters_scanned": 2794,
@@ -5915,6 +6162,23 @@
       ]
     },
     {
+      "characters_scanned": 2302,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "instruction",
+      "local_evidence_mention": false,
+      "name": "backstage-software-templates",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/instructions/backstage-software-templates.instructions.md",
+      "review_status": "needs-semantic-review",
+      "signals": [],
+      "source_domains": []
+    },
+    {
       "characters_scanned": 2306,
       "external_url_count": 1,
       "files_scanned": 1,
@@ -5934,6 +6198,23 @@
       "source_domains": [
         "backstage.io"
       ]
+    },
+    {
+      "characters_scanned": 1865,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "instruction",
+      "local_evidence_mention": false,
+      "name": "backstage-techdocs",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/instructions/backstage-techdocs.instructions.md",
+      "review_status": "needs-semantic-review",
+      "signals": [],
+      "source_domains": []
     },
     {
       "characters_scanned": 8236,
@@ -6243,6 +6524,25 @@
       "package": null,
       "packaged_by": [],
       "path": "harness/github-copilot/instructions/copilot-primitive-authoring.instructions.md",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language"
+      ],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 9879,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "instruction",
+      "local_evidence_mention": false,
+      "name": "copilot-primitive-authoring",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/instructions/copilot-primitive-authoring.instructions.md",
       "review_status": "needs-current-source-review",
       "signals": [
         "currency-language"
@@ -6793,8 +7093,8 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 6217,
-      "external_url_count": 1,
+      "characters_scanned": 1933,
+      "external_url_count": 0,
       "files_scanned": 1,
       "kind": "instruction",
       "local_evidence_mention": false,
@@ -6807,16 +7107,12 @@
       "path": "harness/github-copilot/plugins/open-horizons-platform/instructions/docker-compose.instructions.md",
       "review_status": "needs-current-source-review",
       "signals": [
-        "currency-language",
-        "version-claim",
-        "external-source"
+        "currency-language"
       ],
-      "source_domains": [
-        "localhost:8008"
-      ]
+      "source_domains": []
     },
     {
-      "characters_scanned": 6325,
+      "characters_scanned": 1999,
       "external_url_count": 0,
       "files_scanned": 1,
       "kind": "instruction",
@@ -6830,8 +7126,7 @@
       "path": "harness/github-copilot/plugins/open-horizons-platform/instructions/dockerfile.instructions.md",
       "review_status": "needs-current-source-review",
       "signals": [
-        "currency-language",
-        "version-claim"
+        "currency-language"
       ],
       "source_domains": []
     },
@@ -7142,7 +7437,7 @@
       ]
     },
     {
-      "characters_scanned": 5852,
+      "characters_scanned": 2056,
       "external_url_count": 0,
       "files_scanned": 1,
       "kind": "instruction",
@@ -7154,10 +7449,8 @@
         "open-horizons-platform"
       ],
       "path": "harness/github-copilot/plugins/open-horizons-platform/instructions/github-actions.instructions.md",
-      "review_status": "needs-current-source-review",
-      "signals": [
-        "currency-language"
-      ],
+      "review_status": "needs-semantic-review",
+      "signals": [],
       "source_domains": []
     },
     {
@@ -7289,7 +7582,7 @@
       ]
     },
     {
-      "characters_scanned": 5305,
+      "characters_scanned": 1949,
       "external_url_count": 0,
       "files_scanned": 1,
       "kind": "instruction",
@@ -7452,8 +7745,8 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 7994,
-      "external_url_count": 1,
+      "characters_scanned": 2453,
+      "external_url_count": 0,
       "files_scanned": 1,
       "kind": "instruction",
       "local_evidence_mention": false,
@@ -7466,13 +7759,9 @@
       "path": "harness/github-copilot/plugins/open-horizons-platform/instructions/kubernetes.instructions.md",
       "review_status": "needs-current-source-review",
       "signals": [
-        "currency-language",
-        "version-claim",
-        "external-source"
+        "currency-language"
       ],
-      "source_domains": [
-        "github.com"
-      ]
+      "source_domains": []
     },
     {
       "characters_scanned": 10995,
@@ -7685,6 +7974,26 @@
         "currency-language",
         "version-claim",
         "date-claim"
+      ],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 2977,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "instruction",
+      "local_evidence_mention": false,
+      "name": "microsoft-agent-framework",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/instructions/microsoft-agent-framework.instructions.md",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "version-claim"
       ],
       "source_domains": []
     },
@@ -7903,6 +8212,40 @@
       "signals": [
         "currency-language"
       ],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 2255,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "instruction",
+      "local_evidence_mention": false,
+      "name": "opa-policy",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/instructions/opa-policy.instructions.md",
+      "review_status": "needs-semantic-review",
+      "signals": [],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 4722,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "instruction",
+      "local_evidence_mention": false,
+      "name": "open-horizons-backstage-aeg",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/instructions/open-horizons-backstage-aeg.instructions.md",
+      "review_status": "needs-semantic-review",
+      "signals": [],
       "source_domains": []
     },
     {
@@ -8647,8 +8990,30 @@
       ]
     },
     {
-      "characters_scanned": 7943,
-      "external_url_count": 2,
+      "characters_scanned": 6033,
+      "external_url_count": 1,
+      "files_scanned": 1,
+      "kind": "instruction",
+      "local_evidence_mention": false,
+      "name": "prompt",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/instructions/prompt.instructions.md",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "external-source"
+      ],
+      "source_domains": [
+        "code.visualstudio.com"
+      ]
+    },
+    {
+      "characters_scanned": 2406,
+      "external_url_count": 0,
       "files_scanned": 1,
       "kind": "instruction",
       "local_evidence_mention": false,
@@ -8661,14 +9026,9 @@
       "path": "harness/github-copilot/plugins/open-horizons-platform/instructions/python.instructions.md",
       "review_status": "needs-current-source-review",
       "signals": [
-        "currency-language",
-        "version-claim",
-        "external-source"
+        "version-claim"
       ],
-      "source_domains": [
-        "cognitiveservices.azure.com",
-        "customer.openai.azure.com"
-      ]
+      "source_domains": []
     },
     {
       "characters_scanned": 9107,
@@ -8882,6 +9242,25 @@
       ]
     },
     {
+      "characters_scanned": 2557,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "instruction",
+      "local_evidence_mention": false,
+      "name": "sdd-artifacts",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/instructions/sdd-artifacts.instructions.md",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "lifecycle-language"
+      ],
+      "source_domains": []
+    },
+    {
       "characters_scanned": 35714,
       "external_url_count": 5,
       "files_scanned": 1,
@@ -8938,26 +9317,6 @@
       "path": "harness/github-copilot/instructions/shell.instructions.md",
       "review_status": "needs-current-source-review",
       "signals": [
-        "lifecycle-language"
-      ],
-      "source_domains": []
-    },
-    {
-      "characters_scanned": 5881,
-      "external_url_count": 0,
-      "files_scanned": 1,
-      "kind": "instruction",
-      "local_evidence_mention": true,
-      "name": "shell",
-      "ownership": "plugin",
-      "package": "open-horizons-platform",
-      "packaged_by": [
-        "open-horizons-platform"
-      ],
-      "path": "harness/github-copilot/plugins/open-horizons-platform/instructions/shell.instructions.md",
-      "review_status": "needs-current-source-review",
-      "signals": [
-        "currency-language",
         "lifecycle-language"
       ],
       "source_domains": []
@@ -9180,7 +9539,7 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 7716,
+      "characters_scanned": 2413,
       "external_url_count": 0,
       "files_scanned": 1,
       "kind": "instruction",
@@ -9192,10 +9551,8 @@
         "open-horizons-platform"
       ],
       "path": "harness/github-copilot/plugins/open-horizons-platform/instructions/terraform.instructions.md",
-      "review_status": "needs-current-source-review",
-      "signals": [
-        "lifecycle-language"
-      ],
+      "review_status": "needs-semantic-review",
+      "signals": [],
       "source_domains": []
     },
     {
@@ -9240,25 +9597,6 @@
         "github.com",
         "registry.terraform.io"
       ]
-    },
-    {
-      "characters_scanned": 6492,
-      "external_url_count": 0,
-      "files_scanned": 1,
-      "kind": "instruction",
-      "local_evidence_mention": false,
-      "name": "typescript",
-      "ownership": "plugin",
-      "package": "open-horizons-platform",
-      "packaged_by": [
-        "open-horizons-platform"
-      ],
-      "path": "harness/github-copilot/plugins/open-horizons-platform/instructions/typescript.instructions.md",
-      "review_status": "needs-current-source-review",
-      "signals": [
-        "version-claim"
-      ],
-      "source_domains": []
     },
     {
       "characters_scanned": 10771,
@@ -10824,11 +11162,11 @@
       ]
     },
     {
-      "characters_scanned": 631844,
-      "external_url_count": 64,
-      "files_scanned": 96,
+      "characters_scanned": 2255093,
+      "external_url_count": 300,
+      "files_scanned": 310,
       "kind": "plugin",
-      "local_evidence_mention": false,
+      "local_evidence_mention": true,
       "name": "open-horizons-platform",
       "ownership": "plugin",
       "package": "open-horizons-platform",
@@ -10849,32 +11187,67 @@
         "${backstage_url",
         "${grafana_url",
         "agent-plugins.org",
+        "agentskills.io",
+        "ai.azure.com",
         "aka.ms",
         "alistairmavin.com",
+        "api.anthropic.com",
+        "api.example.com",
+        "api.githubcopilot.com",
+        "api.notion.com",
+        "apt.releases.hashicorp.com",
         "argocd.example.com",
         "argoproj.github.io",
+        "aws-external-anthropic.{region",
+        "aws.amazon.com",
+        "azure.github.io",
         "backstage.example.com",
+        "backstage.io",
+        "bedrock-mantle.{region",
+        "cloud.google.com",
+        "code.visualstudio.com",
         "codespaces.new",
-        "cognitiveservices.azure.com",
-        "customer.openai.azure.com",
-        "dev.azure.com",
+        "davidpine.dev",
+        "developer.hashicorp.com",
+        "dl.k8s.io",
         "docs.github.com",
         "doi.org",
+        "example",
+        "example.com",
         "github.com",
+        "go.microsoft.com",
         "learn.microsoft.com",
-        "localhost:3100",
-        "localhost:7007",
-        "localhost:8008",
+        "llmstxt.org",
+        "localhost",
+        "localhost:${port",
+        "localhost:3000",
+        "localhost:8080",
         "localhost:9090",
+        "localhost:9093",
+        "mcp.linear.app",
+        "mcp.notion.com",
+        "mcp.slack.com",
+        "microsoft.github.io",
         "modelcontextprotocol.io",
+        "my-mcp-server.example.com",
+        "my.test.proxy.example.com",
+        "my.test.server.example.com:8083",
         "opentelemetry.io",
-        "primer.style",
+        "platform.claude.com",
+        "portal.azure.com",
+        "prices.azure.com",
         "prometheus-community.github.io",
+        "proxy.example",
+        "pypi.org",
         "raw.githubusercontent.com",
         "redis.io",
+        "remixicon.com",
+        "research.manchester.ac.uk",
+        "slack.com",
+        "status.anthropic.com",
         "token.actions.githubusercontent.com",
-        "www.drawio.com",
-        "www.microsoft.com",
+        "ui.backstage.io",
+        "www.apache.org",
         "||"
       ]
     },
@@ -12011,27 +12384,6 @@
       ]
     },
     {
-      "characters_scanned": 5891,
-      "external_url_count": 2,
-      "files_scanned": 1,
-      "kind": "prompt",
-      "local_evidence_mention": false,
-      "name": "ado-setup",
-      "ownership": "plugin",
-      "package": "open-horizons-platform",
-      "packaged_by": [
-        "open-horizons-platform"
-      ],
-      "path": "harness/github-copilot/plugins/open-horizons-platform/prompts/ado-setup.prompt.md",
-      "review_status": "needs-source-review",
-      "signals": [
-        "external-source"
-      ],
-      "source_domains": [
-        "dev.azure.com"
-      ]
-    },
-    {
       "characters_scanned": 11585,
       "external_url_count": 0,
       "files_scanned": 1,
@@ -12097,23 +12449,6 @@
       "source_domains": [
         "azure.microsoft.com"
       ]
-    },
-    {
-      "characters_scanned": 5165,
-      "external_url_count": 0,
-      "files_scanned": 1,
-      "kind": "prompt",
-      "local_evidence_mention": false,
-      "name": "azure-infra",
-      "ownership": "plugin",
-      "package": "open-horizons-platform",
-      "packaged_by": [
-        "open-horizons-platform"
-      ],
-      "path": "harness/github-copilot/plugins/open-horizons-platform/prompts/azure-infra.prompt.md",
-      "review_status": "needs-semantic-review",
-      "signals": [],
-      "source_domains": []
     },
     {
       "characters_scanned": 11858,
@@ -12316,7 +12651,7 @@
       ]
     },
     {
-      "characters_scanned": 5828,
+      "characters_scanned": 2933,
       "external_url_count": 0,
       "files_scanned": 1,
       "kind": "prompt",
@@ -12373,7 +12708,7 @@
       ]
     },
     {
-      "characters_scanned": 6085,
+      "characters_scanned": 3172,
       "external_url_count": 0,
       "files_scanned": 1,
       "kind": "prompt",
@@ -12392,7 +12727,7 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 7342,
+      "characters_scanned": 7483,
       "external_url_count": 0,
       "files_scanned": 1,
       "kind": "prompt",
@@ -12402,12 +12737,31 @@
       "package": null,
       "packaged_by": [],
       "path": "harness/github-copilot/prompts/design-agentic-system.prompt.md",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language"
+      ],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 3014,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "prompt",
+      "local_evidence_mention": false,
+      "name": "diagram-architecture",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/prompts/diagram-architecture.prompt.md",
       "review_status": "needs-semantic-review",
       "signals": [],
       "source_domains": []
     },
     {
-      "characters_scanned": 6232,
+      "characters_scanned": 6310,
       "external_url_count": 0,
       "files_scanned": 1,
       "kind": "prompt",
@@ -12417,8 +12771,10 @@
       "package": null,
       "packaged_by": [],
       "path": "harness/github-copilot/prompts/diagram-architecture.prompt.md",
-      "review_status": "needs-semantic-review",
-      "signals": [],
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language"
+      ],
       "source_domains": []
     },
     {
@@ -12515,28 +12871,6 @@
         "version-claim"
       ],
       "source_domains": []
-    },
-    {
-      "characters_scanned": 5680,
-      "external_url_count": 1,
-      "files_scanned": 1,
-      "kind": "prompt",
-      "local_evidence_mention": false,
-      "name": "hybrid-setup",
-      "ownership": "plugin",
-      "package": "open-horizons-platform",
-      "packaged_by": [
-        "open-horizons-platform"
-      ],
-      "path": "harness/github-copilot/plugins/open-horizons-platform/prompts/hybrid-setup.prompt.md",
-      "review_status": "needs-current-source-review",
-      "signals": [
-        "currency-language",
-        "external-source"
-      ],
-      "source_domains": [
-        "dev.azure.com"
-      ]
     },
     {
       "characters_scanned": 6191,
@@ -12761,22 +13095,111 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 5717,
+      "characters_scanned": 3275,
       "external_url_count": 0,
       "files_scanned": 1,
       "kind": "prompt",
       "local_evidence_mention": false,
-      "name": "open-horizons-backstage",
+      "name": "open-horizons-aeg-approve",
       "ownership": "plugin",
       "package": "open-horizons-platform",
       "packaged_by": [
         "open-horizons-platform"
       ],
-      "path": "harness/github-copilot/plugins/open-horizons-platform/prompts/open-horizons-backstage.prompt.md",
+      "path": "harness/github-copilot/plugins/open-horizons-platform/prompts/open-horizons-aeg-approve.prompt.md",
+      "review_status": "needs-semantic-review",
+      "signals": [],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 3262,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "prompt",
+      "local_evidence_mention": false,
+      "name": "open-horizons-aeg-harvest",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/prompts/open-horizons-aeg-harvest.prompt.md",
+      "review_status": "needs-semantic-review",
+      "signals": [],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 3414,
+      "external_url_count": 1,
+      "files_scanned": 1,
+      "kind": "prompt",
+      "local_evidence_mention": false,
+      "name": "open-horizons-aeg-modernize",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/prompts/open-horizons-aeg-modernize.prompt.md",
+      "review_status": "needs-source-review",
+      "signals": [
+        "external-source"
+      ],
+      "source_domains": [
+        "github.com"
+      ]
+    },
+    {
+      "characters_scanned": 3237,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "prompt",
+      "local_evidence_mention": false,
+      "name": "open-horizons-aeg-start",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/prompts/open-horizons-aeg-start.prompt.md",
+      "review_status": "needs-semantic-review",
+      "signals": [],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 2913,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "prompt",
+      "local_evidence_mention": false,
+      "name": "open-horizons-aeg-status",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/prompts/open-horizons-aeg-status.prompt.md",
       "review_status": "needs-current-source-review",
       "signals": [
         "currency-language"
       ],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 2306,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "prompt",
+      "local_evidence_mention": false,
+      "name": "open-horizons-backstage-assess",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/prompts/open-horizons-backstage-assess.prompt.md",
+      "review_status": "needs-semantic-review",
+      "signals": [],
       "source_domains": []
     },
     {
@@ -12901,23 +13324,6 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 4604,
-      "external_url_count": 0,
-      "files_scanned": 1,
-      "kind": "prompt",
-      "local_evidence_mention": false,
-      "name": "security-review",
-      "ownership": "plugin",
-      "package": "open-horizons-platform",
-      "packaged_by": [
-        "open-horizons-platform"
-      ],
-      "path": "harness/github-copilot/plugins/open-horizons-platform/prompts/security-review.prompt.md",
-      "review_status": "needs-semantic-review",
-      "signals": [],
-      "source_domains": []
-    },
-    {
       "characters_scanned": 11818,
       "external_url_count": 0,
       "files_scanned": 1,
@@ -12967,43 +13373,6 @@
       "review_status": "needs-current-source-review",
       "signals": [
         "lifecycle-language"
-      ],
-      "source_domains": []
-    },
-    {
-      "characters_scanned": 5244,
-      "external_url_count": 0,
-      "files_scanned": 1,
-      "kind": "prompt",
-      "local_evidence_mention": true,
-      "name": "terraform",
-      "ownership": "plugin",
-      "package": "open-horizons-platform",
-      "packaged_by": [
-        "open-horizons-platform"
-      ],
-      "path": "harness/github-copilot/plugins/open-horizons-platform/prompts/terraform.prompt.md",
-      "review_status": "needs-semantic-review",
-      "signals": [],
-      "source_domains": []
-    },
-    {
-      "characters_scanned": 5724,
-      "external_url_count": 0,
-      "files_scanned": 1,
-      "kind": "prompt",
-      "local_evidence_mention": false,
-      "name": "troubleshoot-incident",
-      "ownership": "plugin",
-      "package": "open-horizons-platform",
-      "packaged_by": [
-        "open-horizons-platform"
-      ],
-      "path": "harness/github-copilot/plugins/open-horizons-platform/prompts/troubleshoot-incident.prompt.md",
-      "review_status": "needs-current-source-review",
-      "signals": [
-        "version-claim",
-        "date-claim"
       ],
       "source_domains": []
     },
@@ -13267,32 +13636,6 @@
       ]
     },
     {
-      "characters_scanned": 24811,
-      "external_url_count": 19,
-      "files_scanned": 8,
-      "kind": "skill",
-      "local_evidence_mention": false,
-      "name": "agentic-architecture-patterns",
-      "ownership": "plugin",
-      "package": "open-horizons-platform",
-      "packaged_by": [
-        "open-horizons-platform"
-      ],
-      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/agentic-architecture-patterns",
-      "review_status": "needs-current-source-review",
-      "signals": [
-        "currency-language",
-        "external-source"
-      ],
-      "source_domains": [
-        "docs.github.com",
-        "learn.microsoft.com",
-        "modelcontextprotocol.io",
-        "opentelemetry.io",
-        "redis.io"
-      ]
-    },
-    {
       "characters_scanned": 6771,
       "external_url_count": 0,
       "files_scanned": 1,
@@ -13308,25 +13651,6 @@
       "review_status": "needs-current-source-review",
       "signals": [
         "version-claim"
-      ],
-      "source_domains": []
-    },
-    {
-      "characters_scanned": 7522,
-      "external_url_count": 0,
-      "files_scanned": 1,
-      "kind": "skill",
-      "local_evidence_mention": false,
-      "name": "ai-foundry-operations",
-      "ownership": "plugin",
-      "package": "open-horizons-platform",
-      "packaged_by": [
-        "open-horizons-platform"
-      ],
-      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/ai-foundry-operations",
-      "review_status": "needs-current-source-review",
-      "signals": [
-        "currency-language"
       ],
       "source_domains": []
     },
@@ -13525,25 +13849,6 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 12822,
-      "external_url_count": 0,
-      "files_scanned": 2,
-      "kind": "skill",
-      "local_evidence_mention": false,
-      "name": "architecture-doc",
-      "ownership": "plugin",
-      "package": "open-horizons-platform",
-      "packaged_by": [
-        "open-horizons-platform"
-      ],
-      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/architecture-doc",
-      "review_status": "needs-current-source-review",
-      "signals": [
-        "version-claim"
-      ],
-      "source_domains": []
-    },
-    {
       "characters_scanned": 10564,
       "external_url_count": 11,
       "files_scanned": 3,
@@ -13563,28 +13868,6 @@
       "source_domains": [
         "docs.arduino.cc",
         "learn.microsoft.com"
-      ]
-    },
-    {
-      "characters_scanned": 6041,
-      "external_url_count": 1,
-      "files_scanned": 1,
-      "kind": "skill",
-      "local_evidence_mention": false,
-      "name": "argocd-cli",
-      "ownership": "plugin",
-      "package": "open-horizons-platform",
-      "packaged_by": [
-        "open-horizons-platform"
-      ],
-      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/argocd-cli",
-      "review_status": "needs-current-source-review",
-      "signals": [
-        "currency-language",
-        "external-source"
-      ],
-      "source_domains": [
-        "argoproj.github.io"
       ]
     },
     {
@@ -14065,6 +14348,54 @@
       ]
     },
     {
+      "characters_scanned": 24805,
+      "external_url_count": 19,
+      "files_scanned": 8,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "azure-agentic-architecture-patterns",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/azure-agentic-architecture-patterns",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "external-source"
+      ],
+      "source_domains": [
+        "docs.github.com",
+        "learn.microsoft.com",
+        "modelcontextprotocol.io",
+        "opentelemetry.io",
+        "redis.io"
+      ]
+    },
+    {
+      "characters_scanned": 6950,
+      "external_url_count": 3,
+      "files_scanned": 1,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "azure-api-center",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/azure-api-center",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "external-source"
+      ],
+      "source_domains": [
+        "learn.microsoft.com"
+      ]
+    },
+    {
       "characters_scanned": 6950,
       "external_url_count": 3,
       "files_scanned": 1,
@@ -14084,6 +14415,52 @@
       ],
       "source_domains": [
         "learn.microsoft.com"
+      ]
+    },
+    {
+      "characters_scanned": 7950,
+      "external_url_count": 4,
+      "files_scanned": 1,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "azure-apim-ai-gateway",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/azure-apim-ai-gateway",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "external-source"
+      ],
+      "source_domains": [
+        "learn.microsoft.com"
+      ]
+    },
+    {
+      "characters_scanned": 14677,
+      "external_url_count": 2,
+      "files_scanned": 8,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "azure-appinsights-instrumentation",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/azure-appinsights-instrumentation",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "lifecycle-language",
+        "date-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "learn.microsoft.com",
+        "portal.azure.com"
       ]
     },
     {
@@ -14115,18 +14492,18 @@
       ]
     },
     {
-      "characters_scanned": 39487,
-      "external_url_count": 9,
-      "files_scanned": 10,
+      "characters_scanned": 8868,
+      "external_url_count": 2,
+      "files_scanned": 2,
       "kind": "skill",
       "local_evidence_mention": false,
-      "name": "azure-architecture-diagrams",
+      "name": "azure-argocd-cli",
       "ownership": "plugin",
       "package": "open-horizons-platform",
       "packaged_by": [
         "open-horizons-platform"
       ],
-      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/azure-architecture-diagrams",
+      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/azure-argocd-cli",
       "review_status": "needs-current-source-review",
       "signals": [
         "currency-language",
@@ -14134,42 +14511,12 @@
         "external-source"
       ],
       "source_domains": [
-        "github.com",
-        "learn.microsoft.com",
-        "modelcontextprotocol.io",
-        "primer.style",
-        "www.drawio.com",
-        "www.microsoft.com"
+        "argoproj.github.io",
+        "github.com"
       ]
     },
     {
-      "characters_scanned": 63556,
-      "external_url_count": 9,
-      "files_scanned": 11,
-      "kind": "skill",
-      "local_evidence_mention": false,
-      "name": "azure-architecture-diagrams",
-      "ownership": "shared",
-      "package": null,
-      "packaged_by": [],
-      "path": "harness/github-copilot/skills/azure-architecture-diagrams",
-      "review_status": "needs-current-source-review",
-      "signals": [
-        "currency-language",
-        "version-claim",
-        "external-source"
-      ],
-      "source_domains": [
-        "github.com",
-        "learn.microsoft.com",
-        "modelcontextprotocol.io",
-        "primer.style",
-        "www.drawio.com",
-        "www.microsoft.com"
-      ]
-    },
-    {
-      "characters_scanned": 20093,
+      "characters_scanned": 19922,
       "external_url_count": 1,
       "files_scanned": 2,
       "kind": "skill",
@@ -14183,6 +14530,7 @@
       "path": "harness/github-copilot/plugins/open-horizons-platform/skills/azure-cli",
       "review_status": "needs-current-source-review",
       "signals": [
+        "currency-language",
         "lifecycle-language",
         "external-source"
       ],
@@ -14214,6 +14562,28 @@
         "github.com",
         "{account",
         "{vault"
+      ]
+    },
+    {
+      "characters_scanned": 4527,
+      "external_url_count": 2,
+      "files_scanned": 1,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "azure-cost-optimize",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/azure-cost-optimize",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "external-source"
+      ],
+      "source_domains": [
+        "learn.microsoft.com"
       ]
     },
     {
@@ -14295,7 +14665,97 @@
       ]
     },
     {
-      "characters_scanned": 48524,
+      "characters_scanned": 105508,
+      "external_url_count": 11,
+      "files_scanned": 10,
+      "kind": "skill",
+      "local_evidence_mention": true,
+      "name": "azure-draw-io-diagram-generator",
+      "ownership": "shared",
+      "package": null,
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/skills/azure-draw-io-diagram-generator",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "lifecycle-language",
+        "version-claim",
+        "date-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "brand.github.com",
+        "github.com",
+        "learn.microsoft.com",
+        "www.microsoft.com"
+      ]
+    },
+    {
+      "characters_scanned": 4041,
+      "external_url_count": 1,
+      "files_scanned": 1,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "azure-entra-agent-user",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/azure-entra-agent-user",
+      "review_status": "needs-source-review",
+      "signals": [
+        "external-source"
+      ],
+      "source_domains": [
+        "learn.microsoft.com"
+      ]
+    },
+    {
+      "characters_scanned": 4775,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "azure-helm-cli",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/azure-helm-cli",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "lifecycle-language"
+      ],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 4826,
+      "external_url_count": 2,
+      "files_scanned": 1,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "azure-import-infrastructure-as-code",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/azure-import-infrastructure-as-code",
+      "review_status": "needs-source-review",
+      "signals": [
+        "external-source"
+      ],
+      "source_domains": [
+        "azure.github.io",
+        "developer.hashicorp.com"
+      ]
+    },
+    {
+      "characters_scanned": 46943,
       "external_url_count": 6,
       "files_scanned": 3,
       "kind": "skill",
@@ -14321,6 +14781,26 @@
         "raw.githubusercontent.com",
         "||"
       ]
+    },
+    {
+      "characters_scanned": 5748,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "azure-kubectl-cli",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/azure-kubectl-cli",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "lifecycle-language"
+      ],
+      "source_domains": []
     },
     {
       "characters_scanned": 16272,
@@ -14350,6 +14830,76 @@
       ]
     },
     {
+      "characters_scanned": 8157,
+      "external_url_count": 5,
+      "files_scanned": 3,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "azure-observability-stack",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/azure-observability-stack",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "version-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "localhost:3000",
+        "localhost:9090",
+        "localhost:9093",
+        "prometheus-community.github.io"
+      ]
+    },
+    {
+      "characters_scanned": 4592,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "azure-postgre-database-management",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/azure-postgre-database-management",
+      "review_status": "needs-semantic-review",
+      "signals": [],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 25827,
+      "external_url_count": 6,
+      "files_scanned": 5,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "azure-pricing",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/azure-pricing",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "lifecycle-language",
+        "version-claim",
+        "date-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "go.microsoft.com",
+        "learn.microsoft.com",
+        "microsoft.github.io",
+        "prices.azure.com"
+      ]
+    },
+    {
       "characters_scanned": 25827,
       "external_url_count": 6,
       "files_scanned": 5,
@@ -14376,6 +14926,25 @@
         "microsoft.github.io",
         "prices.azure.com"
       ]
+    },
+    {
+      "characters_scanned": 10254,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "azure-resource-health-diagnose",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/azure-resource-health-diagnose",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language"
+      ],
+      "source_domains": []
     },
     {
       "characters_scanned": 10254,
@@ -14421,6 +14990,26 @@
       "kind": "skill",
       "local_evidence_mention": false,
       "name": "azure-role-selector",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/azure-role-selector",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "date-claim"
+      ],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 9429,
+      "external_url_count": 0,
+      "files_scanned": 2,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "azure-role-selector",
       "ownership": "shared",
       "package": null,
       "packaged_by": [],
@@ -14429,6 +15018,25 @@
       "signals": [
         "currency-language",
         "date-claim"
+      ],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 18202,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "azure-scaffold-wizard",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/azure-scaffold-wizard",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language"
       ],
       "source_domains": []
     },
@@ -14475,6 +15083,66 @@
         "localhost:3000`",
         "localhost:4280",
         "localhost:4280`"
+      ]
+    },
+    {
+      "characters_scanned": 6053,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "azure-terraform-cli",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/azure-terraform-cli",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "version-claim"
+      ],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 6629,
+      "external_url_count": 0,
+      "files_scanned": 2,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "azure-terraform-terratest-module-testing",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/azure-terraform-terratest-module-testing",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language"
+      ],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 4187,
+      "external_url_count": 1,
+      "files_scanned": 1,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "azure-well-architected-review",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/azure-well-architected-review",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "external-source"
+      ],
+      "source_domains": [
+        "learn.microsoft.com"
       ]
     },
     {
@@ -14559,6 +15227,30 @@
         "currency-language"
       ],
       "source_domains": []
+    },
+    {
+      "characters_scanned": 26614,
+      "external_url_count": 5,
+      "files_scanned": 2,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "backstage-app-frontend-system-migration",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/backstage-app-frontend-system-migration",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "lifecycle-language",
+        "version-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "backstage.io",
+        "github.com"
+      ]
     },
     {
       "characters_scanned": 3897,
@@ -14732,6 +15424,30 @@
       ]
     },
     {
+      "characters_scanned": 26325,
+      "external_url_count": 4,
+      "files_scanned": 2,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "backstage-mui-to-bui-migration",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/backstage-mui-to-bui-migration",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "version-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "github.com",
+        "remixicon.com",
+        "ui.backstage.io"
+      ]
+    },
+    {
       "characters_scanned": 2637,
       "external_url_count": 3,
       "files_scanned": 1,
@@ -14751,6 +15467,29 @@
       ],
       "source_domains": [
         "backstage.io"
+      ]
+    },
+    {
+      "characters_scanned": 19025,
+      "external_url_count": 11,
+      "files_scanned": 2,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "backstage-onboard-to-openapi-server",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/backstage-onboard-to-openapi-server",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "version-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "github.com"
       ]
     },
     {
@@ -14792,6 +15531,29 @@
       ]
     },
     {
+      "characters_scanned": 12916,
+      "external_url_count": 1,
+      "files_scanned": 2,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "backstage-plugin-analytics-instrumentation",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/backstage-plugin-analytics-instrumentation",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "lifecycle-language",
+        "version-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "github.com"
+      ]
+    },
+    {
       "characters_scanned": 44725,
       "external_url_count": 10,
       "files_scanned": 19,
@@ -14815,6 +15577,58 @@
         "backstage.io",
         "github.com",
         "raw.githubusercontent.com"
+      ]
+    },
+    {
+      "characters_scanned": 23349,
+      "external_url_count": 5,
+      "files_scanned": 2,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "backstage-plugin-full-frontend-system-migration",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/backstage-plugin-full-frontend-system-migration",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "lifecycle-language",
+        "version-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "backstage.io",
+        "github.com",
+        "remixicon.com"
+      ]
+    },
+    {
+      "characters_scanned": 18943,
+      "external_url_count": 5,
+      "files_scanned": 2,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "backstage-plugin-new-frontend-system-support",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/backstage-plugin-new-frontend-system-support",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "lifecycle-language",
+        "version-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "backstage.io",
+        "github.com",
+        "remixicon.com"
       ]
     },
     {
@@ -15306,6 +16120,46 @@
       "source_domains": []
     },
     {
+      "characters_scanned": 12590,
+      "external_url_count": 0,
+      "files_scanned": 2,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "cloud-architecture-best-practices-docs",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/cloud-architecture-best-practices-docs",
+      "review_status": "needs-semantic-review",
+      "signals": [],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 37744,
+      "external_url_count": 2,
+      "files_scanned": 10,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "cloud-design-patterns",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/cloud-design-patterns",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "version-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "learn.microsoft.com"
+      ]
+    },
+    {
       "characters_scanned": 37744,
       "external_url_count": 2,
       "files_scanned": 10,
@@ -15426,30 +16280,6 @@
         "docs.oasis-open.org",
         "github.com",
         "sarifweb.azurewebsites.net"
-      ]
-    },
-    {
-      "characters_scanned": 6646,
-      "external_url_count": 2,
-      "files_scanned": 1,
-      "kind": "skill",
-      "local_evidence_mention": false,
-      "name": "codespaces-golden-paths",
-      "ownership": "plugin",
-      "package": "open-horizons-platform",
-      "packaged_by": [
-        "open-horizons-platform"
-      ],
-      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/codespaces-golden-paths",
-      "review_status": "needs-current-source-review",
-      "signals": [
-        "currency-language",
-        "version-claim",
-        "external-source"
-      ],
-      "source_domains": [
-        "codespaces.new",
-        "github.com"
       ]
     },
     {
@@ -16012,6 +16842,27 @@
       "kind": "skill",
       "local_evidence_mention": false,
       "name": "create-llms",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/create-llms",
+      "review_status": "needs-source-review",
+      "signals": [
+        "external-source"
+      ],
+      "source_domains": [
+        "llmstxt.org"
+      ]
+    },
+    {
+      "characters_scanned": 6354,
+      "external_url_count": 3,
+      "files_scanned": 1,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "create-llms",
       "ownership": "shared",
       "package": null,
       "packaged_by": [],
@@ -16403,23 +17254,6 @@
       ]
     },
     {
-      "characters_scanned": 6370,
-      "external_url_count": 0,
-      "files_scanned": 1,
-      "kind": "skill",
-      "local_evidence_mention": false,
-      "name": "database-management",
-      "ownership": "plugin",
-      "package": "open-horizons-platform",
-      "packaged_by": [
-        "open-horizons-platform"
-      ],
-      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/database-management",
-      "review_status": "needs-semantic-review",
-      "signals": [],
-      "source_domains": []
-    },
-    {
       "characters_scanned": 87230,
       "external_url_count": 0,
       "files_scanned": 4,
@@ -16573,23 +17407,6 @@
         "pypi.example.com",
         "repo.maven.apache.org"
       ]
-    },
-    {
-      "characters_scanned": 6929,
-      "external_url_count": 0,
-      "files_scanned": 1,
-      "kind": "skill",
-      "local_evidence_mention": false,
-      "name": "deploy-orchestration",
-      "ownership": "plugin",
-      "package": "open-horizons-platform",
-      "packaged_by": [
-        "open-horizons-platform"
-      ],
-      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/deploy-orchestration",
-      "review_status": "needs-semantic-review",
-      "signals": [],
-      "source_domains": []
     },
     {
       "characters_scanned": 4934,
@@ -17439,8 +18256,8 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 6875,
-      "external_url_count": 0,
+      "characters_scanned": 7972,
+      "external_url_count": 4,
       "files_scanned": 1,
       "kind": "skill",
       "local_evidence_mention": false,
@@ -17453,9 +18270,59 @@
       "path": "harness/github-copilot/plugins/open-horizons-platform/skills/foundry-agent-blueprint",
       "review_status": "needs-current-source-review",
       "signals": [
-        "currency-language"
+        "currency-language",
+        "external-source"
       ],
-      "source_domains": []
+      "source_domains": [
+        "learn.microsoft.com"
+      ]
+    },
+    {
+      "characters_scanned": 22562,
+      "external_url_count": 2,
+      "files_scanned": 1,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "foundry-agent-framework-py-release",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/foundry-agent-framework-py-release",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "lifecycle-language",
+        "version-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "github.com"
+      ]
+    },
+    {
+      "characters_scanned": 7710,
+      "external_url_count": 2,
+      "files_scanned": 1,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "foundry-agent-sync",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/foundry-agent-sync",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "lifecycle-language",
+        "date-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "ai.azure.com"
+      ]
     },
     {
       "characters_scanned": 7710,
@@ -17478,6 +18345,119 @@
       ],
       "source_domains": [
         "ai.azure.com"
+      ]
+    },
+    {
+      "characters_scanned": 6779,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "foundry-agentic-eval",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/foundry-agentic-eval",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "version-claim"
+      ],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 7092,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "foundry-ai-operations",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/foundry-ai-operations",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "lifecycle-language",
+        "date-claim"
+      ],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 975827,
+      "external_url_count": 131,
+      "files_scanned": 70,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "foundry-claude-api",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/foundry-claude-api",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "lifecycle-language",
+        "version-claim",
+        "date-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "api.anthropic.com",
+        "api.githubcopilot.com",
+        "api.notion.com",
+        "aws-external-anthropic.{region",
+        "aws.amazon.com",
+        "bedrock-mantle.{region",
+        "cloud.google.com",
+        "example",
+        "example.com",
+        "github.com",
+        "mcp.linear.app",
+        "mcp.notion.com",
+        "mcp.slack.com",
+        "modelcontextprotocol.io",
+        "my-mcp-server.example.com",
+        "my.test.proxy.example.com",
+        "my.test.server.example.com:8083",
+        "platform.claude.com",
+        "proxy.example",
+        "pypi.org",
+        "slack.com",
+        "status.anthropic.com",
+        "www.apache.org"
+      ]
+    },
+    {
+      "characters_scanned": 47710,
+      "external_url_count": 3,
+      "files_scanned": 7,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "foundry-hosted-agent-copilotkit",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/foundry-hosted-agent-copilotkit",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "lifecycle-language",
+        "version-claim",
+        "date-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "ai.azure.com",
+        "github.com",
+        "localhost"
       ]
     },
     {
@@ -18179,7 +19159,7 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 20021,
+      "characters_scanned": 19528,
       "external_url_count": 5,
       "files_scanned": 2,
       "kind": "skill",
@@ -18191,9 +19171,8 @@
         "open-horizons-platform"
       ],
       "path": "harness/github-copilot/plugins/open-horizons-platform/skills/github-cli",
-      "review_status": "needs-current-source-review",
+      "review_status": "needs-source-review",
       "signals": [
-        "currency-language",
         "external-source"
       ],
       "source_domains": [
@@ -18220,6 +19199,112 @@
       "source_domains": []
     },
     {
+      "characters_scanned": 11328,
+      "external_url_count": 2,
+      "files_scanned": 2,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "github-codespaces-golden-paths",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/github-codespaces-golden-paths",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "version-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "codespaces.new",
+        "github.com"
+      ]
+    },
+    {
+      "characters_scanned": 4121,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "github-copilot-generate-custom-instructions",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/github-copilot-generate-custom-instructions",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "lifecycle-language"
+      ],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 7322,
+      "external_url_count": 2,
+      "files_scanned": 1,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "github-copilot-harness-engineering",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/github-copilot-harness-engineering",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "lifecycle-language",
+        "external-source"
+      ],
+      "source_domains": [
+        "github.com"
+      ]
+    },
+    {
+      "characters_scanned": 10857,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "github-copilot-instructions-blueprint-generator",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/github-copilot-instructions-blueprint-generator",
+      "review_status": "needs-semantic-review",
+      "signals": [],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 23002,
+      "external_url_count": 4,
+      "files_scanned": 2,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "github-copilot-sdk",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/github-copilot-sdk",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "lifecycle-language",
+        "version-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "api.githubcopilot.com",
+        "github.com"
+      ]
+    },
+    {
       "characters_scanned": 13956,
       "external_url_count": 11,
       "files_scanned": 1,
@@ -18239,6 +19324,44 @@
       "source_domains": [
         "github.com"
       ]
+    },
+    {
+      "characters_scanned": 7854,
+      "external_url_count": 0,
+      "files_scanned": 5,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "github-copilot-usage-metrics",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/github-copilot-usage-metrics",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "date-claim"
+      ],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 13564,
+      "external_url_count": 0,
+      "files_scanned": 3,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "github-issue-ops",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/github-issue-ops",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "version-claim"
+      ],
+      "source_domains": []
     },
     {
       "characters_scanned": 49992,
@@ -18262,6 +19385,25 @@
       "source_domains": [
         "github.com"
       ]
+    },
+    {
+      "characters_scanned": 6604,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "github-pipeline-diagnostics",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/github-pipeline-diagnostics",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language"
+      ],
+      "source_domains": []
     },
     {
       "characters_scanned": 16281,
@@ -18603,28 +19745,6 @@
       ]
     },
     {
-      "characters_scanned": 6865,
-      "external_url_count": 1,
-      "files_scanned": 1,
-      "kind": "skill",
-      "local_evidence_mention": false,
-      "name": "helm-cli",
-      "ownership": "plugin",
-      "package": "open-horizons-platform",
-      "packaged_by": [
-        "open-horizons-platform"
-      ],
-      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/helm-cli",
-      "review_status": "needs-current-source-review",
-      "signals": [
-        "currency-language",
-        "external-source"
-      ],
-      "source_domains": [
-        "prometheus-community.github.io"
-      ]
-    },
-    {
       "characters_scanned": 26389,
       "external_url_count": 0,
       "files_scanned": 2,
@@ -18761,23 +19881,6 @@
       "source_domains": [
         "github.blog"
       ]
-    },
-    {
-      "characters_scanned": 10441,
-      "external_url_count": 0,
-      "files_scanned": 2,
-      "kind": "skill",
-      "local_evidence_mention": false,
-      "name": "issue-ops",
-      "ownership": "plugin",
-      "package": "open-horizons-platform",
-      "packaged_by": [
-        "open-horizons-platform"
-      ],
-      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/issue-ops",
-      "review_status": "needs-semantic-review",
-      "signals": [],
-      "source_domains": []
     },
     {
       "characters_scanned": 15666,
@@ -19006,25 +20109,6 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 6248,
-      "external_url_count": 0,
-      "files_scanned": 1,
-      "kind": "skill",
-      "local_evidence_mention": false,
-      "name": "kubectl-cli",
-      "ownership": "plugin",
-      "package": "open-horizons-platform",
-      "packaged_by": [
-        "open-horizons-platform"
-      ],
-      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/kubectl-cli",
-      "review_status": "needs-current-source-review",
-      "signals": [
-        "currency-language"
-      ],
-      "source_domains": []
-    },
-    {
       "characters_scanned": 8301,
       "external_url_count": 2,
       "files_scanned": 1,
@@ -19243,25 +20327,6 @@
       ]
     },
     {
-      "characters_scanned": 7490,
-      "external_url_count": 0,
-      "files_scanned": 1,
-      "kind": "skill",
-      "local_evidence_mention": false,
-      "name": "markdown-writer",
-      "ownership": "plugin",
-      "package": "open-horizons-platform",
-      "packaged_by": [
-        "open-horizons-platform"
-      ],
-      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/markdown-writer",
-      "review_status": "needs-current-source-review",
-      "signals": [
-        "version-claim"
-      ],
-      "source_domains": []
-    },
-    {
       "characters_scanned": 9892,
       "external_url_count": 7,
       "files_scanned": 2,
@@ -19282,6 +20347,35 @@
       "source_domains": [
         "github.com",
         "markstream.simonhe.me"
+      ]
+    },
+    {
+      "characters_scanned": 117683,
+      "external_url_count": 6,
+      "files_scanned": 10,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "mcp-builder",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/mcp-builder",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "lifecycle-language",
+        "version-claim",
+        "date-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "api.example.com",
+        "example.com",
+        "localhost:${port",
+        "raw.githubusercontent.com",
+        "www.apache.org"
       ]
     },
     {
@@ -19311,6 +20405,25 @@
         "raw.githubusercontent.com",
         "www.apache.org"
       ]
+    },
+    {
+      "characters_scanned": 6495,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "mcp-cli",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/mcp-cli",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language"
+      ],
+      "source_domains": []
     },
     {
       "characters_scanned": 6495,
@@ -19426,28 +20539,6 @@
         "admin.microsoft.com",
         "admin.powerplatform.microsoft.com",
         "learn.microsoft.com"
-      ]
-    },
-    {
-      "characters_scanned": 6449,
-      "external_url_count": 3,
-      "files_scanned": 1,
-      "kind": "skill",
-      "local_evidence_mention": false,
-      "name": "mcp-ecosystem",
-      "ownership": "plugin",
-      "package": "open-horizons-platform",
-      "packaged_by": [
-        "open-horizons-platform"
-      ],
-      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/mcp-ecosystem",
-      "review_status": "needs-current-source-review",
-      "signals": [
-        "version-claim",
-        "external-source"
-      ],
-      "source_domains": [
-        "localhost:3100"
       ]
     },
     {
@@ -19601,6 +20692,30 @@
       "kind": "skill",
       "local_evidence_mention": false,
       "name": "microsoft-agent-framework",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/microsoft-agent-framework",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "lifecycle-language",
+        "external-source"
+      ],
+      "source_domains": [
+        "github.com",
+        "learn.microsoft.com"
+      ]
+    },
+    {
+      "characters_scanned": 7825,
+      "external_url_count": 10,
+      "files_scanned": 3,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "microsoft-agent-framework",
       "ownership": "shared",
       "package": null,
       "packaged_by": [
@@ -19615,6 +20730,29 @@
       ],
       "source_domains": [
         "github.com",
+        "learn.microsoft.com"
+      ]
+    },
+    {
+      "characters_scanned": 7191,
+      "external_url_count": 1,
+      "files_scanned": 1,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "microsoft-code-reference",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/microsoft-code-reference",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "lifecycle-language",
+        "external-source"
+      ],
+      "source_domains": [
         "learn.microsoft.com"
       ]
     },
@@ -19646,6 +20784,30 @@
       "kind": "skill",
       "local_evidence_mention": true,
       "name": "microsoft-docs",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/microsoft-docs",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "version-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "davidpine.dev",
+        "github.com"
+      ]
+    },
+    {
+      "characters_scanned": 7004,
+      "external_url_count": 2,
+      "files_scanned": 1,
+      "kind": "skill",
+      "local_evidence_mention": true,
+      "name": "microsoft-docs",
       "ownership": "shared",
       "package": null,
       "packaged_by": [],
@@ -19659,6 +20821,28 @@
       "source_domains": [
         "davidpine.dev",
         "github.com"
+      ]
+    },
+    {
+      "characters_scanned": 16398,
+      "external_url_count": 4,
+      "files_scanned": 2,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "microsoft-skill-creator",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/microsoft-skill-creator",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "external-source"
+      ],
+      "source_domains": [
+        "learn.microsoft.com"
       ]
     },
     {
@@ -20053,30 +21237,6 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 7043,
-      "external_url_count": 2,
-      "files_scanned": 1,
-      "kind": "skill",
-      "local_evidence_mention": false,
-      "name": "observability-stack",
-      "ownership": "plugin",
-      "package": "open-horizons-platform",
-      "packaged_by": [
-        "open-horizons-platform"
-      ],
-      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/observability-stack",
-      "review_status": "needs-current-source-review",
-      "signals": [
-        "currency-language",
-        "lifecycle-language",
-        "external-source"
-      ],
-      "source_domains": [
-        "localhost:9090",
-        "prometheus-community.github.io"
-      ]
-    },
-    {
       "characters_scanned": 9872,
       "external_url_count": 0,
       "files_scanned": 1,
@@ -20137,33 +21297,607 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 7140,
-      "external_url_count": 1,
+      "characters_scanned": 3726,
+      "external_url_count": 0,
       "files_scanned": 1,
       "kind": "skill",
       "local_evidence_mention": false,
-      "name": "open-horizons-backstage-deployment",
+      "name": "open-horizons-azure-readiness",
       "ownership": "plugin",
       "package": "open-horizons-platform",
       "packaged_by": [
         "open-horizons-platform"
       ],
-      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/open-horizons-backstage-deployment",
+      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/open-horizons-azure-readiness",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language"
+      ],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 31300,
+      "external_url_count": 0,
+      "files_scanned": 7,
+      "kind": "skill",
+      "local_evidence_mention": true,
+      "name": "open-horizons-backstage-aeg-feature",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/open-horizons-backstage-aeg-feature",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "version-claim"
+      ],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 2525,
+      "external_url_count": 1,
+      "files_scanned": 1,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "open-horizons-backstage-ai-catalog",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/open-horizons-backstage-ai-catalog",
       "review_status": "needs-current-source-review",
       "signals": [
         "currency-language",
         "external-source"
       ],
       "source_domains": [
-        "localhost:7007"
+        "backstage.io"
       ]
     },
     {
-      "characters_scanned": 18769,
+      "characters_scanned": 2860,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "open-horizons-backstage-app-bootstrap",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/open-horizons-backstage-app-bootstrap",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language"
+      ],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 2894,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "open-horizons-backstage-app-configuration",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/open-horizons-backstage-app-configuration",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language"
+      ],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 3911,
+      "external_url_count": 3,
+      "files_scanned": 1,
+      "kind": "skill",
+      "local_evidence_mention": true,
+      "name": "open-horizons-backstage-authentication",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/open-horizons-backstage-authentication",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "external-source"
+      ],
+      "source_domains": [
+        "backstage.io"
+      ]
+    },
+    {
+      "characters_scanned": 2575,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "open-horizons-backstage-catalog",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/open-horizons-backstage-catalog",
+      "review_status": "needs-semantic-review",
+      "signals": [],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 4940,
       "external_url_count": 1,
+      "files_scanned": 2,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "open-horizons-backstage-catalog-db-performance",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/open-horizons-backstage-catalog-db-performance",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "version-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "github.com"
+      ]
+    },
+    {
+      "characters_scanned": 2788,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "open-horizons-backstage-core-contribution",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/open-horizons-backstage-core-contribution",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "version-claim"
+      ],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 7697,
+      "external_url_count": 6,
+      "files_scanned": 4,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "open-horizons-backstage-external-integrations",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/open-horizons-backstage-external-integrations",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "lifecycle-language",
+        "version-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "backstage.io",
+        "github.com"
+      ]
+    },
+    {
+      "characters_scanned": 2670,
+      "external_url_count": 3,
+      "files_scanned": 1,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "open-horizons-backstage-framework",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/open-horizons-backstage-framework",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "lifecycle-language",
+        "external-source"
+      ],
+      "source_domains": [
+        "backstage.io"
+      ]
+    },
+    {
+      "characters_scanned": 2725,
+      "external_url_count": 2,
+      "files_scanned": 1,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "open-horizons-backstage-kubernetes",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/open-horizons-backstage-kubernetes",
+      "review_status": "needs-source-review",
+      "signals": [
+        "external-source"
+      ],
+      "source_domains": [
+        "backstage.io"
+      ]
+    },
+    {
+      "characters_scanned": 5023,
+      "external_url_count": 3,
+      "files_scanned": 2,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "open-horizons-backstage-mcp-actions",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/open-horizons-backstage-mcp-actions",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "date-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "backstage.io"
+      ]
+    },
+    {
+      "characters_scanned": 2651,
+      "external_url_count": 3,
+      "files_scanned": 1,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "open-horizons-backstage-notifications",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/open-horizons-backstage-notifications",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "version-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "backstage.io"
+      ]
+    },
+    {
+      "characters_scanned": 2796,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "open-horizons-backstage-operations",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/open-horizons-backstage-operations",
+      "review_status": "needs-semantic-review",
+      "signals": [],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 2845,
+      "external_url_count": 2,
+      "files_scanned": 1,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "open-horizons-backstage-permissions",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/open-horizons-backstage-permissions",
+      "review_status": "needs-source-review",
+      "signals": [
+        "external-source"
+      ],
+      "source_domains": [
+        "backstage.io"
+      ]
+    },
+    {
+      "characters_scanned": 2796,
+      "external_url_count": 3,
+      "files_scanned": 1,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "open-horizons-backstage-search",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/open-horizons-backstage-search",
+      "review_status": "needs-source-review",
+      "signals": [
+        "external-source"
+      ],
+      "source_domains": [
+        "backstage.io"
+      ]
+    },
+    {
+      "characters_scanned": 2768,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "open-horizons-backstage-software-templates",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/open-horizons-backstage-software-templates",
+      "review_status": "needs-semantic-review",
+      "signals": [],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 2570,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "open-horizons-backstage-techdocs",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/open-horizons-backstage-techdocs",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "lifecycle-language"
+      ],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 3083,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "open-horizons-backstage-upgrade",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/open-horizons-backstage-upgrade",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language"
+      ],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 4230,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "open-horizons-brownfield-engineering",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/open-horizons-brownfield-engineering",
+      "review_status": "needs-semantic-review",
+      "signals": [],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 9685,
+      "external_url_count": 2,
+      "files_scanned": 5,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "open-horizons-deploy-orchestration",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/open-horizons-deploy-orchestration",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "lifecycle-language",
+        "external-source"
+      ],
+      "source_domains": [
+        "localhost:3000",
+        "localhost:8080"
+      ]
+    },
+    {
+      "characters_scanned": 4130,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "open-horizons-deployment-operation",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/open-horizons-deployment-operation",
+      "review_status": "needs-semantic-review",
+      "signals": [],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 3301,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "open-horizons-ears-validate",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/open-horizons-ears-validate",
+      "review_status": "needs-semantic-review",
+      "signals": [],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 5392,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "open-horizons-orchestration",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/open-horizons-orchestration",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language"
+      ],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 6953,
+      "external_url_count": 0,
+      "files_scanned": 2,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "open-horizons-portal-integration",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/open-horizons-portal-integration",
+      "review_status": "needs-semantic-review",
+      "signals": [],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 21711,
+      "external_url_count": 5,
       "files_scanned": 3,
       "kind": "skill",
       "local_evidence_mention": false,
+      "name": "open-horizons-prerequisites",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/open-horizons-prerequisites",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "lifecycle-language",
+        "version-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "aka.ms",
+        "apt.releases.hashicorp.com",
+        "dl.k8s.io"
+      ]
+    },
+    {
+      "characters_scanned": 3960,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "open-horizons-security-review",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/open-horizons-security-review",
+      "review_status": "needs-semantic-review",
+      "signals": [],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 3857,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "open-horizons-sre-investigation",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/open-horizons-sre-investigation",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language"
+      ],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 7022,
+      "external_url_count": 0,
+      "files_scanned": 2,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "open-horizons-terraform-change",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/open-horizons-terraform-change",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language"
+      ],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 50911,
+      "external_url_count": 3,
+      "files_scanned": 4,
+      "kind": "skill",
+      "local_evidence_mention": true,
       "name": "open-horizons-workspace-kit",
       "ownership": "plugin",
       "package": "open-horizons-platform",
@@ -20173,11 +21907,14 @@
       "path": "harness/github-copilot/plugins/open-horizons-platform/skills/open-horizons-workspace-kit",
       "review_status": "needs-current-source-review",
       "signals": [
+        "currency-language",
         "lifecycle-language",
         "version-claim",
         "external-source"
       ],
       "source_domains": [
+        "code.visualstudio.com",
+        "docs.github.com",
         "learn.microsoft.com"
       ]
     },
@@ -20488,23 +22225,6 @@
         "lifecycle-language",
         "version-claim"
       ],
-      "source_domains": []
-    },
-    {
-      "characters_scanned": 5744,
-      "external_url_count": 0,
-      "files_scanned": 1,
-      "kind": "skill",
-      "local_evidence_mention": false,
-      "name": "pipeline-diagnostics",
-      "ownership": "plugin",
-      "package": "open-horizons-platform",
-      "packaged_by": [
-        "open-horizons-platform"
-      ],
-      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/pipeline-diagnostics",
-      "review_status": "needs-semantic-review",
-      "signals": [],
       "source_domains": []
     },
     {
@@ -20962,29 +22682,6 @@
       ]
     },
     {
-      "characters_scanned": 21828,
-      "external_url_count": 1,
-      "files_scanned": 3,
-      "kind": "skill",
-      "local_evidence_mention": false,
-      "name": "prerequisites",
-      "ownership": "plugin",
-      "package": "open-horizons-platform",
-      "packaged_by": [
-        "open-horizons-platform"
-      ],
-      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/prerequisites",
-      "review_status": "needs-current-source-review",
-      "signals": [
-        "lifecycle-language",
-        "version-claim",
-        "external-source"
-      ],
-      "source_domains": [
-        "aka.ms"
-      ]
-    },
-    {
       "characters_scanned": 12239,
       "external_url_count": 0,
       "files_scanned": 1,
@@ -21081,6 +22778,65 @@
       ]
     },
     {
+      "characters_scanned": 6281,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "python-code-quality",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/python-code-quality",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "lifecycle-language",
+        "version-claim"
+      ],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 5693,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "python-development",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/python-development",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "lifecycle-language"
+      ],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 8639,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "python-feature-lifecycle",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/python-feature-lifecycle",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "lifecycle-language"
+      ],
+      "source_domains": []
+    },
+    {
       "characters_scanned": 6570,
       "external_url_count": 1,
       "files_scanned": 1,
@@ -21099,6 +22855,31 @@
       ],
       "source_domains": [
         "localhost:port"
+      ]
+    },
+    {
+      "characters_scanned": 14458,
+      "external_url_count": 3,
+      "files_scanned": 1,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "python-package-management",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/python-package-management",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "lifecycle-language",
+        "version-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "github.com",
+        "pypi.org"
       ]
     },
     {
@@ -21132,6 +22913,25 @@
         "semver.org",
         "test.pypi.org"
       ]
+    },
+    {
+      "characters_scanned": 8085,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "python-testing",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/python-testing",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "lifecycle-language"
+      ],
+      "source_domains": []
     },
     {
       "characters_scanned": 6233,
@@ -21713,25 +23513,6 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 7060,
-      "external_url_count": 0,
-      "files_scanned": 1,
-      "kind": "skill",
-      "local_evidence_mention": false,
-      "name": "requirements-engineer",
-      "ownership": "plugin",
-      "package": "open-horizons-platform",
-      "packaged_by": [
-        "open-horizons-platform"
-      ],
-      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/requirements-engineer",
-      "review_status": "needs-current-source-review",
-      "signals": [
-        "currency-language"
-      ],
-      "source_domains": []
-    },
-    {
       "characters_scanned": 23064,
       "external_url_count": 11,
       "files_scanned": 2,
@@ -22130,7 +23911,34 @@
       "external_url_count": 3,
       "files_scanned": 7,
       "kind": "skill",
-      "local_evidence_mention": false,
+      "local_evidence_mention": true,
+      "name": "sdd-requirements-engineer",
+      "ownership": "plugin",
+      "package": "open-horizons-platform",
+      "packaged_by": [
+        "open-horizons-platform"
+      ],
+      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/sdd-requirements-engineer",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "lifecycle-language",
+        "version-claim",
+        "date-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "alistairmavin.com",
+        "doi.org",
+        "research.manchester.ac.uk"
+      ]
+    },
+    {
+      "characters_scanned": 50962,
+      "external_url_count": 3,
+      "files_scanned": 7,
+      "kind": "skill",
+      "local_evidence_mention": true,
       "name": "sdd-requirements-engineer",
       "ownership": "shared",
       "package": null,
@@ -22148,29 +23956,6 @@
         "alistairmavin.com",
         "doi.org",
         "research.manchester.ac.uk"
-      ]
-    },
-    {
-      "characters_scanned": 12689,
-      "external_url_count": 2,
-      "files_scanned": 3,
-      "kind": "skill",
-      "local_evidence_mention": false,
-      "name": "sdd-spec-engineer",
-      "ownership": "plugin",
-      "package": "open-horizons-platform",
-      "packaged_by": [
-        "open-horizons-platform"
-      ],
-      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/sdd-spec-engineer",
-      "review_status": "needs-current-source-review",
-      "signals": [
-        "version-claim",
-        "external-source"
-      ],
-      "source_domains": [
-        "alistairmavin.com",
-        "doi.org"
       ]
     },
     {
@@ -22545,23 +24330,6 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 5569,
-      "external_url_count": 0,
-      "files_scanned": 1,
-      "kind": "skill",
-      "local_evidence_mention": false,
-      "name": "story-planning",
-      "ownership": "plugin",
-      "package": "open-horizons-platform",
-      "packaged_by": [
-        "open-horizons-platform"
-      ],
-      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/story-planning",
-      "review_status": "needs-semantic-review",
-      "signals": [],
-      "source_domains": []
-    },
-    {
       "characters_scanned": 6025,
       "external_url_count": 0,
       "files_scanned": 1,
@@ -22783,42 +24551,6 @@
         "registry.terraform.io",
         "www.python.org"
       ]
-    },
-    {
-      "characters_scanned": 5673,
-      "external_url_count": 0,
-      "files_scanned": 1,
-      "kind": "skill",
-      "local_evidence_mention": false,
-      "name": "terraform-cli",
-      "ownership": "plugin",
-      "package": "open-horizons-platform",
-      "packaged_by": [
-        "open-horizons-platform"
-      ],
-      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/terraform-cli",
-      "review_status": "needs-current-source-review",
-      "signals": [
-        "version-claim"
-      ],
-      "source_domains": []
-    },
-    {
-      "characters_scanned": 5160,
-      "external_url_count": 0,
-      "files_scanned": 1,
-      "kind": "skill",
-      "local_evidence_mention": false,
-      "name": "test-coverage",
-      "ownership": "plugin",
-      "package": "open-horizons-platform",
-      "packaged_by": [
-        "open-horizons-platform"
-      ],
-      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/test-coverage",
-      "review_status": "needs-semantic-review",
-      "signals": [],
-      "source_domains": []
     },
     {
       "characters_scanned": 335655,
@@ -23167,30 +24899,6 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 97897,
-      "external_url_count": 1,
-      "files_scanned": 7,
-      "kind": "skill",
-      "local_evidence_mention": false,
-      "name": "validation-scripts",
-      "ownership": "plugin",
-      "package": "open-horizons-platform",
-      "packaged_by": [
-        "open-horizons-platform"
-      ],
-      "path": "harness/github-copilot/plugins/open-horizons-platform/skills/validation-scripts",
-      "review_status": "needs-current-source-review",
-      "signals": [
-        "currency-language",
-        "lifecycle-language",
-        "version-claim",
-        "external-source"
-      ],
-      "source_domains": [
-        "aka.ms"
-      ]
-    },
-    {
       "characters_scanned": 6942,
       "external_url_count": 2,
       "files_scanned": 1,
@@ -23529,31 +25237,31 @@
   "unreadableFiles": [],
   "validation": {
     "pluginOwned": {
-      "agents": 15,
+      "agents": 19,
       "errors": 0,
-      "instructions": 18,
+      "instructions": 34,
       "prompts": 11,
-      "skills": 54,
+      "skills": 115,
       "warnings": 0
     },
     "sharedHarness": {
-      "errors": 4,
+      "errors": 5,
       "summary": [
         {
           "errors": 0,
-          "files": 243,
+          "files": 247,
           "kind": "agents",
           "warnings": 0
         },
         {
           "errors": 0,
-          "files": 212,
+          "files": 228,
           "kind": "instructions",
           "warnings": 0
         },
         {
           "errors": 3,
-          "files": 492,
+          "files": 553,
           "kind": "skills",
           "warnings": 1
         },
@@ -23564,7 +25272,7 @@
           "warnings": 0
         },
         {
-          "errors": 1,
+          "errors": 2,
           "files": 102,
           "kind": "plugins",
           "warnings": 0

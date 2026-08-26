@@ -5,7 +5,7 @@ description: "Use when editing Backstage app configuration layers, schemas, secr
 
 # Backstage Configuration
 
-This file exclusively owns app configuration under `backstage/app-config*.yaml`; catalog entity shape is owned by `backstage-catalog`.
+This file exclusively owns app configuration under `backstage/app-config*.yaml`; catalog entity shape is owned by `open-horizons-backstage-catalog`.
 
 ## Conventions
 
@@ -22,3 +22,18 @@ This file exclusively owns app configuration under `backstage/app-config*.yaml`;
 - Stitched configuration passes the repository's Backstage config check.
 - Production overlays contain no guest fallback, development secret, or literal credential.
 - Every catalog location and file reference resolves from the Backstage app root as configured.
+
+## Do / Do Not
+
+| Do | Do not |
+| --- | --- |
+| Keep shared defaults and environment overlays explicit and test stitched output. | Hide environment branching inside values or bypass overlay precedence. |
+| Resolve secrets externally and validate every referenced path. | Commit literal credentials or assume paths resolve from the repository root. |
+
+## Checklist Before Opening a PR
+
+- [ ] The change matches this instruction's `applyTo` scope.
+- [ ] Configuration precedence and environment selection are explicit.
+- [ ] The stitched config check passes and all references resolve.
+- [ ] Production overlays contain no guest fallback or literal secret.
+- [ ] No unrelated edits or unresolved placeholders remain.
