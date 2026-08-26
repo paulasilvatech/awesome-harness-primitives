@@ -1,0 +1,20 @@
+{
+    "name": "mainframe-cobol-db2",
+    "description": "Modernize COBOL, DB2, VSAM, and JCL systems with evidence-first archaeology, REQ-NNN lineage, bounded correction loops, an extracted engineering graph, behavior and data equivalence proof, and human-gated delivery.",
+    "version": "0.1.0",
+    "author": {
+        "name": "paulasilvatech"
+    },
+    "repository": "https://github.com/paulasilvatech/copilot-primitives",
+    "keywords": [
+        "mainframe",
+        "cobol",
+        "db2",
+        "vsam",
+        "jcl",
+        "modernization",
+        "github-copilot"
+    ],
+    "agents": "agents/",
+    "skills": "skills/"
+}

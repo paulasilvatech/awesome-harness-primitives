@@ -6,3 +6,5 @@ _plugin_governance
 validate_primitives
 # Local sibling modules bundled inside skill packages.
 sifap_loop_graph
+sifap_loop_extract
+cobol_db2_graph

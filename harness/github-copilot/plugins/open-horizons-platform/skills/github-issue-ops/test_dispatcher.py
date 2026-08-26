@@ -10,7 +10,8 @@ import unittest
 from unittest import mock
 
 MODULE_PATH = Path(__file__).with_name("dispatcher.py")
-SPEC = importlib.util.spec_from_file_location("issue_ops_dispatcher", MODULE_PATH)
+SPEC = importlib.util.spec_from_file_location(
+    "issue_ops_dispatcher", MODULE_PATH)
 assert SPEC is not None and SPEC.loader is not None
 dispatcher = importlib.util.module_from_spec(SPEC)
 sys.modules[SPEC.name] = dispatcher
@@ -60,8 +61,10 @@ class CommandTests(unittest.TestCase):
         completed = subprocess.CompletedProcess(
             args=[], returncode=7, stdout="validation failed\n", stderr=""
         )
-        with mock.patch.object(
-            dispatcher.subprocess, "run", return_value=completed
+        # AGENT_VALIDATOR only resolves to a real file in the published layout.
+        with mock.patch.object(dispatcher, "AGENT_VALIDATOR", MODULE_PATH), \
+                mock.patch.object(
+                    dispatcher.subprocess, "run", return_value=completed
         ) as run:
             result = dispatcher.execute_command("/check-agents")
 
@@ -70,7 +73,7 @@ class CommandTests(unittest.TestCase):
         run.assert_called_once_with(
             [
                 dispatcher.sys.executable,
-                str(dispatcher.AGENT_VALIDATOR),
+                str(MODULE_PATH),
                 "--strict",
             ],
             cwd=dispatcher.REPO_ROOT,
@@ -79,6 +82,16 @@ class CommandTests(unittest.TestCase):
             text=True,
             timeout=300,
         )
+
+    def test_missing_validator_fails_without_execution(self) -> None:
+        missing = MODULE_PATH.with_name("does-not-exist.py")
+        with mock.patch.object(dispatcher, "AGENT_VALIDATOR", missing), \
+                mock.patch.object(dispatcher.subprocess, "run") as run:
+            result = dispatcher.execute_command("/check-agents")
+
+        self.assertEqual(result.exit_code, 2)
+        self.assertIn("unavailable", result.summary)
+        run.assert_not_called()
 
 
 if __name__ == "__main__":

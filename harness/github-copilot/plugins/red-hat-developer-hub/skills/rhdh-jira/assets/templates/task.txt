@@ -1,0 +1,12 @@
+h1. Task Description (Required)
+
+As an engineer working on RHDH, I want to <ACTION> so that <THIS OUTCOME>
+
+h2. *Background*
+
+h2. *Dependencies and Blockers*
+
+(?) QE impacted work
+(?) Documentation impacted work
+
+h2. *Acceptance Criteria*

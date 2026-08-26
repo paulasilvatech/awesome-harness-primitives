@@ -1,0 +1,27 @@
+{
+  "version": 2,
+  "dgSpecHash": "eqc9ljje67w=",
+  "success": true,
+  "projectFilePath": "/Volumes/T9/copilot-primitives/harness/github-copilot/skills/winmd-api-search/scripts/cache-generator/CacheGenerator.csproj",
+  "expectedPackageFiles": [
+    "/Users/paulasilva/.nuget/packages/microsoft.web.webview2/1.0.3719.77/microsoft.web.webview2.1.0.3719.77.nupkg.sha512",
+    "/Users/paulasilva/.nuget/packages/microsoft.windows.sdk.buildtools/10.0.26100.4654/microsoft.windows.sdk.buildtools.10.0.26100.4654.nupkg.sha512",
+    "/Users/paulasilva/.nuget/packages/microsoft.windows.sdk.buildtools.msix/1.7.251221100/microsoft.windows.sdk.buildtools.msix.1.7.251221100.nupkg.sha512",
+    "/Users/paulasilva/.nuget/packages/microsoft.windowsappsdk/2.4.0/microsoft.windowsappsdk.2.4.0.nupkg.sha512",
+    "/Users/paulasilva/.nuget/packages/microsoft.windowsappsdk.ai/2.4.4/microsoft.windowsappsdk.ai.2.4.4.nupkg.sha512",
+    "/Users/paulasilva/.nuget/packages/microsoft.windowsappsdk.base/2.0.4/microsoft.windowsappsdk.base.2.0.4.nupkg.sha512",
+    "/Users/paulasilva/.nuget/packages/microsoft.windowsappsdk.dwrite/2.1.0/microsoft.windowsappsdk.dwrite.2.1.0.nupkg.sha512",
+    "/Users/paulasilva/.nuget/packages/microsoft.windowsappsdk.foundation/2.3.9/microsoft.windowsappsdk.foundation.2.3.9.nupkg.sha512",
+    "/Users/paulasilva/.nuget/packages/microsoft.windowsappsdk.interactiveexperiences/2.1.6/microsoft.windowsappsdk.interactiveexperiences.2.1.6.nupkg.sha512",
+    "/Users/paulasilva/.nuget/packages/microsoft.windowsappsdk.ml/2.1.74/microsoft.windowsappsdk.ml.2.1.74.nupkg.sha512",
+    "/Users/paulasilva/.nuget/packages/microsoft.windowsappsdk.runtime/2.4.0/microsoft.windowsappsdk.runtime.2.4.0.nupkg.sha512",
+    "/Users/paulasilva/.nuget/packages/microsoft.windowsappsdk.search/2.4.4/microsoft.windowsappsdk.search.2.4.4.nupkg.sha512",
+    "/Users/paulasilva/.nuget/packages/microsoft.windowsappsdk.widgets/2.0.5/microsoft.windowsappsdk.widgets.2.0.5.nupkg.sha512",
+    "/Users/paulasilva/.nuget/packages/microsoft.windowsappsdk.winui/2.3.6/microsoft.windowsappsdk.winui.2.3.6.nupkg.sha512",
+    "/Users/paulasilva/.nuget/packages/system.reflection.metadata/8.0.1/system.reflection.metadata.8.0.1.nupkg.sha512",
+    "/Users/paulasilva/.nuget/packages/microsoft.netcore.app.ref/8.0.22/microsoft.netcore.app.ref.8.0.22.nupkg.sha512",
+    "/Users/paulasilva/.nuget/packages/microsoft.aspnetcore.app.ref/8.0.22/microsoft.aspnetcore.app.ref.8.0.22.nupkg.sha512",
+    "/Users/paulasilva/.nuget/packages/microsoft.netcore.app.host.osx-arm64/8.0.22/microsoft.netcore.app.host.osx-arm64.8.0.22.nupkg.sha512"
+  ],
+  "logs": []
+}

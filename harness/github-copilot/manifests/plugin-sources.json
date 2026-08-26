@@ -1,6 +1,16 @@
 {
   "version": 2,
   "plugins": {
+    "accessibility-compliance": {
+      "componentSource": "library",
+      "agents": [
+        "./agents/accessibility.agent.md",
+        "./agents/accessibility-runtime-tester.agent.md",
+        "./agents/insiders-a11y-tracker.agent.md",
+        "./agents/markdown-accessibility-assistant.agent.md"
+      ],
+      "skills": []
+    },
     "accessibility-kanban": {
       "componentSource": "plugin",
       "extensionLayoutVersion": 1,
@@ -375,6 +385,27 @@
         "./skills/quasi-coder/"
       ]
     },
+    "code-quality-refactoring": {
+      "componentSource": "library",
+      "agents": [
+        "./agents/csharp-dotnet-janitor.agent.md",
+        "./agents/janitor.agent.md",
+        "./agents/quality-playbook.agent.md",
+        "./agents/tech-debt-remediation-plan.agent.md",
+        "./agents/wg-code-alchemist.agent.md"
+      ],
+      "skills": [
+        "./skills/dotnet-design-pattern-review/",
+        "./skills/editorconfig/",
+        "./skills/em-dash/",
+        "./skills/quality-playbook/",
+        "./skills/refactor/",
+        "./skills/refactor-method-complexity-reduce/",
+        "./skills/review-and-refactor/",
+        "./skills/ruff-recursive-fix/",
+        "./skills/tiny-stepping/"
+      ]
+    },
     "codebase-blueprints": {
       "componentSource": "library",
       "agents": [
@@ -435,6 +466,38 @@
         "./skills/convert-word-to-md/"
       ]
     },
+    "copilot-customization-authoring": {
+      "componentSource": "library",
+      "agents": [
+        "./agents/custom-agent-foundry.agent.md",
+        "./agents/prompt-builder.agent.md",
+        "./agents/prompt-engineer.agent.md",
+        "./agents/trojan-skill-hunter.agent.md"
+      ],
+      "skills": [
+        "./skills/agent-skill-stack/",
+        "./skills/ai-ready/",
+        "./skills/boost-prompt/",
+        "./skills/cli-mastery/",
+        "./skills/copilot-cli-quickstart/",
+        "./skills/copilot-primitive-authoring/",
+        "./skills/copilot-spaces/",
+        "./skills/copilot-usage-metrics/",
+        "./skills/finalize-agent-prompt/",
+        "./skills/generate-custom-instructions-from-codebase/",
+        "./skills/github-copilot-starter/",
+        "./skills/harness-engineering/",
+        "./skills/lsp-setup/",
+        "./skills/memory-merger/",
+        "./skills/microsoft-skill-creator/",
+        "./skills/mini-context-graph/",
+        "./skills/prompt-optimizer/",
+        "./skills/remember/",
+        "./skills/skill-creator/",
+        "./skills/steno-mode/",
+        "./skills/vardoger-analyze/"
+      ]
+    },
     "copilot-plugin-development": {
       "componentSource": "library",
       "agents": [
@@ -449,6 +512,23 @@
       "agents": [],
       "skills": [
         "./skills/copilot-sdk/"
+      ]
+    },
+    "creative-media-tooling": {
+      "componentSource": "library",
+      "agents": [],
+      "skills": [
+        "./skills/adobe-illustrator-scripting/",
+        "./skills/freecad-scripts/",
+        "./skills/game-engine/",
+        "./skills/image-manipulation-image-magick/",
+        "./skills/latchshot-page-capture/",
+        "./skills/nano-banana-pro-openrouter/",
+        "./skills/pdftk-server/",
+        "./skills/resemble-detect/",
+        "./skills/rhino3d-scripts/",
+        "./skills/slang-shader-engineer/",
+        "./skills/transloadit-media-processing/"
       ]
     },
     "csharp-dotnet-development": {
@@ -466,6 +546,21 @@
         "./skills/dotnet-best-practices/",
         "./skills/dotnet-upgrade/",
         "./skills/fluentui-blazor/"
+      ]
+    },
+    "data-engineering": {
+      "componentSource": "library",
+      "agents": [
+        "./agents/defender-scout-kql.agent.md",
+        "./agents/kusto-assistant.agent.md"
+      ],
+      "skills": [
+        "./skills/bigquery-pipeline-audit/",
+        "./skills/datanalysis-credit-risk/",
+        "./skills/pinecone-rag/",
+        "./skills/snowflake-semanticview/",
+        "./skills/sql-server-table-reconciliation/",
+        "./skills/ssma-console/"
       ]
     },
     "database-data-management": {
@@ -775,6 +870,36 @@
         "./skills/server-side-conversion-tracking/"
       ]
     },
+    "incident-response": {
+      "componentSource": "library",
+      "agents": [
+        "./agents/aws-incident-triage.agent.md",
+        "./agents/cloud-saas-outage-triage.agent.md",
+        "./agents/new-relic-incident-response.agent.md",
+        "./agents/platform-sre-kubernetes.agent.md"
+      ],
+      "skills": [
+        "./skills/aws-cloudwatch-investigation/",
+        "./skills/bug-receipt/",
+        "./skills/bug-reproduction-brief/",
+        "./skills/devops-rollout-plan/",
+        "./skills/impediment-prioritization/",
+        "./skills/incident-postmortem/"
+      ]
+    },
+    "iot-embedded-systems": {
+      "componentSource": "library",
+      "agents": [
+        "./agents/azure-smart-city-iot-architect.agent.md",
+        "./agents/expert-embedded-c-engineer.agent.md"
+      ],
+      "skills": [
+        "./skills/arduino-azure-iot-edge-integration/",
+        "./skills/azure-smart-city-iot-solution-builder/",
+        "./skills/legacy-circuit-mockups/",
+        "./skills/python-azure-iot-edge-modules/"
+      ]
+    },
     "java-development": {
       "componentSource": "library",
       "agents": [],
@@ -829,6 +954,23 @@
         "./skills/kotlin-mcp-server-generator/"
       ]
     },
+    "learning-and-mentoring": {
+      "componentSource": "library",
+      "agents": [
+        "./agents/critical-thinking.agent.md",
+        "./agents/demonstrate-understanding.agent.md",
+        "./agents/devils-advocate.agent.md",
+        "./agents/dotnet-fullstack-mentor.agent.md",
+        "./agents/dotnet-self-learning-architect.agent.md",
+        "./agents/mentor.agent.md",
+        "./agents/mentoring-juniors.agent.md",
+        "./agents/microsoft-study-mode.agent.md",
+        "./agents/scientific-paper-research.agent.md"
+      ],
+      "skills": [
+        "./skills/mentoring-juniors/"
+      ]
+    },
     "linux-operations": {
       "componentSource": "library",
       "agents": [
@@ -844,7 +986,7 @@
         "./skills/fedora-linux-triage/"
       ]
     },
-    "mainframe-modernization": {
+    "mainframe-natural-adabas": {
       "componentSource": "plugin",
       "sharedSkills": [
         "./skills/adabas-postgresql-migration/",
@@ -889,6 +1031,20 @@
         "./skills/mcp-create-adaptive-cards/",
         "./skills/mcp-create-declarative-agent/",
         "./skills/mcp-deploy-manage-agents/"
+      ]
+    },
+    "microsoft-365-data-platform": {
+      "componentSource": "library",
+      "agents": [
+        "./agents/declarative-agents-architect.agent.md",
+        "./agents/microsoft-learn-contributor.agent.md"
+      ],
+      "skills": [
+        "./skills/declarative-agents/",
+        "./skills/fabric-lakehouse/",
+        "./skills/msgraph-sdk/",
+        "./skills/powerbi-modeling/",
+        "./skills/workiq-copilot/"
       ]
     },
     "napkin": {
@@ -1041,6 +1197,19 @@
         "./skills/php-mcp-server-generator/"
       ]
     },
+    "platform-vendor-expertise": {
+      "componentSource": "library",
+      "agents": [
+        "./agents/drupal-expert.agent.md",
+        "./agents/laravel-expert-agent.agent.md",
+        "./agents/pimcore-expert.agent.md",
+        "./agents/salesforce-expert.agent.md",
+        "./agents/shopify-expert.agent.md"
+      ],
+      "skills": [
+        "./skills/shopify-review-triage/"
+      ]
+    },
     "power-apps-code-apps": {
       "componentSource": "library",
       "agents": [
@@ -1182,6 +1351,15 @@
         "./skills/react19-concurrent-patterns/",
         "./skills/react19-source-patterns/",
         "./skills/react19-test-patterns/"
+      ]
+    },
+    "red-hat-developer-hub": {
+      "componentSource": "library",
+      "agents": [],
+      "skills": [
+        "./skills/rhdh/",
+        "./skills/rhdh-jira/",
+        "./skills/rhdh-local/"
       ]
     },
     "release-notes-showcase": {
@@ -1329,6 +1507,25 @@
       ],
       "skills": []
     },
+    "spec-driven-development": {
+      "componentSource": "library",
+      "agents": [
+        "./agents/blueprint-mode.agent.md",
+        "./agents/specification.agent.md"
+      ],
+      "skills": [
+        "./skills/breakdown-plan/",
+        "./skills/breakdown-test/",
+        "./skills/create-github-action-workflow-specification/",
+        "./skills/create-github-issue-feature-from-specification/",
+        "./skills/create-github-issues-for-unmet-specification-requirements/",
+        "./skills/create-specification/",
+        "./skills/first-ask/",
+        "./skills/gen-specs-as-issues/",
+        "./skills/prd/",
+        "./skills/update-specification/"
+      ]
+    },
     "structured-autonomy": {
       "componentSource": "library",
       "agents": [],
@@ -1362,16 +1559,37 @@
         "./agents/playwright-tester.agent.md",
         "./agents/tdd-green.agent.md",
         "./agents/tdd-red.agent.md",
-        "./agents/tdd-refactor.agent.md"
+        "./agents/tdd-refactor.agent.md",
+        "./agents/terratest-module-testing.agent.md"
       ],
       "skills": [
         "./skills/ai-prompt-engineering-safety-review/",
         "./skills/csharp-nunit/",
         "./skills/java-junit/",
+        "./skills/javascript-typescript-jest/",
+        "./skills/pester-migration/",
+        "./skills/pester-should-migration/",
         "./skills/playwright-automation-fill-in-form/",
         "./skills/playwright-explore-website/",
         "./skills/playwright-generate-test/",
+        "./skills/pytest-coverage/",
+        "./skills/scoutqa-test/",
+        "./skills/unit-test-vue-pinia/",
         "./skills/webapp-testing/"
+      ]
+    },
+    "testing-frameworks": {
+      "componentSource": "library",
+      "agents": [
+        "./agents/terratest-module-testing.agent.md"
+      ],
+      "skills": [
+        "./skills/javascript-typescript-jest/",
+        "./skills/pester-migration/",
+        "./skills/pester-should-migration/",
+        "./skills/pytest-coverage/",
+        "./skills/scoutqa-test/",
+        "./skills/unit-test-vue-pinia/"
       ]
     },
     "the-workshop": {
@@ -1458,6 +1676,24 @@
         "./skills/pr-screenshots/",
         "./skills/screen-recording/",
         "./skills/ui-screenshots/"
+      ]
+    },
+    "web-framework-development": {
+      "componentSource": "library",
+      "agents": [
+        "./agents/aem-frontend-specialist.agent.md",
+        "./agents/devtools-regression-investigator.agent.md",
+        "./agents/expert-nextjs-developer.agent.md",
+        "./agents/frontend-performance-investigator.agent.md",
+        "./agents/nuxt-expert.agent.md",
+        "./agents/vuejs-expert.agent.md"
+      ],
+      "skills": [
+        "./skills/chrome-devtools/",
+        "./skills/gsap-framer-scroll-animation/",
+        "./skills/markstream-install/",
+        "./skills/next-intl-add-language/",
+        "./skills/react-container-presentation-component/"
       ]
     },
     "where-was-i": {

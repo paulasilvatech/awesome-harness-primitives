@@ -6,6 +6,12 @@
   },
   "plugins": [
     {
+      "name": "accessibility-compliance",
+      "source": "./harness/github-copilot/plugins/accessibility-compliance",
+      "description": "Design, implement, and verify accessible experiences against WCAG 2.1 and 2.2, including runtime keyboard and focus validation, accessible Markdown authoring, and accessibility regression tracking.",
+      "version": "1.0.0"
+    },
+    {
       "name": "accessibility-kanban",
       "source": "./harness/github-copilot/plugins/accessibility-kanban",
       "description": "Kanban board to manage accessibility issues, allow you to plan, track, and complete remediation work.",
@@ -180,6 +186,12 @@
       "version": "1.1.2"
     },
     {
+      "name": "code-quality-refactoring",
+      "source": "./harness/github-copilot/plugins/code-quality-refactoring",
+      "description": "Improve existing code without changing behavior: surgical refactoring, complexity reduction, repository-wide review, design pattern and SOLID checks, formatting conventions, linter autofix loops, tech-debt planning, and incremental delivery discipline.",
+      "version": "1.0.0"
+    },
+    {
       "name": "codebase-blueprints",
       "source": "./harness/github-copilot/plugins/codebase-blueprints",
       "description": "Analyze an existing codebase and generate evidence-backed blueprints: architecture, folder structure, technology stack, code exemplars, workflow analysis, repository history, and Copilot instruction scaffolds.",
@@ -210,6 +222,12 @@
       "version": "1.0.3"
     },
     {
+      "name": "copilot-customization-authoring",
+      "source": "./harness/github-copilot/plugins/copilot-customization-authoring",
+      "description": "Author and operate GitHub Copilot customization itself: skills, agents, instructions, prompts, memory, harness engineering, CLI onboarding, Copilot Spaces, usage metrics, and LSP setup.",
+      "version": "1.0.0"
+    },
+    {
       "name": "copilot-plugin-development",
       "source": "./harness/github-copilot/plugins/copilot-plugin-development",
       "description": "Create, migrate, audit, and validate flat GitHub Copilot plugins and marketplaces with direct component paths, canonical source ownership, dependency pinning, and isolated runtime tests.",
@@ -222,10 +240,22 @@
       "version": "1.0.2"
     },
     {
+      "name": "creative-media-tooling",
+      "source": "./harness/github-copilot/plugins/creative-media-tooling",
+      "description": "Produce and process creative and media assets: Illustrator and CAD scripting, ImageMagick and Transloadit processing, PDF manipulation, page capture, AI image generation, synthetic-media detection, shader engineering, and browser game engines.",
+      "version": "1.0.0"
+    },
+    {
       "name": "csharp-dotnet-development",
       "source": "./harness/github-copilot/plugins/csharp-dotnet-development",
       "description": "Essential prompts, instructions, and agents for C# and .NET development including testing, documentation, and best practices.",
       "version": "1.1.2"
+    },
+    {
+      "name": "data-engineering",
+      "source": "./harness/github-copilot/plugins/data-engineering",
+      "description": "Engineer and audit data systems: BigQuery pipeline cost and safety audits, Snowflake semantic views, SQL Server reconciliation and Oracle migration tooling, credit-risk data preparation, Kusto analytics, and Pinecone vector pipelines.",
+      "version": "1.0.0"
     },
     {
       "name": "database-data-management",
@@ -366,6 +396,18 @@
       "version": "1.0.0"
     },
     {
+      "name": "incident-response",
+      "source": "./harness/github-copilot/plugins/incident-response",
+      "description": "Handle production incidents end to end: cloud log and metric investigation, outage triage, Kubernetes platform SRE work, blameless postmortems, auditable bug receipts, reproduction briefs, rollout planning, and impediment prioritization.",
+      "version": "1.0.0"
+    },
+    {
+      "name": "iot-embedded-systems",
+      "source": "./harness/github-copilot/plugins/iot-embedded-systems",
+      "description": "Design and implement IoT and embedded solutions: Arduino and Python Azure IoT Edge modules, smart-city architectures, embedded C engineering, and retro circuit mockups.",
+      "version": "1.0.0"
+    },
+    {
       "name": "java-development",
       "source": "./harness/github-copilot/plugins/java-development",
       "description": "Comprehensive collection of prompts and instructions for Java development including Spring Boot, Quarkus, testing, documentation, and best practices.",
@@ -396,15 +438,21 @@
       "version": "1.0.2"
     },
     {
+      "name": "learning-and-mentoring",
+      "source": "./harness/github-copilot/plugins/learning-and-mentoring",
+      "description": "Teach and coach rather than deliver answers: Socratic mentoring for juniors, study modes, understanding checks, critical thinking and devil's advocate review, self-learning architecture paths, and scientific paper research.",
+      "version": "1.0.0"
+    },
+    {
       "name": "linux-operations",
       "source": "./harness/github-copilot/plugins/linux-operations",
       "description": "Diagnose and remediate Linux incidents across Arch, CentOS, Debian, and Fedora with distribution-correct package managers, systemd, journal analysis, security modules, and rollback discipline.",
       "version": "1.0.0"
     },
     {
-      "name": "mainframe-modernization",
-      "source": "./harness/github-copilot/plugins/mainframe-modernization",
-      "description": "Modernize the SIFAP Natural/Adabas workshop system with evidence-first archaeology, REQ-NNN lineage, modular-monolith design, behavior-equivalence testing, secure delivery, and a preview-first workspace publisher.",
+      "name": "mainframe-natural-adabas",
+      "source": "./harness/github-copilot/plugins/mainframe-natural-adabas",
+      "description": "Modernize Software AG Natural and Adabas systems with evidence-first archaeology, REQ-NNN lineage, bounded correction loops, an extracted engineering graph, behavior and data equivalence proof, and a preview-first workspace publisher.",
       "version": "0.1.0"
     },
     {
@@ -418,6 +466,12 @@
       "source": "./harness/github-copilot/plugins/mcp-m365-copilot",
       "description": "Comprehensive collection for building declarative agents with Model Context Protocol integration for Microsoft 365 Copilot",
       "version": "1.0.2"
+    },
+    {
+      "name": "microsoft-365-data-platform",
+      "source": "./harness/github-copilot/plugins/microsoft-365-data-platform",
+      "description": "Build on Microsoft 365 and the Microsoft data platform: declarative Copilot agents, Microsoft Graph SDK integration, WorkIQ work-data queries, Power BI semantic models, and Microsoft Fabric Lakehouse solutions.",
+      "version": "1.0.0"
     },
     {
       "name": "napkin",
@@ -504,6 +558,12 @@
       "version": "1.0.3"
     },
     {
+      "name": "platform-vendor-expertise",
+      "source": "./harness/github-copilot/plugins/platform-vendor-expertise",
+      "description": "Apply vendor platform expertise for Drupal, Laravel, Pimcore, Salesforce, and Shopify development, including Shopify App Store review triage.",
+      "version": "1.0.0"
+    },
+    {
       "name": "power-apps-code-apps",
       "source": "./harness/github-copilot/plugins/power-apps-code-apps",
       "description": "Complete toolkit for Power Apps Code Apps development including project scaffolding, development standards, and expert guidance for building code-first applications with Power Platform integration.",
@@ -568,6 +628,12 @@
       "source": "./harness/github-copilot/plugins/react19-upgrade",
       "description": "Enterprise React 19 migration toolkit with specialized agents and skills for upgrading React 18 codebases to React 19. Includes auditor, dependency surgeon, source code migrator, and test guardian. Handles removal of deprecated APIs including ReactDOM.render, forwardRef, defaultProps, legacy context, string refs, and more.",
       "version": "1.0.2"
+    },
+    {
+      "name": "red-hat-developer-hub",
+      "source": "./harness/github-copilot/plugins/red-hat-developer-hub",
+      "description": "Work with Red Hat Developer Hub: route plugin development and overlay management, run local plugin testing with rhdh-local, and manage RHDH Jira projects across acli, GraphQL, and REST.",
+      "version": "1.0.0"
     },
     {
       "name": "release-notes-showcase",
@@ -648,6 +714,12 @@
       "version": "1.0.2"
     },
     {
+      "name": "spec-driven-development",
+      "source": "./harness/github-copilot/plugins/spec-driven-development",
+      "description": "Drive work from written specifications: author and update spec files, derive GitHub issues and epics, break down features and test plans, write product requirements, and refine a request before implementation.",
+      "version": "1.0.0"
+    },
+    {
       "name": "structured-autonomy",
       "source": "./harness/github-copilot/plugins/structured-autonomy",
       "description": "Premium planning, thrifty implementation",
@@ -670,6 +742,12 @@
       "source": "./harness/github-copilot/plugins/testing-automation",
       "description": "Comprehensive collection for writing tests, test automation, and test-driven development including unit tests, integration tests, and end-to-end testing strategies.",
       "version": "1.0.2"
+    },
+    {
+      "name": "testing-frameworks",
+      "source": "./harness/github-copilot/plugins/testing-frameworks",
+      "description": "Write and migrate automated tests across ecosystems: Jest for JavaScript and TypeScript, Vitest with Vue and Pinia, pytest coverage loops, Pester major-version migrations, Terratest modules, and exploratory web testing.",
+      "version": "1.0.0"
     },
     {
       "name": "the-workshop",
@@ -718,6 +796,12 @@
       "source": "./harness/github-copilot/plugins/visual-pr",
       "description": "Capture, annotate, and embed screenshots and animated GIF demos in pull request descriptions. Includes Playwright-based UI capture, PIL image annotations, PR embedding workflows for GitHub and Azure DevOps, and screen recording with variable timing.",
       "version": "1.0.2"
+    },
+    {
+      "name": "web-framework-development",
+      "source": "./harness/github-copilot/plugins/web-framework-development",
+      "description": "Build and debug modern web applications across frameworks: Next.js, Nuxt, Vue, AEM front end, React component structure, internationalization, scroll animation, streaming Markdown rendering, Chrome DevTools inspection, and frontend performance investigation.",
+      "version": "1.0.0"
     },
     {
       "name": "where-was-i",

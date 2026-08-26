@@ -1,0 +1,20 @@
+{
+  "name": "iot-embedded-systems",
+  "description": "Design and implement IoT and embedded solutions: Arduino and Python Azure IoT Edge modules, smart-city architectures, embedded C engineering, and retro circuit mockups.",
+  "version": "1.0.0",
+  "author": {
+    "name": "paulasilvatech"
+  },
+  "repository": "https://github.com/paulasilvatech/copilot-primitives",
+  "license": "MIT",
+  "keywords": [
+    "iot",
+    "embedded",
+    "azure-iot-edge",
+    "arduino",
+    "smart-city",
+    "hardware"
+  ],
+  "agents": "agents/",
+  "skills": "skills/"
+}

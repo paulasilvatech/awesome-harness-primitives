@@ -1,0 +1,20 @@
+{
+  "name": "microsoft-365-data-platform",
+  "description": "Build on Microsoft 365 and the Microsoft data platform: declarative Copilot agents, Microsoft Graph SDK integration, WorkIQ work-data queries, Power BI semantic models, and Microsoft Fabric Lakehouse solutions.",
+  "version": "1.0.0",
+  "author": {
+    "name": "paulasilvatech"
+  },
+  "repository": "https://github.com/paulasilvatech/copilot-primitives",
+  "license": "MIT",
+  "keywords": [
+    "microsoft-365",
+    "graph",
+    "power-bi",
+    "fabric",
+    "lakehouse",
+    "copilot"
+  ],
+  "agents": "agents/",
+  "skills": "skills/"
+}

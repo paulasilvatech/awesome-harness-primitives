@@ -9,9 +9,9 @@ Regenerate this file after changing files under `harness/github-copilot/agents/`
 | --- | ---: |
 | Agents | 228 |
 | Instructions | 195 |
-| Skills | 481 |
+| Skills | 487 |
 | VS Code prompts | 48 |
-| Plugins | 122 |
+| Plugins | 136 |
 | Hooks | 8 |
 
 ## Agents
@@ -468,6 +468,7 @@ Regenerate this file after changing files under `harness/github-copilot/agents/`
 | ai-ready | Help users install and use John Papa's ai-ready skill as the up-to-date source for making repositories AI-ready with AGENTS.md, copilot-instructions.md, CI workflows, issue templa… |
 | ai-team-orchestration | Bootstrap and run a lightweight multi-agent development team. Use when starting or adopting a project, planning multi-step work, coordinating implementation with optional QA, brai… |
 | anti-ui-slop | Prevent generic web and iOS interfaces by extracting product-specific design decisions from repository evidence and UIZZE's public catalogue of 800,000+ real web and iOS screens.… |
+| api-testing | Test REST, GraphQL, and gRPC APIs at the contract and behavior level with schema validation, authentication and authorization coverage, error-path assertions, pagination and idemp… |
 | apim-ai-gateway | Design Azure API Management as the runtime AI gateway for model and tool traffic, including token-per-minute controls, token limits, quotas, multi-backend load-balanced backend po… |
 | appinsights-instrumentation | Instrument Azure-hosted web apps with Azure Application Insights telemetry by choosing auto-instrumentation or code instrumentation for ASP.NET Core, Node.js, or Python. Use when… |
 | apple-appstore-reviewer | Review an iOS app codebase and metadata for likely Apple App Store rejection risks, compliance gaps, reviewer friction, and fast approval improvements. Use when asked to "review f… |
@@ -566,6 +567,7 @@ Regenerate this file after changing files under `harness/github-copilot/agents/`
 | build-evidence-map | Build auditable evidence maps for contested technical choices, research synthesis, proposal review, and consequential decisions. Use this skill when GitHub Copilot must preserve s… |
 | canvas-design | Create beautiful visual art in .png and .pdf documents using design philosophy. You should use this skill when the user asks to create a poster, piece of art, design, or other sta… |
 | centos-linux-triage | Diagnose and remediate CentOS Linux incidents with RHEL-compatible systemd, journal, dnf/yum, SELinux, firewalld, and rollback practices. Use when the user asks to triage CentOS s… |
+| chaos-engineering | Design and run controlled resilience experiments with a steady-state hypothesis, limited blast radius, and an abort condition, covering fault injection, dependency failure, latenc… |
 | chrome-devtools | Handle `browser-related` tasks and control a live Chrome browser through Chrome DevTools MCP for browser automation, visual inspection, debugging, performance analysis, and emulat… |
 | cli-mastery | Interactive training for the GitHub Copilot CLI through guided lessons, quizzes, scenario challenges, a final exam, and on-demand reference for slash commands, shortcuts, modes, a… |
 | cloud-design-patterns | Select, explain, and apply cloud design patterns for distributed systems across reliability, performance, messaging, architecture, deployment, security, and event-driven categorie… |
@@ -581,6 +583,7 @@ Regenerate this file after changing files under `harness/github-copilot/agents/`
 | containerize-aspnetcore | Containerize an ASP.NET Core project for a Linux Docker container by creating a multi-stage Dockerfile, .dockerignore, optional health check, environment-variable configuration, a… |
 | content-management-systems | Build and modify content management systems by locating the correct theme, plugin, module, editor, content model, media, render, or export seam before changing code. Use this skil… |
 | context-map | Build a concise map of files relevant to a requested code change before implementation. Use when the user asks to identify affected files, plan changes, map dependencies, find tes… |
+| contract-testing | Design consumer-driven contract tests with Pact or provider schema verification so services can deploy independently without integration-wide end-to-end suites. Use when the user… |
 | conventional-branch | Create, normalize, validate, and check out Git branches following the Conventional Branch specification with feature/, bugfix/, hotfix/, release/, and chore/ prefixes. Use when cr… |
 | convert-excel-to-md | Convert Excel .xlsx workbooks to Markdown with the bundled script so spreadsheet contents can be read, summarized, searched, extracted, compared, charted, or analyzed. Use wheneve… |
 | convert-pdf-to-md | Convert PDF .pdf documents to Markdown with the bundled script so reports, papers, invoices, forms, contracts, scanned documents, and folders of PDFs can be read, summarized, sear… |
@@ -744,6 +747,7 @@ Regenerate this file after changing files under `harness/github-copilot/agents/`
 | legacy-characterization-testing | Design and implement characterization, differential, golden-master, and behavior-equivalence tests that pin observable legacy behavior before modernization. Use when a legacy slic… |
 | legacy-circuit-mockups | Generates breadboard circuit mockups and visual electronics diagrams with HTML5 Canvas conventions for retro computers, 6502 builds, 555 timer circuits, EEPROM/RAM/VIA wiring, 740… |
 | linkedin-post-formatter | Draft and format LinkedIn posts with Unicode bold, italic, bold-italic, separators, hooks, CTAs, hashtags, and plain-text layouts. Use when the user asks to write a LinkedIn post,… |
+| load-performance-testing | Design and run load, stress, soak, and spike tests with k6, JMeter, Locust, or Gatling, define latency and error-rate thresholds, model realistic workloads, and interpret results… |
 | lsp-setup | Install and configure Language Server Protocol servers for GitHub Copilot CLI code intelligence, including go-to-definition, find-references, hover, and type information. Use when… |
 | make-repo-contribution | Follow repository contribution guidance safely before creating issues, branches, commits, pushes, or pull requests. Use when the user asks for contribution guidelines, issue creat… |
 | markdown-to-html | Convert Markdown files to HTML similar to `marked.js`, `pandoc`, `gomarkdown/markdown`, or similar tools; or writing custom script to convert markdown to html and/or working on we… |
@@ -773,6 +777,7 @@ Regenerate this file after changing files under `harness/github-copilot/agents/`
 | msgraph-sdk | Integrate Microsoft Graph SDK in .NET, TypeScript/JavaScript, or Python applications using correct authentication, permissions, SDK clients, pagination, batching, delta queries, c… |
 | msstore-cli | Use Microsoft Store Developer CLI (msstore) to configure Partner Center credentials, list Store apps, package and publish Windows submissions, check status, manage package flights… |
 | multi-stage-dockerfile | Create or improve optimized multi-stage Dockerfiles with builder, dependency, test, and runtime stages. Use when the user asks for a multi-stage structure, smaller image, secure r… |
+| mutation-testing | Measure whether a test suite actually detects defects by injecting mutants with Stryker, PIT, mutmut, or Cosmic Ray, reading survived mutants, and fixing weak assertions. Use when… |
 | mvvm-toolkit | CommunityToolkit.Mvvm core guidance for ViewModels, source generators, observable properties, commands, validation, and base-class selection. Use this skill when authoring or revi… |
 | mvvm-toolkit-di | Wire CommunityToolkit.Mvvm ViewModels into Microsoft.Extensions.DependencyInjection for XAML apps. Use this skill when standing up a .NET Generic Host composition root for WPF, Wi… |
 | mvvm-toolkit-messenger | Configure CommunityToolkit.Mvvm Messenger pub/sub for decoupled ViewModel communication. Use this skill when users ask to send messages between ViewModels, choose WeakReferenceMes… |
@@ -901,6 +906,7 @@ Regenerate this file after changing files under `harness/github-copilot/agents/`
 | technical-job-search | Help software engineers perform active job-search tasks: analyze job descriptions, tailor resumes, write concise cover letters, evaluate offers, and draft interview follow-ups. Us… |
 | technology-stack-blueprint-generator | Generate a technology stack blueprint by analyzing codebase languages, frameworks, dependencies, versions, licenses, conventions, usage patterns, tooling, infrastructure, and diag… |
 | terraform-azurerm-set-diff-analyzer | Analyze Terraform plan JSON for AzureRM Provider Set-type attribute noise and separate order-only false-positive diffs from real Azure resource changes. Use when Application Gatew… |
+| test-data-management | Build reliable test data with factories, fixtures, deterministic seeding, per-test isolation, and safe anonymization of production data for realistic datasets. Use when the user a… |
 | threat-model-analyst | Produce full or incremental STRIDE-A threat models for repositories and systems, including architecture overviews, DFD diagrams, findings, STRIDE heatmaps, and executive assessmen… |
 | tiny-stepping | Guide careful implementation through the smallest meaningful change, validation, feedback, and commit-sized increments. Use when the user asks for tiny steps, iterative developmen… |
 | tldr-prompt | Create tldr-style markdown summaries for GitHub Copilot customization files, MCP server documentation, Copilot documentation URLs, or focused Copilot usage queries. Use when asked… |
@@ -993,6 +999,7 @@ They exist to filter a large marketplace and never remove, hide, or block a pack
 
 | Plugin | Version | Lifecycle | Assurance | Provenance | Description |
 | --- | --- | --- | --- | --- | --- |
+| accessibility-compliance | 1.0.0 | active | static-validated | repository | Design, implement, and verify accessible experiences against WCAG 2.1 and 2.2, including runtime keyboard and focus validation, accessible Markdown authoring, and accessibility re… |
 | accessibility-kanban | 1.0.4 | active | runtime-required | upstream-mirror | Kanban board to manage accessibility issues, allow you to plan, track, and complete remediation work. |
 | acreadiness-cockpit | 1.0.2 | active | static-validated | repository | Drive Microsoft AgentRC from Copilot chat: assess AI readiness, generate Copilot instructions (flat or nested with applyTo globs for monorepos), and manage policies. Produces a se… |
 | agent-governance | 1.0.1 | active | static-validated | repository | Govern and audit AI agent systems with policy enforcement, OWASP Agentic Security Initiative controls, supply-chain integrity, and evidence-quality gates. Use when designing produ… |
@@ -1022,14 +1029,18 @@ They exist to filter a large marketplace and never remove, hide, or block a pack
 | chromium-control-canvas | 1.0.4 | active | runtime-required | upstream-mirror | Opens a real Chromium window you can navigate and interact with from a Copilot canvas control panel and agent actions. |
 | clojure-interactive-programming | 1.0.2 | active | static-validated | repository | Tools for REPL-first Clojure workflows featuring Clojure instructions, the interactive programming agent and supporting guidance. |
 | cms-development | 1.1.2 | active | static-validated | repository | Skills for CMS development across themes, plugins, admin tooling, media workflows, markdown rendering, and static export pipelines. |
+| code-quality-refactoring | 1.0.0 | active | static-validated | repository | Improve existing code without changing behavior: surgical refactoring, complexity reduction, repository-wide review, design pattern and SOLID checks, formatting conventions, linte… |
 | codebase-blueprints | 1.0.0 | active | static-validated | repository | Analyze an existing codebase and generate evidence-backed blueprints: architecture, folder structure, technology stack, code exemplars, workflow analysis, repository history, and… |
 | color-orb | 1.0.4 | active | runtime-required | upstream-mirror | A visual orb that users can ask the agent to recolor while showing a live activity log in the canvas. |
 | context-engineering | 1.0.2 | active | static-validated | repository | Tools and techniques for maximizing GitHub Copilot effectiveness through better context management. Includes guidelines for structuring code, an agent for planning multi-file chan… |
 | context-matic | 0.1.2 | incubating | runtime-required | repository | Coding agents hallucinate APIs. ContextMatic gives them curated, versioned API and SDK docs. Ask your agent to "integrate the payments API" and it guesses — falling back on outdat… |
 | convert-to-md | 1.0.3 | active | static-validated | repository | A collection of Copilot skills that convert common document formats into Markdown so their contents can be accurately analyzed, summarized, searched, or extracted from. Just tell… |
+| copilot-customization-authoring | 1.0.0 | active | static-validated | repository | Author and operate GitHub Copilot customization itself: skills, agents, instructions, prompts, memory, harness engineering, CLI onboarding, Copilot Spaces, usage metrics, and LSP… |
 | copilot-plugin-development | 1.0.3 | active | static-validated | repository | Create, migrate, audit, and validate flat GitHub Copilot plugins and marketplaces with direct component paths, canonical source ownership, dependency pinning, and isolated runtime… |
 | copilot-sdk | 1.0.2 | active | static-validated | repository | Build applications with the GitHub Copilot SDK across multiple programming languages. Includes comprehensive instructions for C#, Go, Node.js/TypeScript, and Python to help you cr… |
+| creative-media-tooling | 1.0.0 | active | static-validated | repository | Produce and process creative and media assets: Illustrator and CAD scripting, ImageMagick and Transloadit processing, PDF manipulation, page capture, AI image generation, syntheti… |
 | csharp-dotnet-development | 1.1.2 | active | static-validated | repository | Essential prompts, instructions, and agents for C# and .NET development including testing, documentation, and best practices. |
+| data-engineering | 1.0.0 | active | static-validated | repository | Engineer and audit data systems: BigQuery pipeline cost and safety audits, Snowflake semantic views, SQL Server reconciliation and Oracle migration tooling, credit-risk data prepa… |
 | database-data-management | 1.0.2 | active | static-validated | repository | Database administration, SQL optimization, and data management tools for PostgreSQL, SQL Server, and general database development best practices. |
 | dataverse-sdk-for-python | 1.0.2 | active | static-validated | repository | Comprehensive collection for building production-ready Python integrations with Microsoft Dataverse. Includes official documentation, best practices, advanced features, file opera… |
 | devops-oncall | 1.0.2 | active | static-validated | repository | A focused set of prompts, instructions, and an agent to help triage incidents and respond quickly with DevOps tools and Azure resources. |
@@ -1053,15 +1064,19 @@ They exist to filter a large marketplace and never remove, hide, or block a pack
 | github-actions-maintenance | 1.0.1 | active | static-validated | repository | Maintain GitHub Actions workflows with specialist guidance for authoring, runtime upgrades, security hardening, and CI efficiency. Use when workflows need safer permissions, immut… |
 | go-mcp-development | 1.0.3 | active | static-validated | repository | Complete toolkit for building Model Context Protocol (MCP) servers in Go using the official github.com/modelcontextprotocol/go-sdk. Includes instructions for best practices, a pro… |
 | go-to-market | 1.0.0 | active | static-validated | repository | Plan and execute go-to-market work for technical products: positioning, pricing, product-led growth, partnerships, enterprise accounts and onboarding, operating cadence, investor… |
+| incident-response | 1.0.0 | active | static-validated | repository | Handle production incidents end to end: cloud log and metric investigation, outage triage, Kubernetes platform SRE work, blameless postmortems, auditable bug receipts, reproductio… |
+| iot-embedded-systems | 1.0.0 | active | static-validated | repository | Design and implement IoT and embedded solutions: Arduino and Python Azure IoT Edge modules, smart-city architectures, embedded C engineering, and retro circuit mockups. |
 | java-development | 1.0.2 | active | static-validated | repository | Comprehensive collection of prompts and instructions for Java development including Spring Boot, Quarkus, testing, documentation, and best practices. |
 | java-kotlin-development | 1.0.0 | active | static-validated | repository | Develop and modernize Java and Kotlin services: Spring Boot and Helidon applications, GraalVM native image support, javax to jakarta migration, focused refactorings, and Spring Bo… |
 | java-mcp-development | 1.0.2 | active | static-validated | repository | Complete toolkit for building Model Context Protocol servers in Java using the official MCP Java SDK with reactive streams and Spring Boot integration. |
 | java-modernization-studio | 1.0.4 | active | runtime-required | upstream-mirror | Drive the GitHub Copilot App Modernization for Java workflow from an interactive canvas: environment readiness, repo assessment, prioritized plan and progress, validation gates, a… |
 | kotlin-mcp-development | 1.0.2 | active | static-validated | repository | Complete toolkit for building Model Context Protocol (MCP) servers in Kotlin using the official io.modelcontextprotocol:kotlin-sdk library. Includes instructions for best practice… |
+| learning-and-mentoring | 1.0.0 | active | static-validated | repository | Teach and coach rather than deliver answers: Socratic mentoring for juniors, study modes, understanding checks, critical thinking and devil's advocate review, self-learning archit… |
 | linux-operations | 1.0.0 | active | static-validated | repository | Diagnose and remediate Linux incidents across Arch, CentOS, Debian, and Fedora with distribution-correct package managers, systemd, journal analysis, security modules, and rollbac… |
-| mainframe-modernization | 0.1.0 | incubating | runtime-verified | repository | Modernize the SIFAP Natural/Adabas workshop system with evidence-first archaeology, REQ-NNN lineage, modular-monolith design, behavior-equivalence testing, secure delivery, and a… |
+| mainframe-natural-adabas | 0.1.0 | incubating | runtime-verified | repository | Modernize Software AG Natural and Adabas systems with evidence-first archaeology, REQ-NNN lineage, bounded correction loops, an extracted engineering graph, behavior and data equi… |
 | mcp-development | 1.0.0 | active | static-validated | repository | Build, test, secure, and release Model Context Protocol servers and clients, including CLI exploration, configuration auditing, implementation security review, pre-release QA, and… |
 | mcp-m365-copilot | 1.0.2 | active | static-validated | repository | Comprehensive collection for building declarative agents with Model Context Protocol integration for Microsoft 365 Copilot |
+| microsoft-365-data-platform | 1.0.0 | active | static-validated | repository | Build on Microsoft 365 and the Microsoft data platform: declarative Copilot agents, Microsoft Graph SDK integration, WorkIQ work-data queries, Power BI semantic models, and Micros… |
 | napkin | 1.0.2 | active | static-validated | repository | Visual whiteboard collaboration for Copilot CLI. Opens an interactive whiteboard in your browser where you can draw, sketch, and add sticky notes — then share everything back with… |
 | noob-mode | 1.0.2 | active | static-validated | repository | Plain-English translation layer for non-technical Copilot CLI users. Translates every approval prompt, error message, and technical output into clear, jargon-free English with col… |
 | open-horizons-platform | 2.0.0 | active | runtime-verified | repository | Open Horizons agentic DevOps platform toolkit for Azure, AKS, Backstage, AEG, GitHub, Azure DevOps, Terraform, security, reliability, architecture, and deployment operations. Use… |
@@ -1076,6 +1091,7 @@ They exist to filter a large marketplace and never remove, hide, or block a pack
 | pcf-development | 1.1.1 | active | static-validated | repository | Complete toolkit for developing custom code components using Power Apps Component Framework for model-driven and canvas apps |
 | phoenix | 1.0.2 | active | static-validated | repository | Phoenix AI observability skills for LLM application debugging, evaluation, and tracing. Includes CLI debugging tools, LLM evaluation workflows, and OpenInference tracing instrumen… |
 | php-mcp-development | 1.0.3 | active | static-validated | repository | Comprehensive resources for building Model Context Protocol servers using the official PHP SDK with attribute-based discovery, including best practices, project generation, and ex… |
+| platform-vendor-expertise | 1.0.0 | active | static-validated | repository | Apply vendor platform expertise for Drupal, Laravel, Pimcore, Salesforce, and Shopify development, including Shopify App Store review triage. |
 | power-apps-code-apps | 1.0.2 | active | static-validated | repository | Complete toolkit for Power Apps Code Apps development including project scaffolding, development standards, and expert guidance for building code-first applications with Power Pla… |
 | power-bi-development | 1.0.3 | active | static-validated | repository | Comprehensive Power BI development resources including data modeling, DAX optimization, performance tuning, visualization design, security best practices, and DevOps/ALM guidance… |
 | power-platform-architect | 1.0.2 | active | static-validated | repository | Solution Architect for the Microsoft Power Platform, turning business requirements into functioning Power Platform solution architectures. |
@@ -1087,6 +1103,7 @@ They exist to filter a large marketplace and never remove, hide, or block a pack
 | qdrant-development | 1.0.1 | active | static-validated | repository | Design, deploy, operate, scale, optimize, migrate, and upgrade Qdrant vector search systems with official client, monitoring, relevance, and capacity guidance. Use when building o… |
 | react18-upgrade | 1.0.2 | active | static-validated | repository | Enterprise React 18 migration toolkit with specialized agents and skills for upgrading React 16/17 class-component codebases to React 18.3.1. Includes auditor, dependency surgeon,… |
 | react19-upgrade | 1.0.2 | active | static-validated | repository | Enterprise React 19 migration toolkit with specialized agents and skills for upgrading React 18 codebases to React 19. Includes auditor, dependency surgeon, source code migrator,… |
+| red-hat-developer-hub | 1.0.0 | active | static-validated | repository | Work with Red Hat Developer Hub: route plugin development and overlay management, run local plugin testing with rhdh-local, and manage RHDH Jira projects across acli, GraphQL, and… |
 | release-notes-showcase | 1.0.4 | active | runtime-required | upstream-mirror | Compose and refine launch-ready release notes with contributor callouts and export-friendly output. |
 | repo-actions-hub | 1.0.4 | active | runtime-required | upstream-mirror | Browse repository GitHub Actions workflows, inspect recent runs, and trigger manual workflow_dispatch runs from a Copilot canvas. |
 | repo-documentation | 1.0.0 | active | static-validated | repository | Author and maintain repository documentation: READMEs, AGENTS.md, llms.txt, Diataxis guides, component docs, tutorials, coding standards, tldr pages, and Markdown conversion or tr… |
@@ -1100,10 +1117,12 @@ They exist to filter a large marketplace and never remove, hide, or block a pack
 | site-studio | 1.0.4 | active | runtime-required | upstream-mirror | Plan, draft, and track a personal website section by section — a shared canvas where you and your agent author content, watch progress, and review every change. |
 | skill-image-gen | 1.0.2 | active | static-validated | repository | Generate images using AI directly from your coding workflow. Supports OpenAI (gpt-image-2) and Google Gemini. BYO API key — the skill guides you through setup on first use. |
 | software-engineering-team | 1.0.2 | active | static-validated | repository | 7 specialized agents covering the full software development lifecycle from UX design and architecture to security and DevOps. |
+| spec-driven-development | 1.0.0 | active | static-validated | repository | Drive work from written specifications: author and update spec files, derive GitHub issues and epics, break down features and test plans, write product requirements, and refine a… |
 | structured-autonomy | 1.0.2 | active | static-validated | repository | Premium planning, thrifty implementation |
 | swift-mcp-development | 1.0.2 | active | static-validated | repository | Comprehensive collection for building Model Context Protocol servers in Swift using the official MCP Swift SDK with modern concurrency features. |
 | technical-spike | 1.0.2 | active | static-validated | repository | Tools for creation, management and research of technical spikes to reduce unknowns and assumptions before proceeding to specification and implementation of solutions. |
 | testing-automation | 1.0.2 | active | static-validated | repository | Comprehensive collection for writing tests, test automation, and test-driven development including unit tests, integration tests, and end-to-end testing strategies. |
+| testing-frameworks | 1.0.0 | active | static-validated | repository | Write and migrate automated tests across ecosystems: Jest for JavaScript and TypeScript, Vitest with Vue and Pinia, pytest coverage loops, Pester major-version migrations, Terrate… |
 | the-workshop | 0.1.3 | incubating | runtime-required | upstream-mirror | Stop being the switchboard between your AI agents — direct a team. The Workshop puts long-running AI agents (desks) in the same room, on the same work, each with its own memory an… |
 | tiny-tool-town-submitter | 1.0.4 | active | runtime-required | upstream-mirror | Inspect a repository, improve Tiny Tool Town readiness, submit its listing issue, and launch remediation work. |
 | token-pacman | 1.0.4 | active | runtime-required | upstream-mirror | Visualizes live session AI-credit usage as a Pac-Man board with pellets, ghosts, fruit milestones, and game-over limits. |
@@ -1112,6 +1131,7 @@ They exist to filter a large marketplace and never remove, hide, or block a pack
 | uizze | 1.0.2 | active | static-validated | repository | Stop generic UI from shipping. Ground GitHub Copilot in 800,000+ real web and iOS screens, write a product-specific design contract, and enforce a hard finish gate. |
 | ux-design-tooling | 1.0.0 | active | static-validated | repository | Design-time UX and visual tooling: build and review UI/UX designs in Penpot with design systems, component patterns, and accessibility checks, and create original poster, art, and… |
 | visual-pr | 1.0.2 | active | static-validated | repository | Capture, annotate, and embed screenshots and animated GIF demos in pull request descriptions. Includes Playwright-based UI capture, PIL image annotations, PR embedding workflows f… |
+| web-framework-development | 1.0.0 | active | static-validated | repository | Build and debug modern web applications across frameworks: Next.js, Nuxt, Vue, AEM front end, React component structure, internationalization, scroll animation, streaming Markdown… |
 | where-was-i | 1.0.4 | active | runtime-required | upstream-mirror | Reconstruct your dev context (branch, commits, uncommitted work, PR clues) and trigger a resume prompt to continue quickly. |
 | windows-app-storage-inspector-cleanup | 1.0.5 | active | runtime-required | upstream-mirror | Inspect Windows application storage, understand local disk usage, and safely move approved cleanup items to the Recycle Bin. |
 | work-hub | 1.0.4 | active | runtime-required | upstream-mirror | Generic cross-repo command center canvas for GitHub Copilot with onboarding, focus planning, repo health, work signals, and session cleanup. |

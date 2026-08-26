@@ -36,6 +36,11 @@ class ComponentCopy:
     target: Path
 
 
+# Build output is regenerated locally and embeds absolute paths, so it must
+# never reach a distributed plugin package.
+GENERATED_OUTPUT_NAMES = ("obj", "bin", "__pycache__", ".playwright-mcp")
+
+
 def refs(config: dict, key: str) -> list[str]:
     value = config.get(key, [])
     if not isinstance(value, list) or not all(isinstance(ref, str) for ref in value):
@@ -62,7 +67,8 @@ def collect_component_copies(
     for plugin_name, config in sorted(source_map.items(), key=lambda item: item[0].casefold()):
         plugin_dir = plugin_root / plugin_name
         if not plugin_dir.is_dir():
-            raise FileNotFoundError(f"{plugin_name}: plugin directory is missing")
+            raise FileNotFoundError(
+                f"{plugin_name}: plugin directory is missing")
         source_mode = config.get("componentSource")
         if source_mode == "library":
             for ref in refs(config, "agents"):
@@ -130,13 +136,19 @@ def copy_component(copy: ComponentCopy) -> None:
         )
     copy.target.parent.mkdir(parents=True, exist_ok=True)
     if copy.source.is_dir():
-        shutil.copytree(copy.source, copy.target, copy_function=shutil.copy2)
+        shutil.copytree(
+            copy.source,
+            copy.target,
+            copy_function=shutil.copy2,
+            ignore=shutil.ignore_patterns(*GENERATED_OUTPUT_NAMES),
+        )
     else:
         shutil.copy2(copy.source, copy.target)
 
 
 def dircmp_differences(left: Path, right: Path) -> list[str]:
-    comparison = filecmp.dircmp(left, right)
+    comparison = filecmp.dircmp(
+        left, right, ignore=list(GENERATED_OUTPUT_NAMES))
     differences = [str(left / name) for name in comparison.left_only]
     differences.extend(str(right / name) for name in comparison.right_only)
     differences.extend(str(left / name) for name in comparison.diff_files)

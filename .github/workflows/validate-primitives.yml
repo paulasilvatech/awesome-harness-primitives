@@ -56,6 +56,36 @@ jobs:
       - name: Check installed primitive drift
         run: python3 harness/github-copilot/scripts/sync_installed_primitives.py --check
 
+  tests:
+    name: Bundled script tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - name: Set up Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: "3.12"
+
+      # Each file runs from its own directory: duplicate module names across
+      # skill packages collide under a single unittest discovery root.
+      - name: Run every bundled test file
+        run: |
+          set -euo pipefail
+          export PYTHONPYCACHEPREFIX="${RUNNER_TEMP}/pycache"
+          failed=0
+          while IFS= read -r test_file; do
+            echo "::group::${test_file}"
+            if ! (cd "$(dirname "${test_file}")" \
+                && python3 -m unittest "$(basename "${test_file}" .py)" -v); then
+              failed=1
+            fi
+            echo "::endgroup::"
+          done < <(find harness/github-copilot -name 'test_*.py' -type f | sort)
+          exit "${failed}"
+
   links:
     name: External link audit (advisory)
     runs-on: ubuntu-latest

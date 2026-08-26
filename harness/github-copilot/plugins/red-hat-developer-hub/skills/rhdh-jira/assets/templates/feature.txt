@@ -1,0 +1,39 @@
+h1. *Feature Overview (aka. Goal Summary)*
+
+An elevator pitch (value statement) that describes the Feature in a clear, concise way.
+
+<your text here>
+
+h3. *Goals (aka. expected user outcomes)*
+
+The observable functionality that the user now has as a result of receiving this feature. Include the anticipated primary user type/persona and which existing features, if any, will be expanded.
+
+<your text here>
+
+h3. *Requirements (aka. Acceptance Criteria):*
+
+A list of specific needs or objectives that a feature must deliver in order to be considered complete. If the feature spans across releases then good to have scope for each release with acceptance criteria. Be sure to include nonfunctional requirements such as security, reliability, performance, maintainability, scalability, usability, etc.
+
+<enter general Feature acceptance here>
+
+h3. *Out of Scope (Optional)*
+
+High-level list of items that are out of scope.
+
+<your text here>
+
+h3. *Customer Considerations (Optional)*
+
+Provide any additional customer-specific considerations that must be made when designing and delivering the Feature. Initial completion during Refinement status.
+
+<your text here>
+
+h3. *Documentation Considerations*
+
+Provide information that needs to be considered and planned so that documentation will meet customer needs. If the feature extends existing functionality, provide a link to its current documentation.
+
+<your text here>
+
+h3. *Upstream engagement*
+
+Review ideas/need with upstream SIGs to determine how best to interact with community

@@ -33,6 +33,11 @@ and the 36-file publisher lifecycle figure describe the pre-change package and w
 standard-library traceability, workspace-publisher, and loop-graph tests were re-run against the current
 package and passed.
 
+The package was then renamed from `mainframe-modernization` to `mainframe-natural-adabas` so the COBOL and
+DB2 track could ship as the sibling `mainframe-cobol-db2` package. The install command recorded above uses
+the retired name and was not re-probed; treat `copilot plugin install mainframe-natural-adabas@copilot-primitives`
+as unverified until a new probe is recorded here.
+
 ## First-party customization documentation verification
 
 Verification date: 2026-08-21. These checks fetched known first-party pages directly; they did not use

@@ -1,0 +1,19 @@
+h1. Task Description (Required)
+
+As an engineer working on RHDH, I want to update the Renovate configuration to enable minor version Dockerfile updates so that base image security patches are not missed between releases.
+
+h2. *Background*
+
+Current Renovate rules disable minor version updates and only automerge patch versions. Over the past year, minor version bumps of the ubi9-minimal base image have been missed because they require manual intervention. This creates a growing gap between the base image in use and the latest security-patched version.
+
+h2. *Dependencies and Blockers*
+
+(?) QE impacted work - no, Renovate PRs go through existing CI
+(?) Documentation impacted work - no
+
+h2. *Acceptance Criteria*
+
+(?) Renovate config updated to allow minor version Dockerfile updates
+(?) Minor version updates create PRs without automerge (require human review)
+(?) Patch version updates continue to automerge as before
+(?) Existing Renovate behavior for non-Dockerfile dependencies is unchanged

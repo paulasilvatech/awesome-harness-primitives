@@ -1,0 +1,17 @@
+h2. *Description of problem:*
+
+h2. *Prerequisites (if any, like setup, operators/versions):*
+
+h2. *Steps to Reproduce*
+
+ # <steps>
+
+h2. *Actual results:*
+
+h2. *Expected results:*
+
+h2. *Reproducibility (Always/Intermittent/Only Once):*
+
+h2. *Build Details:*
+
+h2. *Additional info (Such as Logs, Screenshots, etc):*

@@ -1,0 +1,20 @@
+{
+  "name": "data-engineering",
+  "description": "Engineer and audit data systems: BigQuery pipeline cost and safety audits, Snowflake semantic views, SQL Server reconciliation and Oracle migration tooling, credit-risk data preparation, Kusto analytics, and Pinecone vector pipelines.",
+  "version": "1.0.0",
+  "author": {
+    "name": "paulasilvatech"
+  },
+  "repository": "https://github.com/paulasilvatech/copilot-primitives",
+  "license": "MIT",
+  "keywords": [
+    "data",
+    "bigquery",
+    "snowflake",
+    "sql-server",
+    "kusto",
+    "vector-database"
+  ],
+  "agents": "agents/",
+  "skills": "skills/"
+}

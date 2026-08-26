@@ -1,0 +1,20 @@
+{
+  "name": "mainframe-natural-adabas",
+  "description": "Modernize Software AG Natural and Adabas systems with evidence-first archaeology, REQ-NNN lineage, bounded correction loops, an extracted engineering graph, behavior and data equivalence proof, and a preview-first workspace publisher.",
+  "version": "0.1.0",
+  "author": {
+    "name": "paulasilvatech"
+  },
+  "repository": "https://github.com/paulasilvatech/copilot-primitives",
+  "keywords": [
+    "mainframe",
+    "natural",
+    "adabas",
+    "sifap",
+    "modernization",
+    "java",
+    "github-copilot"
+  ],
+  "agents": "agents/",
+  "skills": "skills/"
+}

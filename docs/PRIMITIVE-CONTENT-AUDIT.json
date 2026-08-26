@@ -16,7 +16,7 @@
   },
   "packaging": {
     "activePluginHookPackages": 2,
-    "marketplaceEntries": 122,
+    "marketplaceEntries": 136,
     "pluginOwned": {
       "agents": 24,
       "errors": 0,
@@ -25,211 +25,83 @@
       "skills": 118,
       "warnings": 0
     },
-    "pluginPackages": 122,
+    "pluginPackages": 136,
     "sharedAgents": {
-      "packaged": 152,
+      "packaged": 198,
       "total": 228,
       "unpackaged": [
-        "accessibility-runtime-tester.agent.md",
-        "accessibility.agent.md",
-        "aem-frontend-specialist.agent.md",
         "api-architect.agent.md",
         "atlassian-requirements-to-jira.agent.md",
         "aws-cloud-expert.agent.md",
-        "aws-incident-triage.agent.md",
-        "azure-smart-city-iot-architect.agent.md",
         "azure-verified-modules-owner-triage.agent.md",
-        "blueprint-mode.agent.md",
         "caveman-mode.agent.md",
-        "cloud-saas-outage-triage.agent.md",
         "code-tour.agent.md",
         "context7.agent.md",
-        "critical-thinking.agent.md",
-        "csharp-dotnet-janitor.agent.md",
         "csharp-expert.agent.md",
-        "custom-agent-foundry.agent.md",
         "debug.agent.md",
-        "declarative-agents-architect.agent.md",
-        "defender-scout-kql.agent.md",
         "delphi-expert.agent.md",
-        "demonstrate-understanding.agent.md",
-        "devils-advocate.agent.md",
         "devops-expert.agent.md",
-        "devtools-regression-investigator.agent.md",
-        "dotnet-fullstack-mentor.agent.md",
-        "dotnet-self-learning-architect.agent.md",
         "dotnet-upgrade.agent.md",
-        "drupal-expert.agent.md",
         "expert-cpp-software-engineer.agent.md",
-        "expert-embedded-c-engineer.agent.md",
-        "expert-nextjs-developer.agent.md",
-        "frontend-performance-investigator.agent.md",
         "gilfoyle.agent.md",
         "hlbpa.agent.md",
-        "insiders-a11y-tracker.agent.md",
-        "janitor.agent.md",
         "kubestellar-console.agent.md",
-        "kusto-assistant.agent.md",
-        "laravel-expert-agent.agent.md",
-        "markdown-accessibility-assistant.agent.md",
-        "mentor.agent.md",
-        "mentoring-juniors.agent.md",
-        "microsoft-learn-contributor.agent.md",
-        "microsoft-study-mode.agent.md",
         "modernization.agent.md",
-        "new-relic-incident-response.agent.md",
-        "nuxt-expert.agent.md",
-        "pimcore-expert.agent.md",
-        "platform-sre-kubernetes.agent.md",
         "principal-software-engineer.agent.md",
-        "prompt-builder.agent.md",
-        "prompt-engineer.agent.md",
         "python-notebook-sample-builder.agent.md",
         "python-win-arm64-gha-wheel-builder.agent.md",
-        "quality-playbook.agent.md",
-        "salesforce-expert.agent.md",
-        "scientific-paper-research.agent.md",
         "search-ai-optimization-expert.agent.md",
-        "shopify-expert.agent.md",
         "simple-app-idea-generator.agent.md",
         "software-engineer-agent-v1.agent.md",
         "spark-performance.agent.md",
-        "specification.agent.md",
         "taxcore-technical-writer.agent.md",
-        "tech-debt-remediation-plan.agent.md",
         "technical-content-evaluator.agent.md",
         "terminal-helper.agent.md",
         "terraform-iac-reviewer.agent.md",
-        "terratest-module-testing.agent.md",
         "thinking-beast-mode.agent.md",
-        "trojan-skill-hunter.agent.md",
-        "ultimate-transparent-thinking-beast-mode.agent.md",
-        "vuejs-expert.agent.md",
-        "wg-code-alchemist.agent.md"
+        "ultimate-transparent-thinking-beast-mode.agent.md"
       ]
     },
     "sharedSkills": {
-      "packaged": 362,
-      "total": 481,
+      "packaged": 450,
+      "total": 487,
       "unpackaged": [
-        "adobe-illustrator-scripting",
-        "agent-skill-stack",
-        "ai-ready",
+        "api-testing",
         "apple-appstore-reviewer",
-        "arduino-azure-iot-edge-integration",
         "aspire",
         "autoresearch",
         "aws-cdk-python-setup",
-        "aws-cloudwatch-investigation",
-        "azure-smart-city-iot-solution-builder",
         "batch-files",
-        "bigquery-pipeline-audit",
-        "boost-prompt",
-        "breakdown-plan",
-        "breakdown-test",
-        "bug-receipt",
-        "bug-reproduction-brief",
         "build-evidence-map",
-        "chrome-devtools",
-        "cli-mastery",
+        "chaos-engineering",
         "code-tour",
         "codebase-memory-mcp",
         "containerize-aspnet-framework",
         "containerize-aspnetcore",
-        "copilot-cli-quickstart",
-        "copilot-primitive-authoring",
-        "copilot-spaces",
-        "copilot-usage-metrics",
-        "create-github-action-workflow-specification",
-        "create-github-issue-feature-from-specification",
-        "create-github-issues-for-unmet-specification-requirements",
-        "create-specification",
-        "datanalysis-credit-risk",
-        "declarative-agents",
-        "devops-rollout-plan",
+        "contract-testing",
         "diagnose",
-        "dotnet-design-pattern-review",
-        "editorconfig",
         "ef-core",
-        "em-dash",
         "eval-driven-dev",
-        "fabric-lakehouse",
-        "finalize-agent-prompt",
         "finnish-humanizer",
-        "first-ask",
-        "freecad-scripts",
-        "game-engine",
-        "gen-specs-as-issues",
-        "generate-custom-instructions-from-codebase",
         "github-codespaces-efficiency",
-        "github-copilot-starter",
-        "gsap-framer-scroll-animation",
-        "harness-engineering",
-        "image-manipulation-image-magick",
-        "impediment-prioritization",
-        "incident-postmortem",
-        "javascript-typescript-jest",
-        "latchshot-page-capture",
-        "legacy-circuit-mockups",
-        "lsp-setup",
-        "markstream-install",
-        "memory-merger",
-        "mentoring-juniors",
+        "load-performance-testing",
         "microsoft-code-reference",
         "microsoft-docs",
-        "microsoft-skill-creator",
         "minecraft-plugin-development",
-        "mini-context-graph",
-        "msgraph-sdk",
+        "mutation-testing",
         "namecheap",
-        "nano-banana-pro-openrouter",
-        "next-intl-add-language",
         "optimize-simplicite-logs",
-        "pdftk-server",
-        "pester-migration",
-        "pester-should-migration",
-        "pinecone-rag",
-        "powerbi-modeling",
-        "prd",
-        "prompt-optimizer",
         "publish-to-pages",
-        "pytest-coverage",
-        "python-azure-iot-edge-modules",
         "python-pypi-package-builder",
-        "quality-playbook",
-        "react-container-presentation-component",
-        "refactor",
-        "refactor-method-complexity-reduce",
-        "remember",
-        "resemble-detect",
-        "review-and-refactor",
-        "rhdh",
-        "rhdh-jira",
-        "rhdh-local",
-        "rhino3d-scripts",
-        "ruff-recursive-fix",
         "sandbox-npm-install",
-        "scoutqa-test",
         "setup-my-iq",
-        "shopify-review-triage",
         "shuffle-json-data",
-        "skill-creator",
-        "slang-shader-engineer",
-        "snowflake-semanticview",
-        "sql-server-table-reconciliation",
-        "ssma-console",
-        "steno-mode",
         "terraform-azurerm-set-diff-analyzer",
-        "tiny-stepping",
-        "transloadit-media-processing",
-        "unit-test-vue-pinia",
-        "update-specification",
-        "vardoger-analyze",
+        "test-data-management",
         "vcpkg",
         "verify-agent-action",
         "vscode-ext-commands",
         "vscode-ext-localization",
-        "workiq-copilot",
         "x-twitter-scraper"
       ]
     }
@@ -245,7 +117,9 @@
       "name": ".NET Self-Learning Architect",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "learning-and-mentoring"
+      ],
       "path": "harness/github-copilot/agents/dotnet-self-learning-architect.agent.md",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -281,7 +155,9 @@
       "name": "Accessibility Expert",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "accessibility-compliance"
+      ],
       "path": "harness/github-copilot/agents/accessibility.agent.md",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -302,7 +178,9 @@
       "name": "Accessibility Runtime Tester",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "accessibility-compliance"
+      ],
       "path": "harness/github-copilot/agents/accessibility-runtime-tester.agent.md",
       "review_status": "needs-semantic-review",
       "signals": [],
@@ -337,7 +215,9 @@
       "name": "AEM Front-End Specialist",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "web-framework-development"
+      ],
       "path": "harness/github-copilot/agents/aem-frontend-specialist.agent.md",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -586,7 +466,9 @@
       "name": "AWS Incident Triage",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "incident-response"
+      ],
       "path": "harness/github-copilot/agents/aws-incident-triage.agent.md",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -797,7 +679,9 @@
       "name": "Azure Smart City IoT Architect",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "iot-embedded-systems"
+      ],
       "path": "harness/github-copilot/agents/azure-smart-city-iot-architect.agent.md",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -973,7 +857,9 @@
       "name": "Blueprint Mode",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "spec-driven-development"
+      ],
       "path": "harness/github-copilot/agents/blueprint-mode.agent.md",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -1030,7 +916,9 @@
       "name": "C#/.NET Janitor",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "code-quality-refactoring"
+      ],
       "path": "harness/github-copilot/agents/csharp-dotnet-janitor.agent.md",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -1179,7 +1067,9 @@
       "name": "Cloud and SaaS Outage Triage",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "incident-response"
+      ],
       "path": "harness/github-copilot/agents/cloud-saas-outage-triage.agent.md",
       "review_status": "needs-source-review",
       "signals": [
@@ -1306,7 +1196,9 @@
       "name": "Critical thinking mode instructions",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "learning-and-mentoring"
+      ],
       "path": "harness/github-copilot/agents/critical-thinking.agent.md",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -1323,7 +1215,9 @@
       "name": "Custom Agent Foundry",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "copilot-customization-authoring"
+      ],
       "path": "harness/github-copilot/agents/custom-agent-foundry.agent.md",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -1373,7 +1267,9 @@
       "name": "Declarative Agents Architect",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "microsoft-365-data-platform"
+      ],
       "path": "harness/github-copilot/agents/declarative-agents-architect.agent.md",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -1390,7 +1286,9 @@
       "name": "Defender Scout KQL",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "data-engineering"
+      ],
       "path": "harness/github-copilot/agents/defender-scout-kql.agent.md",
       "review_status": "needs-semantic-review",
       "signals": [],
@@ -1422,7 +1320,9 @@
       "name": "Demonstrate Understanding mode instructions",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "learning-and-mentoring"
+      ],
       "path": "harness/github-copilot/agents/demonstrate-understanding.agent.md",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -1439,7 +1339,9 @@
       "name": "devils-advocate",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "learning-and-mentoring"
+      ],
       "path": "harness/github-copilot/agents/devils-advocate.agent.md",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -1473,7 +1375,9 @@
       "name": "DevTools Regression Investigator",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "web-framework-development"
+      ],
       "path": "harness/github-copilot/agents/devtools-regression-investigator.agent.md",
       "review_status": "needs-semantic-review",
       "signals": [],
@@ -1505,7 +1409,9 @@
       "name": "dotnet-fullstack-mentor",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "learning-and-mentoring"
+      ],
       "path": "harness/github-copilot/agents/dotnet-fullstack-mentor.agent.md",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -1566,7 +1472,9 @@
       "name": "Drupal Expert",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "platform-vendor-expertise"
+      ],
       "path": "harness/github-copilot/agents/drupal-expert.agent.md",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -1683,7 +1591,9 @@
       "name": "Expert Nuxt Developer",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "web-framework-development"
+      ],
       "path": "harness/github-copilot/agents/nuxt-expert.agent.md",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -1726,7 +1636,9 @@
       "name": "Expert Vue.js Frontend Engineer",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "web-framework-development"
+      ],
       "path": "harness/github-copilot/agents/vuejs-expert.agent.md",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -1743,7 +1655,9 @@
       "name": "expert-embedded-c-engineer",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "iot-embedded-systems"
+      ],
       "path": "harness/github-copilot/agents/expert-embedded-c-engineer.agent.md",
       "review_status": "needs-semantic-review",
       "signals": [],
@@ -1872,7 +1786,9 @@
       "name": "Frontend Performance Investigator",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "web-framework-development"
+      ],
       "path": "harness/github-copilot/agents/frontend-performance-investigator.agent.md",
       "review_status": "needs-semantic-review",
       "signals": [],
@@ -2549,7 +2465,9 @@
       "name": "Kusto Assistant",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "data-engineering"
+      ],
       "path": "harness/github-copilot/agents/kusto-assistant.agent.md",
       "review_status": "needs-source-review",
       "signals": [
@@ -2568,7 +2486,9 @@
       "name": "Laravel Expert Agent",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "platform-vendor-expertise"
+      ],
       "path": "harness/github-copilot/agents/laravel-expert-agent.agent.md",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -2647,7 +2567,9 @@
       "name": "Markdown Accessibility Assistant",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "accessibility-compliance"
+      ],
       "path": "harness/github-copilot/agents/markdown-accessibility-assistant.agent.md",
       "review_status": "needs-source-review",
       "signals": [
@@ -2711,7 +2633,9 @@
       "name": "Mentor mode",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "learning-and-mentoring"
+      ],
       "path": "harness/github-copilot/agents/mentor.agent.md",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -2750,7 +2674,9 @@
       "name": "Microsoft Learn Contributor",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "microsoft-365-data-platform"
+      ],
       "path": "harness/github-copilot/agents/microsoft-learn-contributor.agent.md",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -2767,7 +2693,9 @@
       "name": "Microsoft Study and Learn",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "learning-and-mentoring"
+      ],
       "path": "harness/github-copilot/agents/microsoft-study-mode.agent.md",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -2931,7 +2859,9 @@
       "name": "New Relic Incident Response Agent",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "incident-response"
+      ],
       "path": "harness/github-copilot/agents/new-relic-incident-response.agent.md",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -2952,7 +2882,9 @@
       "name": "Next.js Expert",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "web-framework-development"
+      ],
       "path": "harness/github-copilot/agents/expert-nextjs-developer.agent.md",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -3330,7 +3262,9 @@
       "name": "Pimcore Expert",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "platform-vendor-expertise"
+      ],
       "path": "harness/github-copilot/agents/pimcore-expert.agent.md",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -3385,7 +3319,9 @@
       "name": "Platform SRE for Kubernetes",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "incident-response"
+      ],
       "path": "harness/github-copilot/agents/platform-sre-kubernetes.agent.md",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -3632,7 +3568,9 @@
       "name": "Prompt Builder",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "copilot-customization-authoring"
+      ],
       "path": "harness/github-copilot/agents/prompt-builder.agent.md",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -3650,7 +3588,9 @@
       "name": "Prompt Engineer",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "copilot-customization-authoring"
+      ],
       "path": "harness/github-copilot/agents/prompt-engineer.agent.md",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -3733,7 +3673,9 @@
       "name": "quality-playbook",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "code-quality-refactoring"
+      ],
       "path": "harness/github-copilot/agents/quality-playbook.agent.md",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -4122,7 +4064,9 @@
       "name": "Salesforce Expert Agent",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "platform-vendor-expertise"
+      ],
       "path": "harness/github-copilot/agents/salesforce-expert.agent.md",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -4213,7 +4157,9 @@
       "name": "Scientific Paper Research",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "learning-and-mentoring"
+      ],
       "path": "harness/github-copilot/agents/scientific-paper-research.agent.md",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -4407,7 +4353,9 @@
       "name": "Sensei - Junior Mentor",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "learning-and-mentoring"
+      ],
       "path": "harness/github-copilot/agents/mentoring-juniors.agent.md",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -4428,7 +4376,9 @@
       "name": "Shopify Expert",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "platform-vendor-expertise"
+      ],
       "path": "harness/github-copilot/agents/shopify-expert.agent.md",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -4439,35 +4389,35 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 4259,
+      "characters_scanned": 4644,
       "external_url_count": 0,
       "files_scanned": 1,
       "kind": "agent",
       "local_evidence_mention": false,
       "name": "sifap-archaeologist",
       "ownership": "plugin",
-      "package": "mainframe-modernization",
+      "package": "mainframe-natural-adabas",
       "packaged_by": [
-        "mainframe-modernization"
+        "mainframe-natural-adabas"
       ],
-      "path": "harness/github-copilot/plugins/mainframe-modernization/agents/sifap-archaeologist.agent.md",
+      "path": "harness/github-copilot/plugins/mainframe-natural-adabas/agents/sifap-archaeologist.agent.md",
       "review_status": "needs-semantic-review",
       "signals": [],
       "source_domains": []
     },
     {
-      "characters_scanned": 4739,
+      "characters_scanned": 4753,
       "external_url_count": 0,
       "files_scanned": 1,
       "kind": "agent",
       "local_evidence_mention": false,
       "name": "sifap-architect",
       "ownership": "plugin",
-      "package": "mainframe-modernization",
+      "package": "mainframe-natural-adabas",
       "packaged_by": [
-        "mainframe-modernization"
+        "mainframe-natural-adabas"
       ],
-      "path": "harness/github-copilot/plugins/mainframe-modernization/agents/sifap-architect.agent.md",
+      "path": "harness/github-copilot/plugins/mainframe-natural-adabas/agents/sifap-architect.agent.md",
       "review_status": "needs-current-source-review",
       "signals": [
         "currency-language"
@@ -4475,18 +4425,18 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 4714,
+      "characters_scanned": 4728,
       "external_url_count": 0,
       "files_scanned": 1,
       "kind": "agent",
       "local_evidence_mention": false,
       "name": "sifap-builder",
       "ownership": "plugin",
-      "package": "mainframe-modernization",
+      "package": "mainframe-natural-adabas",
       "packaged_by": [
-        "mainframe-modernization"
+        "mainframe-natural-adabas"
       ],
-      "path": "harness/github-copilot/plugins/mainframe-modernization/agents/sifap-builder.agent.md",
+      "path": "harness/github-copilot/plugins/mainframe-natural-adabas/agents/sifap-builder.agent.md",
       "review_status": "needs-semantic-review",
       "signals": [],
       "source_domains": []
@@ -4499,11 +4449,11 @@
       "local_evidence_mention": true,
       "name": "sifap-operations",
       "ownership": "plugin",
-      "package": "mainframe-modernization",
+      "package": "mainframe-natural-adabas",
       "packaged_by": [
-        "mainframe-modernization"
+        "mainframe-natural-adabas"
       ],
-      "path": "harness/github-copilot/plugins/mainframe-modernization/agents/sifap-operations.agent.md",
+      "path": "harness/github-copilot/plugins/mainframe-natural-adabas/agents/sifap-operations.agent.md",
       "review_status": "needs-current-source-review",
       "signals": [
         "currency-language",
@@ -4519,11 +4469,11 @@
       "local_evidence_mention": true,
       "name": "sifap-quality",
       "ownership": "plugin",
-      "package": "mainframe-modernization",
+      "package": "mainframe-natural-adabas",
       "packaged_by": [
-        "mainframe-modernization"
+        "mainframe-natural-adabas"
       ],
-      "path": "harness/github-copilot/plugins/mainframe-modernization/agents/sifap-quality.agent.md",
+      "path": "harness/github-copilot/plugins/mainframe-natural-adabas/agents/sifap-quality.agent.md",
       "review_status": "needs-semantic-review",
       "signals": [],
       "source_domains": []
@@ -4555,7 +4505,9 @@
       "name": "Specification",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "spec-driven-development"
+      ],
       "path": "harness/github-copilot/agents/specification.agent.md",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -4751,7 +4703,9 @@
       "name": "Technical Debt Remediation Plan",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "code-quality-refactoring"
+      ],
       "path": "harness/github-copilot/agents/tech-debt-remediation-plan.agent.md",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -4909,7 +4863,10 @@
       "name": "Terratest Module Testing",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "testing-automation",
+        "testing-frameworks"
+      ],
       "path": "harness/github-copilot/agents/terratest-module-testing.agent.md",
       "review_status": "needs-semantic-review",
       "signals": [],
@@ -4945,7 +4902,9 @@
       "name": "Trojan Skill Hunter",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "copilot-customization-authoring"
+      ],
       "path": "harness/github-copilot/agents/trojan-skill-hunter.agent.md",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -5007,7 +4966,9 @@
       "name": "Universal Janitor",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "code-quality-refactoring"
+      ],
       "path": "harness/github-copilot/agents/janitor.agent.md",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -5042,7 +5003,9 @@
       "name": "VS Code Insiders Accessibility Tracker",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "accessibility-compliance"
+      ],
       "path": "harness/github-copilot/agents/insiders-a11y-tracker.agent.md",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -5076,7 +5039,9 @@
       "name": "WG Code Alchemist",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "code-quality-refactoring"
+      ],
       "path": "harness/github-copilot/agents/wg-code-alchemist.agent.md",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -9337,11 +9302,11 @@
       "local_evidence_mention": false,
       "name": "sifap-backend",
       "ownership": "plugin",
-      "package": "mainframe-modernization",
+      "package": "mainframe-natural-adabas",
       "packaged_by": [
-        "mainframe-modernization"
+        "mainframe-natural-adabas"
       ],
-      "path": "harness/github-copilot/plugins/mainframe-modernization/instructions/sifap-backend.instructions.md",
+      "path": "harness/github-copilot/plugins/mainframe-natural-adabas/instructions/sifap-backend.instructions.md",
       "review_status": "needs-current-source-review",
       "signals": [
         "version-claim"
@@ -9356,11 +9321,11 @@
       "local_evidence_mention": false,
       "name": "sifap-cicd",
       "ownership": "plugin",
-      "package": "mainframe-modernization",
+      "package": "mainframe-natural-adabas",
       "packaged_by": [
-        "mainframe-modernization"
+        "mainframe-natural-adabas"
       ],
-      "path": "harness/github-copilot/plugins/mainframe-modernization/instructions/sifap-cicd.instructions.md",
+      "path": "harness/github-copilot/plugins/mainframe-natural-adabas/instructions/sifap-cicd.instructions.md",
       "review_status": "needs-current-source-review",
       "signals": [
         "currency-language",
@@ -9376,11 +9341,11 @@
       "local_evidence_mention": false,
       "name": "sifap-database",
       "ownership": "plugin",
-      "package": "mainframe-modernization",
+      "package": "mainframe-natural-adabas",
       "packaged_by": [
-        "mainframe-modernization"
+        "mainframe-natural-adabas"
       ],
-      "path": "harness/github-copilot/plugins/mainframe-modernization/instructions/sifap-database.instructions.md",
+      "path": "harness/github-copilot/plugins/mainframe-natural-adabas/instructions/sifap-database.instructions.md",
       "review_status": "needs-semantic-review",
       "signals": [],
       "source_domains": []
@@ -9393,11 +9358,11 @@
       "local_evidence_mention": false,
       "name": "sifap-frontend",
       "ownership": "plugin",
-      "package": "mainframe-modernization",
+      "package": "mainframe-natural-adabas",
       "packaged_by": [
-        "mainframe-modernization"
+        "mainframe-natural-adabas"
       ],
-      "path": "harness/github-copilot/plugins/mainframe-modernization/instructions/sifap-frontend.instructions.md",
+      "path": "harness/github-copilot/plugins/mainframe-natural-adabas/instructions/sifap-frontend.instructions.md",
       "review_status": "needs-current-source-review",
       "signals": [
         "currency-language",
@@ -9413,11 +9378,11 @@
       "local_evidence_mention": false,
       "name": "sifap-infrastructure",
       "ownership": "plugin",
-      "package": "mainframe-modernization",
+      "package": "mainframe-natural-adabas",
       "packaged_by": [
-        "mainframe-modernization"
+        "mainframe-natural-adabas"
       ],
-      "path": "harness/github-copilot/plugins/mainframe-modernization/instructions/sifap-infrastructure.instructions.md",
+      "path": "harness/github-copilot/plugins/mainframe-natural-adabas/instructions/sifap-infrastructure.instructions.md",
       "review_status": "needs-current-source-review",
       "signals": [
         "currency-language"
@@ -9432,11 +9397,11 @@
       "local_evidence_mention": false,
       "name": "sifap-natural-adabas",
       "ownership": "plugin",
-      "package": "mainframe-modernization",
+      "package": "mainframe-natural-adabas",
       "packaged_by": [
-        "mainframe-modernization"
+        "mainframe-natural-adabas"
       ],
-      "path": "harness/github-copilot/plugins/mainframe-modernization/instructions/sifap-natural-adabas.instructions.md",
+      "path": "harness/github-copilot/plugins/mainframe-natural-adabas/instructions/sifap-natural-adabas.instructions.md",
       "review_status": "needs-semantic-review",
       "signals": [],
       "source_domains": []
@@ -9449,11 +9414,11 @@
       "local_evidence_mention": false,
       "name": "sifap-requirements",
       "ownership": "plugin",
-      "package": "mainframe-modernization",
+      "package": "mainframe-natural-adabas",
       "packaged_by": [
-        "mainframe-modernization"
+        "mainframe-natural-adabas"
       ],
-      "path": "harness/github-copilot/plugins/mainframe-modernization/instructions/sifap-requirements.instructions.md",
+      "path": "harness/github-copilot/plugins/mainframe-natural-adabas/instructions/sifap-requirements.instructions.md",
       "review_status": "needs-semantic-review",
       "signals": [],
       "source_domains": []
@@ -9466,11 +9431,11 @@
       "local_evidence_mention": false,
       "name": "sifap-security",
       "ownership": "plugin",
-      "package": "mainframe-modernization",
+      "package": "mainframe-natural-adabas",
       "packaged_by": [
-        "mainframe-modernization"
+        "mainframe-natural-adabas"
       ],
-      "path": "harness/github-copilot/plugins/mainframe-modernization/instructions/sifap-security.instructions.md",
+      "path": "harness/github-copilot/plugins/mainframe-natural-adabas/instructions/sifap-security.instructions.md",
       "review_status": "needs-semantic-review",
       "signals": [],
       "source_domains": []
@@ -9483,11 +9448,11 @@
       "local_evidence_mention": false,
       "name": "sifap-tests",
       "ownership": "plugin",
-      "package": "mainframe-modernization",
+      "package": "mainframe-natural-adabas",
       "packaged_by": [
-        "mainframe-modernization"
+        "mainframe-natural-adabas"
       ],
-      "path": "harness/github-copilot/plugins/mainframe-modernization/instructions/sifap-tests.instructions.md",
+      "path": "harness/github-copilot/plugins/mainframe-natural-adabas/instructions/sifap-tests.instructions.md",
       "review_status": "needs-semantic-review",
       "signals": [],
       "source_domains": []
@@ -9943,6 +9908,28 @@
         "version-claim"
       ],
       "source_domains": []
+    },
+    {
+      "characters_scanned": 1692,
+      "external_url_count": 1,
+      "files_scanned": 2,
+      "kind": "plugin",
+      "local_evidence_mention": false,
+      "name": "accessibility-compliance",
+      "ownership": "shared",
+      "package": "accessibility-compliance",
+      "packaged_by": [
+        "accessibility-compliance"
+      ],
+      "path": "harness/github-copilot/plugins/accessibility-compliance",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "version-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "github.com"
+      ]
     },
     {
       "characters_scanned": 42004,
@@ -10635,6 +10622,28 @@
       ]
     },
     {
+      "characters_scanned": 4364,
+      "external_url_count": 1,
+      "files_scanned": 2,
+      "kind": "plugin",
+      "local_evidence_mention": false,
+      "name": "code-quality-refactoring",
+      "ownership": "shared",
+      "package": "code-quality-refactoring",
+      "packaged_by": [
+        "code-quality-refactoring"
+      ],
+      "path": "harness/github-copilot/plugins/code-quality-refactoring",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "version-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "github.com"
+      ]
+    },
+    {
       "characters_scanned": 4665,
       "external_url_count": 1,
       "files_scanned": 2,
@@ -10758,6 +10767,29 @@
       ]
     },
     {
+      "characters_scanned": 6725,
+      "external_url_count": 1,
+      "files_scanned": 2,
+      "kind": "plugin",
+      "local_evidence_mention": false,
+      "name": "copilot-customization-authoring",
+      "ownership": "shared",
+      "package": "copilot-customization-authoring",
+      "packaged_by": [
+        "copilot-customization-authoring"
+      ],
+      "path": "harness/github-copilot/plugins/copilot-customization-authoring",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "version-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "github.com"
+      ]
+    },
+    {
       "characters_scanned": 1268,
       "external_url_count": 1,
       "files_scanned": 2,
@@ -10803,6 +10835,29 @@
       ]
     },
     {
+      "characters_scanned": 3456,
+      "external_url_count": 1,
+      "files_scanned": 2,
+      "kind": "plugin",
+      "local_evidence_mention": false,
+      "name": "creative-media-tooling",
+      "ownership": "shared",
+      "package": "creative-media-tooling",
+      "packaged_by": [
+        "creative-media-tooling"
+      ],
+      "path": "harness/github-copilot/plugins/creative-media-tooling",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "lifecycle-language",
+        "version-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "github.com"
+      ]
+    },
+    {
       "characters_scanned": 3031,
       "external_url_count": 1,
       "files_scanned": 2,
@@ -10815,6 +10870,28 @@
         "csharp-dotnet-development"
       ],
       "path": "harness/github-copilot/plugins/csharp-dotnet-development",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "version-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "github.com"
+      ]
+    },
+    {
+      "characters_scanned": 2977,
+      "external_url_count": 1,
+      "files_scanned": 2,
+      "kind": "plugin",
+      "local_evidence_mention": false,
+      "name": "data-engineering",
+      "ownership": "shared",
+      "package": "data-engineering",
+      "packaged_by": [
+        "data-engineering"
+      ],
+      "path": "harness/github-copilot/plugins/data-engineering",
       "review_status": "needs-current-source-review",
       "signals": [
         "version-claim",
@@ -11486,6 +11563,50 @@
       ]
     },
     {
+      "characters_scanned": 3594,
+      "external_url_count": 1,
+      "files_scanned": 2,
+      "kind": "plugin",
+      "local_evidence_mention": false,
+      "name": "incident-response",
+      "ownership": "shared",
+      "package": "incident-response",
+      "packaged_by": [
+        "incident-response"
+      ],
+      "path": "harness/github-copilot/plugins/incident-response",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "version-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "github.com"
+      ]
+    },
+    {
+      "characters_scanned": 2909,
+      "external_url_count": 1,
+      "files_scanned": 2,
+      "kind": "plugin",
+      "local_evidence_mention": false,
+      "name": "iot-embedded-systems",
+      "ownership": "shared",
+      "package": "iot-embedded-systems",
+      "packaged_by": [
+        "iot-embedded-systems"
+      ],
+      "path": "harness/github-copilot/plugins/iot-embedded-systems",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "version-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "github.com"
+      ]
+    },
+    {
       "characters_scanned": 1511,
       "external_url_count": 1,
       "files_scanned": 2,
@@ -11601,6 +11722,28 @@
       ]
     },
     {
+      "characters_scanned": 2780,
+      "external_url_count": 1,
+      "files_scanned": 2,
+      "kind": "plugin",
+      "local_evidence_mention": false,
+      "name": "learning-and-mentoring",
+      "ownership": "shared",
+      "package": "learning-and-mentoring",
+      "packaged_by": [
+        "learning-and-mentoring"
+      ],
+      "path": "harness/github-copilot/plugins/learning-and-mentoring",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "version-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "github.com"
+      ]
+    },
+    {
       "characters_scanned": 2638,
       "external_url_count": 1,
       "files_scanned": 2,
@@ -11623,18 +11766,18 @@
       ]
     },
     {
-      "characters_scanned": 240145,
+      "characters_scanned": 269391,
       "external_url_count": 7,
-      "files_scanned": 46,
+      "files_scanned": 48,
       "kind": "plugin",
-      "local_evidence_mention": false,
-      "name": "mainframe-modernization",
+      "local_evidence_mention": true,
+      "name": "mainframe-natural-adabas",
       "ownership": "plugin",
-      "package": "mainframe-modernization",
+      "package": "mainframe-natural-adabas",
       "packaged_by": [
-        "mainframe-modernization"
+        "mainframe-natural-adabas"
       ],
-      "path": "harness/github-copilot/plugins/mainframe-modernization",
+      "path": "harness/github-copilot/plugins/mainframe-natural-adabas",
       "review_status": "needs-current-source-review",
       "signals": [
         "currency-language",
@@ -11697,6 +11840,28 @@
       ]
     },
     {
+      "characters_scanned": 3006,
+      "external_url_count": 1,
+      "files_scanned": 2,
+      "kind": "plugin",
+      "local_evidence_mention": false,
+      "name": "microsoft-365-data-platform",
+      "ownership": "shared",
+      "package": "microsoft-365-data-platform",
+      "packaged_by": [
+        "microsoft-365-data-platform"
+      ],
+      "path": "harness/github-copilot/plugins/microsoft-365-data-platform",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "version-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "github.com"
+      ]
+    },
+    {
       "characters_scanned": 7187,
       "external_url_count": 1,
       "files_scanned": 2,
@@ -11742,7 +11907,7 @@
       ]
     },
     {
-      "characters_scanned": 2241225,
+      "characters_scanned": 2241859,
       "external_url_count": 300,
       "files_scanned": 307,
       "kind": "plugin",
@@ -12076,6 +12241,28 @@
       ]
     },
     {
+      "characters_scanned": 2212,
+      "external_url_count": 1,
+      "files_scanned": 2,
+      "kind": "plugin",
+      "local_evidence_mention": false,
+      "name": "platform-vendor-expertise",
+      "ownership": "shared",
+      "package": "platform-vendor-expertise",
+      "packaged_by": [
+        "platform-vendor-expertise"
+      ],
+      "path": "harness/github-copilot/plugins/platform-vendor-expertise",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "version-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "github.com"
+      ]
+    },
+    {
       "characters_scanned": 1624,
       "external_url_count": 1,
       "files_scanned": 2,
@@ -12335,6 +12522,28 @@
       "review_status": "needs-current-source-review",
       "signals": [
         "lifecycle-language",
+        "version-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "github.com"
+      ]
+    },
+    {
+      "characters_scanned": 2205,
+      "external_url_count": 1,
+      "files_scanned": 2,
+      "kind": "plugin",
+      "local_evidence_mention": false,
+      "name": "red-hat-developer-hub",
+      "ownership": "shared",
+      "package": "red-hat-developer-hub",
+      "packaged_by": [
+        "red-hat-developer-hub"
+      ],
+      "path": "harness/github-copilot/plugins/red-hat-developer-hub",
+      "review_status": "needs-current-source-review",
+      "signals": [
         "version-claim",
         "external-source"
       ],
@@ -12649,6 +12858,28 @@
       ]
     },
     {
+      "characters_scanned": 3902,
+      "external_url_count": 1,
+      "files_scanned": 2,
+      "kind": "plugin",
+      "local_evidence_mention": false,
+      "name": "spec-driven-development",
+      "ownership": "shared",
+      "package": "spec-driven-development",
+      "packaged_by": [
+        "spec-driven-development"
+      ],
+      "path": "harness/github-copilot/plugins/spec-driven-development",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "version-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "github.com"
+      ]
+    },
+    {
       "characters_scanned": 996,
       "external_url_count": 1,
       "files_scanned": 2,
@@ -12727,6 +12958,28 @@
         "testing-automation"
       ],
       "path": "harness/github-copilot/plugins/testing-automation",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "version-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "github.com"
+      ]
+    },
+    {
+      "characters_scanned": 616,
+      "external_url_count": 1,
+      "files_scanned": 1,
+      "kind": "plugin",
+      "local_evidence_mention": false,
+      "name": "testing-frameworks",
+      "ownership": "shared",
+      "package": "testing-frameworks",
+      "packaged_by": [
+        "testing-frameworks"
+      ],
+      "path": "harness/github-copilot/plugins/testing-frameworks",
       "review_status": "needs-current-source-review",
       "signals": [
         "version-claim",
@@ -12917,6 +13170,28 @@
       "review_status": "needs-current-source-review",
       "signals": [
         "currency-language",
+        "version-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "github.com"
+      ]
+    },
+    {
+      "characters_scanned": 3584,
+      "external_url_count": 1,
+      "files_scanned": 2,
+      "kind": "plugin",
+      "local_evidence_mention": false,
+      "name": "web-framework-development",
+      "ownership": "shared",
+      "package": "web-framework-development",
+      "packaged_by": [
+        "web-framework-development"
+      ],
+      "path": "harness/github-copilot/plugins/web-framework-development",
+      "review_status": "needs-current-source-review",
+      "signals": [
         "version-claim",
         "external-source"
       ],
@@ -13949,18 +14224,18 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 3336,
+      "characters_scanned": 4160,
       "external_url_count": 0,
       "files_scanned": 1,
       "kind": "prompt",
       "local_evidence_mention": false,
       "name": "sifap-archaeology",
       "ownership": "plugin",
-      "package": "mainframe-modernization",
+      "package": "mainframe-natural-adabas",
       "packaged_by": [
-        "mainframe-modernization"
+        "mainframe-natural-adabas"
       ],
-      "path": "harness/github-copilot/plugins/mainframe-modernization/prompts/sifap-archaeology.prompt.md",
+      "path": "harness/github-copilot/plugins/mainframe-natural-adabas/prompts/sifap-archaeology.prompt.md",
       "review_status": "needs-semantic-review",
       "signals": [],
       "source_domains": []
@@ -13973,11 +14248,11 @@
       "local_evidence_mention": false,
       "name": "sifap-build-slice",
       "ownership": "plugin",
-      "package": "mainframe-modernization",
+      "package": "mainframe-natural-adabas",
       "packaged_by": [
-        "mainframe-modernization"
+        "mainframe-natural-adabas"
       ],
-      "path": "harness/github-copilot/plugins/mainframe-modernization/prompts/sifap-build-slice.prompt.md",
+      "path": "harness/github-copilot/plugins/mainframe-natural-adabas/prompts/sifap-build-slice.prompt.md",
       "review_status": "needs-semantic-review",
       "signals": [],
       "source_domains": []
@@ -13990,11 +14265,11 @@
       "local_evidence_mention": true,
       "name": "sifap-operate",
       "ownership": "plugin",
-      "package": "mainframe-modernization",
+      "package": "mainframe-natural-adabas",
       "packaged_by": [
-        "mainframe-modernization"
+        "mainframe-natural-adabas"
       ],
-      "path": "harness/github-copilot/plugins/mainframe-modernization/prompts/sifap-operate.prompt.md",
+      "path": "harness/github-copilot/plugins/mainframe-natural-adabas/prompts/sifap-operate.prompt.md",
       "review_status": "needs-current-source-review",
       "signals": [
         "currency-language",
@@ -14010,11 +14285,11 @@
       "local_evidence_mention": false,
       "name": "sifap-specify",
       "ownership": "plugin",
-      "package": "mainframe-modernization",
+      "package": "mainframe-natural-adabas",
       "packaged_by": [
-        "mainframe-modernization"
+        "mainframe-natural-adabas"
       ],
-      "path": "harness/github-copilot/plugins/mainframe-modernization/prompts/sifap-specify.prompt.md",
+      "path": "harness/github-copilot/plugins/mainframe-natural-adabas/prompts/sifap-specify.prompt.md",
       "review_status": "needs-semantic-review",
       "signals": [],
       "source_domains": []
@@ -14027,11 +14302,11 @@
       "local_evidence_mention": true,
       "name": "sifap-verify",
       "ownership": "plugin",
-      "package": "mainframe-modernization",
+      "package": "mainframe-natural-adabas",
       "packaged_by": [
-        "mainframe-modernization"
+        "mainframe-natural-adabas"
       ],
-      "path": "harness/github-copilot/plugins/mainframe-modernization/prompts/sifap-verify.prompt.md",
+      "path": "harness/github-copilot/plugins/mainframe-natural-adabas/prompts/sifap-verify.prompt.md",
       "review_status": "needs-semantic-review",
       "signals": [],
       "source_domains": []
@@ -14227,7 +14502,7 @@
       "ownership": "shared",
       "package": null,
       "packaged_by": [
-        "mainframe-modernization"
+        "mainframe-natural-adabas"
       ],
       "path": "harness/github-copilot/skills/adabas-postgresql-migration",
       "review_status": "needs-semantic-review",
@@ -14264,7 +14539,9 @@
       "name": "adobe-illustrator-scripting",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "creative-media-tooling"
+      ],
       "path": "harness/github-copilot/skills/adobe-illustrator-scripting",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -14333,7 +14610,9 @@
       "name": "agent-skill-stack",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "copilot-customization-authoring"
+      ],
       "path": "harness/github-copilot/skills/agent-skill-stack",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -14417,7 +14696,9 @@
       "name": "ai-ready",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "copilot-customization-authoring"
+      ],
       "path": "harness/github-copilot/skills/ai-ready",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -14467,6 +14748,30 @@
       ],
       "source_domains": [
         "uizze.com"
+      ]
+    },
+    {
+      "characters_scanned": 5784,
+      "external_url_count": 4,
+      "files_scanned": 1,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "api-testing",
+      "ownership": "shared",
+      "package": null,
+      "packaged_by": [],
+      "path": "harness/github-copilot/skills/api-testing",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "lifecycle-language",
+        "external-source"
+      ],
+      "source_domains": [
+        "json-schema.org",
+        "spec.graphql.org",
+        "spec.openapis.org",
+        "www.rfc-editor.org"
       ]
     },
     {
@@ -14607,7 +14912,9 @@
       "name": "arduino-azure-iot-edge-integration",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "iot-embedded-systems"
+      ],
       "path": "harness/github-copilot/skills/arduino-azure-iot-edge-integration",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -14982,7 +15289,9 @@
       "name": "aws-cloudwatch-investigation",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "incident-response"
+      ],
       "path": "harness/github-copilot/skills/aws-cloudwatch-investigation",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -16731,7 +17040,9 @@
       "name": "azure-smart-city-iot-solution-builder",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "iot-embedded-systems"
+      ],
       "path": "harness/github-copilot/skills/azure-smart-city-iot-solution-builder",
       "review_status": "needs-source-review",
       "signals": [
@@ -17627,7 +17938,9 @@
       "name": "bigquery-pipeline-audit",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "data-engineering"
+      ],
       "path": "harness/github-copilot/skills/bigquery-pipeline-audit",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -17644,7 +17957,9 @@
       "name": "boost-prompt",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "copilot-customization-authoring"
+      ],
       "path": "harness/github-copilot/skills/boost-prompt",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -17752,7 +18067,9 @@
       "name": "breakdown-plan",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "spec-driven-development"
+      ],
       "path": "harness/github-copilot/skills/breakdown-plan",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -17769,7 +18086,9 @@
       "name": "breakdown-test",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "spec-driven-development"
+      ],
       "path": "harness/github-copilot/skills/breakdown-test",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -17786,7 +18105,9 @@
       "name": "bug-receipt",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "incident-response"
+      ],
       "path": "harness/github-copilot/skills/bug-receipt",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -17808,7 +18129,9 @@
       "name": "bug-reproduction-brief",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "incident-response"
+      ],
       "path": "harness/github-copilot/skills/bug-reproduction-brief",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -17883,6 +18206,29 @@
       "source_domains": []
     },
     {
+      "characters_scanned": 6498,
+      "external_url_count": 4,
+      "files_scanned": 1,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "chaos-engineering",
+      "ownership": "shared",
+      "package": null,
+      "packaged_by": [],
+      "path": "harness/github-copilot/skills/chaos-engineering",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "external-source"
+      ],
+      "source_domains": [
+        "chaos-mesh.org",
+        "docs.aws.amazon.com",
+        "learn.microsoft.com",
+        "principlesofchaos.org"
+      ]
+    },
+    {
       "characters_scanned": 6099,
       "external_url_count": 0,
       "files_scanned": 1,
@@ -17891,7 +18237,9 @@
       "name": "chrome-devtools",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "web-framework-development"
+      ],
       "path": "harness/github-copilot/skills/chrome-devtools",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -17908,7 +18256,9 @@
       "name": "cli-mastery",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "copilot-customization-authoring"
+      ],
       "path": "harness/github-copilot/skills/cli-mastery",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -18007,7 +18357,7 @@
       "ownership": "shared",
       "package": null,
       "packaged_by": [
-        "mainframe-modernization"
+        "mainframe-natural-adabas"
       ],
       "path": "harness/github-copilot/skills/code-modernization",
       "review_status": "needs-current-source-review",
@@ -18236,6 +18586,25 @@
       "source_domains": []
     },
     {
+      "characters_scanned": 5994,
+      "external_url_count": 3,
+      "files_scanned": 1,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "contract-testing",
+      "ownership": "shared",
+      "package": null,
+      "packaged_by": [],
+      "path": "harness/github-copilot/skills/contract-testing",
+      "review_status": "needs-source-review",
+      "signals": [
+        "external-source"
+      ],
+      "source_domains": [
+        "docs.pact.io"
+      ]
+    },
+    {
       "characters_scanned": 5650,
       "external_url_count": 2,
       "files_scanned": 1,
@@ -18359,7 +18728,9 @@
       "name": "copilot-cli-quickstart",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "copilot-customization-authoring"
+      ],
       "path": "harness/github-copilot/skills/copilot-cli-quickstart",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -18444,7 +18815,9 @@
       "name": "copilot-primitive-authoring",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "copilot-customization-authoring"
+      ],
       "path": "harness/github-copilot/skills/copilot-primitive-authoring",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -18487,7 +18860,9 @@
       "name": "copilot-spaces",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "copilot-customization-authoring"
+      ],
       "path": "harness/github-copilot/skills/copilot-spaces",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -18504,7 +18879,9 @@
       "name": "copilot-usage-metrics",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "copilot-customization-authoring"
+      ],
       "path": "harness/github-copilot/skills/copilot-usage-metrics",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -18565,7 +18942,7 @@
       "ownership": "shared",
       "package": null,
       "packaged_by": [
-        "mainframe-modernization"
+        "mainframe-natural-adabas"
       ],
       "path": "harness/github-copilot/skills/create-architectural-decision-record",
       "review_status": "needs-current-source-review",
@@ -18583,7 +18960,9 @@
       "name": "create-github-action-workflow-specification",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "spec-driven-development"
+      ],
       "path": "harness/github-copilot/skills/create-github-action-workflow-specification",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -18600,7 +18979,9 @@
       "name": "create-github-issue-feature-from-specification",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "spec-driven-development"
+      ],
       "path": "harness/github-copilot/skills/create-github-issue-feature-from-specification",
       "review_status": "needs-semantic-review",
       "signals": [],
@@ -18632,7 +19013,9 @@
       "name": "create-github-issues-for-unmet-specification-requirements",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "spec-driven-development"
+      ],
       "path": "harness/github-copilot/skills/create-github-issues-for-unmet-specification-requirements",
       "review_status": "needs-semantic-review",
       "signals": [],
@@ -18735,7 +19118,9 @@
       "name": "create-specification",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "spec-driven-development"
+      ],
       "path": "harness/github-copilot/skills/create-specification",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -19103,7 +19488,9 @@
       "name": "datanalysis-credit-risk",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "data-engineering"
+      ],
       "path": "harness/github-copilot/skills/datanalysis-credit-risk",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -19215,7 +19602,9 @@
       "name": "declarative-agents",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "microsoft-365-data-platform"
+      ],
       "path": "harness/github-copilot/skills/declarative-agents",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -19298,7 +19687,9 @@
       "name": "devops-rollout-plan",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "incident-response"
+      ],
       "path": "harness/github-copilot/skills/devops-rollout-plan",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -19390,7 +19781,9 @@
       "name": "dotnet-design-pattern-review",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "code-quality-refactoring"
+      ],
       "path": "harness/github-copilot/skills/dotnet-design-pattern-review",
       "review_status": "needs-semantic-review",
       "signals": [],
@@ -19543,7 +19936,9 @@
       "name": "editorconfig",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "code-quality-refactoring"
+      ],
       "path": "harness/github-copilot/skills/editorconfig",
       "review_status": "needs-semantic-review",
       "signals": [],
@@ -19593,7 +19988,9 @@
       "name": "em-dash",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "code-quality-refactoring"
+      ],
       "path": "harness/github-copilot/skills/em-dash",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -19878,7 +20275,9 @@
       "name": "fabric-lakehouse",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "microsoft-365-data-platform"
+      ],
       "path": "harness/github-copilot/skills/fabric-lakehouse",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -19913,7 +20312,9 @@
       "name": "finalize-agent-prompt",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "copilot-customization-authoring"
+      ],
       "path": "harness/github-copilot/skills/finalize-agent-prompt",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -19949,7 +20350,9 @@
       "name": "first-ask",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "spec-driven-development"
+      ],
       "path": "harness/github-copilot/skills/first-ask",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -20365,7 +20768,9 @@
       "name": "freecad-scripts",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "creative-media-tooling"
+      ],
       "path": "harness/github-copilot/skills/freecad-scripts",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -20763,7 +21168,9 @@
       "name": "game-engine",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "creative-media-tooling"
+      ],
       "path": "harness/github-copilot/skills/game-engine",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -20826,7 +21233,9 @@
       "name": "gen-specs-as-issues",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "spec-driven-development"
+      ],
       "path": "harness/github-copilot/skills/gen-specs-as-issues",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -20843,7 +21252,9 @@
       "name": "generate-custom-instructions-from-codebase",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "copilot-customization-authoring"
+      ],
       "path": "harness/github-copilot/skills/generate-custom-instructions-from-codebase",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -21005,7 +21416,7 @@
       "package": null,
       "packaged_by": [
         "github-actions-maintenance",
-        "mainframe-modernization"
+        "mainframe-natural-adabas"
       ],
       "path": "harness/github-copilot/skills/github-actions-hardening",
       "review_status": "needs-current-source-review",
@@ -21191,7 +21602,9 @@
       "name": "github-copilot-starter",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "copilot-customization-authoring"
+      ],
       "path": "harness/github-copilot/skills/github-copilot-starter",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -21223,7 +21636,7 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 13564,
+      "characters_scanned": 14198,
       "external_url_count": 0,
       "files_scanned": 3,
       "kind": "skill",
@@ -21363,7 +21776,9 @@
       "name": "gsap-framer-scroll-animation",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "web-framework-development"
+      ],
       "path": "harness/github-copilot/skills/gsap-framer-scroll-animation",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -21639,7 +22054,9 @@
       "name": "harness-engineering",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "copilot-customization-authoring"
+      ],
       "path": "harness/github-copilot/skills/harness-engineering",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -21679,7 +22096,9 @@
       "name": "image-manipulation-image-magick",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "creative-media-tooling"
+      ],
       "path": "harness/github-copilot/skills/image-manipulation-image-magick",
       "review_status": "needs-semantic-review",
       "signals": [],
@@ -21694,7 +22113,9 @@
       "name": "impediment-prioritization",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "incident-response"
+      ],
       "path": "harness/github-copilot/skills/impediment-prioritization",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -21739,7 +22160,9 @@
       "name": "incident-postmortem",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "incident-response"
+      ],
       "path": "harness/github-copilot/skills/incident-postmortem",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -21867,7 +22290,7 @@
       "package": null,
       "packaged_by": [
         "java-development",
-        "mainframe-modernization",
+        "mainframe-natural-adabas",
         "testing-automation"
       ],
       "path": "harness/github-copilot/skills/java-junit",
@@ -21948,7 +22371,7 @@
       "package": null,
       "packaged_by": [
         "java-development",
-        "mainframe-modernization"
+        "mainframe-natural-adabas"
       ],
       "path": "harness/github-copilot/skills/java-springboot",
       "review_status": "needs-semantic-review",
@@ -21964,7 +22387,10 @@
       "name": "javascript-typescript-jest",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "testing-automation",
+        "testing-frameworks"
+      ],
       "path": "harness/github-copilot/skills/javascript-typescript-jest",
       "review_status": "needs-semantic-review",
       "signals": [],
@@ -22062,7 +22488,9 @@
       "name": "latchshot-page-capture",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "creative-media-tooling"
+      ],
       "path": "harness/github-copilot/skills/latchshot-page-capture",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -22087,7 +22515,7 @@
       "ownership": "shared",
       "package": null,
       "packaged_by": [
-        "mainframe-modernization"
+        "mainframe-natural-adabas"
       ],
       "path": "harness/github-copilot/skills/legacy-business-rule-extraction",
       "review_status": "needs-semantic-review",
@@ -22104,7 +22532,7 @@
       "ownership": "shared",
       "package": null,
       "packaged_by": [
-        "mainframe-modernization"
+        "mainframe-natural-adabas"
       ],
       "path": "harness/github-copilot/skills/legacy-characterization-testing",
       "review_status": "needs-semantic-review",
@@ -22120,7 +22548,9 @@
       "name": "legacy-circuit-mockups",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "iot-embedded-systems"
+      ],
       "path": "harness/github-copilot/skills/legacy-circuit-mockups",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -22190,6 +22620,30 @@
       "source_domains": []
     },
     {
+      "characters_scanned": 6100,
+      "external_url_count": 4,
+      "files_scanned": 1,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "load-performance-testing",
+      "ownership": "shared",
+      "package": null,
+      "packaged_by": [],
+      "path": "harness/github-copilot/skills/load-performance-testing",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "version-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "docs.gatling.io",
+        "docs.locust.io",
+        "grafana.com",
+        "jmeter.apache.org"
+      ]
+    },
+    {
       "characters_scanned": 15386,
       "external_url_count": 20,
       "files_scanned": 2,
@@ -22198,7 +22652,9 @@
       "name": "lsp-setup",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "copilot-customization-authoring"
+      ],
       "path": "harness/github-copilot/skills/lsp-setup",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -22297,7 +22753,9 @@
       "name": "markstream-install",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "web-framework-development"
+      ],
       "path": "harness/github-copilot/skills/markstream-install",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -22631,7 +23089,9 @@
       "name": "memory-merger",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "copilot-customization-authoring"
+      ],
       "path": "harness/github-copilot/skills/memory-merger",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -22648,7 +23108,9 @@
       "name": "mentoring-juniors",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "learning-and-mentoring"
+      ],
       "path": "harness/github-copilot/skills/mentoring-juniors",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -22828,7 +23290,9 @@
       "name": "microsoft-skill-creator",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "copilot-customization-authoring"
+      ],
       "path": "harness/github-copilot/skills/microsoft-skill-creator",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -22901,7 +23365,9 @@
       "name": "mini-context-graph",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "copilot-customization-authoring"
+      ],
       "path": "harness/github-copilot/skills/mini-context-graph",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -22936,7 +23402,9 @@
       "name": "msgraph-sdk",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "microsoft-365-data-platform"
+      ],
       "path": "harness/github-copilot/skills/msgraph-sdk",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -23023,6 +23491,28 @@
         "version-claim"
       ],
       "source_domains": []
+    },
+    {
+      "characters_scanned": 5563,
+      "external_url_count": 4,
+      "files_scanned": 1,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "mutation-testing",
+      "ownership": "shared",
+      "package": null,
+      "packaged_by": [],
+      "path": "harness/github-copilot/skills/mutation-testing",
+      "review_status": "needs-source-review",
+      "signals": [
+        "external-source"
+      ],
+      "source_domains": [
+        "cosmic-ray.readthedocs.io",
+        "mutmut.readthedocs.io",
+        "pitest.org",
+        "stryker-mutator.io"
+      ]
     },
     {
       "characters_scanned": 52766,
@@ -23128,7 +23618,9 @@
       "name": "nano-banana-pro-openrouter",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "creative-media-tooling"
+      ],
       "path": "harness/github-copilot/skills/nano-banana-pro-openrouter",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -23172,7 +23664,7 @@
       "ownership": "shared",
       "package": null,
       "packaged_by": [
-        "mainframe-modernization"
+        "mainframe-natural-adabas"
       ],
       "path": "harness/github-copilot/skills/natural-adabas-analysis",
       "review_status": "needs-semantic-review",
@@ -23188,7 +23680,9 @@
       "name": "next-intl-add-language",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "web-framework-development"
+      ],
       "path": "harness/github-copilot/skills/next-intl-add-language",
       "review_status": "needs-semantic-review",
       "signals": [],
@@ -24010,7 +24504,9 @@
       "name": "pdftk-server",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "creative-media-tooling"
+      ],
       "path": "harness/github-copilot/skills/pdftk-server",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -24087,7 +24583,10 @@
       "name": "pester-migration",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "testing-automation",
+        "testing-frameworks"
+      ],
       "path": "harness/github-copilot/skills/pester-migration",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -24111,7 +24610,10 @@
       "name": "pester-should-migration",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "testing-automation",
+        "testing-frameworks"
+      ],
       "path": "harness/github-copilot/skills/pester-should-migration",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -24240,7 +24742,9 @@
       "name": "pinecone-rag",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "data-engineering"
+      ],
       "path": "harness/github-copilot/skills/pinecone-rag",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -24437,7 +24941,7 @@
       "package": null,
       "packaged_by": [
         "database-data-management",
-        "mainframe-modernization"
+        "mainframe-natural-adabas"
       ],
       "path": "harness/github-copilot/skills/postgresql-code-review",
       "review_status": "needs-semantic-review",
@@ -24455,7 +24959,7 @@
       "package": null,
       "packaged_by": [
         "database-data-management",
-        "mainframe-modernization"
+        "mainframe-natural-adabas"
       ],
       "path": "harness/github-copilot/skills/postgresql-optimization",
       "review_status": "needs-current-source-review",
@@ -24618,7 +25122,9 @@
       "name": "powerbi-modeling",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "microsoft-365-data-platform"
+      ],
       "path": "harness/github-copilot/skills/powerbi-modeling",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -24683,7 +25189,9 @@
       "name": "prd",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "spec-driven-development"
+      ],
       "path": "harness/github-copilot/skills/prd",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -24739,7 +25247,9 @@
       "name": "prompt-optimizer",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "copilot-customization-authoring"
+      ],
       "path": "harness/github-copilot/skills/prompt-optimizer",
       "review_status": "needs-semantic-review",
       "signals": [],
@@ -24780,7 +25290,10 @@
       "name": "pytest-coverage",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "testing-automation",
+        "testing-frameworks"
+      ],
       "path": "harness/github-copilot/skills/pytest-coverage",
       "review_status": "needs-semantic-review",
       "signals": [],
@@ -24795,7 +25308,9 @@
       "name": "python-azure-iot-edge-modules",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "iot-embedded-systems"
+      ],
       "path": "harness/github-copilot/skills/python-azure-iot-edge-modules",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -25165,7 +25680,9 @@
       "name": "quality-playbook",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "code-quality-refactoring"
+      ],
       "path": "harness/github-copilot/skills/quality-playbook",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -25230,7 +25747,9 @@
       "name": "react-container-presentation-component",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "web-framework-development"
+      ],
       "path": "harness/github-copilot/skills/react-container-presentation-component",
       "review_status": "needs-semantic-review",
       "signals": [],
@@ -25449,7 +25968,9 @@
       "name": "refactor",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "code-quality-refactoring"
+      ],
       "path": "harness/github-copilot/skills/refactor",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -25467,7 +25988,9 @@
       "name": "refactor-method-complexity-reduce",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "code-quality-refactoring"
+      ],
       "path": "harness/github-copilot/skills/refactor-method-complexity-reduce",
       "review_status": "needs-semantic-review",
       "signals": [],
@@ -25503,7 +26026,9 @@
       "name": "remember",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "copilot-customization-authoring"
+      ],
       "path": "harness/github-copilot/skills/remember",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -25559,7 +26084,9 @@
       "name": "resemble-detect",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "creative-media-tooling"
+      ],
       "path": "harness/github-copilot/skills/resemble-detect",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -25583,7 +26110,9 @@
       "name": "review-and-refactor",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "code-quality-refactoring"
+      ],
       "path": "harness/github-copilot/skills/review-and-refactor",
       "review_status": "needs-semantic-review",
       "signals": [],
@@ -25625,7 +26154,9 @@
       "name": "rhdh",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "red-hat-developer-hub"
+      ],
       "path": "harness/github-copilot/skills/rhdh",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -25650,7 +26181,9 @@
       "name": "rhdh-jira",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "red-hat-developer-hub"
+      ],
       "path": "harness/github-copilot/skills/rhdh-jira",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -25675,7 +26208,9 @@
       "name": "rhdh-local",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "red-hat-developer-hub"
+      ],
       "path": "harness/github-copilot/skills/rhdh-local",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -25704,7 +26239,9 @@
       "name": "rhino3d-scripts",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "creative-media-tooling"
+      ],
       "path": "harness/github-copilot/skills/rhino3d-scripts",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -25788,7 +26325,9 @@
       "name": "ruff-recursive-fix",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "code-quality-refactoring"
+      ],
       "path": "harness/github-copilot/skills/ruff-recursive-fix",
       "review_status": "needs-semantic-review",
       "signals": [],
@@ -25907,7 +26446,10 @@
       "name": "scoutqa-test",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "testing-automation",
+        "testing-frameworks"
+      ],
       "path": "harness/github-copilot/skills/scoutqa-test",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -25981,7 +26523,7 @@
       "ownership": "shared",
       "package": null,
       "packaged_by": [
-        "mainframe-modernization"
+        "mainframe-natural-adabas"
       ],
       "path": "harness/github-copilot/skills/sdd-requirements-engineer",
       "review_status": "needs-current-source-review",
@@ -26126,7 +26668,9 @@
       "name": "shopify-review-triage",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "platform-vendor-expertise"
+      ],
       "path": "harness/github-copilot/skills/shopify-review-triage",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -26153,18 +26697,18 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 79962,
+      "characters_scanned": 107283,
       "external_url_count": 0,
-      "files_scanned": 9,
+      "files_scanned": 11,
       "kind": "skill",
       "local_evidence_mention": true,
       "name": "sifap-loop",
       "ownership": "plugin",
-      "package": "mainframe-modernization",
+      "package": "mainframe-natural-adabas",
       "packaged_by": [
-        "mainframe-modernization"
+        "mainframe-natural-adabas"
       ],
-      "path": "harness/github-copilot/plugins/mainframe-modernization/skills/sifap-loop",
+      "path": "harness/github-copilot/plugins/mainframe-natural-adabas/skills/sifap-loop",
       "review_status": "needs-current-source-review",
       "signals": [
         "currency-language",
@@ -26180,11 +26724,11 @@
       "local_evidence_mention": true,
       "name": "sifap-modernization-context",
       "ownership": "plugin",
-      "package": "mainframe-modernization",
+      "package": "mainframe-natural-adabas",
       "packaged_by": [
-        "mainframe-modernization"
+        "mainframe-natural-adabas"
       ],
-      "path": "harness/github-copilot/plugins/mainframe-modernization/skills/sifap-modernization-context",
+      "path": "harness/github-copilot/plugins/mainframe-natural-adabas/skills/sifap-modernization-context",
       "review_status": "needs-current-source-review",
       "signals": [
         "currency-language",
@@ -26200,11 +26744,11 @@
       "local_evidence_mention": true,
       "name": "sifap-requirements-traceability",
       "ownership": "plugin",
-      "package": "mainframe-modernization",
+      "package": "mainframe-natural-adabas",
       "packaged_by": [
-        "mainframe-modernization"
+        "mainframe-natural-adabas"
       ],
-      "path": "harness/github-copilot/plugins/mainframe-modernization/skills/sifap-requirements-traceability",
+      "path": "harness/github-copilot/plugins/mainframe-natural-adabas/skills/sifap-requirements-traceability",
       "review_status": "needs-semantic-review",
       "signals": [],
       "source_domains": []
@@ -26217,11 +26761,11 @@
       "local_evidence_mention": true,
       "name": "sifap-workshop-orchestration",
       "ownership": "plugin",
-      "package": "mainframe-modernization",
+      "package": "mainframe-natural-adabas",
       "packaged_by": [
-        "mainframe-modernization"
+        "mainframe-natural-adabas"
       ],
-      "path": "harness/github-copilot/plugins/mainframe-modernization/skills/sifap-workshop-orchestration",
+      "path": "harness/github-copilot/plugins/mainframe-natural-adabas/skills/sifap-workshop-orchestration",
       "review_status": "needs-current-source-review",
       "signals": [
         "currency-language"
@@ -26236,11 +26780,11 @@
       "local_evidence_mention": true,
       "name": "sifap-workspace-kit",
       "ownership": "plugin",
-      "package": "mainframe-modernization",
+      "package": "mainframe-natural-adabas",
       "packaged_by": [
-        "mainframe-modernization"
+        "mainframe-natural-adabas"
       ],
-      "path": "harness/github-copilot/plugins/mainframe-modernization/skills/sifap-workspace-kit",
+      "path": "harness/github-copilot/plugins/mainframe-natural-adabas/skills/sifap-workspace-kit",
       "review_status": "needs-current-source-review",
       "signals": [
         "currency-language",
@@ -26282,7 +26826,9 @@
       "name": "skill-creator",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "copilot-customization-authoring"
+      ],
       "path": "harness/github-copilot/skills/skill-creator",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -26303,7 +26849,9 @@
       "name": "slang-shader-engineer",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "creative-media-tooling"
+      ],
       "path": "harness/github-copilot/skills/slang-shader-engineer",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -26325,7 +26873,9 @@
       "name": "snowflake-semanticview",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "data-engineering"
+      ],
       "path": "harness/github-copilot/skills/snowflake-semanticview",
       "review_status": "needs-source-review",
       "signals": [
@@ -26440,7 +26990,9 @@
       "name": "sql-server-table-reconciliation",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "data-engineering"
+      ],
       "path": "harness/github-copilot/skills/sql-server-table-reconciliation",
       "review_status": "needs-semantic-review",
       "signals": [],
@@ -26455,7 +27007,9 @@
       "name": "ssma-console",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "data-engineering"
+      ],
       "path": "harness/github-copilot/skills/ssma-console",
       "review_status": "needs-semantic-review",
       "signals": [],
@@ -26470,7 +27024,9 @@
       "name": "steno-mode",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "copilot-customization-authoring"
+      ],
       "path": "harness/github-copilot/skills/steno-mode",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -26709,6 +27265,29 @@
       ]
     },
     {
+      "characters_scanned": 6256,
+      "external_url_count": 3,
+      "files_scanned": 1,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "test-data-management",
+      "ownership": "shared",
+      "package": null,
+      "packaged_by": [],
+      "path": "harness/github-copilot/skills/test-data-management",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "lifecycle-language",
+        "version-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "csrc.nist.gov",
+        "gdpr-info.eu",
+        "www.natpryce.com"
+      ]
+    },
+    {
       "characters_scanned": 335655,
       "external_url_count": 15,
       "files_scanned": 17,
@@ -26752,7 +27331,9 @@
       "name": "tiny-stepping",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "code-quality-refactoring"
+      ],
       "path": "harness/github-copilot/skills/tiny-stepping",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -26819,7 +27400,9 @@
       "name": "transloadit-media-processing",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "creative-media-tooling"
+      ],
       "path": "harness/github-copilot/skills/transloadit-media-processing",
       "review_status": "needs-source-review",
       "signals": [
@@ -26947,7 +27530,10 @@
       "name": "unit-test-vue-pinia",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "testing-automation",
+        "testing-frameworks"
+      ],
       "path": "harness/github-copilot/skills/unit-test-vue-pinia",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -27058,7 +27644,9 @@
       "name": "update-specification",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "spec-driven-development"
+      ],
       "path": "harness/github-copilot/skills/update-specification",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -27075,7 +27663,9 @@
       "name": "vardoger-analyze",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "copilot-customization-authoring"
+      ],
       "path": "harness/github-copilot/skills/vardoger-analyze",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -27316,7 +27906,9 @@
       "name": "workiq-copilot",
       "ownership": "shared",
       "package": null,
-      "packaged_by": [],
+      "packaged_by": [
+        "microsoft-365-data-platform"
+      ],
       "path": "harness/github-copilot/skills/workiq-copilot",
       "review_status": "needs-current-source-review",
       "signals": [
@@ -27441,7 +28033,7 @@
         },
         {
           "errors": 0,
-          "files": 599,
+          "files": 605,
           "kind": "skills",
           "warnings": 0
         },
@@ -27453,7 +28045,7 @@
         },
         {
           "errors": 0,
-          "files": 122,
+          "files": 136,
           "kind": "plugins",
           "warnings": 0
         },

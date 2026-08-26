@@ -1,0 +1,20 @@
+{
+  "name": "incident-response",
+  "description": "Handle production incidents end to end: cloud log and metric investigation, outage triage, Kubernetes platform SRE work, blameless postmortems, auditable bug receipts, reproduction briefs, rollout planning, and impediment prioritization.",
+  "version": "1.0.0",
+  "author": {
+    "name": "paulasilvatech"
+  },
+  "repository": "https://github.com/paulasilvatech/copilot-primitives",
+  "license": "MIT",
+  "keywords": [
+    "incident",
+    "sre",
+    "postmortem",
+    "observability",
+    "triage",
+    "operations"
+  ],
+  "agents": "agents/",
+  "skills": "skills/"
+}

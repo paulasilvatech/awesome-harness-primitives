@@ -1,0 +1,34 @@
+h2. *Description of problem:*
+
+Dynamic plugin loading fails silently when the plugin's package.json contains an invalid `scalprum` field. The plugin does not appear in the UI and no error is logged to the backend console.
+
+h2. *Prerequisites (if any, like setup, operators/versions):*
+
+RHDH 1.10 deployed via Helm chart with dynamic plugins enabled. At least one dynamic plugin configured in `dynamic-plugins.yaml`.
+
+h2. *Steps to Reproduce*
+
+ # Deploy RHDH 1.10 with Helm chart
+ # Add a dynamic plugin with an invalid `scalprum.name` field (e.g., missing the `@` prefix)
+ # Restart the RHDH pod
+ # Navigate to the UI and check for the plugin's page/card
+
+h2. *Actual results:*
+
+Plugin does not render. No error in browser console. No error in backend logs. The plugin appears as "loaded" in the admin panel but its components are not mounted.
+
+h2. *Expected results:*
+
+Either the plugin loads correctly despite the naming mismatch, or a clear error is logged indicating the scalprum name doesn't match the expected format.
+
+h2. *Reproducibility (Always/Intermittent/Only Once):*
+
+Always
+
+h2. *Build Details:*
+
+RHDH 1.10.2, Helm chart 1.10.1, OpenShift 4.16
+
+h2. *Additional info (Such as Logs, Screenshots, etc):*
+
+Discovered while onboarding the cost-management plugin. The invalid scalprum name was `cost-management` instead of `@red-hat-developer-hub/backstage-plugin-cost-management`. Once corrected, the plugin loaded. No documentation mentions this naming requirement.

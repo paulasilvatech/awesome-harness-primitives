@@ -1,0 +1,19 @@
+{
+  "name": "creative-media-tooling",
+  "description": "Produce and process creative and media assets: Illustrator and CAD scripting, ImageMagick and Transloadit processing, PDF manipulation, page capture, AI image generation, synthetic-media detection, shader engineering, and browser game engines.",
+  "version": "1.0.0",
+  "author": {
+    "name": "paulasilvatech"
+  },
+  "repository": "https://github.com/paulasilvatech/copilot-primitives",
+  "license": "MIT",
+  "keywords": [
+    "media",
+    "images",
+    "pdf",
+    "cad",
+    "shaders",
+    "automation"
+  ],
+  "skills": "skills/"
+}

@@ -7,9 +7,10 @@ active primitives.
 ## Canonical package
 
 The maintained package is
-[`harness/github-copilot/plugins/mainframe-modernization/`](../harness/github-copilot/plugins/mainframe-modernization/).
-It contains four stage agents, SIFAP context and traceability Skills, focused instructions and prompts,
-shared generated Skills, and the transactional `sifap-workspace-kit` publisher.
+[`harness/github-copilot/plugins/mainframe-natural-adabas/`](../harness/github-copilot/plugins/mainframe-natural-adabas/).
+It contains five stage agents, SIFAP context and traceability Skills, the loop and engineering graph,
+focused instructions and prompts, shared generated Skills, and the transactional `sifap-workspace-kit`
+publisher. COBOL and DB2 systems use the sibling `mainframe-cobol-db2` package.
 
 Do not update the snapshot's old agents, prompts, instructions, empty skill directories, or local plugin
 manifests independently. Make changes in the canonical package and use its workspace kit to publish a
@@ -17,7 +18,7 @@ clean target repository.
 
 ## Publication
 
-After installing `mainframe-modernization@copilot-primitives`, preview a target repository with:
+After installing `mainframe-natural-adabas@copilot-primitives`, preview a target repository with:
 
 ```bash
 python3 scripts/install_workspace_kit.py \
@@ -30,6 +31,6 @@ not a second source of truth.
 
 ## References
 
-- [Canonical plugin](../harness/github-copilot/plugins/mainframe-modernization/README.md)
+- [Canonical plugin](../harness/github-copilot/plugins/mainframe-natural-adabas/README.md)
 - [Harness contract](../docs/COPILOT-HARNESS-SPEC.md)
 - [Runtime evidence](../docs/HARNESS-VALIDATION.md#mainframe-modernization-plugin-runtime-verification)

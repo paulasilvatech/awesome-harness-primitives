@@ -13,3 +13,9 @@ logs/
 
 # Playwright MCP run artifacts are session output, not plugin components.
 .playwright-mcp/
+
+# .NET build output bakes in absolute paths and is never skill content.
+obj/Debug/
+obj/Release/
+bin/Debug/
+bin/Release/

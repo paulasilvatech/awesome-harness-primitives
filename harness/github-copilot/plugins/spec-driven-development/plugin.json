@@ -1,0 +1,20 @@
+{
+  "name": "spec-driven-development",
+  "description": "Drive work from written specifications: author and update spec files, derive GitHub issues and epics, break down features and test plans, write product requirements, and refine a request before implementation.",
+  "version": "1.0.0",
+  "author": {
+    "name": "paulasilvatech"
+  },
+  "repository": "https://github.com/paulasilvatech/copilot-primitives",
+  "license": "MIT",
+  "keywords": [
+    "specification",
+    "requirements",
+    "planning",
+    "issues",
+    "prd",
+    "backlog"
+  ],
+  "agents": "agents/",
+  "skills": "skills/"
+}
