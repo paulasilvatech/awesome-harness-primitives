@@ -1,0 +1,28 @@
+{
+    "kitName": "cobol-classic-workspace-kit",
+    "stateFile": ".github/.cobol-classic-workspace-kit.json",
+    "globalInstructions": "workspace-kit/copilot-instructions.md",
+    "agents": [
+        "cobol-classic-archaeologist.agent.md",
+        "cobol-classic-architect.agent.md",
+        "cobol-classic-builder.agent.md",
+        "cobol-classic-evolution.agent.md"
+    ],
+    "prompts": [
+        "cobol-classic-archaeology.prompt.md",
+        "cobol-classic-specify.prompt.md",
+        "cobol-classic-build-slice.prompt.md",
+        "cobol-classic-evolve.prompt.md"
+    ],
+    "skills": [
+        "cobol-classic-context",
+        "modernization-workspace-kit"
+    ],
+    "coreInstructions": [
+        "cobol-legacy.instructions.md"
+    ],
+    "workshopInstructions": [
+        "db2-schema.instructions.md"
+    ],
+    "automation": []
+}

@@ -16,16 +16,16 @@
   },
   "packaging": {
     "activePluginHookPackages": 2,
-    "marketplaceEntries": 137,
+    "marketplaceEntries": 139,
     "pluginOwned": {
-      "agents": 29,
+      "agents": 37,
       "errors": 0,
-      "instructions": 45,
-      "prompts": 21,
-      "skills": 119,
+      "instructions": 56,
+      "prompts": 29,
+      "skills": 123,
       "warnings": 0
     },
-    "pluginPackages": 137,
+    "pluginPackages": 139,
     "sharedAgents": {
       "packaged": 198,
       "total": 228,
@@ -1078,6 +1078,77 @@
       "source_domains": [
         "outagedeck.com"
       ]
+    },
+    {
+      "characters_scanned": 5005,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "agent",
+      "local_evidence_mention": false,
+      "name": "cobol-classic-archaeologist",
+      "ownership": "plugin",
+      "package": "mainframe-cobol-db2-classic",
+      "packaged_by": [
+        "mainframe-cobol-db2-classic"
+      ],
+      "path": "harness/github-copilot/plugins/mainframe-cobol-db2-classic/agents/cobol-classic-archaeologist.agent.md",
+      "review_status": "needs-semantic-review",
+      "signals": [],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 5018,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "agent",
+      "local_evidence_mention": false,
+      "name": "cobol-classic-architect",
+      "ownership": "plugin",
+      "package": "mainframe-cobol-db2-classic",
+      "packaged_by": [
+        "mainframe-cobol-db2-classic"
+      ],
+      "path": "harness/github-copilot/plugins/mainframe-cobol-db2-classic/agents/cobol-classic-architect.agent.md",
+      "review_status": "needs-semantic-review",
+      "signals": [],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 4845,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "agent",
+      "local_evidence_mention": false,
+      "name": "cobol-classic-builder",
+      "ownership": "plugin",
+      "package": "mainframe-cobol-db2-classic",
+      "packaged_by": [
+        "mainframe-cobol-db2-classic"
+      ],
+      "path": "harness/github-copilot/plugins/mainframe-cobol-db2-classic/agents/cobol-classic-builder.agent.md",
+      "review_status": "needs-semantic-review",
+      "signals": [],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 5804,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "agent",
+      "local_evidence_mention": false,
+      "name": "cobol-classic-evolution",
+      "ownership": "plugin",
+      "package": "mainframe-cobol-db2-classic",
+      "packaged_by": [
+        "mainframe-cobol-db2-classic"
+      ],
+      "path": "harness/github-copilot/plugins/mainframe-cobol-db2-classic/agents/cobol-classic-evolution.agent.md",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "lifecycle-language"
+      ],
+      "source_domains": []
     },
     {
       "characters_scanned": 5031,
@@ -4530,6 +4601,79 @@
       "source_domains": []
     },
     {
+      "characters_scanned": 4269,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "agent",
+      "local_evidence_mention": false,
+      "name": "sifap-classic-archaeologist",
+      "ownership": "plugin",
+      "package": "mainframe-natural-adabas-classic",
+      "packaged_by": [
+        "mainframe-natural-adabas-classic"
+      ],
+      "path": "harness/github-copilot/plugins/mainframe-natural-adabas-classic/agents/sifap-classic-archaeologist.agent.md",
+      "review_status": "needs-semantic-review",
+      "signals": [],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 4735,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "agent",
+      "local_evidence_mention": false,
+      "name": "sifap-classic-architect",
+      "ownership": "plugin",
+      "package": "mainframe-natural-adabas-classic",
+      "packaged_by": [
+        "mainframe-natural-adabas-classic"
+      ],
+      "path": "harness/github-copilot/plugins/mainframe-natural-adabas-classic/agents/sifap-classic-architect.agent.md",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language"
+      ],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 4717,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "agent",
+      "local_evidence_mention": false,
+      "name": "sifap-classic-builder",
+      "ownership": "plugin",
+      "package": "mainframe-natural-adabas-classic",
+      "packaged_by": [
+        "mainframe-natural-adabas-classic"
+      ],
+      "path": "harness/github-copilot/plugins/mainframe-natural-adabas-classic/agents/sifap-classic-builder.agent.md",
+      "review_status": "needs-semantic-review",
+      "signals": [],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 5053,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "agent",
+      "local_evidence_mention": false,
+      "name": "sifap-classic-evolution",
+      "ownership": "plugin",
+      "package": "mainframe-natural-adabas-classic",
+      "packaged_by": [
+        "mainframe-natural-adabas-classic"
+      ],
+      "path": "harness/github-copilot/plugins/mainframe-natural-adabas-classic/agents/sifap-classic-evolution.agent.md",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "lifecycle-language"
+      ],
+      "source_domains": []
+    },
+    {
       "characters_scanned": 5875,
       "external_url_count": 0,
       "files_scanned": 1,
@@ -6370,6 +6514,23 @@
       "local_evidence_mention": false,
       "name": "cobol-legacy",
       "ownership": "plugin",
+      "package": "mainframe-cobol-db2-classic",
+      "packaged_by": [
+        "mainframe-cobol-db2-classic"
+      ],
+      "path": "harness/github-copilot/plugins/mainframe-cobol-db2-classic/instructions/cobol-legacy.instructions.md",
+      "review_status": "needs-semantic-review",
+      "signals": [],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 3912,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "instruction",
+      "local_evidence_mention": false,
+      "name": "cobol-legacy",
+      "ownership": "plugin",
       "package": "mainframe-cobol-db2",
       "packaged_by": [
         "mainframe-cobol-db2"
@@ -7094,6 +7255,23 @@
         "github.com",
         "learn.microsoft.com"
       ]
+    },
+    {
+      "characters_scanned": 4078,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "instruction",
+      "local_evidence_mention": false,
+      "name": "db2-schema",
+      "ownership": "plugin",
+      "package": "mainframe-cobol-db2-classic",
+      "packaged_by": [
+        "mainframe-cobol-db2-classic"
+      ],
+      "path": "harness/github-copilot/plugins/mainframe-cobol-db2-classic/instructions/db2-schema.instructions.md",
+      "review_status": "needs-semantic-review",
+      "signals": [],
+      "source_domains": []
     },
     {
       "characters_scanned": 4078,
@@ -9424,6 +9602,25 @@
       "local_evidence_mention": false,
       "name": "sifap-backend",
       "ownership": "plugin",
+      "package": "mainframe-natural-adabas-classic",
+      "packaged_by": [
+        "mainframe-natural-adabas-classic"
+      ],
+      "path": "harness/github-copilot/plugins/mainframe-natural-adabas-classic/instructions/sifap-backend.instructions.md",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "version-claim"
+      ],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 2784,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "instruction",
+      "local_evidence_mention": false,
+      "name": "sifap-backend",
+      "ownership": "plugin",
       "package": "mainframe-natural-adabas",
       "packaged_by": [
         "mainframe-natural-adabas"
@@ -9432,6 +9629,26 @@
       "review_status": "needs-current-source-review",
       "signals": [
         "version-claim"
+      ],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 2737,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "instruction",
+      "local_evidence_mention": false,
+      "name": "sifap-cicd",
+      "ownership": "plugin",
+      "package": "mainframe-natural-adabas-classic",
+      "packaged_by": [
+        "mainframe-natural-adabas-classic"
+      ],
+      "path": "harness/github-copilot/plugins/mainframe-natural-adabas-classic/instructions/sifap-cicd.instructions.md",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "lifecycle-language"
       ],
       "source_domains": []
     },
@@ -9463,6 +9680,23 @@
       "local_evidence_mention": false,
       "name": "sifap-database",
       "ownership": "plugin",
+      "package": "mainframe-natural-adabas-classic",
+      "packaged_by": [
+        "mainframe-natural-adabas-classic"
+      ],
+      "path": "harness/github-copilot/plugins/mainframe-natural-adabas-classic/instructions/sifap-database.instructions.md",
+      "review_status": "needs-semantic-review",
+      "signals": [],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 2990,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "instruction",
+      "local_evidence_mention": false,
+      "name": "sifap-database",
+      "ownership": "plugin",
       "package": "mainframe-natural-adabas",
       "packaged_by": [
         "mainframe-natural-adabas"
@@ -9470,6 +9704,26 @@
       "path": "harness/github-copilot/plugins/mainframe-natural-adabas/instructions/sifap-database.instructions.md",
       "review_status": "needs-semantic-review",
       "signals": [],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 2853,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "instruction",
+      "local_evidence_mention": false,
+      "name": "sifap-frontend",
+      "ownership": "plugin",
+      "package": "mainframe-natural-adabas-classic",
+      "packaged_by": [
+        "mainframe-natural-adabas-classic"
+      ],
+      "path": "harness/github-copilot/plugins/mainframe-natural-adabas-classic/instructions/sifap-frontend.instructions.md",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "version-claim"
+      ],
       "source_domains": []
     },
     {
@@ -9500,6 +9754,25 @@
       "local_evidence_mention": false,
       "name": "sifap-infrastructure",
       "ownership": "plugin",
+      "package": "mainframe-natural-adabas-classic",
+      "packaged_by": [
+        "mainframe-natural-adabas-classic"
+      ],
+      "path": "harness/github-copilot/plugins/mainframe-natural-adabas-classic/instructions/sifap-infrastructure.instructions.md",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language"
+      ],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 2930,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "instruction",
+      "local_evidence_mention": false,
+      "name": "sifap-infrastructure",
+      "ownership": "plugin",
       "package": "mainframe-natural-adabas",
       "packaged_by": [
         "mainframe-natural-adabas"
@@ -9519,11 +9792,45 @@
       "local_evidence_mention": false,
       "name": "sifap-natural-adabas",
       "ownership": "plugin",
+      "package": "mainframe-natural-adabas-classic",
+      "packaged_by": [
+        "mainframe-natural-adabas-classic"
+      ],
+      "path": "harness/github-copilot/plugins/mainframe-natural-adabas-classic/instructions/sifap-natural-adabas.instructions.md",
+      "review_status": "needs-semantic-review",
+      "signals": [],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 2906,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "instruction",
+      "local_evidence_mention": false,
+      "name": "sifap-natural-adabas",
+      "ownership": "plugin",
       "package": "mainframe-natural-adabas",
       "packaged_by": [
         "mainframe-natural-adabas"
       ],
       "path": "harness/github-copilot/plugins/mainframe-natural-adabas/instructions/sifap-natural-adabas.instructions.md",
+      "review_status": "needs-semantic-review",
+      "signals": [],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 2680,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "instruction",
+      "local_evidence_mention": false,
+      "name": "sifap-requirements",
+      "ownership": "plugin",
+      "package": "mainframe-natural-adabas-classic",
+      "packaged_by": [
+        "mainframe-natural-adabas-classic"
+      ],
+      "path": "harness/github-copilot/plugins/mainframe-natural-adabas-classic/instructions/sifap-requirements.instructions.md",
       "review_status": "needs-semantic-review",
       "signals": [],
       "source_domains": []
@@ -9553,11 +9860,45 @@
       "local_evidence_mention": false,
       "name": "sifap-security",
       "ownership": "plugin",
+      "package": "mainframe-natural-adabas-classic",
+      "packaged_by": [
+        "mainframe-natural-adabas-classic"
+      ],
+      "path": "harness/github-copilot/plugins/mainframe-natural-adabas-classic/instructions/sifap-security.instructions.md",
+      "review_status": "needs-semantic-review",
+      "signals": [],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 3306,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "instruction",
+      "local_evidence_mention": false,
+      "name": "sifap-security",
+      "ownership": "plugin",
       "package": "mainframe-natural-adabas",
       "packaged_by": [
         "mainframe-natural-adabas"
       ],
       "path": "harness/github-copilot/plugins/mainframe-natural-adabas/instructions/sifap-security.instructions.md",
+      "review_status": "needs-semantic-review",
+      "signals": [],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 2710,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "instruction",
+      "local_evidence_mention": false,
+      "name": "sifap-tests",
+      "ownership": "plugin",
+      "package": "mainframe-natural-adabas-classic",
+      "packaged_by": [
+        "mainframe-natural-adabas-classic"
+      ],
+      "path": "harness/github-copilot/plugins/mainframe-natural-adabas-classic/instructions/sifap-tests.instructions.md",
       "review_status": "needs-semantic-review",
       "signals": [],
       "source_domains": []
@@ -11888,7 +12229,7 @@
       ]
     },
     {
-      "characters_scanned": 116050,
+      "characters_scanned": 116254,
       "external_url_count": 3,
       "files_scanned": 18,
       "kind": "plugin",
@@ -11914,7 +12255,33 @@
       ]
     },
     {
-      "characters_scanned": 216996,
+      "characters_scanned": 55622,
+      "external_url_count": 3,
+      "files_scanned": 13,
+      "kind": "plugin",
+      "local_evidence_mention": true,
+      "name": "mainframe-cobol-db2-classic",
+      "ownership": "plugin",
+      "package": "mainframe-cobol-db2-classic",
+      "packaged_by": [
+        "mainframe-cobol-db2-classic"
+      ],
+      "path": "harness/github-copilot/plugins/mainframe-cobol-db2-classic",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "lifecycle-language",
+        "version-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "agentskills.io",
+        "code.visualstudio.com",
+        "github.com"
+      ]
+    },
+    {
+      "characters_scanned": 217207,
       "external_url_count": 4,
       "files_scanned": 43,
       "kind": "plugin",
@@ -11937,6 +12304,32 @@
         "agentskills.io",
         "code.visualstudio.com",
         "docs.github.com",
+        "github.com"
+      ]
+    },
+    {
+      "characters_scanned": 92646,
+      "external_url_count": 3,
+      "files_scanned": 30,
+      "kind": "plugin",
+      "local_evidence_mention": true,
+      "name": "mainframe-natural-adabas-classic",
+      "ownership": "plugin",
+      "package": "mainframe-natural-adabas-classic",
+      "packaged_by": [
+        "mainframe-natural-adabas-classic"
+      ],
+      "path": "harness/github-copilot/plugins/mainframe-natural-adabas-classic",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "lifecycle-language",
+        "version-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "agentskills.io",
+        "code.visualstudio.com",
         "github.com"
       ]
     },
@@ -13552,6 +13945,77 @@
       "source_domains": []
     },
     {
+      "characters_scanned": 4174,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "prompt",
+      "local_evidence_mention": false,
+      "name": "cobol-classic-archaeology",
+      "ownership": "plugin",
+      "package": "mainframe-cobol-db2-classic",
+      "packaged_by": [
+        "mainframe-cobol-db2-classic"
+      ],
+      "path": "harness/github-copilot/plugins/mainframe-cobol-db2-classic/prompts/cobol-classic-archaeology.prompt.md",
+      "review_status": "needs-semantic-review",
+      "signals": [],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 3860,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "prompt",
+      "local_evidence_mention": false,
+      "name": "cobol-classic-build-slice",
+      "ownership": "plugin",
+      "package": "mainframe-cobol-db2-classic",
+      "packaged_by": [
+        "mainframe-cobol-db2-classic"
+      ],
+      "path": "harness/github-copilot/plugins/mainframe-cobol-db2-classic/prompts/cobol-classic-build-slice.prompt.md",
+      "review_status": "needs-semantic-review",
+      "signals": [],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 4420,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "prompt",
+      "local_evidence_mention": false,
+      "name": "cobol-classic-evolve",
+      "ownership": "plugin",
+      "package": "mainframe-cobol-db2-classic",
+      "packaged_by": [
+        "mainframe-cobol-db2-classic"
+      ],
+      "path": "harness/github-copilot/plugins/mainframe-cobol-db2-classic/prompts/cobol-classic-evolve.prompt.md",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "lifecycle-language"
+      ],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 3897,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "prompt",
+      "local_evidence_mention": false,
+      "name": "cobol-classic-specify",
+      "ownership": "plugin",
+      "package": "mainframe-cobol-db2-classic",
+      "packaged_by": [
+        "mainframe-cobol-db2-classic"
+      ],
+      "path": "harness/github-copilot/plugins/mainframe-cobol-db2-classic/prompts/cobol-classic-specify.prompt.md",
+      "review_status": "needs-semantic-review",
+      "signals": [],
+      "source_domains": []
+    },
+    {
       "characters_scanned": 4298,
       "external_url_count": 0,
       "files_scanned": 1,
@@ -14492,6 +14956,77 @@
       "source_domains": []
     },
     {
+      "characters_scanned": 3378,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "prompt",
+      "local_evidence_mention": false,
+      "name": "sifap-classic-archaeology",
+      "ownership": "plugin",
+      "package": "mainframe-natural-adabas-classic",
+      "packaged_by": [
+        "mainframe-natural-adabas-classic"
+      ],
+      "path": "harness/github-copilot/plugins/mainframe-natural-adabas-classic/prompts/sifap-classic-archaeology.prompt.md",
+      "review_status": "needs-semantic-review",
+      "signals": [],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 3580,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "prompt",
+      "local_evidence_mention": false,
+      "name": "sifap-classic-build-slice",
+      "ownership": "plugin",
+      "package": "mainframe-natural-adabas-classic",
+      "packaged_by": [
+        "mainframe-natural-adabas-classic"
+      ],
+      "path": "harness/github-copilot/plugins/mainframe-natural-adabas-classic/prompts/sifap-classic-build-slice.prompt.md",
+      "review_status": "needs-semantic-review",
+      "signals": [],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 3793,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "prompt",
+      "local_evidence_mention": false,
+      "name": "sifap-classic-evolve",
+      "ownership": "plugin",
+      "package": "mainframe-natural-adabas-classic",
+      "packaged_by": [
+        "mainframe-natural-adabas-classic"
+      ],
+      "path": "harness/github-copilot/plugins/mainframe-natural-adabas-classic/prompts/sifap-classic-evolve.prompt.md",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "lifecycle-language"
+      ],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 3361,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "prompt",
+      "local_evidence_mention": false,
+      "name": "sifap-classic-specify",
+      "ownership": "plugin",
+      "package": "mainframe-natural-adabas-classic",
+      "packaged_by": [
+        "mainframe-natural-adabas-classic"
+      ],
+      "path": "harness/github-copilot/plugins/mainframe-natural-adabas-classic/prompts/sifap-classic-specify.prompt.md",
+      "review_status": "needs-semantic-review",
+      "signals": [],
+      "source_domains": []
+    },
+    {
       "characters_scanned": 4040,
       "external_url_count": 0,
       "files_scanned": 1,
@@ -14736,7 +15271,8 @@
       "ownership": "shared",
       "package": null,
       "packaged_by": [
-        "mainframe-natural-adabas"
+        "mainframe-natural-adabas",
+        "mainframe-natural-adabas-classic"
       ],
       "path": "harness/github-copilot/skills/adabas-postgresql-migration",
       "review_status": "needs-semantic-review",
@@ -18565,6 +19101,26 @@
       ]
     },
     {
+      "characters_scanned": 6182,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "cobol-classic-context",
+      "ownership": "plugin",
+      "package": "mainframe-cobol-db2-classic",
+      "packaged_by": [
+        "mainframe-cobol-db2-classic"
+      ],
+      "path": "harness/github-copilot/plugins/mainframe-cobol-db2-classic/skills/cobol-classic-context",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "lifecycle-language"
+      ],
+      "source_domains": []
+    },
+    {
       "characters_scanned": 6207,
       "external_url_count": 0,
       "files_scanned": 1,
@@ -18574,7 +19130,8 @@
       "ownership": "shared",
       "package": null,
       "packaged_by": [
-        "mainframe-cobol-db2"
+        "mainframe-cobol-db2",
+        "mainframe-cobol-db2-classic"
       ],
       "path": "harness/github-copilot/skills/cobol-db2-analysis",
       "review_status": "needs-semantic-review",
@@ -18646,7 +19203,9 @@
       "package": null,
       "packaged_by": [
         "mainframe-cobol-db2",
-        "mainframe-natural-adabas"
+        "mainframe-cobol-db2-classic",
+        "mainframe-natural-adabas",
+        "mainframe-natural-adabas-classic"
       ],
       "path": "harness/github-copilot/skills/code-modernization",
       "review_status": "needs-current-source-review",
@@ -19232,7 +19791,9 @@
       "package": null,
       "packaged_by": [
         "mainframe-cobol-db2",
-        "mainframe-natural-adabas"
+        "mainframe-cobol-db2-classic",
+        "mainframe-natural-adabas",
+        "mainframe-natural-adabas-classic"
       ],
       "path": "harness/github-copilot/skills/create-architectural-decision-record",
       "review_status": "needs-current-source-review",
@@ -19874,7 +20435,8 @@
       "ownership": "shared",
       "package": null,
       "packaged_by": [
-        "mainframe-cobol-db2"
+        "mainframe-cobol-db2",
+        "mainframe-cobol-db2-classic"
       ],
       "path": "harness/github-copilot/skills/db2-postgresql-migration",
       "review_status": "needs-semantic-review",
@@ -21724,7 +22286,9 @@
       "packaged_by": [
         "github-actions-maintenance",
         "mainframe-cobol-db2",
-        "mainframe-natural-adabas"
+        "mainframe-cobol-db2-classic",
+        "mainframe-natural-adabas",
+        "mainframe-natural-adabas-classic"
       ],
       "path": "harness/github-copilot/skills/github-actions-hardening",
       "review_status": "needs-current-source-review",
@@ -22598,7 +23162,9 @@
       "package": null,
       "packaged_by": [
         "java-development",
+        "mainframe-cobol-db2-classic",
         "mainframe-natural-adabas",
+        "mainframe-natural-adabas-classic",
         "testing-automation"
       ],
       "path": "harness/github-copilot/skills/java-junit",
@@ -22679,7 +23245,9 @@
       "package": null,
       "packaged_by": [
         "java-development",
-        "mainframe-natural-adabas"
+        "mainframe-cobol-db2-classic",
+        "mainframe-natural-adabas",
+        "mainframe-natural-adabas-classic"
       ],
       "path": "harness/github-copilot/skills/java-springboot",
       "review_status": "needs-semantic-review",
@@ -22824,7 +23392,9 @@
       "package": null,
       "packaged_by": [
         "mainframe-cobol-db2",
-        "mainframe-natural-adabas"
+        "mainframe-cobol-db2-classic",
+        "mainframe-natural-adabas",
+        "mainframe-natural-adabas-classic"
       ],
       "path": "harness/github-copilot/skills/legacy-business-rule-extraction",
       "review_status": "needs-semantic-review",
@@ -22842,7 +23412,9 @@
       "package": null,
       "packaged_by": [
         "mainframe-cobol-db2",
-        "mainframe-natural-adabas"
+        "mainframe-cobol-db2-classic",
+        "mainframe-natural-adabas",
+        "mainframe-natural-adabas-classic"
       ],
       "path": "harness/github-copilot/skills/legacy-characterization-testing",
       "review_status": "needs-semantic-review",
@@ -23714,7 +24286,9 @@
       "package": null,
       "packaged_by": [
         "mainframe-cobol-db2",
-        "mainframe-natural-adabas"
+        "mainframe-cobol-db2-classic",
+        "mainframe-natural-adabas",
+        "mainframe-natural-adabas-classic"
       ],
       "path": "harness/github-copilot/skills/modernization-workspace-kit",
       "review_status": "needs-current-source-review",
@@ -23995,7 +24569,8 @@
       "ownership": "shared",
       "package": null,
       "packaged_by": [
-        "mainframe-natural-adabas"
+        "mainframe-natural-adabas",
+        "mainframe-natural-adabas-classic"
       ],
       "path": "harness/github-copilot/skills/natural-adabas-analysis",
       "review_status": "needs-semantic-review",
@@ -25273,7 +25848,9 @@
       "packaged_by": [
         "database-data-management",
         "mainframe-cobol-db2",
-        "mainframe-natural-adabas"
+        "mainframe-cobol-db2-classic",
+        "mainframe-natural-adabas",
+        "mainframe-natural-adabas-classic"
       ],
       "path": "harness/github-copilot/skills/postgresql-code-review",
       "review_status": "needs-semantic-review",
@@ -25292,7 +25869,9 @@
       "packaged_by": [
         "database-data-management",
         "mainframe-cobol-db2",
-        "mainframe-natural-adabas"
+        "mainframe-cobol-db2-classic",
+        "mainframe-natural-adabas",
+        "mainframe-natural-adabas-classic"
       ],
       "path": "harness/github-copilot/skills/postgresql-optimization",
       "review_status": "needs-current-source-review",
@@ -26857,7 +27436,9 @@
       "package": null,
       "packaged_by": [
         "mainframe-cobol-db2",
-        "mainframe-natural-adabas"
+        "mainframe-cobol-db2-classic",
+        "mainframe-natural-adabas",
+        "mainframe-natural-adabas-classic"
       ],
       "path": "harness/github-copilot/skills/sdd-requirements-engineer",
       "review_status": "needs-current-source-review",
@@ -27026,6 +27607,62 @@
       "package": null,
       "packaged_by": [],
       "path": "harness/github-copilot/skills/shuffle-json-data",
+      "review_status": "needs-semantic-review",
+      "signals": [],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 11601,
+      "external_url_count": 0,
+      "files_scanned": 7,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "sifap-classic-context",
+      "ownership": "plugin",
+      "package": "mainframe-natural-adabas-classic",
+      "packaged_by": [
+        "mainframe-natural-adabas-classic"
+      ],
+      "path": "harness/github-copilot/plugins/mainframe-natural-adabas-classic/skills/sifap-classic-context",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "version-claim"
+      ],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 4483,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "sifap-classic-orchestration",
+      "ownership": "plugin",
+      "package": "mainframe-natural-adabas-classic",
+      "packaged_by": [
+        "mainframe-natural-adabas-classic"
+      ],
+      "path": "harness/github-copilot/plugins/mainframe-natural-adabas-classic/skills/sifap-classic-orchestration",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language"
+      ],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 13219,
+      "external_url_count": 0,
+      "files_scanned": 3,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "sifap-classic-traceability",
+      "ownership": "plugin",
+      "package": "mainframe-natural-adabas-classic",
+      "packaged_by": [
+        "mainframe-natural-adabas-classic"
+      ],
+      "path": "harness/github-copilot/plugins/mainframe-natural-adabas-classic/skills/sifap-classic-traceability",
       "review_status": "needs-semantic-review",
       "signals": [],
       "source_domains": []
@@ -28317,11 +28954,11 @@
   "unreadableFiles": [],
   "validation": {
     "pluginOwned": {
-      "agents": 29,
+      "agents": 37,
       "errors": 0,
-      "instructions": 45,
-      "prompts": 21,
-      "skills": 119,
+      "instructions": 56,
+      "prompts": 29,
+      "skills": 123,
       "warnings": 0
     },
     "sharedHarness": {
@@ -28329,31 +28966,31 @@
       "summary": [
         {
           "errors": 0,
-          "files": 257,
+          "files": 265,
           "kind": "agents",
           "warnings": 0
         },
         {
           "errors": 0,
-          "files": 240,
+          "files": 251,
           "kind": "instructions",
           "warnings": 0
         },
         {
           "errors": 0,
-          "files": 609,
+          "files": 613,
           "kind": "skills",
           "warnings": 0
         },
         {
           "errors": 0,
-          "files": 69,
+          "files": 77,
           "kind": "prompts",
           "warnings": 0
         },
         {
           "errors": 0,
-          "files": 137,
+          "files": 139,
           "kind": "plugins",
           "warnings": 0
         },

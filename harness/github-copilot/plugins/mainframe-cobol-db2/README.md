@@ -4,6 +4,9 @@
 evidence-gated method as the sibling `mainframe-natural-adabas` plugin, with COBOL-specific context,
 instructions, analysis, and graph extraction.
 
+If the team wants the linear four-stage workshop without correction loops or the engineering graph, use
+`mainframe-cobol-db2-classic` instead. The two COBOL packages are mutually exclusive: install one.
+
 ## Included runtime capabilities
 
 | Area | Primitive |

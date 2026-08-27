@@ -1,6 +1,54 @@
 {
   "candidates": [
     {
+      "classification": "workshop-variant",
+      "kind": "agent",
+      "left": "plugins/mainframe-natural-adabas-classic/agents/sifap-classic-builder.agent.md",
+      "rationale": "The classic package is the loop-free four-stage sibling of the same modernization track and is installed instead of it, never alongside it.",
+      "right": "plugins/mainframe-natural-adabas/agents/sifap-builder.agent.md",
+      "similarity": 0.982
+    },
+    {
+      "classification": "workshop-variant",
+      "kind": "agent",
+      "left": "plugins/mainframe-natural-adabas-classic/agents/sifap-classic-architect.agent.md",
+      "rationale": "The classic package is the loop-free four-stage sibling of the same modernization track and is installed instead of it, never alongside it.",
+      "right": "plugins/mainframe-natural-adabas/agents/sifap-architect.agent.md",
+      "similarity": 0.98
+    },
+    {
+      "classification": "workshop-variant",
+      "kind": "agent",
+      "left": "plugins/mainframe-natural-adabas-classic/agents/sifap-classic-archaeologist.agent.md",
+      "rationale": "The classic package is the loop-free four-stage sibling of the same modernization track and is installed instead of it, never alongside it.",
+      "right": "plugins/mainframe-natural-adabas/agents/sifap-archaeologist.agent.md",
+      "similarity": 0.979
+    },
+    {
+      "classification": "workshop-variant",
+      "kind": "agent",
+      "left": "plugins/mainframe-cobol-db2-classic/agents/cobol-classic-architect.agent.md",
+      "rationale": "The classic package is the loop-free four-stage sibling of the same modernization track and is installed instead of it, never alongside it.",
+      "right": "plugins/mainframe-cobol-db2/agents/cobol-db2-architect.agent.md",
+      "similarity": 0.971
+    },
+    {
+      "classification": "workshop-variant",
+      "kind": "agent",
+      "left": "plugins/mainframe-cobol-db2-classic/agents/cobol-classic-archaeologist.agent.md",
+      "rationale": "The classic package is the loop-free four-stage sibling of the same modernization track and is installed instead of it, never alongside it.",
+      "right": "plugins/mainframe-cobol-db2/agents/cobol-db2-archaeologist.agent.md",
+      "similarity": 0.968
+    },
+    {
+      "classification": "workshop-variant",
+      "kind": "agent",
+      "left": "plugins/mainframe-cobol-db2-classic/agents/cobol-classic-builder.agent.md",
+      "rationale": "The classic package is the loop-free four-stage sibling of the same modernization track and is installed instead of it, never alongside it.",
+      "right": "plugins/mainframe-cobol-db2/agents/cobol-db2-builder.agent.md",
+      "similarity": 0.967
+    },
+    {
       "classification": "language-variant",
       "kind": "agent",
       "left": "agents/csharp-mcp-expert.agent.md",
@@ -15,6 +63,14 @@
       "rationale": "Bicep and Terraform use different providers, tooling, and module contracts.",
       "right": "agents/azure-verified-modules-terraform.agent.md",
       "similarity": 0.833
+    },
+    {
+      "classification": "workshop-variant",
+      "kind": "agent",
+      "left": "plugins/mainframe-cobol-db2-classic/agents/cobol-classic-evolution.agent.md",
+      "rationale": "The classic package is the loop-free four-stage sibling of the same modernization track and is installed instead of it, never alongside it.",
+      "right": "plugins/mainframe-cobol-db2/agents/cobol-db2-operations.agent.md",
+      "similarity": 0.83
     },
     {
       "classification": "language-variant",
@@ -70,6 +126,94 @@
       "left": "instructions/prompt.instructions.md",
       "rationale": "The Open Horizons variant adds platform-stage, ownership, routing, identity, and evidence boundaries to the reusable capability.",
       "right": "plugins/open-horizons-platform/instructions/prompt.instructions.md",
+      "similarity": 1.0
+    },
+    {
+      "classification": "workshop-variant",
+      "kind": "instruction",
+      "left": "plugins/mainframe-cobol-db2-classic/instructions/cobol-legacy.instructions.md",
+      "rationale": "The classic package is the loop-free four-stage sibling of the same modernization track and is installed instead of it, never alongside it.",
+      "right": "plugins/mainframe-cobol-db2/instructions/cobol-legacy.instructions.md",
+      "similarity": 1.0
+    },
+    {
+      "classification": "workshop-variant",
+      "kind": "instruction",
+      "left": "plugins/mainframe-cobol-db2-classic/instructions/db2-schema.instructions.md",
+      "rationale": "The classic package is the loop-free four-stage sibling of the same modernization track and is installed instead of it, never alongside it.",
+      "right": "plugins/mainframe-cobol-db2/instructions/db2-schema.instructions.md",
+      "similarity": 1.0
+    },
+    {
+      "classification": "workshop-variant",
+      "kind": "instruction",
+      "left": "plugins/mainframe-natural-adabas-classic/instructions/sifap-backend.instructions.md",
+      "rationale": "The classic package is the loop-free four-stage sibling of the same modernization track and is installed instead of it, never alongside it.",
+      "right": "plugins/mainframe-natural-adabas/instructions/sifap-backend.instructions.md",
+      "similarity": 1.0
+    },
+    {
+      "classification": "workshop-variant",
+      "kind": "instruction",
+      "left": "plugins/mainframe-natural-adabas-classic/instructions/sifap-cicd.instructions.md",
+      "rationale": "The classic package is the loop-free four-stage sibling of the same modernization track and is installed instead of it, never alongside it.",
+      "right": "plugins/mainframe-natural-adabas/instructions/sifap-cicd.instructions.md",
+      "similarity": 1.0
+    },
+    {
+      "classification": "workshop-variant",
+      "kind": "instruction",
+      "left": "plugins/mainframe-natural-adabas-classic/instructions/sifap-database.instructions.md",
+      "rationale": "The classic package is the loop-free four-stage sibling of the same modernization track and is installed instead of it, never alongside it.",
+      "right": "plugins/mainframe-natural-adabas/instructions/sifap-database.instructions.md",
+      "similarity": 1.0
+    },
+    {
+      "classification": "workshop-variant",
+      "kind": "instruction",
+      "left": "plugins/mainframe-natural-adabas-classic/instructions/sifap-frontend.instructions.md",
+      "rationale": "The classic package is the loop-free four-stage sibling of the same modernization track and is installed instead of it, never alongside it.",
+      "right": "plugins/mainframe-natural-adabas/instructions/sifap-frontend.instructions.md",
+      "similarity": 1.0
+    },
+    {
+      "classification": "workshop-variant",
+      "kind": "instruction",
+      "left": "plugins/mainframe-natural-adabas-classic/instructions/sifap-infrastructure.instructions.md",
+      "rationale": "The classic package is the loop-free four-stage sibling of the same modernization track and is installed instead of it, never alongside it.",
+      "right": "plugins/mainframe-natural-adabas/instructions/sifap-infrastructure.instructions.md",
+      "similarity": 1.0
+    },
+    {
+      "classification": "workshop-variant",
+      "kind": "instruction",
+      "left": "plugins/mainframe-natural-adabas-classic/instructions/sifap-natural-adabas.instructions.md",
+      "rationale": "The classic package is the loop-free four-stage sibling of the same modernization track and is installed instead of it, never alongside it.",
+      "right": "plugins/mainframe-natural-adabas/instructions/sifap-natural-adabas.instructions.md",
+      "similarity": 1.0
+    },
+    {
+      "classification": "workshop-variant",
+      "kind": "instruction",
+      "left": "plugins/mainframe-natural-adabas-classic/instructions/sifap-requirements.instructions.md",
+      "rationale": "The classic package is the loop-free four-stage sibling of the same modernization track and is installed instead of it, never alongside it.",
+      "right": "plugins/mainframe-natural-adabas/instructions/sifap-requirements.instructions.md",
+      "similarity": 1.0
+    },
+    {
+      "classification": "workshop-variant",
+      "kind": "instruction",
+      "left": "plugins/mainframe-natural-adabas-classic/instructions/sifap-security.instructions.md",
+      "rationale": "The classic package is the loop-free four-stage sibling of the same modernization track and is installed instead of it, never alongside it.",
+      "right": "plugins/mainframe-natural-adabas/instructions/sifap-security.instructions.md",
+      "similarity": 1.0
+    },
+    {
+      "classification": "workshop-variant",
+      "kind": "instruction",
+      "left": "plugins/mainframe-natural-adabas-classic/instructions/sifap-tests.instructions.md",
+      "rationale": "The classic package is the loop-free four-stage sibling of the same modernization track and is installed instead of it, never alongside it.",
+      "right": "plugins/mainframe-natural-adabas/instructions/sifap-tests.instructions.md",
       "similarity": 1.0
     },
     {
@@ -137,6 +281,54 @@
       "similarity": 0.738
     },
     {
+      "classification": "workshop-variant",
+      "kind": "prompt",
+      "left": "plugins/mainframe-natural-adabas-classic/prompts/sifap-classic-archaeology.prompt.md",
+      "rationale": "The classic package is the loop-free four-stage sibling of the same modernization track and is installed instead of it, never alongside it.",
+      "right": "plugins/mainframe-natural-adabas/prompts/sifap-archaeology.prompt.md",
+      "similarity": 0.976
+    },
+    {
+      "classification": "workshop-variant",
+      "kind": "prompt",
+      "left": "plugins/mainframe-natural-adabas-classic/prompts/sifap-classic-build-slice.prompt.md",
+      "rationale": "The classic package is the loop-free four-stage sibling of the same modernization track and is installed instead of it, never alongside it.",
+      "right": "plugins/mainframe-natural-adabas/prompts/sifap-build-slice.prompt.md",
+      "similarity": 0.976
+    },
+    {
+      "classification": "workshop-variant",
+      "kind": "prompt",
+      "left": "plugins/mainframe-natural-adabas-classic/prompts/sifap-classic-specify.prompt.md",
+      "rationale": "The classic package is the loop-free four-stage sibling of the same modernization track and is installed instead of it, never alongside it.",
+      "right": "plugins/mainframe-natural-adabas/prompts/sifap-specify.prompt.md",
+      "similarity": 0.972
+    },
+    {
+      "classification": "workshop-variant",
+      "kind": "prompt",
+      "left": "plugins/mainframe-cobol-db2-classic/prompts/cobol-classic-build-slice.prompt.md",
+      "rationale": "The classic package is the loop-free four-stage sibling of the same modernization track and is installed instead of it, never alongside it.",
+      "right": "plugins/mainframe-cobol-db2/prompts/cobol-db2-build-slice.prompt.md",
+      "similarity": 0.961
+    },
+    {
+      "classification": "workshop-variant",
+      "kind": "prompt",
+      "left": "plugins/mainframe-cobol-db2-classic/prompts/cobol-classic-specify.prompt.md",
+      "rationale": "The classic package is the loop-free four-stage sibling of the same modernization track and is installed instead of it, never alongside it.",
+      "right": "plugins/mainframe-cobol-db2/prompts/cobol-db2-specify.prompt.md",
+      "similarity": 0.959
+    },
+    {
+      "classification": "workshop-variant",
+      "kind": "prompt",
+      "left": "plugins/mainframe-cobol-db2-classic/prompts/cobol-classic-archaeology.prompt.md",
+      "rationale": "The classic package is the loop-free four-stage sibling of the same modernization track and is installed instead of it, never alongside it.",
+      "right": "plugins/mainframe-cobol-db2/prompts/cobol-db2-archaeology.prompt.md",
+      "similarity": 0.83
+    },
+    {
       "classification": "framework-variant",
       "kind": "prompt",
       "left": "prompts/containerize-aspnet-framework.prompt.md",
@@ -151,6 +343,30 @@
       "rationale": "AEG initialization and modernization operate on different lifecycle states and outputs.",
       "right": "plugins/open-horizons-platform/prompts/open-horizons-aeg-start.prompt.md",
       "similarity": 0.783
+    },
+    {
+      "classification": "workshop-variant",
+      "kind": "prompt",
+      "left": "plugins/mainframe-natural-adabas-classic/prompts/sifap-classic-evolve.prompt.md",
+      "rationale": "The classic package is the loop-free four-stage sibling of the same modernization track and is installed instead of it, never alongside it.",
+      "right": "plugins/mainframe-natural-adabas/prompts/sifap-operate.prompt.md",
+      "similarity": 0.75
+    },
+    {
+      "classification": "workshop-variant",
+      "kind": "prompt",
+      "left": "plugins/mainframe-cobol-db2-classic/prompts/cobol-classic-evolve.prompt.md",
+      "rationale": "The classic package is the loop-free four-stage sibling of the same modernization track and is installed instead of it, never alongside it.",
+      "right": "plugins/mainframe-cobol-db2/prompts/cobol-db2-operate.prompt.md",
+      "similarity": 0.741
+    },
+    {
+      "classification": "technology-track-variant",
+      "kind": "prompt",
+      "left": "plugins/mainframe-cobol-db2-classic/prompts/cobol-classic-archaeology.prompt.md",
+      "rationale": "Shared archaeology method, but different legacy corpus, file types, analysis skills, and evidence vocabulary per mainframe track.",
+      "right": "plugins/mainframe-natural-adabas-classic/prompts/sifap-classic-archaeology.prompt.md",
+      "similarity": 0.732
     },
     {
       "classification": "specialization",
@@ -449,6 +665,14 @@
       "similarity": 0.98
     },
     {
+      "classification": "workshop-variant",
+      "kind": "skill",
+      "left": "plugins/mainframe-cobol-db2-classic/skills/cobol-classic-context/SKILL.md",
+      "rationale": "The classic package is the loop-free four-stage sibling of the same modernization track and is installed instead of it, never alongside it.",
+      "right": "plugins/mainframe-cobol-db2/skills/cobol-db2-context/SKILL.md",
+      "similarity": 0.98
+    },
+    {
       "classification": "specialization",
       "kind": "skill",
       "left": "plugins/backstage-expert/skills/backstage-catalog-db-performance/SKILL.md",
@@ -561,6 +785,14 @@
       "similarity": 0.974
     },
     {
+      "classification": "workshop-variant",
+      "kind": "skill",
+      "left": "plugins/mainframe-natural-adabas-classic/skills/sifap-classic-traceability/SKILL.md",
+      "rationale": "The classic package is the loop-free four-stage sibling of the same modernization track and is installed instead of it, never alongside it.",
+      "right": "plugins/mainframe-natural-adabas/skills/sifap-requirements-traceability/SKILL.md",
+      "similarity": 0.974
+    },
+    {
       "classification": "specialization",
       "kind": "skill",
       "left": "plugins/backstage-expert/skills/backstage-authentication/SKILL.md",
@@ -575,6 +807,22 @@
       "rationale": "The Open Horizons variant adds platform-stage, ownership, routing, identity, and evidence boundaries to the reusable capability.",
       "right": "plugins/open-horizons-platform/skills/open-horizons-backstage-operations/SKILL.md",
       "similarity": 0.972
+    },
+    {
+      "classification": "workshop-variant",
+      "kind": "skill",
+      "left": "plugins/mainframe-natural-adabas-classic/skills/sifap-classic-context/SKILL.md",
+      "rationale": "The classic package is the loop-free four-stage sibling of the same modernization track and is installed instead of it, never alongside it.",
+      "right": "plugins/mainframe-natural-adabas/skills/sifap-modernization-context/SKILL.md",
+      "similarity": 0.971
+    },
+    {
+      "classification": "workshop-variant",
+      "kind": "skill",
+      "left": "plugins/mainframe-natural-adabas-classic/skills/sifap-classic-orchestration/SKILL.md",
+      "rationale": "The classic package is the loop-free four-stage sibling of the same modernization track and is installed instead of it, never alongside it.",
+      "right": "plugins/mainframe-natural-adabas/skills/sifap-workshop-orchestration/SKILL.md",
+      "similarity": 0.939
     },
     {
       "classification": "lifecycle-variant",
@@ -644,8 +892,8 @@
   "summary": {
     "confirmedDuplicates": 0,
     "exactDuplicateGroups": 0,
-    "similarityCandidates": 78,
-    "sources": 1175,
+    "similarityCandidates": 109,
+    "sources": 1206,
     "unclassifiedCandidates": 0
   },
   "threshold": 0.72

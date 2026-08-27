@@ -986,6 +986,24 @@
         "./skills/fedora-linux-triage/"
       ]
     },
+    "mainframe-cobol-db2-classic": {
+      "componentSource": "plugin",
+      "sharedSkills": [
+        "./skills/cobol-db2-analysis/",
+        "./skills/code-modernization/",
+        "./skills/create-architectural-decision-record/",
+        "./skills/db2-postgresql-migration/",
+        "./skills/github-actions-hardening/",
+        "./skills/java-junit/",
+        "./skills/java-springboot/",
+        "./skills/legacy-business-rule-extraction/",
+        "./skills/legacy-characterization-testing/",
+        "./skills/modernization-workspace-kit/",
+        "./skills/postgresql-code-review/",
+        "./skills/postgresql-optimization/",
+        "./skills/sdd-requirements-engineer/"
+      ]
+    },
     "mainframe-cobol-db2": {
       "componentSource": "plugin",
       "sharedSkills": [
@@ -997,6 +1015,24 @@
         "./skills/legacy-business-rule-extraction/",
         "./skills/legacy-characterization-testing/",
         "./skills/modernization-workspace-kit/",
+        "./skills/postgresql-code-review/",
+        "./skills/postgresql-optimization/",
+        "./skills/sdd-requirements-engineer/"
+      ]
+    },
+    "mainframe-natural-adabas-classic": {
+      "componentSource": "plugin",
+      "sharedSkills": [
+        "./skills/adabas-postgresql-migration/",
+        "./skills/code-modernization/",
+        "./skills/create-architectural-decision-record/",
+        "./skills/github-actions-hardening/",
+        "./skills/java-junit/",
+        "./skills/java-springboot/",
+        "./skills/legacy-business-rule-extraction/",
+        "./skills/legacy-characterization-testing/",
+        "./skills/modernization-workspace-kit/",
+        "./skills/natural-adabas-analysis/",
         "./skills/postgresql-code-review/",
         "./skills/postgresql-optimization/",
         "./skills/sdd-requirements-engineer/"

@@ -44,6 +44,14 @@ is therefore retired. The publisher's sixteen standard-library tests were re-run
 engine and passed, and a full-profile preview produced 47 planned files for the Natural/Adabas package and
 20 for the COBOL/DB2 package. Skill discovery through the CLI was not re-probed.
 
+Two loop-free sibling packages were then added: `mainframe-natural-adabas-classic` and
+`mainframe-cobol-db2-classic`. Each restores the original four-stage workshop (archaeology, architecture,
+build, evolution) without the correction-loop skill, the engineering graph, or the split quality and
+operations agents, and each carries its own `workspace-kit.json`. Both packages were static-validated with
+the nine repository gates and both produced a successful full-profile publisher preview against a scratch
+repository. Neither classic package was probed through GitHub Copilot CLI or VS Code, so plugin
+installation, agent discovery, and prompt execution for them remain unverified.
+
 ## First-party customization documentation verification
 
 Verification date: 2026-08-21. These checks fetched known first-party pages directly; they did not use

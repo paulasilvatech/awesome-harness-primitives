@@ -11,7 +11,7 @@ Regenerate this file after changing files under `harness/github-copilot/agents/`
 | Instructions | 195 |
 | Skills | 490 |
 | VS Code prompts | 48 |
-| Plugins | 137 |
+| Plugins | 139 |
 | Hooks | 8 |
 
 ## Agents
@@ -1077,7 +1077,9 @@ They exist to filter a large marketplace and never remove, hide, or block a pack
 | learning-and-mentoring | 1.0.0 | active | static-validated | repository | Teach and coach rather than deliver answers: Socratic mentoring for juniors, study modes, understanding checks, critical thinking and devil's advocate review, self-learning archit… |
 | linux-operations | 1.0.0 | active | static-validated | repository | Diagnose and remediate Linux incidents across Arch, CentOS, Debian, and Fedora with distribution-correct package managers, systemd, journal analysis, security modules, and rollbac… |
 | mainframe-cobol-db2 | 0.1.0 | incubating | static-validated | repository | Modernize COBOL, DB2, VSAM, and JCL systems with evidence-first archaeology, REQ-NNN lineage, bounded correction loops, an extracted engineering graph, behavior and data equivalen… |
+| mainframe-cobol-db2-classic | 0.1.0 | incubating | static-validated | repository | Modernize COBOL, DB2, VSAM, and JCL systems with the four-stage classic workshop: evidence-first archaeology, REQ-NNN lineage, bounded implementation, and hardened evolution, with… |
 | mainframe-natural-adabas | 0.1.0 | incubating | runtime-verified | repository | Modernize Software AG Natural and Adabas systems with evidence-first archaeology, REQ-NNN lineage, bounded correction loops, an extracted engineering graph, behavior and data equi… |
+| mainframe-natural-adabas-classic | 0.1.0 | incubating | static-validated | repository | Modernize Software AG Natural and Adabas systems with the four-stage SIFAP workshop: evidence-first archaeology, REQ-NNN lineage, bounded implementation, and hardened evolution, w… |
 | mcp-development | 1.0.0 | active | static-validated | repository | Build, test, secure, and release Model Context Protocol servers and clients, including CLI exploration, configuration auditing, implementation security review, pre-release QA, and… |
 | mcp-m365-copilot | 1.0.2 | active | static-validated | repository | Comprehensive collection for building declarative agents with Model Context Protocol integration for Microsoft 365 Copilot |
 | microsoft-365-data-platform | 1.0.0 | active | static-validated | repository | Build on Microsoft 365 and the Microsoft data platform: declarative Copilot agents, Microsoft Graph SDK integration, WorkIQ work-data queries, Power BI semantic models, and Micros… |

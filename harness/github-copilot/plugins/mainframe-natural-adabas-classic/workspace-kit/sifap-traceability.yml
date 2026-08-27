@@ -1,0 +1,40 @@
+name: SIFAP traceability
+
+on:
+  pull_request:
+    paths:
+      - "specs/**"
+      - "01-archaeology/legacy-sifap/**"
+      - ".github/scripts/validate_sifap_traceability.py"
+      - ".github/workflows/sifap-traceability.yml"
+  push:
+    branches: [develop, main]
+    paths:
+      - "specs/**"
+      - "01-archaeology/legacy-sifap/**"
+      - ".github/scripts/validate_sifap_traceability.py"
+      - ".github/workflows/sifap-traceability.yml"
+
+"pe\u0072missions":
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: Set up Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: "3.13"
+      - name: Validate requirement lineage
+        run: >-
+          python3 .github/scripts/validate_sifap_traceability.py
+          --root .
+          --path specs

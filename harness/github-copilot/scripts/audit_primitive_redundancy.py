@@ -87,8 +87,23 @@ COBOL_OPERATIONS_AGENT = (
 NATURAL_OPERATIONS_AGENT = (
     "plugins/mainframe-natural-adabas/agents/sifap-operations.agent.md"
 )
+COBOL_CLASSIC_ARCHAEOLOGY_PROMPT = (
+    "plugins/mainframe-cobol-db2-classic/prompts/"
+    "cobol-classic-archaeology.prompt.md"
+)
+NATURAL_CLASSIC_ARCHAEOLOGY_PROMPT = (
+    "plugins/mainframe-natural-adabas-classic/prompts/"
+    "sifap-classic-archaeology.prompt.md"
+)
 
 CLASSIFICATIONS: dict[frozenset[str], tuple[str, str]] = {
+    frozenset(
+        {COBOL_CLASSIC_ARCHAEOLOGY_PROMPT, NATURAL_CLASSIC_ARCHAEOLOGY_PROMPT}
+    ): (
+        "technology-track-variant",
+        "Shared archaeology method, but different legacy corpus, file types, "
+        "analysis skills, and evidence vocabulary per mainframe track.",
+    ),
     frozenset(
         {COBOL_OPERATIONS_AGENT, NATURAL_OPERATIONS_AGENT}
     ): (
@@ -285,10 +300,24 @@ def plugin_primitives() -> Iterable[Primitive]:
                 yield primitive(path, kind, "plugin", plugin_dir.name)
 
 
+def classic_variant(left: Primitive, right: Primitive) -> bool:
+    first, second = left.package, right.package
+    if first is None or second is None or first == second:
+        return False
+    return second == f"{first}-classic" or first == f"{second}-classic"
+
+
 def classify(left: Primitive, right: Primitive) -> tuple[str, str]:
     key = frozenset({left.path, right.path})
     if key in CLASSIFICATIONS:
         return CLASSIFICATIONS[key]
+    if classic_variant(left, right):
+        return (
+            "workshop-variant",
+            "The classic package is the loop-free four-stage sibling of "
+            "the same modernization track and is installed instead of "
+            "it, never alongside it.",
+        )
     open_horizons_prefix = "plugins/open-horizons-platform/"
     if left.path.startswith(open_horizons_prefix) != right.path.startswith(
         open_horizons_prefix
@@ -307,18 +336,31 @@ def classify(left: Primitive, right: Primitive) -> tuple[str, str]:
     return "unclassified", "Requires responsibility-boundary review."
 
 
+def sibling_package_copy(paths: list[str], by_path: dict[str, str]) -> bool:
+    packages = {by_path.get(path) for path in paths}
+    if None in packages or len(packages) != len(paths):
+        return False
+    names = sorted(str(name) for name in packages)
+    return len(names) == 2 and names[1] == f"{names[0]}-classic"
+
+
 def build_audit() -> dict[str, Any]:
     primitives = sorted(
         [*shared_primitives(), *plugin_primitives()],
         key=lambda item: (item.kind, item.path.casefold()),
     )
+    package_of = {
+        item.path: item.package
+        for item in primitives
+        if item.package is not None
+    }
     hashes: dict[tuple[str, str], list[str]] = defaultdict(list)
     for item in primitives:
         hashes[(item.kind, item.body_hash)].append(item.path)
     exact_groups = sorted(
-        sorted(paths)
-        for paths in hashes.values()
-        if len(paths) > 1
+        group
+        for group in (sorted(paths) for paths in hashes.values())
+        if len(group) > 1 and not sibling_package_copy(group, package_of)
     )
 
     candidates: list[Candidate] = []
@@ -450,6 +492,9 @@ primitive type and classified by responsibility boundary. The complete ledger is
 - `specialization` and `complement` remain separate only while inputs, authority, or outputs differ.
 - `duplicate` and `supersedes` require consolidation and reference migration.
 - `unclassified` blocks the audit until a human-readable rationale is recorded.
+- `workshop-variant` marks a loop-free `-classic` sibling of the same track;
+  byte-identical assets between such siblings are intentional because the two
+  packages are mutually exclusive installs that must each stay self-contained.
 - Same-name primitives across different types are composition, not automatic duplication.
 """
 

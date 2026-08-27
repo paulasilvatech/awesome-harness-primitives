@@ -7,6 +7,9 @@ layer and five evidence-gated stage agents.
 For COBOL and DB2 systems, use the sibling `mainframe-cobol-db2` plugin. Both tracks follow the same
 loop, gate, defect-routing, and engineering-graph method with technology-specific context.
 
+If the team wants the linear four-stage workshop without correction loops or the engineering graph, use
+`mainframe-natural-adabas-classic` instead. The two Natural packages are mutually exclusive: install one.
+
 ## Included runtime capabilities
 
 | Area | Primitive |
