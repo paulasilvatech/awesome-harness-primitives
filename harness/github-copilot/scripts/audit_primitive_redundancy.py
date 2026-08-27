@@ -81,36 +81,9 @@ class Candidate:
     rationale: str
 
 
-COBOL_OPERATIONS_AGENT = (
-    "plugins/mainframe-cobol-db2/agents/cobol-db2-operations.agent.md"
-)
-NATURAL_OPERATIONS_AGENT = (
-    "plugins/mainframe-natural-adabas/agents/sifap-operations.agent.md"
-)
-COBOL_CLASSIC_ARCHAEOLOGY_PROMPT = (
-    "plugins/mainframe-cobol-db2-classic/prompts/"
-    "cobol-classic-archaeology.prompt.md"
-)
-NATURAL_CLASSIC_ARCHAEOLOGY_PROMPT = (
-    "plugins/mainframe-natural-adabas-classic/prompts/"
-    "sifap-classic-archaeology.prompt.md"
-)
+MAINFRAME_TRACKS = ("mainframe-cobol-db2", "mainframe-natural-adabas")
 
 CLASSIFICATIONS: dict[frozenset[str], tuple[str, str]] = {
-    frozenset(
-        {COBOL_CLASSIC_ARCHAEOLOGY_PROMPT, NATURAL_CLASSIC_ARCHAEOLOGY_PROMPT}
-    ): (
-        "technology-track-variant",
-        "Shared archaeology method, but different legacy corpus, file types, "
-        "analysis skills, and evidence vocabulary per mainframe track.",
-    ),
-    frozenset(
-        {COBOL_OPERATIONS_AGENT, NATURAL_OPERATIONS_AGENT}
-    ): (
-        "technology-track-variant",
-        "Shared release method, but different legacy corpus, context skills, "
-        "migration mapping, and cutover constraints per mainframe track.",
-    ),
     frozenset(
         {
             "agents/csharp-mcp-expert.agent.md",
@@ -300,6 +273,13 @@ def plugin_primitives() -> Iterable[Primitive]:
                 yield primitive(path, kind, "plugin", plugin_dir.name)
 
 
+def mainframe_track(package: str | None) -> str | None:
+    for track in MAINFRAME_TRACKS:
+        if package in (track, f"{track}-classic"):
+            return track
+    return None
+
+
 def classic_variant(left: Primitive, right: Primitive) -> bool:
     first, second = left.package, right.package
     if first is None or second is None or first == second:
@@ -311,6 +291,15 @@ def classify(left: Primitive, right: Primitive) -> tuple[str, str]:
     key = frozenset({left.path, right.path})
     if key in CLASSIFICATIONS:
         return CLASSIFICATIONS[key]
+    left_track = mainframe_track(left.package)
+    right_track = mainframe_track(right.package)
+    if left_track and right_track and left_track != right_track:
+        return (
+            "technology-track-variant",
+            "Shared workshop method, but different legacy corpus, file types, "
+            "analysis skills, migration mapping, and cutover constraints per "
+            "mainframe track.",
+        )
     if classic_variant(left, right):
         return (
             "workshop-variant",

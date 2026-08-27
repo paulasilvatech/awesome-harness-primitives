@@ -100,4 +100,4 @@ implementation Skills that match the target stack recorded for the engagement.
 | Name | Type | Use when | Context to pass |
 | --- | --- | --- | --- |
 | `cobol-classic-architect` | agent | Requirements or design are ambiguous or drift needs approval | Evidence, affected REQ-ID, alternatives, and impact. |
-| `cobol-classic-evolution` | agent | The bounded implementation is validated | Changes, tests, drift classification, and in-scope tables and datasets. |
+| `cobol-classic-quality` | agent | The bounded implementation is validated | Changes, tests, drift classification, and in-scope tables and datasets. |

@@ -18,10 +18,10 @@
     "activePluginHookPackages": 2,
     "marketplaceEntries": 139,
     "pluginOwned": {
-      "agents": 37,
+      "agents": 39,
       "errors": 0,
       "instructions": 56,
-      "prompts": 29,
+      "prompts": 31,
       "skills": 123,
       "warnings": 0
     },
@@ -1114,7 +1114,7 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 4845,
+      "characters_scanned": 4843,
       "external_url_count": 0,
       "files_scanned": 1,
       "kind": "agent",
@@ -1131,23 +1131,40 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 5804,
+      "characters_scanned": 5911,
       "external_url_count": 0,
       "files_scanned": 1,
       "kind": "agent",
       "local_evidence_mention": false,
-      "name": "cobol-classic-evolution",
+      "name": "cobol-classic-operations",
       "ownership": "plugin",
       "package": "mainframe-cobol-db2-classic",
       "packaged_by": [
         "mainframe-cobol-db2-classic"
       ],
-      "path": "harness/github-copilot/plugins/mainframe-cobol-db2-classic/agents/cobol-classic-evolution.agent.md",
+      "path": "harness/github-copilot/plugins/mainframe-cobol-db2-classic/agents/cobol-classic-operations.agent.md",
       "review_status": "needs-current-source-review",
       "signals": [
         "currency-language",
         "lifecycle-language"
       ],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 5691,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "agent",
+      "local_evidence_mention": false,
+      "name": "cobol-classic-quality",
+      "ownership": "plugin",
+      "package": "mainframe-cobol-db2-classic",
+      "packaged_by": [
+        "mainframe-cobol-db2-classic"
+      ],
+      "path": "harness/github-copilot/plugins/mainframe-cobol-db2-classic/agents/cobol-classic-quality.agent.md",
+      "review_status": "needs-semantic-review",
+      "signals": [],
       "source_domains": []
     },
     {
@@ -4637,7 +4654,7 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 4717,
+      "characters_scanned": 4715,
       "external_url_count": 0,
       "files_scanned": 1,
       "kind": "agent",
@@ -4654,23 +4671,40 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 5053,
+      "characters_scanned": 5871,
       "external_url_count": 0,
       "files_scanned": 1,
       "kind": "agent",
       "local_evidence_mention": false,
-      "name": "sifap-classic-evolution",
+      "name": "sifap-classic-operations",
       "ownership": "plugin",
       "package": "mainframe-natural-adabas-classic",
       "packaged_by": [
         "mainframe-natural-adabas-classic"
       ],
-      "path": "harness/github-copilot/plugins/mainframe-natural-adabas-classic/agents/sifap-classic-evolution.agent.md",
+      "path": "harness/github-copilot/plugins/mainframe-natural-adabas-classic/agents/sifap-classic-operations.agent.md",
       "review_status": "needs-current-source-review",
       "signals": [
         "currency-language",
         "lifecycle-language"
       ],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 5823,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "agent",
+      "local_evidence_mention": false,
+      "name": "sifap-classic-quality",
+      "ownership": "plugin",
+      "package": "mainframe-natural-adabas-classic",
+      "packaged_by": [
+        "mainframe-natural-adabas-classic"
+      ],
+      "path": "harness/github-copilot/plugins/mainframe-natural-adabas-classic/agents/sifap-classic-quality.agent.md",
+      "review_status": "needs-semantic-review",
+      "signals": [],
       "source_domains": []
     },
     {
@@ -12255,9 +12289,9 @@
       ]
     },
     {
-      "characters_scanned": 55622,
+      "characters_scanned": 66019,
       "external_url_count": 3,
-      "files_scanned": 13,
+      "files_scanned": 15,
       "kind": "plugin",
       "local_evidence_mention": true,
       "name": "mainframe-cobol-db2-classic",
@@ -12308,9 +12342,9 @@
       ]
     },
     {
-      "characters_scanned": 92646,
+      "characters_scanned": 104349,
       "external_url_count": 3,
-      "files_scanned": 30,
+      "files_scanned": 32,
       "kind": "plugin",
       "local_evidence_mention": true,
       "name": "mainframe-natural-adabas-classic",
@@ -13962,7 +13996,7 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 3860,
+      "characters_scanned": 3857,
       "external_url_count": 0,
       "files_scanned": 1,
       "kind": "prompt",
@@ -13979,18 +14013,18 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 4420,
+      "characters_scanned": 4376,
       "external_url_count": 0,
       "files_scanned": 1,
       "kind": "prompt",
       "local_evidence_mention": false,
-      "name": "cobol-classic-evolve",
+      "name": "cobol-classic-operate",
       "ownership": "plugin",
       "package": "mainframe-cobol-db2-classic",
       "packaged_by": [
         "mainframe-cobol-db2-classic"
       ],
-      "path": "harness/github-copilot/plugins/mainframe-cobol-db2-classic/prompts/cobol-classic-evolve.prompt.md",
+      "path": "harness/github-copilot/plugins/mainframe-cobol-db2-classic/prompts/cobol-classic-operate.prompt.md",
       "review_status": "needs-current-source-review",
       "signals": [
         "currency-language",
@@ -14011,6 +14045,23 @@
         "mainframe-cobol-db2-classic"
       ],
       "path": "harness/github-copilot/plugins/mainframe-cobol-db2-classic/prompts/cobol-classic-specify.prompt.md",
+      "review_status": "needs-semantic-review",
+      "signals": [],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 4537,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "prompt",
+      "local_evidence_mention": false,
+      "name": "cobol-classic-verify",
+      "ownership": "plugin",
+      "package": "mainframe-cobol-db2-classic",
+      "packaged_by": [
+        "mainframe-cobol-db2-classic"
+      ],
+      "path": "harness/github-copilot/plugins/mainframe-cobol-db2-classic/prompts/cobol-classic-verify.prompt.md",
       "review_status": "needs-semantic-review",
       "signals": [],
       "source_domains": []
@@ -14973,7 +15024,7 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 3580,
+      "characters_scanned": 3583,
       "external_url_count": 0,
       "files_scanned": 1,
       "kind": "prompt",
@@ -14990,18 +15041,18 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 3793,
+      "characters_scanned": 4052,
       "external_url_count": 0,
       "files_scanned": 1,
       "kind": "prompt",
       "local_evidence_mention": false,
-      "name": "sifap-classic-evolve",
+      "name": "sifap-classic-operate",
       "ownership": "plugin",
       "package": "mainframe-natural-adabas-classic",
       "packaged_by": [
         "mainframe-natural-adabas-classic"
       ],
-      "path": "harness/github-copilot/plugins/mainframe-natural-adabas-classic/prompts/sifap-classic-evolve.prompt.md",
+      "path": "harness/github-copilot/plugins/mainframe-natural-adabas-classic/prompts/sifap-classic-operate.prompt.md",
       "review_status": "needs-current-source-review",
       "signals": [
         "currency-language",
@@ -15022,6 +15073,23 @@
         "mainframe-natural-adabas-classic"
       ],
       "path": "harness/github-copilot/plugins/mainframe-natural-adabas-classic/prompts/sifap-classic-specify.prompt.md",
+      "review_status": "needs-semantic-review",
+      "signals": [],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 4617,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "prompt",
+      "local_evidence_mention": false,
+      "name": "sifap-classic-verify",
+      "ownership": "plugin",
+      "package": "mainframe-natural-adabas-classic",
+      "packaged_by": [
+        "mainframe-natural-adabas-classic"
+      ],
+      "path": "harness/github-copilot/plugins/mainframe-natural-adabas-classic/prompts/sifap-classic-verify.prompt.md",
       "review_status": "needs-semantic-review",
       "signals": [],
       "source_domains": []
@@ -19101,7 +19169,7 @@
       ]
     },
     {
-      "characters_scanned": 6182,
+      "characters_scanned": 6199,
       "external_url_count": 0,
       "files_scanned": 1,
       "kind": "skill",
@@ -27632,7 +27700,7 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 4483,
+      "characters_scanned": 4537,
       "external_url_count": 0,
       "files_scanned": 1,
       "kind": "skill",
@@ -28954,10 +29022,10 @@
   "unreadableFiles": [],
   "validation": {
     "pluginOwned": {
-      "agents": 37,
+      "agents": 39,
       "errors": 0,
       "instructions": 56,
-      "prompts": 29,
+      "prompts": 31,
       "skills": 123,
       "warnings": 0
     },
@@ -28966,7 +29034,7 @@
       "summary": [
         {
           "errors": 0,
-          "files": 265,
+          "files": 267,
           "kind": "agents",
           "warnings": 0
         },
@@ -28984,7 +29052,7 @@
         },
         {
           "errors": 0,
-          "files": 77,
+          "files": 79,
           "kind": "prompts",
           "warnings": 0
         },

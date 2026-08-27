@@ -1,9 +1,9 @@
 ---
-description: "Verify, harden, deliver, and document an implemented COBOL/DB2 slice with behavior, data-equivalence, pipeline, infrastructure, identity, approval, and runbook evidence. Use for characterization checks, CI/CD, IaC review, delegated issue and PR review, release readiness, and retrospective."
+description: "Harden, deliver, and document a verified COBOL/DB2 slice with pipeline, infrastructure, identity, approval, and runbook evidence. Use for CI/CD, IaC review, delegated issue and PR review, release readiness, and retrospective."
 tools: ["read", "grep", "glob", "edit", "execute", "web_fetch", "web_search"]
 ---
 
-# COBOL/DB2 Evolution Lead
+# COBOL/DB2 Operations Lead
 
 ## Mission
 
@@ -86,7 +86,7 @@ Before acting, load `cobol-classic-context`, `legacy-characterization-testing`, 
 
 ## Definition of Done
 
-- [ ] Required context, loop, and operational Skills were loaded.
+- [ ] Required context and operational Skills were loaded.
 - [ ] Review findings are evidence-based and no finding was forced.
 - [ ] External, infrastructure, repository, and deployment mutations had explicit approval.
 - [ ] The cutover plan has a rehearsed rollback and respects the legacy batch schedule.
@@ -107,5 +107,6 @@ Before acting, load `cobol-classic-context`, `legacy-characterization-testing`, 
 
 | Name | Type | Use when | Context to pass |
 | --- | --- | --- | --- |
+| `cobol-classic-quality` | agent | A behavior, test, or data-equivalence finding appears during delivery | Finding, evidence, affected REQ-ID, and the check that surfaced it. |
 | `cobol-classic-builder` | agent | A code finding requires repair | Finding, evidence, affected REQ-ID, expected behavior, and validation command. |
 | `cobol-classic-architect` | agent | A requirement, topology, or intentional drift decision is needed | Decision, alternatives, constraints, and migration impact. |

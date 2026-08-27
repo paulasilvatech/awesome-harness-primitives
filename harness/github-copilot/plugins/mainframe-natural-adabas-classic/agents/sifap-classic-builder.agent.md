@@ -99,4 +99,4 @@ Before editing, load `sifap-classic-context`, `sifap-classic-traceability`,
 | Name | Type | Use when | Context to pass |
 | --- | --- | --- | --- |
 | `sifap-classic-architect` | agent | Requirements or design are ambiguous or drift needs approval | Evidence, affected REQ-ID, alternatives, and impact. |
-| `sifap-classic-evolution` | agent | The bounded implementation is validated | Changes, tests, drift classification, risks, and operational needs. |
+| `sifap-classic-quality` | agent | The bounded implementation is validated | Changes, tests, drift classification, risks, and operational needs. |

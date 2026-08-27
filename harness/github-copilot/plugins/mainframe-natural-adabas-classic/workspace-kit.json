@@ -6,13 +6,15 @@
         "sifap-classic-archaeologist.agent.md",
         "sifap-classic-architect.agent.md",
         "sifap-classic-builder.agent.md",
-        "sifap-classic-evolution.agent.md"
+        "sifap-classic-quality.agent.md",
+        "sifap-classic-operations.agent.md"
     ],
     "prompts": [
         "sifap-classic-archaeology.prompt.md",
         "sifap-classic-specify.prompt.md",
         "sifap-classic-build-slice.prompt.md",
-        "sifap-classic-evolve.prompt.md"
+        "sifap-classic-verify.prompt.md",
+        "sifap-classic-operate.prompt.md"
     ],
     "skills": [
         "sifap-classic-context",

@@ -100,4 +100,4 @@ Stop if the slice scope, the requirement set, or the writable paths are ambiguou
 | --- | --- | --- |
 | `cobol-classic-builder` | agent | Owns implementation judgment and drift classification. |
 | `legacy-characterization-testing` | skill | Supplies behavior-pinning test structure. |
-| `cobol-classic-evolve` | prompt | Verifies, hardens, and releases the implemented slice. |
+| `cobol-classic-verify` | prompt | Proves behavior and data equivalence for the slice. |

@@ -6,13 +6,15 @@
         "cobol-classic-archaeologist.agent.md",
         "cobol-classic-architect.agent.md",
         "cobol-classic-builder.agent.md",
-        "cobol-classic-evolution.agent.md"
+        "cobol-classic-quality.agent.md",
+        "cobol-classic-operations.agent.md"
     ],
     "prompts": [
         "cobol-classic-archaeology.prompt.md",
         "cobol-classic-specify.prompt.md",
         "cobol-classic-build-slice.prompt.md",
-        "cobol-classic-evolve.prompt.md"
+        "cobol-classic-verify.prompt.md",
+        "cobol-classic-operate.prompt.md"
     ],
     "skills": [
         "cobol-classic-context",

@@ -30,8 +30,8 @@ missing path is a blocker for claims about its content, not permission to invent
 | Specifications | `specs/<NNN>-<feature>/` | Requirements, plan, tasks, and test strategy. |
 | Architecture outputs | `02-modern-spec/` | Scope and architecture artifacts. |
 | Implementation reports | `03-implementation/` | Implementation review artifacts. |
-| Quality outputs | `04-quality/` | Verification reports, migration mappings, reconciliation evidence. |
-| Operations outputs | `05-operations/` | Issues, delegations, reviews, runbooks, and retrospective. |
+| Quality outputs | `04-evolution/reports/` | Verification reports, migration mappings, reconciliation evidence. |
+| Operations outputs | `04-evolution/reviews/` | Issues, delegations, reviews, runbooks, and retrospective. |
 
 ## Member conventions
 

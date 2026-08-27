@@ -3,6 +3,22 @@
     {
       "classification": "workshop-variant",
       "kind": "agent",
+      "left": "plugins/mainframe-natural-adabas-classic/agents/sifap-classic-quality.agent.md",
+      "rationale": "The classic package is the loop-free four-stage sibling of the same modernization track and is installed instead of it, never alongside it.",
+      "right": "plugins/mainframe-natural-adabas/agents/sifap-quality.agent.md",
+      "similarity": 0.984
+    },
+    {
+      "classification": "workshop-variant",
+      "kind": "agent",
+      "left": "plugins/mainframe-natural-adabas-classic/agents/sifap-classic-operations.agent.md",
+      "rationale": "The classic package is the loop-free four-stage sibling of the same modernization track and is installed instead of it, never alongside it.",
+      "right": "plugins/mainframe-natural-adabas/agents/sifap-operations.agent.md",
+      "similarity": 0.983
+    },
+    {
+      "classification": "workshop-variant",
+      "kind": "agent",
       "left": "plugins/mainframe-natural-adabas-classic/agents/sifap-classic-builder.agent.md",
       "rationale": "The classic package is the loop-free four-stage sibling of the same modernization track and is installed instead of it, never alongside it.",
       "right": "plugins/mainframe-natural-adabas/agents/sifap-builder.agent.md",
@@ -27,10 +43,26 @@
     {
       "classification": "workshop-variant",
       "kind": "agent",
+      "left": "plugins/mainframe-cobol-db2-classic/agents/cobol-classic-quality.agent.md",
+      "rationale": "The classic package is the loop-free four-stage sibling of the same modernization track and is installed instead of it, never alongside it.",
+      "right": "plugins/mainframe-cobol-db2/agents/cobol-db2-quality.agent.md",
+      "similarity": 0.974
+    },
+    {
+      "classification": "workshop-variant",
+      "kind": "agent",
       "left": "plugins/mainframe-cobol-db2-classic/agents/cobol-classic-architect.agent.md",
       "rationale": "The classic package is the loop-free four-stage sibling of the same modernization track and is installed instead of it, never alongside it.",
       "right": "plugins/mainframe-cobol-db2/agents/cobol-db2-architect.agent.md",
       "similarity": 0.971
+    },
+    {
+      "classification": "workshop-variant",
+      "kind": "agent",
+      "left": "plugins/mainframe-cobol-db2-classic/agents/cobol-classic-operations.agent.md",
+      "rationale": "The classic package is the loop-free four-stage sibling of the same modernization track and is installed instead of it, never alongside it.",
+      "right": "plugins/mainframe-cobol-db2/agents/cobol-db2-operations.agent.md",
+      "similarity": 0.969
     },
     {
       "classification": "workshop-variant",
@@ -65,14 +97,6 @@
       "similarity": 0.833
     },
     {
-      "classification": "workshop-variant",
-      "kind": "agent",
-      "left": "plugins/mainframe-cobol-db2-classic/agents/cobol-classic-evolution.agent.md",
-      "rationale": "The classic package is the loop-free four-stage sibling of the same modernization track and is installed instead of it, never alongside it.",
-      "right": "plugins/mainframe-cobol-db2/agents/cobol-db2-operations.agent.md",
-      "similarity": 0.83
-    },
-    {
       "classification": "language-variant",
       "kind": "agent",
       "left": "agents/csharp-mcp-expert.agent.md",
@@ -91,8 +115,40 @@
     {
       "classification": "technology-track-variant",
       "kind": "agent",
+      "left": "plugins/mainframe-cobol-db2-classic/agents/cobol-classic-operations.agent.md",
+      "rationale": "Shared workshop method, but different legacy corpus, file types, analysis skills, migration mapping, and cutover constraints per mainframe track.",
+      "right": "plugins/mainframe-natural-adabas-classic/agents/sifap-classic-operations.agent.md",
+      "similarity": 0.767
+    },
+    {
+      "classification": "technology-track-variant",
+      "kind": "agent",
+      "left": "plugins/mainframe-cobol-db2-classic/agents/cobol-classic-quality.agent.md",
+      "rationale": "Shared workshop method, but different legacy corpus, file types, analysis skills, migration mapping, and cutover constraints per mainframe track.",
+      "right": "plugins/mainframe-natural-adabas-classic/agents/sifap-classic-quality.agent.md",
+      "similarity": 0.758
+    },
+    {
+      "classification": "technology-track-variant",
+      "kind": "agent",
+      "left": "plugins/mainframe-cobol-db2-classic/agents/cobol-classic-operations.agent.md",
+      "rationale": "Shared workshop method, but different legacy corpus, file types, analysis skills, migration mapping, and cutover constraints per mainframe track.",
+      "right": "plugins/mainframe-natural-adabas/agents/sifap-operations.agent.md",
+      "similarity": 0.747
+    },
+    {
+      "classification": "technology-track-variant",
+      "kind": "agent",
+      "left": "plugins/mainframe-cobol-db2-classic/agents/cobol-classic-quality.agent.md",
+      "rationale": "Shared workshop method, but different legacy corpus, file types, analysis skills, migration mapping, and cutover constraints per mainframe track.",
+      "right": "plugins/mainframe-natural-adabas/agents/sifap-quality.agent.md",
+      "similarity": 0.739
+    },
+    {
+      "classification": "technology-track-variant",
+      "kind": "agent",
       "left": "plugins/mainframe-cobol-db2/agents/cobol-db2-operations.agent.md",
-      "rationale": "Shared release method, but different legacy corpus, context skills, migration mapping, and cutover constraints per mainframe track.",
+      "rationale": "Shared workshop method, but different legacy corpus, file types, analysis skills, migration mapping, and cutover constraints per mainframe track.",
       "right": "plugins/mainframe-natural-adabas/agents/sifap-operations.agent.md",
       "similarity": 0.724
     },
@@ -299,10 +355,42 @@
     {
       "classification": "workshop-variant",
       "kind": "prompt",
+      "left": "plugins/mainframe-natural-adabas-classic/prompts/sifap-classic-operate.prompt.md",
+      "rationale": "The classic package is the loop-free four-stage sibling of the same modernization track and is installed instead of it, never alongside it.",
+      "right": "plugins/mainframe-natural-adabas/prompts/sifap-operate.prompt.md",
+      "similarity": 0.976
+    },
+    {
+      "classification": "workshop-variant",
+      "kind": "prompt",
+      "left": "plugins/mainframe-natural-adabas-classic/prompts/sifap-classic-verify.prompt.md",
+      "rationale": "The classic package is the loop-free four-stage sibling of the same modernization track and is installed instead of it, never alongside it.",
+      "right": "plugins/mainframe-natural-adabas/prompts/sifap-verify.prompt.md",
+      "similarity": 0.976
+    },
+    {
+      "classification": "workshop-variant",
+      "kind": "prompt",
       "left": "plugins/mainframe-natural-adabas-classic/prompts/sifap-classic-specify.prompt.md",
       "rationale": "The classic package is the loop-free four-stage sibling of the same modernization track and is installed instead of it, never alongside it.",
       "right": "plugins/mainframe-natural-adabas/prompts/sifap-specify.prompt.md",
       "similarity": 0.972
+    },
+    {
+      "classification": "workshop-variant",
+      "kind": "prompt",
+      "left": "plugins/mainframe-cobol-db2-classic/prompts/cobol-classic-verify.prompt.md",
+      "rationale": "The classic package is the loop-free four-stage sibling of the same modernization track and is installed instead of it, never alongside it.",
+      "right": "plugins/mainframe-cobol-db2/prompts/cobol-db2-verify.prompt.md",
+      "similarity": 0.966
+    },
+    {
+      "classification": "workshop-variant",
+      "kind": "prompt",
+      "left": "plugins/mainframe-cobol-db2-classic/prompts/cobol-classic-operate.prompt.md",
+      "rationale": "The classic package is the loop-free four-stage sibling of the same modernization track and is installed instead of it, never alongside it.",
+      "right": "plugins/mainframe-cobol-db2/prompts/cobol-db2-operate.prompt.md",
+      "similarity": 0.962
     },
     {
       "classification": "workshop-variant",
@@ -345,26 +433,10 @@
       "similarity": 0.783
     },
     {
-      "classification": "workshop-variant",
-      "kind": "prompt",
-      "left": "plugins/mainframe-natural-adabas-classic/prompts/sifap-classic-evolve.prompt.md",
-      "rationale": "The classic package is the loop-free four-stage sibling of the same modernization track and is installed instead of it, never alongside it.",
-      "right": "plugins/mainframe-natural-adabas/prompts/sifap-operate.prompt.md",
-      "similarity": 0.75
-    },
-    {
-      "classification": "workshop-variant",
-      "kind": "prompt",
-      "left": "plugins/mainframe-cobol-db2-classic/prompts/cobol-classic-evolve.prompt.md",
-      "rationale": "The classic package is the loop-free four-stage sibling of the same modernization track and is installed instead of it, never alongside it.",
-      "right": "plugins/mainframe-cobol-db2/prompts/cobol-db2-operate.prompt.md",
-      "similarity": 0.741
-    },
-    {
       "classification": "technology-track-variant",
       "kind": "prompt",
       "left": "plugins/mainframe-cobol-db2-classic/prompts/cobol-classic-archaeology.prompt.md",
-      "rationale": "Shared archaeology method, but different legacy corpus, file types, analysis skills, and evidence vocabulary per mainframe track.",
+      "rationale": "Shared workshop method, but different legacy corpus, file types, analysis skills, migration mapping, and cutover constraints per mainframe track.",
       "right": "plugins/mainframe-natural-adabas-classic/prompts/sifap-classic-archaeology.prompt.md",
       "similarity": 0.732
     },
@@ -892,8 +964,8 @@
   "summary": {
     "confirmedDuplicates": 0,
     "exactDuplicateGroups": 0,
-    "similarityCandidates": 109,
-    "sources": 1206,
+    "similarityCandidates": 118,
+    "sources": 1210,
     "unclassifiedCandidates": 0
   },
   "threshold": 0.72

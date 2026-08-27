@@ -14,10 +14,10 @@ first-party evidence and its runtime surface is exercised where applicable.
 
 | Content type | Sources | Shared canonical | Plugin-owned | Mentioned in dated evidence |
 | --- | --- | --- | --- | --- |
-| agent | 265 | 228 | 37 | 10 |
+| agent | 267 | 228 | 39 | 10 |
 | instruction | 251 | 195 | 56 | 17 |
 | skill | 613 | 490 | 123 | 44 |
-| prompt | 77 | 48 | 29 | 6 |
+| prompt | 79 | 48 | 31 | 6 |
 | hook | 10 | 8 | 2 | 3 |
 | plugin | 139 | 110 | 29 | 22 |
 
@@ -33,10 +33,10 @@ The “mentioned in dated evidence” column is only an index hint. A mention in
 
 | Content type | Currency wording | Lifecycle wording | Version claims | Date claims | External sources | Current-source review | Source review | Semantic review |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| agent | 172 | 69 | 81 | 4 | 67 | 198 | 11 | 56 |
+| agent | 172 | 69 | 81 | 4 | 67 | 198 | 11 | 58 |
 | instruction | 115 | 63 | 100 | 14 | 107 | 184 | 22 | 45 |
 | skill | 356 | 211 | 304 | 77 | 320 | 487 | 27 | 99 |
-| prompt | 27 | 13 | 9 | 3 | 9 | 35 | 3 | 39 |
+| prompt | 27 | 13 | 9 | 3 | 9 | 35 | 3 | 41 |
 | hook | 4 | 2 | 6 | 0 | 4 | 7 | 1 | 2 |
 | plugin | 46 | 39 | 139 | 7 | 139 | 139 | 0 | 0 |
 
@@ -53,10 +53,10 @@ words such as “latest”, “preview”, “deprecated”, and “current” r
 | Shared agents not packaged | 30 |
 | Shared skills packaged | 453 / 490 |
 | Shared skills not packaged | 37 |
-| Plugin-owned agents | 37 |
+| Plugin-owned agents | 39 |
 | Plugin-owned skills | 123 |
 | Plugin-owned workspace instructions | 56 |
-| Plugin-owned VS Code prompts | 29 |
+| Plugin-owned VS Code prompts | 31 |
 | Active plugin hook packages | 2 |
 
 The 67 unreferenced shared agents and

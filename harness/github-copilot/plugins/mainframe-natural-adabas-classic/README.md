@@ -15,7 +15,7 @@ extracted corpus coverage, and split quality and operations ownership.
 | Archaeology | `sifap-classic-archaeologist` agent |
 | Requirements and architecture | `sifap-classic-architect` agent |
 | Bounded implementation | `sifap-classic-builder` agent |
-| Hardening and operations | `sifap-classic-evolution` agent |
+| Hardening and operations | `sifap-classic-quality` and `sifap-classic-operations` agents |
 | SIFAP product context | `sifap-classic-context` skill |
 | Requirement lineage | `sifap-classic-traceability` skill |
 | Stage coordination | `sifap-classic-orchestration` skill |
@@ -41,7 +41,7 @@ and would compete for the same workshop role.
 | 1. Archaeology | `sifap-classic-archaeologist` | `/sifap-classic-archaeology` | Inventory, dependencies, rule candidates, open questions |
 | 2. Architecture | `sifap-classic-architect` | `/sifap-classic-specify` | `REQ-NNN` requirements, ADRs, modular-monolith plan |
 | 3. Build | `sifap-classic-builder` | `/sifap-classic-build-slice` | Modern code and behavior-pinning tests |
-| 4. Evolution | `sifap-classic-evolution` | `/sifap-classic-evolve` | Hardening, reviewed issues and PRs, IaC evidence, retrospective |
+| 4. Evolution | `sifap-classic-quality`, then `sifap-classic-operations` | `/sifap-classic-verify`, then `/sifap-classic-operate` | Behavior and data-equivalence proof, hardening, reviewed issues and PRs, IaC evidence, retrospective |
 
 Prompts are VS Code only. In GitHub Copilot CLI, name the agent or the skill instead.
 

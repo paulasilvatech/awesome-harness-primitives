@@ -15,7 +15,7 @@ coverage, and split quality and operations ownership.
 | Archaeology | `cobol-classic-archaeologist` agent |
 | Requirements and architecture | `cobol-classic-architect` agent |
 | Bounded implementation | `cobol-classic-builder` agent |
-| Verification, hardening, and operations | `cobol-classic-evolution` agent |
+| Verification, hardening, and operations | `cobol-classic-quality` and `cobol-classic-operations` agents |
 | COBOL/DB2 workshop context | `cobol-classic-context` skill |
 | Repository publication | `modernization-workspace-kit` skill |
 
@@ -39,7 +39,7 @@ and would compete for the same workshop role.
 | 1. Archaeology | `cobol-classic-archaeologist` | `/cobol-classic-archaeology` | Inventory, dependencies, rule candidates, open questions |
 | 2. Architecture | `cobol-classic-architect` | `/cobol-classic-specify` | `REQ-NNN` requirements, ADRs, target design |
 | 3. Build | `cobol-classic-builder` | `/cobol-classic-build-slice` | Modern code and behavior-pinning tests |
-| 4. Evolution | `cobol-classic-evolution` | `/cobol-classic-evolve` | Behavior and data-equivalence proof, hardening, release evidence |
+| 4. Evolution | `cobol-classic-quality`, then `cobol-classic-operations` | `/cobol-classic-verify`, then `/cobol-classic-operate` | Behavior and data-equivalence proof, hardening, release evidence |
 
 Prompts are VS Code only. In GitHub Copilot CLI, name the agent or the skill instead.
 

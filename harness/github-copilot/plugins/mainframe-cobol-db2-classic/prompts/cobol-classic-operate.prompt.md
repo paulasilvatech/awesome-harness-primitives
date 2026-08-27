@@ -1,11 +1,11 @@
 ---
-name: 'cobol-classic-evolve'
-description: 'Verify, harden, release, and document one implemented COBOL/DB2 slice with behavior and data-equivalence checks, cutover and rollback review, safe action previews, and residual-risk ownership.'
-argument-hint: 'scope=<implemented-slice-or-pr> destination=response|<review-file>'
-agent: 'cobol-classic-evolution'
+name: 'cobol-classic-operate'
+description: 'Harden, release, and document one verified COBOL/DB2 slice with cutover and rollback review, evidence-based findings, safe action previews, and residual-risk ownership.'
+argument-hint: 'scope=<verified-slice-or-pr> destination=response|<review-file>'
+agent: 'cobol-classic-operations'
 ---
 
-# /cobol-classic-evolve
+# /cobol-classic-operate
 
 ## Objective
 
@@ -86,7 +86,7 @@ Stop if the review scope or destination is ambiguous.
 ## Prompt Body
 
 1. **Validate scope and destination.** Stop if either is ambiguous.
-2. **Load context.** Load context, loop, and pipeline hardening Skills.
+2. **Load context.** Load context and pipeline hardening Skills.
 3. **Inspect evidence.** Compare the release path with approved decisions, quality evidence, and actual checks.
 4. **Review cutover.** Check ordering, batch window, and rollback rehearsal.
 5. **Rank findings.** Report only evidence-backed release, security, documentation, and operations gaps.
@@ -96,13 +96,13 @@ Stop if the review scope or destination is ambiguous.
 ## Invocation Example
 
 ```text
-/cobol-classic-evolve scope=impl/001-payment-inspection destination=04-evolution/reviews/001-payment-inspection.md
+/cobol-classic-operate scope=impl/001-payment-inspection destination=04-evolution/reviews/001-payment-inspection.md
 ```
 
 ## Related Primitives
 
 | Name | Type | Relationship |
 | --- | --- | --- |
-| `cobol-classic-evolution` | agent | Owns verification, readiness judgment, and approval boundaries. |
+| `cobol-classic-operations` | agent | Owns readiness judgment and approval boundaries. |
 | `github-actions-hardening` | skill | Supplies pipeline and supply-chain review criteria. |
 | `cobol-classic-builder` | agent | Receives code findings that require repair. |

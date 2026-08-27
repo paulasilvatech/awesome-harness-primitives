@@ -30,7 +30,7 @@ solely from an inferred stage.
 | Archaeology | `sifap-classic-archaeologist` | Legacy corpus and scope | Inventory, dependencies, rule candidates, questions | Behavior claims cite inspected legacy evidence. |
 | Architecture | `sifap-classic-architect` | Approved rule candidates and scope | `REQ-NNN` specs, ADRs, modular-monolith plan | Requirements validate and unresolved meaning is not promoted. |
 | Build | `sifap-classic-builder` | Approved requirements, plan, and bounded slice | Modern code and equivalence tests | Focused tests and builds pass; drift is classified. |
-| Evolution | `sifap-classic-evolution` | Validated implementation and operational scope | Hardening, reviewed issues/PRs, IaC evidence, retrospective | Human approvals and validation evidence are recorded. |
+| Evolution | `sifap-classic-quality`, then `sifap-classic-operations` | Validated implementation and operational scope | Verification evidence, hardening, reviewed issues/PRs, IaC evidence, retrospective | Human approvals and validation evidence are recorded. |
 
 ## Procedure
 

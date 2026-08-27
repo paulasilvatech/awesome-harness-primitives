@@ -46,11 +46,12 @@ engine and passed, and a full-profile preview produced 47 planned files for the 
 
 Two loop-free sibling packages were then added: `mainframe-natural-adabas-classic` and
 `mainframe-cobol-db2-classic`. Each restores the original four-stage workshop (archaeology, architecture,
-build, evolution) without the correction-loop skill, the engineering graph, or the split quality and
-operations agents, and each carries its own `workspace-kit.json`. Both packages were static-validated with
-the nine repository gates and both produced a successful full-profile publisher preview against a scratch
-repository. Neither classic package was probed through GitHub Copilot CLI or VS Code, so plugin
-installation, agent discovery, and prompt execution for them remain unverified.
+build, evolution) without the correction-loop skill or the engineering graph, keeps the split quality and
+operations agents inside the evolution stage, and carries its own `workspace-kit.json`. Both packages were
+static-validated with the nine repository gates, and a full-profile publisher preview planned 36 files for
+the Natural/Adabas classic package and 17 for the COBOL/DB2 classic package. Neither classic package was
+probed through GitHub Copilot CLI or VS Code, so plugin installation, agent discovery, and prompt
+execution for them remain unverified.
 
 ## First-party customization documentation verification
 
