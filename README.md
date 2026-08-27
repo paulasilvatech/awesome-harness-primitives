@@ -1,4 +1,4 @@
-# Copilot Primitives
+# Awesome Harness Primitives
 
 [![Validate primitives](https://github.com/paulasilvatech/copilot-primitives/actions/workflows/validate-primitives.yml/badge.svg)](https://github.com/paulasilvatech/copilot-primitives/actions/workflows/validate-primitives.yml)
 
