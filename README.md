@@ -2,14 +2,15 @@
 
 [![Validate primitives](https://github.com/paulasilvatech/copilot-primitives/actions/workflows/validate-primitives.yml/badge.svg)](https://github.com/paulasilvatech/copilot-primitives/actions/workflows/validate-primitives.yml)
 
-A curated, spec-validated collection of GitHub Copilot CLI primitives for the Copilot CLI harness. The shared harness currently contains **228 agents**, **195 instruction files**, **481 skills**, **48 VS Code prompts**, **136 plugin manifests**, and **8 reusable hook packages**, validated against GitHub Copilot CLI **1.0.81-4**. Self-contained plugins add plugin-owned primitives; the generated content audit reports both scopes without double-counting generated copies.
+A curated, spec-validated collection of GitHub Copilot CLI primitives for the Copilot CLI harness. The generated root catalog carries the current counts for agents, instructions, skills, VS Code prompts, plugins, and reusable hook packages. Self-contained plugins add plugin-owned primitives; the generated content audit reports both scopes without double-counting generated copies.
 
-For a generated, alphabetized inventory, see [docs/CATALOG.md](docs/CATALOG.md). The [primitive content audit](docs/PRIMITIVE-CONTENT-AUDIT.md) separates structural coverage from semantic freshness review, the [capability audit](docs/PRIMITIVE-CAPABILITIES.md) tracks agent and prompt tool policy, and the [redundancy audit](docs/PRIMITIVE-REDUNDANCY.md) blocks unclassified overlap. `docs/COPILOT-HARNESS-SPEC.md` is the canonical format and discovery reference, and [docs/templates/](docs/templates) holds the authoring templates for each primitive type.
+For the complete generated inventory, concise descriptions, and use cases, see [CATALOG.md](CATALOG.md). The [primitive content audit](docs/PRIMITIVE-CONTENT-AUDIT.md) separates structural coverage from semantic freshness review, the [capability audit](docs/PRIMITIVE-CAPABILITIES.md) tracks agent and prompt tool policy, and the [redundancy audit](docs/PRIMITIVE-REDUNDANCY.md) blocks unclassified overlap. `docs/COPILOT-HARNESS-SPEC.md` is the canonical format and discovery reference, and [docs/templates/](docs/templates) holds the authoring templates for each primitive type.
 
 ## Repository layout
 
 ```text
 .
+├── CATALOG.md                     # Generated complete primitive inventory
 ├── harness/github-copilot/
 │   ├── agents/                  # Source *.agent.md files
 │   ├── instructions/            # Source *.instructions.md files
@@ -32,7 +33,6 @@ For a generated, alphabetized inventory, see [docs/CATALOG.md](docs/CATALOG.md).
 │       ├── sync_plugin_components.py
 │       └── validate_primitives.py
 └── docs/
-    ├── CATALOG.md
     ├── COPILOT-HARNESS-SPEC.md
     ├── PRIMITIVE-CAPABILITIES.md
     ├── PRIMITIVE-CONTENT-AUDIT.md

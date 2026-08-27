@@ -301,7 +301,7 @@ documented flat package contract for GitHub-specific agents, hooks, and extensio
 `plugin.json` carries no maturity, tier, status, or category field: unsupported top-level keys fail rule
 `PL007`, and `keywords` is a discovery taxonomy that must not double as governance. Classification
 therefore lives in the canonical `harness/github-copilot/manifests/plugin-sources.json` under an optional
-`governance` object and is projected into `docs/PLUGIN-AUDIT.md` and `docs/CATALOG.md` by the shared
+`governance` object and is projected into `docs/PLUGIN-AUDIT.md` and the root `CATALOG.md` by the shared
 classifier `harness/github-copilot/scripts/_plugin_governance.py`.
 
 `governance` accepts only `lifecycle`, `lastRuntimeProbe`, and `evidence`. A probe date requires evidence,

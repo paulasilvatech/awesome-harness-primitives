@@ -15,7 +15,8 @@ python3 harness/github-copilot/scripts/validate_primitives.py --kind plugins
 python3 harness/github-copilot/scripts/validate_primitives.py --kind hooks
 ```
 
-Regenerate the catalog after primitive changes:
+Regenerate the root `CATALOG.md` after any canonical primitive change. CI runs the same command with
+`--check` and rejects stale catalog content:
 
 ```sh
 python3 harness/github-copilot/scripts/generate_catalog.py
