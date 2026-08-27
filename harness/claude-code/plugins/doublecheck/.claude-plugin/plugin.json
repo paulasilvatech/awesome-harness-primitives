@@ -1,0 +1,18 @@
+{
+  "name": "doublecheck",
+  "version": "1.0.2",
+  "description": "Three-layer verification pipeline for AI output. Extracts claims, finds sources, and flags hallucination risks so humans can verify before acting.",
+  "author": {
+    "name": "Awesome Copilot Community"
+  },
+  "repository": "https://github.com/github/awesome-copilot",
+  "license": "MIT",
+  "keywords": [
+    "verification",
+    "hallucination",
+    "fact-check",
+    "source-citation",
+    "trust",
+    "safety"
+  ]
+}

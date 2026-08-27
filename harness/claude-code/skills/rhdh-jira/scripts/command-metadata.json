@@ -1,0 +1,47 @@
+{
+  "assign": {
+    "description": "Recommend and assign team members to unassigned issues using expertise, capacity, and context proximity analysis.",
+    "argumentHint": "[issue key(s) or JQL query]",
+    "reference": "references/assign.md"
+  },
+  "refine": {
+    "description": "Check issues against exit criteria, identify duplicates, missing fields, unaddressed comments, and readiness for the next status.",
+    "argumentHint": "[issue key(s), JQL query, or 'sprint' for current sprint]",
+    "reference": "references/refine.md"
+  },
+  "plan": {
+    "description": "Sprint planning prep: carryover, velocity, capacity, ready-for-planning queue, and sprint fill suggestions. Run before each planning call.",
+    "argumentHint": "[team name or ID]",
+    "reference": "references/plan.md"
+  },
+  "sprint-report": {
+    "description": "Sprint review summary: committed vs completed, per-member breakdown, epic progress, demo checklist with naming conventions, velocity trend.",
+    "argumentHint": "[team] or [team previous]",
+    "reference": "references/sprint-report.md"
+  },
+  "release": {
+    "description": "Release readiness: feature matrix, PI funnel, epic roll-up, dependency map, blocker bugs, RN readiness, risk assessment.",
+    "argumentHint": "[version] or [version team]",
+    "reference": "references/release.md"
+  },
+  "to-feature": {
+    "description": "Create a RHDHPLAN Feature from conversation context. Grills on scope, customer value, AC. Optionally chains into Epic decomposition.",
+    "argumentHint": "[feature description]",
+    "reference": "references/to-feature.md"
+  },
+  "to-epic": {
+    "description": "Create an RHIDP Epic from conversation context. Grills on delivery scope, dependencies, AC. Optionally chains into Story/Task decomposition.",
+    "argumentHint": "[epic description]",
+    "reference": "references/to-epic.md"
+  },
+  "to-issue": {
+    "description": "Create a Story, Task, Bug, or Spike. Automatically infers the issue type. Grills on implementation details, AC, story points.",
+    "argumentHint": "[issue description]",
+    "reference": "references/to-issue.md"
+  },
+  "update-jira-status": {
+    "description": "Update a Jira issue with session progress. Detects the related issue, adds a status comment, proposes transitions, checks upward cascade to parent Epic/Feature.",
+    "argumentHint": "[issue key] or auto-detect",
+    "reference": "references/update-jira-status.md"
+  }
+}

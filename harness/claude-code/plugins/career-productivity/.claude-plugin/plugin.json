@@ -1,0 +1,18 @@
+{
+  "name": "career-productivity",
+  "version": "1.0.0",
+  "description": "Support individual work output: impact and brag sheets, performance and peer reviews, job-search materials, daily preparation, professional emails, meeting minutes, LinkedIn posts, and exam preparation.",
+  "author": {
+    "name": "paulasilvatech"
+  },
+  "repository": "https://github.com/paulasilvatech/copilot-primitives",
+  "license": "MIT",
+  "keywords": [
+    "career",
+    "productivity",
+    "performance-review",
+    "email",
+    "meetings",
+    "linkedin"
+  ]
+}

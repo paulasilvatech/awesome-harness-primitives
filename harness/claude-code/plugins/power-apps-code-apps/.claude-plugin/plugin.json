@@ -1,0 +1,19 @@
+{
+  "name": "power-apps-code-apps",
+  "version": "1.0.2",
+  "description": "Complete toolkit for Power Apps Code Apps development including project scaffolding, development standards, and expert guidance for building code-first applications with Power Platform integration.",
+  "author": {
+    "name": "Awesome Copilot Community"
+  },
+  "repository": "https://github.com/github/awesome-copilot",
+  "license": "MIT",
+  "keywords": [
+    "power-apps",
+    "power-platform",
+    "typescript",
+    "react",
+    "code-apps",
+    "dataverse",
+    "connectors"
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "name": "partners",
+  "version": "1.0.3",
+  "description": "Custom agents that have been created by GitHub partners",
+  "author": {
+    "name": "Awesome Copilot Community"
+  },
+  "repository": "https://github.com/github/awesome-copilot",
+  "license": "MIT",
+  "keywords": [
+    "devops",
+    "security",
+    "database",
+    "cloud",
+    "infrastructure",
+    "observability",
+    "feature-flags",
+    "cicd",
+    "migration",
+    "performance"
+  ]
+}

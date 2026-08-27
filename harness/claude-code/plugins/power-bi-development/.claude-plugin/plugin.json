@@ -1,0 +1,20 @@
+{
+  "name": "power-bi-development",
+  "version": "1.0.3",
+  "description": "Comprehensive Power BI development resources including data modeling, DAX optimization, performance tuning, visualization design, security best practices, and DevOps/ALM guidance for building enterprise-grade Power BI solutions.",
+  "author": {
+    "name": "Awesome Copilot Community"
+  },
+  "repository": "https://github.com/github/awesome-copilot",
+  "license": "MIT",
+  "keywords": [
+    "power-bi",
+    "dax",
+    "data-modeling",
+    "performance",
+    "visualization",
+    "security",
+    "devops",
+    "business-intelligence"
+  ]
+}

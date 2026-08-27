@@ -1,0 +1,56 @@
+name: "H2: GitHub Runners"
+description: "Deploy self-hosted GitHub Actions runners on AKS"
+title: "[Runners] Deploy GitHub Actions runners"
+labels: ["h2-enhancement", "github-runners", "copilot-agent"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## GitHub Actions Runners Deployment
+        This issue triggers the **github-runners-agent**.
+
+  - type: dropdown
+    id: sizing_profile
+    attributes:
+      label: "T-Shirt Size"
+      options:
+        - "small - 2-5 runners, standard VM"
+        - "medium - 5-20 runners, auto-scaling"
+        - "large - 20-50 runners, GPU support"
+        - "xlarge - 50+ runners, multi-pool"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: runner_type
+    attributes:
+      label: "Runner Type"
+      options:
+        - "ARC (Actions Runner Controller) - Kubernetes"
+        - "VMSS (Virtual Machine Scale Set)"
+        - "Container Apps Jobs"
+    validations:
+      required: true
+
+  - type: input
+    id: github_org
+    attributes:
+      label: "GitHub Organization"
+      description: "Organization for runner registration"
+      placeholder: "my-org"
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: runner_features
+    attributes:
+      label: "Runner Features"
+      options:
+        - label: "Auto-scaling"
+          required: true
+        - label: "Ephemeral runners"
+        - label: "Runner groups"
+        - label: "GPU runners"
+        - label: "Windows runners"
+        - label: "macOS runners (hosted)"

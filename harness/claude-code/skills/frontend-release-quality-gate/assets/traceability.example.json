@@ -1,0 +1,40 @@
+{
+  "version": 1,
+  "entries": [
+    {
+      "id": "TR-001",
+      "story_id": "US-001",
+      "acceptance_id": "AC-001",
+      "scenario_id": "SC-001",
+      "risk": "high",
+      "test_layer": "component",
+      "result": "pass",
+      "evidence": {
+        "type": "command",
+        "reference": "npm test -- account-recovery.test.tsx"
+      },
+      "environment": {
+        "build": "example-build",
+        "runtime": "example-runtime"
+      }
+    },
+    {
+      "id": "TR-002",
+      "story_id": "US-001",
+      "acceptance_id": "AC-002",
+      "scenario_id": "SC-002",
+      "risk": "medium",
+      "test_layer": "manual",
+      "result": "manual",
+      "evidence": {
+        "type": "manual",
+        "reference": "Keyboard and screen-reader smoke test in the QA report"
+      },
+      "manual_procedure": "Complete the recovery flow with keyboard and the approved screen-reader/browser combination.",
+      "environment": {
+        "browser": "example-browser",
+        "assistive_technology": "example-at"
+      }
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "name": "openapi-to-application-python-fastapi",
+  "version": "1.0.2",
+  "description": "Generate production-ready FastAPI applications from OpenAPI specifications. Includes project scaffolding, route generation, dependency injection, and Python best practices for async APIs.",
+  "author": {
+    "name": "Awesome Copilot Community"
+  },
+  "repository": "https://github.com/github/awesome-copilot",
+  "license": "MIT",
+  "keywords": [
+    "openapi",
+    "code-generation",
+    "api",
+    "python",
+    "fastapi"
+  ]
+}

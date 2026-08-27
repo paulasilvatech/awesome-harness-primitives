@@ -1,0 +1,16 @@
+{
+  "name": "dataverse-sdk-for-python",
+  "version": "1.0.2",
+  "description": "Comprehensive collection for building production-ready Python integrations with Microsoft Dataverse. Includes official documentation, best practices, advanced features, file operations, and code generation prompts.",
+  "author": {
+    "name": "Awesome Copilot Community"
+  },
+  "repository": "https://github.com/github/awesome-copilot",
+  "license": "MIT",
+  "keywords": [
+    "dataverse",
+    "python",
+    "integration",
+    "sdk"
+  ]
+}

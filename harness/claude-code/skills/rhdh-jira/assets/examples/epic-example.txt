@@ -1,0 +1,32 @@
+h1. EPIC Goal
+
+Implement multi-source catalog provider registration and entity merging so that RHDH can ingest entities from multiple external catalogs simultaneously.
+
+h2. *Background/Feature Origin*
+
+Part of the Multi-Source Catalog Ingestion feature (RHDHPLAN-500). Platform engineers need to aggregate software catalog data from GitHub, GitLab, and Bitbucket without running separate RHDH instances.
+
+h2. *Why is this important?*
+
+Enterprise customers with heterogeneous SCM environments currently run multiple RHDH instances - one per catalog source. This increases operational overhead, fragments the developer experience, and makes cross-source search impossible.
+
+h2. *User Scenarios*
+
+* Platform engineer adds a GitLab provider alongside an existing GitHub provider via app-config
+* Developer searches the catalog and finds results from both GitHub and GitLab without knowing which source they came from
+* Admin views per-provider ingestion status in the admin dashboard
+
+h2. *Dependencies (internal and external)*
+
+* Backstage core catalog module provider registration API (upstream)
+* RHDH dynamic plugin system - must not interfere with provider lifecycle
+* RHIDP-600: Admin dashboard health monitoring (internal, parallel)
+
+h2. *Acceptance Criteria*
+
+(?) DEV - Upstream code and tests merged: provider registration + entity merge logic
+(?) DEV - Upstream documentation merged: multi-source configuration guide
+(?) DEV - Downstream build attached to advisory
+(?) QE - Test plans in Playwright: multi-provider ingestion + dedup scenarios
+(?) QE - Automated tests merged: provider failure isolation tests
+(?) DOC - Downstream documentation merged: admin guide + migration guide

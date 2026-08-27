@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"${CLAUDE_PROJECT_DIR}/.claude/hooks/fix-broken-links/link-fix.sh\"",
+            "timeout": 120
+          }
+        ]
+      }
+    ]
+  }
+}

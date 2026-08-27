@@ -1,0 +1,18 @@
+{
+  "name": "mainframe-cobol-db2-classic",
+  "version": "0.1.0",
+  "description": "Modernize COBOL, DB2, VSAM, and JCL systems with the four-stage classic workshop: evidence-first archaeology, REQ-NNN lineage, bounded implementation, and hardened evolution, without the correction-loop and engineering-graph layer.",
+  "author": {
+    "name": "paulasilvatech"
+  },
+  "repository": "https://github.com/paulasilvatech/copilot-primitives",
+  "keywords": [
+    "mainframe",
+    "cobol",
+    "db2",
+    "vsam",
+    "jcl",
+    "modernization",
+    "github-copilot"
+  ]
+}

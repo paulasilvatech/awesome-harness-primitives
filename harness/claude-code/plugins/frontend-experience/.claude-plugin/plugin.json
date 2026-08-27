@@ -1,0 +1,17 @@
+{
+  "name": "frontend-experience",
+  "version": "0.1.0",
+  "description": "Product-specific frontend design, implementation, accessibility, discoverability, integration testing, and release validation for web, mobile, and desktop projects.",
+  "author": {
+    "name": "paulasilvatech"
+  },
+  "repository": "https://github.com/paulasilvatech/copilot-primitives",
+  "keywords": [
+    "frontend",
+    "ux",
+    "accessibility",
+    "responsive-design",
+    "testing",
+    "seo"
+  ]
+}

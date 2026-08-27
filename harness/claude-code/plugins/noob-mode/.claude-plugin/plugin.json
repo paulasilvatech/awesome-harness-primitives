@@ -1,0 +1,19 @@
+{
+  "name": "noob-mode",
+  "version": "1.0.2",
+  "description": "Plain-English translation layer for non-technical Copilot CLI users. Translates every approval prompt, error message, and technical output into clear, jargon-free English with color-coded risk indicators.",
+  "author": {
+    "name": "Awesome Copilot Community"
+  },
+  "repository": "https://github.com/github/awesome-copilot",
+  "license": "MIT",
+  "keywords": [
+    "accessibility",
+    "plain-english",
+    "non-technical",
+    "beginner",
+    "translation",
+    "copilot-cli",
+    "ux"
+  ]
+}

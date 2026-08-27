@@ -1,0 +1,19 @@
+{
+  "name": "testing-frameworks",
+  "version": "1.0.0",
+  "description": "Write and migrate automated tests across ecosystems: Jest for JavaScript and TypeScript, Vitest with Vue and Pinia, pytest coverage loops, Pester major-version migrations, Terratest modules, and exploratory web testing.",
+  "author": {
+    "name": "paulasilvatech"
+  },
+  "repository": "https://github.com/paulasilvatech/copilot-primitives",
+  "license": "MIT",
+  "keywords": [
+    "testing",
+    "jest",
+    "vitest",
+    "pytest",
+    "pester",
+    "terratest",
+    "exploratory-testing"
+  ]
+}

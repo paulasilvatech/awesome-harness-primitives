@@ -1,0 +1,18 @@
+{
+  "name": "go-to-market",
+  "version": "1.0.0",
+  "description": "Plan and execute go-to-market work for technical products: positioning, pricing, product-led growth, partnerships, enterprise accounts and onboarding, operating cadence, investor communication, and paid-campaign analysis.",
+  "author": {
+    "name": "paulasilvatech"
+  },
+  "repository": "https://github.com/paulasilvatech/copilot-primitives",
+  "license": "MIT",
+  "keywords": [
+    "gtm",
+    "positioning",
+    "pricing",
+    "growth",
+    "partnerships",
+    "marketing"
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "name": "pcf-development",
+  "version": "1.1.1",
+  "description": "Complete toolkit for developing custom code components using Power Apps Component Framework for model-driven and canvas apps",
+  "author": {
+    "name": "Awesome Copilot Community"
+  },
+  "repository": "https://github.com/github/awesome-copilot",
+  "license": "MIT",
+  "keywords": [
+    "power-apps",
+    "pcf",
+    "component-framework",
+    "typescript",
+    "power-platform"
+  ]
+}

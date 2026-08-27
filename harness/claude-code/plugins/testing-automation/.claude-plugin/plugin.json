@@ -1,0 +1,20 @@
+{
+  "name": "testing-automation",
+  "version": "1.0.2",
+  "description": "Comprehensive collection for writing tests, test automation, and test-driven development including unit tests, integration tests, and end-to-end testing strategies.",
+  "author": {
+    "name": "Awesome Copilot Community"
+  },
+  "repository": "https://github.com/github/awesome-copilot",
+  "license": "MIT",
+  "keywords": [
+    "testing",
+    "tdd",
+    "automation",
+    "unit-tests",
+    "integration",
+    "playwright",
+    "jest",
+    "nunit"
+  ]
+}

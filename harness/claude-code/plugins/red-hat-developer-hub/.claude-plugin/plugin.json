@@ -1,0 +1,18 @@
+{
+  "name": "red-hat-developer-hub",
+  "version": "1.0.0",
+  "description": "Work with Red Hat Developer Hub: route plugin development and overlay management, run local plugin testing with rhdh-local, and manage RHDH Jira projects across acli, GraphQL, and REST.",
+  "author": {
+    "name": "paulasilvatech"
+  },
+  "repository": "https://github.com/paulasilvatech/copilot-primitives",
+  "license": "MIT",
+  "keywords": [
+    "rhdh",
+    "backstage",
+    "red-hat",
+    "plugins",
+    "jira",
+    "developer-portal"
+  ]
+}

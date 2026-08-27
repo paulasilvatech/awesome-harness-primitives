@@ -1,0 +1,20 @@
+{
+  "name": "azure-cloud-development",
+  "version": "1.0.4",
+  "description": "Comprehensive Azure cloud development tools including Infrastructure as Code, serverless functions, architecture patterns, and cost optimization for building scalable cloud applications.",
+  "author": {
+    "name": "Awesome Copilot Community"
+  },
+  "repository": "https://github.com/github/awesome-copilot",
+  "license": "MIT",
+  "keywords": [
+    "azure",
+    "cloud",
+    "infrastructure",
+    "bicep",
+    "terraform",
+    "serverless",
+    "architecture",
+    "devops"
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "name": "power-platform-architect",
+  "version": "1.0.2",
+  "description": "Solution Architect for the Microsoft Power Platform, turning business requirements into functioning Power Platform solution architectures.",
+  "author": {
+    "name": "Tim Hanewich"
+  },
+  "repository": "https://github.com/github/awesome-copilot",
+  "license": "MIT",
+  "keywords": [
+    "power-platform",
+    "power-platform-architect",
+    "power-apps",
+    "dataverse",
+    "power-automate",
+    "power-pages",
+    "power-bi"
+  ]
+}

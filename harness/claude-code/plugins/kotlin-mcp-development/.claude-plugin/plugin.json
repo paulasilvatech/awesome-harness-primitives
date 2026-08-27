@@ -1,0 +1,18 @@
+{
+  "name": "kotlin-mcp-development",
+  "version": "1.0.2",
+  "description": "Complete toolkit for building Model Context Protocol (MCP) servers in Kotlin using the official io.modelcontextprotocol:kotlin-sdk library. Includes instructions for best practices, a prompt for generating servers, and an expert agent for guidance.",
+  "author": {
+    "name": "Awesome Copilot Community"
+  },
+  "repository": "https://github.com/github/awesome-copilot",
+  "license": "MIT",
+  "keywords": [
+    "kotlin",
+    "mcp",
+    "model-context-protocol",
+    "kotlin-multiplatform",
+    "server-development",
+    "ktor"
+  ]
+}

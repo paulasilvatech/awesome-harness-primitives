@@ -1,0 +1,50 @@
+{
+  "version": 1,
+  "copies": [
+    {
+      "source": "harness/claude-code/rules/copilot-repository-governance.md",
+      "target": "CLAUDE.md",
+      "mode": "strip-frontmatter"
+    },
+    {
+      "source": "harness/claude-code/rules/claude-code-harness.md",
+      "target": ".claude/rules/claude-code-harness.md"
+    },
+    {
+      "source": "harness/claude-code/rules/copilot-primitive-authoring.md",
+      "target": ".claude/rules/copilot-primitive-authoring.md"
+    },
+    {
+      "source": "harness/claude-code/rules/agents.md",
+      "target": ".claude/rules/agents.md"
+    },
+    {
+      "source": "harness/claude-code/rules/agent-skills.md",
+      "target": ".claude/rules/agent-skills.md"
+    },
+    {
+      "source": "harness/claude-code/rules/prompt.md",
+      "target": ".claude/rules/prompt.md"
+    },
+    {
+      "source": "harness/claude-code/rules/hooks.md",
+      "target": ".claude/rules/hooks.md"
+    },
+    {
+      "source": "harness/claude-code/agents/copilot-primitive-architect.md",
+      "target": ".claude/agents/copilot-primitive-architect.md"
+    },
+    {
+      "source": "harness/claude-code/skills/copilot-primitive-authoring",
+      "target": ".claude/skills/copilot-primitive-authoring"
+    },
+    {
+      "source": "harness/claude-code/skills/skill-creator",
+      "target": ".claude/skills/skill-creator"
+    },
+    {
+      "source": "harness/claude-code/commands/create-copilot-primitive.md",
+      "target": ".claude/commands/create-copilot-primitive.md"
+    }
+  ]
+}

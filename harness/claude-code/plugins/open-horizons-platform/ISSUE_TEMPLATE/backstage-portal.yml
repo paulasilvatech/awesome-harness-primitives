@@ -1,0 +1,57 @@
+name: "H2: Developer Portal (Backstage)"
+description: "Deploy Backstage developer portal on AKS"
+title: "[Backstage] Deploy developer portal"
+labels: ["h2-enhancement", "backstage", "copilot-agent"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Backstage Developer Portal Deployment
+        This issue triggers the **backstage-expert** agent for IDP setup.
+
+  - type: dropdown
+    id: platform
+    attributes:
+      label: "Target Platform"
+      options:
+        - "AKS - Azure Kubernetes Service"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: auth_provider
+    attributes:
+      label: "Authentication Provider"
+      options:
+        - "Entra ID (Microsoft) - for GitHub EMU"
+        - "GitHub OAuth - for GitHub Enterprise Cloud"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: sizing_profile
+    attributes:
+      label: "T-Shirt Size"
+      options:
+        - "small - Basic Backstage, 2 replicas"
+        - "medium - Backstage with plugins, 3 replicas"
+        - "large - Backstage HA, all plugins"
+        - "xlarge - Backstage HA, custom plugins, multi-cluster"
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: backstage_plugins
+    attributes:
+      label: "Backstage Plugins to Enable"
+      options:
+        - label: "GitHub Integration"
+          required: true
+        - label: "Kubernetes Plugin"
+        - label: "ArgoCD Plugin"
+        - label: "Azure DevOps Plugin"
+        - label: "Jira Plugin"
+        - label: "TechDocs"
+        - label: "Software Templates"
+        - label: "API Documentation"

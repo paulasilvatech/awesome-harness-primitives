@@ -1,0 +1,19 @@
+{
+  "name": "ai-team-orchestration",
+  "version": "2.0.3",
+  "description": "Run a lightweight, role-separated AI development team with flexible tools, developer-selected models, proportionate planning, and optional QA.",
+  "author": {
+    "name": "Denis Evdokimov"
+  },
+  "repository": "https://github.com/github/awesome-copilot",
+  "license": "MIT",
+  "keywords": [
+    "ai-team",
+    "multi-agent",
+    "sprint-planning",
+    "brainstorm",
+    "project-management",
+    "orchestration",
+    "developer-workflow"
+  ]
+}

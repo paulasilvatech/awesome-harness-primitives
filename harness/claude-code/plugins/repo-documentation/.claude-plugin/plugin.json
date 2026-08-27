@@ -1,0 +1,18 @@
+{
+  "name": "repo-documentation",
+  "version": "1.0.0",
+  "description": "Author and maintain repository documentation: READMEs, AGENTS.md, llms.txt, Diataxis guides, component docs, tutorials, coding standards, tldr pages, and Markdown conversion or translation.",
+  "author": {
+    "name": "paulasilvatech"
+  },
+  "repository": "https://github.com/paulasilvatech/copilot-primitives",
+  "license": "MIT",
+  "keywords": [
+    "documentation",
+    "readme",
+    "markdown",
+    "docs",
+    "diataxis",
+    "llms-txt"
+  ]
+}

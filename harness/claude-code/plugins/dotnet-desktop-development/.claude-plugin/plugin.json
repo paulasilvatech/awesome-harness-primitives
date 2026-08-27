@@ -1,0 +1,19 @@
+{
+  "name": "dotnet-desktop-development",
+  "version": "1.0.0",
+  "description": "Build Windows and cross-platform .NET client applications with the MVVM Toolkit, dependency injection, messaging, Windows metadata APIs, WinUI 3 migration, Microsoft Store publishing, System.CommandLine, NuGet, and timezone handling.",
+  "author": {
+    "name": "paulasilvatech"
+  },
+  "repository": "https://github.com/paulasilvatech/copilot-primitives",
+  "license": "MIT",
+  "keywords": [
+    "dotnet",
+    "windows",
+    "mvvm",
+    "winui",
+    "maui",
+    "desktop",
+    "nuget"
+  ]
+}

@@ -1,0 +1,41 @@
+h1. Story (Required)
+
+As a platform engineer trying to configure multiple catalog sources I want to add a second catalog provider via app-config so that entities from both sources appear in the unified catalog.
+
+_This enables multi-source catalog ingestion without code changes. Platform engineers managing heterogeneous SCM environments can consolidate all entities into one RHDH instance._
+
+h2. *Background (Required)*
+
+_Currently RHDH supports one catalog provider per instance. The multi-source catalog feature (RHDHPLAN-500, Epic RHIDP-700) requires extending the provider registration to accept multiple provider configs and merge their entities._
+
+h2. *Out of scope*
+
+_Entity conflict resolution UI - conflicts are handled by last-write-wins in this story. Custom conflict resolution is a future story._
+
+h2. *Approach (Required)*
+
+_Extend the existing CatalogBuilder to accept an array of provider configs instead of a single config. Each provider registers independently with the catalog engine. Entity merging uses the existing EntityPolicy chain - no new merge logic needed for this story._
+
+h2. *Dependencies*
+
+_Depends on RHIDP-701 (provider config schema) being merged first._
+
+(?) QE impacted work - need multi-provider test fixtures
+(?) Documentation impacted work - app-config reference update
+
+h2. *Acceptance Criteria (Required)*
+
+(?) Two providers configured in app-config both register and ingest successfully
+(?) Entities from both providers appear in catalog search results
+(?) Provider failure in one does not block the other
+(?) Existing single-provider configs continue to work without changes
+(?) documentation updates (design docs, release notes etc)
+(?) demo needed
+
+h1. *Done Checklist*
+
+(?) Code is completed, reviewed, documented and checked in
+(?) Unit and integration test automation have been delivered and running cleanly in continuous integration/staging/canary environment
+(?) Continuous Delivery pipeline(s) is able to proceed with new code included
+(?) Customer facing documentation, API docs, design docs etc. are produced/updated, reviewed and published
+(?) Acceptance criteria are met

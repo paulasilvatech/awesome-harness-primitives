@@ -1,0 +1,18 @@
+{
+  "name": "code-quality-refactoring",
+  "version": "1.0.0",
+  "description": "Improve existing code without changing behavior: surgical refactoring, complexity reduction, repository-wide review, design pattern and SOLID checks, formatting conventions, linter autofix loops, tech-debt planning, and incremental delivery discipline.",
+  "author": {
+    "name": "paulasilvatech"
+  },
+  "repository": "https://github.com/paulasilvatech/copilot-primitives",
+  "license": "MIT",
+  "keywords": [
+    "refactoring",
+    "code-quality",
+    "technical-debt",
+    "review",
+    "linting",
+    "solid"
+  ]
+}

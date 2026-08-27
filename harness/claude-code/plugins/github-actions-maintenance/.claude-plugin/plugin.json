@@ -1,0 +1,17 @@
+{
+  "name": "github-actions-maintenance",
+  "version": "1.0.1",
+  "description": "Maintain GitHub Actions workflows with specialist guidance for authoring, runtime upgrades, security hardening, and CI efficiency. Use when workflows need safer permissions, immutable action pins, faster runs, or deprecated runtime remediation.",
+  "author": {
+    "name": "Copilot Primitives Maintainers"
+  },
+  "repository": "https://github.com/paulasilvatech/copilot-primitives",
+  "license": "MIT",
+  "keywords": [
+    "github-actions",
+    "ci",
+    "workflow-security",
+    "runtime-upgrade",
+    "optimization"
+  ]
+}

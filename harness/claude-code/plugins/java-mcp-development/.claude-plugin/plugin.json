@@ -1,0 +1,20 @@
+{
+  "name": "java-mcp-development",
+  "version": "1.0.2",
+  "description": "Complete toolkit for building Model Context Protocol servers in Java using the official MCP Java SDK with reactive streams and Spring Boot integration.",
+  "author": {
+    "name": "Awesome Copilot Community"
+  },
+  "repository": "https://github.com/github/awesome-copilot",
+  "license": "MIT",
+  "keywords": [
+    "java",
+    "mcp",
+    "model-context-protocol",
+    "server-development",
+    "sdk",
+    "reactive-streams",
+    "spring-boot",
+    "reactor"
+  ]
+}

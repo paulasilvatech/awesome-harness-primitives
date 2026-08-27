@@ -1,0 +1,16 @@
+{
+  "name": "csharp-dotnet-development",
+  "version": "1.1.2",
+  "description": "Essential prompts, instructions, and agents for C# and .NET development including testing, documentation, and best practices.",
+  "author": {
+    "name": "Awesome Copilot Community"
+  },
+  "repository": "https://github.com/github/awesome-copilot",
+  "license": "MIT",
+  "keywords": [
+    "csharp",
+    "dotnet",
+    "aspnet",
+    "testing"
+  ]
+}

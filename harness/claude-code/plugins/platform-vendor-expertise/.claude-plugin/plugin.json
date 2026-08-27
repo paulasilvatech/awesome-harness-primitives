@@ -1,0 +1,18 @@
+{
+  "name": "platform-vendor-expertise",
+  "version": "1.0.0",
+  "description": "Apply vendor platform expertise for Drupal, Laravel, Pimcore, Salesforce, and Shopify development, including Shopify App Store review triage.",
+  "author": {
+    "name": "paulasilvatech"
+  },
+  "repository": "https://github.com/paulasilvatech/copilot-primitives",
+  "license": "MIT",
+  "keywords": [
+    "drupal",
+    "laravel",
+    "pimcore",
+    "salesforce",
+    "shopify",
+    "cms"
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "GUARD_MODE=block \"${CLAUDE_PROJECT_DIR}/.claude/hooks/tool-guardian/guard-tool.sh\"",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}

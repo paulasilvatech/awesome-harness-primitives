@@ -1,0 +1,18 @@
+{
+  "name": "application-security",
+  "version": "1.0.0",
+  "description": "Assess and harden application security: source vulnerability review, secret scanning, CodeQL scanning, STRIDE and TM7 threat models, data-breach blast radius, and GDPR engineering practices.",
+  "author": {
+    "name": "paulasilvatech"
+  },
+  "repository": "https://github.com/paulasilvatech/copilot-primitives",
+  "license": "MIT",
+  "keywords": [
+    "security",
+    "threat-model",
+    "codeql",
+    "secret-scanning",
+    "gdpr",
+    "vulnerability"
+  ]
+}

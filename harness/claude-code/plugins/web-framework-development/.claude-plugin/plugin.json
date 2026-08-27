@@ -1,0 +1,18 @@
+{
+  "name": "web-framework-development",
+  "version": "1.0.0",
+  "description": "Build and debug modern web applications across frameworks: Next.js, Nuxt, Vue, AEM front end, React component structure, internationalization, scroll animation, streaming Markdown rendering, Chrome DevTools inspection, and frontend performance investigation.",
+  "author": {
+    "name": "paulasilvatech"
+  },
+  "repository": "https://github.com/paulasilvatech/copilot-primitives",
+  "license": "MIT",
+  "keywords": [
+    "web",
+    "nextjs",
+    "nuxt",
+    "vue",
+    "react",
+    "performance"
+  ]
+}

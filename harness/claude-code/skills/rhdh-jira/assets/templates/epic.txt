@@ -1,0 +1,21 @@
+h1. EPIC Goal
+
+What are we trying to solve here?
+
+h2. *Background/Feature Origin*
+
+h2. *Why is this important?*
+
+h2. *User Scenarios*
+
+h2. *Dependencies (internal and external)*
+
+h2. *Acceptance Criteria*
+
+(?) Release Enablement/Demo - Provide necessary release enablement details and documents
+(?) DEV - Upstream code and tests merged: <link to meaningful PR or GitHub Issue>
+(?) DEV - Upstream documentation merged: <link to meaningful PR or GitHub Issue>
+(?) DEV - Downstream build attached to advisory: <link to errata>
+(?) QE - Test plans in Playwright: <link or reference to playwright>
+(?) QE - Automated tests merged: <link or reference to automated tests>
+(?) DOC - Downstream documentation merged: <link to meaningful PR>

@@ -1,0 +1,18 @@
+{
+  "name": "typespec-m365-copilot",
+  "version": "1.0.2",
+  "description": "Comprehensive collection of prompts, instructions, and resources for building declarative agents and API plugins using TypeSpec for Microsoft 365 Copilot extensibility.",
+  "author": {
+    "name": "Awesome Copilot Community"
+  },
+  "repository": "https://github.com/github/awesome-copilot",
+  "license": "MIT",
+  "keywords": [
+    "typespec",
+    "m365-copilot",
+    "declarative-agents",
+    "api-plugins",
+    "agent-development",
+    "microsoft-365"
+  ]
+}

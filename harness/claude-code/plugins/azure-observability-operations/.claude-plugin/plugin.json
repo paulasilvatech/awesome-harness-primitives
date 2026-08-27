@@ -1,0 +1,18 @@
+{
+  "name": "azure-observability-operations",
+  "version": "1.0.0",
+  "description": "Operate Azure workloads with cost management, production diagnostics and triage, Application Insights instrumentation, observability stack design, and reliability posture assessment.",
+  "author": {
+    "name": "paulasilvatech"
+  },
+  "repository": "https://github.com/paulasilvatech/copilot-primitives",
+  "license": "MIT",
+  "keywords": [
+    "azure",
+    "observability",
+    "diagnostics",
+    "cost",
+    "monitoring",
+    "reliability"
+  ]
+}

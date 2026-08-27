@@ -1,0 +1,19 @@
+{
+  "name": "azure-app-lifecycle",
+  "version": "1.0.0",
+  "description": "Take an application from idea or existing code to a running Azure deployment: readiness assessment, architecture and cost planning, infrastructure scaffolding, pre-deployment validation, and gated deployment.",
+  "author": {
+    "name": "paulasilvatech"
+  },
+  "repository": "https://github.com/paulasilvatech/copilot-primitives",
+  "license": "MIT",
+  "keywords": [
+    "azure",
+    "deployment",
+    "azd",
+    "bicep",
+    "terraform",
+    "onboarding",
+    "scaffolding"
+  ]
+}

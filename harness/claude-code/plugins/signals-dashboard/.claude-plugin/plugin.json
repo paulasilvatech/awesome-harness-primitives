@@ -1,0 +1,16 @@
+{
+  "name": "signals-dashboard",
+  "version": "0.2.2",
+  "description": "Real-time Workshop dashboard with agent signals, honesty calibration, and cost-aware repo or connected desk launch profiles.",
+  "author": {
+    "name": "jennyf19",
+    "url": "https://github.com/jennyf19"
+  },
+  "keywords": [
+    "agent-signals",
+    "dashboard",
+    "multi-agent",
+    "coordination",
+    "canvas"
+  ]
+}

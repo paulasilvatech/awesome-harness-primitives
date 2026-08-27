@@ -1,0 +1,19 @@
+{
+  "name": "azure-data-development",
+  "version": "1.0.0",
+  "description": "Work with Azure data and messaging services: Kusto and KQL analytics, IRQL security hunting, graph queries, Event Hubs and Service Bus troubleshooting, PostgreSQL management, and Azure Storage design.",
+  "author": {
+    "name": "paulasilvatech"
+  },
+  "repository": "https://github.com/paulasilvatech/copilot-primitives",
+  "license": "MIT",
+  "keywords": [
+    "azure",
+    "data",
+    "kusto",
+    "kql",
+    "storage",
+    "messaging",
+    "postgresql"
+  ]
+}

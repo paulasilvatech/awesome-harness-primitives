@@ -1,0 +1,20 @@
+{
+  "name": "backstage-expert",
+  "version": "1.0.1",
+  "description": "Build, configure, authenticate, extend, document, operate, upgrade, and contribute to Backstage applications and the Backstage core repository with current first-party workflows, safety gates, and migration guidance.",
+  "author": {
+    "name": "Copilot Primitives Maintainers"
+  },
+  "homepage": "https://backstage.io/",
+  "repository": "https://github.com/paulasilvatech/copilot-primitives",
+  "license": "Apache-2.0",
+  "keywords": [
+    "backstage",
+    "internal-developer-portal",
+    "software-catalog",
+    "software-templates",
+    "techdocs",
+    "plugin-development",
+    "platform-engineering"
+  ]
+}

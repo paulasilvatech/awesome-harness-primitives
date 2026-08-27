@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
-"""Generate the root catalog from the repository's primitive sources."""
+"""Generate the split primitive catalog from the repository's sources."""
 from __future__ import annotations
 
 import argparse
 import json
+import os
 import re
 import sys
+from dataclasses import dataclass, field
 from datetime import date
 from pathlib import Path
 from typing import Any
@@ -21,10 +23,15 @@ except ModuleNotFoundError:  # pragma: no cover - supports python3 -m invocation
     from ._plugin_sources import load_plugin_sources
     from .validate_primitives import PLUGIN_MANIFESTS, parse_frontmatter
 
-DEFAULT_OUT = REPO_ROOT / "CATALOG.md"
+DEFAULT_INDEX = REPO_ROOT / "CATALOG.md"
+DEFAULT_PAGES_DIR = REPO_ROOT / "docs" / "catalog"
 SOURCE_ROOT = HARNESS_ROOT
+LINK_BASE = REPO_ROOT
 DESCRIPTION_WIDTH = 140
 USE_CASE_WIDTH = 180
+REGENERATE_COMMAND = (
+    "python3 harness/github-copilot/scripts/generate_catalog.py"
+)
 HOOK_EVENT_ORDER = [
     "sessionStart",
     "sessionEnd",
@@ -216,12 +223,13 @@ def catalog_description(
     return truncate(summary), truncate(use_case, USE_CASE_WIDTH)
 
 
+def relative_link_target(path: Path, base: Path | None = None) -> str:
+    origin = LINK_BASE if base is None else base
+    return Path(os.path.relpath(path, origin)).as_posix()
+
+
 def source_link(path: Path, label: str = "source") -> str:
-    try:
-        target = path.relative_to(REPO_ROOT).as_posix()
-    except ValueError:
-        target = path.as_posix()
-    return f"[{label}]({target})"
+    return f"[{label}]({relative_link_target(path)})"
 
 
 def sort_rows(rows: list[list[str]]) -> list[list[str]]:
@@ -433,188 +441,239 @@ def hook_rows() -> list[list[str]]:
     return sort_rows(rows)
 
 
-def build_catalog() -> str:
-    agents = agent_rows()
-    instructions = instruction_rows()
-    skills = skill_rows()
-    prompts = prompt_rows()
-    plugins = plugin_rows()
-    hooks = hook_rows()
+@dataclass
+class CatalogPage:
+    slug: str
+    title: str
+    type_label: str
+    purpose: str
+    use_cases: str
+    canonical: str
+    headers: list[str]
+    rows: list[list[str]] = field(default_factory=list)
+    note: str = ""
+    path: Path = REPO_ROOT
 
-    type_guide = [
-        [
-            "Agent",
-            "Defines a specialist persona, judgment boundary, and tool posture.",
-            (
+
+def collect_pages() -> list[CatalogPage]:
+    return [
+        CatalogPage(
+            slug="agents",
+            title="Agents",
+            type_label="Agent",
+            purpose=(
+                "Defines a specialist persona, judgment boundary, and tool "
+                "posture."
+            ),
+            use_cases=(
                 "Delegated implementation, review, diagnosis, architecture, "
                 "or domain-specific decisions."
             ),
-            "`harness/github-copilot/agents/`",
-        ],
-        [
-            "Instructions",
-            "Applies passive conventions to matching files or repository work.",
-            (
+            canonical="harness/github-copilot/agents/",
+            headers=["Agent", "Description", "Use cases", "Source"],
+            rows=agent_rows(),
+        ),
+        CatalogPage(
+            slug="instructions",
+            title="Instructions",
+            type_label="Instructions",
+            purpose=(
+                "Applies passive conventions to matching files or repository "
+                "work."
+            ),
+            use_cases=(
                 "Coding standards, governance, path-specific rules, and "
                 "verification requirements."
             ),
-            "`harness/github-copilot/instructions/`",
-        ],
-        [
-            "Skill",
-            (
+            canonical="harness/github-copilot/instructions/",
+            headers=[
+                "Instruction",
+                "applyTo",
+                "Description",
+                "Use cases",
+                "Source",
+            ],
+            rows=instruction_rows(),
+            note=(
+                "An `applyTo` glob makes the file auto-apply to matching "
+                "paths. Entries without one are loaded as general repository "
+                "guidance."
+            ),
+        ),
+        CatalogPage(
+            slug="skills",
+            title="Skills",
+            type_label="Skill",
+            purpose=(
                 "Packages a reusable workflow with optional scripts, "
                 "references, and assets."
             ),
-            (
+            use_cases=(
                 "Repeatable procedures that need ordered steps, domain "
                 "knowledge, or bundled resources."
             ),
-            "`harness/github-copilot/skills/`",
-        ],
-        [
-            "VS Code prompt",
-            "Defines an explicit action a user runs from VS Code Chat.",
-            (
+            canonical="harness/github-copilot/skills/",
+            headers=["Skill", "Description", "Use cases", "Source"],
+            rows=skill_rows(),
+        ),
+        CatalogPage(
+            slug="prompts",
+            title="VS Code Prompts",
+            type_label="VS Code prompt",
+            purpose="Defines an explicit action a user runs from VS Code Chat.",
+            use_cases=(
                 "Guided generation, transformation, review, and interactive "
                 "workspace tasks."
             ),
-            "`harness/github-copilot/prompts/`",
-        ],
-        [
-            "Plugin",
-            (
+            canonical="harness/github-copilot/prompts/",
+            headers=["Prompt", "Description", "Use cases", "Source"],
+            rows=prompt_rows(),
+            note=(
+                "These prompts are explicit VS Code Chat actions; GitHub "
+                "Copilot CLI does not discover or execute them."
+            ),
+        ),
+        CatalogPage(
+            slug="plugins",
+            title="Plugins",
+            type_label="Plugin",
+            purpose=(
                 "Bundles installable Copilot capabilities and optional MCP, "
                 "hook, or client-extension surfaces."
             ),
-            (
+            use_cases=(
                 "Distributing cohesive capability suites through a plugin "
                 "or marketplace."
             ),
-            "`harness/github-copilot/plugins/`",
-        ],
-        [
-            "Hook",
-            (
+            canonical="harness/github-copilot/plugins/",
+            headers=[
+                "Plugin",
+                "Version",
+                "Lifecycle",
+                "Assurance",
+                "Provenance",
+                "Contents",
+                "Description",
+                "Use cases",
+                "Source",
+            ],
+            rows=plugin_rows(),
+            note=(
+                "Lifecycle, assurance, and provenance are descriptive "
+                "classifications generated from repository evidence. They "
+                "exist to filter a large marketplace and never remove, hide, "
+                "or block a package."
+            ),
+        ),
+        CatalogPage(
+            slug="hooks",
+            title="Hooks",
+            type_label="Hook",
+            purpose=(
                 "Runs deterministic checks or automation at Copilot "
                 "lifecycle events."
             ),
-            (
+            use_cases=(
                 "Guardrails, compliance checks, logging, and opt-in session "
                 "automation."
             ),
-            "`harness/github-copilot/hooks/`",
-        ],
+            canonical="harness/github-copilot/hooks/",
+            headers=[
+                "Hook package",
+                "Description",
+                "Trigger events",
+                "Use cases",
+                "Source",
+            ],
+            rows=hook_rows(),
+        ),
     ]
-    type_guide_table = md_table(
-        ["Type", "What it does", "Typical use cases", "Canonical source"],
-        type_guide,
-    )
-    agent_table = md_table(
-        ["Agent", "Description", "Use cases", "Source"],
-        agents,
-    )
-    instruction_table = md_table(
-        ["Instruction", "applyTo", "Description", "Use cases", "Source"],
-        instructions,
-    )
-    skill_table = md_table(
-        ["Skill", "Description", "Use cases", "Source"],
-        skills,
-    )
-    prompt_table = md_table(
-        ["Prompt", "Description", "Use cases", "Source"],
-        prompts,
-    )
-    plugin_table = md_table(
-        [
-            "Plugin",
-            "Version",
-            "Lifecycle",
-            "Assurance",
-            "Provenance",
-            "Contents",
-            "Description",
-            "Use cases",
-            "Source",
-        ],
-        plugins,
-    )
-    hook_table = md_table(
-        [
-            "Hook package",
-            "Description",
-            "Trigger events",
-            "Use cases",
-            "Source",
-        ],
-        hooks,
-    )
 
+
+def render_page(page: CatalogPage, index_path: Path, page_path: Path) -> str:
+    index_link = relative_link_target(index_path, page_path.parent)
+    note = f"\n{page.note}\n" if page.note else ""
+    overview = md_table(
+        ["Field", "Value"],
+        [
+            ["Primitive type", page.type_label],
+            ["Entries", str(len(page.rows))],
+            ["Canonical source", f"`{page.canonical}`"],
+            ["Typical use cases", page.use_cases],
+        ],
+    )
+    return f"""# Copilot Primitives Catalog — {page.title}
+
+{page.purpose}
+
+Part of the [Copilot primitives catalog]({index_link}). Generated file: do not
+hand-edit it. Regenerate with `{REGENERATE_COMMAND}`.
+
+## Overview
+
+{overview}
+{note}
+## Entries
+
+{md_table(page.headers, page.rows)}
+"""
+
+
+def render_index(pages: list[CatalogPage], index_path: Path) -> str:
+    guide_rows = [
+        [
+            f"[{page.title}]({relative_link_target(page.path, index_path.parent)})",
+            page.purpose,
+            page.use_cases,
+            f"`{page.canonical}`",
+        ]
+        for page in pages
+    ]
+    summary_rows = [
+        [
+            f"[{page.title}]({relative_link_target(page.path, index_path.parent)})",
+            str(len(page.rows)),
+        ]
+        for page in pages
+    ]
     return f"""# Copilot Primitives Catalog
 
-This is the generated root inventory of every canonical Copilot primitive
-package in this repository. Each entry includes a concise purpose, a typical
-use case, and a link to its source.
+This is the generated index of every canonical Copilot primitive package in
+this repository. Each primitive type has its own page listing every entry with
+a concise purpose, a typical use case, and a link to its source.
 
-## Maintenance contract
+## Catalog pages
 
-- Do not hand-edit this file. Regenerate it with
-  `python3 harness/github-copilot/scripts/generate_catalog.py`.
-- Regenerate after changing canonical agents, instructions, skills, prompts,
-  plugins, or hooks under `harness/github-copilot/`.
-- CI runs `python3 harness/github-copilot/scripts/generate_catalog.py --check`
-  and blocks stale catalog changes.
-- Shared primitives copied into plugins or `.github/` are listed once at their
-  canonical source. Plugin rows summarize bundled capabilities without
-  duplicating generated copies.
-
-## Primitive type guide
-
-{type_guide_table}
+{md_table(["Page", "What the type does", "Typical use cases", "Canonical source"], guide_rows)}
 
 ## Summary
 
-| Primitive type | Count |
-| --- | ---: |
-| Agents | {len(agents)} |
-| Instructions | {len(instructions)} |
-| Skills | {len(skills)} |
-| VS Code prompts | {len(prompts)} |
-| Plugins | {len(plugins)} |
-| Hooks | {len(hooks)} |
+{md_table(["Primitive type", "Entries"], summary_rows)}
 
-## Agents
+## Maintenance contract
 
-{agent_table}
-
-## Instructions
-
-{instruction_table}
-
-## Skills
-
-{skill_table}
-
-## VS Code Prompts
-
-These prompts are explicit VS Code Chat actions; GitHub Copilot CLI does not
-discover or execute them.
-
-{prompt_table}
-
-## Plugins
-
-Lifecycle, assurance, and provenance are descriptive classifications generated
-from repository evidence. They exist to filter a large marketplace and never
-remove, hide, or block a package.
-
-{plugin_table}
-
-## Hooks
-
-{hook_table}
+- Do not hand-edit the index or any catalog page. Regenerate them with
+  `{REGENERATE_COMMAND}`.
+- Regenerate after changing canonical agents, instructions, skills, prompts,
+  plugins, or hooks under `harness/github-copilot/`.
+- CI runs `{REGENERATE_COMMAND} --check` and blocks a stale index or page.
+- Shared primitives copied into plugins or `.github/` are listed once at their
+  canonical source. Plugin rows summarize bundled capabilities without
+  duplicating generated copies.
 """
+
+
+def build_outputs(index_path: Path, pages_dir: Path) -> dict[Path, str]:
+    global LINK_BASE
+    LINK_BASE = pages_dir
+    pages = collect_pages()
+    outputs: dict[Path, str] = {}
+    for page in pages:
+        page.path = pages_dir / f"{page.slug}.md"
+        outputs[page.path] = render_page(page, index_path, page.path)
+    LINK_BASE = index_path.parent
+    outputs[index_path] = render_index(pages, index_path)
+    return outputs
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -626,32 +685,51 @@ def main(argv: list[str] | None = None) -> int:
         default=HARNESS_ROOT,
         help="canonical harness root (default: <repo>/harness/github-copilot)",
     )
-    parser.add_argument("--out", type=Path, default=DEFAULT_OUT,
-                        help="output path (default: CATALOG.md)")
+    parser.add_argument("--out", type=Path, default=DEFAULT_INDEX,
+                        help="index path (default: CATALOG.md)")
+    parser.add_argument(
+        "--pages-dir",
+        type=Path,
+        default=DEFAULT_PAGES_DIR,
+        help="per-type page directory (default: docs/catalog)",
+    )
     parser.add_argument(
         "--check",
         action="store_true",
-        help="exit 1 if the output file is stale; do not write",
+        help="exit 1 if any generated file is stale; do not write",
     )
     args = parser.parse_args(argv)
 
     global SOURCE_ROOT
     SOURCE_ROOT = args.root.resolve()
-    out = args.out if args.out.is_absolute() else REPO_ROOT / args.out
-    content = build_catalog()
+    index_path = args.out if args.out.is_absolute() else REPO_ROOT / args.out
+    pages_dir = (
+        args.pages_dir
+        if args.pages_dir.is_absolute()
+        else REPO_ROOT / args.pages_dir
+    )
+    outputs = build_outputs(index_path, pages_dir)
+
     if args.check:
-        current = out.read_text(encoding="utf-8") if out.exists() else ""
-        if current != content:
-            print(
-                f"{out.relative_to(REPO_ROOT)} is stale; run "
-                "python3 harness/github-copilot/scripts/generate_catalog.py",
-                file=sys.stderr,
-            )
+        stale = [
+            path
+            for path, content in outputs.items()
+            if not path.exists()
+            or path.read_text(encoding="utf-8") != content
+        ]
+        if stale:
+            for path in sorted(stale):
+                print(
+                    f"{relative_link_target(path, REPO_ROOT)} is stale",
+                    file=sys.stderr,
+                )
+            print(f"run {REGENERATE_COMMAND}", file=sys.stderr)
             return 1
         return 0
 
-    out.parent.mkdir(parents=True, exist_ok=True)
-    out.write_text(content, encoding="utf-8")
+    for path, content in outputs.items():
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(content, encoding="utf-8")
     return 0
 
 

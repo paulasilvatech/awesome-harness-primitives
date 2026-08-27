@@ -1,0 +1,20 @@
+{
+  "name": "project-planning",
+  "version": "1.0.2",
+  "description": "Tools and guidance for software project planning, feature breakdown, epic management, implementation planning, and task organization for development teams.",
+  "author": {
+    "name": "Awesome Copilot Community"
+  },
+  "repository": "https://github.com/github/awesome-copilot",
+  "license": "MIT",
+  "keywords": [
+    "planning",
+    "project-management",
+    "epic",
+    "feature",
+    "implementation",
+    "task",
+    "architecture",
+    "technical-spike"
+  ]
+}

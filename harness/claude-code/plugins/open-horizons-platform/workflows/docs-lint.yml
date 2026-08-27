@@ -1,0 +1,84 @@
+name: Docs Lint
+
+on:
+  push:
+    branches: [develop, stage, main]
+    paths:
+      - 'docs/**'
+      - 'README.md'
+      - 'AGENTS.md'
+      - '.github/**/*.md'
+      - '.github/markdown-link-check.json'
+      - 'scripts/add-doc-footers.sh'
+      - '.github/workflows/docs-lint.yml'
+  pull_request:
+    paths:
+      - 'docs/**'
+      - 'README.md'
+      - 'AGENTS.md'
+      - '.github/**/*.md'
+      - '.github/markdown-link-check.json'
+
+permissions:
+  contents: read
+
+jobs:
+  footer-check:
+    name: Verify navigation footers
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: Check all guides have current prev/next footer
+        run: bash scripts/add-doc-footers.sh --check
+
+  link-check:
+    name: Verify internal links
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: markdown-link-check docs
+        uses: gaurav-nelson/github-action-markdown-link-check@5c5dfc0ac2e225883c0e5f03a85311ec2830d368 # v1
+        with:
+          use-quiet-mode: 'yes'
+          use-verbose-mode: 'yes'
+          config-file: '.github/markdown-link-check.json'
+          folder-path: 'docs'
+          file-extension: '.md'
+
+      - name: markdown-link-check GitHub customization docs
+        uses: gaurav-nelson/github-action-markdown-link-check@5c5dfc0ac2e225883c0e5f03a85311ec2830d368 # v1
+        with:
+          use-quiet-mode: 'yes'
+          use-verbose-mode: 'yes'
+          config-file: '.github/markdown-link-check.json'
+          folder-path: '.github'
+          file-extension: '.md'
+
+      - name: markdown-link-check AGENTS.md
+        uses: gaurav-nelson/github-action-markdown-link-check@5c5dfc0ac2e225883c0e5f03a85311ec2830d368 # v1
+        with:
+          use-quiet-mode: 'yes'
+          use-verbose-mode: 'yes'
+          config-file: '.github/markdown-link-check.json'
+          file-path: 'AGENTS.md'
+
+  frontmatter-check:
+    name: Verify guides have YAML frontmatter
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: Check frontmatter present on every guide
+        run: |
+          missing=0
+          for f in docs/guides/*.md; do
+            if ! head -1 "$f" | grep -q '^---$'; then
+              echo "MISSING frontmatter: $f"
+              missing=1
+            fi
+          done
+          if [ $missing -eq 1 ]; then
+            echo "::error::Some guides lack YAML frontmatter. See docs/DOCS_STANDARD.md section 1."
+            exit 1
+          fi
+          guide_count=$(find docs/guides -maxdepth 1 -type f -name '*.md' | wc -l | tr -d ' ')
+          echo "All ${guide_count} guides have YAML frontmatter."

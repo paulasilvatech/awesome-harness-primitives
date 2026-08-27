@@ -1,0 +1,48 @@
+{
+    "kitName": "sifap-classic-workspace-kit",
+    "stateFile": ".github/.sifap-classic-workspace-kit.json",
+    "globalInstructions": "workspace-kit/copilot-instructions.md",
+    "agents": [
+        "sifap-classic-archaeologist.agent.md",
+        "sifap-classic-architect.agent.md",
+        "sifap-classic-builder.agent.md",
+        "sifap-classic-quality.agent.md",
+        "sifap-classic-operations.agent.md"
+    ],
+    "prompts": [
+        "sifap-classic-archaeology.prompt.md",
+        "sifap-classic-specify.prompt.md",
+        "sifap-classic-build-slice.prompt.md",
+        "sifap-classic-verify.prompt.md",
+        "sifap-classic-operate.prompt.md"
+    ],
+    "skills": [
+        "sifap-classic-context",
+        "sifap-classic-traceability",
+        "sifap-classic-orchestration",
+        "modernization-workspace-kit"
+    ],
+    "coreInstructions": [
+        "sifap-natural-adabas.instructions.md",
+        "sifap-requirements.instructions.md",
+        "sifap-security.instructions.md"
+    ],
+    "workshopInstructions": [
+        "sifap-backend.instructions.md",
+        "sifap-cicd.instructions.md",
+        "sifap-database.instructions.md",
+        "sifap-frontend.instructions.md",
+        "sifap-infrastructure.instructions.md",
+        "sifap-tests.instructions.md"
+    ],
+    "automation": [
+        {
+            "source": "workspace-kit/sifap-traceability.yml",
+            "destination": ".github/workflows/sifap-traceability.yml"
+        },
+        {
+            "source": "skills/sifap-classic-traceability/scripts/validate_traceability.py",
+            "destination": ".github/scripts/validate_sifap_traceability.py"
+        }
+    ]
+}

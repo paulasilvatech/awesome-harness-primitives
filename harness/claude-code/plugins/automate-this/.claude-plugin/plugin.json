@@ -1,0 +1,20 @@
+{
+  "name": "automate-this",
+  "version": "1.0.2",
+  "description": "Record your screen doing a manual process, drop the video on your Desktop, and let Copilot CLI analyze it frame-by-frame to build working automation scripts. Supports narrated recordings with audio transcription.",
+  "author": {
+    "name": "Awesome Copilot Community"
+  },
+  "repository": "https://github.com/github/awesome-copilot",
+  "license": "MIT",
+  "keywords": [
+    "automation",
+    "screen-recording",
+    "workflow",
+    "video-analysis",
+    "process-automation",
+    "scripting",
+    "productivity",
+    "copilot-cli"
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "name": "agent-governance",
+  "version": "1.0.1",
+  "description": "Govern and audit AI agent systems with policy enforcement, OWASP Agentic Security Initiative controls, supply-chain integrity, and evidence-quality gates. Use when designing production agent guardrails or reviewing agent safety and compliance.",
+  "author": {
+    "name": "Copilot Primitives Maintainers"
+  },
+  "repository": "https://github.com/paulasilvatech/copilot-primitives",
+  "license": "MIT",
+  "keywords": [
+    "agent-governance",
+    "agentic-security",
+    "owasp",
+    "supply-chain",
+    "audit",
+    "policy"
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "name": "python-mcp-development",
+  "version": "1.0.2",
+  "description": "Complete toolkit for building Model Context Protocol (MCP) servers in Python using the official SDK with FastMCP. Includes instructions for best practices, a prompt for generating servers, and an expert agent for guidance.",
+  "author": {
+    "name": "Awesome Copilot Community"
+  },
+  "repository": "https://github.com/github/awesome-copilot",
+  "license": "MIT",
+  "keywords": [
+    "python",
+    "mcp",
+    "model-context-protocol",
+    "fastmcp",
+    "server-development"
+  ]
+}

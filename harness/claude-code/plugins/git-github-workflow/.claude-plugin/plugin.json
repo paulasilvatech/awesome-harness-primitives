@@ -1,0 +1,19 @@
+{
+  "name": "git-github-workflow",
+  "version": "1.0.0",
+  "description": "Run day-to-day Git and GitHub workflows: conventional commits and branches, issue and release management, pull request review loops, dashboards, Dependabot, and contribution guardrails.",
+  "author": {
+    "name": "paulasilvatech"
+  },
+  "repository": "https://github.com/paulasilvatech/copilot-primitives",
+  "license": "MIT",
+  "keywords": [
+    "git",
+    "github",
+    "commits",
+    "branches",
+    "issues",
+    "pull-requests",
+    "release"
+  ]
+}

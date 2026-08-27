@@ -1,0 +1,19 @@
+{
+  "name": "azure-governance",
+  "version": "1.0.0",
+  "description": "Govern Azure environments with compliance and security auditing, Microsoft Entra identity and app registration, agent identities, quota management, RBAC role selection, and Well-Architected review.",
+  "author": {
+    "name": "paulasilvatech"
+  },
+  "repository": "https://github.com/paulasilvatech/copilot-primitives",
+  "license": "MIT",
+  "keywords": [
+    "azure",
+    "governance",
+    "compliance",
+    "entra",
+    "rbac",
+    "quotas",
+    "well-architected"
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "ATTESTER_MODE=block \"${CLAUDE_PROJECT_DIR}/.claude/hooks/attester-import-check/check-imports.py\"",
+            "timeout": 30
+          }
+        ]
+      }
+    ]
+  }
+}

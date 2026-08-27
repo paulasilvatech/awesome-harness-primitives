@@ -1,0 +1,19 @@
+{
+  "name": "ux-design-tooling",
+  "version": "1.0.0",
+  "description": "Design-time UX and visual tooling: build and review UI/UX designs in Penpot with design systems, component patterns, and accessibility checks, and create original poster, art, and static visual pieces as PNG or PDF.",
+  "author": {
+    "name": "paulasilvatech"
+  },
+  "repository": "https://github.com/paulasilvatech/copilot-primitives",
+  "license": "MIT",
+  "keywords": [
+    "ux",
+    "ui",
+    "design",
+    "penpot",
+    "design-system",
+    "accessibility",
+    "visual"
+  ]
+}

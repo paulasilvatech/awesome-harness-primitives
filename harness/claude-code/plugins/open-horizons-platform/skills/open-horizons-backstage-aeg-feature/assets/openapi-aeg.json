@@ -1,0 +1,320 @@
+{
+    "openapi": "3.0.3",
+    "info": {
+        "title": "Open Horizons AEG API",
+        "version": "1.1.0",
+        "description": "Authenticated contract for AEG run management, G1/G2 decisions, traceability, metrics, and draft profile proposals. The service derives actor identity from the authenticated principal."
+    },
+    "security": [
+        {
+            "bearerAuth": []
+        }
+    ],
+    "paths": {
+        "/runs": {
+            "post": {
+                "operationId": "aeg_start_run",
+                "summary": "Start an AEG run",
+                "x-open-horizons-mutating": true,
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StartRunRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Run created"
+                    },
+                    "401": {
+                        "description": "Authentication required"
+                    },
+                    "403": {
+                        "description": "Caller is not authorized"
+                    }
+                }
+            },
+            "get": {
+                "operationId": "aeg_list_runs",
+                "summary": "List bounded AEG run summaries",
+                "x-open-horizons-mutating": false,
+                "responses": {
+                    "200": {
+                        "description": "Run summaries returned"
+                    }
+                }
+            }
+        },
+        "/runs/{run_id}": {
+            "get": {
+                "operationId": "aeg_get_run",
+                "summary": "Get one AEG run",
+                "x-open-horizons-mutating": false,
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/RunId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Run returned"
+                    },
+                    "404": {
+                        "description": "Run not found"
+                    }
+                }
+            }
+        },
+        "/runs/{run_id}/gates/{gate_id}/package": {
+            "get": {
+                "operationId": "aeg_get_gate_package",
+                "summary": "Get a G1 or G2 decision package",
+                "x-open-horizons-mutating": false,
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/RunId"
+                    },
+                    {
+                        "$ref": "#/components/parameters/GateId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Decision package returned"
+                    }
+                }
+            }
+        },
+        "/gates/decision": {
+            "post": {
+                "operationId": "aeg_decide_gate",
+                "summary": "Record an authenticated G1 or G2 decision",
+                "x-open-horizons-mutating": true,
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/GateDecisionRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Decision recorded"
+                    },
+                    "403": {
+                        "description": "Authenticated caller lacks the approver role"
+                    }
+                }
+            }
+        },
+        "/runs/{run_id}/traceability": {
+            "get": {
+                "operationId": "aeg_get_traceability",
+                "summary": "Get requirement-to-resource traceability",
+                "x-open-horizons-mutating": false,
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/RunId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Traceability returned"
+                    }
+                }
+            }
+        },
+        "/metrics": {
+            "get": {
+                "operationId": "aeg_get_metrics",
+                "summary": "Get AEG metrics with source units and periods",
+                "x-open-horizons-mutating": false,
+                "responses": {
+                    "200": {
+                        "description": "Metrics returned"
+                    }
+                }
+            }
+        },
+        "/harvest/propose": {
+            "post": {
+                "operationId": "aeg_propose_profile",
+                "summary": "Create a draft reusable profile proposal",
+                "x-open-horizons-mutating": true,
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProposeProfileRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Draft proposal created"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "scheme": "bearer"
+            }
+        },
+        "parameters": {
+            "RunId": {
+                "name": "run_id",
+                "in": "path",
+                "required": true,
+                "schema": {
+                    "type": "string"
+                }
+            },
+            "GateId": {
+                "name": "gate_id",
+                "in": "path",
+                "required": true,
+                "schema": {
+                    "type": "string",
+                    "enum": [
+                        "G1",
+                        "G2"
+                    ]
+                }
+            }
+        },
+        "schemas": {
+            "StartRunRequest": {
+                "type": "object",
+                "required": [
+                    "intent",
+                    "name",
+                    "need"
+                ],
+                "properties": {
+                    "intent": {
+                        "type": "string",
+                        "enum": [
+                            "greenfield",
+                            "modernization",
+                            "change",
+                            "system"
+                        ]
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "need": {
+                        "type": "string"
+                    },
+                    "source_repo": {
+                        "type": "string",
+                        "format": "uri"
+                    },
+                    "component_ref": {
+                        "type": "string"
+                    },
+                    "change_type": {
+                        "type": "string",
+                        "enum": [
+                            "feature",
+                            "bugfix"
+                        ]
+                    },
+                    "topology": {
+                        "type": "string",
+                        "enum": [
+                            "auto",
+                            "single-repo",
+                            "multi-repo"
+                        ]
+                    },
+                    "release_train": {
+                        "type": "string",
+                        "enum": [
+                            "independent",
+                            "coordinated"
+                        ]
+                    },
+                    "environment_profile": {
+                        "type": "string",
+                        "enum": [
+                            "sandbox",
+                            "production"
+                        ]
+                    },
+                    "worker_engine": {
+                        "type": "string",
+                        "default": "inherit",
+                        "enum": [
+                            "inherit",
+                            "claude-code",
+                            "copilot-cli",
+                            "copilot-sdk"
+                        ]
+                    }
+                },
+                "additionalProperties": false
+            },
+            "GateDecisionRequest": {
+                "type": "object",
+                "required": [
+                    "run_id",
+                    "gate_id",
+                    "decision"
+                ],
+                "properties": {
+                    "run_id": {
+                        "type": "string"
+                    },
+                    "gate_id": {
+                        "type": "string",
+                        "enum": [
+                            "G1",
+                            "G2"
+                        ]
+                    },
+                    "decision": {
+                        "type": "string",
+                        "enum": [
+                            "approve",
+                            "reject"
+                        ]
+                    },
+                    "feedback": {
+                        "type": "string"
+                    }
+                },
+                "additionalProperties": false
+            },
+            "ProposeProfileRequest": {
+                "type": "object",
+                "required": [
+                    "evidence_runs"
+                ],
+                "properties": {
+                    "evidence_runs": {
+                        "type": "array",
+                        "minItems": 2,
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "additionalProperties": false
+            }
+        }
+    }
+}

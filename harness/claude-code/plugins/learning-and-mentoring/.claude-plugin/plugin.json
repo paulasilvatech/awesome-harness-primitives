@@ -1,0 +1,18 @@
+{
+  "name": "learning-and-mentoring",
+  "version": "1.0.0",
+  "description": "Teach and coach rather than deliver answers: Socratic mentoring for juniors, study modes, understanding checks, critical thinking and devil's advocate review, self-learning architecture paths, and scientific paper research.",
+  "author": {
+    "name": "paulasilvatech"
+  },
+  "repository": "https://github.com/paulasilvatech/copilot-primitives",
+  "license": "MIT",
+  "keywords": [
+    "mentoring",
+    "learning",
+    "teaching",
+    "critical-thinking",
+    "study",
+    "research"
+  ]
+}

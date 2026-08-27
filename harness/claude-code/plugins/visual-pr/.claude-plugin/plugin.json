@@ -1,0 +1,20 @@
+{
+  "name": "visual-pr",
+  "version": "1.0.2",
+  "description": "Capture, annotate, and embed screenshots and animated GIF demos in pull request descriptions. Includes Playwright-based UI capture, PIL image annotations, PR embedding workflows for GitHub and Azure DevOps, and screen recording with variable timing.",
+  "author": {
+    "name": "Awesome Copilot Community"
+  },
+  "repository": "https://github.com/github/awesome-copilot",
+  "license": "MIT",
+  "keywords": [
+    "screenshots",
+    "pull-request",
+    "before-after",
+    "annotations",
+    "playwright",
+    "gif",
+    "screen-recording",
+    "visual"
+  ]
+}

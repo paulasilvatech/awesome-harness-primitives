@@ -1,0 +1,62 @@
+name: "H1: Defender for Cloud"
+description: "Enable Microsoft Defender for Cloud security posture management"
+title: "[Defender] Enable cloud security"
+labels: ["h1-foundation", "security", "defender", "copilot-agent"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Defender for Cloud Deployment
+        This issue triggers the **defender-cloud-agent** for CSPM and workload protection.
+
+  - type: dropdown
+    id: sizing_profile
+    attributes:
+      label: "T-Shirt Size"
+      options:
+        - "small - Free CSPM, Containers only (~$100/mo)"
+        - "medium - Standard CSPM, Containers + KV (~$500/mo)"
+        - "large - Full CSPM, all workload protection (~$2,000/mo)"
+        - "xlarge - Enterprise, regulatory compliance (~$5,000/mo)"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: azure_region
+    attributes:
+      label: "Primary Azure Region"
+      options:
+        - "brazilsouth - Brazil South (São Paulo)"
+        - "eastus2 - East US 2 (Virginia)"
+        - "southcentralus - South Central US (Texas)"
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: defender_plans
+    attributes:
+      label: "Defender Plans to Enable"
+      options:
+        - label: "Defender CSPM (Cloud Security Posture)"
+          required: true
+        - label: "Defender for Containers"
+          required: true
+        - label: "Defender for Servers (P1/P2)"
+        - label: "Defender for Databases"
+        - label: "Defender for Key Vault"
+        - label: "Defender for Storage"
+        - label: "Defender for AI Services"
+        - label: "Defender for App Service"
+
+  - type: checkboxes
+    id: compliance_frameworks
+    attributes:
+      label: "Regulatory Compliance Frameworks"
+      options:
+        - label: "Azure CIS 1.4.0"
+        - label: "NIST SP 800-53"
+        - label: "PCI DSS"
+        - label: "ISO 27001"
+        - label: "SOX"
+        - label: "LGPD (Brazil)"

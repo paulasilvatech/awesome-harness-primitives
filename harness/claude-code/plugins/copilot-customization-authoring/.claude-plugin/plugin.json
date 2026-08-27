@@ -1,0 +1,18 @@
+{
+  "name": "copilot-customization-authoring",
+  "version": "1.0.0",
+  "description": "Author and operate GitHub Copilot customization itself: skills, agents, instructions, prompts, memory, harness engineering, CLI onboarding, Copilot Spaces, usage metrics, and LSP setup.",
+  "author": {
+    "name": "paulasilvatech"
+  },
+  "repository": "https://github.com/paulasilvatech/copilot-primitives",
+  "license": "MIT",
+  "keywords": [
+    "copilot",
+    "skills",
+    "agents",
+    "prompts",
+    "customization",
+    "harness"
+  ]
+}

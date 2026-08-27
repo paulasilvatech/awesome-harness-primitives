@@ -1,0 +1,18 @@
+{
+  "name": "copilot-plugin-development",
+  "version": "1.0.3",
+  "description": "Create, migrate, audit, and validate flat GitHub Copilot plugins and marketplaces with direct component paths, canonical source ownership, dependency pinning, and isolated runtime tests.",
+  "author": {
+    "name": "Copilot Primitives Maintainers"
+  },
+  "repository": "https://github.com/paulasilvatech/copilot-primitives",
+  "license": "MIT",
+  "keywords": [
+    "github-copilot",
+    "plugins",
+    "marketplace",
+    "agent-plugins",
+    "validation",
+    "authoring"
+  ]
+}

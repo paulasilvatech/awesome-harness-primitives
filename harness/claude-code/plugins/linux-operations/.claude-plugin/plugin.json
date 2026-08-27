@@ -1,0 +1,18 @@
+{
+  "name": "linux-operations",
+  "version": "1.0.0",
+  "description": "Diagnose and remediate Linux incidents across Arch, CentOS, Debian, and Fedora with distribution-correct package managers, systemd, journal analysis, security modules, and rollback discipline.",
+  "author": {
+    "name": "paulasilvatech"
+  },
+  "repository": "https://github.com/paulasilvatech/copilot-primitives",
+  "license": "MIT",
+  "keywords": [
+    "linux",
+    "sre",
+    "incident",
+    "systemd",
+    "triage",
+    "operations"
+  ]
+}

@@ -1,0 +1,107 @@
+name: Publish TechDocs
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "docs/**"
+      - "mkdocs.yml"
+      - "backstage/catalog-info.yaml"
+      - ".github/workflows/techdocs-publish.yml"
+  workflow_dispatch:
+
+permissions: {}
+
+env:
+  TECHDOCS_IMAGE: spotify/techdocs@sha256:c725b12c549c247db708e03de5dce5d81a80a4c486a8bf8ec828403dde7332bc
+
+concurrency:
+  group: techdocs-dev
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build Open Horizons TechDocs
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+
+      - name: Generate TechDocs site
+        shell: bash
+        run: |
+          set -euo pipefail
+          techdocs_source="${RUNNER_TEMP}/techdocs-source"
+          mkdir -p "${techdocs_source}"
+          cp mkdocs.yml "${techdocs_source}/mkdocs.yml"
+          cp -R docs "${techdocs_source}/docs"
+          docker run \
+            --rm \
+            --user "$(id -u):$(id -g)" \
+            --volume "${techdocs_source}:/content" \
+            --workdir /content \
+            "${TECHDOCS_IMAGE}" \
+            build \
+            --site-dir site
+
+      - name: Upload generated TechDocs site
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: open-horizons-techdocs
+          path: ${{ runner.temp }}/techdocs-source/site/
+          if-no-files-found: error
+          retention-days: 1
+
+  publish:
+    name: Publish Open Horizons TechDocs
+    needs: build
+    runs-on: [self-hosted, linux, x64, ohorizons-techdocs]
+    environment: dev
+    permissions:
+      actions: read
+      id-token: write
+
+    steps:
+      - name: Download generated TechDocs site
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: open-horizons-techdocs
+          path: site/
+
+      - name: Verify approved publisher tooling
+        shell: bash
+        run: |
+          set -euo pipefail
+          command -v az >/dev/null
+          az version --output json >/dev/null
+
+      - name: Sign in to Azure with workload identity
+        uses: azure/login@7184910d9eb2b1c5e48f7073824a90609bb9b6d6 # v2
+        with:
+          client-id: ${{ vars.TECHDOCS_PUBLISHER_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Publish TechDocs to Azure Blob Storage
+        shell: bash
+        run: |
+          set -euo pipefail
+          az storage blob upload-batch \
+            --account-name stohorizonsdocsdev001 \
+            --auth-mode login \
+            --destination techdocs \
+            --destination-path default/component/open-horizons-portal \
+            --overwrite true \
+            --source site \
+            --output none
+
+      - name: Sign out of Azure
+        if: always()
+        shell: bash
+        run: az logout

@@ -1,0 +1,17 @@
+{
+  "name": "edge-ai-tasks",
+  "version": "1.0.2",
+  "description": "Task Researcher and Task Planner for intermediate to expert users and large codebases - Brought to you by microsoft/edge-ai",
+  "author": {
+    "name": "Awesome Copilot Community"
+  },
+  "repository": "https://github.com/github/awesome-copilot",
+  "license": "MIT",
+  "keywords": [
+    "architecture",
+    "planning",
+    "research",
+    "tasks",
+    "implementation"
+  ]
+}

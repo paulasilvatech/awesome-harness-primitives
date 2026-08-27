@@ -1,0 +1,20 @@
+{
+  "name": "security-best-practices",
+  "version": "1.0.2",
+  "description": "Security frameworks, accessibility guidelines, performance optimization, and code quality best practices for building secure, maintainable, and high-performance applications.",
+  "author": {
+    "name": "Awesome Copilot Community"
+  },
+  "repository": "https://github.com/github/awesome-copilot",
+  "license": "MIT",
+  "keywords": [
+    "security",
+    "accessibility",
+    "performance",
+    "code-quality",
+    "owasp",
+    "a11y",
+    "optimization",
+    "best-practices"
+  ]
+}

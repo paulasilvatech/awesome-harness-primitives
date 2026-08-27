@@ -1,0 +1,21 @@
+{
+  "name": "arize-ax",
+  "version": "1.0.2",
+  "description": "Arize AX platform skills for LLM observability, evaluation, and optimization. Includes trace export, instrumentation, datasets, experiments, evaluators, AI provider integrations, annotations, prompt optimization, and deep linking to the Arize UI.",
+  "author": {
+    "name": "Arize AI"
+  },
+  "repository": "https://github.com/github/awesome-copilot",
+  "license": "MIT",
+  "keywords": [
+    "arize",
+    "llm",
+    "observability",
+    "tracing",
+    "evaluation",
+    "instrumentation",
+    "datasets",
+    "experiments",
+    "prompt-optimization"
+  ]
+}

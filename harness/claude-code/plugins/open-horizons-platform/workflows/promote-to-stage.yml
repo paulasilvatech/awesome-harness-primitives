@@ -1,0 +1,140 @@
+# =============================================================================
+# PROMOTE: develop → stage
+# =============================================================================
+# Validates a PR targeting stage:
+# 1. Source branch must be develop
+# 2. All tests pass on develop
+# 3. SDD artifacts present and gate APPROVE
+# 4. Terraform validates
+# 5. Stage Azure environment exists (currently NOT provisioned — will block until ready)
+#
+# Branch mapping (2026-05-10):
+#   develop → AZURE DEV (aks-ohorizons-dev-eus2) — current live environment
+#   stage   → AZURE STAGE (aks-ohorizons-stage-eus2) — to be provisioned
+#   main    → TEMPLATE (no cluster, customer-fork ready)
+# =============================================================================
+
+name: Promote develop to stage
+
+on:
+  pull_request:
+    branches: [stage]
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  validate-source:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Reject PRs not from develop
+        if: github.head_ref != 'develop' && !startsWith(github.head_ref, 'release/')
+        env:
+          HEAD_REF: ${{ github.head_ref }}
+        run: |
+          echo "::error::PRs to stage must come from 'develop' or 'release/*' branches."
+          echo "Current source: $HEAD_REF"
+          exit 1
+
+  stage-env-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Warn if stage environment not yet provisioned
+        run: |
+          echo "::warning::Stage Azure environment (aks-ohorizons-stage-eus2) is not yet provisioned."
+          echo "::warning::This PR will land on the stage branch but cannot be deployed until the cluster exists."
+          echo "::warning::See .github/copilot-instructions.md → Environment Reality table."
+
+  sdd-exclusion:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: Block internal SDD pipeline content from reaching stage
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "Internal SDD pipeline artifacts are confined to develop + feat/* branches."
+          echo "Stage must NOT contain .specs/** or internal SDD agents and skills."
+          FORBIDDEN_PATHS=(
+            ".specs"
+          )
+          FORBIDDEN_GLOBS=(
+            ".github/agents/sdd-*"
+            ".github/agents/design-architect.agent.md"
+            ".github/agents/implementer.agent.md"
+            ".github/agents/quality-reviewer.agent.md"
+            ".github/agents/release-engineer.agent.md"
+            ".github/agents/requirements-engineer.agent.md"
+            ".github/agents/research-analyst.agent.md"
+            ".github/agents/spec-engineer.agent.md"
+            ".github/agents/task-planner.agent.md"
+            ".github/agents/test-verifier.agent.md"
+            ".github/skills/sdd-pipeline"
+            ".github/skills/sdd-markdown-standard"
+            ".github/skills/implementer"
+            ".github/skills/release-engineer"
+            ".github/skills/research-analyst"
+            ".github/skills/test-verifier"
+          )
+          found=0
+          for path in "${FORBIDDEN_PATHS[@]}"; do
+            if [ -e "$path" ]; then
+              echo "::error::Forbidden path on stage: $path"
+              found=1
+            fi
+          done
+          for glob in "${FORBIDDEN_GLOBS[@]}"; do
+            # shellcheck disable=SC2045,SC2086
+            for match in $(ls -d $glob 2>/dev/null); do
+              if [ -e "$match" ]; then
+                echo "::error::Forbidden internal SDD artifact on stage: $match"
+                found=1
+              fi
+            done
+          done
+          if [ "$found" -eq 1 ]; then
+            echo ""
+            echo "::error::This PR carries internal SDD content that must NOT reach stage."
+            echo "Remove the listed internal SDD artifacts, then amend the commit."
+            exit 1
+          fi
+          echo "✅ No internal SDD content detected — stage stays clean."
+
+  test-suite:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: Run wizard tests
+        run: bash tests/wizard/run.sh
+      - name: Validate Terraform modules
+        run: |
+          for module in terraform/modules/*/; do
+            terraform -chdir="$module" fmt -check -recursive
+            terraform -chdir="$module" init -backend=false
+            terraform -chdir="$module" validate
+          done
+
+  sdd-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: Check SDD artifacts present for changed features
+        run: |
+          changed=$(git diff --name-only origin/main...HEAD | grep -E '^(backstage|terraform|scripts)/' || true)
+          if [ -n "$changed" ]; then
+            specs=$(find .specs -name "ANALYSIS.md" -exec grep -l "APPROVE" {} \;)
+            if [ -z "$specs" ]; then
+              echo "::warning::Significant changes detected but no APPROVED SDD found."
+            fi
+          fi
+
+  summary:
+    needs: [validate-source, sdd-exclusion, test-suite, sdd-gate]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Promotion ready
+        run: |
+          echo "✅ All gates passed. PR ready for review."
+          echo "Reviewer must verify Azure stage environment will accept these changes."

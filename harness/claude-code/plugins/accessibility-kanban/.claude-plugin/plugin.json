@@ -1,0 +1,17 @@
+{
+  "name": "accessibility-kanban",
+  "version": "1.0.4",
+  "description": "Kanban board to manage accessibility issues, allow you to plan, track, and complete remediation work.",
+  "author": {
+    "name": "Aaron Powell",
+    "url": "https://github.com/aaronpowell"
+  },
+  "keywords": [
+    "accessibility",
+    "github-issues",
+    "issue-triage",
+    "kanban-board",
+    "planning-workflow",
+    "status-tracking"
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "name": "typescript-mcp-development",
+  "version": "1.0.2",
+  "description": "Complete toolkit for building Model Context Protocol (MCP) servers in TypeScript/Node.js using the official SDK. Includes instructions for best practices, a prompt for generating servers, and an expert agent for guidance.",
+  "author": {
+    "name": "Awesome Copilot Community"
+  },
+  "repository": "https://github.com/github/awesome-copilot",
+  "license": "MIT",
+  "keywords": [
+    "typescript",
+    "mcp",
+    "model-context-protocol",
+    "nodejs",
+    "server-development"
+  ]
+}
