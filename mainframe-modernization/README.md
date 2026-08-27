@@ -9,7 +9,8 @@ active primitives.
 The maintained package is
 [`harness/github-copilot/plugins/mainframe-natural-adabas/`](../harness/github-copilot/plugins/mainframe-natural-adabas/).
 It contains five stage agents, SIFAP context and traceability Skills, the loop and engineering graph,
-focused instructions and prompts, shared generated Skills, and the transactional `sifap-workspace-kit`
+focused instructions and prompts, shared generated Skills, and the transactional
+`modernization-workspace-kit`
 publisher. COBOL and DB2 systems use the sibling `mainframe-cobol-db2` package.
 
 Do not update the snapshot's old agents, prompts, instructions, empty skill directories, or local plugin

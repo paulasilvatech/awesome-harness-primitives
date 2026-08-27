@@ -1,0 +1,31 @@
+{
+    "kitName": "cobol-db2-workspace-kit",
+    "stateFile": ".github/.cobol-db2-workspace-kit.json",
+    "globalInstructions": "workspace-kit/copilot-instructions.md",
+    "agents": [
+        "cobol-db2-archaeologist.agent.md",
+        "cobol-db2-architect.agent.md",
+        "cobol-db2-builder.agent.md",
+        "cobol-db2-quality.agent.md",
+        "cobol-db2-operations.agent.md"
+    ],
+    "prompts": [
+        "cobol-db2-archaeology.prompt.md",
+        "cobol-db2-specify.prompt.md",
+        "cobol-db2-build-slice.prompt.md",
+        "cobol-db2-verify.prompt.md",
+        "cobol-db2-operate.prompt.md"
+    ],
+    "skills": [
+        "cobol-db2-context",
+        "cobol-db2-loop",
+        "modernization-workspace-kit"
+    ],
+    "coreInstructions": [
+        "cobol-legacy.instructions.md"
+    ],
+    "workshopInstructions": [
+        "db2-schema.instructions.md"
+    ],
+    "automation": []
+}

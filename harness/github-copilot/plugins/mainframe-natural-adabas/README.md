@@ -20,7 +20,7 @@ loop, gate, defect-routing, and engineering-graph method with technology-specifi
 | Requirement lineage | `sifap-requirements-traceability` skill |
 | Stage coordination | `sifap-workshop-orchestration` skill |
 | Phase loops, defect routing, and the engineering graph | `sifap-loop` skill |
-| Repository publication | `sifap-workspace-kit` skill |
+| Repository publication | `modernization-workspace-kit` skill |
 
 The package also materializes shared canonical skills for general modernization, Natural/Adabas
 analysis, Adabas-to-PostgreSQL migration, business-rule extraction, characterization testing,
@@ -33,7 +33,8 @@ copilot plugin install mainframe-natural-adabas@copilot-primitives
 ```
 
 Installation exposes the agents and skills. It does not activate repository instructions or VS Code
-prompts. Publish those into the target repository with `sifap-workspace-kit`:
+prompts. Publish those into the target repository with `modernization-workspace-kit`, which reads this
+package's `workspace-kit.json` asset policy:
 
 ```bash
 python3 scripts/install_workspace_kit.py --target <repository> --profile full
@@ -119,7 +120,7 @@ skill reference `references/autonomous-run.md`.
 ## Runtime boundaries
 
 Plugin installation exposes agents and skills. Repository instructions and VS Code prompts are bundled
-for publication but are not activated by plugin installation. Use `sifap-workspace-kit` to preview and
+for publication but are not activated by plugin installation. Use `modernization-workspace-kit` to preview and
 publish those repository files.
 
 The SIFAP workshop versions are compatibility baselines, not latest-version claims. The target repository

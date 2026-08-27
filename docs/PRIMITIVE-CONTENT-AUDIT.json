@@ -16,16 +16,16 @@
   },
   "packaging": {
     "activePluginHookPackages": 2,
-    "marketplaceEntries": 136,
+    "marketplaceEntries": 137,
     "pluginOwned": {
-      "agents": 24,
+      "agents": 29,
       "errors": 0,
-      "instructions": 43,
-      "prompts": 16,
-      "skills": 118,
+      "instructions": 45,
+      "prompts": 21,
+      "skills": 119,
       "warnings": 0
     },
-    "pluginPackages": 136,
+    "pluginPackages": 137,
     "sharedAgents": {
       "packaged": 198,
       "total": 228,
@@ -63,8 +63,8 @@
       ]
     },
     "sharedSkills": {
-      "packaged": 450,
-      "total": 487,
+      "packaged": 453,
+      "total": 490,
       "unpackaged": [
         "api-testing",
         "apple-appstore-reviewer",
@@ -1078,6 +1078,94 @@
       "source_domains": [
         "outagedeck.com"
       ]
+    },
+    {
+      "characters_scanned": 5031,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "agent",
+      "local_evidence_mention": false,
+      "name": "cobol-db2-archaeologist",
+      "ownership": "plugin",
+      "package": "mainframe-cobol-db2",
+      "packaged_by": [
+        "mainframe-cobol-db2"
+      ],
+      "path": "harness/github-copilot/plugins/mainframe-cobol-db2/agents/cobol-db2-archaeologist.agent.md",
+      "review_status": "needs-semantic-review",
+      "signals": [],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 5024,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "agent",
+      "local_evidence_mention": false,
+      "name": "cobol-db2-architect",
+      "ownership": "plugin",
+      "package": "mainframe-cobol-db2",
+      "packaged_by": [
+        "mainframe-cobol-db2"
+      ],
+      "path": "harness/github-copilot/plugins/mainframe-cobol-db2/agents/cobol-db2-architect.agent.md",
+      "review_status": "needs-semantic-review",
+      "signals": [],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 4849,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "agent",
+      "local_evidence_mention": false,
+      "name": "cobol-db2-builder",
+      "ownership": "plugin",
+      "package": "mainframe-cobol-db2",
+      "packaged_by": [
+        "mainframe-cobol-db2"
+      ],
+      "path": "harness/github-copilot/plugins/mainframe-cobol-db2/agents/cobol-db2-builder.agent.md",
+      "review_status": "needs-semantic-review",
+      "signals": [],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 5885,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "agent",
+      "local_evidence_mention": false,
+      "name": "cobol-db2-operations",
+      "ownership": "plugin",
+      "package": "mainframe-cobol-db2",
+      "packaged_by": [
+        "mainframe-cobol-db2"
+      ],
+      "path": "harness/github-copilot/plugins/mainframe-cobol-db2/agents/cobol-db2-operations.agent.md",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "lifecycle-language"
+      ],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 5716,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "agent",
+      "local_evidence_mention": false,
+      "name": "cobol-db2-quality",
+      "ownership": "plugin",
+      "package": "mainframe-cobol-db2",
+      "packaged_by": [
+        "mainframe-cobol-db2"
+      ],
+      "path": "harness/github-copilot/plugins/mainframe-cobol-db2/agents/cobol-db2-quality.agent.md",
+      "review_status": "needs-semantic-review",
+      "signals": [],
+      "source_domains": []
     },
     {
       "characters_scanned": 14078,
@@ -6275,6 +6363,23 @@
       "source_domains": []
     },
     {
+      "characters_scanned": 3912,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "instruction",
+      "local_evidence_mention": false,
+      "name": "cobol-legacy",
+      "ownership": "plugin",
+      "package": "mainframe-cobol-db2",
+      "packaged_by": [
+        "mainframe-cobol-db2"
+      ],
+      "path": "harness/github-copilot/plugins/mainframe-cobol-db2/instructions/cobol-legacy.instructions.md",
+      "review_status": "needs-semantic-review",
+      "signals": [],
+      "source_domains": []
+    },
+    {
       "characters_scanned": 3552,
       "external_url_count": 0,
       "files_scanned": 1,
@@ -6989,6 +7094,23 @@
         "github.com",
         "learn.microsoft.com"
       ]
+    },
+    {
+      "characters_scanned": 4078,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "instruction",
+      "local_evidence_mention": false,
+      "name": "db2-schema",
+      "ownership": "plugin",
+      "package": "mainframe-cobol-db2",
+      "packaged_by": [
+        "mainframe-cobol-db2"
+      ],
+      "path": "harness/github-copilot/plugins/mainframe-cobol-db2/instructions/db2-schema.instructions.md",
+      "review_status": "needs-semantic-review",
+      "signals": [],
+      "source_domains": []
     },
     {
       "characters_scanned": 5819,
@@ -11766,9 +11888,35 @@
       ]
     },
     {
-      "characters_scanned": 269391,
-      "external_url_count": 7,
-      "files_scanned": 48,
+      "characters_scanned": 116050,
+      "external_url_count": 3,
+      "files_scanned": 18,
+      "kind": "plugin",
+      "local_evidence_mention": true,
+      "name": "mainframe-cobol-db2",
+      "ownership": "plugin",
+      "package": "mainframe-cobol-db2",
+      "packaged_by": [
+        "mainframe-cobol-db2"
+      ],
+      "path": "harness/github-copilot/plugins/mainframe-cobol-db2",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "lifecycle-language",
+        "version-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "agentskills.io",
+        "code.visualstudio.com",
+        "github.com"
+      ]
+    },
+    {
+      "characters_scanned": 216996,
+      "external_url_count": 4,
+      "files_scanned": 43,
       "kind": "plugin",
       "local_evidence_mention": true,
       "name": "mainframe-natural-adabas",
@@ -11788,10 +11936,8 @@
       "source_domains": [
         "agentskills.io",
         "code.visualstudio.com",
-        "developer.hashicorp.com",
         "docs.github.com",
-        "github.com",
-        "www.w3.org"
+        "github.com"
       ]
     },
     {
@@ -13403,6 +13549,94 @@
       "signals": [
         "currency-language"
       ],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 4298,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "prompt",
+      "local_evidence_mention": false,
+      "name": "cobol-db2-archaeology",
+      "ownership": "plugin",
+      "package": "mainframe-cobol-db2",
+      "packaged_by": [
+        "mainframe-cobol-db2"
+      ],
+      "path": "harness/github-copilot/plugins/mainframe-cobol-db2/prompts/cobol-db2-archaeology.prompt.md",
+      "review_status": "needs-semantic-review",
+      "signals": [],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 3847,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "prompt",
+      "local_evidence_mention": false,
+      "name": "cobol-db2-build-slice",
+      "ownership": "plugin",
+      "package": "mainframe-cobol-db2",
+      "packaged_by": [
+        "mainframe-cobol-db2"
+      ],
+      "path": "harness/github-copilot/plugins/mainframe-cobol-db2/prompts/cobol-db2-build-slice.prompt.md",
+      "review_status": "needs-semantic-review",
+      "signals": [],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 4347,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "prompt",
+      "local_evidence_mention": false,
+      "name": "cobol-db2-operate",
+      "ownership": "plugin",
+      "package": "mainframe-cobol-db2",
+      "packaged_by": [
+        "mainframe-cobol-db2"
+      ],
+      "path": "harness/github-copilot/plugins/mainframe-cobol-db2/prompts/cobol-db2-operate.prompt.md",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "lifecycle-language"
+      ],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 3878,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "prompt",
+      "local_evidence_mention": false,
+      "name": "cobol-db2-specify",
+      "ownership": "plugin",
+      "package": "mainframe-cobol-db2",
+      "packaged_by": [
+        "mainframe-cobol-db2"
+      ],
+      "path": "harness/github-copilot/plugins/mainframe-cobol-db2/prompts/cobol-db2-specify.prompt.md",
+      "review_status": "needs-semantic-review",
+      "signals": [],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 4503,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "prompt",
+      "local_evidence_mention": false,
+      "name": "cobol-db2-verify",
+      "ownership": "plugin",
+      "package": "mainframe-cobol-db2",
+      "packaged_by": [
+        "mainframe-cobol-db2"
+      ],
+      "path": "harness/github-copilot/plugins/mainframe-cobol-db2/prompts/cobol-db2-verify.prompt.md",
+      "review_status": "needs-semantic-review",
+      "signals": [],
       "source_domains": []
     },
     {
@@ -18331,6 +18565,60 @@
       ]
     },
     {
+      "characters_scanned": 6207,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "cobol-db2-analysis",
+      "ownership": "shared",
+      "package": null,
+      "packaged_by": [
+        "mainframe-cobol-db2"
+      ],
+      "path": "harness/github-copilot/skills/cobol-db2-analysis",
+      "review_status": "needs-semantic-review",
+      "signals": [],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 6178,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "cobol-db2-context",
+      "ownership": "plugin",
+      "package": "mainframe-cobol-db2",
+      "packaged_by": [
+        "mainframe-cobol-db2"
+      ],
+      "path": "harness/github-copilot/plugins/mainframe-cobol-db2/skills/cobol-db2-context",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "lifecycle-language"
+      ],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 49092,
+      "external_url_count": 0,
+      "files_scanned": 3,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "cobol-db2-loop",
+      "ownership": "plugin",
+      "package": "mainframe-cobol-db2",
+      "packaged_by": [
+        "mainframe-cobol-db2"
+      ],
+      "path": "harness/github-copilot/plugins/mainframe-cobol-db2/skills/cobol-db2-loop",
+      "review_status": "needs-semantic-review",
+      "signals": [],
+      "source_domains": []
+    },
+    {
       "characters_scanned": 7490,
       "external_url_count": 0,
       "files_scanned": 1,
@@ -18357,6 +18645,7 @@
       "ownership": "shared",
       "package": null,
       "packaged_by": [
+        "mainframe-cobol-db2",
         "mainframe-natural-adabas"
       ],
       "path": "harness/github-copilot/skills/code-modernization",
@@ -18942,6 +19231,7 @@
       "ownership": "shared",
       "package": null,
       "packaged_by": [
+        "mainframe-cobol-db2",
         "mainframe-natural-adabas"
       ],
       "path": "harness/github-copilot/skills/create-architectural-decision-record",
@@ -19572,6 +19862,23 @@
       "signals": [
         "version-claim"
       ],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 9811,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "db2-postgresql-migration",
+      "ownership": "shared",
+      "package": null,
+      "packaged_by": [
+        "mainframe-cobol-db2"
+      ],
+      "path": "harness/github-copilot/skills/db2-postgresql-migration",
+      "review_status": "needs-semantic-review",
+      "signals": [],
       "source_domains": []
     },
     {
@@ -21416,6 +21723,7 @@
       "package": null,
       "packaged_by": [
         "github-actions-maintenance",
+        "mainframe-cobol-db2",
         "mainframe-natural-adabas"
       ],
       "path": "harness/github-copilot/skills/github-actions-hardening",
@@ -22515,6 +22823,7 @@
       "ownership": "shared",
       "package": null,
       "packaged_by": [
+        "mainframe-cobol-db2",
         "mainframe-natural-adabas"
       ],
       "path": "harness/github-copilot/skills/legacy-business-rule-extraction",
@@ -22532,6 +22841,7 @@
       "ownership": "shared",
       "package": null,
       "packaged_by": [
+        "mainframe-cobol-db2",
         "mainframe-natural-adabas"
       ],
       "path": "harness/github-copilot/skills/legacy-characterization-testing",
@@ -23391,6 +23701,27 @@
       "path": "harness/github-copilot/skills/mkdocs-translations",
       "review_status": "needs-semantic-review",
       "signals": [],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 50358,
+      "external_url_count": 0,
+      "files_scanned": 3,
+      "kind": "skill",
+      "local_evidence_mention": true,
+      "name": "modernization-workspace-kit",
+      "ownership": "shared",
+      "package": null,
+      "packaged_by": [
+        "mainframe-cobol-db2",
+        "mainframe-natural-adabas"
+      ],
+      "path": "harness/github-copilot/skills/modernization-workspace-kit",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "lifecycle-language"
+      ],
       "source_domains": []
     },
     {
@@ -24941,6 +25272,7 @@
       "package": null,
       "packaged_by": [
         "database-data-management",
+        "mainframe-cobol-db2",
         "mainframe-natural-adabas"
       ],
       "path": "harness/github-copilot/skills/postgresql-code-review",
@@ -24959,6 +25291,7 @@
       "package": null,
       "packaged_by": [
         "database-data-management",
+        "mainframe-cobol-db2",
         "mainframe-natural-adabas"
       ],
       "path": "harness/github-copilot/skills/postgresql-optimization",
@@ -26523,6 +26856,7 @@
       "ownership": "shared",
       "package": null,
       "packaged_by": [
+        "mainframe-cobol-db2",
         "mainframe-natural-adabas"
       ],
       "path": "harness/github-copilot/skills/sdd-requirements-engineer",
@@ -26771,32 +27105,6 @@
         "currency-language"
       ],
       "source_domains": []
-    },
-    {
-      "characters_scanned": 52480,
-      "external_url_count": 3,
-      "files_scanned": 5,
-      "kind": "skill",
-      "local_evidence_mention": true,
-      "name": "sifap-workspace-kit",
-      "ownership": "plugin",
-      "package": "mainframe-natural-adabas",
-      "packaged_by": [
-        "mainframe-natural-adabas"
-      ],
-      "path": "harness/github-copilot/plugins/mainframe-natural-adabas/skills/sifap-workspace-kit",
-      "review_status": "needs-current-source-review",
-      "signals": [
-        "currency-language",
-        "lifecycle-language",
-        "version-claim",
-        "external-source"
-      ],
-      "source_domains": [
-        "developer.hashicorp.com",
-        "github.com",
-        "www.w3.org"
-      ]
     },
     {
       "characters_scanned": 5922,
@@ -28009,11 +28317,11 @@
   "unreadableFiles": [],
   "validation": {
     "pluginOwned": {
-      "agents": 24,
+      "agents": 29,
       "errors": 0,
-      "instructions": 43,
-      "prompts": 16,
-      "skills": 118,
+      "instructions": 45,
+      "prompts": 21,
+      "skills": 119,
       "warnings": 0
     },
     "sharedHarness": {
@@ -28021,31 +28329,31 @@
       "summary": [
         {
           "errors": 0,
-          "files": 252,
+          "files": 257,
           "kind": "agents",
           "warnings": 0
         },
         {
           "errors": 0,
-          "files": 238,
+          "files": 240,
           "kind": "instructions",
           "warnings": 0
         },
         {
           "errors": 0,
-          "files": 605,
+          "files": 609,
           "kind": "skills",
           "warnings": 0
         },
         {
           "errors": 0,
-          "files": 64,
+          "files": 69,
           "kind": "prompts",
           "warnings": 0
         },
         {
           "errors": 0,
-          "files": 136,
+          "files": 137,
           "kind": "plugins",
           "warnings": 0
         },

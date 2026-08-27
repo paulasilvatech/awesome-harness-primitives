@@ -450,6 +450,12 @@
       "version": "1.0.0"
     },
     {
+      "name": "mainframe-cobol-db2",
+      "source": "./harness/github-copilot/plugins/mainframe-cobol-db2",
+      "description": "Modernize COBOL, DB2, VSAM, and JCL systems with evidence-first archaeology, REQ-NNN lineage, bounded correction loops, an extracted engineering graph, behavior and data equivalence proof, and human-gated delivery.",
+      "version": "0.1.0"
+    },
+    {
       "name": "mainframe-natural-adabas",
       "source": "./harness/github-copilot/plugins/mainframe-natural-adabas",
       "description": "Modernize Software AG Natural and Adabas systems with evidence-first archaeology, REQ-NNN lineage, bounded correction loops, an extracted engineering graph, behavior and data equivalence proof, and a preview-first workspace publisher.",

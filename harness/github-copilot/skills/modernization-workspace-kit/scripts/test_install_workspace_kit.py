@@ -1,11 +1,16 @@
 #!/usr/bin/env python3
-"""Focused tests for the SIFAP workspace-kit publisher."""
+"""Focused tests for the modernization workspace-kit publisher.
+
+The engine is track-agnostic, so these tests drive it against the
+Natural/Adabas package, which carries the richest asset policy.
+"""
 
 from __future__ import annotations
 
 import importlib.util
 import json
 import io
+import os
 import sys
 import tempfile
 import unittest
@@ -13,8 +18,24 @@ from pathlib import Path
 from unittest import mock
 
 SCRIPT = Path(__file__).with_name("install_workspace_kit.py")
+MARKER = Path("harness/github-copilot/manifests/plugin-sources.json")
+
+
+def repository_root() -> Path:
+    """Resolve the repo root so canonical and generated copies behave alike."""
+    for candidate in Path(__file__).resolve().parents:
+        if (candidate / MARKER).is_file():
+            return candidate
+    raise RuntimeError("repository root not found")
+
+
+PACKAGE = (
+    repository_root()
+    / "harness/github-copilot/plugins/mainframe-natural-adabas"
+)
+os.environ["WORKSPACE_KIT_PACKAGE_ROOT"] = str(PACKAGE)
 SPEC = importlib.util.spec_from_file_location(
-    "sifap_workspace_kit",
+    "modernization_workspace_kit",
     SCRIPT,
 )
 assert SPEC is not None

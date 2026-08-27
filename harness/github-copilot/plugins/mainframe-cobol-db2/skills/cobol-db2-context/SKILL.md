@@ -1,7 +1,7 @@
 ---
 name: cobol-db2-context
 description: >-
-  Supply COBOL, DB2, VSAM, and JCL modernization context: corpus layout, member conventions, target stack boundaries, evidence precedence, stage flow, and security rules. Use for every task in a COBOL/DB2 modernization engagement before analysis, design, implementation, verification, or delivery.
+  Supply COBOL, DB2, VSAM, and JCL modernization context: corpus layout, member conventions, target stack boundaries, evidence precedence, stage flow, and security rules. Use when starting any COBOL/DB2 modernization task, before analysis, design, implementation, verification, or delivery.
 ---
 
 # COBOL and DB2 modernization context

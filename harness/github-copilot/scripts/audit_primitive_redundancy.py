@@ -81,7 +81,21 @@ class Candidate:
     rationale: str
 
 
+COBOL_OPERATIONS_AGENT = (
+    "plugins/mainframe-cobol-db2/agents/cobol-db2-operations.agent.md"
+)
+NATURAL_OPERATIONS_AGENT = (
+    "plugins/mainframe-natural-adabas/agents/sifap-operations.agent.md"
+)
+
 CLASSIFICATIONS: dict[frozenset[str], tuple[str, str]] = {
+    frozenset(
+        {COBOL_OPERATIONS_AGENT, NATURAL_OPERATIONS_AGENT}
+    ): (
+        "technology-track-variant",
+        "Shared release method, but different legacy corpus, context skills, "
+        "migration mapping, and cutover constraints per mainframe track.",
+    ),
     frozenset(
         {
             "agents/csharp-mcp-expert.agent.md",
@@ -194,7 +208,8 @@ def cosine(left: list[str], right: list[str]) -> float:
         for token in left_counts.keys() & right_counts.keys()
     )
     left_norm = math.sqrt(sum(value * value for value in left_counts.values()))
-    right_norm = math.sqrt(sum(value * value for value in right_counts.values()))
+    right_norm = math.sqrt(
+        sum(value * value for value in right_counts.values()))
     return dot / (left_norm * right_norm)
 
 
@@ -215,7 +230,8 @@ def primitive(
     )
     if not present or error:
         raise ValueError(f"{path}: invalid frontmatter: {error or 'missing'}")
-    fallback_name = path.parent.name if kind == "skill" else path.name.split(".", 1)[0]
+    fallback_name = path.parent.name if kind == "skill" else path.name.split(".", 1)[
+        0]
     name = str(data.get("name") or fallback_name)
     description = str(data.get("description") or "")
     normalized = normalized_body(body)
@@ -311,7 +327,7 @@ def build_audit() -> dict[str, Any]:
         by_kind[item.kind].append(item)
     for kind, items in by_kind.items():
         for index, left in enumerate(items):
-            for right in items[index + 1 :]:
+            for right in items[index + 1:]:
                 similarity = cosine(left.tokens, right.tokens)
                 if similarity < SIMILARITY_THRESHOLD:
                     continue
@@ -458,7 +474,8 @@ def has_blockers(audit: dict[str, Any]) -> bool:
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--check", action="store_true", help="fail when reports are stale")
+    parser.add_argument("--check", action="store_true",
+                        help="fail when reports are stale")
     parser.add_argument("--json", action="store_true", dest="json_output")
     args = parser.parse_args(argv)
 

@@ -33,6 +33,14 @@
       "similarity": 0.77
     },
     {
+      "classification": "technology-track-variant",
+      "kind": "agent",
+      "left": "plugins/mainframe-cobol-db2/agents/cobol-db2-operations.agent.md",
+      "rationale": "Shared release method, but different legacy corpus, context skills, migration mapping, and cutover constraints per mainframe track.",
+      "right": "plugins/mainframe-natural-adabas/agents/sifap-operations.agent.md",
+      "similarity": 0.724
+    },
+    {
       "classification": "specialization",
       "kind": "instruction",
       "left": "instructions/agent-skills.instructions.md",
@@ -636,8 +644,8 @@
   "summary": {
     "confirmedDuplicates": 0,
     "exactDuplicateGroups": 0,
-    "similarityCandidates": 77,
-    "sources": 1159,
+    "similarityCandidates": 78,
+    "sources": 1175,
     "unclassifiedCandidates": 0
   },
   "threshold": 0.72

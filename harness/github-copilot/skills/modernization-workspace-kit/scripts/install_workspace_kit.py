@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
-"""Plan, apply, or archive SIFAP repository customizations."""
+"""Plan, apply, or archive repository customizations for a modernization kit.
+
+Policy lives in `<plugin-root>/workspace-kit.json`; this module is the
+transactional mechanism and carries no track-specific asset names.
+"""
 
 from __future__ import annotations
 
@@ -14,57 +18,54 @@ from dataclasses import asdict, dataclass
 from pathlib import Path, PurePosixPath
 from typing import Iterable
 
-PACKAGE_ROOT = Path(__file__).resolve().parents[3]
+
+def find_package_root() -> Path:
+    """Locate the plugin package that carries this generated copy.
+
+    The canonical source has no package above it, so tests and tooling set
+    WORKSPACE_KIT_PACKAGE_ROOT to select a package explicitly.
+    """
+    override = os.environ.get("WORKSPACE_KIT_PACKAGE_ROOT")
+    if override:
+        return Path(override).resolve()
+    here = Path(__file__).resolve()
+    for candidate in here.parents:
+        if (candidate / "workspace-kit.json").is_file():
+            return candidate
+    return here.parents[3]
+
+
+PACKAGE_ROOT = find_package_root()
 PACKAGE_NAME = PACKAGE_ROOT.name
-STATE_RELATIVE = Path(".github/.sifap-workspace-kit.json")
-BACKUP_RELATIVE = Path(".github/.sifap-workspace-kit-backup")
+KIT_MANIFEST = PACKAGE_ROOT / "workspace-kit.json"
 PROFILES = ("core", "workshop", "automation", "full")
-STAGE_AGENTS = (
-    "sifap-archaeologist.agent.md",
-    "sifap-architect.agent.md",
-    "sifap-builder.agent.md",
-    "sifap-quality.agent.md",
-    "sifap-operations.agent.md",
-)
-STAGE_PROMPTS = (
-    "sifap-archaeology.prompt.md",
-    "sifap-specify.prompt.md",
-    "sifap-build-slice.prompt.md",
-    "sifap-verify.prompt.md",
-    "sifap-operate.prompt.md",
-)
-PROJECT_SKILLS = (
-    "sifap-modernization-context",
-    "sifap-requirements-traceability",
-    "sifap-workshop-orchestration",
-    "sifap-loop",
-    "sifap-workspace-kit",
-)
-CORE_INSTRUCTIONS = (
-    "sifap-natural-adabas.instructions.md",
-    "sifap-requirements.instructions.md",
-    "sifap-security.instructions.md",
-)
-WORKSHOP_INSTRUCTIONS = (
-    "sifap-backend.instructions.md",
-    "sifap-cicd.instructions.md",
-    "sifap-database.instructions.md",
-    "sifap-frontend.instructions.md",
-    "sifap-infrastructure.instructions.md",
-    "sifap-tests.instructions.md",
-)
-GLOBAL_TEMPLATE = (
-    PACKAGE_ROOT
-    / "skills/sifap-workspace-kit/templates/copilot-instructions.md"
-)
-WORKFLOW_TEMPLATE = (
-    PACKAGE_ROOT
-    / "skills/sifap-workspace-kit/templates/sifap-traceability.yml"
-)
-TRACEABILITY_SCRIPT = (
-    PACKAGE_ROOT
-    / "skills/sifap-requirements-traceability/scripts/validate_traceability.py"
-)
+
+
+def load_kit() -> dict:
+    """Read the per-plugin asset policy that drives every profile."""
+    if not KIT_MANIFEST.is_file():
+        raise ValueError(f"workspace-kit manifest is missing: {KIT_MANIFEST}")
+    manifest = json.loads(KIT_MANIFEST.read_text(encoding="utf-8"))
+    if not isinstance(manifest, dict):
+        raise ValueError(f"{KIT_MANIFEST}: manifest root must be an object")
+    for required in ("kitName", "stateFile", "globalInstructions"):
+        if not isinstance(manifest.get(required), str):
+            raise ValueError(f"{KIT_MANIFEST}: {required} must be a string")
+    return manifest
+
+
+KIT = load_kit()
+KIT_NAME = KIT["kitName"]
+STATE_RELATIVE = Path(KIT["stateFile"])
+BACKUP_RELATIVE = Path(f"{KIT['stateFile']}-backup")
+TEMP_PREFIX = f".{KIT_NAME}-"
+STAGE_AGENTS = tuple(KIT.get("agents", ()))
+STAGE_PROMPTS = tuple(KIT.get("prompts", ()))
+PROJECT_SKILLS = tuple(KIT.get("skills", ()))
+CORE_INSTRUCTIONS = tuple(KIT.get("coreInstructions", ()))
+WORKSHOP_INSTRUCTIONS = tuple(KIT.get("workshopInstructions", ()))
+AUTOMATION_FILES = tuple(KIT.get("automation", ()))
+GLOBAL_TEMPLATE = PACKAGE_ROOT / KIT["globalInstructions"]
 
 
 @dataclass(frozen=True)
@@ -202,14 +203,13 @@ def workshop_items() -> Iterable[CopyItem]:
 
 
 def automation_items() -> Iterable[CopyItem]:
-    yield CopyItem(
-        WORKFLOW_TEMPLATE.resolve(),
-        ".github/workflows/sifap-traceability.yml",
-    )
-    yield CopyItem(
-        TRACEABILITY_SCRIPT.resolve(),
-        ".github/scripts/validate_sifap_traceability.py",
-    )
+    for entry in AUTOMATION_FILES:
+        source = entry.get("source")
+        destination = entry.get("destination")
+        if not isinstance(source, str) or not isinstance(destination, str):
+            raise ValueError(
+                "automation entries need string source and destination")
+        yield file_item(source, destination)
 
 
 def source_items(profile: str) -> list[CopyItem]:
@@ -550,7 +550,7 @@ def apply_install(
     }
     target.mkdir(parents=True, exist_ok=True)
     with tempfile.TemporaryDirectory(
-        prefix=".sifap-workspace-kit-",
+        prefix=TEMP_PREFIX,
         dir=target,
     ) as temporary_name:
         transaction = Path(temporary_name)
@@ -690,7 +690,7 @@ def apply_uninstall(target: Path, state: dict, plan: list[PlanEntry]) -> None:
         )
     target.mkdir(parents=True, exist_ok=True)
     with tempfile.TemporaryDirectory(
-        prefix=".sifap-workspace-kit-",
+        prefix=TEMP_PREFIX,
         dir=target,
     ) as temporary_name:
         transaction = Path(temporary_name)
@@ -758,7 +758,7 @@ def print_report(
     if json_output:
         print(json.dumps(payload, indent=2, sort_keys=True))
         return
-    print(f"SIFAP workspace kit: {payload['mode']}")
+    print(f"{KIT_NAME}: {payload['mode']}")
     print(f"Target: {target}")
     print(f"Profile: {profile}")
     summary = ", ".join(
@@ -772,7 +772,7 @@ def print_report(
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Plan, apply, or uninstall the SIFAP workspace kit."
+        description="Plan, apply, or uninstall a modernization workspace kit."
     )
     parser.add_argument("--target", type=Path, default=Path.cwd())
     parser.add_argument("--profile", required=True, choices=PROFILES)

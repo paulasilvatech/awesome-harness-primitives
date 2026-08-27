@@ -38,6 +38,12 @@ DB2 track could ship as the sibling `mainframe-cobol-db2` package. The install c
 the retired name and was not re-probed; treat `copilot plugin install mainframe-natural-adabas@copilot-primitives`
 as unverified until a new probe is recorded here.
 
+The track-specific `sifap-workspace-kit` was replaced by the shared `modernization-workspace-kit`, whose
+asset policy lives in each package's `workspace-kit.json`. The skill name recorded in the probe row above
+is therefore retired. The publisher's sixteen standard-library tests were re-run against the refactored
+engine and passed, and a full-profile preview produced 47 planned files for the Natural/Adabas package and
+20 for the COBOL/DB2 package. Skill discovery through the CLI was not re-probed.
+
 ## First-party customization documentation verification
 
 Verification date: 2026-08-21. These checks fetched known first-party pages directly; they did not use

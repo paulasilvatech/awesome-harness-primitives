@@ -9,9 +9,9 @@ Regenerate this file after changing files under `harness/github-copilot/agents/`
 | --- | ---: |
 | Agents | 228 |
 | Instructions | 195 |
-| Skills | 487 |
+| Skills | 490 |
 | VS Code prompts | 48 |
-| Plugins | 136 |
+| Plugins | 137 |
 | Hooks | 8 |
 
 ## Agents
@@ -571,6 +571,7 @@ Regenerate this file after changing files under `harness/github-copilot/agents/`
 | chrome-devtools | Handle `browser-related` tasks and control a live Chrome browser through Chrome DevTools MCP for browser automation, visual inspection, debugging, performance analysis, and emulat… |
 | cli-mastery | Interactive training for the GitHub Copilot CLI through guided lessons, quizzes, scenario challenges, a final exam, and on-demand reference for slash commands, shortcuts, modes, a… |
 | cloud-design-patterns | Select, explain, and apply cloud design patterns for distributed systems across reliability, performance, messaging, architecture, deployment, security, and event-driven categorie… |
+| cobol-db2-analysis | Analyze COBOL programs, copybooks, PERFORM and CALL structure, file and VSAM access, embedded EXEC SQL and EXEC CICS, DB2 DDL, DCLGEN structures, cursors, and JCL job steps with s… |
 | code-exemplars-blueprint-generator | Generate a configurable prompt blueprint for scanning a codebase and producing an exemplars.md catalog of high-quality, real code examples. Use this skill when the user asks for c… |
 | code-modernization | Use this skill when the user asks to modernize legacy code with a disciplined GitHub Copilot workflow: brief, assess, map, extract business rules, reimagine architecture, transfor… |
 | code-tour | Create CodeTour .tour JSON files that guide a persona through real repository files, directories, line numbers, selections, patterns, URIs, views, and VS Code commands. Use when a… |
@@ -629,6 +630,7 @@ Regenerate this file after changing files under `harness/github-copilot/agents/`
 | dataverse-python-production-code | Generate production-ready Python 3.10+ code for the PowerPlatform-Dataverse-Client SDK with DataverseError handling, singleton client management, retry with exponential backoff fo… |
 | dataverse-python-quickstart | Generate concise Microsoft Dataverse SDK for Python preview setup, authentication, CRUD, bulk create/update, paging, and optional File column upload snippets using official patter… |
 | dataverse-python-usecase-builder | Generate complete Python solutions for Microsoft Dataverse SDK business use cases, including architecture, table design, CRUD, batch, query, file, scheduled, or real-time patterns… |
+| db2-postgresql-migration | Model DB2 for z/OS tables, DDL, DCLGEN structures, COBOL record layouts, OCCURS and REDEFINES groups, packed decimal fields, cursors, and VSAM datasets as a PostgreSQL schema, the… |
 | debian-linux-triage | Diagnose and remediate Debian Linux incidents with apt, dpkg, systemd, journal analysis, AppArmor-aware checks, firewall review, and rollback practices. Use when the user asks to… |
 | declarative-agents | Build, validate, and optimize Microsoft 365 Copilot declarative agents with v1.5 schema, TypeSpec, Microsoft 365 Agents Toolkit, capabilities, conversation starters, localization,… |
 | dependabot | Comprehensive guide for configuring and managing GitHub Dependabot. Use this skill when users ask about creating or optimizing dependabot.yml files, managing Dependabot pull reque… |
@@ -774,6 +776,7 @@ Regenerate this file after changing files under `harness/github-copilot/agents/`
 | minecraft-plugin-development | Guides Paper, Spigot, and Bukkit Minecraft server plugin development for plugin.yml setup, JavaPlugin bootstrap, commands, listeners, schedulers, player state, arenas, minigames,… |
 | mini-context-graph | A persistent, compounding knowledge base combining Karpathy's LLM Wiki pattern with a structured knowledge graph. Ingest documents once — the LLM writes wiki pages, extracts entit… |
 | mkdocs-translations | Translate an MkDocs documentation stack from docs/docs/en and docs/docs/includes/en into a target ISO 639-1 or locale folder, preserving Markdown structure and updating mkdocs.yml… |
+| modernization-workspace-kit | Preview, publish, update, inspect, or uninstall managed modernization repository customizations with conflict detection, ownership hashes, transactional rollback, and safe archive… |
 | msgraph-sdk | Integrate Microsoft Graph SDK in .NET, TypeScript/JavaScript, or Python applications using correct authentication, permissions, SDK clients, pagination, batching, delta queries, c… |
 | msstore-cli | Use Microsoft Store Developer CLI (msstore) to configure Partner Center credentials, list Store apps, package and publish Windows submissions, check status, manage package flights… |
 | multi-stage-dockerfile | Create or improve optimized multi-stage Dockerfiles with builder, dependency, test, and runtime stages. Use when the user asks for a multi-stage structure, smaller image, secure r… |
@@ -1073,6 +1076,7 @@ They exist to filter a large marketplace and never remove, hide, or block a pack
 | kotlin-mcp-development | 1.0.2 | active | static-validated | repository | Complete toolkit for building Model Context Protocol (MCP) servers in Kotlin using the official io.modelcontextprotocol:kotlin-sdk library. Includes instructions for best practice… |
 | learning-and-mentoring | 1.0.0 | active | static-validated | repository | Teach and coach rather than deliver answers: Socratic mentoring for juniors, study modes, understanding checks, critical thinking and devil's advocate review, self-learning archit… |
 | linux-operations | 1.0.0 | active | static-validated | repository | Diagnose and remediate Linux incidents across Arch, CentOS, Debian, and Fedora with distribution-correct package managers, systemd, journal analysis, security modules, and rollbac… |
+| mainframe-cobol-db2 | 0.1.0 | incubating | static-validated | repository | Modernize COBOL, DB2, VSAM, and JCL systems with evidence-first archaeology, REQ-NNN lineage, bounded correction loops, an extracted engineering graph, behavior and data equivalen… |
 | mainframe-natural-adabas | 0.1.0 | incubating | runtime-verified | repository | Modernize Software AG Natural and Adabas systems with evidence-first archaeology, REQ-NNN lineage, bounded correction loops, an extracted engineering graph, behavior and data equi… |
 | mcp-development | 1.0.0 | active | static-validated | repository | Build, test, secure, and release Model Context Protocol servers and clients, including CLI exploration, configuration auditing, implementation security review, pre-release QA, and… |
 | mcp-m365-copilot | 1.0.2 | active | static-validated | repository | Comprehensive collection for building declarative agents with Model Context Protocol integration for Microsoft 365 Copilot |
