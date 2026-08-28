@@ -60,7 +60,7 @@ The agent does not fill these gaps with assumptions; it labels unknowns and docu
 | Deployment | Servers, containers, databases, queues, environments, network boundaries, security zones | Deployment strategy and infrastructure choices. |
 | Data Flow | Data sources, sinks, stores, transformations, validation, processing points | Data handling, transformation, and storage strategy. |
 | Sequence | Key user journeys or workflows, ordering, request/response flows | Critical use-case operation flow. |
-| Additional | ERD, state, network, security, or integration diagrams as needed | Domain-specific complexity not covered by required diagrams. |
+| Additional | ERD, state, network, security, or integration diagrams as needed | Domain-specific complexity covered by required diagrams. |
 
 ## Per-Diagram Explanation Requirements
 
