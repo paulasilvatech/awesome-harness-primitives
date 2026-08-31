@@ -114,6 +114,16 @@ harness/claude-code/
 
 Edit canonical content under `harness/github-copilot/`. Do not hand-edit generated Claude primitives, plugin copies, installed `.github/` mirrors, or installed `.claude/` mirrors.
 
+## Credits and upstream references
+
+This collection includes multiple plugins, components, and reference materials derived from or inspired by
+[github/awesome-copilot](https://github.com/github/awesome-copilot). Those materials have been adapted,
+updated, and improved here for current harness contracts, stricter validation, self-contained packaging,
+catalog discoverability, and GitHub Copilot plus Claude Code compatibility.
+
+Upstream attribution remains explicit: the repository URL and source commit for imported plugin material are
+recorded in `harness/github-copilot/manifests/plugin-sources.json` and surfaced in the generated catalogs.
+
 ## Quality and public-use policy
 
 - [Content audit](docs/PRIMITIVE-CONTENT-AUDIT.md) tracks structure, freshness risk, and plugin composition.

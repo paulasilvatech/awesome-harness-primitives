@@ -16,10 +16,17 @@ hand-edit it. Regenerate with `python3 harness/github-copilot/scripts/generate_c
 
 An `applyTo` glob makes the file auto-apply to matching paths. Entries without one are loaded as general repository guidance.
 
+## Credits and provenance
+
+Some catalog entries are adapted from
+[github/awesome-copilot](https://github.com/github/awesome-copilot) and have been updated and
+improved for this repository's validation, packaging, and cross-harness
+contracts. Plugin rows preserve their upstream source link when applicable.
+
 ## Entries
 
-| Instruction | applyTo | Description | Use cases | Source |
-| --- | --- | --- | --- | --- |
+| Instruction | applyTo | Description | Use cases | Upstream | Source |
+| --- | --- | --- | --- | --- | --- |
 | .NET Framework Upgrade Specialist | **/*.{csproj,vbproj,fsproj,sln,props,targets} | Enforces .NET upgrade conventions for project type detection, target framework selection, dependency sequencing, package updates, breaking… | Applies automatically to files matching `**/*.{csproj,vbproj,fsproj,sln,props,targets}`. | [source](../../../harness/github-copilot/instructions/dotnet-upgrade.instructions.md) |
 | a11y | **/*.{html,htm,css,scss,sass,js,jsx,ts,tsx,vue,svelte,astro} | Comprehensive web accessibility conventions based on WCAG 2.2 AA, legal enforcement context, WAI-ARIA rules, anti-patterns, and framework-s… | Applies automatically to files matching `**/*.{html,htm,css,scss,sass,js,jsx,ts,tsx,vue,svelte,astro}`. | [source](../../../harness/github-copilot/instructions/a11y.instructions.md) |
 | agent-safety | ** | Enforces safety and governance conventions for AI agent systems, tool-calling LLMs, and multi-agent orchestration. | Use when code defines agents, tools, policies, guardrails, or audit behavior. | [source](../../../harness/github-copilot/instructions/agent-safety.instructions.md) |

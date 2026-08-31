@@ -6,6 +6,13 @@ Part of the [Claude Code catalog](../claude-code.md). Generated file: do not
 hand-edit it. Regenerate with
 `python3 harness/claude-code/scripts/generate_catalog.py`.
 
+## Credits and provenance
+
+Some entries are adapted from
+[github/awesome-copilot](https://github.com/github/awesome-copilot) and have been updated and
+improved for this repository's validation, packaging, and cross-harness
+contracts. Plugin rows preserve their upstream source link when applicable.
+
 ## Overview
 
 | Field | Value |
@@ -501,7 +508,7 @@ hand-edit it. Regenerate with
 | `webapp-testing` | Toolkit for interacting with and testing local web applications using Playwright. Use when verifying frontend functionality, debugging rendered UI behavior, capturing screenshots, inspecting browser… | 5 | [source](../../../harness/claude-code/skills/webapp-testing) |
 | `webmcpify` | Make a web app agent-ready with WebMCP by detecting app actions, building a manifest, integrating document.modelContext tools, verifying in a real browser, healing failures, and auditing diffs. Use w… | 11 | [source](../../../harness/claude-code/skills/webmcpify) |
 | `what-context-needed` | Identify the minimum files, symbols, configuration, tests, and prior context GitHub Copilot needs before answering a codebase question. Use this skill when the user asks what context is needed, what… | 0 | [source](../../../harness/claude-code/skills/what-context-needed) |
-| `winmd-api-search` | Find and explore Windows desktop APIs. Use when building features that need platform capabilities — camera, file access, notifications, UI controls, AI/ML, sensors, networking, etc. Discovers the rig… | 8 | [source](../../../harness/claude-code/skills/winmd-api-search) |
+| `winmd-api-search` | Find and explore Windows desktop APIs. Use when building features that need platform capabilities — camera, file access, notifications, UI controls, AI/ML, sensors, networking, etc. Discovers the rig… | 19 | [source](../../../harness/claude-code/skills/winmd-api-search) |
 | `winui3-migration-guide` | Maps UWP APIs and patterns to WinUI 3 and Windows App SDK equivalents with migration rules for namespaces, threading, windowing, dialogs, pickers, sharing, printing, background tasks, settings, tests… | 0 | [source](../../../harness/claude-code/skills/winui3-migration-guide) |
 | `workiq-copilot` | Use the WorkIQ `CLI/MCP` server to query Microsoft 365 work data such as emails, meetings, documents, Teams messages, people, and projects for live organizational context. Use when the user asks for… | 0 | [source](../../../harness/claude-code/skills/workiq-copilot) |
 | `workshop-create` | Create a workshop root for desks either by using an existing local directory or by creating a new private GitHub repository in the signed-in account. Use this skill when the operator says create a wo… | 0 | [source](../../../harness/claude-code/skills/workshop-create) |

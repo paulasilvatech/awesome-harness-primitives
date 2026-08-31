@@ -5,6 +5,14 @@ Generated inventory for `harness/claude-code/`.
 [Catalog hub](README.md) · [Plugin versus standalone](../USAGE.md) ·
 [Repository home](../../README.md)
 
+## Credits and provenance
+
+This catalog includes multiple plugins, components, and references adapted from
+[github/awesome-copilot](https://github.com/github/awesome-copilot). They have been updated and
+improved for current harness contracts, stricter validation, self-contained
+packaging, and GitHub Copilot plus Claude Code compatibility. Applicable plugin
+rows link back to the upstream repository.
+
 ## Catalog pages
 
 | Page | Contents | Entries |

@@ -14,6 +14,13 @@ hand-edit it. Regenerate with `python3 harness/github-copilot/scripts/generate_c
 | Canonical source | `harness/github-copilot/skills/` |
 | Typical use cases | Repeatable procedures that need ordered steps, domain knowledge, or bundled resources. |
 
+## Credits and provenance
+
+Some catalog entries are adapted from
+[github/awesome-copilot](https://github.com/github/awesome-copilot) and have been updated and
+improved for this repository's validation, packaging, and cross-harness
+contracts. Plugin rows preserve their upstream source link when applicable.
+
 ## Entries
 
 | Skill | Description | Use cases | Source |

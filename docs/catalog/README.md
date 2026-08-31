@@ -17,6 +17,14 @@ Browse by target harness or by package membership.
 
 The plugin-component inventories are intentionally explicit: aggregate package counts are not considered sufficient catalog coverage.
 
+## Credits and provenance
+
+Multiple catalog entries are adapted from
+[github/awesome-copilot](https://github.com/github/awesome-copilot). They have
+been updated and improved here for stricter validation, packaging, discovery,
+and GitHub Copilot plus Claude Code compatibility. Applicable plugin rows link
+to their upstream source.
+
 ## Choose a delivery model
 
 Use a [plugin](../USAGE.md#choose-a-plugin) for a cohesive suite or a [standalone primitive](../USAGE.md#choose-a-standalone-primitive) for one focused capability.

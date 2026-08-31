@@ -32,6 +32,7 @@ USE_CASE_WIDTH = 180
 REGENERATE_COMMAND = (
     "python3 harness/github-copilot/scripts/generate_catalog.py"
 )
+AWESOME_COPILOT_URL = "https://github.com/github/awesome-copilot"
 HOOK_EVENT_ORDER = [
     "sessionStart",
     "sessionEnd",
@@ -417,6 +418,16 @@ def plugin_rows() -> list[list[str]]:
             contents,
             description,
             use_case,
+            (
+                f"[github/awesome-copilot]({AWESOME_COPILOT_URL})"
+                if source_config.get("upstreamRepository")
+                == AWESOME_COPILOT_URL
+                else (
+                    f"[upstream]({source_config['upstreamRepository']})"
+                    if source_config.get("upstreamRepository")
+                    else "—"
+                )
+            ),
             source_link(manifest) if manifest is not None else "—",
         ])
     return sort_rows(rows)
@@ -706,6 +717,7 @@ def collect_pages() -> list[CatalogPage]:
                 "applyTo",
                 "Description",
                 "Use cases",
+                "Upstream",
                 "Source",
             ],
             rows=instruction_rows(),
@@ -799,6 +811,7 @@ def collect_pages() -> list[CatalogPage]:
                 "Contents",
                 "Description",
                 "Use cases",
+                "Upstream",
                 "Source",
             ],
             rows=plugin_rows(),
@@ -858,6 +871,13 @@ hand-edit it. Regenerate with `{REGENERATE_COMMAND}`.
 
 {overview}
 {note}
+## Credits and provenance
+
+Some catalog entries are adapted from
+[github/awesome-copilot]({AWESOME_COPILOT_URL}) and have been updated and
+improved for this repository's validation, packaging, and cross-harness
+contracts. Plugin rows preserve their upstream source link when applicable.
+
 ## Entries
 
 {md_table(page.headers, page.rows)}
@@ -889,6 +909,14 @@ a concise purpose, a typical use case, and a link to its source.
 
 [Catalog hub](README.md) · [Plugin versus standalone](../USAGE.md) ·
 [Repository home](../../README.md)
+
+## Credits and provenance
+
+This catalog includes multiple plugins, components, and references adapted from
+[github/awesome-copilot]({AWESOME_COPILOT_URL}). They have been updated and
+improved for current harness contracts, stricter validation, self-contained
+packaging, and GitHub Copilot plus Claude Code compatibility. Applicable plugin
+rows link back to the upstream repository.
 
 ## Catalog pages
 

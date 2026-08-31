@@ -40,6 +40,14 @@ except ModuleNotFoundError:  # pragma: no cover - supports python3 -m invocation
 DEFAULT_INDEX = REPO_ROOT / "docs" / "catalog" / "claude-code.md"
 DEFAULT_PAGES_DIR = REPO_ROOT / "docs" / "catalog" / "claude-code"
 LINK_BASE = REPO_ROOT
+AWESOME_COPILOT_URL = "https://github.com/github/awesome-copilot"
+PLUGIN_PROVENANCE_PATH = (
+    REPO_ROOT
+    / "harness"
+    / "github-copilot"
+    / "manifests"
+    / "plugin-sources.json"
+)
 
 HEADER = """# Claude Code Primitives Catalog
 
@@ -98,8 +106,17 @@ def _frontmatter(path: Path) -> dict[str, Any]:
     return data
 
 
+def load_plugin_provenance() -> dict[str, dict[str, Any]]:
+    document = json.loads(
+        PLUGIN_PROVENANCE_PATH.read_text(encoding="utf-8")
+    )
+    plugins = document.get("plugins")
+    return plugins if isinstance(plugins, dict) else {}
+
+
 def collect() -> dict[str, list[dict[str, Any]]]:
     data: dict[str, list[dict[str, Any]]] = {}
+    provenance = load_plugin_provenance()
 
     data["agents"] = [
         {
@@ -174,6 +191,10 @@ def collect() -> dict[str, list[dict[str, Any]]]:
                 "version": manifest.get("version", ""),
                 "description": _flatten(manifest.get("description")),
                 "components": components,
+                "upstream": provenance.get(
+                    plugin_dir.name,
+                    {},
+                ).get("upstreamRepository"),
                 "path": plugin_dir,
             }
         )
@@ -446,6 +467,15 @@ def page_definitions(
                 str(components["commands"]),
                 str(components["hooks"]),
                 str(components["mcp"]),
+                (
+                    f"[github/awesome-copilot]({AWESOME_COPILOT_URL})"
+                    if entry.get("upstream") == AWESOME_COPILOT_URL
+                    else (
+                        f"[upstream]({entry['upstream']})"
+                        if entry.get("upstream")
+                        else "—"
+                    )
+                ),
                 _link(entry["path"], "source"),
             ]
         )
@@ -516,6 +546,7 @@ def page_definitions(
                 "Commands",
                 "Hooks",
                 "MCP",
+                "Upstream",
                 "Source",
             ],
             "rows": plugin_rows,
@@ -545,6 +576,13 @@ def render_page(
 Part of the [Claude Code catalog]({index_link}). Generated file: do not
 hand-edit it. Regenerate with
 `python3 harness/claude-code/scripts/generate_catalog.py`.
+
+## Credits and provenance
+
+Some entries are adapted from
+[github/awesome-copilot]({AWESOME_COPILOT_URL}) and have been updated and
+improved for this repository's validation, packaging, and cross-harness
+contracts. Plugin rows preserve their upstream source link when applicable.
 
 ## Overview
 
@@ -583,6 +621,14 @@ Generated inventory for `harness/claude-code/`.
 
 [Catalog hub](README.md) · [Plugin versus standalone](../USAGE.md) ·
 [Repository home](../../README.md)
+
+## Credits and provenance
+
+This catalog includes multiple plugins, components, and references adapted from
+[github/awesome-copilot]({AWESOME_COPILOT_URL}). They have been updated and
+improved for current harness contracts, stricter validation, self-contained
+packaging, and GitHub Copilot plus Claude Code compatibility. Applicable plugin
+rows link back to the upstream repository.
 
 ## Catalog pages
 

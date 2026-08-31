@@ -131,6 +131,9 @@ Select this agent when an API contract needs specialist review.
                 "demo-plugin": {
                     "componentSource": "plugin",
                     "sharedSkills": ["./skills/demo-skill/"],
+                    "upstreamRepository": (
+                        "https://github.com/github/awesome-copilot"
+                    ),
                 }
             }
             with (
@@ -160,6 +163,11 @@ Select this agent when an API contract needs specialist review.
         self.assertIn("demo-plugin:demo", catalog)
         self.assertIn("Plugin-owned", catalog)
         self.assertIn("Shared library copy", catalog)
+        self.assertIn(
+            "[github/awesome-copilot]"
+            "(https://github.com/github/awesome-copilot)",
+            catalog,
+        )
         self.assertIn("sessionEnd", catalog)
 
 

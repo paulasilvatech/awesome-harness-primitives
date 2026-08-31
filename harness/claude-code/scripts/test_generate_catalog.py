@@ -20,9 +20,26 @@ class ClaudeCatalogTests(unittest.TestCase):
                 "COMMANDS_ROOT": root / "commands",
                 "HOOKS_ROOT": root / "hooks",
                 "PLUGINS_ROOT": root / "plugins",
+                "PLUGIN_PROVENANCE_PATH": root / "plugin-sources.json",
             }
-            for path in paths.values():
+            for name, path in paths.items():
+                if name == "PLUGIN_PROVENANCE_PATH":
+                    continue
                 path.mkdir(parents=True)
+            paths["PLUGIN_PROVENANCE_PATH"].write_text(
+                json.dumps(
+                    {
+                        "plugins": {
+                            "demo-plugin": {
+                                "upstreamRepository": (
+                                    "https://github.com/github/awesome-copilot"
+                                )
+                            }
+                        }
+                    }
+                ),
+                encoding="utf-8",
+            )
 
             plugin = paths["PLUGINS_ROOT"] / "demo-plugin"
             (plugin / ".claude-plugin").mkdir(parents=True)
@@ -88,6 +105,19 @@ class ClaudeCatalogTests(unittest.TestCase):
         )
         self.assertIn("## Plugin Components", catalog)
         self.assertIn("Copied payload; not a Claude component", catalog)
+        self.assertEqual(
+            data["plugins"][0]["upstream"],
+            "https://github.com/github/awesome-copilot",
+        )
+        self.assertIn(
+            "[github/awesome-copilot]"
+            "(https://github.com/github/awesome-copilot)",
+            generate_catalog.render_index(
+                generate_catalog.page_definitions(data),
+                Path("/tmp/docs/catalog/claude-code.md"),
+                Path("/tmp/docs/catalog/claude-code"),
+            ),
+        )
 
 
 if __name__ == "__main__":
