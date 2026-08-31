@@ -39,7 +39,7 @@ Result reference: `@outputs('Get_SP_Items')?['body/value']`
 > **Dynamic OData filter with string interpolation**: inject a runtime value
 > directly into the `$filter` string using `@{...}` syntax:
 > ```
-> "$filter": "Title eq '@{outputs('ConfirmationCode')}'"  
+> "$filter": "Title eq '@{outputs('ConfirmationCode')}'"
 > ```
 > Note the single-quotes inside double-quotes — correct OData string literal
 > syntax. Avoids a separate variable action.

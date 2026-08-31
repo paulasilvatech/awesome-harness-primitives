@@ -41,7 +41,7 @@ Save all generated files to the `output/` folder:
 
 The scan generates a JSON report with recommendations categorized by impact level (High/Medium/Low), including:
 - Orphaned resources (NICs, disks, IPs)
-- Azure Advisor cost recommendations  
+- Azure Advisor cost recommendations
 - Resource inventory
 - Cost breakdown by resource
 

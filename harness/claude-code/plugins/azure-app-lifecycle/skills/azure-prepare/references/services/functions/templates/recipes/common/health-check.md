@@ -71,7 +71,7 @@ public HttpResponseMessage health(
         @HttpTrigger(name = "req", methods = {HttpMethod.GET}, authLevel = AuthorizationLevel.ANONYMOUS)
         HttpRequestMessage<Optional<String>> request,
         final ExecutionContext context) {
-    
+
     return request.createResponseBuilder(HttpStatus.OK)
             .header("Content-Type", "application/json")
             .body("{\"status\":\"healthy\"}")

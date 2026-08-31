@@ -194,7 +194,7 @@ model User {
 public class Patient {
     @Column(name = "diagnosis")  // Tier 1 PHI
     private String diagnosis;
-    
+
     @Column(name = "ssn")        // Tier 1
     private String ssn;
 }
@@ -226,7 +226,7 @@ logger.debug(f"Payment for card {card_number}")
 {
   "id": "...",
   "email": "...",          // Tier 3
-  "phone": "...",          // Tier 3 
+  "phone": "...",          // Tier 3
   "dateOfBirth": "...",    // Tier 2 — should this be returned?
   "passwordHash": "...",   // Tier 1 — should NEVER be returned
   "ssn": "...",            // Tier 1 — should NEVER be returned

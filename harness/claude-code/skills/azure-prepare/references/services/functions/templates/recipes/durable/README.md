@@ -4,7 +4,7 @@ Orchestration workflows with Durable Task Scheduler as the backend.
 
 ## Template Selection
 
-Resource filter: `durable`  
+Resource filter: `durable`
 Discover templates via MCP or CDN manifest where `resource == "durable"` and `language` matches user request.
 
 ## Key Concept
@@ -17,12 +17,12 @@ See [Durable Task Scheduler reference](../../../../durable-task-scheduler/README
 
 ### Orchestration Fails to Start
 
-**Cause:** Durable Task Scheduler (DTS) backend not provisioned or connection misconfigured.  
+**Cause:** Durable Task Scheduler (DTS) backend not provisioned or connection misconfigured.
 **Solution:** Verify the DTS resource exists and the function app has the `Durable Task Scheduler Worker` role. Do NOT use Azure Storage queues/tables as backend.
 
 ### UAMI Connection Issues
 
-**Cause:** Missing or incorrect Durable Task Scheduler connection string.  
+**Cause:** Missing or incorrect Durable Task Scheduler connection string.
 **Solution:** DTS uses a connection string format (not the `__` suffix pattern). Set these app settings:
 
 - `DURABLE_TASK_SCHEDULER_CONNECTION_STRING`: `Endpoint=<scheduler-endpoint>;Authentication=ManagedIdentity;ClientID=<client-id>`

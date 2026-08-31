@@ -71,7 +71,7 @@ This section helps you choose the right transformation approach for your data pi
 
 ### Pattern 1: Aggregations (GROUP BY + Aggregate Functions)
 
-**WHAT:**  
+**WHAT:**
 Summarize data by grouping rows and applying aggregate functions (`SUM`, `COUNT`, `AVG`, `MIN`, `MAX`, `COLLECT_LIST`).
 
 **WHY:**
@@ -110,7 +110,7 @@ df.groupBy("product_category", "region", "order_date") \
 
 ### Pattern 2: Window Functions (Partitioned Analytics)
 
-**WHAT:**  
+**WHAT:**
 Perform calculations across rows related to the current row without collapsing them into groups. Common functions: `ROW_NUMBER()`, `RANK()`, `LAG()`, `LEAD()`, `SUM() OVER (...)`, `AVG() OVER (...)`.
 
 **WHY:**
@@ -149,7 +149,7 @@ df.withColumn("cumulative_spent", F.sum("amount").over(window_running)) \
 
 ### Pattern 3: Joins (Combining Datasets)
 
-**WHAT:**  
+**WHAT:**
 Merge two DataFrames based on a common key. Types: `inner`, `left` (left outer), `right`, `full` (full outer), `cross`, `left_semi`, `left_anti`.
 
 **WHY:**
@@ -192,7 +192,7 @@ orders.join(customers, on="customer_id", how="left") \
 
 ### Pattern 4: Materialized Lake Views (Declarative Transformations)
 
-**WHAT:**  
+**WHAT:**
 A Fabric-native feature that materializes transformation results as Delta tables with automatic refresh, data quality constraints, and query optimization. Two authoring modes: Spark SQL (with incremental refresh) or PySpark (full refresh only).
 
 **WHY:**

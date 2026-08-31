@@ -26,7 +26,7 @@
 
 ## After Prereq Returns (Step 4 — scan-informed intent gathering)
 
-Prereq has written `prereq-output.json` and `context.json.components[]` — this is the authoritative source for all downstream phases (prepare and scaffold consume `context.json`, not `prereq-output.json`). 
+Prereq has written `prereq-output.json` and `context.json.components[]` — this is the authoritative source for all downstream phases (prepare and scaffold consume `context.json`, not `prereq-output.json`).
 
 Confirm the Azure target ("☁️ **Azure target**: {subscriptionName} ({subscriptionId})"). If the user wants a different subscription, write to `context.json.overrides[]`.
 

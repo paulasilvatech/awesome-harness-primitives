@@ -109,18 +109,18 @@ function App() {
 ```jsx
 function DataComponent({ id }) {
   // Only create promise once per id:
-  const dataPromise = useMemo(() => 
+  const dataPromise = useMemo(() =>
     fetch(`/api/data/${id}`).then(r => r.json()),
     [id]
   );
-  
+
   const data = use(dataPromise);
   return <pre>{JSON.stringify(data, null, 2)}</pre>;
 }
 
 function App() {
   const [id, setId] = useState(1);
-  
+
   return (
     <Suspense fallback={<Spinner />}>
       <DataComponent id={id} />
@@ -146,7 +146,7 @@ function UserProfile({ userId }) {
     queryKey: ['user', userId],
     queryFn: () => fetchUser(userId),
   });
-  
+
   return <div>{user.name}</div>;
 }
 
@@ -185,11 +185,11 @@ function App() {
 
 class ErrorBoundary extends React.Component {
   state = { error: null };
-  
+
   static getDerivedStateFromError(error) {
     return { error };
   }
-  
+
   render() {
     if (this.state.error) return this.props.fallback;
     return this.props.children;
@@ -210,7 +210,7 @@ function App({ userId }) {
       <Suspense fallback={<UserSpinner />}>
         <UserProfile userId={userId} />
       </Suspense>
-      
+
       <Suspense fallback={<PostsSpinner />}>
         <UserPosts userId={userId} />
       </Suspense>
@@ -244,7 +244,7 @@ Now:
 ```jsx
 function App({ userId }) {
   const user = use(fetchUser(userId)); // Must complete first
-  
+
   return (
     <Suspense fallback={<PostsSpinner />}>
       <UserPosts userId={user.id} /> {/* Depends on user */}
@@ -267,7 +267,7 @@ function App({ userId }) {
       <Suspense fallback={<UserSpinner />}>
         <UserProfile userId={userId} />
       </Suspense>
-      
+
       <Suspense fallback={<PostsSpinner />}>
         <UserPosts userId={userId} /> {/* Fetches in parallel */}
       </Suspense>
@@ -304,11 +304,11 @@ grep -rn "useEffect.*fetch\|useEffect.*axios\|useEffect.*graphql" src/ --include
 // Before (React 18):
 function UserProfile({ userId }) {
   const [user, setUser] = useState(null);
-  
+
   useEffect(() => {
     fetchUser(userId).then(setUser);
   }, [userId]);
-  
+
   if (!user) return <Spinner />;
   return <div>{user.name}</div>;
 }

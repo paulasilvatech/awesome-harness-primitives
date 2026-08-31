@@ -332,15 +332,15 @@ Type reflection kind values: `Scalar`, `Vector`, `Matrix`, `Array`, `Struct`, `R
 ## Compilation Targets
 
 ### D3D11 (DXBC)
-Stages: `vertex`, `hull`, `domain`, `geometry`, `fragment`  
+Stages: `vertex`, `hull`, `domain`, `geometry`, `fragment`
 Registers: `b` (cbuffers), `t` (SRVs), `u` (UAVs), `s` (samplers)
 
 ### D3D12 (DXIL)
-Adds: ray tracing (`raygeneration`, `closesthit`, `miss`, `anyhit`, `intersection`, `callable`)  
+Adds: ray tracing (`raygeneration`, `closesthit`, `miss`, `anyhit`, `intersection`, `callable`)
 Root signatures: root constants, descriptor tables, root descriptors.
 
 ### Vulkan (SPIR-V)
-Descriptor sets instead of tables. Push constants instead of root constants.  
+Descriptor sets instead of tables. Push constants instead of root constants.
 ```hlsl
 [[vk::binding(0, 1)]] Texture2D myTexture;
 [[vk::push_constant]]  cbuffer PC { float4 color; };

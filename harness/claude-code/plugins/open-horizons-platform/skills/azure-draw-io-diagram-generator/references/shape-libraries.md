@@ -39,7 +39,7 @@ Common shapes for any diagram type.
 
 ### Flowchart
 
-**Enable**: `View > Shapes > Flowchart`  
+**Enable**: `View > Shapes > Flowchart`
 **Shape prefix**: `mxgraph.flowchart.`
 
 Standard ANSI/ISO flowchart symbols.
@@ -100,14 +100,14 @@ Use swimlane containers for class boxes:
 
 ```xml
 <!-- Class container -->
-<mxCell value="«interface»&#xa;IOrderService" 
+<mxCell value="«interface»&#xa;IOrderService"
         style="swimlane;fontStyle=1;align=center;startSize=30;whiteSpace=wrap;html=1;"
         vertex="1" parent="1">
   <mxGeometry x="200" y="100" width="200" height="160" as="geometry" />
 </mxCell>
 
 <!-- Attributes (child of class) -->
-<mxCell value="+ id: string&#xa;+ status: string" 
+<mxCell value="+ id: string&#xa;+ status: string"
         style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;overflow=hidden;html=1;"
         vertex="1" parent="classId">
   <mxGeometry y="30" width="200" height="60" as="geometry" />
@@ -246,7 +246,7 @@ Use swimlane containers for class boxes:
 
 ### BPMN 2.0
 
-**Enable**: `View > Shapes > BPMN`  
+**Enable**: `View > Shapes > BPMN`
 **Shape prefix**: `shape=mxgraph.bpmn.*`
 
 | Shape | Style String |

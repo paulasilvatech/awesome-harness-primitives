@@ -1,9 +1,9 @@
 # Primitive Authoring Templates
 
-These templates are starting points for six Copilot customization and package formats. They are not an exhaustive
-list of every type supported by the harness. Repository governance defines source precedence and freshness;
-`docs/COPILOT-HARNESS-SPEC.md` is the authority for CLI-discovered formats, and prompt files are a local
-VS Code feature.
+These templates are starting points for six canonical Copilot customization and package formats. They are not an exhaustive
+list of every type supported by either harness. Repository governance defines source precedence and freshness;
+`docs/COPILOT-HARNESS-SPEC.md` is the authority for Copilot formats, `docs/CLAUDE-CODE-HARNESS-SPEC.md`
+defines deterministic Claude Code conversion, and prompt files are a local VS Code feature.
 
 | Template | Canonical source in this repository | Purpose | Support |
 | --- | --- | --- | --- |
@@ -37,7 +37,10 @@ VS Code feature.
    capabilities in these templates.
 5. Validate the canonical source, regenerate derived content, and synchronize generated copies when
    applicable. See [Validation and synchronization](#validation-and-synchronization).
-6. When a claim depends on current platform behavior, consult `docs/HARNESS-VALIDATION.md`. Verify a
+6. Regenerate the Claude Code harness from the completed canonical source and validate its catalog and
+   installed copies.
+7. When a claim depends on current platform behavior, consult `docs/HARNESS-VALIDATION.md` for Copilot
+   or `docs/CLAUDE-CODE-VALIDATION.md` for Claude Code. Verify a
    first-party source only when the user requests current behavior, the target version changed, sources
    conflict, a claim is unverified, or the recorded evidence is older than 90 days.
 
@@ -241,6 +244,18 @@ Synchronize declared installed repository customizations and compatibility guida
 python3 harness/github-copilot/scripts/sync_installed_primitives.py
 python3 harness/github-copilot/scripts/sync_installed_primitives.py --check
 ```
+
+Regenerate and validate the companion Claude Code harness:
+
+```sh
+python3 harness/claude-code/scripts/convert_from_copilot.py
+python3 harness/claude-code/scripts/validate_primitives.py --strict
+python3 harness/claude-code/scripts/generate_catalog.py
+python3 harness/github-copilot/scripts/sync_installed_primitives.py \
+  --manifest harness/claude-code/manifests/installed-primitives.json
+```
+
+Before delivery, rerun conversion, catalog, and installed-copy synchronization with `--check`.
 
 With their default paths, the validator checks `harness/github-copilot/agents/`, `harness/github-copilot/instructions/`,
 `harness/github-copilot/skills/`, `harness/github-copilot/prompts/`, `harness/github-copilot/plugins/`, and `harness/github-copilot/hooks/` plus installed repository

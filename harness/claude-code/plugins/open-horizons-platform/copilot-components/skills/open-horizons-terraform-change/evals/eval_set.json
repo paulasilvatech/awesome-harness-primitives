@@ -1,0 +1,34 @@
+[
+  {
+    "query": "Add a diagnostic setting output to terraform/modules/observability-diag and validate the module without applying it.",
+    "should_trigger": true
+  },
+  {
+    "query": "Update the ohorizons-runtime-bindings environment root, preserving its provider lock and state boundary.",
+    "should_trigger": true
+  },
+  {
+    "query": "Prepare an approved saved Terraform plan for one isolated environment and report its digest, but do not apply it.",
+    "should_trigger": true
+  },
+  {
+    "query": "Repair an import block in terraform/environments/ohorizons-foundry-rbac and run backend-disabled validation.",
+    "should_trigger": true
+  },
+  {
+    "query": "Apply the production Terraform plan and monitor the rollout.",
+    "should_trigger": false
+  },
+  {
+    "query": "Check whether the Azure subscription has enough quota for a Foundry deployment.",
+    "should_trigger": false
+  },
+  {
+    "query": "Write Terratest coverage for the networking module without changing Terraform.",
+    "should_trigger": false
+  },
+  {
+    "query": "Create a new Backstage page and wire it to the portal sidebar.",
+    "should_trigger": false
+  }
+]

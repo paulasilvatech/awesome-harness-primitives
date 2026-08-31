@@ -484,22 +484,22 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '9.0.x'
-      
+
       - name: Install msstore CLI
         run: winget install "Microsoft Store Developer CLI" --accept-package-agreements --accept-source-agreements
-      
+
       - name: Configure Store credentials
         run: |
           msstore reconfigure --tenantId ${{ secrets.TENANT_ID }} --sellerId ${{ secrets.SELLER_ID }} --clientId ${{ secrets.CLIENT_ID }} --clientSecret ${{ secrets.CLIENT_SECRET }}
-      
+
       - name: Build application
         run: dotnet publish -c Release
-      
+
       - name: Publish to Store
         run: msstore publish ./src/MyApp
 ```

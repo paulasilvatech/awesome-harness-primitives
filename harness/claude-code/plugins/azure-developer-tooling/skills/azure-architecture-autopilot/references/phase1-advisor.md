@@ -55,10 +55,10 @@ Utilize this time to **preload information needed for subsequent questions and B
     - references/azure-dynamic-sources.md
     - references/architecture-guidance-sources.md
 
-[3] web_fetch — Pre-fetch architecture guidance (when workload type is identified)
+[3] WebFetch — Pre-fetch architecture guidance (when workload type is identified)
     - Up to 2 targeted fetches based on decision rules in architecture-guidance-sources.md
 
-[4] web_fetch — Fetch MS Docs for services mentioned by the user (pre-acquire Dynamic information)
+[4] WebFetch — Fetch MS Docs for services mentioned by the user (pre-acquire Dynamic information)
     - e.g., Foundry → API version, model availability page
     - e.g., AI Search → SKU list page
     - Use URL patterns from azure-dynamic-sources.md
@@ -70,7 +70,7 @@ Wait time is significantly reduced compared to sequential execution.
 
 **Notes: **
 - Preload targets are only information independent of the project name (nothing depends on the name)
-- web_fetch is performed only for services mentioned in the user's initial request (no guessing)
+- WebFetch is performed only for services mentioned in the user's initial request (no guessing)
 - Azure CLI check (`az account show`) is NOT done at this point — preload at architecture finalization
 
 **Utilizing Architecture Guidance (Adjusting Question Depth): **
@@ -138,7 +138,7 @@ When the user asks about a service category ("What Spark options are there?", "W
 - State definitively "In Azure, X has A and B"
 
 **MUST do this: **
-1. **Explore the full category via web_search ** — Search at the category level like `"Azure managed Spark options site:learn.microsoft.com"` to first discover what services exist
+1. **Explore the full category via WebSearch ** — Search at the category level like `"Azure managed Spark options site:learn.microsoft.com"` to first discover what services exist
 2. **Cross-check with v1 scope ** — Regardless of search results, check whether v1 scope services (Foundry, Fabric, AI Search, ADLS Gen2, etc.) fall under the relevant category. e.g.: "Spark" → Microsoft Fabric's Data Engineering workload also provides Spark
 3. **Targeted fetch of discovered options ** — Fetch MS Docs for the services found via search to collect accurate comparison information
 4. **Present all options to the user ** — Present all discovered options in a comprehensive comparison without omitting any
@@ -146,7 +146,7 @@ When the user asks about a service category ("What Spark options are there?", "W
 **Example — When asked "What Spark instances are available?": **
 ```
 Wrong approach: Fetch only Databricks URL + Synapse URL → Compare only 2
-Correct approach: web_search("Azure managed Spark options") → Discover Databricks, Synapse, Fabric Spark, HDInsight
+Correct approach: WebSearch("Azure managed Spark options") → Discover Databricks, Synapse, Fabric Spark, HDInsight
             → v1 scope check: Fabric is v1 scope and provides Spark → MUST include
             → Targeted fetch of each service's MS Docs → Present full comparison table
 ```
@@ -202,7 +202,7 @@ ask_user({
 })
 ```
 
-> **Note **: The SKU and region values in the examples above are for illustration only. When actually asking, dynamically compose choices based on the latest information by querying MS Docs via web_fetch. Do not hardcode.
+> **Note **: The SKU and region values in the examples above are for illustration only. When actually asking, dynamically compose choices based on the latest information by querying MS Docs via WebFetch. Do not hardcode.
 
 **Example — When user input is insufficient: **
 ```
@@ -590,7 +590,7 @@ Service addition/change is not a "simple update" — it is an **event that reope
 **[Top Priority Principle] Immediate Fact Check During Design Phase **
 
 **The purpose of Phase 1 is to confirm a "feasible architecture". **
-**No matter what the user requests, before reflecting it in the diagram, you MUST fact-check whether it is actually possible by directly querying MS Docs via web_fetch. **
+**No matter what the user requests, before reflecting it in the diagram, you MUST fact-check whether it is actually possible by directly querying MS Docs via WebFetch. **
 
 **Design Direction vs Deployment Specs — Separate Information Paths: **
 
@@ -621,13 +621,13 @@ Service addition/change is not a "simple update" — it is an **event that reope
 Do not simply query once and move on for user requests.
 **Cross-verification using other MS Docs pages/sources MUST always be performed. **
 
-> **GHCP Environment Constraint **: Sub-agents (explore/task/general-purpose) do NOT have `web_fetch`/`web_search` tools.
+> **GHCP Environment Constraint **: Sub-agents (explore/task/general-purpose) do NOT have `WebFetch`/`WebSearch` tools.
 > Therefore, verification requiring MS Docs queries MUST be performed **directly by the main agent **.
 
 ```
-[1st Verification] Main agent directly queries MS Docs via web_fetch (primary page)
+[1st Verification] Main agent directly queries MS Docs via WebFetch (primary page)
     ↓
-[2nd Verification] Main agent additionally fetches other/related MS Docs pages via web_fetch for cross-checking
+[2nd Verification] Main agent additionally fetches other/related MS Docs pages via WebFetch for cross-checking
     - e.g., Model availability → 1st: models page / 2nd: regional availability or pricing page
     - e.g., API version → 1st: Bicep reference page / 2nd: REST API reference page
     - Compare 1st and 2nd results and flag any discrepancies
@@ -653,11 +653,11 @@ Do not simply query once and move on for user requests.
 **Sub-Agent Usage Rules: **
 
 **Sub-agents in GHCP = `task` tool: **
-- `agent_type: "explore"` — Read-only tasks like codebase exploration, file search (**web_fetch/web_search NOT available **)
+- `agent_type: "explore"` — Read-only tasks like codebase exploration, file search (**WebFetch/WebSearch NOT available **)
 - `agent_type: "task"` — Command execution like az cli, bicep build
 - `agent_type: "general-purpose"` — High-level tasks like complex Bicep generation
 
-> **Sub-agent tool constraint **: ALL sub-agents (explore/task/general-purpose) CANNOT use `web_fetch` or `web_search`.
+> **Sub-agent tool constraint **: ALL sub-agents (explore/task/general-purpose) CANNOT use `WebFetch` or `WebSearch`.
 > Fact checks requiring MS Docs queries, API version verification, model availability checks, etc. MUST be performed **directly by the main agent **.
 
 **Foreground vs Background Decision Criteria: **
@@ -665,28 +665,28 @@ Do not simply query once and move on for user requests.
   - e.g., Query SKU list then provide choices to user, verify model availability then reflect in diagram
   - Running in background here would leave the user idle waiting for results
 - **If there is other independent work that can be done while waiting for results → `mode: "background"`**
-  - e.g., Simultaneously web_fetch multiple MS Docs pages for cross-verification
+  - e.g., Simultaneously WebFetch multiple MS Docs pages for cross-verification
 
 **Most fact checks should be run in foreground (`mode: "sync"`) ** because the next question cannot be asked without the results.
 
 **How to run cross-verification in parallel: **
 ```
 // Execute 1st and 2nd verification simultaneously (main agent performs directly)
-[Simultaneously] Directly query primary MS Docs page via web_fetch (1st)
-[Simultaneously] Additionally query related MS Docs page via web_fetch (2nd)
+[Simultaneously] Directly query primary MS Docs page via WebFetch (1st)
+[Simultaneously] Additionally query related MS Docs page via WebFetch (2nd)
 // Compare both results to check for discrepancies
 // e.g., Model availability → parallel fetch of models page + regional availability page
 ```
 
 **NEVER do this: **
 - Run in background when results are needed, then sit idle doing nothing while waiting
-- Delegate tasks requiring web_fetch/web_search to sub-agents (main agent MUST perform directly)
+- Delegate tasks requiring WebFetch/WebSearch to sub-agents (main agent MUST perform directly)
 - Attempt to directly read files internal to sub-agents
 
 ---
 
 **Important: Do NOT execute any shell commands until the user explicitly approves proceeding to the next step. **
-However, MS Docs web_fetch for the above fact checks is exceptionally allowed.
+However, MS Docs WebFetch for the above fact checks is exceptionally allowed.
 
 Once the architecture is confirmed (user said no changes to the diagram), ask the user whether to proceed to the next step.
 
@@ -835,7 +835,7 @@ Therefore, `@secure()` parameter handling follows these rules:
 - Any `@secure()` parameter requires user input → Use JSON parameter file instead of `.bicepparam`
 
 **When MS Docs fetch fails: **
-- If web_fetch fails due to rate limiting, etc., MUST notify the user:
+- If WebFetch fails due to rate limiting, etc., MUST notify the user:
   ```
    MS Docs API version lookup failed. Generating with the last known stable version.
   Verifying the actual latest version before deployment is recommended.

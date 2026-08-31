@@ -14,7 +14,7 @@ Star schema is the optimal design pattern for Power BI semantic models. It organ
 - Examples: Customer, Product, Date, Geography, Employee
 - Naming convention: Singular noun (`Customer`, `Product`)
 
-### Fact Tables  
+### Fact Tables
 - Contain measurable, quantitative data
 - Have foreign keys to dimensions
 - Store data at consistent grain (one row per transaction/event)
@@ -51,7 +51,7 @@ Always create a dedicated date table:
 - Add relative date columns (IsCurrentMonth, IsPreviousYear)
 
 ```dax
-Date = 
+Date =
 ADDCOLUMNS(
     CALENDAR(DATE(2020,1,1), DATE(2030,12,31)),
     "Year", YEAR([Date]),

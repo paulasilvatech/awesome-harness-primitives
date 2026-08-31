@@ -12,7 +12,7 @@ Recommend Azure VM sizes, VM Scale Sets (VMSS), and configurations by analyzing 
 
 ## Workflow
 
-> Use reference files for initial filtering. Then **verify with live documentation** via `web_fetch` before final recommendations. If `web_fetch` fails, fall back to the reference files and surface the staleness warning from [web-fetch-policy.md](references/web-fetch-policy.md).
+> Use reference files for initial filtering. Then **verify with live documentation** via `WebFetch` before final recommendations. If `WebFetch` fails, fall back to the reference files and surface the staleness warning from [web-fetch-policy.md](references/web-fetch-policy.md).
 
 ### Step 1: Gather Requirements
 
@@ -46,11 +46,11 @@ Review [VMSS Guide](../../references/vmss-guide.md). Decision shortcut — start
 | Unique per-instance config | **VM** |
 | Stateful, tightly-coupled cluster | **VM** (or VMSS case-by-case) |
 
-If recommending VMSS, verify with `web_fetch` per [web-fetch-policy.md](references/web-fetch-policy.md). When in doubt, default to a single **VM**.
+If recommending VMSS, verify with `WebFetch` per [web-fetch-policy.md](references/web-fetch-policy.md). When in doubt, default to a single **VM**.
 
 ### Step 3: Select VM Family
 
-Review [VM Family Guide](../../references/vm-families.md) and pick 2–3 candidate families. Verify each candidate's specs with `web_fetch` against:
+Review [VM Family Guide](../../references/vm-families.md) and pick 2–3 candidate families. Verify each candidate's specs with `WebFetch` against:
 
 ```
 https://learn.microsoft.com/en-us/azure/virtual-machines/sizes/<family-category>/<series-name>

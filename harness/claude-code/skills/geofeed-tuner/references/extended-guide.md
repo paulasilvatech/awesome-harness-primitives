@@ -135,7 +135,7 @@ This phase runs after structural checks pass.
 
     - **Unspecified geolocation for subnet**
       - Condition: All geographical fields (`CountryCode`, `RegionCode`, `City`) are empty for a subnet.
-      - Action: 
+      - Action:
         - Set `DoNotGeolocate = true` for the entry.
         - Set `CountryCode` to `ZZ` for the entry.
       - Message ID: `3104`

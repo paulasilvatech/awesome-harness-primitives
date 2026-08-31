@@ -4,7 +4,7 @@
 >
 > **Companion files**:
 > - `SPARK-AUTHORING-CORE.md` — Authoring patterns: notebook deployment, lakehouse creation, job execution
-> - `COMMON-CORE.md` — Fabric REST API patterns, authentication, token audiences  
+> - `COMMON-CORE.md` — Fabric REST API patterns, authentication, token audiences
 > - `COMMON-CLI.md` — CLI invocation patterns for cross-platform tools
 
 ---
@@ -172,7 +172,7 @@ https://onelake.table.fabric.microsoft.com/delta/{workspaceId}/{lakehouseId}/api
 | Large | 16 | 112g | 16 | 112g | Heavy collect(), high partition count, large metadata |
 | XLarge | 32 | 224g | 32 | 224g | Very high volume data manipulation |
 
-**Valid memory values**:  28g, 56g, 112g, 200g, 224g, 400g  
+**Valid memory values**:  28g, 56g, 112g, 200g, 224g, 400g
 **Important**: Using invalid memory values (e.g., 4g, 2g) will result in validation errors.
 
 **Alternative configuration** (Small tier for light workloads):
@@ -181,7 +181,7 @@ https://onelake.table.fabric.microsoft.com/delta/{workspaceId}/{lakehouseId}/api
   "name": "analytical_session",
   "driverMemory": "28g",
   "driverCores": 4,
-  "executorMemory": "28g", 
+  "executorMemory": "28g",
   "executorCores": 4,
   "numExecutors": 2
 }
@@ -298,7 +298,7 @@ joined_data = bronze_data.alias("b").join(
 **Incremental Cross-Lakehouse Sync**:
 ```python
 new_data = spark.sql("""
-    SELECT * FROM source_lakehouse.default.table_name 
+    SELECT * FROM source_lakehouse.default.table_name
     WHERE date > (SELECT MAX(date) FROM target_lakehouse.default.table_name)
 """)
 new_data.write.mode("append").saveAsTable("target_lakehouse.default.table_name")

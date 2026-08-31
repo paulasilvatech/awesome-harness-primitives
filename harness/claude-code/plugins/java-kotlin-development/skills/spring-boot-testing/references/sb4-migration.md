@@ -82,10 +82,10 @@ Replaces TestRestTemplate (deprecated):
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @AutoConfigureRestTestClient
 class OrderIntegrationTest {
-  
+
   @Autowired
   private RestTestClient restClient;
-  
+
   @Test
   void shouldCreateOrder() {
     restClient

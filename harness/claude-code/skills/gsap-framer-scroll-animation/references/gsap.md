@@ -128,7 +128,7 @@ Most common for entrance animations: `"play none none none"` (animate once, don'
 
 **Copilot Chat Prompt:**
 ```
-Using GSAP ScrollTrigger.batch, animate all .card elements: 
+Using GSAP ScrollTrigger.batch, animate all .card elements:
 fade in from opacity 0, y 50 when they enter the viewport at 85%.
 Stagger 0.15s between cards. Animate once (no reverse).
 ```
@@ -159,7 +159,7 @@ Why `batch` over individual ScrollTriggers: batch groups elements entering toget
 **Copilot Chat Prompt:**
 ```
 GSAP scrub: animate .hero-image scale from 1 to 1.3 and opacity to 0
-as the user scrolls past .hero-section. 
+as the user scrolls past .hero-section.
 Perfectly synced to scroll position, no pin.
 ```
 
@@ -368,7 +368,7 @@ ScrollTrigger.create({
 
 **Copilot Chat Prompt:**
 ```
-GSAP: fixed progress bar at top of page. scaleX 0→1 linked to 
+GSAP: fixed progress bar at top of page. scaleX 0→1 linked to
 full page scroll, scrub 0.3 for slight smoothing. transformOrigin left center.
 ```
 
@@ -440,7 +440,7 @@ ScrollSmoother.create({
 
 **Copilot Chat Prompt:**
 ```
-GSAP: animate .counter elements from 0 to their data-target value 
+GSAP: animate .counter elements from 0 to their data-target value
 when they enter the viewport. Duration 2s, ease power2.out.
 Format with toLocaleString. Animate once.
 ```

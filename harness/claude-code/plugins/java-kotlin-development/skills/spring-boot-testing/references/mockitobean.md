@@ -11,10 +11,10 @@ Mocking dependencies in Spring Boot tests (replaces deprecated @MockBean in Spri
 ```java
 @WebMvcTest(OrderController.class)
 class OrderControllerTest {
-  
+
   @MockitoBean
   private OrderService orderService;
-  
+
   @MockitoBean
   private UserService userService;
 }
@@ -35,7 +35,7 @@ class OrderControllerTest {
 void shouldReturnOrder() {
   Order order = new Order(1L, "PENDING");
   given(orderService.findById(1L)).willReturn(order);
-  
+
   // Test code
 }
 ```
@@ -109,14 +109,14 @@ Use `@MockitoSpyBean` to wrap a real bean with Mockito.
 ```java
 @SpringBootTest
 class OrderServiceIntegrationTest {
-  
+
   @MockitoSpyBean
   private PaymentGatewayClient paymentClient;
-  
+
   @Test
   void shouldProcessOrder() {
     doReturn(true).when(paymentClient).processPayment(any());
-    
+
     // Test with real service but mocked payment client
   }
 }
@@ -129,7 +129,7 @@ Register a custom bean instance in the test context:
 ```java
 @SpringBootTest
 class OrderServiceTest {
-  
+
   @TestBean
   private PaymentGatewayClient paymentClient() {
     return new FakePaymentClient();
@@ -152,7 +152,7 @@ public class OrderProcessor {
 class OrderServiceTest {
   @MockitoBean
   private OrderProcessor orderProcessor;
-  
+
   @Test
   void shouldWorkWithPrototype() {
     given(orderProcessor.process()).willReturn("mocked");
@@ -170,16 +170,16 @@ class OrderServiceTest {
 class OrderServiceTest {
   @MockitoBean
   private OrderRepository orderRepository;
-  
+
   @Autowired
   private OrderService orderService;
-  
+
   @Test
   void shouldCreateOrder() {
     given(orderRepository.save(any())).willReturn(new Order(1L));
-    
+
     Long id = orderService.createOrder(new OrderRequest());
-    
+
     assertThat(id).isEqualTo(1L);
     verify(orderRepository).save(any(Order.class));
   }

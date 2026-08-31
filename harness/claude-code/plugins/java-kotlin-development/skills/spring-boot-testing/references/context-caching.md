@@ -73,7 +73,7 @@ logging.level.org.springframework.test.context.cache=DEBUG
  tests/
    unit/           # No context
    web/            # @WebMvcTest
-   repository/     # @DataJpaTest  
+   repository/     # @DataJpaTest
    integration/    # @SpringBootTest
 ```
 

@@ -35,11 +35,11 @@ function App() {
 // React 18 approach 2  fetch data with state + useEffect:
 function App({ userId }) {
   const [user, setUser] = useState(null);
-  
+
   useEffect(() => {
     fetchUser(userId).then(setUser);
   }, [userId]);
-  
+
   if (!user) return <Spinner />;
   return <User user={user} />;
 }
@@ -78,7 +78,7 @@ function Root() {
 function SearchResults() {
   const [results, setResults] = useState(null);
   const [query, setQuery] = useState('');
-  
+
   useEffect(() => {
     if (query) {
       search(query).then(setResults);
@@ -86,7 +86,7 @@ function SearchResults() {
       setResults(null);
     }
   }, [query]);
-  
+
   if (!results) return null;
   return <Results items={results} />;
 }
@@ -94,9 +94,9 @@ function SearchResults() {
 // React 19  use() with conditional
 function SearchResults() {
   const [query, setQuery] = useState('');
-  
+
   if (!query) return null;
-  
+
   const results = use(search(query)); // Only fetches if query is truthy
   return <Results items={results} />;
 }
@@ -154,11 +154,11 @@ Example refactor:
 // Before:
 function Post({ postId }) {
   const [post, setPost] = useState(null);
-  
+
   useEffect(() => {
     fetchPost(postId).then(setPost);
   }, [postId]);
-  
+
   if (!post) return <Spinner />;
   return <PostContent post={post} />;
 }

@@ -410,7 +410,7 @@ GET /workspaces/{workspaceId}/items/{lakehouseId}/jobs/instances/{jobInstanceId}
      Type: Daily, Time: 02:00 UTC
      Start: Now
      End: 1 year from now
-   
+
    Proceed? [Allow / Decline]
    ```
 6. On "Allow": POST schedule payload, return schedule ID
@@ -427,7 +427,7 @@ GET /workspaces/{workspaceId}/items/{lakehouseId}/jobs/instances/{jobInstanceId}
    Triggering on-demand refresh:
      Lakehouse ID: xyz-456-ghi
      Scope: Full lineage OR execution definition <id>
-   
+
    Do you want the default full-lineage refresh, or only `inventory_daily` through an execution definition? Proceed? [Allow / Decline]
    ```
 3. If the user chooses a subset, create or reuse an execution definition for `inventory_daily` and send its ID in `executionData`; otherwise POST `/instances` with no body. Capture the job ID from the Location header.
@@ -450,7 +450,7 @@ GET /workspaces/{workspaceId}/items/{lakehouseId}/jobs/instances/{jobInstanceId}
      2. If the MLVs are independent, create separate execution definitions and
         schedules within the lakehouse's 20-schedule limit
      3. If they're in separate lakehouses, create one schedule per lakehouse
-   
+
    Which would you prefer?
    ```
 2. If user picks option 1: Create one Daily schedule with `"times": ["02:00"]`
@@ -468,7 +468,7 @@ GET /workspaces/{workspaceId}/items/{lakehouseId}/jobs/instances/{jobInstanceId}
    ```
    Active schedule on lakehouse 'CustomerVoice':
      - ID: sched-111 (created 2025-10-15, type: Daily, time: 02:00)
-   
+
    Delete this schedule? [Allow / Decline]
    ```
 4. On "Allow": DELETE /schedules/{id}, confirm

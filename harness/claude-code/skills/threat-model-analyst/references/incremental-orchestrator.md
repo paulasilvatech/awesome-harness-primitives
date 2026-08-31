@@ -76,10 +76,10 @@ Use incremental analysis when ALL of these conditions are met:
    ```
    # Check for existing worktree
    git worktree list
-   
+
    # If a worktree for baseline_sha exists → reuse it
    # Verify: git -C {worktree_path} rev-parse HEAD
-   
+
    # If not → create one:
    git worktree add ../baseline-{baseline_sha_short} {baseline_sha}
    ```
@@ -124,17 +124,17 @@ For EACH component in inherited inventory:
 
   1. Check source_files existence at target commit:
      git ls-tree {target_sha} -- {each source_file}
-  
+
   2. If ALL source files missing:
      → change_status = "removed"
      → Mark all linked threats as "removed_with_component"
      → Mark all linked findings as "removed_with_component"
-  
+
   3. If source files exist, check for changes:
      git diff --stat {baseline_sha} {target_sha} -- {source_files}
-     
+
      If NO changes → change_status = "unchanged"
-     
+
      If changes exist, check if security-relevant:
        Read the diff: git diff {baseline_sha} {target_sha} -- {source_files}
        Look for changes in:
@@ -144,10 +144,10 @@ For EACH component in inherited inventory:
        - Command execution patterns (shell exec, process spawn)
        - Config values (TLS settings, CORS, security headers)
        - Dependencies (new packages, version changes)
-       
+
        If security-relevant → change_status = "modified"
        If cosmetic only (whitespace, comments, logging, docs) → change_status = "unchanged"
-  
+
   4. If files moved or renamed:
      git log --follow --diff-filter=R {baseline_sha}..{target_sha} -- {source_files}
      → change_status = "restructured"
@@ -383,7 +383,7 @@ Same schema as single analysis, with additional fields:
   "baseline_report": "threat-model-20260309-174425",
   "baseline_commit": "2dd84ab",
   "target_commit": "abc1234",
-  
+
   "components": [
     {
       "id": "McpHost",
@@ -391,7 +391,7 @@ Same schema as single analysis, with additional fields:
       ...existing fields...
     }
   ],
-  
+
   "threats": [
     {
       "id": "T01.S",
@@ -399,7 +399,7 @@ Same schema as single analysis, with additional fields:
       ...existing fields...
     }
   ],
-  
+
   "findings": [
     {
       "id": "FIND-01",
@@ -407,7 +407,7 @@ Same schema as single analysis, with additional fields:
       ...existing fields...
     }
   ],
-  
+
   "metrics": {
     ...existing fields...,
     "status_summary": {
@@ -552,7 +552,7 @@ Generate a self-contained HTML file that visualizes the comparison. All data com
 <div class="metrics-bar">
   Components: {{old_count}} → {{new_count}} (±N)
   Trust Boundaries: {{old_boundaries}} → {{new_boundaries}} (±N)
-  Threats: {{old_count}} → {{new_count}} (±N)  
+  Threats: {{old_count}} → {{new_count}} (±N)
   Findings: {{old_count}} → {{new_count}} (±N)
   Code Changes: {{COMMIT_COUNT}} commits, {{PR_COUNT}} PRs
 </div>

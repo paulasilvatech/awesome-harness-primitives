@@ -38,6 +38,7 @@ try:
         HOOKS_ROOT,
         MARKETPLACE_PATH,
         PLUGINS_ROOT,
+        PROJECT_SETTINGS_PATH,
         REPO_ROOT,
         RULES_ROOT,
         SKILLS_ROOT,
@@ -60,6 +61,7 @@ except ModuleNotFoundError:  # pragma: no cover - supports python3 -m invocation
         HOOKS_ROOT,
         MARKETPLACE_PATH,
         PLUGINS_ROOT,
+        PROJECT_SETTINGS_PATH,
         REPO_ROOT,
         RULES_ROOT,
         SKILLS_ROOT,
@@ -95,6 +97,8 @@ HOOK_EVENTS = frozenset(
         "WorktreeRemove",
         "PreCompact",
         "PostCompact",
+        "PreModelSwitch",
+        "PostModelSwitch",
         "Elicitation",
         "ElicitationResult",
         "SessionEnd",
@@ -472,6 +476,15 @@ def run(report: Report) -> None:
     for path in sorted(HOOKS_ROOT.glob("*/hooks.json")):
         validate_hooks_document(report, path, plugin_scoped=False)
         report.counts["hooks"] += 1
+    if PROJECT_SETTINGS_PATH.is_file():
+        validate_hooks_document(
+            report,
+            PROJECT_SETTINGS_PATH,
+            plugin_scoped=False,
+        )
+        report.counts["project-settings"] += 1
+    else:
+        report.error(PROJECT_SETTINGS_PATH, "generated project settings are missing")
     for plugin_dir in sorted(p for p in PLUGINS_ROOT.iterdir() if p.is_dir()):
         validate_plugin(report, plugin_dir)
     validate_marketplace(report)

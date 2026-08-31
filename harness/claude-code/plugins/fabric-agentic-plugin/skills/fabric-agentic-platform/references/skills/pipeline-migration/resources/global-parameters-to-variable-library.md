@@ -173,7 +173,7 @@ def b64(obj: dict) -> str:
 def convert_synapse_global_params(synapse_params: dict) -> dict:
     """
     Convert Synapse global parameters to Fabric Variable Library variables.json content.
-    
+
     Returns:
         variables.json content dict
     """
@@ -242,13 +242,13 @@ def create_variable_library(
 ) -> str:
     """
     Create a Fabric Variable Library from Synapse global parameters.
-    
+
     Args:
         synapse_params: Dict from Synapse ARM API `properties.globalParameters`
         workspace_id: Fabric workspace GUID
         library_name: Display name for the Variable Library item
         additional_value_sets: Optional list of extra value set names (e.g. ["dev","test","prod"])
-    
+
     Returns:
         Created item ID (GUID)
     """

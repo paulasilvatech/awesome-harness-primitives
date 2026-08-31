@@ -305,7 +305,7 @@ Present these options to the user:
 > Your new Flex Consumption app `<NEW_APP_NAME>` has been created and configured. Now we need to deploy your function code. How would you like to proceed?
 >
 > 1. **Update CI/CD pipeline** — I'll help you update your Azure Pipelines or GitHub Actions workflow to target the new app
-> 2. **Deploy from local project** — I'll run `func azure functionapp publish <NEW_APP_NAME>` from your project directory  
+> 2. **Deploy from local project** — I'll run `func azure functionapp publish <NEW_APP_NAME>` from your project directory
 > 3. **Deploy existing package** — I'll deploy the package we downloaded earlier from the original app
 
 ---
@@ -357,7 +357,7 @@ DEFAULT_HOST=$(az functionapp show --name <NEW_APP_NAME> --resource-group <RESOU
 HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" "https://$DEFAULT_HOST")
 echo "App responded with HTTP $HTTP_STATUS"
 
-# Expected: 2xx or 401/404 (means the host is up). 
+# Expected: 2xx or 401/404 (means the host is up).
 # If 503 or connection refused → the app failed to start. Check logs:
 #   az functionapp log tail --name <NEW_APP_NAME> --resource-group <RESOURCE_GROUP>
 ```

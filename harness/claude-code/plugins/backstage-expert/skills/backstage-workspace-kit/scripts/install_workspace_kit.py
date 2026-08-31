@@ -14,6 +14,7 @@ from dataclasses import asdict, dataclass
 from pathlib import Path, PurePosixPath
 
 PLUGIN_ROOT = Path(__file__).resolve().parents[3]
+COPILOT_SOURCE_ROOT = PLUGIN_ROOT / "copilot-components"
 STATE_RELATIVE = Path(".github/.backstage-expert-workspace-kit.json")
 PROFILE_FILES = {
     "adopter": {
@@ -103,14 +104,14 @@ def safe_destination(target: Path, relative: str) -> Path:
 
 
 def checked_source(relative: str) -> Path:
-    source = PLUGIN_ROOT / relative
+    source = COPILOT_SOURCE_ROOT / relative
     if source.is_symlink():
         raise ValueError(f"source symlink is not allowed: {source}")
     if not source.is_file():
         raise FileNotFoundError(f"workspace-kit source does not exist: {source}")
     resolved = source.resolve()
     try:
-        resolved.relative_to(PLUGIN_ROOT.resolve())
+        resolved.relative_to(COPILOT_SOURCE_ROOT.resolve())
     except ValueError as exc:
         raise ValueError(f"source escapes plugin root: {source}") from exc
     return resolved
@@ -353,7 +354,7 @@ def print_report(
 
 
 def validate_plugin_root() -> None:
-    manifest = PLUGIN_ROOT / "plugin.json"
+    manifest = COPILOT_SOURCE_ROOT / "plugin.json"
     if not manifest.is_file():
         raise FileNotFoundError(f"plugin manifest not found: {manifest}")
     data = json.loads(manifest.read_text(encoding="utf-8"))

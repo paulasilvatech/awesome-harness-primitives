@@ -114,7 +114,7 @@ class ExampleTool
 {
     /**
      * Performs a greeting with the provided name.
-     * 
+     *
      * @param string $name The name to greet
      * @return string A greeting message
      */
@@ -123,7 +123,7 @@ class ExampleTool
     {
         return "Hello, {$name}!";
     }
-    
+
     /**
      * Performs arithmetic calculations.
      */
@@ -138,7 +138,7 @@ class ExampleTool
             'add' => $a + $b,
             'subtract' => $a - $b,
             'multiply' => $a * $b,
-            'divide' => $b != 0 ? $a / $b : 
+            'divide' => $b != 0 ? $a / $b :
                 throw new \InvalidArgumentException('Division by zero'),
             default => throw new \InvalidArgumentException('Invalid operation')
         };
@@ -250,7 +250,7 @@ class PromptGenerator
             ]
         ];
     }
-    
+
     /**
      * Generates documentation prompt.
      */
@@ -282,43 +282,43 @@ use App\Tools\ExampleTool;
 class ToolsTest extends TestCase
 {
     private ExampleTool $tool;
-    
+
     protected function setUp(): void
     {
         $this->tool = new ExampleTool();
     }
-    
+
     public function testGreet(): void
     {
         $result = $this->tool->greet('World');
         $this->assertSame('Hello, World!', $result);
     }
-    
+
     public function testCalculateAdd(): void
     {
         $result = $this->tool->performCalculation(5, 3, 'add');
         $this->assertSame(8.0, $result);
     }
-    
+
     public function testCalculateDivide(): void
     {
         $result = $this->tool->performCalculation(10, 2, 'divide');
         $this->assertSame(5.0, $result);
     }
-    
+
     public function testCalculateDivideByZero(): void
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Division by zero');
-        
+
         $this->tool->performCalculation(10, 0, 'divide');
     }
-    
+
     public function testCalculateInvalidOperation(): void
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid operation');
-        
+
         $this->tool->performCalculation(5, 3, 'modulo');
     }
 }

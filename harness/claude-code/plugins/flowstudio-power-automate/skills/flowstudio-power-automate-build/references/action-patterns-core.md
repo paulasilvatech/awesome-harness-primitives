@@ -124,7 +124,7 @@ Types: `"Integer"`, `"Float"`, `"Boolean"`, `"String"`, `"Array"`, `"Object"`
 }
 ```
 
-Comparison operators: `equals`, `not`, `greater`, `greaterOrEquals`, `less`, `lessOrEquals`, `contains`  
+Comparison operators: `equals`, `not`, `greater`, `greaterOrEquals`, `less`, `lessOrEquals`, `contains`
 Logical: `and: [...]`, `or: [...]`
 
 ---

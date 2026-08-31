@@ -15,10 +15,10 @@ Testing REST clients in isolation with MockRestServiceServer.
 ```java
 @RestClientTest(WeatherService.class)
 class WeatherServiceTest {
-  
+
   @Autowired
   private WeatherService weatherService;
-  
+
   @Autowired
   private MockRestServiceServer server;
 }
@@ -29,13 +29,13 @@ class WeatherServiceTest {
 ```java
 @RestClientTest(WeatherService.class)
 class WeatherServiceTest {
-  
+
   @Autowired
   private WeatherService weatherService;
-  
+
   @Autowired
   private MockRestServiceServer server;
-  
+
   @Test
   void shouldFetchWeather() {
     // Given
@@ -45,10 +45,10 @@ class WeatherServiceTest {
       .andRespond(withSuccess()
         .contentType(MediaType.APPLICATION_JSON)
         .body("{\"temperature\": 22, \"condition\": \"Sunny\"}"));
-    
+
     // When
     Weather weather = weatherService.getCurrentWeather("Berlin");
-    
+
     // Then
     assertThat(weather.getTemperature()).isEqualTo(22);
     assertThat(weather.getCondition()).isEqualTo("Sunny");
@@ -61,21 +61,21 @@ class WeatherServiceTest {
 ```java
 @RestClientTest(WeatherService.class)
 class WeatherServiceTest {
-  
+
   @Autowired
   private WeatherService weatherService;
-  
+
   @Autowired
   private MockRestServiceServer server;
-  
+
   @Test
   void shouldFetchWeatherWithRestClient() {
     server.expect(requestTo("https://api.weather.com/v1/current"))
       .andRespond(withSuccess()
         .body("{\"temperature\": 22}"));
-    
+
     Weather weather = weatherService.getCurrentWeather("Berlin");
-    
+
     assertThat(weather.getTemperature()).isEqualTo(22);
   }
 }
@@ -100,7 +100,7 @@ server.expect(requestTo(matchesPattern("https://api.example.com/users/\\d+")))
 ### HTTP Method
 
 ```java
-server.expect(ExpectedCount.once(), 
+server.expect(ExpectedCount.once(),
   requestTo("https://api.example.com/users"))
   .andExpect(method(HttpMethod.POST))
   .andRespond(withCreatedEntity(URI.create("/users/1")));
@@ -171,12 +171,12 @@ server.expect(requestTo("/users"))
 ```java
 @Test
 void shouldCallApi() {
-  server.expect(ExpectedCount.once(), 
+  server.expect(ExpectedCount.once(),
     requestTo("https://api.example.com/data"))
     .andRespond(withSuccess());
-  
+
   service.fetchData();
-  
+
   server.verify(); // Verify all expectations met
 }
 ```
@@ -189,7 +189,7 @@ void shouldHandleMultipleCalls() {
   server.expect(ExpectedCount.manyTimes(),
     requestTo(matchesPattern("/api/.*")))
     .andRespond(withSuccess());
-  
+
   // Multiple calls allowed
   service.callApi();
   service.callApi();

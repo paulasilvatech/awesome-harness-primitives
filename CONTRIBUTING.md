@@ -1,8 +1,15 @@
 # Contributing
 
 Repository governance defines source precedence and freshness. `docs/COPILOT-HARNESS-SPEC.md` is the
-authority for runtime format, while `docs/HARNESS-VALIDATION.md` records tested versions, dates,
-divergences, and unverified behavior. Run the validator before opening a PR:
+GitHub Copilot runtime authority, while `docs/HARNESS-VALIDATION.md` records its tested versions, dates,
+divergences, and unverified behavior. The generated Claude Code companion uses
+`docs/CLAUDE-CODE-HARNESS-SPEC.md` and `docs/CLAUDE-CODE-VALIDATION.md`.
+
+Author reusable primitive content only under `harness/github-copilot/`. Do not hand-edit generated
+Claude primitives under `harness/claude-code/{agents,rules,skills,commands,hooks,plugins}/`; run the
+converter after canonical changes.
+
+Run the Copilot validator before opening a PR:
 
 ```sh
 python3 harness/github-copilot/scripts/validate_primitives.py
@@ -28,6 +35,23 @@ python3 harness/github-copilot/scripts/sync_plugin_components.py --check
 python3 harness/github-copilot/scripts/sync_installed_primitives.py --check
 ```
 
+Regenerate and validate the Claude Code harness after every canonical primitive change:
+
+```sh
+python3 harness/claude-code/scripts/convert_from_copilot.py
+python3 harness/claude-code/scripts/validate_primitives.py --strict
+python3 harness/claude-code/scripts/generate_catalog.py
+python3 harness/github-copilot/scripts/sync_installed_primitives.py \
+  --manifest harness/claude-code/manifests/installed-primitives.json
+```
+
+Before delivery, rerun the same commands with `convert_from_copilot.py --check`,
+`generate_catalog.py --check`, and installed-copy `--check`. When Claude Code is installed, also run:
+
+```sh
+claude plugin validate --strict .claude-plugin/marketplace.json
+```
+
 ## Body structure shared by all types
 
 Frontmatter rules differ per type, but every primitive answers the same six questions. The templates in [docs/templates/](docs/templates) encode this structure, and the validator reports drift at `INFO` — advisory only, since the CLI never validates a primitive body.
@@ -41,7 +65,7 @@ Frontmatter rules differ per type, but every primitive answers the same six ques
 | Output | What does it return? | `## Output Format` | Constrains matching work | `## Output template` | `## Output Format` |
 | Verification | How do we know it worked? | `## Definition of Done` | `## Checklist Before Opening a PR` | `## Quality gate` | `## Definition of Done` |
 
-Cross-primitive references use the **name and type**, never a relative path: a primitive is installed standalone into `.github/…` or `~/.copilot/…`, so `../` targets do not survive installation and nothing resolves them at runtime. Only a skill's own bundled resources (`scripts/`, `references/`, `assets/`) may be linked relatively. Never reference a `*.prompt.md` file from a CLI primitive — prompt files are a VS Code feature the Copilot CLI does not discover; convert the prompt to a user-invocable skill instead.
+Cross-primitive references use the **name and type**, never a relative path: a primitive can be installed standalone into `.github/…`, `.claude/…`, or a user-scoped directory, so `../` targets do not survive installation and nothing resolves them at runtime. Only a skill's own bundled resources (`scripts/`, `references/`, `assets/`) may be linked relatively. Never reference a `*.prompt.md` file from a Copilot CLI primitive; prompt files are a VS Code feature. The Claude converter publishes prompt content as explicit command files and reports unsupported runtime fields or tools.
 
 ## Current-platform claims
 
@@ -124,6 +148,9 @@ the spec and dependent guidance. Never refresh a date without repeating the chec
 
 - `harness/github-copilot/manifests/installed-primitives.json` declares canonical sources that this repository installs under
   `.github/` or publishes as compatibility guidance.
+- `harness/claude-code/manifests/installed-primitives.json` declares generated Claude sources installed as
+  root `CLAUDE.md` and selected `.claude/` customizations.
 - Run `python3 harness/github-copilot/scripts/sync_installed_primitives.py` after changing a declared source.
+- Pass `--manifest harness/claude-code/manifests/installed-primitives.json` for Claude installed copies.
 - Never resolve drift by editing both source and target; regenerate, then run `--check`.
 - Plugin-local agents and skills remain owned by `sync_plugin_components.py`.

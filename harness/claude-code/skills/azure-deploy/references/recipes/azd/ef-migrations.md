@@ -125,7 +125,7 @@ Server=tcp:{server}.database.windows.net,1433;Database={database};Authentication
 public class ApplicationDbContextFactory : IDesignTimeDbContextFactory<ApplicationDbContext> {
     public ApplicationDbContext CreateDbContext(string[] args) {
         var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
-        var connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING") 
+        var connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING")
             ?? args.FirstOrDefault() ?? "Server=(localdb)\\mssqllocaldb;Database=MyDb;Trusted_Connection=True;";
         optionsBuilder.UseSqlServer(connectionString);
         return new ApplicationDbContext(optionsBuilder.Options);

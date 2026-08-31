@@ -1,16 +1,17 @@
 # Awesome Harness Primitives
 
-[![Validate primitives](https://github.com/paulasilvatech/copilot-primitives/actions/workflows/validate-primitives.yml/badge.svg)](https://github.com/paulasilvatech/copilot-primitives/actions/workflows/validate-primitives.yml)
+[![Validate primitives](https://github.com/paulasilvatech/awesome-harness-primitives/actions/workflows/validate-primitives.yml/badge.svg)](https://github.com/paulasilvatech/awesome-harness-primitives/actions/workflows/validate-primitives.yml)
 
-A curated, spec-validated collection of GitHub Copilot CLI primitives for the Copilot CLI harness. The generated root catalog carries the current counts for agents, instructions, skills, VS Code prompts, plugins, and reusable hook packages. Self-contained plugins add plugin-owned primitives; the generated content audit reports both scopes without double-counting generated copies.
+A curated, spec-validated collection of reusable harness primitives. GitHub Copilot content is canonical under `harness/github-copilot/`; compatible content is deterministically converted into a Claude Code harness under `harness/claude-code/`. Both harnesses have generated catalogs, validators, drift checks, self-contained plugins, and repository-installed customization manifests.
 
-For the complete generated inventory, concise descriptions, and use cases, see [CATALOG.md](CATALOG.md). The [primitive content audit](docs/PRIMITIVE-CONTENT-AUDIT.md) separates structural coverage from semantic freshness review, the [capability audit](docs/PRIMITIVE-CAPABILITIES.md) tracks agent and prompt tool policy, and the [redundancy audit](docs/PRIMITIVE-REDUNDANCY.md) blocks unclassified overlap. `docs/COPILOT-HARNESS-SPEC.md` is the canonical format and discovery reference, and [docs/templates/](docs/templates) holds the authoring templates for each primitive type.
+For complete inventories, see the generated [GitHub Copilot catalog](CATALOG.md) and [Claude Code catalog](CLAUDE-CODE-CATALOG.md). The [primitive content audit](docs/PRIMITIVE-CONTENT-AUDIT.md) separates structural coverage from semantic freshness review, the [capability audit](docs/PRIMITIVE-CAPABILITIES.md) tracks agent and prompt tool policy, and the [redundancy audit](docs/PRIMITIVE-REDUNDANCY.md) blocks unclassified overlap. Runtime contracts live in [the Copilot harness spec](docs/COPILOT-HARNESS-SPEC.md) and [the Claude Code harness spec](docs/CLAUDE-CODE-HARNESS-SPEC.md); [docs/templates/](docs/templates) holds canonical authoring templates.
 
 ## Repository layout
 
 ```text
 .
 ├── CATALOG.md                     # Generated complete primitive inventory
+├── CLAUDE-CODE-CATALOG.md         # Generated Claude Code inventory
 ├── harness/github-copilot/
 │   ├── agents/                  # Source *.agent.md files
 │   ├── instructions/            # Source *.instructions.md files
@@ -32,7 +33,19 @@ For the complete generated inventory, concise descriptions, and use cases, see [
 │       ├── sync_installed_primitives.py
 │       ├── sync_plugin_components.py
 │       └── validate_primitives.py
+├── harness/claude-code/
+│   ├── agents/                    # Generated Claude Code subagents
+│   ├── rules/                     # Generated path-scoped rules
+│   ├── skills/                    # Generated Claude Code skills
+│   ├── commands/                  # Generated legacy-compatible commands
+│   ├── plugins/                   # Generated self-contained Claude plugins
+│   ├── hooks/                     # Generated reusable hook packages
+│   ├── manifests/                 # Installed Claude copy manifest
+│   └── scripts/                   # Converter, validator, and catalog generator
+├── .claude-plugin/marketplace.json # Generated Claude Code marketplace
 └── docs/
+    ├── CLAUDE-CODE-HARNESS-SPEC.md
+    ├── CLAUDE-CODE-VALIDATION.md
     ├── COPILOT-HARNESS-SPEC.md
     ├── PRIMITIVE-CAPABILITIES.md
     ├── PRIMITIVE-CONTENT-AUDIT.md
@@ -40,7 +53,7 @@ For the complete generated inventory, concise descriptions, and use cases, see [
     └── templates/               # Authoring templates per primitive type
 ```
 
-## Primitive types
+## GitHub Copilot primitive types
 
 | Type | Source in this repo | CLI discovery path | Format |
 | --- | --- | --- | --- |
@@ -55,6 +68,19 @@ Every type above is loaded by the Copilot CLI harness except **prompts**: agents
 Host do not use prompt files. They are kept here for VS Code users — see
 [the prompt contract](docs/templates/README.md#prompt) for when to convert one into a skill, which works
 across skills-compatible surfaces.
+
+## Claude Code generated types
+
+| Type | Generated source | Discovery path | Derived from |
+| --- | --- | --- | --- |
+| Subagents | `harness/claude-code/agents/*.md` | `.claude/agents/**/*.md`, `~/.claude/agents/**/*.md`, or `<plugin>/agents/**/*.md` | Copilot agents |
+| Rules | `harness/claude-code/rules/*.md` | `CLAUDE.md`, `.claude/rules/**/*.md`, or `~/.claude/CLAUDE.md` | Copilot instructions |
+| Skills | `harness/claude-code/skills/<name>/SKILL.md` | `.claude/skills/<name>/SKILL.md`, `~/.claude/skills/`, or `<plugin>/skills/` | Copilot skills |
+| Commands | `harness/claude-code/commands/*.md` | `.claude/commands/*.md` or `<plugin>/commands/*.md` | VS Code prompts |
+| Plugins | `harness/claude-code/plugins/<name>/.claude-plugin/plugin.json` | Registered marketplace or `--plugin-dir` | Copilot plugins |
+| Hooks | `harness/claude-code/hooks/<name>/hooks.json` | `.claude/settings.json` or `<plugin>/hooks/hooks.json` | Copilot hooks |
+
+Claude Code custom commands remain supported, but current first-party guidance groups them with skills and recommends skills for new reusable procedures. See [the Claude Code harness spec](docs/CLAUDE-CODE-HARNESS-SPEC.md) for conversion boundaries and dated evidence.
 
 ## Repository governance
 
@@ -72,7 +98,30 @@ Do not hand-edit a declared `.github/` mirror. Runtime and first-party documenta
 with dates in `docs/HARNESS-VALIDATION.md`; stable schema and discovery rules belong in
 `docs/COPILOT-HARNESS-SPEC.md`.
 
+The Claude Code harness is generated from those same canonical sources:
+
+```sh
+python3 harness/claude-code/scripts/convert_from_copilot.py
+python3 harness/github-copilot/scripts/sync_installed_primitives.py \
+  --manifest harness/claude-code/manifests/installed-primitives.json
+```
+
+Do not hand-edit generated files under `harness/claude-code/{agents,rules,skills,commands,hooks,plugins}/`, `.claude/`, or root `CLAUDE.md`. Claude-specific runtime evidence is recorded in `docs/CLAUDE-CODE-VALIDATION.md`.
+
+The generated `.claude/settings.json` activates the same four repository hooks already enabled for Copilot: dependency licensing, governance audit, secrets scanning, and session logging. Intrusive hooks disabled in `.github/hooks/` remain disabled for Claude Code.
+
 ## Install and usage
+
+### Claude Code marketplace
+
+Add the repository marketplace and install a generated Claude Code plugin from an interactive Claude Code session:
+
+```text
+/plugin marketplace add paulasilvatech/copilot-primitives
+/plugin install <name>@copilot-primitives-claude
+```
+
+Generated plugin packages are self-contained under `harness/claude-code/plugins/`. The marketplace and packages can be validated locally with Claude Code before publishing.
 
 ### Plugins
 
@@ -207,6 +256,17 @@ python3 harness/github-copilot/scripts/sync_plugin_components.py --check
 python3 harness/github-copilot/scripts/sync_installed_primitives.py --check
 ```
 
+Check the generated Claude Code harness and its installed copies with:
+
+```sh
+python3 harness/claude-code/scripts/convert_from_copilot.py --check
+python3 harness/claude-code/scripts/validate_primitives.py --strict
+python3 harness/claude-code/scripts/generate_catalog.py --check
+python3 harness/github-copilot/scripts/sync_installed_primitives.py \
+  --manifest harness/claude-code/manifests/installed-primitives.json --check
+claude plugin validate --strict .claude-plugin/marketplace.json
+```
+
 ## Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md). For new primitives, start from the [authoring templates](docs/templates/README.md). The canonical authority for primitive formats remains [docs/COPILOT-HARNESS-SPEC.md](docs/COPILOT-HARNESS-SPEC.md).
+See [CONTRIBUTING.md](CONTRIBUTING.md). For new primitives, start from the [authoring templates](docs/templates/README.md). GitHub Copilot content remains canonical; regenerate the Claude Code harness rather than authoring duplicate primitive bodies.

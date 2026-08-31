@@ -77,7 +77,7 @@ assertThat(orderService.findById(999L)).isEmpty();
 @Test
 void shouldThrowException() {
   OrderService service = new OrderService();
-  
+
   assertThatThrownBy(() -> service.findById(999L))
     .isInstanceOf(OrderNotFoundException.class)
     .hasMessage("Order 999 not found")
@@ -102,15 +102,15 @@ Create domain-specific assertions for reusable test code:
 
 ```java
 public class OrderAssert extends AbstractAssert<OrderAssert, Order> {
-  
+
   public static OrderAssert assertThat(Order actual) {
     return new OrderAssert(actual);
   }
-  
+
   private OrderAssert(Order actual) {
     super(actual, OrderAssert.class);
   }
-  
+
   public OrderAssert isPending() {
     isNotNull();
     if (!"PENDING".equals(actual.getStatus())) {
@@ -118,7 +118,7 @@ public class OrderAssert extends AbstractAssert<OrderAssert, Order> {
     }
     return this;
   }
-  
+
   public OrderAssert hasTotal(BigDecimal expected) {
     isNotNull();
     if (!expected.equals(actual.getTotal())) {
@@ -145,7 +145,7 @@ Collect multiple failures before failing:
 @Test
 void shouldValidateOrder() {
   Order order = orderService.findById(1L);
-  
+
   SoftAssertions.assertSoftly(softly -> {
     softly.assertThat(order.getId()).isEqualTo(1L);
     softly.assertThat(order.getStatus()).isEqualTo("PENDING");
@@ -172,14 +172,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 class OrderServiceTest {
-  
+
   @Autowired
   private OrderService orderService;
-  
+
   @Test
   void shouldCreateOrder() {
     Order order = orderService.create(new OrderRequest("Product", 2));
-    
+
     assertThat(order)
       .isNotNull()
       .extracting(Order::getId, Order::getStatus)

@@ -15,10 +15,10 @@ This file contains WebFetch URLs for fetching current information from platform.
 
 | Topic           | URL                                                                          | Extraction Prompt                                                               |
 | --------------- | ---------------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
-| Models Overview | `https://platform.claude.com/docs/en/about-claude/models/overview.md`        | "Extract current model IDs, context windows, and pricing for all Claude models" |
+| Models Overview | `https://platform.claude.com/docs/en/models/overview.md`        | "Extract current model IDs, context windows, and pricing for all Claude models" |
 | Migration Guide | `https://platform.claude.com/docs/en/about-claude/models/migration-guide.md` | "Extract breaking changes, deprecated parameters, and per-model migration steps when moving to a newer Claude model" |
-| Introducing Claude Fable 5 | `https://platform.claude.com/docs/en/about-claude/models/introducing-claude-fable-5.md` | "Extract capabilities, API changes, and availability stages for Claude Fable 5 and Claude Mythos 5" |
-| Pricing         | `https://platform.claude.com/docs/en/pricing.md`                             | "Extract current pricing per million tokens for input and output"               |
+| Introducing Claude Fable 5 | `https://platform.claude.com/docs/en/models/fable-5/introducing-claude-fable-5-and-claude-mythos-5.md` | "Extract capabilities, API changes, and availability stages for Claude Fable 5 and Claude Mythos 5" |
+| Pricing         | `https://platform.claude.com/docs/en/about-claude/pricing.md`                             | "Extract current pricing per million tokens for input and output"               |
 
 ### Core Features
 

@@ -1,0 +1,9 @@
+Open Horizons GitHub Copilot Plugin
+Copyright (c) 2026 Open Horizons Contributors
+
+This package contains original Open Horizons integration material and generated
+copies of shared Copilot Primitives components. Shared-source ownership is
+recorded in harness/github-copilot/manifests/plugin-sources.json.
+
+External MCP implementations referenced by mcp.json are resolved at runtime and
+are not redistributed in this package. See THIRD_PARTY_NOTICES.md.

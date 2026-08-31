@@ -206,7 +206,7 @@ claude mcp add penpot -t http http://localhost:4401/mcp
    ```bash
    # Test the SSE endpoint
    curl http://localhost:4401/sse
-   
+
    # Test the MCP endpoint
    curl http://localhost:4401/mcp
    ```

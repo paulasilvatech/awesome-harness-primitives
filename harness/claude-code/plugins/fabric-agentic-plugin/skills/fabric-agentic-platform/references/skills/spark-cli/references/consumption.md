@@ -92,7 +92,7 @@ az rest --method get --resource "$FABRIC_RESOURCE_SCOPE" --url "$FABRIC_API_URL/
 read -p "Workspace ID: " workspaceId
 
 # List lakehouses in workspace
-az rest --method get --resource "$FABRIC_RESOURCE_SCOPE" --url "$FABRIC_API_URL/workspaces/$workspaceId/items?type=Lakehouse" --query "value[].{name:displayName, id:id}" --output table  
+az rest --method get --resource "$FABRIC_RESOURCE_SCOPE" --url "$FABRIC_API_URL/workspaces/$workspaceId/items?type=Lakehouse" --query "value[].{name:displayName, id:id}" --output table
 read -p "Lakehouse ID: " lakehouseId
 ```
 
@@ -120,8 +120,8 @@ if [[ -z "$sessionId" ]]; then
 }
 EOF
     sessionId=$(az rest --method post --resource "$FABRIC_RESOURCE_SCOPE" --url "$FABRIC_API_URL/workspaces/$workspaceId/lakehouses/$lakehouseId/$LIVY_API_PATH/sessions" --body @/tmp/body.json --query "id" --output tsv)
-    
-    echo "⏳ Waiting for starter pool session to be ready..." 
+
+    echo "⏳ Waiting for starter pool session to be ready..."
     # With starter pools, this should be 3-5 seconds
     timeout=30  # Reduced from 90s since starter pools are fast
     while [ $timeout -gt 0 ]; do

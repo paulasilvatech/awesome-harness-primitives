@@ -1,6 +1,6 @@
 # GitHub Copilot Harness — Canonical Primitive Specification
 
-Authoritative reference for this repository. Every rule below is verified against **one or both** of:
+Authoritative GitHub Copilot reference for this repository. The generated Claude Code companion harness is specified separately in [CLAUDE-CODE-HARNESS-SPEC.md](CLAUDE-CODE-HARNESS-SPEC.md). Every rule below is verified against **one or both** of:
 
 - **BUNDLE** — the installed GitHub Copilot CLI runtime (`~/.copilot/pkg/<platform>/<version>/prebuilds/<platform>/runtime.node`,
   `app.js`, `definitions/*.agent.yaml`, `builtin-skills/*/SKILL.md`). Rust source paths recovered from the binary
@@ -480,4 +480,14 @@ python3 harness/github-copilot/scripts/audit_primitive_redundancy.py --check
 python3 harness/github-copilot/scripts/generate_catalog.py --check
 python3 harness/github-copilot/scripts/sync_plugin_components.py --check
 python3 harness/github-copilot/scripts/sync_installed_primitives.py --check
+```
+
+Canonical Copilot primitive changes also require regenerating and validating the companion Claude Code harness:
+
+```sh
+python3 harness/claude-code/scripts/convert_from_copilot.py --check
+python3 harness/claude-code/scripts/validate_primitives.py --strict
+python3 harness/claude-code/scripts/generate_catalog.py --check
+python3 harness/github-copilot/scripts/sync_installed_primitives.py \
+  --manifest harness/claude-code/manifests/installed-primitives.json --check
 ```

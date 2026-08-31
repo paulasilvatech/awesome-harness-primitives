@@ -98,7 +98,7 @@ df = spark.read.format("csv") \
 ```sql
 %%sql
 -- Query Delta table directly
-SELECT 
+SELECT
     customer_id,
     COUNT(*) as order_count,
     SUM(amount) as total_amount
@@ -140,7 +140,7 @@ from pyspark.sql.functions import col
 
 # Get last processed watermark
 last_watermark = spark.sql("""
-    SELECT MAX(processed_timestamp) as watermark 
+    SELECT MAX(processed_timestamp) as watermark
     FROM silver_orders
 """).collect()[0]["watermark"]
 
@@ -176,7 +176,7 @@ spark.sql("""
 # Insert new versions
 spark.sql("""
     INSERT INTO dim_customer
-    SELECT 
+    SELECT
         customer_id,
         name,
         email,

@@ -4,7 +4,7 @@ This document describes the modeling guidelines that should be applied when deve
 
 ## Core Principles
 
-- **Consistency Over Perfection** - When working with an existing semantic model, first analyze its established development patterns and align your work with them. 
+- **Consistency Over Perfection** - When working with an existing semantic model, first analyze its established development patterns and align your work with them.
 - **Star schema modeling** - When modeling data, always default to a star schema: use a single fact table with denormalized dimension tables, clear one-column relationship keys, and one-to-many relationships. Only deviate if there is a strong, explicit requirement that a star schema cannot satisfy. Avoid snowflake dimensions.
 - **Explicit measures** - Always use explicit measures instead of relying on implicit aggregations. When the measure aggregates a base column (e.g., `SUM('T'[Col])`, `AVERAGE`, `COUNT`), also set `isHidden = true` on that base column. Also suggest enabling model property `discourageImplicitMeasures`
 - **Lean models** - Only include columns and tables that are needed for analysis. Remove unused objects to keep the model small and fast.
@@ -84,7 +84,7 @@ Consider the following table to better understand partition types and storage mo
 - Leave foreign key columns visible - always hide them.
 - Keep columns that are not referenced by any measure, relationship, or report visual - they waste memory and slow refresh.
 - Exceed ~30 visible columns per table - this usually signals a denormalization issue. Consider splitting into proper star schema dimensions.
-  
+
 ## Calculated Columns
 
 Calculated columns are evaluated during data refresh for every row. Use them sparingly.
@@ -153,7 +153,7 @@ Calculated columns are evaluated during data refresh for every row. Use them spa
 - Hide foreign key columns on the "many" side of relationships (`IsHidden = true`)
 
 **DON'T:**
-- Use Composite keys. They are NOT supported. 
+- Use Composite keys. They are NOT supported.
 - Do NOT create surrogate keys on Fact tables (memory waste)
 - Use bi-directional cross-filtering unless strictly necessary (causes ambiguity and performance issues). If needed on many-to-many, always verify it is single-direction.
 - Use many-to-many relationships unless required — they degrade performance. Keep bi-directional + many-to-many relationships below 30% of total relationships.

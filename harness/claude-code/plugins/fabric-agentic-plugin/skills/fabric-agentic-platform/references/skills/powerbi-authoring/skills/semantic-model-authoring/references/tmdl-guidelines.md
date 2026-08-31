@@ -30,7 +30,7 @@ Unified reference for Tabular Model Definition Language (TMDL) - syntax rules, o
 - Place **measures before columns** in table definitions
 - `formatString` is required on every measure
 - Always learn from existing examples and patterns in the code (e.g., existing naming conventions)
-  
+
 ---
 
 ## TMDL File Layout
@@ -69,7 +69,7 @@ The model file declares properties and references to all tables, roles, perspect
 ```tmdl
 model Model
 	culture: en-US
-	defaultPowerBIDataSourceVersion: powerBI_V3	
+	defaultPowerBIDataSourceVersion: powerBI_V3
 	sourceQueryCulture: en-US
 
 ref table Sales
@@ -100,7 +100,7 @@ table Customer
 
 	column CustomerId
 		dataType: int64
-		isHidden		
+		isHidden
 		summarizeBy: none
 		sourceColumn: CustomerId
 
@@ -140,7 +140,7 @@ table Sales
 
 	column SalesKey
 		dataType: int64
-		isHidden		
+		isHidden
 		summarizeBy: none
 		sourceColumn: sales_key
 
@@ -190,7 +190,7 @@ relationship 'Sales - Ship Date to Date'
 - Hide foreign keys on fact tables (`isHidden: true`)
 - No composite keys - use a single surrogate integer key
 - No surrogate keys on fact tables - use natural keys where possible
-  
+
 ---
 
 ## Hierarchies
@@ -351,7 +351,7 @@ perspective 'Internet Sales'
 
 DAX user-defined functions are DAX-defined reusable calculations declared in `functions.tmdl`.
 
-Example of DAX function in `functions.tmdl`: 
+Example of DAX function in `functions.tmdl`:
 
 ```tmdl
 /// Returns double the input value
@@ -496,7 +496,7 @@ A TMDL script always includes a command at the top followed by one or more objec
 ```tmdl
 <TMDL Command name>
   <TMDL object>
-  
+
   <TMDL object>
 ```
 - The semantics of TMDL language are applied to objects within the command
@@ -524,12 +524,12 @@ createOrReplace
 
 **DO:**
 - The format should be `/// Description` placed right above each object such as `table`, `column`, or `measure` identifier in the TMDL code:
-    ```tmdl    
+    ```tmdl
     /// Description line 1
     /// Description line 2
     measure 'Measure1' = [DAX Expression]
         formatString: #,##0
-    
+
     /// Description line 1
     column 'Column1'
         formatString: #,##0

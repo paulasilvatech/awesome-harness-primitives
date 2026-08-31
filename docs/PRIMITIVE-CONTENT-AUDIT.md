@@ -15,7 +15,7 @@ first-party evidence and its runtime surface is exercised where applicable.
 | Content type | Sources | Shared canonical | Plugin-owned | Mentioned in dated evidence |
 | --- | --- | --- | --- | --- |
 | agent | 267 | 228 | 39 | 10 |
-| instruction | 251 | 195 | 56 | 17 |
+| instruction | 252 | 196 | 56 | 17 |
 | skill | 613 | 490 | 123 | 44 |
 | prompt | 79 | 48 | 31 | 6 |
 | hook | 10 | 8 | 2 | 3 |
@@ -34,7 +34,7 @@ The “mentioned in dated evidence” column is only an index hint. A mention in
 | Content type | Currency wording | Lifecycle wording | Version claims | Date claims | External sources | Current-source review | Source review | Semantic review |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | agent | 172 | 69 | 81 | 4 | 67 | 198 | 11 | 58 |
-| instruction | 115 | 63 | 100 | 14 | 107 | 184 | 22 | 45 |
+| instruction | 116 | 63 | 100 | 14 | 108 | 185 | 22 | 45 |
 | skill | 356 | 211 | 304 | 77 | 320 | 487 | 27 | 99 |
 | prompt | 27 | 13 | 9 | 3 | 9 | 35 | 3 | 41 |
 | hook | 4 | 2 | 6 | 0 | 4 | 7 | 1 | 2 |

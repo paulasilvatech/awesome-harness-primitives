@@ -1,0 +1,41 @@
+name: "[OK] Cross: Validation"
+description: "Validate platform deployment and configuration"
+title: "[Validation] Run platform validation"
+labels: ["cross-cutting", "validation", "copilot-agent"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Platform Validation
+        This issue triggers the **validation-agent** to verify deployment.
+
+  - type: dropdown
+    id: validation_scope
+    attributes:
+      label: "Validation Scope"
+      options:
+        - "full - All components"
+        - "h1 - Foundation only"
+        - "h2 - Enhancement only"
+        - "h3 - Innovation only"
+        - "security - Security components"
+        - "networking - Network components"
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: validation_types
+    attributes:
+      label: "Validation Types"
+      options:
+        - label: "Infrastructure validation"
+          required: true
+        - label: "Security compliance"
+          required: true
+        - label: "Network connectivity"
+        - label: "RBAC verification"
+        - label: "Secret rotation"
+        - label: "Backup validation"
+        - label: "DR failover test"
+        - label: "Performance baseline"

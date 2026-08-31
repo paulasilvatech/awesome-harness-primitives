@@ -184,8 +184,8 @@ Web search and web fetch let Claude search the web and retrieve page content. Th
 
 ```json
 [
-  { "type": "web_search_20260209", "name": "web_search" },
-  { "type": "web_fetch_20260209", "name": "web_fetch" }
+  { "type": "web_search_20260209", "name": "WebSearch" },
+  { "type": "web_fetch_20260209", "name": "WebFetch" }
 ]
 ```
 
@@ -196,8 +196,8 @@ The `web_search_20260209` and `web_fetch_20260209` versions support **dynamic fi
 ```json
 {
   "tools": [
-    { "type": "web_search_20260209", "name": "web_search" },
-    { "type": "web_fetch_20260209", "name": "web_fetch" }
+    { "type": "web_search_20260209", "name": "WebSearch" },
+    { "type": "web_fetch_20260209", "name": "WebFetch" }
   ]
 }
 ```

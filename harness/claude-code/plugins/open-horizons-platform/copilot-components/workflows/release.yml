@@ -1,0 +1,258 @@
+# .github/workflows/release.yml
+# Release workflow for Open Horizons Platform
+
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version (e.g., v4.1.0)'
+        required: true
+        type: string
+      prerelease:
+        description: 'Mark as pre-release'
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+  packages: write
+
+jobs:
+  # Job 1: Validate release
+  validate:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0
+
+      - name: Determine Version
+        id: version
+        run: |
+          if [ "${{ github.event_name }}" == "push" ]; then
+            VERSION="${GITHUB_REF#refs/tags/}"
+          else
+            VERSION="${{ github.event.inputs.version }}"
+          fi
+
+          # Validate semantic versioning
+          if ! [[ $VERSION =~ ^v[0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9]+)?$ ]]; then
+            echo "Error: Invalid version format: $VERSION"
+            exit 1
+          fi
+
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "## Release Version: $VERSION" >> $GITHUB_STEP_SUMMARY
+
+      - name: Check Version Consistency
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+
+          # Check INVENTORY_v4.md for version match
+          if ! grep -q "$VERSION" docs/INVENTORY_v4.md 2>/dev/null; then
+            echo "Warning: Version $VERSION not found in INVENTORY_v4.md"
+          fi
+
+  # Job 2: Build release artifacts
+  build:
+    runs-on: ubuntu-latest
+    needs: validate
+
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - name: Create Release Archive
+        run: |
+          VERSION="${{ needs.validate.outputs.version }}"
+          ARCHIVE_NAME="agentic-devops-platform-${VERSION}"
+
+          # Create distribution folder
+          mkdir -p dist
+
+          # Copy essential files
+          cp -r terraform dist/
+          cp -r agents dist/
+          cp -r golden-paths dist/
+          cp -r scripts dist/
+          cp -r deploy dist/
+          cp -r config dist/
+          cp -r .github dist/
+          cp docs/*.md dist/
+          cp README.md dist/
+          cp LICENSE dist/ 2>/dev/null || echo "MIT License" > dist/LICENSE
+
+          # Create archives
+          tar -czvf "${ARCHIVE_NAME}.tar.gz" -C dist .
+          cd dist && zip -r "../${ARCHIVE_NAME}.zip" . && cd ..
+
+          echo "Created release archives"
+          ls -la *.tar.gz *.zip
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: release-artifacts
+          path: |
+            *.tar.gz
+            *.zip
+
+  # Job 3: Generate changelog
+  changelog:
+    runs-on: ubuntu-latest
+    needs: validate
+    outputs:
+      changelog: ${{ steps.changelog.outputs.changelog }}
+
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0
+
+      - name: Generate Changelog
+        id: changelog
+        run: |
+          VERSION="${{ needs.validate.outputs.version }}"
+
+          # Get previous tag
+          PREV_TAG=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || echo "")
+
+          if [ -z "$PREV_TAG" ]; then
+            RANGE="HEAD"
+          else
+            RANGE="${PREV_TAG}..HEAD"
+          fi
+
+          # Generate changelog
+          CHANGELOG=$(cat << EOF
+          ## What's Changed in $VERSION
+
+          ### Features
+          $(git log $RANGE --pretty=format:"- %s" --grep="feat" || echo "- No new features")
+
+          ### Bug Fixes
+          $(git log $RANGE --pretty=format:"- %s" --grep="fix" || echo "- No bug fixes")
+
+          ### Infrastructure
+          $(git log $RANGE --pretty=format:"- %s" --grep="infra\|terraform" || echo "- No infrastructure changes")
+
+          ### Documentation
+          $(git log $RANGE --pretty=format:"- %s" --grep="doc" || echo "- No documentation changes")
+
+          ### Other Changes
+          $(git log $RANGE --pretty=format:"- %s" --grep -v "feat\|fix\|doc\|infra" | head -10 || echo "- No other changes")
+
+          ---
+
+          **Full Changelog**: https://github.com/${{ github.repository }}/compare/${PREV_TAG:-initial}...$VERSION
+          EOF
+          )
+
+          # Escape for GitHub Output
+          CHANGELOG="${CHANGELOG//'%'/'%25'}"
+          CHANGELOG="${CHANGELOG//$'\n'/'%0A'}"
+          CHANGELOG="${CHANGELOG//$'\r'/'%0D'}"
+
+          echo "changelog<<EOF" >> $GITHUB_OUTPUT
+          echo "$CHANGELOG" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+  # Job 4: Create GitHub Release
+  release:
+    runs-on: ubuntu-latest
+    needs: [validate, build, changelog]
+
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - name: Download Artifacts
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: release-artifacts
+
+      - name: Create Release
+        uses: softprops/action-gh-release@3bb12739c298aeb8a4eeaf626c5b8d85266b0e65 # v2
+        with:
+          tag_name: ${{ needs.validate.outputs.version }}
+          name: Open Horizons Platform ${{ needs.validate.outputs.version }}
+          body: |
+            # Open Horizons Platform ${{ needs.validate.outputs.version }}
+
+            Enterprise-grade platform accelerator for Azure with AI capabilities.
+
+            ## Highlights
+
+            - 18 Terraform modules for Azure infrastructure
+            - 17 Copilot Chat Agents for interactive development
+            - 22 Golden Path templates for Backstage
+            - 28 GitHub Issue templates with T-shirt sizing
+            - Multi-region support (Brazil, US East, US South Central)
+
+            ## Installation
+
+            ```bash
+            # Clone the repository
+            git clone https://github.com/${{ github.repository }}.git
+            cd agentic-devops-platform
+
+            # Or download the release
+            wget https://github.com/${{ github.repository }}/releases/download/${{ needs.validate.outputs.version }}/agentic-devops-platform-${{ needs.validate.outputs.version }}.tar.gz
+            tar -xzf agentic-devops-platform-${{ needs.validate.outputs.version }}.tar.gz
+            ```
+
+            ## Documentation
+
+            - [Deployment Guide](docs/guides/DEPLOYMENT_GUIDE.md) - Step-by-step deployment instructions
+            - [Architecture Guide](docs/guides/ARCHITECTURE_GUIDE.md) - Open Horizons architecture
+            - [Agent Documentation](agents/README.md) - 17 Copilot Chat Agents
+
+            ${{ needs.changelog.outputs.changelog }}
+          files: |
+            *.tar.gz
+            *.zip
+          prerelease: ${{ github.event.inputs.prerelease || false }}
+          draft: false
+
+  # Job 5: Notify
+  notify:
+    runs-on: ubuntu-latest
+    needs: [validate, release]
+    if: always()
+
+    steps:
+      - name: Send Teams Notification
+        if: env.TEAMS_WEBHOOK != ''
+        env:
+          TEAMS_WEBHOOK: ${{ secrets.TEAMS_WEBHOOK }}
+        run: |
+          VERSION="${{ needs.validate.outputs.version }}"
+          STATUS="${{ needs.release.result }}"
+          COLOR=$([ "$STATUS" == "success" ] && echo "00FF00" || echo "FF0000")
+
+          curl -H "Content-Type: application/json" -d '{
+            "@type": "MessageCard",
+            "@context": "http://schema.org/extensions",
+            "themeColor": "'$COLOR'",
+            "summary": "Release '$VERSION'",
+            "sections": [{
+              "activityTitle": "📦 New Release Published",
+              "facts": [
+                {"name": "Version", "value": "'$VERSION'"},
+                {"name": "Status", "value": "'$STATUS'"},
+                {"name": "Actor", "value": "${{ github.actor }}"}
+              ]
+            }],
+            "potentialAction": [{
+              "@type": "OpenUri",
+              "name": "View Release",
+              "targets": [{"os": "default", "uri": "https://github.com/${{ github.repository }}/releases/tag/'$VERSION'"}]
+            }]
+          }' "$TEAMS_WEBHOOK"

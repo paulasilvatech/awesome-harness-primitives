@@ -135,7 +135,7 @@ Response: `{ "value": [{ "id", "type", "catalogEntryType", "displayName", "descr
 * Filter supports `eq`, `ne`, `or`, and parentheses.
 * `search` can be empty, allowing filtering by type only.
 * Indexing delay: Newly created items can take up to 24 hours to appear in search results.
- 
+
 ### List Workspaces
 
 ```

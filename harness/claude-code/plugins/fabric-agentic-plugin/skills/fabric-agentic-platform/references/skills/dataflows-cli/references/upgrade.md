@@ -389,6 +389,6 @@ ALL_DFS=$(az rest --method get \
 
 # Gen1 dataflows have a modelUrl
 echo "$ALL_DFS" | jq '[.value[] | select(.modelUrl != null and .modelUrl != "") |
-  {id: .objectId, name: .name, workspace: .workspaceId, 
+  {id: .objectId, name: .name, workspace: .workspaceId,
    owner: .configuredBy, storage: .modelUrl}]'
 ```

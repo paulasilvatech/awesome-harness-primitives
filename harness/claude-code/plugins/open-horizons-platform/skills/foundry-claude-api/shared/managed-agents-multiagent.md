@@ -36,7 +36,7 @@ worker = client.beta.agents.create(
     tools=[{
         "type": "agent_toolset_20260401",
         "default_config": {"enabled": False},
-        "configs": [{"name": n, "enabled": True} for n in ("read", "glob", "grep", "web_fetch", "web_search")],
+        "configs": [{"name": n, "enabled": True} for n in ("read", "glob", "grep", "WebFetch", "WebSearch")],
     }],
 )
 
@@ -67,7 +67,7 @@ test_writer = client.beta.agents.create(
     model="claude-sonnet-5",
     system="Write focused tests for the behavior you are given, run them with the command you are given, and report pass/fail, the relevant output, and the paths of files you added. Do not edit non-test code; if the code under test looks wrong, report that instead.",
     tools=[{"type": "agent_toolset_20260401", "default_config": {"enabled": True},
-            "configs": [{"name": n, "enabled": False} for n in ("web_fetch", "web_search")]}],
+            "configs": [{"name": n, "enabled": False} for n in ("WebFetch", "WebSearch")]}],
 )
 lead = client.beta.agents.create(
     name="Engineering lead",

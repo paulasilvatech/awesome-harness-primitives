@@ -53,17 +53,20 @@ runtime contract and the type routing table.
   `python3 harness/claude-code/scripts/generate_catalog.py`.
 - Do not hand-edit `harness/claude-code/`. Change the canonical Copilot source
   and re-run `python3 harness/claude-code/scripts/convert_from_copilot.py`.
-- CI runs `python3 harness/claude-code/scripts/generate_catalog.py --check` and
-  blocks a stale catalog.
+- Generate declared `CLAUDE.md` and `.claude/` copies with
+  `python3 harness/github-copilot/scripts/sync_installed_primitives.py --manifest
+  harness/claude-code/manifests/installed-primitives.json`.
+- CI checks conversion drift, strict validation, catalog drift, and installed
+  Claude copy drift.
 
 ## Primitive type guide
 
-| Type | What it does | Discovery path | Canonical source |
+| Type | What it does | Discovery path | Generated output |
 | --- | --- | --- | --- |
 | Subagent | Specialist persona with its own context window, tool scope, and model. | `.claude/agents/*.md`, `~/.claude/agents/*.md`, `<plugin>/agents/*.md` | `harness/claude-code/agents/` |
 | Rule | Passive instructions loaded at launch or when Claude touches matching files. | `.claude/rules/**/*.md`, `~/.claude/rules/**/*.md` | `harness/claude-code/rules/` |
 | Skill | Reusable procedure with optional scripts, references, and assets. | `.claude/skills/<name>/SKILL.md`, `~/.claude/skills/`, `<plugin>/skills/` | `harness/claude-code/skills/` |
-| Command | Explicit `/name` action a user invokes. | `.claude/commands/*.md`, `<plugin>/commands/*.md` | `harness/claude-code/commands/` |
+| Command | Legacy-compatible explicit `/name` action; new reusable procedures should prefer skills. | `.claude/commands/*.md`, `<plugin>/commands/*.md` | `harness/claude-code/commands/` |
 | Plugin | Installable bundle of skills, agents, commands, hooks, and MCP servers. | `.claude-plugin/plugin.json` | `harness/claude-code/plugins/` |
 | Hook | Deterministic automation bound to a Claude Code lifecycle event. | `.claude/settings.json`, `<plugin>/hooks/hooks.json` | `harness/claude-code/hooks/` |
 """

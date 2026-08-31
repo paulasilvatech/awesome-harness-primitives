@@ -4504,7 +4504,7 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 10436,
+      "characters_scanned": 10432,
       "external_url_count": 0,
       "files_scanned": 1,
       "kind": "agent",
@@ -6506,6 +6506,26 @@
       "source_domains": []
     },
     {
+      "characters_scanned": 7234,
+      "external_url_count": 5,
+      "files_scanned": 1,
+      "kind": "instruction",
+      "local_evidence_mention": false,
+      "name": "claude-code-harness",
+      "ownership": "shared",
+      "package": null,
+      "packaged_by": [],
+      "path": "harness/github-copilot/instructions/claude-code-harness.instructions.md",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "external-source"
+      ],
+      "source_domains": [
+        "code.claude.com"
+      ]
+    },
+    {
       "characters_scanned": 11937,
       "external_url_count": 0,
       "files_scanned": 1,
@@ -6823,8 +6843,8 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 9308,
-      "external_url_count": 2,
+      "characters_scanned": 11005,
+      "external_url_count": 3,
       "files_scanned": 1,
       "kind": "instruction",
       "local_evidence_mention": false,
@@ -6840,6 +6860,7 @@
         "external-source"
       ],
       "source_domains": [
+        "code.claude.com",
         "code.visualstudio.com",
         "docs.github.com"
       ]
@@ -12480,7 +12501,7 @@
       ]
     },
     {
-      "characters_scanned": 2241859,
+      "characters_scanned": 2241929,
       "external_url_count": 300,
       "files_scanned": 307,
       "kind": "plugin",
@@ -17566,7 +17587,7 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 548863,
+      "characters_scanned": 548862,
       "external_url_count": 127,
       "files_scanned": 164,
       "kind": "skill",
@@ -21596,7 +21617,7 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 975827,
+      "characters_scanned": 975897,
       "external_url_count": 131,
       "files_scanned": 70,
       "kind": "skill",
@@ -26652,7 +26673,7 @@
       ]
     },
     {
-      "characters_scanned": 785589,
+      "characters_scanned": 785621,
       "external_url_count": 3,
       "files_scanned": 32,
       "kind": "skill",
@@ -29040,7 +29061,7 @@
         },
         {
           "errors": 0,
-          "files": 251,
+          "files": 252,
           "kind": "instructions",
           "warnings": 0
         },

@@ -1,0 +1,212 @@
+name: "Infrastructure Deployment"
+description: "Deploy H1 Foundation infrastructure (AKS, ACR, Key Vault)"
+title: "[H1] Infrastructure - "
+labels: ["agent:deploy", "horizon:h1", "env:dev"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Infrastructure Agent
+        
+        This issue triggers the **Infrastructure Agent** to provision:
+        - Azure Resource Group
+        - Virtual Network & Subnets
+        - Azure Kubernetes Service (AKS)
+        - Azure Container Registry (ACR)
+        - Azure Key Vault
+        - Managed Identities
+        
+        ---
+        
+        ### Related Components
+        
+        | Component | Path | Description |
+        |-----------|------|-------------|
+        | Terraform | `terraform/modules/` | Infrastructure as Code |
+        | **Naming Module** | `terraform/modules/naming/` | CAF-compliant naming |
+        | Scripts | `scripts/` | Automation scripts |
+        | Agent Spec | `agents/h1-foundation/infrastructure-agent.md` | Agent definition |
+        
+        ### Naming Convention (CAF)
+        
+        Resources will be named following Azure Cloud Adoption Framework:
+        ```
+        {type}-{project}-{env}-{region}
+        
+        Examples:
+        - rg-myproject-prd-brs
+        - aks-myproject-prd-brs
+        - crprojectprdbrs (no hyphens)
+        - stprojectprdbrs001 (no hyphens, max 24)
+        - kv-myproject-prd-brs (max 24)
+        ```
+
+  - type: input
+    id: project_name
+    attributes:
+      label: Project Name
+      description: "Lowercase, 2-10 chars, alphanumeric only (used in resource naming)"
+      placeholder: "myproject"
+    validations:
+      required: true
+
+  - type: input
+    id: subscription_id
+    attributes:
+      label: Azure Subscription ID
+      placeholder: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: environment
+    attributes:
+      label: Environment
+      description: "Environment code for naming"
+      options:
+        - dev (Development)
+        - stg (Staging)
+        - prd (Production)
+        - sbx (Sandbox)
+        - tst (Test)
+      default: 0
+    validations:
+      required: true
+
+  - type: dropdown
+    id: region
+    attributes:
+      label: Azure Region
+      description: "Region with code for naming"
+      options:
+        - brazilsouth (brs)
+        - brazilsoutheast (brse)
+        - eastus (eus)
+        - eastus2 (eus2)
+        - southcentralus (scus)
+        - westus2 (wus2)
+        - westeurope (weu)
+      default: 0
+    validations:
+      required: true
+
+  - type: dropdown
+    id: sizing_profile
+    attributes:
+      label: Sizing Profile
+      description: "See config/sizing-profiles.yaml for details"
+      options:
+        - small (Dev/Test - 3 nodes, D4s_v3)
+        - medium (Staging - 5 nodes, D8s_v3)
+        - large (Production - 10 nodes, D16s_v3)
+        - xlarge (Enterprise - 20 nodes, D32s_v3)
+      default: 0
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: components
+    attributes:
+      label: Infrastructure Components
+      description: "Select components to deploy"
+      options:
+        - label: "Networking (VNet, Subnets, NSGs)"
+          required: true
+        - label: "AKS Cluster"
+          required: true
+        - label: "Container Registry (ACR)"
+          required: true
+        - label: "Key Vault"
+          required: true
+        - label: "PostgreSQL Flexible Server"
+        - label: "Azure Managed Redis"
+        - label: "Private Endpoints"
+        - label: "Azure Bastion"
+
+  - type: dropdown
+    id: kubernetes_version
+    attributes:
+      label: Kubernetes Version
+      options:
+        - "1.34"
+        - "1.33"
+        - "1.32"
+      default: 0
+
+  - type: checkboxes
+    id: security_features
+    attributes:
+      label: Security Features
+      options:
+        - label: "Enable Defender for Cloud"
+        - label: "Enable Azure Policy"
+        - label: "Enable Private Cluster"
+        - label: "Enable Workload Identity"
+          required: true
+
+  - type: textarea
+    id: custom_tags
+    attributes:
+      label: Custom Tags (YAML format)
+      description: "Additional tags for resources"
+      placeholder: |
+        CostCenter: "IT-Platform"
+        Owner: "platform-team@company.com"
+        Project: "Open Horizons"
+      render: yaml
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        
+        ## Pre-Deployment Checklist
+        
+        Before submitting, ensure:
+        
+        - [ ] Run `scripts/validate-prerequisites.sh` to verify tools
+        - [ ] Run `scripts/validate-naming.sh --all {project} {env} {region}` to verify naming
+        - [ ] Verify Azure subscription permissions (Contributor + User Access Admin)
+        - [ ] Review `terraform/terraform.tfvars.example` for configuration options
+        
+        ## Deployment Steps
+        
+        The agent will execute:
+        
+        ```bash
+        # 1. Validate prerequisites
+        ./scripts/validate-prerequisites.sh
+        
+        # 2. Validate naming
+        ./scripts/validate-naming.sh --all $PROJECT $ENV $REGION
+        
+        # 3. Initialize Terraform
+        cd terraform
+        terraform init
+        
+        # 4. Plan deployment
+        terraform plan -var-file=terraform.tfvars
+        
+        # 5. Apply infrastructure
+        terraform apply -var-file=terraform.tfvars
+        ```
+        
+        ## Related Issues
+        
+        After infrastructure, you may want to:
+        - **Security**: Deploy Defender & Purview → `security.yml`
+        - **GitOps**: Configure ArgoCD → `gitops.yml`
+        - **Observability**: Setup monitoring → `observability.yml`
+        - **Backstage Portal**: Deploy developer portal → `backstage-portal.yml`
+
+  - type: checkboxes
+    id: confirmation
+    attributes:
+      label: Confirmation
+      options:
+        - label: "I have validated the naming convention with validate-naming.sh"
+          required: true
+        - label: "I have reviewed the terraform plan before applying"
+          required: true
+        - label: "I understand this will create billable Azure resources"
+          required: true

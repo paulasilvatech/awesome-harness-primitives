@@ -1,18 +1,18 @@
-# web_fetch policy
+# WebFetch policy
 
-Steps 2 and 3 of the recommender rely on `web_fetch` against `learn.microsoft.com` to verify that a recommendation reflects current capabilities (especially VMSS features, family availability, and Spot eligibility).
+Steps 2 and 3 of the recommender rely on `WebFetch` against `learn.microsoft.com` to verify that a recommendation reflects current capabilities (especially VMSS features, family availability, and Spot eligibility).
 
-## When `web_fetch` succeeds
+## When `WebFetch` succeeds
 
 Use the live documentation as the source of truth. Cite the URL in the recommendation so the user can verify.
 
-## When `web_fetch` fails (timeout, 404, blocked, offline)
+## When `WebFetch` fails (timeout, 404, blocked, offline)
 
 Proceed using the reference files in `../../references/` — but **always** include this warning in the recommendation:
 
 > ⚠ Unable to verify against latest Azure documentation. Recommendation is based on reference material that may not reflect recent updates (e.g., new VM families, Spot eligibility changes, regional rollouts).
 
-Do not block the recommendation on `web_fetch` failure. The user is better served by an annotated recommendation than by no recommendation.
+Do not block the recommendation on `WebFetch` failure. The user is better served by an annotated recommendation than by no recommendation.
 
 ## What to fetch (Step 2 — VMSS)
 

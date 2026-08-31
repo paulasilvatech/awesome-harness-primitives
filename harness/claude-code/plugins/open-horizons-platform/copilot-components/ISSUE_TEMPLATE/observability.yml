@@ -1,0 +1,48 @@
+name: "H2: Observability Stack"
+description: "Deploy Prometheus, Grafana, and Azure Monitor integration"
+title: "[Observability] Deploy monitoring infrastructure"
+labels: ["h2-enhancement", "observability", "copilot-agent"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Observability Stack Deployment
+        This issue triggers the **observability-agent**.
+
+  - type: dropdown
+    id: sizing_profile
+    attributes:
+      label: "T-Shirt Size"
+      options:
+        - "small - Azure Monitor only (~$50/mo)"
+        - "medium - Prometheus + Grafana (~$200/mo)"
+        - "large - Full stack, 90 day retention (~$500/mo)"
+        - "xlarge - Enterprise, 365 day retention (~$2,000/mo)"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: azure_region
+    attributes:
+      label: "Primary Azure Region"
+      options:
+        - "brazilsouth - Brazil South (São Paulo)"
+        - "eastus2 - East US 2 (Virginia)"
+        - "southcentralus - South Central US (Texas)"
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: observability_features
+    attributes:
+      label: "Observability Features"
+      options:
+        - label: "Azure Monitor / Log Analytics"
+          required: true
+        - label: "Prometheus (Azure Managed)"
+        - label: "Grafana (Azure Managed)"
+        - label: "Application Insights"
+        - label: "Custom Dashboards"
+        - label: "Alerting Rules"
+        - label: "SLO/SLI Tracking"

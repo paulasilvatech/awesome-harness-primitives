@@ -92,7 +92,7 @@ Apply these frameworks during analysis:
 6. **Exhaustive findings consolidation:** After STRIDE analysis is complete, scan the STRIDE output for ALL identified threats. Every threat MUST map to either:
    - A finding in `3-findings.md` (consolidated with related threats)
    - A ` Mitigated by Platform` entry in the Threat Coverage Verification table (for platform-handled threats only)
-   
+
    ** EVERY `Open` THREAT MUST HAVE A FINDING.** The tool does NOT have authority to accept risks, defer threats, or decide that a threat is "acceptable." That is the engineering team's decision. The tool's job is to identify ALL threats and create findings for them. The Coverage table should show ` Covered (FIND-XX)` for every Open threat — NEVER ` Accepted Risk`.
 
    If you have 40+ threats in STRIDE but only 10 findings, you are under-consolidating. Check for missed data store auth, operational controls, credential management, and supply chain issues.
@@ -114,20 +114,20 @@ Apply these frameworks during analysis:
    - Small repo (< 20 source files): 8+ findings expected
    - Medium repo (20-100 source files): 12+ findings expected
    - Large repo (100+ source files): 18+ findings expected
-   
+
    If below threshold, systematically review: auth per component, secrets in code, container security, network segmentation, logging/monitoring, input validation.
 
 8. **Context-aware Platform ratio limits (MANDATORY):**
-   
+
    After completing the security infrastructure inventory (Step 1), detect the deployment pattern:
-   
+
    | Pattern | Detection Signal | Platform Limit |
    |---------|-----------------|----------------|
    | **K8s Operator** | `controller-runtime`, `kubebuilder`, or `operator-sdk` in go.mod/go.sum; `Reconcile()` functions in source | **≤35%** |
    | **Standalone Application** | All other repos (web apps, CLI tools, services) | **≤20%** |
-   
+
    **Why K8s operators have higher Platform ratios:** Operators delegate security to the K8s platform (RBAC for CR access, etcd encryption, API server TLS, webhook cert validation, Azure AD token validation). The operator code CANNOT implement these controls — they are the platform's responsibility. Classifying them as Platform is correct.
-   
+
    **Action when Platform exceeds limit:**
    - Review each Platform-classified threat
    - If the operator CAN take action (e.g., add input validation, add RBAC checks at startup) → reclassify as `Open` with a finding

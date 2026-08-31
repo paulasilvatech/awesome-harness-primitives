@@ -179,12 +179,12 @@ struct PointLight : ILight
 {
     float3 position;
     float3 intensity;
-  
+
     LightSample sample(float3 hitPos)
     {
         float3 delta = hitPos - position;
         float distance = length(delta);
-      
+
         LightSample sample;
         sample.direction = delta / distance;
         sample.intensity = intensity * falloff(distance);
@@ -449,8 +449,8 @@ Backward-mode computes vector-Jacobian products: `<v^T, Df(x)>`
 
 ```hlsl
 [Differentiable]
-float2 foo(float a, float b) 
-{ 
+float2 foo(float a, float b)
+{
     return float2(a * b * b, a * a);
 }
 
@@ -458,9 +458,9 @@ void main()
 {
     DifferentialPair<float> dp_a = diffPair(1.0, 1.0);  // value and derivative
     DifferentialPair<float> dp_b = diffPair(2.4, 0.0);
-  
+
     DifferentialPair<float2> dp_output = fwd_diff(foo)(dp_a, dp_b);
-  
+
     float2 output_p = dp_output.p;  // primal output
     float2 output_d = dp_output.d;  // derivative output
 }
@@ -470,8 +470,8 @@ void main()
 
 ```hlsl
 [Differentiable]
-float2 foo(float a, float b) 
-{ 
+float2 foo(float a, float b)
+{
     return float2(a * b * b, a * a);
 }
 
@@ -479,11 +479,11 @@ void main()
 {
     DifferentialPair<float> dp_a = diffPair(1.0);
     DifferentialPair<float> dp_b = diffPair(2.4);
-  
+
     float2 dL_doutput = float2(1.0, 0.0);  // output derivatives
-  
+
     bwd_diff(foo)(dp_a, dp_b, dL_doutput);
-  
+
     float dL_da = dp_a.d;  // computed input derivatives
     float dL_db = dp_b.d;
 }
@@ -586,9 +586,9 @@ Only visible within same type:
 struct MyType
 {
     private int member;
-  
+
     int f() { member = 5; }  // OK
-  
+
     struct ChildType
     {
         int g(MyType t) { return t.member; }  // OK
@@ -615,7 +615,7 @@ public struct PS
 }
 internal void f() { ... }
 
-// m.slang  
+// m.slang
 module m;
 import a;
 void main()
@@ -881,7 +881,7 @@ void printVariable(slang::VariableReflection* variable)
 {
     const char* name = variable->getName();
     slang::TypeReflection* type = variable->getType();
-  
+
     print("name: "); printQuotedString(name);
     print("type: "); printType(type);
 }
@@ -896,17 +896,17 @@ void printType(slang::TypeReflection* type)
 {
     const char* name = type->getName();
     slang::TypeReflection::Kind kind = type->getKind();
-  
+
     print("name: "); printQuotedString(name);
     print("kind: "); printTypeKind(kind);
-  
+
     switch(type->getKind())
     {
     case slang::TypeReflection::Kind::Scalar:
         print("scalar type: ");
         printScalarType(type->getScalarType());
         break;
-      
+
     case slang::TypeReflection::Kind::Struct:
         print("fields:");
         int fieldCount = type->getFieldCount();
@@ -916,7 +916,7 @@ void printType(slang::TypeReflection* type)
             printVariable(field);
         }
         break;
-      
+
     case slang::TypeReflection::Kind::Array:
         print("element count: ");
         printPossiblyUnbounded(type->getElementCount());
@@ -936,7 +936,7 @@ void printParameterLayout(slang::ParameterLayout* parameterLayout)
 {
     slang::VariableReflection* variable = parameterLayout->getVariable();
     printVariable(variable);
-  
+
     // Print binding information
     int bindingRangeCount = parameterLayout->getBindingRangeCount();
     for (int r = 0; r < bindingRangeCount; r++)
@@ -944,7 +944,7 @@ void printParameterLayout(slang::ParameterLayout* parameterLayout)
         slang::BindingRangeType rangeType = parameterLayout->getBindingRangeType(r);
         int rangeIndex = parameterLayout->getBindingRangeIndex(r);
         int rangeSpace = parameterLayout->getBindingRangeSpace(r);
-      
+
         print("binding: ");
         printBindingRangeType(rangeType);
         printf(" index=%d space=%d", rangeIndex, rangeSpace);
@@ -961,12 +961,12 @@ void printEntryPointLayout(slang::EntryPointLayout* entryPointLayout)
 {
     slang::Stage stage = entryPointLayout->getStage();
     print("stage: "); printStage(stage);
-  
+
     // Print varying parameters
     int varyingCount = entryPointLayout->getVaryingParamCount();
     for (int v = 0; v < varyingCount; v++)
     {
-        slang::VaryingParameterReflection* varying = 
+        slang::VaryingParameterReflection* varying =
             entryPointLayout->getVaryingParamByIndex(v);
         printVaryingParameter(varying);
     }
@@ -1352,7 +1352,7 @@ cd emsdk
 
 # Build generators for build platform
 cmake --workflow --preset generators --fresh
-mkdir generators  
+mkdir generators
 cmake --install build --prefix generators --component generators
 
 # Configure and build for WebAssembly

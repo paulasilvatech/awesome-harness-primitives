@@ -91,14 +91,14 @@ final var randomOrder = Instancio.create(Order.class);
 @AutoConfigureTestDatabase
 @Testcontainers
 class OrderRepositoryTest {
-  
+
   @Container
   @ServiceConnection
   static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:18");
-  
+
   @Autowired
   private OrderRepository orderRepository;
-  
+
   @Test
   void shouldFindOrdersByStatus() {
     // Given: Create 10 random orders with PENDING status
@@ -106,12 +106,12 @@ class OrderRepositoryTest {
       .size(10)
       .set(field(Order::getStatus), "PENDING")
       .create();
-    
+
     orderRepository.saveAll(orders);
-    
+
     // When
     final var found = orderRepository.findByStatus("PENDING");
-    
+
     // Then
     assertThat(found).hasSize(10);
   }
@@ -123,22 +123,22 @@ class OrderRepositoryTest {
 ```java
 @WebMvcTest(OrderController.class)
 class OrderControllerTest {
-  
+
   @Autowired
   private MockMvcTester mvc;
-  
+
   @MockitoBean
   private OrderService orderService;
-  
+
   @Test
   void shouldReturnOrder() {
     // Given: Random order with specific ID
     Order order = Instancio.of(Order.class)
       .set(field(Order::getId), 1L)
       .create();
-    
+
     given(orderService.findById(1L)).willReturn(order);
-    
+
     // When/Then
     assertThat(mvc.get().uri("/orders/1"))
       .hasStatus(HttpStatus.OK)

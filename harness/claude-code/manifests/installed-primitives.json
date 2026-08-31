@@ -3,8 +3,7 @@
   "copies": [
     {
       "source": "harness/claude-code/rules/copilot-repository-governance.md",
-      "target": "CLAUDE.md",
-      "mode": "strip-frontmatter"
+      "target": "CLAUDE.md"
     },
     {
       "source": "harness/claude-code/rules/claude-code-harness.md",
@@ -45,6 +44,26 @@
     {
       "source": "harness/claude-code/commands/create-copilot-primitive.md",
       "target": ".claude/commands/create-copilot-primitive.md"
+    },
+    {
+      "source": "harness/claude-code/settings.json",
+      "target": ".claude/settings.json"
+    },
+    {
+      "source": "harness/claude-code/hooks/dependency-license-checker",
+      "target": ".claude/hooks/dependency-license-checker"
+    },
+    {
+      "source": "harness/claude-code/hooks/governance-audit",
+      "target": ".claude/hooks/governance-audit"
+    },
+    {
+      "source": "harness/claude-code/hooks/secrets-scanner",
+      "target": ".claude/hooks/secrets-scanner"
+    },
+    {
+      "source": "harness/claude-code/hooks/session-logger",
+      "target": ".claude/hooks/session-logger"
     }
   ]
 }

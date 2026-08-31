@@ -1,0 +1,59 @@
+name: "H3: AI Foundry Setup"
+description: "Deploy Azure AI Foundry with models and RAG infrastructure"
+title: "[AI] Deploy AI Foundry infrastructure"
+labels: ["h3-innovation", "ai-foundry", "copilot-agent"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Azure AI Foundry Deployment
+        This issue triggers the **ai-foundry-agent**.
+
+  - type: dropdown
+    id: sizing_profile
+    attributes:
+      label: "T-Shirt Size"
+      options:
+        - "small - Basic models, 10K TPM (~$100/mo)"
+        - "medium - GPT-4o, 50K TPM (~$500/mo)"
+        - "large - Full models, 200K TPM (~$2,000/mo)"
+        - "xlarge - PTU deployment, fine-tuning (~$10,000/mo)"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: azure_region
+    attributes:
+      label: "AI Workloads Region"
+      description: "Region for AI Foundry (check model availability)"
+      options:
+        - "eastus2 - East US 2 (Full AI support)"
+        - "southcentralus - South Central US"
+        - "brazilsouth - Brazil South (Limited models)"
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: ai_models
+    attributes:
+      label: "AI Models to Deploy"
+      options:
+        - label: "GPT-4o (recommended)"
+        - label: "GPT-4o-mini"
+        - label: "GPT-4"
+        - label: "o3-mini (reasoning)"
+        - label: "text-embedding-ada-002"
+        - label: "text-embedding-3-large"
+
+  - type: checkboxes
+    id: ai_features
+    attributes:
+      label: "AI Features"
+      options:
+        - label: "Azure AI Search (for RAG)"
+        - label: "Prompt Flow"
+        - label: "Content Safety"
+        - label: "Agent Service"
+        - label: "Fine-tuning support"
+        - label: "Private Endpoints"

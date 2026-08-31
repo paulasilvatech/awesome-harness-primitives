@@ -7,13 +7,13 @@ Testing Spring MVC controllers with focused slice tests.
 ```java
 @WebMvcTest(OrderController.class)
 class OrderControllerTest {
-  
+
   @Autowired
   private MockMvcTester mvc;
-  
+
   @MockitoBean
   private OrderService orderService;
-  
+
   @MockitoBean
   private UserService userService;
 }
@@ -35,7 +35,7 @@ class OrderControllerTest {
 void shouldReturnOrder() {
   var order = new Order(1L, "PENDING", BigDecimal.valueOf(99.99));
   given(orderService.findById(1L)).willReturn(order);
-  
+
   assertThat(mvc.get().uri("/orders/1"))
     .hasStatusOk()
     .hasContentType(MediaType.APPLICATION_JSON)
@@ -53,14 +53,14 @@ void shouldReturnOrder() {
 @Test
 void shouldCreateOrder() {
   given(orderService.create(any(OrderRequest.class))).willReturn(1L);
-  
+
   var json = """
     {
       "product": "Product A",
       "quantity": 2
     }
     """;
-  
+
   assertThat(mvc.post().uri("/orders")
     .contentType(MediaType.APPLICATION_JSON)
     .content(json))
@@ -78,7 +78,7 @@ record OrderRequest(String product, int quantity) {}
 void shouldCreateOrderWithRecord() {
   var request = new OrderRequest("Product A", 2);
   given(orderService.create(any())).willReturn(1L);
-  
+
   assertThat(mvc.post().uri("/orders")
     .contentType(MediaType.APPLICATION_JSON)
     .content(json.write(request).getJson()))
@@ -97,7 +97,7 @@ void shouldRejectInvalidOrder() {
       "quantity": -1
     }
     """;
-  
+
   assertThat(mvc.post().uri("/orders")
     .contentType(MediaType.APPLICATION_JSON)
     .content(invalidJson))
@@ -114,7 +114,7 @@ void shouldRejectInvalidOrder() {
 void shouldFilterOrdersByStatus() {
   assertThat(mvc.get().uri("/orders?status=PENDING"))
     .hasStatusOk();
-  
+
   verify(orderService).findByStatus(OrderStatus.PENDING);
 }
 ```
@@ -126,7 +126,7 @@ void shouldFilterOrdersByStatus() {
 void shouldCancelOrder() {
   assertThat(mvc.put().uri("/orders/123/cancel"))
     .hasStatusOk();
-  
+
   verify(orderService).cancel(123L);
 }
 ```

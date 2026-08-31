@@ -78,7 +78,7 @@ def get_pipeline_definition(workspace_id, pipeline_item_id, fabric_token,
                 f"pipeline {pipeline_item_id!r}: {exc}. "
                 f"Body excerpt: {r.text[:500]!r}"
             ) from exc
-    
+
     # Handle LRO — prefer Location/Operation-Location header; fall back to x-ms-operation-id
     op_url = r.headers.get("Location") or r.headers.get("Operation-Location")
     operation_id = r.headers.get("x-ms-operation-id")
@@ -142,7 +142,7 @@ def get_pipeline_definition(workspace_id, pipeline_item_id, fabric_token,
             raise RuntimeError(f"getDefinition failed: {state}")
         elif status == "Cancelled":
             raise RuntimeError(f"getDefinition cancelled: {state}")
-    
+
     raise TimeoutError(
         f"getDefinition LRO timed out after {max_polls} polls "
         f"(base interval {base_poll_interval}s). Increase FABRIC_LRO_MAX_POLLS "
@@ -226,7 +226,7 @@ def run_pipeline(workspace_id, pipeline_item_id, fabric_token, parameters=None):
     body = {}
     if parameters:
         body["executionData"] = {"parameters": parameters}
-    
+
     r = requests.post(
         f"https://api.fabric.microsoft.com/v1/workspaces/{workspace_id}/datapipelines/{pipeline_item_id}/jobs/instances?jobType=Pipeline",
         headers=headers,
@@ -234,7 +234,7 @@ def run_pipeline(workspace_id, pipeline_item_id, fabric_token, parameters=None):
         timeout=_HTTP_TIMEOUT,
     )
     r.raise_for_status()
-    
+
     # Get job instance ID from Location header
     location = r.headers.get("Location", "")
     if location:
@@ -249,7 +249,7 @@ def run_pipeline(workspace_id, pipeline_item_id, fabric_token, parameters=None):
 def wait_for_pipeline_run(workspace_id, pipeline_item_id, job_instance_id, fabric_token, timeout_seconds=3600):
     headers = {"Authorization": f"Bearer {fabric_token}"}
     deadline = time.time() + timeout_seconds
-    
+
     while time.time() < deadline:
         r = requests.get(
             f"https://api.fabric.microsoft.com/v1/workspaces/{workspace_id}/datapipelines/{pipeline_item_id}/jobs/instances/{job_instance_id}",
@@ -259,7 +259,7 @@ def wait_for_pipeline_run(workspace_id, pipeline_item_id, job_instance_id, fabri
         r.raise_for_status()
         status_data = r.json()
         status = status_data.get("status")
-        
+
         # Fabric Job Scheduler getJobInstance returns "Completed" as the
         # terminal success state on a job instance (not "Succeeded" --
         # "Succeeded" is what the per-activity queryactivityruns response
@@ -273,14 +273,14 @@ def wait_for_pipeline_run(workspace_id, pipeline_item_id, job_instance_id, fabri
             raise RuntimeError(
                 f"Pipeline run {status}: {failure_reason.get('message', 'Unknown error')}"
             )
-        
+
         time.sleep(15)  # Poll every 15 seconds
-    
+
     raise TimeoutError(f"Pipeline run did not complete within {timeout_seconds} seconds")
 
 
 # Example
-job_id = run_pipeline(FABRIC_WS_ID, PIPELINE_ITEM_ID, FABRIC_TOKEN, 
+job_id = run_pipeline(FABRIC_WS_ID, PIPELINE_ITEM_ID, FABRIC_TOKEN,
                       parameters={"runDate": "2024-01-01"})
 result = wait_for_pipeline_run(FABRIC_WS_ID, PIPELINE_ITEM_ID, job_id, FABRIC_TOKEN)
 ```
@@ -295,7 +295,7 @@ After a pipeline run that includes `TridentNotebook` activities, confirm the not
 def verify_notebook_activity_output(run_result: dict, activity_name: str, expected_key: str = None):
     """
     Check that a TridentNotebook activity in the run result succeeded.
-    
+
     Args:
         run_result: The completed job instance response
         activity_name: Name of the TridentNotebook activity
@@ -307,7 +307,7 @@ def verify_notebook_activity_output(run_result: dict, activity_name: str, expect
     status = run_result.get("status")
     if status != "Completed":
         raise AssertionError(f"Run did not complete. Status: {status}")
-    
+
     print(f"✅ V3: Pipeline containing notebook activity '{activity_name}' succeeded")
     print(f"   Run ID: {run_result.get('id')}")
     print(f"   Start: {run_result.get('startTimeUtc')}")

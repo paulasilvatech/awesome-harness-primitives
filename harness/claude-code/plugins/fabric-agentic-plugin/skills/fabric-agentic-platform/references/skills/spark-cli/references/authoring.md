@@ -328,7 +328,7 @@ az rest --method post --resource "https://api.fabric.microsoft.com" \
 Quick reference:
 ```python
 # Write-heavy (Bronze): Disable V-Order, enable autoCompact
-# Balanced (Silver): Enable V-Order, adaptive execution  
+# Balanced (Silver): Enable V-Order, adaptive execution
 # Read-heavy (Gold): Vectorized reads, optimal parallelism
 # See data-engineering-patterns.md for complete config tables
 ```

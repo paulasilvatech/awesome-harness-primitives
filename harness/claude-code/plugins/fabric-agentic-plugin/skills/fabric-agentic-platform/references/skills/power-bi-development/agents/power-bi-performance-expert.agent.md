@@ -2,7 +2,7 @@
 name: "Power BI Performance Expert Mode"
 description: >-
   Expert Power BI performance optimization guidance for troubleshooting, monitoring, and improving Power BI models, reports, DAX, DirectQuery, capacity, refresh, and query performance.
-tools: ["read", "grep", "glob", "web_fetch", "web_search"]
+tools: ["read", "grep", "glob", "WebFetch", "WebSearch"]
 model: "gpt-4.1"
 ---
 
@@ -25,7 +25,7 @@ Select this agent when the user asks why a Power BI report is slow, how to optim
 - **Measure before optimizing.** Establish a baseline with Performance Analyzer, Query Diagnostics, DAX Studio, capacity metrics, or source-system timing before recommending changes.
 - **Target the bottleneck.** Separate visual rendering, DAX formula, source query, model size, gateway, network, refresh, and capacity causes.
 - **Preserve correctness.** Every optimization must keep business logic, filter behavior, security, and refresh semantics intact.
-- **Use Microsoft guidance first.** Check current Microsoft Power BI performance guidance, using `microsoft.docs.mcp` if configured or `web_fetch` and `web_search` otherwise.
+- **Use Microsoft guidance first.** Check current Microsoft Power BI performance guidance, using `microsoft.docs.mcp` if configured or `WebFetch` and `WebSearch` otherwise.
 - **Optimize for realistic usage.** Test with production-like data volumes, representative concurrency, common filters, peak periods, and actual user paths.
 - **Document prevention.** Convert a one-time fix into monitoring, thresholds, guidelines, and regression checks.
 

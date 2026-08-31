@@ -247,8 +247,8 @@ If the flow stops after deploying notebook code without binding or executing:
 
 ## Gold Layer → Power BI Consumption
 
-After Gold tables are populated, connect Power BI to surface the analytics. 
-Build a semantic model on top of the Gold lakehouse, using DirectLake. 
+After Gold tables are populated, connect Power BI to surface the analytics.
+Build a semantic model on top of the Gold lakehouse, using DirectLake.
 
 
 ### Step-by-Step

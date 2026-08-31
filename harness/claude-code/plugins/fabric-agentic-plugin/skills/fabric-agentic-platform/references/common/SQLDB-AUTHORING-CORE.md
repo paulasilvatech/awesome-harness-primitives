@@ -200,7 +200,7 @@ SELECT * FROM sys.dm_db_tuning_recommendations;
 ALTER TABLE dbo.Orders ADD ShippingAddress nvarchar(500) NULL;
 
 -- Add constraint
-ALTER TABLE dbo.Orders ADD CONSTRAINT CK_Status 
+ALTER TABLE dbo.Orders ADD CONSTRAINT CK_Status
   CHECK (Status IN ('Pending', 'Shipped', 'Delivered', 'Cancelled'));
 
 -- Drop column
@@ -250,7 +250,7 @@ VALUES (1, GETUTCDATE(), 99.95, 'Pending');
 
 -- Multi-row
 INSERT INTO dbo.Orders (CustomerID, OrderDate, TotalAmount, Status)
-VALUES 
+VALUES
   (1, GETUTCDATE(), 99.95, 'Pending'),
   (2, GETUTCDATE(), 149.00, 'Pending');
 
@@ -513,12 +513,12 @@ BEGIN
     BEGIN TRY
         INSERT INTO dbo.Orders (CustomerID, OrderDate, TotalAmount, Status)
         VALUES (@CustomerID, GETUTCDATE(), 0, 'Pending');
-        
+
         DECLARE @OrderID int = SCOPE_IDENTITY();
-        
+
         UPDATE dbo.Inventory SET Quantity = Quantity - @Quantity
         WHERE ProductID = @ProductID;
-        
+
         COMMIT TRANSACTION;
         SELECT @OrderID AS NewOrderID;
     END TRY

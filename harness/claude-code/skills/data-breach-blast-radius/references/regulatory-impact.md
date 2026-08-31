@@ -147,8 +147,8 @@ Scan the codebase for these signals to determine which regulations apply:
 
 ## GDPR Fine Calculator
 
-**Legal source:** GDPR Article 83 — https://gdpr-info.eu/art-83-gdpr/  
-**Exact text, Art. 83.4:** "...up to 10 000 000 EUR, or...up to 2% of the total worldwide annual turnover...whichever is higher"  
+**Legal source:** GDPR Article 83 — https://gdpr-info.eu/art-83-gdpr/
+**Exact text, Art. 83.4:** "...up to 10 000 000 EUR, or...up to 2% of the total worldwide annual turnover...whichever is higher"
 **Exact text, Art. 83.5:** "...up to 20 000 000 EUR, or...up to 4% of the total worldwide annual turnover...whichever is higher"
 
 ### Maximum Fines (Article 83)
@@ -187,7 +187,7 @@ When annual revenue/turnover is unknown, use these conservative estimates:
 
 ## CCPA / CPRA Fine Calculator
 
-**Legal source:** California Civil Code § 1798.155(a) (as amended June 30, 2025, Stats. 2025, Ch. 20) — https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CIV&sectionNum=1798.155  
+**Legal source:** California Civil Code § 1798.155(a) (as amended June 30, 2025, Stats. 2025, Ch. 20) — https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CIV&sectionNum=1798.155
 **Private right of action source:** California Civil Code § 1798.150 — https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CIV&sectionNum=1798.150
 
 ```
@@ -219,8 +219,8 @@ Civil_damages = max($100, min($750, actual_damages)) × affected_California_cons
 
 ## HIPAA Fine Calculator
 
-**Legal source:** 45 CFR § 160.404 — https://www.ecfr.gov/current/title-45/subtitle-A/subchapter-C/part-160/subpart-D/section-160.404  
-**HHS enforcement page:** https://www.hhs.gov/hipaa/for-professionals/compliance-enforcement/examples/all-cases/index.html  
+**Legal source:** 45 CFR § 160.404 — https://www.ecfr.gov/current/title-45/subtitle-A/subchapter-C/part-160/subpart-D/section-160.404
+**HHS enforcement page:** https://www.hhs.gov/hipaa/for-professionals/compliance-enforcement/examples/all-cases/index.html
 **Note:** Amounts are 2024 inflation-adjusted figures per HHS. Updated annually — verify at HHS link above.
 
 HIPAA fines are tiered by knowledge/culpability (45 CFR § 160.404):
@@ -244,7 +244,7 @@ HIPAA fines are tiered by knowledge/culpability (45 CFR § 160.404):
 
 ## LGPD Fine Calculator (Brazil)
 
-**Legal source:** Lei nº 13.709/2018 (LGPD) — Article 52, I — https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm  
+**Legal source:** Lei nº 13.709/2018 (LGPD) — Article 52, I — https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm
 **ANPD (Brazilian DPA):** https://www.gov.br/anpd/pt-br
 
 ```
@@ -252,7 +252,7 @@ Maximum fine per violation = 2% of revenue in Brazil in the prior fiscal year  [
 Hard cap = R$50,000,000 (≈ $10M USD) per violation                            [Art. 52, I]
 ```
 
-Daily fine possible during non-compliance period.  
+Daily fine possible during non-compliance period.
 **Brazilian DPA (ANPD) enforcement began 2021.** Enforcement ramp-up is ongoing.
 
 ---
@@ -279,8 +279,8 @@ How fast you must notify regulators and affected individuals after discovering a
 
 ## Total Breach Cost Estimation Model
 
-**Benchmark source:** IBM Security + Ponemon Institute — "Cost of a Data Breach Report" (annually updated)  
-**URL:** https://www.ibm.com/reports/data-breach  
+**Benchmark source:** IBM Security + Ponemon Institute — "Cost of a Data Breach Report" (annually updated)
+**URL:** https://www.ibm.com/reports/data-breach
 Figures below are from the **2024 edition** (last verified). IBM 2025 shows a 9% decrease — download the current PDF for updated values. **[IBM 2024, p.14]** page references refer to the 2024 edition.
 
 Use this model when generating the Financial Impact Estimate section:

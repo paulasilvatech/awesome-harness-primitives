@@ -1,0 +1,293 @@
+# .github/workflows/cd.yml
+# Continuous Deployment workflow for Open Horizons Platform
+
+name: CD
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "terraform/**"
+      - "deploy/**"
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Target environment"
+        required: true
+        type: choice
+        options:
+          - dev
+          - staging
+          - prod
+      horizon:
+        description: "Horizon to deploy"
+        required: true
+        type: choice
+        options:
+          - h1-foundation
+          - h2-enhancement
+          - h3-innovation
+          - all
+      dry_run:
+        description: "Dry run (plan only)"
+        required: false
+        type: boolean
+        default: true
+
+permissions: {}
+
+concurrency:
+  group: cd-${{ github.event.inputs.environment || 'dev' }}
+  cancel-in-progress: false
+
+env:
+  ARM_USE_OIDC: true
+  TF_VERSION: "1.5.0"
+
+jobs:
+  # Job 1: Prepare deployment
+  prepare:
+    permissions: {}
+    runs-on: ubuntu-latest
+    outputs:
+      environment: ${{ steps.config.outputs.environment }}
+      horizon: ${{ steps.config.outputs.horizon }}
+      dry_run: ${{ steps.config.outputs.dry_run }}
+
+    steps:
+      - name: Set Configuration
+        id: config
+        run: |
+          # Determine configuration from inputs or defaults
+          ENV="${{ github.event.inputs.environment || 'dev' }}"
+          HORIZON="${{ github.event.inputs.horizon || 'all' }}"
+          DRY_RUN="${{ github.event.inputs.dry_run || 'true' }}"
+
+          {
+            echo "environment=$ENV"
+            echo "horizon=$HORIZON"
+            echo "dry_run=$DRY_RUN"
+          } >> "$GITHUB_OUTPUT"
+
+          {
+            echo "## Deployment Configuration"
+            echo "| Setting | Value |"
+            echo "|---------|-------|"
+            echo "| Environment | $ENV |"
+            echo "| Horizon | $HORIZON |"
+            echo "| Dry Run | $DRY_RUN |"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  # Job 2: Deploy H1 Foundation
+  deploy-h1:
+    permissions:
+      contents: read
+      id-token: write
+    runs-on: ubuntu-latest
+    needs: prepare
+    if: needs.prepare.outputs.horizon == 'h1-foundation' || needs.prepare.outputs.horizon == 'all'
+    environment: ${{ needs.prepare.outputs.environment }}
+
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - name: Azure Login
+        uses: azure/login@7184910d9eb2b1c5e48f7073824a90609bb9b6d6 # v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd # v3
+        with:
+          terraform_version: ${{ env.TF_VERSION }}
+
+      - name: Terraform Init
+        working-directory: terraform
+        run: |
+          terraform init \
+            -backend-config="resource_group_name=${{ secrets.TF_STATE_RG }}" \
+            -backend-config="storage_account_name=${{ secrets.TF_STATE_STORAGE }}" \
+            -backend-config="container_name=tfstate" \
+            -backend-config="key=${{ needs.prepare.outputs.environment }}.tfstate"
+
+      - name: Terraform Plan
+        working-directory: terraform
+        run: |
+          terraform plan \
+            -var-file="environments/${{ needs.prepare.outputs.environment }}.tfvars" \
+            -out=tfplan
+
+      - name: Terraform Apply
+        if: needs.prepare.outputs.dry_run == 'false'
+        working-directory: terraform
+        run: terraform apply -auto-approve tfplan
+
+      - name: Output Infrastructure Details
+        if: needs.prepare.outputs.dry_run == 'false'
+        working-directory: terraform
+        run: |
+          {
+            echo "## H1 Infrastructure Deployed"
+            echo ""
+            terraform output -json | jq -r 'to_entries[] | "- **\(.key)**: \(.value.value)"'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  # Job 3: Deploy H2 Enhancement
+  deploy-h2:
+    permissions:
+      contents: read
+      id-token: write
+    runs-on: ubuntu-latest
+    needs: [prepare, deploy-h1]
+    if: |
+      always() &&
+      (needs.prepare.outputs.horizon == 'h2-enhancement' || needs.prepare.outputs.horizon == 'all') &&
+      (needs.deploy-h1.result == 'success' || needs.deploy-h1.result == 'skipped')
+    environment: ${{ needs.prepare.outputs.environment }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - name: Azure Login
+        uses: azure/login@7184910d9eb2b1c5e48f7073824a90609bb9b6d6 # v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Get AKS Credentials
+        run: |
+          az aks get-credentials \
+            --resource-group ${{ secrets.RESOURCE_GROUP }} \
+            --name ${{ secrets.AKS_CLUSTER_NAME }} \
+            --overwrite-existing
+
+      - name: Deploy ArgoCD
+        if: needs.prepare.outputs.dry_run == 'false'
+        run: |
+          helm repo add argo https://argoproj.github.io/argo-helm
+          helm repo update
+
+          helm upgrade --install argocd argo/argo-cd \
+            --namespace argocd \
+            --create-namespace \
+            --values deploy/helm/argocd/values.yaml \
+            --wait
+
+      - name: Deploy Observability Stack
+        if: needs.prepare.outputs.dry_run == 'false'
+        run: |
+          helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+          helm repo update
+
+          helm upgrade --install kube-prometheus-stack prometheus-community/kube-prometheus-stack \
+            --namespace monitoring \
+            --create-namespace \
+            --values deploy/helm/monitoring/values.yaml \
+            --wait
+
+  # Job 4: Deploy H3 Innovation
+  deploy-h3:
+    permissions:
+      contents: read
+      id-token: write
+    runs-on: ubuntu-latest
+    needs: [prepare, deploy-h2]
+    if: |
+      always() &&
+      (needs.prepare.outputs.horizon == 'h3-innovation' || needs.prepare.outputs.horizon == 'all') &&
+      (needs.deploy-h2.result == 'success' || needs.deploy-h2.result == 'skipped')
+    environment: ${{ needs.prepare.outputs.environment }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - name: Azure Login
+        uses: azure/login@7184910d9eb2b1c5e48f7073824a90609bb9b6d6 # v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Deploy AI Foundry Resources
+        if: needs.prepare.outputs.dry_run == 'false'
+        working-directory: terraform/modules/ai-foundry
+        run: |
+          terraform init
+          terraform apply -auto-approve \
+            -var="environment=${{ needs.prepare.outputs.environment }}"
+
+  # Job 5: Validation
+  validate-deployment:
+    permissions:
+      contents: read
+      id-token: write
+    runs-on: ubuntu-latest
+    needs: [prepare, deploy-h1, deploy-h2, deploy-h3]
+    if: always() && needs.prepare.outputs.dry_run == 'false'
+
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - name: Azure Login
+        uses: azure/login@7184910d9eb2b1c5e48f7073824a90609bb9b6d6 # v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Run Validation Script
+        run: |
+          ./.github/skills/validation-scripts/scripts/validate-deployment.sh \
+            --environment ${{ needs.prepare.outputs.environment }} \
+            --horizon ${{ needs.prepare.outputs.horizon }}
+
+      - name: Deployment Summary
+        run: |
+          {
+            echo "## Deployment Complete"
+            echo ""
+            echo "| Component | Status |"
+            echo "|-----------|--------|"
+            echo "| H1 Foundation | ${{ needs.deploy-h1.result }} |"
+            echo "| H2 Enhancement | ${{ needs.deploy-h2.result }} |"
+            echo "| H3 Innovation | ${{ needs.deploy-h3.result }} |"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  # Job 6: Notification
+  notify:
+    permissions: {}
+    runs-on: ubuntu-latest
+    needs: [prepare, validate-deployment]
+    if: always()
+
+    steps:
+      - name: Send Teams Notification
+        if: env.TEAMS_WEBHOOK != ''
+        env:
+          TEAMS_WEBHOOK: ${{ secrets.TEAMS_WEBHOOK }}
+          STATUS: ${{ needs.validate-deployment.result }}
+          DEPLOY_ENVIRONMENT: ${{ needs.prepare.outputs.environment }}
+          HORIZON: ${{ needs.prepare.outputs.horizon }}
+          ACTOR: ${{ github.actor }}
+        run: |
+          COLOR=$([ "$STATUS" = "success" ] && echo "00FF00" || echo "FF0000")
+          payload=$(cat <<JSON
+          {
+            "@type": "MessageCard",
+            "@context": "http://schema.org/extensions",
+            "themeColor": "$COLOR",
+            "summary": "Deployment $DEPLOY_ENVIRONMENT",
+            "sections": [{
+              "activityTitle": "🚀 Deployment Update",
+              "facts": [
+                {"name": "Environment", "value": "$DEPLOY_ENVIRONMENT"},
+                {"name": "Horizon", "value": "$HORIZON"},
+                {"name": "Status", "value": "$STATUS"},
+                {"name": "Actor", "value": "$ACTOR"}
+              ]
+            }]
+          }
+          JSON
+          )
+          curl -H "Content-Type: application/json" -d "$payload" "$TEAMS_WEBHOOK"

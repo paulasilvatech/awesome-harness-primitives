@@ -81,11 +81,11 @@ namespace EntraAuthConsole
         private static async Task CallGraphApiAsync(string accessToken)
         {
             using var httpClient = new System.Net.Http.HttpClient();
-            httpClient.DefaultRequestHeaders.Authorization = 
+            httpClient.DefaultRequestHeaders.Authorization =
                 new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accessToken);
 
             var response = await httpClient.GetAsync("https://graph.microsoft.com/v1.0/me");
-            
+
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();
@@ -147,17 +147,17 @@ def acquire_token_interactive():
         CLIENT_ID,
         authority=AUTHORITY
     )
-    
+
     # Try to get token from cache first
     accounts = app.get_accounts()
     result = None
-    
+
     if accounts:
         # Try silent acquisition
         result = app.acquire_token_silent(SCOPES, account=accounts[0])
         if result:
             print("Token acquired from cache")
-    
+
     if not result:
         # Interactive authentication
         result = app.acquire_token_interactive(
@@ -165,7 +165,7 @@ def acquire_token_interactive():
             prompt="select_account"
         )
         print("Token acquired interactively")
-    
+
     return result
 
 def acquire_token_device_code():
@@ -174,15 +174,15 @@ def acquire_token_device_code():
         CLIENT_ID,
         authority=AUTHORITY
     )
-    
+
     flow = app.initiate_device_flow(scopes=SCOPES)
-    
+
     if "user_code" not in flow:
         raise Exception(f"Failed to create device flow: {flow.get('error_description')}")
-    
+
     # Display instructions to user
     print(flow["message"])
-    
+
     # Wait for user to complete authentication
     result = app.acquire_token_by_device_flow(flow)
     return result
@@ -193,12 +193,12 @@ def call_graph_api(access_token):
         'Authorization': f'Bearer {access_token}',
         'Content-Type': 'application/json'
     }
-    
+
     response = requests.get(
         'https://graph.microsoft.com/v1.0/me',
         headers=headers
     )
-    
+
     if response.status_code == 200:
         user_data = response.json()
         print("\nUser profile from Microsoft Graph:")
@@ -213,7 +213,7 @@ def main():
     print("1. Interactive (opens browser)")
     print("2. Device code (for headless scenarios)")
     choice = input("Enter choice (1 or 2): ")
-    
+
     try:
         if choice == "1":
             result = acquire_token_interactive()
@@ -222,17 +222,17 @@ def main():
         else:
             print("Invalid choice")
             return
-        
+
         if "access_token" in result:
             print(f"\nWelcome, {result.get('id_token_claims', {}).get('preferred_username', 'User')}!")
             print(f"Token expires in: {result.get('expires_in')} seconds")
-            
+
             # Call Microsoft Graph API
             call_graph_api(result["access_token"])
         else:
             print(f"Error acquiring token: {result.get('error')}")
             print(f"Description: {result.get('error_description')}")
-    
+
     except Exception as e:
         print(f"Error: {e}")
 
@@ -276,7 +276,7 @@ const scopes = ["User.Read"];
 // Interactive authentication (opens browser)
 async function acquireTokenInteractive() {
     const pca = new msal.PublicClientApplication(config);
-    
+
     const authCodeUrlParameters = {
         scopes: scopes,
         redirectUri: "http://localhost:3000",
@@ -290,7 +290,7 @@ async function acquireTokenInteractive() {
 // Device code flow (for headless scenarios)
 async function acquireTokenDeviceCode() {
     const pca = new msal.PublicClientApplication(config);
-    
+
     const deviceCodeRequest = {
         deviceCodeCallback: (response) => {
             console.log("\n" + response.message);
@@ -311,9 +311,9 @@ async function acquireTokenClientCredentials() {
             clientSecret: "YOUR_CLIENT_SECRET", // From app registration
         }
     };
-    
+
     const cca = new msal.ConfidentialClientApplication(confidentialConfig);
-    
+
     const clientCredentialRequest = {
         scopes: ["https://graph.microsoft.com/.default"],
     };
@@ -344,24 +344,24 @@ async function main() {
     console.log("Select authentication method:");
     console.log("1. Device code flow (recommended for CLI)");
     console.log("2. Client credentials (service-to-service)");
-    
+
     // For demonstration, using device code flow
     // In production, get user input with readline or similar
     const choice = "1";
-    
+
     try {
         let result;
-        
+
         if (choice === "1") {
             result = await acquireTokenDeviceCode();
         } else if (choice === "2") {
             result = await acquireTokenClientCredentials();
         }
-        
+
         if (result.accessToken) {
             console.log('\nAuthentication successful!');
             console.log(`Token expires: ${new Date(result.expiresOn)}`);
-            
+
             // Call Microsoft Graph API
             await callGraphApi(result.accessToken);
         } else {

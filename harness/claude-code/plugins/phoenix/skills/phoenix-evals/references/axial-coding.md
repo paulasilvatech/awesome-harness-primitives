@@ -17,15 +17,15 @@ failure_taxonomy:
     hallucination: [invented_facts, fictional_citations]
     incompleteness: [partial_answer, missing_key_info]
     inaccuracy: [wrong_numbers, wrong_dates]
-  
+
   communication:
     tone_mismatch: [too_casual, too_formal]
     clarity: [ambiguous, jargon_heavy]
-  
+
   context:
     user_context: [ignored_preferences, misunderstood_intent]
     retrieved_context: [ignored_documents, wrong_context]
-  
+
   safety:
     missing_disclaimers: [legal, medical, financial]
 ```

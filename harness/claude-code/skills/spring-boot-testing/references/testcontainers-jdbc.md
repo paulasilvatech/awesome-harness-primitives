@@ -30,14 +30,14 @@ Testcontainers provides real database instances in Docker containers for integra
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Testcontainers
 class OrderRepositoryPostgresTest {
-  
+
   @Container
   @ServiceConnection
   static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:18");
-  
+
   @Autowired
   private OrderRepository orderRepository;
-  
+
   @Autowired
   private TestEntityManager entityManager;
 }
@@ -66,11 +66,11 @@ static MySQLContainer<?> mysql = new MySQLContainer<>("mysql:8.4");
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Testcontainers
 class MultiDatabaseTest {
-  
+
   @Container
   @ServiceConnection(name = "primary")
   static PostgreSQLContainer<?> primaryDb = new PostgreSQLContainer<>("postgres:18");
-  
+
   @Container
   @ServiceConnection(name = "analytics")
   static PostgreSQLContainer<?> analyticsDb = new PostgreSQLContainer<>("postgres:18");
@@ -112,14 +112,14 @@ static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:18"
 @Testcontainers
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class MigrationTest {
-  
+
   @Container
   @ServiceConnection
   static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:18");
-  
+
   @Autowired
   private Flyway flyway;
-  
+
   @Test
   void shouldApplyMigrations() {
     flyway.migrate();
@@ -157,32 +157,32 @@ static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:18"
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Testcontainers
 class OrderRepositoryTest {
-  
+
   @Container
   @ServiceConnection
   static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:18");
-  
+
   @Autowired
   private OrderRepository orderRepository;
-  
+
   @Autowired
   private TestEntityManager entityManager;
-  
+
   @Test
   void shouldFindOrdersByStatus() {
     // Given
     entityManager.persist(new Order("PENDING"));
     entityManager.persist(new Order("COMPLETED"));
     entityManager.flush();
-    
+
     // When
     List<Order> pending = orderRepository.findByStatus("PENDING");
-    
+
     // Then
     assertThat(pending).hasSize(1);
     assertThat(pending.get(0).getStatus()).isEqualTo("PENDING");
   }
-  
+
   @Test
   void shouldSupportPostgresSpecificFeatures() {
     // Can use Postgres-specific features like:
@@ -201,10 +201,10 @@ If not using @ServiceConnection:
 @SpringBootTest
 @Testcontainers
 class OrderServiceTest {
-  
+
   @Container
   static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:18");
-  
+
   @DynamicPropertySource
   static void configureProperties(DynamicPropertyRegistry registry) {
     registry.add("spring.datasource.url", postgres::getJdbcUrl);

@@ -15,7 +15,7 @@ A stored procedure performs a lookup operation using `SELECT INTO` to retrieve a
 ```sql
 SELECT column_name
 INTO variable_name
-FROM table1, table2 
+FROM table1, table2
 WHERE table1.id = table2.id AND table1.id = parameter_value;
 ```
 
@@ -49,7 +49,7 @@ The PostgreSQL version was missing explicit error handling for the `NOT FOUND` c
 ```plpgsql
 SELECT column_name
 INTO variable_name
-FROM table1, table2 
+FROM table1, table2
 WHERE table1.id = table2.id AND table1.id = parameter_value;
 
 IF variable_name = 'X' THEN
@@ -72,7 +72,7 @@ Add explicit `NOT FOUND` error handling to match Oracle behavior.
 ```plpgsql
 SELECT column_name
 INTO variable_name
-FROM table1, table2 
+FROM table1, table2
 WHERE table1.id = table2.id AND table1.id = parameter_value;
 
 -- Explicitly raise exception if no data found (matching Oracle behavior)

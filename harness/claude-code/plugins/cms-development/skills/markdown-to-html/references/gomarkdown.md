@@ -147,8 +147,8 @@ import (
 
 func mdToHTML(md []byte) []byte {
     // Parser with extensions
-    extensions := parser.CommonExtensions | 
-                  parser.AutoHeadingIDs | 
+    extensions := parser.CommonExtensions |
+                  parser.AutoHeadingIDs |
                   parser.NoEmptyLineBeforeBlock
     p := parser.NewWithExtensions(extensions)
     doc := p.Parse(md)

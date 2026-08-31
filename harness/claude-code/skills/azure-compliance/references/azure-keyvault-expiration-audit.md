@@ -59,10 +59,10 @@ Organize findings into:
 
 ## Remediation Priority
 
-**🔴 Critical** - Expired (< 0 days): Rotate immediately  
-**🟠 High** - Expiring 0-7 days: Schedule rotation within 24 hours  
-**🟡 Medium** - Expiring 8-30 days: Plan rotation within 1 week  
-**🟡 Medium** - No expiration set: Apply expiration policy  
+**🔴 Critical** - Expired (< 0 days): Rotate immediately
+**🟠 High** - Expiring 0-7 days: Schedule rotation within 24 hours
+**🟡 Medium** - Expiring 8-30 days: Plan rotation within 1 week
+**🟡 Medium** - No expiration set: Apply expiration policy
 **🟢 Low** - Active (> 30 days): Monitor on regular schedule
 
 ## Best Practices
@@ -85,7 +85,7 @@ Organize findings into:
 | `keyvault_certificate_list` | List all certificates in a vault |
 | `keyvault_certificate_get` | Get certificate details including expiration |
 
-**Required**: `vault` (Key Vault name)  
+**Required**: `vault` (Key Vault name)
 **Optional**: `subscription`, `tenant`
 
 ## Fallback Strategy: Azure CLI Commands

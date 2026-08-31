@@ -369,12 +369,12 @@ DATASET_TYPE_TO_FORMAT_SETTINGS = {
 def inline_dataset(activity: dict, dataset_map: dict, connection_map: dict) -> dict:
     """
     Inline dataset references in a Copy, Lookup, GetMetadata, or Delete activity.
-    
+
     Args:
         activity: The Synapse activity dict (will be deep-copied).
         dataset_map: {datasetName: datasetProperties} from Synapse.
         connection_map: {linkedServiceName: fabricConnectionName}
-    
+
     Returns:
         Activity with dataset references inlined.
     """
@@ -652,7 +652,7 @@ def inline_all_activities(
 ) -> tuple[list, list[str]]:
     """
     Inline datasets in all activities, including nested inner activities.
-    
+
     Returns:
         (transformed_activities, list_of_warning_messages)
     """

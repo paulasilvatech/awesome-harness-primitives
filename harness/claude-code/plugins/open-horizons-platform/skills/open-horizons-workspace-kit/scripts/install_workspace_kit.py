@@ -15,6 +15,7 @@ from pathlib import Path, PurePosixPath
 from typing import Iterable
 
 PACKAGE_ROOT = Path(__file__).resolve().parents[3]
+COPILOT_SOURCE_ROOT = PACKAGE_ROOT / "copilot-components"
 PACKAGE_NAME = PACKAGE_ROOT.name
 STATE_RELATIVE = Path(".github/.open-horizons-workspace-kit.json")
 BACKUP_RELATIVE = Path(".github/.open-horizons-workspace-kit-backup")
@@ -33,7 +34,7 @@ AEG_PROMPTS = (
     "open-horizons-aeg-status.prompt.md",
 )
 WORKSPACE_MCP_TEMPLATE = (
-    PACKAGE_ROOT / "skills/open-horizons-workspace-kit/templates/mcp.json"
+    COPILOT_SOURCE_ROOT / "skills/open-horizons-workspace-kit/templates/mcp.json"
 )
 
 
@@ -97,7 +98,7 @@ def safe_destination(target: Path, relative: str) -> Path:
 
 
 def checked_source(relative: str) -> Path:
-    source = PACKAGE_ROOT / relative
+    source = COPILOT_SOURCE_ROOT / relative
     if source.is_symlink():
         raise ValueError(f"source symlink is not allowed: {source}")
     if not source.is_file():
@@ -106,14 +107,14 @@ def checked_source(relative: str) -> Path:
         )
     resolved = source.resolve()
     try:
-        resolved.relative_to(PACKAGE_ROOT.resolve())
+        resolved.relative_to(COPILOT_SOURCE_ROOT.resolve())
     except ValueError as exc:
         raise ValueError(f"source escapes package root: {source}") from exc
     return resolved
 
 
 def iter_tree(source_relative: str, destination: str) -> Iterable[CopyItem]:
-    source_root = PACKAGE_ROOT / source_relative
+    source_root = COPILOT_SOURCE_ROOT / source_relative
     if source_root.is_symlink() or not source_root.is_dir():
         raise ValueError(f"invalid workspace-kit source tree: {source_root}")
     for source in sorted(source_root.rglob("*")):
@@ -698,7 +699,7 @@ def apply_uninstall(target: Path, state: dict, plan: list[PlanEntry]) -> None:
 
 def validate_workspace_mcp_template() -> None:
     package = json.loads(
-        (PACKAGE_ROOT / "mcp.json").read_text(encoding="utf-8")
+        (COPILOT_SOURCE_ROOT / "mcp.json").read_text(encoding="utf-8")
     )
     workspace = json.loads(WORKSPACE_MCP_TEMPLATE.read_text(encoding="utf-8"))
     expected: dict[str, dict[str, object]] = {}
@@ -734,7 +735,7 @@ def validate_workspace_mcp_template() -> None:
 
 def validate_package_root() -> None:
     manifest = json.loads(
-        (PACKAGE_ROOT / "plugin.json").read_text(encoding="utf-8")
+        (COPILOT_SOURCE_ROOT / "plugin.json").read_text(encoding="utf-8")
     )
     if manifest.get("name") != PACKAGE_NAME:
         raise ValueError(f"unexpected package at {PACKAGE_ROOT}")

@@ -231,7 +231,7 @@ EXEC @retval = sp_invoke_external_rest_endpoint
 
 ```sql
 -- List all user tables
-SELECT s.name AS [schema], t.name AS [table], 
+SELECT s.name AS [schema], t.name AS [table],
     SUM(p.rows) AS row_count
 FROM sys.tables t
 JOIN sys.schemas s ON t.schema_id = s.schema_id
@@ -240,7 +240,7 @@ GROUP BY s.name, t.name
 ORDER BY s.name, t.name;
 
 -- Columns for a specific table
-SELECT c.name AS column_name, ty.name AS data_type, 
+SELECT c.name AS column_name, ty.name AS data_type,
     c.max_length, c.precision, c.scale, c.is_nullable, c.is_identity
 FROM sys.columns c
 JOIN sys.types ty ON c.user_type_id = ty.user_type_id
@@ -271,7 +271,7 @@ GROUP BY i.name, i.type_desc;
 ```sql
 SELECT tc.constraint_name, tc.constraint_type, kcu.column_name
 FROM information_schema.table_constraints tc
-JOIN information_schema.key_column_usage kcu 
+JOIN information_schema.key_column_usage kcu
     ON tc.constraint_name = kcu.constraint_name
 WHERE tc.table_schema = 'dbo' AND tc.table_name = 'Orders'
 ORDER BY tc.constraint_type, kcu.ordinal_position;
@@ -317,7 +317,7 @@ WHERE JSON_VALUE(state, '$.currentValue') = 'Active';
 
 ```sql
 -- Active sessions
-SELECT session_id, login_name, status, program_name, 
+SELECT session_id, login_name, status, program_name,
     cpu_time, reads, writes, last_request_start_time
 FROM sys.dm_exec_sessions
 WHERE is_user_process = 1;
@@ -336,7 +336,7 @@ WHERE r.session_id != @@SPID;
 
 ```sql
 -- Top resource-consuming queries (last 24 hours)
-SELECT TOP 20 
+SELECT TOP 20
     q.query_id, qt.query_sql_text,
     SUM(rs.avg_cpu_time * rs.count_executions) AS total_cpu,
     SUM(rs.count_executions) AS total_executions

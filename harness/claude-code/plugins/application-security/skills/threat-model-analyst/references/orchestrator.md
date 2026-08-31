@@ -121,7 +121,7 @@ Sub-agents are **independent execution contexts** — they have no memory of the
    This table is the **single source of truth** for prerequisite floors. No threat or finding may have a lower prerequisite than what the exposure table permits for its component.
 
    ** DETERMINISTIC NAMING — Apply BEFORE writing any files:**
-   
+
    When identifying components, assign each a canonical PascalCase `id`. The naming MUST be deterministic — two independent runs on the same codebase MUST produce the same component IDs.
 
    ** ABSOLUTE RULE: Every component ID MUST be anchored to a real code artifact.**
@@ -159,7 +159,7 @@ Sub-agents are **independent execution contexts** — they have no memory of the
    - `config_keys` → the env vars / config keys for the service connection (e.g., `["AZURE_OPENAI_ENDPOINT", "RESPONSES_API_DEPLOYMENT"]`). These are the most stable anchors for external services.
    - `api_routes` → leave empty (external services expose their own routes, not yours)
    - `dependencies` → the SDK package used (e.g., `["Azure.AI.OpenAI"]` for NuGet, `["pymilvus"]` for pip)
-   
+
    **Why this matters:** External services frequently change display names across LLM runs (e.g., "Azure OpenAI" vs "GPT-4 Endpoint" vs "LLM Backend"). The `config_keys` and `dependencies` fields are what make them matchable across runs.
 
    ** FORBIDDEN naming patterns — NEVER use these:**
@@ -206,7 +206,7 @@ Sub-agents are **independent execution contexts** — they have no memory of the
    1. **It crosses a trust boundary OR handles security-sensitive data** (credentials, user input, network I/O, file I/O, process execution)
    2. **It is a top-level service**, not an internal helper (registered in DI, or the main entry point, or an agent with its own responsibility)
    3. **It would appear in a deployment diagram** — you could point to it and say "this runs here, talks to that"
-   
+
    **ALWAYS include these component types (if they exist in the code):**
    - ALL agent classes (HealthAgent, InfrastructureAgent, InvestigatorAgent, SupportabilityAgent, etc.)
    - ALL MCP server classes (HealthServer, InfrastructureServer, etc.)
@@ -218,14 +218,14 @@ Sub-agents are **independent execution contexts** — they have no memory of the
    - ALL session/state persistence services
    - ALL LLM service classes (ResponsesAPIService, LLMService — if they are separate classes, they are separate components)
    - External actors (Operator, EndUser)
-   
+
    **NEVER include these as separate components:**
    - Loggers (LocalFileLogger, TelemetryLogger) — these are cross-cutting concerns, not threat model components
    - Static helper classes
    - Model/DTO classes
    - Configuration builders (unless they handle secrets)
    - Infrastructure-as-code classes that don't exist at runtime (AzureStackHCI cluster reference, deployment scripts)
-   
+
    **The goal:** Every run on the same code should identify the SAME set of ~12-20 components. If you're including a logger or excluding an agent, you're doing it wrong.
 
    **Boundary naming rules:**
@@ -265,7 +265,7 @@ Sub-agents are **independent execution contexts** — they have no memory of the
 
    ** DATA FLOW COMPLETENESS (MANDATORY — ensures consistent flow enumeration across runs):**
    Data flows MUST be enumerated exhaustively. Two independent analyses of the same codebase MUST produce the same set of flows. To achieve this:
-   
+
    ** RETURN FLOW MODELING RULE (addresses 24% variance in flow counts):**
    - **DO NOT model separate return flows.** A request-response pair is ONE bidirectional flow (use `<-->` in Mermaid).
    - Example: `DF01: Operator <--> TUI` (one flow for input and output)
@@ -273,28 +273,28 @@ Sub-agents are **independent execution contexts** — they have no memory of the
    - **DO model separate flows ONLY when the two directions use different protocols or semantics** (e.g., HTTP request vs WebSocket push-back).
    - **Why:** When runs independently decide whether to create 1 flow or 2 flows per interaction, the flow count varies by 20-30%. This rule eliminates that variance.
    - **Flow count formula:** `# flows ≈ # unique component-to-component interactions`. If component A talks to component B, that is 1 flow, not 2.
-   
+
    **Flow completeness checklist (use `<-->` bidirectional flows per the return flow rule above):**
    1. **Ingress/reverse proxy flows**: `DF_EndUser_to_NginxIngress` (bidirectional `<-->`), `DF_NginxIngress_to_Backend` (bidirectional `<-->`). Each is ONE flow, not two.
    2. **Database/datastore flows**: `DF_Service_to_Redis` (bidirectional `<-->`). ONE flow per service-datastore pair.
    3. **Auth provider flows**: `DF_Service_to_AzureAD` (bidirectional `<-->`). ONE flow per service-auth pair.
    4. **Admin access flows**: `DF_Operator_to_Service` (bidirectional `<-->`). ONE per admin interaction.
    5. **Flow count locking**: After enumerating flows, LOCK the count. Two runs on the same code MUST produce the same number of flows (±3 acceptable). A difference of >5 flows indicates incomplete enumeration.
-   
+
    ** EXTERNAL ENTITY INCLUSION RULES (addresses variance in which externals are modeled):**
    - **ALWAYS include `AzureAD` (or `EntraID`) as an external entity** if the code acquires tokens from Azure AD / Microsoft Entra ID (look for `ChainedTokenCredential`, `ManagedIdentityCredential`, `AzureCliCredential`, MSAL, or any OAuth2/OIDC flow).
    - **ALWAYS include the infrastructure target** (e.g., `OnPremInfra`, `HCICluster`) as an external entity if the code sends commands to external infrastructure via PowerShell, REST, or WMI.
    - **ALWAYS include `AzureOpenAI`** (or equivalent LLM endpoint) if the code calls a cloud LLM API.
    - **ALWAYS include `Operator`** as an external actor for CLI/TUI tools, admin tools, or operator consoles.
    - **Rule of thumb:** If the code has a client class or config for a service, that service is an external entity.
-   
+
    ** TMT CATEGORY RULES (addresses category inconsistency across runs):**
    - **Tool servers** that expose APIs callable by agents → `SE.P.TMCore.WebSvc` (NOT `SE.P.TMCore.NetApp`)
    - **Network-level services** that handle connections/sockets → `SE.P.TMCore.NetApp`
    - **Services that execute OS commands** (PowerShell, bash) → `SE.P.TMCore.OSProcess`
    - **Services that store data to disk** (SessionStore, FileLogger) → `SE.DS.TMCore.FS` (classify as Data Store, NOT Process)
    - **Rule:** If a class's primary purpose is persisting data, it is a Data Store. If it does computation or orchestration, it is a Process. Never switch between runs.
-   
+
    ** DFD DIRECTION (MANDATORY — addresses layout variance):**
    - ALL DFDs MUST use `flowchart LR` (left-to-right). NEVER use `flowchart TB`.
    - ALL summary DFDs MUST also use `flowchart LR`.
@@ -315,7 +315,7 @@ Sub-agents are **independent execution contexts** — they have no memory of the
    - Azure OpenAI: `AzureOpenAI` (never `OpenAIService`, `LLMEndpoint`)
    - NFS: `NFSServer` (never `NfsServer`, `FileShare`)
    - If two LLM models are separate deployments, keep them separate (never merge `MistralLLM` + `PhiLLM` into `LocalLlm`)
-   
+
    **BUT: for application-specific classes, use the EXACT class name from the code, NOT a technology label:**
    - `ResponsesAPIService.cs` → `ResponsesAPIService` (NOT `OpenAIService` — the class IS named ResponsesAPIService)
    - `TaskProcessor.cs` → `TaskProcessor` (NOT `LocalLLM` — the class IS named TaskProcessor)
@@ -460,7 +460,7 @@ Sub-agents are **independent execution contexts** — they have no memory of the
    - `threats.length == metrics.total_threats` — if mismatch, the threats array was truncated during generation. Rebuild by re-reading `2-stride-analysis.md` and extracting every threat row.
    - `findings.length == metrics.total_findings` — if mismatch, rebuild from `3-findings.md`.
    - `components.length == metrics.total_components` — if mismatch, rebuild from architecture/element tables.
-   
+
     **CROSS-FILE THREAT COUNT VERIFICATION (MANDATORY — catches dropped threats):**
    The JSON `threats.length` can match `metrics.total_threats` but BOTH can be wrong if threats were dropped during JSON generation. To catch this:
    - Count threat rows in `2-stride-analysis.md`: grep for `^\| T\d+\.` and count unique threat IDs
@@ -489,14 +489,14 @@ Sub-agents are **independent execution contexts** — they have no memory of the
       c. **Chunked write** — use the Large Repo Strategy below.
    4. **Re-validate** after regeneration — if still mismatched, repeat with the next strategy
    5. **NEVER proceed to Step 9 (assessment) or Step 10 (verification) with mismatched counts**
-   
+
     **LARGE REPO STRATEGY (MANDATORY for repos with >60 threats):**
    For repos producing more than ~60 threats, the JSON file can exceed output token limits if generated in one pass. Use this chunked approach:
    1. **Write metadata + components + boundaries + flows + metrics first** — these are small arrays
    2. **Append threats in batches** — write threats array with ~20 threats per append operation. Use `replace_string_in_file` to add batches to the existing file rather than writing the entire JSON in one `create_file` call.
    3. **Append findings** — similarly batch if >15 findings
    4. **Final validation** — read the completed file and verify all array lengths match metrics
-   
+
    **Alternative approach:** If chunked writing is not feasible, keep each threat/finding entry minimal:
    - `description` field: max 1 sentence (not full prose paragraphs)
    - `mitigation` field: max 1 sentence

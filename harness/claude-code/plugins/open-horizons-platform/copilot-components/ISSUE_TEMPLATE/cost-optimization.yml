@@ -1,0 +1,46 @@
+name: "Cross: Cost Optimization"
+description: "Analyze and optimize platform costs"
+title: "[Cost] Run cost optimization analysis"
+labels: ["cross-cutting", "cost-optimization", "copilot-agent"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Cost Optimization
+        This issue triggers the **cost-optimization-agent**.
+
+  - type: dropdown
+    id: analysis_scope
+    attributes:
+      label: "Analysis Scope"
+      options:
+        - "full - All resources"
+        - "compute - AKS and VMs"
+        - "storage - Storage accounts"
+        - "database - PostgreSQL and Redis"
+        - "ai - AI Foundry"
+        - "networking - Network resources"
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: optimization_actions
+    attributes:
+      label: "Optimization Actions"
+      options:
+        - label: "Generate cost report"
+          required: true
+        - label: "Identify unused resources"
+        - label: "Right-sizing recommendations"
+        - label: "Reserved instance analysis"
+        - label: "Spot instance opportunities"
+        - label: "Auto-shutdown schedules"
+        - label: "Storage tier optimization"
+
+  - type: input
+    id: budget_target
+    attributes:
+      label: "Monthly Budget Target"
+      description: "Target monthly spend in USD"
+      placeholder: "$5,000"

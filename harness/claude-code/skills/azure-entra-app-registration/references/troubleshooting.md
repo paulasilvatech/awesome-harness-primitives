@@ -17,7 +17,7 @@ This guide helps you diagnose and fix common issues with app registrations and a
 
 **Error message:**
 ```
-AADSTS50011: The redirect URI 'http://localhost:3000' specified in the request 
+AADSTS50011: The redirect URI 'http://localhost:3000' specified in the request
 does not match the redirect URIs configured for the application.
 ```
 
@@ -50,7 +50,7 @@ does not match the redirect URIs configured for the application.
 
 **Error message:**
 ```
-AADSTS7000215: Invalid client secret provided. 
+AADSTS7000215: Invalid client secret provided.
 Ensure the secret being sent in the request is the client secret value, not the client secret ID.
 ```
 

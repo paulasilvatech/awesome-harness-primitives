@@ -9,14 +9,14 @@ Testing JPA repositories with isolated data layer slice.
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Testcontainers
 class OrderRepositoryTest {
-  
+
   @Container
   @ServiceConnection
   static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:18");
-  
+
   @Autowired
   private OrderRepository orderRepository;
-  
+
   @Autowired
   private TestEntityManager entityManager;
 }
@@ -41,10 +41,10 @@ void shouldFindOrdersByStatus() {
   entityManager.persist(pending);
   entityManager.persist(completed);
   entityManager.flush();
-  
+
   // When
   var pendingOrders = orderRepository.findByStatus("PENDING");
-  
+
   // Then - Using sequenced collection methods
   assertThat(pendingOrders).hasSize(1);
   assertThat(pendingOrders.getFirst().getStatus()).isEqualTo("PENDING");
@@ -59,9 +59,9 @@ void shouldExecuteNativeQuery() {
   entityManager.persist(new Order("PENDING", BigDecimal.valueOf(100)));
   entityManager.persist(new Order("PENDING", BigDecimal.valueOf(200)));
   entityManager.flush();
-  
+
   var total = orderRepository.calculatePendingTotal();
-  
+
   assertThat(total).isEqualTo(new BigDecimal("300.00"));
 }
 ```
@@ -76,9 +76,9 @@ void shouldReturnPagedResults() {
     entityManager.persist(new Order("PENDING"));
   });
   entityManager.flush();
-  
+
   var page = orderRepository.findByStatus("PENDING", PageRequest.of(0, 10));
-  
+
   assertThat(page.getContent()).hasSize(10);
   assertThat(page.getTotalElements()).isEqualTo(20);
   assertThat(page.getContent().getFirst().getStatus()).isEqualTo("PENDING");
@@ -95,9 +95,9 @@ void shouldLazyLoadOrderItems() {
   entityManager.persist(order);
   entityManager.flush();
   entityManager.clear(); // Detach from persistence context
-  
+
   var found = orderRepository.findById(order.getId());
-  
+
   assertThat(found).isPresent();
   // This will trigger lazy loading
   assertThat(found.get().getItems()).hasSize(1);
@@ -114,10 +114,10 @@ void shouldCascadeDelete() {
   order.addItem(new OrderItem("Product", 2));
   entityManager.persist(order);
   entityManager.flush();
-  
+
   orderRepository.delete(order);
   entityManager.flush();
-  
+
   assertThat(entityManager.find(OrderItem.class, order.getItems().getFirst().getId()))
     .isNull();
 }
@@ -127,7 +127,7 @@ void shouldCascadeDelete() {
 
 ```java
 @Query("SELECT o FROM Order o WHERE o.createdAt > :date AND o.status = :status")
-List<Order> findRecentByStatus(@Param("date") LocalDateTime date, 
+List<Order> findRecentByStatus(@Param("date") LocalDateTime date,
                                @Param("status") String status);
 
 @Test
@@ -136,14 +136,14 @@ void shouldFindRecentOrders() {
   old.setCreatedAt(LocalDateTime.now().minusDays(10));
   var recent = new Order("PENDING");
   recent.setCreatedAt(LocalDateTime.now().minusHours(1));
-  
+
   entityManager.persist(old);
   entityManager.persist(recent);
   entityManager.flush();
-  
+
   var recentOrders = orderRepository.findRecentByStatus(
     LocalDateTime.now().minusDays(1), "PENDING");
-  
+
   assertThat(recentOrders).hasSize(1);
   assertThat(recentOrders.getFirst().getId()).isEqualTo(recent.getId());
 }

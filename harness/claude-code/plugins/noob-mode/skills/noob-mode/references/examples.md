@@ -143,7 +143,7 @@ This sends your changes to a shared server where your colleagues can see them. I
 
 ### Without Noob Mode
 ```
-Allow tool: web_fetch on URL "https://api.github.com/repos/github/docs/issues"?
+Allow tool: WebFetch on URL "https://api.github.com/repos/github/docs/issues"?
 [y/n]
 ```
 

@@ -4,7 +4,7 @@ Cosmos DB change feed trigger with managed identity authentication.
 
 ## Template Selection
 
-Resource filter: `cosmos`  
+Resource filter: `cosmos`
 Discover templates via MCP or CDN manifest where `resource == "cosmos"` and `language` matches user request.
 
 ## Troubleshooting
@@ -17,7 +17,7 @@ Discover templates via MCP or CDN manifest where `resource == "cosmos"` and `lan
 
 ### UAMI Connection Issues
 
-**Cause:** Missing managed identity credential settings.  
+**Cause:** Missing managed identity credential settings.
 **Solution:** Ensure all three settings are present in app configuration:
 
 - `COSMOS_CONNECTION__accountEndpoint`

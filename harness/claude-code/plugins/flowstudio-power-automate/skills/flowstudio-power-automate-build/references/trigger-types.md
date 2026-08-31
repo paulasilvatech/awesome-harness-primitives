@@ -67,7 +67,7 @@ Receive an HTTP POST with a JSON body.
 }
 ```
 
-Access values: `@triggerBody()?['name']`  
+Access values: `@triggerBody()?['name']`
 Trigger URL available after saving: `@listCallbackUrl()`
 
 #### No-Schema Variant (Accept Arbitrary JSON)

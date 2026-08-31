@@ -39,7 +39,7 @@ DEFINITION=$(az rest --method get \
   --url "https://api.powerbi.com/v1.0/myorg/groups/$WS_ID/dataflows/$DF_ID" -o json)
 
 # Check for incremental refresh policies (ppiConfig)
-echo "$DEFINITION" | jq '[.entities[]? | select(.ppiConfig != null) | 
+echo "$DEFINITION" | jq '[.entities[]? | select(.ppiConfig != null) |
   {entity: .name, incrementalRefreshPolicy: .ppiConfig}]'
 ```
 
@@ -177,7 +177,7 @@ DEFINITION=$(az rest --method get \
   --url "https://api.powerbi.com/v1.0/myorg/groups/$WS_ID/dataflows/$DF_ID" -o json)
 
 # Look for linked entity references
-echo "$DEFINITION" | jq '[.entities[]? | select(.linkedEntityRef != null) | 
+echo "$DEFINITION" | jq '[.entities[]? | select(.linkedEntityRef != null) |
   {entity: .name, linkedTo: .linkedEntityRef}]'
 ```
 
@@ -207,7 +207,7 @@ DEFINITION=$(az rest --method get \
   --url "https://api.powerbi.com/v1.0/myorg/groups/$WS_ID/dataflows/$DF_ID" -o json)
 
 # Check for DirectQuery partitions
-echo "$DEFINITION" | jq '[.entities[]? | .partitions[]? | 
+echo "$DEFINITION" | jq '[.entities[]? | .partitions[]? |
   select(.mode == "directQuery") | {entity: .name, mode: .mode}]'
 ```
 

@@ -107,14 +107,14 @@ public static async Task<string[]> FanOutFanIn([OrchestrationTrigger] TaskOrches
 public static async Task<string> ApprovalWorkflow([OrchestrationTrigger] TaskOrchestrationContext context)
 {
     await context.CallActivityAsync(nameof(SendApprovalRequest), context.GetInput<string>());
-    
+
     // Wait for approval event with timeout
     using var cts = new CancellationTokenSource();
     var approvalTask = context.WaitForExternalEvent<bool>("ApprovalEvent");
     var timeoutTask = context.CreateTimer(context.CurrentUtcDateTime.AddDays(3), cts.Token);
-    
+
     var winner = await Task.WhenAny(approvalTask, timeoutTask);
-    
+
     if (winner == approvalTask)
     {
         cts.Cancel();

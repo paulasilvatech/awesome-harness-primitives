@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "SCAN_MODE=warn SCAN_SCOPE=diff \"${CLAUDE_PROJECT_DIR}/.claude/hooks/secrets-scanner/scan-secrets.sh\"",
+            "timeout": 30
+          }
+        ]
+      }
+    ]
+  }
+}

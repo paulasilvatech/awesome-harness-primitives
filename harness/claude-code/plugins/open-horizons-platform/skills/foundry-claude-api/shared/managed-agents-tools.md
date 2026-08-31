@@ -26,8 +26,8 @@ The `agent_toolset_20260401` provides these built-in tools:
 | `edit` | Perform string replacement in a file |
 | `glob` | Fast file pattern matching using glob patterns |
 | `grep` | Text search using regex patterns |
-| `web_fetch` | Fetch content from a URL |
-| `web_search` | Search the web for information |
+| `WebFetch` | Fetch content from a URL |
+| `WebSearch` | Search the web for information |
 
 Enable the full toolset:
 
@@ -362,7 +362,7 @@ Skills can also live in your codebase. When a session mounts a repository via th
 
 **The agent can discover any skill in `.claude/skills/<skill-name>/`** — one directory level deep at the repository root. Skills in the following locations are not discoverable: a bare `.claude/skills/SKILL.md` (no skill directory), anything nested deeper (`.claude/skills/tools/code-review/SKILL.md`), a `skills/` directory outside `.claude`, or a `.claude/skills` inside a package subdirectory (though those can still surface when the agent reads files under that subtree). The `SKILL.md` format is the same as uploaded custom skills.
 
-> ⚠️ **Repository skills are agent instructions — treat them as part of your trust boundary.** Anyone who can commit to a mounted repository (a merged external PR, a compromised dependency, a contributor) can add or edit `.claude/skills/` content, and the platform loads it at session start with no review step — where session tools like `bash` and `web_fetch` give injected instructions real capability. Only mount repositories you trust, and audit `.claude/skills/` before mounting one with external contributors.
+> ⚠️ **Repository skills are agent instructions — treat them as part of your trust boundary.** Anyone who can commit to a mounted repository (a merged external PR, a compromised dependency, a contributor) can add or edit `.claude/skills/` content, and the platform loads it at session start with no review step — where session tools like `bash` and `WebFetch` give injected instructions real capability. Only mount repositories you trust, and audit `.claude/skills/` before mounting one with external contributors.
 
 Rules:
 - **Cloud sandboxes only** — self-hosted sandboxes don't support `github_repository` resources, so they can't load repository skills.

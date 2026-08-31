@@ -394,14 +394,14 @@ Use the `retailPrice` value from the returned row for the autoscale rate. If no 
 ```text
 Example (fill in live prices from API):
 - SQL DW peak: 16 CUs
-- Power BI peak: 8 CUs  
+- Power BI peak: 8 CUs
 - Spark peak: 64 CUs (but only 4 hours/day)
 - Pipelines: 4 CUs
 
 Base capacity (standard, capacity-billed): sized for SQL + PBI + Pipelines = 16 + 8 + 4 = 28 CUs raw
   → apply 1.2× safety: 28 × 1.2 = 33.6 CUs → round up to next tier → **F64**
   Monthly cost: [look up F64 1-Year RI rate from API, amortized ÷ 12]
-  
+
 Spark (Autoscale Billing, offloaded from capacity):
   64 CU × 4 hours/day × 30 days = 7,680 CU-hours/month
   Cost: 7,680 × [live 'autoscale for Spark Capacity Usage CU' rate from API]

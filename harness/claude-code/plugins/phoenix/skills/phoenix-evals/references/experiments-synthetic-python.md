@@ -30,7 +30,7 @@ tuples = [
 def tuple_to_query(t):
     prompt = f"""Generate a realistic customer message:
     Issue: {t[0]}, Mood: {t[1]}, Complexity: {t[2]}
-    
+
     Write naturally, include typos if appropriate. Don't be formulaic."""
     return llm(prompt)
 ```

@@ -688,7 +688,7 @@ This is the most important step for the code review protocol. Everything found d
    # Auto-generated: re-run mechanical extraction commands and verify saved artifacts
    set -euo pipefail
    FAIL=0
-   
+
    # Verify <function>
    ACTUAL=$(awk '/void vring_transport_features/,/^}$/' drivers/virtio/virtio_ring.c | grep -nE '^\s*case\s+')
    SAVED=$(cat quality/mechanical/vring_transport_features_cases.txt)
@@ -699,7 +699,7 @@ This is the most important step for the code review protocol. Everything found d
    else
      echo "OK: vring_transport_features_cases.txt"
    fi
-   
+
    exit $FAIL
    ```
 
@@ -2244,7 +2244,7 @@ For each bug, perform these checks in order:
    - Apply it: `git apply quality/patches/BUG-NNN-regression-test.patch`
    - Run the test (using the project's test runner). If the test PASSES, the bug is fixed. If it FAILS, the bug is still present.
    - Reverse the patch: `git apply -R quality/patches/BUG-NNN-regression-test.patch`
-   
+
    If the regression test patch doesn't apply cleanly (because the source has changed), note this and fall back to source inspection alone.
 
 4. **Verdict.** Assign one of these statuses:

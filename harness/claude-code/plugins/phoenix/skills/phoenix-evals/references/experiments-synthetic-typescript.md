@@ -36,7 +36,7 @@ async function tupleToQuery(t: Tuple): Promise<string> {
     model: openai("gpt-4o"),
     prompt: `Generate a realistic customer message:
     Issue: ${t[0]}, Mood: ${t[1]}, Complexity: ${t[2]}
-    
+
     Write naturally, include typos if appropriate. Don't be formulaic.`,
   });
   return text;

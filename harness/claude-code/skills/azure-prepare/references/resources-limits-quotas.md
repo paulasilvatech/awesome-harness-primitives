@@ -52,7 +52,7 @@ Not all providers support quota API. If `az quota list` fails with BadRequest, u
    # Option A: Azure Resource Graph (recommended)
    az extension add --name resource-graph
    az graph query -q "resources | where type == '{type}' and location == '{loc}' | count"
-   
+
    # Option B: Resource list
    az resource list --subscription "{id}" --resource-type "{Type}" --location "{loc}" | jq 'length'
    ```
@@ -193,7 +193,7 @@ Common quotas to check:
 - SQL logical servers: 250 per region
 - Service Bus namespaces: 100-1,000 (tier dependent)
 
-### Regional Level  
+### Regional Level
 - Storage accounts: 250 per region (quota resource name: `StorageAccounts`)
 - AKS clusters: 5,000 per region (quota resource name: varies by configuration)
 - Container Apps environments: 50 per region (quota resource name: `ManagedEnvironmentCount`)
@@ -296,7 +296,7 @@ az quota show \
 # Alternative: If quotas were insufficient
 # ❌ Container Apps: 49/50 (only 1 available, need 3)
 # Action: Request quota increase
-# 
+#
 # az quota update \
 #   --resource-name ManagedEnvironmentCount \
 #   --scope /subscriptions/abc-123/providers/Microsoft.App/locations/eastus \

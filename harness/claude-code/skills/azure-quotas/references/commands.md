@@ -135,7 +135,7 @@ az quota update --resource-name NAME --scope SCOPE --limit-object value=N [--res
 
 **Required**:
 - `--resource-name` - Quota resource name
-- `--scope` - Azure resource URI  
+- `--scope` - Azure resource URI
 - `--limit-object` - New limit value (format: `value=N`)
 
 **Optional**:

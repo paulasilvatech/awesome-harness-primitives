@@ -1,0 +1,117 @@
+name: "Identity Federation Setup"
+description: "Configure Azure to GitHub identity federation (OIDC, Workload Identity)"
+title: "[IDENTITY] "
+labels: ["identity", "federation", "security", "cross-cutting"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Identity Federation Setup
+        Configure secure identity federation between Azure and GitHub using OIDC (no secrets required).
+
+  - type: dropdown
+    id: federation_type
+    attributes:
+      label: "Federation Type"
+      description: "What type of identity federation do you need?"
+      options:
+        - "GitHub Actions → Azure (OIDC)"
+        - "AKS Workload Identity"
+        - "Both GitHub OIDC + AKS Workload Identity"
+        - "Service Principal (legacy)"
+    validations:
+      required: true
+
+  - type: input
+    id: github_org
+    attributes:
+      label: "GitHub Organization"
+      description: "Your GitHub organization name"
+      placeholder: "my-org"
+    validations:
+      required: true
+
+  - type: input
+    id: github_repo
+    attributes:
+      label: "GitHub Repository"
+      description: "Repository name (or * for all repos)"
+      placeholder: "platform-gitops"
+    validations:
+      required: true
+
+  - type: input
+    id: azure_subscription
+    attributes:
+      label: "Azure Subscription ID"
+      description: "Target Azure subscription"
+      placeholder: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+    validations:
+      required: true
+
+  - type: input
+    id: resource_group
+    attributes:
+      label: "Azure Resource Group"
+      description: "Resource group for RBAC assignment"
+      placeholder: "rg-openhorizons-prod"
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: github_environments
+    attributes:
+      label: "GitHub Environments"
+      description: "Which environments need federated credentials?"
+      options:
+        - label: "main branch"
+          required: true
+        - label: "Pull Requests"
+        - label: "dev environment"
+        - label: "staging environment"
+        - label: "prod environment"
+
+  - type: checkboxes
+    id: azure_roles
+    attributes:
+      label: "Azure RBAC Roles"
+      description: "What permissions does the identity need?"
+      options:
+        - label: "Contributor (Resource Group)"
+          required: true
+        - label: "AKS Cluster Admin"
+        - label: "ACR Push"
+        - label: "Key Vault Secrets User"
+        - label: "Storage Blob Data Contributor"
+        - label: "Defender for Cloud Reader"
+
+  - type: textarea
+    id: aks_workload_identity
+    attributes:
+      label: "AKS Workload Identity (if applicable)"
+      description: "If configuring Workload Identity, provide details"
+      placeholder: |
+        AKS Cluster: aks-openhorizons-prod
+        Namespace: app-namespace
+        Service Account: my-service-account
+
+  - type: dropdown
+    id: sizing_profile
+    attributes:
+      label: "Sizing Profile"
+      description: "Infrastructure sizing"
+      options:
+        - "small (dev/test)"
+        - "medium (staging)"
+        - "large (production)"
+        - "xlarge (enterprise)"
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional_notes
+    attributes:
+      label: "Additional Notes"
+      description: "Any other requirements or context"

@@ -72,7 +72,7 @@ Load this during Step 2 (Dependency Audit). Check versions in the project's lock
 
 | Gem | Vulnerable Versions | Issue |
 |-----|-------------------|-------|
-| rails | < 7.1.3 | Various | 
+| rails | < 7.1.3 | Various |
 | nokogiri | < 1.16.2 | XXE, various |
 | rexml | < 3.2.7 | ReDoS |
 | rack | < 3.0.9 | Various |

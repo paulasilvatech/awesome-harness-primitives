@@ -1,0 +1,115 @@
+name: Bug Report
+description: Report a bug or issue with the accelerator
+title: "[BUG] "
+labels: ["bug", "triage"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report!
+
+  - type: dropdown
+    id: component
+    attributes:
+      label: Component
+      description: Which component is affected?
+      options:
+        - Terraform Modules
+        - Golden Path Templates
+        - GitHub Workflows
+        - ArgoCD Configuration
+        - Scripts
+        - Documentation
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: horizon
+    attributes:
+      label: Horizon
+      description: Which horizon is affected?
+      options:
+        - H1 - Foundation
+        - H2 - Enhancement
+        - H3 - Innovation
+        - Cross-cutting
+        - Not applicable
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug Description
+      description: A clear and concise description of what the bug is.
+      placeholder: Describe the bug...
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to Reproduce
+      description: Steps to reproduce the behavior.
+      placeholder: |
+        1. Run command '...'
+        2. Configure '...'
+        3. See error
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behavior
+      description: What you expected to happen.
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual Behavior
+      description: What actually happened.
+    validations:
+      required: true
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: |
+        Please provide environment details:
+        - OS: [e.g. macOS 14.0, Ubuntu 22.04]
+        - Terraform version: [e.g. 1.6.0]
+        - Azure CLI version: [e.g. 2.55.0]
+        - kubectl version: [e.g. 1.28.0]
+      placeholder: |
+        - OS:
+        - Terraform version:
+        - Azure CLI version:
+        - kubectl version:
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant Logs
+      description: Please copy and paste any relevant log output.
+      render: shell
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      options:
+        - label: I have searched for existing issues
+          required: true
+        - label: I have read the documentation
+          required: true
+        - label: I am using the latest version
+          required: false

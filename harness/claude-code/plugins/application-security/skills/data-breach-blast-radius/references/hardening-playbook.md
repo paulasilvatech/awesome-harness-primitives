@@ -351,12 +351,12 @@ ALTER TABLE users ADD COLUMN retention_expires_at TIMESTAMP;
 ALTER TABLE health_records ADD COLUMN retention_expires_at TIMESTAMP;
 
 -- Set retention at insert time
-INSERT INTO users (email, retention_expires_at) 
+INSERT INTO users (email, retention_expires_at)
 VALUES ($1, NOW() + INTERVAL '7 years');
 
 -- Scheduled job to hard-delete expired records (or anonymize)
-DELETE FROM users 
-WHERE retention_expires_at < NOW() 
+DELETE FROM users
+WHERE retention_expires_at < NOW()
 AND deletion_notified_at IS NOT NULL; -- ensure user was notified
 ```
 
@@ -370,7 +370,7 @@ async def purge_expired_records():
     )
     # Anonymize users (don't delete if financial records must be retained)
     await db.execute("""
-        UPDATE users SET 
+        UPDATE users SET
             email = CONCAT('deleted_', id, '@redacted.invalid'),
             phone = NULL,
             address = NULL,
@@ -397,12 +397,12 @@ PSEUDONYM_SALT = os.environ.get("PSEUDONYM_SALT")  # stored in Key Vault
 
 def pseudonymize_user_id(real_user_id: str) -> str:
     """
-    One-way: analyst can track behavior across sessions 
+    One-way: analyst can track behavior across sessions
     but cannot identify the real user without the salt.
     """
     return hmac.new(
-        PSEUDONYM_SALT.encode(), 
-        real_user_id.encode(), 
+        PSEUDONYM_SALT.encode(),
+        real_user_id.encode(),
         hashlib.sha256
     ).hexdigest()
 

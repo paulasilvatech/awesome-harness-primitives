@@ -322,15 +322,15 @@ from typing import Optional
 def transform_notebook_activity(activity: dict, notebook_map: dict, workspace_id: str) -> dict:
     """
     Convert a SynapseNotebook activity to a TridentNotebook activity.
-    
+
     Args:
         activity: The Synapse activity dict to transform.
         notebook_map: {synapseNotebookName: fabricNotebookId}
         workspace_id: Fabric workspace GUID
-    
+
     Returns:
         Transformed activity dict.
-    
+
     Raises:
         KeyError: If the notebook name is not found in notebook_map.
     """
@@ -429,7 +429,7 @@ def transform_pipeline_notebook_activities(
 ) -> tuple[dict, list[str]]:
     """
     Transform all SynapseNotebook activities in a pipeline definition.
-    
+
     Returns:
         (transformed_pipeline_def, list_of_error_messages)
     """

@@ -39,7 +39,7 @@ function Form() {
     },
     { loading: false, data: null, error: null }
   );
-  
+
   async function handleSubmit(e) {
     e.preventDefault();
     dispatch({ type: 'loading' });
@@ -50,7 +50,7 @@ function Form() {
       dispatch({ type: 'error', error: err.message });
     }
   }
-  
+
   return (
     <form onSubmit={handleSubmit}>
       <input name="email" />
@@ -72,7 +72,7 @@ import { useActionState } from 'react';
 async function submitFormAction(prevState, formData) {
   // prevState = previous return value from this function
   // formData = FormData from <form action={submitFormAction}>
-  
+
   try {
     const result = await submitForm(formData);
     return { data: result, error: null };
@@ -86,7 +86,7 @@ function Form() {
     submitFormAction,
     { data: null, error: null } // initial state
   );
-  
+
   return (
     <form action={formAction}>
       <input name="email" />
@@ -135,7 +135,7 @@ function SubmitButton() {
 
 function Form() {
   const [state, formAction] = useActionState(submitFormAction, {});
-  
+
   return (
     <form action={formAction}>
       <input />
@@ -159,13 +159,13 @@ function Form() {
 // React 18  manual optimistic update:
 function TodoList({ todos, onAddTodo }) {
   const [optimistic, setOptimistic] = useState(todos);
-  
+
   async function handleAddTodo(text) {
     const newTodo = { id: Date.now(), text, completed: false };
-    
+
     // Show optimistic update immediately
     setOptimistic([...optimistic, newTodo]);
-    
+
     try {
       const result = await addTodo(text);
       // Update with confirmed result
@@ -178,7 +178,7 @@ function TodoList({ todos, onAddTodo }) {
       setOptimistic(optimistic);
     }
   }
-  
+
   return (
     <ul>
       {optimistic.map(todo => (
@@ -205,9 +205,9 @@ function TodoList({ todos }) {
     todos,
     (state, newTodo) => [...state, newTodo]
   );
-  
+
   const [, formAction] = useActionState(addTodoAction, todos);
-  
+
   async function handleAddTodo(formData) {
     const text = formData.get('text');
     // Optimistic update:
@@ -215,7 +215,7 @@ function TodoList({ todos }) {
     // Then call the form action:
     formAction(formData);
   }
-  
+
   return (
     <>
       <ul>
@@ -266,12 +266,12 @@ function TodoApp({ initialTodos }) {
     initialTodos,
     (state, newTodo) => [...state, newTodo]
   );
-  
+
   const [todos, formAction] = useActionState(
     addTodoAction,
     initialTodos
   );
-  
+
   async function handleAddTodo(formData) {
     const text = formData.get('text');
     // Optimistic: show it immediately
@@ -279,7 +279,7 @@ function TodoApp({ initialTodos }) {
     // Then submit the form (which updates when server confirms)
     await formAction(formData);
   }
-  
+
   return (
     <>
       <ul>
@@ -325,7 +325,7 @@ Patterns worth refactoring:
 // Before:
 function LoginForm() {
   const [state, dispatch] = useReducer(loginReducer, { loading: false, error: null, user: null });
-  
+
   async function handleSubmit(e) {
     e.preventDefault();
     dispatch({ type: 'loading' });
@@ -336,7 +336,7 @@ function LoginForm() {
       dispatch({ type: 'error', error: err.message });
     }
   }
-  
+
   return <form onSubmit={handleSubmit}>...</form>;
 }
 
@@ -352,7 +352,7 @@ async function loginAction(prevState, formData) {
 
 function LoginForm() {
   const [state, formAction] = useActionState(loginAction, { user: null, error: null });
-  
+
   return <form action={formAction}>...</form>;
 }
 ```

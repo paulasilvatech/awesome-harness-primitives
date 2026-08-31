@@ -995,7 +995,7 @@ validate_and_refresh() {
   local df_id="$1"
   echo ""
   echo "Processing dataflow: $df_id"
-  
+
   # Get definition — getDefinition can return 200 or 202 + Location (LRO).
   TOKEN=$(az account get-access-token --resource "$RESOURCE" --query accessToken -o tsv)
   GET_DEF_BODY=$(mktemp); GET_DEF_HDR=$(mktemp)
@@ -1019,15 +1019,15 @@ validate_and_refresh() {
     RESULT=$(cat "$GET_DEF_BODY")
   fi
   rm -f "$GET_DEF_BODY" "$GET_DEF_HDR"
-  
+
   QUERY_META=$(echo "$RESULT" | jq -r '.definition.parts[] | select(.path=="queryMetadata.json") | .payload' | base64 -d)
-  
+
   # List all connections once for efficiency
   ALL_CONNECTIONS=$(az rest --method get \
     --resource "$RESOURCE" \
     --url "https://api.fabric.microsoft.com/v1/connections" \
     --query "value" -o json)
-  
+
   # Validate connections — connectionId is a composite; parse DatasourceId before comparing.
   # Use process substitution so MISSING updates persist (a piped `... | while` runs in a subshell).
   MISSING=0
@@ -1036,18 +1036,18 @@ validate_and_refresh() {
     DATASOURCE_ID=$(echo "$RAW_CONN_ID" | jq -r '.DatasourceId? // empty' 2>/dev/null)
     [ -z "$DATASOURCE_ID" ] && DATASOURCE_ID="$RAW_CONN_ID"
     CONN_NAME=$(echo "$ALL_CONNECTIONS" | jq -r ".[] | select(.id==\"$DATASOURCE_ID\") | .displayName" 2>/dev/null || echo "")
-    
+
     if [ -z "$CONN_NAME" ]; then
       echo "  ❌ Connection not found: $DATASOURCE_ID"
       MISSING=$((MISSING + 1))
     fi
   done < <(echo "$QUERY_META" | jq -c '.connections[]')
-  
+
   if [ $MISSING -gt 0 ]; then
     echo "  ⚠️  Skipping refresh: $MISSING missing connection(s)"
     return 1
   fi
-  
+
   # Trigger refresh
   # az rest cannot return response headers; use curl with an az-acquired token to capture Location.
   echo "  Triggering refresh..."
@@ -1056,19 +1056,19 @@ validate_and_refresh() {
     -H "Authorization: Bearer $TOKEN" -H "Content-Length: 0" \
     "$API/workspaces/$WS_ID/dataflows/$df_id/jobs/instances?jobType=Refresh" \
     -o /dev/null -D - | tr -d '\r' | grep -i "^location:" | awk '{print $2}')
-  
+
   if [ -z "$LOCATION" ]; then
     echo "  ⚠️  No operation URL; cannot poll"
     return 0
   fi
-  
+
   # Poll for completion (max 5 minutes)
   ATTEMPTS=0
   MAX_ATTEMPTS=20
   while [ $ATTEMPTS -lt $MAX_ATTEMPTS ]; do
     STATUS=$(az rest --method get --resource "$RESOURCE" --url "$LOCATION" --query "status" --output tsv 2>/dev/null || echo "Unknown")
     echo "  Status: $STATUS"
-    
+
     case "$STATUS" in
       Completed) echo "  ✅ Refresh completed"; return 0 ;;
       Failed) echo "  ❌ Refresh failed"; return 1 ;;
@@ -1076,7 +1076,7 @@ validate_and_refresh() {
       *) sleep 15; ATTEMPTS=$((ATTEMPTS + 1)) ;;
     esac
   done
-  
+
   echo "  ⚠️  Polling timed out"
   return 0
 }
@@ -1176,7 +1176,7 @@ UPDATED_META="$QUERY_META"
 for conn_id in "${CONN_IDS[@]}"; do
   cluster_id="${CLUSTER_IDS[$conn_id]}"
   echo "  Adding connection $conn_id (cluster: $cluster_id)..."
-  
+
   UPDATED_META=$(echo "$UPDATED_META" | jq \
     --arg cid "$conn_id" \
     --arg clid "$cluster_id" \

@@ -24,7 +24,7 @@ RestTestClient is the modern alternative to TestRestTemplate in Spring Boot 4.0+
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @AutoConfigureRestTestClient
 class OrderIntegrationTest {
-  
+
   @Autowired
   private RestTestClient restClient;
 }
@@ -57,7 +57,7 @@ void shouldGetOrder() {
 @Test
 void shouldCreateOrder() {
   OrderRequest request = new OrderRequest("Laptop", 2);
-  
+
   restClient
     .post()
     .uri("/orders")
@@ -205,10 +205,10 @@ RestTestClient can also work with MockMvc (no server startup):
 @AutoConfigureMockMvc
 @AutoConfigureRestTestClient
 class OrderMockMvcTest {
-  
+
   @Autowired
   private RestTestClient restClient;
-  
+
   @Test
   void shouldWorkWithMockMvc() {
     // Uses MockMvc under the hood - no server startup
@@ -244,7 +244,7 @@ private TestRestTemplate restTemplate;
 void shouldGetOrder() {
   ResponseEntity<Order> response = restTemplate
     .getForEntity("/orders/1", Order.class);
-  
+
   assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
   assertThat(response.getBody().getId()).isEqualTo(1L);
 }

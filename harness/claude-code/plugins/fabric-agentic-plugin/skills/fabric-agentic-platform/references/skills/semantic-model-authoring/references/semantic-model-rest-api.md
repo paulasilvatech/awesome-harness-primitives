@@ -97,7 +97,7 @@ database
 ```tmdl
 model Model
 	culture: en-US
-	defaultPowerBIDataSourceVersion: powerBI_V3	
+	defaultPowerBIDataSourceVersion: powerBI_V3
 ```
 
 > **Note**: `defaultPowerBIDataSourceVersion: powerBI_V3` is required for Import-mode models.

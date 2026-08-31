@@ -129,7 +129,7 @@ The AI data schema controls which tables, columns, and measures are exposed to C
 - Include all dependent objects for selected measures (any column or measure referenced by a selected measure must also be visible to Copilot).
 - Exclude helper measures, intermediate calculations, and technical bridge tables.
 - Exclude duplicate or overlapping measures.
-  
+
 **DON'T:**
 - Default to "expose everything" - it dilutes the signal Copilot uses to pick the right field.
 

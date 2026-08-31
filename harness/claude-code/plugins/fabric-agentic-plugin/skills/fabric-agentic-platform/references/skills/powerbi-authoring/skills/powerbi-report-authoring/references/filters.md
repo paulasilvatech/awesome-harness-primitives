@@ -53,7 +53,7 @@ and visual (`visual.json`). All use the same `filterConfig.filters` array.
   "howCreated": "User" // must have
 }
 ```
-**⚠️ Critical**: Inside a `filter.Where` condition, `SourceRef` uses `"Source"` 
+**⚠️ Critical**: Inside a `filter.Where` condition, `SourceRef` uses `"Source"`
 (the alias from `From`), NOT `"Entity"`. The `field` property at the top level
 uses `"Entity"`. `powerbi-report-author validate` flags entity refs that
 slip into `Where` with `PBIR_FILTER_ENTITY_IN_WHERE`. To inventory every filter

@@ -4,14 +4,14 @@ Event Hubs streaming trigger with managed identity authentication.
 
 ## Template Selection
 
-Resource filter: `eventhub`  
+Resource filter: `eventhub`
 Discover templates via MCP or CDN manifest where `resource == "eventhub"` and `language` matches user request.
 
 ## Troubleshooting
 
 ### "Unauthorized" or "Forbidden" Errors
 
-**Cause:** Missing UAMI credential settings for Event Hubs.  
+**Cause:** Missing UAMI credential settings for Event Hubs.
 **Solution:** Ensure all three settings are present in app configuration:
 
 - `EventHubConnection__fullyQualifiedNamespace`
@@ -22,7 +22,7 @@ See [Event Hubs trigger connections](https://learn.microsoft.com/en-us/azure/azu
 
 ### Events Not Arriving
 
-**Cause:** Consumer group or checkpoint storage misconfigured.  
+**Cause:** Consumer group or checkpoint storage misconfigured.
 **Solution:** Verify the Event Hubs consumer group exists and the function has `Azure Event Hubs Data Receiver` role on the namespace.
 
 ## Eval

@@ -4,14 +4,14 @@ SQL change tracking trigger with Entra ID managed identity authentication.
 
 ## Template Selection
 
-Resource filter: `sql`  
+Resource filter: `sql`
 Discover templates via MCP or CDN manifest where `resource == "sql"` and `language` matches user request.
 
 ## Troubleshooting
 
 ### SQL Trigger Not Firing
 
-**Cause:** Change tracking not enabled on the target table.  
+**Cause:** Change tracking not enabled on the target table.
 **Solution:** Run these T-SQL commands on your database:
 
 ```sql
@@ -21,7 +21,7 @@ ALTER TABLE [dbo].[ToDo] ENABLE CHANGE_TRACKING;
 
 ### "Login failed" or "Unauthorized" Errors
 
-**Cause:** Missing managed identity authentication or SQL access not granted.  
+**Cause:** Missing managed identity authentication or SQL access not granted.
 **Solution:** Set the SQL connection string with managed identity authentication:
 
 ```

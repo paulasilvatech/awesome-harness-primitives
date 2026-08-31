@@ -16,7 +16,12 @@ except ModuleNotFoundError:  # pragma: no cover - supports python3 -m invocation
     from ._layout import INSTALLED_MANIFEST_PATH, REPO_ROOT
 
 DEFAULT_MANIFEST = INSTALLED_MANIFEST_PATH
-ALLOWED_TARGET_ROOTS = (Path(".github"), Path("docs/templates"))
+ALLOWED_TARGET_ROOTS = (
+    Path(".github"),
+    Path("docs/templates"),
+    Path(".claude"),
+    Path("CLAUDE.md"),
+)
 SUPPORTED_MODES = {"copy", "strip-frontmatter"}
 IGNORED_SOURCE_NAMES = {"__pycache__", ".DS_Store"}
 
@@ -55,7 +60,8 @@ def read_manifest(path: Path, repo_root: Path) -> list[InstalledCopy]:
         target_rel = safe_relative_path(target_value, f"copies[{index}].target")
         if not is_within(target_rel, ALLOWED_TARGET_ROOTS):
             raise ValueError(
-                f"{path}: target must be under .github/ or docs/templates/: {target_rel}"
+                f"{path}: target must be under .github/, .claude/, docs/templates/, "
+                f"or be CLAUDE.md: {target_rel}"
             )
 
         source = (repo_root / source_rel).resolve()
@@ -231,9 +237,13 @@ def main(argv: list[str] | None = None) -> int:
                 for finding in check_copy(copy)
             ]
             if findings:
+                command = (
+                    "python3 harness/github-copilot/scripts/sync_installed_primitives.py"
+                )
+                if manifest != DEFAULT_MANIFEST.resolve():
+                    command += f" --manifest {manifest.relative_to(REPO_ROOT)}"
                 print(
-                    "Installed primitive copies are stale; run "
-                    "python3 harness/github-copilot/scripts/sync_installed_primitives.py",
+                    f"Installed primitive copies are stale; run {command}",
                     file=sys.stderr,
                 )
                 for finding in findings:
@@ -245,7 +255,7 @@ def main(argv: list[str] | None = None) -> int:
             synchronize(copy)
         print(f"Synchronized {len(copies)} installed primitive copies.")
         return 0
-    except (OSError, ValueError, json.JSONDecodeError) as exc:
+    except (OSError, ValueError) as exc:
         print(f"sync_installed_primitives.py: {exc}", file=sys.stderr)
         return 2
 

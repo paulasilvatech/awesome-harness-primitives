@@ -4,7 +4,7 @@
 >
 > **Companion files**:
 > - `SPARK-CONSUMPTION-CORE.md` — Consumption patterns: Livy sessions, data exploration, analytics workflows
-> - `COMMON-CORE.md` — Fabric REST API patterns, authentication, token audiences  
+> - `COMMON-CORE.md` — Fabric REST API patterns, authentication, token audiences
 > - `COMMON-CLI.md` — CLI invocation patterns for cross-platform tools
 
 ---
@@ -40,7 +40,7 @@ For Livy session management, interactive data queries, PySpark analytics pattern
 ```json
 {
   "displayName": "MyLakehouse",
-  "type": "Lakehouse", 
+  "type": "Lakehouse",
   "description": "Data lakehouse for analytics workloads",
   "creationPayload": {
     "enableSchemas": true
@@ -105,7 +105,7 @@ df.write.format("delta").saveAsTable("silver.cleansed_data")
 **Endpoint**: `POST /workspaces/{workspaceId}/items`
 
 Two workflows: (1) create empty notebook (omit `definition`), then deploy content separately via `POST /v1/workspaces/{workspaceId}/notebooks/{notebookId}/updateDefinition`; (2) create with content in a single operation:
-**IMPORTANT: All creation and definition calls return HTTP 202 Accepted (async).** 
+**IMPORTANT: All creation and definition calls return HTTP 202 Accepted (async).**
 
 You must:
 

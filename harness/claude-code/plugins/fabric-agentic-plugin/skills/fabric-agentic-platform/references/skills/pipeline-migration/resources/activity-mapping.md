@@ -429,10 +429,10 @@ INNER_ACTIVITY_KEYS = {
 def transform_activity(activity, notebook_map, connection_map, dataset_map):
     """Recursively transform an activity and all nested inner activities."""
     activity_type = activity.get("type")
-    
+
     # Transform this activity
     activity = apply_type_transform(activity, notebook_map, connection_map, dataset_map)
-    
+
     # Recurse into inner activities
     inner_keys = INNER_ACTIVITY_KEYS.get(activity_type, [])
     for key in inner_keys:
@@ -441,7 +441,7 @@ def transform_activity(activity, notebook_map, connection_map, dataset_map):
             transform_activity(a, notebook_map, connection_map, dataset_map)
             for a in inner
         ]
-    
+
     # Special case: Switch has cases with nested activities
     if activity_type == "Switch":
         cases = activity.get("typeProperties", {}).get("cases", [])
@@ -450,6 +450,6 @@ def transform_activity(activity, notebook_map, connection_map, dataset_map):
                 transform_activity(a, notebook_map, connection_map, dataset_map)
                 for a in case.get("activities", [])
             ]
-    
+
     return activity
 ```

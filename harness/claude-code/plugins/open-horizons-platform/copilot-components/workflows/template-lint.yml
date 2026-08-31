@@ -1,0 +1,55 @@
+# =============================================================================
+# TEMPLATE LINT — Ensures main branch stays template-clean
+# =============================================================================
+# REQ-OPS-001: Block commits containing non-template hostnames
+# Task: T-006
+# =============================================================================
+
+name: Template Lint
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  template-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - name: Check for hardcoded hostnames
+        run: |
+          echo "Scanning for customer-specific hostnames on main branch..."
+          FORBIDDEN="ohorizons.ai"
+
+          FILES_TO_CHECK=(
+            "backstage/catalog/"
+            "backstage/packages/"
+            "backstage/examples/"
+          )
+
+          found=0
+          for dir in "${FILES_TO_CHECK[@]}"; do
+            if [ -d "$dir" ]; then
+              matches=$(grep -rl "$FORBIDDEN" "$dir" 2>/dev/null || true)
+              if [ -n "$matches" ]; then
+                echo "::error::Hardcoded hostname '$FORBIDDEN' found in:"
+                echo "$matches"
+                found=1
+              fi
+            fi
+          done
+
+          if [ "$found" -eq 1 ]; then
+            echo ""
+            echo "::error::Main branch must not contain customer-specific hostnames."
+            echo "Run: scripts/templatize-main.sh"
+            exit 1
+          fi
+
+          echo "✅ No hardcoded hostnames found. Main branch is template-clean."

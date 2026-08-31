@@ -663,6 +663,30 @@ a concise purpose, a typical use case, and a link to its source.
 """
 
 
+def build_catalog() -> str:
+    """Build a single-document catalog for API consumers and focused tests."""
+    global LINK_BASE
+    LINK_BASE = REPO_ROOT
+    pages = collect_pages()
+    sections = ["# Copilot Primitives Catalog"]
+    for page in pages:
+        count_label = page.type_label.lower()
+        if len(page.rows) != 1:
+            count_label += "s"
+        sections.extend(
+            [
+                f"## {page.title}",
+                "",
+                page.purpose,
+                "",
+                f"{len(page.rows)} {count_label}. Use cases: {page.use_cases}",
+                "",
+                md_table(page.headers, page.rows),
+            ]
+        )
+    return "\n".join(sections).rstrip() + "\n"
+
+
 def build_outputs(index_path: Path, pages_dir: Path) -> dict[Path, str]:
     global LINK_BASE
     LINK_BASE = pages_dir

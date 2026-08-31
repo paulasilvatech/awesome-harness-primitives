@@ -1367,7 +1367,7 @@ from datetime import datetime, timezone
 def rollback_migration(state_file_path, from_phase, dry_run=True):
     """
     Roll back migrated items from Fabric workspace.
-    
+
     Args:
         state_file_path: Path to migration-state-{uuid}.json
         from_phase: Lowest phase to roll back (0 = all, 3 = SJDs only)

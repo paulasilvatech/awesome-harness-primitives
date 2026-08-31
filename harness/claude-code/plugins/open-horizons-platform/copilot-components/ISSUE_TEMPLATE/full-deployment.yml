@@ -1,0 +1,236 @@
+name: "Full Platform Deployment"
+description: "Deploy complete Open Horizons platform (all horizons)"
+title: "[FULL] Platform Deployment - "
+labels: ["full-deployment", "workflow:full-deployment", "agent:deploy", "horizon:h1", "horizon:h2", "horizon:h3"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Full Platform Deployment
+        
+        This issue orchestrates a **complete Open Horizons platform deployment**
+        across all horizons, executing agents in the correct dependency order.
+        
+        ---
+        
+        ### Deployment Order
+        
+        ```
+        ┌─────────────────────────────────────────────────────────────┐
+        │ PHASE 1: Prerequisites                                      │
+        ├─────────────────────────────────────────────────────────────┤
+        │ [ ] validate-prerequisites.sh                                 │
+        │ [ ] validate-naming.sh --all {project} {env} {region}         │
+        │ [ ] setup-identity-federation.sh                              │
+        └─────────────────────────────────────────────────────────────┘
+                                    ↓
+        ┌─────────────────────────────────────────────────────────────┐
+        │ PHASE 2: H1 Foundation                                      │
+        ├─────────────────────────────────────────────────────────────┤
+        │ [ ] Networking (VNet, subnets, NSGs)                          │
+        │ [ ] Security (Key Vault, identities)                          │
+        │ [ ] AKS Cluster                                               │
+        │ [ ] Container Registry                                        │
+        │ [ ] Databases (PostgreSQL, Redis)                             │
+        │ [ ] Defender for Cloud                                        │
+        │ [ ] Purview (governance)                                      │
+        └─────────────────────────────────────────────────────────────┘
+                                    ↓
+        ┌─────────────────────────────────────────────────────────────┐
+        │ PHASE 3: H2 Enhancement                                     │
+        ├─────────────────────────────────────────────────────────────┤
+        │ [ ] ArgoCD (GitOps)                                           │
+        │ [ ] GitHub Runners                                            │
+        │ [ ] Backstage Portal                                               │
+        │ [ ] Observability (Prometheus, Grafana)                       │
+        │ [ ] Golden Paths                                              │
+        └─────────────────────────────────────────────────────────────┘
+                                    ↓
+        ┌─────────────────────────────────────────────────────────────┐
+        │ PHASE 4: H3 Innovation                                      │
+        ├─────────────────────────────────────────────────────────────┤
+        │ [ ] AI Foundry                                                │
+        │ [ ] MLOps Pipelines                                           │
+        │ [ ] Multi-Agent Systems                                       │
+        │ [ ] SRE Agent Integration                                     │
+        └─────────────────────────────────────────────────────────────┘
+        ```
+        
+        ### Component Map
+        
+        | Phase | Agent | Terraform Module | Script | Issue Template |
+        |-------|-------|------------------|--------|----------------|
+        | Setup | - | - | `validate-prerequisites.sh` | - |
+        | Setup | - | `modules/naming/` | `validate-naming.sh` | - |
+        | Setup | identity-federation | - | `setup-identity-federation.sh` | `identity-federation.yml` |
+        | H1 | networking | `modules/networking/` | - | `networking.yml` |
+        | H1 | security | `modules/security/` | - | `security.yml` |
+        | H1 | infrastructure | `modules/aks-cluster/` | - | `infrastructure.yml` |
+        | H1 | container-registry | `modules/container-registry/` | - | `container-registry.yml` |
+        | H1 | database | `modules/databases/` | - | `database.yml` |
+        | H1 | defender-cloud | `modules/defender/` | - | `defender-cloud.yml` |
+        | H1 | purview | `modules/purview/` | - | `purview-governance.yml` |
+        | H2 | gitops | `modules/argocd/` | `bootstrap.sh` | `gitops.yml` |
+        | H2 | github-runners | `modules/github-runners/` | - | `github-runners.yml` |
+        | H2 | backstage-portal | `modules/backstage/` | `setup-github-app.sh` | `backstage-portal.yml` |
+        | H2 | observability | `modules/observability/` | - | `observability.yml` |
+        | H2 | golden-paths | - | `onboard-team.sh` | `golden-paths.yml` |
+        | H3 | ai-foundry | `modules/ai-foundry/` | - | `ai-foundry.yml` |
+        | H3 | mlops-pipeline | - | - | `mlops-pipeline.yml` |
+
+  - type: input
+    id: project_name
+    attributes:
+      label: Project Name
+      description: "Lowercase, 2-10 chars (used for all resource naming)"
+      placeholder: "myproject"
+    validations:
+      required: true
+
+  - type: input
+    id: subscription_id
+    attributes:
+      label: Azure Subscription ID
+      placeholder: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+    validations:
+      required: true
+
+  - type: input
+    id: github_org
+    attributes:
+      label: GitHub Organization
+      placeholder: "my-org"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: environment
+    attributes:
+      label: Environment
+      options:
+        - dev
+        - stg
+        - prd
+      default: 0
+    validations:
+      required: true
+
+  - type: dropdown
+    id: region
+    attributes:
+      label: Azure Region
+      options:
+        - brazilsouth (brs)
+        - eastus (eus)
+        - westeurope (weu)
+      default: 0
+    validations:
+      required: true
+
+  - type: dropdown
+    id: sizing_profile
+    attributes:
+      label: Sizing Profile
+      options:
+        - small (Dev - $500-1000/month)
+        - medium (Staging - $1500-2500/month)
+        - large (Production - $5000-8000/month)
+        - xlarge (Enterprise - $15000+/month)
+      default: 0
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: horizons
+    attributes:
+      label: Horizons to Deploy
+      options:
+        - label: "H1: Foundation (AKS, ACR, databases, security)"
+          required: true
+        - label: "H2: Enhancement (GitOps, Backstage, observability)"
+          required: true
+        - label: "H3: Innovation (AI Foundry, MLOps)"
+
+  - type: checkboxes
+    id: optional_components
+    attributes:
+      label: Optional Components
+      options:
+        - label: "Enable Defender for Cloud"
+        - label: "Enable Purview Governance"
+        - label: "Enable AI Foundry"
+        - label: "Enable Private Cluster"
+        - label: "Enable Geo-Replication for ACR"
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        
+        ## Full Deployment Script
+        
+        ```bash
+        # 1. Clone and setup
+        git clone https://github.com/Ohorizons/open-horizons-platform.git
+        cd open-horizons-platform
+        
+        # 2. Validate prerequisites
+        ./scripts/validate-prerequisites.sh
+        
+        # 3. Validate naming
+        ./scripts/validate-naming.sh --all $PROJECT $ENV $REGION
+        
+        # 4. Setup identity federation
+        ./scripts/setup-identity-federation.sh \
+          --github-org $GITHUB_ORG \
+          --github-repo platform-gitops \
+          --resource-group rg-$PROJECT-$ENV-$REGION
+        
+        # 5. Deploy infrastructure
+        cd terraform
+        cp terraform.tfvars.example terraform.tfvars
+        # Edit terraform.tfvars
+        terraform init
+        terraform plan
+        terraform apply
+        
+        # 6. Bootstrap platform
+        cd ..
+        ./scripts/bootstrap.sh standard
+        
+        # 7. Setup GitHub App for Backstage
+        ./scripts/setup-github-app.sh \
+          --github-org $GITHUB_ORG \
+          --app-name $PROJECT-backstage \
+          --target backstage
+        ```
+        
+        ## Individual Issue Templates
+        
+        For fine-grained control, create individual issues:
+        
+        | Phase | Template | Description |
+        |-------|----------|-------------|
+        | Setup | `identity-federation.yml` | OIDC federation |
+        | H1 | `infrastructure.yml` | AKS, networking |
+        | H1 | `security.yml` | Key Vault, identities |
+        | H1 | `container-registry.yml` | ACR setup |
+        | H1 | `database.yml` | PostgreSQL, Redis |
+        | H2 | `gitops.yml` | ArgoCD |
+        | H2 | `backstage-portal.yml` | Developer Portal |
+        | H2 | `observability.yml` | Monitoring |
+        | H3 | `ai-foundry.yml` | AI platform |
+
+  - type: checkboxes
+    id: confirmation
+    attributes:
+      label: Confirmation
+      options:
+        - label: "I have run validate-naming.sh to verify all names"
+          required: true
+        - label: "I understand estimated costs for selected sizing profile"
+          required: true
+        - label: "I have Azure Owner/Contributor permissions"
+          required: true
+        - label: "I have GitHub organization admin permissions"
+          required: true

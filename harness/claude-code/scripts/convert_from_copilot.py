@@ -54,6 +54,7 @@ try:
     from _layout import (
         HARNESS_ROOT,
         MARKETPLACE_PATH,
+        PROJECT_SETTINGS_PATH,
         REPO_ROOT,
         SOURCE_AGENTS_ROOT,
         SOURCE_HOOKS_ROOT,
@@ -82,6 +83,7 @@ except ModuleNotFoundError:  # pragma: no cover - supports python3 -m invocation
     from ._layout import (  # type: ignore
         HARNESS_ROOT,
         MARKETPLACE_PATH,
+        PROJECT_SETTINGS_PATH,
         REPO_ROOT,
         SOURCE_AGENTS_ROOT,
         SOURCE_HOOKS_ROOT,
@@ -103,6 +105,15 @@ MARKETPLACE_DESCRIPTION = (
 )
 DEFAULT_AUTHOR = {"name": "paulasilvatech"}
 DEFAULT_VERSION = "1.0.0"
+IGNORED_RESOURCE_NAMES = frozenset({".DS_Store", "__pycache__", "obj", "bin"})
+COPILOT_INSTALLED_HOOKS_ROOT = REPO_ROOT / ".github" / "hooks"
+COPILOT_WORKSPACE_KIT_PLUGINS = frozenset(
+    {"backstage-expert", "open-horizons-platform"}
+)
+MARKDOWN_TOOL_REPLACEMENTS = (
+    (re.compile(r"\bweb_fetch\b"), "WebFetch"),
+    (re.compile(r"\bweb_search\b"), "WebSearch"),
+)
 
 # Copilot-only frontmatter that has no Claude Code equivalent on the target type.
 DROPPED_AGENT_KEYS = ("user-invocable", "disable-model-invocation", "argument-hint", "target", "handoffs")
@@ -134,6 +145,27 @@ def copy_file(source: Path, target: Path) -> None:
     shutil.copyfile(source, target)
     if os.access(source, os.X_OK):
         target.chmod(target.stat().st_mode | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
+
+
+def ignored_resource_path(path: Path) -> bool:
+    return (
+        any(part in IGNORED_RESOURCE_NAMES for part in path.parts)
+        or path.suffix == ".pyc"
+    )
+
+
+def copy_skill_resource(source: Path, target: Path) -> None:
+    if source.suffix.lower() != ".md":
+        copy_file(source, target)
+        return
+    text = read(source)
+    had_final_newline = text.endswith(("\n", "\r"))
+    text = "\n".join(line.rstrip() for line in text.splitlines())
+    if had_final_newline:
+        text += "\n"
+    for pattern, replacement in MARKDOWN_TOOL_REPLACEMENTS:
+        text = pattern.sub(replacement, text)
+    write(target, text)
 
 
 # ---------------------------------------------------------------------------
@@ -255,9 +287,10 @@ def convert_skill_dir(source_dir: Path, target_dir: Path, stats: Stats) -> None:
     for path in sorted(source_dir.rglob("*")):
         if path.is_dir() or path == skill_md:
             continue
-        if path.name == ".DS_Store" or "__pycache__" in path.parts or path.suffix == ".pyc":
+        relative = path.relative_to(source_dir)
+        if ignored_resource_path(relative):
             continue
-        copy_file(path, target_dir / path.relative_to(source_dir))
+        copy_skill_resource(path, target_dir / relative)
         stats.bump("skill-resources")
 
 
@@ -369,7 +402,11 @@ def convert_hooks(document: dict[str, Any], *, root_variable: str, package: str 
     return {"hooks": converted}
 
 
-def convert_hook_package(source_dir: Path, target_dir: Path, stats: Stats) -> None:
+def convert_hook_package(
+    source_dir: Path,
+    target_dir: Path,
+    stats: Stats,
+) -> dict[str, Any]:
     document = json.loads(read(source_dir / "hooks.json"))
     converted = convert_hooks(
         document, root_variable="${CLAUDE_PROJECT_DIR}/.claude/hooks/" + source_dir.name, package=source_dir.name
@@ -378,10 +415,12 @@ def convert_hook_package(source_dir: Path, target_dir: Path, stats: Stats) -> No
     for path in sorted(source_dir.rglob("*")):
         if path.is_dir() or path.name == "hooks.json":
             continue
-        if path.name == ".DS_Store" or "__pycache__" in path.parts:
+        relative = path.relative_to(source_dir)
+        if ignored_resource_path(relative):
             continue
-        copy_file(path, target_dir / path.relative_to(source_dir))
+        copy_file(path, target_dir / relative)
         stats.bump("hook-resources")
+    return converted
 
 
 # ---------------------------------------------------------------------------
@@ -407,6 +446,87 @@ def convert_plugin_manifest(data: dict[str, Any], plugin_name: str) -> dict[str,
     return ordered
 
 
+def replace_required(text: str, old: str, new: str, *, source: Path) -> str:
+    count = text.count(old)
+    if count != 1:
+        raise ConversionError(
+            f"{source}: expected one workspace-kit marker {old!r}, found {count}"
+        )
+    return text.replace(old, new, 1)
+
+
+def adapt_workspace_kit_script(plugin_name: str, script: Path) -> None:
+    text = read(script)
+    if plugin_name == "backstage-expert":
+        replacements = (
+            (
+                "PLUGIN_ROOT = Path(__file__).resolve().parents[3]\n",
+                "PLUGIN_ROOT = Path(__file__).resolve().parents[3]\n"
+                'COPILOT_SOURCE_ROOT = PLUGIN_ROOT / "copilot-components"\n',
+            ),
+            ("source = PLUGIN_ROOT / relative", "source = COPILOT_SOURCE_ROOT / relative"),
+            (
+                "resolved.relative_to(PLUGIN_ROOT.resolve())",
+                "resolved.relative_to(COPILOT_SOURCE_ROOT.resolve())",
+            ),
+            (
+                'manifest = PLUGIN_ROOT / "plugin.json"',
+                'manifest = COPILOT_SOURCE_ROOT / "plugin.json"',
+            ),
+        )
+    elif plugin_name == "open-horizons-platform":
+        replacements = (
+            (
+                "PACKAGE_ROOT = Path(__file__).resolve().parents[3]\n",
+                "PACKAGE_ROOT = Path(__file__).resolve().parents[3]\n"
+                'COPILOT_SOURCE_ROOT = PACKAGE_ROOT / "copilot-components"\n',
+            ),
+            (
+                'PACKAGE_ROOT / "skills/open-horizons-workspace-kit/templates/mcp.json"',
+                'COPILOT_SOURCE_ROOT / "skills/open-horizons-workspace-kit/templates/mcp.json"',
+            ),
+            ("source = PACKAGE_ROOT / relative", "source = COPILOT_SOURCE_ROOT / relative"),
+            (
+                "resolved.relative_to(PACKAGE_ROOT.resolve())",
+                "resolved.relative_to(COPILOT_SOURCE_ROOT.resolve())",
+            ),
+            (
+                "source_root = PACKAGE_ROOT / source_relative",
+                "source_root = COPILOT_SOURCE_ROOT / source_relative",
+            ),
+            (
+                '(PACKAGE_ROOT / "mcp.json").read_text',
+                '(COPILOT_SOURCE_ROOT / "mcp.json").read_text',
+            ),
+            (
+                '(PACKAGE_ROOT / "plugin.json").read_text',
+                '(COPILOT_SOURCE_ROOT / "plugin.json").read_text',
+            ),
+        )
+    else:
+        return
+
+    for old, new in replacements:
+        text = replace_required(text, old, new, source=script)
+    write(script, text)
+
+
+def copy_copilot_workspace_kit_payload(
+    source_dir: Path,
+    target_dir: Path,
+    stats: Stats,
+) -> None:
+    payload_root = target_dir / "copilot-components"
+    for path in sorted(source_dir.rglob("*")):
+        if path.is_dir():
+            continue
+        relative = path.relative_to(source_dir)
+        if ignored_resource_path(relative):
+            continue
+        copy_file(path, payload_root / relative)
+        stats.bump("plugin-copilot-payload")
+
+
 def convert_plugin(source_dir: Path, target_dir: Path, stats: Stats) -> dict[str, Any]:
     manifest_path = source_dir / "plugin.json"
     raw = json.loads(read(manifest_path)) if manifest_path.is_file() else {}
@@ -418,7 +538,7 @@ def convert_plugin(source_dir: Path, target_dir: Path, stats: Stats) -> dict[str
 
     for entry in sorted(source_dir.iterdir()):
         name = entry.name
-        if name in {"plugin.json", ".DS_Store"}:
+        if name == "plugin.json" or ignored_resource_path(Path(name)):
             continue
         if entry.is_file():
             if name == "mcp.json":
@@ -436,6 +556,18 @@ def convert_plugin(source_dir: Path, target_dir: Path, stats: Stats) -> dict[str
         elif name == "skills":
             for skill_md in sorted(entry.glob("*/SKILL.md")):
                 convert_skill_dir(skill_md.parent, target_dir / "skills" / skill_md.parent.name, stats)
+                workspace_kit_script = (
+                    target_dir
+                    / "skills"
+                    / skill_md.parent.name
+                    / "scripts"
+                    / "install_workspace_kit.py"
+                )
+                if (
+                    source_dir.name in COPILOT_WORKSPACE_KIT_PLUGINS
+                    and workspace_kit_script.is_file()
+                ):
+                    adapt_workspace_kit_script(source_dir.name, workspace_kit_script)
                 stats.bump("plugin-skills")
         elif name == "prompts":
             for path in sorted(entry.glob("*.prompt.md")):
@@ -461,16 +593,20 @@ def convert_plugin(source_dir: Path, target_dir: Path, stats: Stats) -> dict[str
                     json.dumps(converted, indent=2, ensure_ascii=False) + "\n",
                 )
                 for path in sorted(package_dir.rglob("*")):
-                    if path.is_dir() or path.name == "hooks.json" or "__pycache__" in path.parts:
+                    relative = path.relative_to(package_dir)
+                    if path.is_dir() or path.name == "hooks.json" or ignored_resource_path(relative):
                         continue
-                    copy_file(path, target_dir / "hooks" / path.relative_to(package_dir))
+                    copy_file(path, target_dir / "hooks" / relative)
                 stats.bump("plugin-hooks")
         else:
             for path in sorted(entry.rglob("*")):
-                if path.is_dir() or path.name == ".DS_Store" or "__pycache__" in path.parts:
+                relative = path.relative_to(entry)
+                if path.is_dir() or ignored_resource_path(relative):
                     continue
-                copy_file(path, target_dir / name / path.relative_to(entry))
+                copy_file(path, target_dir / name / relative)
                 stats.bump("plugin-payload")
+    if source_dir.name in COPILOT_WORKSPACE_KIT_PLUGINS:
+        copy_copilot_workspace_kit_payload(source_dir, target_dir, stats)
     return manifest
 
 
@@ -521,9 +657,36 @@ def build(destination: Path, marketplace_path: Path) -> Stats:
         write(destination / "commands" / f"{slug}.md", convert_prompt(path))
         stats.bump("commands")
 
+    enabled_hook_names = {
+        path.stem
+        for path in COPILOT_INSTALLED_HOOKS_ROOT.glob("*.json")
+        if not json.loads(read(path)).get("disableAllHooks", False)
+    }
+    project_hooks: dict[str, list[dict[str, Any]]] = {}
+    converted_hook_names: set[str] = set()
     for hooks_json in sorted(SOURCE_HOOKS_ROOT.glob("*/hooks.json")):
-        convert_hook_package(hooks_json.parent, destination / "hooks" / hooks_json.parent.name, stats)
+        hook_name = hooks_json.parent.name
+        converted = convert_hook_package(
+            hooks_json.parent,
+            destination / "hooks" / hook_name,
+            stats,
+        )
+        converted_hook_names.add(hook_name)
+        if hook_name in enabled_hook_names:
+            for event, groups in converted["hooks"].items():
+                project_hooks.setdefault(event, []).extend(groups)
         stats.bump("hooks")
+    missing_hooks = enabled_hook_names - converted_hook_names
+    if missing_hooks:
+        raise ConversionError(
+            "installed Copilot hooks have no canonical package: "
+            + ", ".join(sorted(missing_hooks))
+        )
+    write(
+        destination / "settings.json",
+        json.dumps({"hooks": project_hooks}, indent=2, ensure_ascii=False) + "\n",
+    )
+    stats.bump("project-hooks", len(enabled_hook_names))
 
     entries: list[dict[str, Any]] = []
     for plugin_dir in sorted(p for p in SOURCE_PLUGINS_ROOT.iterdir() if p.is_dir()):
@@ -550,7 +713,12 @@ def build(destination: Path, marketplace_path: Path) -> Stats:
 
 
 def tree_files(root: Path) -> set[Path]:
-    return {path.relative_to(root) for path in root.rglob("*") if path.is_file()}
+    return {
+        relative
+        for path in root.rglob("*")
+        if path.is_file()
+        if not ignored_resource_path(relative := path.relative_to(root))
+    }
 
 
 def diff_trees(expected_root: Path, actual_root: Path) -> list[str]:
@@ -565,6 +733,22 @@ def diff_trees(expected_root: Path, actual_root: Path) -> list[str]:
         if not filecmp.cmp(expected_root / shared, actual_root / shared, shallow=False):
             problems.append(f"out of date: {shared.as_posix()}")
     return problems
+
+
+def replace_generated_tree(staged: Path, target: Path) -> None:
+    backup = target.with_name(f".{target.name}.backup-{os.getpid()}")
+    if backup.exists():
+        shutil.rmtree(backup)
+    if target.exists():
+        target.replace(backup)
+    try:
+        staged.replace(target)
+    except OSError:
+        if backup.exists() and not target.exists():
+            backup.replace(target)
+        raise
+    if backup.exists():
+        shutil.rmtree(backup)
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -590,6 +774,19 @@ def main(argv: list[str] | None = None) -> int:
                 problems.append(f"missing: {MARKETPLACE_PATH.relative_to(REPO_ROOT).as_posix()}")
             elif not filecmp.cmp(staged_marketplace, MARKETPLACE_PATH, shallow=False):
                 problems.append(f"out of date: {MARKETPLACE_PATH.relative_to(REPO_ROOT).as_posix()}")
+            staged_settings = staging / "settings.json"
+            if not PROJECT_SETTINGS_PATH.is_file():
+                problems.append(
+                    f"missing: {PROJECT_SETTINGS_PATH.relative_to(REPO_ROOT).as_posix()}"
+                )
+            elif not filecmp.cmp(
+                staged_settings,
+                PROJECT_SETTINGS_PATH,
+                shallow=False,
+            ):
+                problems.append(
+                    f"out of date: {PROJECT_SETTINGS_PATH.relative_to(REPO_ROOT).as_posix()}"
+                )
             if problems:
                 print(f"Claude Code harness is out of date ({len(problems)} problems):", file=sys.stderr)
                 for problem in problems[:40]:
@@ -604,12 +801,20 @@ def main(argv: list[str] | None = None) -> int:
             print("Claude Code harness is up to date.")
             return 0
 
-    for name in ("agents", "rules", "skills", "commands", "hooks", "plugins"):
-        target = HARNESS_ROOT / name
-        if target.exists():
-            shutil.rmtree(target)
     try:
-        stats = build(HARNESS_ROOT, MARKETPLACE_PATH)
+        with tempfile.TemporaryDirectory(
+            prefix=".claude-code-staging-",
+            dir=HARNESS_ROOT.parent,
+        ) as tmp:
+            staging = Path(tmp) / "claude-code"
+            staged_marketplace = Path(tmp) / "marketplace.json"
+            stats = build(staging, staged_marketplace)
+            for name in ("agents", "rules", "skills", "commands", "hooks", "plugins"):
+                replace_generated_tree(staging / name, HARNESS_ROOT / name)
+            staged_settings = staging / "settings.json"
+            staged_settings.replace(PROJECT_SETTINGS_PATH)
+            MARKETPLACE_PATH.parent.mkdir(parents=True, exist_ok=True)
+            staged_marketplace.replace(MARKETPLACE_PATH)
     except ConversionError as error:
         print(f"conversion error: {error}", file=sys.stderr)
         return 1

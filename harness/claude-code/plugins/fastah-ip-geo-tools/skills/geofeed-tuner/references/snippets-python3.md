@@ -42,7 +42,7 @@ import ipaddress
 
 def is_non_public(network):
     """Check if a network is non-public (private, loopback, link-local, multicast, or reserved).
-    
+
     Note: In Python < 3.11, is_private may incorrectly flag some ranges
     (e.g., 100.64.0.0/10 CGNAT space). Use is_global as the primary check
     when available, with fallbacks for edge cases.

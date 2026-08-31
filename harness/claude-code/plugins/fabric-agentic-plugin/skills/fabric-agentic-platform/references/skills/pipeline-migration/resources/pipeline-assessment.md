@@ -434,7 +434,7 @@ After scoring, determine migration order by sorting pipelines such that:
 def recommended_order(assessments: dict, dependency_graph: dict) -> list[str]:
     """
     Return pipeline names in recommended migration order.
-    Priority: no-blocker < medium < high < critical, 
+    Priority: no-blocker < medium < high < critical,
     then by how many other pipelines depend on this one (descending).
     """
     # Count how many pipelines call each pipeline

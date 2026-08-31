@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "LICENSE_MODE=warn \"${CLAUDE_PROJECT_DIR}/.claude/hooks/dependency-license-checker/check-licenses.sh\"",
+            "timeout": 60
+          }
+        ]
+      }
+    ]
+  }
+}

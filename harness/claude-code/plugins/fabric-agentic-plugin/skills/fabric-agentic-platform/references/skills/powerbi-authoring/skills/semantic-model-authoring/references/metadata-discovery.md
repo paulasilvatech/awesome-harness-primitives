@@ -1,6 +1,6 @@
 # Semantic Model Metadata Discovery — DAX INFO Functions
 
-Read-only DAX queries for metadata exploration using `INFO.VIEW.*` and `INFO.*` rowsets. Use this reference when discovering model metadata through **DAX INFO functions** instead of `powerbi-modeling-mcp` get/list tools. 
+Read-only DAX queries for metadata exploration using `INFO.VIEW.*` and `INFO.*` rowsets. Use this reference when discovering model metadata through **DAX INFO functions** instead of `powerbi-modeling-mcp` get/list tools.
 
 ## Recommended Discovery Order
 

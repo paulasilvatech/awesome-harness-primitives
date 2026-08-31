@@ -1,0 +1,42 @@
+name: "H2: Golden Paths Templates"
+description: "Deploy software templates for developer self-service"
+title: "[Templates] Deploy golden path templates"
+labels: ["h2-enhancement", "golden-paths", "copilot-agent"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Golden Paths Deployment
+        This issue triggers the **golden-paths-agent** to create software templates.
+
+  - type: checkboxes
+    id: template_types
+    attributes:
+      label: "Template Types to Deploy"
+      options:
+        - label: "Backend API (Node.js/Python/Go)"
+        - label: "Frontend SPA (React/Vue)"
+        - label: "Microservice (containerized)"
+        - label: "Azure Function"
+        - label: "Data Pipeline"
+        - label: "ML Model Service"
+        - label: "Documentation Site"
+
+  - type: dropdown
+    id: target_portal
+    attributes:
+      label: "Target Developer Portal"
+      options:
+        - "Backstage"
+        - "Backstage OSS"
+        - "GitHub Templates only"
+    validations:
+      required: true
+
+  - type: input
+    id: template_repo
+    attributes:
+      label: "Templates Repository"
+      description: "Repository to store golden path templates"
+      placeholder: "https://github.com/org/platform-templates"

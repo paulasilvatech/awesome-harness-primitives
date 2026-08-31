@@ -393,13 +393,13 @@ Execute a query and convert Apache Arrow results to CSV:
 param(
     [Parameter(Mandatory)]
     [string]$WorkspaceId,
-    
+
     [Parameter(Mandatory)]
     [string]$DataflowId,
-    
+
     [Parameter(Mandatory)]
     [string]$QueryName,
-    
+
     [string]$CustomMashup = ""
 )
 

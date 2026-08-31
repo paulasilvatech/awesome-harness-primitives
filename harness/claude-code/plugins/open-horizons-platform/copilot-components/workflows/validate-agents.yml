@@ -1,0 +1,94 @@
+name: Validate Agents
+
+on:
+  push:
+    paths:
+      - ".github/agents/**"
+      - ".github/prompts/**"
+      - ".github/instructions/**"
+      - ".github/skills/**"
+      - ".github/ISSUE_TEMPLATE/**"
+      - ".github/mcp.json"
+      - ".github/model-routing.yaml"
+      - ".github/copilot-instructions.md"
+      - ".github/harness/COPILOT-HARNESS.md"
+      - "AGENTS.md"
+      - "scripts/update-copilot-inventory.py"
+      - "backstage/server/agent-api-maf/**"
+  pull_request:
+    paths:
+      - ".github/agents/**"
+      - ".github/prompts/**"
+      - ".github/instructions/**"
+      - ".github/skills/**"
+      - ".github/ISSUE_TEMPLATE/**"
+      - ".github/mcp.json"
+      - ".github/model-routing.yaml"
+      - ".github/copilot-instructions.md"
+      - ".github/harness/COPILOT-HARNESS.md"
+      - "AGENTS.md"
+      - "scripts/update-copilot-inventory.py"
+      - "backstage/server/agent-api-maf/**"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - name: Set up Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: "3.12"
+
+      - name: Install validation and MAF dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install --disable-pip-version-check \
+            "PyYAML==6.0.3" \
+            -r backstage/server/agent-api-maf/requirements.txt
+
+      - name: Validate customization primitives
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 .github/skills/validation-scripts/scripts/validate-agents.py --strict
+
+      - name: Validate SKILL.md structure
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 .github/skills/verify-skills.py
+
+      - name: Validate generated Copilot inventory
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 scripts/update-copilot-inventory.py --check
+
+      - name: Validate MAF routing and Hosted Agent construction
+        shell: bash
+        env:
+          FOUNDRY_PROJECT_ENDPOINT: https://example.services.ai.azure.com/api/projects/example
+          FOUNDRY_GPT_56_SOL_DEPLOYMENT: gpt-5-6-sol
+          FOUNDRY_GPT_56_TERRA_DEPLOYMENT: gpt-5-6-terra
+          FOUNDRY_GPT_56_LUNA_DEPLOYMENT: gpt-5-6-luna
+          OPEN_HORIZONS_AGENT_ROLE: pipeline
+          MODEL_ROUTING_CONFIG: ../../../.github/model-routing.yaml
+        run: |
+          set -euo pipefail
+          python -m unittest discover \
+            -s backstage/server/agent-api-maf/tests \
+            -p 'test_*.py' \
+            -v
+          python -m py_compile \
+            backstage/server/agent-api-maf/main.py \
+            backstage/server/agent-api-maf/hosted.py \
+            backstage/server/agent-api-maf/model_routing.py
+          pushd backstage/server/agent-api-maf >/dev/null
+          python -c "from hosted import create_hosted_agent; create_hosted_agent()"
+          popd >/dev/null

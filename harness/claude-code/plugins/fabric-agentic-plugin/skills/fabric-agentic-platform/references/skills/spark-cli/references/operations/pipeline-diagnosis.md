@@ -218,7 +218,7 @@ Cell In[<cell_number>], line <line_number>
 
 **Example traceback lines:**
 ```
-  File "Cell In[14], line 19"  
+  File "Cell In[14], line 19"
     raise Exception(f"Expected key '{key}' not found in URL: {url}")
 Exception: Expected key 'cluster_id' not found in URL: https://...
 ```

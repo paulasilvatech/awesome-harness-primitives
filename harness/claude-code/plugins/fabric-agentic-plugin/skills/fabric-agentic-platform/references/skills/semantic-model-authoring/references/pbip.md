@@ -1,6 +1,6 @@
 # Power BI Project file (PBIP)
 
-Power BI Project (PBIP) is the code-behind of a Power BI development. 
+Power BI Project (PBIP) is the code-behind of a Power BI development.
 
 It can include a Semantic Model + Report or just a Report (live connect).
 
@@ -12,23 +12,23 @@ PBIPFolder/
 |   ├── /definition # The semantic model definition using TMDL language [REQUIRED]
 |   ├── definition.pbism # The semantic model definition file [REQUIRED]
 |   ├── * # Other semantic model metadata files and folders
-├── [Name].Report/        
+├── [Name].Report/
 |   ├── /definition # The report definition using PBIR format
 |   ├── definition.pbir # The report definition file with a byPath relative reference to the semantic model folder. [REQUIRED]
 |   ├── * # Other report metadata files and folders
 └── [Name].pbip # A shortcut file to the report folder
-```    
+```
 
 **PBIP Folder with Report folder:**
 
 ```text
 PBIPFolder/
-├── [Name].Report/        
+├── [Name].Report/
 |   ├── /definition # The report definition using PBIR format
 |   ├──  definition.pbir # The report definition file with a byConnection reference to a semantic model in a Workspace. [REQUIRED]
 |   ├── * # Other report metadata files and folders
 └── [Name].pbip # A shortcut file to the report folder
-```   
+```
 
 ## definition.pbism file
 
@@ -68,11 +68,11 @@ Example of `definition.pbir` file targeting a local semantic model folder:
 Example of `definition.pbir` file targeting a semantic model in a workspace:
 
 ```json
-{  
+{
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definitionProperties/2.0.0/schema.json",
   "version": "4.0",
   "datasetReference": {
-    "byConnection": {      
+    "byConnection": {
       "connectionString": "semanticmodelid=[SemanticModelId]"
     }
   }
@@ -87,7 +87,7 @@ Refer to [JSON Schema](https://github.com/microsoft/json-schemas/blob/main/fabri
 
 ## .pbip file
 
-Serves as a shortcut to a Power BI Report. 
+Serves as a shortcut to a Power BI Report.
 
 Example of a `[name].pbip` file:
 

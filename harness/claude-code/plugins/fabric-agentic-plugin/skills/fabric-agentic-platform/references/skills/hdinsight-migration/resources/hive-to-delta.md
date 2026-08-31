@@ -162,10 +162,10 @@ hive_tables = {
 for table, source_format in hive_tables.items():
     # Read from ADLS (via OneLake shortcut)
     df = spark.read.format(source_format).load(f"Files/hive-export/{table}/")
-    
+
     # Write as Delta to Lakehouse schema
     df.write.format("delta").mode("overwrite").saveAsTable(f"sales_db.{table}")
-    
+
     print(f"Migrated {table}")
 
 # Step 3: Verify

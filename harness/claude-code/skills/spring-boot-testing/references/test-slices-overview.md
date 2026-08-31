@@ -24,7 +24,7 @@ Quick reference for selecting the right Spring Boot test slice.
 ```java
 class PriceCalculatorTest {
   private PriceCalculator calculator = new PriceCalculator();
-  
+
   @Test
   void shouldApplyDiscount() {
     var result = calculator.applyDiscount(100, 0.1);
@@ -126,7 +126,7 @@ record OrderResponse(Long id, String status, BigDecimal total) {}
 @Test
 void shouldHandleDifferentOrderTypes() {
   var order = orderService.create(new OrderRequest("Product", 2));
-  
+
   switch (order) {
     case PhysicalOrder po -> assertThat(po.getShippingAddress()).isNotNull();
     case DigitalOrder do_ -> assertThat(do_.getDownloadLink()).isNotNull();
@@ -150,7 +150,7 @@ void shouldParseComplexJson() {
       ]
     }
     """;
-  
+
   assertThat(mvc.post().uri("/orders")
     .contentType(APPLICATION_JSON)
     .content(json))
@@ -164,7 +164,7 @@ void shouldParseComplexJson() {
 @Test
 void shouldReturnOrdersInSequence() {
   var orders = orderRepository.findAll();
-  
+
   assertThat(orders.getFirst().getStatus()).isEqualTo("NEW");
   assertThat(orders.getLast().getStatus()).isEqualTo("COMPLETED");
   assertThat(orders.reversed().getFirst().getStatus()).isEqualTo("COMPLETED");

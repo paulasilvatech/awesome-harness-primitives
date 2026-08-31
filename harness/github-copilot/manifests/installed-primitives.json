@@ -11,6 +11,10 @@
       "target": ".github/instructions/copilot-primitive-authoring.instructions.md"
     },
     {
+      "source": "harness/github-copilot/instructions/claude-code-harness.instructions.md",
+      "target": ".github/instructions/claude-code-harness.instructions.md"
+    },
+    {
       "source": "harness/github-copilot/instructions/agents.instructions.md",
       "target": ".github/instructions/agents.instructions.md"
     },

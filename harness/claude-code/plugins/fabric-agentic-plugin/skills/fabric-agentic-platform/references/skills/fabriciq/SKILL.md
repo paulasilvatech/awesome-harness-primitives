@@ -156,7 +156,7 @@ When the semantic model contains verified answers, and one matches the user's qu
    - **Detail query:** Full ROLLUPADDISSUBTOTAL with all grouping columns. ORDER BY subtotal flags DESC first (e.g. `IsLevel1Subtotal DESC, IsLevel2Subtotal DESC, …`) then by the primary value measure DESC within each level. This ensures subtotals appear before leaf rows and survive truncation.
    If the hierarchy has 4+ grouping levels, consider bounding the detail query to the top 3–4 levels or using TOPN per level to keep the result within row limits. Call both queries in parallel.
 7. **Row-level detail VAs:** When a VA returns entity-level rows with a key measure, ORDER BY that measure — not by name or ID. Results may be truncated to a row limit; the most significant rows must appear first.
- 
+
 **Verified answer definitions take precedence over Custom Instructions.** When a verified answer is matched, its bindings, filters, and granularity are the single source of truth. Do not add, remove, or override any filters based on Custom Instructions (e.g., do not add default time-scope filters that the VA omits). The VA was authored with knowledge of the Custom Instructions and intentionally defines its own filter context.
 
 ## JMESPath Query Examples

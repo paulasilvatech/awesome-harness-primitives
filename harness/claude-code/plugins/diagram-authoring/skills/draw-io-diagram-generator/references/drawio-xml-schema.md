@@ -222,25 +222,25 @@ Toggle layer visibility:
 
 ```xml
 <!-- Swimlane container -->
-<mxCell id="swim1" value="Process" style="shape=pool;startSize=30;horizontal=1;" 
+<mxCell id="swim1" value="Process" style="shape=pool;startSize=30;horizontal=1;"
         vertex="1" parent="1">
   <mxGeometry x="40" y="40" width="800" height="340" as="geometry" />
 </mxCell>
 
 <!-- Lane 1 (child of swimlane container) -->
-<mxCell id="lane1" value="Customer" style="swimlane;startSize=30;" 
+<mxCell id="lane1" value="Customer" style="swimlane;startSize=30;"
         vertex="1" parent="swim1">
   <mxGeometry x="0" y="30" width="800" height="150" as="geometry" />
 </mxCell>
 
 <!-- Shape inside lane (child of lane) -->
-<mxCell id="step1" value="Place Order" style="rounded=1;whiteSpace=wrap;html=1;" 
+<mxCell id="step1" value="Place Order" style="rounded=1;whiteSpace=wrap;html=1;"
         vertex="1" parent="lane1">
   <mxGeometry x="80" y="50" width="120" height="60" as="geometry" />
 </mxCell>
 ```
 
-> **Key**: Cells inside a swimlane have `parent` set to the **lane's ID**, not `"1"`.  
+> **Key**: Cells inside a swimlane have `parent` set to the **lane's ID**, not `"1"`.
 > Coordinates inside lanes are **relative to the lane origin**.
 
 ---

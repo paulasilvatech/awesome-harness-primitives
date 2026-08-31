@@ -23,7 +23,7 @@ Oracle automatically converts empty strings (`''`) to `NULL` in VARCHAR2 columns
 INSERT INTO table (varchar_column) VALUES ('');
 SELECT * FROM table WHERE varchar_column IS NULL;  -- Returns the row
 
--- PostgreSQL behavior  
+-- PostgreSQL behavior
 INSERT INTO table (varchar_column) VALUES ('');
 SELECT * FROM table WHERE varchar_column IS NULL;  -- Returns nothing
 SELECT * FROM table WHERE varchar_column = '';     -- Returns the row

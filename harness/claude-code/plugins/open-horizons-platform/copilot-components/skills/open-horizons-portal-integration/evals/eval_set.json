@@ -1,0 +1,34 @@
+[
+  {
+    "query": "Add a Backstage route for a new Open Horizons agent view and connect it to an existing runtime endpoint.",
+    "should_trigger": true
+  },
+  {
+    "query": "Repair fragmented SSE handling between the ai-chat plugin and agent-api-maf without changing the event contract.",
+    "should_trigger": true
+  },
+  {
+    "query": "Register a product-specific AI resource in backstage/catalog and expose it in the existing portal.",
+    "should_trigger": true
+  },
+  {
+    "query": "Wire a new agent service manifest into backstage/k8s and check the component render plan.",
+    "should_trigger": true
+  },
+  {
+    "query": "Provision an Azure AI Foundry project and model deployment.",
+    "should_trigger": false
+  },
+  {
+    "query": "Change GitHub organization branch protection for every repository.",
+    "should_trigger": false
+  },
+  {
+    "query": "Deploy the Backstage manifests to the production AKS cluster.",
+    "should_trigger": false
+  },
+  {
+    "query": "Rotate the production Backstage OAuth client secret.",
+    "should_trigger": false
+  }
+]

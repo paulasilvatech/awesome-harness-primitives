@@ -76,7 +76,7 @@ class MyComponent extends React.Component {
   render() {
     return <div ref={ref => this.node = ref}>Content</div>;
   }
-  
+
   getWidth() {
     return findDOMNode(this).offsetWidth;
   }
@@ -87,11 +87,11 @@ class MyComponent extends React.Component {
 // and use direct refs to access DOM nodes instead.
 class MyComponent extends React.Component {
   nodeRef = React.createRef();
-  
+
   render() {
     return <div ref={this.nodeRef}>Content</div>;
   }
-  
+
   getWidth() {
     return this.nodeRef.current.offsetWidth;
   }
@@ -137,12 +137,12 @@ import { forwardRef, useImperativeHandle } from 'react';
 
 const TextInput = forwardRef((props, ref) => {
   const inputRef = useRef();
-  
+
   useImperativeHandle(ref, () => ({
     focus: () => inputRef.current.focus(),
     clear: () => { inputRef.current.value = ''; }
   }));
-  
+
   return <input ref={inputRef} {...props} />;
 });
 
@@ -159,12 +159,12 @@ function App() {
 // After (React 19):
 function TextInput({ ref, ...props }) {
   const inputRef = useRef(null);
-  
+
   useImperativeHandle(ref, () => ({
     focus: () => inputRef.current.focus(),
     clear: () => { inputRef.current.value = ''; }
   }));
-  
+
   return <input ref={inputRef} {...props} />;
 }
 
@@ -217,7 +217,7 @@ class Button extends React.Component {
     label: 'Click',
     disabled: false
   };
-  
+
   render() {
     return <button disabled={this.props.disabled}>{this.props.label}</button>;
   }
@@ -231,7 +231,7 @@ class Button extends React.Component {
     this.label = props.label || 'Click';
     this.disabled = props.disabled || false;
   }
-  
+
   render() {
     return <button disabled={this.disabled}>{this.label}</button>;
   }
@@ -315,7 +315,7 @@ class MyComponent extends React.Component {
   static contextTypes = {
     theme: PropTypes.string
   };
-  
+
   render() {
     return <div style={{ color: this.context.theme }}>Text</div>;
   }
@@ -326,11 +326,11 @@ class App extends React.Component {
   static childContextTypes = {
     theme: PropTypes.string
   };
-  
+
   getChildContext() {
     return { theme: 'dark' };
   }
-  
+
   render() {
     return <MyComponent />;
   }
@@ -360,7 +360,7 @@ function App() {
 // Before (class component consuming old context):
 class MyComponent extends React.Component {
   static contextType = ThemeContext;
-  
+
   render() {
     return <div style={{ color: this.context }}>Text</div>;
   }
@@ -395,7 +395,7 @@ class Component extends React.Component {
 // After (React 19):
 class Component extends React.Component {
   inputRef = React.createRef();
-  
+
   render() {
     return (
       <>
@@ -428,7 +428,7 @@ class Component extends React.Component {
     super(props);
     this.inputRef = null;
   }
-  
+
   render() {
     return (
       <>

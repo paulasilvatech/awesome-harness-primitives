@@ -24,10 +24,10 @@ assertThat(mvc.get().uri("/orders/1"))
 ```java
 @WebMvcTest(OrderController.class)
 class OrderControllerTest {
-  
+
   @Autowired
   private MockMvcTester mvc;
-  
+
   @MockitoBean
   private OrderService orderService;
 }
@@ -41,7 +41,7 @@ class OrderControllerTest {
 @Test
 void shouldGetOrder() {
   given(orderService.findById(1L)).willReturn(new Order(1L, "PENDING", 99.99));
-  
+
   assertThat(mvc.get().uri("/orders/1"))
     .hasStatus(HttpStatus.OK)
     .bodyJson()
@@ -63,7 +63,7 @@ void shouldGetAllOrders() {
     new Order(1L, "PENDING"),
     new Order(2L, "COMPLETED")
   ));
-  
+
   assertThat(mvc.get().uri("/orders"))
     .hasStatus(HttpStatus.OK)
     .bodyJson()
@@ -119,7 +119,7 @@ void shouldCalculateOrderTotal() {
 @Test
 void shouldCreateOrder() {
   given(orderService.create(any())).willReturn(1L);
-  
+
   assertThat(mvc.post().uri("/orders")
     .contentType(MediaType.APPLICATION_JSON)
     .content("{\"product\": \"Laptop\", \"quantity\": 2}"))
@@ -219,7 +219,7 @@ private JacksonTester<OrderRequest> json;
 @Test
 void shouldCreateOrder() {
   OrderRequest request = new OrderRequest("Laptop", 2);
-  
+
   assertThat(mvc.post().uri("/orders")
     .contentType(MediaType.APPLICATION_JSON)
     .content(json.write(request).getJson()))
@@ -234,7 +234,7 @@ void shouldCreateOrder() {
 void shouldReturnValidationErrors() {
   given(orderService.findById(999L))
     .willThrow(new OrderNotFoundException(999L));
-  
+
   assertThat(mvc.get().uri("/orders/999"))
     .hasStatus(HttpStatus.NOT_FOUND)
     .bodyJson()
@@ -252,7 +252,7 @@ void shouldReturnValidationErrors() {
 @Test
 void shouldRejectInvalidOrder() {
   OrderRequest invalidRequest = new OrderRequest("", -1);
-  
+
   assertThat(mvc.post().uri("/orders")
     .contentType(MediaType.APPLICATION_JSON)
     .content(json.write(invalidRequest).getJson()))

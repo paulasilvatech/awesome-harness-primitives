@@ -4,7 +4,7 @@ Scheduled/cron trigger for periodic task execution.
 
 ## Template Selection
 
-Resource filter: `timer`  
+Resource filter: `timer`
 Discover templates via MCP or CDN manifest where `resource == "timer"` and `language` matches user request.
 
 ## Cron Expressions
@@ -25,12 +25,12 @@ Some templates define the schedule via an app setting reference `%TIMER_SCHEDULE
 
 ### Timer Not Firing
 
-**Cause:** Invalid cron expression or function app not running.  
+**Cause:** Invalid cron expression or function app not running.
 **Solution:** Verify cron syntax; check function app is started and healthy.
 
 ### Duplicate Executions
 
-**Cause:** Multiple instances running the same timer.  
+**Cause:** Multiple instances running the same timer.
 **Solution:** Timer triggers use Storage lease to ensure single execution. Verify `AzureWebJobsStorage` is configured.
 
 ## Eval

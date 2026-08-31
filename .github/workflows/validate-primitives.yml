@@ -56,6 +56,21 @@ jobs:
       - name: Check installed primitive drift
         run: python3 harness/github-copilot/scripts/sync_installed_primitives.py --check
 
+      - name: Check Claude Code conversion drift
+        run: python3 harness/claude-code/scripts/convert_from_copilot.py --check
+
+      - name: Validate Claude Code primitives
+        run: python3 harness/claude-code/scripts/validate_primitives.py --strict
+
+      - name: Check Claude Code catalog drift
+        run: python3 harness/claude-code/scripts/generate_catalog.py --check
+
+      - name: Check installed Claude Code primitive drift
+        run: >-
+          python3 harness/github-copilot/scripts/sync_installed_primitives.py
+          --manifest harness/claude-code/manifests/installed-primitives.json
+          --check
+
   tests:
     name: Bundled script tests
     runs-on: ubuntu-latest
@@ -83,7 +98,7 @@ jobs:
               failed=1
             fi
             echo "::endgroup::"
-          done < <(find harness/github-copilot -name 'test_*.py' -type f | sort)
+          done < <(find harness/github-copilot harness/claude-code -name 'test_*.py' -type f | sort)
           exit "${failed}"
 
   links:

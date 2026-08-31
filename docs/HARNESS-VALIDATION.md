@@ -1,5 +1,7 @@
 # GitHub Copilot CLI Harness Runtime Validation
 
+This file records GitHub Copilot evidence. Claude Code evidence is maintained separately in [CLAUDE-CODE-VALIDATION.md](CLAUDE-CODE-VALIDATION.md), with its stable contract in [CLAUDE-CODE-HARNESS-SPEC.md](CLAUDE-CODE-HARNESS-SPEC.md).
+
 Date: 2026-08-17
 CLI: `GitHub Copilot CLI 1.0.81-0`
 Binary: `/Users/paulasilva/.local/bin/copilot`

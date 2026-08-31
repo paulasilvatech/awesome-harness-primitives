@@ -12,17 +12,20 @@ runtime contract and the type routing table.
   `python3 harness/claude-code/scripts/generate_catalog.py`.
 - Do not hand-edit `harness/claude-code/`. Change the canonical Copilot source
   and re-run `python3 harness/claude-code/scripts/convert_from_copilot.py`.
-- CI runs `python3 harness/claude-code/scripts/generate_catalog.py --check` and
-  blocks a stale catalog.
+- Generate declared `CLAUDE.md` and `.claude/` copies with
+  `python3 harness/github-copilot/scripts/sync_installed_primitives.py --manifest
+  harness/claude-code/manifests/installed-primitives.json`.
+- CI checks conversion drift, strict validation, catalog drift, and installed
+  Claude copy drift.
 
 ## Primitive type guide
 
-| Type | What it does | Discovery path | Canonical source |
+| Type | What it does | Discovery path | Generated output |
 | --- | --- | --- | --- |
 | Subagent | Specialist persona with its own context window, tool scope, and model. | `.claude/agents/*.md`, `~/.claude/agents/*.md`, `<plugin>/agents/*.md` | `harness/claude-code/agents/` |
 | Rule | Passive instructions loaded at launch or when Claude touches matching files. | `.claude/rules/**/*.md`, `~/.claude/rules/**/*.md` | `harness/claude-code/rules/` |
 | Skill | Reusable procedure with optional scripts, references, and assets. | `.claude/skills/<name>/SKILL.md`, `~/.claude/skills/`, `<plugin>/skills/` | `harness/claude-code/skills/` |
-| Command | Explicit `/name` action a user invokes. | `.claude/commands/*.md`, `<plugin>/commands/*.md` | `harness/claude-code/commands/` |
+| Command | Legacy-compatible explicit `/name` action; new reusable procedures should prefer skills. | `.claude/commands/*.md`, `<plugin>/commands/*.md` | `harness/claude-code/commands/` |
 | Plugin | Installable bundle of skills, agents, commands, hooks, and MCP servers. | `.claude-plugin/plugin.json` | `harness/claude-code/plugins/` |
 | Hook | Deterministic automation bound to a Claude Code lifecycle event. | `.claude/settings.json`, `<plugin>/hooks/hooks.json` | `harness/claude-code/hooks/` |
 
@@ -31,7 +34,7 @@ runtime contract and the type routing table.
 | Primitive type | Count |
 | --- | ---: |
 | Subagents | 228 |
-| Rules | 195 |
+| Rules | 196 |
 | Skills | 490 |
 | Commands | 48 |
 | Plugins | 139 |
@@ -300,6 +303,7 @@ runtime contract and the type routing table.
 | `blazor` | `**/*.razor, **/*.razor.cs, **/*.razor.css` | [file](harness/claude-code/rules/blazor.md) |
 | `caveman-mode` | `all files` | [file](harness/claude-code/rules/caveman-mode.md) |
 | `centos-linux` | `all files` | [file](harness/claude-code/rules/centos-linux.md) |
+| `claude-code-harness` | `harness/claude-code/**, .claude/**, CLAUDE.md, .claude-plugin/marketplace.json, CLAUDE-CODE-CATALOG.md, docs/CLAUDE-COD…` | [file](harness/claude-code/rules/claude-code-harness.md) |
 | `clojure` | `**/*.{clj,cljs,cljc,bb,edn.mdx?}` | [file](harness/claude-code/rules/clojure.md) |
 | `cmake-vcpkg` | `**/*.cmake, **/CMakeLists.txt, **/*.cpp, **/*.c, **/*.h, **/*.hpp` | [file](harness/claude-code/rules/cmake-vcpkg.md) |
 | `code-modernization` | `legacy/**, analysis/**, modernized/**` | [file](harness/claude-code/rules/code-modernization.md) |
@@ -958,7 +962,7 @@ runtime contract and the type routing table.
 | `webapp-testing` | Toolkit for interacting with and testing local web applications using Playwright. Use when verifying frontend functionality, debugging rendered UI behavior, capturing screenshots, inspecting browser… | 5 | [directory](harness/claude-code/skills/webapp-testing) |
 | `webmcpify` | Make a web app agent-ready with WebMCP by detecting app actions, building a manifest, integrating document.modelContext tools, verifying in a real browser, healing failures, and auditing diffs. Use w… | 11 | [directory](harness/claude-code/skills/webmcpify) |
 | `what-context-needed` | Identify the minimum files, symbols, configuration, tests, and prior context GitHub Copilot needs before answering a codebase question. Use this skill when the user asks what context is needed, what… | 0 | [directory](harness/claude-code/skills/what-context-needed) |
-| `winmd-api-search` | Find and explore Windows desktop APIs. Use when building features that need platform capabilities — camera, file access, notifications, UI controls, AI/ML, sensors, networking, etc. Discovers the rig… | 19 | [directory](harness/claude-code/skills/winmd-api-search) |
+| `winmd-api-search` | Find and explore Windows desktop APIs. Use when building features that need platform capabilities — camera, file access, notifications, UI controls, AI/ML, sensors, networking, etc. Discovers the rig… | 8 | [directory](harness/claude-code/skills/winmd-api-search) |
 | `winui3-migration-guide` | Maps UWP APIs and patterns to WinUI 3 and Windows App SDK equivalents with migration rules for namespaces, threading, windowing, dialogs, pickers, sharing, printing, background tasks, settings, tests… | 0 | [directory](harness/claude-code/skills/winui3-migration-guide) |
 | `workiq-copilot` | Use the WorkIQ `CLI/MCP` server to query Microsoft 365 work data such as emails, meetings, documents, Teams messages, people, and projects for live organizational context. Use when the user asks for… | 0 | [directory](harness/claude-code/skills/workiq-copilot) |
 | `workshop-create` | Create a workshop root for desks either by using an existing local directory or by creating a new private GitHub repository in the signed-in account. Use this skill when the operator says create a wo… | 0 | [directory](harness/claude-code/skills/workshop-create) |

@@ -155,9 +155,9 @@ check the parent action first to confirm the branch ran at all.
 
 ## Post-Fix Verification Checklist
 
-1. `update_live_flow` returns `error: null` — definition accepted  
-2. `resubmit_live_flow_run` confirms new run started  
-3. Wait for run completion (poll `get_live_flow_runs` every 15 s)  
-4. Confirm new run `status = "Succeeded"`  
+1. `update_live_flow` returns `error: null` — definition accepted
+2. `resubmit_live_flow_run` confirms new run started
+3. Wait for run completion (poll `get_live_flow_runs` every 15 s)
+4. Confirm new run `status = "Succeeded"`
 5. If flow has downstream consumers (child flows, emails, SharePoint writes),
    spot-check those too

@@ -4,7 +4,7 @@ Blob trigger via Event Grid for high-scale, low-latency blob processing.
 
 ## Template Selection
 
-Resource filter: `blob`  
+Resource filter: `blob`
 Discover templates via MCP or CDN manifest where `resource == "blob"` and `language` matches user request.
 
 ## Why Event Grid?
@@ -18,7 +18,7 @@ Discover templates via MCP or CDN manifest where `resource == "blob"` and `langu
 
 ### "Unauthorized" or "Forbidden" Errors
 
-**Cause:** Missing UAMI credential settings for Storage.  
+**Cause:** Missing UAMI credential settings for Storage.
 **Solution:** Ensure these settings are present in app configuration (prefix must match the connection name used in your function code, default: `AzureWebJobsStorage`):
 
 - `<ConnectionName>__blobServiceUri` (e.g., `https://<account>.blob.core.windows.net`)
@@ -29,7 +29,7 @@ See [Blob Storage trigger connections](https://learn.microsoft.com/en-us/azure/a
 
 ### Blob Events Not Triggering
 
-**Cause:** Event Grid subscription not created or filtering incorrectly.  
+**Cause:** Event Grid subscription not created or filtering incorrectly.
 **Solution:** Verify the Event Grid system topic and subscription exist. Check the blob container prefix filter matches the expected path.
 
 ## Eval

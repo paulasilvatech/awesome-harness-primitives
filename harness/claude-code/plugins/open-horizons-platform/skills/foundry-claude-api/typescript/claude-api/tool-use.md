@@ -58,7 +58,7 @@ The runner's `tools` array accepts raw server-tool definitions (`web_search_2026
 const params = {
   model: "claude-opus-5",
   max_tokens: 16000,
-  tools: [getWeather, { type: "web_search_20260209", name: "web_search", max_uses: 5 }],
+  tools: [getWeather, { type: "web_search_20260209", name: "WebSearch", max_uses: 5 }],
   messages: [{ role: "user", content: "Compare this week's forecasts for Paris across two sources" }],
 };
 
@@ -263,7 +263,7 @@ const response = await client.messages.create({
   tools: [
     { type: "text_editor_20250728", name: "str_replace_based_edit_tool" },
     { type: "bash_20250124", name: "bash" },
-    { type: "web_search_20260209", name: "web_search" },
+    { type: "web_search_20260209", name: "WebSearch" },
     { type: "code_execution_20260120", name: "code_execution" },
   ],
   messages: [{ role: "user", content: "..." }],
@@ -279,8 +279,8 @@ const response = await client.messages.create({
 | `ToolTextEditor20250429` | `str_replace_based_edit_tool` | `text_editor_20250429` |
 | `ToolTextEditor20250728` | `str_replace_based_edit_tool` | `text_editor_20250728` |
 | `ToolBash20250124` | `bash` | `bash_20250124` |
-| `WebSearchTool20260209` | `web_search` | `web_search_20260209` |
-| `WebFetchTool20260209` | `web_fetch` | `web_fetch_20260209` |
+| `WebSearchTool20260209` | `WebSearch` | `web_search_20260209` |
+| `WebFetchTool20260209` | `WebFetch` | `web_fetch_20260209` |
 | `CodeExecutionTool20260120` | `code_execution` | `code_execution_20260120` |
 
 **Don't mix beta and non-beta types**: if you call `client.beta.messages.create()`, the response `content` is `BetaContentBlock[]` — you cannot pass that to a non-beta `ContentBlockParam[]` without narrowing each element.
