@@ -4,7 +4,7 @@ paths:
   - ".claude/**"
   - CLAUDE.md
   - ".claude-plugin/marketplace.json"
-  - CLAUDE-CODE-CATALOG.md
+  - docs/catalog/claude-code.md
   - docs/CLAUDE-CODE-*.md
   - ".github/workflows/validate-primitives.yml"
 ---
@@ -33,7 +33,7 @@ When dated evidence contradicts the specification or converter, update the speci
 
 - Treat `harness/claude-code/{agents,rules,skills,commands,hooks,plugins}/` as generated output.
 - Edit reusable primitive content under `harness/github-copilot/`, then run the Claude converter.
-- Treat `.claude-plugin/marketplace.json`, `harness/claude-code/settings.json`, and `CLAUDE-CODE-CATALOG.md` as generated files.
+- Treat `.claude-plugin/marketplace.json`, `harness/claude-code/settings.json`, and `docs/catalog/claude-code.md` as generated files.
 - Generate `CLAUDE.md`, `.claude/settings.json`, and other `.claude/` copies from the installed-copy manifest; do not maintain them independently.
 - Keep `harness/claude-code/scripts/`, `harness/claude-code/manifests/`, and Claude-specific documentation as maintained source.
 - Exclude local metadata, Python caches, and build output such as `.DS_Store`, `__pycache__/`, `obj/`, and `bin/` from generated primitives.
@@ -103,7 +103,7 @@ Use `claude plugin validate --strict` for runtime validation when Claude Code is
 - [ ] Canonical content changes were made under `harness/github-copilot/`, not generated Claude primitive roots.
 - [ ] Claude-specific runtime claims match dated evidence in `docs/CLAUDE-CODE-VALIDATION.md`.
 - [ ] Conversion, strict validation, catalog drift, and installed-copy drift checks pass.
-- [ ] `.claude-plugin/marketplace.json`, `CLAUDE-CODE-CATALOG.md`, `CLAUDE.md`, `.claude/settings.json`, installed hook scripts, and other declared `.claude/` copies are synchronized.
+- [ ] `.claude-plugin/marketplace.json`, `docs/catalog/claude-code.md`, `CLAUDE.md`, `.claude/settings.json`, installed hook scripts, and other declared `.claude/` copies are synchronized.
 - [ ] Generated primitives contain no local metadata, caches, build output, unresolved placeholders, or unsupported fields.
 - [ ] Runtime plugin validation was run when Claude Code was available, or the unrun check is reported.
 

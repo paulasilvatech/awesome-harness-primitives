@@ -126,7 +126,7 @@ Do not commit production values such as:
 
 ```bash
 DATABASE_URL=postgresql://prod-server/myapp
-API_KEY=actual_secret_key_12345
+API_KEY=unsafe
 ```
 
 ### Branch Protection

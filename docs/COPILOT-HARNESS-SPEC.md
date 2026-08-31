@@ -301,7 +301,7 @@ documented flat package contract for GitHub-specific agents, hooks, and extensio
 `plugin.json` carries no maturity, tier, status, or category field: unsupported top-level keys fail rule
 `PL007`, and `keywords` is a discovery taxonomy that must not double as governance. Classification
 therefore lives in the canonical `harness/github-copilot/manifests/plugin-sources.json` under an optional
-`governance` object and is projected into `docs/PLUGIN-AUDIT.md` and the root `CATALOG.md` by the shared
+`governance` object and is projected into `docs/PLUGIN-AUDIT.md` and `docs/catalog/github-copilot.md` by the shared
 classifier `harness/github-copilot/scripts/_plugin_governance.py`.
 
 `governance` accepts only `lifecycle`, `lastRuntimeProbe`, and `evidence`. A probe date requires evidence,
@@ -447,6 +447,16 @@ PascalCase aliases exist for VS Code compatibility. Note the asymmetries:
   `interrupt`, `hookSpecificOutput`, `decision`, `reason`, `continue`.
 
 Hook scripts must be executable (`chmod +x`).
+
+### 5.5 Plugin versus standalone distribution
+
+Use a plugin when a capability is released as one versioned suite or requires bundled hooks, MCP or
+LSP servers, output styles, or client extensions. Use a standalone primitive when a project needs one
+focused agent, instruction, skill, prompt, or hook and should not inherit the rest of a package.
+
+The generated catalog lists plugin packages and every declared plugin runtime component separately.
+Shared library copies therefore appear once on their standalone type page and again as qualified
+`plugin:item` membership on the Plugin Components page.
 
 ---
 

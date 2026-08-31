@@ -23,8 +23,8 @@ except ModuleNotFoundError:  # pragma: no cover - supports python3 -m invocation
     from ._plugin_sources import load_plugin_sources
     from .validate_primitives import PLUGIN_MANIFESTS, parse_frontmatter
 
-DEFAULT_INDEX = REPO_ROOT / "CATALOG.md"
-DEFAULT_PAGES_DIR = REPO_ROOT / "docs" / "catalog"
+DEFAULT_INDEX = REPO_ROOT / "docs" / "catalog" / "github-copilot.md"
+DEFAULT_PAGES_DIR = REPO_ROOT / "docs" / "catalog" / "github-copilot"
 SOURCE_ROOT = HARNESS_ROOT
 LINK_BASE = REPO_ROOT
 DESCRIPTION_WIDTH = 140
@@ -72,6 +72,26 @@ PLUGIN_COMPONENTS = (
     ("hooks", "hook package", "hook packages"),
     ("extensions", "client extension", "client extensions"),
 )
+PLUGIN_ITEM_FIELDS = (
+    "agents",
+    "skills",
+    "commands",
+    "hooks",
+    "mcpServers",
+    "lspServers",
+    "outputStyles",
+    "extensions",
+)
+PLUGIN_ITEM_LABELS = {
+    "agents": "Agent",
+    "skills": "Skill",
+    "commands": "Command",
+    "hooks": "Hook package",
+    "mcpServers": "MCP server",
+    "lspServers": "LSP server",
+    "outputStyles": "Output style",
+    "extensions": "Client extension",
+}
 
 
 def read_text(path: Path) -> str:
@@ -402,6 +422,201 @@ def plugin_rows() -> list[list[str]]:
     return sort_rows(rows)
 
 
+def component_paths(
+    plugin_dir: Path,
+    key: str,
+    value: Any,
+) -> list[Path]:
+    values = [value] if isinstance(value, str) else value
+    if not isinstance(values, list):
+        return []
+    paths: list[Path] = []
+    for item in values:
+        if not isinstance(item, str):
+            continue
+        target = plugin_dir / item.removeprefix("./")
+        if target.is_file():
+            paths.append(target)
+            continue
+        if not target.is_dir():
+            continue
+        patterns = {
+            "agents": "*.agent.md",
+            "skills": "*/SKILL.md",
+            "commands": "*.md",
+            "hooks": "hooks.json",
+            "outputStyles": "*.md",
+        }
+        if key == "extensions":
+            package = target / "package.json"
+            if package.is_file():
+                paths.append(package)
+            else:
+                paths.extend(sorted(target.glob("*/package.json")))
+            continue
+        pattern = patterns.get(key)
+        if pattern:
+            paths.extend(sorted(target.glob(pattern)))
+    return paths
+
+
+def server_items(
+    plugin_dir: Path,
+    key: str,
+    value: Any,
+    manifest: Path,
+) -> list[tuple[str, str, Path]]:
+    source = manifest
+    servers: Any = value
+    if isinstance(value, str):
+        source = plugin_dir / value.removeprefix("./")
+        if not source.is_file():
+            return []
+        document = json.loads(source.read_text(encoding="utf-8"))
+        servers = document.get(key)
+    if not isinstance(servers, dict):
+        return []
+    items = []
+    for name, config in sorted(servers.items()):
+        transport = config.get("type") if isinstance(config, dict) else None
+        detail = (
+            f"{PLUGIN_ITEM_LABELS[key]} using the `{transport}` transport."
+            if transport
+            else f"{PLUGIN_ITEM_LABELS[key]} configuration."
+        )
+        items.append((str(name), detail, source))
+    return items
+
+
+def component_details(
+    key: str,
+    path: Path,
+) -> tuple[str, str, str]:
+    if key in {"agents", "skills", "commands", "outputStyles"}:
+        required = key != "outputStyles"
+        fm, body = document_parts(path, required=required)
+        if key == "skills":
+            name = fm.get("name") or path.parent.name
+        elif key == "agents":
+            name = path.name.removesuffix(".agent.md")
+        else:
+            name = fm.get("name") or path.stem
+        description, use_case = catalog_description(
+            fm.get("description"),
+            body,
+            f"Use the plugin-provided {PLUGIN_ITEM_LABELS[key].lower()} `{name}`.",
+        )
+        return one_line(name), description, use_case
+    if key == "extensions":
+        data = json.loads(path.read_text(encoding="utf-8"))
+        name = data.get("displayName") or data.get("name") or path.parent.name
+        description, use_case = catalog_description(
+            data.get("description"),
+            fallback_use_case=(
+                f"Use the `{name}` client extension included by this plugin."
+            ),
+        )
+        return one_line(name), description, use_case
+    if key == "hooks":
+        data = json.loads(path.read_text(encoding="utf-8"))
+        events = data.get("hooks")
+        event_names = ", ".join(events) if isinstance(events, dict) else ""
+        name = path.parent.name
+        description = (
+            f"Runs plugin automation for {event_names}."
+            if event_names
+            else "Runs plugin lifecycle automation."
+        )
+        return name, description, f"Use with the `{name}` plugin guardrails."
+    return path.stem, PLUGIN_ITEM_LABELS[key], ""
+
+
+def component_ownership(
+    plugin_dir: Path,
+    key: str,
+    path: Path,
+    source_config: dict[str, Any],
+) -> str:
+    shared_refs: set[str] = set()
+    if key == "skills":
+        shared_refs.update(source_config.get("sharedSkills") or [])
+        if source_config.get("componentSource") == "library":
+            shared_refs.update(source_config.get("skills") or [])
+        relative = f"./skills/{path.parent.name}/"
+    elif key == "agents":
+        if source_config.get("componentSource") == "library":
+            shared_refs.update(source_config.get("agents") or [])
+        relative = f"./agents/{path.name}"
+    else:
+        return "Plugin-owned"
+    normalized = {
+        f"./{value.removeprefix('./')}"
+        for value in shared_refs
+        if isinstance(value, str)
+    }
+    return (
+        "Shared library copy"
+        if relative in normalized
+        else "Plugin-owned"
+    )
+
+
+def plugin_component_rows() -> list[list[str]]:
+    rows: list[list[str]] = []
+    source_map = load_plugin_sources()
+    plugins_root = SOURCE_ROOT / "plugins"
+    plugin_dirs = (
+        [path for path in plugins_root.iterdir() if path.is_dir()]
+        if plugins_root.is_dir()
+        else []
+    )
+    for plugin_dir in sorted(plugin_dirs, key=lambda path: path.name.casefold()):
+        manifest = plugin_manifest(plugin_dir)
+        if manifest is None:
+            continue
+        data = json.loads(manifest.read_text(encoding="utf-8"))
+        source_config = source_map.get(plugin_dir.name, {})
+        for key in PLUGIN_ITEM_FIELDS:
+            value = data.get(key)
+            if value is None:
+                continue
+            if key in {"mcpServers", "lspServers"}:
+                for name, description, source in server_items(
+                    plugin_dir,
+                    key,
+                    value,
+                    manifest,
+                ):
+                    rows.append([
+                        f"{plugin_dir.name}:{name}",
+                        PLUGIN_ITEM_LABELS[key],
+                        plugin_dir.name,
+                        "Plugin-owned",
+                        description,
+                        f"Use the `{name}` integration installed with this plugin.",
+                        source_link(source),
+                    ])
+                continue
+            for path in component_paths(plugin_dir, key, value):
+                name, description, use_case = component_details(key, path)
+                ownership = component_ownership(
+                    plugin_dir,
+                    key,
+                    path,
+                    source_config,
+                )
+                rows.append([
+                    f"{plugin_dir.name}:{name}",
+                    PLUGIN_ITEM_LABELS[key],
+                    plugin_dir.name,
+                    ownership,
+                    description,
+                    use_case,
+                    source_link(path),
+                ])
+    return sort_rows(rows)
+
+
 def hook_rows() -> list[list[str]]:
     rows = []
     event_order = {event: idx for idx, event in enumerate(HOOK_EVENT_ORDER)}
@@ -534,6 +749,35 @@ def collect_pages() -> list[CatalogPage]:
             ),
         ),
         CatalogPage(
+            slug="plugin-components",
+            title="Plugin Components",
+            type_label="Plugin component",
+            purpose=(
+                "Lists every runtime component declared by every plugin as an "
+                "individually discoverable item."
+            ),
+            use_cases=(
+                "Finding a specific agent, skill, hook, MCP or LSP server, "
+                "output style, or client extension without browsing package trees."
+            ),
+            canonical="harness/github-copilot/plugins/*/",
+            headers=[
+                "Qualified item",
+                "Type",
+                "Plugin",
+                "Ownership",
+                "Description",
+                "Use cases",
+                "Source",
+            ],
+            rows=plugin_component_rows(),
+            note=(
+                "Qualified names use `plugin:item`. Shared library copies remain "
+                "listed here to show plugin membership; their standalone source "
+                "also appears on the matching primitive page."
+            ),
+        ),
+        CatalogPage(
             slug="plugins",
             title="Plugins",
             type_label="Plugin",
@@ -562,7 +806,8 @@ def collect_pages() -> list[CatalogPage]:
                 "Lifecycle, assurance, and provenance are descriptive "
                 "classifications generated from repository evidence. They "
                 "exist to filter a large marketplace and never remove, hide, "
-                "or block a package."
+                "or block a package. Open [Plugin Components](plugin-components.md) "
+                "to browse every bundled runtime item separately."
             ),
         ),
         CatalogPage(
@@ -642,6 +887,9 @@ This is the generated index of every canonical Copilot primitive package in
 this repository. Each primitive type has its own page listing every entry with
 a concise purpose, a typical use case, and a link to its source.
 
+[Catalog hub](README.md) · [Plugin versus standalone](../USAGE.md) ·
+[Repository home](../../README.md)
+
 ## Catalog pages
 
 {md_table(["Page", "What the type does", "Typical use cases", "Canonical source"], guide_rows)}
@@ -657,9 +905,9 @@ a concise purpose, a typical use case, and a link to its source.
 - Regenerate after changing canonical agents, instructions, skills, prompts,
   plugins, or hooks under `harness/github-copilot/`.
 - CI runs `{REGENERATE_COMMAND} --check` and blocks a stale index or page.
-- Shared primitives copied into plugins or `.github/` are listed once at their
-  canonical source. Plugin rows summarize bundled capabilities without
-  duplicating generated copies.
+- Standalone pages list shared primitives once at their canonical source.
+- The Plugin Components page intentionally repeats package membership with
+  qualified `plugin:item` names so every bundled runtime item is discoverable.
 """
 
 
@@ -709,13 +957,20 @@ def main(argv: list[str] | None = None) -> int:
         default=HARNESS_ROOT,
         help="canonical harness root (default: <repo>/harness/github-copilot)",
     )
-    parser.add_argument("--out", type=Path, default=DEFAULT_INDEX,
-                        help="index path (default: CATALOG.md)")
+    parser.add_argument(
+        "--out",
+        type=Path,
+        default=DEFAULT_INDEX,
+        help="index path (default: docs/catalog/github-copilot.md)",
+    )
     parser.add_argument(
         "--pages-dir",
         type=Path,
         default=DEFAULT_PAGES_DIR,
-        help="per-type page directory (default: docs/catalog)",
+        help=(
+            "per-type page directory "
+            "(default: docs/catalog/github-copilot)"
+        ),
     )
     parser.add_argument(
         "--check",

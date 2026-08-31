@@ -51,7 +51,7 @@ Instructions and VS Code prompts are repository workspace customizations, not po
 8. Add or update the alphabetized `.github/plugin/marketplace.json` entry with source, exact manifest description, and exact version.
 9. Validate schemas, components, ownership, marketplace coverage, generated drift, capability policy, and redundancy classifications.
 10. Install the plugin in an isolated `COPILOT_HOME`, list its skills and MCP servers, invoke a representative namespaced agent, and exercise hooks or extensions when their runtime surface is available.
-11. Record dated current-platform evidence in `docs/HARNESS-VALIDATION.md` and regenerate `docs/PLUGIN-AUDIT.md`, `docs/PRIMITIVE-CONTENT-AUDIT.md`, `docs/PRIMITIVE-CAPABILITIES.md`, `docs/PRIMITIVE-REDUNDANCY.md`, and the root `CATALOG.md`.
+11. Record dated current-platform evidence in `docs/HARNESS-VALIDATION.md` and regenerate `docs/PLUGIN-AUDIT.md`, `docs/PRIMITIVE-CONTENT-AUDIT.md`, `docs/PRIMITIVE-CAPABILITIES.md`, `docs/PRIMITIVE-REDUNDANCY.md`, and `docs/catalog/github-copilot.md`.
 
 ## Required checks
 

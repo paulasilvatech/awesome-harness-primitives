@@ -1,8 +1,14 @@
 __pycache__/
 *.py[cod]
+.mypy_cache/
+.venv/
 
 # macOS metadata is local-only.
 .DS_Store
+
+# Local audit scratch output belongs under docs/audits/ only when intentionally retained.
+.audit-work/
+.linkwork-skills.json
 
 # Large Microsoft security reference PDFs remain local and outside Git LFS.
 docs/microsoft-security/**/*.pdf

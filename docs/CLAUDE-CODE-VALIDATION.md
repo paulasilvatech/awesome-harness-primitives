@@ -65,7 +65,7 @@ The failed pre-remediation probes establish why the original Claude harness comm
 | Workspace-kit compatibility tests | Passed 7 Backstage tests and 17 Open Horizons tests after generated publishers were redirected to isolated `copilot-components/` payloads. |
 | Catalog compatibility tests | Passed all 4 `generate_catalog.py` tests after restoring the documented single-document builder API. |
 | Project hook activation | Verified `.claude/settings.json` aggregates the 4 hooks active on the Copilot side and the installed-copy manifest publishes all matching scripts under `.claude/hooks/`. |
-| Full bundled Python test loop | Passed all 623 tests across 60 test files in both harness trees with `PYTHONDONTWRITEBYTECODE=1`. |
+| Full bundled Python test loop | Passed all 626 tests across 61 test files in both harness trees with `PYTHONDONTWRITEBYTECODE=1`. |
 
 ## Unverified behavior
 

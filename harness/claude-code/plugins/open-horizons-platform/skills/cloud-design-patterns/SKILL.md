@@ -40,7 +40,7 @@ Design patterns compensate for incorrect assumptions. Explicitly identify which 
 | The network is reliable. | Use Retry, Circuit Breaker, Health Endpoint Monitoring, and idempotent operations. |
 | Latency is zero. | Use Cache-Aside, CQRS, asynchronous messaging, and locality-aware deployment. |
 | Bandwidth is infinite. | Use Claim Check, compression, pagination, and coarse-grained APIs. |
-| The network is secure. | Use Federated Identity, Valet Key, mTLS/private endpoints, and least privilege. |
+| The network is secure. | Use federated identity, mTLS/private endpoints, least privilege, and the Valet Key pattern. |
 | Topology doesn't change. | Use service discovery, Gateway Routing, and resilient client configuration. |
 | There's one administrator. | Use External Configuration Store, policy-as-code, and operational ownership tags. |
 | Component versioning is simple. | Use Anti-Corruption Layer, Backends for Frontends, and contract tests. |

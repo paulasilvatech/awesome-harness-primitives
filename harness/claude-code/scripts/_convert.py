@@ -8,6 +8,7 @@ used by primitive frontmatter.
 
 from __future__ import annotations
 
+import ast
 import json
 import re
 from typing import Any, Iterable
@@ -223,17 +224,235 @@ def parse_frontmatter(text: str, *, source: str) -> tuple[dict[str, Any], str]:
     raw, body = split_frontmatter(text)
     if raw is None:
         return {}, body
-    if yaml is None:  # pragma: no cover - environment dependent
-        raise ConversionError(f"{source}: PyYAML is required to convert primitives")
     try:
-        data = yaml.safe_load(raw)
-    except yaml.YAMLError as error:  # pragma: no cover - malformed source
+        data = (
+            yaml.safe_load(raw)
+            if yaml is not None
+            else fallback_yaml_parse(raw)
+        )
+    except Exception as error:  # pragma: no cover - malformed source
         raise ConversionError(f"{source}: invalid YAML frontmatter: {error}") from error
     if data is None:
         return {}, body
     if not isinstance(data, dict):
         raise ConversionError(f"{source}: frontmatter must be a mapping")
     return data, body
+
+
+def fallback_yaml_parse(raw: str) -> dict[str, Any]:
+    src = raw.splitlines()
+    first = _next_yaml_content(src, 0)
+    if first >= len(src):
+        return {}
+    value, end = _parse_yaml_node(src, first, _yaml_indent(src[first]))
+    trailing = _next_yaml_content(src, end)
+    if trailing != len(src):
+        raise ValueError(f"cannot parse line: {src[trailing]}")
+    if not isinstance(value, dict):
+        raise ValueError("frontmatter is not a map")
+    return value
+
+
+def _next_yaml_content(src: list[str], index: int) -> int:
+    while index < len(src):
+        stripped = src[index].strip()
+        if stripped and not stripped.startswith("#"):
+            return index
+        index += 1
+    return index
+
+
+def _yaml_indent(line: str) -> int:
+    if "\t" in line[: len(line) - len(line.lstrip())]:
+        raise ValueError("tabs are not supported in YAML indentation")
+    return len(line) - len(line.lstrip(" "))
+
+
+def _parse_yaml_node(
+    src: list[str],
+    index: int,
+    indent: int,
+) -> tuple[Any, int]:
+    stripped = src[index].strip()
+    if stripped.startswith("- "):
+        return _parse_yaml_sequence(src, index, indent)
+    if re.match(r"^[A-Za-z0-9_.-]+\s*:", stripped):
+        return _parse_yaml_mapping(src, index, indent)
+    return parse_scalar(stripped), index + 1
+
+
+def _parse_yaml_mapping(
+    src: list[str],
+    index: int,
+    indent: int,
+) -> tuple[dict[str, Any], int]:
+    result: dict[str, Any] = {}
+    while True:
+        index = _next_yaml_content(src, index)
+        if index >= len(src):
+            break
+        line = src[index]
+        current_indent = _yaml_indent(line)
+        stripped = line.strip()
+        if (
+            current_indent < indent
+            or current_indent != indent
+            or stripped.startswith("- ")
+        ):
+            break
+        if ":" not in stripped:
+            raise ValueError(f"cannot parse mapping line: {line}")
+        key, raw_value = stripped.split(":", 1)
+        key = key.strip()
+        raw_value = raw_value.strip()
+        if not key:
+            raise ValueError("empty key")
+        index += 1
+        if raw_value in {"|", ">", "|-", ">-"}:
+            result[key], index = _parse_yaml_block_scalar(
+                src,
+                index,
+                indent,
+                raw_value,
+            )
+            continue
+        if raw_value:
+            result[key] = parse_scalar(raw_value)
+            continue
+        child = _next_yaml_content(src, index)
+        if child >= len(src) or _yaml_indent(src[child]) <= indent:
+            result[key] = {}
+            index = child
+            continue
+        result[key], index = _parse_yaml_node(
+            src,
+            child,
+            _yaml_indent(src[child]),
+        )
+    return result, index
+
+
+def _parse_yaml_sequence(
+    src: list[str],
+    index: int,
+    indent: int,
+) -> tuple[list[Any], int]:
+    result: list[Any] = []
+    mapping_item = re.compile(r"^([A-Za-z0-9_.-]+)\s*:(.*)$")
+    while True:
+        index = _next_yaml_content(src, index)
+        if index >= len(src):
+            break
+        line = src[index]
+        if (
+            _yaml_indent(line) != indent
+            or not line.strip().startswith("- ")
+        ):
+            break
+        raw_item = line.strip()[2:].strip()
+        index += 1
+        match = mapping_item.match(raw_item)
+        if match is None:
+            result.append(parse_scalar(raw_item))
+            continue
+        key, raw_value = match.groups()
+        item: dict[str, Any] = {
+            key: (
+                parse_scalar(raw_value.strip())
+                if raw_value.strip()
+                else {}
+            )
+        }
+        child = _next_yaml_content(src, index)
+        if child < len(src) and _yaml_indent(src[child]) > indent:
+            child_indent = _yaml_indent(src[child])
+            if raw_value.strip():
+                remainder, index = _parse_yaml_mapping(
+                    src,
+                    child,
+                    child_indent,
+                )
+                item.update(remainder)
+            else:
+                item[key], index = _parse_yaml_node(
+                    src,
+                    child,
+                    child_indent,
+                )
+        result.append(item)
+    return result, index
+
+
+def _parse_yaml_block_scalar(
+    src: list[str],
+    index: int,
+    parent_indent: int,
+    marker: str,
+) -> tuple[str, int]:
+    block: list[str] = []
+    content_indent: int | None = None
+    while index < len(src):
+        line = src[index]
+        if line.strip():
+            indent = _yaml_indent(line)
+            if indent <= parent_indent:
+                break
+            content_indent = (
+                indent
+                if content_indent is None
+                else min(content_indent, indent)
+            )
+        block.append(line)
+        index += 1
+    base_indent = (
+        content_indent
+        if content_indent is not None
+        else parent_indent + 2
+    )
+    dedented = [
+        line[base_indent:] if line.strip() else ""
+        for line in block
+    ]
+    text = "\n".join(dedented)
+    if marker.startswith(">"):
+        text = " ".join(line.strip() for line in dedented)
+    if not marker.endswith("-"):
+        text += "\n"
+    return text, index
+
+
+def parse_scalar(value: str) -> Any:
+    if value == "":
+        return ""
+    if value in {"true", "True"}:
+        return True
+    if value in {"false", "False"}:
+        return False
+    if value in {"null", "Null", "~"}:
+        return None
+    if value.startswith("[") and value.endswith("]"):
+        try:
+            return ast.literal_eval(value)
+        except Exception:
+            inner = value[1:-1].strip()
+            return (
+                []
+                if not inner
+                else [parse_scalar(item.strip()) for item in inner.split(",")]
+            )
+    if value.startswith("'") and value.endswith("'"):
+        return value[1:-1].replace("''", "'")
+    if value.startswith('"') and value.endswith('"'):
+        try:
+            return ast.literal_eval(value)
+        except Exception:
+            return value[1:-1]
+    if re.fullmatch(r"-?\d+", value):
+        try:
+            return int(value)
+        except Exception:
+            pass
+    return value.split(" #", 1)[0].strip()
 
 
 _PLAIN_SCALAR = re.compile(r"^[A-Za-z0-9][A-Za-z0-9 _./+,()*|=-]*$")

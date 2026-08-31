@@ -4367,7 +4367,7 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 11458,
+      "characters_scanned": 11441,
       "external_url_count": 0,
       "files_scanned": 1,
       "kind": "agent",
@@ -6506,7 +6506,7 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 7234,
+      "characters_scanned": 7249,
       "external_url_count": 5,
       "files_scanned": 1,
       "kind": "instruction",
@@ -6610,7 +6610,7 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 18494,
+      "characters_scanned": 18480,
       "external_url_count": 6,
       "files_scanned": 1,
       "kind": "instruction",
@@ -9589,7 +9589,7 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 35714,
+      "characters_scanned": 35700,
       "external_url_count": 5,
       "files_scanned": 1,
       "kind": "instruction",
@@ -11653,7 +11653,7 @@
       ]
     },
     {
-      "characters_scanned": 4386623,
+      "characters_scanned": 4386641,
       "external_url_count": 544,
       "files_scanned": 288,
       "kind": "plugin",
@@ -12501,7 +12501,7 @@
       ]
     },
     {
-      "characters_scanned": 2241929,
+      "characters_scanned": 2241941,
       "external_url_count": 300,
       "files_scanned": 307,
       "kind": "plugin",
@@ -19144,7 +19144,7 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 38060,
+      "characters_scanned": 38072,
       "external_url_count": 2,
       "files_scanned": 10,
       "kind": "skill",
@@ -19167,7 +19167,7 @@
       ]
     },
     {
-      "characters_scanned": 37744,
+      "characters_scanned": 37756,
       "external_url_count": 2,
       "files_scanned": 10,
       "kind": "skill",
@@ -19698,7 +19698,7 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 8783,
+      "characters_scanned": 8794,
       "external_url_count": 0,
       "files_scanned": 1,
       "kind": "skill",
@@ -21097,7 +21097,7 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 4349780,
+      "characters_scanned": 4349798,
       "external_url_count": 538,
       "files_scanned": 281,
       "kind": "skill",
@@ -22248,7 +22248,7 @@
       ]
     },
     {
-      "characters_scanned": 518794,
+      "characters_scanned": 518707,
       "external_url_count": 39,
       "files_scanned": 8,
       "kind": "skill",

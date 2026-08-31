@@ -1,0 +1,14 @@
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "Documented fake credentials and public identifiers"
+regexTarget = "line"
+regexes = [
+  '''API_KEY=actual_secret_key_12345''',
+  '''const API_KEY = ["']sk_live_abc123(?:xyz789|def456)["']''',
+  '''KEY_VAULT_SECRETS_USER = "4633458b-17de-408a-b874-0445c86b69e6"''',
+  '''"rowKey": "(?:550e8400-e29b-41d4-a716-446655440000|6ba7b810-9dad-11d1-80b4-00c04fd430c8|6ba7b811-9dad-11d1-80b4-00c04fd430c8)"''',
+  '''The network is secure.*Valet Key.*mTLS/private endpoints.*least privilege''',
+  '''pagerduty\.com/integration-key: abc123def456''',
+]

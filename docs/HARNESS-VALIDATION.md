@@ -144,7 +144,7 @@ its canonical owner.
 ## Frontend experience planning source verification
 
 Verification date: 2026-08-25. Target: planning evidence for
-`docs/specs/frontend-experience-plugin-plan.md`. No frontend plugin component or
+`docs/plans/frontend-experience-plugin.md`. No frontend plugin component or
 runtime behavior was implemented or probed by this check.
 
 | Area | Official source | Verified result |

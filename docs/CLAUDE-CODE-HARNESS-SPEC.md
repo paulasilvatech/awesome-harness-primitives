@@ -24,7 +24,7 @@ Do not edit those outputs directly. Maintained Claude-specific source consists o
 - this specification
 - `docs/CLAUDE-CODE-VALIDATION.md`
 
-`CLAUDE-CODE-CATALOG.md`, `CLAUDE.md`, and the declared `.claude/` files are generated distribution surfaces.
+`docs/catalog/claude-code.md`, `CLAUDE.md`, and the declared `.claude/` files are generated distribution surfaces.
 
 ## 2. Primitive routing
 
@@ -136,13 +136,18 @@ The validator accepts the hook events and handler fields documented for Claude C
 
 ## 9. Generated catalog
 
-`CLAUDE-CODE-CATALOG.md` inventories generated subagents, rules, skills, commands, plugins, and hooks. Regenerate it after conversion:
+`docs/catalog/claude-code.md` inventories generated subagents, rules, skills, commands, plugins, hooks, and every plugin component. Regenerate it after conversion:
 
 ```sh
 python3 harness/claude-code/scripts/generate_catalog.py
 ```
 
 The catalog is descriptive. It does not prove runtime activation or semantic equivalence.
+
+Choose a plugin when the capability needs a self-contained, versioned suite or bundled hooks and MCP
+servers. Choose a standalone generated primitive when one focused subagent, rule, skill, command, or
+hook is sufficient. The Plugin Components page lists every native component and labels compatibility
+payloads that Claude Code does not discover directly.
 
 ## 10. Validation contract
 

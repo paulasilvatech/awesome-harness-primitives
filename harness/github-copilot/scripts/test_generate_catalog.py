@@ -6,9 +6,29 @@ from pathlib import Path
 from unittest.mock import patch
 
 import generate_catalog
+import validate_primitives
 
 
 class GenerateCatalogTests(unittest.TestCase):
+    def test_fallback_yaml_preserves_escaped_apostrophe(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            path = Path(temp_dir) / "demo.prompt.md"
+            path.write_text(
+                "---\n"
+                "description: 'Create from this repository''s templates.'\n"
+                "---\n"
+                "# Demo\n",
+                encoding="utf-8",
+            )
+
+            with patch.object(validate_primitives, "yaml", None):
+                frontmatter, _ = generate_catalog.document_parts(path)
+
+        self.assertEqual(
+            frontmatter["description"],
+            "Create from this repository's templates.",
+        )
+
     def test_split_description_separates_explicit_use_case(self) -> None:
         description, use_case = generate_catalog.split_description(
             "Reviews API contracts. Use when an endpoint changes."
@@ -77,12 +97,26 @@ Select this agent when an API contract needs specialist review.
             )
             (root / "plugins/demo-plugin/plugin.json").write_text(
                 '{"name":"demo-plugin","version":"1.0.0","description":"Bundles demos.",'
-                '"keywords":["demo"],"agents":"agents/"}\n',
+                '"keywords":["demo"],"agents":"agents/","skills":"skills/"}\n',
                 encoding="utf-8",
             )
             (root / "plugins/demo-plugin/agents").mkdir()
+            (root / "plugins/demo-plugin/skills/demo-skill").mkdir(
+                parents=True
+            )
             (root / "plugins/demo-plugin/agents/demo.agent.md").write_text(
                 "---\ndescription: Demo\n---\n", encoding="utf-8"
+            )
+            (
+                root
+                / "plugins/demo-plugin/skills/demo-skill/SKILL.md"
+            ).write_text(
+                "---\n"
+                "name: demo-skill\n"
+                "description: Runs plugin demos.\n"
+                "---\n"
+                "# Demo skill\n",
+                encoding="utf-8",
             )
             (root / "hooks/demo-hook/hooks.json").write_text(
                 '{"version":1,"hooks":{"sessionEnd":[]}}\n', encoding="utf-8"
@@ -93,7 +127,20 @@ Select this agent when an API contract needs specialist review.
                 encoding="utf-8",
             )
 
-            with patch.object(generate_catalog, "SOURCE_ROOT", root):
+            source_map = {
+                "demo-plugin": {
+                    "componentSource": "plugin",
+                    "sharedSkills": ["./skills/demo-skill/"],
+                }
+            }
+            with (
+                patch.object(generate_catalog, "SOURCE_ROOT", root),
+                patch.object(
+                    generate_catalog,
+                    "load_plugin_sources",
+                    return_value=source_map,
+                ),
+            ):
                 catalog = generate_catalog.build_catalog()
 
         for heading in (
@@ -101,6 +148,7 @@ Select this agent when an API contract needs specialist review.
             "## Instructions",
             "## Skills",
             "## VS Code Prompts",
+            "## Plugin Components",
             "## Plugins",
             "## Hooks",
         ):
@@ -109,6 +157,9 @@ Select this agent when an API contract needs specialist review.
         self.assertIn("Use when a demo changes.", catalog)
         self.assertIn("[source](", catalog)
         self.assertIn("1 agent", catalog)
+        self.assertIn("demo-plugin:demo", catalog)
+        self.assertIn("Plugin-owned", catalog)
+        self.assertIn("Shared library copy", catalog)
         self.assertIn("sessionEnd", catalog)
 
 

@@ -22,7 +22,7 @@ python3 harness/github-copilot/scripts/validate_primitives.py --kind plugins
 python3 harness/github-copilot/scripts/validate_primitives.py --kind hooks
 ```
 
-Regenerate the root `CATALOG.md` after any canonical primitive change. CI runs the same command with
+Regenerate `docs/catalog/github-copilot.md` after any canonical primitive change. CI runs the same command with
 `--check` and rejects stale catalog content:
 
 ```sh
@@ -52,9 +52,19 @@ Before delivery, rerun the same commands with `convert_from_copilot.py --check`,
 claude plugin validate --strict .claude-plugin/marketplace.json
 ```
 
+For public-release secret hygiene, run both the current-tree and history scans:
+
+```sh
+gitleaks dir .
+gitleaks git
+```
+
+`.gitleaks.toml` allowlists only exact historical documentation fixtures and public identifiers. Do not
+allowlist complete files or broad credential patterns.
+
 ## Body structure shared by all types
 
-Frontmatter rules differ per type, but every primitive answers the same six questions. The templates in [docs/templates/](docs/templates) encode this structure, and the validator reports drift at `INFO` — advisory only, since the CLI never validates a primitive body.
+Frontmatter rules differ per type, but every primitive answers the same six questions. The templates in [docs/templates/](../docs/templates/) encode this structure, and the validator reports drift at `INFO` — advisory only, since the CLI never validates a primitive body.
 
 | Block | Question | Agent | Instructions | Skill | Prompt |
 | --- | --- | --- | --- | --- | --- |
@@ -83,7 +93,7 @@ the spec and dependent guidance. Never refresh a date without repeating the chec
 
 ## Agents
 
-- Start from [the agent template](docs/templates/agent.template.md), then add source files under `harness/github-copilot/agents/*.agent.md`; install copies in `.github/agents/` or `~/.copilot/agents/`.
+- Start from [the agent template](../docs/templates/agent.template.md), then add source files under `harness/github-copilot/agents/*.agent.md`; install copies in `.github/agents/` or `~/.copilot/agents/`.
 - Filename must match `^[A-Za-z0-9._-]+\.agent\.md$`.
 - Frontmatter requires non-empty `description`; optional keys include `name`, `tools`, `model`, `target`, `user-invocable`, `disable-model-invocation`, and `mcp-servers`.
 - Body must be non-empty and at most 30,000 characters.
@@ -91,7 +101,7 @@ the spec and dependent guidance. Never refresh a date without repeating the chec
 
 ## Instructions
 
-- Start from [the instructions template](docs/templates/instructions.template.md), then add source files under `harness/github-copilot/instructions/*.instructions.md`; install copies in `.github/instructions/` or `~/.copilot/instructions/`.
+- Start from [the instructions template](../docs/templates/instructions.template.md), then add source files under `harness/github-copilot/instructions/*.instructions.md`; install copies in `.github/instructions/` or `~/.copilot/instructions/`.
 - Filename must match `^[A-Za-z0-9._-]+\.instructions\.md$`.
 - Frontmatter is optional, but reusable modules should include `applyTo`; recognized keys are `applyTo`, `description`, `name`, and `excludeAgent`.
 - Body must be non-empty.
@@ -99,7 +109,7 @@ the spec and dependent guidance. Never refresh a date without repeating the chec
 
 ## Skills
 
-- Start from [the skill template](docs/templates/skill.template.md), then add each skill under `harness/github-copilot/skills/<name>/SKILL.md`; install copies in `.github/skills/<name>/` or `~/.copilot/skills/<name>/`.
+- Start from [the skill template](../docs/templates/skill.template.md), then add each skill under `harness/github-copilot/skills/<name>/SKILL.md`; install copies in `.github/skills/<name>/` or `~/.copilot/skills/<name>/`.
 - Directory and frontmatter `name` must match; names must be 1–64 characters, kebab-case, and not contain `--`.
 - Frontmatter requires `name` and `description`; descriptions must be 1–1024 characters and state what the skill does and when to use it.
 - Body must be non-empty; move large resources into bundled files referenced from the skill.
@@ -107,7 +117,7 @@ the spec and dependent guidance. Never refresh a date without repeating the chec
 
 ## Prompts
 
-- Start from [the prompt template](docs/templates/prompt.template.md), then add source files under `harness/github-copilot/prompts/*.prompt.md`.
+- Start from [the prompt template](../docs/templates/prompt.template.md), then add source files under `harness/github-copilot/prompts/*.prompt.md`.
 - Prompt files are local VS Code actions and are not discovered by Agent Host or Copilot CLI.
 - This repository requires kebab-case filename and matching `name`, a non-empty `description`, valid prompt metadata, and the ten mandatory sections in template order.
 - Static validation checks local metadata and structure; use **Chat: Run Prompt** to verify runtime inputs, tools, destination behavior, and side effects.
@@ -140,7 +150,7 @@ the spec and dependent guidance. Never refresh a date without repeating the chec
 - `disableAllHooks: true` inside a hook file is **file-scoped** — use it to ship a hook off by default;
   sibling hooks keep running. The same key in `config.json`/`settings.json` is the global kill switch.
 - Repository hooks are skipped without warning until the workspace is in `trustedFolders`; see the
-  [README](README.md#hooks) before concluding a hook is broken.
+  [usage guide](../docs/USAGE.md#github-copilot) before concluding a hook is broken.
 - Both `harness/github-copilot/hooks/*/hooks.json` and this repo's installed `.github/hooks/*.json` are validated.
 - PR-gating rule IDs: `HK001`, `HK002`, `HK003`, `HK004`, `HK006`, `HK008`, `HK009`.
 

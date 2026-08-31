@@ -3,10 +3,12 @@ from pathlib import Path
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 CONVERTER = importlib.import_module("convert_from_copilot")
+CONVERSION_HELPERS = importlib.import_module("_convert")
 copy_skill_resource = CONVERTER.copy_skill_resource
 ignored_resource_path = CONVERTER.ignored_resource_path
 replace_generated_tree = CONVERTER.replace_generated_tree
@@ -79,6 +81,49 @@ class CopySkillResourceTests(unittest.TestCase):
                 "Use WebFetch and WebSearch.\n"
                 "Keep WebFetchToolResult unchanged.\n",
             )
+
+
+class FrontmatterFallbackTests(unittest.TestCase):
+    def test_parses_frontmatter_without_pyyaml(self) -> None:
+        text = """---
+name: demo-agent
+description: >-
+  Reviews generated content
+  without an optional dependency.
+argument-hint: 'repository''s path'
+tools: [Read, Grep]
+metadata:
+  source: fixture
+  args:
+    ["run", "-v", "${{ github.workspace }}:/workspace"]
+---
+# Demo
+"""
+        with patch.object(CONVERSION_HELPERS, "yaml", None):
+            data, body = CONVERTER.parse_frontmatter(
+                text,
+                source="fixture.md",
+            )
+
+        self.assertEqual(data["name"], "demo-agent")
+        self.assertEqual(
+            data["description"],
+            "Reviews generated content without an optional dependency.",
+        )
+        self.assertEqual(data["tools"], ["Read", "Grep"])
+        self.assertEqual(data["argument-hint"], "repository's path")
+        self.assertEqual(
+            data["metadata"],
+            {
+                "source": "fixture",
+                "args": [
+                    "run",
+                    "-v",
+                    "${{ github.workspace }}:/workspace",
+                ],
+            },
+        )
+        self.assertEqual(body, "# Demo\n")
 
 
 if __name__ == "__main__":

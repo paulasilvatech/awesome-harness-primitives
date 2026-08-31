@@ -44,7 +44,7 @@ jobs:
       - name: Check primitive redundancy audit
         run: python3 harness/github-copilot/scripts/audit_primitive_redundancy.py --check
 
-      # Prevent the committed root CATALOG.md from drifting from repository contents.
+      # Prevent generated catalog indexes and pages from drifting from repository contents.
       - name: Check catalog drift
         run: python3 harness/github-copilot/scripts/generate_catalog.py --check
 

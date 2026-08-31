@@ -670,7 +670,7 @@ print(f"\nResolved {len(vault_resources)} vault resource IDs")
 ```python
 import uuid
 
-KEY_VAULT_SECRETS_USER = "4633458b-17de-408a-b874-0445c86b69e6"
+KEY_VAULT_SECRETS_USER = "4633458b-17de-408a-b874-0445c86b69e6"  # gitleaks:allow
 
 # Get Workspace Identity service principal ID (from S1 Step 4)
 ws_resp = requests.get(

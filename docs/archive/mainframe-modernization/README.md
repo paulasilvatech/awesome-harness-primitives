@@ -7,7 +7,7 @@ active primitives.
 ## Canonical package
 
 The maintained package is
-[`harness/github-copilot/plugins/mainframe-natural-adabas/`](../harness/github-copilot/plugins/mainframe-natural-adabas/).
+[`harness/github-copilot/plugins/mainframe-natural-adabas/`](../../../harness/github-copilot/plugins/mainframe-natural-adabas/).
 It contains five stage agents, SIFAP context and traceability Skills, the loop and engineering graph,
 focused instructions and prompts, shared generated Skills, and the transactional
 `modernization-workspace-kit`
@@ -32,6 +32,6 @@ not a second source of truth.
 
 ## References
 
-- [Canonical plugin](../harness/github-copilot/plugins/mainframe-natural-adabas/README.md)
-- [Harness contract](../docs/COPILOT-HARNESS-SPEC.md)
-- [Runtime evidence](../docs/HARNESS-VALIDATION.md#mainframe-modernization-plugin-runtime-verification)
+- [Canonical plugin](../../../harness/github-copilot/plugins/mainframe-natural-adabas/README.md)
+- [Harness contract](../../COPILOT-HARNESS-SPEC.md)
+- [Runtime evidence](../../HARNESS-VALIDATION.md#mainframe-modernization-plugin-runtime-verification)

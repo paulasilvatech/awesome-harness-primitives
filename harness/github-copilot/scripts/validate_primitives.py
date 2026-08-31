@@ -1395,7 +1395,9 @@ def parse_scalar(val: str) -> Any:
         except Exception:
             inner = val[1:-1].strip()
             return [] if not inner else [parse_scalar(x.strip()) for x in inner.split(",")]
-    if (val.startswith('"') and val.endswith('"')) or (val.startswith("'") and val.endswith("'")):
+    if val.startswith("'") and val.endswith("'"):
+        return val[1:-1].replace("''", "'")
+    if val.startswith('"') and val.endswith('"'):
         try:
             return ast.literal_eval(val)
         except Exception:
