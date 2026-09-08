@@ -10,7 +10,7 @@
         "projectUniqueName": "/Volumes/T9/copilot-primitives/harness/claude-code/skills/winmd-api-search/scripts/cache-generator/CacheGenerator.csproj",
         "projectName": "CacheGenerator",
         "projectPath": "/Volumes/T9/copilot-primitives/harness/claude-code/skills/winmd-api-search/scripts/cache-generator/CacheGenerator.csproj",
-        "packagesPath": "/Users/paulasilva/.nuget/packages/",
+        "packagesPath": "/Volumes/T9/agentic-sldc-system/.cache/nuget",
         "outputPath": "/Volumes/T9/copilot-primitives/harness/claude-code/skills/winmd-api-search/scripts/cache-generator/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
