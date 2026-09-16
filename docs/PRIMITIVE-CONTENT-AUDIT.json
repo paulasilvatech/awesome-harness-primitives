@@ -28,7 +28,7 @@
     "pluginPackages": 139,
     "sharedAgents": {
       "packaged": 198,
-      "total": 228,
+      "total": 230,
       "unpackaged": [
         "api-architect.agent.md",
         "atlassian-requirements-to-jira.agent.md",
@@ -41,6 +41,8 @@
         "debug.agent.md",
         "delphi-expert.agent.md",
         "devops-expert.agent.md",
+        "dotnet-azure-modernizer.agent.md",
+        "dotnet-modernization-assessor.agent.md",
         "dotnet-upgrade.agent.md",
         "expert-cpp-software-engineer.agent.md",
         "gilfoyle.agent.md",
@@ -64,7 +66,7 @@
     },
     "sharedSkills": {
       "packaged": 453,
-      "total": 490,
+      "total": 493,
       "unpackaged": [
         "api-testing",
         "apple-appstore-reviewer",
@@ -80,6 +82,9 @@
         "containerize-aspnetcore",
         "contract-testing",
         "diagnose",
+        "dotnet-linux-modernization",
+        "dotnet-modernization-assessment",
+        "dotnet-windows-appservice",
         "ef-core",
         "eval-driven-dev",
         "finnish-humanizer",
@@ -129,8 +134,8 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 10951,
-      "external_url_count": 0,
+      "characters_scanned": 12091,
+      "external_url_count": 3,
       "files_scanned": 1,
       "kind": "agent",
       "local_evidence_mention": false,
@@ -142,9 +147,15 @@
       "review_status": "needs-current-source-review",
       "signals": [
         "currency-language",
-        "lifecycle-language"
+        "lifecycle-language",
+        "version-claim",
+        "date-claim",
+        "external-source"
       ],
-      "source_domains": []
+      "source_domains": [
+        "dotnet.microsoft.com",
+        "learn.microsoft.com"
+      ]
     },
     {
       "characters_scanned": 14696,
@@ -1577,6 +1588,23 @@
       "source_domains": []
     },
     {
+      "characters_scanned": 6626,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "agent",
+      "local_evidence_mention": false,
+      "name": "dotnet-azure-modernizer",
+      "ownership": "shared",
+      "package": null,
+      "packaged_by": [],
+      "path": "harness/github-copilot/agents/dotnet-azure-modernizer.agent.md",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language"
+      ],
+      "source_domains": []
+    },
+    {
       "characters_scanned": 9032,
       "external_url_count": 0,
       "files_scanned": 1,
@@ -1592,6 +1620,24 @@
       "review_status": "needs-current-source-review",
       "signals": [
         "currency-language"
+      ],
+      "source_domains": []
+    },
+    {
+      "characters_scanned": 6252,
+      "external_url_count": 0,
+      "files_scanned": 1,
+      "kind": "agent",
+      "local_evidence_mention": false,
+      "name": "dotnet-modernization-assessor",
+      "ownership": "shared",
+      "package": null,
+      "packaged_by": [],
+      "path": "harness/github-copilot/agents/dotnet-modernization-assessor.agent.md",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "lifecycle-language"
       ],
       "source_domains": []
     },
@@ -5563,8 +5609,8 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 10621,
-      "external_url_count": 3,
+      "characters_scanned": 11677,
+      "external_url_count": 5,
       "files_scanned": 1,
       "kind": "instruction",
       "local_evidence_mention": false,
@@ -5578,9 +5624,11 @@
         "currency-language",
         "lifecycle-language",
         "version-claim",
+        "date-claim",
         "external-source"
       ],
       "source_domains": [
+        "dotnet.microsoft.com",
         "learn.microsoft.com"
       ]
     },
@@ -7472,6 +7520,29 @@
       "review_status": "needs-semantic-review",
       "signals": [],
       "source_domains": []
+    },
+    {
+      "characters_scanned": 6071,
+      "external_url_count": 4,
+      "files_scanned": 1,
+      "kind": "instruction",
+      "local_evidence_mention": false,
+      "name": "dotnet-azure-modernization",
+      "ownership": "shared",
+      "package": null,
+      "packaged_by": [],
+      "path": "harness/github-copilot/instructions/dotnet-azure-modernization.instructions.md",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "lifecycle-language",
+        "version-claim",
+        "date-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "dotnet.microsoft.com",
+        "learn.microsoft.com"
+      ]
     },
     {
       "characters_scanned": 8827,
@@ -20748,6 +20819,30 @@
       "source_domains": []
     },
     {
+      "characters_scanned": 13784,
+      "external_url_count": 12,
+      "files_scanned": 2,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "dotnet-linux-modernization",
+      "ownership": "shared",
+      "package": null,
+      "packaged_by": [],
+      "path": "harness/github-copilot/skills/dotnet-linux-modernization",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "lifecycle-language",
+        "version-claim",
+        "date-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "dotnet.microsoft.com",
+        "learn.microsoft.com"
+      ]
+    },
+    {
       "characters_scanned": 95835,
       "external_url_count": 24,
       "files_scanned": 14,
@@ -20783,6 +20878,31 @@
       ]
     },
     {
+      "characters_scanned": 56202,
+      "external_url_count": 10,
+      "files_scanned": 7,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "dotnet-modernization-assessment",
+      "ownership": "shared",
+      "package": null,
+      "packaged_by": [],
+      "path": "harness/github-copilot/skills/dotnet-modernization-assessment",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "lifecycle-language",
+        "version-claim",
+        "date-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "dotnet.microsoft.com",
+        "learn.microsoft.com",
+        "schemas.microsoft.com"
+      ]
+    },
+    {
       "characters_scanned": 15056,
       "external_url_count": 0,
       "files_scanned": 3,
@@ -20800,8 +20920,8 @@
       "source_domains": []
     },
     {
-      "characters_scanned": 8996,
-      "external_url_count": 0,
+      "characters_scanned": 10416,
+      "external_url_count": 3,
       "files_scanned": 1,
       "kind": "skill",
       "local_evidence_mention": false,
@@ -20815,9 +20935,37 @@
       "review_status": "needs-current-source-review",
       "signals": [
         "currency-language",
-        "lifecycle-language"
+        "lifecycle-language",
+        "version-claim",
+        "date-claim",
+        "external-source"
       ],
-      "source_domains": []
+      "source_domains": [
+        "dotnet.microsoft.com",
+        "learn.microsoft.com"
+      ]
+    },
+    {
+      "characters_scanned": 11341,
+      "external_url_count": 4,
+      "files_scanned": 2,
+      "kind": "skill",
+      "local_evidence_mention": false,
+      "name": "dotnet-windows-appservice",
+      "ownership": "shared",
+      "package": null,
+      "packaged_by": [],
+      "path": "harness/github-copilot/skills/dotnet-windows-appservice",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "version-claim",
+        "date-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "learn.microsoft.com"
+      ]
     },
     {
       "characters_scanned": 14674,
@@ -29055,19 +29203,19 @@
       "summary": [
         {
           "errors": 0,
-          "files": 267,
+          "files": 269,
           "kind": "agents",
           "warnings": 0
         },
         {
           "errors": 0,
-          "files": 252,
+          "files": 253,
           "kind": "instructions",
           "warnings": 0
         },
         {
           "errors": 0,
-          "files": 613,
+          "files": 616,
           "kind": "skills",
           "warnings": 0
         },

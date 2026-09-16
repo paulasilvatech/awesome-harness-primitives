@@ -8,6 +8,37 @@ Binary: `/Users/paulasilva/.local/bin/copilot`
 
 > Note: the requested scratch root was `/tmp/harness-check`, but this execution environment forbids file operations under `/tmp`. I used `/Volumes/T9/harness-check` instead. The live `~/.copilot` tree was not modified; commands used `COPILOT_HOME=/Volumes/T9/harness-check/copilot-home`.
 
+## .NET Azure modernization suite evidence
+
+Verification date: **2026-09-15**. Scope: the standalone .NET assessment, Windows App Service,
+Linux modernization, and reused .NET upgrade primitives. Known first-party URLs were fetched directly.
+These documentation checks do not refresh the CLI runtime probes recorded elsewhere in this file.
+
+| Area | First-party source | Verified result |
+| --- | --- | --- |
+| Runtime lifecycle | https://dotnet.microsoft.com/en-us/platform/support/policy/dotnet-core | Page updated 2026-09-08: .NET 10 is active LTS through 2028-11-14; .NET 8 and 9 are in maintenance through 2026-11-10. .NET 11 RC1 is listed separately as a go-live pre-release, not GA. Exact SDK/runtime patches must be selected again at execution time. |
+| Upgrade tool status | https://learn.microsoft.com/en-us/dotnet/core/porting/upgrade-assistant-overview | Explicitly marks .NET Upgrade Assistant deprecated and points to GitHub Copilot upgrade/modernization tooling. The reused upgrade agent, skill and instructions no longer recommend automatic global installation of the retired tool. |
+| Upgrade workflow | https://learn.microsoft.com/en-us/dotnet/core/porting/github-copilot-upgrade/overview | Describes .NET upgrade scenarios, project types and supported environments, and distinguishes runtime upgrades from Azure-specific modernization. Installed capabilities and permissions still require discovery. |
+| Framework porting | https://learn.microsoft.com/en-us/dotnet/core/porting/ | Separates framework migration, runtime upgrades and cloud modernization. Its 18-month STS description differs from the support policy's two-year description; the dedicated policy's per-release dates take precedence. |
+| ASP.NET app model | https://learn.microsoft.com/en-us/aspnet/core/migration/fx-to-core/?view=aspnetcore-10.0 | Identifies System.Web, authentication/session, hosting and dependency differences; describes incremental migration as preferable for many production apps, not a mechanical TFM edit. |
+| Unavailable technologies | https://learn.microsoft.com/en-us/dotnet/core/porting/net-framework-tech-unavailable | Documents remoting, COM+, Workflow and AppDomain constraints; alternatives need application-specific validation. |
+| Windows App Service bases | https://learn.microsoft.com/en-us/azure/app-service/configure-custom-container | Documents ASP.NET Framework 4.8/LTSC 2019 and 4.8.1/LTSC 2022 cached images; explicitly excludes Windows Server 2025 bases. Also documents classic container ports, managed identity, image-pull networking and Windows resource limits. |
+| Windows build/runtime | https://learn.microsoft.com/en-us/azure/app-service/quickstart-custom-container and https://learn.microsoft.com/en-us/virtualization/windowscontainers/deploy-containers/version-compatibility | Windows containers require a suitable Windows engine/runner; host/image version and isolation compatibility is a separate check from App Service support. |
+| ACA images | https://learn.microsoft.com/en-us/azure/container-apps/containers | Documents Linux x86-64 (`linux/amd64`) images and distinguishes application versus job lifecycle. Windows and ARM images do not satisfy this documented ACA profile. |
+| App Service container modes | https://learn.microsoft.com/en-us/azure/app-service/configure-sidecar | Sidecar-enabled apps use `sitecontainers`; classic `DOCKER_*` and `WEBSITES_PORT` app settings do not apply. Only the main container receives external traffic. |
+| ASP.NET container listener | https://learn.microsoft.com/en-us/dotnet/core/compatibility/containers/8.0/aspnet-port | Default port changed to 8080 starting with .NET 8; older WebHost applications may not honor `ASPNETCORE_HTTP_PORTS`. Actual bindings need verification. |
+| Container image variants | https://learn.microsoft.com/en-us/dotnet/core/docker/container-images | Runtime/image families and chiseled/AOT/globalization differences require workload-specific choices rather than blind minimal-image defaults. |
+| ACA probes | https://learn.microsoft.com/en-us/azure/container-apps/health-probes | Documents startup/readiness/liveness HTTP(S) or TCP probes and excludes `exec` probes. |
+| Registry identity | https://learn.microsoft.com/en-us/azure/container-apps/managed-identity-image-pull and https://learn.microsoft.com/en-us/azure/container-registry/container-registry-rbac-built-in-roles-overview | Managed identity avoids registry admin credentials. Pull roles depend on conventional RBAC versus ABAC-enabled repository permissions; authentication and network-policy changes need explicit authorization. |
+| Primitive metadata/discovery | https://docs.github.com/en/copilot/reference/custom-agents-configuration and https://code.visualstudio.com/docs/agent-customization/agent-skills and https://code.visualstudio.com/docs/agent-customization/custom-instructions | Rechecked minimal agent metadata, on-demand skill packages/resources and path-scoped instructions. No new CLI tool-token behavior was measured; the existing harness token contract remains authoritative. |
+
+The suite's Python helpers operate locally without .NET, a container engine, credentials or network.
+Synthetic standard-library tests verify inventory and image/port consistency, not application or
+hosting compatibility. No Windows image build/startup, real application upgrade, Azure deployment,
+agent runtime activation, or VS Code prompt execution was performed for this suite. No new prompt
+or hook primitive is included. See [the suite guide](DOTNET-AZURE-MODERNIZATION.md) for installation,
+scope and script contracts.
+
 ## Mainframe modernization plugin runtime verification
 
 Verification date: 2026-08-26. Target runtime: GitHub Copilot CLI 1.0.81-9. The probe used

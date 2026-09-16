@@ -8,6 +8,7 @@ Use this page as the navigation hub for the repository.
 | --- | --- |
 | [Catalog hub](catalog/README.md) | Browse both harnesses and every plugin component. |
 | [Usage and installation](USAGE.md) | Choose plugin versus standalone and install the selected artifact. |
+| [.NET Azure modernization](DOTNET-AZURE-MODERNIZATION.md) | Assess legacy .NET, rehost Windows containers on App Service, or modernize for Linux and ACA. |
 | [Licensing](LICENSING.md) | Resolve package licenses, notices, and provenance. |
 
 ## Runtime contracts

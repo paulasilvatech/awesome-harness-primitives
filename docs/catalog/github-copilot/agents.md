@@ -10,7 +10,7 @@ hand-edit it. Regenerate with `python3 harness/github-copilot/scripts/generate_c
 | Field | Value |
 | --- | --- |
 | Primitive type | Agent |
-| Entries | 228 |
+| Entries | 230 |
 | Canonical source | `harness/github-copilot/agents/` |
 | Typical use cases | Delegated implementation, review, diagnosis, architecture, or domain-specific decisions. |
 
@@ -26,7 +26,7 @@ contracts. Plugin rows preserve their upstream source link when applicable.
 | Agent | Description | Use cases | Source |
 | --- | --- | --- | --- |
 | .NET Self-Learning Architect | Senior .NET architect for complex delivery. | Use when .NET 6+ or .NET 8+ systems need architecture, implementation strategy, subagent orchestration, validation, lessons, and durable project memory. | [source](../../../harness/github-copilot/agents/dotnet-self-learning-architect.agent.md) |
-| .NET Upgrade | Performs evidence-driven .NET framework and SDK upgrades, package compatibility checks, CI updates, and validation. | Use when migrating C#/.NET projects to the next stable or LTS version. | [source](../../../harness/github-copilot/agents/dotnet-upgrade.agent.md) |
+| .NET Upgrade | Performs evidence-driven .NET framework and SDK upgrades, package compatibility checks, CI updates, and validation. | Use when migrating .NET projects to a selected supported stable or LTS version. | [source](../../../harness/github-copilot/agents/dotnet-upgrade.agent.md) |
 | Accessibility Expert | Guide WCAG 2.1/2.2 accessibility design, implementation, review, and testing. | Use when web UI, SPA, form, media, or a11y regression work must be inclusive and verifiable. | [source](../../../harness/github-copilot/agents/accessibility.agent.md) |
 | Accessibility Runtime Tester | Runtime accessibility specialist for keyboard flows, focus management, dialog behavior, form errors, and evidence-backed WCAG validation in… | Use when accessibility must be tested through actual UI behavior. | [source](../../../harness/github-copilot/agents/accessibility-runtime-tester.agent.md) |
 | ADR Generator | Creates comprehensive Architectural Decision Records with structured rationale, consequences, alternatives, and implementation notes. | Use when a technical decision must be documented as an ADR. | [source](../../../harness/github-copilot/agents/adr-generator.agent.md) |
@@ -89,7 +89,9 @@ contracts. Plugin rows preserve their upstream source link when applicable.
 | DevOps Expert | DevOps lifecycle specialist for Plan → Code → Build → Test → Release → Deploy → Operate → Monitor. | Use when teams need automation, collaboration, IaC, CI/CD, monitoring, or continuous improvement guidance. | [source](../../../harness/github-copilot/agents/devops-expert.agent.md) |
 | DevTools Regression Investigator | Browser regression specialist for reproducing broken user flows, collecting console and network evidence, and narrowing likely root causes… | Select this agent for UI regressions after a merge or release, broken forms, failed submissions, missing UI state, stuck loading states, JavaScript errors, failed network requests… | [source](../../../harness/github-copilot/agents/devtools-regression-investigator.agent.md) |
 | DiffblueCover | Expert agent for creating unit tests for java applications using Diffblue Cover. | Use this agent when the user requests unit tests for a Java application and wants Diffblue Cover to generate them. The target may be the whole project or specific packages, classe… | [source](../../../harness/github-copilot/agents/diffblue-cover.agent.md) |
+| dotnet-azure-modernizer | Implement assessed .NET migrations to Windows containers on App Service or modern .NET Linux containers on App Service and Azure Container… | Use when preparing or executing an approved legacy .NET rehost, runtime upgrade, or Windows-to-Linux modernization. | [source](../../../harness/github-copilot/agents/dotnet-azure-modernizer.agent.md) |
 | dotnet-fullstack-mentor | Opinionated mentor for .NET full-stack development. | Use for career progression from junior to staff levels, Clean Architecture, Aspire, C# internals, and Microsoft ecosystem trade-offs. | [source](../../../harness/github-copilot/agents/dotnet-fullstack-mentor.agent.md) |
+| dotnet-modernization-assessor | Assess legacy .NET workloads and distinguish Windows App Service rehosting from modern .NET Linux migration. | Use when choosing a migration path for IIS, ASP.NET Framework, Web Forms, Windows containers, App Service, or Azure Container Apps. | [source](../../../harness/github-copilot/agents/dotnet-modernization-assessor.agent.md) |
 | Doublecheck | Interactive verification agent for AI-generated output. | Use when AI output needs claim extraction, source verification, adversarial review, and source-linked risk reporting before humans act. | [source](../../../harness/github-copilot/agents/doublecheck.agent.md) |
 | droid | Provides installation guidance, usage examples, and automation patterns for the Droid CLI. | Use when developers need secure droid exec usage for CI/CD, non-interactive automation, SDK integration, or scripted workflows. | [source](../../../harness/github-copilot/agents/droid.agent.md) |
 | Drupal Expert | Expert Drupal development assistant for custom modules, entities, themes, services, configuration, security, performance, testing, and depl… | Use when building or reviewing Drupal code and architecture. | [source](../../../harness/github-copilot/agents/drupal-expert.agent.md) |

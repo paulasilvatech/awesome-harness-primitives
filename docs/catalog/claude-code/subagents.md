@@ -17,7 +17,7 @@ contracts. Plugin rows preserve their upstream source link when applicable.
 
 | Field | Value |
 | --- | --- |
-| Entries | 228 |
+| Entries | 230 |
 | Generated source | `harness/claude-code/` |
 
 ## Entries
@@ -85,10 +85,12 @@ contracts. Plugin rows preserve their upstream source link when applicable.
 | `devops-expert` | DevOps lifecycle specialist for Plan → Code → Build → Test → Release → Deploy → Operate → Monitor. Use when teams need automation, collaboration, IaC, CI/CD, monitoring, or continuous improvement gui… | `Read, Grep, Glob, Edit, Write, Bash` | [source](../../../harness/claude-code/agents/devops-expert.md) |
 | `devtools-regression-investigator` | Browser regression specialist for reproducing broken user flows, collecting console and network evidence, and narrowing likely root causes with Chrome DevTools MCP. | `Read, Grep, Glob, WebFetch, WebSearch` | [source](../../../harness/claude-code/agents/devtools-regression-investigator.md) |
 | `diffblue-cover` | Expert agent for creating unit tests for java applications using Diffblue Cover. | `mcp__DiffblueCover` | [source](../../../harness/claude-code/agents/diffblue-cover.md) |
+| `dotnet-azure-modernizer` | Implement assessed .NET migrations to Windows containers on App Service or modern .NET Linux containers on App Service and Azure Container Apps. Use when preparing or executing an approved legacy .NE… | `inherits all tools` | [source](../../../harness/claude-code/agents/dotnet-azure-modernizer.md) |
 | `dotnet-fullstack-mentor` | Opinionated mentor for .NET full-stack development. Use for career progression from junior to staff levels, Clean Architecture, Aspire, C# internals, and Microsoft ecosystem trade-offs. | `Read, Grep, Glob, Edit, Write, Bash` | [source](../../../harness/claude-code/agents/dotnet-fullstack-mentor.md) |
 | `dotnet-maui` | Support .NET MAUI cross-platform apps with controls, XAML, handlers, performance, and navigation guidance. Use when building or reviewing MAUI UI and app patterns. | `Read, Grep, Glob, Edit, Write, Bash, WebFetch, WebSearch` | [source](../../../harness/claude-code/agents/dotnet-maui.md) |
+| `dotnet-modernization-assessor` | Assess legacy .NET workloads and distinguish Windows App Service rehosting from modern .NET Linux migration. Use when choosing a migration path for IIS, ASP.NET Framework, Web Forms, Windows containe… | `Read, Grep, Glob, WebFetch` | [source](../../../harness/claude-code/agents/dotnet-modernization-assessor.md) |
 | `dotnet-self-learning-architect` | Senior .NET architect for complex delivery. Use when .NET 6+ or .NET 8+ systems need architecture, implementation strategy, subagent orchestration, validation, lessons, and durable project memory. | `Read, Grep, Glob, Edit, Write, Bash, WebFetch, WebSearch, Agent` | [source](../../../harness/claude-code/agents/dotnet-self-learning-architect.md) |
-| `dotnet-upgrade` | Performs evidence-driven .NET framework and SDK upgrades, package compatibility checks, CI updates, and validation. Use when migrating C#/.NET projects to the next stable or LTS version. | `Read, Grep, Glob, Edit, Write, Bash, WebFetch, WebSearch` | [source](../../../harness/claude-code/agents/dotnet-upgrade.md) |
+| `dotnet-upgrade` | Performs evidence-driven .NET framework and SDK upgrades, package compatibility checks, CI updates, and validation. Use when migrating .NET projects to a selected supported stable or LTS version. | `Read, Grep, Glob, Edit, Write, Bash, WebFetch, WebSearch` | [source](../../../harness/claude-code/agents/dotnet-upgrade.md) |
 | `doublecheck` | Interactive verification agent for AI-generated output. Use when AI output needs claim extraction, source verification, adversarial review, and source-linked risk reporting before humans act. | `WebFetch, WebSearch` | [source](../../../harness/claude-code/agents/doublecheck.md) |
 | `droid` | Provides installation guidance, usage examples, and automation patterns for the Droid CLI. Use when developers need secure droid exec usage for CI/CD, non-interactive automation, SDK integration, or… | `Read, Grep, Glob` | [source](../../../harness/claude-code/agents/droid.md) |
 | `drupal-expert` | Expert Drupal development assistant for custom modules, entities, themes, services, configuration, security, performance, testing, and deployment. Use when building or reviewing Drupal code and archi… | `Read, Grep, Glob, Edit, Write, Bash, WebFetch, WebSearch` | [source](../../../harness/claude-code/agents/drupal-expert.md) |

@@ -17,7 +17,7 @@ contracts. Plugin rows preserve their upstream source link when applicable.
 
 | Field | Value |
 | --- | --- |
-| Entries | 196 |
+| Entries | 197 |
 | Generated source | `harness/claude-code/` |
 
 ## Entries
@@ -97,10 +97,11 @@ contracts. Plugin rows preserve their upstream source link when applicable.
 | `devbox-image-definition` | `**/*.yaml, **/*.yml` | [source](../../../harness/claude-code/rules/devbox-image-definition.md) |
 | `devops-core-principles` | `all files` | [source](../../../harness/claude-code/rules/devops-core-principles.md) |
 | `dotnet-architecture-good-practices` | `**/*.cs, **/*.csproj, **/Program.cs, **/*.razor` | [source](../../../harness/claude-code/rules/dotnet-architecture-good-practices.md) |
+| `dotnet-azure-modernization` | `**/*.csproj, **/*.vbproj, **/*.fsproj, **/Directory.Build.*, **/Directory.Packages.props, **/global.json, **/packages.c…` | [source](../../../harness/claude-code/rules/dotnet-azure-modernization.md) |
 | `dotnet-framework` | `**/*.csproj, **/*.cs` | [source](../../../harness/claude-code/rules/dotnet-framework.md) |
 | `dotnet-maui-9-to-dotnet-maui-10-upgrade` | `**/*.csproj, **/*.cs, **/*.xaml` | [source](../../../harness/claude-code/rules/dotnet-maui-9-to-dotnet-maui-10-upgrade.md) |
 | `dotnet-maui` | `**/*.xaml, **/*.cs` | [source](../../../harness/claude-code/rules/dotnet-maui.md) |
-| `dotnet-upgrade` | `**/*.{csproj,vbproj,fsproj,sln,props,targets}` | [source](../../../harness/claude-code/rules/dotnet-upgrade.md) |
+| `dotnet-upgrade` | `**/*.{csproj,vbproj,fsproj,sln,slnx,props,targets}` | [source](../../../harness/claude-code/rules/dotnet-upgrade.md) |
 | `dotnet-wpf` | `**/*.xaml, **/*.cs` | [source](../../../harness/claude-code/rules/dotnet-wpf.md) |
 | `draw-io` | `**/*.drawio, **/*.drawio.svg, **/*.drawio.png` | [source](../../../harness/claude-code/rules/draw-io.md) |
 | `exclude-prompt-data` | `all files` | [source](../../../harness/claude-code/rules/exclude-prompt-data.md) |

@@ -1712,6 +1712,23 @@
       "authority": "bounded-write",
       "kind": "agent",
       "model": null,
+      "name": "dotnet-azure-modernizer",
+      "notes": [
+        "bounded-write-inherits-all-tools"
+      ],
+      "ownership": "shared",
+      "package": null,
+      "path": "harness/github-copilot/agents/dotnet-azure-modernizer.agent.md",
+      "selected_agent": null,
+      "status": "capability-review-required",
+      "target": "vscode+github-copilot",
+      "tools": [],
+      "tools_mode": "inherit-all"
+    },
+    {
+      "authority": "bounded-write",
+      "kind": "agent",
+      "model": null,
       "name": "dotnet-fullstack-mentor",
       "notes": [],
       "ownership": "shared",
@@ -1726,6 +1743,26 @@
         "glob",
         "edit",
         "execute"
+      ],
+      "tools_mode": "allow-list"
+    },
+    {
+      "authority": "read-only",
+      "kind": "agent",
+      "model": null,
+      "name": "dotnet-modernization-assessor",
+      "notes": [],
+      "ownership": "shared",
+      "package": null,
+      "path": "harness/github-copilot/agents/dotnet-modernization-assessor.agent.md",
+      "selected_agent": null,
+      "status": "current-static",
+      "target": "vscode+github-copilot",
+      "tools": [
+        "read",
+        "grep",
+        "glob",
+        "web_fetch"
       ],
       "tools_mode": "allow-list"
     },
@@ -7302,11 +7339,11 @@
   ],
   "schemaVersion": 1,
   "summary": {
-    "agents": 267,
+    "agents": 269,
     "blocked": 0,
-    "boundedWriteAgentsInheritingAll": 0,
-    "capabilityReviewRequired": 0,
-    "currentStatic": 294,
+    "boundedWriteAgentsInheritingAll": 1,
+    "capabilityReviewRequired": 1,
+    "currentStatic": 295,
     "fixedModels": 0,
     "prompts": 79,
     "readOnlyAgentsInheritingAll": 0,

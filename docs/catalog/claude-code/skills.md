@@ -17,7 +17,7 @@ contracts. Plugin rows preserve their upstream source link when applicable.
 
 | Field | Value |
 | --- | --- |
-| Entries | 490 |
+| Entries | 493 |
 | Generated source | `harness/claude-code/` |
 
 ## Entries
@@ -215,9 +215,12 @@ contracts. Plugin rows preserve their upstream source link when applicable.
 | `documentation-writer` | Create, review, and structure software documentation with the Diátaxis framework: tutorials, how-to guides, reference, and explanation. Use when the user asks for a Diátaxis documentation expert, a d… | 0 | [source](../../../harness/claude-code/skills/documentation-writer) |
 | `dotnet-best-practices` | Review or improve .NET and C# code against solution/project best practices for documentation, architecture, dependency injection, resources, async, tests, configuration, Semantic Kernel, logging, per… | 0 | [source](../../../harness/claude-code/skills/dotnet-best-practices) |
 | `dotnet-design-pattern-review` | Review C# and .NET code for design pattern quality, SOLID principles, dependency injection, repository/provider abstractions, ResourceManager usage, async practices, testability, and maintainability.… | 0 | [source](../../../harness/claude-code/skills/dotnet-design-pattern-review) |
+| `dotnet-linux-modernization` | Modernize legacy .NET applications to a verified supported .NET release and Linux containers for Azure App Service or Azure Container Apps. Use when removing Windows dependencies, migrating System.We… | 1 | [source](../../../harness/claude-code/skills/dotnet-linux-modernization) |
 | `dotnet-mcp-builder` | Build and debug C#/.NET MCP servers and clients with current ModelContextProtocol 2.x packages. Use when the user mentions ModelContextProtocol, McpServerTool, MapMcp, WithStdioServerTransport, Strea… | 13 | [source](../../../harness/claude-code/skills/dotnet-mcp-builder) |
+| `dotnet-modernization-assessment` | Inventory legacy .NET projects, identify Windows and app-model migration risks, and check container platform evidence before choosing Azure hosting. Use when assessing .NET Framework, IIS, Web Forms,… | 6 | [source](../../../harness/claude-code/skills/dotnet-modernization-assessment) |
 | `dotnet-timezone` | Resolve .NET and C# timezone questions with TimeZoneInfo, DateTimeOffset, TimeZoneConverter, NodaTime, UTC conversion, daylight saving time, scheduling, Windows and IANA timezone IDs, location lookup… | 2 | [source](../../../harness/claude-code/skills/dotnet-timezone) |
-| `dotnet-upgrade` | Guide comprehensive .NET upgrade discovery, assessment, sequencing, dependency review, framework targeting, code modernization, CI/CD updates, validation, breaking-change analysis, PR strategy, commu… | 0 | [source](../../../harness/claude-code/skills/dotnet-upgrade) |
+| `dotnet-upgrade` | Guide .NET upgrade discovery, dependency-aware sequencing, supported framework targeting, compatibility fixes, CI/CD updates, and validation. Use when assessing or upgrading .NET Framework, .NET Core… | 0 | [source](../../../harness/claude-code/skills/dotnet-upgrade) |
+| `dotnet-windows-appservice` | Prepare and validate legacy ASP.NET and .NET Framework workloads for Windows custom containers on Azure App Service without forcing a Linux rewrite. Use when rehosting IIS, Web Forms, MVC, or an exis… | 1 | [source](../../../harness/claude-code/skills/dotnet-windows-appservice) |
 | `doublecheck` | Runs a three-layer verification pipeline for AI output by extracting verifiable claims, checking web sources, applying adversarial hallucination review, and producing inline or full verification repo… | 1 | [source](../../../harness/claude-code/skills/doublecheck) |
 | `draw-io-diagram-generator` | Use when creating, editing, or generating draw.io diagram files (.drawio, .drawio.svg, .drawio.png). Covers mxGraph XML authoring, shape libraries, style strings, flowcharts, system architecture, seq… | 12 | [source](../../../harness/claude-code/skills/draw-io-diagram-generator) |
 | `drawio` | Generate draw.io diagrams as native .drawio files and export them to PNG, SVG, or PDF with embedded XML. Use when the user asks for draw.io diagrams, diagrams.net XML, mxGraphModel, editable diagram… | 2 | [source](../../../harness/claude-code/skills/drawio) |

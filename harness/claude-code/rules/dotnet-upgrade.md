@@ -1,6 +1,6 @@
 ---
 paths:
-  - "**/*.{csproj,vbproj,fsproj,sln,props,targets}"
+  - "**/*.{csproj,vbproj,fsproj,sln,slnx,props,targets}"
 ---
 
 <!-- Generated from harness/github-copilot/instructions/dotnet-upgrade.instructions.md by harness/claude-code/scripts/convert_from_copilot.py. Edit the source, not this file. -->
@@ -18,11 +18,15 @@ Classify every project before changing target frameworks.
 | Existing target or package style | Convention |
 | --- | --- |
 | `netcoreapp*` | Treat as modern .NET / .NET Core and upgrade to the latest supported LTS requested by the repo, for example `net10.0` when that is the chosen target. |
-| `netstandard*` | Prefer migrating to .NET 8+ when feasible; use `netstandard2.1` only when a library must remain .NET Standard. |
-| `net4*`, for example `net472` | Upgrade to at least .NET Framework 4.8, or migrate to modern .NET 8+ / .NET 10 when feasible and supported. |
-| `packages.config` | Migrate to `PackageReference` where possible before modernizing dependencies. |
+| `netstandard*` | Preserve consumer compatibility. .NET Framework consumers cannot use .NET Standard 2.1; retain a compatible target such as 2.0 or multi-target when needed. |
+| `net4*`, for example `net472` | Separate Framework runtime maintenance from porting to modern .NET. Select a supported runtime/image and assess app-model and Windows dependencies before changing targets. |
+| `packages.config` | Convert to `PackageReference` only for supported project types, preserving binding redirects, restore behavior and build assets. |
 
-Review official .NET release notes and breaking changes before selecting targets.
+Review official .NET release notes, support policy and breaking changes before selecting targets.
+The [.NET support policy](https://dotnet.microsoft.com/en-us/platform/support/policy/dotnet-core),
+verified 2026-09-15, lists .NET 10 as active LTS. Reverify at execution time; previews and the highest
+installed SDK are not automatic production targets. Evaluate imported properties and conditions;
+literal project XML does not establish effective MSBuild values.
 
 ## Dependency-Aware Upgrade Sequencing
 
@@ -44,9 +48,14 @@ Keep project file edits focused and compatible.
 | --- | --- |
 | Target framework | Update `TargetFramework` or `TargetFrameworks` deliberately and consistently. |
 | Packages | Check NuGet compatibility with `dotnet list package --outdated` and update with `dotnet add package <PackageName> --version <LatestVersion>` only to compatible versions. |
-| Restore and build | Run `dotnet build <ProjectName>.csproj` after each project change and `dotnet test` for affected tests. |
-| Legacy packages | Use `dotnet migrate <ProjectPath>` only where it is applicable for legacy migration. |
-| Upgrade Assistant | Use `dotnet tool install -g upgrade-assistant` and `upgrade-assistant upgrade <SolutionName>.sln` as optional assistance, not as a substitute for review. |
+| Restore and build | Use the existing supported MSBuild/NuGet workflow for legacy projects; use SDK build/test commands where the project supports them. |
+| Legacy formats | Convert project/package format with verified tooling or explicit edits and tests; `dotnet migrate` is not a general .NET Framework migration command. |
+| Upgrade tooling | Discover an installed Microsoft upgrade workflow and its project/scenario support, or use reviewed manual changes; do not automatically install global migration tools. |
+
+The [Upgrade Assistant overview](https://learn.microsoft.com/en-us/dotnet/core/porting/upgrade-assistant-overview),
+verified 2026-09-15, marks .NET Upgrade Assistant deprecated and points to the
+[GitHub Copilot upgrade workflow](https://learn.microsoft.com/en-us/dotnet/core/porting/github-copilot-upgrade/overview).
+Do not preserve an obsolete tool recommendation merely because an older example uses it.
 
 ## Code and Breaking Change Patterns
 

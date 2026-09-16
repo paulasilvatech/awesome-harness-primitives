@@ -14,9 +14,9 @@ first-party evidence and its runtime surface is exercised where applicable.
 
 | Content type | Sources | Shared canonical | Plugin-owned | Mentioned in dated evidence |
 | --- | --- | --- | --- | --- |
-| agent | 267 | 228 | 39 | 10 |
-| instruction | 252 | 196 | 56 | 17 |
-| skill | 613 | 490 | 123 | 44 |
+| agent | 269 | 230 | 39 | 10 |
+| instruction | 253 | 197 | 56 | 17 |
+| skill | 616 | 493 | 123 | 44 |
 | prompt | 79 | 48 | 31 | 6 |
 | hook | 10 | 8 | 2 | 3 |
 | plugin | 139 | 110 | 29 | 22 |
@@ -33,9 +33,9 @@ The “mentioned in dated evidence” column is only an index hint. A mention in
 
 | Content type | Currency wording | Lifecycle wording | Version claims | Date claims | External sources | Current-source review | Source review | Semantic review |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| agent | 172 | 69 | 81 | 4 | 67 | 198 | 11 | 58 |
-| instruction | 116 | 63 | 100 | 14 | 108 | 185 | 22 | 45 |
-| skill | 356 | 211 | 304 | 77 | 320 | 487 | 27 | 99 |
+| agent | 174 | 70 | 82 | 5 | 68 | 200 | 11 | 58 |
+| instruction | 116 | 64 | 101 | 16 | 109 | 186 | 22 | 45 |
+| skill | 359 | 213 | 308 | 81 | 324 | 490 | 27 | 99 |
 | prompt | 27 | 13 | 9 | 3 | 9 | 35 | 3 | 41 |
 | hook | 4 | 2 | 6 | 0 | 4 | 7 | 1 | 2 |
 | plugin | 46 | 39 | 139 | 7 | 139 | 139 | 0 | 0 |
@@ -49,17 +49,17 @@ words such as “latest”, “preview”, “deprecated”, and “current” r
 | --- | ---: |
 | Existing plugin packages | 139 |
 | Marketplace entries | 139 |
-| Shared agents packaged | 198 / 228 |
-| Shared agents not packaged | 30 |
-| Shared skills packaged | 453 / 490 |
-| Shared skills not packaged | 37 |
+| Shared agents packaged | 198 / 230 |
+| Shared agents not packaged | 32 |
+| Shared skills packaged | 453 / 493 |
+| Shared skills not packaged | 40 |
 | Plugin-owned agents | 39 |
 | Plugin-owned skills | 123 |
 | Plugin-owned workspace instructions | 56 |
 | Plugin-owned VS Code prompts | 31 |
 | Active plugin hook packages | 2 |
 
-The 67 unreferenced shared agents and
+The 72 unreferenced shared agents and
 skills are **composition candidates**, not missing plugins by definition. A new plugin is justified only
 when those components form one coherent installable capability without duplicating an existing package.
 Instructions and VS Code prompts are not portable core Agent Plugins 1.0 components; publish them through

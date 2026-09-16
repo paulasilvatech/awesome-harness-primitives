@@ -19,12 +19,12 @@ enabled tool runs.
 
 | Type | Sources | Inherited tools | Allow-lists | Tools disabled | Current static | Runtime check | Capability review | Blocked |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| agent | 267 | 0 | 265 | 2 | 220 | 47 | 0 | 0 |
+| agent | 269 | 1 | 266 | 2 | 221 | 47 | 1 | 0 |
 | prompt | 79 | 47 | 32 | 0 | 74 | 5 | 0 | 0 |
 
 - Fixed model pins: 0.
 - Read-only agents inheriting all tools: 0.
-- Bounded-write agents inheriting all tools: 0.
+- Bounded-write agents inheriting all tools: 1.
 - Blocking capability findings: 0.
 - Full machine-readable ledger: `docs/PRIMITIVE-CAPABILITIES.json`.
 
@@ -95,7 +95,9 @@ they inherit every tool. A policy that scopes *which files* an agent may touch c
 tool allow-list, so each entry needs a human decision: narrow the tools, narrow the prose, or accept the
 inheritance deliberately.
 
-None.
+| Type | Name | Path | Authority |
+| --- | --- | --- | --- |
+| agent | dotnet-azure-modernizer | harness/github-copilot/agents/dotnet-azure-modernizer.agent.md | bounded-write |
 
 ## Acceptance
 

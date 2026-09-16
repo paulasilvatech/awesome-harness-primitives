@@ -12,6 +12,7 @@ GitHub Copilot sources are canonical. The Claude Code harness is generated from 
 | --- | --- |
 | Browse everything | [Catalog hub](docs/catalog/README.md) |
 | Choose a plugin or standalone primitive | [Usage and installation guide](docs/USAGE.md) |
+| Migrate or modernize legacy .NET on Azure | [Windows App Service and Linux/ACA suite](docs/DOTNET-AZURE-MODERNIZATION.md) |
 | Understand the repository | [Documentation hub](docs/README.md) |
 | Author or contribute | [Contributing guide](.github/CONTRIBUTING.md) |
 | Review runtime contracts | [Copilot spec](docs/COPILOT-HARNESS-SPEC.md) · [Claude Code spec](docs/CLAUDE-CODE-HARNESS-SPEC.md) |
