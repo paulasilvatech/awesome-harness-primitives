@@ -10,7 +10,7 @@ hand-edit it. Regenerate with `python3 harness/github-copilot/scripts/generate_c
 | Field | Value |
 | --- | --- |
 | Primitive type | Skill |
-| Entries | 493 |
+| Entries | 494 |
 | Canonical source | `harness/github-copilot/skills/` |
 | Typical use cases | Repeatable procedures that need ordered steps, domain knowledge, or bundled resources. |
 
@@ -468,6 +468,7 @@ contracts. Plugin rows preserve their upstream source link when applicable.
 | skill-creator | Create, audit, repair, and improve GitHub Copilot Agent Skills for VS Code, GitHub Copilot CLI, and GitHub Copilot cloud agent. | Use when a user asks to create a skill, generate a SKILL.md, convert a workflow into a reusable skill, audit an existing skill, fix skill loading issues, optimize a skill descript… | [source](../../../harness/github-copilot/skills/skill-creator/SKILL.md) |
 | slang-shader-engineer | Write, review, refactor, explain, and optimize Slang shaders and C++ engine integration for graphics pipelines, compute shaders, tessellati… | Use when the user mentions Slang, .slang files, slangc, SPIR-V, HLSL, GLSL, Metal, CUDA, shader stages, or modern shader language features. | [source](../../../harness/github-copilot/skills/slang-shader-engineer/SKILL.md) |
 | snowflake-semanticview | Create, alter, validate, and troubleshoot Snowflake semantic views with Snowflake CLI. Use this skill when asked to build semantic layer DD… | "Create a Snowflake semantic view for these fact and dimension tables.". "Validate this CREATE SEMANTIC VIEW statement with Snowflake CLI.". | [source](../../../harness/github-copilot/skills/snowflake-semanticview/SKILL.md) |
+| sonarqube-api-query | Query read-only SonarQube Server or SonarQube Cloud data through available SonarQube tools, the official sonar CLI, or a bundled Web API he… | Use when the user asks to list projects, inspect quality gates, issues, security hotspots, measures, analyses, metrics, rules, branches, pull requests, or server status in SonarQu… | [source](../../../harness/github-copilot/skills/sonarqube-api-query/SKILL.md) |
 | sponsor-finder | Find sponsorable direct and transitive dependencies for a GitHub repository using deps.dev, GitHub funding files, npm funding metadata, ver… | "/sponsor expressjs/express". "Find sponsorable dependencies for this GitHub repo.". | [source](../../../harness/github-copilot/skills/sponsor-finder/SKILL.md) |
 | spring-boot-testing | Select and write effective Spring Boot 4 tests with JUnit 6, AssertJ, MockMvcTester, RestTestClient, Testcontainers, and focused test slice… | Use when the user asks for Spring Boot testing guidance, unit tests, slice tests, integration tests, coverage priorities, migration from @MockBean, or testing best practices. | [source](../../../harness/github-copilot/skills/spring-boot-testing/SKILL.md) |
 | sql-code-review | Review SQL code across PostgreSQL, MySQL, SQL Server, and Oracle for injection risks, access control, data protection, performance, schema… | Use when asked to "review SQL", "find SQL injection", "audit database code", "check stored procedures", or "perform SQL security analysis". | [source](../../../harness/github-copilot/skills/sql-code-review/SKILL.md) |

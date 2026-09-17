@@ -18,8 +18,8 @@ rows link back to the upstream repository.
 | Page | Contents | Entries |
 | --- | --- | --- |
 | [Subagents](claude-code/subagents.md) | Specialist personas with isolated context and tool scope. | 230 |
-| [Rules](claude-code/rules.md) | Passive project guidance, optionally scoped by paths. | 197 |
-| [Skills](claude-code/skills.md) | Reusable procedures with optional bundled resources. | 493 |
+| [Rules](claude-code/rules.md) | Passive project guidance, optionally scoped by paths. | 198 |
+| [Skills](claude-code/skills.md) | Reusable procedures with optional bundled resources. | 494 |
 | [Commands](claude-code/commands.md) | Explicit legacy-compatible slash-command actions. | 48 |
 | [Plugin Components](claude-code/plugin-components.md) | Every component bundled by a plugin, listed separately with its runtime support. | 1004 |
 | [Plugins](claude-code/plugins.md) | Installable, self-contained Claude Code packages. | 139 |

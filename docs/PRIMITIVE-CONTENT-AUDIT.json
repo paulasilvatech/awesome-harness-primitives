@@ -66,7 +66,7 @@
     },
     "sharedSkills": {
       "packaged": 453,
-      "total": 493,
+      "total": 494,
       "unpackaged": [
         "api-testing",
         "apple-appstore-reviewer",
@@ -101,6 +101,7 @@
         "sandbox-npm-install",
         "setup-my-iq",
         "shuffle-json-data",
+        "sonarqube-api-query",
         "terraform-azurerm-set-diff-analyzer",
         "test-data-management",
         "vcpkg",
@@ -10045,6 +10046,26 @@
       "review_status": "needs-semantic-review",
       "signals": [],
       "source_domains": []
+    },
+    {
+      "characters_scanned": 7897,
+      "external_url_count": 2,
+      "files_scanned": 1,
+      "kind": "instruction",
+      "local_evidence_mention": false,
+      "name": "sonarqube",
+      "ownership": "shared",
+      "package": null,
+      "packaged_by": [],
+      "path": "harness/github-copilot/instructions/sonarqube.instructions.md",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "currency-language",
+        "external-source"
+      ],
+      "source_domains": [
+        "docs.sonarsource.com"
+      ]
     },
     {
       "characters_scanned": 13459,
@@ -28068,6 +28089,38 @@
       ]
     },
     {
+      "characters_scanned": 62872,
+      "external_url_count": 16,
+      "files_scanned": 4,
+      "kind": "skill",
+      "local_evidence_mention": true,
+      "name": "sonarqube-api-query",
+      "ownership": "shared",
+      "package": null,
+      "packaged_by": [],
+      "path": "harness/github-copilot/skills/sonarqube-api-query",
+      "review_status": "needs-current-source-review",
+      "signals": [
+        "lifecycle-language",
+        "version-claim",
+        "date-claim",
+        "external-source"
+      ],
+      "source_domains": [
+        "`",
+        "docs.sonarsource.com",
+        "example.com",
+        "example.test",
+        "github.com",
+        "next.sonarqube.com",
+        "sonarcloud.io",
+        "sonarcloud.io`",
+        "sonarqube.example.com`",
+        "sonarqube.us`",
+        "user:secret@example.test"
+      ]
+    },
+    {
       "characters_scanned": 13210,
       "external_url_count": 15,
       "files_scanned": 1,
@@ -29209,13 +29262,13 @@
         },
         {
           "errors": 0,
-          "files": 253,
+          "files": 254,
           "kind": "instructions",
           "warnings": 0
         },
         {
           "errors": 0,
-          "files": 616,
+          "files": 617,
           "kind": "skills",
           "warnings": 0
         },

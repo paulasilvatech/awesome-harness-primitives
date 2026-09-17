@@ -17,7 +17,7 @@ contracts. Plugin rows preserve their upstream source link when applicable.
 
 | Field | Value |
 | --- | --- |
-| Entries | 197 |
+| Entries | 198 |
 | Generated source | `harness/claude-code/` |
 
 ## Entries
@@ -198,6 +198,7 @@ contracts. Plugin rows preserve their upstream source link when applicable.
 | `security-and-owasp` | `all files` | [source](../../../harness/claude-code/rules/security-and-owasp.md) |
 | `self-explanatory-code-commenting` | `all files` | [source](../../../harness/claude-code/rules/self-explanatory-code-commenting.md) |
 | `shell` | `**/*.sh` | [source](../../../harness/claude-code/rules/shell.md) |
+| `sonarqube` | `all files` | [source](../../../harness/claude-code/rules/sonarqube.md) |
 | `spec-driven-workflow-v1` | `all files` | [source](../../../harness/claude-code/rules/spec-driven-workflow-v1.md) |
 | `springboot-4-migration` | `**/*.java, **/*.kt, **/build.gradle.kts, **/build.gradle, **/settings.gradle.kts, **/gradle/libs.versions.toml, **/*.pr…` | [source](../../../harness/claude-code/rules/springboot-4-migration.md) |
 | `springboot` | `**/*.java, **/*.kt` | [source](../../../harness/claude-code/rules/springboot.md) |

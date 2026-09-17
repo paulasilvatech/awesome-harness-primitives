@@ -8,6 +8,26 @@ Binary: `/Users/paulasilva/.local/bin/copilot`
 
 > Note: the requested scratch root was `/tmp/harness-check`, but this execution environment forbids file operations under `/tmp`. I used `/Volumes/T9/harness-check` instead. The live `~/.copilot` tree was not modified; commands used `COPILOT_HOME=/Volumes/T9/harness-check/copilot-home`.
 
+## SonarQube API query primitive evidence
+
+Verification date: **2026-09-16**. Scope: the `sonarqube-api-query` skill, its read-only
+Python helper, and the companion SonarQube instructions. These checks do not refresh the GitHub
+Copilot CLI runtime probes recorded elsewhere in this file.
+
+| Area | First-party source or probe | Verified result |
+| --- | --- | --- |
+| SonarQube Server Web API | https://docs.sonarsource.com/sonarqube-server/extension-guide/web-api | Documents bearer-token authentication, the special `X-Sonar-Passcode` monitoring path, the token-expiration response header, form data for POST requests, and gradual Web API v2 replacement. The new helper deliberately supports GET-only information retrieval and does not support the passcode path. |
+| SonarQube Cloud Web API | https://docs.sonarsource.com/sonarqube-cloud/appendices/web-api | Documents EU and US v1 base URLs, API-specific v2 domains, bearer authentication, gradual v2 replacement, and HTTP 429 rate limiting. The skill requires explicit region and reports rate-limit evidence instead of retrying aggressively. |
+| Live Server endpoint metadata | https://next.sonarqube.com/sonarqube/api/webservices/list | Confirmed read endpoints for components, quality gates, measures, issues, hotspots, analyses, branches, pull requests, profiles, rules, metrics, status, and version. The probe exposed `components` for issue project scope and `project` for hotspot scope; hotspot search/show reported `deprecatedSince=2026.4`. |
+| Live Cloud endpoint metadata | https://sonarcloud.io/api/webservices/list | Confirmed the Cloud parameter differences `componentKeys`, `projectKey`, and optional `organization`. The metadata reported v1 quality-gate deprecations dated 2025-09-16 and hotspot deprecations dated 2026-06-16, so the skill surfaces exact deprecation evidence and does not guess v2 replacements. |
+| Public read-only smoke tests | `https://next.sonarqube.com/sonarqube` | The helper successfully discovered capabilities and queried accessible projects, metrics, quality gates, project gate status, measures, issues, branches, analyses, quality profiles, server status, and deprecated hotspot search anonymously. `/api/projects/search` returned 403 for anonymous access, so project discovery was corrected to `/api/components/search` with `qualifiers=TRK` when supported. |
+| Synthetic helper tests | `python3 harness/github-copilot/skills/sonarqube-api-query/scripts/test_sonarqube_query.py` | Thirteen standard-library tests passed for URL and credential safety, endpoint discovery, Server/Cloud parameter selection, unsupported scope rejection, bearer-header placement, 429 handling, both SonarQube pagination shapes, page overlap removal, truncation, and deprecation metadata. |
+
+No private or authenticated SonarQube instance was queried. No Web API v2 operation, SonarQube
+MCP tool, official `sonar` CLI command, issue mutation, analysis trigger, or integration
+reconfiguration was executed. Public smoke results prove the bounded helper behavior against the
+named Server instance, not compatibility with every SonarQube edition or version.
+
 ## .NET Azure modernization suite evidence
 
 Verification date: **2026-09-15**. Scope: the standalone .NET assessment, Windows App Service,

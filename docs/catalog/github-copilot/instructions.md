@@ -10,7 +10,7 @@ hand-edit it. Regenerate with `python3 harness/github-copilot/scripts/generate_c
 | Field | Value |
 | --- | --- |
 | Primitive type | Instructions |
-| Entries | 197 |
+| Entries | 198 |
 | Canonical source | `harness/github-copilot/instructions/` |
 | Typical use cases | Coding standards, governance, path-specific rules, and verification requirements. |
 
@@ -201,6 +201,7 @@ contracts. Plugin rows preserve their upstream source link when applicable.
 | security-and-owasp | ** | Enforces OWASP-aligned secure coding conventions for web, backend, frontend, API, dependency, logging, and AI/LLM changes. | Applies automatically to files matching `**`. | [source](../../../harness/github-copilot/instructions/security-and-owasp.instructions.md) |
 | self-explanatory-code-commenting | ** | Enforces self-explanatory code comments that explain why, constraints, and risks while avoiding obvious, redundant, stale, decorative, or h… | Applies automatically to files matching `**`. | [source](../../../harness/github-copilot/instructions/self-explanatory-code-commenting.instructions.md) |
 | shell | **/*.sh | Enforces safe, readable shell scripting conventions for bash, sh, zsh, automation, parsers, cleanup, and static analysis. | Applies automatically to files matching `**/*.sh`. | [source](../../../harness/github-copilot/instructions/shell.instructions.md) |
+| sonarqube | ** | Requires evidence-backed, read-only SonarQube Server and SonarQube Cloud lookups when work depends on projects, quality gates, issues, hots… | Applies automatically to files matching `**`. | [source](../../../harness/github-copilot/instructions/sonarqube.instructions.md) |
 | spec-driven-workflow-v1 | ** | Enforces Specification-Driven Workflow v1 conventions for requirements, design, tasks, documentation, validation, reflection, handoff, trou… | Applies automatically to files matching `**`. | [source](../../../harness/github-copilot/instructions/spec-driven-workflow-v1.instructions.md) |
 | springboot | **/*.java,**/*.kt | Conventions for Spring Boot base applications covering dependency injection, configuration, package organization, services, logging, securi… | Applies automatically to files matching `**/*.java,**/*.kt`. | [source](../../../harness/github-copilot/instructions/springboot.instructions.md) |
 | springboot-4-migration | **/*.java,**/*.kt,**/build.gradle.kts,**/build.gradle,**/settings.gradle.kts,**/gradle/libs.versions.toml,**/*.properties,**/*.yml,**/*.yaml | Enforces Spring Boot 3.x to 4.0 migration conventions for Java, Kotlin, Gradle, version catalogs, configuration, tests, and production read… | Applies automatically to files matching `**/*.java,**/*.kt,**/build.gradle.kts,**/build.gradle,**/settings.gradle.kts,**/gradle/libs.versions.toml,**/*.properties,**/*.yml,**/*.ya… | [source](../../../harness/github-copilot/instructions/springboot-4-migration.instructions.md) |

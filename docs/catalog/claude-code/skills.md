@@ -17,7 +17,7 @@ contracts. Plugin rows preserve their upstream source link when applicable.
 
 | Field | Value |
 | --- | --- |
-| Entries | 493 |
+| Entries | 494 |
 | Generated source | `harness/claude-code/` |
 
 ## Entries
@@ -467,6 +467,7 @@ contracts. Plugin rows preserve their upstream source link when applicable.
 | `skill-creator` | Create, audit, repair, and improve GitHub Copilot Agent Skills for VS Code, GitHub Copilot CLI, and GitHub Copilot cloud agent. Use when a user asks to create a skill, generate a SKILL.md, convert a… | 5 | [source](../../../harness/claude-code/skills/skill-creator) |
 | `slang-shader-engineer` | Write, review, refactor, explain, and optimize Slang shaders and C++ engine integration for graphics pipelines, compute shaders, tessellation, ray tracing, parameter blocks, generics, interfaces, cap… | 3 | [source](../../../harness/claude-code/skills/slang-shader-engineer) |
 | `snowflake-semanticview` | Create, alter, validate, and troubleshoot Snowflake semantic views with Snowflake CLI. Use this skill when asked to build semantic layer DDL, validate CREATE SEMANTIC VIEW or ALTER SEMANTIC VIEW stat… | 0 | [source](../../../harness/claude-code/skills/snowflake-semanticview) |
+| `sonarqube-api-query` | Query read-only SonarQube Server or SonarQube Cloud data through available SonarQube tools, the official sonar CLI, or a bundled Web API helper. Use when the user asks to list projects, inspect quali… | 3 | [source](../../../harness/claude-code/skills/sonarqube-api-query) |
 | `sponsor-finder` | Find sponsorable direct and transitive dependencies for a GitHub repository using deps.dev, GitHub funding files, npm funding metadata, verified funding links, and OSSF Scorecard health data. Use thi… | 0 | [source](../../../harness/claude-code/skills/sponsor-finder) |
 | `spring-boot-testing` | Select and write effective Spring Boot 4 tests with JUnit 6, AssertJ, MockMvcTester, RestTestClient, Testcontainers, and focused test slices. Use when the user asks for Spring Boot testing guidance,… | 14 | [source](../../../harness/claude-code/skills/spring-boot-testing) |
 | `sql-code-review` | Review SQL code across PostgreSQL, MySQL, SQL Server, and Oracle for injection risks, access control, data protection, performance, schema quality, and maintainability. Use when asked to "review SQL"… | 0 | [source](../../../harness/claude-code/skills/sql-code-review) |
@@ -511,7 +512,7 @@ contracts. Plugin rows preserve their upstream source link when applicable.
 | `webapp-testing` | Toolkit for interacting with and testing local web applications using Playwright. Use when verifying frontend functionality, debugging rendered UI behavior, capturing screenshots, inspecting browser… | 5 | [source](../../../harness/claude-code/skills/webapp-testing) |
 | `webmcpify` | Make a web app agent-ready with WebMCP by detecting app actions, building a manifest, integrating document.modelContext tools, verifying in a real browser, healing failures, and auditing diffs. Use w… | 11 | [source](../../../harness/claude-code/skills/webmcpify) |
 | `what-context-needed` | Identify the minimum files, symbols, configuration, tests, and prior context GitHub Copilot needs before answering a codebase question. Use this skill when the user asks what context is needed, what… | 0 | [source](../../../harness/claude-code/skills/what-context-needed) |
-| `winmd-api-search` | Find and explore Windows desktop APIs. Use when building features that need platform capabilities — camera, file access, notifications, UI controls, AI/ML, sensors, networking, etc. Discovers the rig… | 19 | [source](../../../harness/claude-code/skills/winmd-api-search) |
+| `winmd-api-search` | Find and explore Windows desktop APIs. Use when building features that need platform capabilities — camera, file access, notifications, UI controls, AI/ML, sensors, networking, etc. Discovers the rig… | 13 | [source](../../../harness/claude-code/skills/winmd-api-search) |
 | `winui3-migration-guide` | Maps UWP APIs and patterns to WinUI 3 and Windows App SDK equivalents with migration rules for namespaces, threading, windowing, dialogs, pickers, sharing, printing, background tasks, settings, tests… | 0 | [source](../../../harness/claude-code/skills/winui3-migration-guide) |
 | `workiq-copilot` | Use the WorkIQ `CLI/MCP` server to query Microsoft 365 work data such as emails, meetings, documents, Teams messages, people, and projects for live organizational context. Use when the user asks for… | 0 | [source](../../../harness/claude-code/skills/workiq-copilot) |
 | `workshop-create` | Create a workshop root for desks either by using an existing local directory or by creating a new private GitHub repository in the signed-in account. Use this skill when the operator says create a wo… | 0 | [source](../../../harness/claude-code/skills/workshop-create) |

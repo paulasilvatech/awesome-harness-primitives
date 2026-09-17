@@ -32,8 +32,8 @@ rows link back to the upstream repository.
 | Primitive type | Entries |
 | --- | --- |
 | [Agents](github-copilot/agents.md) | 230 |
-| [Instructions](github-copilot/instructions.md) | 197 |
-| [Skills](github-copilot/skills.md) | 493 |
+| [Instructions](github-copilot/instructions.md) | 198 |
+| [Skills](github-copilot/skills.md) | 494 |
 | [VS Code Prompts](github-copilot/prompts.md) | 48 |
 | [Plugin Components](github-copilot/plugin-components.md) | 919 |
 | [Plugins](github-copilot/plugins.md) | 139 |
